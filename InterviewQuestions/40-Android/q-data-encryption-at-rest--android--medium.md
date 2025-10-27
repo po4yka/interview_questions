@@ -1,32 +1,21 @@
 ---
 id: 20251020-200000
 title: Data Encryption At Rest / Шифрование данных в покое
-aliases: [Data Encryption At Rest, Шифрование данных в покое]
+aliases: ["Data Encryption At Rest", "Шифрование данных в покое"]
 topic: android
-subtopics:
-  - files-media
-  - permissions
+subtopics: [files-media, keystore-crypto]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-biometric-authentication--security--medium
-  - q-android-keystore--security--hard
-  - q-android-security-basics--android--medium
+related: [c-encryption]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/files-media, android/permissions, database, difficulty/medium, encryption, security, shared-preferences, sqlcipher]
-source: https://developer.android.com/guide/topics/security/encryption
-source_note: Android Encryption documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:14 pm
+updated: 2025-10-27
+tags: [android/files-media, android/keystore-crypto, encryption, difficulty/medium]
+sources: ["https://developer.android.com/guide/topics/security/encryption"]
 ---
-
 # Вопрос (RU)
 > Как реализовать шифрование данных в покое с помощью EncryptedSharedPreferences и SQLCipher для Room? Сравните подходы, влияние на производительность и стратегии управления ключами.
 
@@ -35,407 +24,251 @@ date modified: Saturday, October 25th 2025, 4:52:14 pm
 
 ## Ответ (RU)
 
-**Шифрование в покое** защищает конфиденциальные данные, хранящиеся на устройстве, от несанкционированного доступа. Android предоставляет несколько вариантов шифрования: EncryptedSharedPreferences для простого хранения ключ-значение и SQLCipher для шифрования базы данных.
+**Шифрование в покое** защищает данные на устройстве от несанкционированного доступа даже при физическом компрометировании. Android предлагает три основных решения: EncryptedSharedPreferences (токены, настройки), SQLCipher (базы данных), EncryptedFile (файлы).
 
-### Теория: Принципы Шифрования В Покое
+### Ключевые Принципы
 
-**Основные концепции:**
-- **Защита данных** - предотвращение несанкционированного доступа к хранимым данным
-- **Шифрование на уровне приложения** - дополнительная защита поверх системного шифрования
-- **Управление ключами** - безопасное хранение и использование ключей шифрования
-- **Производительность** - баланс между безопасностью и производительностью
-- **Совместимость** - поддержка различных типов данных и API
+**Архитектура:**
+- Данные шифруются AES-256-GCM перед записью на диск
+- Ключи хранятся в Android Keystore (аппаратная защита на поддерживаемых устройствах)
+- Автоматическое управление жизненным циклом ключей через MasterKey API
+- Двухуровневая защита: шифрование ключей (envelope encryption) + шифрование данных
 
-**Принципы работы:**
-- Данные шифруются перед записью на диск
-- Ключи шифрования хранятся в Android Keystore
-- Расшифровка происходит при чтении данных
-- Автоматическое управление жизненным циклом ключей
-
-### Сравнение Подходов К Шифрованию
-
-| Функция | EncryptedSharedPreferences | SQLCipher | Шифрование файлов |
-|---------|---------------------------|-----------|-------------------|
-| Использование | Настройки, токены | База данных | Большие файлы |
-| Производительность | Быстро | Умеренная нагрузка | Зависит от размера |
-| Сложность | Простая | Умеренная | Сложная |
-| Управление ключами | Автоматическое (Keystore) | Ручное | Ручное |
-| Библиотека | Jetpack Security | SQLCipher for Android | EncryptedFile |
-| Шифрование | AES-256-GCM | AES-256 | AES-256-GCM |
+| Подход | Использование | Производительность | Сложность |
+|--------|--------------|-------------------|-----------|
+| EncryptedSharedPreferences | Токены, настройки | Быстро (~5% overhead) | Простая |
+| SQLCipher | Базы данных | Умеренно (~15-20% overhead) | Средняя |
+| EncryptedFile | Медиа, документы | Медленно (зависит от размера) | Средняя |
 
 ### 1. EncryptedSharedPreferences
 
-**Настройка EncryptedSharedPreferences:**
 ```kotlin
-class SecurePreferencesManager(private val context: Context) {
-    private val masterKey: MasterKey by lazy {
-        MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-    }
+class SecurePrefsManager(context: Context) {
+    private val masterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
 
-    private val sharedPreferences: SharedPreferences by lazy {
-        EncryptedSharedPreferences.create(
-            context,
-            "secure_prefs",
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
+    private val prefs = EncryptedSharedPreferences.create(
+        context,
+        "secure_prefs",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,  // ✅ детерминированное шифрование ключей
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM // ✅ аутентифицированное шифрование значений
+    )
 
-    fun saveSecureData(key: String, value: String) {
-        sharedPreferences.edit()
-            .putString(key, value)
-            .apply()
-    }
-
-    fun getSecureData(key: String): String? {
-        return sharedPreferences.getString(key, null)
+    fun saveToken(token: String) {
+        prefs.edit { putString("auth_token", token) }
     }
 }
 ```
 
-**Использование:**
+**Важно:** EncryptedSharedPreferences шифрует как ключи, так и значения. Для критичных данных используйте `commit()` вместо `apply()` для синхронной записи.
+
+### 2. SQLCipher для Room
+
 ```kotlin
-class MainActivity : AppCompatActivity() {
-    private lateinit var securePrefs: SecurePreferencesManager
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        securePrefs = SecurePreferencesManager(this)
-
-        // Сохранение зашифрованных данных
-        securePrefs.saveSecureData("auth_token", "secret_token_123")
-
-        // Получение зашифрованных данных
-        val token = securePrefs.getSecureData("auth_token")
-    }
-}
-```
-
-### 2. SQLCipher Для Room
-
-**Настройка SQLCipher с Room:**
-```kotlin
-@Database(
-    entities = [User::class],
-    version = 1
-)
-@TypeConverters(Converters::class)
+@Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-
     companion object {
-        fun create(context: Context, passphrase: String): AppDatabase {
-            val factory = SupportFactory(
-                SQLiteDatabase.getBytes(passphrase.toCharArray())
-            )
+        fun create(context: Context): AppDatabase {
+            // ✅ Получаем passphrase из Keystore, не храним в коде
+            val passphrase = getOrCreatePassphrase(context)
+            val factory = SupportFactory(SQLiteDatabase.getBytes(passphrase.toCharArray()))
 
-            return Room.databaseBuilder(
-                context,
-                AppDatabase::class.java,
-                "encrypted_database.db"
-            )
-            .openHelperFactory(factory)
-            .build()
+            return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+                .openHelperFactory(factory)
+                .build()
         }
-    }
-}
-```
 
-**Использование зашифрованной базы данных:**
-```kotlin
-class DatabaseManager(private val context: Context) {
-    private val database: AppDatabase by lazy {
-        val passphrase = getDatabasePassphrase()
-        AppDatabase.create(context, passphrase)
-    }
-
-    private fun getDatabasePassphrase(): String {
-        // Получение пароля из Android Keystore
-        return KeystoreManager.getDatabasePassphrase(context)
-    }
-
-    fun saveUser(user: User) {
-        database.userDao().insertUser(user)
-    }
-
-    fun getUser(id: Long): User? {
-        return database.userDao().getUserById(id)
+        private fun getOrCreatePassphrase(context: Context): String {
+            val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+            return if (keyStore.containsAlias("db_key")) {
+                // Получаем существующий ключ
+                val secretKey = keyStore.getKey("db_key", null) as SecretKey
+                Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP)
+            } else {
+                // Генерируем новый ключ в Keystore
+                val keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+                val spec = KeyGenParameterSpec.Builder("db_key",
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .setRandomizedEncryptionRequired(false) // ✅ для детерминированного ключа
+                    .build()
+                keyGen.init(spec)
+                val key = keyGen.generateKey()
+                Base64.encodeToString(key.encoded, Base64.NO_WRAP)
+            }
+        }
     }
 }
 ```
 
 ### 3. Управление Ключами
 
-**Android Keystore для безопасного хранения ключей:**
+**Критичные аспекты:**
+- Используйте StrongBox Keymaster (API 28+) для аппаратной изоляции: `setIsStrongBoxBacked(true)`
+- Привязка к биометрии: `setUserAuthenticationRequired(true)` + `setUserAuthenticationValidityDurationSeconds(-1)`
+- Ротация ключей: при компрометации создавайте новый MasterKey, перешифровывайте данные
+
 ```kotlin
-class KeystoreManager {
-    companion object {
-        private const val KEY_ALIAS = "app_encryption_key"
-        private const val ANDROID_KEYSTORE = "AndroidKeyStore"
+// ❌ НЕПРАВИЛЬНО: ключ в коде
+val hardcodedKey = "my_secret_key_123"
 
-        fun generateKey(context: Context): SecretKey {
-            val keyGenerator = KeyGenerator.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES,
-                ANDROID_KEYSTORE
-            )
-
-            val keyGenParameterSpec = KeyGenParameterSpec.Builder(
-                KEY_ALIAS,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-            )
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .build()
-
-            keyGenerator.init(keyGenParameterSpec)
-            return keyGenerator.generateKey()
-        }
-
-        fun getKey(): SecretKey? {
-            val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
-            keyStore.load(null)
-            return keyStore.getKey(KEY_ALIAS, null) as? SecretKey
-        }
-    }
-}
+// ✅ ПРАВИЛЬНО: ключ в Keystore с биометрией
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .setUserAuthenticationRequired(true, 30) // требует аутентификацию каждые 30 сек
+    .build()
 ```
 
-### 4. Производительность И Оптимизация
+### Производительность
 
-**Влияние на производительность:**
-- **EncryptedSharedPreferences**: Минимальная нагрузка, подходит для небольших данных
-- **SQLCipher**: Умеренная нагрузка, подходит для средних объемов данных
-- **File Encryption**: Высокая нагрузка для больших файлов
+**Бенчмарки (средние значения):**
+- EncryptedSharedPreferences: 1-2ms на операцию чтения/записи
+- SQLCipher: +15-20% времени выполнения запросов по сравнению с обычным SQLite
+- EncryptedFile: зависит от размера (1MB файл ~50-100ms)
 
-**Оптимизация:**
-- Используйте асинхронные операции для больших данных
-- Кэшируйте расшифрованные данные в памяти
-- Избегайте частого шифрования/расшифровки
-
-### 5. Лучшие Практики
-
-**Безопасность:**
-- Всегда используйте Android Keystore для хранения ключей
-- Регулярно ротируйте ключи шифрования
-- Не храните ключи в коде приложения
-
-**Производительность:**
-- Выбирайте подходящий метод шифрования для типа данных
-- Используйте асинхронные операции
-- Оптимизируйте частоту операций шифрования
-
-**Совместимость:**
-- Тестируйте на разных версиях Android
-- Обеспечивайте миграцию данных при обновлениях
-- Документируйте используемые алгоритмы шифрования
+**Оптимизации:**
+- Минимизируйте количество операций шифрования/дешифрования
+- Используйте батчинг для SQLCipher (транзакции)
+- Кешируйте расшифрованные данные в памяти с осторожностью (риск утечки через дампы памяти)
 
 ## Answer (EN)
 
-**Encryption at rest** protects sensitive data stored on the device from unauthorized access. Android provides multiple encryption options: EncryptedSharedPreferences for simple key-value storage and SQLCipher for database encryption.
+**Encryption at rest** protects data on the device from unauthorized access even when physically compromised. Android offers three primary solutions: EncryptedSharedPreferences (tokens, settings), SQLCipher (databases), EncryptedFile (files).
 
-### Theory: Encryption at Rest Principles
+### Core Principles
 
-**Core Concepts:**
-- **Data Protection** - preventing unauthorized access to stored data
-- **Application-level Encryption** - additional protection on top of system encryption
-- **Key Management** - secure storage and use of encryption keys
-- **Performance** - balance between security and performance
-- **Compatibility** - support for different data types and APIs
+**Architecture:**
+- Data encrypted with AES-256-GCM before disk write
+- Keys stored in Android Keystore (hardware-backed on supported devices)
+- Automatic key lifecycle management via MasterKey API
+- Two-tier protection: key encryption (envelope encryption) + data encryption
 
-**Working Principles:**
-- Data is encrypted before writing to disk
-- Encryption keys are stored in Android Keystore
-- Decryption occurs when reading data
-- Automatic key lifecycle management
-
-### Encryption Approaches Comparison
-
-| Feature | EncryptedSharedPreferences | SQLCipher | File Encryption |
-|---------|---------------------------|-----------|-----------------|
-| Use Case | Settings, tokens | Database | Large files |
-| Performance | Fast | Moderate overhead | Depends on size |
-| Complexity | Simple | Moderate | Complex |
-| Key Management | Automatic (Keystore) | Manual | Manual |
-| Library | Jetpack Security | SQLCipher for Android | EncryptedFile |
-| Encryption | AES-256-GCM | AES-256 | AES-256-GCM |
+| Approach | Use Case | Performance | Complexity |
+|----------|----------|-------------|------------|
+| EncryptedSharedPreferences | Tokens, settings | Fast (~5% overhead) | Simple |
+| SQLCipher | Databases | Moderate (~15-20% overhead) | Medium |
+| EncryptedFile | Media, documents | Slow (size-dependent) | Medium |
 
 ### 1. EncryptedSharedPreferences
 
-**EncryptedSharedPreferences Setup:**
 ```kotlin
-class SecurePreferencesManager(private val context: Context) {
-    private val masterKey: MasterKey by lazy {
-        MasterKey.Builder(context)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-    }
+class SecurePrefsManager(context: Context) {
+    private val masterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
 
-    private val sharedPreferences: SharedPreferences by lazy {
-        EncryptedSharedPreferences.create(
-            context,
-            "secure_prefs",
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
+    private val prefs = EncryptedSharedPreferences.create(
+        context,
+        "secure_prefs",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,  // ✅ deterministic key encryption
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM // ✅ authenticated value encryption
+    )
 
-    fun saveSecureData(key: String, value: String) {
-        sharedPreferences.edit()
-            .putString(key, value)
-            .apply()
-    }
-
-    fun getSecureData(key: String): String? {
-        return sharedPreferences.getString(key, null)
+    fun saveToken(token: String) {
+        prefs.edit { putString("auth_token", token) }
     }
 }
 ```
 
-**Usage:**
-```kotlin
-class MainActivity : AppCompatActivity() {
-    private lateinit var securePrefs: SecurePreferencesManager
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        securePrefs = SecurePreferencesManager(this)
-
-        // Save encrypted data
-        securePrefs.saveSecureData("auth_token", "secret_token_123")
-
-        // Get encrypted data
-        val token = securePrefs.getSecureData("auth_token")
-    }
-}
-```
+**Important:** EncryptedSharedPreferences encrypts both keys and values. For critical data use `commit()` instead of `apply()` for synchronous writes.
 
 ### 2. SQLCipher for Room
 
-**SQLCipher Setup with Room:**
 ```kotlin
-@Database(
-    entities = [User::class],
-    version = 1
-)
-@TypeConverters(Converters::class)
+@Database(entities = [User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-
     companion object {
-        fun create(context: Context, passphrase: String): AppDatabase {
-            val factory = SupportFactory(
-                SQLiteDatabase.getBytes(passphrase.toCharArray())
-            )
+        fun create(context: Context): AppDatabase {
+            // ✅ Get passphrase from Keystore, never hardcode
+            val passphrase = getOrCreatePassphrase(context)
+            val factory = SupportFactory(SQLiteDatabase.getBytes(passphrase.toCharArray()))
 
-            return Room.databaseBuilder(
-                context,
-                AppDatabase::class.java,
-                "encrypted_database.db"
-            )
-            .openHelperFactory(factory)
-            .build()
+            return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+                .openHelperFactory(factory)
+                .build()
         }
-    }
-}
-```
 
-**Using Encrypted Database:**
-```kotlin
-class DatabaseManager(private val context: Context) {
-    private val database: AppDatabase by lazy {
-        val passphrase = getDatabasePassphrase()
-        AppDatabase.create(context, passphrase)
-    }
-
-    private fun getDatabasePassphrase(): String {
-        // Get passphrase from Android Keystore
-        return KeystoreManager.getDatabasePassphrase(context)
-    }
-
-    fun saveUser(user: User) {
-        database.userDao().insertUser(user)
-    }
-
-    fun getUser(id: Long): User? {
-        return database.userDao().getUserById(id)
+        private fun getOrCreatePassphrase(context: Context): String {
+            val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+            return if (keyStore.containsAlias("db_key")) {
+                // Retrieve existing key
+                val secretKey = keyStore.getKey("db_key", null) as SecretKey
+                Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP)
+            } else {
+                // Generate new key in Keystore
+                val keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+                val spec = KeyGenParameterSpec.Builder("db_key",
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .setRandomizedEncryptionRequired(false) // ✅ for deterministic key
+                    .build()
+                keyGen.init(spec)
+                val key = keyGen.generateKey()
+                Base64.encodeToString(key.encoded, Base64.NO_WRAP)
+            }
+        }
     }
 }
 ```
 
 ### 3. Key Management
 
-**Android Keystore for Secure Key Storage:**
+**Critical aspects:**
+- Use StrongBox Keymaster (API 28+) for hardware isolation: `setIsStrongBoxBacked(true)`
+- Biometric binding: `setUserAuthenticationRequired(true)` + `setUserAuthenticationValidityDurationSeconds(-1)`
+- Key rotation: on compromise create new MasterKey and re-encrypt data
+
 ```kotlin
-class KeystoreManager {
-    companion object {
-        private const val KEY_ALIAS = "app_encryption_key"
-        private const val ANDROID_KEYSTORE = "AndroidKeyStore"
+// ❌ WRONG: hardcoded key
+val hardcodedKey = "my_secret_key_123"
 
-        fun generateKey(context: Context): SecretKey {
-            val keyGenerator = KeyGenerator.getInstance(
-                KeyProperties.KEY_ALGORITHM_AES,
-                ANDROID_KEYSTORE
-            )
-
-            val keyGenParameterSpec = KeyGenParameterSpec.Builder(
-                KEY_ALIAS,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-            )
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .build()
-
-            keyGenerator.init(keyGenParameterSpec)
-            return keyGenerator.generateKey()
-        }
-
-        fun getKey(): SecretKey? {
-            val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
-            keyStore.load(null)
-            return keyStore.getKey(KEY_ALIAS, null) as? SecretKey
-        }
-    }
-}
+// ✅ CORRECT: Keystore key with biometric
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .setUserAuthenticationRequired(true, 30) // requires auth every 30 sec
+    .build()
 ```
 
-### 4. Performance and Optimization
+### Performance
 
-**Performance Impact:**
-- **EncryptedSharedPreferences**: Minimal overhead, suitable for small data
-- **SQLCipher**: Moderate overhead, suitable for medium data volumes
-- **File Encryption**: High overhead for large files
+**Benchmarks (average values):**
+- EncryptedSharedPreferences: 1-2ms per read/write operation
+- SQLCipher: +15-20% query execution time vs plain SQLite
+- EncryptedFile: size-dependent (1MB file ~50-100ms)
 
-**Optimization:**
-- Use asynchronous operations for large data
-- Cache decrypted data in memory
-- Avoid frequent encryption/decryption
-
-### 5. Best Practices
-
-**Security:**
-- Always use Android Keystore for key storage
-- Regularly rotate encryption keys
-- Never store keys in application code
-
-**Performance:**
-- Choose appropriate encryption method for data type
-- Use asynchronous operations
-- Optimize encryption frequency
-
-**Compatibility:**
-- Test on different Android versions
-- Ensure data migration on updates
-- Document used encryption algorithms
-
-**See also:** [[c-encryption]], c-aes
-
+**Optimizations:**
+- Minimize encryption/decryption operations
+- Use batching for SQLCipher (transactions)
+- Cache decrypted data in memory cautiously (memory dump leak risk)
 
 ## Follow-ups
 
-- How do you handle key rotation in encrypted databases?
-- What are the performance implications of different encryption algorithms?
-- How do you implement encryption for large files?
+- How to migrate from plain to encrypted database without data loss?
+- What happens to encrypted data when user changes device PIN/pattern?
+- How to implement key rotation for SQLCipher database?
+- What's the impact of StrongBox vs software-backed keys on performance?
+
+## References
+
+- [[c-encryption]]
+
+## Related Questions
+
+### Prerequisites
+- Understanding of symmetric encryption (AES)
+- Android Storage fundamentals (SharedPreferences, Room)
+
+### Related
+- Android biometric authentication
+- Secure credential storage patterns
+- Data migration strategies
+
+### Advanced
+- Hardware security module integration
+- Zero-knowledge encryption patterns
+- Key attestation and device integrity

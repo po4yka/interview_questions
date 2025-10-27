@@ -1,32 +1,21 @@
 ---
 id: 20251020-200000
 title: Dagger Scope Explained / Объяснение скоупов Dagger
-aliases: [Dagger Scope Explained, Объяснение скоупов Dagger]
+aliases: ["Dagger Scope Explained", "Объяснение скоупов Dagger"]
 topic: android
-subtopics:
-  - di-hilt
-  - lifecycle
+subtopics: [di-hilt, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-dagger-custom-scopes--android--hard
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-main-elements--android--medium
+related: [q-dagger-custom-scopes--android--hard, q-dagger-framework-overview--android--hard, q-dagger-main-elements--android--medium]
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
-source: https://dagger.dev/api/latest/dagger/Scope.html
-source_note: Dagger Scope API documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:16 pm
+sources: [https://dagger.dev/api/latest/dagger/Scope.html]
 ---
-
 # Вопрос (RU)
 > Что такое scope в Dagger и как они работают?
 
@@ -35,374 +24,174 @@ date modified: Saturday, October 25th 2025, 4:52:16 pm
 
 ## Ответ (RU)
 
-**Scopes** в Dagger контролируют **время жизни** зависимостей. Они обеспечивают повторное использование объектов в рамках определенного жизненного цикла, предотвращая ненужное создание объектов.
+**Scope** в Dagger — это механизм управления временем жизни зависимостей. Scope гарантирует, что в рамках одного компонента создается только один экземпляр объекта.
 
-### Теория: Принципы Работы Scopes
+### Принцип работы
 
-**Основные концепции:**
-- **Время жизни объекта** - как долго существует экземпляр зависимости
-- **Повторное использование** - один экземпляр в рамках скоупа
-- **Привязка к компонентам** - скоупы связаны с Dagger компонентами
-- **Управление памятью** - предотвращение утечек и оптимизация производительности
+Scope привязывает зависимость к жизненному циклу Dagger-компонента:
+- Компонент создан → создается scoped-зависимость
+- Компонент жив → переиспользуется один экземпляр
+- Компонент уничтожен → зависимость освобождается
 
-**Принципы работы:**
-- Объекты живут столько, сколько живет их компонент
-- Один экземпляр на скоуп
-- Автоматическое управление жизненным циклом
-- Проверка на этапе компиляции
+**Проверка на этапе компиляции**: Dagger проверяет, что scoped-зависимости используются только в компонентах с соответствующим scope.
 
-### 1. @Singleton - Глобальный Скоуп
-
-**@Singleton** живет в течение всего жизненного цикла приложения:
+### Иерархия Hilt Scopes
 
 ```kotlin
+@Singleton              // ✅ Приложение (Application)
+  └─ @ActivityRetainedScoped  // ✅ Переживает пересоздание Activity
+      └─ @ActivityScoped      // ✅ Activity
+          ├─ @FragmentScoped  // ✅ Fragment
+          └─ @ViewScoped      // ✅ View
+  └─ @ViewModelScoped         // ✅ ViewModel
+  └─ @ServiceScoped           // ✅ Service
+```
+
+### Типичные кейсы
+
+```kotlin
+// ✅ Singleton для глобальных сервисов
 @Singleton
-class UserRepository @Inject constructor(
-    private val apiService: ApiService
-)
+class NetworkClient @Inject constructor()
 
-@Singleton
-class ApiService @Inject constructor(
-    private val retrofit: Retrofit
-)
-```
+// ✅ ActivityRetainedScoped для данных, переживающих configuration changes
+@ActivityRetainedScoped
+class UserSessionManager @Inject constructor()
 
-**Использование:**
-```kotlin
-@HiltAndroidApp
-class MyApplication : Application() {
-    @Inject
-    lateinit var repository: UserRepository // Один экземпляр на все приложение
-}
-```
-
-### 2. @ActivityScoped - Скоуп Activity
-
-**@ActivityScoped** живет в течение жизненного цикла Activity:
-
-```kotlin
-@ActivityScoped
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
-)
-
-@ActivityScoped
-class UserAdapter @Inject constructor()
-```
-
-**Использование:**
-```kotlin
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModel: UserViewModel // Один экземпляр на Activity
-}
-```
-
-### 3. @FragmentScoped - Скоуп Fragment
-
-**@FragmentScoped** живет в течение жизненного цикла Fragment:
-
-```kotlin
-@FragmentScoped
-class UserListFragment @Inject constructor()
-
-@FragmentScoped
-class UserListAdapter @Inject constructor()
-```
-
-**Использование:**
-```kotlin
-@AndroidEntryPoint
-class UserListFragment : Fragment() {
-    @Inject
-    lateinit var adapter: UserListAdapter // Один экземпляр на Fragment
-}
-```
-
-### 4. @ViewModelScoped - Скоуп ViewModel
-
-**@ViewModelScoped** живет в течение жизненного цикла ViewModel:
-
-```kotlin
-@ViewModelScoped
-class UserRepository @Inject constructor(
-    private val apiService: ApiService
-)
-
-@ViewModelScoped
-class UserCache @Inject constructor()
-```
-
-**Использование:**
-```kotlin
+// ✅ ViewModelScoped для зависимостей ViewModel
 @HiltViewModel
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
+class ProfileViewModel @Inject constructor(
+    private val repository: ProfileRepository  // ❌ Unscoped - создается каждый раз
 ) : ViewModel()
+
+@ViewModelScoped  // ✅ Живет вместе с ViewModel
+class ProfileRepository @Inject constructor(
+    private val api: ApiService  // ✅ @Singleton - переиспользуется
+)
 ```
 
-### 5. @ServiceScoped - Скоуп Service
+### Правила использования
 
-**@ServiceScoped** живет в течение жизненного цикла Service:
+**Scope Hierarchy Rule**: дочерний компонент может использовать зависимости из родительского scope, но не наоборот:
 
 ```kotlin
-@ServiceScoped
-class LocationService @Inject constructor()
-
-@ServiceScoped
-class NotificationManager @Inject constructor()
-```
-
-**Использование:**
-```kotlin
-@AndroidEntryPoint
-class MyService : Service() {
-    @Inject
-    lateinit var locationService: LocationService // Один экземпляр на Service
-}
-```
-
-### Сравнение Скоупов
-
-**Иерархия скоупов:**
-- `@Singleton` - самый долгий, живет с приложением
-- `@ActivityScoped` - живет с Activity
-- `@FragmentScoped` - живет с Fragment
-- `@ViewModelScoped` - живет с ViewModel
-- `@ServiceScoped` - живет с Service
-
-**Правила наследования:**
-- Дочерние скоупы могут использовать объекты из родительских скоупов
-- Родительские скоупы не могут использовать объекты из дочерних скоупов
-- Объекты создаются в самом узком скоупе, где они нужны
-
-### Практические Примеры
-
-**Правильное использование скоупов:**
-```kotlin
-// Глобальные объекты
-@Singleton
-class Database @Inject constructor()
-
-@Singleton
-class ApiService @Inject constructor()
-
-// Объекты уровня Activity
+// ✅ Правильно: Activity использует Singleton
 @ActivityScoped
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
+class UserFlow @Inject constructor(
+    private val database: Database  // @Singleton - ОК
 )
 
-// Объекты уровня Fragment
-@FragmentScoped
-class UserAdapter @Inject constructor()
-```
-
-**Неправильное использование:**
-```kotlin
-// Плохо: создание тяжелых объектов в узком скоупе
-@FragmentScoped
-class Database @Inject constructor() // Должен быть @Singleton
-
-// Плохо: создание легких объектов в широком скоупе
+// ❌ Неправильно: Singleton зависит от Activity scope
 @Singleton
-class UserAdapter @Inject constructor() // Должен быть @FragmentScoped
+class GlobalService @Inject constructor(
+    private val flow: UserFlow  // @ActivityScoped - ОШИБКА компиляции
+)
 ```
+
+**Правильный выбор scope**:
+- Тяжелые объекты (DB, Network) → `@Singleton`
+- Данные UI, переживающие rotation → `@ActivityRetainedScoped` или `@ViewModelScoped`
+- UI-адаптеры, презентеры → `@ActivityScoped` или `@FragmentScoped`
+- Легкие утилиты → unscoped (создаются каждый раз)
 
 ## Answer (EN)
 
-**Scopes** in Dagger control the **lifetime** of dependencies. They ensure object reuse within a specific lifecycle, preventing unnecessary object creation.
+**Scope** in Dagger is a mechanism for managing dependency lifetimes. A scope guarantees that only one instance of an object is created within a single component.
 
-### Theory: Scope Working Principles
+### How it works
 
-**Core Concepts:**
-- **Object lifetime** - how long a dependency instance exists
-- **Reuse** - one instance within scope
-- **Component binding** - scopes are bound to Dagger components
-- **Memory management** - prevent leaks and optimize performance
+Scope binds a dependency to the lifecycle of a Dagger component:
+- Component created → scoped dependency instantiated
+- Component alive → same instance reused
+- Component destroyed → dependency released
 
-**Working Principles:**
-- Objects live as long as their component lives
-- One instance per scope
-- Automatic lifecycle management
-- Compile-time validation
+**Compile-time validation**: Dagger verifies that scoped dependencies are only used in components with matching scopes.
 
-### 1. @Singleton - Global Scope
-
-**@Singleton** lives for the entire application lifecycle:
+### Hilt Scope Hierarchy
 
 ```kotlin
+@Singleton              // ✅ Application
+  └─ @ActivityRetainedScoped  // ✅ Survives Activity recreation
+      └─ @ActivityScoped      // ✅ Activity
+          ├─ @FragmentScoped  // ✅ Fragment
+          └─ @ViewScoped      // ✅ View
+  └─ @ViewModelScoped         // ✅ ViewModel
+  └─ @ServiceScoped           // ✅ Service
+```
+
+### Typical Use Cases
+
+```kotlin
+// ✅ Singleton for global services
 @Singleton
-class UserRepository @Inject constructor(
-    private val apiService: ApiService
-)
+class NetworkClient @Inject constructor()
 
-@Singleton
-class ApiService @Inject constructor(
-    private val retrofit: Retrofit
-)
-```
+// ✅ ActivityRetainedScoped for data surviving configuration changes
+@ActivityRetainedScoped
+class UserSessionManager @Inject constructor()
 
-**Usage:**
-```kotlin
-@HiltAndroidApp
-class MyApplication : Application() {
-    @Inject
-    lateinit var repository: UserRepository // One instance for entire app
-}
-```
-
-### 2. @ActivityScoped - Activity Scope
-
-**@ActivityScoped** lives for the Activity lifecycle:
-
-```kotlin
-@ActivityScoped
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
-)
-
-@ActivityScoped
-class UserAdapter @Inject constructor()
-```
-
-**Usage:**
-```kotlin
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModel: UserViewModel // One instance per Activity
-}
-```
-
-### 3. @FragmentScoped - Fragment Scope
-
-**@FragmentScoped** lives for the Fragment lifecycle:
-
-```kotlin
-@FragmentScoped
-class UserListFragment @Inject constructor()
-
-@FragmentScoped
-class UserListAdapter @Inject constructor()
-```
-
-**Usage:**
-```kotlin
-@AndroidEntryPoint
-class UserListFragment : Fragment() {
-    @Inject
-    lateinit var adapter: UserListAdapter // One instance per Fragment
-}
-```
-
-### 4. @ViewModelScoped - ViewModel Scope
-
-**@ViewModelScoped** lives for the ViewModel lifecycle:
-
-```kotlin
-@ViewModelScoped
-class UserRepository @Inject constructor(
-    private val apiService: ApiService
-)
-
-@ViewModelScoped
-class UserCache @Inject constructor()
-```
-
-**Usage:**
-```kotlin
+// ✅ ViewModelScoped for ViewModel dependencies
 @HiltViewModel
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
+class ProfileViewModel @Inject constructor(
+    private val repository: ProfileRepository  // ❌ Unscoped - created each time
 ) : ViewModel()
+
+@ViewModelScoped  // ✅ Lives with ViewModel
+class ProfileRepository @Inject constructor(
+    private val api: ApiService  // ✅ @Singleton - reused
+)
 ```
 
-### 5. @ServiceScoped - Service Scope
+### Usage Rules
 
-**@ServiceScoped** lives for the Service lifecycle:
+**Scope Hierarchy Rule**: child components can use dependencies from parent scopes, but not vice versa:
 
 ```kotlin
-@ServiceScoped
-class LocationService @Inject constructor()
-
-@ServiceScoped
-class NotificationManager @Inject constructor()
-```
-
-**Usage:**
-```kotlin
-@AndroidEntryPoint
-class MyService : Service() {
-    @Inject
-    lateinit var locationService: LocationService // One instance per Service
-}
-```
-
-### Scope Comparison
-
-**Scope hierarchy:**
-- `@Singleton` - longest lived, lives with application
-- `@ActivityScoped` - lives with Activity
-- `@FragmentScoped` - lives with Fragment
-- `@ViewModelScoped` - lives with ViewModel
-- `@ServiceScoped` - lives with Service
-
-**Inheritance rules:**
-- Child scopes can use objects from parent scopes
-- Parent scopes cannot use objects from child scopes
-- Objects are created in the narrowest scope where they're needed
-
-### Practical Examples
-
-**Correct scope usage:**
-```kotlin
-// Global objects
-@Singleton
-class Database @Inject constructor()
-
-@Singleton
-class ApiService @Inject constructor()
-
-// Activity-level objects
+// ✅ Correct: Activity uses Singleton
 @ActivityScoped
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
+class UserFlow @Inject constructor(
+    private val database: Database  // @Singleton - OK
 )
 
-// Fragment-level objects
-@FragmentScoped
-class UserAdapter @Inject constructor()
-```
-
-**Incorrect usage:**
-```kotlin
-// Bad: creating heavy objects in narrow scope
-@FragmentScoped
-class Database @Inject constructor() // Should be @Singleton
-
-// Bad: creating light objects in wide scope
+// ❌ Incorrect: Singleton depends on Activity scope
 @Singleton
-class UserAdapter @Inject constructor() // Should be @FragmentScoped
+class GlobalService @Inject constructor(
+    private val flow: UserFlow  // @ActivityScoped - COMPILATION ERROR
+)
 ```
 
-**See also:** [[c-dependency-injection]], c-singleton-pattern
+**Choosing the right scope**:
+- Heavy objects (DB, Network) → `@Singleton`
+- UI data surviving rotation → `@ActivityRetainedScoped` or `@ViewModelScoped`
+- UI adapters, presenters → `@ActivityScoped` or `@FragmentScoped`
+- Lightweight utilities → unscoped (created each time)
 
 ## Follow-ups
 
 - How do you create custom scopes in Dagger?
-- What happens when you use the wrong scope?
-- How do scopes affect memory usage?
+- What happens if you inject an `@ActivityScoped` dependency into a `@Singleton` component?
+- How does `@ActivityRetainedScoped` survive configuration changes internally?
+- What are the performance implications of using too many singletons?
+- How do you test scoped dependencies?
+
+## References
+
+- [[c-dependency-injection]] — DI fundamentals and principles
+- Official Dagger documentation on scopes: https://dagger.dev/api/latest/dagger/Scope.html
+- Hilt component hierarchy: https://developer.android.com/training/dependency-injection/hilt-android#component-hierarchy
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-dagger-inject-annotation--android--easy]]
+- [[q-dagger-inject-annotation--android--easy]] — Understanding @Inject annotation
+- q-what-is-dependency-injection--android--easy — DI basics
 
 ### Related (Same Level)
-- [[q-dagger-main-elements--android--medium]]
+- [[q-dagger-main-elements--android--medium]] — Core Dagger concepts
+- q-hilt-vs-dagger--android--medium — Choosing between Hilt and vanilla Dagger
+- q-viewmodel-scope--android--medium — ViewModel lifecycle management
 
 ### Advanced (Harder)
-- [[q-dagger-custom-scopes--android--hard]]
-- [[q-dagger-framework-overview--android--hard]]
+- [[q-dagger-custom-scopes--android--hard]] — Creating custom scopes
+- [[q-dagger-framework-overview--android--hard]] — Deep dive into Dagger internals
+- q-dagger-subcomponents--android--hard — Subcomponents and scope relationships

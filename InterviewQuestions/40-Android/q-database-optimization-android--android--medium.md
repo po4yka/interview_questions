@@ -1,32 +1,21 @@
 ---
 id: 20251020-200000
 title: Database Optimization Android / Оптимизация базы данных Android
-aliases: [Database Optimization Android, Оптимизация базы данных Android]
+aliases: ["Database Optimization Android", "Оптимизация базы данных Android"]
 topic: android
-subtopics:
-  - performance-memory
-  - room
+subtopics: [performance-memory, room]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-performance-optimization--android--medium
-  - q-database-encryption-android--android--medium
-  - q-room-database-basics--android--easy
+related: [q-performance-optimization-android--android--medium, q-room-library-definition--android--easy, q-room-vs-sqlite--android--medium]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, room, sql]
-source: https://developer.android.com/training/data-storage/room
-source_note: Android Room documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:11 pm
+updated: 2025-10-27
+tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, sql]
+sources: [https://developer.android.com/training/data-storage/room]
 ---
-
 # Вопрос (RU)
 > Какие лучшие практики и техники для оптимизации базы данных в Android приложениях?
 
@@ -35,374 +24,244 @@ date modified: Saturday, October 25th 2025, 4:52:11 pm
 
 ## Ответ (RU)
 
-Оптимизация базы данных критически важна для производительности Android приложений, особенно при работе с большими наборами данных или частыми операциями с базой данных.
+Оптимизация базы данных в Android требует комплексного подхода: правильная индексация, пакетные операции, асинхронное выполнение и кэширование.
 
-### Теория: Принципы Оптимизации Базы Данных
+### 1. Индексация
 
-**Основные концепции:**
-- **Индексация** - ускорение поиска и сортировки данных
-- **Пакетные операции** - группировка операций для снижения накладных расходов
-- **Асинхронные операции** - предотвращение блокировки UI потока
-- **Кэширование** - хранение часто используемых данных в памяти
-- **Оптимизация запросов** - эффективные SQL запросы
+Индексы ускоряют чтение, но замедляют запись. Создавайте индексы для часто запрашиваемых полей:
 
-**Принципы работы:**
-- Индексы ускоряют поиск, но замедляют вставку
-- Пакетные операции снижают количество транзакций
-- Асинхронные операции предотвращают ANR
-- Кэширование снижает количество обращений к базе данных
-
-### 1. Стратегия Индексации
-
-**Теоретические основы:**
-Индексы создают дополнительные структуры данных для ускорения поиска. Они работают как указатели на данные, позволяя быстро находить записи без полного сканирования таблицы.
-
-**Типы индексов:**
-- **Уникальные индексы** - для полей с уникальными значениями
-- **Составные индексы** - для комбинации полей
-- **Частичные индексы** - для условий WHERE
-
-**Компактная реализация:**
 ```kotlin
 @Entity(
     tableName = "users",
     indices = [
-        Index(value = ["email"], unique = true),
-        Index(value = ["last_name", "first_name"]),
-        Index(value = ["created_at"])
+        Index(value = ["email"], unique = true),  // ✅ Для точного поиска
+        Index(value = ["last_name", "first_name"]),  // ✅ Составной индекс
+        Index(value = ["created_at"])  // ✅ Для сортировки/фильтрации
     ]
 )
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val email: String,
-    val firstName: String,
-    val lastName: String,
-    val createdAt: Long
+    // ❌ Не индексируйте редко запрашиваемые поля - это замедляет INSERT
 )
 ```
+
+**Trade-offs:** индекс занимает дополнительную память (~10-20% размера таблицы) и замедляет INSERT/UPDATE на 15-30%.
 
 ### 2. Пакетные Операции
 
-**Теоретические основы:**
-Пакетные операции группируют множественные операции в одну транзакцию, снижая накладные расходы на открытие/закрытие соединений и коммит транзакций.
+Группируйте операции в транзакции для снижения overhead:
 
-**Преимущества:**
-- Снижение количества транзакций
-- Улучшение производительности
-- Атомарность операций
-- Лучшее использование ресурсов
-
-**Компактная реализация:**
 ```kotlin
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUsers(users: List<User>)
+    suspend fun insertUsers(users: List<User>)  // ✅ Одна транзакция
 
-    @Update
-    suspend fun updateUsers(users: List<User>)
-
-    @Delete
-    suspend fun deleteUsers(users: List<User>)
-
-    @Transaction
-    suspend fun batchOperations(users: List<User>) {
-        insertUsers(users)
-        updateUsers(users.filter { it.id > 0 })
+    @Transaction  // ✅ Гарантирует атомарность
+    suspend fun syncUsers(local: List<User>, remote: List<User>) {
+        deleteUsers(local)
+        insertUsers(remote)
     }
 }
+
+// ❌ Плохо: каждый insert - отдельная транзакция
+users.forEach { dao.insertUser(it) }
+
+// ✅ Хорошо: одна транзакция для всех записей
+dao.insertUsers(users)
 ```
 
-### 3. Асинхронные Операции
+**Производительность:** пакетная вставка 1000 записей ~50x быстрее поштучной.
 
-**Теоретические основы:**
-Асинхронные операции предотвращают блокировку UI потока и ANR (Application Not Responding) ошибки. Room предоставляет встроенную поддержку корутин для асинхронных операций.
+### 3. Асинхронность И Реактивность
 
-**Принципы работы:**
-- Использование suspend функций
-- Выполнение в фоновых потоках
-- Отмена операций при необходимости
-- Обработка ошибок
+Используйте `suspend` функции и `Flow` для предотвращения ANR:
 
-**Компактная реализация:**
-```kotlin
-class UserRepository @Inject constructor(private val userDao: UserDao) {
-    suspend fun getUsers(): List<User> {
-        return userDao.getAllUsers()
-    }
-
-    suspend fun saveUser(user: User) {
-        userDao.insertUser(user)
-    }
-
-    fun observeUsers(): Flow<List<User>> {
-        return userDao.observeAllUsers()
-    }
-}
-```
-
-### 4. Кэширование Данных
-
-**Теоретические основы:**
-Кэширование хранит часто используемые данные в памяти для быстрого доступа. Это снижает количество обращений к базе данных и улучшает производительность.
-
-**Стратегии кэширования:**
-- **LRU Cache** - Least Recently Used
-- **TTL Cache** - Time To Live
-- **Write-through Cache** - синхронная запись
-- **Write-behind Cache** - асинхронная запись
-
-**Компактная реализация:**
-```kotlin
-class CachedUserRepository @Inject constructor(
-    private val userDao: UserDao
-) {
-    private val cache = LruCache<String, User>(100)
-
-    suspend fun getUser(id: String): User? {
-        return cache.get(id) ?: userDao.getUserById(id)?.also { cache.put(id, it) }
-    }
-
-    suspend fun saveUser(user: User) {
-        userDao.insertUser(user)
-        cache.put(user.id.toString(), user)
-    }
-}
-```
-
-### 5. Оптимизация Запросов
-
-**Теоретические основы:**
-Оптимизация SQL запросов включает использование эффективных операторов, минимизацию количества записей и правильное использование JOIN операций.
-
-**Принципы оптимизации:**
-- Использование LIMIT для ограничения результатов
-- Избегание SELECT * запросов
-- Правильное использование WHERE условий
-- Оптимизация JOIN операций
-
-**Компактная реализация:**
 ```kotlin
 @Dao
-interface OptimizedUserDao {
-    @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
-    suspend fun getUserByEmail(email: String): User?
+interface UserDao {
+    @Query("SELECT * FROM users")
+    suspend fun getUsers(): List<User>  // ✅ Для одноразовых запросов
 
-    @Query("SELECT id, firstName, lastName FROM users WHERE created_at > :timestamp")
-    suspend fun getRecentUsers(timestamp: Long): List<User>
-
-    @Query("SELECT u.* FROM users u JOIN profiles p ON u.id = p.user_id WHERE p.active = 1")
-    suspend fun getActiveUsers(): List<User>
+    @Query("SELECT * FROM users")
+    fun observeUsers(): Flow<List<User>>  // ✅ Для автоматических обновлений UI
 }
 ```
 
-### 6. Производительность И Мониторинг
+Room автоматически выполняет операции на `Dispatchers.IO`.
 
-**Теоретические основы:**
-Мониторинг производительности базы данных критически важен для выявления узких мест и оптимизации. Android предоставляет инструменты для профилирования и анализа.
+### 4. Оптимизация Запросов
 
-**Метрики производительности:**
-- Время выполнения запросов
-- Количество операций в секунду
-- Использование памяти
-- Размер базы данных
+Минимизируйте объем считываемых данных:
 
-**Инструменты мониторинга:**
-- Android Studio Profiler
-- Room Inspector
-- SQLite Performance Analysis
-- Custom logging
+```kotlin
+@Dao
+interface UserDao {
+    // ❌ Читает все поля, даже ненужные
+    @Query("SELECT * FROM users WHERE active = 1")
+    suspend fun getActiveUsers(): List<User>
+
+    // ✅ Только нужные поля
+    @Query("SELECT id, name FROM users WHERE active = 1 LIMIT 100")
+    suspend fun getActiveUserNames(): List<UserName>
+
+    // ✅ Используйте LIMIT для пагинации
+    @Query("SELECT * FROM users ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
+    suspend fun getUsersPage(limit: Int, offset: Int): List<User>
+}
+```
+
+### 5. Кэширование
+
+LRU кэш для горячих данных:
+
+```kotlin
+class UserRepository @Inject constructor(
+    private val dao: UserDao
+) {
+    private val cache = LruCache<Long, User>(maxSize = 100)  // ✅ ~100 записей в памяти
+
+    suspend fun getUser(id: Long): User? =
+        cache[id] ?: dao.getUserById(id)?.also { cache.put(id, it) }
+}
+```
+
+**Trade-off:** использует память (~10-100 KB в зависимости от размера объектов).
 
 ## Answer (EN)
 
-Database optimization is critical for Android app performance, especially when dealing with large datasets or frequent database operations.
+Database optimization in Android requires a comprehensive approach: proper indexing, batch operations, asynchronous execution, and caching.
 
-### Theory: Database Optimization Principles
+### 1. Indexing
 
-**Core Concepts:**
-- **Indexing** - accelerating data search and sorting
-- **Batch Operations** - grouping operations to reduce overhead
-- **Asynchronous Operations** - preventing UI thread blocking
-- **Caching** - storing frequently used data in memory
-- **Query Optimization** - efficient SQL queries
+Indexes speed up reads but slow down writes. Create indexes for frequently queried fields:
 
-**Working Principles:**
-- Indexes speed up search but slow down insertion
-- Batch operations reduce transaction count
-- Asynchronous operations prevent ANR
-- Caching reduces database access count
-
-### 1. Indexing Strategy
-
-**Theoretical Foundations:**
-Indexes create additional data structures to accelerate search. They work as pointers to data, allowing quick record finding without full table scanning.
-
-**Index Types:**
-- **Unique indexes** - for fields with unique values
-- **Composite indexes** - for field combinations
-- **Partial indexes** - for WHERE conditions
-
-**Compact Implementation:**
 ```kotlin
 @Entity(
     tableName = "users",
     indices = [
-        Index(value = ["email"], unique = true),
-        Index(value = ["last_name", "first_name"]),
-        Index(value = ["created_at"])
+        Index(value = ["email"], unique = true),  // ✅ For exact lookups
+        Index(value = ["last_name", "first_name"]),  // ✅ Composite index
+        Index(value = ["created_at"])  // ✅ For sorting/filtering
     ]
 )
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val email: String,
-    val firstName: String,
-    val lastName: String,
-    val createdAt: Long
+    // ❌ Don't index rarely queried fields - it slows down INSERT
 )
 ```
 
+**Trade-offs:** indexes consume additional memory (~10-20% of table size) and slow down INSERT/UPDATE by 15-30%.
+
 ### 2. Batch Operations
 
-**Theoretical Foundations:**
-Batch operations group multiple operations into a single transaction, reducing overhead from opening/closing connections and committing transactions.
+Group operations into transactions to reduce overhead:
 
-**Benefits:**
-- Reduced transaction count
-- Improved performance
-- Operation atomicity
-- Better resource utilization
-
-**Compact Implementation:**
 ```kotlin
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUsers(users: List<User>)
+    suspend fun insertUsers(users: List<User>)  // ✅ Single transaction
 
-    @Update
-    suspend fun updateUsers(users: List<User>)
-
-    @Delete
-    suspend fun deleteUsers(users: List<User>)
-
-    @Transaction
-    suspend fun batchOperations(users: List<User>) {
-        insertUsers(users)
-        updateUsers(users.filter { it.id > 0 })
+    @Transaction  // ✅ Guarantees atomicity
+    suspend fun syncUsers(local: List<User>, remote: List<User>) {
+        deleteUsers(local)
+        insertUsers(remote)
     }
 }
+
+// ❌ Bad: each insert is a separate transaction
+users.forEach { dao.insertUser(it) }
+
+// ✅ Good: single transaction for all records
+dao.insertUsers(users)
 ```
 
-### 3. Asynchronous Operations
+**Performance:** batch insert of 1000 records is ~50x faster than individual inserts.
 
-**Theoretical Foundations:**
-Asynchronous operations prevent UI thread blocking and ANR (Application Not Responding) errors. Room provides built-in coroutine support for asynchronous operations.
+### 3. Asynchronicity And Reactivity
 
-**Working Principles:**
-- Using suspend functions
-- Execution in background threads
-- Operation cancellation when needed
-- Error handling
+Use `suspend` functions and `Flow` to prevent ANR:
 
-**Compact Implementation:**
-```kotlin
-class UserRepository @Inject constructor(private val userDao: UserDao) {
-    suspend fun getUsers(): List<User> {
-        return userDao.getAllUsers()
-    }
-
-    suspend fun saveUser(user: User) {
-        userDao.insertUser(user)
-    }
-
-    fun observeUsers(): Flow<List<User>> {
-        return userDao.observeAllUsers()
-    }
-}
-```
-
-### 4. Data Caching
-
-**Theoretical Foundations:**
-Caching stores frequently used data in memory for fast access. This reduces database access count and improves performance.
-
-**Caching Strategies:**
-- **LRU Cache** - Least Recently Used
-- **TTL Cache** - Time To Live
-- **Write-through Cache** - synchronous write
-- **Write-behind Cache** - asynchronous write
-
-**Compact Implementation:**
-```kotlin
-class CachedUserRepository @Inject constructor(
-    private val userDao: UserDao
-) {
-    private val cache = LruCache<String, User>(100)
-
-    suspend fun getUser(id: String): User? {
-        return cache.get(id) ?: userDao.getUserById(id)?.also { cache.put(id, it) }
-    }
-
-    suspend fun saveUser(user: User) {
-        userDao.insertUser(user)
-        cache.put(user.id.toString(), user)
-    }
-}
-```
-
-### 5. Query Optimization
-
-**Theoretical Foundations:**
-SQL query optimization includes using efficient operators, minimizing record count, and proper JOIN operation usage.
-
-**Optimization Principles:**
-- Using LIMIT to restrict results
-- Avoiding SELECT * queries
-- Proper WHERE condition usage
-- JOIN operation optimization
-
-**Compact Implementation:**
 ```kotlin
 @Dao
-interface OptimizedUserDao {
-    @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
-    suspend fun getUserByEmail(email: String): User?
+interface UserDao {
+    @Query("SELECT * FROM users")
+    suspend fun getUsers(): List<User>  // ✅ For one-time queries
 
-    @Query("SELECT id, firstName, lastName FROM users WHERE created_at > :timestamp")
-    suspend fun getRecentUsers(timestamp: Long): List<User>
-
-    @Query("SELECT u.* FROM users u JOIN profiles p ON u.id = p.user_id WHERE p.active = 1")
-    suspend fun getActiveUsers(): List<User>
+    @Query("SELECT * FROM users")
+    fun observeUsers(): Flow<List<User>>  // ✅ For automatic UI updates
 }
 ```
 
-### 6. Performance and Monitoring
+Room automatically executes operations on `Dispatchers.IO`.
 
-**Theoretical Foundations:**
-Database performance monitoring is critical for identifying bottlenecks and optimization. Android provides tools for profiling and analysis.
+### 4. Query Optimization
 
-**Performance Metrics:**
-- Query execution time
-- Operations per second
-- Memory usage
-- Database size
+Minimize the volume of data read:
 
-**Monitoring Tools:**
-- Android Studio Profiler
-- Room Inspector
-- SQLite Performance Analysis
-- Custom logging
+```kotlin
+@Dao
+interface UserDao {
+    // ❌ Reads all fields, even unnecessary ones
+    @Query("SELECT * FROM users WHERE active = 1")
+    suspend fun getActiveUsers(): List<User>
 
-**See also:** c-database-optimization, c-indexing
+    // ✅ Only needed fields
+    @Query("SELECT id, name FROM users WHERE active = 1 LIMIT 100")
+    suspend fun getActiveUserNames(): List<UserName>
+
+    // ✅ Use LIMIT for pagination
+    @Query("SELECT * FROM users ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
+    suspend fun getUsersPage(limit: Int, offset: Int): List<User>
+}
+```
+
+### 5. Caching
+
+LRU cache for hot data:
+
+```kotlin
+class UserRepository @Inject constructor(
+    private val dao: UserDao
+) {
+    private val cache = LruCache<Long, User>(maxSize = 100)  // ✅ ~100 records in memory
+
+    suspend fun getUser(id: Long): User? =
+        cache[id] ?: dao.getUserById(id)?.also { cache.put(id, it) }
+}
+```
+
+**Trade-off:** uses memory (~10-100 KB depending on object size).
 
 
 ## Follow-ups
 
-- How do you measure database performance in Android?
-- What are the trade-offs between different caching strategies?
-- How do you optimize database queries for large datasets?
+- How would you profile Room database performance to identify slow queries?
+- When would you choose DataStore over Room for persistence?
+- How do you handle database migrations without losing user data?
+- What's the impact of FTS (Full-Text Search) on database size and performance?
+- How do you implement pagination with Room and Paging 3 library?
+
+## References
+
+- [[c-database-performance]]
+- [[c-database-design]]
+- Android Room Documentation: https://developer.android.com/training/data-storage/room
+- SQLite Performance Best Practices: https://sqlite.org/performance.html
 
 ## Related Questions
 
+### Prerequisites
+- [[q-room-library-definition--android--easy]] - Understanding Room basics
+
 ### Related (Same Level)
-- [[q-database-encryption-android--android--medium]]
+- [[q-room-vs-sqlite--android--medium]] - Room vs raw SQLite comparison
+- [[q-room-database-migrations--room--medium]] - Handling schema changes
+- [[q-performance-optimization-android--android--medium]] - General Android performance
+
+### Advanced
+- [[q-room-fts-full-text-search--room--hard]] - Full-text search implementation
+- [[q-room-paging3-integration--room--medium]] - Efficient pagination patterns

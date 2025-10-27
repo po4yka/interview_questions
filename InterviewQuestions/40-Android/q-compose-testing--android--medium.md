@@ -1,59 +1,36 @@
 ---
 id: 20251020-190000
 title: Compose Testing / Тестирование Compose
-aliases: [Compose Testing, Тестирование Compose]
+aliases: ["Compose Testing", "Тестирование Compose"]
 topic: android
-subtopics:
-  - testing-unit
-  - ui-compose
+subtopics: [testing-unit, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-compose-performance-optimization--android--hard
-  - q-compose-semantics--android--medium
+related: [q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium]
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/testing-unit, android/ui-compose, difficulty/medium]
-source: https://developer.android.com/jetpack/compose/testing
-source_note: Official Compose testing documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:29 pm
+sources: [https://developer.android.com/jetpack/compose/testing]
 ---
-
 # Вопрос (RU)
-> Тестирование Compose?
+> Как тестировать Compose UI? Какие основные подходы и инструменты?
 
 # Question (EN)
-> Compose Testing?
+> How to test Compose UI? What are the main approaches and tools?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
-
-## Answer (EN)
-
-**Compose Testing** uses semantic tree (not View hierarchy) to find and interact with UI elements. Tests run synchronously while Compose handles recomposition. See also c-compose-state and c-testing-pyramid.
+**Compose Testing** использует семантическое дерево (не View иерархию) для поиска и взаимодействия с UI элементами. Тесты выполняются синхронно, Compose автоматически ожидает рекомпозиции.
 
 ### ComposeTestRule
 
-**ComposeTestRule** is the main testing utility for Compose UI tests. It provides:
-- `setContent {}` - Set composable content for testing
-- `onNode...()` - Find single UI element
-- `onAllNodes...()` - Find multiple UI elements
-- `waitForIdle()` - Wait for recomposition to complete
-- `mainClock` - Control time for animations
-
-### Setup
-
-Create test class:
+Основной инструмент тестирования, обеспечивает синхронизацию с Compose runtime:
 
 ```kotlin
 class LoginScreenTest {
@@ -61,152 +38,256 @@ class LoginScreenTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun loginScreen_displaysCorrectly() {
-        composeTestRule.setContent {
-            LoginScreen()
-        }
-        // Assertions here
+    fun loginButton_click_triggersAuth() {
+        composeTestRule.setContent { LoginScreen() }
+
+        composeTestRule.onNodeWithTag("login_btn").performClick()
+        // ✅ Автоматически ждет recomposition
+        composeTestRule.onNodeWithTag("progress").assertExists()
     }
 }
 ```
 
-### Finding Elements
+### Поиск элементов
 
-**By text:**
+**testTag** (рекомендуется - стабилен к рефакторингу):
 ```kotlin
-composeTestRule.onNodeWithText("Welcome").assertExists()
+Button(modifier = Modifier.testTag("submit")) { /* ... */ }
+composeTestRule.onNodeWithTag("submit").performClick()
 ```
 
-**By test tag (recommended):**
+**По тексту** (хрупкий - зависит от локализации):
 ```kotlin
-Button(modifier = Modifier.testTag("login_button")) { Text("Login") }
-composeTestRule.onNodeWithTag("login_button").assertExists()
+composeTestRule.onNodeWithText("Submit").performClick() // ❌ Сломается при переводе
 ```
 
-**By content description:**
+**По семантике** (лучше для a11y):
 ```kotlin
-Image(contentDescription = "User avatar")
-composeTestRule.onNodeWithContentDescription("User avatar").assertExists()
+Icon(contentDescription = "Close")
+composeTestRule.onNodeWithContentDescription("Close").performClick()
 ```
 
-### User Interactions
-
-**Click:**
-```kotlin
-composeTestRule.onNodeWithTag("button").performClick()
-```
-
-**Text input:**
-```kotlin
-composeTestRule.onNodeWithTag("text_field").performTextInput("Hello")
-```
-
-**Scroll:**
-```kotlin
-composeTestRule.onNodeWithTag("scrollable").performScrollToNode(hasText("Bottom"))
-```
-
-### Assertions
-
-**Existence:**
-```kotlin
-composeTestRule.onNodeWithTag("button").assertExists()
-composeTestRule.onNodeWithTag("button").assertDoesNotExist()
-```
-
-**Text:**
-```kotlin
-composeTestRule.onNodeWithTag("text").assertTextEquals("Expected")
-```
-
-**State:**
-```kotlin
-composeTestRule.onNodeWithTag("checkbox").assertIsSelected()
-composeTestRule.onNodeWithTag("button").assertIsEnabled()
-```
-
-### Testing State Changes
+### Взаимодействия
 
 ```kotlin
-@Composable
-fun Counter() {
-    var count by remember { mutableStateOf(0) }
+// Ввод текста
+composeTestRule.onNodeWithTag("email_field")
+    .performTextInput("test@example.com")
 
-    Column {
-        Text("Count: $count", modifier = Modifier.testTag("count"))
-        Button(
-            onClick = { count++ },
-            modifier = Modifier.testTag("increment")
-        ) {
-            Text("+")
-        }
-    }
-}
+// Scroll до элемента
+composeTestRule.onNodeWithTag("list")
+    .performScrollToNode(hasText("Item 50"))
 
-@Test
-fun counter_increments() {
-    composeTestRule.setContent { Counter() }
-
-    composeTestRule.onNodeWithTag("count").assertTextEquals("Count: 0")
-    composeTestRule.onNodeWithTag("increment").performClick()
-    composeTestRule.onNodeWithTag("count").assertTextEquals("Count: 1")
-}
+// Проверка состояния
+composeTestRule.onNodeWithTag("checkbox")
+    .assertIsSelected()
+    .assertIsEnabled()
 ```
 
-### Testing Async Operations
+### Тестирование State и Recomposition
 
 ```kotlin
 @Test
-fun asyncData_loading() {
+fun stateChange_triggersRecomposition() {
+    var counter by mutableStateOf(0)
+
     composeTestRule.setContent {
-        AsyncDataScreen()
+        Button(onClick = { counter++ }) {
+            Text("Clicks: $counter") // ✅ Автоматически recompose
+        }
     }
 
-    // Initially loading
+    composeTestRule.onNodeWithText("Clicks: 0").assertExists()
+    composeTestRule.onNodeWithText("Clicks: 0").performClick()
+    // ✅ Ждет recomposition, затем проверяет
+    composeTestRule.onNodeWithText("Clicks: 1").assertExists()
+}
+```
+
+### Асинхронные операции
+
+```kotlin
+@Test
+fun asyncLoading_showsDataWhenReady() {
+    composeTestRule.setContent {
+        DataScreen(viewModel) // ViewModel с coroutine scope
+    }
+
     composeTestRule.onNodeWithTag("loading").assertExists()
 
-    // Wait for data
-    composeTestRule.waitUntil(timeoutMillis = 2000) {
-        composeTestRule.onAllNodesWithTag("data").fetchSemanticsNodes().isNotEmpty()
+    // ✅ Ждем появления элемента
+    composeTestRule.waitUntil(timeoutMillis = 3000) {
+        composeTestRule.onAllNodesWithTag("data_item")
+            .fetchSemanticsNodes().isNotEmpty()
     }
 
-    // Data loaded
-    composeTestRule.onNodeWithTag("data").assertExists()
+    composeTestRule.onNodeWithTag("data_item").assertExists()
 }
 ```
 
-### Best Practices
+### Семантическое дерево
 
-1. **Use testTag** for stable element identification
-2. **Test behavior, not implementation** - focus on user interactions
-3. **Keep tests simple** - one concept per test
-4. **Mock dependencies** - use fake implementations for ViewModels
-5. **Test accessibility** - ensure content descriptions are present
+Compose строит дерево с семантическими свойствами (text, role, actions):
+
+```kotlin
+// ❌ НЕВЕРНО - элемент не найден в semantic tree
+Image(painter = painterResource(R.drawable.logo))
+composeTestRule.onNodeWithTag("logo").assertExists() // Fail!
+
+// ✅ ВЕРНО - добавлена семантика
+Image(
+    painter = painterResource(R.drawable.logo),
+    contentDescription = "App logo", // Семантика для a11y и тестов
+    modifier = Modifier.testTag("logo")
+)
+```
+
+## Answer (EN)
+
+**Compose Testing** uses a semantic tree (not View hierarchy) to find and interact with UI elements. Tests run synchronously, Compose automatically awaits recomposition.
+
+### ComposeTestRule
+
+Main testing utility, provides synchronization with Compose runtime:
+
+```kotlin
+class LoginScreenTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    @Test
+    fun loginButton_click_triggersAuth() {
+        composeTestRule.setContent { LoginScreen() }
+
+        composeTestRule.onNodeWithTag("login_btn").performClick()
+        // ✅ Automatically waits for recomposition
+        composeTestRule.onNodeWithTag("progress").assertExists()
+    }
+}
+```
+
+### Finding elements
+
+**testTag** (recommended - refactoring-safe):
+```kotlin
+Button(modifier = Modifier.testTag("submit")) { /* ... */ }
+composeTestRule.onNodeWithTag("submit").performClick()
+```
+
+**By text** (brittle - breaks with localization):
+```kotlin
+composeTestRule.onNodeWithText("Submit").performClick() // ❌ Breaks with i18n
+```
+
+**By semantics** (better for a11y):
+```kotlin
+Icon(contentDescription = "Close")
+composeTestRule.onNodeWithContentDescription("Close").performClick()
+```
+
+### Interactions
+
+```kotlin
+// Text input
+composeTestRule.onNodeWithTag("email_field")
+    .performTextInput("test@example.com")
+
+// Scroll to element
+composeTestRule.onNodeWithTag("list")
+    .performScrollToNode(hasText("Item 50"))
+
+// Check state
+composeTestRule.onNodeWithTag("checkbox")
+    .assertIsSelected()
+    .assertIsEnabled()
+```
+
+### Testing State and Recomposition
+
+```kotlin
+@Test
+fun stateChange_triggersRecomposition() {
+    var counter by mutableStateOf(0)
+
+    composeTestRule.setContent {
+        Button(onClick = { counter++ }) {
+            Text("Clicks: $counter") // ✅ Auto-recompose
+        }
+    }
+
+    composeTestRule.onNodeWithText("Clicks: 0").assertExists()
+    composeTestRule.onNodeWithText("Clicks: 0").performClick()
+    // ✅ Waits for recomposition, then asserts
+    composeTestRule.onNodeWithText("Clicks: 1").assertExists()
+}
+```
+
+### Async operations
+
+```kotlin
+@Test
+fun asyncLoading_showsDataWhenReady() {
+    composeTestRule.setContent {
+        DataScreen(viewModel) // ViewModel with coroutine scope
+    }
+
+    composeTestRule.onNodeWithTag("loading").assertExists()
+
+    // ✅ Wait for element to appear
+    composeTestRule.waitUntil(timeoutMillis = 3000) {
+        composeTestRule.onAllNodesWithTag("data_item")
+            .fetchSemanticsNodes().isNotEmpty()
+    }
+
+    composeTestRule.onNodeWithTag("data_item").assertExists()
+}
+```
+
+### Semantic tree
+
+Compose builds a tree with semantic properties (text, role, actions):
+
+```kotlin
+// ❌ WRONG - element not in semantic tree
+Image(painter = painterResource(R.drawable.logo))
+composeTestRule.onNodeWithTag("logo").assertExists() // Fail!
+
+// ✅ CORRECT - semantics added
+Image(
+    painter = painterResource(R.drawable.logo),
+    contentDescription = "App logo", // Semantics for a11y and testing
+    modifier = Modifier.testTag("logo")
+)
+```
 
 ---
 
 ## Follow-ups
 
-- How to test custom composables?
-- What are the differences between unit tests and UI tests?
-- How to test navigation in Compose?
-- How to mock ViewModels in tests?
-- What are the performance implications of Compose testing?
+- How to test LaunchedEffect and other side effects?
+- How to handle time-based animations in tests (mainClock)?
+- When to use unmerged vs merged semantic tree?
+- How to test Compose Navigation?
+- How to handle flaky tests with async state updates?
 
 ## References
 
+- [[c-jetpack-compose]] - Compose fundamentals
+- [[c-unit-testing]] - Testing principles
 - https://developer.android.com/jetpack/compose/testing
 - https://developer.android.com/jetpack/compose/testing/semantics
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-compose-semantics--android--medium]]
+### Prerequisites
+- [[q-compose-remember-derived-state--android--medium]] - State in Compose
+- [[c-jetpack-compose]] - Basic Compose concepts
 
-### Related (Same Level)
-- [[q-compose-performance-optimization--android--hard]]
-- [[q-compose-modifier-system--android--medium]]
+### Related
+- [[q-compose-semantics--android--medium]] - Semantic tree details
+- [[q-testing-compose-ui--android--medium]] - UI testing patterns
+- [[q-testing-viewmodels-turbine--android--medium]] - Testing ViewModels
 
-### Advanced (Harder)
-- [[q-compose-compiler-plugin--android--hard]]
-- [[q-compose-slot-table-recomposition--android--hard]]
+### Advanced
+- [[q-compose-performance-optimization--android--hard]] - Performance testing
+- [[q-testing-coroutines-flow--android--hard]] - Testing async code

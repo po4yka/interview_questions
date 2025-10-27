@@ -1,112 +1,226 @@
 ---
 id: 20251012-122710
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
-aliases: [Semantics in Jetpack Compose, Семантика в Jetpack Compose]
+aliases: ["Semantics in Jetpack Compose", "Семантика в Jetpack Compose"]
 topic: android
-subtopics:
-  - a11y
-  - testing-unit
-  - ui-compose
+subtopics: [a11y, testing-unit, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-compose-modifier-system--android--medium
-  - q-compose-performance-optimization--android--hard
-  - q-compose-testing--android--medium
+related: [q-compose-modifier-system--android--medium, q-compose-performance-optimization--android--hard, q-compose-testing--android--medium]
 created: 2025-10-06
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/a11y, android/testing-unit, android/ui-compose, difficulty/medium]
-source: https://developer.android.com/jetpack/compose/semantics
-source_note: Official Compose Semantics docs
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:36 pm
+sources: [https://developer.android.com/jetpack/compose/semantics]
 ---
 
 # Вопрос (RU)
-> Семантика в Jetpack Compose?
+> Что такое семантика в Jetpack Compose и зачем она нужна?
 
 # Question (EN)
-> Semantics in Jetpack Compose?
+> What is Semantics in Jetpack Compose and why is it needed?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Концепция
+Semantics — это механизм в Compose для передачи смысла и структуры UI сервисам доступности (TalkBack, Switch Access) и тестовым API. Система семантики создаёт параллельное дерево узлов с метаданными, которое описывает *назначение* элементов, а не их визуальное представление.
+
+Ключевые свойства: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`.
+
+### Основные паттерны
+
+**Доступная кнопка**
+```kotlin
+Box(
+  Modifier
+    .clickable(onClick = onClick)
+    .semantics {
+      contentDescription = "Отправить"
+      role = Role.Button
+    }
+) {
+  Text("Отправить")
+}
+```
+
+**Изображение с описанием**
+```kotlin
+// ✅ Правильно: описание для важного контента
+Image(
+  painter = painterResource(R.drawable.profile),
+  contentDescription = "Фото профиля пользователя"
+)
+
+// ✅ Декоративное изображение
+Image(
+  painter = painterResource(R.drawable.divider),
+  contentDescription = null // явно указываем отсутствие
+)
+```
+
+**Индикатор прогресса**
+```kotlin
+Box(
+  Modifier.semantics {
+    progressBarRangeInfo = ProgressBarRangeInfo(
+      current = progress,
+      range = 0f..1f
+    )
+    stateDescription = "${(progress * 100).toInt()}%"
+  }
+) {
+  LinearProgressIndicator(progress)
+}
+```
+
+**Объединение дочерних элементов**
+```kotlin
+// ✅ TalkBack прочитает "Иван Иванов" вместо двух отдельных текстов
+Row(
+  Modifier.semantics(mergeDescendants = true) {
+    contentDescription = "$firstName $lastName"
+  }
+) {
+  Text(firstName)
+  Text(lastName)
+}
+```
+
+**Тестовые селекторы**
+```kotlin
+// UI
+Button(
+  onClick = onSubmit,
+  modifier = Modifier.testTag("submit_button")
+) {
+  Text("Отправить")
+}
+
+// Тест
+composeTestRule
+  .onNodeWithTag("submit_button")
+  .assertIsEnabled()
+  .performClick()
+```
+
+### Рекомендации
+- Всегда устанавливайте `contentDescription` для информативных изображений и иконок
+- Используйте `mergeDescendants = true` для составных элементов, чтобы избежать дублирующихся объявлений
+- Применяйте `testTag` вместо текстовых селекторов для стабильности тестов
 
 ## Answer (EN)
 
 ### Concept
-- Semantics expose UI meaning/structure to accessibility services and test APIs in [[c-jetpack-compose]].
-- Key properties: contentDescription, role, stateDescription, progressBarRangeInfo, selected/disabled for testing with c-espresso.
+Semantics is a Compose mechanism for exposing UI meaning and structure to accessibility services (TalkBack, Switch Access) and test APIs. The semantics system creates a parallel tree of nodes with metadata that describes the *purpose* of elements, not their visual representation.
 
-### Minimal Patterns
+Key properties: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`.
 
-Accessible button semantics
+### Core Patterns
+
+**Accessible button**
 ```kotlin
-Box(Modifier.clickable(onClick)
-    .semantics { contentDescription = "Submit"; role = Role.Button }) {
+Box(
+  Modifier
+    .clickable(onClick = onClick)
+    .semantics {
+      contentDescription = "Submit"
+      role = Role.Button
+    }
+) {
   Text("Submit")
 }
 ```
 
-Image with alt text
+**Image with description**
 ```kotlin
-Image(painter = painter, contentDescription = "User profile photo")
+// ✅ Correct: description for meaningful content
+Image(
+  painter = painterResource(R.drawable.profile),
+  contentDescription = "User profile photo"
+)
+
+// ✅ Decorative image
+Image(
+  painter = painterResource(R.drawable.divider),
+  contentDescription = null // explicitly mark as decorative
+)
 ```
 
-Custom state (progress)
+**Progress indicator**
 ```kotlin
-Box(Modifier.semantics {
-  progressBarRangeInfo = ProgressBarRangeInfo(current = progress, range = 0f..1f)
-  stateDescription = "${(progress*100).toInt()}%"
-}) { /* UI */ }
+Box(
+  Modifier.semantics {
+    progressBarRangeInfo = ProgressBarRangeInfo(
+      current = progress,
+      range = 0f..1f
+    )
+    stateDescription = "${(progress * 100).toInt()}%"
+  }
+) {
+  LinearProgressIndicator(progress)
+}
 ```
 
-Merging child semantics
+**Merging child semantics**
 ```kotlin
-Row(Modifier.semantics(mergeDescendants = true) {
-  contentDescription = "$firstName $lastName"
-}) { Text(firstName); Text(lastName) }
+// ✅ TalkBack will read "John Doe" instead of two separate texts
+Row(
+  Modifier.semantics(mergeDescendants = true) {
+    contentDescription = "$firstName $lastName"
+  }
+) {
+  Text(firstName)
+  Text(lastName)
+}
 ```
 
-Testing selectors
+**Test selectors**
 ```kotlin
-// In UI
-Button(Modifier.testTag("submit"), onClick = onSubmit) { Text("Submit") }
-// In test
-rule.onNodeWithTag("submit").assertIsEnabled().performClick()
-rule.onNodeWithText("Submit").assertExists()
+// UI
+Button(
+  onClick = onSubmit,
+  modifier = Modifier.testTag("submit_button")
+) {
+  Text("Submit")
+}
+
+// Test
+composeTestRule
+  .onNodeWithTag("submit_button")
+  .assertIsEnabled()
+  .performClick()
 ```
 
-Guidelines
-- Always set contentDescription for non‑decorative images/icons.
-- Prefer mergeDescendants for compound labels; avoid duplicate announcements.
-- Use testTag for stable, language‑agnostic test selectors.
+### Guidelines
+- Always set `contentDescription` for informative images and icons
+- Use `mergeDescendants = true` for compound elements to avoid duplicate announcements
+- Apply `testTag` instead of text selectors for test stability
 
 ## Follow-ups
-- How to handle live region announcements for dynamic content?
-- When to expose vs hide semantics for performance or redundancy?
-- How to structure semantics for custom controls (slider, chips)?
+- How to handle live region announcements for dynamic content updates?
+- When should semantics be cleared with `clearAndSetSemantics` for performance?
+- How to implement custom semantics properties for domain-specific accessibility?
 
 ## References
+- [[c-jetpack-compose]]
 - https://developer.android.com/jetpack/compose/semantics
 - https://developer.android.com/guide/topics/ui/accessibility
 
 ## Related Questions
 
-### Prerequisites (Easier)
+### Prerequisites
 - [[q-android-jetpack-overview--android--easy]]
-
-### Related (Same Level)
-- [[q-compose-testing--android--medium]]
 - [[q-compose-modifier-system--android--medium]]
 
-### Advanced (Harder)
+### Related
+- [[q-compose-testing--android--medium]]
+- Understanding TalkBack behavior and gestures
+
+### Advanced
 - [[q-compose-performance-optimization--android--hard]]
+- Implementing custom accessibility actions with `customActions`

@@ -18,13 +18,11 @@ related:
   - q-android-service-types--android--easy
   - q-android-services-purpose--android--easy
   - q-background-vs-foreground-service--android--medium
+sources: []
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/notifications, android/service, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:51 pm
 ---
-
 # Вопрос (RU)
 > Может ли сервис общаться с пользователем?
 
@@ -35,17 +33,43 @@ date modified: Saturday, October 25th 2025, 4:52:51 pm
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+- **Прямой UI**: Нет. [[c-service|Service]] не имеет UI и выполняется в фоновом режиме.
+- **Основной канал**: **Уведомления** (включая foreground-сервисы) для видимых пользователю событий и элементов управления. Android требует показ уведомлений для foreground-сервисов при длительной работе.
+- **Другие паттерны (косвенные)**:
+  - **Запуск Activity**: только для критичных сценариев по инициативе пользователя (использовать флаги; избегать прерывания контекста).
+  - **Bound Service callbacks**: UI привязывается и получает колбэки; отображение происходит в UI, а не в сервисе.
+  - **Broadcast → UI**: сервис отправляет broadcast; Activity/Fragment получает и обновляет UI.
+  - **Toast**: избегать для важной информации; предпочтительны уведомления.
+
+### Минимальный пример (foreground notification)
+```kotlin
+class PlayerService : Service() {
+  override fun onCreate() {
+    startForeground(ID, NotificationCompat.Builder(this, CHANNEL)
+      .setContentTitle("Воспроизведение")
+      .setSmallIcon(R.drawable.ic_stat)
+      .build())
+  }
+  override fun onBind(i: Intent?) = null
+  companion object { const val CHANNEL = "player"; const val ID = 1 }
+}
+```
+
+### Рекомендации
+- Длительная/фоновая работа → foreground-сервис с постоянным уведомлением.
+- Не запускать Activity неожиданно; уважать контекст пользователя.
+- Обновления UI должны происходить в UI-слое (Activity/Fragment), даже если данные от сервиса.
+- Очищать bindings/callbacks для предотвращения утечек памяти.
 
 ## Answer (EN)
 
-- **Direct UI**: No. `Service` has no UI; it runs in background.
-- **Primary channel**: **Notifications** (incl. foreground services) for user-visible events and controls. Android [[c-lifecycle]] rules enforce foreground service notifications for long-running work.
+- **Direct UI**: No. [[c-service|Service]] has no UI; it runs in background.
+- **Primary channel**: **Notifications** (including foreground services) for user-visible events and controls. Android enforces foreground service notifications for long-running work.
 - **Other patterns (indirect)**:
   - **Start Activity**: only for critical, user-initiated flows (use flags; avoid disruption).
   - **Bound Service callbacks**: UI binds and receives callbacks; the UI renders, not the service.
   - **Broadcast → UI**: service broadcasts; Activity/Fragment receives and updates UI.
-  - **Toasts**: avoid for important info; prefer notifications.
+  - **Toast**: avoid for important info; prefer notifications.
 
 ### Minimal Snippet (foreground notification)
 ```kotlin
@@ -63,7 +87,7 @@ class PlayerService : Service() {
 
 ### Best Practices
 - Long-running/background work → foreground service with persistent notification.
-- Don’t push Activities unexpectedly; respect user context.
+- Don't push Activities unexpectedly; respect user context.
 - UI updates must occur in UI layer (Activity/Fragment) even if data originates from a service.
 - Clean up bindings/callbacks to prevent leaks.
 
@@ -73,6 +97,7 @@ class PlayerService : Service() {
 - How to safely bind/unbind to avoid memory leaks?
 
 ## References
+- [[c-service]]
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/develop/ui/views/notifications/notification-styles
 

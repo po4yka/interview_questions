@@ -1,17 +1,13 @@
 ---
 id: 20251012-122770
-title: Android Runtime ART / Android Runtime ART
-aliases: [Android Runtime ART]
+title: Android Runtime (ART) / Android Runtime (ART)
+aliases: ["Android Runtime (ART)", "Android Runtime (ART)", "ART", "АРТ"]
 topic: android
-subtopics:
-  - performance-memory
-  - processes
+subtopics: [performance-memory, processes]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
@@ -19,121 +15,122 @@ related:
   - q-android-build-optimization--android--medium
   - q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
-updated: 2025-10-15
+updated: 2025-10-27
 tags: [android/performance-memory, android/processes, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:11 pm
+sources: []
 ---
-
 # Вопрос (RU)
-> Что такое Android Runtime ART?
-
----
+> Что такое Android Runtime (ART)?
 
 # Question (EN)
-> What is Android Runtime ART?
+> What is Android Runtime (ART)?
 
-## Answer (EN)
-**Android Runtime (ART)** is the execution environment for Android applications, responsible for running code, managing memory, and interacting with the operating system. ART replaced Dalvik VM from Android 5.0 and uses **AOT (Ahead-of-Time) compilation** for improved performance.
+## Ответ (RU)
 
-**Runtime Theory:**
-Android Runtime provides a managed execution environment that abstracts hardware differences and provides [[c-memory-management]], c-garbage-collection, and security isolation. It converts DEX bytecode to native machine code for optimal performance while maintaining portability across different Android devices.
+**Android Runtime (ART)** — среда выполнения приложений Android, ответственная за запуск кода, управление памятью и взаимодействие с ОС. ART заменил Dalvik VM начиная с Android 5.0 и использует **AOT (Ahead-of-Time) компиляцию** для повышения производительности. См. также [[c-memory-management]].
+
+**Ключевые особенности ART:**
+
+1. **Гибридная компиляция (Android 7.0+)**
+   - Установка: базовая AOT-компиляция (быстро)
+   - Первые запуски: JIT-компиляция "горячих" путей кода
+   - Фоновая оптимизация: полная AOT-компиляция
+
+2. **Улучшенная сборка мусора**
+   - Concurrent copying GC с heap compaction
+   - Минимальные паузы приложения
+   - Эффективное использование памяти
+
+3. **DEX формат**
+   - Оптимизирован для мобильных устройств
+   - Меньший размер по сравнению с Java bytecode
+   - Все классы в одном DEX-файле
 
 **ART vs Dalvik:**
-- **Dalvik**: JIT (Just-In-Time) compilation during execution
-- **ART**: AOT (Ahead-of-Time) compilation at install time + JIT profiling since Android 7.0
+- **Dalvik**: JIT-компиляция во время выполнения, простая GC
+- **ART**: AOT + JIT, продвинутая GC, быстрее запуск/выполнение, больше размер приложения
 
-**AOT Compilation Process:**
-```
-APK → DEX bytecode → AOT compilation → Native machine code
-                    (at install time)
-```
+**Пример проверки runtime:**
 
-**Key ART Features:**
-- **AOT Compilation**: Converts DEX to native code at install time
-- **Improved Garbage Collection**: Concurrent copying GC with heap compaction
-- **Better Performance**: Faster app startup and execution
-- **Lower Battery Consumption**: No runtime compilation overhead
-- **Hybrid Compilation**: AOT + JIT profiling for optimal performance
-
-**Memory Management:**
 ```kotlin
-class MemoryExample {
-    fun createObjects() {
-        val list = mutableListOf<String>()
-        repeat(10000) {
-            list.add("Object $it")
-        }
-        // ART automatically manages garbage collection
-    }
+fun checkRuntime() {
+    val runtime = System.getProperty("java.vm.name")
+    Log.d("Runtime", "VM: $runtime") // ✅ "ART" на современных устройствах
 }
 ```
 
-**Garbage Collection Theory:**
-ART uses a concurrent copying garbage collector that runs alongside the application, minimizing pause times. It performs heap compaction to reduce fragmentation and improve memory allocation efficiency.
+**Оптимизация производительности:**
 
-**Class Loading:**
-```kotlin
-class MyActivity : AppCompatActivity() {
-    // Classes loaded on-demand from DEX files
-    private val helper by lazy { DatabaseHelper(this) }
-}
-```
-
-**DEX Format:**
-```
-Java/Kotlin code → .class files → .dex files → ART execution
-```
-
-**DEX Theory:**
-DEX (Dalvik Executable) format is optimized for mobile devices with smaller file sizes than Java bytecode. All classes are packaged in a single DEX file for efficient loading and execution.
-
-**Hybrid Compilation (Android 7.0+):**
-```
-Install: Basic AOT compilation (fast)
-         ↓
-First runs: JIT compilation of "hot" code paths
-         ↓
-Background: Full AOT optimization
-```
-
-**Performance Optimization:**
 ```kotlin
 class PerformanceExample {
     fun hotMethod() {
-        // Frequently called - compiled to optimized native code
+        // ✅ Часто вызывается → компилируется в оптимизированный нативный код
         processData()
     }
 
     fun coldMethod() {
-        // Rarely called - may remain interpreted
+        // ❌ Редкие вызовы → может оставаться интерпретированным
         cleanup()
     }
 }
 ```
 
-**Security Features:**
-- **Sandboxed Execution**: Each app runs in isolated environment
-- **Process Isolation**: Apps run in separate processes
-- **Permission System**: Controlled access to system resources
+## Answer (EN)
 
-**Runtime Detection:**
+**Android Runtime (ART)** is the execution environment for Android applications, responsible for running code, managing memory, and interacting with the OS. ART replaced Dalvik VM starting from Android 5.0 and uses **AOT (Ahead-of-Time) compilation** for improved performance. See also [[c-memory-management]].
+
+**Key ART Features:**
+
+1. **Hybrid Compilation (Android 7.0+)**
+   - Install: Basic AOT compilation (fast)
+   - First runs: JIT compilation of "hot" code paths
+   - Background optimization: Full AOT compilation
+
+2. **Improved Garbage Collection**
+   - Concurrent copying GC with heap compaction
+   - Minimal application pause times
+   - Efficient memory utilization
+
+3. **DEX Format**
+   - Optimized for mobile devices
+   - Smaller size compared to Java bytecode
+   - All classes packaged in single DEX file
+
+**ART vs Dalvik:**
+- **Dalvik**: JIT compilation during runtime, simple GC
+- **ART**: AOT + JIT, advanced GC, faster startup/execution, larger app size
+
+**Runtime detection example:**
+
 ```kotlin
 fun checkRuntime() {
     val runtime = System.getProperty("java.vm.name")
-    Log.d("Runtime", "VM: $runtime") // "ART" or "Dalvik"
+    Log.d("Runtime", "VM: $runtime") // ✅ "ART" on modern devices
 }
 ```
 
-**Key Differences:**
-- **ART**: AOT compilation, better GC, faster execution, larger app size
-- **Dalvik**: JIT compilation, simpler GC, slower execution, smaller app size
+**Performance optimization:**
+
+```kotlin
+class PerformanceExample {
+    fun hotMethod() {
+        // ✅ Frequently called → compiled to optimized native code
+        processData()
+    }
+
+    fun coldMethod() {
+        // ❌ Rarely called → may remain interpreted
+        cleanup()
+    }
+}
+```
 
 ## Follow-ups
 
-- How does ART's garbage collection differ from Dalvik's approach?
-- What are the performance implications of AOT vs JIT compilation?
-- How does hybrid compilation work in modern Android versions?
+- How does ART's concurrent copying GC reduce pause times?
+- What triggers full AOT compilation in background optimization?
+- How does profile-guided compilation improve performance in Android 7.0+?
+- What are the trade-offs between app install time and runtime performance?
 
 ## References
 
@@ -142,14 +139,16 @@ fun checkRuntime() {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] - App components
-- [[q-android-manifest-file--android--easy]] - App configuration
+### Prerequisites
+- [[q-android-app-components--android--easy]] - Understanding app lifecycle and components
+- [[q-android-manifest-file--android--easy]] - App configuration basics
 
-### Related (Medium)
-- [[q-android-app-lag-analysis--android--medium]] - Performance analysis
-- [[q-android-performance-measurement-tools--android--medium]] - Performance tools
-- [[q-android-build-optimization--android--medium]] - Build optimization
+### Related
+- [[q-android-app-lag-analysis--android--medium]] - Analyzing performance bottlenecks
+- [[q-android-performance-measurement-tools--android--medium]] - Profiling and measuring performance
+- [[q-android-build-optimization--android--medium]] - Optimizing build and compilation
 
-### Advanced (Harder)
-- [[q-android-architectural-patterns--android--medium]] - Architecture patterns
+### Advanced
+- Memory management strategies in ART
+- DEX optimization techniques
+- Runtime performance profiling

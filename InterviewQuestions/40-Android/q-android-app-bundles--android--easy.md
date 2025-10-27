@@ -1,7 +1,12 @@
 ---
 id: 20251005-143000
-title: Android App Bundles / Android App Bundle (AAB)
-aliases: [AAB, Android App Bundle, Android App Bundles]
+title: Android App Bundle (AAB) / Android App Bundle (AAB)
+aliases:
+  - AAB
+  - Android App Bundle
+  - Android App Bundles
+  - Формат AAB
+  - Андроид App Bundle
 topic: android
 subtopics:
   - app-bundle
@@ -17,15 +22,13 @@ moc: moc-android
 related:
   - q-gradle-basics--android--easy
   - q-play-feature-delivery--android--medium
-  - q-play-store-publishing--distribution--medium
 created: 2025-10-05
-updated: 2025-10-15
+updated: 2025-10-27
+sources:
+  - https://github.com/Kirchhoff-/Android-Interview-Questions
+  - https://developer.android.com/guide/app-bundle
 tags: [android/app-bundle, android/play-console, difficulty/easy]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
-date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Saturday, October 25th 2025, 4:53:20 pm
 ---
-
 # Вопрос (RU)
 > Что такое Android App Bundle (AAB)?
 
@@ -34,24 +37,58 @@ date modified: Saturday, October 25th 2025, 4:53:20 pm
 # Question (EN)
 > What are Android App Bundles?
 
+## Ответ (RU)
+
+**Android App Bundle (AAB)** — формат публикации приложений для Google Play, который содержит скомпилированный код и ресурсы. Google Play самостоятельно генерирует оптимизированные APK для каждого устройства.
+
+**Ключевые преимущества:**
+
+- **Меньший размер загрузки**: Пользователь скачивает только код и ресурсы для своего устройства
+- **Динамическая доставка**: Возможность загружать функции по требованию
+- **Лимит 150 МБ**: Увеличен с 100 МБ для сжатой загрузки
+- **Подписывание Google**: Автоматическое подписывание APK через Google Play
+
+**Настройка Bundle:**
+
+```kotlin
+// build.gradle.kts
+android {
+    bundle {
+        language { enableSplit = true }  // ✅ Разделение по языкам
+        density { enableSplit = true }   // ✅ Разделение по плотности экрана
+        abi { enableSplit = true }       // ✅ Разделение по архитектуре процессора
+    }
+}
+```
+
+**Тестирование AAB локально:**
+
+```bash
+# Генерация универсального APK для тестирования
+bundletool build-apks --bundle=app-release.aab --output=app.apks --mode=universal
+
+# Установка на устройство
+bundletool install-apks --apks=app.apks
+```
+
+**Требования:**
+
+- **Обязательно**: AAB требуется для новых приложений с августа 2021
+- **Поддержка APK**: Только для существующих приложений
+- **Asset-паки**: Не учитываются в лимите 150 МБ
+
+---
+
 ## Answer (EN)
-Android App Bundle (AAB) is a publishing format that includes compiled code and resources, with APK generation deferred to Google Play. App distribution is optimized through dynamic delivery.
+
+**Android App Bundle (AAB)** is a publishing format for Google Play that contains compiled code and resources. Google Play generates optimized APKs for each device configuration.
 
 **Key Benefits:**
 
-- **Smaller downloads**: Only device-specific code and resources downloaded
+- **Smaller downloads**: Users download only device-specific code and resources
 - **Dynamic delivery**: Features can be downloaded on-demand
 - **150MB limit**: Increased from 100MB for compressed downloads
 - **Google signing**: Automatic APK signing by Google Play
-
-**AAB vs APK:**
-
-| Feature | APK | AAB |
-|---------|-----|-----|
-| Installation | Direct install | Must be processed to APK |
-| Size optimization | No | Yes |
-| Dynamic delivery | No | Yes |
-| Signing | Developer or Google | Google only |
 
 **Bundle Configuration:**
 
@@ -59,9 +96,9 @@ Android App Bundle (AAB) is a publishing format that includes compiled code and 
 // build.gradle.kts
 android {
     bundle {
-        language { enableSplit = true }
-        density { enableSplit = true }
-        abi { enableSplit = true }
+        language { enableSplit = true }  // ✅ Split by language
+        density { enableSplit = true }   // ✅ Split by screen density
+        abi { enableSplit = true }       // ✅ Split by CPU architecture
     }
 }
 ```
@@ -76,45 +113,30 @@ bundletool build-apks --bundle=app-release.aab --output=app.apks --mode=universa
 bundletool install-apks --apks=app.apks
 ```
 
-**Modern Dependencies:**
-
-```kotlin
-// Feature delivery (Play Core is deprecated)
-implementation("com.google.android.play:feature-delivery:2.1.0")
-implementation("com.google.android.play:feature-delivery-ktx:2.1.0")
-
-// Asset delivery
-implementation("com.google.android.play:asset-delivery:2.2.0")
-implementation("com.google.android.play:asset-delivery-ktx:2.2.0")
-```
-
 **Requirements:**
 
 - **Mandatory**: AAB required for new apps since August 2021
-- **APK support**: Only for existing apps and testing tracks
+- **APK support**: Only for existing apps
 - **Asset packs**: Don't count toward 150MB limit
-- **Feature modules**: Optional, downloaded on-demand
+
+---
 
 ## Follow-ups
 
 - How do you test AABs on different device configurations?
 - What are the differences between feature modules and asset packs?
-- How do you migrate from APK to AAB format?
-- What are the limitations of dynamic delivery?
-- How do you handle AAB signing and security?
+- How does AAB signing work with Google Play App Signing?
 
 ## References
 
+- [[c-gradle]] - Gradle build system concepts
 - [Android App Bundle Guide](https://developer.android.com/guide/app-bundle)
-- [Play Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery)
 - [BundleTool Documentation](https://developer.android.com/studio/command-line/bundletool)
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-gradle-basics--android--easy]] - Gradle build system
-- [[q-android-app-components--android--easy]] - App components
+### Prerequisites
+- [[q-gradle-basics--android--easy]]
 
-### Related (Medium)
-- [[q-play-feature-delivery--android--medium]] - Feature delivery
-- [[q-what-is-intent--android--easy]] - Intent system
+### Related
+- [[q-play-feature-delivery--android--medium]]

@@ -1,105 +1,92 @@
 ---
 id: 20251021-140000
 title: Custom Drawable Implementation / Реализация Custom Drawable
-aliases: [Custom Drawable Implementation, Реализация Custom Drawable]
+aliases: ["Custom Drawable Implementation", "Реализация Custom Drawable"]
 topic: android
-subtopics:
-  - ui-graphics
-  - ui-views
+subtopics: [ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-canvas-drawing-optimization--android--hard
-  - q-custom-viewgroup-layout--android--hard
+related: [q-canvas-drawing-optimization--android--hard, q-custom-viewgroup-layout--android--hard]
 created: 2025-10-21
-updated: 2025-10-21
+updated: 2025-10-27
 tags: [android/ui-graphics, android/ui-views, difficulty/medium]
-source: https://developer.android.com/reference/android/graphics/drawable/Drawable
-source_note: Official Drawable documentation
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:26 pm
+sources: ["https://developer.android.com/reference/android/graphics/drawable/Drawable"]
 ---
 
 # Вопрос (RU)
-> Реализация Custom Drawable?
+> Как реализовать Custom Drawable в Android?
 
 # Question (EN)
-> Custom Drawable Implementation?
+> How to implement a Custom Drawable in Android?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Что такое Custom Drawable
+- Легковесная переиспользуемая графика для нескольких View
+- Эффективнее, чем кастомная View для простой графики без взаимодействия
+- Управляется системой Android, не требует сложного жизненного цикла
 
-## Answer (EN)
+Связано с концептами [[c-custom-views]], c-canvas-drawing и [[c-lifecycle]].
 
-### What is Custom Drawable
-- Lightweight, reusable graphics for multiple views
-- More efficient than custom View for simple graphics without interaction
-- Managed by Android system, no complex lifecycle needed
+### Drawable vs Custom View
 
-Related to concepts [[c-custom-views]], c-canvas-drawing, and [[c-lifecycle]].
-
-### Drawable Vs Custom View
-
-| Feature | Drawable | Custom View |
+| Характеристика | Drawable | Custom View |
 |---------|----------|-------------|
-| **Use case** | Simple graphics, icons | Interactive UI elements |
-| **Performance** | Lightweight | Heavier (full View) |
-| **Interaction** | No touch handling | Full touch support |
-| **Lifecycle** | Simple | Complex (attach/detach) |
-| **Reusability** | High | Lower |
-| **State** | Limited | Full state management |
+| **Случай использования** | Простая графика, иконки | Интерактивные UI элементы |
+| **Производительность** | Легковесная | Тяжелая (полноценная View) |
+| **Взаимодействие** | Без обработки касаний | Полная поддержка касаний |
+| **Жизненный цикл** | Простой | Сложный (attach/detach) |
+| **Переиспользуемость** | Высокая | Ниже |
+| **Состояние** | Ограниченное | Полное управление состоянием |
 
-**Use Drawable when:**
-- Non-interactive graphics
-- Reusable across views
-- Simple shapes/animations
-- Background/foreground graphics
+**Используйте Drawable когда:**
+- Неинтерактивная графика
+- Переиспользование в разных View
+- Простые формы/анимации
+- Фоновая/передняя графика
 
-**Use Custom View when:**
-- Need touch interaction
-- Complex lifecycle
-- Accessibility requirements
-- Animation coordination
+**Используйте Custom View когда:**
+- Нужно взаимодействие с касаниями
+- Сложный жизненный цикл
+- Требования доступности
+- Координация анимаций
 
-### Drawable Lifecycle
-1. **Creation** - constructor or factory methods
-2. **Bounds setting** - `setBounds()` defines drawing area
-3. **Drawing** - `draw()` called by system
-4. **State changes** - `setState()` for appearance updates
-5. **Cleanup** - automatic memory management
+### Жизненный цикл Drawable
+1. **Создание** - конструктор или фабричные методы
+2. **Установка границ** - `setBounds()` определяет область рисования
+3. **Отрисовка** - `draw()` вызывается системой
+4. **Изменения состояния** - `setState()` для обновления внешнего вида
+5. **Очистка** - автоматическое управление памятью
 
-### Key Methods to Override
+### Ключевые методы для переопределения
 
 **draw(canvas: Canvas)**
-- Main drawing method
-- Called by system for rendering
+- Основной метод отрисовки
+- Вызывается системой для рендеринга
 
 **setBounds()**
-- Sets drawing area boundaries
-- Defines where and how big to draw
+- Устанавливает границы области рисования
+- Определяет где и какого размера рисовать
 
 **getOpacity()**
-- Returns drawable transparency
+- Возвращает прозрачность drawable
 - PixelFormat.OPAQUE, TRANSLUCENT, TRANSPARENT
 
 **setAlpha(alpha: Int)**
-- Sets alpha channel
-- Affects transparency
+- Устанавливает альфа-канал
+- Влияет на прозрачность
 
 **setColorFilter(colorFilter: ColorFilter?)**
-- Applies color filter
-- For tinting and color effects
+- Применяет цветовой фильтр
+- Для тонирования и цветовых эффектов
 
-### Minimal Implementation
+### Минимальная реализация
 
 ```kotlin
 class CircleDrawable : Drawable() {
@@ -112,7 +99,7 @@ class CircleDrawable : Drawable() {
         get() = paint.color
         set(value) {
             paint.color = value
-            invalidateSelf() // Request redraw
+            invalidateSelf() // Запрос перерисовки
         }
 
     override fun draw(canvas: Canvas) {
@@ -142,7 +129,7 @@ class CircleDrawable : Drawable() {
 }
 ```
 
-### State Management
+### Управление состоянием
 
 ```kotlin
 class StatefulDrawable : Drawable() {
@@ -150,6 +137,7 @@ class StatefulDrawable : Drawable() {
     private var isPressed = false
 
     override fun draw(canvas: Canvas) {
+        // ✅ Оптимально: выбор цвета по состоянию
         paint.color = if (isPressed) Color.RED else Color.BLUE
         canvas.drawRect(bounds, paint)
     }
@@ -167,11 +155,11 @@ class StatefulDrawable : Drawable() {
 
     override fun isStateful(): Boolean = true
 
-    // ... other methods
+    // ... остальные методы
 }
 ```
 
-### Animated Drawable
+### Анимированный Drawable
 
 ```kotlin
 class AnimatedDrawable : Drawable() {
@@ -191,7 +179,7 @@ class AnimatedDrawable : Drawable() {
     }
 
     fun startAnimation() {
-        // Use ValueAnimator for animation
+        // Использование ValueAnimator
         ValueAnimator.ofFloat(0f, 1f).apply {
             duration = 1000
             addUpdateListener { animator ->
@@ -202,7 +190,136 @@ class AnimatedDrawable : Drawable() {
         }
     }
 
-    // ... other methods
+    // ... остальные методы
+}
+```
+
+### Лучшие практики
+
+1. **Используйте Paint.ANTI_ALIAS_FLAG** для гладких краёв
+2. **Кэшируйте Paint объекты** - не создавайте в draw()
+3. **Вызывайте invalidateSelf()** при изменении внешнего вида
+4. **Реализуйте intrinsic размеры** для правильной разметки
+5. **Обрабатывайте состояния** через setState() для интерактивности
+6. **Избегайте сложных вычислений** в draw() - предварительно вычисляйте
+7. **Используйте правильные границы** через свойство bounds
+
+### Подводные камни
+
+- **Не создавайте объекты в draw()** - влияет на производительность
+- **Правильно обрабатывайте bounds** - система может их изменить
+- **Помните о прозрачности** - корректно реализуйте getOpacity()
+- **Не забывайте invalidateSelf()** при изменениях
+- **Тестируйте на разных размерах** - intrinsic размеры важны
+
+## Answer (EN)
+
+### What is Custom Drawable
+- Lightweight, reusable graphics for multiple views
+- More efficient than custom View for simple graphics without interaction
+- Managed by Android system, no complex lifecycle needed
+
+Related to concepts [[c-custom-views]], c-canvas-drawing, and [[c-lifecycle]].
+
+### Drawable vs Custom View
+
+| Feature | Drawable | Custom View |
+|---------|----------|-------------|
+| **Use case** | Simple graphics, icons | Interactive UI elements |
+| **Performance** | Lightweight | Heavier (full View) |
+| **Interaction** | No touch handling | Full touch support |
+| **Lifecycle** | Simple | Complex (attach/detach) |
+| **Reusability** | High | Lower |
+
+**Use Drawable when:** non-interactive graphics, reusable across views, simple shapes/animations.
+
+**Use Custom View when:** need touch interaction, complex lifecycle, accessibility requirements.
+
+### Drawable Lifecycle
+1. **Creation** - constructor or factory methods
+2. **Bounds setting** - `setBounds()` defines drawing area
+3. **Drawing** - `draw()` called by system
+4. **State changes** - `setState()` for appearance updates
+5. **Cleanup** - automatic memory management
+
+### Key Methods to Override
+
+**draw(canvas: Canvas)** - Main drawing method called by system for rendering
+
+**setBounds()** - Sets drawing area boundaries, defines where and how big to draw
+
+**getOpacity()** - Returns drawable transparency (PixelFormat.OPAQUE, TRANSLUCENT, TRANSPARENT)
+
+**setAlpha(alpha: Int)** - Sets alpha channel for transparency
+
+**setColorFilter(colorFilter: ColorFilter?)** - Applies color filter for tinting
+
+### Minimal Implementation
+
+```kotlin
+class CircleDrawable : Drawable() {
+    // ✅ Cache Paint - create once, reuse
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.BLUE
+    }
+
+    var color: Int
+        get() = paint.color
+        set(value) {
+            paint.color = value
+            invalidateSelf() // ✅ Request redraw
+        }
+
+    override fun draw(canvas: Canvas) {
+        val radius = min(bounds.width(), bounds.height()) / 2f
+        canvas.drawCircle(
+            bounds.centerX().toFloat(),
+            bounds.centerY().toFloat(),
+            radius, paint
+        )
+    }
+
+    override fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+        invalidateSelf()
+    }
+
+    override fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.colorFilter = colorFilter
+        invalidateSelf()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+}
+```
+
+### State Management
+
+```kotlin
+class StatefulDrawable : Drawable() {
+    private val paint = Paint()
+    private var isPressed = false
+
+    override fun draw(canvas: Canvas) {
+        // ✅ Optimal: select color by state
+        paint.color = if (isPressed) Color.RED else Color.BLUE
+        canvas.drawRect(bounds, paint)
+    }
+
+    override fun setState(stateSet: IntArray): Boolean {
+        val wasPressed = isPressed
+        isPressed = stateSet.contains(android.R.attr.state_pressed)
+
+        if (wasPressed != isPressed) {
+            invalidateSelf()
+            return true
+        }
+        return false
+    }
+
+    override fun isStateful(): Boolean = true
 }
 ```
 
@@ -212,33 +329,43 @@ class AnimatedDrawable : Drawable() {
 2. **Cache Paint objects** - don't create in draw()
 3. **Call invalidateSelf()** when appearance changes
 4. **Implement intrinsic sizes** for proper layout
-5. **Handle states** through setState() for interactivity
-6. **Avoid complex calculations** in draw() - precompute
-7. **Use proper bounds** through bounds property
+5. **Avoid complex calculations** in draw() - precompute
 
 ### Pitfalls
 
 - **Don't create objects in draw()** - affects performance
 - **Handle bounds correctly** - system may change them
-- **Remember transparency** - implement getOpacity() correctly
-- **Don't forget invalidateSelf()** on changes
+- **Remember invalidateSelf()** on changes
 - **Test on different sizes** - intrinsic sizes matter
 
 ---
 
 ## Follow-ups
 
-- How to create compound drawables?
-- When to use DrawableContainer vs custom Drawable?
-- How to optimize Drawable performance?
-- What are the differences between VectorDrawable and custom Drawable?
+- How to implement compound drawables using LayerDrawable or DrawableContainer?
+- When should you use VectorDrawable instead of custom Drawable?
+- How to handle density-independent sizing in custom Drawables?
+- What are the performance implications of complex draw() operations?
+- How to implement animated state transitions in Drawable?
 
 ## References
 
-- [Drawable Documentation](https://developer.android.com/reference/android/graphics/drawable/Drawable)
+- [[c-custom-views]] - Custom View implementation patterns
+- [[c-canvas-drawing]] - Canvas drawing fundamentals
+- [[c-lifecycle]] - Android component lifecycle
+- [Drawable API Reference](https://developer.android.com/reference/android/graphics/drawable/Drawable)
 - [Custom Drawables Guide](https://developer.android.com/guide/topics/graphics/drawables)
 
 ## Related Questions
 
-### Advanced (Harder)
-- q-android-performance-optimization--android--hard
+### Prerequisites
+- [[q-canvas-drawing-basics--android--easy]] - Basic Canvas drawing operations
+- [[q-paint-and-canvas-api--android--easy]] - Understanding Paint and Canvas
+
+### Related
+- [[q-custom-viewgroup-layout--android--hard]] - Custom ViewGroup implementation
+- [[q-vector-drawable-usage--android--medium]] - VectorDrawable vs custom Drawable
+
+### Advanced
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas optimization techniques
+- [[q-hardware-acceleration-layers--android--hard]] - Hardware acceleration and layer types

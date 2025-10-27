@@ -1,30 +1,21 @@
 ---
 id: 20251012-122801
 title: Clean Architecture on Android / Clean Architecture в Android
-aliases: [Clean Architecture on Android, Clean Architecture в Android]
+aliases: ["Clean Architecture on Android", "Clean Architecture в Android"]
 topic: android
-subtopics:
-  - architecture-clean
-  - architecture-modularization
+subtopics: [architecture-clean, architecture-modularization]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-architectural-patterns--android--medium
-  - q-android-modularization--android--medium
-  - q-architecture-components-libraries--android--easy
+related: [q-android-architectural-patterns--android--medium, q-android-modularization--android--medium, q-architecture-components-libraries--android--easy]
+sources: []
 created: 2025-10-11
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/architecture-clean, android/architecture-modularization, difficulty/hard]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:43 pm
 ---
-
 # Вопрос (RU)
 > Clean Architecture в Android?
 
@@ -35,7 +26,66 @@ date modified: Saturday, October 25th 2025, 4:52:43 pm
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Принципы
+- Правило зависимостей: зависимости в коде направлены внутрь (UI → domain; data реализует интерфейсы domain)
+- Разделение ответственности: domain слой на чистом Kotlin; фреймворки на периферии
+- Тестируемость: бизнес-логика независима от Android SDK
+
+### Слои (типичные)
+- Domain: entities + use cases (чистый Kotlin, без Android)
+- Data: repositories (реализуют порты domain), маперы, источники данных (network/db)
+- Presentation: ViewModel/UI (Android), маппинг в domain модели
+
+### Границы и контракты
+- Определяем интерфейсы domain (порты); реализуем в data (адаптеры)
+- Маппинг DTO/DB моделей на границах; domain модели стабильны
+- См. [[c-database-design]] для best practices слоя данных
+
+### Минимальная структура модулей
+```text
+app/                 # только wiring presentation
+feature-*/           # feature presentation
+core-domain/         # entities, use cases, ports (чистый Kotlin)
+core-data/           # реализации repo, маперы, sources
+```
+
+### Минимальный код (порты и Use case)
+```kotlin
+// core-domain
+interface UserRepository { suspend fun getUser(id: String): User }
+class GetUser(private val repo: UserRepository) {
+  suspend operator fun invoke(id: String): User = repo.getUser(id)
+}
+```
+
+```kotlin
+// core-data (зависит от core-domain)
+class UserRepositoryImpl(private val api: Api, private val dao: UserDao) : UserRepository {
+  override suspend fun getUser(id: String): User =
+    dao.get(id)?.toDomain() ?: api.fetch(id).also { dao.insert(it.toEntity()) }.toDomain()
+}
+```
+
+```kotlin
+// app/feature presentation (зависит от core-domain)
+class UserViewModel(private val getUser: GetUser) : ViewModel() {
+  val state = MutableStateFlow<UiState>(UiState.Loading)
+  fun load(id: String) = viewModelScope.launch { state.value = UiState.Data(getUser(id)) }
+}
+```
+
+### DI и связывание
+- Предоставляем use cases в presentation через constructor injection (Hilt/Koin/plain DI)
+- Связываем порты domain с адаптерами data в DI графе; UI не видит деталей data
+
+### Тестирование
+- Domain: быстрые unit тесты с fake repositories
+- Data: contract тесты против портов domain; instrumented для DB при необходимости
+- Presentation: тесты ViewModel с TestDispatcher; fake use cases
+
+### Конкурентность и ошибки
+- Domain синхронный/чистый когда возможно; suspend оборачиваем на границах
+- Преобразуем исключения инфраструктуры в domain failures; обработка маппинга в presentation
 
 ## Answer (EN)
 

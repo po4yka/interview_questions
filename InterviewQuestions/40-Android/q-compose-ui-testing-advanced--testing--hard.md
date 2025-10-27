@@ -1,23 +1,20 @@
 ---
 id: 20251020-210000
 title: "Advanced Compose UI Testing / Продвинутое тестирование Compose UI"
-aliases: [Advanced Compose UI Testing, Продвинутое тестирование Compose UI]
-topic: testing
-subtopics: [accessibility, testing-ui]
+aliases: ["Advanced Compose UI Testing", "Продвинутое тестирование Compose UI"]
+topic: android
+subtopics: [testing-ui, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
-source: https://developer.android.com/jetpack/compose/testing
-source_note: Official Compose testing documentation
+sources: [https://developer.android.com/jetpack/compose/testing]
 status: draft
 related: [q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium, q-compose-testing--android--medium]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [accessibility, compose-testing, difficulty/hard, semantics, testing, ui-testing]
-moc: moc-testing
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:28 pm
+updated: 2025-10-27
+tags: [android/testing-ui, android/ui-compose, compose-testing, accessibility, semantics, difficulty/hard]
+moc: moc-android
 ---
 
 # Вопрос (RU)
@@ -28,511 +25,304 @@ date modified: Saturday, October 25th 2025, 4:52:28 pm
 # Question (EN)
 > How to test complex Compose UI scenarios including animations, gestures, semantic matchers, and accessibility? How to handle async operations in Compose tests?
 
+---
+
 ## Ответ (RU)
 
-**Продвинутое тестирование Compose** расширяет базовое тестирование сложными сценариями, пользовательскими matchers и обработкой асинхронности. Использует semantic tree для надежной идентификации элементов. См. также c-testing-pyramid, c-ui-testing и [[c-accessibility]].
+**Продвинутое тестирование Compose** опирается на semantic tree для надежной идентификации элементов и детерминированной синхронизации с асинхронными операциями, анимациями и жестами.
 
-### ComposeTestRule
+### Ключевые Принципы
 
-**ComposeTestRule** предоставляет продвинутые возможности тестирования:
-- `setContent {}` - Установить composable контент
-- `onNode...()` - Найти один элемент
-- `onAllNodes...()` - Найти несколько элементов
-- `waitForIdle()` - Ждать рекомпозицию
-- `mainClock` - Контролировать время для анимаций
+**Семантика вместо структуры:**
+- Тестируйте через roles, contentDescription, testTag — не через layout tree
+- Утверждайте поведение (текст, состояния, действия), а не детали реализации
+- Используйте `ComposeTestRule.mainClock` для детерминированного контроля времени
 
-### Теория И Подходы
+**Синхронизация:**
+- `waitUntil {}` и `waitForIdle()` вместо `Thread.sleep()`
+- `mainClock.advanceTimeBy()` для анимаций
+- `runOnIdle {}` для проверки состояния после recomposition
 
-- Тестируйте через семантику, а не дерево layout: роли, contentDescription, testTag
-- Утверждайте поведение, а не структуру: текст, состояние и действия, без деталей реализации
-- Делайте время детерминированным: останавливайте авто‑таймер и продвигайте `mainClock`
-- Изолируйте обновления состояния: делайте эффекты детерминированными; давайте стабильные теги для переходных состояний
-- Синхронизируйтесь с асинхронностью: используйте `waitUntil {}` и `runOnIdle {}` вместо «снов»
-- Проектируйте под тестирование: DI‑стыки и фэйковые источники; без случайных задержек в UI
-- Борьба с флаками: ждите условий, избегайте гонок между рекомпозицией и проверками
-- Сначала доступность: проверяйте роли, действия и content descriptions; тестируйте merge semantics
+**Проектирование под тестирование:**
+- DI seams для подмены зависимостей
+- Стабильные testTag для переходных UI состояний
+- Избегайте случайных задержек в UI логике
 
 ### Semantic Matchers
 
-**Пользовательские semantic matchers:**
-
+**Пользовательские matchers:**
 ```kotlin
-// Пользовательский matcher для конкретного состояния
-fun hasCustomState(expectedState: String): SemanticsMatcher {
-    return SemanticsMatcher.expectValue(
-        SemanticsProperties.Custom,
-        expectedState
+fun hasLoadingState(): SemanticsMatcher =
+    SemanticsMatcher.expectValue(
+        SemanticsProperties.StateDescription, // ✅ используйте стандартные properties
+        "loading"
     )
-}
 
-// Использование
-composeTestRule.onNode(hasCustomState("loading"))
-    .assertExists()
+composeTestRule.onNode(hasLoadingState()).assertExists()
+composeTestRule.onNodeWithRole(Role.Button).assertHasClickAction()
 ```
 
-**Matchers по ролям:**
+### Анимации
 
-```kotlin
-composeTestRule.onNodeWithRole(Role.Button).assertExists()
-composeTestRule.onNodeWithRole(Role.Checkbox).assertExists()
-composeTestRule.onNodeWithRole(Role.Switch).assertExists()
-```
-
-### Тестирование Анимаций
-
-**Контроль времени анимации:**
-
+**Детерминированный контроль времени:**
 ```kotlin
 @Test
-fun animationTest() {
-    composeTestRule.setContent {
-        AnimatedVisibility(visible = true) {
-            Text("Animated Text")
-        }
-    }
+fun testAnimation() {
+    composeTestRule.mainClock.autoAdvance = false // ✅ отключить авто-advance
+    composeTestRule.setContent { AnimatedContent() }
 
-    // Ускорить анимации
-    composeTestRule.mainClock.advanceTimeBy(1000)
-
-    composeTestRule.onNodeWithText("Animated Text")
-        .assertIsDisplayed()
-}
-```
-
-**Тестирование состояний анимации:**
-
-```kotlin
-@Test
-fun animationStates() {
-    var isVisible by remember { mutableStateOf(false) }
-
-    composeTestRule.setContent {
-        AnimatedVisibility(visible = isVisible) {
-            Text("Content")
-        }
-        Button(onClick = { isVisible = true }) {
-            Text("Show")
-        }
-    }
-
-    // Изначально скрыто
-    composeTestRule.onNodeWithText("Content").assertDoesNotExist()
-
-    // Запустить анимацию
     composeTestRule.onNodeWithText("Show").performClick()
+    composeTestRule.mainClock.advanceTimeBy(500) // ✅ контролируемое продвижение
 
-    // Ждать анимацию
-    composeTestRule.mainClock.advanceTimeBy(500)
-
-    // Теперь видимо
-    composeTestRule.onNodeWithText("Content").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("animated_content").assertIsDisplayed()
 }
 ```
 
-### Тестирование Жестов
+### Жесты
 
-**Жесты свайпа:**
-
+**Touch input:**
 ```kotlin
 @Test
-fun swipeGesture() {
-    composeTestRule.setContent {
-        SwipeableBox()
-    }
-
+fun testSwipeGesture() {
     composeTestRule.onNodeWithTag("swipeable")
         .performTouchInput {
-            swipeLeft()
+            swipeLeft() // или swipeRight(), swipeUp(), swipeDown()
         }
 
-    composeTestRule.onNodeWithText("Swiped Left").assertExists()
+    composeTestRule.onNodeWithText("Swiped").assertExists()
 }
-```
 
-**Перетаскивание:**
-
-```kotlin
 @Test
-fun dragAndDrop() {
-    composeTestRule.setContent {
-        DragDropList()
-    }
-
-    composeTestRule.onNodeWithTag("item_1")
+fun testDrag() {
+    composeTestRule.onNodeWithTag("draggable")
         .performTouchInput {
             down(center)
-            moveTo(offset = Offset(0f, 200f))
+            moveTo(center + Offset(200f, 0f)) // ✅ точный контроль
             up()
         }
-
-    composeTestRule.onNodeWithText("Item moved").assertExists()
 }
 ```
 
-### Тестирование Async Операций
+### Async Операции
 
-**Ждать async данные:**
-
+**Правильная синхронизация:**
 ```kotlin
 @Test
-fun asyncDataLoading() {
-    composeTestRule.setContent {
-        AsyncDataScreen()
-    }
+fun testAsyncLoading() {
+    composeTestRule.setContent { AsyncScreen() }
 
-    // Изначально загрузка
-    composeTestRule.onNodeWithTag("loading").assertExists()
+    // ❌ Thread.sleep(1000) — НИКОГДА
 
-    // Ждать загрузку данных
+    // ✅ Ждать конкретное условие
     composeTestRule.waitUntil(timeoutMillis = 5000) {
-        composeTestRule.onAllNodesWithTag("data_item")
+        composeTestRule.onAllNodesWithTag("loaded_item")
             .fetchSemanticsNodes().isNotEmpty()
     }
 
-    // Проверить загруженные данные
-    composeTestRule.onNodeWithTag("data_item").assertExists()
+    composeTestRule.onNodeWithTag("loaded_item").assertExists()
 }
-```
 
-**Тестирование состояний ошибок:**
-
-```kotlin
 @Test
-fun errorStateHandling() {
-    composeTestRule.setContent {
-        ErrorHandlingScreen()
-    }
+fun testErrorState() {
+    composeTestRule.onNodeWithTag("trigger_error").performClick()
 
-    // Вызвать ошибку
-    composeTestRule.onNodeWithTag("error_button").performClick()
-
-    // Ждать состояние ошибки
     composeTestRule.waitUntil {
         composeTestRule.onAllNodesWithTag("error_message")
             .fetchSemanticsNodes().isNotEmpty()
     }
-
-    // Проверить сообщение об ошибке
-    composeTestRule.onNodeWithTag("error_message")
-        .assertTextEquals("Something went wrong")
 }
 ```
 
-### Тестирование Доступности
+### Доступность
 
-**Тестирование content descriptions:**
-
+**Обязательные проверки:**
 ```kotlin
 @Test
-fun accessibilityContentDescription() {
+fun testAccessibility() {
     composeTestRule.setContent {
-        Image(
-            painter = painterResource(R.drawable.icon),
-            contentDescription = "User profile"
-        )
+        IconButton(onClick = {}) {
+            Icon(Icons.Default.Delete, contentDescription = "Delete item") // ✅
+        }
     }
 
-    composeTestRule.onNodeWithContentDescription("User profile")
-        .assertExists()
+    // Проверка contentDescription
+    composeTestRule.onNodeWithContentDescription("Delete item").assertExists()
+
+    // Проверка semantic role
+    composeTestRule.onNodeWithRole(Role.Button).assertHasClickAction()
+
+    // Merged semantics для сложных composables
+    composeTestRule.onNode(
+        hasText("Item") and hasClickAction(),
+        useUnmergedTree = false // ✅ тестируйте merged tree
+    ).assertExists()
 }
 ```
-
-**Тестирование семантических ролей:**
-
-```kotlin
-@Test
-fun accessibilityRoles() {
-    composeTestRule.setContent {
-        Button(onClick = {}) { Text("Submit") }
-        Checkbox(checked = false, onCheckedChange = {})
-    }
-
-    composeTestRule.onNodeWithRole(Role.Button)
-        .assertHasClickAction()
-
-    composeTestRule.onNodeWithRole(Role.Checkbox)
-        .assertIsNotChecked()
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте testTag** для стабильной идентификации элементов
-2. **Тестируйте взаимодействия пользователя**, не детали реализации
-3. **Обрабатывайте async операции** с правильным ожиданием
-4. **Тестируйте accessibility** функции и семантические роли
-5. **Контролируйте анимации** с mainClock для детерминированных тестов
-6. **Используйте пользовательские matchers** для сложных сценариев
-7. **Держите тесты сфокусированными** на конкретных пользовательских потоках
 
 ---
 
 ## Answer (EN)
 
-**Advanced Compose Testing** extends basic testing with complex scenarios, custom matchers, and async handling. Uses semantic tree for robust element identification. See also c-testing-pyramid, c-ui-testing, and [[c-accessibility]].
+**Advanced Compose Testing** relies on the semantic tree for robust element identification and deterministic synchronization with async operations, animations, and gestures.
 
-### ComposeTestRule
+### Core Principles
 
-**ComposeTestRule** provides advanced testing capabilities:
-- `setContent {}` - Set composable content
-- `onNode...()` - Find single element
-- `onAllNodes...()` - Find multiple elements
-- `waitForIdle()` - Wait for recomposition
-- `mainClock` - Control time for animations
+**Semantics over structure:**
+- Test via roles, contentDescription, testTag — not layout tree
+- Assert behavior (text, states, actions), not implementation details
+- Use `ComposeTestRule.mainClock` for deterministic time control
 
-### Theory & Approaches
+**Synchronization:**
+- `waitUntil {}` and `waitForIdle()` instead of `Thread.sleep()`
+- `mainClock.advanceTimeBy()` for animations
+- `runOnIdle {}` for checking state after recomposition
 
-- Test via semantics, not layout tree: rely on roles, contentDescription, and test tags
-- Prefer behavior assertions over structure: assert text, state, and actions, not implementation details
-- Control time deterministically: pause auto-advancing clock and advance `mainClock` for animations
-- Isolate state updates: make effects deterministic; expose stable tags for transient UI
-- Synchronize with async: use `waitUntil {}` and `runOnIdle {}` instead of sleeps
-- Design for testability: provide DI seams and fake data sources; avoid random delays in UI
-- Flaky-proofing: wait for conditions, avoid racing recomposition and assertions
-- Accessibility-first: assert roles, actions, and content descriptions; test merged semantics
+**Design for testability:**
+- DI seams for dependency injection
+- Stable testTag for transient UI states
+- Avoid random delays in UI logic
 
 ### Semantic Matchers
 
-**Custom semantic matchers:**
-
+**Custom matchers:**
 ```kotlin
-// Custom matcher for specific state
-fun hasCustomState(expectedState: String): SemanticsMatcher {
-    return SemanticsMatcher.expectValue(
-        SemanticsProperties.Custom,
-        expectedState
+fun hasLoadingState(): SemanticsMatcher =
+    SemanticsMatcher.expectValue(
+        SemanticsProperties.StateDescription, // ✅ use standard properties
+        "loading"
     )
-}
 
-// Usage
-composeTestRule.onNode(hasCustomState("loading"))
-    .assertExists()
+composeTestRule.onNode(hasLoadingState()).assertExists()
+composeTestRule.onNodeWithRole(Role.Button).assertHasClickAction()
 ```
 
-**Role-based matchers:**
+### Animations
 
-```kotlin
-composeTestRule.onNodeWithRole(Role.Button).assertExists()
-composeTestRule.onNodeWithRole(Role.Checkbox).assertExists()
-composeTestRule.onNodeWithRole(Role.Switch).assertExists()
-```
-
-### Testing Animations
-
-**Control animation timing:**
-
+**Deterministic time control:**
 ```kotlin
 @Test
-fun animationTest() {
-    composeTestRule.setContent {
-        AnimatedVisibility(visible = true) {
-            Text("Animated Text")
-        }
-    }
+fun testAnimation() {
+    composeTestRule.mainClock.autoAdvance = false // ✅ disable auto-advance
+    composeTestRule.setContent { AnimatedContent() }
 
-    // Fast forward animations
-    composeTestRule.mainClock.advanceTimeBy(1000)
-
-    composeTestRule.onNodeWithText("Animated Text")
-        .assertIsDisplayed()
-}
-```
-
-**Test animation states:**
-
-```kotlin
-@Test
-fun animationStates() {
-    var isVisible by remember { mutableStateOf(false) }
-
-    composeTestRule.setContent {
-        AnimatedVisibility(visible = isVisible) {
-            Text("Content")
-        }
-        Button(onClick = { isVisible = true }) {
-            Text("Show")
-        }
-    }
-
-    // Initially hidden
-    composeTestRule.onNodeWithText("Content").assertDoesNotExist()
-
-    // Trigger animation
     composeTestRule.onNodeWithText("Show").performClick()
+    composeTestRule.mainClock.advanceTimeBy(500) // ✅ controlled advancement
 
-    // Wait for animation
-    composeTestRule.mainClock.advanceTimeBy(500)
-
-    // Now visible
-    composeTestRule.onNodeWithText("Content").assertIsDisplayed()
+    composeTestRule.onNodeWithTag("animated_content").assertIsDisplayed()
 }
 ```
 
-### Testing Gestures
+### Gestures
 
-**Swipe gestures:**
-
+**Touch input:**
 ```kotlin
 @Test
-fun swipeGesture() {
-    composeTestRule.setContent {
-        SwipeableBox()
-    }
-
+fun testSwipeGesture() {
     composeTestRule.onNodeWithTag("swipeable")
         .performTouchInput {
-            swipeLeft()
+            swipeLeft() // or swipeRight(), swipeUp(), swipeDown()
         }
 
-    composeTestRule.onNodeWithText("Swiped Left").assertExists()
+    composeTestRule.onNodeWithText("Swiped").assertExists()
 }
-```
 
-**Drag and drop:**
-
-```kotlin
 @Test
-fun dragAndDrop() {
-    composeTestRule.setContent {
-        DragDropList()
-    }
-
-    composeTestRule.onNodeWithTag("item_1")
+fun testDrag() {
+    composeTestRule.onNodeWithTag("draggable")
         .performTouchInput {
             down(center)
-            moveTo(offset = Offset(0f, 200f))
+            moveTo(center + Offset(200f, 0f)) // ✅ precise control
             up()
         }
-
-    composeTestRule.onNodeWithText("Item moved").assertExists()
 }
 ```
 
-### Testing Async Operations
+### Async Operations
 
-**Wait for async data:**
-
+**Proper synchronization:**
 ```kotlin
 @Test
-fun asyncDataLoading() {
-    composeTestRule.setContent {
-        AsyncDataScreen()
-    }
+fun testAsyncLoading() {
+    composeTestRule.setContent { AsyncScreen() }
 
-    // Initially loading
-    composeTestRule.onNodeWithTag("loading").assertExists()
+    // ❌ Thread.sleep(1000) — NEVER
 
-    // Wait for data to load
+    // ✅ Wait for specific condition
     composeTestRule.waitUntil(timeoutMillis = 5000) {
-        composeTestRule.onAllNodesWithTag("data_item")
+        composeTestRule.onAllNodesWithTag("loaded_item")
             .fetchSemanticsNodes().isNotEmpty()
     }
 
-    // Verify loaded data
-    composeTestRule.onNodeWithTag("data_item").assertExists()
+    composeTestRule.onNodeWithTag("loaded_item").assertExists()
 }
-```
 
-**Test error states:**
-
-```kotlin
 @Test
-fun errorStateHandling() {
-    composeTestRule.setContent {
-        ErrorHandlingScreen()
-    }
+fun testErrorState() {
+    composeTestRule.onNodeWithTag("trigger_error").performClick()
 
-    // Trigger error
-    composeTestRule.onNodeWithTag("error_button").performClick()
-
-    // Wait for error state
     composeTestRule.waitUntil {
         composeTestRule.onAllNodesWithTag("error_message")
             .fetchSemanticsNodes().isNotEmpty()
     }
-
-    // Verify error message
-    composeTestRule.onNodeWithTag("error_message")
-        .assertTextEquals("Something went wrong")
 }
 ```
 
-### Accessibility Testing
+### Accessibility
 
-**Test content descriptions:**
-
+**Required checks:**
 ```kotlin
 @Test
-fun accessibilityContentDescription() {
+fun testAccessibility() {
     composeTestRule.setContent {
-        Image(
-            painter = painterResource(R.drawable.icon),
-            contentDescription = "User profile"
-        )
+        IconButton(onClick = {}) {
+            Icon(Icons.Default.Delete, contentDescription = "Delete item") // ✅
+        }
     }
 
-    composeTestRule.onNodeWithContentDescription("User profile")
-        .assertExists()
+    // Check contentDescription
+    composeTestRule.onNodeWithContentDescription("Delete item").assertExists()
+
+    // Check semantic role
+    composeTestRule.onNodeWithRole(Role.Button).assertHasClickAction()
+
+    // Merged semantics for complex composables
+    composeTestRule.onNode(
+        hasText("Item") and hasClickAction(),
+        useUnmergedTree = false // ✅ test merged tree
+    ).assertExists()
 }
 ```
-
-**Test semantic roles:**
-
-```kotlin
-    @Test
-fun accessibilityRoles() {
-        composeTestRule.setContent {
-        Button(onClick = {}) { Text("Submit") }
-        Checkbox(checked = false, onCheckedChange = {})
-    }
-
-    composeTestRule.onNodeWithRole(Role.Button)
-        .assertHasClickAction()
-
-    composeTestRule.onNodeWithRole(Role.Checkbox)
-        .assertIsNotChecked()
-}
-```
-
-### Best Practices
-
-1. **Use testTag** for stable element identification
-2. **Test user interactions**, not implementation details
-3. **Handle async operations** with proper waiting
-4. **Test accessibility** features and semantic roles
-5. **Control animations** with mainClock for deterministic tests
-6. **Use custom matchers** for complex scenarios
-7. **Keep tests focused** on specific user flows
 
 ---
 
 ## Follow-ups
 
-- How to test complex navigation flows in Compose?
-- What are the differences between unit tests and UI tests?
-- How to mock ViewModels and dependencies in Compose tests?
-- How to test custom composables with complex state?
-- What are the performance implications of advanced Compose testing?
+- How to test navigation with NavHost and nested destinations?
+- How to mock ViewModel dependencies in Compose tests?
+- How to test complex state machines and side effects?
+- How to test custom Modifier chains and layout behavior?
+- What are best practices for testing merged vs unmerged semantic trees?
+- How to handle flaky tests in CI/CD environments?
 
 ## References
 
+- [[c-accessibility]] — Accessibility fundamentals
+- [[c-ui-testing]] — UI testing principles
+- [[c-testing-pyramid]] — Testing strategy
 - [Compose Testing Guide](https://developer.android.com/jetpack/compose/testing)
-- [Compose Testing Semantics](https://developer.android.com/jetpack/compose/testing/semantics)
+- [Semantics in Compose](https://developer.android.com/jetpack/compose/semantics)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-
-- [[q-compose-testing--android--medium]]
-- [[q-compose-semantics--android--medium]]
+- [[q-compose-testing--android--medium]] — Basic Compose testing
+- [[q-compose-semantics--android--medium]] — Semantic tree fundamentals
 
 ### Related (Same Level)
-
-- [[q-compose-performance-optimization--android--hard]]
-- [[q-compose-modifier-system--android--medium]]
+- [[q-compose-performance-optimization--android--hard]] — Performance testing
+- Test isolation strategies for large Compose apps
 
 ### Advanced (Harder)
-
-- [[q-compose-compiler-plugin--android--hard]]
-- [[q-compose-slot-table-recomposition--android--hard]]
+- [[q-compose-compiler-plugin--android--hard]] — Compiler internals
+- Custom semantic properties for domain-specific testing
 

@@ -1,162 +1,163 @@
 ---
 id: 20251012-122765
 title: Android Jetpack Overview / Обзор Android Jetpack
-aliases: [Android Jetpack Overview, Обзор Android Jetpack]
+aliases: ["Android Jetpack Overview", "Обзор Android Jetpack"]
 topic: android
-subtopics:
-  - architecture-clean
-  - ui-compose
+subtopics: [architecture-clean, ui-compose]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-room-library-definition--android--easy
-  - q-viewmodel-pattern--android--easy
+related: [q-room-library-definition--android--easy, q-viewmodel-pattern--android--easy]
+sources: []
 created: 2025-10-13
-updated: 2025-10-15
+updated: 2025-10-27
 tags: [android/architecture-clean, android/ui-compose, difficulty/easy]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:15 pm
 ---
-
 # Вопрос (RU)
-> Что такое Обзор Android Jetpack?
-
----
+> Что такое Android Jetpack и какие его основные компоненты?
 
 # Question (EN)
-> What is Android Jetpack Overview?
+> What is Android Jetpack and what are its core components?
 
-## Answer (EN)
-**Architecture Components** - Modern app architecture
+## Ответ (RU)
 
-[[c-viewmodel|ViewModel]], LiveData, and [[c-room|Room]] are core Android Jetpack components for modern app architecture.
+Android Jetpack — набор библиотек и инструментов от Google для упрощения разработки Android-приложений. Включает компоненты для архитектуры, UI, фоновой работы и управления данными.
+
+**Основные категории:**
+
+**Architecture** — [[c-viewmodel|ViewModel]], [[c-room|Room]], Navigation, Lifecycle
+- ViewModel сохраняет данные при изменении конфигурации
+- Room — ORM для SQLite с compile-time проверками
+- Navigation — граф навигации между экранами
 
 ```kotlin
-// ViewModel - survives configuration changes
+// ✅ ViewModel с корутинами
 class UserViewModel : ViewModel() {
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
+    private val _users = MutableStateFlow<List<User>>(emptyList())
+    val users: StateFlow<List<User>> = _users.asStateFlow()
 }
 
-// Room - SQLite ORM
-@Entity(tableName = "users")
-data class User(@PrimaryKey val id: Int, val name: String)
-
-@Dao
-interface UserDao {
-    @Query("SELECT * FROM users")
-    suspend fun getAllUsers(): List<User>
-}
-```
-
-**Navigation Component** - Screen navigation
-```kotlin
-// Navigation graph
-findNavController().navigate(R.id.action_home_to_details)
-
-// With arguments
-val action = HomeFragmentDirections.actionHomeToDetails(userId = 123)
-findNavController().navigate(action)
-```
-
-**WorkManager** - Background tasks
-```kotlin
-class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
-    override suspend fun doWork(): Result {
-        return try {
-            uploadFile()
-            Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
-    }
-}
-```
-
-**DataStore** - Modern SharedPreferences
-```kotlin
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
-suspend fun savePreference(key: String, value: String) {
-    context.dataStore.edit { preferences ->
-        preferences[stringPreferencesKey(key)] = value
-    }
-}
-```
-
-**Paging** - Large dataset loading
-```kotlin
-class UserPagingSource(private val apiService: ApiService) : PagingSource<Int, User>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
-        val page = params.key ?: 1
-        val response = apiService.getUsers(page, params.loadSize)
-        return LoadResult.Page(data = response.users, prevKey = null, nextKey = page + 1)
-    }
-}
-```
-
-**Hilt** - Dependency injection
-```kotlin
-@HiltAndroidApp
-class MyApplication : Application()
-
-@AndroidEntryPoint
+// ❌ Логика в Activity — потеря данных при повороте
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var repository: UserRepository
+    var users: List<User> = emptyList() // теряется при recreation
 }
 ```
 
-**Compose** - Declarative UI
+**Background Work** — WorkManager для отложенных и периодических задач
+```kotlin
+// ✅ Гарантированное выполнение даже после перезагрузки
+class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork() = try {
+        repository.sync()
+        Result.success()
+    } catch (e: Exception) {
+        Result.retry()
+    }
+}
+```
+
+**UI** — Jetpack Compose для декларативного UI
 ```kotlin
 @Composable
-fun UserListScreen(viewModel: UserViewModel = hiltViewModel()) {
+fun UserList(viewModel: UserViewModel = hiltViewModel()) {
     val users by viewModel.users.collectAsState()
-
     LazyColumn {
-        items(users) { user ->
-            UserItem(user = user)
-        }
+        items(users) { user -> UserItem(user) }
     }
 }
 ```
 
-| Category | Libraries | Purpose |
-|----------|-----------|---------|
-| Foundation | AppCompat, KTX | Basic compatibility |
+**Data** — DataStore (замена SharedPreferences), Paging для больших списков
+
+| Категория | Компоненты | Назначение |
+|-----------|------------|------------|
+| Architecture | ViewModel, Room, Navigation | Архитектура приложения |
+| UI | Compose, Fragment | Пользовательский интерфейс |
+| Background | WorkManager | Фоновые задачи |
+| Data | DataStore, Paging | Управление данными |
+
+## Answer (EN)
+
+Android Jetpack is a suite of libraries and tools from Google that simplifies Android development. It provides components for architecture, UI, background work, and data management.
+
+**Core Categories:**
+
+**Architecture** — [[c-viewmodel|ViewModel]], [[c-room|Room]], Navigation, Lifecycle
+- ViewModel survives configuration changes
+- Room is an ORM for SQLite with compile-time verification
+- Navigation provides graph-based screen navigation
+
+```kotlin
+// ✅ ViewModel with coroutines
+class UserViewModel : ViewModel() {
+    private val _users = MutableStateFlow<List<User>>(emptyList())
+    val users: StateFlow<List<User>> = _users.asStateFlow()
+}
+
+// ❌ Logic in Activity — data loss on rotation
+class MainActivity : AppCompatActivity() {
+    var users: List<User> = emptyList() // lost on recreation
+}
+```
+
+**Background Work** — WorkManager for deferrable and periodic tasks
+```kotlin
+// ✅ Guaranteed execution even after device reboot
+class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork() = try {
+        repository.sync()
+        Result.success()
+    } catch (e: Exception) {
+        Result.retry()
+    }
+}
+```
+
+**UI** — Jetpack Compose for declarative UI
+```kotlin
+@Composable
+fun UserList(viewModel: UserViewModel = hiltViewModel()) {
+    val users by viewModel.users.collectAsState()
+    LazyColumn {
+        items(users) { user -> UserItem(user) }
+    }
+}
+```
+
+**Data** — DataStore (SharedPreferences replacement), Paging for large lists
+
+| Category | Components | Purpose |
+|----------|------------|---------|
 | Architecture | ViewModel, Room, Navigation | App architecture |
 | UI | Compose, Fragment | User interface |
-| Behavior | WorkManager, Permissions | App behavior |
+| Background | WorkManager | Background tasks |
 | Data | DataStore, Paging | Data management |
 
 ## Follow-ups
 
-- When to migrate from SharedPreferences to DataStore?
-- View-based UI vs Jetpack Compose migration strategy?
-- WorkManager vs Foreground Service for background work?
+- When to use WorkManager vs AlarmManager vs Foreground Service?
+- How does ViewModel survive configuration changes?
+- What are the benefits of Room over raw SQLite?
+- When should you migrate from View system to Jetpack Compose?
 
 ## References
 
+- [[c-viewmodel]] - ViewModel concept
+- [[c-room]] - Room database concept
 - https://developer.android.com/jetpack
-- https://developer.android.com/topic/libraries/architecture
-- https://developer.android.com/jetpack/compose
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] - App components overview
-- [[q-viewmodel-pattern--android--easy]] - ViewModel basics
+### Prerequisites
+- [[q-android-app-components--android--easy]] - Android app components
 
-### Related (Medium)
+### Related
+- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern details
 - [[q-room-library-definition--android--easy]] - Room database
-- q-compose-basics--kotlin--easy - Compose fundamentals
-- [[q-workmanager-decision-guide--android--medium]] - WorkManager usage
 
-### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]] - Compose performance
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+### Advanced
+- [[q-workmanager-decision-guide--android--medium]] - Background work strategies
+- [[q-compose-performance-optimization--android--hard]] - Compose optimization

@@ -1,139 +1,183 @@
 ---
 id: 20251012-122767
 title: Android Modularization / Модуляризация Android
-aliases: [Android Modularization, Модуляризация Android]
+aliases: ["Android Modularization", "Модуляризация Android"]
 topic: android
-subtopics:
-  - architecture-clean
-  - build-variants
-  - gradle
+subtopics: [architecture-clean, build-variants, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-architectural-patterns--android--medium
-  - q-android-build-optimization--android--medium
-  - q-gradle-build-system--android--medium
+related: [q-android-architectural-patterns--android--medium, q-android-build-optimization--android--medium, q-gradle-build-system--android--medium]
 created: 2025-10-15
-updated: 2025-10-15
+updated: 2025-10-27
 tags: [android/architecture-clean, android/build-variants, android/gradle, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:13 pm
+sources: []
 ---
-
 # Вопрос (RU)
-> Что такое Модуляризация Android?
-
----
+> Что такое модуляризация Android-приложений и какие основные преимущества она даёт?
 
 # Question (EN)
-> What is Android Modularization?
+> What is Android modularization and what are its main benefits?
 
-## Answer (EN)
-**Android Modularization** is the practice of organizing codebases into loosely coupled, self-contained modules. Each module serves a specific purpose and can be developed, tested, and maintained independently.
+## Ответ (RU)
 
-**Modularization Theory:**
-Modularization follows the principle of c-separation-of-concerns, breaking complex systems into manageable components. Each module encapsulates related functionality and exposes a well-defined interface, reducing coupling and improving maintainability through [[c-dependency-injection]].
+**Модуляризация Android** — это разделение кодовой базы на слабо связанные, самостоятельные модули. Каждый модуль инкапсулирует определённую функциональность и может разрабатываться, тестироваться и поддерживаться независимо.
 
-**Core Benefits:**
-- **Reusability**: Modules can be shared across multiple apps or features
-- **Strict Visibility Control**: Internal implementation details are hidden from other modules
-- **Customizable Delivery**: Play Feature Delivery enables on-demand feature loading
-- **Scalability**: Changes in one module don't cascade to others
-- **Ownership**: Each module can have dedicated maintainers
-- **Testability**: Modules can be tested in isolation
+**Основные типы модулей:**
+- **App Module** — точка входа приложения, координирует feature-модули
+- **Feature Modules** — изолированные функции (новости, профиль, настройки)
+- **Core Modules** — общая логика (data, network, UI)
+- **Library Modules** — переиспользуемые компоненты
 
-**Module Types:**
-- **App Module**: Main application entry point
-- **Feature Modules**: Self-contained features (news, profile, settings)
-- **Core Modules**: Shared functionality (data, network, UI)
-- **Library Modules**: Reusable components
+**Ключевые преимущества:**
+- **Масштабируемость** — изменения в одном модуле не затрагивают другие
+- **Переиспользование** — модули можно применять в других приложениях
+- **Контроль видимости** — внутренняя реализация скрыта через `internal`
+- **Параллельная разработка** — команды работают над модулями независимо
+- **Быстрая сборка** — Gradle кеширует неизменённые модули
+- **Тестируемость** — модули тестируются изолированно
 
-**Basic Module Structure:**
-```
+**Пример структуры:**
+```text
 app/
-├── app/                    # Main app module
-├── feature:news/          # News feature module
-├── feature:profile/       # Profile feature module
-├── core:data/            # Data layer
-├── core:network/         # Network layer
-├── core:ui/              # UI components
-└── shared:utils/         # Shared utilities
+├── app/                  # Главный модуль
+├── feature:news/         # Фича "Новости"
+├── feature:profile/      # Фича "Профиль"
+├── core:data/           # Слой данных
+├── core:network/        # Сетевой слой
+└── core:ui/             # UI-компоненты
 ```
 
-**Module Dependencies:**
+**Управление зависимостями:**
 ```gradle
 // app/build.gradle
 dependencies {
-    implementation project(':feature:news')
-    implementation project(':feature:profile')
-    implementation project(':core:data')
-    implementation project(':core:network')
+    implementation(project(":feature:news"))
+    implementation(project(":core:data"))
 }
 
 // feature:news/build.gradle
 dependencies {
-    implementation project(':core:data')
-    implementation project(':core:ui')
-    // No direct dependency on other features
+    implementation(project(":core:data"))
+    implementation(project(":core:ui"))
+    // ✅ Нет прямой зависимости между фичами
+}
+```
+
+**Контроль видимости:**
+```kotlin
+// core:data module
+internal class DatabaseHelper {
+    // ✅ Доступен только внутри модуля
+}
+
+class UserRepository {
+    // ✅ Публичное API для других модулей
+    fun getUser(id: String): User = TODO()
+}
+
+// feature:news module
+class NewsViewModel {
+    private val repo = UserRepository() // ✅ Можно использовать
+    // ❌ DatabaseHelper недоступен напрямую
+}
+```
+
+**Типичные ошибки:**
+- **Циклические зависимости** — модули зависят друг от друга
+- **Слишком мелкое дробление** — усложняет сборку
+- **Монолитные модули** — теряется польза модуляризации
+
+**Best practices:**
+- Начинайте с app и core модулей
+- Добавляйте feature-модули по мере роста функциональности
+- Используйте чёткую иерархию зависимостей
+- Применяйте Play Feature Delivery для больших приложений
+
+## Answer (EN)
+
+**Android Modularization** is the practice of organizing a codebase into loosely coupled, self-contained modules. Each module encapsulates specific functionality and can be developed, tested, and maintained independently.
+
+**Main Module Types:**
+- **App Module** — application entry point, coordinates feature modules
+- **Feature Modules** — isolated features (news, profile, settings)
+- **Core Modules** — shared logic (data, network, UI)
+- **Library Modules** — reusable components
+
+**Key Benefits:**
+- **Scalability** — changes in one module don't affect others
+- **Reusability** — modules can be shared across apps
+- **Visibility Control** — internal implementation hidden via `internal`
+- **Parallel Development** — teams work on modules independently
+- **Faster Builds** — Gradle caches unchanged modules
+- **Testability** — modules can be tested in isolation
+
+**Example Structure:**
+```text
+app/
+├── app/                  # Main module
+├── feature:news/         # News feature
+├── feature:profile/      # Profile feature
+├── core:data/           # Data layer
+├── core:network/        # Network layer
+└── core:ui/             # UI components
+```
+
+**Dependency Management:**
+```gradle
+// app/build.gradle
+dependencies {
+    implementation(project(":feature:news"))
+    implementation(project(":core:data"))
+}
+
+// feature:news/build.gradle
+dependencies {
+    implementation(project(":core:data"))
+    implementation(project(":core:ui"))
+    // ✅ No direct dependency between features
 }
 ```
 
 **Visibility Control:**
 ```kotlin
-// In core:data module
+// core:data module
 internal class DatabaseHelper {
-    // Internal - only accessible within this module
+    // ✅ Only accessible within this module
 }
 
-public class UserRepository {
-    // Public - accessible from other modules
-    fun getUser(id: String): User = // ...
+class UserRepository {
+    // ✅ Public API for other modules
+    fun getUser(id: String): User = TODO()
 }
 
-// In feature:news module
+// feature:news module
 class NewsViewModel {
-    private val userRepo = UserRepository() // Can access public API
-    // Cannot access DatabaseHelper directly
-}
-```
-
-**Play Feature Delivery:**
-```gradle
-// feature:news/build.gradle
-android {
-    dynamicFeatures = [':feature:news']
-}
-
-// app/build.gradle
-dependencies {
-    implementation 'com.google.android.play:core:1.10.3'
+    private val repo = UserRepository() // ✅ Can use
+    // ❌ DatabaseHelper not accessible directly
 }
 ```
 
 **Common Pitfalls:**
-- **Too Fine-grained**: Excessive modules increase build complexity
-- **Too Coarse-grained**: Large modules become monoliths
-- **Circular Dependencies**: Modules depending on each other
-- **Inconsistent Naming**: Unclear module purposes
+- **Circular Dependencies** — modules depend on each other
+- **Over-modularization** — too many small modules complicate builds
+- **Monolithic Modules** — defeats the purpose of modularization
 
 **Best Practices:**
 - Start with app and core modules
-- Add feature modules as they grow
+- Add feature modules as functionality grows
 - Use clear dependency hierarchy
-- Avoid circular dependencies
-- Keep modules focused and cohesive
+- Apply Play Feature Delivery for large apps
 
 ## Follow-ups
 
-- How to handle shared dependencies between modules?
-- What are the best practices for module communication?
-- How to implement feature flags in modularized apps?
+- How do you handle shared dependencies between multiple feature modules?
+- What strategies prevent circular dependencies in modularized projects?
+- When should you use dynamic feature modules vs static modules?
+- How does modularization affect build time and app performance?
 
 ## References
 
@@ -142,15 +186,15 @@ dependencies {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-architectural-patterns--android--medium]] - Architecture patterns
-- [[q-gradle-build-system--android--medium]] - Build system basics
+### Prerequisites
+- [[q-gradle-build-system--android--medium]] — Build system fundamentals
+- [[q-android-app-components--android--easy]] — App components overview
 
-### Related (Medium)
-- [[q-android-build-optimization--android--medium]] - Build optimization
-- [[q-android-app-components--android--easy]] - App components
-- [[q-android-jetpack-overview--android--easy]] - Jetpack libraries
+### Related
+- [[q-android-architectural-patterns--android--medium]] — Architecture patterns
+- [[q-android-build-optimization--android--medium]] — Build optimization techniques
 
-### Advanced (Harder)
-- q-android-dependency-injection--android--hard - Dependency injection
-- [[q-android-testing-strategies--android--medium]] - Testing approaches
+### Advanced
+- [[q-android-testing-strategies--android--medium]] — Testing in modular apps
+- Dynamic feature delivery implementation
+- Convention plugins for module configuration

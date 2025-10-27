@@ -1,17 +1,17 @@
 ---
-id: 20251012-122760
-title: Android App Lag Analysis / Анализ тормозов приложения Android
-aliases: [Android App Lag Analysis, Анализ тормозов приложения Android]
+id: 20251012-122700
+title: Анализ тормозов приложения Android / Android App Lag Analysis
+aliases:
+  - Анализ тормозов приложения Android
+  - Android App Lag Analysis
+  - App Performance Analysis
+  - Анализ производительности приложения
 topic: android
-subtopics:
-  - performance-memory
-  - performance-rendering
+subtopics: [performance-memory, performance-rendering]
 question_kind: android
 difficulty: medium
-original_language: en
-language_tags:
-  - en
-  - ru
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
@@ -19,64 +19,73 @@ related:
   - q-compose-performance-optimization--android--hard
   - q-strictmode-debugging--android--medium
 created: 2025-10-13
-updated: 2025-10-15
-tags: [android/performance-memory, android/performance-rendering, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:19 pm
+updated: 2025-10-27
+sources:
+  - https://developer.android.com/topic/performance
+  - https://developer.android.com/studio/profile
+tags:
+  - android/performance-memory
+  - android/performance-rendering
+  - profiling
+  - strictmode
+  - difficulty/medium
 ---
 
 # Вопрос (RU)
-> Что такое Анализ тормозов приложения Android?
+
+> Как диагностировать и устранить задержки (лаги) в Android приложении?
 
 ---
 
 # Question (EN)
-> What are Android App Lag Analysis?
 
-## Answer (EN)
-App lag occurs when UI thread is blocked or frame rendering exceeds 16ms (60 FPS target). Understanding root causes and using proper diagnostic tools like Android Profiler is essential for smooth user experience.
+> How to diagnose and fix lag in Android applications?
 
-**Common Causes:**
+---
 
-**1. Main Thread Blocking:**
-- Synchronous DB/network calls
-- Heavy computations
-- Solution: Use coroutines, Dispatchers.IO/Default
+## Ответ (RU)
+
+Лаги возникают при блокировке UI-потока или когда рендеринг кадра превышает 16ms (цель 60 FPS). Необходимо понимать причины и использовать инструменты профилирования.
+
+**Основные причины лагов:**
+
+**1. Блокировка главного потока:**
+- Синхронные вызовы БД/сети
+- Тяжелые вычисления на UI-потоке
 
 ```kotlin
-// BAD: Blocking main thread
+// ❌ Плохо: блокировка главного потока
 fun loadData() {
-    val data = database.getAllUsers() // Synchronous DB call
+    val data = database.getAllUsers() // Синхронный вызов БД
     val result = heavyComputation(data)
     updateUI(result)
 }
 
-// GOOD: Async operations
+// ✅ Хорошо: асинхронные операции
 fun loadData() {
     viewModelScope.launch {
         val data = withContext(Dispatchers.IO) {
-            repository.getAllUsers()
+            repository.getAllUsers() // В фоне
         }
         val result = withContext(Dispatchers.Default) {
-            heavyComputation(data)
+            heavyComputation(data) // В фоне
         }
         _uiState.value = UiState.Success(result)
     }
 }
 ```
 
-**2. Memory Issues:**
-- Memory leaks
-- Excessive allocations
-- Solution: LeakCanary, proper lifecycle management
+**2. Утечки памяти:**
+- Статические ссылки на Context/View
+- Несвоевременная отписка от слушателей
 
 ```kotlin
-// BAD: Memory leak
+// ❌ Плохо: утечка памяти
 companion object {
     private var listener: OnDataListener? = null
 }
 
-// GOOD: Proper lifecycle
+// ✅ Хорошо: корректное управление жизненным циклом
 lifecycleScope.launch {
     repeatOnLifecycle(Lifecycle.State.STARTED) {
         viewModel.data.collect { data ->
@@ -86,81 +95,108 @@ lifecycleScope.launch {
 }
 ```
 
-**3. Overdraw and Complex Layouts:**
-- Deep view hierarchy
-- Multiple pixel redraws
-- Solution: ConstraintLayout, Compose, minimize nesting
+**3. Сложные layouts:**
+- Глубокая вложенность View
+- Множественная перерисовка пикселей (overdraw)
+
+**4. Неоптимизированные списки:**
+- Отсутствие RecyclerView
+- Неиспользование DiffUtil
 
 ```kotlin
-// BAD: Deep hierarchy
-<LinearLayout>
-    <RelativeLayout>
-        <FrameLayout>
-            <ConstraintLayout>
-                <TextView />
-            </ConstraintLayout>
-        </FrameLayout>
-    </RelativeLayout>
-</LinearLayout>
+// Оптимизация RecyclerView
+recyclerView.apply {
+    setHasFixedSize(true)
+    setItemViewCacheSize(20)
+}
 
-// GOOD: Flat hierarchy
-<ConstraintLayout>
-    <TextView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</ConstraintLayout>
+val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(oldItems, newItems))
+diffResult.dispatchUpdatesTo(adapter)
 ```
 
+**Инструменты диагностики:**
+
+1. **Android Profiler** - CPU/Memory/Network анализ
+2. **GPU Overdraw** - визуализация перерисовок
+3. **StrictMode** - обнаружение блокировок потока
+4. **LeakCanary** - автоматическое обнаружение утечек памяти
+
+## Answer (EN)
+
+App lag occurs when the UI thread is blocked or frame rendering exceeds 16ms (60 FPS target). Understanding root causes and using proper diagnostic tools is essential.
+
+**Common Causes:**
+
+**1. Main Thread Blocking:**
+- Synchronous DB/network calls on UI thread
+- Heavy computations blocking rendering
+
+```kotlin
+// ❌ Bad: Blocking main thread
+fun loadData() {
+    val data = database.getAllUsers() // Synchronous DB call
+    updateUI(data)
+}
+
+// ✅ Good: Async operations
+fun loadData() {
+    viewModelScope.launch {
+        val data = withContext(Dispatchers.IO) {
+            repository.getAllUsers() // Background thread
+        }
+        _uiState.value = UiState.Success(data)
+    }
+}
+```
+
+**2. Memory Leaks:**
+- Static references to Context/View
+- Unsubscribed listeners
+
+```kotlin
+// ❌ Bad: Memory leak
+companion object {
+    private var listener: OnDataListener? = null
+}
+
+// ✅ Good: Proper lifecycle management
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.data.collect { data ->
+            updateUI(data)
+        }
+    }
+}
+```
+
+**3. Complex Layouts:**
+- Deep view hierarchy
+- Multiple overdraw passes
+
 **4. Unoptimized Lists:**
-- No recycling
-- No DiffUtil
-- Solution: RecyclerView with optimization
+- Missing RecyclerView optimizations
+- No DiffUtil usage
 
 ```kotlin
 // RecyclerView optimization
 recyclerView.apply {
     setHasFixedSize(true)
     setItemViewCacheSize(20)
-    layoutManager = LinearLayoutManager(context).apply {
-        isItemPrefetchEnabled = true
-        initialPrefetchItemCount = 4
-    }
 }
 
-// Use DiffUtil for efficient updates
-val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(oldItems, newItems))
+val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(oldList, newList))
 diffResult.dispatchUpdatesTo(adapter)
-```
-
-**5. Poor Image Loading:**
-- Loading large images
-- Synchronous loading
-- Solution: Glide/Coil, sampling, caching
-
-```kotlin
-// BAD: Loading large images
-imageView.setImageBitmap(BitmapFactory.decodeFile(largeImagePath))
-
-// GOOD: Proper image loading
-Glide.with(imageView.context)
-    .load(imagePath)
-    .override(targetWidth, targetHeight)
-    .diskCacheStrategy(DiskCacheStrategy.ALL)
-    .into(imageView)
 ```
 
 **Diagnostic Tools:**
 
-**1. GPU Overdraw Detection:**
-- Enable: Settings → Developer Options → Debug GPU overdraw
-- Colors indicate overdraw levels (blue=2x, green=3x, red=4x+)
+1. **Android Profiler** - CPU/Memory/Network analysis
+2. **GPU Overdraw** - Visualize pixel redraws
+3. **StrictMode** - Detect thread violations
+4. **LeakCanary** - Automatic leak detection
 
-**2. Profile GPU Rendering:**
-- Enable: Settings → Developer Options → Profile GPU Rendering
-- Green line = 16ms target, bars above = dropped frames
-
-**3. StrictMode:**
 ```kotlin
+// StrictMode setup
 StrictMode.setThreadPolicy(
     StrictMode.ThreadPolicy.Builder()
         .detectDiskReads()
@@ -170,41 +206,24 @@ StrictMode.setThreadPolicy(
 )
 ```
 
-**4. Android Profiler:**
-- CPU Profiler: Identify hot methods
-- Memory Profiler: Find memory leaks
-- Network Profiler: Analyze requests
-- Energy Profiler: Check battery consumption
-
-**5. LeakCanary:**
-- Automatically detects memory leaks in debug builds
+---
 
 ## Follow-ups
 
-- How do you measure frame rendering performance in production?
-- What are the differences between GPU and CPU profiling?
-- How do you optimize RecyclerView for large datasets?
-- What are the best practices for image loading and caching?
-- How do you prevent memory leaks in long-running services?
+- How to measure frame rendering in production?
+- What's the difference between GPU and CPU profiling?
+- How to optimize RecyclerView for large datasets?
 
 ## References
 
-- [Android Performance Best Practices](https://developer.android.com/topic/performance)
-- [GPU Profiling](https://developer.android.com/topic/performance/rendering/profile-gpu)
-- [Memory Profiler](https://developer.android.com/studio/profile/memory-profiler)
-- [LeakCanary Documentation](https://square.github.io/leakcanary/)
+- [[q-strictmode-debugging--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-performance-measurement-tools--android--medium]] - Performance tools
-- [[q-strictmode-debugging--android--medium]] - StrictMode debugging
+### Same Level
+- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-performance-monitoring-jank-compose--android--medium]]
 
-### Related (Medium)
-- [[q-compose-performance-optimization--android--hard]] - Compose performance
-- [[q-performance-monitoring-jank-compose--android--medium]] - Jank monitoring
-- [[q-performance-optimization-android--android--medium]] - Performance optimization
-
-### Advanced (Harder)
-- [[q-what-is-layout-performance-measured-in--android--medium]] - Layout performance
-- [[q-performance-optimization-android--android--medium]] - Advanced optimization
+### Advanced
+- [[q-compose-performance-optimization--android--hard]]

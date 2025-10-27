@@ -1,7 +1,7 @@
 ---
 id: 20251012-122772
 title: "Android Security Best Practices / Лучшие практики безопасности Android"
-aliases: [Android Security Best Practices, Лучшие практики безопасности Android]
+aliases: ["Android Security Best Practices", "Лучшие практики безопасности Android"]
 topic: android
 subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
@@ -15,10 +15,7 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium]
 sources: [https://developer.android.com/topic/security/best-practices]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:10 pm
 ---
-
 # Вопрос (RU)
 > Какие лучшие практики безопасности Android вы знаете?
 
@@ -29,231 +26,173 @@ date modified: Saturday, October 25th 2025, 4:53:10 pm
 
 ## Ответ (RU)
 
-**Теория безопасности Android:**
-Android использует многоуровневую архитектуру безопасности (defense-in-depth) с изоляцией приложений, системой разрешений, безопасным хранилищем и зашифрованной связью. Каждый уровень защищает от специфических векторов атак.
+**Архитектура безопасности:**
+Android применяет defense-in-depth подход: изоляция процессов (sandboxing), система разрешений, [[c-encryption|шифрование]] данных и защищенная сетевая коммуникация. Каждый слой защищает от специфических векторов атак.
 
-**Безопасность разрешений:**
-App choosers предотвращают перехват чувствительных интентов вредоносными приложениями, позволяя пользователям явно выбирать доверенные приложения.
-
-```kotlin
-// Показать выбор приложения для чувствительных интентов
-val intent = Intent(ACTION_SEND)
-val possibleActivities = queryIntentActivities(intent, PackageManager.MATCH_ALL)
-
-if (possibleActivities.size > 1) {
-    val chooser = Intent.createChooser(intent, "Share with")
-    startActivity(chooser)
-}
-```
-
-**Signature-разрешения:**
-Разрешения на основе подписи позволяют только приложениям, подписанным тем же сертификатом, получать доступ к защищенным ресурсам.
+**1. Система разрешений:**
+Runtime permissions контролируют доступ к чувствительным ресурсам. Signature-based permissions ограничивают доступ приложениями с одинаковым сертификатом подписи.
 
 ```xml
-<permission android:name="my_custom_permission_name"
-            android:protectionLevel="signature" />
+<!-- ✅ Signature permission для внутреннего API -->
+<permission
+    android:name="com.app.INTERNAL_API"
+    android:protectionLevel="signature" />
 ```
 
-**Безопасность Content Provider:**
-Content providers с `android:exported="false"` предотвращают доступ внешних приложений к внутренним данным.
-
-```xml
-<provider
-    android:name="android.support.v4.content.FileProvider"
-    android:authorities="com.example.myapp.fileprovider"
-    android:exported="false" />
-```
-
-**Сетевая безопасность:**
-Конфигурация сетевой безопасности обеспечивает коммуникацию только через HTTPS и предотвращает незашифрованный трафик.
-
-```xml
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">api.example.com</domain>
-    </domain-config>
-</network-security-config>
-```
-
-**Безопасность WebView:**
-Ограничение контента до списка разрешенных источников и использование безопасных каналов связи.
+**2. Безопасное хранение данных:**
+Jetpack Security (EncryptedSharedPreferences, EncryptedFile) использует [[c-encryption|AES-256-GCM]] шифрование с ключами из Android Keystore, защищенными аппаратно.
 
 ```kotlin
-val channel = webView.createWebMessageChannel()
-channel[0].setWebMessageCallback(object : WebMessagePort.WebMessageCallback() {
-    override fun onMessage(port: WebMessagePort, message: WebMessage) {
-        // Обработка безопасного сообщения
-    }
-})
-```
-
-**Безопасность хранения:**
-Внутреннее хранилище изолировано для каждого приложения и автоматически удаляется при деинсталляции.
-
-```kotlin
-val file = File(filesDir, "sensitive_data.txt")
-file.writeText("Private data")
-```
-
-**Зашифрованное хранилище:**
-Jetpack Security обеспечивает шифрование с аппаратной поддержкой с использованием Android Keystore.
-
-```kotlin
+// ✅ Шифрование SharedPreferences
 val masterKey = MasterKey.Builder(context)
     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
     .build()
 
 val encryptedPrefs = EncryptedSharedPreferences.create(
     context, "secure_prefs", masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    PrefKeyEncryptionScheme.AES256_SIV,
+    PrefValueEncryptionScheme.AES256_GCM
 )
 ```
 
-**Биометрическая аутентификация:**
-Использование BiometricPrompt для безопасной аутентификации пользователей.
+**3. Сетевая безопасность:**
+Network Security Config принудительно обеспечивает HTTPS и certificate pinning для защиты от MITM атак.
 
-```kotlin
-val biometricPrompt = BiometricPrompt(this, executor, callback)
-val promptInfo = BiometricPrompt.PromptInfo.Builder()
-    .setTitle("Biometric Authentication")
-    .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-    .build()
-biometricPrompt.authenticate(promptInfo)
+```xml
+<!-- ✅ Блокировка cleartext + pinning -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">api.example.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">base64hash==</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>
 ```
 
-**Certificate Pinning:**
-Привязка сертификатов предотвращает атаки man-in-the-middle.
+**4. Защита компонентов:**
+Экспортированные компоненты доступны другим приложениям. Используйте `android:exported="false"` для внутренних компонентов.
 
-```kotlin
-val certificatePinner = CertificatePinner.Builder()
-    .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
-    .build()
+```xml
+<!-- ✅ Неэкспортированный Provider -->
+<provider
+    android:name=".InternalProvider"
+    android:exported="false" />
+
+<!-- ❌ Небезопасный Intent без проверки -->
+<!-- Используйте Intent.createChooser() для критичных операций -->
 ```
 
-**Мониторинг безопасности:**
-- Поддерживать зависимости обновленными
-- Нацеливаться на последнюю Android SDK
-- Проводить тестирование на проникновение
-- Использовать инструменты статического анализа
+**5. WebView безопасность:**
+Отключите ненужные функции, включите HTTPS-only режим, валидируйте сообщения между JS и нативным кодом.
+
+```kotlin
+// ✅ Безопасная конфигурация WebView
+webView.settings.apply {
+    javaScriptEnabled = false  // Включать только если необходимо
+    allowFileAccess = false
+    allowContentAccess = false
+}
+```
+
+**Дополнительные практики:**
+- Обфускация кода (R8/ProGuard)
+- Биометрическая аутентификация через BiometricPrompt
+- Регулярные security audits и penetration testing
+- Использование Android Lint для статического анализа
 
 ## Answer (EN)
 
-**Android Security Theory:**
-Android uses a defense-in-depth security architecture with application sandboxing, permission system, secure storage, and encrypted communication. Each layer protects against specific attack vectors.
+**Security Architecture:**
+Android employs defense-in-depth approach: process isolation (sandboxing), permission system, data [[c-encryption|encryption]], and secure network communication. Each layer protects against specific attack vectors.
 
-**Permission Security:**
-App choosers prevent malicious apps from intercepting sensitive intents by allowing users to explicitly choose trusted applications.
-
-```kotlin
-// Show app chooser for sensitive intents
-val intent = Intent(ACTION_SEND)
-val possibleActivities = queryIntentActivities(intent, PackageManager.MATCH_ALL)
-
-if (possibleActivities.size > 1) {
-    val chooser = Intent.createChooser(intent, "Share with")
-    startActivity(chooser)
-}
-```
-
-**Signature-based Permissions:**
-Signature-based permissions only allow apps signed with the same certificate to access protected resources.
+**1. Permission System:**
+Runtime permissions control access to sensitive resources. Signature-based permissions restrict access to apps signed with the same certificate.
 
 ```xml
-<permission android:name="my_custom_permission_name"
-            android:protectionLevel="signature" />
+<!-- ✅ Signature permission for internal API -->
+<permission
+    android:name="com.app.INTERNAL_API"
+    android:protectionLevel="signature" />
 ```
 
-**Content Provider Security:**
-Content providers with `android:exported="false"` prevent external apps from accessing internal data.
-
-```xml
-<provider
-    android:name="android.support.v4.content.FileProvider"
-    android:authorities="com.example.myapp.fileprovider"
-    android:exported="false" />
-```
-
-**Network Security:**
-Network security configuration enforces HTTPS-only communication and prevents cleartext traffic.
-
-```xml
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">api.example.com</domain>
-    </domain-config>
-</network-security-config>
-```
-
-**WebView Security:**
-Restrict content to allowlisted sources and use secure communication channels.
+**2. Secure Data Storage:**
+Jetpack Security (EncryptedSharedPreferences, EncryptedFile) uses [[c-encryption|AES-256-GCM]] encryption with keys from Android Keystore, hardware-backed protection.
 
 ```kotlin
-val channel = webView.createWebMessageChannel()
-channel[0].setWebMessageCallback(object : WebMessagePort.WebMessageCallback() {
-    override fun onMessage(port: WebMessagePort, message: WebMessage) {
-        // Handle secure message
-    }
-})
-```
-
-**Data Storage Security:**
-Internal storage is sandboxed per app and automatically deleted on uninstall.
-
-```kotlin
-val file = File(filesDir, "sensitive_data.txt")
-file.writeText("Private data")
-```
-
-**Encrypted Storage:**
-Jetpack Security provides hardware-backed encryption using Android Keystore.
-
-```kotlin
+// ✅ Encrypt SharedPreferences
 val masterKey = MasterKey.Builder(context)
     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
     .build()
 
 val encryptedPrefs = EncryptedSharedPreferences.create(
     context, "secure_prefs", masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    PrefKeyEncryptionScheme.AES256_SIV,
+    PrefValueEncryptionScheme.AES256_GCM
 )
 ```
 
-**Biometric Authentication:**
-Use BiometricPrompt for secure user authentication.
+**3. Network Security:**
+Network Security Config enforces HTTPS and certificate pinning to protect against MITM attacks.
 
-```kotlin
-val biometricPrompt = BiometricPrompt(this, executor, callback)
-val promptInfo = BiometricPrompt.PromptInfo.Builder()
-    .setTitle("Biometric Authentication")
-    .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-    .build()
-biometricPrompt.authenticate(promptInfo)
+```xml
+<!-- ✅ Block cleartext + pinning -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">api.example.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">base64hash==</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>
 ```
 
-**Certificate Pinning:**
-Certificate pinning prevents man-in-the-middle attacks.
+**4. Component Protection:**
+Exported components are accessible to other apps. Use `android:exported="false"` for internal components.
 
-```kotlin
-val certificatePinner = CertificatePinner.Builder()
-    .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
-    .build()
+```xml
+<!-- ✅ Non-exported Provider -->
+<provider
+    android:name=".InternalProvider"
+    android:exported="false" />
+
+<!-- ❌ Unsafe Intent without validation -->
+<!-- Use Intent.createChooser() for sensitive operations -->
 ```
 
-**Security Monitoring:**
-- Keep dependencies updated
-- Target latest Android SDK
-- Perform penetration testing
-- Use static analysis tools
+**5. WebView Security:**
+Disable unnecessary features, enforce HTTPS-only mode, validate messages between JS and native code.
+
+```kotlin
+// ✅ Secure WebView configuration
+webView.settings.apply {
+    javaScriptEnabled = false  // Enable only if necessary
+    allowFileAccess = false
+    allowContentAccess = false
+}
+```
+
+**Additional Practices:**
+- Code obfuscation (R8/ProGuard)
+- Biometric authentication via BiometricPrompt
+- Regular security audits and penetration testing
+- Android Lint for static analysis
 
 ---
 
 ## Follow-ups
 
-- How do you implement certificate pinning for different environments?
-- What are the security implications of using WebView in Android apps?
+- How do you implement certificate pinning for different build variants (dev/staging/prod)?
+- What are the security implications of using WebView with JavaScript enabled?
 - How do you handle sensitive data in memory to prevent memory dumps?
+- What's the difference between `BIOMETRIC_STRONG` and `BIOMETRIC_WEAK` authenticators?
+- How do you securely store API keys in an Android app?
+
+## References
+
+- [[c-encryption]] - Encryption fundamentals
+- [[c-permissions]] - Android permissions system
+- https://developer.android.com/topic/security/best-practices
 
 ## Related Questions
 

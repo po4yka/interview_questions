@@ -1,31 +1,21 @@
 ---
 id: 20251020-200000
-title: Datastore Preferences Proto / DataStore Preferences Proto
-aliases: [Datastore Preferences Proto, DataStore Preferences Proto]
+title: DataStore Preferences и Proto / DataStore Preferences and Proto
+aliases: ["DataStore Preferences and Proto", "DataStore Preferences и Proto"]
 topic: android
-subtopics:
-  - datastore
+subtopics: [datastore]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-storage-types--android--medium
-  - q-room-database-basics--android--easy
-  - q-shared-preferences-android--android--easy
+related: [c-coroutines, q-android-storage-types--android--medium]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/datastore, datastore, difficulty/medium, preferences, proto-datastore, storage]
-source: https://developer.android.com/topic/libraries/architecture/datastore
-source_note: Android DataStore documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:10 pm
+updated: 2025-10-27
+tags: [android/datastore, datastore, preferences, proto-datastore, storage, difficulty/medium]
+sources: [https://developer.android.com/topic/libraries/architecture/datastore]
 ---
-
 # Вопрос (RU)
 > Что вы знаете о DataStore?
 
@@ -34,288 +24,202 @@ date modified: Saturday, October 25th 2025, 4:52:10 pm
 
 ## Ответ (RU)
 
-Jetpack DataStore - это решение для хранения данных, которое позволяет хранить пары ключ-значение или типизированные объекты с протокольными буферами. DataStore использует Kotlin корутины и Flow для асинхронного, последовательного и транзакционного хранения данных.
+DataStore — это современное решение для хранения данных в Android, заменяющее SharedPreferences. Предоставляет два варианта: **Preferences DataStore** (ключ-значение) и **Proto DataStore** (типизированные объекты с Protocol Buffers). Использует корутины и Flow для асинхронности и реактивности.
 
-### Теория: DataStore В Android
+### Основные Концепции
 
-**Основные концепции:**
-- **DataStore** - современная замена SharedPreferences
-- **Preferences DataStore** - хранение пар ключ-значение без схемы
-- **Proto DataStore** - типизированное хранение с протокольными буферами
-- **Асинхронность** - использование корутин и Flow
-- **Транзакционность** - атомарные операции
+**Preferences DataStore** — простое хранилище ключ-значение без схемы:
+- Подходит для простых настроек (theme, language, flags)
+- Не требует определения схемы
+- Минимальная конфигурация
 
-**Принципы работы:**
-- DataStore использует корутины для асинхронных операций
-- Flow обеспечивает реактивные обновления данных
-- Транзакции гарантируют консистентность данных
-- Типизация обеспечивает безопасность типов
-- Миграция данных из SharedPreferences
+**Proto DataStore** — типизированное хранилище:
+- Требует определение схемы `.proto`
+- Compile-time type safety
+- Лучшая производительность сериализации
+- Подходит для сложных структур данных
 
-### Preferences DataStore Vs Proto DataStore
+**Ключевые отличия от SharedPreferences:**
+- Асинхронный API (корутины) — не блокирует UI поток
+- Транзакционность — атомарные операции через `edit` или `updateData`
+- Безопасность типов — для Proto DataStore
+- Поддержка миграций
 
-**Сравнение реализаций:**
+### Preferences DataStore: Пример
 
-| Критерий | Preferences DataStore | Proto DataStore |
-|----------|----------------------|-----------------|
-| Схема | Без предопределенной схемы | Требует схему protobuf |
-| Типизация | Нет типизации | Полная типизация |
-| Сложность | Простая | Средняя |
-| Производительность | Хорошая | Отличная |
-| Размер | Минимальный | Больше |
-
-**Выбор реализации:**
-- **Preferences DataStore** - для простых настроек приложения
-- **Proto DataStore** - для сложных структур данных
-
-### Preferences DataStore
-
-**Теоретические основы:**
-Preferences DataStore хранит данные как пары ключ-значение без предопределенной схемы. Это простая реализация для базовых настроек приложения.
-
-**Создание DataStore:**
 ```kotlin
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-```
+// ✅ Создание с делегатом
+private val Context.dataStore by preferencesDataStore(name = "settings")
 
-**Чтение данных:**
-```kotlin
-val EXAMPLE_COUNTER = intPreferencesKey("example_counter")
-val exampleCounterFlow: Flow<Int> = context.dataStore.data.map { preferences ->
-    preferences[EXAMPLE_COUNTER] ?: 0
-}
-```
+// ✅ Определение ключей
+private val THEME_KEY = stringPreferencesKey("theme")
 
-**Запись данных:**
-```kotlin
-suspend fun incrementCounter() {
-    context.dataStore.edit { preferences ->
-        val currentCounterValue = preferences[EXAMPLE_COUNTER] ?: 0
-        preferences[EXAMPLE_COUNTER] = currentCounterValue + 1
+// Чтение
+val themeFlow: Flow<String> = context.dataStore.data
+    .map { prefs -> prefs[THEME_KEY] ?: "light" }
+
+// Запись (транзакционно)
+suspend fun saveTheme(theme: String) {
+    context.dataStore.edit { prefs ->
+        prefs[THEME_KEY] = theme
     }
 }
 ```
 
-### Proto DataStore
+### Proto DataStore: Пример
 
-**Теоретические основы:**
-Proto DataStore хранит данные как типизированные объекты с использованием протокольных буферов. Это обеспечивает полную типизацию и лучшую производительность.
-
-**Определение схемы:**
+**Схема (settings.proto):**
 ```protobuf
 syntax = "proto3";
-
-option java_package = "com.example.application";
-option java_multiple_files = true;
-
-message Settings {
-  int32 example_counter = 1;
-  string user_name = 2;
-  bool notifications_enabled = 3;
+message UserSettings {
+  string theme = 1;
+  bool notifications_enabled = 2;
+  int32 font_size = 3;
 }
 ```
 
 **Сериализатор:**
 ```kotlin
-object SettingsSerializer : Serializer<Settings> {
-    override val defaultValue: Settings = Settings.getDefaultInstance()
+object UserSettingsSerializer : Serializer<UserSettings> {
+    override val defaultValue = UserSettings.getDefaultInstance()
 
-    override suspend fun readFrom(input: InputStream): Settings {
-        try {
-            return Settings.parseFrom(input)
-        } catch (exception: InvalidProtocolBufferException) {
-            throw CorruptionException("Cannot read proto.", exception)
-        }
-    }
+    override suspend fun readFrom(input: InputStream) =
+        UserSettings.parseFrom(input)
 
-    override suspend fun writeTo(t: Settings, output: OutputStream) = t.writeTo(output)
+    override suspend fun writeTo(t: UserSettings, output: OutputStream) =
+        t.writeTo(output)
 }
 ```
 
-**Создание Proto DataStore:**
+**Использование:**
 ```kotlin
-val Context.settingsDataStore: DataStore<Settings> by dataStore(
-    fileName = "settings.pb",
-    serializer = SettingsSerializer
+private val Context.settingsStore by dataStore(
+    fileName = "user_settings.pb",
+    serializer = UserSettingsSerializer
 )
-```
 
-**Использование Proto DataStore:**
-```kotlin
-val settingsFlow: Flow<Settings> = context.settingsDataStore.data
+// Чтение
+val settingsFlow: Flow<UserSettings> = context.settingsStore.data
 
-suspend fun updateUserName(newName: String) {
-    context.settingsDataStore.updateData { currentSettings ->
-        currentSettings.toBuilder()
-            .setUserName(newName)
+// Запись (транзакционно)
+suspend fun updateTheme(theme: String) {
+    context.settingsStore.updateData { current ->
+        current.toBuilder()
+            .setTheme(theme)
             .build()
     }
 }
 ```
 
-### Миграция Из SharedPreferences
+### Миграция из SharedPreferences
 
-**Теоретические основы:**
-DataStore предоставляет инструменты для миграции данных из SharedPreferences. Это обеспечивает плавный переход без потери пользовательских данных.
-
-**Миграция:**
 ```kotlin
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+val Context.dataStore by preferencesDataStore(
     name = "settings",
     produceMigrations = { context ->
-        listOf(sharedPreferencesMigration(context, "old_preferences_name"))
+        listOf(
+            // ✅ Автоматическая миграция всех значений
+            SharedPreferencesMigration(context, "old_prefs_name")
+        )
     }
 )
 ```
 
-### Преимущества DataStore
+### Когда Использовать
 
-**Теоретические преимущества:**
-- **Асинхронность** - не блокирует UI поток
-- **Типизация** - безопасность типов на этапе компиляции
-- **Транзакционность** - атомарные операции
-- **Реактивность** - автоматические обновления через Flow
-- **Консистентность** - гарантии целостности данных
+| Сценарий | Решение | Причина |
+|----------|---------|---------|
+| Простые настройки (theme, language) | Preferences | Минимальная конфигурация |
+| Сложные структуры (user profile) | Proto | Type safety, лучшая производительность |
+| Миграция с SharedPreferences | Preferences | Встроенная поддержка миграций |
+| Большой объем данных | Не использовать | Для больших данных → Room или файлы |
 
-**Практические преимущества:**
-- Замена устаревшего SharedPreferences
-- Лучшая производительность
-- Современный API с корутинами
-- Поддержка миграций
-- Интеграция с архитектурными компонентами
-
-### Лучшие Практики
-
-**Теоретические принципы:**
-- Используйте Preferences DataStore для простых настроек
-- Используйте Proto DataStore для сложных структур
-- Обрабатывайте исключения при чтении/записи
-- Используйте миграции для обновления данных
-- Кэшируйте часто используемые данные
-
-**Практические рекомендации:**
-- Создавайте DataStore как singleton
-- Используйте Flow для реактивных обновлений
-- Обрабатывайте ошибки gracefully
-- Тестируйте миграции данных
-- Документируйте схемы protobuf
+**Важно:** DataStore не подходит для больших объемов данных или частых синхронных чтений.
 
 ## Answer (EN)
 
-Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
+DataStore is a modern data storage solution for Android, replacing SharedPreferences. It provides two variants: **Preferences DataStore** (key-value) and **Proto DataStore** (typed objects with Protocol Buffers). Uses coroutines and Flow for asynchronicity and reactivity.
 
-### Theory: DataStore in Android
+### Core Concepts
 
-**Core Concepts:**
-- **DataStore** - modern replacement for SharedPreferences
-- **Preferences DataStore** - key-value pair storage without schema
-- **Proto DataStore** - typed storage with protocol buffers
-- **Asynchrony** - using coroutines and Flow
-- **Transactional** - atomic operations
+**Preferences DataStore** — simple key-value storage without schema:
+- Suitable for simple settings (theme, language, flags)
+- No schema definition required
+- Minimal configuration
 
-**Working Principles:**
-- DataStore uses coroutines for asynchronous operations
-- Flow provides reactive data updates
-- Transactions ensure data consistency
-- Typing provides type safety
-- Data migration from SharedPreferences
+**Proto DataStore** — typed storage:
+- Requires `.proto` schema definition
+- Compile-time type safety
+- Better serialization performance
+- Suitable for complex data structures
 
-### Preferences DataStore Vs Proto DataStore
+**Key Differences from SharedPreferences:**
+- Asynchronous API (coroutines) — doesn't block UI thread
+- Transactional — atomic operations via `edit` or `updateData`
+- Type safety — for Proto DataStore
+- Migration support
 
-**Implementation Comparison:**
+### Preferences DataStore: Example
 
-| Criterion | Preferences DataStore | Proto DataStore |
-|-----------|----------------------|-----------------|
-| Schema | No predefined schema | Requires protobuf schema |
-| Typing | No typing | Full typing |
-| Complexity | Simple | Medium |
-| Performance | Good | Excellent |
-| Size | Minimal | Larger |
-
-**Implementation Selection:**
-- **Preferences DataStore** - for simple app settings
-- **Proto DataStore** - for complex data structures
-
-### Preferences DataStore
-
-**Theoretical Foundations:**
-Preferences DataStore stores data as key-value pairs without a predefined schema. This is a simple implementation for basic app settings.
-
-**Creating DataStore:**
 ```kotlin
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-```
+// ✅ Create with delegate
+private val Context.dataStore by preferencesDataStore(name = "settings")
 
-**Reading Data:**
-```kotlin
-val EXAMPLE_COUNTER = intPreferencesKey("example_counter")
-val exampleCounterFlow: Flow<Int> = context.dataStore.data.map { preferences ->
-    preferences[EXAMPLE_COUNTER] ?: 0
-}
-```
+// ✅ Define keys
+private val THEME_KEY = stringPreferencesKey("theme")
 
-**Writing Data:**
-```kotlin
-suspend fun incrementCounter() {
-    context.dataStore.edit { preferences ->
-        val currentCounterValue = preferences[EXAMPLE_COUNTER] ?: 0
-        preferences[EXAMPLE_COUNTER] = currentCounterValue + 1
+// Read
+val themeFlow: Flow<String> = context.dataStore.data
+    .map { prefs -> prefs[THEME_KEY] ?: "light" }
+
+// Write (transactionally)
+suspend fun saveTheme(theme: String) {
+    context.dataStore.edit { prefs ->
+        prefs[THEME_KEY] = theme
     }
 }
 ```
 
-### Proto DataStore
+### Proto DataStore: Example
 
-**Theoretical Foundations:**
-Proto DataStore stores data as typed objects using protocol buffers. This provides full typing and better performance.
-
-**Schema Definition:**
+**Schema (settings.proto):**
 ```protobuf
 syntax = "proto3";
-
-option java_package = "com.example.application";
-option java_multiple_files = true;
-
-message Settings {
-  int32 example_counter = 1;
-  string user_name = 2;
-  bool notifications_enabled = 3;
+message UserSettings {
+  string theme = 1;
+  bool notifications_enabled = 2;
+  int32 font_size = 3;
 }
 ```
 
 **Serializer:**
 ```kotlin
-object SettingsSerializer : Serializer<Settings> {
-    override val defaultValue: Settings = Settings.getDefaultInstance()
+object UserSettingsSerializer : Serializer<UserSettings> {
+    override val defaultValue = UserSettings.getDefaultInstance()
 
-    override suspend fun readFrom(input: InputStream): Settings {
-        try {
-            return Settings.parseFrom(input)
-        } catch (exception: InvalidProtocolBufferException) {
-            throw CorruptionException("Cannot read proto.", exception)
-        }
-    }
+    override suspend fun readFrom(input: InputStream) =
+        UserSettings.parseFrom(input)
 
-    override suspend fun writeTo(t: Settings, output: OutputStream) = t.writeTo(output)
+    override suspend fun writeTo(t: UserSettings, output: OutputStream) =
+        t.writeTo(output)
 }
 ```
 
-**Creating Proto DataStore:**
+**Usage:**
 ```kotlin
-val Context.settingsDataStore: DataStore<Settings> by dataStore(
-    fileName = "settings.pb",
-    serializer = SettingsSerializer
+private val Context.settingsStore by dataStore(
+    fileName = "user_settings.pb",
+    serializer = UserSettingsSerializer
 )
-```
 
-**Using Proto DataStore:**
-```kotlin
-val settingsFlow: Flow<Settings> = context.settingsDataStore.data
+// Read
+val settingsFlow: Flow<UserSettings> = context.settingsStore.data
 
-suspend fun updateUserName(newName: String) {
-    context.settingsDataStore.updateData { currentSettings ->
-        currentSettings.toBuilder()
-            .setUserName(newName)
+// Write (transactionally)
+suspend fun updateTheme(theme: String) {
+    context.settingsStore.updateData { current ->
+        current.toBuilder()
+            .setTheme(theme)
             .build()
     }
 }
@@ -323,61 +227,53 @@ suspend fun updateUserName(newName: String) {
 
 ### Migration from SharedPreferences
 
-**Theoretical Foundations:**
-DataStore provides tools for migrating data from SharedPreferences. This ensures a smooth transition without losing user data.
-
-**Migration:**
 ```kotlin
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+val Context.dataStore by preferencesDataStore(
     name = "settings",
     produceMigrations = { context ->
-        listOf(sharedPreferencesMigration(context, "old_preferences_name"))
+        listOf(
+            // ✅ Automatically migrate all values
+            SharedPreferencesMigration(context, "old_prefs_name")
+        )
     }
 )
 ```
 
-### DataStore Benefits
+### When to Use
 
-**Theoretical Benefits:**
-- **Asynchrony** - doesn't block UI thread
-- **Typing** - compile-time type safety
-- **Transactional** - atomic operations
-- **Reactive** - automatic updates through Flow
-- **Consistency** - data integrity guarantees
+| Scenario | Solution | Reason |
+|----------|----------|--------|
+| Simple settings (theme, language) | Preferences | Minimal configuration |
+| Complex structures (user profile) | Proto | Type safety, better performance |
+| Migration from SharedPreferences | Preferences | Built-in migration support |
+| Large data volumes | Don't use | For large data → Room or files |
 
-**Practical Benefits:**
-- Replacement for deprecated SharedPreferences
-- Better performance
-- Modern API with coroutines
-- Migration support
-- Integration with architectural components
-
-### Best Practices
-
-**Theoretical Principles:**
-- Use Preferences DataStore for simple settings
-- Use Proto DataStore for complex structures
-- Handle exceptions when reading/writing
-- Use migrations for data updates
-- Cache frequently used data
-
-**Practical Recommendations:**
-- Create DataStore as singleton
-- Use Flow for reactive updates
-- Handle errors gracefully
-- Test data migrations
-- Document protobuf schemas
-
-**See also:** c-protocol-buffers, c-data-serialization
+**Important:** DataStore is not suitable for large data volumes or frequent synchronous reads.
 
 
 ## Follow-ups
 
-- How do you migrate from SharedPreferences to DataStore?
-- What are the performance differences between Preferences and Proto DataStore?
-- How do you handle errors in DataStore operations?
+- How do you handle DataStore exceptions (e.g., CorruptionException)?
+- What are the performance implications of using DataStore vs SharedPreferences?
+- When should you use DataStore instead of Room database?
+- How do you test DataStore in unit tests?
+- What happens if multiple processes access the same DataStore file?
+
+## References
+
+- [[c-coroutines]] - Kotlin coroutines and Flow fundamentals
+- Android DataStore official documentation
+- Protocol Buffers documentation (for Proto DataStore schema definition)
 
 ## Related Questions
 
+### Prerequisites
+- Understanding of Kotlin coroutines and Flow
+- Basic knowledge of Android storage options
+
 ### Related (Same Level)
-- [[q-android-storage-types--android--medium]]
+- [[q-android-storage-types--android--medium]] - Overview of storage options in Android
+
+### Advanced
+- Implementing custom Serializer for Proto DataStore with error handling
+- Multi-module DataStore configuration with dependency injection

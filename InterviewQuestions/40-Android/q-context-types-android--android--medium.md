@@ -1,18 +1,13 @@
 ---
 id: 20251021-130000
 title: Context Types in Android / Типы Context в Android
-aliases: [Context Types in Android, Типы Context в Android]
+aliases: ["Context Types in Android", "Типы Context в Android"]
 topic: android
-subtopics:
-  - activity
-  - app-startup
-  - lifecycle
+subtopics: [activity, app-startup, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
@@ -20,151 +15,200 @@ related:
   - q-memory-leaks-definition--android--easy
   - q-usecase-pattern-android--android--medium
 created: 2025-10-21
-updated: 2025-10-21
+updated: 2025-10-27
 tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
-source: https://developer.android.com/reference/android/content/Context
-source_note: Official Context documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:27 pm
+sources: ["https://developer.android.com/reference/android/content/Context"]
 ---
-
 # Вопрос (RU)
-> Типы Context в Android?
+> Какие типы Context существуют в Android и когда каждый из них использовать?
 
 # Question (EN)
-> Context Types in Android?
+> What types of Context exist in Android and when should each be used?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+Context — абстрактный класс, предоставляющий доступ к ресурсам приложения, системным сервисам и операциям уровня приложения. Каждый тип Context имеет свой жизненный цикл и область применения.
+
+### Основные типы
+
+**Application Context**
+- Привязан к жизненному циклу всего приложения
+- Получение: `applicationContext` или `getApplicationContext()`
+- Используется для: singleton-объектов, операций БД/сети, запуска сервисов
+- Не может: создавать диалоги, запускать Activity без флага `FLAG_ACTIVITY_NEW_TASK`
+
+**Activity Context**
+- Привязан к жизненному циклу Activity
+- Получение: `this` внутри Activity
+- Используется для: UI-операций (диалоги, layout inflation), запуска Activity, тем оформления
+- Риск: memory leak при передаче в долгоживущие объекты
+
+**Service Context**
+- Привязан к жизненному циклу Service
+- Получение: `this` внутри Service
+- Используется для: фоновых операций, запуска других сервисов
+
+### Иерархия классов
+
+```kotlin
+Context (abstract)
+  └── ContextWrapper
+        ├── Application
+        ├── Service
+        └── ContextThemeWrapper
+              └── Activity
+```
+
+### Когда использовать
+
+| Операция | Application | Activity | Service |
+|----------|-------------|----------|---------|
+| Диалоги | Нет | Да | Нет |
+| Запуск Activity | Требует флага | Да | Требует флага |
+| Inflate layout | Без темы | С темой | Без темы |
+| Singleton | Да | Нет | Нет |
+| БД/сеть | Да | Избегать | Да |
+
+### Распространенные ошибки
+
+```kotlin
+// ❌ Memory leak: Activity в статическом поле
+companion object {
+    lateinit var context: Context
+}
+fun onCreate() {
+    context = this // утечка Activity
+}
+
+// ✅ Правильно: Application Context
+companion object {
+    lateinit var appContext: Context
+}
+fun onCreate() {
+    appContext = applicationContext
+}
+
+// ❌ Application Context для диалогов
+AlertDialog.Builder(applicationContext) // crash
+
+// ✅ Activity Context для UI
+AlertDialog.Builder(this@MyActivity)
+```
+
+### Правила выбора
+
+1. **Application Context** — для долгоживущих объектов (Repository, WorkManager, singleton)
+2. **Activity Context** — строго для UI-компонентов с коротким lifecycle
+3. **WeakReference** — если нужна Activity-ссылка в callback/async операциях
+4. Проверять lifecycle перед использованием Context
 
 ## Answer (EN)
 
-### What is Context
-- Interface to global information about application environment
-- Abstract class, implementation provided by Android system
-- Access to resources, classes, application-level operations
+Context is an abstract class providing access to application resources, system services, and application-level operations. Each Context type has its own lifecycle and use cases.
 
-Understanding Context is critical for working with [[c-dependency-injection]] and [[c-lifecycle]].
+### Main Types
 
-### Context Hierarchy
-```
-Context (abstract class)
-├── ContextWrapper
-│   ├── Application
-│   ├── Service
-│   └── ContextThemeWrapper
-│       └── Activity
-└── ... other implementations
-```
+**Application Context**
+- Tied to entire application lifecycle
+- Access: `applicationContext` or `getApplicationContext()`
+- Use for: singletons, database/network operations, starting services
+- Cannot: create dialogs, start Activity without `FLAG_ACTIVITY_NEW_TASK`
 
-### Main Context Types
-
-**Application Context:**
-- Global application context
-- Lives for entire app lifecycle
-- Used for: starting services, sending broadcasts, loading resources
-- NOT used for: showing dialogs, starting Activity, inflating layout
-
-**Activity Context:**
-- Context of specific Activity
+**Activity Context**
 - Tied to Activity lifecycle
-- Used for: showing dialogs, starting Activity, inflating layout, UI operations
-- Can cause memory leaks if used incorrectly
+- Access: `this` inside Activity
+- Use for: UI operations (dialogs, layout inflation), starting Activities, themed resources
+- Risk: memory leak if passed to long-lived objects
 
-**Service Context:**
-- Service context
-- Tied to service lifecycle
-- Used for background operations
+**Service Context**
+- Tied to Service lifecycle
+- Access: `this` inside Service
+- Use for: background operations, starting other services
 
-### Capabilities by Context Type
-
-| Action | Application | Activity | Service |
-|--------|-------------|----------|---------|
-| Show Dialog | ❌ | ✅ | ❌ |
-| Start Activity | ❌¹ | ✅ | ❌¹ |
-| Inflate Layout | ❌² | ✅ | ❌² |
-| Start Service | ✅ | ✅ | ✅ |
-| Bind to Service | ✅ | ✅ | ✅ |
-| Send Broadcast | ✅ | ✅ | ✅ |
-| Load Resources | ✅ | ✅ | ✅ |
-
-¹ Possible but requires creating new task
-² Possible but without theme information
-
-### When to Use Which Context
-
-**Application Context:**
-- Starting services and broadcasts
-- Accessing resources without UI
-- Singleton objects
-- Database, network operations
-
-**Activity Context:**
-- UI operations (dialogs, layout inflation)
-- Starting other Activities
-- ContextMenu, Toast with UI
-- Operations tied to Activity lifecycle
-
-### Pitfalls
-
-**Memory Leaks:**
-- Long-lived references to Activity Context
-- Static fields with Activity Context
-- Async operations holding Activity Context
-
-**Wrong Choice:**
-- Using Activity Context for long-lived objects
-- Application Context for UI operations
-- Context in inappropriate scope
-
-### Best Practices
-
-1. **Use Application Context** for long-lived operations
-2. **Use Activity Context** only for UI operations
-3. **Avoid static references** to Context
-4. **Check lifecycle** before using Context
-5. **Use WeakReference** when long-lived references needed
-
-### Getting Context
+### Class Hierarchy
 
 ```kotlin
-// In Activity
-val context = this // Activity Context
-
-// In Fragment
-val context = requireContext() // Activity Context
-
-// In Application
-val context = this // Application Context
-
-// In Service
-val context = this // Service Context
-
-// Global access (careful!)
-val context = MyApplication.getInstance()
+Context (abstract)
+  └── ContextWrapper
+        ├── Application
+        ├── Service
+        └── ContextThemeWrapper
+              └── Activity
 ```
+
+### When to Use
+
+| Operation | Application | Activity | Service |
+|-----------|-------------|----------|---------|
+| Dialogs | No | Yes | No |
+| Start Activity | Needs flag | Yes | Needs flag |
+| Inflate layout | No theme | With theme | No theme |
+| Singleton | Yes | No | No |
+| DB/network | Yes | Avoid | Yes |
+
+### Common Mistakes
+
+```kotlin
+// ❌ Memory leak: Activity in static field
+companion object {
+    lateinit var context: Context
+}
+fun onCreate() {
+    context = this // Activity leaked
+}
+
+// ✅ Correct: Application Context
+companion object {
+    lateinit var appContext: Context
+}
+fun onCreate() {
+    appContext = applicationContext
+}
+
+// ❌ Application Context for dialogs
+AlertDialog.Builder(applicationContext) // crash
+
+// ✅ Activity Context for UI
+AlertDialog.Builder(this@MyActivity)
+```
+
+### Selection Rules
+
+1. **Application Context** — for long-lived objects (Repository, WorkManager, singletons)
+2. **Activity Context** — strictly for UI components with short lifecycle
+3. **WeakReference** — if Activity reference needed in callbacks/async operations
+4. Check lifecycle before using Context
 
 ---
 
 ## Follow-ups
 
-- How to avoid memory leaks with Context?
-- What happens when using wrong Context type?
-- How to properly manage Context in background threads?
-- What are the differences between ContextWrapper and ContextThemeWrapper?
+- How does ContextWrapper differ from ContextThemeWrapper?
+- What happens if you inflate a themed layout using Application Context?
+- How to safely pass Context to ViewModel or Repository?
+- When should you use `getBaseContext()` vs `getApplicationContext()`?
+- How does Jetpack Compose handle Context internally?
 
 ## References
 
-- [Context Documentation](https://developer.android.com/reference/android/content/Context)
-- [Application Context vs Activity Context](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- Official Android docs: https://developer.android.com/reference/android/content/Context
+- [[c-lifecycle]] - Understanding lifecycle implications
+- [[q-memory-leaks-definition--android--easy]] - Memory leak patterns
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-activity-lifecycle-methods--android--medium]]
+### Prerequisites
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle basics
+- [[q-memory-leaks-definition--android--easy]] - Memory leak fundamentals
 
-### Related (Same Level)
-- [[q-usecase-pattern-android--android--medium]]
+### Related
+- [[q-usecase-pattern-android--android--medium]] - Dependency injection patterns
+- Service lifecycle and Context usage
+- Fragment Context considerations
+
+### Advanced
+- WeakReference and lifecycle-aware Context handling
+- Testing code that depends on Context
+- Context in multi-module architecture

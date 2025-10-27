@@ -1,30 +1,23 @@
 ---
 id: 20251011-220005
 title: Gradle Build Optimization / Оптимизация сборки Gradle
-aliases: [Gradle Build Optimization, Оптимизация сборки Gradle]
+aliases: ["Gradle Build Optimization", "Оптимизация сборки Gradle"]
 topic: android
-subtopics:
-  - dependency-management
-  - gradle
+subtopics: [dependency-management, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
   - q-android-build-optimization--android--medium
   - q-android-modularization--android--medium
   - q-baseline-profiles-optimization--android--medium
+sources: []
 created: 2025-10-11
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/dependency-management, android/gradle, difficulty/medium]
-source: Original
-source_note: Gradle build performance best practices
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:52 pm
 ---
 
 # Вопрос (RU)

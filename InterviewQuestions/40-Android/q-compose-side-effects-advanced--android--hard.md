@@ -1,17 +1,13 @@
 ---
 id: 20251017-104815
 title: Compose Side Effects (Advanced) / Побочные эффекты Compose (продвинуто)
-aliases: [Compose Side Effects Advanced, Побочные эффекты Compose]
+aliases: ["Compose Side Effects Advanced", "Побочные эффекты Compose"]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, ui-state]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
@@ -19,93 +15,147 @@ related:
   - q-compose-performance-optimization--android--hard
   - q-compose-remember-derived-state--android--medium
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
-source: https://developer.android.com/jetpack/compose/side-effects
-source_note: Official Compose side‑effects docs
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:35 pm
+sources: ["https://developer.android.com/jetpack/compose/side-effects"]
 ---
-
 # Вопрос (RU)
-> Побочные эффекты Compose (продвинуто)?
+> Как выбирать и правильно использовать API побочных эффектов Compose (LaunchedEffect, DisposableEffect, SideEffect, produceState)?
 
 # Question (EN)
-> Compose Side Effects (Advanced)?
+> How to choose and correctly use Compose side-effect APIs (LaunchedEffect, DisposableEffect, SideEffect, produceState)?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+**Четыре API для различных сценариев**:
+
+1. **LaunchedEffect** — запускает корутину, привязанную к композиции; отменяется при изменении ключа или выходе из композиции
+2. **DisposableEffect** — регистрирует внешние ресурсы (слушатели, подписки); требует `onDispose` для очистки
+3. **SideEffect** — синхронизирует состояние Compose с внешними системами после каждой успешной рекомпозиции; без очистки
+4. **produceState** — конвертирует асинхронную работу (Flow, suspend функции) в `State<T>`; корутина автоматически отменяется
+
+**Выбор API**:
+- Нужна корутина → `LaunchedEffect`; конвертация в State → `produceState`
+- Без корутины: нужна очистка → `DisposableEffect`; только синхронизация → `SideEffect`
+
+**Ключи (keys)**: контролируют перезапуск эффекта. Изменение ключа отменяет текущий эффект и запускает новый.
+
+**Примеры**:
+
+```kotlin
+// ✅ LaunchedEffect: асинхронная загрузка с отменой
+LaunchedEffect(userId) {
+  try {
+    viewModel.loadUser(userId)
+  } finally {
+    // Гарантированно выполнится при отмене
+  }
+}
+
+// ✅ DisposableEffect: регистрация слушателя с очисткой
+DisposableEffect(sensorType) {
+  val manager = context.getSystemService<SensorManager>()
+  val listener = object : SensorEventListener { /* ... */ }
+  manager?.registerListener(listener, /* ... */)
+  onDispose {
+    manager?.unregisterListener(listener) // ✅ Обязательная очистка
+  }
+}
+
+// ✅ SideEffect: публикация в аналитику (без ключей)
+SideEffect {
+  analytics.logScreen(currentScreen) // Вызывается после каждой рекомпозиции
+}
+
+// ✅ produceState: асинхронная загрузка → State
+val imageState by produceState<ImageBitmap?>(null, url) {
+  value = imageLoader.load(url) // Автоматическая отмена
+}
+```
+
+**Типичные ошибки**:
+- ❌ Отсутствие `onDispose` → утечки ресурсов
+- ❌ Неправильные ключи → лишние перезапуски или их отсутствие
+- ❌ Тяжёлая логика в `SideEffect` → проблемы с производительностью
+- ✅ Для меняющихся callback без перезапуска эффекта: `rememberUpdatedState`
 
 ## Answer (EN)
 
-### What Each API Does
-- LaunchedEffect: run coroutine side‑effects tied to composition; cancels on key change/dispose.
-- DisposableEffect: register external resources; must clean up in onDispose on key change/dispose.
-- SideEffect: sync Compose state to non‑Compose after every successful recomposition; no cleanup.
-- produceState: convert async work/Flow into `State<T>`; coroutine auto‑cancelled on dispose.
-- Relies on [[c-coroutines]] for async operations and lifecycle management.
+**Four APIs for different scenarios**:
 
-### Minimal Patterns
+1. **LaunchedEffect** — launches a coroutine tied to composition; cancels on key change or composition exit
+2. **DisposableEffect** — registers external resources (listeners, subscriptions); requires `onDispose` for cleanup
+3. **SideEffect** — synchronizes Compose state to external systems after every successful recomposition; no cleanup
+4. **produceState** — converts async work (Flow, suspend functions) to `State<T>`; coroutine auto-cancels
 
-LaunchedEffect (async work with keys)
+**Choosing the API**:
+- Need coroutine → `LaunchedEffect`; converting to State → `produceState`
+- No coroutine: need cleanup → `DisposableEffect`; just sync → `SideEffect`
+
+**Keys**: control effect restart semantics. Key change cancels current effect and starts new one.
+
+**Examples**:
+
 ```kotlin
-LaunchedEffect(userId) { /* cancels previous on userId change */
-  try { vm.load(userId) } finally { /* update UI flags */ }
+// ✅ LaunchedEffect: async loading with cancellation
+LaunchedEffect(userId) {
+  try {
+    viewModel.loadUser(userId)
+  } finally {
+    // Guaranteed to run on cancellation
+  }
 }
-```
 
-DisposableEffect (listener lifecycle)
-```kotlin
+// ✅ DisposableEffect: listener registration with cleanup
 DisposableEffect(sensorType) {
-  val mgr = context.getSystemService<SensorManager>()
-  val listener = object: SensorEventListener { /* update state */ }
-  mgr?.registerListener(listener, mgr.getDefaultSensor(sensorType), SensorManager.SENSOR_DELAY_NORMAL)
-  onDispose { mgr?.unregisterListener(listener) }
+  val manager = context.getSystemService<SensorManager>()
+  val listener = object : SensorEventListener { /* ... */ }
+  manager?.registerListener(listener, /* ... */)
+  onDispose {
+    manager?.unregisterListener(listener) // ✅ Mandatory cleanup
+  }
+}
+
+// ✅ SideEffect: analytics publishing (no keys)
+SideEffect {
+  analytics.logScreen(currentScreen) // Called after every recomposition
+}
+
+// ✅ produceState: async load → State
+val imageState by produceState<ImageBitmap?>(null, url) {
+  value = imageLoader.load(url) // Auto-cancelled
 }
 ```
 
-SideEffect (publish state out)
-```kotlin
-SideEffect { analytics.logScreen(screenName) } // runs after every recomposition
-```
-
-produceState (async→State)
-```kotlin
-val image by produceState<ImageBitmap?>(initialValue = null, key1 = url) {
-  value = loader.load(url) // cancelled on dispose/key change
-}
-```
-
-### Choosing the Right API
-- Need coroutine? use LaunchedEffect; converting to State? use produceState.
-- No coroutine: need cleanup? DisposableEffect; just sync state? SideEffect.
-- Use correct keys to control restart semantics; avoid heavy work in SideEffect.
-
-### Common Pitfalls
-- Missing onDispose → leaks listeners; wrong keys → unnecessary restarts; heavy logic in SideEffect.
-- For callbacks that change but shouldn’t restart effect, wrap with `rememberUpdatedState`.
+**Common pitfalls**:
+- ❌ Missing `onDispose` → resource leaks
+- ❌ Wrong keys → unnecessary restarts or missing restarts
+- ❌ Heavy logic in `SideEffect` → performance issues
+- ✅ For changing callbacks without restarting effect: `rememberUpdatedState`
 
 ## Follow-ups
-- How to combine multiple side‑effects safely in one composable?
-- When to move effects into ViewModel vs keep in UI?
-- Patterns for lifecycle‑aware Flow collection without leaks?
+- How to combine multiple side-effects safely in one composable?
+- When to move effects into ViewModel vs keep in UI layer?
+- How to collect Flow lifecycle-aware without leaks using `collectAsStateWithLifecycle`?
+- What's the difference between `LaunchedEffect` and `rememberCoroutineScope`?
+- How does `rememberUpdatedState` prevent unnecessary effect restarts?
 
 ## References
+- [[c-coroutines]] — coroutine fundamentals
 - https://developer.android.com/jetpack/compose/side-effects
 - https://developer.android.com/jetpack/compose/lifecycle
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-jetpack-overview--android--easy]]
+### Prerequisites
+- [[q-compose-remember-derived-state--android--medium]] — understanding state management basics
+- [[q-android-jetpack-overview--android--easy]] — Compose fundamentals
 
-### Related (Same Level)
-- [[q-compose-remember-derived-state--android--medium]]
-- [[q-compose-performance-optimization--android--hard]]
+### Related
+- [[q-compose-performance-optimization--android--hard]] — avoiding unnecessary recompositions
+- [[q-compose-compiler-plugin--android--hard]] — how Compose tracks effects
 
-### Advanced (Harder)
-- [[q-compose-compiler-plugin--android--hard]]
-- [[q-compose-slot-table-recomposition--android--hard]]
+### Advanced
+- [[q-compose-slot-table-recomposition--android--hard]] — internal composition mechanics

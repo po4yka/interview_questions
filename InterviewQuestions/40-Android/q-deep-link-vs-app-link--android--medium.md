@@ -1,362 +1,292 @@
 ---
 id: 20251020-200000
 title: Deep Link Vs App Link / Deep Link против App Link
-aliases: [Deep Link Vs App Link, Deep Link против App Link]
+aliases: ["Deep Link Vs App Link", "Deep Link против App Link"]
 topic: android
-subtopics:
-  - ui-navigation
+subtopics: [ui-navigation, intents-deeplinks]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-intent-system--android--medium
-  - q-android-navigation-component--android--medium
-  - q-android-webview-basics--android--easy
+related: [q-android-intent-system--android--medium, q-android-navigation-component--android--medium, q-android-webview-basics--android--easy]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/ui-navigation, app-linking, app-links, deep-linking, difficulty/medium, https, navigation, uri, verification]
-source: https://developer.android.com/training/app-links
-source_note: Android App Links documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:10 pm
+updated: 2025-10-27
+tags: [android/ui-navigation, android/intents-deeplinks, app-links, deep-linking, difficulty/medium]
+sources: [https://developer.android.com/training/app-links]
 ---
 
 # Вопрос (RU)
-> Какие особенности отличия deep link от app link?
+> Какие основные отличия между Deep Link и App Link в Android?
 
 # Question (EN)
-> What are the differences between deep links and app links?
+> What are the main differences between Deep Link and App Link in Android?
+
+---
 
 ## Ответ (RU)
 
-**Deep Link** работает через **пользовательскую URI схему** (например, `myapp://`) и требует конфигурации `intent-filter`.
+**Deep Link** использует **пользовательскую URI-схему** (`myapp://`) для навигации внутри приложения. Прост в настройке, но любое приложение может заявить ту же схему.
 
-**App Link** использует **HTTP/HTTPS URLs** и требует **верификации владения доменом** через файл `assetlinks.json`.
+**App Link** использует **HTTPS URL** с **верификацией домена** через `assetlinks.json`. Обеспечивает безопасность и прямой запуск приложения без диалога выбора.
 
-### Теория: Deep Link Vs App Link
-
-**Основные концепции:**
-- **Deep Link** - пользовательская URI схема для внутренней навигации
-- **App Link** - верифицированные HTTP/HTTPS ссылки для веб-контента
-- **Intent Filter** - механизм обработки входящих намерений
-- **Domain Verification** - проверка владения доменом для App Links
-- **User Experience** - различный опыт пользователя для каждого типа
-
-**Принципы работы:**
-- Deep Links используют пользовательские схемы URI
-- App Links требуют верификации домена через assetlinks.json
-- Оба типа используют Intent Filter для обработки
-- App Links обеспечивают лучшую безопасность
-- Deep Links проще в настройке
-
-### Сравнение Deep Link И App Link
+### Ключевые Различия
 
 | Критерий | Deep Link | App Link |
 |----------|-----------|----------|
-| **Схема** | Пользовательская (`myapp://`) | Только HTTPS (`https://`) |
-| **Верификация** | Отсутствует | Требуется верификация домена |
-| **Пользовательский опыт** | Показывает диалог выбора приложения | Открывает приложение напрямую |
-| **Версия Android** | Все версии | Android 6.0+ (API 23+) |
-| **Безопасность** | Низкая (любой может заявить схему) | Высокая (верифицированное владение) |
-| **Сложность настройки** | Простая | Сложная (требует файл на сервере) |
-| **Случай использования** | Внутренняя навигация | Верифицированный веб-контент |
+| **Схема** | Пользовательская (`myapp://`) | HTTPS (`https://`) |
+| **Верификация** | Отсутствует | Верификация домена через `assetlinks.json` |
+| **UX** | Диалог выбора приложения | Прямой запуск приложения |
+| **Android API** | Все версии | 23+ (Marshmallow 6.0+) |
+| **Безопасность** | Низкая (схема не защищена) | Высокая (верифицированное владение) |
+| **Настройка** | Простая (только manifest) | Сложная (manifest + файл на сервере) |
 
-### Deep Links
+### Deep Link: Реализация
 
-**Теоретические основы:**
-Deep Links используют пользовательские URI схемы для навигации внутри приложения. Они просты в настройке, но не обеспечивают верификацию владения схемой.
-
-**Характеристики:**
-- Пользовательская URI схема (например, `myapp://`, `mydomain://`)
-- Работает на всех версиях Android
-- Простая настройка (без конфигурации сервера)
-- Не верифицируется - любое приложение может заявить ту же схему
-- Показывает диалог неоднозначности, если несколько приложений обрабатывают URI
-
-**Компактная реализация:**
+**Intent Filter (AndroidManifest.xml):**
 ```xml
 <activity android:name=".DetailActivity">
     <intent-filter>
+        <!-- ✅ VIEW action для обработки ссылок -->
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
+        <!-- ❌ Пользовательская схема - любой может перехватить -->
         <data android:scheme="myapp" android:host="detail" />
     </intent-filter>
 </activity>
 ```
 
-**Обработка в коде:**
+**Обработка в Activity:**
 ```kotlin
-class DetailActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        val uri = intent.data
-        if (uri != null) {
-            val itemId = uri.getQueryParameter("id")
-            // Обработка параметров
+    // ✅ Безопасная обработка с валидацией
+    intent.data?.let { uri ->
+        val id = uri.getQueryParameter("id")
+        if (id != null && id.matches(Regex("\\d+"))) {
+            loadDetail(id)
         }
     }
 }
 ```
 
-### App Links
+**Пример использования:** `myapp://detail?id=123`
 
-**Теоретические основы:**
-App Links используют HTTP/HTTPS URLs и требуют верификации владения доменом. Они обеспечивают лучшую безопасность и пользовательский опыт.
+### App Link: Реализация
 
-**Характеристики:**
-- Использует HTTP/HTTPS URLs
-- Требует верификации домена через assetlinks.json
-- Открывает приложение напрямую без диалога выбора
-- Работает на Android 6.0+ (API 23+)
-- Высокая безопасность через верификацию
-
-**Компактная реализация:**
+**Intent Filter с autoVerify:**
 ```xml
 <activity android:name=".DetailActivity">
+    <!-- ✅ autoVerify=true для автоматической верификации -->
     <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" android:host="example.com" />
+        <!-- ✅ HTTPS схема - только верифицированный домен -->
+        <data android:scheme="https"
+              android:host="example.com"
+              android:pathPrefix="/detail" />
     </intent-filter>
 </activity>
 ```
 
-**Файл assetlinks.json:**
+**Файл assetlinks.json (на сервере):**
+Размещается: `https://example.com/.well-known/assetlinks.json`
+
 ```json
 [{
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
     "package_name": "com.example.app",
-    "sha256_cert_fingerprints": ["AA:BB:CC:..."]
+    "sha256_cert_fingerprints": ["14:6D:E9:..."]
   }
 }]
 ```
 
-### Верификация App Links
+**Пример использования:** `https://example.com/detail?id=123`
 
-**Теоретические основы:**
-Верификация App Links происходит через файл assetlinks.json на сервере. Android проверяет соответствие между доменом и приложением.
+### Проверка Верификации
 
-**Процесс верификации:**
-1. Android запрашивает `https://domain.com/.well-known/assetlinks.json`
-2. Проверяет соответствие package_name и fingerprint
-3. Устанавливает приложение как обработчик по умолчанию
-4. Открывает приложение напрямую для верифицированных ссылок
-
-**Проверка статуса верификации:**
 ```kotlin
-val packageManager = packageManager
-val domainVerificationState = packageManager.getDomainVerificationUserState(packageName)
-val verifiedDomains = domainVerificationState?.verifiedDomains ?: emptySet()
+// API 31+ (Android 12+)
+val manager = getSystemService(DomainVerificationManager::class.java)
+val userState = manager.getDomainVerificationUserState(packageName)
+
+userState?.hostToStateMap?.forEach { (domain, state) ->
+    when (state) {
+        // ✅ Домен верифицирован
+        DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> {
+            Log.d("AppLink", "$domain verified")
+        }
+        // ❌ Верификация не прошла
+        else -> Log.w("AppLink", "$domain not verified: $state")
+    }
+}
 ```
 
-### Выбор Между Deep Link И App Link
+### Выбор Подхода
 
-**Теоретические принципы:**
-Выбор между Deep Link и App Link зависит от требований безопасности, пользовательского опыта и сложности настройки.
+**Deep Link → для:**
+- Внутренней навигации (между частями приложения)
+- Быстрого прототипирования
+- Случаев без требований к безопасности
 
-**Deep Link подходит для:**
-- Внутренней навигации в приложении
-- Простых случаев использования
-- Когда не требуется верификация домена
-- Быстрой разработки и тестирования
+**App Link → для:**
+- Публичного веб-контента с мобильной версией
+- Интеграции с маркетинговыми кампаниями
+- Случаев с высокими требованиями к безопасности
+- Universal Links совместимости (iOS)
 
-**App Link подходит для:**
-- Веб-контента, связанного с приложением
-- Когда требуется высокая безопасность
-- Публичных ссылок для пользователей
-- Когда важен прямой доступ к приложению
-
-### Лучшие Практики
-
-**Теоретические принципы:**
-- Используйте App Links для публичного контента
-- Используйте Deep Links для внутренней навигации
-- Обрабатывайте ошибки и edge cases
-- Тестируйте на разных устройствах и версиях Android
-- Документируйте схемы URI
-
-**Практические рекомендации:**
-- Всегда проверяйте входящие данные
-- Используйте валидацию параметров
-- Обрабатывайте случаи отсутствия приложения
-- Предоставляйте fallback для веб-версии
-- Тестируйте верификацию App Links
+---
 
 ## Answer (EN)
 
-**Deep Link** works through a **custom URI scheme** (e.g., `myapp://`) and requires `intent-filter` configuration.
+**Deep Link** uses a **custom URI scheme** (`myapp://`) for in-app navigation. Simple to configure, but any app can claim the same scheme.
 
-**App Link** uses **HTTP/HTTPS URLs** and requires **domain ownership verification** through the `assetlinks.json` file.
+**App Link** uses **HTTPS URLs** with **domain verification** via `assetlinks.json`. Provides security and direct app launch without chooser dialog.
 
-### Theory: Deep Link Vs App Link
-
-**Core Concepts:**
-- **Deep Link** - custom URI scheme for internal navigation
-- **App Link** - verified HTTP/HTTPS links for web content
-- **Intent Filter** - mechanism for handling incoming intents
-- **Domain Verification** - domain ownership verification for App Links
-- **User Experience** - different user experience for each type
-
-**Working Principles:**
-- Deep Links use custom URI schemes
-- App Links require domain verification through assetlinks.json
-- Both types use Intent Filter for handling
-- App Links provide better security
-- Deep Links are simpler to set up
-
-### Deep Link Vs App Link Comparison
+### Key Differences
 
 | Criterion | Deep Link | App Link |
 |-----------|-----------|----------|
-| **Scheme** | Custom (`myapp://`) | HTTPS only (`https://`) |
-| **Verification** | None | Domain verification required |
-| **User Experience** | Shows app chooser dialog | Opens app directly |
-| **Android Version** | All versions | Android 6.0+ (API 23+) |
-| **Security** | Low (anyone can claim scheme) | High (verified ownership) |
-| **Setup Complexity** | Simple | Complex (requires server file) |
-| **Use Case** | Internal navigation | Verified web content |
+| **Scheme** | Custom (`myapp://`) | HTTPS (`https://`) |
+| **Verification** | None | Domain verification via `assetlinks.json` |
+| **UX** | App chooser dialog | Direct app launch |
+| **Android API** | All versions | 23+ (Marshmallow 6.0+) |
+| **Security** | Low (unprotected scheme) | High (verified ownership) |
+| **Setup** | Simple (manifest only) | Complex (manifest + server file) |
 
-### Deep Links
+### Deep Link: Implementation
 
-**Theoretical Foundations:**
-Deep Links use custom URI schemes for navigation within the application. They are simple to set up but don't provide scheme ownership verification.
-
-**Characteristics:**
-- Custom URI scheme (e.g., `myapp://`, `mydomain://`)
-- Works on all Android versions
-- Simple setup (no server configuration)
-- Not verified - any app can claim the same scheme
-- Shows disambiguation dialog if multiple apps handle the URI
-
-**Compact Implementation:**
+**Intent Filter (AndroidManifest.xml):**
 ```xml
 <activity android:name=".DetailActivity">
     <intent-filter>
+        <!-- ✅ VIEW action for link handling -->
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
+        <!-- ❌ Custom scheme - anyone can intercept -->
         <data android:scheme="myapp" android:host="detail" />
     </intent-filter>
 </activity>
 ```
 
-**Code Handling:**
+**Activity Handling:**
 ```kotlin
-class DetailActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        val uri = intent.data
-        if (uri != null) {
-            val itemId = uri.getQueryParameter("id")
-            // Handle parameters
+    // ✅ Safe handling with validation
+    intent.data?.let { uri ->
+        val id = uri.getQueryParameter("id")
+        if (id != null && id.matches(Regex("\\d+"))) {
+            loadDetail(id)
         }
     }
 }
 ```
 
-### App Links
+**Usage example:** `myapp://detail?id=123`
 
-**Theoretical Foundations:**
-App Links use HTTP/HTTPS URLs and require domain ownership verification. They provide better security and user experience.
+### App Link: Implementation
 
-**Characteristics:**
-- Uses HTTP/HTTPS URLs
-- Requires domain verification through assetlinks.json
-- Opens app directly without chooser dialog
-- Works on Android 6.0+ (API 23+)
-- High security through verification
-
-**Compact Implementation:**
+**Intent Filter with autoVerify:**
 ```xml
 <activity android:name=".DetailActivity">
+    <!-- ✅ autoVerify=true for automatic verification -->
     <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" android:host="example.com" />
+        <!-- ✅ HTTPS scheme - verified domain only -->
+        <data android:scheme="https"
+              android:host="example.com"
+              android:pathPrefix="/detail" />
     </intent-filter>
 </activity>
 ```
 
-**assetlinks.json file:**
+**assetlinks.json file (on server):**
+Location: `https://example.com/.well-known/assetlinks.json`
+
 ```json
 [{
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
     "package_name": "com.example.app",
-    "sha256_cert_fingerprints": ["AA:BB:CC:..."]
+    "sha256_cert_fingerprints": ["14:6D:E9:..."]
   }
 }]
 ```
 
-### App Links Verification
+**Usage example:** `https://example.com/detail?id=123`
 
-**Theoretical Foundations:**
-App Links verification happens through the assetlinks.json file on the server. Android verifies the correspondence between the domain and the application.
+### Verification Check
 
-**Verification Process:**
-1. Android requests `https://domain.com/.well-known/assetlinks.json`
-2. Checks correspondence between package_name and fingerprint
-3. Sets app as default handler
-4. Opens app directly for verified links
-
-**Verification Status Check:**
 ```kotlin
-val packageManager = packageManager
-val domainVerificationState = packageManager.getDomainVerificationUserState(packageName)
-val verifiedDomains = domainVerificationState?.verifiedDomains ?: emptySet()
+// API 31+ (Android 12+)
+val manager = getSystemService(DomainVerificationManager::class.java)
+val userState = manager.getDomainVerificationUserState(packageName)
+
+userState?.hostToStateMap?.forEach { (domain, state) ->
+    when (state) {
+        // ✅ Domain verified
+        DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> {
+            Log.d("AppLink", "$domain verified")
+        }
+        // ❌ Verification failed
+        else -> Log.w("AppLink", "$domain not verified: $state")
+    }
+}
 ```
 
-### Choosing Between Deep Link and App Link
+### Choosing the Approach
 
-**Theoretical Principles:**
-The choice between Deep Link and App Link depends on security requirements, user experience, and setup complexity.
+**Deep Link → for:**
+- Internal navigation (between app sections)
+- Rapid prototyping
+- Cases without security requirements
 
-**Deep Link is suitable for:**
-- Internal navigation within the app
-- Simple use cases
-- When domain verification is not required
-- Quick development and testing
+**App Link → for:**
+- Public web content with mobile app version
+- Marketing campaign integration
+- Cases with high security requirements
+- Universal Links compatibility (iOS)
 
-**App Link is suitable for:**
-- Web content related to the app
-- When high security is required
-- Public links for users
-- When direct app access is important
-
-### Best Practices
-
-**Theoretical Principles:**
-- Use App Links for public content
-- Use Deep Links for internal navigation
-- Handle errors and edge cases
-- Test on different devices and Android versions
-- Document URI schemes
-
-**Practical Recommendations:**
-- Always validate incoming data
-- Use parameter validation
-- Handle cases where app is not installed
-- Provide fallback for web version
-- Test App Links verification
-
-**See also:** c-uri, c-url-routing
-
+---
 
 ## Follow-ups
 
-- How do you handle deep links when the app is not installed?
-- What are the security implications of each approach?
-- How do you test deep links and app links?
+- How to handle unverified App Links fallback?
+- What happens if multiple apps claim the same App Link domain?
+- How to test App Link verification during development?
+- What are security best practices for parsing deep link parameters?
+
+## References
+
+- [[q-android-intent-system--android--medium]] - Android Intent system basics
+- [[q-android-navigation-component--android--medium]] - Jetpack Navigation integration
+- [Android App Links Documentation](https://developer.android.com/training/app-links)
+- [assetlinks.json Generator](https://developers.google.com/digital-asset-links/tools/generator)
+
+## Related Questions
+
+### Prerequisites
+- [[q-android-intent-system--android--medium]] - Understanding Intent system required for link handling
+- [[q-android-webview-basics--android--easy]] - WebView integration for fallback scenarios
+
+### Related
+- [[q-android-navigation-component--android--medium]] - Deep link integration with Navigation component
+- How to implement deferred deep linking for app installs
+- App Link verification debugging and troubleshooting
+
+### Advanced
+- Implementing branch.io or Firebase Dynamic Links for cross-platform deep linking
+- App Link security: preventing deep link hijacking attacks
+- Universal Links (iOS) and App Links coordination strategy

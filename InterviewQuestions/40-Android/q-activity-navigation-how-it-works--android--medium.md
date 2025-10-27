@@ -1,166 +1,243 @@
 ---
 id: 20251012-122757
-title: Activity Navigation How It Works / Как работает навигация Activity
-aliases: [Activity Navigation, Навигация Activity]
+title: Как работает навигация Activity / Activity Navigation How It Works
+aliases:
+  - Навигация Activity
+  - Activity Navigation
+  - Activity Back Stack
+  - Стек активностей
 topic: android
-subtopics:
-  - activity
-  - ui-navigation
+subtopics: [activity, ui-navigation]
 question_kind: android
 difficulty: medium
-original_language: en
-language_tags:
-  - en
-  - ru
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
 related:
   - q-activity-lifecycle-methods--android--medium
   - q-intent-filters-android--android--medium
+  - q-what-is-intent--android--easy
 created: 2025-10-15
-updated: 2025-10-15
-tags: [android/activity, android/ui-navigation, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:20 pm
+updated: 2025-10-27
+tags: [android/activity, android/ui-navigation, intent, back-stack, difficulty/medium]
+sources:
+  - https://developer.android.com/guide/components/activities/tasks-and-back-stack
+  - https://developer.android.com/guide/navigation
 ---
-
 # Вопрос (RU)
-> Что такое Как работает навигация Activity?
+
+> Как работает навигация между Activity в Android?
 
 ---
 
 # Question (EN)
-> Activity Navigation How It Works?
 
-## Answer (EN)
-Activity navigation in Android is managed through Intents, back stack, and task management. The Navigation Component provides a modern alternative.
+> How does Activity navigation work in Android?
 
-**Main mechanisms:**
+## Ответ (RU)
 
-- **Explicit Intents**: Launch specific Activity by class name
-- **Implicit Intents**: Declare general operation, system chooses appropriate component
-- **Back Stack**: Manages Activity history (LIFO - last in, first out)
-- **Task Management**: Groups related Activities together
-- **Launch Modes**: Control how Activities are instantiated (standard, singleTop, singleTask, singleInstance)
+Навигация между Activity в Android управляется через **Intent**, **back stack** (стек возврата) и систему задач (tasks).
 
-**Intent types:**
+**Основные механизмы:**
+
+1. **Intent** — сообщение для запуска Activity:
+   - Explicit (явный) — указывает конкретный класс Activity
+   - Implicit (неявный) — описывает действие, система выбирает подходящий компонент
+
+2. **Back Stack** — стек Activity (LIFO):
+   - Каждая новая Activity добавляется в стек
+   - Кнопка Back убирает верхнюю Activity из стека
+
+3. **Task** — группа связанных Activity
+4. **Launch Modes** — режимы запуска Activity (standard, singleTop, singleTask, singleInstance)
+
+**Примеры Intent:**
 
 ```kotlin
-// Explicit Intent - specific Activity
+// ✅ Explicit Intent — конкретная Activity
 val intent = Intent(this, SecondActivity::class.java)
 intent.putExtra("USER_ID", userId)
 startActivity(intent)
 
-// Implicit Intent - system chooses
+// ✅ Implicit Intent — система выбирает приложение
 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
 startActivity(intent)
 ```
 
-**Activity lifecycle during navigation:**
+**Жизненный цикл при навигации:**
 
+```text
+Activity A → Activity B:
+  A: onPause() → onStop()
+  B: onCreate() → onStart() → onResume()
+
+Нажатие Back:
+  B: onPause() → onStop() → onDestroy()
+  A: onRestart() → onStart() → onResume()
 ```
-Activity A → Activity B
 
-Activity A: onPause() → onStop()
-Activity B: onCreate() → onStart() → onResume()
-
-User presses Back:
-Activity B: onPause() → onStop() → onDestroy()
-Activity A: onRestart() → onStart() → onResume()
-```
-
-**Closing Activity:**
+**Флаги Intent для управления стеком:**
 
 ```kotlin
-// Close current Activity
+// ✅ Очистить верхние Activity до целевой
+val intent = Intent(this, MainActivity::class.java)
+intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+startActivity(intent)
+
+// ✅ Не создавать новый экземпляр, если уже наверху
+intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+// ✅ Очистить весь стек и начать новую задачу
+intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+```
+
+**Управление стеком:**
+
+```text
+Навигация: A → B → C → D
+Back stack: [A, B, C, D] ← D наверху
+
+Back:
+Back stack: [A, B, C] ← C видима, D уничтожена
+```
+
+**Закрытие Activity:**
+
+```kotlin
+// ✅ Закрыть текущую Activity
 finish()
 
-// Return result
+// ✅ Вернуть результат
 val resultIntent = Intent()
 resultIntent.putExtra("RESULT_DATA", resultValue)
 setResult(RESULT_OK, resultIntent)
 finish()
 ```
 
-**Intent flags for back stack control:**
+**Современный подход — Navigation Component:**
 
 ```kotlin
-// Clear top and bring to front
+// ✅ Навигация между фрагментами
+findNavController().navigate(R.id.action_home_to_detail)
+
+// ✅ С аргументами
+val bundle = bundleOf("userId" to userId)
+findNavController().navigate(R.id.action_home_to_detail, bundle)
+```
+
+---
+
+## Answer (EN)
+
+Activity navigation in Android is managed through **Intents**, **back stack**, and **task management**.
+
+**Core mechanisms:**
+
+1. **Intent** — message to launch Activity:
+   - Explicit — specifies target Activity class
+   - Implicit — declares action, system chooses component
+
+2. **Back Stack** — LIFO stack of Activities:
+   - Each new Activity pushed onto stack
+   - Back button pops top Activity
+
+3. **Task** — group of related Activities
+4. **Launch Modes** — control instantiation (standard, singleTop, singleTask, singleInstance)
+
+**Intent examples:**
+
+```kotlin
+// ✅ Explicit Intent — specific Activity
+val intent = Intent(this, SecondActivity::class.java)
+intent.putExtra("USER_ID", userId)
+startActivity(intent)
+
+// ✅ Implicit Intent — system chooses
+val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
+startActivity(intent)
+```
+
+**Lifecycle during navigation:**
+
+```text
+Activity A → Activity B:
+  A: onPause() → onStop()
+  B: onCreate() → onStart() → onResume()
+
+Back pressed:
+  B: onPause() → onStop() → onDestroy()
+  A: onRestart() → onStart() → onResume()
+```
+
+**Intent flags for stack control:**
+
+```kotlin
+// ✅ Clear top Activities up to target
 val intent = Intent(this, MainActivity::class.java)
 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 startActivity(intent)
 
-// Single top - don't create new instance
+// ✅ Don't create new instance if already on top
 intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
-// New task
-intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-// Clear entire task
+// ✅ Clear entire stack and start new task
 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 ```
 
-**Back stack management:**
+**Stack management:**
 
-```
-User flow: A → B → C → D
+```text
+Navigation: A → B → C → D
 Back stack: [A, B, C, D] ← D on top
 
-User presses Back:
+Back:
 Back stack: [A, B, C] ← C visible, D destroyed
 ```
 
-**Modern approach - Navigation Component:**
+**Closing Activity:**
 
 ```kotlin
-// Navigate between Fragments
+// ✅ Close current Activity
+finish()
+
+// ✅ Return result
+val resultIntent = Intent()
+resultIntent.putExtra("RESULT_DATA", resultValue)
+setResult(RESULT_OK, resultIntent)
+finish()
+```
+
+**Modern approach — Navigation Component:**
+
+```kotlin
+// ✅ Navigate between fragments
 findNavController().navigate(R.id.action_home_to_detail)
 
-// With arguments
+// ✅ With arguments
 val bundle = bundleOf("userId" to userId)
 findNavController().navigate(R.id.action_home_to_detail, bundle)
-
-// Navigate back
-findNavController().navigateUp()
 ```
 
-**State saving:**
-
-```kotlin
-override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putString("user_input", editText.text.toString())
-}
-
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    if (savedInstanceState != null) {
-        val savedText = savedInstanceState.getString("user_input")
-        editText.setText(savedText)
-    }
-}
-```
+---
 
 ## Follow-ups
 
-- How do you handle deep links in Activity navigation?
-- What's the difference between singleTop and singleTask launch modes?
-- How do you prevent Activity recreation during configuration changes?
-- What happens to the back stack when the app is killed?
-- How do you implement custom transitions between Activities?
+- Как обрабатывать deep links в навигации Activity?
+- В чём разница между singleTop и singleTask launch modes?
+- Что происходит со стеком при убийстве приложения системой?
 
 ## References
 
-- [Android Activity Navigation Guide](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
-- [Intent and Intent Filters](https://developer.android.com/guide/components/intents-filters)
-- [Navigation Component](https://developer.android.com/guide/navigation)
+- https://developer.android.com/guide/components/activities/tasks-and-back-stack
+- https://developer.android.com/guide/navigation
+- https://developer.android.com/guide/components/intents-filters
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
-- [[q-android-app-components--android--easy]] - Activity basics
+- [[q-activity-lifecycle-methods--android--medium]] — жизненный цикл Activity
+- [[q-what-is-intent--android--easy]] — система Intent
 
-### Related (Medium)
-- [[q-what-is-intent--android--easy]] - Intent system
-- [[q-fragment-basics--android--easy]] - Fragment navigation
+### Advanced (Harder)
+- [[q-intent-filters-android--android--medium]] — Intent filters и implicit navigation

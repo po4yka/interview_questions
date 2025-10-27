@@ -1,302 +1,203 @@
 ---
 id: 20251020-200000
 title: Dark Theme Android / Темная тема Android
-aliases: [Dark Theme Android, Темная тема Android]
+aliases: ["Dark Theme Android", "Темная тема Android"]
 topic: android
-subtopics:
-  - ui-theming
+subtopics: [ui-theming]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-theming-basics--android--medium
-  - q-android-ui-optimization--android--medium
-  - q-material-design-theming--android--medium
+related: [q-android-theming-basics--android--medium, q-android-ui-optimization--android--medium, q-material-design-theming--android--medium]
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/ui-theming, dark-theme, daynight, difficulty/medium, material-design, theming]
-source: https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
-source_note: Android Dark Theme documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:14 pm
+sources: [https://developer.android.com/guide/topics/ui/look-and-feel/darktheme]
 ---
 
 # Вопрос (RU)
-> Что такое темная тема в Android?
+> Как реализовать темную тему в Android? Объясните ключевые подходы и преимущества.
 
 # Question (EN)
-> What is Dark Theme in Android?
+> How to implement dark theme in Android? Explain key approaches and benefits.
 
 ## Ответ (RU)
 
-Темная тема доступна в Android 10 (API level 29) и выше. Она предоставляет альтернативную цветовую схему с темными фонами вместо светлых, предлагая несколько важных преимуществ.
+Темная тема в Android (API 29+) - это системная функция, позволяющая приложениям адаптировать UI под темную цветовую схему. Основное преимущество - экономия батареи на OLED экранах (до 40%) и снижение усталости глаз.
 
-### Теория: Принципы Темной Темы
+### Ключевые Подходы
 
-**Основные концепции:**
-- **Альтернативная цветовая схема** - темные фоны вместо светлых
-- **Системная интеграция** - автоматическое переключение с системой
-- **Энергоэффективность** - снижение потребления энергии на OLED экранах
-- **Доступность** - улучшение видимости для пользователей с нарушениями зрения
-- **Современный дизайн** - эстетичный внешний вид
+**1. DayNight темы**
 
-**Принципы работы:**
-- Автоматическое переключение с системной темой
-- Использование атрибутов темы вместо жестко заданных цветов
-- Поддержка DayNight тем
-- Интеграция с Material Design
+Используйте базовую тему с автоматическим переключением:
 
-### Преимущества Темной Темы
-
-**1. Снижение потребления энергии**
-- Значительное снижение на OLED/AMOLED экранах
-- Черные пиксели полностью выключены
-- Экономия батареи до 30-40%
-
-**2. Улучшение доступности**
-- Лучшая видимость для пользователей с нарушениями зрения
-- Снижение чувствительности к яркому свету
-- Уменьшение напряжения глаз
-
-**3. Использование в условиях слабого освещения**
-- Комфортное использование в темноте
-- Снижение усталости глаз
-- Улучшение пользовательского опыта
-
-**4. Современный дизайн**
-- Стильный и эстетичный внешний вид
-- Соответствие современным трендам
-- Предпочтения пользователей
-
-### Реализация Темной Темы
-
-**1. Наследование от DayNight темы**
 ```xml
-<!-- AppCompat -->
-<style name="AppTheme" parent="Theme.AppCompat.DayNight">
-    <!-- Настройки темы -->
-</style>
-
-<!-- Material Components -->
+<!-- res/values/themes.xml -->
 <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-    <!-- Настройки темы -->
+    <item name="colorPrimary">@color/purple_500</item>
+    <item name="colorOnPrimary">@color/white</item>
 </style>
 ```
 
-**2. Использование атрибутов темы**
+**2. Атрибуты темы вместо hardcoded цветов**
+
 ```xml
-<!-- Плохо: жестко заданные цвета -->
+<!-- ❌ Неправильно: хардкод -->
 <TextView
     android:textColor="#000000"
     android:background="#FFFFFF" />
 
-<!-- Хорошо: атрибуты темы -->
+<!-- ✅ Правильно: атрибуты темы -->
 <TextView
-    android:textColor="?android:attr/textColorPrimary"
-    android:background="?android:attr/colorBackground" />
+    android:textColor="?attr/colorOnSurface"
+    android:background="?attr/colorSurface" />
 ```
 
-**3. Создание ресурсов для темной темы**
+**3. Альтернативные ресурсы (values-night/)**
+
 ```xml
 <!-- res/values/colors.xml -->
-<color name="primary_color">#6200EE</color>
-<color name="background_color">#FFFFFF</color>
+<color name="surface">#FFFFFF</color>
 
 <!-- res/values-night/colors.xml -->
-<color name="primary_color">#BB86FC</color>
-<color name="background_color">#121212</color>
+<color name="surface">#121212</color>
 ```
 
-### Программное Управление Темой
+**4. Программное управление темой**
 
-**Принудительное переключение темы:**
+```kotlin
+// В Application.onCreate() или Activity
+AppCompatDelegate.setDefaultNightMode(
+    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM // Рекомендуется
+    // MODE_NIGHT_YES - принудительно темная
+    // MODE_NIGHT_NO - принудительно светлая
+)
+```
+
+### Критические Детали
+
+**Обработка изменения темы**
+
+Activity пересоздается при переключении темы. Для сохранения состояния:
+
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        // Принудительная темная тема
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
-        // Принудительная светлая тема
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-        // Следование системной теме
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    fun switchTheme(nightMode: Int) {
+        if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+            AppCompatDelegate.setDefaultNightMode(nightMode)
+            // Activity автоматически пересоздастся
+        }
     }
 }
 ```
 
-**Динамическое переключение:**
-```kotlin
-fun toggleTheme() {
-    val currentMode = AppCompatDelegate.getDefaultNightMode()
-    val newMode = when (currentMode) {
-        AppCompatDelegate.MODE_NIGHT_YES -> AppCompatDelegate.MODE_NIGHT_NO
-        else -> AppCompatDelegate.MODE_NIGHT_YES
-    }
-    AppCompatDelegate.setDefaultNightMode(newMode)
-}
-```
+**Material Design рекомендации**
 
-### Лучшие Практики
-
-**1. Использование атрибутов темы**
-- Всегда используйте `?android:attr/` или `?attr/`
-- Избегайте жестко заданных цветов
-- Тестируйте на обеих темах
-
-**2. Создание ресурсов для ночной темы**
-- Создавайте папки `values-night/`
-- Используйте соответствующие цвета для темной темы
-- Проверяйте контрастность
-
-**3. Тестирование**
-- Тестируйте на обеих темах
-- Проверяйте читаемость текста
-- Убедитесь в правильном отображении изображений
+- Фон: `#121212` вместо чистого черного (#000000) для уменьшения смазывания на OLED
+- Elevation через alpha, не тени: `colorSurface` с повышенной alpha для элементов на разных уровнях
+- Текст: достаточный контраст (минимум 4.5:1 для обычного текста)
 
 ## Answer (EN)
 
-Dark theme is available in Android 10 (API level 29) and higher. It provides an alternative color scheme with dark backgrounds instead of light ones, offering several important benefits.
+Dark theme in Android (API 29+) is a system feature allowing apps to adapt UI to a dark color scheme. Main benefits: battery savings on OLED screens (up to 40%) and reduced eye strain.
 
-### Theory: Dark Theme Principles
+### Key Approaches
 
-**Core Concepts:**
-- **Alternative color scheme** - dark backgrounds instead of light ones
-- **System integration** - automatic switching with system
-- **Energy efficiency** - reduced power consumption on OLED screens
-- **Accessibility** - improved visibility for users with vision impairments
-- **Modern design** - aesthetic appearance
+**1. DayNight Themes**
 
-**Working Principles:**
-- Automatic switching with system theme
-- Using theme attributes instead of hardcoded colors
-- DayNight theme support
-- Material Design integration
+Use base theme with automatic switching:
 
-### Dark Theme Benefits
-
-**1. Reduced Power Consumption**
-- Significant reduction on OLED/AMOLED screens
-- Black pixels are completely turned off
-- Battery savings up to 30-40%
-
-**2. Improved Accessibility**
-- Better visibility for users with vision impairments
-- Reduced sensitivity to bright light
-- Decreased eye strain
-
-**3. Low-light Environment Usage**
-- Comfortable use in darkness
-- Reduced eye fatigue
-- Improved user experience
-
-**4. Modern Design**
-- Stylish and aesthetic appearance
-- Compliance with modern trends
-- User preferences
-
-### Dark Theme Implementation
-
-**1. Inherit from DayNight Theme**
 ```xml
-<!-- AppCompat -->
-<style name="AppTheme" parent="Theme.AppCompat.DayNight">
-    <!-- Theme settings -->
-</style>
-
-<!-- Material Components -->
+<!-- res/values/themes.xml -->
 <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-    <!-- Theme settings -->
+    <item name="colorPrimary">@color/purple_500</item>
+    <item name="colorOnPrimary">@color/white</item>
 </style>
 ```
 
-**2. Using Theme Attributes**
+**2. Theme Attributes Instead of Hardcoded Colors**
+
 ```xml
-<!-- Bad: hardcoded colors -->
+<!-- ❌ Wrong: hardcoded -->
 <TextView
     android:textColor="#000000"
     android:background="#FFFFFF" />
 
-<!-- Good: theme attributes -->
+<!-- ✅ Correct: theme attributes -->
 <TextView
-    android:textColor="?android:attr/textColorPrimary"
-    android:background="?android:attr/colorBackground" />
+    android:textColor="?attr/colorOnSurface"
+    android:background="?attr/colorSurface" />
 ```
 
-**3. Creating Resources for Dark Theme**
+**3. Alternative Resources (values-night/)**
+
 ```xml
 <!-- res/values/colors.xml -->
-<color name="primary_color">#6200EE</color>
-<color name="background_color">#FFFFFF</color>
+<color name="surface">#FFFFFF</color>
 
 <!-- res/values-night/colors.xml -->
-<color name="primary_color">#BB86FC</color>
-<color name="background_color">#121212</color>
+<color name="surface">#121212</color>
 ```
 
-### Programmatic Theme Management
+**4. Programmatic Theme Control**
 
-**Forced Theme Switching:**
+```kotlin
+// In Application.onCreate() or Activity
+AppCompatDelegate.setDefaultNightMode(
+    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM // Recommended
+    // MODE_NIGHT_YES - force dark
+    // MODE_NIGHT_NO - force light
+)
+```
+
+### Critical Details
+
+**Handling Theme Changes**
+
+Activity recreates on theme switch. To preserve state:
+
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        // Force dark theme
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
-        // Force light theme
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-        // Follow system theme
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    fun switchTheme(nightMode: Int) {
+        if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+            AppCompatDelegate.setDefaultNightMode(nightMode)
+            // Activity auto-recreates
+        }
     }
 }
 ```
 
-**Dynamic Theme Switching:**
-```kotlin
-fun toggleTheme() {
-    val currentMode = AppCompatDelegate.getDefaultNightMode()
-    val newMode = when (currentMode) {
-        AppCompatDelegate.MODE_NIGHT_YES -> AppCompatDelegate.MODE_NIGHT_NO
-        else -> AppCompatDelegate.MODE_NIGHT_YES
-    }
-    AppCompatDelegate.setDefaultNightMode(newMode)
-}
-```
+**Material Design Guidelines**
 
-### Best Practices
-
-**1. Using Theme Attributes**
-- Always use `?android:attr/` or `?attr/`
-- Avoid hardcoded colors
-- Test on both themes
-
-**2. Creating Night Theme Resources**
-- Create `values-night/` folders
-- Use appropriate colors for dark theme
-- Check contrast ratios
-
-**3. Testing**
-- Test on both themes
-- Check text readability
-- Ensure proper image display
-
-**See also:** c-material-design
-
+- Background: `#121212` instead of pure black (#000000) to reduce smearing on OLED
+- Elevation via alpha, not shadows: `colorSurface` with elevated alpha for elements at different levels
+- Text: sufficient contrast (minimum 4.5:1 for normal text)
 
 ## Follow-ups
 
-- How do you handle images in dark theme?
-- What are the Material Design guidelines for dark theme?
-- How do you test dark theme compatibility?
+- How do you handle drawable tinting for dark theme?
+- What's the difference between `MODE_NIGHT_FOLLOW_SYSTEM` and `MODE_NIGHT_AUTO_BATTERY`?
+- How do you test dark theme with different elevation levels?
+- How to handle WebView content in dark theme?
+
+## References
+
+- [[c-material-design]]
+- https://m3.material.io/styles/color/dark-mode/overview
+- https://developer.android.com/develop/ui/views/theming/darktheme
+
+## Related Questions
+
+### Prerequisites
+- [[q-android-theming-basics--android--medium]] - Understanding Android theming fundamentals
+
+### Related
+- [[q-android-ui-optimization--android--medium]] - UI performance optimization techniques
+- [[q-material-design-theming--android--medium]] - Material Design theming patterns
+
+### Advanced
+- Dynamic theming with Material You (API 31+)
+- Custom theme engine with DataStore persistence
+- Theme transition animations without recreation

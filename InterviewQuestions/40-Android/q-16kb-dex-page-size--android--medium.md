@@ -1,130 +1,124 @@
 ---
-id: 20251012-122750
+id: 20251025-132630
 title: 16kb Dex Page Size / Размер страницы DEX 16KB
-aliases: [16 КБ страница DEX, 16KB DEX Page Size]
+aliases: [16KB DEX Page Size, 16 КБ страница DEX]
 topic: android
-subtopics:
-  - gradle
-  - performance-memory
+subtopics: [gradle, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-background-tasks-decision-guide--android--medium
-  - q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
-  - q-why-fragment-needs-separate-callback-for-ui-creation--android--hard
-created: 2025-10-15
-updated: 2025-10-15
+related: [c-gradle, q-proguard-r8--android--medium]
+created: 2025-10-25
+updated: 2025-10-27
+sources: []
 tags: [android/gradle, android/performance-memory, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:36 pm
 ---
-
 # Вопрос (RU)
-> Что такое Размер страницы DEX 16KB?
+> Что такое проблема размера страницы DEX 16KB в Android?
 
 ---
 
 # Question (EN)
-> What is 16kb Dex Page Size?
+> What is the 16KB DEX page size issue in Android?
 
-## Answer (EN)
-The 16 KB DEX page size issue is a memory alignment problem affecting Android 6.0+ that causes significant app bloat when apps are optimized with R8/ProGuard. This affects [[c-gradle|Gradle]] builds and APK sizes.
+---
 
-#### Problem
+## Ответ (RU)
 
-Android uses 16 KB pages for DEX files. Method IDs must be page-aligned, creating wasted padding space.
+Проблема размера страницы DEX 16KB - это проблема выравнивания памяти в Android 6.0+, вызывающая раздувание размера приложения при оптимизации с R8/ProGuard.
+
+**Причина**: Android использует страницы по 16 KB для DEX-файлов. ID методов выравниваются по границам страниц, создавая пустое место:
 
 ```
-Without alignment: [Header][Strings][Methods][Code]
-With alignment:    [Header][Strings][Padding][Methods][Code]
-                                    ^^^^^^^^ Wasted space
+Без выравнивания: [Header][Strings][Methods][Code]
+С выравниванием:  [Header][Strings][Padding][Methods][Code]  ✅ Правильно
+                                   ^^^^^^^^ Потерянное место   ❌ Неэффективно
 ```
 
-Impact:
-- Small apps (< 5 MB): 20-40% size increase
-- Large apps (> 50 MB): 5-15% size increase
-- Multi-DEX apps: Multiplied impact
+**Влияние**:
+- Малые приложения (< 5 MB): +20-40% размера
+- Большие приложения (> 50 MB): +5-15% размера
 
-#### Detection
-
-APK Analyzer:
-- Tools → APK Analyzer → Select APK
-- Check classes.dex size
-- Look for unusual growth in optimized builds
-
-Command line:
-```bash
-unzip app-release.apk
-ls -lh *.dex
-dexdump -f classes.dex > dex_dump.txt
-```
-
-#### Solutions
-
-Upgrade to latest AGP:
+**Решение**:
 ```kotlin
+// ✅ Обновить AGP до последней версии
 plugins {
-    id("com.android.application") apply false
+    id("com.android.application") version "8.2+"  // ✅ Автоматическая оптимизация
 }
-```
 
-Manual R8 configuration (older AGP):
-```properties
-android.enableR8.fullMode=true
-```
-
-Use App Bundle for automatic optimization.
-
-#### Best Practices
-
-Enable R8 optimization:
-```kotlin
+// ✅ Включить R8
 android {
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = true          // ✅ Обязательно
+            isShrinkResources = true        // ✅ Рекомендуется
         }
     }
 }
 ```
 
-Monitor APK size in CI/CD. Use App Bundle instead of APK.
+**Лучшие практики**:
+- Использовать App Bundle вместо APK
+- Мониторить размер в CI/CD
+
+---
+
+## Answer (EN)
+
+The 16 KB DEX page size issue is a memory alignment problem affecting Android 6.0+ that causes app bloat when optimized with R8/ProGuard.
+
+**Cause**: Android uses 16 KB pages for DEX files. Method IDs align to page boundaries, creating wasted padding:
+
+```
+Without alignment: [Header][Strings][Methods][Code]
+With alignment:    [Header][Strings][Padding][Methods][Code]  ✅ Correct
+                                    ^^^^^^^^ Wasted space      ❌ Inefficient
+```
+
+**Impact**:
+- Small apps (< 5 MB): +20-40% size increase
+- Large apps (> 50 MB): +5-15% size increase
+
+**Solution**:
+```kotlin
+// ✅ Upgrade to latest AGP
+plugins {
+    id("com.android.application") version "8.2+"  // ✅ Auto-optimization
+}
+
+// ✅ Enable R8
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true          // ✅ Required
+            isShrinkResources = true        // ✅ Recommended
+        }
+    }
+}
+```
+
+**Best practices**:
+- Use App Bundle instead of APK
+- Monitor size in CI/CD
 
 ---
 
 ## Follow-ups
 
-- What happens if you use AGP versions older than 8.2?
-- How does this issue affect Instant Apps?
-- What's the difference between R8 and ProGuard in handling this issue?
-- How do App Bundles mitigate the 16KB page size problem?
-- What tools can help detect alignment issues in CI/CD?
+- How do App Bundles mitigate this issue?
+- What's the difference between R8 and ProGuard handling?
+- How to detect alignment issues in CI/CD?
 
 ## References
 
-- [Android Developer Guide: Configure your build](https://developer.android.com/studio/build)
-- [R8 Optimization Guide](https://developer.android.com/studio/build/shrink-code)
-- [Android App Bundle](https://developer.android.com/guide/app-bundle)
-- [APK Analyzer Documentation](https://developer.android.com/studio/build/analyze-apk)
+- [[c-gradle]] - Build system
+- [R8 Optimization](https://developer.android.com/studio/build/shrink-code)
+- [App Bundle Guide](https://developer.android.com/guide/app-bundle)
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-gradle-basics--android--easy]] - Build
-
 ### Related (Medium)
-- [[q-dagger-build-time-optimization--android--medium]] - Build
-- [[q-android-build-optimization--android--medium]] - Build
-- [[q-proguard-r8--android--medium]] - Build
-- [[q-build-optimization-gradle--android--medium]] - Build
-- [[q-kapt-ksp-migration--android--medium]] - Build
-
-### Advanced (Harder)
-- [[q-kotlin-dsl-builders--android--hard]] - Build
+- [[q-proguard-r8--android--medium]]
