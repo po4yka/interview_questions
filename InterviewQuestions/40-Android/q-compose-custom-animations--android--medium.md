@@ -19,87 +19,140 @@ related:
   - q-animated-visibility-vs-content--android--medium
   - q-compose-compiler-plugin--android--hard
 created: 2025-10-13
-updated: 2025-10-20
+updated: 2025-01-27
 tags: [android/ui-animation, android/ui-compose, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:41 pm
+sources: []
 ---
-
 # Вопрос (RU)
-> Кастомные анимации Compose?
+> Как реализовать кастомные анимации в Jetpack Compose и когда использовать разные Animation API?
 
 # Question (EN)
-> Compose Custom Animations?
+> How to implement custom animations in Jetpack Compose and when to use different Animation APIs?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Выбор API
+- `animate*AsState`: декларативный подход, автоматическая отмена при изменении состояния
+- `Animatable`: императивный контроль, последовательности, прерывания
+- `Transition`: координация нескольких анимированных значений
 
-## Answer (EN)
+### Паттерны
 
-### Choosing the API
-- `animate*AsState`: declarative, simple target‑based, auto‑cancellable on state change
-- `Animatable`: imperative control, sequences, interruption, springs/tweens manually
-
-### Minimal Patterns
-
-animate*AsState (declarative):
+**animate*AsState** (декларативный):
 ```kotlin
 @Composable
 fun Pulse(expanded: Boolean) {
-  val scale by animateFloatAsState(if (expanded) 1.2f else 1f, animationSpec = spring())
-  Box(Modifier.size(48.dp).graphicsLayer(scaleX = scale, scaleY = scale))
+  // ✅ Автоматическая отмена при изменении expanded
+  val scale by animateFloatAsState(
+    targetValue = if (expanded) 1.2f else 1f,
+    animationSpec = spring()
+  )
+  Box(Modifier.graphicsLayer(scaleX = scale, scaleY = scale))
 }
 ```
 
-Animatable (imperative):
+**Animatable** (императивный):
 ```kotlin
 @Composable
 fun SwipeProgress(target: Float) {
   val progress = remember { Animatable(0f) }
-  LaunchedEffect(target) { progress.animateTo(target, spring(dampingRatio = Spring.DampingRatioNoBouncy)) }
-  LinearProgressIndicator(progress.value)
+  LaunchedEffect(target) {
+    // ✅ Ручной контроль последовательности
+    progress.animateTo(target, spring(dampingRatio = Spring.DampingRatioNoBouncy))
+  }
+  LinearProgressIndicator(progress = progress.value)
 }
 ```
 
-Sequencing and interruption:
-```kotlin
-LaunchedEffect(Unit) {
-  progress.snapTo(0f)
-  progress.animateTo(0.5f, tween())
-  if (!isActive) return@LaunchedEffect
-  progress.animateTo(1f, spring())
-}
-```
-
-Transition API for multiple values:
+**Transition** (множественные значения):
 ```kotlin
 @Composable
 fun CardTransition(expanded: Boolean) {
-  val t = updateTransition(expanded, label = "expansion")
-  val alpha by t.animateFloat(label = "alpha") { if (it) 1f else 0.6f }
-  val corner by t.animateDp(label = "radius") { if (it) 24.dp else 8.dp }
-  Card(Modifier.alpha(alpha), shape = RoundedCornerShape(corner)) { /* ... */ }
+  val transition = updateTransition(expanded, label = "card")
+  val alpha by transition.animateFloat(label = "alpha") { if (it) 1f else 0.6f }
+  val cornerRadius by transition.animateDp(label = "radius") { if (it) 24.dp else 8.dp }
+  Card(
+    modifier = Modifier.alpha(alpha),
+    shape = RoundedCornerShape(cornerRadius)
+  ) { /* content */ }
 }
 ```
 
-### Specs and Performance
-- Specs: `spring` (natural), `tween` (time‑based), `keyframes`, `snap`
-- Prefer springs for interruptible UX; use `FastOutSlowInEasing` etc. for material feel
-- Avoid allocations in animation lambdas; hoist state; limit recomposition to animated subtree
-- Profile with Layout Inspector/Perfetto; measure jank
+### Производительность
+- `spring()` для естественных прерываемых анимаций
+- `tween()` с easing для контролируемой продолжительности
+- Избегайте аллокаций в лямбдах анимаций
+- Ограничивайте рекомпозицию анимированным поддеревом
+- Профилируйте через Layout Inspector и Macrobenchmark
+
+## Answer (EN)
+
+### Choosing the API
+- `animate*AsState`: declarative, auto-cancellable on state change
+- `Animatable`: imperative control, sequences, interruptions
+- `Transition`: coordinate multiple animated values
+
+### Patterns
+
+**animate*AsState** (declarative):
+```kotlin
+@Composable
+fun Pulse(expanded: Boolean) {
+  // ✅ Automatically cancels when expanded changes
+  val scale by animateFloatAsState(
+    targetValue = if (expanded) 1.2f else 1f,
+    animationSpec = spring()
+  )
+  Box(Modifier.graphicsLayer(scaleX = scale, scaleY = scale))
+}
+```
+
+**Animatable** (imperative):
+```kotlin
+@Composable
+fun SwipeProgress(target: Float) {
+  val progress = remember { Animatable(0f) }
+  LaunchedEffect(target) {
+    // ✅ Manual sequence control
+    progress.animateTo(target, spring(dampingRatio = Spring.DampingRatioNoBouncy))
+  }
+  LinearProgressIndicator(progress = progress.value)
+}
+```
+
+**Transition** (multiple values):
+```kotlin
+@Composable
+fun CardTransition(expanded: Boolean) {
+  val transition = updateTransition(expanded, label = "card")
+  val alpha by transition.animateFloat(label = "alpha") { if (it) 1f else 0.6f }
+  val cornerRadius by transition.animateDp(label = "radius") { if (it) 24.dp else 8.dp }
+  Card(
+    modifier = Modifier.alpha(alpha),
+    shape = RoundedCornerShape(cornerRadius)
+  ) { /* content */ }
+}
+```
+
+### Performance
+- Use `spring()` for natural interruptible animations
+- Use `tween()` with easing for controlled duration
+- Avoid allocations in animation lambdas
+- Limit recomposition to animated subtree
+- Profile with Layout Inspector and Macrobenchmark
+
+---
 
 ## Follow-ups
-- When to prefer `animate*AsState` vs `Animatable` vs `Transition`?
-- How to structure animation state to avoid recomposition storms?
-- How to benchmark animation jank in CI (Macrobenchmark)?
+- How to sequence multiple animations with different timing?
+- When does `Transition` provide better performance than multiple `animate*AsState` calls?
+- How to implement gesture-driven animations with `Animatable`?
 
 ## References
-- [[c-algorithms]] - Animation interpolation and timing algorithms
+- [[c-jetpack-compose]] - Compose fundamentals
 - https://developer.android.com/develop/ui/compose/animation
-- https://developer.android.com/develop/ui/compose/performance
 
 ## Related Questions
 
@@ -108,7 +161,6 @@ fun CardTransition(expanded: Boolean) {
 
 ### Related (Same Level)
 - [[q-compose-compiler-plugin--android--hard]]
-- [[q-compose-canvas-graphics--android--hard]]
 
 ### Advanced (Harder)
 - [[q-android-performance-measurement-tools--android--medium]]

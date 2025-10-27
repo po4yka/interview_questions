@@ -1,288 +1,190 @@
 ---
-id: 20251012-12271128
+id: 20251012-122711
 title: "Leakcanary Library / Библиотека LeakCanary"
+aliases: ["Leakcanary Library", "Библиотека LeakCanary"]
 topic: android
+subtopics: [performance-memory, profiling]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [android/memory-management, debugging-tools, leakcanary, memory-leaks, memory-management, square, tools, difficulty/easy]
+updated: 2025-01-27
+tags: [android/performance-memory, android/profiling, leakcanary, memory-leaks, debugging-tools, difficulty/easy]
 moc: moc-android
-related: [q-test-doubles-dependency-injection--testing--medium, q-how-vsync-and-recomposition-events-are-related--android--hard, q-custom-view-lifecycle--custom-views--medium]
+related: [c-memory-management, q-test-doubles-dependency-injection--testing--medium, q-how-vsync-and-recomposition-events-are-related--android--hard]
+sources: []
 ---
+# Вопрос (RU)
+
+> Какая библиотека используется для нахождения утечек памяти в Android?
 
 # Question (EN)
 
 > What library is used for finding memory leaks in Android?
 
-# Вопрос (RU)
-
-> Какая библиотека используется для нахождения утечек памяти в Android?
-
----
-
-## Answer (EN)
-
-The popular library for detecting memory leaks in Android is **LeakCanary** by Square.
-
-**Setup:**
-
-```kotlin
-// build.gradle (app)
-dependencies {
-    // Debug builds only
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
-}
-```
-
-**Features:**
-
--   **Automatic detection** of Activity/Fragment leaks
--   **Zero configuration** - works out of the box
--   **Visual leak traces** with retention chains
--   **Heap dump analysis** with Shark library
--   **Debug builds only** - no production overhead
-
-**How It Works:**
-
-```kotlin
-// Automatically watches Activity lifecycle
-Application.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-    override fun onActivityDestroyed(activity: Activity) {
-        // LeakCanary watches for leaks
-        AppWatcher.objectWatcher.watch(
-            activity,
-            "${activity::class.java.name} received Activity#onDestroy() callback"
-        )
-    }
-    // ... other callbacks
-})
-```
-
-**Leak Notification:**
-
-When a leak is detected, LeakCanary shows a notification:
-
-```
-
-   LeakCanary
-
-  MainActivity has leaked
-
-  1 retained object
-  Retaining 2.5 MB
-
-  Tap to see leak trace
-
-```
-
-**Leak Trace Example:**
-
-```
-
- REFERENCES UNDERLINED are the leak
- cause
-
-
- GC Root: System class
-     ↓ static MyApplication.sInstance
- MyApplication instance
-     ↓ MyApplication.activityManager
- ActivityManager instance
-     ↓ ActivityManager.currentActivity
-
- MainActivity instance
-
-   Leaking: YES (Activity#mDestroyed=true)
-   Retaining 2.5 MB in 1234 objects
-
-```
-
-**Watch Custom Objects:**
-
-```kotlin
-class MyViewModel : ViewModel() {
-    init {
-        // Watch ViewModel for leaks
-        AppWatcher.objectWatcher.watch(
-            watchedObject = this,
-            description = "MyViewModel cleared"
-        )
-    }
-}
-```
-
-**Configuration:**
-
-```kotlin
-// Application class
-class MyApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-        // Custom configuration (optional)
-        val config = AppWatcher.config.copy(
-            watchActivities = true,
-            watchFragments = true,
-            watchViewModels = true,
-            watchDurationMillis = 5000  // Wait 5s before checking
-        )
-        AppWatcher.config = config
-    }
-}
-```
-
-**Alternatives:**
-
-| Library                              | Purpose               | Pros               | Cons           |
-| ------------------------------------ | --------------------- | ------------------ | -------------- |
-| **LeakCanary**                       | Memory leak detection | Auto, visual, easy | Debug only     |
-| **Memory Profiler** (Android Studio) | Manual analysis       | Powerful, detailed | Manual work    |
-| **MAT (Eclipse)**                    | Heap dump analysis    | Professional tool  | Complex        |
-| **Perfetto**                         | System tracing        | Complete picture   | Learning curve |
-
-**Common Leaks Detected:**
-
-**1. Static Activity Reference:**
-
-```kotlin
-companion object {
-    var activity: Activity? = null  // - Leak!
-}
-```
-
 ---
 
 ## Ответ (RU)
 
-Популярная библиотека для обнаружения утечек памяти в Android — это **LeakCanary** от Square.
+**LeakCanary** от Square — стандартный инструмент для автоматического обнаружения утечек памяти в Android приложениях.
+
+**Основные возможности:**
+
+- Автоматически отслеживает утечки Activity, Fragment, ViewModel
+- Работает "из коробки" без конфигурации
+- Визуализирует цепочки удержания объектов
+- Не влияет на production (только debug-сборки)
 
 **Подключение:**
 
 ```kotlin
 // build.gradle (app)
 dependencies {
-    // Только для debug-сборок
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
+    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Only debug builds
 }
 ```
 
-**Возможности:**
+**Принцип работы:**
 
-- **Автоматическое обнаружение** утечек Activity/Fragment
-- **Нулевая конфигурация** - работает из коробки
-- **Визуальные трассировки утечек** с цепочками удержания
-- **Анализ heap dump** с библиотекой Shark
-- **Только debug-сборки** - нет нагрузки на production
-
-**Как это работает:**
+LeakCanary регистрирует lifecycle callbacks и отслеживает объекты после их уничтожения. Если объект не собран GC через 5 секунд — выполняется heap dump и анализ.
 
 ```kotlin
-// Автоматически отслеживает жизненный цикл Activity
-Application.registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-    override fun onActivityDestroyed(activity: Activity) {
-        // LeakCanary отслеживает утечки
-        AppWatcher.objectWatcher.watch(
-            activity,
-            "${activity::class.java.name} received Activity#onDestroy() callback"
-        )
+// LeakCanary автоматически следит за Activity
+override fun onActivityDestroyed(activity: Activity) {
+    AppWatcher.objectWatcher.watch(
+        activity,
+        "Activity#onDestroy() called"
+    )
+}
+```
+
+**Пример утечки:**
+
+```kotlin
+companion object {
+    var activity: Activity? = null  // ❌ Static reference — leak!
+}
+
+class MainActivity : AppCompatActivity() {
+    init {
+        activity = this  // ❌ Activity won't be GC'd
     }
-    // ... другие callbacks
-})
+}
 ```
 
-**Уведомление об утечке:**
-
-Когда обнаружена утечка, LeakCanary показывает уведомление:
-
-```
-   LeakCanary
-  MainActivity has leaked
-  1 retained object
-  Retaining 2.5 MB
-  Tap to see leak trace
-```
-
-**Пример трассировки утечки:**
-
-```
- REFERENCES UNDERLINED are the leak cause
-
- GC Root: System class
-     ↓ static MyApplication.sInstance
- MyApplication instance
-     ↓ MyApplication.activityManager
- ActivityManager instance
-     ↓ ActivityManager.currentActivity
- MainActivity instance
-   Leaking: YES (Activity#mDestroyed=true)
-   Retaining 2.5 MB in 1234 objects
-```
-
-**Отслеживание пользовательских объектов:**
+**Отслеживание кастомных объектов:**
 
 ```kotlin
 class MyViewModel : ViewModel() {
     init {
-        // Отслеживать ViewModel на утечки
         AppWatcher.objectWatcher.watch(
             watchedObject = this,
-            description = "MyViewModel cleared"
+            description = "ViewModel cleared"
         )
-    }
-}
-```
-
-**Конфигурация:**
-
-```kotlin
-// Класс Application
-class MyApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-        // Пользовательская конфигурация (опционально)
-        val config = AppWatcher.config.copy(
-            watchActivities = true,
-            watchFragments = true,
-            watchViewModels = true,
-            watchDurationMillis = 5000  // Ждать 5 секунд перед проверкой
-        )
-        AppWatcher.config = config
     }
 }
 ```
 
 **Альтернативы:**
 
-| Библиотека | Назначение | Плюсы | Минусы |
-| --- | --- | --- | --- |
-| **LeakCanary** | Обнаружение утечек памяти | Авто, визуальная, простая | Только debug |
-| **Memory Profiler** (Android Studio) | Ручной анализ | Мощный, детальный | Ручная работа |
-| **MAT (Eclipse)** | Анализ heap dump | Профессиональный инструмент | Сложный |
-| **Perfetto** | Системная трассировка | Полная картина | Кривая обучения |
+- [[c-memory-profiler]] — ручной анализ через Android Studio
+- Perfetto — системная трассировка с полной картиной производительности
+- MAT (Eclipse Memory Analyzer) — детальный анализ heap dump
 
-**Распространенные обнаруживаемые утечки:**
+---
 
-**1. Статическая ссылка на Activity:**
+## Answer (EN)
+
+**LeakCanary** by Square is the standard tool for automatically detecting memory leaks in Android applications.
+
+**Key features:**
+
+- Automatically tracks Activity, Fragment, ViewModel leaks
+- Zero configuration — works out of the box
+- Visualizes object retention chains
+- No production impact (debug builds only)
+
+**Setup:**
+
+```kotlin
+// build.gradle (app)
+dependencies {
+    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Only debug builds
+}
+```
+
+**How it works:**
+
+LeakCanary registers lifecycle callbacks and watches objects after destruction. If an object isn't collected by GC after 5 seconds — heap dump is performed and analyzed.
+
+```kotlin
+// LeakCanary automatically watches Activity
+override fun onActivityDestroyed(activity: Activity) {
+    AppWatcher.objectWatcher.watch(
+        activity,
+        "Activity#onDestroy() called"
+    )
+}
+```
+
+**Leak example:**
 
 ```kotlin
 companion object {
-    var activity: Activity? = null  // ⚠️ Утечка!
+    var activity: Activity? = null  // ❌ Static reference — leak!
+}
+
+class MainActivity : AppCompatActivity() {
+    init {
+        activity = this  // ❌ Activity won't be GC'd
+    }
 }
 ```
+
+**Watch custom objects:**
+
+```kotlin
+class MyViewModel : ViewModel() {
+    init {
+        AppWatcher.objectWatcher.watch(
+            watchedObject = this,
+            description = "ViewModel cleared"
+        )
+    }
+}
+```
+
+**Alternatives:**
+
+- [[c-memory-profiler]] — manual analysis via Android Studio
+- Perfetto — system tracing with full performance picture
+- MAT (Eclipse Memory Analyzer) — detailed heap dump analysis
 
 ---
 
 ## Follow-ups
 
--   How do you interpret LeakCanary leak traces and fix common leak patterns?
--   What's the difference between retained object count and actual memory usage?
--   How can you integrate LeakCanary with CI or turn it off in release builds?
+- How does LeakCanary distinguish between expected retained objects and actual leaks?
+- What strategies prevent common leak patterns (static Activity references, inner class listeners)?
+- How do you interpret leak traces to identify the root cause in complex object graphs?
 
 ## References
 
--   `https://square.github.io/leakcanary/` — LeakCanary docs
--   `https://github.com/square/leakcanary` — LeakCanary GitHub
--   `https://developer.android.com/topic/performance/memory` — Memory management
+- [[c-memory-management]] — Android memory management fundamentals
+- [[c-garbage-collection]] — GC behavior and object lifecycle
+- https://square.github.io/leakcanary/ — Official LeakCanary documentation
 
 ## Related Questions
+
+### Prerequisites
+- [[q-android-lifecycle-basics--android--easy]] — Understanding component lifecycle
+- [[q-garbage-collection-basics--android--easy]] — GC fundamentals
+
+### Related
+- [[q-memory-profiler-usage--android--medium]] — Manual memory analysis tools
+- [[q-common-memory-leaks--android--medium]] — Typical leak patterns
+
+### Advanced
+- [[q-heap-dump-analysis--android--hard]] — Deep heap dump investigation

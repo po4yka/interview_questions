@@ -1,217 +1,197 @@
 ---
 id: 20251012-400005
 title: "Sealed Classes for State Management / Sealed классы для управления состоянием"
-aliases:
-  - "Sealed Classes for State Management"
-  - "Sealed классы для управления состоянием"
+aliases: ["Sealed Classes for State Management", "Sealed классы для управления состоянием"]
 topic: android
-subtopics: [kotlin, state-management]
+subtopics: [architecture-mvi, ui-state]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-sealed-classes, q-mvi-architecture--android--hard, q-kotlin-sealed-classes--kotlin--medium]
+related: [q-mvi-architecture--android--hard, q-state-hoisting-compose--android--medium, q-stateflow-flow-sharedflow-livedata--android--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [android/kotlin, android/state-management, sealed-classes, state-management, mvi, architecture, difficulty/medium]
+updated: 2025-01-27
+tags: [android/architecture-mvi, android/ui-state, sealed-classes, state-management, mvi, difficulty/medium]
 sources: [https://kotlinlang.org/docs/sealed-classes.html]
 ---
-
 # Вопрос (RU)
-> Что такое sealed классы и как их использовать для управления состоянием?
+> Как использовать sealed классы для управления состоянием в Android приложениях?
 
 # Question (EN)
-> What are sealed classes and how to use them for state management?
+> How to use sealed classes for state management in Android applications?
 
 ---
 
 ## Ответ (RU)
 
-**Теория Sealed классов:**
-Sealed классы представляют ограниченную иерархию типов, где все подклассы известны на этапе компиляции. Они идеальны для моделирования состояний UI, результатов API и событий навигации.
+**Концепция:**
+Sealed классы ([[c-sealed-classes]]) представляют ограниченную иерархию типов, где все подклассы известны на этапе компиляции. В Android они используются для моделирования UI состояний, результатов API и событий в паттерне [[c-mvi-pattern]].
 
-**Основные преимущества:**
-- Исчерпывающие when выражения
-- Типобезопасность
+**Преимущества:**
+- Исчерпывающие when выражения — компилятор проверяет все варианты
+- Типобезопасность — невозможно передать некорректное состояние
 - Могут содержать данные (в отличие от enum)
-- Компилятор проверяет полноту обработки
+
+**Базовый пример состояния UI:**
 
 ```kotlin
-// Базовый sealed класс для результата API
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-    data object Loading : Result<Nothing>()
-}
-
-// Исчерпывающая обработка без else
-fun <T> handleResult(result: Result<T>) {
-    when (result) {
-        is Result.Success -> println("Данные: ${result.data}")
-        is Result.Error -> println("Ошибка: ${result.exception.message}")
-        is Result.Loading -> println("Загрузка...")
-    }
-}
-```
-
-**Управление состоянием UI:**
-Sealed классы отлично подходят для моделирования состояний экранов.
-
-```kotlin
-// Состояние UI экрана
 sealed interface UiState<out T> {
+    // ✅ data object для состояний без данных
     data object Idle : UiState<Nothing>
     data object Loading : UiState<Nothing>
+    // ✅ data class для состояний с данными
     data class Success<T>(val data: T) : UiState<T>
     data class Error(val message: String) : UiState<Nothing>
 }
 
-// Использование в ViewModel
 class ProfileViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<UserProfile>>(UiState.Idle)
-    val uiState: StateFlow<UiState<UserProfile>> = _uiState.asStateFlow()
+    private val _state = MutableStateFlow<UiState<User>>(UiState.Idle)
+    val state: StateFlow<UiState<User>> = _state.asStateFlow()
 
     fun loadProfile() {
         viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            try {
-                val profile = userRepository.getProfile()
-                _uiState.value = UiState.Success(profile)
+            _state.value = UiState.Loading
+            _state.value = try {
+                val user = repository.getUser()
+                UiState.Success(user) // ✅ Явное состояние успеха
             } catch (e: Exception) {
-                _uiState.value = UiState.Error("Ошибка загрузки")
+                UiState.Error(e.message ?: "Unknown error") // ✅ Обработка ошибки
             }
         }
     }
 }
 ```
 
-**Sealed интерфейсы (Kotlin 1.5+):**
-Позволяют множественное наследование и более гибкую архитектуру.
+**Обработка в UI:**
 
 ```kotlin
-// Sealed интерфейс для множественного наследования
-sealed interface Response
-sealed interface ApiResponse : Response {
-    data class Success(val data: String) : ApiResponse
-    data class Failure(val error: String) : ApiResponse
+@Composable
+fun ProfileScreen(viewModel: ProfileViewModel) {
+    val state by viewModel.state.collectAsState()
+
+    // ✅ Исчерпывающая обработка всех состояний
+    when (state) {
+        UiState.Idle -> Text("Press button to load")
+        UiState.Loading -> CircularProgressIndicator()
+        is UiState.Success -> UserProfile(state.data)
+        is UiState.Error -> ErrorMessage(state.message)
+    } // Компилятор проверит, что все варианты обработаны
 }
 ```
 
-**События навигации:**
-Sealed классы идеальны для типобезопасной навигации.
+**MVI Events:**
 
 ```kotlin
-sealed class NavigationEvent {
-    data class NavigateToProfile(val userId: String) : NavigationEvent()
-    data class NavigateToSettings : NavigationEvent()
-    data object NavigateBack : NavigationEvent()
+sealed interface ProfileEvent {
+    data object LoadProfile : ProfileEvent
+    data class UpdateName(val name: String) : ProfileEvent
+    data object Logout : ProfileEvent
 }
+
+// ❌ Не используйте enum для событий с данными
+enum class BadEvent { LOAD, UPDATE, LOGOUT } // Нет данных!
 ```
 
 ## Answer (EN)
 
-**Sealed Classes Theory:**
-Sealed classes represent restricted type hierarchies where all subclasses are known at compile time. They're perfect for modeling UI states, API results, and navigation events.
+**Concept:**
+Sealed classes ([[c-sealed-classes]]) represent restricted type hierarchies where all subclasses are known at compile time. In Android, they're used to model UI states, API results, and events in the [[c-mvi-pattern]] pattern.
 
-**Main advantages:**
-- Exhaustive when expressions
-- Type safety
+**Advantages:**
+- Exhaustive when expressions — compiler checks all variants
+- Type safety — impossible to pass incorrect state
 - Can hold data (unlike enums)
-- Compiler checks completeness
+
+**Basic UI State Example:**
 
 ```kotlin
-// Basic sealed class for API result
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-    data object Loading : Result<Nothing>()
-}
-
-// Exhaustive handling without else
-fun <T> handleResult(result: Result<T>) {
-    when (result) {
-        is Result.Success -> println("Data: ${result.data}")
-        is Result.Error -> println("Error: ${result.exception.message}")
-        is Result.Loading -> println("Loading...")
-    }
-}
-```
-
-**UI State Management:**
-Sealed classes are excellent for modeling screen states.
-
-```kotlin
-// UI state for screen
 sealed interface UiState<out T> {
+    // ✅ data object for stateless cases
     data object Idle : UiState<Nothing>
     data object Loading : UiState<Nothing>
+    // ✅ data class for states with data
     data class Success<T>(val data: T) : UiState<T>
     data class Error(val message: String) : UiState<Nothing>
 }
 
-// Usage in ViewModel
 class ProfileViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<UserProfile>>(UiState.Idle)
-    val uiState: StateFlow<UiState<UserProfile>> = _uiState.asStateFlow()
+    private val _state = MutableStateFlow<UiState<User>>(UiState.Idle)
+    val state: StateFlow<UiState<User>> = _state.asStateFlow()
 
     fun loadProfile() {
         viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            try {
-                val profile = userRepository.getProfile()
-                _uiState.value = UiState.Success(profile)
+            _state.value = UiState.Loading
+            _state.value = try {
+                val user = repository.getUser()
+                UiState.Success(user) // ✅ Explicit success state
             } catch (e: Exception) {
-                _uiState.value = UiState.Error("Load error")
+                UiState.Error(e.message ?: "Unknown error") // ✅ Error handling
             }
         }
     }
 }
 ```
 
-**Sealed Interfaces (Kotlin 1.5+):**
-Allow multiple inheritance and more flexible architecture.
+**UI Handling:**
 
 ```kotlin
-// Sealed interface for multiple inheritance
-sealed interface Response
-sealed interface ApiResponse : Response {
-    data class Success(val data: String) : ApiResponse
-    data class Failure(val error: String) : ApiResponse
+@Composable
+fun ProfileScreen(viewModel: ProfileViewModel) {
+    val state by viewModel.state.collectAsState()
+
+    // ✅ Exhaustive handling of all states
+    when (state) {
+        UiState.Idle -> Text("Press button to load")
+        UiState.Loading -> CircularProgressIndicator()
+        is UiState.Success -> UserProfile(state.data)
+        is UiState.Error -> ErrorMessage(state.message)
+    } // Compiler checks all variants are handled
 }
 ```
 
-**Navigation Events:**
-Sealed classes are ideal for type-safe navigation.
+**MVI Events:**
 
 ```kotlin
-sealed class NavigationEvent {
-    data class NavigateToProfile(val userId: String) : NavigationEvent()
-    data class NavigateToSettings : NavigationEvent()
-    data object NavigateBack : NavigationEvent()
+sealed interface ProfileEvent {
+    data object LoadProfile : ProfileEvent
+    data class UpdateName(val name: String) : ProfileEvent
+    data object Logout : ProfileEvent
 }
+
+// ❌ Don't use enum for events with data
+enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 ```
 
 ---
 
 ## Follow-ups
 
-- How do sealed classes compare to enums?
-- What are the performance implications of sealed classes?
-- How do you handle sealed classes in Compose?
+- When should you use `sealed class` vs `sealed interface`?
+- How do sealed classes interact with SavedStateHandle for process death?
+- What's the performance overhead of sealed classes vs regular inheritance?
+- How do you handle backward compatibility when adding new states?
+
+## References
+
+- [[c-sealed-classes]] - Sealed classes concept
+- [[c-mvi-pattern]] - MVI architecture pattern
+- [[c-state-flow]] - StateFlow for state management
+- https://kotlinlang.org/docs/sealed-classes.html
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-kotlin-basics--kotlin--easy]] - Kotlin basics
-- [[q-android-app-components--android--easy]] - App components
+- Basic understanding of Kotlin data classes and when expressions
+- Knowledge of ViewModel and StateFlow
 
 ### Related (Same Level)
-- [[q-mvi-architecture--android--hard]] - MVI architecture
-- [[q-kotlin-sealed-classes--kotlin--medium]] - Kotlin sealed classes
-- [[q-state-management-patterns--android--medium]] - State management
+- [[q-mvi-architecture--android--hard]] - MVI architecture implementation
+- Questions about StateFlow vs LiveData for state management
+- Questions about handling loading and error states in Compose
 
 ### Advanced (Harder)
-- [[q-kotlin-advanced-features--kotlin--hard]] - Advanced Kotlin
-- [[q-android-architecture-patterns--android--hard]] - Architecture patterns
+- Complex state machines with nested sealed hierarchies
+- State normalization strategies for large apps
+- Event vs State distinction in MVI

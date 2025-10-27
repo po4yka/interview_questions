@@ -15,213 +15,203 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+  - c-custom-views
   - q-custom-view-lifecycle--android--medium
-  - q-how-to-add-custom-attributes-to-custom-view--android--medium
 created: 2025-10-21
-updated: 2025-10-21
+updated: 2025-01-27
 tags: [android/ui-theming, android/ui-views, difficulty/medium]
-source: https://developer.android.com/guide/topics/ui/themes
-source_note: Official theming guide
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:23 pm
+sources: [https://developer.android.com/guide/topics/ui/themes]
 ---
-
 # Вопрос (RU)
-> Атрибуты Custom View?
+> Как работают кастомные атрибуты в Custom View и как их правильно объявлять и считывать?
 
 # Question (EN)
-> Custom View Attributes?
+> How do custom attributes work in Custom Views, and how to properly declare and read them?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+**Кастомные XML-атрибуты** позволяют настраивать Custom View прямо в XML-разметке. Android предоставляет **TypedArray** для типобезопасного чтения атрибутов с поддержкой стилей, тем и значений по умолчанию.
 
-## Answer (EN)
+**Основные принципы**:
+- **AttributeSet** содержит все XML-атрибуты
+- **TypedArray** обеспечивает типобезопасный доступ к значениям
+- **Стили и темы** поддерживают переиспользование конфигурации
+- **Значения по умолчанию** обеспечивают fallback
 
-### Custom Attributes Theory
-
-**Custom XML attributes** allow configuring custom views directly in XML files, making them reusable and customizable. Android system uses **TypedArray** for reading attributes with support for styles, themes, and default values.
-
-Based on [[c-custom-views]] and c-android-theming.
-
-**Key principles**:
-- **AttributeSet** contains all XML attributes
-- **TypedArray** provides type-safe access to values
-- **Style hierarchy** supports style inheritance
-- **Default values** provide fallback values
-
-### Attribute Types
-
-| Type | Format | Usage |
-|------|--------|-------|
-| **color** | Color values | Background, text, border colors |
-| **dimension** | Sizes (dp, sp, px) | Padding, sizes, thickness |
-| **string** | String values | Text, descriptions |
-| **boolean** | true/false | Enable/disable features |
-| **float/integer** | Numeric values | Percentages, counters |
-| **reference** | Resource references | Drawable, strings, colors |
-| **enum** | Enumerated values | Styles, directions |
-| **flags** | Bit mask | Flag combinations |
-
-### Attribute Declaration in attrs.xml
+### Объявление атрибутов
 
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/attrs.xml -->
 <resources>
     <declare-styleable name="CustomProgressBar">
         <attr name="progress" format="float" />
         <attr name="progressColor" format="color" />
-        <attr name="backgroundColor" format="color" />
-        <attr name="showPercentage" format="boolean" />
         <attr name="barHeight" format="dimension" />
-        <attr name="label" format="string" />
-        <attr name="icon" format="reference" />
-
-        <attr name="animationStyle" format="enum">
-            <enum name="none" value="0" />
-            <enum name="fade" value="1" />
-            <enum name="slide" value="2" />
-        </attr>
-
-        <attr name="edges" format="flags">
-            <flag name="left" value="0x01" />
-            <flag name="top" value="0x02" />
-            <flag name="right" value="0x04" />
-            <flag name="bottom" value="0x08" />
-        </attr>
+        <!-- ✅ Группировка связанных атрибутов -->
     </declare-styleable>
 </resources>
 ```
 
-### Reading Attributes in Constructor
+### Чтение атрибутов
 
 ```kotlin
 class CustomProgressBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
-) : View(context, attrs, defStyleAttr, defStyleRes) {
-
-    var progress = 0f
-    var progressColor = Color.BLUE
-    var backgroundColor = Color.LIGHT_GRAY
-    var showPercentage = false
-    var barHeight = 8.dpToPx()
-    var label = ""
-    var icon: Drawable? = null
-    var animationStyle = AnimationStyle.NONE
-    var edges = Edges.ALL
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     init {
-        // Read attributes from XML
         context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.CustomProgressBar,
-            defStyleAttr,
-            defStyleRes
+            attrs, R.styleable.CustomProgressBar, defStyleAttr, 0
         ).apply {
             try {
-                progress = getFloat(R.styleable.CustomProgressBar_progress, 0f)
-                progressColor = getColor(R.styleable.CustomProgressBar_progressColor, Color.BLUE)
-                backgroundColor = getColor(R.styleable.CustomProgressBar_backgroundColor, Color.LIGHT_GRAY)
-                showPercentage = getBoolean(R.styleable.CustomProgressBar_showPercentage, false)
-                barHeight = getDimension(R.styleable.CustomProgressBar_barHeight, 8.dpToPx())
-                label = getString(R.styleable.CustomProgressBar_label) ?: ""
-                icon = getDrawable(R.styleable.CustomProgressBar_icon)
-                animationStyle = AnimationStyle.values()[getInt(R.styleable.CustomProgressBar_animationStyle, 0)]
-                edges = Edges.fromFlags(getInt(R.styleable.CustomProgressBar_edges, Edges.ALL.value))
+                // ✅ Всегда указывайте значения по умолчанию
+                val progress = getFloat(R.styleable.CustomProgressBar_progress, 0f)
+                val color = getColor(R.styleable.CustomProgressBar_progressColor, Color.BLUE)
             } finally {
-                recycle() // Release resources
+                recycle()  // ✅ ОБЯЗАТЕЛЬНО освобождайте ресурсы
             }
-        }
-    }
-
-    private fun Int.dpToPx(): Int =
-        (this * Resources.getSystem().displayMetrics.density).toInt()
-
-    enum class AnimationStyle { NONE, FADE, SLIDE }
-
-    enum class Edges(val value: Int) {
-        NONE(0),
-        LEFT(0x01),
-        TOP(0x02),
-        RIGHT(0x04),
-        BOTTOM(0x08),
-        ALL(0x0F);
-
-        companion object {
-            fun fromFlags(flags: Int): Edges = values().find { it.value == flags } ?: ALL
         }
     }
 }
 ```
 
-### Styles and Themes Support
+### Использование в XML
 
 ```xml
-<!-- res/values/styles.xml -->
-<style name="Widget.ProgressBar">
-    <item name="progressColor">@color/primary</item>
-    <item name="backgroundColor">@color/surface</item>
-    <item name="barHeight">12dp</item>
-    <item name="showPercentage">true</item>
-</style>
+<CustomProgressBar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:progress="75"
+    app:progressColor="@color/primary"
+    app:barHeight="12dp" />
+```
 
-<style name="Widget.ProgressBar.Small">
-    <item name="barHeight">4dp</item>
-    <item name="showPercentage">false</item>
-</style>
+### Ключевые моменты
 
-<style name="Widget.ProgressBar.Large">
-    <item name="barHeight">16dp</item>
-    <item name="showPercentage">true</item>
-</style>
+**Типы атрибутов**:
+- `color`, `dimension`, `string`, `boolean`, `integer`, `float`
+- `reference` для ссылок на ресурсы
+- `enum` для ограниченного набора значений
+- `flags` для битовых масок
+
+**Best practices**:
+1. Всегда вызывайте `recycle()` на TypedArray
+2. Указывайте значения по умолчанию
+3. Используйте `enum` вместо magic numbers
+4. Группируйте связанные атрибуты в одном `declare-styleable`
+
+**Важные параметры конструктора**:
+- `attrs` — набор XML-атрибутов
+- `defStyleAttr` — атрибут темы со стилем по умолчанию
+- `defStyleRes` — стиль по умолчанию
+
+## Answer (EN)
+
+**Custom XML attributes** enable configuring Custom Views directly in XML layouts. Android provides **TypedArray** for type-safe attribute reading with support for styles, themes, and default values.
+
+**Key principles**:
+- **AttributeSet** contains all XML attributes
+- **TypedArray** provides type-safe value access
+- **Styles and themes** enable configuration reuse
+- **Default values** provide fallback behavior
+
+### Declaring Attributes
+
+```xml
+<!-- res/values/attrs.xml -->
+<resources>
+    <declare-styleable name="CustomProgressBar">
+        <attr name="progress" format="float" />
+        <attr name="progressColor" format="color" />
+        <attr name="barHeight" format="dimension" />
+        <!-- ✅ Group related attributes -->
+    </declare-styleable>
+</resources>
+```
+
+### Reading Attributes
+
+```kotlin
+class CustomProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    init {
+        context.theme.obtainStyledAttributes(
+            attrs, R.styleable.CustomProgressBar, defStyleAttr, 0
+        ).apply {
+            try {
+                // ✅ Always provide default values
+                val progress = getFloat(R.styleable.CustomProgressBar_progress, 0f)
+                val color = getColor(R.styleable.CustomProgressBar_progressColor, Color.BLUE)
+            } finally {
+                recycle()  // ✅ MUST release resources
+            }
+        }
+    }
+}
 ```
 
 ### XML Usage
 
 ```xml
-<com.example.ui.CustomProgressBar
+<CustomProgressBar
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:style="@style/Widget.ProgressBar"
     app:progress="75"
-    app:label="Loading"
-    app:animationStyle="fade"
-    app:edges="left|right" />
+    app:progressColor="@color/primary"
+    app:barHeight="12dp" />
 ```
 
-### Best Practices
+### Key Concepts
 
-1. **Always use TypedArray** for reading attributes
-2. **Don't forget recycle()** TypedArray to release resources
-3. **Provide default values** for all attributes
-4. **Use enum for limited value sets**
-5. **Group related attributes** in one declare-styleable
-6. **Support styles and themes** for reusability
-7. **Document attributes** for other developers
+**Attribute formats**:
+- `color`, `dimension`, `string`, `boolean`, `integer`, `float`
+- `reference` for resource references
+- `enum` for limited value sets
+- `flags` for bit masks
 
-### Pitfalls
+**Best practices**:
+1. Always call `recycle()` on TypedArray
+2. Provide default values
+3. Use `enum` instead of magic numbers
+4. Group related attributes in one `declare-styleable`
 
-- **Don't forget recycle()** TypedArray - can cause memory leaks
-- **Handle null values properly** for optional attributes
-- **Use correct attribute formats** for type safety
-- **Check value boundaries** for enum and flags
-- **Test with different styles** and themes
+**Constructor parameters**:
+- `attrs` — set of XML attributes
+- `defStyleAttr` — theme attribute with default style
+- `defStyleRes` — default style resource
 
 ---
 
 ## Follow-ups
 
-- How to create custom attribute groups?
-- What are the performance implications of custom attributes?
-- How to handle attribute inheritance in custom views?
-- When to use reference vs direct values?
+- How does attribute resolution work through style and theme hierarchy?
+- What's the performance impact of TypedArray allocation and why must it be recycled?
+- How to implement attribute validation for enum and flag types?
+- When should you use defStyleAttr vs defStyleRes parameter?
 
 ## References
 
-- [Custom Views Guide](https://developer.android.com/guide/topics/ui/custom-components)
-- [Themes and Styles Guide](https://developer.android.com/guide/topics/ui/themes)
+- [[c-custom-views]]
+- https://developer.android.com/guide/topics/ui/custom-components
+- https://developer.android.com/guide/topics/ui/themes
+
+## Related Questions
+
+### Prerequisites
+- [[q-custom-view-lifecycle--android--medium]]
+
+### Related
+- Custom view state management
+- Theme attribute resolution patterns
+
+### Advanced
+- Dynamic attribute updates during runtime
+- Attribute animation and interpolation

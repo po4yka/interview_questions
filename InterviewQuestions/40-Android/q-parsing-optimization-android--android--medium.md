@@ -1,416 +1,291 @@
 ---
-id: 20251012-12271161
-title: "Parsing Optimization Android / Parsing Оптимизация Android"
+id: 20251015-120000
+title: "Parsing Optimization Android / Оптимизация парсинга Android"
+aliases: ["Parsing Optimization Android", "Оптимизация парсинга Android"]
 topic: android
+subtopics: [performance-memory, serialization]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium, q-cicd-pipeline-setup--devops--medium, q-server-sent-events-sse--networking--medium]
+related: [q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium]
 created: 2025-10-15
-tags: [android/performance, gson, json, moshi, optimization, parsing, performance, xml, difficulty/medium]
+updated: 2025-01-27
+sources: []
+tags: [android/performance-memory, android/serialization, json, xml, optimization, difficulty/medium]
 ---
+# Вопрос (RU)
+
+> Где можно оптимизировать парсинг в Android-приложениях?
 
 # Question (EN)
 
 > Where can parsing be optimized in Android applications?
 
-# Вопрос (RU)
-
-> Где можно оптимизировать парсинг?
-
 ---
+
+## Ответ (RU)
+
+**1. Потоковый парсинг (Streaming)**
+
+Используйте XmlPullParser вместо DOM для обработки XML. Потоковый парсинг обрабатывает документ последовательно, не загружая всё в память.
+
+```kotlin
+// ❌ Плохо - DOM загружает весь документ в память
+val factory = DocumentBuilderFactory.newInstance()
+val doc = factory.newDocumentBuilder().parse(inputStream)
+
+// ✅ Хорошо - потоковый парсер
+val parser = Xml.newPullParser().apply { setInput(inputStream, null) }
+while (parser.next() != XmlPullParser.END_DOCUMENT) {
+    if (parser.eventType == XmlPullParser.START_TAG && parser.name == "item") {
+        parseItem(parser)
+    }
+}
+```
+
+**2. Минимизация преобразований строк**
+
+Избегайте множественных конвертаций между форматами - парсите напрямую из потока.
+
+```kotlin
+// ❌ Плохо - несколько преобразований
+val jsonString = response.body?.string()
+val data = JSONObject(jsonString)
+
+// ✅ Хорошо - прямой парсинг из потока
+val data = JSONObject(response.body?.charStream())
+```
+
+**3. Кеширование результатов**
+
+Кешируйте распарсенные данные для повторного использования, особенно если данные запрашиваются часто.
+
+**4. Специализированные библиотеки**
+
+Производительность (1000 объектов):
+- **Moshi**: ~15ms (самая быстрая)
+- **kotlinx.serialization**: ~18ms (нативная для Kotlin)
+- **Gson**: ~25ms (универсальная)
+- **org.json**: ~45ms (стандартная Android API)
+
+**Moshi** - лучший выбор для производительности:
+```kotlin
+@JsonClass(generateAdapter = true)
+data class User(val id: Int, val name: String)
+
+val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+val user = moshi.adapter(User::class.java).fromJson(jsonString)
+```
+
+**kotlinx.serialization** - для Kotlin-first проектов:
+```kotlin
+@Serializable
+data class User(val id: Int, val name: String)
+
+val user = Json.decodeFromString<User>(jsonString)
+```
+
+**5. Ленивый парсинг больших списков**
+
+Используйте Sequence для обработки только необходимых элементов:
+
+```kotlin
+// ❌ Плохо - парсит весь список сразу
+fun parseAll(json: String): List<User> {
+    val array = JSONArray(json)
+    return (0 until array.length()).map { parseUser(array.getJSONObject(it)) }
+}
+
+// ✅ Хорошо - ленивый парсинг
+fun parseLazy(json: String): Sequence<User> = sequence {
+    val array = JSONArray(json)
+    for (i in 0 until array.length()) yield(parseUser(array.getJSONObject(i)))
+}
+
+parseLazy(json).take(10).toList()  // Парсит только первые 10
+```
+
+**6. Фоновые потоки**
+
+Выполняйте парсинг в фоновом потоке для сохранения отзывчивости UI:
+
+```kotlin
+viewModelScope.launch(Dispatchers.Default) {
+    val data = parseData(jsonString)  // ✅ Парсинг в фоне
+    withContext(Dispatchers.Main) { _dataLiveData.value = data }
+}
+```
+
+**7. Инкрементальный парсинг**
+
+Для больших JSON-потоков используйте JsonReader:
+
+```kotlin
+fun parseStream(stream: InputStream) = flow {
+    JsonReader(stream.reader()).use { reader ->
+        reader.beginArray()
+        while (reader.hasNext()) emit(parseItem(reader))  // ✅ По элементу
+        reader.endArray()
+    }
+}
+```
+
+**Таблица оптимизаций:**
+
+| Техника | Выгода | Применение |
+|---------|--------|-----------|
+| Streaming | Меньше памяти | Большие XML/JSON |
+| Меньше конвертаций | Быстрее | Строковые данные |
+| Кеширование | Избегаем повторного парсинга | Частый доступ |
+| Moshi/kotlinx | Скорость | JSON-парсинг |
+| Lazy парсинг | Эффективность памяти | Большие списки |
+| Фоновые потоки | Отзывчивость UI | Тяжелый парсинг |
 
 ## Answer (EN)
 
-**1. Use Streaming Processing**
+**1. Streaming Processing**
 
-Use XmlPullParser instead of DOM for XML.
+Use XmlPullParser instead of DOM for XML parsing. Streaming parsers process documents sequentially without loading everything into memory.
 
 ```kotlin
-// - BAD - DOM loads entire document
+// ❌ Bad - DOM loads entire document
 val factory = DocumentBuilderFactory.newInstance()
-val builder = factory.newDocumentBuilder()
-val doc = builder.parse(inputStream)  // Loads all in memory
+val doc = factory.newDocumentBuilder().parse(inputStream)
 
-// - GOOD - Streaming parser
-val parser = Xml.newPullParser()
-parser.setInput(inputStream, null)
-
+// ✅ Good - streaming parser
+val parser = Xml.newPullParser().apply { setInput(inputStream, null) }
 while (parser.next() != XmlPullParser.END_DOCUMENT) {
-    if (parser.eventType == XmlPullParser.START_TAG) {
-        when (parser.name) {
-            "item" -> parseItem(parser)
-        }
+    if (parser.eventType == XmlPullParser.START_TAG && parser.name == "item") {
+        parseItem(parser)
     }
 }
 ```
 
 **2. Reduce String Conversions**
 
-```kotlin
-// - BAD - Multiple conversions
-val jsonString = response.body?.string()
-val data = jsonString?.let { JSONObject(it) }
-val value = data?.getString("key")
+Avoid multiple conversions between formats - parse directly from streams.
 
-// - GOOD - Direct stream parsing
+```kotlin
+// ❌ Bad - multiple conversions
+val jsonString = response.body?.string()
+val data = JSONObject(jsonString)
+
+// ✅ Good - direct stream parsing
 val data = JSONObject(response.body?.charStream())
 ```
 
 **3. Cache Parsing Results**
 
-```kotlin
-class DataRepository {
-    private var cachedData: List<Item>? = null
-    private var cacheTimestamp: Long = 0
-    private val CACHE_DURATION = 5 * 60 * 1000  // 5 minutes
-
-    suspend fun getData(): List<Item> {
-        // Return cached if fresh
-        if (cachedData != null &&
-            System.currentTimeMillis() - cacheTimestamp < CACHE_DURATION) {
-            return cachedData!!
-        }
-
-        // Parse and cache
-        val data = api.fetchData()
-        cachedData = parseData(data)
-        cacheTimestamp = System.currentTimeMillis()
-
-        return cachedData!!
-    }
-}
-```
+Cache parsed data for reuse, especially for frequently accessed data.
 
 **4. Use Specialized Libraries**
 
-**Moshi - Fast and efficient:**
+Performance comparison (1000 objects):
+- **Moshi**: ~15ms (fastest)
+- **kotlinx.serialization**: ~18ms (Kotlin-native)
+- **Gson**: ~25ms (flexible)
+- **org.json**: ~45ms (standard Android API)
 
+**Moshi** - best for performance:
 ```kotlin
-// build.gradle
-implementation 'com.squareup.moshi:moshi:1.15.0'
-implementation 'com.squareup.moshi:moshi-kotlin:1.15.0'
-
 @JsonClass(generateAdapter = true)
-data class User(
-    val id: Int,
-    val name: String,
-    val email: String
-)
-
-val moshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
-    .build()
-
-val adapter = moshi.adapter(User::class.java)
-val user = adapter.fromJson(jsonString)
-```
-
-**Gson - Flexible:**
-
-```kotlin
-implementation 'com.google.code.gson:gson:2.10.1'
-
 data class User(val id: Int, val name: String)
 
-val gson = Gson()
-val user = gson.fromJson(jsonString, User::class.java)
+val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+val user = moshi.adapter(User::class.java).fromJson(jsonString)
 ```
 
-**kotlinx.serialization - Native Kotlin:**
-
+**kotlinx.serialization** - for Kotlin-first projects:
 ```kotlin
 @Serializable
 data class User(val id: Int, val name: String)
 
-val json = Json { ignoreUnknownKeys = true }
-val user = json.decodeFromString<User>(jsonString)
+val user = Json.decodeFromString<User>(jsonString)
 ```
 
-**Performance Comparison:**
+**5. Lazy Parse Large Lists**
+
+Use Sequence to process only needed elements:
 
 ```kotlin
-// Benchmark results (1000 objects)
-// Moshi:                 ~15ms
-// kotlinx.serialization: ~18ms
-// Gson:                  ~25ms
-// org.json:              ~45ms
-// Jackson:               ~30ms
-```
-
-**5. Optimize Large Lists:**
-
-```kotlin
-// - BAD - Parse all at once
-fun parseAllUsers(json: String): List<User> {
+// ❌ Bad - parses entire list
+fun parseAll(json: String): List<User> {
     val array = JSONArray(json)
-    return (0 until array.length()).map {
-        parseUser(array.getJSONObject(it))
-    }
+    return (0 until array.length()).map { parseUser(array.getJSONObject(it)) }
 }
 
-// - GOOD - Lazy parsing with sequence
-fun parseUsersLazy(json: String): Sequence<User> = sequence {
+// ✅ Good - lazy parsing
+fun parseLazy(json: String): Sequence<User> = sequence {
     val array = JSONArray(json)
-    for (i in 0 until array.length()) {
-        yield(parseUser(array.getJSONObject(i)))
-    }
+    for (i in 0 until array.length()) yield(parseUser(array.getJSONObject(i)))
 }
 
-// Use only what you need
-parseUsersLazy(json).take(10).toList()
+parseLazy(json).take(10).toList()  // Parses only first 10
 ```
 
-**6. Background Parsing:**
+**6. Background Threads**
+
+Parse data on background threads to keep UI responsive:
 
 ```kotlin
-class DataViewModel : ViewModel() {
-    fun loadData(jsonString: String) {
-        viewModelScope.launch(Dispatchers.Default) {
-            // Parse on background thread
-            val data = parseData(jsonString)
-
-            withContext(Dispatchers.Main) {
-                // Update UI on main thread
-                _dataLiveData.value = data
-            }
-        }
-    }
+viewModelScope.launch(Dispatchers.Default) {
+    val data = parseData(jsonString)  // ✅ Parse in background
+    withContext(Dispatchers.Main) { _dataLiveData.value = data }
 }
 ```
 
-**7. Incremental Parsing:**
+**7. Incremental Parsing**
+
+For large JSON streams use JsonReader:
 
 ```kotlin
-// For large JSON streams
-class IncrementalParser {
-    fun parseStream(inputStream: InputStream) = flow {
-        JsonReader(inputStream.reader()).use { reader ->
-            reader.beginArray()
-            while (reader.hasNext()) {
-                val item = parseItem(reader)
-                emit(item)  // Emit one by one
-            }
-            reader.endArray()
-        }
+fun parseStream(stream: InputStream) = flow {
+    JsonReader(stream.reader()).use { reader ->
+        reader.beginArray()
+        while (reader.hasNext()) emit(parseItem(reader))  // ✅ Item by item
+        reader.endArray()
     }
-}
-
-// Usage
-parserparseStream(stream).collect { item ->
-    // Process items as they arrive
-    displayItem(item)
 }
 ```
 
 **Optimization Summary:**
 
-| Optimization           | Benefit          | Use Case            |
-| ---------------------- | ---------------- | ------------------- |
-| **Streaming**          | Lower memory     | Large documents     |
-| **Reduce conversions** | Faster parsing   | String heavy        |
-| **Caching**            | Avoid re-parsing | Frequently accessed |
-| **Moshi/kotlinx**      | Speed            | JSON parsing        |
-| **Lazy parsing**       | Memory efficient | Large lists         |
-| **Background**         | UI responsive    | Heavy parsing       |
-
-**Summary:**
-
-1. Use streaming (XmlPullParser vs DOM)
-2. Reduce string conversions
-3. Cache parsing results for reuse
-4. Use specialized libraries (Moshi, Gson, kotlinx.serialization)
-5. Parse large lists lazily
-6. Parse on background thread
-
-## Ответ (RU)
-
-### Оптимизация парсинга в Android
-
-**1. Потоковая обработка (Streaming)**
-
-Используйте XmlPullParser вместо DOM для XML. Streaming парсер обрабатывает документ последовательно, не загружая все в память сразу.
-
-```kotlin
-// ❌ ПЛОХО - DOM загружает весь документ
-val factory = DocumentBuilderFactory.newInstance()
-val builder = factory.newDocumentBuilder()
-val doc = builder.parse(inputStream)  // Весь документ в памяти
-
-// ✅ ХОРОШО - Streaming парсер
-val parser = Xml.newPullParser()
-parser.setInput(inputStream, null)
-
-while (parser.next() != XmlPullParser.END_DOCUMENT) {
-    if (parser.eventType == XmlPullParser.START_TAG) {
-        when (parser.name) {
-            "item" -> parseItem(parser)
-        }
-    }
-}
-```
-
-**2. Уменьшение преобразований строк**
-
-Избегайте множественных конвертаций между форматами. Парсите напрямую из потока.
-
-**3. Кеширование результатов**
-
-Кешируйте распарсенные данные для повторного использования, особенно для часто используемых данных.
-
-**4. Специализированные библиотеки**
-
-**Сравнение производительности библиотек (1000 объектов):**
-- Moshi: ~15ms (самая быстрая)
-- kotlinx.serialization: ~18ms
-- Gson: ~25ms
-- org.json: ~45ms (самая медленная)
-- Jackson: ~30ms
-
-**Moshi - быстрая и эффективная:**
-
-```kotlin
-@JsonClass(generateAdapter = true)
-data class User(
-    val id: Int,
-    val name: String,
-    val email: String
-)
-
-val moshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
-    .build()
-
-val adapter = moshi.adapter(User::class.java)
-val user = adapter.fromJson(jsonString)
-```
-
-**kotlinx.serialization - нативная для Kotlin:**
-
-```kotlin
-@Serializable
-data class User(val id: Int, val name: String)
-
-val json = Json { ignoreUnknownKeys = true }
-val user = json.decodeFromString<User>(jsonString)
-```
-
-**5. Ленивый парсинг больших списков**
-
-Используйте Sequence для lazy обработки больших списков:
-
-```kotlin
-// ❌ ПЛОХО - парсит все сразу
-fun parseAllUsers(json: String): List<User> {
-    val array = JSONArray(json)
-    return (0 until array.length()).map {
-        parseUser(array.getJSONObject(it))
-    }
-}
-
-// ✅ ХОРОШО - ленивый парсинг
-fun parseUsersLazy(json: String): Sequence<User> = sequence {
-    val array = JSONArray(json)
-    for (i in 0 until array.length()) {
-        yield(parseUser(array.getJSONObject(i)))
-    }
-}
-
-// Используем только то, что нужно
-parseUsersLazy(json).take(10).toList()
-```
-
-**6. Фоновый парсинг**
-
-Парсите данные в фоновом потоке с помощью coroutines:
-
-```kotlin
-class DataViewModel : ViewModel() {
-    fun loadData(jsonString: String) {
-        viewModelScope.launch(Dispatchers.Default) {
-            // Парсинг в фоновом потоке
-            val data = parseData(jsonString)
-
-            withContext(Dispatchers.Main) {
-                // Обновление UI в главном потоке
-                _dataLiveData.value = data
-            }
-        }
-    }
-}
-```
-
-**7. Инкрементальный парсинг**
-
-Для больших JSON потоков используйте инкрементальный парсинг:
-
-```kotlin
-class IncrementalParser {
-    fun parseStream(inputStream: InputStream) = flow {
-        JsonReader(inputStream.reader()).use { reader ->
-            reader.beginArray()
-            while (reader.hasNext()) {
-                val item = parseItem(reader)
-                emit(item)  // Отправляем по одному
-            }
-            reader.endArray()
-        }
-    }
-}
-
-// Использование
-parser.parseStream(stream).collect { item ->
-    // Обрабатываем элементы по мере поступления
-    displayItem(item)
-}
-```
-
-### Таблица оптимизаций
-
-| Оптимизация | Выгода | Случай использования |
-|-------------|--------|---------------------|
-| **Streaming** | Меньше памяти | Большие документы |
-| **Уменьшение конвертаций** | Быстрее парсинг | Много строк |
-| **Кеширование** | Избегание повторного парсинга | Частый доступ |
-| **Moshi/kotlinx** | Скорость | Парсинг JSON |
-| **Lazy парсинг** | Эффективность памяти | Большие списки |
-| **Фоновый парсинг** | Отзывчивость UI | Тяжелый парсинг |
-
-### Резюме
-
-1. Используйте streaming (XmlPullParser вместо DOM) для больших файлов
-2. Уменьшайте количество преобразований строк
-3. Кешируйте результаты парсинга для повторного использования
-4. Используйте специализированные библиотеки (Moshi - самая быстрая, kotlinx.serialization - нативная для Kotlin)
-5. Парсите большие списки лениво с помощью Sequence
-6. Парсите в фоновом потоке (Dispatchers.Default)
-7. Используйте инкрементальный парсинг для потоков данных
+| Technique | Benefit | Use Case |
+|-----------|---------|----------|
+| Streaming | Lower memory | Large XML/JSON |
+| Fewer conversions | Faster | String data |
+| Caching | Avoid re-parsing | Frequent access |
+| Moshi/kotlinx | Speed | JSON parsing |
+| Lazy parsing | Memory efficient | Large lists |
+| Background threads | UI responsive | Heavy parsing |
 
 ---
 
 ## Follow-ups
 
--   How do you choose between Gson, Moshi, and Jackson for JSON parsing performance?
--   What are the memory implications of using streaming vs DOM parsing for large XML files?
--   How can you implement caching strategies for parsed data to avoid repeated parsing?
+- How would you benchmark parsing performance for different JSON libraries in your production app?
+- What trade-offs exist between Moshi's compile-time code generation and Gson's reflection-based approach?
+- How do you handle parsing errors and partial data in streaming parsers?
+- When should you use JsonReader directly instead of higher-level libraries like Moshi or Gson?
 
 ## References
 
--   `https://github.com/square/moshi` — Moshi JSON library
--   `https://github.com/google/gson` — Gson library
--   `https://developer.android.com/topic/performance` — Android performance guide
+- https://github.com/square/moshi - Moshi JSON library
+- https://github.com/google/gson - Gson library
+- https://developer.android.com/topic/performance - Android performance guide
 
 ## Related Questions
 
-### Backend Concepts
+### Prerequisites (Easier)
+- [[q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium]] - UI updates after data changes
 
--   [[q-virtual-tables-disadvantages--backend--medium]] - Performance
--   [[q-sql-join-algorithms-complexity--backend--hard]] - Performance
+### Related (Same Level)
+- Android performance optimization patterns
+- Memory profiling techniques for data-heavy applications
 
-### Kotlin Language Features
-
--   [[q-deferred-async-patterns--kotlin--medium]] - Performance
--   [[q-coroutine-performance-optimization--kotlin--hard]] - Performance
--   [[q-channel-buffering-strategies--kotlin--hard]] - Performance
--   [[q-custom-dispatchers-limited-parallelism--kotlin--hard]] - Performance
--   [[q-kotlin-inline-functions--kotlin--medium]] - Performance
+### Advanced (Harder)
+- Custom serialization adapters for complex data structures
+- Protocol buffer alternatives for binary serialization

@@ -17,14 +17,11 @@ moc: moc-android
 related:
   - q-android-performance-measurement-tools--android--medium
   - q-app-startup-optimization--android--medium
-  - q-baseline-profiles-android--android--medium
+sources: []
 created: 2025-10-11
-updated: 2025-10-15
+updated: 2025-01-27
 tags: [android/gradle, android/performance-startup, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:54 pm
 ---
-
 # Вопрос (RU)
 > Как оптимизировать Android-приложение с помощью Baseline Profiles?
 
@@ -35,168 +32,179 @@ date modified: Saturday, October 25th 2025, 4:52:54 pm
 
 ## Ответ (RU)
 
-### Что Такое Baseline Profiles
+### Концепция
 
-**Теория**: Baseline Profiles сообщают Android Runtime (ART), какие пути кода компилировать ahead-of-time (AOT) для более быстрого запуска и плавной работы.
+**Baseline Profiles** — механизм AOT-компиляции критических путей кода при установке приложения. ART компилирует указанные методы и классы заранее, минуя JIT, что ускоряет холодный старт на 30-40% и снижает количество пропущенных кадров.
 
 **Как работает**:
-- Без профиля: Запуск → Интерпретация кода → JIT компиляция горячего кода → Постепенное улучшение
-- С профилем: Установка → AOT компиляция критического кода → Запуск → Сразу быстрое выполнение
-
-**Влияние на производительность**:
-- Холодный запуск: на 30-40% быстрее
-- Уменьшение рывков: на 15-20% меньше пропущенных кадров
-- Начальный рендеринг: на 10-15% быстрее
-- Стабильная производительность с первого запуска
+- Без профиля: Запуск → Интерпретация → JIT по мере использования
+- С профилем: Установка → AOT критического кода → Запуск сразу оптимизирован
 
 ### Реализация
 
-(См. код и детали в английской секции - структура проекта, конфигурация модулей, генерация профиля, измерение производительности, облачные профили)
-
-### Лучшие Практики
-
-**Генерация профиля**:
-- Покрывать только критические пользовательские сценарии
-- Тестировать на реальных устройствах, не эмуляторах
-- Держать размер профиля меньше 200KB
-- Перегенерировать при major релизах
-
-**Мониторинг производительности**:
-- Измерять до/после с помощью Macrobenchmark
-- Мониторить установку профиля в продакшене
-- Отслеживать метрики запуска в аналитике
-- Комбинировать с другими оптимизациями запуска
-
-**Интеграция CI/CD**:
-- Автоматизировать генерацию профиля в CI
-- Хранить baseline-prof.txt под версионным контролем
-- Тестировать установку профиля в staging окружении
-
-## Answer (EN)
-
-### What Are Baseline Profiles
-
-**Theory**: Baseline Profiles tell Android Runtime (ART) which code paths to ahead-of-time (AOT) compile for faster startup and smoother runtime performance. Understanding c-jit-aot-compilation is essential for optimization.
-
-**How It Works**:
-- Without Profile: App starts → Interpret code → JIT compile hot code → Gradual improvement
-- With Profile: App installs → AOT compile critical code → App starts → Fast execution immediately
-
-**Performance Impact**:
-- Cold startup: 30-40% faster
-- Jank reduction: 15-20% fewer dropped frames
-- Initial rendering: 10-15% faster
-- Consistent performance from first launch
-
-### Implementation Setup
-
-**Project Structure**:
-```
-MyApp/
- app/                    # Main app module
- baseline-profile/       # Profile generation module
-    build.gradle.kts
-    src/androidTest/java/
-        BaselineProfileGenerator.kt
-```
-
-**Baseline Profile Module (build.gradle.kts)**:
+**1. Структура модуля профилирования** (baseline-profile/build.gradle.kts):
 ```kotlin
-// Theory: Configure test module for profile generation
+// ✅ Модуль тестирования для генерации профиля
 plugins {
     id("com.android.test")
-    id("org.jetbrains.kotlin.android")
     id("androidx.baselineprofile")
 }
 
 android {
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
     targetProjectPath = ":app"
     testOptions.managedDevices.devices {
         create<ManagedVirtualDevice>("pixel6Api33") {
             device = "Pixel 6"
             apiLevel = 33
-            systemImageSource = "aosp"
         }
     }
 }
-
-dependencies {
-    implementation("androidx.test.ext:junit:1.1.5")
-    implementation("androidx.test.espresso:espresso-core:3.5.1")
-    implementation("androidx.test.uiautomator:uiautomator:2.2.0")
-    implementation("androidx.benchmark:benchmark-macro-junit4:1.2.0")
-}
 ```
 
-**Profile Generator**:
+**2. Генератор профиля**:
 ```kotlin
-// Theory: Test critical user journeys to generate profile
 @RunWith(AndroidJUnit4::class)
 class BaselineProfileGenerator {
-
     @get:Rule
-    val baselineProfileRule = BaselineProfileRule()
+    val rule = BaselineProfileRule()
 
     @Test
-    fun generate() = baselineProfileRule.collect(
+    fun generate() = rule.collect(
         packageName = "com.example.app"
     ) {
-        // Critical user journey: app launch to main screen
+        // ✅ Покрывайте только критические сценарии запуска
         pressHome()
         startActivityAndWait()
 
-        // Navigate through key screens
         device.findObject(By.text("Home")).click()
         device.findObject(By.text("Profile")).click()
-        device.findObject(By.text("Settings")).click()
-
-        // Return to home
-        device.pressBack()
-        device.pressBack()
+        // ❌ Не добавляйте редкие user flows
     }
 }
 ```
 
-**App Module Configuration**:
+**3. Конфигурация app модуля**:
 ```kotlin
-// Theory: Enable baseline profile consumption in main app
+// ✅ Включение применения профиля
 plugins {
-    id("com.android.application")
+    id("androidx.baselineprofile")
+}
+
+baselineProfile {
+    managedDevices += "pixel6Api33"
+}
+```
+
+**4. Мониторинг в production**:
+```kotlin
+// ✅ Проверяйте установку профиля
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    val status = ProfileVerifier.getCompilationStatusAsync().get()
+    when (status.profileInstallResultCode) {
+        CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> {
+            // Профиль применён
+        }
+        CompilationStatus.RESULT_CODE_NO_PROFILE -> {
+            // Профиль отсутствует
+        }
+    }
+}
+```
+
+### Лучшие Практики
+
+- Покрывайте только критические пути (запуск, главный экран)
+- Тестируйте на реальных устройствах
+- Держите размер профиля < 200KB
+- Перегенерируйте при крупных изменениях кодовой базы
+- Измеряйте эффект через [[q-android-performance-measurement-tools--android--medium|Macrobenchmark]]
+- Автоматизируйте генерацию в CI/CD
+
+## Answer (EN)
+
+### Concept
+
+**Baseline Profiles** instruct Android Runtime (ART) to AOT-compile critical code paths at install time, bypassing JIT interpretation. This achieves 30-40% faster cold startup and reduces jank by pre-optimizing hot methods.
+
+**How It Works**:
+- Without Profile: App starts → Interpret code → JIT compile gradually
+- With Profile: Install → AOT compile critical paths → Launch immediately optimized
+
+### Implementation
+
+**1. Profile Generation Module** (baseline-profile/build.gradle.kts):
+```kotlin
+// ✅ Test module for generating baseline profile
+plugins {
+    id("com.android.test")
     id("androidx.baselineprofile")
 }
 
 android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+    targetProjectPath = ":app"
+    testOptions.managedDevices.devices {
+        create<ManagedVirtualDevice>("pixel6Api33") {
+            device = "Pixel 6"
+            apiLevel = 33
         }
     }
 }
+```
 
-baselineProfile {
-    // This specifies the managed devices to use that you run the tests on
-    managedDevices += "pixel6Api33"
-    // This enables using connected devices to generate profiles
-    useConnectedDevices = false
+**2. Profile Generator**:
+```kotlin
+@RunWith(AndroidJUnit4::class)
+class BaselineProfileGenerator {
+    @get:Rule
+    val rule = BaselineProfileRule()
+
+    @Test
+    fun generate() = rule.collect(
+        packageName = "com.example.app"
+    ) {
+        // ✅ Cover only critical startup flows
+        pressHome()
+        startActivityAndWait()
+
+        device.findObject(By.text("Home")).click()
+        device.findObject(By.text("Profile")).click()
+        // ❌ Don't include rare user journeys
+    }
 }
 ```
 
-### Performance Measurement
-
-**Macrobenchmark Integration**:
+**3. App Module Configuration**:
 ```kotlin
-// Theory: Measure startup performance with and without profiles
+// ✅ Enable profile consumption
+plugins {
+    id("androidx.baselineprofile")
+}
+
+baselineProfile {
+    managedDevices += "pixel6Api33"
+}
+```
+
+**4. Production Monitoring**:
+```kotlin
+// ✅ Verify profile installation
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    val status = ProfileVerifier.getCompilationStatusAsync().get()
+    when (status.profileInstallResultCode) {
+        CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> {
+            // Profile applied successfully
+        }
+        CompilationStatus.RESULT_CODE_NO_PROFILE -> {
+            // Profile missing
+        }
+    }
+}
+```
+
+**5. Benchmarking**:
+```kotlin
 @RunWith(AndroidJUnit4::class)
 class StartupBenchmark {
-
     @get:Rule
     val benchmarkRule = MacrobenchmarkRule()
 
@@ -204,7 +212,6 @@ class StartupBenchmark {
     fun startup() = benchmarkRule.measureRepeated(
         packageName = "com.example.app",
         metrics = listOf(StartupTimingMetric()),
-        iterations = 5,
         startupMode = StartupMode.COLD
     ) {
         pressHome()
@@ -213,87 +220,21 @@ class StartupBenchmark {
 }
 ```
 
-**Production Monitoring**:
-```kotlin
-// Theory: Monitor profile installation in production
-class ProfileMonitor {
-    fun checkProfileStatus(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val status = ProfileVerifier.getCompilationStatusAsync().get()
-
-            when (status.profileInstallResultCode) {
-                ProfileVerifier.CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> {
-                    // Profile successfully installed and compiled
-                    logMetric("profile_installed", 1)
-                }
-                ProfileVerifier.CompilationStatus.RESULT_CODE_NO_PROFILE -> {
-                    // No profile found
-                    logMetric("profile_missing", 1)
-                }
-                else -> {
-                    logMetric("profile_unknown_status", 1)
-                }
-            }
-        }
-    }
-}
-```
-
-### Cloud Profiles
-
-**Setup Cloud Profiles**:
-```kotlin
-// Theory: Enable cloud profiles for Play Store distribution
-dependencies {
-    implementation("androidx.profileinstaller:profileinstaller:1.3.1")
-}
-```
-
-**Cloud Profile Monitoring**:
-```kotlin
-// Theory: Monitor cloud profile installation
-class CloudProfileMonitor {
-    fun checkCloudProfileInstallation(context: Context) {
-        val status = ProfileInstaller.writeProfile(context)
-        when (status) {
-            ProfileInstaller.RESULT_INSTALL_SUCCESS -> {
-                Log.d("Profile", "Cloud profile installed successfully")
-            }
-            ProfileInstaller.RESULT_ALREADY_INSTALLED -> {
-                Log.d("Profile", "Cloud profile already installed")
-            }
-            else -> {
-                Log.w("Profile", "Cloud profile installation failed: $status")
-            }
-        }
-    }
-}
-```
-
 ### Best Practices
 
-**Profile Generation**:
-- Cover critical user journeys only
-- Test on real devices, not emulators
-- Keep profile size under 200KB
-- Regenerate with major releases
-
-**Performance Monitoring**:
-- Measure before/after with Macrobenchmark
-- Monitor profile installation in production
-- Track startup metrics in analytics
-- Combine with other startup optimizations
-
-**CI/CD Integration**:
-- Automate profile generation in CI
-- Version control baseline-prof.txt
-- Test profile installation in staging
+- Focus on critical paths (startup, main screen navigation)
+- Test on real devices for accurate profiling
+- Keep profile size < 200KB
+- Regenerate after significant code changes
+- Measure impact with [[q-android-performance-measurement-tools--android--medium|Macrobenchmark]]
+- Automate generation in CI/CD pipeline
 
 ## Follow-ups
 
-- How do you measure the impact of baseline profiles in production?
-- What are the differences between baseline profiles and cloud profiles?
-- How do you handle profile updates across app versions?
+- How does profile size correlate with compile time and app size?
+- What's the trade-off between baseline profiles and R8 full mode optimization?
+- How do you validate profile effectiveness for different Android API levels?
+- What happens when a baseline profile references methods removed during ProGuard/R8 shrinking?
 
 ## References
 
@@ -302,17 +243,13 @@ class CloudProfileMonitor {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-baseline-profiles-android--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
-- [[q-app-startup-library--android--medium]]
+- [[q-app-startup-optimization--android--medium]]
 
 ### Related (Same Level)
 - [[q-app-startup-optimization--android--medium]]
-- [[q-android-build-optimization--android--medium]]
-- [[q-jit-vs-aot-compilation--android--medium]]
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
-- [[q-android-runtime-art--android--medium]]
-- [[q-offline-first-architecture--android--hard]]
+- Understanding ART compilation strategies
+- Analyzing dex2oat compiler output for profile verification
 

@@ -3,32 +3,21 @@ id: 20251020-200000
 title: Design Instagram Stories / Проектирование Instagram Stories
 aliases: [Design Instagram Stories, Проектирование Instagram Stories]
 topic: android
-subtopics:
-  - architecture-clean
-  - files-media
-  - service
-
+subtopics: [architecture-clean, files-media, service]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
-source: https://developer.android.com/guide/topics/media
-source_note: Android media stack overview
+language_tags: [en, ru]
+sources: [https://developer.android.com/guide/topics/media]
 status: draft
 moc: moc-android
 related:
   - q-data-sync-unstable-network--android--hard
   - q-database-optimization-android--android--medium
-  - q-deep-link-vs-app-link--android--medium
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-01-27
 tags: [android/architecture-clean, android/files-media, android/service, cdn, difficulty/hard, media, stories]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:08 pm
 ---
-
 # Вопрос (RU)
 > Как спроектировать Instagram Stories для Android?
 
@@ -38,133 +27,148 @@ date modified: Saturday, October 25th 2025, 4:52:08 pm
 ---
 ## Ответ (RU)
 
-Instagram Stories включает захват и обработку медиа, загрузку, доставку через CDN, просмотр, счетчики/реакции в реальном времени и автоматическое истечение через 24 часа.
+Instagram Stories — система для создания, загрузки, воспроизведения и автоматического удаления медиа через 24ч.
 
-### Требования
-- Функциональные: создание фото/видео ≤15s, редактор (фильтры/стикеры/текст), просмотр, индикаторы seen/unseen, ответы в DM, близкие друзья, highlights, свайп-навигация, счетчики просмотров.
-- Нефункциональные: быстрая загрузка (<5s при хорошем канале), плавное воспроизведение, устойчивость к плохой сети, экономия батареи/памяти, безопасность и приватность.
+### Архитектура
 
-### Архитектура (высокий уровень)
-- Клиент Android: камера, редактор, загрузчик, просмотрщик, кеш/предзагрузка, офлайн-очередь, фоновые задачи (WorkManager).
-- Backend API: прием загрузок, транскодирование, генерация превью, TTL/истечение, ACL, счетчики/аналитика.
-- Хранилище: объектное (S3/GCS) + CDN для доставки; БД для метаданных; кэш (Redis) для фидов/счетчиков.
-- Реал-тайм: Pub/Sub/WebSocket для обновлений просмотров/реакций и инвалидации кеша.
+**Android-клиент:**
+- [[c-clean-architecture]]: Domain (Story entity, TTL logic), Data (Repository для загрузки/кеша), Presentation (MVVM для камеры и просмотра)
+- [[c-workmanager]] для надежной загрузки с повторами и очистки истекших
+- ExoPlayer для видео, Coil для изображений
+- Многоуровневый кеш (Memory/Disk/Network)
 
-### Клиент Android: Потоки
-1. Создание → обработка → загрузка:
-   - Изображение: ресайз ≤1080x1920, JPEG/WEBP, генерация thumbnail.
-   - Видео: обрезка ≤15s, H.264/HEVC, bitrate ~2Mbps, thumbnail первого кадра.
-   - Мета-данные: userId, expiresAt=now+24h, mediaType, размеры.
-   - Надежная отправка: WorkManager, повтор с backoff, возобновление.
-2. Просмотр:
-   - ExoPlayer (видео) + Coil (картинки), прогресс-индикаторы.
-   - Предзагрузка: текущая + следующие 2–3 stories; многоуровневое кеширование (Memory→Disk→Network).
-   - Управление энергией: пауза в фоне, остановка при сворачивании.
-3. Офлайн:
-   - Очередь загрузки, локальные метаданные, синхронизация при онлайне.
+**Backend:**
+- API: загрузка, транскодирование, TTL-джобы, ACL
+- Хранилище: S3/GCS + CDN; метаданные в БД
+- Realtime: WebSocket/Pub-Sub для счетчиков просмотров
 
-### Медиа-пайплайн (сервер)
-- Транскодирование видео в HLS/DASH профили (мобильные битрейты), хранение мастер-файла и адаптивных слоев.
-- Генерация preview/thumbnail; оптимизация изображений под viewport.
-- Подписи URL (signed URLs) для защищенной доставки, короткий TTL на ссылки.
+### Ключевые потоки
 
-### Истечение (TTL 24h)
-- На сервере: периодическая джоб/streaming TTL (delete marker) + асинхронное удаление объектов, инвалидация CDN.
-- На клиенте: периодическая очистка локальных файлов/кеша и метаданных.
+**Создание и загрузка:**
 
 ```kotlin
-// WorkManager: периодическая чистка локально
-class StoryTtlWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
-  override suspend fun doWork(): Result { /* delete expired local media + DB */ return Result.success() }
+// ✅ Надежная загрузка с повторами
+class UploadStoryWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result =
+    try {
+      val uri = inputData.getString("uri")!!
+      val compressed = compressMedia(uri) // JPEG/WEBP, H.264, ≤2Mbps
+      storyRepo.upload(compressed, expiresAt = now() + 24.hours)
+      Result.success()
+    } catch (e: Exception) {
+      if (runAttemptCount < 3) Result.retry() else Result.failure()
+    }
 }
 ```
 
-### Приватность, Доступ, Безопасность
-- ACL уровней: автор, близкие друзья, все подписчики.
-- Подписанные ссылки (CDN), проверка токенов, ограничение скорости, защита от горячих ссылок.
-- Валидация входящих параметров deep/app links.
+**Просмотр:**
+- Предзагрузка текущей + 2 следующих stories
+- OkHttp DiskCache + память для превью
+- Пауза ExoPlayer в фоне для экономии батареи
 
-### Масштабирование И Производительность
-- CDN для медиа; кэш фидов и списков сторис; денормализация «кольца» seen/unseen.
-- Партиционирование по userId/time; очередь фона для транскодирования/TTL.
-- Backpressure на загрузки; лимиты размера/длительности; сжатие на клиенте.
+**TTL (24ч):**
 
-### Метрики И Тестирование
-- Время загрузки, время к первому кадру, процент буферизации, ошибки загрузки/воспроизведения.
-- Нагрузочное тестирование CDN/транскодера; тесты на плохой сети; battery profile.
+```kotlin
+// ✅ Периодическая очистка истекших
+class CleanupExpiredWorker : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result {
+    storyRepo.deleteExpired(before = now())
+    cacheManager.evict { it.expiresAt < now() }
+    return Result.success()
+  }
+}
+```
+
+### Оптимизация
+
+- **Offline:** очередь в WorkManager, локальная БД с метаданными
+- **CDN:** подписанные URL с коротким TTL
+- **Скейлинг:** партиционирование по userId, денормализация seen/unseen ring
 
 ## Answer (EN)
 
-Instagram Stories spans capture/processing, upload, CDN delivery, viewing, realtime counters/reactions, and 24h expiration.
+Instagram Stories is a system for creating, uploading, playing, and auto-deleting media after 24h.
 
-### Requirements
-- Functional: photo/video ≤15s, editor (filters/stickers/text), viewing, seen/unseen, DM replies, close friends, highlights, swipe nav, view counters.
-- Non-functional: fast upload (<5s on good network), smooth playback, network resilience, battery/memory efficiency, security/privacy.
+### Architecture
 
-### Architecture (high-level)
-- Android client: camera, editor, uploader, viewer, cache/preload, offline queue, background jobs (WorkManager).
-- Backend API: ingest, transcode, previews, TTL/expiration, ACL, counters/analytics.
-- Storage: object store (S3/GCS) + CDN; DB for metadata; cache (Redis) for feeds/counters.
-- Realtime: Pub/Sub/WebSocket for view/reaction updates and cache invalidation.
+**Android client:**
+- [[c-clean-architecture]]: Domain (Story entity, TTL logic), Data (Repository for upload/cache), Presentation (MVVM for camera and viewer)
+- [[c-workmanager]] for reliable upload with retries and cleanup of expired stories
+- ExoPlayer for video, Coil for images
+- Multi-level caching (Memory/Disk/Network)
 
-### Android Client Flows
-1. Create → process → upload:
-   - Image: resize ≤1080x1920, JPEG/WEBP, thumbnail.
-   - Video: trim ≤15s, H.264/HEVC ~2Mbps, first-frame thumbnail.
-   - Metadata: userId, expiresAt=now+24h, mediaType, dimensions.
-   - Reliability: WorkManager, retry with backoff, resume uploads.
-2. Playback:
-   - ExoPlayer for video, Coil for images, progress indicators.
-   - Preload current + next 2–3; multi-level caching (Memory→Disk→Network).
-   - Power: pause in background, stop on app background.
-3. Offline:
-   - Upload queue, local metadata, sync on reconnect.
+**Backend:**
+- API: upload, transcode, TTL jobs, ACL
+- Storage: S3/GCS + CDN; metadata in DB
+- Realtime: WebSocket/Pub-Sub for view counters
 
-### Media Pipeline (server)
-- Transcode video to HLS/DASH mobile renditions; keep master and adaptive layers.
-- Generate previews/thumbnails; optimize images for viewport.
-- Signed URLs with short TTL; secure delivery via CDN.
+### Key Flows
 
-### Expiration (24h TTL)
-- Server: periodic job/streaming TTL marker + async object deletion; CDN invalidation.
-- Client: periodic local cleanup of files/cache and metadata.
+**Create and Upload:**
 
 ```kotlin
-// WorkManager: periodic local cleanup
-class StoryTtlWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
-  override suspend fun doWork(): Result { /* delete expired local media + DB */ return Result.success() }
+// ✅ Reliable upload with retries
+class UploadStoryWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result =
+    try {
+      val uri = inputData.getString("uri")!!
+      val compressed = compressMedia(uri) // JPEG/WEBP, H.264, ≤2Mbps
+      storyRepo.upload(compressed, expiresAt = now() + 24.hours)
+      Result.success()
+    } catch (e: Exception) {
+      if (runAttemptCount < 3) Result.retry() else Result.failure()
+    }
 }
 ```
 
-### Privacy, Access, Security
-- ACL tiers: author, close friends, all followers.
-- Signed URLs (CDN), token checks, rate limits, hotlink protection.
-- Validate deep/app link parameters.
+**Playback:**
+- Preload current + next 2 stories
+- OkHttp DiskCache + memory for previews
+- Pause ExoPlayer in background to save battery
 
-### Scalability & Performance
-- CDN for media; cache rings/feeds; denormalize seen/unseen ring.
-- Partition by userId/time; background queues for transcode/TTL.
-- Client-side compression; enforce size/duration limits; backpressure uploads.
+**TTL (24h):**
 
-### Metrics & Testing
-- Upload time, time-to-first-frame, rebuffer ratio, upload/playback errors.
-- Load test CDN/transcoder; poor-network tests; battery profiling.
+```kotlin
+// ✅ Periodic cleanup of expired stories
+class CleanupExpiredWorker : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result {
+    storyRepo.deleteExpired(before = now())
+    cacheManager.evict { it.expiresAt < now() }
+    return Result.success()
+  }
+}
+```
 
-**See also:** c-mvvm, c-clean-architecture
+### Optimization
 
+- **Offline:** WorkManager queue, local DB for metadata
+- **CDN:** signed URLs with short TTL
+- **Scaling:** partition by userId, denormalize seen/unseen ring
 
 ## Follow-ups
-- How to order story buckets efficiently (ranking, freshness, edges)?
-- How to handle abusive content detection at scale?
-- How to minimize rebuffering on low bandwidth?
+
+- How to handle video transcoding failures and retry strategies?
+- What caching strategy minimizes bandwidth while ensuring smooth playback?
+- How to implement efficient preloading without draining battery?
+- What security measures prevent unauthorized access to expired stories?
 
 ## References
-- https://exoplayer.dev/
+
+- [[c-clean-architecture]]
+- [[c-workmanager]]
+- https://developer.android.com/guide/topics/media
 - https://developer.android.com/guide/background
-- https://developer.android.com/guide/topics/media/mediaplayer
-- https://cloud.google.com/cdn
 
 ## Related Questions
-- [[q-deep-link-vs-app-link--android--medium]]
+
+### Prerequisites
+- Understanding of WorkManager retry policies and constraints
+- ExoPlayer basics for video playback
+
+### Related
 - [[q-data-sync-unstable-network--android--hard]]
 - [[q-database-optimization-android--android--medium]]
+
+### Advanced
+- Design a CDN caching strategy for ephemeral content
+- Implement real-time view counters at Instagram scale

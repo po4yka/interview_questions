@@ -1,511 +1,222 @@
 ---
-id: 20251012-12271163
+id: 20251027-120000
 title: "Performance Optimization Android / Performance Оптимизация Android"
+aliases: ["Performance Optimization Android", "Performance Оптимизация Android"]
 topic: android
+subtopics: [performance-rendering, performance-memory, performance-battery]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-recyclerview-diffutil-advanced--recyclerview--medium, q-kotlin-context-receivers--kotlin--hard, q-notification-channels-android--android--medium]
+related: [q-baseline-profiles-android--android--medium, q-notification-channels-android--android--medium]
 created: 2025-10-15
-tags: [performance, optimization, performance-rendering, performance-memory, checklist, difficulty/medium]
+updated: 2025-01-27
+sources: []
+tags: [performance, optimization, performance-rendering, performance-memory, checklist, difficulty/medium, android/performance-rendering, android/performance-memory, android/performance-battery]
 ---
+# Вопрос (RU)
+
+> Каков комплексный подход к оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?
 
 # Question (EN)
 
-> What is a comprehensive checklist for optimizing Android app performance? What are the key areas to focus on?
+> What is a comprehensive approach to optimizing Android app performance? What are the key areas to focus on?
 
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-Performance optimization requires a systematic approach across multiple areas. Here's a comprehensive checklist covering startup, runtime, memory, network, and rendering performance.
+Оптимизация производительности требует системного подхода к нескольким критическим областям. Основные направления: запуск приложения, рендеринг UI, управление памятью, работа с сетью и батареей.
 
-#### 1. **App Startup Optimization**
+### 1. Оптимизация запуска приложения
+
+**Целевые метрики**: Cold start < 1000ms, warm start < 500ms.
 
 ```kotlin
-// - Application class optimization
 class OptimizedApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // - DO: Critical initialization only
+        // ✅ Критическая инициализация на главном потоке
         initializeCrashReporting()
 
-        // - DO: Defer non-critical work
+        // ✅ Отложенная инициализация второстепенных компонентов
         lifecycleScope.launch {
             initializeAnalytics()
             initializeAdSDK()
         }
 
-        // - DON'T: Heavy work on main thread
-        // loadConfiguration() // Blocking I/O
-        // initializeAllLibraries() // Too much work
+        // ❌ Блокирующие операции I/O
+        // loadConfiguration() // Не делать на главном потоке
     }
-
-    // - Use App Startup library
-    // Automatically initializes dependencies in correct order
 }
 
-// - Lazy initialization
-class LazyComponents {
-    val database by lazy { createDatabase() }
-    val imageLoader by lazy { ImageLoader.create() }
-    val analytics by lazy { Analytics.initialize() }
-}
-
-// - Splash screen with windowBackground
-// res/values/styles.xml
-<style name="SplashTheme" parent="Theme.App">
-    <item name="android:windowBackground">@drawable/splash</item>
-</style>
-
-// - Use Baseline Profiles
-// Pre-compile critical startup code
-// See q-baseline-profiles-android--android--medium.md
+// ✅ Ленивая инициализация компонентов
+val database by lazy { Room.databaseBuilder(...).build() }
+val imageLoader by lazy { Coil.imageLoader(context) }
 ```
 
-**Checklist:**
+**Ключевые техники**:
+- App Startup library для управления порядком инициализации
+- Baseline Profiles для предкомпиляции критического кода
+- Splash screen через windowBackground (не отдельная Activity)
 
--   [ ] Profile Application.onCreate() time
--   [ ] Defer non-critical initialization
--   [ ] Use App Startup library
--   [ ] Implement baseline profiles
--   [ ] Measure with `adb shell am start -W`
--   [ ] Target: Cold start < 1000ms
--   [ ] Use lazy initialization
--   [ ] Splash screen via theme (not Activity)
+### 2. Оптимизация UI и рендеринга
 
-#### 2. **UI Rendering Optimization**
+**Целевая метрика**: 60 FPS (16ms на кадр).
 
 ```kotlin
-// - Flatten view hierarchy
-// - BAD: Deep nesting
-<LinearLayout>
-    <RelativeLayout>
-        <FrameLayout>
-            <LinearLayout>
-                <TextView />
-            </LinearLayout>
-        </FrameLayout>
-    </RelativeLayout>
-</LinearLayout>
-
-// - GOOD: Flat hierarchy with ConstraintLayout
+// ✅ Плоская иерархия с ConstraintLayout
 <ConstraintLayout>
     <TextView
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </ConstraintLayout>
 
-// - BEST: Jetpack Compose
-@Composable
-fun OptimizedScreen() {
-    Column {
-        Text("Hello")
-        Button(onClick = {}) {
-            Text("Click")
-        }
-    }
-}
+// ❌ Глубокая вложенность
+// <LinearLayout>
+//     <RelativeLayout>
+//         <FrameLayout>...</FrameLayout>
+//     </RelativeLayout>
+// </LinearLayout>
 
-// - Avoid overdraw
-class OverdrawOptimization {
-    // - Multiple backgrounds drawing over each other
-    // <LinearLayout android:background="@color/white">
-    //     <View android:background="@color/gray" />
-    // </LinearLayout>
-
-    // - Remove unnecessary backgrounds
-    // <LinearLayout> <!-- No background -->
-    //     <View android:background="@color/gray" />
-    // </LinearLayout>
-}
-
-// - ViewStub for rarely shown views
+// ✅ ViewStub для условно отображаемых элементов
 <ViewStub
     android:id="@+id/stub_rarely_used"
-    android:layout="@layout/rarely_used"
-    android:inflateId="@+id/rarely_used" />
-
-// Inflate only when needed
-binding.stubRarelyUsed.inflate()
-
-// - Merge tag to eliminate redundant layouts
-<merge xmlns:android="...">
-    <TextView ... />
-    <Button ... />
-</merge>
+    android:layout="@layout/rarely_used" />
 ```
 
-**Checklist:**
+**Инструменты диагностики**:
+- Profile GPU Rendering: выявление просадок FPS
+- Debug GPU Overdraw: цель < 2x overdraw
+- Layout Inspector: анализ глубины иерархии (< 10 уровней)
 
--   [ ] Enable "Profile GPU Rendering"
--   [ ] Enable "Debug GPU Overdraw"
--   [ ] Keep view hierarchy depth < 10
--   [ ] Use ConstraintLayout or Compose
--   [ ] Avoid overdraw (< 2x ideal)
--   [ ] Target 60 FPS (16ms per frame)
--   [ ] Use ViewStub for conditional views
--   [ ] Merge layouts where possible
-
-#### 3. **RecyclerView Optimization**
+### 3. Оптимизация RecyclerView
 
 ```kotlin
 class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
 
     init {
-        // - Enable stable IDs
-        setHasStableIds(true)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // - Use ViewBinding (faster than findViewById)
-        val binding = ItemBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return ViewHolder(binding)
+        setHasStableIds(true) // ✅ Предотвращает лишние пересоздания
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // - Keep lightweight - no heavy operations
+        // ✅ Минимальная работа в onBind
         holder.bind(getItem(position))
-    }
 
-    class ViewHolder(private val binding: ItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Item) {
-            binding.title.text = item.title
-
-            // - Async image loading
-            Glide.with(binding.root.context)
-                .load(item.imageUrl)
-                .placeholder(R.drawable.placeholder)
-                .into(binding.image)
-        }
-    }
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Item>() {
-            override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
-            override fun areContentsTheSame(old: Item, new: Item) = old == new
-        }
+        // ❌ Избегать тяжёлых операций
+        // holder.loadImageSynchronously() // Блокирует рендер
     }
 }
 
-// - Configure RecyclerView
+// ✅ Настройка префетча и кэша
 recyclerView.apply {
     layoutManager = LinearLayoutManager(context).apply {
         isItemPrefetchEnabled = true
         initialPrefetchItemCount = 4
     }
-
-    setHasFixedSize(true)
     setItemViewCacheSize(20)
-
-    // - Shared RecycledViewPool for nested RecyclerViews
-    setRecycledViewPool(sharedViewPool)
 }
-
-// - Use Paging 3 for large lists
-val pager = Pager(
-    config = PagingConfig(pageSize = 50, prefetchDistance = 10),
-    pagingSourceFactory = { repository.getPagingSource() }
-).flow
 ```
 
-**Checklist:**
+**Для больших списков**: Paging 3 library с инкрементальной загрузкой.
 
--   [ ] Use ListAdapter with DiffUtil
--   [ ] Enable stable IDs
--   [ ] Use ViewBinding
--   [ ] Keep onBindViewHolder lightweight
--   [ ] Enable item prefetch
--   [ ] Set appropriate cache size
--   [ ] Use Paging 3 for large datasets
--   [ ] Avoid nested RecyclerViews (use ConcatAdapter)
-
-#### 4. **Memory Optimization**
+### 4. Управление памятью
 
 ```kotlin
-// - Image optimization
-class ImageOptimization {
-    fun loadImage(imageView: ImageView, url: String) {
-        Glide.with(imageView.context)
-            .load(url)
-            .override(imageView.width, imageView.height) // - Resize
-            .diskCacheStrategy(DiskCacheStrategy.ALL)   // - Cache
-            .placeholder(R.drawable.placeholder)
-            .error(R.drawable.error)
-            .into(imageView)
-    }
+// ✅ Правильная работа с изображениями
+Glide.with(imageView.context)
+    .load(url)
+    .override(imageView.width, imageView.height) // Ресайз под размер View
+    .diskCacheStrategy(DiskCacheStrategy.ALL)
+    .into(imageView)
 
-    // - Bitmap sampling for large images
-    suspend fun loadLargeBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap {
-        return withContext(Dispatchers.IO) {
-            BitmapFactory.Options().run {
-                inJustDecodeBounds = true
-                BitmapFactory.decodeFile(path, this)
+// ✅ Bitmap sampling для больших файлов
+suspend fun loadLargeBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap {
+    return withContext(Dispatchers.IO) {
+        BitmapFactory.Options().run {
+            inJustDecodeBounds = true
+            BitmapFactory.decodeFile(path, this)
 
-                inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
-                inJustDecodeBounds = false
+            inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
+            inJustDecodeBounds = false
 
-                BitmapFactory.decodeFile(path, this)
-            }
+            BitmapFactory.decodeFile(path, this)
         }
     }
 }
 
-// - Leak prevention
-class LeakPrevention : AppCompatActivity() {
-    // - Use ViewModel for data retention
-    private val viewModel: MyViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // - Lifecycle-aware observers
-        viewModel.data.observe(this) { data ->
-            updateUI(data)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // - Clean up resources
-        cleanup()
-    }
-}
-
-// - Use LeakCanary
-// debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
-
-// - Memory-efficient collections
-class CollectionOptimization {
-    // - HashMap for primitive keys
-    val map = HashMap<Int, String>()
-
-    // - SparseArray for int keys
-    val sparse = SparseIntArray()
-
-    // - ArrayMap for small maps (<1000 items)
-    val arrayMap = ArrayMap<String, String>()
-}
+// ✅ SparseArray для примитивных ключей
+val sparse = SparseIntArray() // Вместо HashMap<Int, Int>
 ```
 
-**Checklist:**
+**Инструменты**: LeakCanary для детектирования утечек, ViewModel для сохранения данных при пересоздании Activity.
 
--   [ ] Use image loading libraries (Glide/Coil)
--   [ ] Sample large bitmaps
--   [ ] Fix memory leaks (LeakCanary)
--   [ ] Use ViewModel for data retention
--   [ ] Use SparseArray for primitive keys
--   [ ] Implement proper cleanup
--   [ ] Monitor memory usage
--   [ ] Target: < 50MB RAM usage
-
-#### 5. **Database Optimization**
+### 5. Оптимизация сети
 
 ```kotlin
-@Dao
-interface OptimizedDao {
-    // - Use indices
-    @Query("SELECT * FROM users WHERE email = :email")
-    suspend fun getUserByEmail(email: String): User?
-
-    // - Select only needed columns
-    @Query("SELECT id, name FROM users")
-    suspend fun getUserNames(): List<UserName>
-
-    // - Use pagination
-    @Query("SELECT * FROM users ORDER BY id")
-    fun getUsersPaged(): PagingSource<Int, User>
-
-    // - Batch operations
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(users: List<User>)
-
-    // - Use transactions
-    @Transaction
-    suspend fun complexOperation() {
-        // Multiple operations in single transaction
-    }
-}
-
-@Entity(
-    tableName = "users",
-    indices = [
-        Index(value = ["email"], unique = true),
-        Index(value = ["last_name", "first_name"])
-    ]
-)
-data class User(...)
-
-// - Enable WAL mode (default in Room)
-val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
-    .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING)
-    .build()
-```
-
-**Checklist:**
-
--   [ ] Add appropriate indices
--   [ ] Use projections (select specific columns)
--   [ ] Implement pagination
--   [ ] Batch operations
--   [ ] Use transactions
--   [ ] Enable WAL mode
--   [ ] Avoid main thread operations
--   [ ] Profile queries (enable logging)
-
-#### 6. **Network Optimization**
-
-```kotlin
-// - Efficient API calls
-interface ApiService {
-    // - Request only needed data
-    @GET("users/{id}")
-    suspend fun getUser(
-        @Path("id") id: String,
-        @Query("fields") fields: String = "id,name,email" // - Field filtering
-    ): User
-
-    // - Pagination
-    @GET("articles")
-    suspend fun getArticles(
-        @Query("page") page: Int,
-        @Query("pageSize") pageSize: Int = 50
-    ): List<Article>
-
-    // - Compression
-    // OkHttp automatically handles gzip
-}
-
-// - Configure OkHttp
-val client = OkHttpClient.Builder()
-    .cache(Cache(context.cacheDir, 10L * 1024 * 1024)) // - 10MB cache
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .readTimeout(30, TimeUnit.SECONDS)
-    .addInterceptor(CachingInterceptor()) // - Cache responses
-    .build()
-
-// - Implement caching
-class CachingInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val response = chain.proceed(request)
-
-        return response.newBuilder()
-            .header("Cache-Control", "public, max-age=300") // - 5 min cache
-            .build()
-    }
-}
-
-// - Offline-first architecture
-class OfflineFirstRepository(
-    private val apiService: ApiService,
-    private val dao: ArticleDao
-) {
+// ✅ Offline-first архитектура
+class Repository(private val api: ApiService, private val dao: ArticleDao) {
     fun getArticles(): Flow<List<Article>> = flow {
-        // - Emit cached data first
-        emit(dao.getAllArticles())
+        emit(dao.getAllArticles()) // Сначала кэш
 
-        // - Fetch from network
         try {
-            val articles = apiService.getArticles()
-            dao.insertAll(articles)
+            val fresh = api.getArticles()
+            dao.insertAll(fresh)
             emit(dao.getAllArticles())
         } catch (e: Exception) {
-            // - Continue with cached data
+            // Продолжаем с кэшированными данными
         }
     }
 }
+
+// ✅ Настройка кэша OkHttp
+val client = OkHttpClient.Builder()
+    .cache(Cache(context.cacheDir, 10L * 1024 * 1024))
+    .build()
 ```
 
-**Checklist:**
+**Ключевые принципы**:
+- Кэширование HTTP-ответов
+- Пагинация для списков
+- Field filtering (запрос только нужных полей)
+- Сжатие (gzip автоматически в OkHttp)
 
--   [ ] Implement response caching
--   [ ] Use pagination for lists
--   [ ] Compress requests/responses
--   [ ] Field filtering (request only needed data)
--   [ ] Implement offline-first
--   [ ] Batch network requests
--   [ ] Use WorkManager for background sync
--   [ ] Monitor network usage
-
-#### 7. **Battery Optimization**
+### 6. Оптимизация батареи
 
 ```kotlin
-// - Use WorkManager for background tasks
-class SyncWorker(context: Context, params: WorkerParameters) :
-    CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        return try {
-            syncData()
-            Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
-    }
-}
-
-// - Schedule with constraints
+// ✅ WorkManager с constraints
 val constraints = Constraints.Builder()
     .setRequiredNetworkType(NetworkType.CONNECTED)
     .setRequiresBatteryNotLow(true)
-    .setRequiresCharging(false)
     .build()
 
 val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
     .setConstraints(constraints)
     .build()
 
-WorkManager.getInstance(context).enqueue(syncWork)
-
-// - Location updates optimization
+// ✅ Оптимизация location updates
 fusedLocationClient.requestLocationUpdates(
     LocationRequest.create().apply {
-        interval = 60_000 // - 1 minute (not every second)
-        fastestInterval = 30_000
-        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY // - Not HIGH_ACCURACY
+        interval = 60_000 // ✅ 1 минута (не каждую секунду)
+        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
     },
     locationCallback,
     Looper.getMainLooper()
 )
-
-// - Use JobScheduler/WorkManager instead of AlarmManager
-// - Batch network requests
-// - Avoid wakelocks when possible
 ```
 
-**Checklist:**
-
--   [ ] Use WorkManager for background tasks
--   [ ] Set appropriate constraints
--   [ ] Batch network requests
--   [ ] Optimize location updates
--   [ ] Minimize wakelock usage
--   [ ] Use Doze-aware APIs
--   [ ] Profile with Battery Historian
-
-#### 8. **Build Optimization**
+### 7. Оптимизация сборки
 
 ```kotlin
 // build.gradle.kts
-
 android {
-    // - Enable R8
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = true // ✅ R8 shrinking
+            isShrinkResources = true // ✅ Удаление неиспользуемых ресурсов
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -513,167 +224,290 @@ android {
         }
     }
 
-    // - Enable build cache
-    buildCache {
-        local {
-            isEnabled = true
-        }
-    }
-
-    // - Split APKs by ABI
+    // ✅ Splits для уменьшения размера APK
     splits {
         abi {
             isEnable = true
-            reset()
-            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-            isUniversalApk = false
+            include("armeabi-v7a", "arm64-v8a")
         }
     }
-
-    // - Use Android App Bundle
-    // Automatically splits by density, language, ABI
-}
-
-// - Dependency optimization
-dependencies {
-    // - Avoid bloated libraries
-    // implementation("com.google.guava:guava:31.1-android")
-
-    // - Use lightweight alternatives
-    implementation("androidx.collection:collection-ktx:1.3.0")
 }
 ```
 
-**Checklist:**
+**Цель**: APK < 20MB через Android App Bundle, WebP для изображений, удаление неиспользуемых зависимостей.
 
--   [ ] Enable R8/ProGuard
--   [ ] Shrink resources
--   [ ] Use Android App Bundle
--   [ ] Remove unused dependencies
--   [ ] Split APKs by ABI
--   [ ] Optimize images (WebP)
--   [ ] Enable build cache
--   [ ] Target: APK < 20MB
+### Инструменты профилирования
 
-### Monitoring and Profiling
+- **Android Profiler**: CPU, Memory, Network, Energy
+- **Layout Inspector**: анализ UI иерархии в runtime
+- **LeakCanary**: автоматическое обнаружение утечек памяти
+- **Firebase Performance Monitoring**: метрики в production
+- **Perfetto/Systrace**: детальный анализ производительности системы
+
+### Целевые метрики
+
+| Метрика       | Хорошо   | Приемлемо |
+|--------------|----------|-----------|
+| Cold Start   | < 1000ms | < 1500ms  |
+| Frame Rate   | 60 FPS   | > 45 FPS  |
+| Память       | < 100MB  | < 150MB   |
+| APK Size     | < 20MB   | < 50MB    |
+
+---
+
+## Answer (EN)
+
+Performance optimization requires a systematic approach across several critical areas: app startup, UI rendering, memory management, networking, and battery efficiency.
+
+### 1. App Startup Optimization
+
+**Target metrics**: Cold start < 1000ms, warm start < 500ms.
 
 ```kotlin
-// - Performance monitoring
-class PerformanceMonitor {
-    fun trackPerformance() {
-        // Firebase Performance
-        val trace = Firebase.performance.newTrace("screen_load")
-        trace.start()
-        // ... operation
-        trace.stop()
+class OptimizedApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
 
-        // Custom metrics
-        Firebase.analytics.logEvent("performance") {
-            param("startup_time", startupTimeMs)
-            param("memory_mb", memoryUsageMB)
+        // ✅ Critical initialization on main thread only
+        initializeCrashReporting()
+
+        // ✅ Defer non-critical initialization
+        lifecycleScope.launch {
+            initializeAnalytics()
+            initializeAdSDK()
+        }
+
+        // ❌ Blocking I/O operations
+        // loadConfiguration() // Don't do on main thread
+    }
+}
+
+// ✅ Lazy component initialization
+val database by lazy { Room.databaseBuilder(...).build() }
+val imageLoader by lazy { Coil.imageLoader(context) }
+```
+
+**Key techniques**:
+- App Startup library for dependency initialization order
+- Baseline Profiles for pre-compiling critical code paths
+- Splash screen via windowBackground (not a separate Activity)
+
+### 2. UI and Rendering Optimization
+
+**Target metric**: 60 FPS (16ms per frame).
+
+```kotlin
+// ✅ Flat hierarchy with ConstraintLayout
+<ConstraintLayout>
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</ConstraintLayout>
+
+// ❌ Deep nesting
+// <LinearLayout>
+//     <RelativeLayout>
+//         <FrameLayout>...</FrameLayout>
+//     </RelativeLayout>
+// </LinearLayout>
+
+// ✅ ViewStub for conditionally shown views
+<ViewStub
+    android:id="@+id/stub_rarely_used"
+    android:layout="@layout/rarely_used" />
+```
+
+**Diagnostic tools**:
+- Profile GPU Rendering: identify frame drops
+- Debug GPU Overdraw: target < 2x overdraw
+- Layout Inspector: analyze hierarchy depth (< 10 levels)
+
+### 3. RecyclerView Optimization
+
+```kotlin
+class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
+
+    init {
+        setHasStableIds(true) // ✅ Prevents unnecessary recreations
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        // ✅ Minimal work in onBind
+        holder.bind(getItem(position))
+
+        // ❌ Avoid heavy operations
+        // holder.loadImageSynchronously() // Blocks rendering
+    }
+}
+
+// ✅ Configure prefetch and cache
+recyclerView.apply {
+    layoutManager = LinearLayoutManager(context).apply {
+        isItemPrefetchEnabled = true
+        initialPrefetchItemCount = 4
+    }
+    setItemViewCacheSize(20)
+}
+```
+
+**For large lists**: Paging 3 library with incremental loading.
+
+### 4. Memory Management
+
+```kotlin
+// ✅ Proper image handling
+Glide.with(imageView.context)
+    .load(url)
+    .override(imageView.width, imageView.height) // Resize to View dimensions
+    .diskCacheStrategy(DiskCacheStrategy.ALL)
+    .into(imageView)
+
+// ✅ Bitmap sampling for large files
+suspend fun loadLargeBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap {
+    return withContext(Dispatchers.IO) {
+        BitmapFactory.Options().run {
+            inJustDecodeBounds = true
+            BitmapFactory.decodeFile(path, this)
+
+            inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
+            inJustDecodeBounds = false
+
+            BitmapFactory.decodeFile(path, this)
+        }
+    }
+}
+
+// ✅ SparseArray for primitive keys
+val sparse = SparseIntArray() // Instead of HashMap<Int, Int>
+```
+
+**Tools**: LeakCanary for leak detection, ViewModel for data retention across configuration changes.
+
+### 5. Network Optimization
+
+```kotlin
+// ✅ Offline-first architecture
+class Repository(private val api: ApiService, private val dao: ArticleDao) {
+    fun getArticles(): Flow<List<Article>> = flow {
+        emit(dao.getAllArticles()) // Cache first
+
+        try {
+            val fresh = api.getArticles()
+            dao.insertAll(fresh)
+            emit(dao.getAllArticles())
+        } catch (e: Exception) {
+            // Continue with cached data
+        }
+    }
+}
+
+// ✅ Configure OkHttp cache
+val client = OkHttpClient.Builder()
+    .cache(Cache(context.cacheDir, 10L * 1024 * 1024))
+    .build()
+```
+
+**Key principles**:
+- HTTP response caching
+- Pagination for lists
+- Field filtering (request only needed fields)
+- Compression (gzip automatic in OkHttp)
+
+### 6. Battery Optimization
+
+```kotlin
+// ✅ WorkManager with constraints
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
+
+val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
+    .setConstraints(constraints)
+    .build()
+
+// ✅ Optimize location updates
+fusedLocationClient.requestLocationUpdates(
+    LocationRequest.create().apply {
+        interval = 60_000 // ✅ 1 minute (not every second)
+        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+    },
+    locationCallback,
+    Looper.getMainLooper()
+)
+```
+
+### 7. Build Optimization
+
+```kotlin
+// build.gradle.kts
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true // ✅ R8 shrinking
+            isShrinkResources = true // ✅ Remove unused resources
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    // ✅ Splits to reduce APK size
+    splits {
+        abi {
+            isEnable = true
+            include("armeabi-v7a", "arm64-v8a")
         }
     }
 }
 ```
 
-**Tools:**
+**Target**: APK < 20MB via Android App Bundle, WebP for images, remove unused dependencies.
 
--   [ ] Android Profiler (CPU, Memory, Network, Energy)
--   [ ] Layout Inspector
--   [ ] LeakCanary
--   [ ] StrictMode (debug builds)
--   [ ] Firebase Performance Monitoring
--   [ ] Perfetto/Systrace
--   [ ] Baseline Profiles
+### Profiling Tools
 
-### Performance Targets
+- **Android Profiler**: CPU, Memory, Network, Energy
+- **Layout Inspector**: analyze UI hierarchy at runtime
+- **LeakCanary**: automatic memory leak detection
+- **Firebase Performance Monitoring**: production metrics
+- **Perfetto/Systrace**: detailed system performance analysis
 
-| Metric       | Target  | Good      | Acceptable |
-| ------------ | ------- | --------- | ---------- |
-| Cold Start   | < 500ms | < 1000ms  | < 1500ms   |
-| Frame Rate   | 60 FPS  | 50-60 FPS | > 45 FPS   |
-| Memory       | < 50MB  | < 100MB   | < 150MB    |
-| APK Size     | < 10MB  | < 20MB    | < 50MB     |
-| Battery/Hour | < 3%    | < 5%      | < 10%      |
+### Target Metrics
 
----
-
-## Ответ (RU)
-
-# Вопрос (RU)
-
-Каков комплексный чек-лист оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?
-
-## Ответ (RU)
-
-Оптимизация производительности требует системного подхода.
-
-#### Основные области:
-
-**1. Запуск приложения:**
-
--   Отложенная инициализация
--   App Startup library
--   Baseline Profiles
--   Цель: < 1000ms
-
-**2. UI рендеринг:**
-
--   Плоская иерархия view
--   ConstraintLayout/Compose
--   Избегать overdraw
--   Цель: 60 FPS
-
-**3. RecyclerView:**
-
--   ListAdapter + DiffUtil
--   ViewBinding
--   Item prefetch
--   Paging 3
-
-**4. Память:**
-
--   Image libraries (Glide/Coil)
--   LeakCanary
--   ViewModel
--   Цель: < 50MB RAM
-
-**5. База данных:**
-
--   Индексы
--   Пагинация
--   Batch операции
--   WAL mode
-
-**6. Сеть:**
-
--   Кэширование
--   Offline-first
--   Пагинация
--   Сжатие
-
-**7. Батарея:**
-
--   WorkManager
--   Оптимизация location
--   Batch requests
-
-**8. Сборка:**
-
--   R8/ProGuard
--   App Bundle
--   Resource shrinking
--   Цель: < 20MB APK
-
-#### Инструменты:
-
--   Android Profiler
--   LeakCanary
--   Firebase Performance
--   Perfetto
-
-Системная оптимизация всех областей даёт наилучший результат.
+| Metric       | Good     | Acceptable |
+|-------------|----------|------------|
+| Cold Start   | < 1000ms | < 1500ms   |
+| Frame Rate   | 60 FPS   | > 45 FPS   |
+| Memory       | < 100MB  | < 150MB    |
+| APK Size     | < 20MB   | < 50MB     |
 
 ---
+
+## Follow-ups
+
+- How do Baseline Profiles improve startup performance?
+- What are the trade-offs between DiskLruCache and DataStore for caching?
+- How does R8 full-mode differ from standard optimization?
+- When should you use RecyclerView.RecycledViewPool for nested lists?
+- What battery impact metrics should trigger optimization?
+
+## References
+
+- https://developer.android.com/topic/performance
+- https://developer.android.com/topic/performance/baselineprofiles
+- https://developer.android.com/studio/profile
 
 ## Related Questions
+
+### Prerequisites
+- Understanding Activity and Fragment lifecycle is essential for optimization context
+- RecyclerView fundamentals are required for list optimization
+
+### Related
+- [[q-baseline-profiles-android--android--medium]] - Startup optimization technique
+- [[q-notification-channels-android--android--medium]] - Battery-efficient notifications
+
+### Advanced
+- Implementing custom Lint rules to enforce performance best practices
+- Advanced initialization strategies with App Startup library

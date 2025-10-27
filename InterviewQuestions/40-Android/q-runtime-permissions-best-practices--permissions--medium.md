@@ -1,992 +1,332 @@
 ---
-id: 20251012-12271194
+id: 20251027-120000
 title: "Runtime Permissions Best Practices / Лучшие практики runtime разрешений"
-topic: permissions
+aliases: ["Runtime Permissions Best Practices", "Лучшие практики runtime разрешений"]
+topic: android
+subtopics: [permissions]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-database-encryption-android--android--medium, q-clean-architecture-android--android--hard, q-privacy-sandbox-fledge--privacy--hard]
+related: [q-database-encryption-android--android--medium, q-android-security-practices-checklist--android--medium]
+sources: []
 created: 2025-10-15
-tags: [runtime, privacy, ux, best-practices, activity-result, difficulty/medium]
+updated: 2025-01-27
+tags: [android, permissions, security, ux, android/permissions, difficulty/medium]
 ---
+# Вопрос (RU)
+
+> Реализуйте обработку runtime-разрешений с правильным UX: показывайте обоснование запроса, корректно обрабатывайте постоянный отказ и используйте API ActivityResultContracts.
 
 # Question (EN)
 
 > Implement runtime permission handling with proper UX flow. Show rationale before requesting, handle permanent denial gracefully, and use ActivityResultContracts API.
 
-# Вопрос (RU)
+---
 
-> Реализуйте обработку runtime-разрешений с правильным UX: показывайте обоснование запроса, корректно обрабатывайте постоянный отказ и используйте API ActivityResultContracts.
+## Ответ (RU)
+
+**Runtime разрешения** были введены в Android 6.0 (API 23) для предоставления пользователям контроля над конфиденциальными данными. Правильная обработка требует продуманного UX-потока с использованием современного API ActivityResultContracts.
+
+### Состояния разрешений
+
+1. **Не запрошено**: разрешение никогда не запрашивалось
+2. **Предоставлено**: пользователь одобрил
+3. **Отклонено**: пользователь отказал (можно запросить снова)
+4. **Навсегда отклонено**: пользователь отметил "Больше не спрашивать"
+
+### Реализация с ActivityResultContracts
+
+```kotlin
+class PermissionManager(private val activity: AppCompatActivity) {
+
+    // ✅ Современный подход с ActivityResultContracts
+    private var permissionLauncher: ActivityResultLauncher<String>? = null
+
+    init {
+        permissionLauncher = activity.registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            handlePermissionResult(isGranted)
+        }
+    }
+
+    fun requestPermission(permission: String, rationale: String?) {
+        when (getPermissionState(permission)) {
+            PermissionState.Granted -> proceedWithFeature()
+
+            PermissionState.Denied -> {
+                // ✅ Показать обоснование перед повторным запросом
+                if (rationale != null) {
+                    showRationaleDialog(rationale) {
+                        permissionLauncher?.launch(permission)
+                    }
+                } else {
+                    permissionLauncher?.launch(permission)
+                }
+            }
+
+            PermissionState.PermanentlyDenied -> {
+                // ✅ Направить в настройки
+                showSettingsDialog(permission)
+            }
+
+            PermissionState.NotRequested -> {
+                permissionLauncher?.launch(permission)
+            }
+        }
+    }
+
+    private fun getPermissionState(permission: String): PermissionState {
+        return when {
+            ContextCompat.checkSelfPermission(activity, permission) ==
+                PackageManager.PERMISSION_GRANTED -> PermissionState.Granted
+
+            activity.shouldShowRequestPermissionRationale(permission) ->
+                PermissionState.Denied
+
+            wasPermissionRequested(permission) ->
+                PermissionState.PermanentlyDenied
+
+            else -> PermissionState.NotRequested
+        }
+    }
+}
+```
+
+### Множественные разрешения
+
+```kotlin
+// ✅ Запрос группы связанных разрешений
+val locationLauncher = registerForActivityResult(
+    ActivityResultContracts.RequestMultiplePermissions()
+) { permissions ->
+    when {
+        permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ->
+            LocationResult.FineLocation
+
+        permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true ->
+            LocationResult.CoarseLocation
+
+        else -> LocationResult.Denied
+    }
+}
+
+// ❌ НЕПРАВИЛЬНО: запрос всех разрешений при запуске приложения
+override fun onCreate() {
+    requestAllPermissions()
+}
+
+// ✅ ПРАВИЛЬНО: запрос в момент использования функции
+fun startLocationTracking() {
+    locationLauncher.launch(arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ))
+}
+```
+
+### Jetpack Compose интеграция
+
+```kotlin
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun CameraPermissionScreen() {
+    val cameraState = rememberPermissionState(Manifest.permission.CAMERA)
+
+    when {
+        cameraState.status.isGranted -> {
+            // ✅ Разрешение предоставлено
+            CameraPreview()
+        }
+
+        cameraState.status.shouldShowRationale -> {
+            // ✅ Показать обоснование
+            RationaleDialog(
+                message = "Камера нужна для сканирования QR-кодов",
+                onRequest = { cameraState.launchPermissionRequest() }
+            )
+        }
+
+        else -> {
+            // ✅ Первый запрос
+            Button(onClick = { cameraState.launchPermissionRequest() }) {
+                Text("Разрешить доступ к камере")
+            }
+        }
+    }
+}
+```
+
+### Best Practices
+
+1. **Запрашивайте в момент использования** — не при запуске приложения
+2. **Объясняйте перед запросом** — покажите, зачем нужно разрешение
+3. **Обрабатывайте постоянный отказ** — направляйте в Settings
+4. **Запрашивайте минимум** — только необходимые разрешения
+5. **Тестируйте все состояния** — granted, denied, permanently denied
+
+### Типичные ошибки
+
+**❌ Запрос при старте приложения:**
+```kotlin
+override fun onCreate() {
+    requestPermissions(arrayOf(CAMERA, LOCATION, CONTACTS))
+}
+```
+
+**✅ Запрос при использовании:**
+```kotlin
+fun openCamera() {
+    permissionManager.requestPermission(CAMERA, "Для сканирования штрих-кодов")
+}
+```
+
+**❌ Игнорирование постоянного отказа:**
+```kotlin
+// Продолжаем спрашивать, хотя пользователь отказал навсегда
+```
+
+**✅ Направление в настройки:**
+```kotlin
+if (isPermanentlyDenied) {
+    showSettingsDialog()
+}
+```
 
 ---
 
 ## Answer (EN)
 
-**Runtime permissions** were introduced in Android 6.0 (API 23) to give users more control over sensitive data and operations. Proper permission handling requires a well-designed UX flow that respects user decisions while explaining why permissions are needed.
+**Runtime permissions** were introduced in Android 6.0 (API 23) to give users control over sensitive data. Proper handling requires a well-designed UX flow using the modern ActivityResultContracts API.
 
-### Key Concepts
+### Permission States
 
-#### Permission Flow States
+1. **Not Requested**: permission never asked
+2. **Granted**: user approved
+3. **Denied**: user rejected (can ask again)
+4. **Permanently Denied**: user checked "Don't ask again"
 
-1. **Not Requested**: Permission never asked
-2. **Granted**: User approved permission
-3. **Denied**: User rejected permission (can ask again)
-4. **Permanently Denied**: User rejected and checked "Don't ask again"
-
-#### Best Practices Overview
+### Implementation with ActivityResultContracts
 
 ```kotlin
-// Modern approach using ActivityResultContracts
-val requestPermission = registerForActivityResult(
-    ActivityResultContracts.RequestPermission()
-) { isGranted ->
-    if (isGranted) {
-        // Permission granted
-    } else {
-        // Permission denied
-    }
-}
-```
-
-### Complete Permission Handling Implementation
-
-#### 1. Permission Manager with ActivityResultContracts
-
-```kotlin
-import android.Manifest
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-
-/**
- * Comprehensive permission manager using modern APIs
- */
 class PermissionManager(private val activity: AppCompatActivity) {
 
-    // Single permission launcher
-    private var singlePermissionLauncher: ActivityResultLauncher<String>? = null
-    private var singlePermissionCallback: ((Boolean) -> Unit)? = null
-
-    // Multiple permissions launcher
-    private var multiplePermissionsLauncher: ActivityResultLauncher<Array<String>>? = null
-    private var multiplePermissionsCallback: ((Map<String, Boolean>) -> Unit)? = null
+    // ✅ Modern approach with ActivityResultContracts
+    private var permissionLauncher: ActivityResultLauncher<String>? = null
 
     init {
-        // Register single permission launcher
-        singlePermissionLauncher = activity.registerForActivityResult(
+        permissionLauncher = activity.registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
-            singlePermissionCallback?.invoke(isGranted)
-            singlePermissionCallback = null
-        }
-
-        // Register multiple permissions launcher
-        multiplePermissionsLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            multiplePermissionsCallback?.invoke(permissions)
-            multiplePermissionsCallback = null
+            handlePermissionResult(isGranted)
         }
     }
 
-    /**
-     * Check if permission is granted
-     */
-    fun isPermissionGranted(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(
-            activity,
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
+    fun requestPermission(permission: String, rationale: String?) {
+        when (getPermissionState(permission)) {
+            PermissionState.Granted -> proceedWithFeature()
+
+            PermissionState.Denied -> {
+                // ✅ Show rationale before re-requesting
+                if (rationale != null) {
+                    showRationaleDialog(rationale) {
+                        permissionLauncher?.launch(permission)
+                    }
+                } else {
+                    permissionLauncher?.launch(permission)
+                }
+            }
+
+            PermissionState.PermanentlyDenied -> {
+                // ✅ Direct to settings
+                showSettingsDialog(permission)
+            }
+
+            PermissionState.NotRequested -> {
+                permissionLauncher?.launch(permission)
+            }
+        }
     }
 
-    /**
-     * Check if should show rationale
-     */
-    fun shouldShowRationale(permission: String): Boolean {
-        return activity.shouldShowRequestPermissionRationale(permission)
-    }
-
-    /**
-     * Determine permission state
-     */
-    fun getPermissionState(permission: String): PermissionState {
+    private fun getPermissionState(permission: String): PermissionState {
         return when {
-            isPermissionGranted(permission) -> PermissionState.Granted
+            ContextCompat.checkSelfPermission(activity, permission) ==
+                PackageManager.PERMISSION_GRANTED -> PermissionState.Granted
 
-            shouldShowRationale(permission) -> PermissionState.Denied
+            activity.shouldShowRequestPermissionRationale(permission) ->
+                PermissionState.Denied
 
-            // Never requested or permanently denied
-            // Check shared preferences to distinguish
-            wasPermissionRequested(permission) -> PermissionState.PermanentlyDenied
+            wasPermissionRequested(permission) ->
+                PermissionState.PermanentlyDenied
 
             else -> PermissionState.NotRequested
         }
     }
-
-    /**
-     * Request single permission with rationale
-     */
-    fun requestPermission(
-        permission: String,
-        rationale: String? = null,
-        onResult: (Boolean) -> Unit
-    ) {
-        when (getPermissionState(permission)) {
-            PermissionState.Granted -> {
-                onResult(true)
-            }
-
-            PermissionState.NotRequested,
-            PermissionState.Denied -> {
-                // Show rationale if needed
-                if (rationale != null && shouldShowRationale(permission)) {
-                    showRationaleDialog(
-                        message = rationale,
-                        onPositive = {
-                            launchPermissionRequest(permission, onResult)
-                        },
-                        onNegative = {
-                            onResult(false)
-                        }
-                    )
-                } else {
-                    launchPermissionRequest(permission, onResult)
-                }
-            }
-
-            PermissionState.PermanentlyDenied -> {
-                showPermanentlyDeniedDialog(permission)
-                onResult(false)
-            }
-        }
-    }
-
-    /**
-     * Request multiple permissions
-     */
-    fun requestPermissions(
-        permissions: Array<String>,
-        rationale: String? = null,
-        onResult: (Map<String, Boolean>) -> Unit
-    ) {
-        val deniedPermissions = permissions.filter { !isPermissionGranted(it) }
-
-        if (deniedPermissions.isEmpty()) {
-            onResult(permissions.associateWith { true })
-            return
-        }
-
-        val shouldShowRationale = deniedPermissions.any { shouldShowRationale(it) }
-
-        if (rationale != null && shouldShowRationale) {
-            showRationaleDialog(
-                message = rationale,
-                onPositive = {
-                    launchMultiplePermissionsRequest(permissions, onResult)
-                },
-                onNegative = {
-                    onResult(permissions.associateWith { isPermissionGranted(it) })
-                }
-            )
-        } else {
-            launchMultiplePermissionsRequest(permissions, onResult)
-        }
-    }
-
-    private fun launchPermissionRequest(permission: String, callback: (Boolean) -> Unit) {
-        markPermissionAsRequested(permission)
-        singlePermissionCallback = callback
-        singlePermissionLauncher?.launch(permission)
-    }
-
-    private fun launchMultiplePermissionsRequest(
-        permissions: Array<String>,
-        callback: (Map<String, Boolean>) -> Unit
-    ) {
-        permissions.forEach { markPermissionAsRequested(it) }
-        multiplePermissionsCallback = callback
-        multiplePermissionsLauncher?.launch(permissions)
-    }
-
-    private fun showRationaleDialog(
-        message: String,
-        onPositive: () -> Unit,
-        onNegative: () -> Unit
-    ) {
-        androidx.appcompat.app.AlertDialog.Builder(activity)
-            .setTitle("Permission Required")
-            .setMessage(message)
-            .setPositiveButton("Continue") { dialog, _ ->
-                dialog.dismiss()
-                onPositive()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-                onNegative()
-            }
-            .setCancelable(false)
-            .show()
-    }
-
-    private fun showPermanentlyDeniedDialog(permission: String) {
-        val permissionName = getPermissionName(permission)
-
-        androidx.appcompat.app.AlertDialog.Builder(activity)
-            .setTitle("Permission Permanently Denied")
-            .setMessage(
-                "$permissionName permission was permanently denied. " +
-                "Please enable it in app settings to use this feature."
-            )
-            .setPositiveButton("Open Settings") { dialog, _ ->
-                dialog.dismiss()
-                openAppSettings()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
-
-    /**
-     * Open app settings
-     */
-    fun openAppSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", activity.packageName, null)
-        }
-        activity.startActivity(intent)
-    }
-
-    private fun wasPermissionRequested(permission: String): Boolean {
-        val prefs = activity.getSharedPreferences("permissions", Context.MODE_PRIVATE)
-        return prefs.getBoolean("requested_$permission", false)
-    }
-
-    private fun markPermissionAsRequested(permission: String) {
-        val prefs = activity.getSharedPreferences("permissions", Context.MODE_PRIVATE)
-        prefs.edit().putBoolean("requested_$permission", true).apply()
-    }
-
-    private fun getPermissionName(permission: String): String {
-        return when (permission) {
-            Manifest.permission.CAMERA -> "Camera"
-            Manifest.permission.ACCESS_FINE_LOCATION -> "Location"
-            Manifest.permission.RECORD_AUDIO -> "Microphone"
-            Manifest.permission.READ_CONTACTS -> "Contacts"
-            Manifest.permission.READ_CALENDAR -> "Calendar"
-            Manifest.permission.POST_NOTIFICATIONS -> "Notifications"
-            else -> permission.substringAfterLast(".")
-        }
-    }
-
-    sealed class PermissionState {
-        object NotRequested : PermissionState()
-        object Granted : PermissionState()
-        object Denied : PermissionState()
-        object PermanentlyDenied : PermissionState()
-    }
 }
 ```
 
-#### 2. Permission Groups Handling
+### Multiple Permissions
 
 ```kotlin
-/**
- * Handle related permissions as groups
- */
-class PermissionGroupManager(private val permissionManager: PermissionManager) {
-
-    companion object {
-        // Location permissions
-        val LOCATION_PERMISSIONS = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-
-        // Camera and storage for photos
-        val CAMERA_PERMISSIONS = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arrayOf(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_MEDIA_IMAGES
-            )
-        } else {
-            arrayOf(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        }
-
-        // Contacts
-        val CONTACTS_PERMISSIONS = arrayOf(
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS
-        )
-    }
-
-    /**
-     * Request location permissions with fine/coarse fallback
-     */
-    fun requestLocationPermission(
-        requireFineLocation: Boolean = true,
-        onResult: (LocationPermissionResult) -> Unit
-    ) {
-        val permissions = if (requireFineLocation) {
-            LOCATION_PERMISSIONS
-        } else {
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
-        }
-
-        permissionManager.requestPermissions(
-            permissions = permissions,
-            rationale = "Location access is needed to show nearby places and provide accurate navigation."
-        ) { results ->
-            val result = when {
-                results[Manifest.permission.ACCESS_FINE_LOCATION] == true ->
-                    LocationPermissionResult.FineLocation
-
-                results[Manifest.permission.ACCESS_COARSE_LOCATION] == true ->
-                    LocationPermissionResult.CoarseLocation
-
-                else ->
-                    LocationPermissionResult.Denied
-            }
-            onResult(result)
-        }
-    }
-
-    /**
-     * Request background location (Android 10+)
-     */
-    fun requestBackgroundLocation(
-        onResult: (Boolean) -> Unit
-    ) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            onResult(true) // Not needed on older versions
-            return
-        }
-
-        // Must request foreground location first
-        requestLocationPermission { foregroundResult ->
-            if (foregroundResult != LocationPermissionResult.Denied) {
-                // Show explanation for background location
-                permissionManager.requestPermission(
-                    permission = Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                    rationale = "Background location is needed to track your activity even when the app is closed."
-                ) { isGranted ->
-                    onResult(isGranted)
-                }
-            } else {
-                onResult(false)
-            }
-        }
-    }
-
-    sealed class LocationPermissionResult {
-        object FineLocation : LocationPermissionResult()
-        object CoarseLocation : LocationPermissionResult()
-        object Denied : LocationPermissionResult()
-    }
-}
-```
-
-#### 3. ViewModel-Based Permission State Management
-
-```kotlin
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-
-/**
- * ViewModel for managing permission state
- */
-class PermissionViewModel : ViewModel() {
-
-    private val _cameraPermissionState = MutableStateFlow<PermissionUiState>(
-        PermissionUiState.NotRequested
-    )
-    val cameraPermissionState: StateFlow<PermissionUiState> = _cameraPermissionState.asStateFlow()
-
-    private val _locationPermissionState = MutableStateFlow<PermissionUiState>(
-        PermissionUiState.NotRequested
-    )
-    val locationPermissionState: StateFlow<PermissionUiState> = _locationPermissionState.asStateFlow()
-
-    /**
-     * Update camera permission state
-     */
-    fun onCameraPermissionResult(isGranted: Boolean) {
-        viewModelScope.launch {
-            _cameraPermissionState.value = if (isGranted) {
-                PermissionUiState.Granted
-            } else {
-                PermissionUiState.Denied
-            }
-        }
-    }
-
-    /**
-     * Update location permission state
-     */
-    fun onLocationPermissionResult(result: PermissionGroupManager.LocationPermissionResult) {
-        viewModelScope.launch {
-            _locationPermissionState.value = when (result) {
-                PermissionGroupManager.LocationPermissionResult.FineLocation ->
-                    PermissionUiState.Granted
-
-                PermissionGroupManager.LocationPermissionResult.CoarseLocation ->
-                    PermissionUiState.GrantedWithLimitations("Only approximate location")
-
-                PermissionGroupManager.LocationPermissionResult.Denied ->
-                    PermissionUiState.Denied
-            }
-        }
-    }
-
-    /**
-     * Reset permission states
-     */
-    fun resetPermissions() {
-        _cameraPermissionState.value = PermissionUiState.NotRequested
-        _locationPermissionState.value = PermissionUiState.NotRequested
-    }
-
-    sealed class PermissionUiState {
-        object NotRequested : PermissionUiState()
-        object Granted : PermissionUiState()
-        data class GrantedWithLimitations(val message: String) : PermissionUiState()
-        object Denied : PermissionUiState()
-        object PermanentlyDenied : PermissionUiState()
-    }
-}
-```
-
-#### 4. Jetpack Compose Integration
-
-```kotlin
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.*
-
-/**
- * Compose UI for permission handling
- */
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun CameraPermissionScreen() {
-    val cameraPermissionState = rememberPermissionState(
-        permission = Manifest.permission.CAMERA
-    )
-
-    PermissionUI(
-        permissionState = cameraPermissionState,
-        permissionName = "Camera",
-        rationaleMessage = "Camera access is needed to take photos for your profile.",
-        onPermissionGranted = {
-            // Navigate to camera screen
-        }
-    )
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun PermissionUI(
-    permissionState: PermissionState,
-    permissionName: String,
-    rationaleMessage: String,
-    onPermissionGranted: () -> Unit
-) {
+// ✅ Request group of related permissions
+val locationLauncher = registerForActivityResult(
+    ActivityResultContracts.RequestMultiplePermissions()
+) { permissions ->
     when {
-        permissionState.status.isGranted -> {
-            PermissionGrantedContent(
-                permissionName = permissionName,
-                onAction = onPermissionGranted
-            )
-        }
+        permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ->
+            LocationResult.FineLocation
 
-        permissionState.status.shouldShowRationale -> {
-            PermissionRationaleContent(
-                permissionName = permissionName,
-                message = rationaleMessage,
-                onRequestPermission = { permissionState.launchPermissionRequest() }
-            )
-        }
+        permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true ->
+            LocationResult.CoarseLocation
 
-        else -> {
-            PermissionRequestContent(
-                permissionName = permissionName,
-                onRequestPermission = { permissionState.launchPermissionRequest() }
-            )
-        }
+        else -> LocationResult.Denied
     }
 }
 
-@Composable
-fun PermissionGrantedContent(
-    permissionName: String,
-    onAction: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "$permissionName permission granted",
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onAction) {
-            Text("Continue")
-        }
-    }
+// ❌ WRONG: request all permissions on app launch
+override fun onCreate() {
+    requestAllPermissions()
 }
 
-@Composable
-fun PermissionRationaleContent(
-    permissionName: String,
-    message: String,
-    onRequestPermission: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Permission Required",
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(onClick = onRequestPermission) {
-            Text("Grant $permissionName Permission")
-        }
-    }
-}
-
-@Composable
-fun PermissionRequestContent(
-    permissionName: String,
-    onRequestPermission: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "$permissionName access needed",
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onRequestPermission) {
-            Text("Request Permission")
-        }
-    }
-}
-
-/**
- * Multiple permissions in Compose
- */
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun LocationPermissionScreen() {
-    val locationPermissionsState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-    )
-
-    MultiplePermissionsUI(
-        permissionsState = locationPermissionsState,
-        permissionsName = "Location",
-        onAllPermissionsGranted = {
-            // Navigate to map screen
-        }
-    )
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun MultiplePermissionsUI(
-    permissionsState: MultiplePermissionsState,
-    permissionsName: String,
-    onAllPermissionsGranted: () -> Unit
-) {
-    when {
-        permissionsState.allPermissionsGranted -> {
-            PermissionGrantedContent(
-                permissionName = permissionsName,
-                onAction = onAllPermissionsGranted
-            )
-        }
-
-        permissionsState.shouldShowRationale -> {
-            PermissionRationaleContent(
-                permissionName = permissionsName,
-                message = "$permissionsName permissions are needed for this feature.",
-                onRequestPermission = { permissionsState.launchMultiplePermissionRequest() }
-            )
-        }
-
-        else -> {
-            PermissionRequestContent(
-                permissionName = permissionsName,
-                onRequestPermission = { permissionsState.launchMultiplePermissionRequest() }
-            )
-        }
-    }
+// ✅ CORRECT: request at point of use
+fun startLocationTracking() {
+    locationLauncher.launch(arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ))
 }
 ```
 
-### Testing Permission Flows
-
-```kotlin
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-
-/**
- * Test permission handling flows
- */
-@RunWith(AndroidJUnit4::class)
-class PermissionFlowTest {
-
-    @get:Rule
-    val activityRule = ActivityScenarioRule(MainActivity::class.java)
-
-    @get:Rule
-    val cameraPermissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA)
-
-    @Test
-    fun whenCameraPermissionGranted_shouldShowCamera() {
-        // Given permission is granted (by rule)
-
-        // When opening camera screen
-        onView(withId(R.id.openCameraButton)).perform(click())
-
-        // Then camera preview should be visible
-        onView(withId(R.id.cameraPreview))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun whenLocationPermissionDenied_shouldShowRationale() {
-        // Given permission is denied
-
-        // When requesting location
-        onView(withId(R.id.requestLocationButton)).perform(click())
-
-        // Then rationale should be shown
-        onView(withText("Location access is needed"))
-            .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun whenPermissionPermanentlyDenied_shouldShowSettingsDialog() {
-        // Simulate permanent denial by denying multiple times
-        // Then verify settings dialog is shown
-        onView(withText("Open Settings"))
-            .check(matches(isDisplayed()))
-    }
-}
-```
-
-### Best Practices
-
-1. **Request Permissions at Point of Use**
-
-    ```kotlin
-    // BAD: Request all permissions on app launch
-    // GOOD: Request when user tries to use feature
-    button.setOnClickListener {
-        permissionManager.requestPermission(CAMERA) { granted ->
-            if (granted) openCamera()
-        }
-    }
-    ```
-
-2. **Always Show Rationale**
-
-    ```kotlin
-    permissionManager.requestPermission(
-        permission = CAMERA,
-        rationale = "Camera access is needed to scan QR codes"
-    ) { granted -> }
-    ```
-
-3. **Handle Permanent Denial Gracefully**
-
-    ```kotlin
-    when (state) {
-        PermanentlyDenied -> showSettingsDialog()
-        Denied -> showRationale()
-        Granted -> proceed()
-    }
-    ```
-
-4. **Use Minimal Permissions**
-
-    ```kotlin
-    // Request COARSE_LOCATION if fine is not needed
-    if (needsApproximateLocation) {
-        requestPermission(ACCESS_COARSE_LOCATION)
-    }
-    ```
-
-5. **Request Incrementally**
-
-    ```kotlin
-    // Request foreground first, then background
-    requestForegroundLocation { granted ->
-        if (granted && needsBackground) {
-            requestBackgroundLocation()
-        }
-    }
-    ```
-
-6. **Explain Before Requesting**
-
-    ```kotlin
-    // Show UI explaining why, then request
-    showExplanationUI {
-        onContinue = { requestPermission() }
-    }
-    ```
-
-7. **Don't Block App Usage**
-
-    ```kotlin
-    // Allow app usage with degraded functionality
-    if (!hasLocationPermission) {
-        showManualLocationInput()
-    }
-    ```
-
-8. **Test All Permission States**
-
-    ```kotlin
-    // Test: not requested, granted, denied, permanently denied
-    ```
-
-9. **Use System UI When Possible**
-
-    ```kotlin
-    // Photo picker instead of READ_MEDIA_IMAGES on Android 13+
-    ```
-
-10. **Track Permission Analytics**
-    ```kotlin
-    analytics.logEvent("permission_requested", permission)
-    analytics.logEvent("permission_granted", permission)
-    ```
-
-### Common Pitfalls
-
-1. **Requesting Too Early**
-
-    ```kotlin
-    // BAD: On app launch
-    override fun onCreate() {
-        requestAllPermissions()
-    }
-
-    // GOOD: When feature is used
-    fun openCamera() {
-        requestCameraPermission()
-    }
-    ```
-
-2. **Not Handling Permanent Denial**
-
-    ```kotlin
-    // BAD: Keep asking
-    // GOOD: Direct to settings
-    if (isPermanentlyDenied) {
-        openAppSettings()
-    }
-    ```
-
-3. **Poor Rationale Messaging**
-
-    ```kotlin
-    // BAD: "App needs camera"
-    // GOOD: "Camera is needed to scan barcodes for product lookup"
-    ```
-
-4. **Forgetting Android Version Checks**
-    ```kotlin
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        requestRuntimePermission()
-    }
-    ```
-
-### Summary
-
-Runtime permission best practices:
-
--   **Request at point of use**: Not on app launch
--   **Show clear rationale**: Explain why permission is needed
--   **Handle denial gracefully**: Provide alternative flows
--   **Permanent denial**: Direct users to settings
--   **Use ActivityResultContracts**: Modern, lifecycle-aware API
--   **Test all states**: Not requested, granted, denied, permanent
--   **Respect user choice**: Don't nag users
--   **Request minimal permissions**: Only what's truly needed
-
-**UX Guidelines**:
-
--   Explain before requesting
--   Make denial non-blocking when possible
--   One permission at a time for clarity
--   Use system UI when available (photo picker)
--   Analytics to understand permission conversion rates
-
----
-
-## Ответ (RU)
-
-**Runtime разрешения** были введены в Android 6.0 (API 23) для предоставления пользователям большего контроля над конфиденциальными данными. Правильная обработка разрешений требует продуманного UX-потока.
-
-### Основные концепции
-
-**Состояния разрешений:**
-
--   Не запрошено
--   Предоставлено
--   Отклонено (можно запросить снова)
--   Навсегда отклонено (пользователь отметил "Больше не спрашивать")
-
-### Полная реализация
-
-```kotlin
-class PermissionManager(private val activity: AppCompatActivity) {
-
-    private var singlePermissionLauncher: ActivityResultLauncher<String>? = null
-
-    init {
-        singlePermissionLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            // Обработка результата
-        }
-    }
-
-    fun requestPermission(
-        permission: String,
-        rationale: String? = null,
-        onResult: (Boolean) -> Unit
-    ) {
-        when (getPermissionState(permission)) {
-            PermissionState.Granted -> onResult(true)
-
-            PermissionState.Denied -> {
-                if (rationale != null) {
-                    showRationaleDialog(rationale) {
-                        launchPermissionRequest(permission, onResult)
-                    }
-                } else {
-                    launchPermissionRequest(permission, onResult)
-                }
-            }
-
-            PermissionState.PermanentlyDenied -> {
-                showPermanentlyDeniedDialog(permission)
-            }
-        }
-    }
-}
-```
-
-### Группы разрешений
-
-```kotlin
-class PermissionGroupManager {
-
-    fun requestLocationPermission(
-        requireFineLocation: Boolean = true,
-        onResult: (LocationPermissionResult) -> Unit
-    ) {
-        val permissions = if (requireFineLocation) {
-            arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION)
-        } else {
-            arrayOf(ACCESS_COARSE_LOCATION)
-        }
-
-        permissionManager.requestPermissions(permissions) { results ->
-            // Обработка результатов
-        }
-    }
-}
-```
-
-### Compose интеграция
+### Jetpack Compose Integration
 
 ```kotlin
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraPermissionScreen() {
-    val cameraPermissionState = rememberPermissionState(
-        permission = Manifest.permission.CAMERA
-    )
+    val cameraState = rememberPermissionState(Manifest.permission.CAMERA)
 
     when {
-        cameraPermissionState.status.isGranted -> {
-            // Разрешение предоставлено
+        cameraState.status.isGranted -> {
+            // ✅ Permission granted
+            CameraPreview()
         }
 
-        cameraPermissionState.status.shouldShowRationale -> {
-            // Показать обоснование
-            PermissionRationaleContent(
-                onRequestPermission = {
-                    cameraPermissionState.launchPermissionRequest()
-                }
+        cameraState.status.shouldShowRationale -> {
+            // ✅ Show rationale
+            RationaleDialog(
+                message = "Camera is needed to scan QR codes",
+                onRequest = { cameraState.launchPermissionRequest() }
             )
         }
 
         else -> {
-            // Запросить разрешение
-            PermissionRequestContent(
-                onRequestPermission = {
-                    cameraPermissionState.launchPermissionRequest()
-                }
-            )
+            // ✅ First request
+            Button(onClick = { cameraState.launchPermissionRequest() }) {
+                Text("Allow Camera Access")
+            }
         }
     }
 }
@@ -994,51 +334,72 @@ fun CameraPermissionScreen() {
 
 ### Best Practices
 
-1. **Запрашивайте в момент использования**
-2. **Всегда показывайте обоснование**
-3. **Обрабатывайте постоянный отказ**
-4. **Используйте минимальные разрешения**
-5. **Запрашивайте постепенно**
-6. **Объясняйте перед запросом**
-7. **Не блокируйте приложение**
-8. **Тестируйте все состояния**
-9. **Используйте системный UI**
-10. **Отслеживайте аналитику**
+1. **Request at point of use** — not on app launch
+2. **Explain before requesting** — show why permission is needed
+3. **Handle permanent denial** — direct users to Settings
+4. **Request minimum** — only necessary permissions
+5. **Test all states** — granted, denied, permanently denied
 
-### Типичные ошибки
+### Common Mistakes
 
-1. Запрос слишком рано (при запуске приложения)
-2. Отсутствие обработки постоянного отказа
-3. Плохие сообщения обоснования
-4. Забывание проверки версии Android
+**❌ Requesting on app start:**
+```kotlin
+override fun onCreate() {
+    requestPermissions(arrayOf(CAMERA, LOCATION, CONTACTS))
+}
+```
 
-### Резюме
+**✅ Requesting when needed:**
+```kotlin
+fun openCamera() {
+    permissionManager.requestPermission(CAMERA, "To scan barcodes")
+}
+```
 
-Runtime разрешения требуют:
+**❌ Ignoring permanent denial:**
+```kotlin
+// Keep asking even though user permanently denied
+```
 
--   **Запрос в момент использования**: Не при запуске приложения
--   **Четкое обоснование**: Объяснение необходимости
--   **Graceful обработка отказа**: Альтернативные потоки
--   **ActivityResultContracts**: Современный API
--   **Тестирование всех состояний**
--   **Уважение выбора пользователя**
-
-**UX рекомендации**:
-
--   Объяснение перед запросом
--   Не блокирование при отказе
--   Одно разрешение за раз
--   Использование системного UI
--   Аналитика конверсии разрешений
+**✅ Directing to settings:**
+```kotlin
+if (isPermanentlyDenied) {
+    showSettingsDialog()
+}
+```
 
 ---
+
+## Follow-ups
+
+- How to handle background location permissions separately from foreground?
+- What's the strategy for requesting notification permissions on Android 13+?
+- How to gracefully degrade functionality when permissions are denied?
+- What analytics should be tracked for permission conversion rates?
+- How to test permission flows in instrumented tests?
+
+## References
+
+- https://developer.android.com/training/permissions/requesting
+- https://developer.android.com/guide/topics/permissions/overview
+- https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContracts
 
 ## Related Questions
 
-### Related (Medium)
+### Prerequisites (Easier)
 
--   [[q-android-security-practices-checklist--android--medium]] - Security
--   [[q-encrypted-file-storage--android--medium]] - Security
--   [[q-database-encryption-android--android--medium]] - Security
--   [[q-app-security-best-practices--android--medium]] - Security
--   [[q-android14-permissions--android--medium]] - Security
+- Understanding Android permission model and manifest declarations
+- Basics of Android runtime permission system
+
+### Related (Same Level)
+
+- [[q-database-encryption-android--android--medium]] - Security practices
+- [[q-android-security-practices-checklist--android--medium]] - Security checklist
+- ActivityResult API usage patterns
+- User consent and privacy best practices
+
+### Advanced (Harder)
+
+- [[q-clean-architecture-android--android--hard]] - Architecture patterns
+- Implementing permission wrappers in multi-module architecture
+- Advanced security patterns for sensitive data access

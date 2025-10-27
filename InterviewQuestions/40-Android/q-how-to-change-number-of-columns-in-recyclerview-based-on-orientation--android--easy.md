@@ -1,65 +1,36 @@
 ---
-id: 20251012-1227171
-title: "How To Change Number Of Columns In Recyclerview Based On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации"
+id: 20251012-122717
+title: "How To Change Number Of Columns In RecyclerView Based On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации"
+aliases: ["Change RecyclerView Columns by Orientation", "Изменить количество колонок RecyclerView по ориентации"]
 topic: android
+subtopics: [ui-views, ui-widgets]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-cicd-automated-testing--devops--medium, q-looper-empty-queue-behavior--android--medium, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium]
+related: [q-recyclerview-sethasfixedsize--android--easy, q-looper-empty-queue-behavior--android--medium]
 created: 2025-10-15
-tags: [android, difficulty/easy, languages]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:40:00 pm
+updated: 2025-01-27
+sources: []
+tags: [android, android/ui-views, android/ui-widgets, recyclerview, grid-layout, difficulty/easy]
+---
+# Вопрос (RU)
+
+Как изменить количество колонок в RecyclerView в зависимости от ориентации устройства?
+
+# Question (EN)
+
+How do you change the number of columns in RecyclerView based on device orientation?
+
 ---
 
-# Как Изменить Количество Колонок В RecyclerView В Зависимости От Ориентации?
+## Ответ (RU)
 
-## Answer (EN)
-You can use **GridLayoutManager** and set the number of columns dynamically based on screen orientation.
+Используй **GridLayoutManager** с динамическим spanCount в зависимости от ориентации. Оптимальный подход — через ресурсы `dimens.xml`, который автоматически адаптируется при rotation.
 
-### Basic Implementation
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        recyclerView = findViewById(R.id.recyclerView)
-
-        setupRecyclerView()
-    }
-
-    private fun setupRecyclerView() {
-        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            4 // Landscape: 4 columns
-        } else {
-            2 // Portrait: 2 columns
-        }
-
-        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
-        recyclerView.adapter = MyAdapter(items)
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        // Update columns when orientation changes
-        val spanCount = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            4
-        } else {
-            2
-        }
-
-        (recyclerView.layoutManager as? GridLayoutManager)?.spanCount = spanCount
-    }
-}
-```
-
-### Using dimens.xml (Recommended)
+### Рекомендуемый подход: dimens.xml
 
 ```xml
 <!-- res/values/dimens.xml (Portrait) -->
@@ -71,11 +42,6 @@ class MainActivity : AppCompatActivity() {
 <resources>
     <integer name="grid_column_count">4</integer>
 </resources>
-
-<!-- res/values-sw600dp/dimens.xml (Tablets) -->
-<resources>
-    <integer name="grid_column_count">3</integer>
-</resources>
 ```
 
 ```kotlin
@@ -85,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val spanCount = resources.getInteger(R.integer.grid_column_count)
+        // ✅ Система автоматически выбирает значение при смене ориентации
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, spanCount)
@@ -93,59 +60,15 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Dynamic Span Based on Screen Width
+**Преимущества:**
+- Нет необходимости обрабатывать `onConfigurationChanged()`
+- Поддержка планшетов через `res/values-sw600dp/`
+- Проще в тестировании и поддержке
 
-```kotlin
-class AdaptiveGridLayoutManager(
-    context: Context,
-    private val columnWidth: Int // in dp
-) : GridLayoutManager(context, 1) {
-
-    private var lastWidth = 0
-    private var lastHeight = 0
-
-    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
-        val width = width
-        val height = height
-
-        if (width > 0 && height > 0 && (lastWidth != width || lastHeight != height)) {
-            val totalSpace = if (orientation == VERTICAL) {
-                width - paddingRight - paddingLeft
-            } else {
-                height - paddingTop - paddingBottom
-            }
-
-            val spanCount = maxOf(1, totalSpace / columnWidth)
-            setSpanCount(spanCount)
-
-            lastWidth = width
-            lastHeight = height
-        }
-
-        super.onLayoutChildren(recycler, state)
-    }
-}
-
-// Usage
-val columnWidthDp = 120 // Minimum column width
-val columnWidthPx = (columnWidthDp * resources.displayMetrics.density).toInt()
-
-recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
-```
-
----
-
-# Как Изменить Количество Колонок В RecyclerView В Зависимости От Ориентации
-
-## Ответ (RU)
-
-Ты можешь использовать **GridLayoutManager** и задать количество колонок динамически в зависимости от ориентации экрана.
-
-### Базовая Реализация
+### Альтернатива: programmatic
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,9 +81,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            4 // Ландшафт: 4 колонки
+            4  // ✅ Landscape: больше колонок
         } else {
-            2 // Портрет: 2 колонки
+            2  // ✅ Portrait: меньше колонок
         }
 
         recyclerView.layoutManager = GridLayoutManager(this, spanCount)
@@ -169,35 +92,50 @@ class MainActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
-        // Обновляем количество колонок при изменении ориентации
-        val spanCount = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            4
-        } else {
-            2
-        }
-
-        (recyclerView.layoutManager as? GridLayoutManager)?.spanCount = spanCount
+        // ❌ Требует android:configChanges="orientation|screenSize" в манифесте
+        (recyclerView.layoutManager as? GridLayoutManager)?.spanCount =
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
     }
 }
 ```
 
-### Использование dimens.xml (Рекомендуется)
+### Адаптивный подход: по ширине
+
+```kotlin
+class AdaptiveGridLayoutManager(
+    context: Context,
+    private val columnWidth: Int  // минимальная ширина колонки в px
+) : GridLayoutManager(context, 1) {
+
+    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
+        val totalSpace = width - paddingRight - paddingLeft
+        val spanCount = maxOf(1, totalSpace / columnWidth)
+        // ✅ Динамически вычисляет количество колонок под любой экран
+        setSpanCount(spanCount)
+        super.onLayoutChildren(recycler, state)
+    }
+}
+
+// Usage
+val columnWidthPx = (120 * resources.displayMetrics.density).toInt()
+recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
+```
+
+## Answer (EN)
+
+Use **GridLayoutManager** with dynamic spanCount based on orientation. The optimal approach is through `dimens.xml` resources, which automatically adapts on rotation.
+
+### Recommended: dimens.xml approach
 
 ```xml
-<!-- res/values/dimens.xml (Портрет) -->
+<!-- res/values/dimens.xml (Portrait) -->
 <resources>
     <integer name="grid_column_count">2</integer>
 </resources>
 
-<!-- res/values-land/dimens.xml (Ландшафт) -->
+<!-- res/values-land/dimens.xml (Landscape) -->
 <resources>
     <integer name="grid_column_count">4</integer>
-</resources>
-
-<!-- res/values-sw600dp/dimens.xml (Планшеты) -->
-<resources>
-    <integer name="grid_column_count">3</integer>
 </resources>
 ```
 
@@ -208,6 +146,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val spanCount = resources.getInteger(R.integer.grid_column_count)
+        // ✅ System automatically picks value on orientation change
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, spanCount)
@@ -216,66 +155,89 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Динамическое Количество Колонок На Основе Ширины Экрана
+**Benefits:**
+- No need to handle `onConfigurationChanged()`
+- Tablet support via `res/values-sw600dp/`
+- Easier to test and maintain
+
+### Alternative: programmatic
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            4  // ✅ Landscape: more columns
+        } else {
+            2  // ✅ Portrait: fewer columns
+        }
+
+        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
+        recyclerView.adapter = MyAdapter(items)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // ❌ Requires android:configChanges="orientation|screenSize" in manifest
+        (recyclerView.layoutManager as? GridLayoutManager)?.spanCount =
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
+    }
+}
+```
+
+### Adaptive approach: by width
 
 ```kotlin
 class AdaptiveGridLayoutManager(
     context: Context,
-    private val columnWidth: Int // в dp
+    private val columnWidth: Int  // minimum column width in px
 ) : GridLayoutManager(context, 1) {
 
-    private var lastWidth = 0
-    private var lastHeight = 0
-
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
-        val width = width
-        val height = height
-
-        if (width > 0 && height > 0 && (lastWidth != width || lastHeight != height)) {
-            val totalSpace = if (orientation == VERTICAL) {
-                width - paddingRight - paddingLeft
-            } else {
-                height - paddingTop - paddingBottom
-            }
-
-            val spanCount = maxOf(1, totalSpace / columnWidth)
-            setSpanCount(spanCount)
-
-            lastWidth = width
-            lastHeight = height
-        }
-
+        val totalSpace = width - paddingRight - paddingLeft
+        val spanCount = maxOf(1, totalSpace / columnWidth)
+        // ✅ Dynamically calculates columns for any screen
+        setSpanCount(spanCount)
         super.onLayoutChildren(recycler, state)
     }
 }
 
-// Использование
-val columnWidthDp = 120 // Минимальная ширина колонки
-val columnWidthPx = (columnWidthDp * resources.displayMetrics.density).toInt()
-
+// Usage
+val columnWidthPx = (120 * resources.displayMetrics.density).toInt()
 recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 ```
 
-**Преимущества подхода с dimens.xml:**
-- Автоматическая адаптация при изменении конфигурации
-- Поддержка разных размеров экрана (телефоны, планшеты)
-- Не требуется обработка onConfigurationChanged()
-- Проще в поддержке и тестировании
-
-**Преимущества AdaptiveGridLayoutManager:**
-- Максимальное использование доступного пространства
-- Автоматическая адаптация под любой размер экрана
-- Учитывает реальную ширину элементов, а не только ориентацию
-
 ---
+
+## Follow-ups
+
+- How does GridLayoutManager handle span sizes for items with different widths?
+- What's the impact of changing spanCount on RecyclerView performance during rotation?
+- How do you preserve scroll position when spanCount changes?
+- When should you use StaggeredGridLayoutManager vs GridLayoutManager?
+
+## References
+
+- [[c-recyclerview]]
+- [[c-configuration-changes]]
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+### Prerequisites
+- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics
 
-### Advanced (Harder)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+### Related
+- [[q-looper-empty-queue-behavior--android--medium]] - Configuration handling
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
+
+### Advanced
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Advanced RecyclerView patterns

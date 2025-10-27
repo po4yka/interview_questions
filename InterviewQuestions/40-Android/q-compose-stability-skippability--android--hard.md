@@ -16,43 +16,33 @@ status: draft
 moc: moc-android
 related:
   - q-compose-performance-optimization--android--hard
-  - q-compose-slot-table-recomposition--android--hard
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-01-27
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
-source: https://developer.android.com/jetpack/compose/performance
-source_note: Official Compose performance docs
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:30 pm
+sources: [https://developer.android.com/jetpack/compose/performance]
 ---
-
 # Вопрос (RU)
-> Стабильность и пропускаемость Compose?
+> Как стабильность типов влияет на пропускаемость перекомпозиции в Jetpack Compose?
 
 # Question (EN)
-> Compose Stability Skippability?
+> How does type stability affect recomposition skippability in Jetpack Compose?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+**Пропускаемость (skippability)** — это механизм оптимизации в Compose, позволяющий компилятору пропустить рекомпозицию функции, если её параметры не изменились.
 
-## Answer (EN)
+### Условия пропускаемости
 
-**Skippability** is Compose's optimization mechanism that allows the compiler to skip recomposing a composable when its inputs haven't changed. This is critical for performance in large Compose UIs.
+Composable-функция пропускаема, если:
 
-### How Compose Determines Skippability
-
-A composable is **skippable** if all of the following conditions are met:
-
-1. **All parameters are stable** - Every parameter must be of a stable type
-2. **No default parameter expressions** that capture unstable values
-3. **Not marked with @NonSkippableComposable**
-4. **Returns Unit** (or is a non-restartable composable)
+1. **Все параметры стабильны** — каждый параметр имеет стабильный тип
+2. **Функция возвращает Unit** или нерестартуема
+3. **Не помечена @NonSkippableComposable**
 
 ```kotlin
-//  SKIPPABLE - all parameters are primitives (stable)
+// ✅ Пропускаема — все параметры примитивы (стабильны)
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
     Button(onClick = onIncrement) {
@@ -60,7 +50,212 @@ fun Counter(count: Int, onIncrement: () -> Unit) {
     }
 }
 
-//  NOT SKIPPABLE - unstable parameter
+// ❌ НЕ пропускаема — нестабильный параметр
+data class User(var name: String) // var делает класс нестабильным
+
+@Composable
+fun UserProfile(user: User) { // Будет перекомпоноваться всегда
+    Text(user.name)
+}
+
+// ✅ Пропускаема — иммутабельный data class
+data class ImmutableUser(val name: String)
+
+@Composable
+fun ImmutableUserProfile(user: ImmutableUser) {
+    Text(user.name)
+}
+```
+
+### Критерии стабильности типа
+
+Тип **стабилен**, если Compose-компилятор может гарантировать:
+
+1. **equals() возвращает одинаковый результат для тех же экземпляров**
+2. **При изменении публичного свойства Composition получит уведомление**
+3. **Все публичные свойства также стабильны**
+
+**Автоматически стабильные:**
+
+- Примитивы (`Int`, `Long`, `Float`, `Boolean`)
+- `String`
+- Лямбды (function types)
+- Immutable-коллекции из `kotlinx.collections.immutable`
+
+**Нестабильные:**
+
+- Классы с `var`-свойствами
+- Mutable-коллекции (`MutableList`, `MutableMap`)
+- Интерфейсы (компилятор не может доказать стабильность)
+- Абстрактные классы
+
+```kotlin
+// ✅ STABLE
+data class StableUser(val id: Int, val name: String)
+
+// ❌ UNSTABLE — var-свойство
+data class UnstableUser(val id: Int, var name: String)
+
+// ❌ UNSTABLE — мутабельная коллекция
+data class UnstableList(val users: MutableList<String>)
+
+// ✅ STABLE — иммутабельная коллекция
+data class StableList(val users: List<String>)
+```
+
+### Аннотация @Stable
+
+**@Stable** — это **обещание** компилятору, что тип соблюдает контракт стабильности, даже если это невозможно доказать автоматически.
+
+**Используйте @Stable:**
+
+- Для интерфейсов/абстрактных классов, которые стабильны по контракту
+- Для классов с приватным мутабельным состоянием, никогда не выходящим наружу
+- Для observable-паттернов (StateFlow, LiveData), уведомляющих Compose
+
+```kotlin
+// ✅ Указываем компилятору, что интерфейс стабилен
+@Stable
+interface StableUserData {
+    val name: String
+    val email: String
+}
+
+@Composable
+fun UserDisplay(user: StableUserData) { // Теперь пропускаема!
+    Column {
+        Text(user.name)
+        Text(user.email)
+    }
+}
+
+// ❌ ОПАСНО — нарушение контракта
+@Stable
+data class LyingUser(var name: String) // Заявили стабильность, но есть var
+
+@Composable
+fun BuggyDisplay(user: LyingUser) {
+    Text(user.name) // НЕ обновится при изменении name!
+}
+```
+
+### Отладка стабильности
+
+Включите Compose Compiler Metrics:
+
+```kotlin
+// build.gradle.kts
+android {
+    kotlinOptions {
+        freeCompilerArgs += listOf(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                project.buildDir.absolutePath + "/compose_metrics"
+        )
+    }
+}
+```
+
+Отчёт покажет:
+
+```text
+restartable skippable scheme("[...]") fun Counter(
+  stable count: Int
+  stable onIncrement: Function0<Unit>
+)
+
+restartable scheme("[...]") fun UserProfile(
+  unstable user: User
+)
+```
+
+### Практические примеры
+
+**Проблема: ViewModel нестабилен**
+
+```kotlin
+// ❌ ViewModel не гарантирует стабильность
+class UserViewModel : ViewModel() {
+    val userState = mutableStateOf(User())
+}
+
+@Composable
+fun UserScreen(viewModel: UserViewModel) { // НЕ пропускаема
+    val user by viewModel.userState
+    Text(user.name)
+}
+
+// ✅ Решение: передавайте состояние, а не ViewModel
+@Composable
+fun UserScreen(userState: State<User>) { // Стабильный параметр
+    val user by userState
+    Text(user.name)
+}
+```
+
+**Проблема: List вызывает лишние рекомпозиции**
+
+```kotlin
+// ❌ MutableList нестабилен
+@Composable
+fun UserList(users: MutableList<User>) { // НЕ пропускаема
+    LazyColumn {
+        items(users) { user -> UserItem(user) }
+    }
+}
+
+// ✅ Используйте ImmutableList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
+@Composable
+fun UserList(users: ImmutableList<User>) { // Пропускаема!
+    LazyColumn {
+        items(users) { user -> UserItem(user) }
+    }
+}
+```
+
+### Влияние на производительность
+
+**Без пропуска:**
+
+- 10 000 composable на экране
+- Изменение состояния затрагивает 1 элемент
+- Результат: все 10 000 перекомпонуются
+- Время: ~100 мс
+
+**С правильным пропуском:**
+
+- 10 000 composable на экране
+- Изменение состояния затрагивает 1 элемент
+- Результат: только 1 перекомпонуется
+- Время: ~0.1 мс
+
+**Прирост в 1000 раз!**
+
+## Answer (EN)
+
+**Skippability** is Compose's optimization mechanism that allows the compiler to skip recomposing a composable when its inputs haven't changed.
+
+### Skippability Requirements
+
+A composable is **skippable** if:
+
+1. **All parameters are stable** — every parameter must be of a stable type
+2. **Returns Unit** or is non-restartable
+3. **Not marked with @NonSkippableComposable**
+
+```kotlin
+// ✅ Skippable — all parameters are primitives (stable)
+@Composable
+fun Counter(count: Int, onIncrement: () -> Unit) {
+    Button(onClick = onIncrement) {
+        Text("Count: $count")
+    }
+}
+
+// ❌ NOT skippable — unstable parameter
 data class User(var name: String) // var makes it unstable
 
 @Composable
@@ -68,97 +263,63 @@ fun UserProfile(user: User) { // Will always recompose
     Text(user.name)
 }
 
-//  SKIPPABLE - immutable data class
-data class ImmutableUser(val name: String) // val makes it stable
+// ✅ Skippable — immutable data class
+data class ImmutableUser(val name: String)
 
 @Composable
-fun ImmutableUserProfile(user: ImmutableUser) { // Can be skipped
+fun ImmutableUserProfile(user: ImmutableUser) {
     Text(user.name)
 }
 ```
 
----
+### Stability Criteria
 
-### What Makes a Class Stable?
+A type is **stable** if the Compose compiler can guarantee:
 
-A type is **stable** if the Compose compiler can guarantee that:
-
-1. **Result of equals() will always return the same result for the same two instances**
-2. **If a public property changes, Composition will be notified**
+1. **equals() returns the same result for the same instances**
+2. **Public property changes notify Composition**
 3. **All public properties are also stable types**
 
-The stability analysis uses concepts from [[c-algorithms]] to determine equality and [[c-data-structures]] for tracking property changes efficiently.
+**Automatically stable:**
 
-**Automatically stable types:**
-
--   All primitive types (`Int`, `Long`, `Float`, `Boolean`, etc.)
--   `String`
--   All function types (lambdas)
--   Immutable collections from `kotlinx.collections.immutable`
-
-**Conditionally stable:**
-
--   Data classes where all properties are `val` and of stable types
--   Sealed classes with stable subtypes
+- Primitives (`Int`, `Long`, `Float`, `Boolean`)
+- `String`
+- Lambdas (function types)
+- Immutable collections from `kotlinx.collections.immutable`
 
 **Unstable:**
 
--   Classes with `var` properties
--   Mutable collections (`MutableList`, `MutableMap`, etc.)
--   Interfaces (Compose can't prove stability)
--   Abstract classes
+- Classes with `var` properties
+- Mutable collections (`MutableList`, `MutableMap`)
+- Interfaces (compiler can't prove stability)
+- Abstract classes
 
 ```kotlin
-//  STABLE - all properties are val and stable types
-data class StableUser(
-    val id: Int,
-    val name: String,
-    val email: String
-)
+// ✅ STABLE
+data class StableUser(val id: Int, val name: String)
 
-//  UNSTABLE - has var property
-data class UnstableUser(
-    val id: Int,
-    var name: String, // var makes entire class unstable
-    val email: String
-)
+// ❌ UNSTABLE — var property
+data class UnstableUser(val id: Int, var name: String)
 
-//  UNSTABLE - has mutable collection
-data class UnstableUserList(
-    val users: MutableList<String> // Mutable collection is unstable
-)
+// ❌ UNSTABLE — mutable collection
+data class UnstableList(val users: MutableList<String>)
 
-//  STABLE - immutable collection
-data class StableUserList(
-    val users: List<String> // Immutable List is stable
-)
-
-//  UNSTABLE - interface
-interface UserData {
-    val name: String
-}
-
-//  UNSTABLE - uses unstable interface
-@Composable
-fun UserDisplay(user: UserData) { // Will recompose every time
-    Text(user.name)
-}
+// ✅ STABLE — immutable collection
+data class StableList(val users: List<String>)
 ```
-
----
 
 ### The @Stable Annotation
 
-The **@Stable** annotation is a **promise** to the Compose compiler that a type follows the stability contract, even if the compiler can't prove it automatically.
+**@Stable** is a **promise** to the Compose compiler that a type follows the stability contract, even if the compiler can't prove it automatically.
 
-**Use @Stable when:**
+**Use @Stable:**
 
--   You have an interface or abstract class that you know is stable
--   You have a class with private mutable state that's never exposed
--   You're using observable patterns (StateFlow, LiveData) that notify Compose
+- For interfaces/abstract classes that are stable by contract
+- For classes with private mutable state that's never exposed
+- For observable patterns (StateFlow, LiveData) that notify Compose
 
 ```kotlin
-// Tell Compose this interface is stable
+// ✅ Tell compiler this interface is stable
 @Stable
 interface StableUserData {
     val name: String
@@ -173,54 +334,21 @@ fun UserDisplay(user: StableUserData) { // Now skippable!
     }
 }
 
-// Implementation is actually stable
-class UserImpl(
-    override val name: String,
-    override val email: String
-) : StableUserData
-```
-
-**@Stable with private mutable state:**
-
-```kotlin
+// ❌ DANGEROUS — contract violation
 @Stable
-class Counter {
-    private var _count = mutableStateOf(0)
-    val count: State<Int> = _count
-
-    fun increment() {
-        _count.value++
-    }
-}
+data class LyingUser(var name: String) // Claimed stable but has var
 
 @Composable
-fun CounterDisplay(counter: Counter) { // Skippable!
-    Text("Count: ${counter.count.value}")
+fun BuggyDisplay(user: LyingUser) {
+    Text(user.name) // Won't update when name changes!
 }
 ```
-
-**Warning: @Stable is a contract** - if you lie to the compiler, you'll get incorrect skipping behavior and bugs:
-
-```kotlin
-//  INCORRECT - lying about stability
-@Stable
-data class LyingUser(
-    var name: String // This is mutable but we claimed stable!
-)
-
-@Composable
-fun UserDisplay(user: LyingUser) {
-    Text(user.name) // Won't recompose when name changes! BUG!
-}
-```
-
----
 
 ### Debugging Stability
 
-**Check if a composable is skippable** using the Compose Compiler Metrics:
+Enable Compose Compiler Metrics:
 
-```gradle
+```kotlin
 // build.gradle.kts
 android {
     kotlinOptions {
@@ -229,42 +357,29 @@ android {
             "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
                 project.buildDir.absolutePath + "/compose_metrics"
         )
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                project.buildDir.absolutePath + "/compose_metrics"
-        )
     }
 }
 ```
 
-This generates reports showing:
+Report shows:
 
--   Which composables are skippable
--   Which parameters are unstable
--   Stability inference for your classes
-
-**Example report:**
-
-```
-restartable skippable scheme("[androidx.compose.ui.UiComposable]") fun Counter(
+```text
+restartable skippable scheme("[...]") fun Counter(
   stable count: Int
   stable onIncrement: Function0<Unit>
 )
 
-restartable scheme("[androidx.compose.ui.UiComposable]") fun UserProfile(
+restartable scheme("[...]") fun UserProfile(
   unstable user: User
 )
 ```
 
----
+### Practical Examples
 
-### Real-World Examples
-
-**Problem: ViewModel parameters are unstable**
+**Problem: ViewModel is unstable**
 
 ```kotlin
-//  UNSTABLE - ViewModel is a class, not guaranteed stable
+// ❌ ViewModel doesn't guarantee stability
 class UserViewModel : ViewModel() {
     val userState = mutableStateOf(User())
 }
@@ -274,198 +389,81 @@ fun UserScreen(viewModel: UserViewModel) { // NOT skippable
     val user by viewModel.userState
     Text(user.name)
 }
-```
 
-**Solution 1: Use @Stable (if you control the class)**
-
-```kotlin
-@Stable
-class UserViewModel : ViewModel() {
-    private val _userState = mutableStateOf(User())
-    val userState: State<User> = _userState
-}
-
-@Composable
-fun UserScreen(viewModel: UserViewModel) { // Now skippable!
-    val user by viewModel.userState
-    Text(user.name)
-}
-```
-
-**Solution 2: Don't pass ViewModel, pass state**
-
-```kotlin
+// ✅ Solution: pass state, not ViewModel
 @Composable
 fun UserScreen(userState: State<User>) { // Stable parameter
     val user by userState
     Text(user.name)
 }
-
-// Call site
-@Composable
-fun UserScreenContainer(viewModel: UserViewModel) {
-    UserScreen(userState = viewModel.userState)
-}
 ```
 
----
-
-**Problem: List causing unnecessary recompositions**
+**Problem: List causes unnecessary recompositions**
 
 ```kotlin
-//  UNSTABLE - MutableList is unstable
+// ❌ MutableList is unstable
 @Composable
 fun UserList(users: MutableList<User>) { // NOT skippable
     LazyColumn {
-        items(users) { user ->
-            UserItem(user)
-        }
+        items(users) { user -> UserItem(user) }
     }
 }
-```
 
-**Solution: Use immutable collections**
-
-```kotlin
+// ✅ Use ImmutableList
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-//  STABLE - ImmutableList is stable
 @Composable
 fun UserList(users: ImmutableList<User>) { // Skippable!
     LazyColumn {
-        items(users) { user ->
-            UserItem(user)
-        }
-    }
-}
-
-// Usage
-val users = persistentListOf(
-    User(1, "Alice"),
-    User(2, "Bob")
-)
-UserList(users)
-```
-
----
-
-### Advanced: Strong Skipping Mode
-
-Compose 1.5.4+ introduced **Strong Skipping Mode** which makes skipping more aggressive:
-
-```gradle
-// build.gradle.kts
-android {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:experimentalStrongSkipping=true"
-        )
+        items(users) { user -> UserItem(user) }
     }
 }
 ```
-
-**What it does:**
-
--   Treats lambdas as stable even if they capture unstable values
--   Makes more composables skippable by default
--   Experimental feature, use with caution
-
-```kotlin
-// Without strong skipping: NOT skippable (lambda captures unstable user)
-// With strong skipping: SKIPPABLE
-
-var user by remember { mutableStateOf(User("Alice")) }
-
-Button(onClick = { user = User("Bob") }) { // Lambda captures user
-    Text("Change User")
-}
-```
-
----
-
-### Best Practices
-
-1. **Use immutable data classes** for Compose parameters
-
-```kotlin
-//  DO
-data class User(val name: String, val age: Int)
-
-//  DON'T
-data class User(var name: String, var age: Int)
-```
-
-1. **Use kotlinx-collections-immutable** for lists
-
-```kotlin
-//  DO
-fun getUsers(): ImmutableList<User> = persistentListOf(...)
-
-//  DON'T
-fun getUsers(): List<User> = mutableListOf(...) // Still unstable!
-```
-
-1. **Add @Stable to interfaces you control**
-
-```kotlin
-@Stable
-interface Repository {
-    val data: StateFlow<List<User>>
-}
-```
-
-1. **Check compiler reports** regularly
-
-2. **Don't overuse @Stable** - only when you're certain about stability
-
-3. **Consider strong skipping mode** for better default behavior
-
----
 
 ### Performance Impact
 
 **Without skipping:**
 
--   10,000 composables on screen
--   State change affects 1 composable
--   Result: All 10,000 recompose
--   Time: ~100ms
+- 10,000 composables on screen
+- State change affects 1 element
+- Result: all 10,000 recompose
+- Time: ~100 ms
 
 **With proper skipping:**
 
--   10,000 composables on screen
--   State change affects 1 composable
--   Result: Only 1 recomposes
--   Time: ~0.1ms
+- 10,000 composables on screen
+- State change affects 1 element
+- Result: only 1 recomposes
+- Time: ~0.1 ms
 
-**1000x performance improvement!**
+**1000x improvement!**
 
 ---
 
 ## Follow-ups
 
-- How does Compose's stability analysis compare to React's memo optimization?
-- What are the performance implications of using @Immutable vs @Stable annotations?
-- How can you debug and profile Compose recomposition to identify stability issues?
+- What are the trade-offs between @Stable and @Immutable annotations in Compose?
+- How does Strong Skipping Mode affect lambda capture and recomposition behavior?
+- What metrics from the Compose Compiler can help identify unexpected recompositions?
+- How do derived state calculations interact with stability inference?
 
 ## References
 
-- https://developer.android.com/jetpack/compose/mental-model
 - https://developer.android.com/jetpack/compose/performance
+- https://developer.android.com/jetpack/compose/mental-model
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
-- [[q-android-jetpack-overview--android--easy]]
+- Description: Basic understanding of Compose state management and recomposition lifecycle
 
 ### Related (Same Level)
 
-- [[q-compose-slot-table-recomposition--android--hard]]
 - [[q-compose-performance-optimization--android--hard]]
+- Description: Advanced Compose performance profiling and optimization techniques
 
 ### Advanced (Harder)
 
-- [[q-compose-compiler-plugin--android--hard]]
+- Description: Compose Compiler internals, IR transformations, and custom stability annotations

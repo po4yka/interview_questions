@@ -16,17 +16,14 @@ status: draft
 moc: moc-android
 related:
   - q-android-build-optimization--android--medium
-  - q-dependency-injection-basics--android--medium
-  - q-hilt-android--android--medium
+  - q-kapt-ksp-migration--android--medium
+  - q-dagger-framework-overview--android--hard
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-01-27
 tags: [android/di-hilt, android/gradle, difficulty/medium]
-source: https://dagger.dev/hilt/
-source_note: Hilt documentation
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:21 pm
+sources:
+  - https://dagger.dev/hilt/
 ---
-
 # Вопрос (RU)
 > Как минимизировать влияние Dagger на время сборки?
 
@@ -35,222 +32,138 @@ date modified: Saturday, October 25th 2025, 4:52:21 pm
 
 ## Ответ (RU)
 
-Минимизация влияния Dagger на время сборки требует комплексного подхода, включающего оптимизацию архитектуры, конфигурации и инструментов сборки.
+Dagger генерирует код через annotation processing (kapt/ksp), что замедляет инкрементальные сборки. Ключевые стратегии оптимизации: миграция на Hilt, модуляризация, правильное использование scopes и переход на KSP.
 
-Связано с концепциями [[c-dependency-injection]], c-gradle-optimization и c-annotation-processing.
+Связано с концепциями [[c-dependency-injection]], [[c-gradle]].
 
-### Теория: Источники Замедления Сборки
+### Основные Источники Замедления
 
-**Annotation Processing Overhead**
-- Dagger генерирует код на этапе компиляции
-- Каждый `@Provides` метод создает провайдер
-- Каждый компонент генерирует фабрику
-- Большое количество зависимостей увеличивает граф
+**Annotation Processing**
+- Каждый `@Provides` генерирует Provider класс
+- Компоненты создают фабрики и DaggerComponent классы
+- Большой граф зависимостей умножает объём генерируемого кода
 
-**Incremental Build Impact**
-- Изменения в одном модуле могут перекомпилировать весь граф зависимостей
-- Отсутствие инкрементальности в kapt
-- Неоптимальная модульная структура
+**Проблемы Инкрементальности**
+- KAPT не поддерживает полную инкрементальную компиляцию
+- Изменение в одном модуле триггерит перекомпиляцию зависимых графов
+- Неправильная модульная структура усугубляет проблему
 
-### Ключевые Стратегии Оптимизации
+### Практические Стратегии
 
-**1. Миграция на Hilt**
-Hilt автоматизирует создание компонентов и упрощает архитектуру:
-
+**1. Hilt вместо Dagger**
 ```kotlin
-// Вместо ручного создания компонентов
+// ✅ Минимум boilerplate, оптимизированная генерация
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 }
 ```
 
-**2. Модульная архитектура**
-Разделение на логические модули уменьшает область перекомпиляции:
-
+**2. Предпочитайте @Binds над @Provides**
 ```kotlin
 @Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit { /* ... */ }
+abstract class DataModule {
+    @Binds  // ✅ Легковесная делегация без лишних классов
+    abstract fun bindRepo(impl: RepoImpl): Repository
 }
 ```
 
-**3. Использование @Binds**
-`@Binds` генерирует меньше кода чем `@Provides`:
+**3. Миграция на KSP**
+KSP быстрее KAPT в 2-4 раза для annotation processing. Hilt поддерживает KSP начиная с определённой версии.
 
-```kotlin
-@Module
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
-}
-```
-
-**4. Оптимизация Scopes**
-Минимизация Singleton зависимостей:
-
-```kotlin
-@Module
-@InstallIn(ActivityComponent::class)
-object ActivityModule {
-    @Provides
-    @ActivityScoped
-    fun provideAdapter(): MyAdapter = MyAdapter()
-}
-```
-
-### Конфигурация Сборки
-
-**Gradle настройки:**
+**4. Gradle Конфигурация**
 ```properties
 # gradle.properties
-org.gradle.parallel=true
-org.gradle.caching=true
 kapt.incremental.apt=true
 kapt.use.worker.api=true
+org.gradle.caching=true
 ```
 
-**Kapt оптимизации:**
-```gradle
+```kotlin
+// build.gradle.kts
 kapt {
-    useBuildCache = true
-    correctErrorTypes = true
     arguments {
         arg("dagger.gradle.incremental", "enabled")
     }
 }
 ```
 
-### Производительность
+### Измерение Эффекта
 
-**Типичные улучшения:**
-- Время сборки: -50-70%
-- Kapt задачи: -60-80%
-- Генерируемый код: -40-60%
-
-**Мониторинг:**
-- Build Analyzer в Android Studio
-- Gradle Build Scan
-- Профилирование kapt/ksp задач
+Используйте Android Studio Build Analyzer или `./gradlew build --scan` для профилирования kapt/ksp задач. Типичные улучшения: снижение времени annotation processing на 50-70%.
 
 ## Answer (EN)
 
-Minimizing Dagger's impact on build time requires a comprehensive approach including architecture optimization, build configuration, and tooling improvements.
+Dagger generates code via annotation processing (kapt/ksp), which slows down incremental builds. Key optimization strategies: migrate to Hilt, modularize properly, use appropriate scopes, and switch to KSP.
 
-Related to concepts [[c-dependency-injection]], c-gradle-optimization, and c-annotation-processing.
+Related to concepts [[c-dependency-injection]], [[c-gradle]].
 
-### Theory: Sources of Build Slowdown
+### Core Build Slowdowns
 
-**Annotation Processing Overhead**
-- Dagger generates code during compilation
-- Each `@Provides` method creates a provider
-- Each component generates a factory
-- Large dependency graphs increase complexity
+**Annotation Processing**
+- Each `@Provides` generates a Provider class
+- Components create factories and DaggerComponent classes
+- Large dependency graphs multiply generated code volume
 
-**Incremental Build Impact**
-- Changes in one module can recompile the entire dependency graph
-- Lack of incrementality in kapt
-- Suboptimal modular structure
+**Incrementality Issues**
+- KAPT doesn't support full incremental compilation
+- Changes in one module trigger recompilation of dependent graphs
+- Poor modular structure compounds the problem
 
-### Key Optimization Strategies
+### Practical Strategies
 
-**1. Migration to Hilt**
-Hilt automates component creation and simplifies architecture:
-
+**1. Hilt Over Dagger**
 ```kotlin
-// Instead of manual component creation
+// ✅ Minimal boilerplate, optimized generation
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 }
 ```
 
-**2. Modular Architecture**
-Logical module separation reduces recompilation scope:
-
+**2. Prefer @Binds Over @Provides**
 ```kotlin
 @Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit { /* ... */ }
+abstract class DataModule {
+    @Binds  // ✅ Lightweight delegation without extra classes
+    abstract fun bindRepo(impl: RepoImpl): Repository
 }
 ```
 
-**3. Using @Binds**
-`@Binds` generates less code than `@Provides`:
+**3. Migrate to KSP**
+KSP is 2-4x faster than KAPT for annotation processing. Hilt supports KSP starting from certain versions.
 
-```kotlin
-@Module
-abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
-}
-```
-
-**4. Scope Optimization**
-Minimizing Singleton dependencies:
-
-```kotlin
-@Module
-@InstallIn(ActivityComponent::class)
-object ActivityModule {
-    @Provides
-    @ActivityScoped
-    fun provideAdapter(): MyAdapter = MyAdapter()
-}
-```
-
-### Build Configuration
-
-**Gradle settings:**
+**4. Gradle Configuration**
 ```properties
 # gradle.properties
-org.gradle.parallel=true
-org.gradle.caching=true
 kapt.incremental.apt=true
 kapt.use.worker.api=true
+org.gradle.caching=true
 ```
 
-**Kapt optimizations:**
-```gradle
+```kotlin
+// build.gradle.kts
 kapt {
-    useBuildCache = true
-    correctErrorTypes = true
     arguments {
         arg("dagger.gradle.incremental", "enabled")
     }
 }
 ```
 
-### Performance
+### Measuring Impact
 
-**Typical improvements:**
-- Build time: -50-70%
-- Kapt tasks: -60-80%
-- Generated code: -40-60%
-
-**Monitoring:**
-- Build Analyzer in Android Studio
-- Gradle Build Scan
-- Profiling kapt/ksp tasks
+Use Android Studio Build Analyzer or `./gradlew build --scan` to profile kapt/ksp tasks. Typical improvements: 50-70% reduction in annotation processing time.
 
 ## Follow-ups
 
-- How does Dagger's annotation processing compare to Koin's runtime DI in terms of build time?
-- What are the trade-offs between using @Binds vs @Provides for performance?
-- How can you profile and measure Dagger's impact on your specific build times?
+- What is the specific performance difference between KAPT and KSP for Dagger/Hilt?
+- When should you avoid using Singleton scope for build time optimization?
+- How does modularization impact Dagger's code generation?
 
 ## References
 
-- [Hilt Documentation](https://dagger.dev/hilt/)
-- [Android Hilt Guide](https://developer.android.com/training/dependency-injection/hilt-android)
+- https://dagger.dev/hilt/
+- https://developer.android.com/training/dependency-injection/hilt-android
 
 ## Related Questions
 

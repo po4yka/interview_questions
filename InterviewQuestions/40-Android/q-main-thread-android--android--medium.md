@@ -1,313 +1,83 @@
 ---
-id: 20251012-12271133
+id: 20251012-122711
 title: "Main Thread Android / Главный поток Android"
+aliases: ["Main Thread Android", "Главный поток Android", "UI Thread", "Поток UI"]
 topic: android
+subtopics: [threads-sync, lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-vulkan-renderscript--graphics--hard, q-room-code-generation-timing--android--medium, q-baseline-profiles-optimization--performance--medium]
+related: [q-room-code-generation-timing--android--medium]
 created: 2025-10-15
-tags: [threading, ui-thread, difficulty/medium]
+updated: 2025-01-27
+sources: []
+tags: [android/threads-sync, android/lifecycle, threading, ui-thread, difficulty/medium]
 ---
+# Вопрос (RU)
+
+> Какой основной поток выполнения в Android-приложении?
 
 # Question (EN)
 
 > What is the main execution thread in an Android application?
 
-# Вопрос (RU)
-
-> Какой основной поток выполнения приложения?
-
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-The main execution thread in an Android application, also known as the **UI Thread** or **Main Thread**, plays a crucial role in the functioning of Android applications.
+Главный поток (Main Thread), также известный как UI Thread, отвечает за обработку пользовательского интерфейса и событий в Android.
 
-### Key Characteristics
+### Основные характеристики
 
-#### 1. Responsible for User Interface Processing
+#### 1. Обработка UI
 
-All UI-related operations must be executed on the main thread:
+Все операции с UI выполняются в главном потоке:
 
 ```kotlin
+// ✅ UI обновления в main thread
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // UI operations on main thread
         findViewById<TextView>(R.id.textView).text = "Hello World"
     }
 }
 ```
 
-#### 2. Single Thread Execution
+#### 2. Event Loop
 
--   Only **one thread** can modify UI components at a time
--   Prevents **race conditions** and UI inconsistencies
--   Ensures **thread safety** for UI operations
-
-#### 3. Blocking Operations Cause ANR
-
-**ANR (Application Not Responding)** occurs when the main thread is blocked:
+Main thread работает на основе очереди событий (Looper + MessageQueue):
 
 ```kotlin
-// BAD - Blocks main thread
-fun loadData() {
-    val data = networkCall() // Takes 5 seconds
-    updateUI(data) // UI freezes
-}
-
-// GOOD - Use background thread
-fun loadData() {
-    lifecycleScope.launch(Dispatchers.IO) {
-        val data = networkCall() // Background thread
-        withContext(Dispatchers.Main) {
-            updateUI(data) // Back to main thread
-        }
+// ✅ Отправка задачи в main thread
+val handler = Handler(Looper.getMainLooper())
+thread {
+    val result = performComputation()
+    handler.post {
+        textView.text = result
     }
 }
 ```
 
-### Main Thread Responsibilities
+#### 3. ANR при блокировке
 
-1. **UI Updates**: Drawing, layout, input handling
-2. **Lifecycle Events**: onCreate, onResume, onPause
-3. **User Interactions**: Touch events, button clicks
-4. **System Callbacks**: Configuration changes, memory pressure
-
-### Threading Best Practices
-
-#### Use Background Threads for Heavy Operations
+Блокировка главного потока более 5 секунд вызывает ANR (Application Not Responding):
 
 ```kotlin
-// Network operations
-lifecycleScope.launch(Dispatchers.IO) {
-    val result = apiService.getData()
-    withContext(Dispatchers.Main) {
-        updateUI(result)
-    }
-}
-
-// Database operations
-lifecycleScope.launch(Dispatchers.IO) {
-    val users = database.userDao().getAllUsers()
-    withContext(Dispatchers.Main) {
-        adapter.submitList(users)
-    }
-}
-```
-
-#### Use Main Thread for UI Updates Only
-
-```kotlin
-// Correct - UI updates on main thread
-fun updateProgress(progress: Int) {
-    progressBar.progress = progress
-    statusText.text = "Progress: $progress%"
-}
-
-// Incorrect - Heavy computation on main thread
-fun calculateComplexData() {
-    val result = (1..1000000).sum() // Blocks UI
-    updateUI(result)
-}
-```
-
-### Thread Safety Considerations
-
-#### Shared Data Access
-
-```kotlin
-class DataManager {
-    private val _data = MutableLiveData<String>()
-    val data: LiveData<String> = _data
-
-    fun updateData(newData: String) {
-        // Safe - LiveData handles thread switching
-        _data.value = newData
-    }
-}
-```
-
-#### Synchronization
-
-```kotlin
-class ThreadSafeCounter {
-    private var count = 0
-    private val lock = Any()
-
-    fun increment() {
-        synchronized(lock) {
-            count++
-        }
-    }
-
-    fun getCount(): Int {
-        synchronized(lock) {
-            return count
-        }
-    }
-}
-```
-
-### Common Threading Patterns
-
-#### 1. Coroutines with LifecycleScope
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            // Runs on main thread
-            val data = withContext(Dispatchers.IO) {
-                // Background work
-                loadDataFromNetwork()
-            }
-            // Back on main thread
-            updateUI(data)
-        }
-    }
-}
-```
-
-#### 2. ViewModel with Coroutines
-
-```kotlin
-class MyViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    fun loadData() {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            try {
-                val data = repository.getData()
-                _uiState.value = UiState.Success(data)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message)
-            }
-        }
-    }
-}
-```
-
-#### 3. WorkManager for Background Tasks
-
-```kotlin
-class DataSyncWorker(
-    context: Context,
-    params: WorkerParameters
-) : Worker(context, params) {
-
-    override fun doWork(): Result {
-        return try {
-            // Background work
-            syncData()
-            Result.success()
-        } catch (e: Exception) {
-            Result.failure()
-        }
-    }
-}
-```
-
-### Threading Dispatchers
-
-```kotlin
-// Main thread - UI operations
-Dispatchers.Main
-
-// Background thread - CPU-intensive work
-Dispatchers.Default
-
-// Background thread - I/O operations
-Dispatchers.IO
-
-// Unconfined - inherits caller's thread
-Dispatchers.Unconfined
-```
-
-### Debugging Thread Issues
-
-#### Check Current Thread
-
-```kotlin
-fun checkThread() {
-    Log.d("Thread", "Current thread: ${Thread.currentThread().name}")
-    Log.d("Thread", "Is main thread: ${Looper.getMainLooper().thread == Thread.currentThread()}")
-}
-```
-
-#### Detect ANR
-
-```kotlin
-// Monitor main thread blocking
-class ANRDetector {
-    fun startMonitoring() {
-        val handler = Handler(Looper.getMainLooper())
-        handler.post(object : Runnable {
-            override fun run() {
-                // Check if main thread is responsive
-                handler.postDelayed(this, 1000)
-            }
-        })
-    }
-}
-```
-
----
-
-## Ответ (RU)
-
-        // Всё это выполняется в main thread
-        val textView = findViewById<TextView>(R.id.textView)
-        textView.text = "Hello, World!"
-
-        button.setOnClickListener {
-            // Обработка событий - тоже в main thread
-            textView.text = "Button clicked"
-        }
-    }
-
-}
-
-````
-
-#### 2. Обработка событий
-
-Главный поток обрабатывает все события взаимодействия с пользователем:
-
-```kotlin
-// Все эти события обрабатываются в main thread
-button.setOnClickListener { }
-editText.addTextChangedListener { }
-recyclerView.setOnScrollListener { }
-````
-
-#### 3. Запрещает длительные операции
-
-**НЕЛЬЗЯ выполнять в main thread**:
-
--   Сетевые запросы
--   Операции с базой данных
--   Тяжёлые вычисления
--   Чтение/запись больших файлов
-
-```kotlin
-// - НЕПРАВИЛЬНО - блокирует UI
+// ❌ Блокирует UI
 button.setOnClickListener {
-    val data = URL("https://api.example.com/data").readText()  // NetworkOnMainThreadException!
+    val data = URL("https://api.example.com").readText()  // NetworkOnMainThreadException!
     textView.text = data
 }
 
-//  ПРАВИЛЬНО - выполнить в фоновом потоке
+// ✅ Использование фонового потока
 button.setOnClickListener {
     lifecycleScope.launch(Dispatchers.IO) {
-        val data = URL("https://api.example.com/data").readText()
+        val data = URL("https://api.example.com").readText()
         withContext(Dispatchers.Main) {
             textView.text = data
         }
@@ -315,102 +85,168 @@ button.setOnClickListener {
 }
 ```
 
-#### 4. Event Loop (Петля событий)
+### Запрещённые операции
 
-Main thread работает на основе event loop, который обрабатывает события из очереди.
+**Нельзя выполнять в main thread**:
 
-```kotlin
-// Концептуально main thread работает так:
-while (true) {
-    val event = eventQueue.getNextEvent()
-    handleEvent(event)
-}
-```
+- Сетевые запросы
+- Операции с базой данных
+- Тяжёлые вычисления
+- Чтение/запись больших файлов
 
-**Компоненты event loop**:
-
--   **Looper** - управляет очередью сообщений
--   **MessageQueue** - очередь событий и задач
--   **Handler** - отправляет и обрабатывает сообщения
+### Современные подходы
 
 ```kotlin
-// Отправка задачи в main thread из фонового потока
-Thread {
-    // Фоновая работа
-    val result = performHeavyComputation()
-
-    // Обновление UI в main thread
-    runOnUiThread {
-        textView.text = result
-    }
-}.start()
-
-// Или с Handler
-val handler = Handler(Looper.getMainLooper())
-Thread {
-    val result = performHeavyComputation()
-    handler.post {
-        textView.text = result
-    }
-}.start()
-```
-
-### Правило "5 секунд"
-
-Если main thread заблокирован более чем на 5 секунд, Android покажет диалог **"Application Not Responding" (ANR)**.
-
-```kotlin
-// - НЕПРАВИЛЬНО - вызовет ANR
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-
-    Thread.sleep(6000)  // ANR!
-}
-
-//  ПРАВИЛЬНО - длительные операции в фоне
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-
-    lifecycleScope.launch(Dispatchers.IO) {
-        performLongOperation()
-    }
-}
-```
-
-### Современные подходы к работе с потоками
-
-```kotlin
-// 1. Coroutines (рекомендуется)
+// ✅ Coroutines с LifecycleScope
 lifecycleScope.launch {
     val data = withContext(Dispatchers.IO) {
-        fetchDataFromNetwork()
+        repository.fetchData()
     }
-    // Автоматически вернёмся в main thread
-    textView.text = data
+    updateUI(data)
 }
 
-// 2. LiveData + ViewModel
+// ✅ ViewModel с StateFlow
 class MyViewModel : ViewModel() {
-    private val _data = MutableLiveData<String>()
-    val data: LiveData<String> = _data
+    private val _state = MutableStateFlow<UiState>(UiState.Loading)
+    val state = _state.asStateFlow()
 
     fun loadData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = fetchDataFromNetwork()
-            _data.postValue(result)  // Безопасно обновит UI
+        viewModelScope.launch {
+            _state.value = UiState.Loading
+            _state.value = try {
+                UiState.Success(repository.getData())
+            } catch (e: Exception) {
+                UiState.Error(e.message)
+            }
         }
     }
 }
-
-// 3. WorkManager (для фоновых задач)
-val workRequest = OneTimeWorkRequestBuilder<MyWorker>().build()
-WorkManager.getInstance(context).enqueue(workRequest)
 ```
-
-**English**: Main thread (UI thread) is responsible for handling UI operations and user events in Android. It uses an event loop (Looper + MessageQueue) to process events. Long operations (network, database, heavy computations) must run on background threads to avoid ANR (Application Not Responding) dialog after 5 seconds.
 
 ---
 
+## Answer (EN)
+
+The Main Thread, also known as the UI Thread, is responsible for handling user interface operations and events in Android.
+
+### Key Characteristics
+
+#### 1. UI Processing
+
+All UI-related operations must execute on the main thread:
+
+```kotlin
+// ✅ UI updates on main thread
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        findViewById<TextView>(R.id.textView).text = "Hello World"
+    }
+}
+```
+
+#### 2. Event Loop
+
+The main thread operates using an event queue (Looper + MessageQueue):
+
+```kotlin
+// ✅ Posting task to main thread
+val handler = Handler(Looper.getMainLooper())
+thread {
+    val result = performComputation()
+    handler.post {
+        textView.text = result
+    }
+}
+```
+
+#### 3. ANR on Blocking
+
+Blocking the main thread for more than 5 seconds triggers ANR (Application Not Responding):
+
+```kotlin
+// ❌ Blocks UI
+button.setOnClickListener {
+    val data = URL("https://api.example.com").readText()  // NetworkOnMainThreadException!
+    textView.text = data
+}
+
+// ✅ Use background thread
+button.setOnClickListener {
+    lifecycleScope.launch(Dispatchers.IO) {
+        val data = URL("https://api.example.com").readText()
+        withContext(Dispatchers.Main) {
+            textView.text = data
+        }
+    }
+}
+```
+
+### Prohibited Operations
+
+**Must NOT be performed on main thread**:
+
+- Network requests
+- Database operations
+- Heavy computations
+- Reading/writing large files
+
+### Modern Approaches
+
+```kotlin
+// ✅ Coroutines with LifecycleScope
+lifecycleScope.launch {
+    val data = withContext(Dispatchers.IO) {
+        repository.fetchData()
+    }
+    updateUI(data)
+}
+
+// ✅ ViewModel with StateFlow
+class MyViewModel : ViewModel() {
+    private val _state = MutableStateFlow<UiState>(UiState.Loading)
+    val state = _state.asStateFlow()
+
+    fun loadData() {
+        viewModelScope.launch {
+            _state.value = UiState.Loading
+            _state.value = try {
+                UiState.Success(repository.getData())
+            } catch (e: Exception) {
+                UiState.Error(e.message)
+            }
+        }
+    }
+}
+```
+
+---
+
+## Follow-ups
+
+- How does Looper.prepare() work internally?
+- What's the difference between Handler.post() and View.post()?
+- How to detect if current code is running on main thread?
+- What happens when MessageQueue is full?
+- How does StrictMode detect main thread violations?
+
+## References
+
+- Official Android documentation on threading
+- Kotlin Coroutines guide
+
 ## Related Questions
+
+### Prerequisites
+- Understanding of threads and processes in Android
+- Coroutines fundamentals
+
+### Related
+- [[q-room-code-generation-timing--android--medium]] - Database operations and threading
+- Handler and Looper patterns
+
+### Advanced
+- ANR debugging techniques
+- StrictMode for thread policy violations

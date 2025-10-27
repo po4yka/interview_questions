@@ -1,108 +1,184 @@
 ---
 id: 20251016-164356
 title: "How To Choose Layout For Fragment / Как выбрать layout для Fragment"
+aliases: ["How To Choose Layout For Fragment", "Как выбрать layout для Fragment"]
 topic: android
+subtopics: [fragment, ui-views]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-flow-testing-turbine--testing--medium, q-fragment-basics--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
+related: [q-fragment-basics--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
 created: 2025-10-15
-tags: [android/fragments, android/layouts, android/ui, difficulty/easy, fragment, fragments, layoutinflater, layouts, ui]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:39:58 pm
+updated: 2025-01-27
+sources: []
+tags: [android/fragment, android/ui-views, difficulty/easy]
 ---
+# Вопрос (RU)
 
-# Каким Образом Ты Выбираешь Layout?
+Каким образом ты выбираешь layout для Fragment?
 
-**English**: How do you choose a layout?
+# Question (EN)
+
+How do you choose a layout for a Fragment?
+
+## Ответ (RU)
+
+В Android фрагментах выбор layout выполняется в методе **onCreateView()** с использованием **LayoutInflater**. Это основной способ преобразования XML-разметки в View объекты.
+
+### Основные Подходы
+
+**1. XML Inflation**
+
+```kotlin
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    // ✅ attachToRoot = false для фрагментов
+    return inflater.inflate(R.layout.fragment_example, container, false)
+}
+```
+
+**Ключевые параметры:**
+- `inflater` — предоставляется системой
+- `container` — родительская ViewGroup
+- `attachToRoot` — **обязательно false** (FragmentManager сам управляет добавлением)
+
+**2. View Binding** (рекомендуется)
+
+```kotlin
+private var _binding: FragmentExampleBinding? = null
+private val binding get() = _binding!!
+
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    _binding = FragmentExampleBinding.inflate(inflater, container, false)
+    return binding.root
+}
+
+override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null  // ✅ Предотвращение утечек памяти
+}
+```
+
+**3. Jetpack Compose**
+
+```kotlin
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    return ComposeView(requireContext()).apply {
+        setContent {
+            MaterialTheme {
+                MyScreen()
+            }
+        }
+    }
+}
+```
+
+### Условный Выбор Layout
+
+Используйте **resource qualifiers** (layout-land, layout-sw600dp) вместо runtime проверок:
+
+```kotlin
+// ❌ Плохо — проверка во время выполнения
+val layoutId = if (resources.getBoolean(R.bool.is_tablet)) {
+    R.layout.fragment_tablet
+} else {
+    R.layout.fragment_phone
+}
+
+// ✅ Хорошо — resource qualifiers
+// layout/fragment_example.xml
+// layout-sw600dp/fragment_example.xml
+return inflater.inflate(R.layout.fragment_example, container, false)
+```
+
+### Типичные Ошибки
+
+```kotlin
+// ❌ attachToRoot = true вызовет IllegalStateException
+return inflater.inflate(R.layout.fragment, container, true)
+
+// ❌ Утечка памяти через binding
+private val binding: FragmentExampleBinding? = null
+
+// ✅ Правильная очистка
+override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
+}
+```
 
 ## Answer (EN)
 
-In Android fragments, layout selection is performed in the **onCreateView()** method using **LayoutInflater**. This is the standard approach for inflating XML layouts into View objects.
+In Android fragments, layout selection is performed in the **onCreateView()** method using **LayoutInflater**. This is the primary way to inflate XML layouts into View objects.
 
-### Basic Layout Inflation
+### Main Approaches
+
+**1. XML Inflation**
 
 ```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_example, container, false)
-    }
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    // ✅ attachToRoot = false for fragments
+    return inflater.inflate(R.layout.fragment_example, container, false)
 }
 ```
 
-### Key Parameters Explained
+**Key parameters:**
+- `inflater` — provided by the system
+- `container` — parent ViewGroup
+- `attachToRoot` — **must be false** (FragmentManager handles attachment)
 
-1. **inflater**: LayoutInflater provided by the system
-2. **container**: Parent ViewGroup that the fragment's UI will be attached to
-3. **attachToRoot**: Should be **false** for fragments (FragmentManager handles attachment)
-
-### Modern Approach with View Binding
+**2. View Binding** (recommended)
 
 ```kotlin
-class MyFragment : Fragment() {
-    private var _binding: FragmentExampleBinding? = null
-    private val binding get() = _binding!!
+private var _binding: FragmentExampleBinding? = null
+private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentExampleBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    _binding = FragmentExampleBinding.inflate(inflater, container, false)
+    return binding.root
+}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // Access views through binding
-        binding.textView.text = "Hello"
-        binding.button.setOnClickListener {
-            // Handle click
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // Prevent memory leaks
-    }
+override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null  // ✅ Prevent memory leaks
 }
 ```
 
-### Alternative: Programmatic Layout Creation
-
-For dynamic or custom layouts, you can create views programmatically:
+**3. Jetpack Compose**
 
 ```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Create layout programmatically
-        return LinearLayout(requireContext()).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-
-            addView(TextView(requireContext()).apply {
-                text = "Dynamic TextView"
-                textSize = 18f
-            })
-
-            addView(Button(requireContext()).apply {
-                text = "Dynamic Button"
-                setOnClickListener {
-                    // Handle click
-                }
-            })
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    return ComposeView(requireContext()).apply {
+        setContent {
+            MaterialTheme {
+                MyScreen()
+            }
         }
     }
 }
@@ -110,290 +186,61 @@ class MyFragment : Fragment() {
 
 ### Conditional Layout Selection
 
-Choose different layouts based on device characteristics:
+Use **resource qualifiers** (layout-land, layout-sw600dp) instead of runtime checks:
 
 ```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val layoutId = if (resources.getBoolean(R.bool.is_tablet)) {
-            R.layout.fragment_example_tablet
-        } else {
-            R.layout.fragment_example_phone
-        }
-
-        return inflater.inflate(layoutId, container, false)
-    }
+// ❌ Bad — runtime check
+val layoutId = if (resources.getBoolean(R.bool.is_tablet)) {
+    R.layout.fragment_tablet
+} else {
+    R.layout.fragment_phone
 }
-```
 
-### Using Different Layouts for Orientation
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val layoutId = when (resources.configuration.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> R.layout.fragment_landscape
-            else -> R.layout.fragment_portrait
-        }
-
-        return inflater.inflate(layoutId, container, false)
-    }
-}
-```
-
-### Jetpack Compose Alternative
-
-Modern approach using Compose:
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                MaterialTheme {
-                    Column {
-                        Text("Hello from Compose")
-                        Button(onClick = { /* Handle click */ }) {
-                            Text("Click Me")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-### Best Practices
-
-1. **Always return non-null View** from onCreateView (unless using old patterns)
-2. **Use View Binding** over findViewById for type safety
-3. **Set attachToRoot to false** when inflating in fragments
-4. **Clean up binding references** in onDestroyView
-5. **Consider Compose** for new projects
-6. **Use resource qualifiers** (layout-land, layout-sw600dp) instead of runtime checks
-
-### Common Mistakes to Avoid
-
-```kotlin
-// WRONG - attachToRoot = true
-return inflater.inflate(R.layout.fragment_example, container, true)
-
-// CORRECT - attachToRoot = false
+// ✅ Good — resource qualifiers
+// layout/fragment_example.xml
+// layout-sw600dp/fragment_example.xml
 return inflater.inflate(R.layout.fragment_example, container, false)
+```
 
-// WRONG - Not cleaning up binding
-private val binding: FragmentExampleBinding? = null // Memory leak
+### Common Mistakes
 
-// CORRECT - Clean up in onDestroyView
+```kotlin
+// ❌ attachToRoot = true will throw IllegalStateException
+return inflater.inflate(R.layout.fragment, container, true)
+
+// ❌ Memory leak via binding
+private val binding: FragmentExampleBinding? = null
+
+// ✅ Proper cleanup
 override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
 }
 ```
-
-## Ответ (RU)
-
-В Android фрагментах выбор макета выполняется в методе **onCreateView()** с использованием **LayoutInflater**. Это стандартный подход для преобразования XML макетов в объекты View.
-
-### Базовое Преобразование Макета
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Преобразовать макет для этого фрагмента
-        return inflater.inflate(R.layout.fragment_example, container, false)
-    }
-}
-```
-
-### Объяснение Ключевых Параметров
-
-1. **inflater**: LayoutInflater предоставленный системой
-2. **container**: Родительский ViewGroup к которому UI фрагмента будет присоединен
-3. **attachToRoot**: Должен быть **false** для фрагментов (FragmentManager управляет присоединением)
-
-### Современный Подход С View Binding
-
-```kotlin
-class MyFragment : Fragment() {
-    private var _binding: FragmentExampleBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentExampleBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // Доступ к view через binding
-        binding.textView.text = "Привет"
-        binding.button.setOnClickListener {
-            // Обработка нажатия
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // Предотвращение утечек памяти
-    }
-}
-```
-
-### Альтернатива: Программное Создание Макета
-
-Для динамических или кастомных макетов можно создавать view программно:
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Создать макет программно
-        return LinearLayout(requireContext()).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-
-            addView(TextView(requireContext()).apply {
-                text = "Динамический TextView"
-                textSize = 18f
-            })
-
-            addView(Button(requireContext()).apply {
-                text = "Динамическая кнопка"
-                setOnClickListener {
-                    // Обработка нажатия
-                }
-            })
-        }
-    }
-}
-```
-
-### Условный Выбор Макета
-
-Выбор различных макетов на основе характеристик устройства:
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val layoutId = if (resources.getBoolean(R.bool.is_tablet)) {
-            R.layout.fragment_example_tablet
-        } else {
-            R.layout.fragment_example_phone
-        }
-
-        return inflater.inflate(layoutId, container, false)
-    }
-}
-```
-
-### Использование Разных Макетов Для Ориентации
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val layoutId = when (resources.configuration.orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> R.layout.fragment_landscape
-            else -> R.layout.fragment_portrait
-        }
-
-        return inflater.inflate(layoutId, container, false)
-    }
-}
-```
-
-### Альтернатива Jetpack Compose
-
-Современный подход с использованием Compose:
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                MaterialTheme {
-                    Column {
-                        Text("Привет из Compose")
-                        Button(onClick = { /* Обработка нажатия */ }) {
-                            Text("Нажми меня")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Всегда возвращайте non-null View** из onCreateView (если не используете старые паттерны)
-2. **Используйте View Binding** вместо findViewById для безопасности типов
-3. **Устанавливайте attachToRoot в false** при преобразовании во фрагментах
-4. **Очищайте ссылки binding** в onDestroyView
-5. **Рассмотрите Compose** для новых проектов
-6. **Используйте resource qualifiers** (layout-land, layout-sw600dp) вместо runtime проверок
-
-### Частые Ошибки, Которых Следует Избегать
-
-```kotlin
-// НЕПРАВИЛЬНО - attachToRoot = true
-return inflater.inflate(R.layout.fragment_example, container, true)
-
-// ПРАВИЛЬНО - attachToRoot = false
-return inflater.inflate(R.layout.fragment_example, container, false)
-
-// НЕПРАВИЛЬНО - Не очищается binding
-private val binding: FragmentExampleBinding? = null // Утечка памяти
-
-// ПРАВИЛЬНО - Очистка в onDestroyView
-override fun onDestroyView() {
-    super.onDestroyView()
-    _binding = null
-}
-```
-
-**Резюме**: Выбор макета для фрагмента осуществляется в методе **onCreateView()** с помощью **LayoutInflater**. Стандартный подход: `inflater.inflate(R.layout.fragment_example, container, false)`. Современный подход использует **View Binding** для type-safe доступа к views. Альтернативно можно создавать макеты программно или использовать Jetpack Compose. Всегда устанавливайте `attachToRoot = false` для фрагментов и очищайте binding ссылки в onDestroyView для предотвращения утечек памяти.
 
 ---
 
+## Follow-ups
+
+- Why must `attachToRoot` be false for fragments?
+- What happens if you don't clean up View Binding references in `onDestroyView()`?
+- When should you prefer Jetpack Compose over traditional XML layouts?
+- How do resource qualifiers work for different screen sizes and orientations?
+
+## References
+
+- Official Android documentation: Fragment lifecycle
+- Official Android documentation: View Binding
+- Official Android documentation: LayoutInflater API reference
+
 ## Related Questions
+
+### Prerequisites
+- [[q-fragment-basics--android--easy|Fragment Basics]]
+
+### Related
+- [[q-why-user-data-may-disappear-on-screen-rotation--android--hard|Why User Data May Disappear on Screen Rotation]]
+
+### Advanced
+- Advanced fragment transaction management
+- Fragment result API and communication patterns

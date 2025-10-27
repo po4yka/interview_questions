@@ -1,40 +1,36 @@
 ---
 id: 20251017-144923
 title: "Large File Upload / Загрузка больших файлов"
+aliases: ["Large File Upload", "Загрузка больших файлов"]
 topic: android
+subtopics: [networking-http, background-execution, files-media]
+question_kind: android
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-raise-process-priority--android--medium, q-integration-testing-strategies--testing--medium]
+related: [q-viewmodel-vs-onsavedinstancestate--android--medium]
 created: 2025-10-15
-tags: [file-upload, workmanager, retrofit, background-processing, multipart, difficulty/medium]
+updated: 2025-01-27
+sources: []
+tags: [android/networking-http, android/background-execution, android/files-media, file-upload, workmanager, retrofit, multipart, difficulty/medium]
+---
+# Вопрос (RU)
+
+Как загрузить большой файл на сервер в Android?
+
+# Question (EN)
+
+How to upload large files to server in Android?
+
 ---
 
-# Загрузка больших файлов на сервер в Android
+## Ответ (RU)
 
-**English**: How to upload large files to server in Android?
+Для загрузки больших файлов используйте **WorkManager + Retrofit** для гарантированного выполнения в фоне. Ключевые требования: асинхронная обработка, устойчивость к configuration changes, retry logic, отображение прогресса.
 
-## Answer (EN)
-Для реализации загрузки больших файлов необходимо учитывать: асинхронную обработку, устойчивость к изменениям конфигурации (rotation), восстановление после неудач, отображение прогресса и работу в фоновом режиме.
-
-### 1. WorkManager + Retrofit (Recommended Approach)
-
-#### Dependencies
-
-```gradle
-dependencies {
-    // WorkManager
-    implementation "androidx.work:work-runtime-ktx:2.9.0"
-
-    // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-
-    // OkHttp для логирования и настройки таймаутов
-    implementation "com.squareup.okhttp3:okhttp:4.12.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
-}
-```
+### 1. WorkManager + Retrofit (Рекомендуемый подход)
 
 #### API Interface
 
@@ -47,7 +43,7 @@ interface FileUploadApi {
         @Part("description") description: RequestBody
     ): Response<UploadResponse>
 
-    // Для chunked upload (частями)
+    // ✅ Для очень больших файлов - chunked upload
     @Streaming
     @PUT("upload/{fileId}/chunk")
     suspend fun uploadChunk(
@@ -56,46 +52,16 @@ interface FileUploadApi {
         @Body chunk: RequestBody
     ): Response<ChunkResponse>
 }
-
-data class UploadResponse(
-    val success: Boolean,
-    val fileUrl: String,
-    val message: String
-)
-
-data class ChunkResponse(
-    val received: Long,
-    val total: Long
-)
 ```
 
-#### Retrofit Setup with Large Timeouts
+#### Retrofit Setup
 
 ```kotlin
-object RetrofitClient {
-    private const val BASE_URL = "https://api.example.com/"
-
-    private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(60, TimeUnit.SECONDS)  // Увеличен для больших файлов
-        .writeTimeout(60, TimeUnit.SECONDS) // Увеличен для upload
-        .addInterceptor(HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        })
-        .build()
-
-    val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    val api: FileUploadApi = retrofit.create(FileUploadApi::class.java)
-}
+private val okHttpClient = OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(60, TimeUnit.SECONDS)  // ✅ Увеличен для больших файлов
+    .writeTimeout(60, TimeUnit.SECONDS) // ✅ Увеличен для upload
+    .build()
 ```
 
 #### FileUploadWorker
@@ -108,496 +74,360 @@ class FileUploadWorker(
 
     override suspend fun doWork(): Result {
         val filePath = inputData.getString(KEY_FILE_PATH) ?: return Result.failure()
-        val description = inputData.getString(KEY_DESCRIPTION) ?: ""
 
         return try {
-            // Показать notification о начале загрузки
+            // ✅ Foreground service с notification
             setForeground(createForegroundInfo(0))
 
-            // Подготовить файл
             val file = File(filePath)
-            if (!file.exists()) {
-                return Result.failure(
-                    workDataOf(KEY_ERROR to "File not found")
-                )
-            }
+            if (!file.exists()) return Result.failure()
 
-            // Создать MultipartBody.Part
             val requestFile = file.asRequestBody("multipart/form-data".toMediaType())
-            val filePart = MultipartBody.Part.createFormData(
-                "file",
-                file.name,
-                requestFile
-            )
+            val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-            val descriptionBody = description.toRequestBody("text/plain".toMediaType())
-
-            // Отправить файл
             val response = RetrofitClient.api.uploadFile(filePart, descriptionBody)
 
             if (response.isSuccessful && response.body()?.success == true) {
-                // Успешная загрузка
-                Result.success(
-                    workDataOf(
-                        KEY_FILE_URL to response.body()?.fileUrl,
-                        KEY_MESSAGE to "Upload successful"
-                    )
-                )
+                Result.success(workDataOf(KEY_FILE_URL to response.body()?.fileUrl))
             } else {
-                // Ошибка от сервера
-                Result.retry()
+                Result.retry() // ✅ Автоматический retry
             }
-
         } catch (e: Exception) {
-            Log.e(TAG, "Upload failed", e)
-
-            // Retry с экспоненциальной задержкой
             if (runAttemptCount < MAX_RETRIES) {
-                Result.retry()
+                Result.retry() // ✅ Exponential backoff
             } else {
-                Result.failure(
-                    workDataOf(KEY_ERROR to e.message)
-                )
+                Result.failure(workDataOf(KEY_ERROR to e.message))
             }
         }
     }
+}
+```
 
-    private fun createForegroundInfo(progress: Int): ForegroundInfo {
-        val notification = NotificationCompat.Builder(
-            applicationContext,
-            CHANNEL_ID
+#### Starting Upload
+
+```kotlin
+fun uploadFile(filePath: String): UUID {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Требует сеть
+        .build()
+
+    val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
+        .setInputData(workDataOf(KEY_FILE_PATH to filePath))
+        .setConstraints(constraints)
+        .setBackoffCriteria(
+            BackoffPolicy.EXPONENTIAL,  // ✅ Exponential backoff
+            WorkRequest.MIN_BACKOFF_MILLIS,
+            TimeUnit.MILLISECONDS
         )
-            .setContentTitle("Uploading file")
-            .setContentText("Upload in progress...")
-            .setSmallIcon(R.drawable.ic_upload)
-            .setProgress(100, progress, false)
-            .setOngoing(true)
-            .build()
+        .build()
 
-        return ForegroundInfo(NOTIFICATION_ID, notification)
-    }
-
-    companion object {
-        const val TAG = "FileUploadWorker"
-        const val KEY_FILE_PATH = "file_path"
-        const val KEY_DESCRIPTION = "description"
-        const val KEY_FILE_URL = "file_url"
-        const val KEY_MESSAGE = "message"
-        const val KEY_ERROR = "error"
-        const val MAX_RETRIES = 3
-
-        const val CHANNEL_ID = "file_upload_channel"
-        const val NOTIFICATION_ID = 1001
-    }
+    WorkManager.getInstance(context).enqueue(uploadRequest)
+    return uploadRequest.id
 }
 ```
 
-#### Starting the Upload
+### 2. Chunked Upload (для файлов > 50 MB)
 
 ```kotlin
-class FileUploadManager(private val context: Context) {
-
-    fun uploadFile(filePath: String, description: String): UUID {
-        // Создать constraints
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(false)  // Можно загружать даже при низком заряде
-            .build()
-
-        // Создать WorkRequest
-        val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
-            .setInputData(
-                workDataOf(
-                    FileUploadWorker.KEY_FILE_PATH to filePath,
-                    FileUploadWorker.KEY_DESCRIPTION to description
-                )
-            )
-            .setConstraints(constraints)
-            .setBackoffCriteria(
-                BackoffPolicy.EXPONENTIAL,
-                WorkRequest.MIN_BACKOFF_MILLIS,
-                TimeUnit.MILLISECONDS
-            )
-            .addTag("file_upload")
-            .build()
-
-        // Enqueue работу
-        WorkManager.getInstance(context).enqueue(uploadRequest)
-
-        return uploadRequest.id
-    }
-
-    fun observeUpload(uploadId: UUID): LiveData<WorkInfo> {
-        return WorkManager.getInstance(context)
-            .getWorkInfoByIdLiveData(uploadId)
-    }
-
-    fun cancelUpload(uploadId: UUID) {
-        WorkManager.getInstance(context).cancelWorkById(uploadId)
-    }
-}
-
-// Использование в Activity/Fragment
-class UploadActivity : AppCompatActivity() {
-    private lateinit var uploadManager: FileUploadManager
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        uploadManager = FileUploadManager(this)
-
-        uploadButton.setOnClickListener {
-            val filePath = getSelectedFilePath()
-            val uploadId = uploadManager.uploadFile(filePath, "My file description")
-
-            // Наблюдать за прогрессом
-            uploadManager.observeUpload(uploadId).observe(this) { workInfo ->
-                when (workInfo.state) {
-                    WorkInfo.State.RUNNING -> {
-                        progressBar.visibility = View.VISIBLE
-                        statusText.text = "Uploading..."
-                    }
-                    WorkInfo.State.SUCCEEDED -> {
-                        progressBar.visibility = View.GONE
-                        val fileUrl = workInfo.outputData.getString(
-                            FileUploadWorker.KEY_FILE_URL
-                        )
-                        statusText.text = "Upload complete: $fileUrl"
-                    }
-                    WorkInfo.State.FAILED -> {
-                        progressBar.visibility = View.GONE
-                        val error = workInfo.outputData.getString(
-                            FileUploadWorker.KEY_ERROR
-                        )
-                        statusText.text = "Upload failed: $error"
-                    }
-                    WorkInfo.State.CANCELLED -> {
-                        progressBar.visibility = View.GONE
-                        statusText.text = "Upload cancelled"
-                    }
-                    else -> {}
-                }
-            }
-        }
-    }
-}
-```
-
-### 2. Chunked Upload (For Very Large Files)
-
-Разбиение файла на части (chunks) для загрузки.
-
-```kotlin
-class ChunkedFileUploadWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
-
+class ChunkedFileUploadWorker : CoroutineWorker() {
     override suspend fun doWork(): Result {
-        val filePath = inputData.getString(KEY_FILE_PATH) ?: return Result.failure()
-        val file = File(filePath)
+        val file = File(inputData.getString(KEY_FILE_PATH))
+        val chunkSize = 1024 * 1024 * 5  // ✅ 5 MB per chunk
 
-        if (!file.exists()) return Result.failure()
+        file.inputStream().use { inputStream ->
+            var uploadedBytes = 0L
+            val buffer = ByteArray(chunkSize)
 
-        val fileSize = file.length()
-        val chunkSize = 1024 * 1024 * 5  // 5 MB per chunk
-        val totalChunks = (fileSize + chunkSize - 1) / chunkSize
+            while (uploadedBytes < file.length()) {
+                val bytesRead = inputStream.read(buffer)
+                if (bytesRead == -1) break
 
-        return try {
-            // Создать upload session на сервере
-            val fileId = createUploadSession(file.name, fileSize)
+                val chunk = buffer.copyOf(bytesRead)
+                val contentRange = "bytes $uploadedBytes-${uploadedBytes + bytesRead - 1}/${file.length()}"
 
-            // Загрузить файл чанками
-            file.inputStream().use { inputStream ->
-                var uploadedBytes = 0L
-                var chunkIndex = 0L
+                val response = api.uploadChunk(fileId, contentRange, chunk.toRequestBody())
 
-                val buffer = ByteArray(chunkSize.toInt())
+                if (!response.isSuccessful) return Result.retry()
 
-                while (uploadedBytes < fileSize) {
-                    val bytesRead = inputStream.read(buffer, 0, buffer.size)
-                    if (bytesRead == -1) break
+                uploadedBytes += bytesRead
 
-                    val chunk = buffer.copyOf(bytesRead)
-                    val chunkBody = chunk.toRequestBody(
-                        "application/octet-stream".toMediaType()
-                    )
-
-                    val contentRange = "bytes $uploadedBytes-${uploadedBytes + bytesRead - 1}/$fileSize"
-
-                    val response = RetrofitClient.api.uploadChunk(
-                        fileId,
-                        contentRange,
-                        chunkBody
-                    )
-
-                    if (!response.isSuccessful) {
-                        return Result.retry()
-                    }
-
-                    uploadedBytes += bytesRead
-                    chunkIndex++
-
-                    // Обновить прогресс
-                    val progress = (uploadedBytes * 100 / fileSize).toInt()
-                    setProgress(workDataOf(KEY_PROGRESS to progress))
-                    setForeground(createForegroundInfo(progress))
-                }
+                // ✅ Обновить прогресс
+                val progress = (uploadedBytes * 100 / file.length()).toInt()
+                setProgress(workDataOf(KEY_PROGRESS to progress))
             }
-
-            Result.success(workDataOf(KEY_FILE_ID to fileId))
-
-        } catch (e: Exception) {
-            Log.e(TAG, "Chunked upload failed", e)
-            Result.retry()
         }
-    }
 
-    private suspend fun createUploadSession(fileName: String, fileSize: Long): String {
-        // Вызов API для создания upload session
-        // Возвращает fileId для последующих chunk uploads
-        return "file_${System.currentTimeMillis()}"
-    }
-
-    private fun createForegroundInfo(progress: Int): ForegroundInfo {
-        val notification = NotificationCompat.Builder(
-            applicationContext,
-            CHANNEL_ID
-        )
-            .setContentTitle("Uploading large file")
-            .setContentText("Progress: $progress%")
-            .setSmallIcon(R.drawable.ic_upload)
-            .setProgress(100, progress, false)
-            .setOngoing(true)
-            .build()
-
-        return ForegroundInfo(NOTIFICATION_ID, notification)
-    }
-
-    companion object {
-        const val TAG = "ChunkedUpload"
-        const val KEY_FILE_PATH = "file_path"
-        const val KEY_FILE_ID = "file_id"
-        const val KEY_PROGRESS = "progress"
-        const val CHANNEL_ID = "chunked_upload_channel"
-        const val NOTIFICATION_ID = 1002
+        return Result.success()
     }
 }
 ```
 
-### 3. Progress Tracking with OkHttp Interceptor
+### 3. Progress Tracking
 
 ```kotlin
+// ✅ Отслеживание прогресса через OkHttp Interceptor
 class UploadProgressInterceptor(
     private val onProgress: (bytesUploaded: Long, totalBytes: Long) -> Unit
 ) : Interceptor {
-
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        val originalRequest = chain.request()
-
-        val progressRequestBody = originalRequest.body?.let {
-            ProgressRequestBody(it, onProgress)
-        }
-
-        val progressRequest = originalRequest.newBuilder()
-            .method(originalRequest.method, progressRequestBody)
-            .build()
-
-        return chain.proceed(progressRequest)
+        val progressBody = ProgressRequestBody(originalBody, onProgress)
+        return chain.proceed(request.newBuilder().method(method, progressBody).build())
     }
 }
-
-class ProgressRequestBody(
-    private val delegate: RequestBody,
-    private val onProgress: (bytesUploaded: Long, totalBytes: Long) -> Unit
-) : RequestBody() {
-
-    override fun contentType() = delegate.contentType()
-
-    override fun contentLength() = delegate.contentLength()
-
-    override fun writeTo(sink: BufferedSink) {
-        val totalBytes = contentLength()
-        var uploadedBytes = 0L
-
-        val progressSink = object : ForwardingSink(sink) {
-            override fun write(source: Buffer, byteCount: Long) {
-                super.write(source, byteCount)
-                uploadedBytes += byteCount
-                onProgress(uploadedBytes, totalBytes)
-            }
-        }
-
-        val bufferedSink = progressSink.buffer()
-        delegate.writeTo(bufferedSink)
-        bufferedSink.flush()
-    }
-}
-
-// Использование
-val client = OkHttpClient.Builder()
-    .addInterceptor(UploadProgressInterceptor { uploaded, total ->
-        val progress = (uploaded * 100 / total).toInt()
-        Log.d("Upload", "Progress: $progress%")
-    })
-    .build()
 ```
 
-### 4. Resumable Upload (With Resume Capability)
+### 4. Resumable Upload
 
 ```kotlin
-class ResumableUploadManager(
-    private val context: Context,
-    private val api: FileUploadApi
-) {
-    private val prefs = context.getSharedPreferences("uploads", Context.MODE_PRIVATE)
+suspend fun uploadWithResume(file: File): Result<String> {
+    val uploadedBytes = getUploadProgress(fileId)  // ✅ Восстановить прогресс
 
-    suspend fun uploadWithResume(file: File): Result<String> {
-        val fileId = getOrCreateUploadSession(file)
-        val uploadedBytes = getUploadProgress(fileId)
+    file.inputStream().use { stream ->
+        stream.skip(uploadedBytes)  // ✅ Пропустить уже загруженное
 
-        return try {
-            file.inputStream().use { inputStream ->
-                inputStream.skip(uploadedBytes)
-
-                val chunkSize = 1024 * 1024 * 5L
-                val buffer = ByteArray(chunkSize.toInt())
-                var currentPosition = uploadedBytes
-
-                while (currentPosition < file.length()) {
-                    val bytesRead = inputStream.read(buffer)
-                    if (bytesRead == -1) break
-
-                    val chunk = buffer.copyOf(bytesRead)
-                    val response = api.uploadChunk(
-                        fileId,
-                        "bytes $currentPosition-${currentPosition + bytesRead - 1}/${file.length()}",
-                        chunk.toRequestBody()
-                    )
-
-                    if (!response.isSuccessful) {
-                        // Сохранить прогресс
-                        saveUploadProgress(fileId, currentPosition)
-                        return Result.failure(Exception("Upload failed at $currentPosition"))
-                    }
-
-                    currentPosition += bytesRead
-                    saveUploadProgress(fileId, currentPosition)
-                }
-            }
-
-            // Очистить прогресс после успешной загрузки
-            clearUploadProgress(fileId)
-            Result.success(fileId)
-
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    private fun getOrCreateUploadSession(file: File): String {
-        val existingId = prefs.getString("upload_${file.absolutePath}", null)
-        return existingId ?: "upload_${System.currentTimeMillis()}"
-    }
-
-    private fun getUploadProgress(fileId: String): Long {
-        return prefs.getLong("progress_$fileId", 0L)
-    }
-
-    private fun saveUploadProgress(fileId: String, bytes: Long) {
-        prefs.edit().putLong("progress_$fileId", bytes).apply()
-    }
-
-    private fun clearUploadProgress(fileId: String) {
-        prefs.edit()
-            .remove("progress_$fileId")
-            .remove("upload_$fileId")
-            .apply()
+        // Продолжить загрузку с последней позиции
+        // Сохранять прогресс после каждого chunk
     }
 }
 ```
 
 ### Best Practices
 
-1. **Используйте WorkManager** для гарантированной загрузки
-2. **Chunked upload** для файлов > 50 MB
-3. **Progress tracking** для UX
+1. **WorkManager** для гарантированной загрузки
+2. **Chunked upload** для файлов > 50 MB (chunks по 5 MB)
+3. **Progress tracking** для UX (OkHttp Interceptor)
 4. **Retry logic** с exponential backoff
-5. **Notification** для фонового процесса
-6. **Compression** перед загрузкой (если применимо)
-7. **WiFi-only constraint** для больших файлов
-8. **Resumable uploads** для плохого интернета
+5. **Foreground Service** с notification
+6. **WiFi-only constraint** для больших файлов (`NetworkType.UNMETERED`)
+7. **Resumable uploads** - сохранение прогресса в SharedPreferences
 
 ```kotlin
-// Оптимальная конфигурация
+// ❌ Не используйте для больших файлов
 val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.UNMETERED)  // Only WiFi
-    .setRequiresCharging(false)
+    .setRequiredNetworkType(NetworkType.CONNECTED)  // Любая сеть
     .build()
-```
 
-**English**: Upload large files using **WorkManager + Retrofit** for guaranteed background execution. Use **Multipart** for files < 50MB, **chunked upload** for larger files (5MB chunks). Implement progress tracking with **UploadProgressInterceptor**, resumable uploads with progress persistence, foreground service notification. Configure OkHttp with increased timeouts (60s read/write). Use constraints for WiFi-only uploads. Retry with exponential backoff on failure. Save upload progress in SharedPreferences for resume capability.
-
----
-
-## Ответ (RU)
-
-Для реализации загрузки больших файлов на сервер в Android необходимо учитывать несколько ключевых аспектов: асинхронную обработку, устойчивость к изменениям конфигурации (rotation), восстановление после неудач, отображение прогресса и работу в фоновом режиме.
-
-### Рекомендуемый подход: WorkManager + Retrofit
-
-**WorkManager** обеспечивает гарантированное выполнение задачи даже после закрытия приложения или перезагрузки устройства, а **Retrofit** предоставляет удобный API для загрузки файлов через HTTP.
-
-**Основные преимущества**:
-- Гарантированное выполнение загрузки
-- Автоматические повторные попытки при сбое
-- Поддержка constraints (только WiFi, зарядка батареи)
-- Foreground Service с уведомлением для пользователя
-- Отслеживание прогресса загрузки
-
-### Загрузка файлов меньше 50 МБ - Multipart Upload
-
-Для файлов небольшого и среднего размера используется **Multipart** загрузка одним запросом. Ключевые компоненты: API Interface с аннотацией `@Multipart` и `MultipartBody.Part`, Retrofit Client с увеличенными таймаутами (60s read/write), FileUploadWorker (CoroutineWorker) для выполнения загрузки, Constraints для контроля условий запуска (сеть, батарея), ForegroundInfo с notification для видимости процесса.
-
-### Загрузка больших файлов - Chunked Upload
-
-Для файлов больше 50 МБ рекомендуется **разбиение на части (chunks)** по 5 МБ. Преимущества: возможность отслеживания точного прогресса, повторная отправка только failed chunks, меньшее потребление памяти, возможность resume при обрыве соединения. Процесс: создание upload session на сервере (получение fileId), разбиение файла на chunks, последовательная загрузка каждого chunk с header `Content-Range`, обновление прогресса через `setProgress()`, показ прогресса в notification.
-
-### Отслеживание прогресса - UploadProgressInterceptor
-
-**OkHttp Interceptor** позволяет отслеживать прогресс загрузки в реальном времени. Реализация: `ProgressRequestBody` оборачивает оригинальный RequestBody, `ForwardingSink` перехватывает запись байтов, callback вызывается с текущими/общими байтами, можно обновлять UI или notification.
-
-### Resumable Upload - Возобновляемая загрузка
-
-Для плохого интернет-соединения критически важна возможность **возобновления загрузки**. Механизм: сохранение прогресса в SharedPreferences (uploadedBytes), при возобновлении - skip уже загруженных байтов (`inputStream.skip()`), продолжение загрузки с последней позиции, очистка прогресса после успешного завершения.
-
-### Лучшие практики
-
-1. **Используйте WorkManager** для гарантированной загрузки - задача выполнится даже если приложение закрыто
-2. **Chunked upload для файлов > 50 MB** - позволяет возобновлять загрузку и экономит память
-3. **Progress tracking** - показывайте пользователю точный прогресс для лучшего UX
-4. **Retry logic с exponential backoff** - автоматические повторные попытки с увеличивающейся задержкой
-5. **Foreground Service с Notification** - пользователь видит процесс и может отменить
-6. **Compression перед загрузкой** - если применимо, сжимайте файлы (изображения, видео)
-7. **WiFi-only constraint** - для больших файлов загружайте только через WiFi (`NetworkType.UNMETERED`)
-8. **Resumable uploads** - критично для пользователей с нестабильным интернетом
-
-Оптимальная конфигурация constraints:
-```kotlin
-Constraints.Builder()
+// ✅ Используйте для больших файлов
+val constraints = Constraints.Builder()
     .setRequiredNetworkType(NetworkType.UNMETERED)  // Только WiFi
-    .setRequiresBatteryNotLow(true)                // Батарея > 15%
-    .setRequiresCharging(false)                     // Не обязательна зарядка
     .build()
 ```
 
 ---
+
+## Answer (EN)
+
+Use **WorkManager + Retrofit** to upload large files with guaranteed background execution. Key requirements: async processing, configuration change resilience, retry logic, progress tracking.
+
+### 1. WorkManager + Retrofit (Recommended)
+
+#### API Interface
+
+```kotlin
+interface FileUploadApi {
+    @Multipart
+    @POST("upload")
+    suspend fun uploadFile(
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody
+    ): Response<UploadResponse>
+
+    // ✅ For very large files - chunked upload
+    @Streaming
+    @PUT("upload/{fileId}/chunk")
+    suspend fun uploadChunk(
+        @Path("fileId") fileId: String,
+        @Header("Content-Range") contentRange: String,
+        @Body chunk: RequestBody
+    ): Response<ChunkResponse>
+}
+```
+
+#### Retrofit Setup
+
+```kotlin
+private val okHttpClient = OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(60, TimeUnit.SECONDS)  // ✅ Increased for large files
+    .writeTimeout(60, TimeUnit.SECONDS) // ✅ Increased for upload
+    .build()
+```
+
+#### FileUploadWorker
+
+```kotlin
+class FileUploadWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        val filePath = inputData.getString(KEY_FILE_PATH) ?: return Result.failure()
+
+        return try {
+            // ✅ Foreground service with notification
+            setForeground(createForegroundInfo(0))
+
+            val file = File(filePath)
+            if (!file.exists()) return Result.failure()
+
+            val requestFile = file.asRequestBody("multipart/form-data".toMediaType())
+            val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+            val response = RetrofitClient.api.uploadFile(filePart, descriptionBody)
+
+            if (response.isSuccessful && response.body()?.success == true) {
+                Result.success(workDataOf(KEY_FILE_URL to response.body()?.fileUrl))
+            } else {
+                Result.retry() // ✅ Automatic retry
+            }
+        } catch (e: Exception) {
+            if (runAttemptCount < MAX_RETRIES) {
+                Result.retry() // ✅ Exponential backoff
+            } else {
+                Result.failure(workDataOf(KEY_ERROR to e.message))
+            }
+        }
+    }
+}
+```
+
+#### Starting Upload
+
+```kotlin
+fun uploadFile(filePath: String): UUID {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Requires network
+        .build()
+
+    val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
+        .setInputData(workDataOf(KEY_FILE_PATH to filePath))
+        .setConstraints(constraints)
+        .setBackoffCriteria(
+            BackoffPolicy.EXPONENTIAL,  // ✅ Exponential backoff
+            WorkRequest.MIN_BACKOFF_MILLIS,
+            TimeUnit.MILLISECONDS
+        )
+        .build()
+
+    WorkManager.getInstance(context).enqueue(uploadRequest)
+    return uploadRequest.id
+}
+```
+
+### 2. Chunked Upload (files > 50 MB)
+
+```kotlin
+class ChunkedFileUploadWorker : CoroutineWorker() {
+    override suspend fun doWork(): Result {
+        val file = File(inputData.getString(KEY_FILE_PATH))
+        val chunkSize = 1024 * 1024 * 5  // ✅ 5 MB per chunk
+
+        file.inputStream().use { inputStream ->
+            var uploadedBytes = 0L
+            val buffer = ByteArray(chunkSize)
+
+            while (uploadedBytes < file.length()) {
+                val bytesRead = inputStream.read(buffer)
+                if (bytesRead == -1) break
+
+                val chunk = buffer.copyOf(bytesRead)
+                val contentRange = "bytes $uploadedBytes-${uploadedBytes + bytesRead - 1}/${file.length()}"
+
+                val response = api.uploadChunk(fileId, contentRange, chunk.toRequestBody())
+
+                if (!response.isSuccessful) return Result.retry()
+
+                uploadedBytes += bytesRead
+
+                // ✅ Update progress
+                val progress = (uploadedBytes * 100 / file.length()).toInt()
+                setProgress(workDataOf(KEY_PROGRESS to progress))
+            }
+        }
+
+        return Result.success()
+    }
+}
+```
+
+### 3. Progress Tracking
+
+```kotlin
+// ✅ Track progress via OkHttp Interceptor
+class UploadProgressInterceptor(
+    private val onProgress: (bytesUploaded: Long, totalBytes: Long) -> Unit
+) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+        val progressBody = ProgressRequestBody(originalBody, onProgress)
+        return chain.proceed(request.newBuilder().method(method, progressBody).build())
+    }
+}
+```
+
+### 4. Resumable Upload
+
+```kotlin
+suspend fun uploadWithResume(file: File): Result<String> {
+    val uploadedBytes = getUploadProgress(fileId)  // ✅ Restore progress
+
+    file.inputStream().use { stream ->
+        stream.skip(uploadedBytes)  // ✅ Skip already uploaded
+
+        // Continue upload from last position
+        // Save progress after each chunk
+    }
+}
+```
+
+### Best Practices
+
+1. **WorkManager** for guaranteed upload
+2. **Chunked upload** for files > 50 MB (5 MB chunks)
+3. **Progress tracking** for UX (OkHttp Interceptor)
+4. **Retry logic** with exponential backoff
+5. **Foreground Service** with notification
+6. **WiFi-only constraint** for large files (`NetworkType.UNMETERED`)
+7. **Resumable uploads** - save progress in SharedPreferences
+
+```kotlin
+// ❌ Don't use for large files
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)  // Any network
+    .build()
+
+// ✅ Use for large files
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.UNMETERED)  // WiFi only
+    .build()
+```
+
+---
+
+## Follow-ups
+
+- How to implement file compression before upload?
+- What are the trade-offs between chunked upload and multipart upload?
+- How to handle upload cancellation and cleanup of partial uploads?
+- What security considerations exist for file upload endpoints?
+- How to implement upload priority queue for multiple files?
+
+## References
+
+- Android WorkManager documentation
+- Retrofit and OkHttp best practices for file uploads
+- HTTP multipart/form-data specification
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-api-file-upload-server--android--medium]] - api file upload server
+### Prerequisites
+- Understanding Kotlin coroutines for async operations
+- Background work strategies in Android (Service vs WorkManager)
 
-### Advanced (Harder)
-- [[q-large-file-upload-app--android--hard]] - large file upload app
+### Related
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation across configuration changes
+- Foreground services for long-running operations
 
+### Advanced
+- Advanced networking optimization techniques (connection pooling, compression)
+- Custom WorkManager constraints and scheduling strategies

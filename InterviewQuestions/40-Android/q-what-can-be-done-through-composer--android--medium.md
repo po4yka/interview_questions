@@ -1,280 +1,128 @@
 ---
-id: 20251012-122711143
+id: 20251012-122711
 title: "What Can Be Done Through Composer / Что можно сделать через Composer"
+aliases: ["Composer in Jetpack Compose", "Composer в Jetpack Compose"]
 topic: android
+subtopics: [ui-compose, architecture-mvvm, performance-rendering]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-do-you-know-about-modifications--android--medium, q-fragment-vs-activity-lifecycle--android--medium, q-strictmode-debugging--android--medium]
+related: [c-jetpack-compose, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-10-15
+updated: 2025-01-27
+sources: []
 tags:
   - android
+  - android/ui-compose
+  - android/architecture-mvvm
+  - android/performance-rendering
+  - jetpack-compose
+  - recomposition
+  - difficulty/medium
 ---
+# Вопрос (RU)
+
+> Что можно делать через Composer в Jetpack Compose? За что он отвечает и как правильно им пользоваться?
 
 # Question (EN)
 
 > What can be done through the Composer in Jetpack Compose? What does it manage and how should you use it?
 
-# Вопрос (RU)
-
-> Что можно делать через Composer в Jetpack Compose? За что он отвечает и как правильно им пользоваться?
-
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-### What is Composer?
+**Composer** — внутренний компонент Jetpack Compose, управляющий деревом композиции и отслеживанием зависимостей. Разработчики напрямую не работают с Composer, но он автоматически:
 
-**Composer** is an internal component of Jetpack Compose responsible for managing the composition state and rendering process. It's the engine that powers the declarative UI framework.
+1. **Отслеживает состояние** — связывает изменения `State` с зависимыми composable-функциями
+2. **Управляет рекомпозицией** — перерисовывает только изменённые части UI
+3. **Строит дерево композиции** — сохраняет структуру и данные между рекомпозициями
+4. **Обеспечивает CompositionLocal** — передаёт контекстные данные вниз по дереву
+5. **Координирует side effects** — выполняет эффекты в правильный момент жизненного цикла
 
-### Key Responsibilities
+### Ключевые концепции
 
-#### 1. State Tracking and Management
-
-Composer tracks which composables depend on which state:
+#### Отслеживание состояния
 
 ```kotlin
 @Composable
-fun StateTracking() {
-    // Composer tracks this state
-    var count by remember { mutableStateOf(0) }
+fun Counter() {
+    var count by remember { mutableStateOf(0) } // ✅ Composer отслеживает
 
     Column {
-        // Composer knows this Text depends on count
-        Text("Count: $count")
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-    // Composer will recompose only Text when count changes
-}
-```
-
-#### 2. Recomposition Management
-
-Composer determines what needs to be recomposed:
-
-```kotlin
-@Composable
-fun RecompositionScope() {
-    var counter1 by remember { mutableStateOf(0) }
-    var counter2 by remember { mutableStateOf(0) }
-
-    Column {
-        // Only this recomposes when counter1 changes
-        Text("Counter 1: $counter1")
-
-        // Only this recomposes when counter2 changes
-        Text("Counter 2: $counter2")
-
-        // This never recomposes (no state dependencies)
-        StaticHeader()
-
-        Row {
-            Button(onClick = { counter1++ }) {
-                Text("Increment 1")
-            }
-            Button(onClick = { counter2++ }) {
-                Text("Increment 2")
-            }
-        }
-    }
-}
-
-@Composable
-fun StaticHeader() {
-    Text("This is static")
-}
-```
-
-#### 3. Composition Tree Building
-
-Composer builds and maintains the composition tree:
-
-```kotlin
-@Composable
-fun TreeBuilding() {
-    // Composer builds:
-    // Column
-    //    UserHeader
-    //    UserContent
-    //    UserActions
-    Column {
-        UserHeader()
-        UserContent()
-        UserActions()
-    }
-}
-
-@Composable
-fun UserHeader() {
-    Row {
-        Avatar()
-        UserName()
+        Text("Count: $count") // Перекомпозится при изменении count
+        Button(onClick = { count++ }) { Text("Increment") }
     }
 }
 ```
 
-#### 4. CompositionLocal Management
+#### Slot Table и Remember
 
-Composer handles CompositionLocal values:
-
-```kotlin
-// Define CompositionLocal
-val LocalTheme = compositionLocalOf<Theme> { error("No theme provided") }
-
-@Composable
-fun ThemeProvider(theme: Theme, content: @Composable () -> Unit) {
-    // Composer provides this value down the tree
-    CompositionLocalProvider(LocalTheme provides theme) {
-        content()
-    }
-}
-
-@Composable
-fun ThemedComponent() {
-    // Composer retrieves the value
-    val theme = LocalTheme.current
-    Text(
-        text = "Themed Text",
-        color = theme.textColor
-    )
-}
-```
-
-#### 5. Side Effect Coordination
-
-Composer manages side effects:
-
-```kotlin
-@Composable
-fun SideEffects(userId: String) {
-    // Composer ensures this runs at the right time
-    LaunchedEffect(userId) {
-        loadUserData(userId)
-    }
-
-    // Composer handles cleanup
-    DisposableEffect(Unit) {
-        val listener = registerListener()
-        onDispose {
-            unregisterListener(listener)
-        }
-    }
-
-    // Composer coordinates with composition lifecycle
-    SideEffect {
-        updateAnalytics()
-    }
-}
-```
-
-#### 6. Remembering Values
-
-Composer stores remembered values:
+Composer хранит значения между рекомпозициями в slot table:
 
 ```kotlin
 @Composable
 fun RememberExample() {
-    // Composer stores this across recompositions
+    // ✅ Composer сохраняет значения
     val state = remember { mutableStateOf(0) }
-
-    // Composer stores computed value
-    val derived = remember(state.value) {
-        expensiveComputation(state.value)
-    }
-
-    // Composer manages ViewModel lifecycle
     val viewModel: MyViewModel = viewModel()
-
-    // Composer stores coroutine scope
     val scope = rememberCoroutineScope()
 }
 ```
 
-### Internal Operations
+#### Композиционные ключи
 
-#### Slot Table
-
-Composer uses a slot table to store composition data:
+Composer использует ключи для идентификации элементов:
 
 ```kotlin
 @Composable
-fun SlotTableExample() {
-    // Composer stores in slot table:
-    val state = remember { mutableStateOf(0) } // Slot 1
-    val name = remember { "User" }              // Slot 2
-    val colors = remember { listOf<Color>() }   // Slot 3
-
-    // Composer retrieves values from slots during recomposition
-    Text("${state.value} - $name")
-}
-```
-
-#### Change Tracking
-
-```kotlin
-@Composable
-fun ChangeTracking() {
-    var text by remember { mutableStateOf("") }
-
-    // Composer tracks reads and writes
-    TextField(
-        value = text,  // Read tracked
-        onValueChange = {
-            text = it  // Write triggers recomposition
+fun UserList(users: List<User>) {
+    LazyColumn {
+        items(
+            items = users,
+            key = { it.id } // ✅ Помогает Composer отслеживать идентичность
+        ) { user ->
+            UserItem(user)
         }
-    )
-
-    // Composer knows this depends on text
-    Text("You typed: $text")
-}
-```
-
-### Composer API (Internal Use)
-
-While most developers don't interact with Composer directly, here's what it does behind the scenes:
-
-```kotlin
-// What Compose does internally (simplified)
-@Composable
-fun InternalComposerUse() {
-    // currentComposer is implicit parameter
-    // Compiler transforms:
-    Text("Hello")
-
-    // Into something like:
-    // composer.startNode()
-    // Text("Hello", composer, 0)
-    // composer.endNode()
-}
-```
-
-### Composition Process
-
-```kotlin
-@Composable
-fun CompositionProcess() {
-    // 1. Composer starts composition
-    Column {
-        // 2. Composer records this composable
-        Header()
-
-        // 3. Composer tracks state dependencies
-        var count by remember { mutableStateOf(0) }
-        Text("Count: $count")
-
-        // 4. Composer will skip this on recomposition if possible
-        Footer()
     }
-    // 5. Composer completes composition
 }
 ```
 
-### Smart Recomposition
+#### CompositionLocal
 
-Composer enables intelligent recomposition:
+```kotlin
+val LocalTheme = compositionLocalOf<Theme> { error("No theme") }
+
+@Composable
+fun ThemedText() {
+    val theme = LocalTheme.current // ✅ Composer предоставляет значение
+    Text("Text", color = theme.textColor)
+}
+```
+
+#### Side Effects
+
+```kotlin
+@Composable
+fun UserProfile(userId: String) {
+    // ✅ Composer управляет жизненным циклом
+    LaunchedEffect(userId) {
+        loadUserData(userId)
+    }
+
+    DisposableEffect(Unit) {
+        val listener = registerListener()
+        onDispose { unregisterListener(listener) }
+    }
+}
+```
+
+### Умная рекомпозиция
+
+Composer автоматически определяет минимальный scope для обновления:
 
 ```kotlin
 @Composable
@@ -282,202 +130,202 @@ fun SmartRecomposition() {
     var counter by remember { mutableStateOf(0) }
 
     Column {
-        // Recomposition scope 1
-        Text("Counter: $counter")
-
-        // Recomposition scope 2 (independent)
-        ExpensiveComponent()
-
-        // Recomposition scope 3
-        Button(onClick = { counter++ }) {
-            Text("Increment")
-        }
+        Text("Counter: $counter") // ✅ Обновится
+        ExpensiveComponent()      // ❌ Не обновится
+        Button(onClick = { counter++ }) { Text("Increment") }
     }
-    // Composer only recomposes scope 1 when counter changes
-}
-
-@Composable
-fun ExpensiveComponent() {
-    // This won't recompose when counter changes above
-    val data = remember {
-        performExpensiveCalculation()
-    }
-    Text("Result: $data")
-}
-```
-
-### Composition Keys
-
-Composer uses keys to track identity:
-
-```kotlin
-@Composable
-fun KeyedComposition() {
-    val items = listOf("A", "B", "C")
-
-    Column {
-        items.forEach { item ->
-            // Composer uses keys to track identity
-            key(item) {
-                ItemView(item)
-            }
-        }
-    }
-}
-
-@Composable
-fun LazyListKeys() {
-    val items = remember { getItems() }
-
-    LazyColumn {
-        items(
-            items = items,
-            key = { it.id } // Composer tracks by key
-        ) { item ->
-            ItemView(item)
-        }
-    }
-}
-```
-
-### CompositionContext
-
-Composer provides composition context:
-
-```kotlin
-@Composable
-fun ContextExample() {
-    // Composer provides context
-    val context = LocalContext.current
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-
-    // Use context-dependent values
-    val screenWidth = with(density) {
-        configuration.screenWidthDp.dp.toPx()
-    }
-}
-```
-
-### Performance Optimization
-
-Composer helps with performance:
-
-```kotlin
-@Composable
-fun OptimizedComposition() {
-    val items = remember { mutableStateListOf<Item>() }
-
-    LazyColumn {
-        items(
-            items = items,
-            key = { it.id }
-        ) { item ->
-            // Composer only recomposes this item when it changes
-            ItemRow(item)
-        }
-    }
-}
-
-@Composable
-fun ItemRow(item: Item) {
-    // Stable parameters = Composer can skip if unchanged
-    Row {
-        Text(item.name)
-        Text(item.value)
-    }
-}
-```
-
-### Composer Lifecycle
-
-```kotlin
-@Composable
-fun ComposerLifecycle() {
-    // Enter composition
-    DisposableEffect(Unit) {
-        println("Entered composition")
-
-        // Leave composition
-        onDispose {
-            println("Left composition")
-        }
-    }
-
-    // Composer manages this lifecycle
 }
 ```
 
 ### Best Practices
 
-1. **Let Composer manage state**: Use `remember` and state holders
-2. **Provide stable keys**: Help Composer track identity
-3. **Minimize recomposition scope**: Keep composables focused
-4. **Use derivedStateOf**: For computed values
-5. **Trust the Composer**: It's optimized for performance
+1. **Используйте `remember`** — доверьте Composer управление состоянием
+2. **Предоставляйте стабильные ключи** — помогите идентифицировать элементы
+3. **Минимизируйте scope рекомпозиции** — держите composable-функции фокусированными
+4. **Используйте `derivedStateOf`** — для вычисляемых значений
+5. **Не пытайтесь управлять рекомпозицией вручную**
 
-### What You Shouldn't Do
+### Что НЕ делать
 
 ```kotlin
-// - Don't try to manually control recomposition
-@Composable
-fun ManualControl() {
-    var count by remember { mutableStateOf(0) }
+// ❌ Глобальное состояние не отслеживается
+var globalState = 0
 
-    // This is handled automatically by Composer
-    Text("Count: $count")
+@Composable
+fun WrongExample() {
+    Text("Count: $globalState") // Не обновится
 }
 
-// - Don't store mutable state outside of remember
-var globalState = 0 // Won't trigger recomposition
-
+// ✅ Правильно
 @Composable
-fun WrongStateManagement() {
-    Text("Count: $globalState") // Won't update
-}
-
-// - Let Composer manage state
-@Composable
-fun CorrectStateManagement() {
+fun CorrectExample() {
     var count by remember { mutableStateOf(0) }
-    Text("Count: $count") // Will update correctly
+    Text("Count: $count") // Обновится
 }
 ```
 
 ---
 
+## Answer (EN)
+
+**Composer** is an internal component of Jetpack Compose managing the composition tree and state dependencies. Developers don't interact with Composer directly, but it automatically:
+
+1. **Tracks state** — links `State` changes to dependent composables
+2. **Manages recomposition** — redraws only changed UI parts
+3. **Builds composition tree** — preserves structure and data between recompositions
+4. **Provides CompositionLocal** — passes contextual data down the tree
+5. **Coordinates side effects** — executes effects at the right lifecycle moment
+
+### Key Concepts
+
+#### State Tracking
+
+```kotlin
+@Composable
+fun Counter() {
+    var count by remember { mutableStateOf(0) } // ✅ Composer tracks
+
+    Column {
+        Text("Count: $count") // Recomposes when count changes
+        Button(onClick = { count++ }) { Text("Increment") }
+    }
+}
+```
+
+#### Slot Table & Remember
+
+Composer stores values between recompositions in the slot table:
+
+```kotlin
+@Composable
+fun RememberExample() {
+    // ✅ Composer preserves values
+    val state = remember { mutableStateOf(0) }
+    val viewModel: MyViewModel = viewModel()
+    val scope = rememberCoroutineScope()
+}
+```
+
+#### Composition Keys
+
+Composer uses keys to identify elements:
+
+```kotlin
+@Composable
+fun UserList(users: List<User>) {
+    LazyColumn {
+        items(
+            items = users,
+            key = { it.id } // ✅ Helps Composer track identity
+        ) { user ->
+            UserItem(user)
+        }
+    }
+}
+```
+
+#### CompositionLocal
+
+```kotlin
+val LocalTheme = compositionLocalOf<Theme> { error("No theme") }
+
+@Composable
+fun ThemedText() {
+    val theme = LocalTheme.current // ✅ Composer provides value
+    Text("Text", color = theme.textColor)
+}
+```
+
+#### Side Effects
+
+```kotlin
+@Composable
+fun UserProfile(userId: String) {
+    // ✅ Composer manages lifecycle
+    LaunchedEffect(userId) {
+        loadUserData(userId)
+    }
+
+    DisposableEffect(Unit) {
+        val listener = registerListener()
+        onDispose { unregisterListener(listener) }
+    }
+}
+```
+
+### Smart Recomposition
+
+Composer automatically determines minimal scope for updates:
+
+```kotlin
+@Composable
+fun SmartRecomposition() {
+    var counter by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Counter: $counter") // ✅ Will update
+        ExpensiveComponent()      // ❌ Won't update
+        Button(onClick = { counter++ }) { Text("Increment") }
+    }
+}
+```
+
+### Best Practices
+
+1. **Use `remember`** — trust Composer with state management
+2. **Provide stable keys** — help identify elements
+3. **Minimize recomposition scope** — keep composables focused
+4. **Use `derivedStateOf`** — for computed values
+5. **Don't manually control recomposition**
+
+### What NOT to Do
+
+```kotlin
+// ❌ Global state not tracked
+var globalState = 0
+
+@Composable
+fun WrongExample() {
+    Text("Count: $globalState") // Won't update
+}
+
+// ✅ Correct
+@Composable
+fun CorrectExample() {
+    var count by remember { mutableStateOf(0) }
+    Text("Count: $count") // Will update
+}
+```
+
 ---
-
-## Ответ (RU)
-
-**Composer** — это внутренний компонент Jetpack Compose, отвечающий за управление деревом композиции, отслеживание зависимостей состояния и процессом перекомпозиции. Он обновляет только те части UI, которые действительно изменились, обеспечивая высокую производительность и предсказуемость поведения.
-
----
-
-## Related Questions
 
 ## Follow-ups
 
--   How does the Composer decide what to recompose and what to skip?
--   How do stability and `@Stable/@Immutable` annotations affect recomposition?
--   What are practical strategies to minimize recomposition scope?
+- How does Composer decide what to recompose and what to skip?
+- How do `@Stable` and `@Immutable` annotations affect recomposition behavior?
+- What strategies minimize unnecessary recomposition scope?
+- How does Composer handle CompositionLocal value changes?
+- What's the relationship between Composer's slot table and remembering values?
 
 ## References
 
--   `https://developer.android.com/jetpack/compose/mental-model` — Compose mental model
--   `https://developer.android.com/jetpack/compose/performance` — Performance & recomposition
--   `https://developer.android.com/jetpack/compose/state` — State and recomposition
+- [[c-jetpack-compose]] — Jetpack Compose fundamentals
+- https://developer.android.com/jetpack/compose/mental-model
+- https://developer.android.com/jetpack/compose/performance
+- https://developer.android.com/jetpack/compose/state
+
+## Related Questions
+
+### Prerequisites (Easier)
+
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] — Compose basics
 
 ### Related (Medium)
 
--   [[q-how-does-jetpackcompose-work--android--medium]] - Compose
--   [[q-compose-modifier-order-performance--android--medium]] - Compose
--   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
--   [[q-compositionlocal-advanced--android--medium]] - Compose
--   [[q-accessibility-compose--android--medium]] - Compose
+- [[q-how-does-jetpackcompose-work--android--medium]] — Compose architecture
+- [[q-compositionlocal-advanced--android--medium]] — CompositionLocal patterns
 
 ### Advanced (Harder)
 
--   [[q-compose-stability-skippability--android--hard]] - Compose
--   [[q-compose-custom-layout--android--hard]] - Compose
--   [[q-compose-performance-optimization--android--hard]] - Compose
+- [[q-compose-stability-skippability--android--hard]] — Stability and skippability
+- [[q-compose-performance-optimization--android--hard]] — Performance optimization

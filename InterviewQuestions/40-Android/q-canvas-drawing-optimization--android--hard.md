@@ -17,75 +17,216 @@ moc: moc-android
 related:
   - q-android-app-lag-analysis--android--medium
   - q-android-performance-measurement-tools--android--medium
-  - q-android-runtime-art--android--medium
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-01-27
+sources: []
 tags: [android/performance-rendering, android/ui-views, difficulty/hard]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:49 pm
 ---
-
 # Вопрос (RU)
-> Оптимизация отрисовки Canvas?
+> Как оптимизировать отрисовку в Canvas для достижения 60 FPS в кастомных View?
 
 # Question (EN)
-> Canvas Drawing Optimization?
+> How to optimize Canvas drawing to achieve 60 FPS in custom Views?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Основные принципы
+**Цель**: 60 FPS (16.67 мс на кадр), onDraw() должен занимать < 5 мс, нулевые выделения памяти на кадр.
 
-## Answer (EN)
+**Ключевые техники**:
+- Переиспользование объектов Paint/Path/Rect
+- Аппаратное ускорение для сложных/анимированных View
+- Кеширование в Bitmap для статичного контента
+- Отсечение (clipping) для видимой области
 
-### Core Theory
-- **Target**: 60 FPS (16.67ms/frame); onDraw() < 5ms; zero allocations/frame.
-- **Avoid**: object creation in onDraw() → GC thrashing → dropped frames. Use c-profiling to identify bottlenecks.
-- **Optimize**: pre-allocate, cache, clip, hardware accelerate to prevent [[c-memory-leaks]].
+### Нулевые выделения памяти
 
-### Zero Allocations
-- Pre-allocate Paint/Path/Rect objects as fields; reuse with reset()/set().
-- Never create objects inside onDraw(); move to init/onSizeChanged.
-
-### Minimal Snippet (no allocations)
 ```kotlin
 class OptimizedView : View {
+  // ✅ Предварительное выделение объектов
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val rect = Rect()
   private val path = Path()
 
   override fun onDraw(canvas: Canvas) {
-    rect.set(0, 0, width, height) // Reuse, no alloc
-    path.reset(); path.moveTo(0f, 0f); path.lineTo(width.toFloat(), height.toFloat())
+    // ✅ Переиспользование через set/reset
+    rect.set(0, 0, width, height)
+    path.reset()
+    path.moveTo(0f, 0f)
+    path.lineTo(width.toFloat(), height.toFloat())
     canvas.drawPath(path, paint)
+
+    // ❌ НИКОГДА не создавать объекты здесь
+    // val newPaint = Paint() // вызывает GC паузы
+  }
+}
+```
+
+### Аппаратное ускорение
+Включить hardware layer для сложных/анимированных View:
+
+```kotlin
+// ✅ Для статичного сложного контента
+setLayerType(LAYER_TYPE_HARDWARE, null)
+
+// ✅ Для анимаций временно
+view.setLayerType(LAYER_TYPE_HARDWARE, null)
+// ... анимация ...
+view.setLayerType(LAYER_TYPE_NONE, null)
+```
+
+GPU кеширует отрисовку, ускорение до 10x для сложной графики.
+
+### Bitmap кеширование
+Для дорогостоящей статичной отрисовки:
+
+```kotlin
+private var cachedBitmap: Bitmap? = null
+private var cacheValid = false
+
+override fun onDraw(canvas: Canvas) {
+  if (!cacheValid) {
+    cachedBitmap = Bitmap.createBitmap(width, height, ARGB_8888)
+    Canvas(cachedBitmap!!).apply {
+      // ✅ Дорогостоящая отрисовка один раз
+      drawComplexShape(this)
+    }
+    cacheValid = true
+  }
+  canvas.drawBitmap(cachedBitmap!!, 0f, 0f, null)
+}
+```
+
+### Clipping (отсечение)
+
+```kotlin
+override fun onDraw(canvas: Canvas) {
+  val clipBounds = canvas.clipBounds
+  // ✅ Отрисовка только видимых элементов
+  items.filter { it.intersects(clipBounds) }.forEach {
+    drawItem(canvas, it)
+  }
+}
+```
+
+Для прокручиваемого контента ускорение до 20x.
+
+### Профилирование
+Использовать Android Profiler и Systrace:
+
+```kotlin
+override fun onDraw(canvas: Canvas) {
+  Trace.beginSection("MyView.onDraw")
+  // отрисовка
+  Trace.endSection()
+}
+```
+
+Искать: выделения памяти, длительные операции отрисовки, GC события.
+
+## Answer (EN)
+
+### Core Principles
+**Target**: 60 FPS (16.67ms per frame), onDraw() should take < 5ms, zero allocations per frame.
+
+**Key techniques**:
+- Reuse Paint/Path/Rect objects
+- Hardware acceleration for complex/animated Views
+- Bitmap caching for static content
+- Clipping for visible region
+
+### Zero Allocations
+
+```kotlin
+class OptimizedView : View {
+  // ✅ Pre-allocate objects
+  private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+  private val rect = Rect()
+  private val path = Path()
+
+  override fun onDraw(canvas: Canvas) {
+    // ✅ Reuse via set/reset
+    rect.set(0, 0, width, height)
+    path.reset()
+    path.moveTo(0f, 0f)
+    path.lineTo(width.toFloat(), height.toFloat())
+    canvas.drawPath(path, paint)
+
+    // ❌ NEVER create objects here
+    // val newPaint = Paint() // causes GC pauses
   }
 }
 ```
 
 ### Hardware Acceleration
-- Enable hardware layers for complex/animated views (LAYER_TYPE_HARDWARE).
-- GPU caches drawing; 10x faster for static/complex content.
+Enable hardware layer for complex/animated Views:
+
+```kotlin
+// ✅ For static complex content
+setLayerType(LAYER_TYPE_HARDWARE, null)
+
+// ✅ For animations temporarily
+view.setLayerType(LAYER_TYPE_HARDWARE, null)
+// ... animation ...
+view.setLayerType(LAYER_TYPE_NONE, null)
+```
+
+GPU caches drawing, up to 10x speedup for complex graphics.
 
 ### Bitmap Caching
-- Cache expensive drawings to Bitmap; redraw only when needed.
-- Use for static content or slow-changing visuals.
+For expensive static drawing:
+
+```kotlin
+private var cachedBitmap: Bitmap? = null
+private var cacheValid = false
+
+override fun onDraw(canvas: Canvas) {
+  if (!cacheValid) {
+    cachedBitmap = Bitmap.createBitmap(width, height, ARGB_8888)
+    Canvas(cachedBitmap!!).apply {
+      // ✅ Expensive drawing once
+      drawComplexShape(this)
+    }
+    cacheValid = true
+  }
+  canvas.drawBitmap(cachedBitmap!!, 0f, 0f, null)
+}
+```
 
 ### Clipping
-- Get canvas.clipBounds; skip drawing off-screen items.
-- For scrollable content, only draw visible region (20x speedup).
 
-### Paint Optimization
-- Reuse Paint objects; disable anti-aliasing for straight lines; use opaque colors.
+```kotlin
+override fun onDraw(canvas: Canvas) {
+  val clipBounds = canvas.clipBounds
+  // ✅ Draw only visible items
+  items.filter { it.intersects(clipBounds) }.forEach {
+    drawItem(canvas, it)
+  }
+}
+```
+
+For scrollable content, up to 20x speedup.
 
 ### Profiling
-- Use Trace.beginSection("section"); analyze with Android Profiler/Systrace and c-profiling tools.
-- Look for allocations, long draw times, GC events.
+Use Android Profiler and Systrace:
+
+```kotlin
+override fun onDraw(canvas: Canvas) {
+  Trace.beginSection("MyView.onDraw")
+  // drawing
+  Trace.endSection()
+}
+```
+
+Look for: allocations, long draw times, GC events.
 
 ## Follow-ups
-- How to measure and optimize specific drawing bottlenecks (path complexity, bitmap size, overdraw)?
-- When to use software vs hardware rendering for custom views?
-- How to implement incremental drawing for large datasets (pagination/virtualization)?
+- How does overdraw impact Canvas performance and how to detect it?
+- When should you use DisplayList vs immediate mode rendering?
+- How to optimize Path operations for complex shapes?
+- What are the trade-offs between LAYER_TYPE_HARDWARE vs LAYER_TYPE_SOFTWARE?
 
 ## References
 - https://developer.android.com/topic/performance/rendering
@@ -97,8 +238,8 @@ class OptimizedView : View {
 - [[q-android-performance-measurement-tools--android--medium]]
 
 ### Related (Same Level)
-- [[q-android-runtime-art--android--medium]]
 - [[q-android-app-lag-analysis--android--medium]]
 
 ### Advanced (Harder)
-- [[q-android-performance-measurement-tools--android--medium]]
+- Advanced custom view rendering with RenderNode
+- Canvas performance profiling in production apps

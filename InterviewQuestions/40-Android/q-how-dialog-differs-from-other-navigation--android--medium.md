@@ -1,107 +1,63 @@
 ---
-id: 20251012-1227155
+id: 20251012-122715
 title: "How Dialog Differs From Other Navigation / Чем Dialog отличается от другой навигации"
+aliases: ["How Dialog Differs From Other Navigation", "Чем Dialog отличается от другой навигации"]
 topic: android
+subtopics: [ui-navigation, ui-compose]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-kmm-dependency-injection--multiplatform--medium, q-main-thread-android--android--medium, q-what-is-layout-performance-measured-in--android--medium]
+related: [q-main-thread-android--android--medium, q-what-is-layout-performance-measured-in--android--medium]
 created: 2025-10-15
-tags: [android]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:40:15 pm
+updated: 2025-01-27
+tags: [android, android/ui-navigation, android/ui-compose, navigation, dialog, difficulty/medium]
+sources: []
 ---
+# Вопрос (RU)
 
-# How Does Dialog Differ from other Navigation?
+> Чем dialog отличается от остальной навигации?
 
 # Question (EN)
 
 > How does dialog differ from other navigation?
 
-# Вопрос (RU)
-
-> Чем dialog отличается от остальной навигации?
-
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-### Dialog Vs Navigation
+Dialog - это UI-компонент, который отображается поверх текущего экрана и фундаментально отличается от стандартной навигации:
 
-A dialog is a distinct UI pattern that differs fundamentally from standard navigation:
+**Ключевые отличия:**
 
-**Dialog Characteristics:**
+1. **Overlay vs Replacement** - Dialog отображается поверх экрана, обычная навигация заменяет экран
+2. **Back Stack** - Dialog не добавляется в back stack, навигация добавляет записи
+3. **State Preservation** - Под dialog сохраняется состояние экрана, при навигации может теряться
+4. **Scope** - Dialog для кратких взаимодействий (подтверждения, выбор), навигация для полноценных экранов
+5. **Lifecycle** - Dialog имеет независимый lifecycle, привязанный к родительскому экрану
 
-1. **Overlay Display**: Appears on top of the current screen without replacing it
-2. **Navigation Stack**: Does not modify the back stack
-3. **State Preservation**: The underlying screen maintains its state
-4. **Temporary Nature**: Designed for brief interactions and quick decisions
-5. **Modal Behavior**: Often blocks interaction with the underlying content
+**Использование:** подтверждения действий, простые формы, выбор опций (date/time picker), индикаторы прогресса.
 
-**Standard Navigation:**
-
-1. **Screen Replacement**: Replaces the current screen with a new one
-2. **Back Stack**: Adds entries to the navigation back stack
-3. **State Changes**: The previous screen may lose its state (depending on configuration)
-4. **Long-term Interaction**: Designed for extended user interaction
-5. **Full Screen**: Takes over the entire screen space
-
-### Use Cases for Dialogs
-
--   Confirmation prompts ("Are you sure?")
--   Simple forms (login, password entry)
--   Alerts and warnings
--   Quick selections (date picker, time picker)
--   Progress indicators
-
-### Traditional Android Dialog
-
-```kotlin
-AlertDialog.Builder(context)
-    .setTitle("Confirm Action")
-    .setMessage("Are you sure you want to delete this item?")
-    .setPositiveButton("Delete") { dialog, _ ->
-        // Handle deletion
-        dialog.dismiss()
-    }
-    .setNegativeButton("Cancel") { dialog, _ ->
-        dialog.dismiss()
-    }
-    .show()
-```
-
-### DialogFragment
-
-```kotlin
-class MyDialogFragment : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext())
-            .setTitle("Title")
-            .setMessage("Message")
-            .setPositiveButton("OK") { _, _ -> }
-            .create()
-    }
-}
-```
-
-### Dialog in Jetpack Compose
+### Jetpack Compose
 
 ```kotlin
 @Composable
 fun MyScreen() {
-    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) } // ✅ State hoisting
 
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Confirm Action") },
-            text = { Text("Are you sure?") },
+            onDismissRequest = { showDialog = false }, // ✅ Handle dismissal
+            title = { Text("Confirm") },
+            text = { Text("Delete item?") },
             confirmButton = {
                 TextButton(onClick = {
-                    // Handle action
+                    // ✅ Handle action then dismiss
                     showDialog = false
                 }) {
-                    Text("Confirm")
+                    Text("Delete")
                 }
             },
             dismissButton = {
@@ -111,115 +67,142 @@ fun MyScreen() {
             }
         )
     }
+}
 
-    Button(onClick = { showDialog = true }) {
-        Text("Show Dialog")
-    }
+// ❌ Bad: Dialog state not managed properly
+@Composable
+fun BadExample() {
+    AlertDialog(
+        onDismissRequest = { /* no state update */ }, // ❌ Dialog won't close
+        // ...
+    )
 }
 ```
 
-### Key Advantages of Dialogs
+### Traditional Android (Views)
 
-1. **Context Preservation**: User stays in the current context
-2. **Quick Interactions**: Faster than navigating to a new screen
-3. **Focus**: Draws attention to important actions or information
-4. **Lightweight**: Less overhead than creating a new screen
+```kotlin
+// ✅ Good: DialogFragment with lifecycle awareness
+class ConfirmDialogFragment : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext())
+            .setMessage("Confirm action?")
+            .setPositiveButton("OK") { _, _ -> /* action */ }
+            .setNegativeButton("Cancel", null)
+            .create()
+    }
+}
+
+// ❌ Bad: Direct AlertDialog (loses state on config changes)
+AlertDialog.Builder(context)
+    .setMessage("Confirm?")
+    .show() // ❌ Lost on rotation
+```
+
+**Связь с [[c-compose-navigation]]:** Dialog не влияет на NavController, в отличие от обычной навигации между composables.
 
 ---
 
-## Ответ (RU)
+## Answer (EN)
 
-### Dialog Vs Навигация
+A dialog is a UI component displayed on top of the current screen, fundamentally different from standard navigation:
 
-Dialog - это особый UI-паттерн, который фундаментально отличается от стандартной навигации:
+**Key Differences:**
 
-**Характеристики Dialog:**
+1. **Overlay vs Replacement** - Dialog appears on top, navigation replaces the screen
+2. **Back Stack** - Dialog doesn't add to back stack, navigation does
+3. **State Preservation** - Screen state preserved under dialog, may be lost with navigation
+4. **Scope** - Dialog for brief interactions (confirmations, selections), navigation for full screens
+5. **Lifecycle** - Dialog has independent lifecycle tied to parent screen
 
-1. **Оверлейное отображение**: Появляется поверх текущего экрана, не заменяя его
-2. **Навигационный стек**: Не изменяет back stack
-3. **Сохранение состояния**: Нижележащий экран сохраняет свое состояние
-4. **Временный характер**: Предназначен для краткихвзаимодействий и быстрых решений
-5. **Модальное поведение**: Часто блокирует взаимодействие с нижележащим контентом
+**Use Cases:** Action confirmations, simple forms, option selection (date/time pickers), progress indicators.
 
-**Стандартная навигация:**
-
-1. **Замена экрана**: Заменяет текущий экран на новый
-2. **Back Stack**: Добавляет записи в навигационный стек возврата
-3. **Изменение состояния**: Предыдущий экран может потерять свое состояние (в зависимости от конфигурации)
-4. **Долговременное взаимодействие**: Предназначена для продолжительного взаимодействия пользователя
-5. **Полный экран**: Занимает все экранное пространство
-
-### Случаи Использования Dialog
-
-- Запросы подтверждения ("Вы уверены?")
-- Простые формы (логин, ввод пароля)
-- Предупреждения и уведомления
-- Быстрый выбор (выбор даты, времени)
-- Индикаторы прогресса
-
-### Dialog В Jetpack Compose
+### Jetpack Compose
 
 ```kotlin
 @Composable
 fun MyScreen() {
-    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) } // ✅ State hoisting
 
     if (showDialog) {
         AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Подтвердите действие") },
-            text = { Text("Вы уверены?") },
+            onDismissRequest = { showDialog = false }, // ✅ Handle dismissal
+            title = { Text("Confirm") },
+            text = { Text("Delete item?") },
             confirmButton = {
                 TextButton(onClick = {
-                    // Обработка действия
+                    // ✅ Handle action then dismiss
                     showDialog = false
                 }) {
-                    Text("Подтвердить")
+                    Text("Delete")
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text("Отмена")
+                    Text("Cancel")
                 }
             }
         )
     }
+}
 
-    Button(onClick = { showDialog = true }) {
-        Text("Показать Dialog")
-    }
+// ❌ Bad: Dialog state not managed properly
+@Composable
+fun BadExample() {
+    AlertDialog(
+        onDismissRequest = { /* no state update */ }, // ❌ Dialog won't close
+        // ...
+    )
 }
 ```
 
-### Ключевые Преимущества Dialog
+### Traditional Android (Views)
 
-1. **Сохранение контекста**: Пользователь остается в текущем контексте
-2. **Быстрое взаимодействие**: Быстрее, чем переход на новый экран
-3. **Фокус**: Привлекает внимание к важным действиям или информации
-4. **Легковесность**: Меньше накладных расходов, чем создание нового экрана
+```kotlin
+// ✅ Good: DialogFragment with lifecycle awareness
+class ConfirmDialogFragment : DialogFragment() {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext())
+            .setMessage("Confirm action?")
+            .setPositiveButton("OK") { _, _ -> /* action */ }
+            .setNegativeButton("Cancel", null)
+            .create()
+    }
+}
 
-**Резюме:**
+// ❌ Bad: Direct AlertDialog (loses state on config changes)
+AlertDialog.Builder(context)
+    .setMessage("Confirm?")
+    .show() // ❌ Lost on rotation
+```
 
-Dialog отображается поверх текущего экрана без изменения навигационного стека. Основные отличия: не заменяет экран, сохраняет состояние нижележащего экрана, предназначен для краткого взаимодействия. В Compose реализуется через `AlertDialog` composable с управлением состоянием через `remember` и `mutableStateOf`.
+**Related to [[c-compose-navigation]]:** Dialog doesn't affect NavController, unlike standard navigation between composables.
 
 ---
 
 ## Follow-ups
 
--   When should you use a Dialog vs navigating to a new screen in Android?
--   How do you handle Dialog state management and lifecycle in Compose vs View system?
--   What are the accessibility considerations when implementing Dialogs?
+- How does dialog state survive configuration changes in Compose vs Views?
+- What happens to dialog when parent activity/composable is destroyed?
+- How to implement nested navigation with dialogs in Navigation Component?
+- What are the performance implications of showing dialogs frequently?
 
 ## References
 
--   `https://developer.android.com/guide/topics/ui/dialogs` — Dialog guide
--   `https://developer.android.com/jetpack/compose/components/dialog` — Compose dialogs
--   `https://developer.android.com/guide/navigation` — Navigation component
+- [[c-compose-navigation]] - Navigation in Jetpack Compose
+- [[c-compose-state]] - State management in Compose
+- [[c-lifecycle]] - Android lifecycle concepts
 
 ## Related Questions
 
-### Related (Medium)
+### Prerequisites (Easier)
+- [[q-what-is-fragment--android--easy]] - Fragment basics for DialogFragment understanding
 
--   q-navigation-component--android--medium - Navigation component
--   q-compose-navigation--android--medium - Compose navigation
--   q-bottom-sheet-vs-dialog--android--medium - Bottom sheet vs dialog
+### Related (Medium)
+- [[q-main-thread-android--android--medium]] - Main thread and UI operations
+- [[q-what-is-layout-performance-measured-in--android--medium]] - Performance considerations
+
+### Advanced (Harder)
+- Implementing custom dialog destinations in Navigation Component
+- Managing dialog state across process death
+- Building reusable dialog systems with Compose
