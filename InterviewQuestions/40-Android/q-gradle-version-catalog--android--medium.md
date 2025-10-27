@@ -1,570 +1,254 @@
 ---
 id: 20251015-094711
 title: "Gradle Version Catalog / Каталог версий Gradle"
+aliases: [Gradle Version Catalog, Каталог версий Gradle, Version Catalog, libs.versions.toml]
 topic: android
+subtopics: [gradle, dependency-management, build-variants]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-mlkit-face-detection--ml--medium, q-retrofit-modify-all-requests--android--hard]
+related: [q-gradle-build-system--android--medium, q-kapt-ksp-migration--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium]
 created: 2025-10-15
-tags: [android/build-variants, android/dependency-management, dependency-management, difficulty/medium, gradle, toml, version-catalog]
-source: Kirchhoff repo
-subtopics:
-  - build-variants
-  - dependency-management
-  - gradle
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:47:03 pm
+updated: 2025-10-27
+tags: [android/gradle, android/dependency-management, android/build-variants, gradle, dependency-management, toml, difficulty/medium]
+sources: [Kirchhoff repo, Android Developer Docs]
+---
+# Вопрос (RU)
+
+Что вы знаете о Gradle Version Catalog?
+
+# Question (EN)
+
+What do you know about Gradle Version Catalog?
+
 ---
 
-# Gradle Version Catalog / Gradle Version Catalog
+## Ответ (RU)
 
-**English**: What do you know about Gradle Version Catalog?
+**Gradle Version Catalog** - это механизм для централизованного управления зависимостями и плагинами в Gradle-проектах через файл `libs.versions.toml`. Вместо дублирования версий в каждом модуле, создается единый каталог с типобезопасными аксессорами и поддержкой автодополнения в IDE. См. также [[c-dependency-injection]] для паттернов управления зависимостями.
 
-**Russian**: Что вы знаете о Gradle Version Catalog?
+### Ключевые Преимущества
 
-## Answer (EN)
-**Gradle version catalogs** enable you to add and maintain dependencies and plugins in a scalable way. Using Gradle version catalogs makes managing dependencies and plugins easier when you have multiple modules. Instead of hardcoding dependency names and versions in individual build files and updating each entry whenever you need to upgrade a dependency, you can create a central **version catalog** of dependencies that various modules can reference in a type-safe way with Android Studio assistance.
+1. **Типобезопасность**: Gradle генерирует аксессоры для автодополнения (`libs.retrofit.core`)
+2. **Централизация**: Единый источник истины для всех версий
+3. **Бандлы**: Группировка часто используемых вместе зависимостей
+4. **Консистентность**: Одна версия применяется во всех модулях
 
-## Advantages of Version Catalogs
-
-A version catalog provides several advantages over declaring dependencies directly in build scripts:
-
-1. **Type-safe accessors**: For each catalog, Gradle generates type-safe accessors so that you can easily add dependencies with autocompletion in the IDE
-
-2. **Centralized version management**: Each catalog is visible to all projects of a build. It is a central place to declare a version of a dependency and to make sure that a change to that version applies to every subproject
-
-3. **Dependency bundles**: Catalogs can declare dependency bundles, which are "groups of dependencies" that are commonly used together
-
-4. **Version references**: Catalogs can separate the group and name of a dependency from its actual version and use version references instead, making it possible to share a version declaration between multiple dependencies
-
-## Creating a Version Catalog File
-
-### Basic Setup
-
-Start by creating a version catalog file. In your root project's `gradle` folder, create a file called `libs.versions.toml`. Gradle looks for the catalog in the `libs.versions.toml` file by default, so we recommend using this default name.
-
-In your `libs.versions.toml` file, add these sections:
+### Структура libs.versions.toml
 
 ```toml
-[versions]
+[versions]              # ✅ Объявление версий
+kotlin = "1.9.20"
+compose = "1.5.4"
+retrofit = "2.9.0"
 
-[libraries]
+[libraries]             # ✅ Координаты библиотек
+retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 
-[plugins]
+[bundles]               # ✅ Группы зависимостей
+retrofit = ["retrofit-core", "retrofit-gson"]
 
-[bundles]
+[plugins]               # ✅ Плагины
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ```
 
-### TOML File Format
-
-The TOML file consists of 4 major sections:
-
-- **`[versions]`** - Used to declare versions which can be referenced by dependencies
-- **`[libraries]`** - Used to declare the aliases to coordinates
-- **`[bundles]`** - Used to declare dependency bundles
-- **`[plugins]`** - Used to declare plugins
-
-### Example Version Catalog
-
-```toml
-[versions]
-groovy = "3.0.5"
-checkstyle = "8.37"
-
-[libraries]
-groovy-core = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
-groovy-json = { module = "org.codehaus.groovy:groovy-json", version.ref = "groovy" }
-groovy-nio = { module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy" }
-
-[bundles]
-groovy = ["groovy-core", "groovy-json", "groovy-nio"]
-
-[plugins]
-versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
-```
-
-## Aliases and Type-Safe Accessors
-
-### Alias Naming Rules
-
-Aliases must consist of a series of identifiers separated by:
-- Dash (`-`) - **recommended**
-- Underscore (`_`)
-- Dot (`.`)
-
-Identifiers themselves must consist of ASCII characters, preferably lowercase, eventually followed by numbers.
-
-**Valid aliases:**
-- `guava`
-- `groovy-core`
-- `commons-lang3`
-- `androidx.awesome.lib`
-
-**Invalid aliases:**
-- `this.#is.not` (contains special characters)
-
-### Type-Safe Accessor Generation
-
-For the following aliases in a version catalog named `libs`:
-
-```toml
-guava, groovy-core, groovy-xml, groovy-json, androidx.awesome.lib
-```
-
-Gradle generates the following type-safe accessors:
-
-```kotlin
-libs.guava
-libs.groovy.core
-libs.groovy.xml
-libs.groovy.json
-libs.androidx.awesome.lib
-```
-
-Where the `libs` prefix comes from the version catalog name.
-
-### Using Dependencies in Build Files
-
-```kotlin
-dependencies {
-    implementation(libs.guava)
-    implementation(libs.groovy.core)
-    implementation(libs.androidx.awesome.lib)
-}
-```
-
-## Dependency Bundles
-
-Because some dependencies are systematically used together in different projects, a version catalog offers the concept of **dependency bundles**. A bundle is an alias for several dependencies.
-
-### Without Bundle
-
-```kotlin
-dependencies {
-    implementation(libs.groovy.core)
-    implementation(libs.groovy.json)
-    implementation(libs.groovy.nio)
-}
-```
-
-### With Bundle
-
-```kotlin
-dependencies {
-    implementation(libs.bundles.groovy)
-}
-```
-
-### Bundle Declaration
-
-The bundle needs to be declared in the catalog:
-
-```groovy
-dependencyResolutionManagement {
-    versionCatalogs {
-        libs {
-            version('groovy', '3.0.5')
-            version('checkstyle', '8.37')
-            library('groovy-core', 'org.codehaus.groovy', 'groovy').versionRef('groovy')
-            library('groovy-json', 'org.codehaus.groovy', 'groovy-json').versionRef('groovy')
-            library('groovy-nio', 'org.codehaus.groovy', 'groovy-nio').versionRef('groovy')
-            bundle('groovy', ['groovy-core', 'groovy-json', 'groovy-nio'])
-        }
-    }
-}
-```
-
-The semantics are equivalent: adding a single bundle is equivalent to adding all dependencies which are part of the bundle individually.
-
-## Plugins
-
-In addition to libraries, version catalog supports declaring plugin versions. While libraries are represented by their group, artifact and version coordinates, Gradle plugins are identified by their id and version only.
-
-### Plugin Declaration
-
-```groovy
-dependencyResolutionManagement {
-    versionCatalogs {
-        libs {
-            plugin('versions', 'com.github.ben-manes.versions').version('0.45.0')
-        }
-    }
-}
-```
-
-Or in TOML:
-
-```toml
-[plugins]
-versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
-```
-
-### Using Plugins
-
-The plugin is accessible in the `plugins` block and can be consumed in any project:
+### Использование в build.gradle.kts
 
 ```kotlin
 plugins {
-    id("java-library")
-    id("checkstyle")
-    // Use the plugin `versions` as declared in the `libs` version catalog
-    alias(libs.plugins.versions)
+    alias(libs.plugins.kotlin.android)  // ✅ Плагин из каталога
+}
+
+dependencies {
+    // ✅ Отдельные зависимости с типобезопасностью
+    implementation(libs.retrofit.core)
+
+    // ✅ Бандл - все зависимости группы сразу
+    implementation(libs.bundles.retrofit)
 }
 ```
 
-## Real-World Android Example
+### Правила Именования Алиасов
 
-### libs.versions.toml
+**Разделители** (dash рекомендуется):
+- Дефис `-`: `retrofit-core` → `libs.retrofit.core`
+- Точка `.`: `androidx.core.ktx` → `libs.androidx.core.ktx`
+- Подчеркивание `_`: `room_runtime` → `libs.room.runtime`
+
+**Валидные алиасы**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`
+
+**Невалидные**: `this.#invalid` (спецсимволы запрещены)
+
+### Пример для Android-проекта
 
 ```toml
 [versions]
-kotlin = "1.9.20"
 compose = "1.5.4"
-androidx-core = "1.12.0"
-androidx-lifecycle = "2.6.2"
-retrofit = "2.9.0"
 room = "2.6.0"
 
 [libraries]
-# Kotlin
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-
-# AndroidX Core
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
-
-# Lifecycle
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
-
-# Compose
+# Compose UI
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 
-# Networking
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
-
-# Room
+# Room Database
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }  # ✅ KSP dependency
 
 [bundles]
-lifecycle = ["androidx-lifecycle-runtime", "androidx-lifecycle-viewmodel"]
-compose = ["compose-ui", "compose-material3", "compose-ui-tooling"]
-retrofit = ["retrofit", "retrofit-gson"]
+compose = ["compose-ui", "compose-material3"]
 room = ["room-runtime", "room-ktx"]
 
 [plugins]
-android-application = { id = "com.android.application", version = "8.1.2" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.20-1.0.14" }
+```
+
+**Использование**:
+
+```kotlin
+dependencies {
+    implementation(libs.bundles.compose)     // ✅ Весь Compose UI сразу
+    implementation(libs.bundles.room)        // ✅ Room runtime и extensions
+    ksp(libs.room.compiler)                  // ✅ Аннотация-процессор через KSP
+}
+```
+
+### Стратегия Миграции
+
+1. Создайте `gradle/libs.versions.toml`
+2. Извлеките версии из build-файлов в `[versions]`
+3. Объявите библиотеки в `[libraries]` с `version.ref`
+4. Группируйте связанные зависимости в `[bundles]`
+5. Замените `implementation("group:artifact:version")` на `implementation(libs.artifact)`
+6. Протестируйте сборку
+
+## Answer (EN)
+
+**Gradle Version Catalog** is a centralized dependency and plugin management mechanism through `libs.versions.toml` file. Instead of hardcoding versions in each module, you create a single catalog with type-safe accessors and IDE autocompletion support.
+
+### Key Benefits
+
+1. **Type Safety**: Gradle generates accessors for autocompletion (`libs.retrofit.core`)
+2. **Centralization**: Single source of truth for all versions
+3. **Bundles**: Group commonly used dependencies together
+4. **Consistency**: One version applied across all modules
+
+### Structure of libs.versions.toml
+
+```toml
+[versions]              # ✅ Version declarations
+kotlin = "1.9.20"
+compose = "1.5.4"
+retrofit = "2.9.0"
+
+[libraries]             # ✅ Library coordinates
+retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+
+[bundles]               # ✅ Dependency groups
+retrofit = ["retrofit-core", "retrofit-gson"]
+
+[plugins]               # ✅ Plugin declarations
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ```
 
 ### Usage in build.gradle.kts
 
 ```kotlin
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.android)  // ✅ Plugin from catalog
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
+    // ✅ Individual dependencies with type safety
+    implementation(libs.retrofit.core)
 
-    // Using bundles
-    implementation(libs.bundles.lifecycle)
-    implementation(libs.bundles.compose)
+    // ✅ Bundle - all group dependencies at once
     implementation(libs.bundles.retrofit)
-    implementation(libs.bundles.room)
-
-    // KSP for Room
-    ksp(libs.room.compiler)
 }
 ```
 
-## Benefits Summary
+### Alias Naming Rules
 
-1. **Type Safety**: IDE autocompletion and compile-time checking
-2. **Centralization**: Single source of truth for all dependencies
-3. **Consistency**: Same version used across all modules
-4. **Maintainability**: Easy to update versions in one place
-5. **Readability**: Clean, organized dependency declarations
-6. **Refactoring**: Rename-safe with IDE support
-7. **Bundles**: Group related dependencies together
-8. **Plugin Management**: Centralized plugin version control
+**Separators** (dash recommended):
+- Dash `-`: `retrofit-core` → `libs.retrofit.core`
+- Dot `.`: `androidx.core.ktx` → `libs.androidx.core.ktx`
+- Underscore `_`: `room_runtime` → `libs.room.runtime`
 
-## Migration Strategy
+**Valid aliases**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`
 
-When migrating to version catalogs:
+**Invalid**: `this.#invalid` (special characters forbidden)
 
-1. Create `gradle/libs.versions.toml`
-2. Extract versions to `[versions]` section
-3. Move library declarations to `[libraries]`
-4. Move plugin declarations to `[plugins]`
-5. Create bundles for commonly grouped dependencies
-6. Update build files to use `libs.*` accessors
-7. Test build to ensure everything works
-8. Remove old dependency declarations
-
----
-
-## Ответ (RU)
-**Gradle Version Catalog** - это механизм для управления зависимостями и плагинами в масштабируемом виде. Вместо жесткого кодирования имен и версий зависимостей в отдельных файлах сборки, можно создать центральный каталог версий, на который различные модули могут ссылаться типобезопасным способом с поддержкой автодополнения в Android Studio.
-
-## Преимущества Version Catalog
-
-1. **Типобезопасные аксессоры**: Gradle генерирует типобезопасные аксессоры для легкого добавления зависимостей с автодополнением в IDE
-
-2. **Централизованное управление версиями**: Каталог виден всем проектам сборки. Это центральное место для объявления версии зависимости, гарантирующее применение изменений ко всем подпроектам
-
-3. **Бандлы зависимостей**: Каталоги могут объявлять бандлы зависимостей - "группы зависимостей", которые обычно используются вместе
-
-4. **Ссылки на версии**: Каталоги могут разделять группу и имя зависимости от фактической версии, позволяя делиться объявлением версии между несколькими зависимостями
-
-## Создание Файла Каталога Версий
-
-### Базовая Настройка
-
-В папке `gradle` корневого проекта создайте файл `libs.versions.toml`. Gradle по умолчанию ищет каталог в файле `libs.versions.toml`.
-
-Добавьте следующие секции:
-
-```toml
-[versions]      # Версии зависимостей
-
-[libraries]     # Объявления библиотек
-
-[plugins]       # Объявления плагинов
-
-[bundles]       # Группы зависимостей
-```
-
-### Пример Каталога
+### Android Project Example
 
 ```toml
 [versions]
-groovy = "3.0.5"
-checkstyle = "8.37"
-
-[libraries]
-groovy-core = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
-groovy-json = { module = "org.codehaus.groovy:groovy-json", version.ref = "groovy" }
-groovy-nio = { module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy" }
-
-[bundles]
-groovy = ["groovy-core", "groovy-json", "groovy-nio"]
-
-[plugins]
-versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
-```
-
-## Алиасы И Типобезопасные Аксессоры
-
-### Правила Именования
-
-Алиасы должны состоять из идентификаторов, разделенных:
-- Дефисом (`-`) - **рекомендуется**
-- Подчеркиванием (`_`)
-- Точкой (`.`)
-
-**Валидные алиасы:**
-- `guava`
-- `groovy-core`
-- `commons-lang3`
-- `androidx.awesome.lib`
-
-### Генерация Аксессоров
-
-Для алиасов: `guava`, `groovy-core`, `groovy-xml`, `groovy-json`, `androidx.awesome.lib`
-
-Gradle генерирует:
-
-```kotlin
-libs.guava
-libs.groovy.core
-libs.groovy.xml
-libs.groovy.json
-libs.androidx.awesome.lib
-```
-
-### Использование В Build-файлах
-
-```kotlin
-dependencies {
-    implementation(libs.guava)
-    implementation(libs.groovy.core)
-    implementation(libs.androidx.awesome.lib)
-}
-```
-
-## Бандлы Зависимостей
-
-Бандл - это алиас для нескольких зависимостей, которые обычно используются вместе.
-
-### Без Бандла
-
-```kotlin
-dependencies {
-    implementation(libs.groovy.core)
-    implementation(libs.groovy.json)
-    implementation(libs.groovy.nio)
-}
-```
-
-### С Бандлом
-
-```kotlin
-dependencies {
-    implementation(libs.bundles.groovy)
-}
-```
-
-Семантика эквивалентна: добавление одного бандла равносильно добавлению всех зависимостей, которые в него входят.
-
-## Плагины
-
-Помимо библиотек, каталог версий поддерживает объявление версий плагинов.
-
-### Объявление В TOML
-
-```toml
-[plugins]
-versions = { id = "com.github.ben-manes.versions", version = "0.45.0" }
-```
-
-### Использование Плагинов
-
-```kotlin
-plugins {
-    id("java-library")
-    id("checkstyle")
-    alias(libs.plugins.versions)
-}
-```
-
-## Практический Пример Для Android
-
-### libs.versions.toml
-
-```toml
-[versions]
-kotlin = "1.9.20"
 compose = "1.5.4"
-androidx-core = "1.12.0"
-androidx-lifecycle = "2.6.2"
-retrofit = "2.9.0"
 room = "2.6.0"
 
 [libraries]
-# Kotlin
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-
-# AndroidX Core
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
-
-# Lifecycle
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
-
-# Compose
+# Compose UI
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 
-# Networking
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
-
-# Room
+# Room Database
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }  # ✅ KSP dependency
 
 [bundles]
-lifecycle = ["androidx-lifecycle-runtime", "androidx-lifecycle-viewmodel"]
-compose = ["compose-ui", "compose-material3", "compose-ui-tooling"]
-retrofit = ["retrofit", "retrofit-gson"]
+compose = ["compose-ui", "compose-material3"]
 room = ["room-runtime", "room-ktx"]
 
 [plugins]
-android-application = { id = "com.android.application", version = "8.1.2" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.20-1.0.14" }
 ```
 
-### Использование В build.gradle.kts
+**Usage**:
 
 ```kotlin
-plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
-}
-
 dependencies {
-    implementation(libs.androidx.core.ktx)
-
-    // Использование бандлов
-    implementation(libs.bundles.lifecycle)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.retrofit)
-    implementation(libs.bundles.room)
-
-    // KSP для Room
-    ksp(libs.room.compiler)
+    implementation(libs.bundles.compose)     // ✅ All Compose UI at once
+    implementation(libs.bundles.room)        // ✅ Room runtime and extensions
+    ksp(libs.room.compiler)                  // ✅ Annotation processor via KSP
 }
 ```
 
-## Основные Преимущества
+### Migration Strategy
 
-1. **Типобезопасность**: Автодополнение в IDE и проверка на этапе компиляции
-2. **Централизация**: Единый источник истины для всех зависимостей
-3. **Консистентность**: Одинаковая версия используется во всех модулях
-4. **Поддерживаемость**: Легко обновлять версии в одном месте
-5. **Читаемость**: Чистые, организованные объявления зависимостей
-6. **Рефакторинг**: Безопасное переименование с поддержкой IDE
-7. **Бандлы**: Группировка связанных зависимостей
-8. **Управление плагинами**: Централизованный контроль версий плагинов
-
-## Стратегия Миграции
-
-При миграции на Version Catalog:
-
-1. Создайте `gradle/libs.versions.toml`
-2. Извлеките версии в секцию `[versions]`
-3. Переместите объявления библиотек в `[libraries]`
-4. Переместите объявления плагинов в `[plugins]`
-5. Создайте бандлы для часто группируемых зависимостей
-6. Обновите build-файлы для использования аксессоров `libs.*`
-7. Протестируйте сборку
-8. Удалите старые объявления зависимостей
+1. Create `gradle/libs.versions.toml` file
+2. Extract versions from build files to `[versions]` section
+3. Declare libraries in `[libraries]` with `version.ref`
+4. Group related dependencies in `[bundles]`
+5. Replace `implementation("group:artifact:version")` with `implementation(libs.artifact)`
+6. Test the build
 
 ---
+
+## Follow-ups
+
+- How to handle version conflicts in multi-module projects?
+- Can you use multiple version catalogs in one project?
+- How to migrate from buildSrc to version catalog?
+- What happens when an alias name conflicts with existing code?
 
 ## References
 
-- [Migrate your build to version catalogs](https://developer.android.com/build/migrate-to-catalogs)
-- [Sharing dependency versions between projects](https://docs.gradle.org/current/userguide/platforms.html)
-- [Using Version Catalog on Android projects](https://proandroiddev.com/using-version-catalog-on-android-projects-82d88d2f79e5)
-- [Is the New Gradle Version Catalog Worth It for Your Android Projects?](https://molidevwrites.com/is-the-new-gradle-version-catalog-worth-it-for-your-android-projects/)
-
----
+- [Android Developer Docs: Migrate to version catalogs](https://developer.android.com/build/migrate-to-catalogs)
+- [Gradle User Guide: Sharing dependency versions](https://docs.gradle.org/current/userguide/platforms.html)
+- [ProAndroidDev: Version Catalog on Android](https://proandroiddev.com/using-version-catalog-on-android-projects-82d88d2f79e5)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-gradle-basics--android--easy]] - Build
+- [[q-gradle-basics--android--easy]] - Gradle fundamentals
 
-### Related (Medium)
-- [[q-build-optimization-gradle--android--medium]] - Build
-- [[q-kapt-ksp-migration--android--medium]] - Build
-- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
-- [[q-gradle-build-system--android--medium]] - Build
-- [[q-dagger-build-time-optimization--android--medium]] - Build
-
-### Advanced (Harder)
-- [[q-kotlin-dsl-builders--android--hard]] - Build
+### Related (Same Level)
+- [[q-gradle-build-system--android--medium]] - Build system overview
+- [[q-kapt-ksp-migration--android--medium]] - Annotation processing
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build script languages

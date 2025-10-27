@@ -1,23 +1,166 @@
 ---
-id: 20251012-122711158
+id: 20251015-120000
 title: "What Is Dp / Что такое dp"
+aliases: [Dp, Density-independent Pixels, Плотность-независимые пиксели]
 topic: android
-difficulty: medium
+subtopics: [ui-compose, ui-views, ui-theming]
+question_kind: theory
+difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-pass-large-data-between-activities--android--hard, q-play-feature-delivery--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related: [q-what-are-px-dp-sp--android--easy, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-15
+updated: 2025-10-27
+sources: [https://developer.android.com/training/multiscreen/screendensities]
 tags:
-  - android
+  - android/ui-compose
+  - android/ui-views
+  - android/ui-theming
+  - density
+  - material-design
+  - difficulty/easy
 ---
+# Вопрос (RU)
+
+> Что такое dp (density-independent pixel, плотность-независимый пиксель)?
 
 # Question (EN)
 
 > What is dp (density-independent pixel)?
 
-# Вопрос (RU)
+---
 
-> Что такое dp?
+## Ответ (RU)
+
+### Определение
+
+**dp** (density-independent pixels, плотность-независимые пиксели) — единица измерения в Android для создания адаптивных интерфейсов, которые выглядят одинаково на устройствах с разной плотностью экрана.
+
+### Зачем нужен dp
+
+**Проблема**: При использовании пикселей (px) элементы UI имеют разный физический размер на разных устройствах.
+
+**Решение**: dp автоматически масштабируется в зависимости от плотности экрана.
+
+**Формула конвертации**:
+```text
+pixels = dp × (device dpi / 160)
+```
+
+**Пример**: 100dp на разных устройствах
+- mdpi (160dpi): 100dp = 100px
+- hdpi (240dpi): 100dp = 150px
+- xhdpi (320dpi): 100dp = 200px
+- xxhdpi (480dpi): 100dp = 300px
+
+### Density Buckets
+
+| Плотность | DPI     | Коэффициент | Папка            |
+|-----------|---------|-------------|------------------|
+| mdpi      | ~160dpi | 1.0         | drawable-mdpi    |
+| hdpi      | ~240dpi | 1.5         | drawable-hdpi    |
+| xhdpi     | ~320dpi | 2.0         | drawable-xhdpi   |
+| xxhdpi    | ~480dpi | 3.0         | drawable-xxhdpi  |
+| xxxhdpi   | ~640dpi | 4.0         | drawable-xxxhdpi |
+
+### Использование в XML
+
+```xml
+<Button
+    android:layout_width="200dp"   <!-- ✅ Используем dp -->
+    android:layout_height="48dp"   <!-- ✅ Минимальный размер touch target -->
+    android:padding="16dp"         <!-- ✅ Стандартный отступ Material -->
+    android:text="Submit" />
+```
+
+### Использование в Compose
+
+```kotlin
+@Composable
+fun DpExample() {
+    Column(modifier = Modifier.padding(16.dp)) {  // ✅ .dp extension
+        Button(
+            onClick = { },
+            modifier = Modifier
+                .width(200.dp)
+                .height(48.dp)  // ✅ Минимальный touch target
+        ) {
+            Text("Submit")
+        }
+
+        Icon(
+            imageVector = Icons.Default.Star,
+            modifier = Modifier.size(24.dp)  // ✅ Стандартный размер иконки
+        )
+    }
+}
+```
+
+### Конвертация dp ↔ px
+
+**View System**:
+```kotlin
+// dp → px
+val density = resources.displayMetrics.density
+val px = (100 * density).toInt()  // ✅ Правильно
+
+// Extension
+val Int.dp: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+```
+
+**Compose**:
+```kotlin
+@Composable
+fun DpConversion() {
+    val density = LocalDensity.current
+    val widthPx = with(density) { 100.dp.toPx() }  // ✅ dp → px
+}
+```
+
+### Стандартные значения Material Design
+
+```kotlin
+// Отступы
+8.dp   // Малый
+16.dp  // Стандартный (самый частый)
+24.dp  // Большой
+
+// Touch targets
+48.dp  // Минимальный размер для касания
+
+// Иконки
+24.dp  // Стандартная иконка
+```
+
+### dp vs px vs sp
+
+| Случай использования | Единица | Пример              |
+|---------------------|---------|---------------------|
+| Размеры layout      | dp      | `width = 100.dp`    |
+| Отступы/padding     | dp      | `padding(16.dp)`    |
+| Размер текста       | **sp**  | `fontSize = 16.sp`  |
+| Canvas (редко)      | px      | Операции рисования  |
+
+### Best Practices
+
+1. **Всегда используйте dp** для размеров элементов
+2. **Никогда не используйте px** для UI (кроме Canvas)
+3. **Используйте sp** для размера текста (не dp!)
+4. **Кратность 4dp или 8dp** для согласованности
+
+### Частые ошибки
+
+```kotlin
+// ❌ ПЛОХО: Использование px
+textView.layoutParams.width = 100  // Это px!
+
+// ✅ ХОРОШО: Конвертация dp в px
+val widthPx = (100 * density).toInt()
+textView.layoutParams.width = widthPx
+```
 
 ---
 
@@ -25,373 +168,150 @@ tags:
 
 ### Definition
 
-**dp** (Density-independent Pixels), also called **dip**, is a unit of measurement in Android used to create adaptive interfaces that look consistent across devices with different screen densities.
+**dp** (density-independent pixels) is an Android measurement unit for creating adaptive interfaces that look consistent across devices with different screen densities.
 
 ### Why dp Exists
 
-Different devices have different screen pixel densities:
+**Problem**: Using pixels (px) results in different physical sizes on different devices.
 
-```
-Low-end phone:    480 × 800 pixels, 4" screen  = 233 dpi
-Mid-range phone:  1080 × 1920 pixels, 5" screen = 441 dpi
-High-end phone:   1440 × 2560 pixels, 5.5" screen = 534 dpi
-Tablet:           2048 × 1536 pixels, 10" screen = 264 dpi
-```
+**Solution**: dp automatically scales based on screen density.
 
-**Problem**: If you use pixels (px), UI elements will be different physical sizes on different devices.
-
-**Solution**: Use density-independent pixels (dp) that automatically scale.
-
-### How dp Works
-
-The conversion formula:
-
-```
+**Conversion formula**:
+```text
 pixels = dp × (device dpi / 160)
 ```
 
 **Example**: 100dp on different devices
-
--   mdpi (160dpi): 100dp = 100px
--   hdpi (240dpi): 100dp = 150px
--   xhdpi (320dpi): 100dp = 200px
--   xxhdpi (480dpi): 100dp = 300px
-
-### Visual Comparison
-
-```
-
-     Same Physical Size
-
- ldpi:   75px  (100dp)
- mdpi:   100px (100dp)
- hdpi:   150px (100dp)
- xhdpi:  200px (100dp)
- xxhdpi: 300px (100dp)
-
-```
+- mdpi (160dpi): 100dp = 100px
+- hdpi (240dpi): 100dp = 150px
+- xhdpi (320dpi): 100dp = 200px
+- xxhdpi (480dpi): 100dp = 300px
 
 ### Density Buckets
 
-Android defines standard density buckets:
-
-| Density | DPI     | Scale Factor   | Folder           |
-| ------- | ------- | -------------- | ---------------- |
-| ldpi    | ~120dpi | 0.75           | drawable-ldpi    |
-| mdpi    | ~160dpi | 1.0 (baseline) | drawable-mdpi    |
-| hdpi    | ~240dpi | 1.5            | drawable-hdpi    |
-| xhdpi   | ~320dpi | 2.0            | drawable-xhdpi   |
-| xxhdpi  | ~480dpi | 3.0            | drawable-xxhdpi  |
-| xxxhdpi | ~640dpi | 4.0            | drawable-xxxhdpi |
+| Density | DPI     | Scale | Folder           |
+|---------|---------|-------|------------------|
+| mdpi    | ~160dpi | 1.0   | drawable-mdpi    |
+| hdpi    | ~240dpi | 1.5   | drawable-hdpi    |
+| xhdpi   | ~320dpi | 2.0   | drawable-xhdpi   |
+| xxhdpi  | ~480dpi | 3.0   | drawable-xxhdpi  |
+| xxxhdpi | ~640dpi | 4.0   | drawable-xxxhdpi |
 
 ### XML Usage
 
 ```xml
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="vertical">
-
-    <!-- Button with consistent size across devices -->
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:text="Submit" />
-
-    <!-- Icon with standard size -->
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_icon"
-        android:layout_marginTop="8dp" />
-
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider"
-        android:layout_marginVertical="16dp" />
-
-</LinearLayout>
+<Button
+    android:layout_width="200dp"   <!-- ✅ Use dp -->
+    android:layout_height="48dp"   <!-- ✅ Minimum touch target -->
+    android:padding="16dp"         <!-- ✅ Standard Material padding -->
+    android:text="Submit" />
 ```
 
-### Jetpack Compose Usage
+### Compose Usage
 
 ```kotlin
 @Composable
 fun DpExample() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp) // Use .dp extension
-    ) {
-        // Button with consistent size
+    Column(modifier = Modifier.padding(16.dp)) {  // ✅ .dp extension
         Button(
             onClick = { },
             modifier = Modifier
                 .width(200.dp)
-                .height(48.dp)
+                .height(48.dp)  // ✅ Minimum touch target
         ) {
             Text("Submit")
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Icon with standard size
         Icon(
             imageVector = Icons.Default.Star,
-            contentDescription = "Star",
-            modifier = Modifier.size(24.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Divider
-        Divider(
-            thickness = 1.dp,
-            color = Color.Gray
+            modifier = Modifier.size(24.dp)  // ✅ Standard icon size
         )
     }
 }
 ```
 
-### Converting Between dp and px
+### Converting dp ↔ px
 
-#### In Code (View System)
-
+**View System**:
 ```kotlin
-// Get density
+// dp → px
 val density = resources.displayMetrics.density
+val px = (100 * density).toInt()  // ✅ Correct
 
-// Convert dp to px
-fun dpToPx(dp: Int): Int {
-    return (dp * density).toInt()
-}
-
-// Convert px to dp
-fun pxToDp(px: Int): Int {
-    return (px / density).toInt()
-}
-
-// Usage
-val buttonWidthPx = dpToPx(200) // 200dp → pixels
-```
-
-#### Extension Functions
-
-```kotlin
+// Extension
 val Int.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-
-val Int.px: Int
-    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
-
-// Usage
-val width = 100.dp  // 100dp converted to pixels
-val dpValue = 150.px // 150px converted to dp
 ```
 
-#### In Compose
-
+**Compose**:
 ```kotlin
 @Composable
 fun DpConversion() {
     val density = LocalDensity.current
-
-    // Convert dp to px
-    val widthPx = with(density) { 100.dp.toPx() }
-
-    // Convert px to dp
-    val widthDp = with(density) { 150.toDp() }
+    val widthPx = with(density) { 100.dp.toPx() }  // ✅ dp → px
 }
 ```
 
-### Common dp Values
-
-#### Material Design Spacing
+### Material Design Standard Values
 
 ```kotlin
-// Margins and padding
-4.dp   // Extra small spacing
-8.dp   // Small spacing
-12.dp  // Medium-small spacing
-16.dp  // Standard spacing (most common)
-24.dp  // Large spacing
-32.dp  // Extra large spacing
-48.dp  // XXL spacing
-```
+// Spacing
+8.dp   // Small
+16.dp  // Standard (most common)
+24.dp  // Large
 
-#### Component Sizes
+// Touch targets
+48.dp  // Minimum touch target size
 
-```kotlin
-// Touch target sizes
-48.dp  // Minimum touch target (Material Design)
-56.dp  // FAB size
-64.dp  // Large touch target
-
-// Icon sizes
-16.dp  // Small icon
+// Icons
 24.dp  // Standard icon
-32.dp  // Large icon
-48.dp  // Extra large icon
-
-// Other
-1.dp   // Thin divider
-2.dp   // Medium divider
-56.dp  // App bar height
-72.dp  // List item height
-```
-
-### Practical Examples
-
-#### Card Layout
-
-```kotlin
-@Composable
-fun ProductCard() {
-    Card(
-        modifier = Modifier
-            .width(160.dp)
-            .padding(8.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Image(
-                painter = painterResource(R.drawable.product),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Product Name",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = "$19.99",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-        }
-    }
-}
-```
-
-#### Responsive Layout
-
-```kotlin
-@Composable
-fun ResponsiveLayout() {
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp.dp
-
-    // Adjust padding based on screen width
-    val horizontalPadding = when {
-        screenWidthDp < 360.dp -> 8.dp
-        screenWidthDp < 600.dp -> 16.dp
-        else -> 24.dp
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = horizontalPadding)
-    ) {
-        // Content
-    }
-}
 ```
 
 ### dp vs px vs sp
 
-| Use Case          | Unit   | Example            |
-| ----------------- | ------ | ------------------ |
-| Layout dimensions | dp     | `width = 100.dp`   |
-| Margins/Padding   | dp     | `padding(16.dp)`   |
-| Border thickness  | dp     | `border(1.dp)`     |
-| Icon sizes        | dp     | `size(24.dp)`      |
-| **Text size**     | **sp** | `fontSize = 16.sp` |
-| Drawing (rare)    | px     | Canvas operations  |
+| Use Case         | Unit   | Example             |
+|-----------------|--------|---------------------|
+| Layout sizes    | dp     | `width = 100.dp`    |
+| Padding/Margins | dp     | `padding(16.dp)`    |
+| Text size       | **sp** | `fontSize = 16.sp`  |
+| Canvas (rare)   | px     | Drawing operations  |
 
 ### Best Practices
 
 1. **Always use dp** for layout dimensions
-2. **Never use px** for UI elements (except rare canvas drawing)
-3. **Use sp** for text sizes (not dp)
-4. **Follow Material Design** guidelines for standard sizes
-5. **Test on multiple densities** to ensure consistency
-6. **Use consistent spacing** (multiples of 4dp or 8dp)
+2. **Never use px** for UI (except Canvas)
+3. **Use sp** for text sizes (not dp!)
+4. **Use multiples of 4dp or 8dp** for consistency
 
 ### Common Mistakes
 
 ```kotlin
-// BAD: Using px
-textView.layoutParams.width = 100 // This is px!
+// ❌ BAD: Using px
+textView.layoutParams.width = 100  // This is px!
 
-// GOOD: Using dp
+// ✅ GOOD: Convert dp to px
 val widthPx = (100 * density).toInt()
 textView.layoutParams.width = widthPx
 ```
-
-```xml
-<!-- BAD: Inconsistent spacing -->
-<View
-    android:layout_margin="13dp" />
-
-<!-- GOOD: Use multiples of 4dp or 8dp -->
-<View
-    android:layout_margin="12dp" />
-```
-
-### Screen Density Information
-
-Get current screen density:
-
-```kotlin
-val displayMetrics = resources.displayMetrics
-
-val density = displayMetrics.density        // Scale factor
-val densityDpi = displayMetrics.densityDpi  // Actual DPI
-val widthPixels = displayMetrics.widthPixels
-val heightPixels = displayMetrics.heightPixels
-
-// Calculate screen size in dp
-val widthDp = widthPixels / density
-val heightDp = heightPixels / density
-
-Log.d("Screen", "Size: ${widthDp}dp × ${heightDp}dp")
-Log.d("Screen", "Density: ${density}x ($densityDpi dpi)")
-```
-
----
-
-## Ответ (RU)
-
-dp (density-independent pixels, "плотность-независимые пиксели") — единица измерения в Android для создания адаптивных интерфейсов, одинаково выглядящих на экранах с разной плотностью пикселей. Пересчет выполняется по формуле: `px = dp × (dpi / 160)`. Используйте dp для размеров элементов, отступов и толщины линий, а sp — только для размера текста.
 
 ---
 
 ## Follow-ups
 
--   Когда использовать sp вместо dp (и в Compose, и во View-системе)?
--   Как связаны density buckets и папки ресурсов `drawable-*`/`mipmap-*`?
--   Какие проблемы возникают при смешении px и dp и как мигрировать?
+- Когда использовать sp вместо dp (и в Compose, и во View-системе)?
+- Как связаны density buckets и папки ресурсов `drawable-*`/`mipmap-*`?
+- Какие проблемы возникают при смешении px и dp?
 
 ## References
 
--   `https://developer.android.com/training/multiscreen/screendensities` — Support different pixel densities
--   `https://developer.android.com/guide/topics/resources/multiscreen-density` — Density resources
+- https://developer.android.com/training/multiscreen/screendensities
+- https://developer.android.com/guide/topics/resources/multiscreen-density
+- https://m3.material.io/foundations/layout/applying-layout/spacing
 
 ## Related Questions
 
-- [[q-pass-large-data-between-activities--android--hard]]
-- [[q-play-feature-delivery--android--medium]]
+### Same Difficulty (Easy)
+- [[q-what-are-px-dp-sp--android--easy]]
+
+### Next Steps (Medium)
 - [[q-what-are-the-most-important-components-of-compose--android--medium]]

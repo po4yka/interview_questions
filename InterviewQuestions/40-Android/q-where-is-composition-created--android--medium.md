@@ -1,31 +1,45 @@
 ---
-id: 20251012-122711182
+id: 20251012-122711
 title: "Where Is Composition Created / Где создается Composition"
+aliases: [Composition Creation, Создание Composition, setContent, ComposeView]
 topic: android
+subtopics: [ui-compose, lifecycle, ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-is-layoutinflater-a-singleton-and-why--android--medium, q-canvas-drawing-optimization--custom-views--hard, q-network-error-handling-strategies--networking--medium]
+related: [q-is-layoutinflater-a-singleton-and-why--android--medium, q-network-error-handling-strategies--networking--medium, c-jetpack-compose]
 created: 2025-10-15
-tags: [jetpack-compose, compose, composition, difficulty/medium]
+updated: 2025-10-27
+sources: []
+tags: [android/ui-compose, android/lifecycle, android/ui-views, jetpack-compose, composition, difficulty/medium]
+---
+# Вопрос (RU)
+
+Где создается композиция для вызова composable функций?
+
+# Question (EN)
+
+Where is composition created for calling composable functions?
+
 ---
 
-# Where is composition created for calling composable functions?
+## Ответ (RU)
 
-## Answer (EN)
-Composition is created inside the **setContent** function, which sets the entry point for composable functions in Activity or Fragment. It initiates interface rendering and state management.
+**Композиция** создается при вызове **setContent** в Activity (или ComposeView во Fragment). Это точка входа для Compose UI.
 
-### setContent in Activity
+### setContent в Activity
 
 ```kotlin
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Composition is created here
+        // ✅ Здесь создается Composition
         setContent {
-            MyApp() // Entry point to Compose UI
+            MyApp()
         }
     }
 }
@@ -33,28 +47,82 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp() {
     MaterialTheme {
-        Surface {
-            MainScreen()
-        }
+        Surface { MainScreen() }
     }
 }
 ```
 
-### setContent in Fragment
+### ComposeView во Fragment
 
 ```kotlin
 class MyFragment : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Composition created in ComposeView
+        // ✅ Composition создается в ComposeView
         return ComposeView(requireContext()).apply {
-            setContent {
-                MyComposable()
-            }
+            setContent { MyComposable() }
+        }
+    }
+}
+```
+
+### Несколько Compositions
+
+```kotlin
+// ✅ Каждый ComposeView = отдельная Composition
+val layout = LinearLayout(this).apply {
+    addView(ComposeView(this).apply {
+        setContent { Text("First") } // Composition 1
+    })
+    addView(ComposeView(this).apply {
+        setContent { Text("Second") } // Composition 2
+    })
+}
+```
+
+**Резюме**: Каждый вызов `setContent` или создание `ComposeView` запускает новую композицию с собственным lifecycle.
+
+## Answer (EN)
+
+**Composition** is created when **setContent** is called in Activity (or when ComposeView is created in Fragment). It's the entry point for Compose UI.
+
+### setContent in Activity
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // ✅ Composition created here
+        setContent {
+            MyApp()
+        }
+    }
+}
+
+@Composable
+fun MyApp() {
+    MaterialTheme {
+        Surface { MainScreen() }
+    }
+}
+```
+
+### ComposeView in Fragment
+
+```kotlin
+class MyFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // ✅ Composition created in ComposeView
+        return ComposeView(requireContext()).apply {
+            setContent { MyComposable() }
         }
     }
 }
@@ -63,160 +131,23 @@ class MyFragment : Fragment() {
 ### Multiple Compositions
 
 ```kotlin
-class MultiCompositionActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-        }
-
-        // First composition
-        layout.addView(ComposeView(this).apply {
-            setContent {
-                Text("First Composition")
-            }
-        })
-
-        // Second composition (separate)
-        layout.addView(ComposeView(this).apply {
-            setContent {
-                Text("Second Composition")
-            }
-        })
-
-        setContentView(layout)
-    }
+// ✅ Each ComposeView = separate Composition
+val layout = LinearLayout(this).apply {
+    addView(ComposeView(this).apply {
+        setContent { Text("First") } // Composition 1
+    })
+    addView(ComposeView(this).apply {
+        setContent { Text("Second") } // Composition 2
+    })
 }
 ```
 
-### Composition Lifecycle
-
-```kotlin
-@Composable
-fun CompositionLifecycle() {
-    // Enters composition when setContent is called
-    DisposableEffect(Unit) {
-        println("Entered composition")
-
-        onDispose {
-            println("Left composition")
-        }
-    }
-
-    Text("Hello")
-}
-```
+**Summary**: Every `setContent` call or `ComposeView` creation starts a new composition with its own lifecycle.
 
 ---
-
-# Где создается композиция для вызова composable функции
-
-## Ответ (RU)
-
-Композиция создается внутри функции **setContent**, которая задает точку входа для composable функций в Activity или Fragment. Она инициирует рендеринг интерфейса и управление состоянием.
-
-### setContent в Activity
-
-```kotlin
-class MainActivity : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Композиция создается здесь
-        setContent {
-            MyApp() // Точка входа в Compose UI
-        }
-    }
-}
-
-@Composable
-fun MyApp() {
-    MaterialTheme {
-        Surface {
-            MainScreen()
-        }
-    }
-}
-```
-
-### setContent во Fragment
-
-```kotlin
-class MyFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Композиция создается в ComposeView
-        return ComposeView(requireContext()).apply {
-            setContent {
-                MyComposable()
-            }
-        }
-    }
-}
-```
-
-### Несколько композиций
-
-```kotlin
-class MultiCompositionActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-        }
-
-        // Первая композиция
-        layout.addView(ComposeView(this).apply {
-            setContent {
-                Text("First Composition")
-            }
-        })
-
-        // Вторая композиция (отдельная)
-        layout.addView(ComposeView(this).apply {
-            setContent {
-                Text("Second Composition")
-            }
-        })
-
-        setContentView(layout)
-    }
-}
-```
-
-### Жизненный цикл композиции
-
-```kotlin
-@Composable
-fun CompositionLifecycle() {
-    // Входит в композицию при вызове setContent
-    DisposableEffect(Unit) {
-        println("Entered composition")
-
-        onDispose {
-            println("Left composition")
-        }
-    }
-
-    Text("Hello")
-}
-```
-
-### Резюме
-
-Композиция создается при вызове `setContent` в Activity или при создании `ComposeView` во Fragment. Это точка входа, которая запускает механизм Compose для отрисовки UI и отслеживания состояния. Каждый `setContent` или `ComposeView` создает отдельную композицию с собственным жизненным циклом
 
 ## Related Questions
 
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
-- [[q-canvas-drawing-optimization--android--hard]]
 - [[q-network-error-handling-strategies--networking--medium]]
+- [[c-jetpack-compose]]

@@ -1,92 +1,28 @@
 ---
-id: 20251012-122711160
-title: "What Is Intent / Что такое Intent"
+id: 20251015-120000
+title: "Intent в Android / What Is Intent"
+aliases: [Intent, Android Intent, Явный Intent, Неявный Intent]
 topic: android
+subtopics: [intents-deeplinks]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-service-types--android--easy, q-room-vs-sqlite--android--medium, q-react-native-vs-flutter--android--medium]
+related: [q-intent-filters-android--android--medium, q-what-are-services-for--android--easy, q-android-components-besides-activity--android--easy]
 created: 2025-10-15
-tags: [android/intents-deeplinks, component-communication, explicit-intent, implicit-intent, intent, intents-deeplinks, difficulty/easy]
+updated: 2025-10-27
+sources: [https://developer.android.com/guide/components/intents-filters]
+tags: [android/intents-deeplinks, explicit-intent, implicit-intent, difficulty/easy]
 ---
-
-# Question (EN)
-
-> What is Intent?
-
 # Вопрос (RU)
 
 > Что такое Intent?
 
-## Answer (EN)
+# Question (EN)
 
-**Intent** is a messaging object used to **communicate between Android components** (Activity, Service, BroadcastReceiver) and between apps.
-
-**Types:**
-
-**1. Explicit Intent** - Specific component
-
-```kotlin
-// Start specific Activity
-val intent = Intent(this, ProfileActivity::class.java)
-intent.putExtra("user_id", 123)
-startActivity(intent)
-
-// Start specific Service
-startService(Intent(this, MusicService::class.java))
-```
-
-**2. Implicit Intent** - Action-based
-
-```kotlin
-// Open browser
-val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
-startActivity(intent)
-
-// Share text
-val intent = Intent(Intent.ACTION_SEND).apply {
-    type = "text/plain"
-    putExtra(Intent.EXTRA_TEXT, "Hello!")
-}
-startActivity(Intent.createChooser(intent, "Share via"))
-```
-
-**Common Uses:**
-
-**Start Activity:**
-
-```kotlin
-startActivity(Intent(this, MainActivity::class.java))
-```
-
-**Start Service:**
-
-```kotlin
-startService(Intent(this, DownloadService::class.java))
-```
-
-**Send Broadcast:**
-
-```kotlin
-sendBroadcast(Intent("com.example.CUSTOM_ACTION"))
-```
-
-**Pass Data:**
-
-```kotlin
-val intent = Intent(this, DetailActivity::class.java)
-intent.putExtra("name", "John")
-intent.putExtra("age", 30)
-startActivity(intent)
-
-// Receive data
-val name = intent.getStringExtra("name")
-val age = intent.getIntExtra("age", 0)
-```
-
-**Summary:**
-
-Intent is the **glue** that connects Android components, allowing them to communicate and pass data.
+> What is Intent?
 
 ## Ответ (RU)
 
@@ -121,67 +57,82 @@ val intent = Intent(Intent.ACTION_SEND).apply {
 startActivity(Intent.createChooser(intent, "Поделиться через"))
 ```
 
-**Основные применения:**
-
-**Запуск Activity:**
-
-```kotlin
-startActivity(Intent(this, MainActivity::class.java))
-```
-
-**Запуск Service:**
-
-```kotlin
-startService(Intent(this, DownloadService::class.java))
-```
-
-**Отправка Broadcast:**
-
-```kotlin
-sendBroadcast(Intent("com.example.CUSTOM_ACTION"))
-```
-
 **Передача данных:**
 
 ```kotlin
+// ✅ Отправка
 val intent = Intent(this, DetailActivity::class.java)
 intent.putExtra("name", "John")
-intent.putExtra("age", 30)
 startActivity(intent)
 
-// Получение данных
+// ✅ Получение
 val name = intent.getStringExtra("name")
-val age = intent.getIntExtra("age", 0)
 ```
 
-**Итог:**
+**Итог:** Intent — связующее звено между компонентами Android.
 
-Intent — это **связующее звено**, которое соединяет компоненты Android, позволяя им общаться и передавать данные.
+## Answer (EN)
+
+**Intent** is a messaging object used to **communicate between Android components** (Activity, Service, BroadcastReceiver) and between apps.
+
+**Types:**
+
+**1. Explicit Intent** — specific component
+
+```kotlin
+// ✅ Start specific Activity
+val intent = Intent(this, ProfileActivity::class.java)
+intent.putExtra("user_id", 123)
+startActivity(intent)
+```
+
+**2. Implicit Intent** — action-based
+
+```kotlin
+// ✅ Open browser
+val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
+startActivity(intent)
+
+// ✅ Share text
+val intent = Intent(Intent.ACTION_SEND).apply {
+    type = "text/plain"
+    putExtra(Intent.EXTRA_TEXT, "Hello!")
+}
+startActivity(Intent.createChooser(intent, "Share via"))
+```
+
+**Pass data:**
+
+```kotlin
+// ✅ Send
+val intent = Intent(this, DetailActivity::class.java)
+intent.putExtra("name", "John")
+startActivity(intent)
+
+// ✅ Receive
+val name = intent.getStringExtra("name")
+```
+
+**Summary:** Intent is the glue connecting Android components.
 
 ---
 
 ## Follow-ups
 
--   What are security pitfalls with implicit intents and how to avoid them?
--   When to use PendingIntent instead of a direct Intent?
--   How do intent filters influence implicit intent resolution?
+- What are security pitfalls with implicit intents?
+- When to use PendingIntent instead of direct Intent?
+- How do intent filters work?
 
 ## References
 
--   `https://developer.android.com/guide/components/intents-filters` — Intents and intent filters
--   `https://developer.android.com/training/sharing/send` — Share data using intents
+- https://developer.android.com/guide/components/intents-filters
+- https://developer.android.com/training/sharing/send
 
 ## Related Questions
 
 ### Related (Easy)
-
--   [[q-architecture-components-libraries--android--easy]] - Fundamentals
--   [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
--   [[q-what-unifies-android-components--android--easy]] - Fundamentals
--   [[q-android-components-besides-activity--android--easy]] - Fundamentals
+- [[q-what-are-services-for--android--easy]]
+- [[q-android-components-besides-activity--android--easy]]
 
 ### Advanced (Harder)
-
--   [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
--   [[q-intent-filters-android--android--medium]] - Fundamentals
--   [[q-anr-application-not-responding--android--medium]] - Fundamentals
+- [[q-intent-filters-android--android--medium]]

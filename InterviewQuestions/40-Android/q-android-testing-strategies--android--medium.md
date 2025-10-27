@@ -20,12 +20,10 @@ related:
   - q-android-performance-measurement-tools--android--medium
   - q-android-security-best-practices--android--medium
 created: 2025-10-15
-updated: 2025-10-15
+updated: 2025-01-27
+sources: []
 tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:53:08 pm
 ---
-
 # Вопрос (RU)
 > Что такое Стратегии тестирования Android?
 
@@ -34,149 +32,154 @@ date modified: Saturday, October 25th 2025, 4:53:08 pm
 # Question (EN)
 > What are Android Testing Strategies?
 
-## Answer (EN)
-**Android Testing Strategies** provide comprehensive quality assurance through multiple testing layers and automated validation tools.
+## Ответ (RU)
 
-**Testing Strategies Theory:**
-Android testing follows the testing pyramid: 70% unit tests, 20% integration tests, 10% UI tests. Each layer validates different aspects of application behavior and quality.
+**Пирамида тестирования Android:**
+- **Unit тесты (70%)**: Тестируют изолированные компоненты на JVM без Android-зависимостей
+- **Integration тесты (20%)**: Проверяют взаимодействие модулей (Robolectric, Room)
+- **UI тесты (10%)**: Тестируют пользовательские сценарии на реальных устройствах
 
-**1. Unit Tests:**
-Test individual components in isolation using JVM without Android dependencies.
+**Типы тестов:**
 
+**1. Unit-тесты** (JUnit, MockK):
 ```kotlin
-// ViewModel Unit Test
 class UserViewModelTest {
     @Test
-    fun `loadUsers should update LiveData`() = runTest {
+    fun `loadUsers updates state`() = runTest {
+        // ✅ Изолированный тест ViewModel
         val repository = mockk<UserRepository>()
         val viewModel = UserViewModel(repository)
-        val users = listOf(User(1, "Alice", "alice@example.com"))
 
-        coEvery { repository.getUsers() } returns users
+        coEvery { repository.getUsers() } returns listOf(User(1, "Alice"))
         viewModel.loadUsers()
 
-        assertEquals(users, viewModel.users.value)
-    }
-}
-
-// Business Logic Test
-class CalculatorTest {
-    @Test
-    fun `add should return sum`() {
-        val calculator = Calculator()
-        assertEquals(8, calculator.add(5, 3))
+        assertEquals(1, viewModel.users.value?.size)
     }
 }
 ```
 
-**2. Integration Tests:**
-Test module interactions using Robolectric or instrumented tests.
-
+**2. Integration-тесты** (Room, Robolectric):
 ```kotlin
-// Robolectric Integration Test
-@RunWith(RobolectricTestRunner::class)
-class MainActivityTest {
-    @Test
-    fun `button click should update text`() {
-        val activity = Robolectric.buildActivity(MainActivity::class.java).create().get()
-        val button = activity.findViewById<Button>(R.id.button)
-        val textView = activity.findViewById<TextView>(R.id.textView)
-
-        button.performClick()
-
-        assertEquals("Button clicked!", textView.text.toString())
-    }
-}
-
-// Room Database Integration
 @RunWith(AndroidJUnit4::class)
 class UserDaoTest {
     @Test
-    fun insertAndRetrieveUser() = runBlocking {
-        val database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-        val userDao = database.userDao()
-        val user = User(1, "Alice", "alice@example.com")
+    fun insertAndRetrieve() = runBlocking {
+        // ✅ Тест реальной БД в памяти
+        val db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        val user = User(1, "Alice")
 
-        userDao.insertUser(user)
-        val retrieved = userDao.getAllUsers()
+        db.userDao().insert(user)
+        val result = db.userDao().getAll()
 
-        assertEquals(1, retrieved.size)
-        assertEquals(user, retrieved[0])
+        assertEquals(user, result[0])
     }
 }
 ```
 
-**3. UI Tests (Instrumented):**
-Test complete user flows on real devices or emulators.
-
+**3. UI-тесты** (Espresso):
 ```kotlin
 @RunWith(AndroidJUnit4::class)
-class LoginActivityTest {
+class LoginTest {
     @Test
-    fun loginWithValidCredentials_shouldNavigateToHome() {
-        onView(withId(R.id.emailEditText))
-            .perform(typeText("user@example.com"), closeSoftKeyboard())
-        onView(withId(R.id.passwordEditText))
-            .perform(typeText("password123"), closeSoftKeyboard())
-        onView(withId(R.id.loginButton)).perform(click())
+    fun successfulLogin() {
+        // ✅ End-to-end тест UI
+        onView(withId(R.id.email)).perform(typeText("user@test.com"))
+        onView(withId(R.id.password)).perform(typeText("pass123"))
+        onView(withId(R.id.loginBtn)).perform(click())
 
         onView(withId(R.id.homeScreen)).check(matches(isDisplayed()))
     }
 }
 ```
 
-**4. Performance Tests:**
-Measure application performance under load using Benchmark Library.
+**Best Practices:**
+- Используйте [[c-dependency-injection]] для тестируемости
+- Mock внешние зависимости (сеть, БД)
+- Независимые тесты без общего состояния
+- Покрытие критичных путей 70-80%
 
+---
+
+# Question (EN)
+> What are Android Testing Strategies?
+
+## Answer (EN)
+
+**Android Testing Pyramid:**
+- **Unit tests (70%)**: Test isolated components on JVM without Android dependencies
+- **Integration tests (20%)**: Verify module interactions (Robolectric, Room)
+- **UI tests (10%)**: Test user flows on real devices
+
+**Test Types:**
+
+**1. Unit Tests** (JUnit, MockK):
 ```kotlin
-@RunWith(AndroidJUnit4::class)
-class DatabaseBenchmark {
+class UserViewModelTest {
     @Test
-    fun insert1000Users_benchmark() {
-        val users = (1..1000).map { User(it, "User$it", "user$it@example.com") }
+    fun `loadUsers updates state`() = runTest {
+        // ✅ Isolated ViewModel test
+        val repository = mockk<UserRepository>()
+        val viewModel = UserViewModel(repository)
 
-        val startTime = System.currentTimeMillis()
-        runBlocking { users.forEach { userDao.insertUser(it) } }
-        val duration = System.currentTimeMillis() - startTime
+        coEvery { repository.getUsers() } returns listOf(User(1, "Alice"))
+        viewModel.loadUsers()
 
-        assertTrue("Insert took too long: ${duration}ms", duration < 5000)
+        assertEquals(1, viewModel.users.value?.size)
     }
 }
 ```
 
-**5. Static Analysis:**
-Automated code quality checks using Lint, Detekt, and SonarQube.
+**2. Integration Tests** (Room, Robolectric):
+```kotlin
+@RunWith(AndroidJUnit4::class)
+class UserDaoTest {
+    @Test
+    fun insertAndRetrieve() = runBlocking {
+        // ✅ Real in-memory database test
+        val db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+        val user = User(1, "Alice")
 
-**6. Security Tests:**
-Validate security measures including ProGuard obfuscation and certificate pinning.
+        db.userDao().insert(user)
+        val result = db.userDao().getAll()
 
-**7. Snapshot Tests:**
-Verify UI consistency using screenshot testing tools.
+        assertEquals(user, result[0])
+    }
+}
+```
 
-**Testing Pyramid:**
-- **Unit Tests (70%)**: Fast, reliable, test business logic
-- **Integration Tests (20%)**: Test module interactions
-- **UI Tests (10%)**: Test complete user flows
+**3. UI Tests** (Espresso):
+```kotlin
+@RunWith(AndroidJUnit4::class)
+class LoginTest {
+    @Test
+    fun successfulLogin() {
+        // ✅ End-to-end UI test
+        onView(withId(R.id.email)).perform(typeText("user@test.com"))
+        onView(withId(R.id.password)).perform(typeText("pass123"))
+        onView(withId(R.id.loginBtn)).perform(click())
+
+        onView(withId(R.id.homeScreen)).check(matches(isDisplayed()))
+    }
+}
+```
 
 **Best Practices:**
-- Use Given-When-Then pattern
-- Keep tests independent
-- Aim for 70-80% unit test coverage
-- Mock external dependencies
-- Test edge cases and error conditions
+- Use [[c-dependency-injection]] for testability
+- Mock external dependencies (network, database)
+- Keep tests independent without shared state
+- Target 70-80% coverage of critical paths
 
 ## Follow-ups
 
-- How do you test coroutines and Flow in Android?
-- What's the difference between Robolectric and instrumented tests?
-- How do you measure test coverage in Android projects?
-- What are the best practices for mocking in Android tests?
+- How would you design a test strategy for a feature using Jetpack Compose?
+- What are the trade-offs between Robolectric and instrumented tests?
+- How do you handle flaky UI tests in CI/CD pipelines?
+- What metrics beyond code coverage indicate test suite quality?
 
 ## References
 
-- c-testing
+- [[c-dependency-injection]]
 - [Android Testing Guide](https://developer.android.com/training/testing)
-- [Testing Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)
 
 ## Related Questions
 

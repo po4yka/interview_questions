@@ -1,36 +1,42 @@
 ---
-id: 20251012-122711119
-title: "Testing Viewmodels Turbine / Тестирование Viewmodels Turbine"
+id: 20251012-122711
+title: "Testing ViewModels with Turbine / Тестирование ViewModels с Turbine"
+aliases: [Testing ViewModels Turbine, Тестирование ViewModels Turbine, Turbine Flow Testing, StateFlow Testing, SharedFlow Testing]
 topic: android
+subtopics: [testing-unit, coroutines, architecture-mvvm]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-graphql-vs-rest--networking--easy, q-bundle-data-types--android--medium, q-how-does-jetpackcompose-work--android--medium]
+related: [c-viewmodel, q-mvvm-pattern--android--medium, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
-tags: [viewmodel, flow, turbine, state-management, coroutines, difficulty/medium]
+updated: 2025-10-27
+sources: [https://github.com/cashapp/turbine, https://developer.android.com/topic/libraries/architecture/viewmodel]
+tags: [android/testing-unit, android/coroutines, android/architecture-mvvm, viewmodel, flow, turbine, state-management, difficulty/medium]
 ---
+# Вопрос (RU)
 
-# Testing ViewModels with Turbine
+> Как тестировать эмиссии StateFlow и SharedFlow в ViewModels используя библиотеку Turbine?
 
 # Question (EN)
 
-> How do you test StateFlow and SharedFlow emissions in ViewModels using Turbine? Handle multiple emissions and timeouts.
-
-# Вопрос (RU)
-
-> Как тестировать эмиссии StateFlow и SharedFlow в ViewModels используя Turbine? Обработка множественных эмиссий и таймаутов.
+> How do you test StateFlow and SharedFlow emissions in ViewModels using the Turbine library?
 
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-**Turbine** is a testing library that simplifies Flow testing with a clean API for asserting emissions, handling timeouts, and managing multiple flows.
+**Turbine** — библиотека для тестирования Flow с чистым API для проверки эмиссий, обработки таймаутов и управления множественными потоками.
 
----
+### Установка
 
-### Basic ViewModel Testing
+```gradle
+testImplementation("app.cash.turbine:turbine:1.0.0")
+```
 
-**ViewModel example:**
+### Базовое тестирование StateFlow
 
 ```kotlin
 class UserViewModel(
@@ -39,112 +45,275 @@ class UserViewModel(
     private val _uiState = MutableStateFlow<UiState>(UiState.Initial)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _events = MutableSharedFlow<Event>()
-    val events: SharedFlow<Event> = _events.asSharedFlow()
-
     fun loadUser(id: Int) {
         viewModelScope.launch {
-            _uiState.value = UiState.Loading
-
+            _uiState.value = UiState.Loading // ✅ Эмиссия Loading
             try {
                 val user = repository.getUser(id)
-                _uiState.value = UiState.Success(user)
-                _events.emit(Event.UserLoaded)
+                _uiState.value = UiState.Success(user) // ✅ Эмиссия Success
             } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message ?: "Unknown error")
-                _events.emit(Event.LoadFailed)
+                _uiState.value = UiState.Error(e.message) // ❌ Эмиссия Error
             }
         }
     }
 }
 
-sealed class UiState {
-    object Initial : UiState()
-    object Loading : UiState()
-    data class Success(val user: User) : UiState()
-    data class Error(val message: String) : UiState()
-}
+@Test
+fun `loadUser успешно эмитит Loading затем Success`() = runTest {
+    val user = User(1, "John")
+    coEvery { repository.getUser(1) } returns user
 
-sealed class Event {
-    object UserLoaded : Event()
-    object LoadFailed : Event()
-}
-```
+    viewModel.uiState.test {
+        assertEquals(UiState.Initial, awaitItem()) // ✅ Начальное состояние
 
----
+        viewModel.loadUser(1)
 
-### Testing with Turbine
+        assertEquals(UiState.Loading, awaitItem()) // ✅ Loading
 
-```gradle
-dependencies {
-    testImplementation("app.cash.turbine:turbine:1.0.0")
+        val successState = awaitItem() as UiState.Success
+        assertEquals("John", successState.user.name) // ✅ Success
+
+        cancelAndIgnoreRemainingEvents() // ✅ Завершение теста
+    }
 }
 ```
 
-**Test setup:**
+**Ключевые API:**
+- `test {}` — блок для тестирования Flow
+- `awaitItem()` — ждёт следующую эмиссию
+- `cancelAndIgnoreRemainingEvents()` — завершает тест
+
+### Тестирование SharedFlow (события)
 
 ```kotlin
-@OptIn(ExperimentalCoroutinesApi::class)
-class UserViewModelTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
+private val _events = MutableSharedFlow<Event>()
+val events: SharedFlow<Event> = _events.asSharedFlow()
 
-    private lateinit var repository: UserRepository
-    private lateinit var viewModel: UserViewModel
+@Test
+fun `loadUser успешно эмитит UserLoaded событие`() = runTest {
+    val user = User(1, "John")
+    coEvery { repository.getUser(1) } returns user
 
-    @Before
-    fun setUp() {
-        repository = mockk()
-        viewModel = UserViewModel(repository)
+    viewModel.events.test {
+        viewModel.loadUser(1)
+
+        assertEquals(Event.UserLoaded, awaitItem()) // ✅ Ждём событие
+
+        cancelAndIgnoreRemainingEvents()
     }
+}
+```
 
-    @Test
-    fun `loadUser success emits loading then success`() = runTest {
-        val user = User(1, "John")
-        coEvery { repository.getUser(1) } returns user
+**Важно:** SharedFlow не имеет начального значения, поэтому начинайте слушать до эмиссии.
 
+### Множественные эмиссии
+
+```kotlin
+@Test
+fun `поиск эмитит множественные результаты`() = runTest {
+    viewModel.searchResults.test {
+        assertEquals(emptyList(), awaitItem()) // ✅ Начальный
+
+        viewModel.search("a")
+        assertEquals(listOf(Item("Apple")), awaitItem()) // ✅ Первый
+
+        viewModel.search("ab")
+        assertEquals(listOf(Item("Abacus")), awaitItem()) // ✅ Второй
+
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+```
+
+### Таймауты и ожидание
+
+```kotlin
+@Test
+fun `тест с таймаутом`() = runTest {
+    viewModel.events.test(timeout = 5.seconds) { // ✅ Ждём до 5 секунд
+        viewModel.loadUser(1)
+        assertEquals(Event.UserLoaded, awaitItem())
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+
+@Test
+fun `expectNoEvents проверяет тишину`() = runTest {
+    viewModel.events.test {
+        expectNoEvents() // ✅ Не должно быть эмиссий
+        viewModel.loadUser(1)
+        awaitItem() // ✅ Теперь ожидаем событие
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+```
+
+### Пропуск элементов
+
+```kotlin
+@Test
+fun `skipItems пропускает эмиссии`() = runTest {
+    viewModel.uiState.test {
+        awaitItem() // Initial
+        viewModel.loadUser(1)
+        skipItems(1) // ✅ Пропускаем Loading
+        val state = awaitItem() as UiState.Success // ✅ Прыгаем к Success
+        assertEquals("John", state.user.name)
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+
+@Test
+fun `expectMostRecentItem получает последний`() = runTest {
+    viewModel.uiState.test {
+        awaitItem()
+        repeat(5) { viewModel.refresh() } // Множественные обновления
+        val latestState = expectMostRecentItem() // ✅ Игнорируем промежуточные
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+```
+
+### Тестирование множественных Flow
+
+```kotlin
+@Test
+fun `тест состояния и событий вместе`() = runTest {
+    val user = User(1, "John")
+    coEvery { repository.getUser(1) } returns user
+
+    // ✅ Запускаем оба коллектора параллельно
+    launch {
         viewModel.uiState.test {
-            // Initial state
             assertEquals(UiState.Initial, awaitItem())
-
-            viewModel.loadUser(1)
-
-            // Loading state
             assertEquals(UiState.Loading, awaitItem())
-
-            // Success state
             val successState = awaitItem() as UiState.Success
             assertEquals("John", successState.user.name)
-
             cancelAndIgnoreRemainingEvents()
         }
     }
 
-    @Test
-    fun `loadUser error emits loading then error`() = runTest {
-        coEvery { repository.getUser(1) } throws IOException("Network error")
-
-        viewModel.uiState.test {
-            assertEquals(UiState.Initial, awaitItem())
-
-            viewModel.loadUser(1)
-
-            assertEquals(UiState.Loading, awaitItem())
-
-            val errorState = awaitItem() as UiState.Error
-            assertEquals("Network error", errorState.message)
-
+    launch {
+        viewModel.events.test {
+            assertEquals(Event.UserLoaded, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    viewModel.loadUser(1) // Триггерим действие
 }
+```
+
+### Лучшие практики
+
+**1. Всегда ожидайте начальную эмиссию для StateFlow:**
+
+```kotlin
+// ✅ ПРАВИЛЬНО
+viewModel.uiState.test {
+    assertEquals(UiState.Initial, awaitItem()) // Начальное значение
+    // ... тестовая логика
+}
+
+// ❌ НЕПРАВИЛЬНО (пропустит начальное значение)
+viewModel.uiState.test {
+    viewModel.load()
+    assertEquals(UiState.Loading, awaitItem()) // Пропускает Initial!
+}
+```
+
+**2. Используйте cancelAndIgnoreRemainingEvents:**
+
+```kotlin
+// ✅ ПРАВИЛЬНО
+test {
+    assertEquals(expected, awaitItem())
+    cancelAndIgnoreRemainingEvents() // Завершаем тест
+}
+
+// ❌ НЕПРАВИЛЬНО (тест зависнет)
+test {
+    assertEquals(expected, awaitItem())
+    // Нет cancel - тест ждёт бесконечно
+}
+```
+
+**3. Тестируйте состояние и события отдельно или вместе:**
+
+```kotlin
+// ✅ ХОРОШО: Отдельные тесты
+@Test fun testState()
+@Test fun testEvents()
+
+// ✅ ТОЖЕ ХОРОШО: Вместе когда связаны
+@Test fun testStateAndEvents()
 ```
 
 ---
 
-### Testing Events (SharedFlow)
+## Answer (EN)
+
+**Turbine** is a testing library that simplifies Flow testing with a clean API for asserting emissions, handling timeouts, and managing multiple flows.
+
+### Setup
+
+```gradle
+testImplementation("app.cash.turbine:turbine:1.0.0")
+```
+
+### Basic StateFlow Testing
 
 ```kotlin
+class UserViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState>(UiState.Initial)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading // ✅ Emit Loading
+            try {
+                val user = repository.getUser(id)
+                _uiState.value = UiState.Success(user) // ✅ Emit Success
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message) // ❌ Emit Error
+            }
+        }
+    }
+}
+
+@Test
+fun `loadUser success emits Loading then Success`() = runTest {
+    val user = User(1, "John")
+    coEvery { repository.getUser(1) } returns user
+
+    viewModel.uiState.test {
+        assertEquals(UiState.Initial, awaitItem()) // ✅ Initial state
+
+        viewModel.loadUser(1)
+
+        assertEquals(UiState.Loading, awaitItem()) // ✅ Loading
+
+        val successState = awaitItem() as UiState.Success
+        assertEquals("John", successState.user.name) // ✅ Success
+
+        cancelAndIgnoreRemainingEvents() // ✅ Finish test
+    }
+}
+```
+
+**Key APIs:**
+- `test {}` — block for testing Flow
+- `awaitItem()` — waits for next emission
+- `cancelAndIgnoreRemainingEvents()` — finishes test
+
+### Testing SharedFlow (Events)
+
+```kotlin
+private val _events = MutableSharedFlow<Event>()
+val events: SharedFlow<Event> = _events.asSharedFlow()
+
 @Test
 fun `loadUser success emits UserLoaded event`() = runTest {
     val user = User(1, "John")
@@ -153,83 +322,42 @@ fun `loadUser success emits UserLoaded event`() = runTest {
     viewModel.events.test {
         viewModel.loadUser(1)
 
-        // Wait for event
-        assertEquals(Event.UserLoaded, awaitItem())
-
-        cancelAndIgnoreRemainingEvents()
-    }
-}
-
-@Test
-fun `loadUser error emits LoadFailed event`() = runTest {
-    coEvery { repository.getUser(1) } throws IOException("Network error")
-
-    viewModel.events.test {
-        viewModel.loadUser(1)
-
-        assertEquals(Event.LoadFailed, awaitItem())
+        assertEquals(Event.UserLoaded, awaitItem()) // ✅ Wait for event
 
         cancelAndIgnoreRemainingEvents()
     }
 }
 ```
 
----
+**Important:** SharedFlow has no initial value, so start listening before emission.
 
-### Testing Multiple Emissions
+### Multiple Emissions
 
 ```kotlin
-class SearchViewModel : ViewModel() {
-    private val _searchResults = MutableStateFlow<List<Item>>(emptyList())
-    val searchResults: StateFlow<List<Item>> = _searchResults
-
-    fun search(query: String) {
-        viewModelScope.launch {
-            delay(300) // Debounce
-            _searchResults.value = performSearch(query)
-        }
-    }
-}
-
 @Test
 fun `search emits multiple results`() = runTest {
-    val viewModel = SearchViewModel()
-
     viewModel.searchResults.test {
-        // Initial empty list
-        assertEquals(emptyList(), awaitItem())
+        assertEquals(emptyList(), awaitItem()) // ✅ Initial
 
-        // First search
         viewModel.search("a")
-        assertEquals(listOf(Item("Apple")), awaitItem())
+        assertEquals(listOf(Item("Apple")), awaitItem()) // ✅ First
 
-        // Second search
         viewModel.search("ab")
-        assertEquals(listOf(Item("Abacus")), awaitItem())
-
-        // Third search
-        viewModel.search("abc")
-        assertEquals(emptyList(), awaitItem()) // No results
+        assertEquals(listOf(Item("Abacus")), awaitItem()) // ✅ Second
 
         cancelAndIgnoreRemainingEvents()
     }
 }
 ```
 
----
-
-### Handling Timeouts
+### Timeouts and Waiting
 
 ```kotlin
 @Test
 fun `test with timeout`() = runTest {
-    viewModel.events.test(timeout = 5.seconds) {
+    viewModel.events.test(timeout = 5.seconds) { // ✅ Wait up to 5 seconds
         viewModel.loadUser(1)
-
-        // Wait up to 5 seconds for event
-        val event = awaitItem()
-        assertEquals(Event.UserLoaded, event)
-
+        assertEquals(Event.UserLoaded, awaitItem())
         cancelAndIgnoreRemainingEvents()
     }
 }
@@ -237,36 +365,25 @@ fun `test with timeout`() = runTest {
 @Test
 fun `expectNoEvents verifies silence`() = runTest {
     viewModel.events.test {
-        // Should not emit anything yet
-        expectNoEvents()
-
+        expectNoEvents() // ✅ Should not emit anything
         viewModel.loadUser(1)
-
-        awaitItem() // Now we expect an event
-
+        awaitItem() // ✅ Now expect an event
         cancelAndIgnoreRemainingEvents()
     }
 }
 ```
 
----
-
-### Skip and Ignore Items
+### Skip Items
 
 ```kotlin
 @Test
 fun `skipItems skips emissions`() = runTest {
     viewModel.uiState.test {
         awaitItem() // Initial
-
         viewModel.loadUser(1)
-
-        skipItems(1) // Skip Loading state
-
-        // Jump to Success
-        val state = awaitItem() as UiState.Success
+        skipItems(1) // ✅ Skip Loading state
+        val state = awaitItem() as UiState.Success // ✅ Jump to Success
         assertEquals("John", state.user.name)
-
         cancelAndIgnoreRemainingEvents()
     }
 }
@@ -274,22 +391,15 @@ fun `skipItems skips emissions`() = runTest {
 @Test
 fun `expectMostRecentItem gets latest`() = runTest {
     viewModel.uiState.test {
-        awaitItem() // Initial
-
-        // Trigger multiple quick updates
-        repeat(5) { viewModel.refresh() }
-
-        // Get most recent, ignore intermediate
-        val latestState = expectMostRecentItem()
-
+        awaitItem()
+        repeat(5) { viewModel.refresh() } // Multiple updates
+        val latestState = expectMostRecentItem() // ✅ Ignore intermediate
         cancelAndIgnoreRemainingEvents()
     }
 }
 ```
 
----
-
-### Testing Multiple Flows Simultaneously
+### Testing Multiple Flows
 
 ```kotlin
 @Test
@@ -297,249 +407,56 @@ fun `test state and events together`() = runTest {
     val user = User(1, "John")
     coEvery { repository.getUser(1) } returns user
 
-    // Launch both collectors
+    // ✅ Launch both collectors in parallel
     launch {
         viewModel.uiState.test {
             assertEquals(UiState.Initial, awaitItem())
             assertEquals(UiState.Loading, awaitItem())
-
             val successState = awaitItem() as UiState.Success
             assertEquals("John", successState.user.name)
-
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     launch {
         viewModel.events.test {
-            val event = awaitItem()
-            assertEquals(Event.UserLoaded, event)
-
+            assertEquals(Event.UserLoaded, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
     }
 
-    // Trigger action
-    viewModel.loadUser(1)
+    viewModel.loadUser(1) // Trigger action
 }
 ```
-
----
-
-### Complex ViewModel Example
-
-```kotlin
-class CartViewModel : ViewModel() {
-    private val _items = MutableStateFlow<List<CartItem>>(emptyList())
-    val items: StateFlow<List<CartItem>> = _items
-
-    private val _total = MutableStateFlow(0.0)
-    val total: StateFlow<Double> = _total
-
-    private val _checkoutState = MutableStateFlow<CheckoutState>(CheckoutState.Idle)
-    val checkoutState: StateFlow<CheckoutState> = _checkoutState
-
-    private val _messages = MutableSharedFlow<Message>()
-    val messages: SharedFlow<Message> = _messages
-
-    fun addItem(item: CartItem) {
-        viewModelScope.launch {
-            val currentItems = _items.value.toMutableList()
-            currentItems.add(item)
-            _items.value = currentItems
-
-            updateTotal()
-            _messages.emit(Message.ItemAdded(item.name))
-        }
-    }
-
-    fun removeItem(itemId: String) {
-        viewModelScope.launch {
-            _items.value = _items.value.filter { it.id != itemId }
-
-            updateTotal()
-            _messages.emit(Message.ItemRemoved)
-        }
-    }
-
-    fun checkout() {
-        viewModelScope.launch {
-            _checkoutState.value = CheckoutState.Processing
-
-            delay(1000) // Simulate payment
-
-            if (_total.value > 0) {
-                _checkoutState.value = CheckoutState.Success
-                _messages.emit(Message.CheckoutSuccess)
-                _items.value = emptyList()
-                _total.value = 0.0
-            } else {
-                _checkoutState.value = CheckoutState.Error("Cart is empty")
-            }
-        }
-    }
-
-    private fun updateTotal() {
-        _total.value = _items.value.sumOf { it.price * it.quantity }
-    }
-}
-
-data class CartItem(
-    val id: String,
-    val name: String,
-    val price: Double,
-    val quantity: Int
-)
-
-sealed class CheckoutState {
-    object Idle : CheckoutState()
-    object Processing : CheckoutState()
-    object Success : CheckoutState()
-    data class Error(val message: String) : CheckoutState()
-}
-
-sealed class Message {
-    data class ItemAdded(val name: String) : Message()
-    object ItemRemoved : Message()
-    object CheckoutSuccess : Message()
-}
-```
-
-**Complete test:**
-
-```kotlin
-@OptIn(ExperimentalCoroutinesApi::class)
-class CartViewModelTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    private lateinit var viewModel: CartViewModel
-
-    @Before
-    fun setUp() {
-        viewModel = CartViewModel()
-    }
-
-    @Test
-    fun `addItem updates items, total, and emits message`() = runTest {
-        val item = CartItem("1", "Apple", 1.99, 2)
-
-        // Test all flows together
-        launch {
-            viewModel.items.test {
-                assertEquals(emptyList(), awaitItem())
-
-                val items = awaitItem()
-                assertEquals(1, items.size)
-                assertEquals("Apple", items[0].name)
-
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-        launch {
-            viewModel.total.test {
-                assertEquals(0.0, awaitItem())
-                assertEquals(3.98, awaitItem(), 0.01)
-
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-        launch {
-            viewModel.messages.test {
-                val message = awaitItem() as Message.ItemAdded
-                assertEquals("Apple", message.name)
-
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-        // Trigger action
-        viewModel.addItem(item)
-    }
-
-    @Test
-    fun `checkout success flow`() = runTest {
-        // Add item first
-        viewModel.addItem(CartItem("1", "Apple", 1.99, 1))
-        advanceUntilIdle()
-
-        // Test checkout state
-        viewModel.checkoutState.test {
-            assertEquals(CheckoutState.Idle, awaitItem())
-
-            viewModel.messages.test {
-                viewModel.checkout()
-
-                // Wait for processing
-                assertEquals(CheckoutState.Processing, awaitItem())
-
-                // Wait for success
-                assertEquals(CheckoutState.Success, awaitItem())
-
-                // Verify message
-                assertEquals(Message.CheckoutSuccess, awaitItem())
-
-                cancelAndIgnoreRemainingEvents()
-            }
-
-            cancelAndIgnoreRemainingEvents()
-        }
-
-        // Verify items cleared
-        assertEquals(emptyList(), viewModel.items.value)
-        assertEquals(0.0, viewModel.total.value)
-    }
-
-    @Test
-    fun `checkout with empty cart fails`() = runTest {
-        viewModel.checkoutState.test {
-            assertEquals(CheckoutState.Idle, awaitItem())
-
-            viewModel.checkout()
-
-            assertEquals(CheckoutState.Processing, awaitItem())
-
-            val errorState = awaitItem() as CheckoutState.Error
-            assertEquals("Cart is empty", errorState.message)
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-}
-```
-
----
 
 ### Best Practices
 
 **1. Always await initial emission for StateFlow:**
 
 ```kotlin
-//  DO
+// ✅ CORRECT
 viewModel.uiState.test {
     assertEquals(UiState.Initial, awaitItem()) // Initial value
     // ... test logic
 }
 
-//  DON'T (will fail)
+// ❌ WRONG (will miss initial value)
 viewModel.uiState.test {
     viewModel.load()
-    assertEquals(UiState.Loading, awaitItem()) // Misses initial!
+    assertEquals(UiState.Loading, awaitItem()) // Misses Initial!
 }
 ```
 
 **2. Use cancelAndIgnoreRemainingEvents:**
 
 ```kotlin
-//  DO
+// ✅ CORRECT
 test {
     assertEquals(expected, awaitItem())
-    cancelAndIgnoreRemainingEvents()
+    cancelAndIgnoreRemainingEvents() // Finish test
 }
 
-//  DON'T (test may hang)
+// ❌ WRONG (test will hang)
 test {
     assertEquals(expected, awaitItem())
     // Missing cancel - test waits forever
@@ -549,82 +466,40 @@ test {
 **3. Test state and events separately or together:**
 
 ```kotlin
-//  GOOD: Separate tests
+// ✅ GOOD: Separate tests
 @Test fun testState()
 @Test fun testEvents()
 
-//  ALSO GOOD: Together when related
+// ✅ ALSO GOOD: Together when related
 @Test fun testStateAndEvents()
 ```
 
 ---
 
-## Ответ (RU)
-
-**Turbine** — это библиотека тестирования, которая упрощает тестирование Flow с чистым API для утверждений эмиссий, обработки таймаутов и управления множественными потоками.
-
-### Базовое тестирование ViewModel
-
-Используйте `test {}` блок для тестирования StateFlow и SharedFlow эмиссий.
-
-### Тестирование событий (SharedFlow)
-
-SharedFlow не имеет начального значения, поэтому начинайте слушать до эмиссии события.
-
-### Тестирование множественных эмиссий
-
-Используйте `awaitItem()` для каждой эмиссии последовательно.
-
-### Обработка таймаутов
-
-Используйте `test(timeout = duration)` и `expectNoEvents()` для контроля таймингов.
-
-### Пропуск элементов
-
-`skipItems(n)` пропускает n эмиссий, `expectMostRecentItem()` получает последнюю.
-
-### Тестирование множества потоков одновременно
-
-Запускайте несколько `launch { flow.test { } }` блоков для параллельного тестирования.
-
-### Лучшие практики
-
-1. Всегда ожидайте начальную эмиссию для StateFlow
-2. Используйте `cancelAndIgnoreRemainingEvents()`
-3. Тестируйте состояние и события отдельно или вместе
-
-Turbine делает тестирование Flow простым и выразительным.
-
----
-
 ## Follow-ups
 
--   How do you test ViewModels that emit both StateFlow and SharedFlow simultaneously?
--   What are the best practices for handling timeout scenarios in Flow testing?
--   How can you mock dependencies in ViewModel tests while using Turbine?
+- How do you test ViewModels that emit both StateFlow and SharedFlow simultaneously?
+- What are the best practices for handling timeout scenarios in Flow testing?
+- How can you mock dependencies in ViewModel tests while using Turbine?
+- How to test hot flows vs cold flows differently?
+- What's the difference between `awaitItem()` and `expectMostRecentItem()`?
 
 ## References
 
--   `https://github.com/cashapp/turbine` — Turbine library
--   `https://developer.android.com/topic/libraries/architecture/viewmodel` — ViewModel testing
--   `https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-test/` — Coroutines testing
+- [[c-viewmodel]] - ViewModel concept
+- https://github.com/cashapp/turbine - Turbine library
+- https://developer.android.com/topic/libraries/architecture/viewmodel - ViewModel testing guide
+- https://kotlinlang.org/docs/flow.html - Kotlin Flow documentation
 
 ## Related Questions
 
-### Hub
+### Prerequisites (Easier)
+- [[q-what-is-viewmodel--android--medium]] - ViewModel basics
 
--   [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
-
-### Related (Medium)
-
--   [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
--   [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
--   [[q-what-is-viewmodel--android--medium]] - What is ViewModel
--   [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
--   [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+### Related (Same Level)
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel internals
 
 ### Advanced (Harder)
-
--   [[q-mvi-architecture--android--hard]] - MVI architecture pattern
--   [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
--   [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+- [[q-mvi-architecture--android--hard]] - MVI architecture
+- [[q-testing-coroutines-flow--android--hard]] - Advanced Flow testing

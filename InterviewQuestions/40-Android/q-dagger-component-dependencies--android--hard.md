@@ -3,14 +3,11 @@ id: 20251020-200000
 title: Dagger Component Dependencies / Зависимости компонентов Dagger
 aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
@@ -18,314 +15,231 @@ related:
   - q-dagger-framework-overview--android--hard
   - q-hilt-components-scope--android--medium
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-10-27
 tags: [android/di-hilt, difficulty/hard]
-source: https://dagger.dev/api/latest/dagger/Component.html
-source_note: Dagger Component API documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:20 pm
+sources:
+  - url: https://dagger.dev/api/latest/dagger/Component.html
+    title: Dagger Component API documentation
 ---
-
 # Вопрос (RU)
-> В чем разница между Component Dependencies и Subcomponents в Dagger? Когда использовать один подход вместо другого? Как Hilt обрабатывает это?
+> В чем разница между Component Dependencies и Subcomponents в Dagger? Когда использовать один подход вместо другого?
 
 # Question (EN)
-> What's the difference between Component Dependencies and Subcomponents in Dagger? When would you use one over the other? How does Hilt handle this?
+> What's the difference between Component Dependencies and Subcomponents in Dagger? When would you use one over the other?
 
 ## Ответ (RU)
 
-Component Dependencies и Subcomponents — два способа композиции Dagger компонентов с различными характеристиками и областями применения.
+Component Dependencies и Subcomponents — два способа композиции Dagger компонентов с различными характеристиками.
 
-### Теория: Архитектурные Паттерны
-
-**Component Dependencies (Has-a relationship)**
-- Агрегация компонентов через явные зависимости
-- Родительский компонент должен экспортировать зависимости
-- Изолированные scope'ы и жизненные циклы
-- Строгая инкапсуляция зависимостей
-
-**Subcomponents (Is-a relationship)**
-- Наследование компонентов в иерархической структуре
-- Автоматический доступ ко всем зависимостям родителя
-- Общий scope с родительским компонентом
-- Возможность переопределения bindings
-
-### Сравнение Подходов
+### Ключевые Различия
 
 | Аспект | Component Dependencies | Subcomponents |
 |--------|----------------------|---------------|
 | **Отношение** | Has-a (агрегация) | Is-a (наследование) |
 | **Изоляция scope** | Отдельные scope'ы | Общий scope с родителем |
-| **Доступ к зависимостям** | Только явно экспортированные | Все зависимости родителя |
+| **Доступ** | Только экспортированные | Все зависимости родителя |
 | **Создание** | Независимое | Создается родителем |
-| **Конфликты bindings** | Изолированы | Может переопределить родителя |
 
 ### Component Dependencies
 
-Родительский компонент должен явно экспортировать зависимости:
+Родитель явно экспортирует зависимости:
 
 ```kotlin
+// ✅ Явная изоляция scope'ов
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
-    fun appDatabase(): AppDatabase
-    fun apiService(): ApiService
+    fun appDatabase(): AppDatabase  // ✅ Экспортируется явно
 }
 
 @ActivityScope
 @Component(
-    dependencies = [AppComponent::class],
+    dependencies = [AppComponent::class],  // ✅ Зависит от AppComponent
     modules = [ActivityModule::class]
 )
 interface ActivityComponent {
     fun inject(activity: MainActivity)
 }
-```
 
-**Использование:**
-```kotlin
-val appComponent = (application as MyApplication).appComponent
-DaggerActivityComponent.builder()
-    .appComponent(appComponent)
+// Использование
+val activityComponent = DaggerActivityComponent.builder()
+    .appComponent(appComponent)  // ✅ Передаем зависимость
     .build()
-    .inject(this)
 ```
 
 ### Subcomponents
 
-Создается иерархическая структура с автоматическим доступом:
+Автоматический доступ к зависимостям родителя:
 
 ```kotlin
+// ✅ Иерархическая структура
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
-    fun activityComponentFactory(): ActivityComponent.Factory
+    fun activityComponentFactory(): ActivityComponent.Factory  // ✅ Фабрика subcomponent
 }
 
 @Subcomponent(modules = [ActivityModule::class])
 interface ActivityComponent {
     fun inject(activity: MainActivity)
+    // ❌ Не нужно явно объявлять доступ к AppComponent зависимостям
 
     @Subcomponent.Factory
     interface Factory {
         fun create(): ActivityComponent
     }
 }
-```
 
-**Использование:**
-```kotlin
-val activityComponent = appComponent.activityComponentFactory().create()
-activityComponent.inject(this)
+// Использование
+val activityComponent = appComponent
+    .activityComponentFactory()  // ✅ Создается через родителя
+    .create()
 ```
 
 ### Когда Использовать
 
-**Component Dependencies подходят для:**
-- Строгой инкапсуляции зависимостей
-- Независимых жизненных циклов
-- Модульной архитектуры
-- Когда нужен контроль над экспортируемыми зависимостями
+**Component Dependencies:**
+- ✅ Модульная архитектура с изоляцией
+- ✅ Независимые жизненные циклы
+- ✅ Контроль экспортируемых зависимостей
+- ❌ Нужен доступ ко всем зависимостям родителя
 
-**Subcomponents подходят для:**
-- Простых иерархических структур
-- Когда нужен доступ ко всем зависимостям родителя
-- Feature-based архитектуры
-- Когда scope должен быть общим
+**Subcomponents:**
+- ✅ Простая иерархия Activity → Fragment
+- ✅ Доступ ко всем зависимостям приложения
+- ✅ Feature-based модули с общим scope
+- ❌ Строгая инкапсуляция модулей
 
-### Hilt Подход
+### Hilt: Автоматическое Управление
 
-Hilt автоматизирует управление компонентами:
+[[c-hilt]] упрощает управление компонентами:
 
 ```kotlin
-@AndroidEntryPoint
+@AndroidEntryPoint  // ✅ Автоматическое внедрение
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 }
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(SingletonComponent::class)  // ✅ Автоматический scope
 object AppModule {
-    @Provides
-    @Singleton
+    @Provides @Singleton
     fun provideRepository(): UserRepository = UserRepositoryImpl()
 }
 ```
 
-**Hilt автоматически:**
-- Создает компоненты по scope'ам
-- Управляет зависимостями между компонентами
-- Обрабатывает жизненные циклы
-- Предотвращает циклические зависимости
-
-### Лучшие Практики
-
-**Для Component Dependencies:**
-- Экспортируйте только необходимые зависимости
-- Используйте интерфейсы для абстракции
-- Избегайте глубоких иерархий
-
-**Для Subcomponents:**
-- Ограничивайте глубину иерархии
-- Используйте @Subcomponent.Builder для гибкости
-- Избегайте переопределения bindings без необходимости
-
 ## Answer (EN)
 
-Component Dependencies and Subcomponents are two ways to compose Dagger components with different characteristics and use cases.
+Component Dependencies and Subcomponents are two ways to compose [[c-dagger]] components with different characteristics.
 
-### Theory: Architectural Patterns
-
-**Component Dependencies (Has-a relationship)**
-- Component aggregation through explicit dependencies using [[c-dependency-injection]]
-- Parent component must export dependencies
-- Isolated scopes and lifecycles
-- Strict dependency encapsulation with [[c-dagger]]
-
-**Subcomponents (Is-a relationship)**
-- Component inheritance in hierarchical structure
-- Automatic access to all parent dependencies
-- Shared scope with parent component
-- Ability to override bindings
-
-### Approach Comparison
+### Key Differences
 
 | Aspect | Component Dependencies | Subcomponents |
 |--------|----------------------|---------------|
 | **Relationship** | Has-a (aggregation) | Is-a (inheritance) |
-| **Scope Isolation** | Separate scopes | Shared scope with parent |
-| **Dependency Access** | Only explicitly exported | All parent dependencies |
+| **Scope Isolation** | Separate scopes | Shared scope |
+| **Access** | Only exported | All parent dependencies |
 | **Creation** | Independent | Created by parent |
-| **Binding Conflicts** | Isolated | Can override parent |
 
 ### Component Dependencies
 
-Parent component must explicitly export dependencies:
+Parent explicitly exports dependencies:
 
 ```kotlin
+// ✅ Explicit scope isolation
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
-    fun appDatabase(): AppDatabase
-    fun apiService(): ApiService
+    fun appDatabase(): AppDatabase  // ✅ Explicitly exported
 }
 
 @ActivityScope
 @Component(
-    dependencies = [AppComponent::class],
+    dependencies = [AppComponent::class],  // ✅ Depends on AppComponent
     modules = [ActivityModule::class]
 )
 interface ActivityComponent {
     fun inject(activity: MainActivity)
 }
-```
 
-**Usage:**
-```kotlin
-val appComponent = (application as MyApplication).appComponent
-DaggerActivityComponent.builder()
-    .appComponent(appComponent)
+// Usage
+val activityComponent = DaggerActivityComponent.builder()
+    .appComponent(appComponent)  // ✅ Pass dependency
     .build()
-    .inject(this)
 ```
 
 ### Subcomponents
 
-Creates hierarchical structure with automatic access:
+Automatic access to parent dependencies:
 
 ```kotlin
+// ✅ Hierarchical structure
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
-    fun activityComponentFactory(): ActivityComponent.Factory
+    fun activityComponentFactory(): ActivityComponent.Factory  // ✅ Subcomponent factory
 }
 
 @Subcomponent(modules = [ActivityModule::class])
 interface ActivityComponent {
     fun inject(activity: MainActivity)
+    // ❌ No need to declare AppComponent dependencies
 
     @Subcomponent.Factory
     interface Factory {
         fun create(): ActivityComponent
     }
 }
-```
 
-**Usage:**
-```kotlin
-val activityComponent = appComponent.activityComponentFactory().create()
-activityComponent.inject(this)
+// Usage
+val activityComponent = appComponent
+    .activityComponentFactory()  // ✅ Created through parent
+    .create()
 ```
 
 ### When to Use
 
-**Component Dependencies are suitable for:**
-- Strict dependency encapsulation
-- Independent lifecycles
-- Modular architecture
-- When control over exported dependencies is needed
+**Component Dependencies:**
+- ✅ Modular architecture with isolation
+- ✅ Independent lifecycles
+- ✅ Control exported dependencies
+- ❌ Need access to all parent dependencies
 
-**Subcomponents are suitable for:**
-- Simple hierarchical structures
-- When access to all parent dependencies is needed
-- Feature-based architecture
-- When scope should be shared
+**Subcomponents:**
+- ✅ Simple Activity → Fragment hierarchy
+- ✅ Access to all app dependencies
+- ✅ Feature-based modules with shared scope
+- ❌ Strict module encapsulation
 
-### Hilt Approach
+### Hilt: Automatic Management
 
-[[c-hilt]] automates component management:
+[[c-hilt]] simplifies component management:
 
 ```kotlin
-@AndroidEntryPoint
+@AndroidEntryPoint  // ✅ Automatic injection
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 }
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(SingletonComponent::class)  // ✅ Automatic scope
 object AppModule {
-    @Provides
-    @Singleton
+    @Provides @Singleton
     fun provideRepository(): UserRepository = UserRepositoryImpl()
 }
 ```
-
-**Hilt automatically:**
-- Creates components by scopes
-- Manages dependencies between components
-- Handles lifecycles
-- Prevents circular dependencies
-
-### Best Practices
-
-**For Component Dependencies:**
-- Export only necessary dependencies
-- Use interfaces for abstraction
-- Avoid deep hierarchies
-
-**For Subcomponents:**
-- Limit hierarchy depth
-- Use @Subcomponent.Builder for flexibility
-- Avoid unnecessary binding overrides
 
 ## Follow-ups
 
 - How do you handle circular dependencies between components?
 - What are the performance implications of each approach?
-- How does Hilt's automatic component management work internally?
-
-## References
-
-- [Dagger Component API](https://dagger.dev/api/latest/dagger/Component.html)
-- [Hilt Component Hierarchy](https://dagger.dev/hilt/components.html)
+- How does Hilt manage component lifecycles automatically?
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-dagger-build-time-optimization--android--medium]]
+### Prerequisites
+- [[q-hilt-components-scope--android--medium]] - Hilt component scopes
+- [[q-dagger-build-time-optimization--android--medium]] - Dagger optimization
 
-### Related (Same Level)
-- [[q-hilt-components-scope--android--medium]]
-
-### Advanced (Harder)
-- [[q-dagger-framework-overview--android--hard]]
+### Advanced
+- [[q-dagger-framework-overview--android--hard]] - Complete Dagger architecture

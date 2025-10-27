@@ -1,7 +1,9 @@
 ---
 id: 20251021-160000
 title: Custom View Animation / Анимация Custom View
-aliases: [Custom View Animation, Анимация Custom View]
+aliases:
+  - Custom View Animation
+  - Анимация Custom View
 topic: android
 subtopics:
   - ui-animation
@@ -17,56 +19,43 @@ moc: moc-android
 related:
   - q-canvas-drawing-optimization--android--hard
   - q-custom-view-lifecycle--android--medium
+sources:
+  - https://developer.android.com/guide/topics/graphics/prop-animation
 created: 2025-10-21
-updated: 2025-10-21
-tags: [android/ui-animation, android/ui-views, difficulty/medium]
-source: https://developer.android.com/guide/topics/graphics/prop-animation
-source_note: Official property animation guide
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:24 pm
+updated: 2025-10-27
+tags:
+  - android/ui-animation
+  - android/ui-views
+  - difficulty/medium
 ---
-
 # Вопрос (RU)
-> Анимация Custom View?
+> Как реализовать анимацию в Custom View?
 
 # Question (EN)
-> Custom View Animation?
+> How to implement animation in Custom View?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Сравнение подходов к анимации
 
-## Answer (EN)
+| Подход | Назначение | Производительность | Сложность |
+|--------|------------|-------------------|-----------|
+| **ValueAnimator** | Анимация пользовательских свойств | Отличная | Низкая |
+| **Property Animation** | Анимация свойств View | Отличная | Очень низкая |
+| **Canvas Animation** | Сложные пользовательские анимации | Хорошая | Средняя |
 
-### Animation Approaches Comparison
+### ValueAnimator - универсальный подход
 
-| Approach | Use Case | Performance | Complexity |
-|----------|----------|-------------|------------|
-| **ValueAnimator** | Animate custom properties | Excellent | Low |
-| **Property Animation** | Animate View properties | Excellent | Very Low |
-| **Canvas Animation** | Complex custom animations | Good | Medium |
-| **Drawable Animation** | Frame-by-frame | Poor (high memory) | Low |
-
-### ValueAnimator - Most Flexible
-
-**Theory**: ValueAnimator works on the principle of interpolating values between start and end points over a given time. Uses Choreographer for VSYNC synchronization, ensuring smooth 60 FPS performance. Internally manages temporal curves through Interpolator.
-
-See c-android-animations and [[c-custom-views]] for in-depth understanding.
-
-**Key principles**:
-- **Interpolation**: Computing intermediate values between start and end
-- **VSYNC synchronization**: Synchronization with screen refresh rate
-- **Memory efficiency**: Doesn't create objects, only changes primitive values
-- **Lifecycle awareness**: Requires manual cleanup when view is destroyed
+**Принцип**: ValueAnimator интерполирует значения между начальной и конечной точкой за заданное время. Использует Choreographer для синхронизации с VSYNC (60 FPS). Не создает объекты в памяти, работает только с примитивами.
 
 ```kotlin
 class AnimatedProgressBar : View {
     private var progress = 0f
         set(value) {
             field = value.coerceIn(0f, 100f)
-            invalidate()
+            invalidate() // ✅ Перерисовка только при изменении
         }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -77,12 +66,7 @@ class AnimatedProgressBar : View {
     private var animator: ValueAnimator? = null
 
     fun setProgress(target: Float, animated: Boolean = true) {
-        if (!animated) {
-            progress = target
-            return
-        }
-
-        animator?.cancel()
+        animator?.cancel() // ✅ Отмена предыдущей анимации
         animator = ValueAnimator.ofFloat(progress, target).apply {
             duration = 500
             interpolator = DecelerateInterpolator()
@@ -98,64 +82,38 @@ class AnimatedProgressBar : View {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        animator?.cancel()
+        animator?.cancel() // ✅ Предотвращение утечек памяти
     }
 }
 ```
 
-### Property Animation - For View Properties
+### Property Animation - для стандартных свойств View
 
-**Theory**: Property Animation uses reflection to directly change View properties. ViewPropertyAnimator creates a chain of animations, combining them into a single AnimatorSet for optimization. ObjectAnimator works through PropertyValuesHolder for multiple properties.
-
-**Key principles**:
-- **Reflection-based**: Direct property changes through reflection
-- **Hardware acceleration**: Uses GPU for transformations (scale, rotation, translation)
-- **Chained animations**: Combining animations into a single set for synchronization
-- **Automatic cleanup**: System automatically cancels animations when View is destroyed
+**Принцип**: Использует рефлексию для изменения свойств View. ViewPropertyAnimator оптимизирует цепочки анимаций. Поддерживает аппаратное ускорение для трансформаций (scale, rotation, translation).
 
 ```kotlin
 class AnimatedButton : Button {
-
     fun animateScale() {
         animate()
             .scaleX(1.2f)
             .scaleY(1.2f)
             .setDuration(200)
-            .setInterpolator(OvershootInterpolator())
+            .setInterpolator(OvershootInterpolator()) // ✅ Естественное движение
             .withEndAction {
                 animate().scaleX(1f).scaleY(1f).setDuration(200).start()
             }
             .start()
     }
-
-    fun animateColor() {
-        ObjectAnimator.ofArgb(this, "backgroundColor", Color.BLUE, Color.RED).apply {
-            duration = 1000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-            start()
-        }
-    }
 }
 ```
 
-### Canvas Animation - For Complex Animations
+### Canvas Animation - для сложной графики
 
-**Theory**: Canvas Animation works through mathematical functions to compute animated values. Uses trigonometric functions (sin, cos) to create smooth cycles. Each frame recalculates drawing parameters based on animation time.
-
-**Key principles**:
-- **Mathematical interpolation**: Using mathematical functions for smooth transitions
-- **Frame-by-frame calculation**: Recalculating parameters on each frame
-- **Trigonometric cycles**: Sin/cos for cyclical animations
-- **Performance optimization**: Caching Paint objects and precomputing constants
+**Принцип**: Использует математические функции для вычисления анимированных значений. Тригонометрия (sin, cos) для циклических анимаций.
 
 ```kotlin
 class AnimatedCircleView : View {
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
-        color = Color.BLUE
-    }
-
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var animationProgress = 0f
     private var animator: ValueAnimator? = null
 
@@ -163,7 +121,6 @@ class AnimatedCircleView : View {
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
             duration = 2000
             repeatCount = ValueAnimator.INFINITE
-            repeatMode = ValueAnimator.REVERSE
             addUpdateListener {
                 animationProgress = it.animatedValue as Float
                 invalidate()
@@ -173,35 +130,20 @@ class AnimatedCircleView : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        val centerX = width / 2f
-        val centerY = height / 2f
-
-        // Animated radius through linear interpolation
         val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
-
-        // Animated alpha through sine wave
         val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
         paint.alpha = alpha
-
-        canvas.drawCircle(centerX, centerY, radius, paint)
+        canvas.drawCircle(width / 2f, height / 2f, radius, paint)
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        animator?.cancel()
+        animator?.cancel() // ✅ Обязательная очистка
     }
 }
 ```
 
-### Animation Lifecycle Management
-
-**Theory**: Animation lifecycle should synchronize with View lifecycle. Android system automatically manages some aspects, but developers must explicitly cancel animations when View is destroyed to prevent memory leaks.
-
-**Key principles**:
-- **Lifecycle synchronization**: Animations should stop when View is destroyed
-- **Visibility handling**: Pausing animations when View not visible to save resources
-- **Memory leak prevention**: Explicit animation cancellation in onDetachedFromWindow()
-- **State preservation**: Saving animation state during configuration changes
+### Управление жизненным циклом анимации
 
 ```kotlin
 class LifecycleAwareAnimatedView : View {
@@ -210,23 +152,20 @@ class LifecycleAwareAnimatedView : View {
     fun startAnimation() {
         val animator = ValueAnimator.ofFloat(0f, 1f).apply {
             duration = 1000
-            addUpdateListener { invalidate() }
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    activeAnimators.remove(animation) // ✅ Автоочистка
+                }
+            })
         }
-
         activeAnimators.add(animator)
-        animator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                activeAnimators.remove(animation)
-            }
-        })
         animator.start()
     }
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
-
         if (visibility != VISIBLE) {
-            activeAnimators.forEach { it.pause() }
+            activeAnimators.forEach { it.pause() } // ✅ Экономия ресурсов
         } else {
             activeAnimators.forEach { it.resume() }
         }
@@ -240,83 +179,207 @@ class LifecycleAwareAnimatedView : View {
 }
 ```
 
-### Interpolators and Their Usage
+### Best Practices
 
-**Theory**: Interpolators define the temporal curve of animation, transforming linear time into non-linear values. Work on the principle of function f(t) where t ∈ [0,1] and f(t) ∈ [0,1]. Affect the perception of natural movement.
+1. **Всегда отменяйте анимации** в `onDetachedFromWindow()`
+2. **Используйте подходящие интерполяторы**: DecelerateInterpolator для естественного замедления
+3. **Кэшируйте Paint объекты** - не создавайте в `onDraw()`
+4. **Приостанавливайте анимации** когда View невидим
+5. **Ограничивайте количество одновременных анимаций** для производительности
 
-**Key principles**:
-- **Time transformation**: Transforming linear time into non-linear values
-- **Easing functions**: Mathematical functions for natural movement
-- **Performance impact**: Interpolators are computed on each frame
-- **Custom curves**: Ability to create custom temporal curves
+### Типичные ошибки
+
+- ❌ **Забывают отменять анимации** → утечки памяти
+- ❌ **Создают объекты в onDraw()** → аллокации и GC паузы
+- ❌ **Не учитывают поворот экрана** → анимации сбрасываются
+- ❌ **Используют invalidate() вместо postInvalidateOnAnimation()** → пропуски кадров
+
+## Answer (EN)
+
+### Animation Approaches Comparison
+
+| Approach | Use Case | Performance | Complexity |
+|----------|----------|-------------|------------|
+| **ValueAnimator** | Animate custom properties | Excellent | Low |
+| **Property Animation** | Animate View properties | Excellent | Very Low |
+| **Canvas Animation** | Complex custom animations | Good | Medium |
+
+### ValueAnimator - Universal Approach
+
+**Principle**: ValueAnimator interpolates values between start and end points over time. Uses Choreographer for VSYNC synchronization (60 FPS). Works with primitives only, no object allocations.
 
 ```kotlin
-// Linear animation - constant speed
-animator.interpolator = LinearInterpolator()
+class AnimatedProgressBar : View {
+    private var progress = 0f
+        set(value) {
+            field = value.coerceIn(0f, 100f)
+            invalidate() // ✅ Redraw only on change
+        }
 
-// Slow down at the end - natural movement
-animator.interpolator = DecelerateInterpolator()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.BLUE
+    }
 
-// Speed up at the beginning - inertia effect
-animator.interpolator = AccelerateInterpolator()
+    private var animator: ValueAnimator? = null
 
-// Smooth acceleration and deceleration - S-curve
-animator.interpolator = AccelerateDecelerateInterpolator()
+    fun setProgress(target: Float, animated: Boolean = true) {
+        animator?.cancel() // ✅ Cancel previous animation
+        animator = ValueAnimator.ofFloat(progress, target).apply {
+            duration = 500
+            interpolator = DecelerateInterpolator()
+            addUpdateListener { progress = it.animatedValue as Float }
+            start()
+        }
+    }
 
-// Elastic effect - overshoot target value
-animator.interpolator = OvershootInterpolator()
+    override fun onDraw(canvas: Canvas) {
+        val width = width * (progress / 100f)
+        canvas.drawRect(0f, 0f, width, height.toFloat(), paint)
+    }
 
-// Bounce effect - physical bounce simulation
-animator.interpolator = BounceInterpolator()
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel() // ✅ Prevent memory leaks
+    }
+}
+```
 
-// Custom interpolator - sinusoidal curve
-animator.interpolator = object : Interpolator {
-    override fun getInterpolation(input: Float): Float {
-        return sin(input * Math.PI / 2).toFloat()
+### Property Animation - For Standard View Properties
+
+**Principle**: Uses reflection to change View properties. ViewPropertyAnimator optimizes animation chains. Hardware-accelerated for transformations (scale, rotation, translation).
+
+```kotlin
+class AnimatedButton : Button {
+    fun animateScale() {
+        animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(200)
+            .setInterpolator(OvershootInterpolator()) // ✅ Natural movement
+            .withEndAction {
+                animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+            }
+            .start()
+    }
+}
+```
+
+### Canvas Animation - For Complex Graphics
+
+**Principle**: Uses mathematical functions to compute animated values. Trigonometry (sin, cos) for cyclical animations.
+
+```kotlin
+class AnimatedCircleView : View {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var animationProgress = 0f
+    private var animator: ValueAnimator? = null
+
+    fun startAnimation() {
+        animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 2000
+            repeatCount = ValueAnimator.INFINITE
+            addUpdateListener {
+                animationProgress = it.animatedValue as Float
+                invalidate()
+            }
+            start()
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
+        val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
+        paint.alpha = alpha
+        canvas.drawCircle(width / 2f, height / 2f, radius, paint)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel() // ✅ Required cleanup
+    }
+}
+```
+
+### Animation Lifecycle Management
+
+```kotlin
+class LifecycleAwareAnimatedView : View {
+    private val activeAnimators = mutableListOf<Animator>()
+
+    fun startAnimation() {
+        val animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1000
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    activeAnimators.remove(animation) // ✅ Auto-cleanup
+                }
+            })
+        }
+        activeAnimators.add(animator)
+        animator.start()
+    }
+
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (visibility != VISIBLE) {
+            activeAnimators.forEach { it.pause() } // ✅ Save resources
+        } else {
+            activeAnimators.forEach { it.resume() }
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        activeAnimators.forEach { it.cancel() }
+        activeAnimators.clear()
     }
 }
 ```
 
 ### Best Practices
 
-1. **Always cancel animations** in onDetachedFromWindow()
-2. **Use appropriate interpolators** for natural movement
-3. **Limit concurrent animations** for performance
-4. **Pause animations** when view not visible
-5. **Cache Paint objects** - don't create in onDraw()
-6. **Use invalidate()** instead of invalidate() for efficiency
-7. **Test performance** on weak devices
+1. **Always cancel animations** in `onDetachedFromWindow()`
+2. **Use appropriate interpolators**: DecelerateInterpolator for natural deceleration
+3. **Cache Paint objects** - don't create in `onDraw()`
+4. **Pause animations** when View not visible
+5. **Limit concurrent animations** for performance
 
-### Pitfalls
+### Common Mistakes
 
-- **Don't forget to cancel animations** - can cause memory leaks
-- **Handle screen rotation properly** - animations may reset
-- **Avoid animations in onDraw()** - affects performance
-- **Don't create objects in animations** - use precomputed values
-- **Check view state** before starting animations
+- ❌ **Forgetting to cancel animations** → memory leaks
+- ❌ **Creating objects in onDraw()** → allocations and GC pauses
+- ❌ **Not handling screen rotation** → animations reset
+- ❌ **Using invalidate() instead of postInvalidateOnAnimation()** → frame drops
 
 ---
 
 ## Follow-ups
 
-- How to create complex path animations?
-- What are the performance differences between animation approaches?
-- How to handle animations during configuration changes?
-- When to use ViewPropertyAnimator vs ValueAnimator?
+- How to create complex path animations using PathInterpolator?
+- What are performance differences between ValueAnimator and ObjectAnimator?
+- How to synchronize multiple animations?
+- When to use Animator vs ViewPropertyAnimator?
+- How to handle animation state during configuration changes?
 
 ## References
 
+- [[q-custom-view-lifecycle--android--medium]]
+- [[q-canvas-drawing-optimization--android--hard]]
 - [Property Animation Guide](https://developer.android.com/guide/topics/graphics/prop-animation)
-- [Animation and Graphics Overview](https://developer.android.com/guide/topics/graphics)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- q-custom-view-implementation--android--medium
+- [[q-custom-view-lifecycle--android--medium]] - Understanding View lifecycle for proper animation cleanup
+- Custom View basics and onDraw() fundamentals
 
 ### Related (Same Level)
-- q-canvas-drawing-android--android--medium
-- q-view-lifecycle-android--android--medium
+- [[q-canvas-drawing-optimization--android--hard]] - Canvas performance optimization
+- Property animation system and Choreographer
+- Interpolator types and custom implementations
 
 ### Advanced (Harder)
-- q-android-performance-optimization--android--hard
+- Complex path animations with PathMeasure
+- Animation synchronization across multiple Views
+- Hardware-accelerated animation layers

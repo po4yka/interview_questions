@@ -1,585 +1,257 @@
 ---
-id: 20251012-122711105
+id: 20251012-122711
 title: "Single Activity Pros Cons / Преимущества и недостатки Single Activity"
+aliases: ["Single Activity Pros Cons", "Преимущества и недостатки Single Activity"]
 topic: android
+subtopics: [activity, fragment, ui-navigation]
+question_kind: android
 difficulty: medium
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [q-hilt-assisted-injection--di--medium, q-cicd-pipeline-android--android--medium, q-flaky-test-prevention--testing--medium]
+related: [q-activity-lifecycle-methods--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
 created: 2025-10-15
-tags: [android, android/activity, android/fragment, android/performance-startup, fragment, fragments, performance, performance-startup, platform/android, single-activity, difficulty/medium]
+updated: 2025-01-27
+sources: []
+tags: [android, android/activity, android/fragment, android/ui-navigation, fragment, single-activity, viewmodel, navigation, difficulty/medium]
 ---
+# Вопрос (RU)
 
-# Какие у подхода Single Activity этого подхода + и - ?
+Какие у подхода Single Activity этого подхода плюсы и минусы?
 
-**English**: What are the pros and cons of the Single Activity approach?
+# Question (EN)
 
-## Answer (EN)
-The **Single Activity approach** means using **one main Activity** for the entire application, with all screens represented as **Fragments**. This contrasts with the traditional multi-Activity approach where each screen is a separate Activity.
+What are the pros and cons of the Single Activity approach?
 
-### Architecture Comparison
+## Ответ (RU)
 
-**Traditional Multi-Activity:**
-```
-App
- MainActivity (Home screen)
- ProfileActivity (Profile screen)
- SettingsActivity (Settings screen)
- DetailActivity (Detail screen)
-```
+**Подход Single Activity** — использование **одной Activity** для всего приложения, где все экраны представлены как **Fragment**. Это противоположность традиционному подходу с множеством Activity.
 
-**Single Activity:**
-```
-App
- MainActivity
-     HomeFragment
-     ProfileFragment
-     SettingsFragment
-     DetailFragment
-```
+### Плюсы (Advantages)
 
-### Implementation Example
+1. **Упрощенная навигация** — NavController вместо Intent
+2. **Общий ViewModel** — легко делиться данными между экранами через `activityViewModels()`
+3. **Общие UI элементы** — toolbar и bottom navigation не пересоздаются
+4. **Лучшие анимации** — плавные shared element transitions между фрагментами
+5. **Быстрые переходы** — нет overhead создания новой Activity (lifecycle, Window, theme)
+6. **Легкие deep links** — Navigation Component автоматически обрабатывает
+7. **Проще state management** — одно состояние на всё приложение через SavedStateHandle
 
+**Пример навигации:**
 ```kotlin
-// Single Activity setup
-class MainActivity : AppCompatActivity() {
+// ✅ Single Activity - простая навигация
+navController.navigate(R.id.profileFragment, bundleOf("userId" to userId))
 
-    private lateinit var navController: NavController
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Setup Navigation Component
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-
-        // All navigation happens via fragments
-        setupBottomNavigation()
-    }
-
-    private fun setupBottomNavigation() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomNav.setupWithNavController(navController)
-    }
-}
-```
-
-**Navigation Graph (nav_graph.xml):**
-```xml
-<navigation>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.HomeFragment">
-        <action
-            android:id="@+id/action_home_to_profile"
-            app:destination="@id/profileFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.ProfileFragment" />
-
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.SettingsFragment" />
-</navigation>
-```
-
----
-
-## Advantages (Pros)
-
-### 1. Simplified Navigation
-
-**Single Activity:**
-```kotlin
-// Simple fragment navigation
-navController.navigate(R.id.action_home_to_profile)
-
-// With arguments
-val bundle = bundleOf("userId" to userId)
-navController.navigate(R.id.profileFragment, bundle)
-```
-
-**Multi-Activity (more complex):**
-```kotlin
-// Need to create Intent, pass extras, handle result
+// ❌ Multi-Activity - сложнее
 val intent = Intent(this, ProfileActivity::class.java)
 intent.putExtra("userId", userId)
-startActivityForResult(intent, REQUEST_CODE)
-
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    // Handle result
-}
+startActivityForResult(intent, REQUEST_CODE) // deprecated API
 ```
 
-### 2. Shared ViewModel Across Screens
-
+**Общий ViewModel:**
 ```kotlin
-// ViewModel shared across fragments in same activity
-class SharedViewModel : ViewModel() {
-    val userData = MutableLiveData<User>()
-}
-
-// Fragment A
+// ✅ Легко делиться данными между фрагментами
 class FragmentA : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     fun updateUser(user: User) {
-        sharedViewModel.userData.value = user
+        sharedViewModel.userData.value = user // Fragment B получит обновление
     }
 }
 
-// Fragment B (automatically gets the same ViewModel instance)
 class FragmentB : Fragment() {
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        sharedViewModel.userData.observe(viewLifecycleOwner) { user ->
-            // Receives updates from Fragment A
-        }
-    }
+    private val sharedViewModel: SharedViewModel by activityViewModels() // та же instance
 }
 ```
 
-**With multi-Activity, you'd need:**
-- Static singletons (memory leaks)
-- Persistent storage (slower)
-- Passing data through Intents (limited size)
+### Минусы (Disadvantages)
 
-### 3. Shared UI Elements
+1. **Сложность Fragment lifecycle** — больше callback методов (`onDestroyView`, `onDetach`), два lifecycle (Fragment + View)
+2. **Утечки памяти** — ViewBinding нужно очищать в `onDestroyView`
+3. **Сложность FragmentManager** — управление back stack может запутать
+4. **State loss проблемы** — `IllegalStateException` при commit после `onSaveInstanceState`
+5. **Вложенные фрагменты** — `childFragmentManager` vs `parentFragmentManager` confusion
+6. **Сложность тестирования** — больше setup чем для Activity (`launchFragmentInContainer`)
+7. **Обработка кнопки назад** — нужно перехватывать через `onBackPressedDispatcher`
 
+**ViewBinding утечка:**
 ```kotlin
-// Persistent toolbar, bottom nav across all screens
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Toolbar stays visible during all fragment transitions
-        setSupportActionBar(findViewById(R.id.toolbar))
-
-        // Bottom navigation stays visible
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-        bottomNav.setupWithNavController(navController)
-    }
-}
-```
-
-All fragments share the same toolbar and bottom navigation - no recreation needed.
-
-### 4. Better Animations
-
-```kotlin
-// Smooth shared element transitions between fragments
-val extras = FragmentNavigatorExtras(
-    imageView to "image_transition"
-)
-navController.navigate(
-    R.id.detailFragment,
-    bundle,
-    null,
-    extras
-)
-
-// Fragment transition animations
-navController.navigate(
-    R.id.profileFragment,
-    null,
-    NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_in_right)
-        .setExitAnim(R.anim.slide_out_left)
-        .setPopEnterAnim(R.anim.slide_in_left)
-        .setPopExitAnim(R.anim.slide_out_right)
-        .build()
-)
-```
-
-### 5. Faster Screen Transitions
-
-No Activity recreation overhead:
-- No new Activity lifecycle
-- No new Window creation
-- No theme reapplication
-- Just fragment transaction (much faster)
-
-### 6. Easier Deep Linking
-
-```kotlin
-// Navigation Component handles deep links automatically
-<navigation>
-    <fragment
-        android:id="@+id/productDetailFragment"
-        android:name="com.example.ProductDetailFragment">
-        <deepLink
-            app:uri="myapp://product/{productId}" />
-    </fragment>
-</navigation>
-
-// Deep link automatically navigates to correct fragment
-// No need to determine which Activity to launch
-```
-
-### 7. Simplified State Management
-
-```kotlin
-// Single SavedStateHandle for entire app
-class AppViewModel(
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-    // State persists across configuration changes
-    val currentScreen: LiveData<String> = savedStateHandle.getLiveData("current_screen")
-
-    fun navigateTo(screen: String) {
-        savedStateHandle["current_screen"] = screen
-    }
-}
-```
-
----
-
-## Disadvantages (Cons)
-
-### 1. Fragment Complexity
-
-Fragments have more complex lifecycle than Activities:
-
-```kotlin
-// Fragment lifecycle callbacks (more than Activity)
-override fun onAttach(context: Context)
-override fun onCreate(savedInstanceState: Bundle?)
-override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-override fun onStart()
-override fun onResume()
-override fun onPause()
-override fun onStop()
-override fun onDestroyView()  // Fragment-specific
-override fun onDestroy()
-override fun onDetach()  // Fragment-specific
-```
-
-Must understand two lifecycles:
-- Fragment lifecycle
-- View lifecycle (viewLifecycleOwner)
-
-### 2. Memory Leaks with ViewBinding
-
-```kotlin
-// Common mistake - memory leak!
+// ❌ Утечка памяти - binding не очищен
 class MyFragment : Fragment() {
-    private val binding: FragmentMyBinding? = null  // Wrong!
+    private val binding: FragmentMyBinding? = null
 
     override fun onCreateView(...): View {
         binding = FragmentMyBinding.inflate(inflater, container, false)
         return binding.root
     }
-
-    // View is destroyed, but binding still references it = LEAK
+    // View уничтожен, но binding ссылается на него = LEAK
 }
 
-// Correct approach
+// ✅ Правильный подход
 class MyFragment : Fragment() {
     private var _binding: FragmentMyBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(...): View {
-        _binding = FragmentMyBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null  // Must clean up!
+        _binding = null // Must cleanup!
     }
 }
 ```
 
-### 3. FragmentManager Complexity
-
-```kotlin
-// Complex fragment transactions
-supportFragmentManager.beginTransaction()
-    .setReorderingAllowed(true)
-    .replace(R.id.container, FragmentA())
-    .addToBackStack("A")
-    .commit()
-
-supportFragmentManager.beginTransaction()
-    .setReorderingAllowed(true)
-    .add(R.id.container, FragmentB())
-    .addToBackStack("B")
-    .commit()
-
-// Back stack management can get complex
-supportFragmentManager.popBackStack("A", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-```
-
-### 4. State Loss Issues
-
-```kotlin
-// IllegalStateException: Can not perform this action after onSaveInstanceState
-supportFragmentManager.beginTransaction()
-    .replace(R.id.container, MyFragment())
-    .commit()  // Can crash if called after onSaveInstanceState
-
-// Must use commitAllowingStateLoss() or lifecycle-aware approach
-lifecycleScope.launch {
-    whenResumed {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, MyFragment())
-            .commit()
-    }
-}
-```
-
-### 5. Nested Fragment Complexity
-
-```kotlin
-// Fragments within fragments can get confusing
-class ParentFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // childFragmentManager vs parentFragmentManager
-        childFragmentManager.beginTransaction()
-            .replace(R.id.child_container, ChildFragment())
-            .commit()
-    }
-}
-
-class ChildFragment : Fragment() {
-    fun navigateUp() {
-        // Which FragmentManager? Child or parent?
-        parentFragmentManager.popBackStack()  // Or requireActivity().supportFragmentManager?
-    }
-}
-```
-
-### 6. Testing Complexity
-
-```kotlin
-// Testing fragments requires more setup than Activities
-@Test
-fun testFragment() {
-    // Need to create scenario with Activity
-    val scenario = launchFragmentInContainer<MyFragment>(
-        themeResId = R.style.AppTheme
-    )
-
-    scenario.onFragment { fragment ->
-        // Test fragment
-    }
-
-    // vs Activity test (simpler)
-    val activityScenario = launch<MyActivity>()
-}
-```
-
-### 7. Back Button Handling
-
-```kotlin
-// Must intercept back button manually
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        onBackPressedDispatcher.addCallback(this) {
-            val fragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-
-            if (fragment is OnBackPressedHandler && fragment.onBackPressed()) {
-                // Fragment handled it
-                return@addCallback
-            }
-
-            // Default behavior
-            if (!navController.popBackStack()) {
-                finish()
-            }
-        }
-    }
-}
-```
-
----
-
-## Comparison Table
-
-| Aspect | Single Activity | Multi-Activity |
-|--------|----------------|----------------|
-| **Navigation** | Fragment transactions (fast) | Activity intents (slower) |
-| **Data sharing** | Shared ViewModel (easy) | Intent extras / static (complex) |
-| **Transitions** | Smooth, customizable | Activity transitions (limited) |
-| **Memory** | Lower (one Activity) | Higher (multiple Activities) |
-| **State management** | Simpler (one state) | Complex (multiple states) |
-| **Deep links** | Navigation Component (easy) | Manual routing (complex) |
-| **Learning curve** | Fragment lifecycle (steep) | Activity lifecycle (simpler) |
-| **Memory leaks** | ViewBinding cleanup needed | Less prone |
-| **Back stack** | Fragment back stack (complex) | Activity back stack (simpler) |
-| **Testing** | More setup required | Simpler |
-
----
-
-## When to Use Single Activity
-
-**Good fit for:**
-- Apps with shared UI elements (toolbar, bottom nav)
-- Apps needing smooth transitions
-- Apps with complex navigation flows
-- Modern apps using Jetpack Navigation
-- Apps needing shared state across screens
-
-**Example: Social media app**
-```kotlin
-// All screens share bottom navigation
-MainActivity
- FeedFragment (bottom nav: Home)
- SearchFragment (bottom nav: Search)
- NotificationsFragment (bottom nav: Notifications)
- ProfileFragment (bottom nav: Profile)
- DetailFragments (no bottom nav, but same Activity)
-```
-
-**Not ideal for:**
-- Simple apps with few screens
-- Apps with completely independent flows
-- Legacy codebases (migration cost)
-- Teams unfamiliar with Fragments
-
----
-
-## Modern Recommendation: Jetpack Compose
-
-Jetpack Compose further simplifies Single Activity:
-
-```kotlin
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            val navController = rememberNavController()
-
-            MyAppTheme {
-                NavHost(navController, startDestination = "home") {
-                    composable("home") { HomeScreen(navController) }
-                    composable("profile/{userId}") { backStackEntry ->
-                        val userId = backStackEntry.arguments?.getString("userId")
-                        ProfileScreen(userId)
-                    }
-                    composable("settings") { SettingsScreen() }
-                }
-            }
-        }
-    }
-}
-```
-
-No Fragments needed - just composable functions!
-
----
-
-## Summary
-
-**Single Activity Pros:**
-1. Simplified navigation (NavController)
-2. Shared ViewModel across screens
-3. Shared UI elements (toolbar, bottom nav)
-4. Better animations and transitions
-5. Faster screen transitions
-6. Easier deep linking
-7. Simpler state management
-
-**Single Activity Cons:**
-1. Fragment lifecycle complexity
-2. Memory leaks if ViewBinding not cleaned
-3. FragmentManager complexity
-4. State loss issues (commit after onSaveInstanceState)
-5. Nested fragment challenges
-6. More complex testing
-7. Manual back button handling
-
-**Verdict:**
-Single Activity is the **modern Android standard** (especially with Navigation Component and Compose), but requires understanding Fragment lifecycle and best practices.
-
-## Ответ (RU)
-**Подход Single Activity** означает использование **одной основной Activity** для всего приложения, где все экраны представлены как **Fragment**. Это противоположность традиционному подходу с множеством Activity, где каждый экран - отдельная Activity.
-
-### Плюсы (Advantages)
-
-1. **Упрощенная навигация** - использование NavController вместо Intent
-2. **Общий ViewModel** - легко делиться данными между экранами
-3. **Общие UI элементы** - toolbar и bottom navigation не пересоздаются
-4. **Лучшие анимации** - плавные переходы между фрагментами
-5. **Быстрые переходы** - нет overhead создания новой Activity
-6. **Легкие deep links** - Navigation Component автоматически обрабатывает
-7. **Проще state management** - одно состояние на всё приложение
-
-### Минусы (Disadvantages)
-
-1. **Сложность Fragment lifecycle** - больше callback методов чем у Activity
-2. **Утечки памяти** - ViewBinding нужно очищать в onDestroyView
-3. **Сложность FragmentManager** - управление back stack может запутать
-4. **State loss проблемы** - IllegalStateException при commit после onSaveInstanceState
-5. **Вложенные фрагменты** - childFragmentManager vs parentFragmentManager
-6. **Сложность тестирования** - больше setup чем для Activity
-7. **Обработка кнопки назад** - нужно перехватывать вручную
-
-### Таблица сравнения
+### Сравнение
 
 | Аспект | Single Activity | Multi-Activity |
 |--------|----------------|----------------|
 | Навигация | Fragment transactions (быстрая) | Activity intents (медленная) |
 | Обмен данными | Shared ViewModel (легко) | Intent extras (сложно) |
-| Переходы | Плавные, настраиваемые | Ограниченные |
-| Память | Меньше (одна Activity) | Больше (много Activity) |
-| State management | Проще (одно состояние) | Сложнее |
-| Deep links | Navigation Component | Ручная маршрутизация |
+| Memory | Меньше (одна Activity) | Больше (много Activity) |
 | Кривая обучения | Fragment lifecycle (крутая) | Activity lifecycle (проще) |
 | Утечки памяти | ViewBinding cleanup нужен | Менее подвержено |
-| Back stack | Fragment (сложный) | Activity (простой) |
 | Тестирование | Больше setup | Проще |
 
-### Когда использовать Single Activity
+### Когда использовать
 
-**Хорошо подходит для:**
+**Хорошо для:**
 - Приложений с общими UI элементами (toolbar, bottom nav)
-- Приложений с плавными переходами
-- Сложной навигации
-- Современных приложений с Jetpack Navigation
-- Приложений с общим состоянием между экранами
+- Сложной навигации с shared state
+- Современных приложений с Jetpack Navigation/Compose
 
 **Не идеально для:**
 - Простых приложений с малым количеством экранов
-- Приложений с полностью независимыми flow
 - Legacy кодовых баз (дорогая миграция)
-- Команд незнакомых с Fragment
+- Команд незнакомых с Fragment lifecycle
 
-### Вердикт
+**Вердикт:**
+Single Activity — это **современный Android стандарт** (особенно с Navigation Component и Compose), но требует понимания Fragment lifecycle и best practices.
 
-Single Activity - это **современный Android стандарт** (особенно с Navigation Component и Compose), но требует понимания Fragment lifecycle и best practices.
+## Answer (EN)
 
+**Single Activity approach** uses **one Activity** for the entire application, with all screens represented as **Fragments**. This contrasts with traditional multi-Activity where each screen is a separate Activity.
+
+### Advantages (Pros)
+
+1. **Simplified navigation** — NavController instead of Intents
+2. **Shared ViewModel** — easy data sharing between screens via `activityViewModels()`
+3. **Shared UI elements** — toolbar and bottom navigation not recreated
+4. **Better animations** — smooth shared element transitions between fragments
+5. **Faster transitions** — no Activity recreation overhead (lifecycle, Window, theme)
+6. **Easier deep linking** — Navigation Component handles automatically
+7. **Simpler state management** — single state for entire app via SavedStateHandle
+
+**Navigation example:**
+```kotlin
+// ✅ Single Activity - simple navigation
+navController.navigate(R.id.profileFragment, bundleOf("userId" to userId))
+
+// ❌ Multi-Activity - more complex
+val intent = Intent(this, ProfileActivity::class.java)
+intent.putExtra("userId", userId)
+startActivityForResult(intent, REQUEST_CODE) // deprecated API
+```
+
+**Shared ViewModel:**
+```kotlin
+// ✅ Easy data sharing between fragments
+class FragmentA : Fragment() {
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    fun updateUser(user: User) {
+        sharedViewModel.userData.value = user // Fragment B will receive update
+    }
+}
+
+class FragmentB : Fragment() {
+    private val sharedViewModel: SharedViewModel by activityViewModels() // same instance
+}
+```
+
+### Disadvantages (Cons)
+
+1. **Fragment lifecycle complexity** — more callbacks (`onDestroyView`, `onDetach`), two lifecycles (Fragment + View)
+2. **Memory leaks** — ViewBinding requires cleanup in `onDestroyView`
+3. **FragmentManager complexity** — back stack management can be confusing
+4. **State loss issues** — `IllegalStateException` on commit after `onSaveInstanceState`
+5. **Nested fragments** — `childFragmentManager` vs `parentFragmentManager` confusion
+6. **Testing complexity** — more setup than Activity (`launchFragmentInContainer`)
+7. **Back button handling** — need to intercept via `onBackPressedDispatcher`
+
+**ViewBinding leak:**
+```kotlin
+// ❌ Memory leak - binding not cleaned
+class MyFragment : Fragment() {
+    private val binding: FragmentMyBinding? = null
+
+    override fun onCreateView(...): View {
+        binding = FragmentMyBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+    // View destroyed but binding still references it = LEAK
+}
+
+// ✅ Correct approach
+class MyFragment : Fragment() {
+    private var _binding: FragmentMyBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Must cleanup!
+    }
+}
+```
+
+### Comparison
+
+| Aspect | Single Activity | Multi-Activity |
+|--------|----------------|----------------|
+| Navigation | Fragment transactions (fast) | Activity intents (slow) |
+| Data sharing | Shared ViewModel (easy) | Intent extras (complex) |
+| Memory | Lower (one Activity) | Higher (multiple Activities) |
+| Learning curve | Fragment lifecycle (steep) | Activity lifecycle (simpler) |
+| Memory leaks | ViewBinding cleanup needed | Less prone |
+| Testing | More setup required | Simpler |
+
+### When to Use
+
+**Good fit for:**
+- Apps with shared UI elements (toolbar, bottom nav)
+- Complex navigation with shared state
+- Modern apps using Jetpack Navigation/Compose
+
+**Not ideal for:**
+- Simple apps with few screens
+- Legacy codebases (expensive migration)
+- Teams unfamiliar with Fragment lifecycle
+
+**Verdict:**
+Single Activity is the **modern Android standard** (especially with Navigation Component and Compose), but requires understanding Fragment lifecycle and best practices.
 
 ---
 
+## Follow-ups
+
+- How to handle configuration changes in Single Activity with Fragments?
+- What are the memory implications of keeping Fragments in back stack?
+- How does Navigation Component handle deep links and conditional navigation?
+- What are best practices for ViewBinding cleanup in Fragments?
+- How to implement nested navigation graphs in Single Activity?
+
+## References
+
+- Official Android documentation: Navigation Component
+- Official Android documentation: Fragment best practices
+- Official Android documentation: Single Activity architecture guide
+
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity
+### Prerequisites
+- [[q-activity-lifecycle-methods--android--medium]] — Activity lifecycle understanding needed
 
-### Related (Medium)
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Activity
-- [[q-what-is-activity-and-what-is-it-used-for--android--medium]] - Activity
+### Related
+- [[q-what-is-activity-and-what-is-it-used-for--android--medium]] — Activity fundamentals
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] — Fragment-Activity relationship
 
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity
+### Advanced
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] — Deep dive into Fragment architecture
