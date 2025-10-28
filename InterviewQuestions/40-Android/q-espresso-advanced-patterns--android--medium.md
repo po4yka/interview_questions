@@ -1,31 +1,20 @@
 ---
 id: 20251020-200400
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
-aliases: [Espresso Advanced Patterns, Продвинутые паттерны Espresso]
+aliases: [Espresso Advanced Patterns, Продвинутые паттерны Espresso, IdlingResource, Custom Matchers, Custom ViewActions]
 topic: android
-subtopics:
-  - testing-instrumented
-  - testing-ui
-
+subtopics: [testing-instrumented, testing-ui]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
-source: https://developer.android.com/training/testing/espresso
-source_note: Android Espresso testing documentation
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-testing-strategies--android--medium
-  - q-android-testing-tools--testing--medium
-  - q-ui-testing-best-practices--testing--medium
+related: [q-android-testing-strategies--android--medium, q-android-testing-tools--testing--medium, q-ui-testing-best-practices--testing--medium]
+sources: [https://developer.android.com/training/testing/espresso]
 created: 2025-10-20
-updated: 2025-10-20
+updated: 2025-10-28
 tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:04 pm
 ---
 
 # Вопрос (RU)
@@ -35,48 +24,53 @@ date modified: Saturday, October 25th 2025, 4:52:04 pm
 > How to implement Espresso advanced patterns with IdlingResource, custom matchers, and ViewActions?
 
 ---
+
 ## Ответ (RU)
 
-Espresso - фреймворк UI тестирования для View-based интерфейсов. Продвинутое использование требует понимания IdlingResource, custom matchers и сложных паттернов взаимодействия.
+### Ключевые концепции
 
-### Основные Паттерны
+**IdlingResource** - синхронизация с async операциями. Espresso ждет пока все ресурсы idle перед выполнением действий.
 
-**1. IdlingResource для асинхронных операций**
-- Проблема: Espresso не ждет завершения async операций
-- Результат: flaky тесты, race conditions
-- Решение: IdlingResource сообщает Espresso когда приложение idle
+**Custom Matchers** - специфичные проверки View. Наследуют TypeSafeMatcher или BoundedMatcher, реализуют matchesSafely() и describeTo().
+
+**Custom ViewActions** - сложные UI взаимодействия. Реализуют perform(), getConstraints(), getDescription().
+
+**RecyclerViewActions** - специальные действия для списков. Скроллинг, клики по позиции, custom assertions.
+
+### Примеры кода
+
+**1. IdlingResource для network запросов**
 
 ```kotlin
-// Простой IdlingResource
-class SimpleIdlingResource : IdlingResource {
-    @Volatile private var callback: IdlingResource.ResourceCallback? = null
-    @Volatile private var isIdle = true
+// ✅ Корректная реализация
+class NetworkIdlingResource : IdlingResource {
+    @Volatile private var callback: ResourceCallback? = null
+    @Volatile private var activeRequests = 0
 
-    override fun getName() = "SimpleIdlingResource"
-    override fun isIdleNow() = isIdle
+    override fun getName() = "NetworkIdlingResource"
+    override fun isIdleNow() = activeRequests == 0
 
-    override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback?) {
+    override fun registerIdleTransitionCallback(callback: ResourceCallback?) {
         this.callback = callback
     }
 
-    fun setIdleState(isIdle: Boolean) {
-        this.isIdle = isIdle
-        if (isIdle) callback?.onTransitionToIdle()
+    fun increment() {
+        activeRequests++
+    }
+
+    fun decrement() {
+        activeRequests--
+        if (isIdleNow) callback?.onTransitionToIdle()
     }
 }
 
-// Использование в тесте
+// Использование
 @Test
-fun testWithIdlingResource() {
-    val idlingResource = SimpleIdlingResource()
+fun testWithNetwork() {
+    val idlingResource = NetworkIdlingResource()
     IdlingRegistry.getInstance().register(idlingResource)
-
     try {
-        idlingResource.setIdleState(false)
-        // Запуск async операции
-        performAsyncOperation()
-        idlingResource.setIdleState(true)
-
+        onView(withId(R.id.button)).perform(click())
         onView(withText("Success")).check(matches(isDisplayed()))
     } finally {
         IdlingRegistry.getInstance().unregister(idlingResource)
@@ -84,17 +78,14 @@ fun testWithIdlingResource() {
 }
 ```
 
-**2. Custom Matchers**
-- Проблема: стандартные matchers не покрывают все случаи
-- Результат: сложные тесты, плохая читаемость
-- Решение: создание custom matchers для специфичных проверок
+**2. Custom matcher для RecyclerView**
 
 ```kotlin
-// Custom matcher для RecyclerView
+// ✅ Type-safe matcher
 fun withItemCount(count: Int): Matcher<View> {
     return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
         override fun describeTo(description: Description) {
-            description.appendText("RecyclerView with item count: $count")
+            description.appendText("has $count items")
         }
 
         override fun matchesSafely(view: RecyclerView): Boolean {
@@ -103,215 +94,116 @@ fun withItemCount(count: Int): Matcher<View> {
     }
 }
 
-// Custom matcher для текста с regex
-fun withTextMatching(regex: String): Matcher<View> {
-    return object : TypeSafeMatcher<View>() {
-        override fun describeTo(description: Description) {
-            description.appendText("with text matching: $regex")
-        }
-
-        override fun matchesSafely(item: View): Boolean {
-            if (item !is TextView) return false
-            return item.text.toString().matches(regex.toRegex())
-        }
-    }
+// ❌ Проблема: нет type safety
+fun badMatcher(count: Int) = object : BaseMatcher<View>() {
+    override fun matches(item: Any?) = (item as? RecyclerView)?.adapter?.itemCount == count
+    override fun describeTo(description: Description) {}
 }
-
-// Использование
-onView(withId(R.id.recycler_view))
-    .check(matches(withItemCount(5)))
-
-onView(withTextMatching("\\d+ items"))
-    .check(matches(isDisplayed()))
 ```
 
-**3. Custom ViewActions**
-- Проблема: стандартные actions не покрывают сложные взаимодействия
-- Результат: невозможность тестировать сложные UI паттерны
-- Решение: создание custom ViewActions
+**3. Custom ViewAction для drag**
 
 ```kotlin
-// Custom action для swipe с задержкой
-fun swipeWithDelay(direction: GeneralSwipeAction.Direction): ViewAction {
+// ✅ Полная реализация
+fun dragToPosition(x: Float, y: Float): ViewAction {
     return object : ViewAction {
-        override fun getConstraints(): Matcher<View> = isAssignableFrom(View::class.java)
+        override fun getConstraints() = isDisplayed()
 
-        override fun getDescription(): String = "swipe with delay to $direction"
+        override fun getDescription() = "drag to ($x, $y)"
 
         override fun perform(uiController: UiController, view: View) {
-            val coordinates = GeneralLocation.CENTER
-            val precision = GeneralLocation.CENTER
-            val startCoordinates = coordinates.calculateCoordinates(view)
-            val endCoordinates = precision.calculateCoordinates(view)
+            val location = IntArray(2)
+            view.getLocationOnScreen(location)
 
-            val startX = startCoordinates[0]
-            val startY = startCoordinates[1]
-            val endX = endCoordinates[0]
-            val endY = endCoordinates[1]
-
-            val swipeAction = GeneralSwipeAction(
-                Swipe.SLOW, startX, startY, endX, endY, precision
-            )
-            swipeAction.perform(uiController, view)
-        }
-    }
-}
-
-// Custom action для long press с custom duration
-fun longPressWithDuration(duration: Long): ViewAction {
-    return object : ViewAction {
-        override fun getConstraints(): Matcher<View> = isAssignableFrom(View::class.java)
-
-        override fun getDescription(): String = "long press with duration $duration"
-
-        override fun perform(uiController: UiController, view: View) {
-            val coordinates = GeneralLocation.CENTER
-            val precision = GeneralLocation.CENTER
-            val startCoordinates = coordinates.calculateCoordinates(view)
-
-            uiController.loopMainThreadUntilIdle()
-            uiController.loopMainThreadForAtLeast(duration)
+            MotionEvents.sendDown(uiController, location, Press.FINGER)
+            uiController.loopMainThreadForAtLeast(100)
+            MotionEvents.sendMovement(uiController, floatArrayOf(x, y))
+            MotionEvents.sendUp(uiController, floatArrayOf(x, y))
         }
     }
 }
 ```
 
-**4. RecyclerView тестирование**
-- Проблема: RecyclerView требует специальных подходов
-- Результат: сложность тестирования списков
-- Решение: использование RecyclerViewActions
+**4. RecyclerView assertions**
 
 ```kotlin
-// Тестирование RecyclerView
-@Test
-fun testRecyclerViewInteraction() {
-    // Проверка количества элементов
-    onView(withId(R.id.recycler_view))
-        .check(matches(withItemCount(10)))
+// ✅ Проверка конкретного элемента
+onView(withId(R.id.recycler))
+    .perform(scrollToPosition<ViewHolder>(5))
+    .check(matches(hasDescendant(withText("Item 5"))))
 
-    // Клик по элементу
-    onView(withId(R.id.recycler_view))
-        .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-
-    // Проверка текста в элементе
-    onView(withId(R.id.recycler_view))
-        .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(5))
-
-    onView(withText("Item 5"))
-        .check(matches(isDisplayed()))
-}
+// ✅ Действие на элементе с matcher
+onView(withId(R.id.recycler))
+    .perform(actionOnItem<ViewHolder>(
+        hasDescendant(withText("Delete")),
+        click()
+    ))
 ```
 
-**5. Обработка ошибок и retry**
-- Проблема: flaky тесты из-за timing issues
-- Результат: нестабильные тесты
-- Решение: retry механизмы и proper error handling
+### Архитектура
 
-```kotlin
-// Retry механизм для flaky тестов
-fun retryTest(maxAttempts: Int = 3, test: () -> Unit) {
-    var lastException: Throwable? = null
+**Espresso синхронизация:**
+- Автоматически ждет UI thread idle
+- Проверяет все зарегистрированные IdlingResources
+- Гарантирует отсутствие pending animations
+- Предотвращает race conditions
 
-    repeat(maxAttempts) { attempt ->
-        try {
-            test()
-            return
-        } catch (e: Throwable) {
-            lastException = e
-            if (attempt < maxAttempts - 1) {
-                Thread.sleep(1000) // Wait before retry
-            }
-        }
-    }
+**Matcher hierarchy:**
+- BaseMatcher - базовый класс, минимум type safety
+- TypeSafeMatcher - type-safe, для одного типа
+- BoundedMatcher - для View подклассов
 
-    throw lastException ?: AssertionError("Test failed after $maxAttempts attempts")
-}
-
-// Использование
-@Test
-fun flakyTest() {
-    retryTest {
-        onView(withText("Dynamic Content"))
-            .check(matches(isDisplayed()))
-    }
-}
-```
-
-### Теория Espresso
-
-**Архитектура Espresso:**
-- ViewInteraction: взаимодействие с View элементами
-- ViewAction: действия (click, type, swipe)
-- ViewAssertion: проверки (matches, isDisplayed)
-- Matcher: поиск элементов (withId, withText)
-
-**IdlingResource принципы:**
-- Espresso ждет пока все IdlingResource idle
-- Автоматическая синхронизация с UI thread
-- Предотвращение race conditions
-- Поддержка async операций
-
-**Custom Matchers:**
-- TypeSafeMatcher: type-safe проверки
-- BoundedMatcher: ограниченные типы
-- BaseMatcher: базовые matchers
-- describeTo(): описание для error messages
-
-**ViewActions:**
-- perform(): выполнение действия
-- getConstraints(): ограничения для View
-- getDescription(): описание действия
-- UiController: управление UI thread
-
-**Best Practices:**
-- Использовать IdlingResource для async операций
-- Создавать reusable custom matchers
-- Избегать sleep() в тестах
-- Proper cleanup в @After методах
-- Изолированные тесты без зависимостей
+**ViewAction контракт:**
+- getConstraints() - когда можно выполнить
+- perform() - что делать
+- getDescription() - для error messages
 
 ## Answer (EN)
 
-Espresso is Android's UI testing framework for View-based UIs. Advanced usage requires understanding IdlingResources, custom matchers, and complex interaction patterns.
+### Key Concepts
 
-### Key Patterns
+**IdlingResource** - synchronizes with async operations. Espresso waits until all resources idle before performing actions.
 
-**1. IdlingResource for async operations**
-- Problem: Espresso doesn't wait for async operations
-- Result: flaky tests, race conditions
-- Solution: IdlingResource tells Espresso when app is idle
+**Custom Matchers** - specific View checks. Extend TypeSafeMatcher or BoundedMatcher, implement matchesSafely() and describeTo().
+
+**Custom ViewActions** - complex UI interactions. Implement perform(), getConstraints(), getDescription().
+
+**RecyclerViewActions** - special actions for lists. Scrolling, position-based clicks, custom assertions.
+
+### Code Examples
+
+**1. IdlingResource for network requests**
 
 ```kotlin
-// Simple IdlingResource
-class SimpleIdlingResource : IdlingResource {
-    @Volatile private var callback: IdlingResource.ResourceCallback? = null
-    @Volatile private var isIdle = true
+// ✅ Correct implementation
+class NetworkIdlingResource : IdlingResource {
+    @Volatile private var callback: ResourceCallback? = null
+    @Volatile private var activeRequests = 0
 
-    override fun getName() = "SimpleIdlingResource"
-    override fun isIdleNow() = isIdle
+    override fun getName() = "NetworkIdlingResource"
+    override fun isIdleNow() = activeRequests == 0
 
-    override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback?) {
+    override fun registerIdleTransitionCallback(callback: ResourceCallback?) {
         this.callback = callback
     }
 
-    fun setIdleState(isIdle: Boolean) {
-        this.isIdle = isIdle
-        if (isIdle) callback?.onTransitionToIdle()
+    fun increment() {
+        activeRequests++
+    }
+
+    fun decrement() {
+        activeRequests--
+        if (isIdleNow) callback?.onTransitionToIdle()
     }
 }
 
-// Usage in test
+// Usage
 @Test
-fun testWithIdlingResource() {
-    val idlingResource = SimpleIdlingResource()
+fun testWithNetwork() {
+    val idlingResource = NetworkIdlingResource()
     IdlingRegistry.getInstance().register(idlingResource)
-
     try {
-        idlingResource.setIdleState(false)
-        // Start async operation
-        performAsyncOperation()
-        idlingResource.setIdleState(true)
-
+        onView(withId(R.id.button)).perform(click())
         onView(withText("Success")).check(matches(isDisplayed()))
     } finally {
         IdlingRegistry.getInstance().unregister(idlingResource)
@@ -319,17 +211,14 @@ fun testWithIdlingResource() {
 }
 ```
 
-**2. Custom Matchers**
-- Problem: standard matchers don't cover all cases
-- Result: complex tests, poor readability
-- Solution: create custom matchers for specific checks
+**2. Custom matcher for RecyclerView**
 
 ```kotlin
-// Custom matcher for RecyclerView
+// ✅ Type-safe matcher
 fun withItemCount(count: Int): Matcher<View> {
     return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
         override fun describeTo(description: Description) {
-            description.appendText("RecyclerView with item count: $count")
+            description.appendText("has $count items")
         }
 
         override fun matchesSafely(view: RecyclerView): Boolean {
@@ -338,177 +227,99 @@ fun withItemCount(count: Int): Matcher<View> {
     }
 }
 
-// Custom matcher for text with regex
-fun withTextMatching(regex: String): Matcher<View> {
-    return object : TypeSafeMatcher<View>() {
-        override fun describeTo(description: Description) {
-            description.appendText("with text matching: $regex")
-        }
-
-        override fun matchesSafely(item: View): Boolean {
-            if (item !is TextView) return false
-            return item.text.toString().matches(regex.toRegex())
-        }
-    }
+// ❌ Problem: no type safety
+fun badMatcher(count: Int) = object : BaseMatcher<View>() {
+    override fun matches(item: Any?) = (item as? RecyclerView)?.adapter?.itemCount == count
+    override fun describeTo(description: Description) {}
 }
-
-// Usage
-onView(withId(R.id.recycler_view))
-    .check(matches(withItemCount(5)))
-
-onView(withTextMatching("\\d+ items"))
-    .check(matches(isDisplayed()))
 ```
 
-**3. Custom ViewActions**
-- Problem: standard actions don't cover complex interactions
-- Result: inability to test complex UI patterns
-- Solution: create custom ViewActions
+**3. Custom ViewAction for drag**
 
 ```kotlin
-// Custom action for swipe with delay
-fun swipeWithDelay(direction: GeneralSwipeAction.Direction): ViewAction {
+// ✅ Complete implementation
+fun dragToPosition(x: Float, y: Float): ViewAction {
     return object : ViewAction {
-        override fun getConstraints(): Matcher<View> = isAssignableFrom(View::class.java)
+        override fun getConstraints() = isDisplayed()
 
-        override fun getDescription(): String = "swipe with delay to $direction"
+        override fun getDescription() = "drag to ($x, $y)"
 
         override fun perform(uiController: UiController, view: View) {
-            val coordinates = GeneralLocation.CENTER
-            val precision = GeneralLocation.CENTER
-            val startCoordinates = coordinates.calculateCoordinates(view)
-            val endCoordinates = precision.calculateCoordinates(view)
+            val location = IntArray(2)
+            view.getLocationOnScreen(location)
 
-            val startX = startCoordinates[0]
-            val startY = startCoordinates[1]
-            val endX = endCoordinates[0]
-            val endY = endCoordinates[1]
-
-            val swipeAction = GeneralSwipeAction(
-                Swipe.SLOW, startX, startY, endX, endY, precision
-            )
-            swipeAction.perform(uiController, view)
-        }
-    }
-}
-
-// Custom action for long press with custom duration
-fun longPressWithDuration(duration: Long): ViewAction {
-    return object : ViewAction {
-        override fun getConstraints(): Matcher<View> = isAssignableFrom(View::class.java)
-
-        override fun getDescription(): String = "long press with duration $duration"
-
-        override fun perform(uiController: UiController, view: View) {
-            val coordinates = GeneralLocation.CENTER
-            val precision = GeneralLocation.CENTER
-            val startCoordinates = coordinates.calculateCoordinates(view)
-
-            uiController.loopMainThreadUntilIdle()
-            uiController.loopMainThreadForAtLeast(duration)
+            MotionEvents.sendDown(uiController, location, Press.FINGER)
+            uiController.loopMainThreadForAtLeast(100)
+            MotionEvents.sendMovement(uiController, floatArrayOf(x, y))
+            MotionEvents.sendUp(uiController, floatArrayOf(x, y))
         }
     }
 }
 ```
 
-**4. RecyclerView testing**
-- Problem: RecyclerView requires special approaches
-- Result: complexity in testing lists
-- Solution: use RecyclerViewActions
+**4. RecyclerView assertions**
 
 ```kotlin
-// Testing RecyclerView
-@Test
-fun testRecyclerViewInteraction() {
-    // Check item count
-    onView(withId(R.id.recycler_view))
-        .check(matches(withItemCount(10)))
+// ✅ Check specific item
+onView(withId(R.id.recycler))
+    .perform(scrollToPosition<ViewHolder>(5))
+    .check(matches(hasDescendant(withText("Item 5"))))
 
-    // Click on item
-    onView(withId(R.id.recycler_view))
-        .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-
-    // Check text in item
-    onView(withId(R.id.recycler_view))
-        .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(5))
-
-    onView(withText("Item 5"))
-        .check(matches(isDisplayed()))
-}
+// ✅ Action on item with matcher
+onView(withId(R.id.recycler))
+    .perform(actionOnItem<ViewHolder>(
+        hasDescendant(withText("Delete")),
+        click()
+    ))
 ```
 
-**5. Error handling and retry**
-- Problem: flaky tests due to timing issues
-- Result: unstable tests
-- Solution: retry mechanisms and proper error handling
+### Architecture
 
-```kotlin
-// Retry mechanism for flaky tests
-fun retryTest(maxAttempts: Int = 3, test: () -> Unit) {
-    var lastException: Throwable? = null
-
-    repeat(maxAttempts) { attempt ->
-        try {
-            test()
-            return
-        } catch (e: Throwable) {
-            lastException = e
-            if (attempt < maxAttempts - 1) {
-                Thread.sleep(1000) // Wait before retry
-            }
-        }
-    }
-
-    throw lastException ?: AssertionError("Test failed after $maxAttempts attempts")
-}
-
-// Usage
-@Test
-fun flakyTest() {
-    retryTest {
-        onView(withText("Dynamic Content"))
-            .check(matches(isDisplayed()))
-    }
-}
-```
-
-### Espresso Theory
-
-**Espresso Architecture:**
-- ViewInteraction: interaction with View elements
-- ViewAction: actions (click, type, swipe)
-- ViewAssertion: checks (matches, isDisplayed)
-- Matcher: element finding (withId, withText)
-
-**IdlingResource principles:**
-- Espresso waits until all IdlingResources are idle
-- Automatic synchronization with UI thread
+**Espresso synchronization:**
+- Automatically waits for UI thread idle
+- Checks all registered IdlingResources
+- Ensures no pending animations
 - Prevents race conditions
-- Supports async operations
 
-**Custom Matchers:**
-- TypeSafeMatcher: type-safe checks
-- BoundedMatcher: bounded types
-- BaseMatcher: basic matchers
-- describeTo(): description for error messages
+**Matcher hierarchy:**
+- BaseMatcher - base class, minimal type safety
+- TypeSafeMatcher - type-safe, single type
+- BoundedMatcher - for View subclasses
 
-**ViewActions:**
-- perform(): execute action
-- getConstraints(): View constraints
-- getDescription(): action description
-- UiController: UI thread control
+**ViewAction contract:**
+- getConstraints() - when can execute
+- perform() - what to do
+- getDescription() - for error messages
 
-**Best Practices:**
-- Use IdlingResource for async operations
-- Create reusable custom matchers
-- Avoid sleep() in tests
-- Proper cleanup in @After methods
-- Isolated tests without dependencies
-
-**See also:** c-ui-testing, c-test-automation
-
+---
 
 ## Follow-ups
-- How to test Compose UI with Espresso?
-- What's the difference between Espresso and UI Automator?
-- How to handle flaky tests in CI/CD?
+
+- How to debug flaky Espresso tests?
+- When to use UI Automator instead of Espresso?
+- How to test WebView content with Espresso?
+- What are alternatives to sleep() in tests?
+- How to handle dialogs and fragments?
+
+## References
+
+- [[c-ui-testing]]
+- [[c-test-automation]]
+- [[q-android-testing-strategies--android--medium]]
+- https://developer.android.com/training/testing/espresso/idling-resource
+- https://developer.android.com/training/testing/espresso/recipes
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-android-testing-basics--android--easy]]
+- [[q-espresso-basics--android--easy]]
+
+### Related (Same Level)
+- [[q-android-testing-strategies--android--medium]]
+- [[q-ui-testing-best-practices--testing--medium]]
+- [[q-android-testing-tools--testing--medium]]
+
+### Advanced (Harder)
+- [[q-compose-testing-advanced--android--hard]]
+- [[q-test-automation-architecture--testing--hard]]

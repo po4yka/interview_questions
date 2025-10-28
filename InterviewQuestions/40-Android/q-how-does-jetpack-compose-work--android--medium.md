@@ -1,298 +1,57 @@
 ---
 id: 20251012-1227159
 title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
+aliases: [Jetpack Compose, Compose UI, Декларативный UI, Declarative UI]
 topic: android
+subtopics: [ui-compose, architecture-mvvm]
+question_kind: theory
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-certificate-pinning--security--medium, q-how-to-create-animations-in-android--android--medium, q-singleton-scope-binding--android--medium]
+related: [q-jetpack-compose-basics--android--medium, q-what-are-the-most-important-components-of-compose--android--medium, q-mutable-state-compose--android--medium]
 created: 2025-10-15
-tags: [compose, declarative-ui, difficulty/medium, jetpack-compose, recomposition]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:40:12 pm
+updated: 2025-10-28
+sources: []
+tags: [android/ui-compose, android/architecture-mvvm, compose, declarative-ui, recomposition, difficulty/medium]
 ---
 
-# How Does Jetpack Compose Work?
+# Вопрос (RU)
 
-## EN (expanded)
+> Как работает Jetpack Compose? Объясните основные принципы декларативного UI и процесс рендеринга.
 
-### What is Jetpack Compose?
+# Question (EN)
 
-Jetpack Compose is Google's modern, declarative UI framework for building native Android interfaces. It fundamentally changes how Android UIs are created by replacing XML layouts with Kotlin functions.
-
-### Core Principles
-
-#### 1. Declarative Approach
-
-Instead of imperatively describing how to change UI, you declare what the UI should look like:
-
-**Traditional View System (Imperative):**
-```kotlin
-// Update UI by changing properties
-textView.text = "Hello"
-textView.visibility = View.VISIBLE
-button.isEnabled = true
-```
-
-**Compose (Declarative):**
-```kotlin
-@Composable
-fun Greeting(name: String, isVisible: Boolean) {
-    if (isVisible) {
-        Text(text = "Hello $name")
-    }
-    Button(
-        onClick = { /* action */ },
-        enabled = true
-    ) {
-        Text("Click me")
-    }
-}
-```
-
-#### 2. Reactivity
-
-UI automatically updates when data changes:
-
-```kotlin
-@Composable
-fun Counter() {
-    var count by remember { mutableStateOf(0) }
-
-    Column {
-        Text("Count: $count") // Auto-updates when count changes
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-```
-
-#### 3. Component-Based Architecture
-
-UI is built from small, reusable composable functions:
-
-```kotlin
-@Composable
-fun UserCard(user: User) {
-    Card {
-        Column {
-            UserAvatar(user.avatarUrl)
-            UserName(user.name)
-            UserBio(user.bio)
-        }
-    }
-}
-
-@Composable
-fun UserAvatar(url: String) {
-    Image(
-        painter = rememberImagePainter(url),
-        contentDescription = "User avatar"
-    )
-}
-```
-
-### Composable Functions
-
-The foundation of Compose is the `@Composable` annotation:
-
-```kotlin
-@Composable
-fun MyComponent() {
-    Text("This is a composable function")
-}
-```
-
-**Key Characteristics:**
-- Must be annotated with `@Composable`
-- Can only be called from other composable functions
-- Describe UI structure
-- Can maintain state with `remember`
-- Can trigger recomposition when state changes
-
-### How Compose Renders
-
-The rendering process has three phases:
-
-#### 1. Composition Phase
-```kotlin
-@Composable
-fun Example() {
-    // Compose builds UI tree
-    Column {
-        Text("Header")
-        Button(onClick = {}) { Text("Action") }
-    }
-}
-```
-
-#### 2. Layout Phase
-```kotlin
-// Compose measures and positions elements
-Box(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(200.dp)
-) {
-    Text(
-        text = "Centered",
-        modifier = Modifier.align(Alignment.Center)
-    )
-}
-```
-
-#### 3. Drawing Phase
-```kotlin
-// Compose renders to Canvas
-Canvas(modifier = Modifier.size(100.dp)) {
-    drawCircle(color = Color.Blue)
-}
-```
-
-### State Management
-
-State drives recomposition:
-
-```kotlin
-@Composable
-fun LoginScreen() {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    Column {
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") }
-        )
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") }
-        )
-        Button(
-            onClick = { login(email, password) },
-            enabled = email.isNotEmpty() && password.isNotEmpty()
-        ) {
-            Text("Login")
-        }
-    }
-}
-```
-
-### Recomposition
-
-Compose intelligently recomposes only changed parts:
-
-```kotlin
-@Composable
-fun SmartRecomposition() {
-    var counter by remember { mutableStateOf(0) }
-
-    Column {
-        // Recomposes when counter changes
-        Text("Counter: $counter")
-
-        // Doesn't recompose (no state dependency)
-        StaticHeader()
-
-        Button(onClick = { counter++ }) {
-            Text("Increment")
-        }
-    }
-}
-
-@Composable
-fun StaticHeader() {
-    Text("This is static") // Won't recompose
-}
-```
-
-### Side Effects
-
-Manage side effects with dedicated APIs:
-
-```kotlin
-@Composable
-fun UserProfile(userId: String) {
-    var user by remember { mutableStateOf<User?>(null) }
-
-    LaunchedEffect(userId) {
-        // Runs when userId changes
-        user = fetchUser(userId)
-    }
-
-    DisposableEffect(Unit) {
-        // Cleanup when composable leaves composition
-        onDispose {
-            cleanup()
-        }
-    }
-
-    user?.let { UserCard(it) }
-}
-```
-
-### Modifiers
-
-Modifiers configure composable appearance and behavior:
-
-```kotlin
-@Composable
-fun StyledComponent() {
-    Text(
-        text = "Styled Text",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(Color.LightGray)
-            .clickable { /* action */ }
-    )
-}
-```
+> How does Jetpack Compose work? Explain the core principles of declarative UI and the rendering process.
 
 ---
 
-## RU (original)
+## Ответ (RU)
 
-### Что Такое Jetpack Compose?
+**Подход**: Jetpack Compose использует декларативный подход для построения UI, где вы описываете "что" должно отображаться, а не "как" это сделать.
 
-Jetpack Compose — это современный декларативный UI-фреймворк от Google для создания нативных интерфейсов Android. Он фундаментально меняет способ создания UI в Android, заменяя XML-макеты функциями на Kotlin.
+**Основные Концепции**:
 
-### Основные Принципы
+### 1. Декларативный vs Императивный
 
-#### 1. Декларативный Подход
-
-Вместо императивного описания того, как изменить UI, вы декларируете, как UI должен выглядеть:
-
-**Традиционная система View (императивный стиль):**
 ```kotlin
-// Обновление UI путем изменения свойств
+// ❌ Императивный (View System)
 textView.text = "Привет"
 textView.visibility = View.VISIBLE
-button.isEnabled = true
-```
 
-**Compose (декларативный стиль):**
-```kotlin
+// ✅ Декларативный (Compose)
 @Composable
 fun Greeting(name: String, isVisible: Boolean) {
     if (isVisible) {
-        Text(text = "Привет $name")
-    }
-    Button(
-        onClick = { /* действие */ },
-        enabled = true
-    ) {
-        Text("Нажми меня")
+        Text("Привет $name")
     }
 }
 ```
 
-#### 2. Реактивность
+### 2. Composable-функции
 
-UI автоматически обновляется при изменении данных:
+Основа фреймворка - функции с аннотацией `@Composable`:
 
 ```kotlin
 @Composable
@@ -300,7 +59,7 @@ fun Counter() {
     var count by remember { mutableStateOf(0) }
 
     Column {
-        Text("Счет: $count") // Автоматически обновляется при изменении count
+        Text("Счет: $count")
         Button(onClick = { count++ }) {
             Text("Увеличить")
         }
@@ -308,122 +67,34 @@ fun Counter() {
 }
 ```
 
-#### 3. Компонентная Архитектура
+**Характеристики**:
+- Вызываются только из других composable-функций
+- Могут поддерживать состояние через `remember`
+- Запускают рекомпозицию при изменении состояния
 
-UI строится из небольших переиспользуемых composable-функций:
+### 3. Три Фазы Рендеринга
 
-```kotlin
-@Composable
-fun UserCard(user: User) {
-    Card {
-        Column {
-            UserAvatar(user.avatarUrl)
-            UserName(user.name)
-            UserBio(user.bio)
-        }
-    }
-}
-
-@Composable
-fun UserAvatar(url: String) {
-    Image(
-        painter = rememberImagePainter(url),
-        contentDescription = "Аватар пользователя"
-    )
-}
-```
-
-### Composable-функции
-
-Основа Compose — это аннотация `@Composable`:
+**Composition** → **Layout** → **Drawing**
 
 ```kotlin
-@Composable
-fun MyComponent() {
-    Text("Это composable-функция")
+// 1. Composition - строит дерево UI
+Column {
+    Text("Заголовок")
+    Button(onClick = {}) { Text("Действие") }
 }
-```
 
-**Ключевые характеристики:**
-- Должна быть аннотирована `@Composable`
-- Может вызываться только из других composable-функций
-- Описывает структуру UI
-- Может поддерживать состояние с помощью `remember`
-- Может запускать рекомпозицию при изменении состояния
-
-### Как Compose Отрисовывает UI
-
-Процесс отрисовки состоит из трех фаз:
-
-#### 1. Фаза Композиции
-```kotlin
-@Composable
-fun Example() {
-    // Compose строит дерево UI
-    Column {
-        Text("Заголовок")
-        Button(onClick = {}) { Text("Действие") }
-    }
+// 2. Layout - измеряет и позиционирует
+Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+    Text(modifier = Modifier.align(Alignment.Center))
 }
-```
 
-#### 2. Фаза Компоновки
-```kotlin
-// Compose измеряет и позиционирует элементы
-Box(
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(200.dp)
-) {
-    Text(
-        text = "По центру",
-        modifier = Modifier.align(Alignment.Center)
-    )
-}
-```
-
-#### 3. Фаза Отрисовки
-```kotlin
-// Compose рендерит на Canvas
+// 3. Drawing - рендерит на Canvas
 Canvas(modifier = Modifier.size(100.dp)) {
     drawCircle(color = Color.Blue)
 }
 ```
 
-### Управление Состоянием
-
-Состояние управляет рекомпозицией:
-
-```kotlin
-@Composable
-fun LoginScreen() {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    Column {
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") }
-        )
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Пароль") }
-        )
-        Button(
-            onClick = { login(email, password) },
-            enabled = email.isNotEmpty() && password.isNotEmpty()
-        ) {
-            Text("Войти")
-        }
-    }
-}
-```
-
-### Рекомпозиция
-
-Compose интеллектуально перекомпонует только измененные части:
+### 4. Умная Рекомпозиция
 
 ```kotlin
 @Composable
@@ -431,27 +102,14 @@ fun SmartRecomposition() {
     var counter by remember { mutableStateOf(0) }
 
     Column {
-        // Перекомпонуется при изменении counter
-        Text("Счетчик: $counter")
-
-        // Не перекомпонуется (нет зависимости от состояния)
-        StaticHeader()
-
-        Button(onClick = { counter++ }) {
-            Text("Увеличить")
-        }
+        Text("Счетчик: $counter") // ✅ Перекомпонуется
+        StaticHeader() // ✅ Пропускается (нет зависимостей)
+        Button(onClick = { counter++ }) { Text("Увеличить") }
     }
-}
-
-@Composable
-fun StaticHeader() {
-    Text("Это статический заголовок") // Не будет перекомпонован
 }
 ```
 
-### Побочные Эффекты
-
-Управление побочными эффектами с помощью специальных API:
+### 5. Управление Побочными Эффектами
 
 ```kotlin
 @Composable
@@ -459,56 +117,154 @@ fun UserProfile(userId: String) {
     var user by remember { mutableStateOf<User?>(null) }
 
     LaunchedEffect(userId) {
-        // Выполняется при изменении userId
-        user = fetchUser(userId)
+        user = fetchUser(userId) // Запускается при изменении userId
     }
 
     DisposableEffect(Unit) {
-        // Очистка при выходе composable из композиции
-        onDispose {
-            cleanup()
-        }
+        onDispose { cleanup() } // Очистка
     }
 
     user?.let { UserCard(it) }
 }
 ```
 
-### Модификаторы
+**Сложность**: Recomposition - O(n) где n - измененные composable, Layout - O(n), Drawing - O(n)
 
-Модификаторы настраивают внешний вид и поведение composable-элементов:
+---
+
+## Answer (EN)
+
+**Approach**: Jetpack Compose uses a declarative approach where you describe "what" the UI should look like, not "how" to build it.
+
+**Core Concepts**:
+
+### 1. Declarative vs Imperative
 
 ```kotlin
+// ❌ Imperative (View System)
+textView.text = "Hello"
+textView.visibility = View.VISIBLE
+
+// ✅ Declarative (Compose)
 @Composable
-fun StyledComponent() {
-    Text(
-        text = "Стилизованный текст",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(Color.LightGray)
-            .clickable { /* действие */ }
-    )
+fun Greeting(name: String, isVisible: Boolean) {
+    if (isVisible) {
+        Text("Hello $name")
+    }
 }
 ```
 
+### 2. Composable Functions
+
+Foundation - functions annotated with `@Composable`:
+
+```kotlin
+@Composable
+fun Counter() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Count: $count")
+        Button(onClick = { count++ }) {
+            Text("Increment")
+        }
+    }
+}
+```
+
+**Characteristics**:
+- Called only from other composable functions
+- Can maintain state via `remember`
+- Trigger recomposition on state changes
+
+### 3. Three Rendering Phases
+
+**Composition** → **Layout** → **Drawing**
+
+```kotlin
+// 1. Composition - builds UI tree
+Column {
+    Text("Header")
+    Button(onClick = {}) { Text("Action") }
+}
+
+// 2. Layout - measures and positions
+Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+    Text(modifier = Modifier.align(Alignment.Center))
+}
+
+// 3. Drawing - renders to Canvas
+Canvas(modifier = Modifier.size(100.dp)) {
+    drawCircle(color = Color.Blue)
+}
+```
+
+### 4. Smart Recomposition
+
+```kotlin
+@Composable
+fun SmartRecomposition() {
+    var counter by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Counter: $counter") // ✅ Recomposes
+        StaticHeader() // ✅ Skipped (no dependencies)
+        Button(onClick = { counter++ }) { Text("Increment") }
+    }
+}
+```
+
+### 5. Side Effects Management
+
+```kotlin
+@Composable
+fun UserProfile(userId: String) {
+    var user by remember { mutableStateOf<User?>(null) }
+
+    LaunchedEffect(userId) {
+        user = fetchUser(userId) // Runs when userId changes
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { cleanup() } // Cleanup
+    }
+
+    user?.let { UserCard(it) }
+}
+```
+
+**Complexity**: Recomposition - O(n) where n is changed composables, Layout - O(n), Drawing - O(n)
 
 ---
+
+## Follow-ups
+
+- How does Compose determine what to recompose?
+- What is the difference between remember and rememberSaveable?
+- How do modifiers work and what is the order of execution?
+- What are stable classes and why do they matter?
+- How does Compose integrate with ViewModel?
+
+## References
+
+- [[c-compose-ui]] - Compose UI fundamentals
+- [[c-declarative-programming]] - Declarative programming paradigm
+- [[c-recomposition]] - Recomposition mechanics
+- https://developer.android.com/jetpack/compose/mental-model
 
 ## Related Questions
 
-### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+### Prerequisites (Easier)
+- [[q-what-is-jetpack-compose--android--easy]] - Basic introduction
 
-### Related (Medium)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
-- [[q-compose-remember-derived-state--android--medium]] - Derived state patterns
+### Related (Same Level)
+- [[q-jetpack-compose-basics--android--medium]] - Comprehensive introduction
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential components
+- [[q-mutable-state-compose--android--medium]] - State management
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - State persistence
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Lists in Compose
 
 ### Advanced (Harder)
 - [[q-compose-stability-skippability--android--hard]] - Stability & skippability
 - [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
-
+- [[q-compose-performance-optimization--android--hard]] - Performance tuning

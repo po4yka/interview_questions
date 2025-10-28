@@ -12,11 +12,9 @@ status: draft
 moc: moc-android
 related: [c-dialog, c-fragment, q-fragment-lifecycle--android--medium]
 created: 2025-10-15
-updated: 2025-01-25
+updated: 2025-10-28
 tags: [android/lifecycle, android/ui-components, dialog, difficulty/medium, fragment, lifecycle]
-sources: [https://developer.android.com/guide/fragments]
-date created: Saturday, October 25th 2025, 4:09:48 pm
-date modified: Saturday, October 25th 2025, 4:52:07 pm
+sources: [https://developer.android.com/guide/fragments, https://developer.android.com/develop/ui/views/components/dialogs]
 ---
 
 # Вопрос (RU)
@@ -29,227 +27,205 @@ date modified: Saturday, October 25th 2025, 4:52:07 pm
 
 ## Ответ (RU)
 
-**Теория различий:**
-Dialog и Fragment - это разные UI компоненты с различными целями и жизненными циклами. Dialog предназначен для краткосрочных взаимодействий, а Fragment - для модульных, переиспользуемых частей интерфейса.
+**Концепция:**
+Dialog и Fragment решают разные задачи. Dialog - модальное окно для краткосрочных взаимодействий (подтверждения, ввод данных). Fragment - модульная часть UI с полным жизненным циклом для построения экранов.
 
-**Основные различия:**
-- **Назначение**: Dialog для быстрых действий, Fragment для сложных экранов
-- **Жизненный цикл**: Dialog временный, Fragment полный lifecycle
-- **Сложность**: Dialog простой, Fragment может быть сложным
-- **Навигация**: Dialog не участвует в стеке, Fragment - часть навигации
+**Ключевые различия:**
 
-**Dialog - краткосрочные взаимодействия:**
+| Аспект | Dialog | Fragment |
+|--------|--------|----------|
+| **Назначение** | Временные взаимодействия | Переиспользуемые экраны |
+| **Lifecycle** | Упрощенный (show/dismiss) | Полный (onCreate → onDestroy) |
+| **Navigation** | Не в back stack | Часть навигации |
+| **Сложность** | Простые формы | Сложные UI с состоянием |
+
+**Dialog (Views):**
 ```kotlin
-// Простой диалог подтверждения
+// ✅ Простые подтверждения
 AlertDialog.Builder(context)
-    .setTitle("Удалить элемент")
-    .setMessage("Это действие нельзя отменить")
-    .setPositiveButton("Удалить") { _, _ -> deleteItem() }
-    .setNegativeButton("Отмена", null)
+    .setTitle("Удалить?")
+    .setMessage("Действие нельзя отменить")
+    .setPositiveButton("Да") { _, _ -> delete() }
+    .setNegativeButton("Нет", null)
     .show()
 ```
 
-**Fragment - модульный UI компонент:**
+**DialogFragment (Views):**
 ```kotlin
-class UserProfileFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_user_profile, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // Настройка сложного UI, data binding
-    }
-}
-```
-
-**DialogFragment - мост между обоими:**
-```kotlin
-class ConfirmationDialogFragment : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext())
+// ✅ Управление lifecycle и rotation
+class ConfirmDialog : DialogFragment() {
+    override fun onCreateDialog(saved: Bundle?): Dialog =
+        AlertDialog.Builder(requireContext())
             .setTitle("Подтверждение")
-            .setMessage("Продолжить это действие?")
-            .setPositiveButton("Да") { _, _ ->
-                // Обработка подтверждения
-            }
+            .setPositiveButton("Да") { _, _ -> confirm() }
             .setNegativeButton("Нет", null)
             .create()
-    }
 }
 
-// Показать диалог
-ConfirmationDialogFragment().show(
-    supportFragmentManager,
-    "confirmation"
-)
+// Show
+ConfirmDialog().show(supportFragmentManager, "confirm")
 ```
 
-**В Jetpack Compose:**
+**Fragment (Views):**
 ```kotlin
-// Dialog в Compose
+// ✅ Сложные экраны с состоянием
+class ProfileFragment : Fragment(R.layout.fragment_profile) {
+    private val viewModel: ProfileViewModel by viewModels()
+
+    override fun onViewCreated(view: View, saved: Bundle?) {
+        super.onViewCreated(view, saved)
+        viewModel.profile.observe(viewLifecycleOwner) { profile ->
+            bind(profile)
+        }
+    }
+}
+```
+
+**Compose equivalents:**
+```kotlin
+// ✅ Dialog в Compose
 @Composable
-fun ConfirmationDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit
-) {
+fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Подтверждение") },
-        text = { Text("Продолжить это действие?") },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text("Да")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Нет")
-            }
-        }
+        confirmButton = { TextButton(onClick = onConfirm) { Text("Да") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Нет") } },
+        title = { Text("Подтверждение") }
     )
 }
 
-// Screen (эквивалент Fragment) в Compose
+// ✅ Screen (аналог Fragment)
 @Composable
-fun UserProfileScreen(
-    viewModel: UserProfileViewModel = hiltViewModel()
-) {
-    val userState by viewModel.userState.collectAsState()
+fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
+    val profile by viewModel.profile.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        UserHeader(user = userState.user)
-        UserStats(stats = userState.stats)
-        UserContent(content = userState.content)
+    Column {
+        ProfileHeader(profile)
+        ProfileContent(profile)
     }
 }
 ```
+
+**Когда использовать:**
+- **Dialog**: Подтверждения, ошибки, короткий ввод данных
+- **DialogFragment**: Те же случаи + нужен lifecycle (rotation, state)
+- **Fragment**: Полноценные экраны, навигация, сложное состояние
 
 ## Answer (EN)
 
-**Difference Theory:**
-Dialog and Fragment are different UI components with different purposes and lifecycles. Dialog is designed for short-term interactions, while Fragment is for modular, reusable interface parts.
+**Concept:**
+Dialog and Fragment solve different problems. Dialog is a modal window for short interactions (confirmations, data input). Fragment is a modular UI part with full lifecycle for building screens.
 
-**Main differences:**
-- **Purpose**: Dialog for quick actions, Fragment for complex screens
-- **Lifecycle**: Dialog temporary, Fragment full lifecycle
-- **Complexity**: Dialog simple, Fragment can be complex
-- **Navigation**: Dialog doesn't participate in stack, Fragment is part of navigation
+**Key differences:**
 
-**Dialog - short-term interactions:**
+| Aspect | Dialog | Fragment |
+|--------|--------|----------|
+| **Purpose** | Temporary interactions | Reusable screens |
+| **Lifecycle** | Simplified (show/dismiss) | Full (onCreate → onDestroy) |
+| **Navigation** | Not in back stack | Part of navigation |
+| **Complexity** | Simple forms | Complex UI with state |
+
+**Dialog (Views):**
 ```kotlin
-// Simple confirmation dialog
+// ✅ Simple confirmations
 AlertDialog.Builder(context)
-    .setTitle("Delete Item")
-    .setMessage("This action cannot be undone")
-    .setPositiveButton("Delete") { _, _ -> deleteItem() }
-    .setNegativeButton("Cancel", null)
+    .setTitle("Delete?")
+    .setMessage("Cannot be undone")
+    .setPositiveButton("Yes") { _, _ -> delete() }
+    .setNegativeButton("No", null)
     .show()
 ```
 
-**Fragment - modular UI component:**
+**DialogFragment (Views):**
 ```kotlin
-class UserProfileFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_user_profile, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // Complex UI setup, data binding
-    }
-}
-```
-
-**DialogFragment - bridge between both:**
-```kotlin
-class ConfirmationDialogFragment : DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext())
+// ✅ Lifecycle and rotation management
+class ConfirmDialog : DialogFragment() {
+    override fun onCreateDialog(saved: Bundle?): Dialog =
+        AlertDialog.Builder(requireContext())
             .setTitle("Confirmation")
-            .setMessage("Proceed with this action?")
-            .setPositiveButton("Yes") { _, _ ->
-                // Handle confirmation
-            }
+            .setPositiveButton("Yes") { _, _ -> confirm() }
             .setNegativeButton("No", null)
             .create()
-    }
 }
 
-// Show dialog
-ConfirmationDialogFragment().show(
-    supportFragmentManager,
-    "confirmation"
-)
+// Show
+ConfirmDialog().show(supportFragmentManager, "confirm")
 ```
 
-**In Jetpack Compose:**
+**Fragment (Views):**
 ```kotlin
-// Dialog in Compose
+// ✅ Complex screens with state
+class ProfileFragment : Fragment(R.layout.fragment_profile) {
+    private val viewModel: ProfileViewModel by viewModels()
+
+    override fun onViewCreated(view: View, saved: Bundle?) {
+        super.onViewCreated(view, saved)
+        viewModel.profile.observe(viewLifecycleOwner) { profile ->
+            bind(profile)
+        }
+    }
+}
+```
+
+**Compose equivalents:**
+```kotlin
+// ✅ Dialog in Compose
 @Composable
-fun ConfirmationDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit
-) {
+fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Confirmation") },
-        text = { Text("Proceed with this action?") },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text("Yes")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("No")
-            }
-        }
+        confirmButton = { TextButton(onClick = onConfirm) { Text("Yes") } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("No") } },
+        title = { Text("Confirmation") }
     )
 }
 
-// Screen (equivalent to Fragment) in Compose
+// ✅ Screen (Fragment equivalent)
 @Composable
-fun UserProfileScreen(
-    viewModel: UserProfileViewModel = hiltViewModel()
-) {
-    val userState by viewModel.userState.collectAsState()
+fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
+    val profile by viewModel.profile.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        UserHeader(user = userState.user)
-        UserStats(stats = userState.stats)
-        UserContent(content = userState.content)
+    Column {
+        ProfileHeader(profile)
+        ProfileContent(profile)
     }
 }
 ```
+
+**When to use:**
+- **Dialog**: Confirmations, errors, short data input
+- **DialogFragment**: Same cases + need lifecycle (rotation, state)
+- **Fragment**: Full screens, navigation, complex state
 
 ---
 
 ## Follow-ups
 
-- When should you use DialogFragment instead of regular Dialog?
-- How do you handle state in dialogs vs fragments?
-- What are the performance implications of each?
+- Why use DialogFragment over regular Dialog for rotation handling?
+- How to pass data between DialogFragment and parent Fragment?
+- What happens to Dialog state during configuration changes?
+- Can Fragment handle modal behavior like Dialog?
+- How does Compose Dialog differ from Views AlertDialog?
+
+## References
+
+- [[c-dialog]] - Dialog patterns
+- [[c-fragment]] - Fragment architecture
+- https://developer.android.com/guide/fragments
+- https://developer.android.com/develop/ui/views/components/dialogs
+- https://developer.android.com/develop/ui/compose/components/dialog
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] - App components
-- [[q-fragment-basics--android--easy]] - Fragment basics
+- [[q-activity-vs-fragment--android--easy]] - Activity vs Fragment basics
+- [[q-fragment-basics--android--easy]] - Fragment fundamentals
 
 ### Related (Same Level)
 - [[q-fragment-lifecycle--android--medium]] - Fragment lifecycle
-- [[q-dialog-best-practices--android--medium]] - Dialog practices
-- [[q-fragmentmanager-vs-fragmenttransaction--android--medium]] - Fragment management
+- [[q-bottomsheet-vs-dialog--android--medium]] - BottomSheet vs Dialog
+- [[q-dialog-state-management--android--medium]] - Dialog state
 
 ### Advanced (Harder)
-- [[q-fragment-architecture--android--hard]] - Fragment architecture
-- [[q-dialog-custom-implementation--android--hard]] - Custom dialogs
+- [[q-fragment-result-api--android--hard]] - Fragment communication
+- [[q-custom-dialog-implementation--android--hard]] - Custom dialogs

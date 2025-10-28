@@ -1,183 +1,108 @@
 ---
 id: 20251012-1227187
-title: "How To Organize Work With Text And Images In A Delegate / How To Organize Work With Text и Images In A Delegate"
+title: "How To Organize Work With Text And Images In A Delegate / Как Организовать Работу С Текстом И Картинками В Делегате"
+aliases: [Adapter Delegates, RecyclerView Delegates, Делегаты адаптера]
 topic: android
+subtopics: [recyclerview, ui-patterns, adapters]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fakes-vs-mocks-testing--testing--medium, q-room-code-generation-timing--android--medium, q-which-layout-for-large-list--android--easy]
+related: [q-which-layout-for-large-list--android--easy, q-room-code-generation-timing--android--medium, c-recyclerview]
 created: 2025-10-15
-tags: [android/recyclerview, delegates, difficulty/easy, recyclerview, ui]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:24 pm
+updated: 2025-10-28
+sources: []
+tags: [android/recyclerview, android/ui-patterns, android/adapters, delegates, difficulty/easy]
 ---
 
-# Как Организовать Работу С Текстом И Картинками В Делегате?
+# Вопрос (RU)
 
-**English**: How to organize work with text and images in a delegate?
+> Как организовать работу с текстом и картинками в делегате RecyclerView?
 
-## Answer (EN)
-For managing text and images in RecyclerView, use **delegates** (also known as Adapter Delegates) which separate display logic for different data types. This simplifies code and improves maintainability.
+# Question (EN)
 
-### What Are Adapter Delegates?
+> How to organize work with text and images in a RecyclerView delegate?
 
-Adapter Delegates is a pattern that allows you to split complex RecyclerView adapters into smaller, reusable pieces. Each delegate handles a specific item type (e.g., text items, image items, mixed items).
+---
 
-### Basic Implementation
+## Ответ (RU)
 
-#### 1. Define Data Models
+Используйте **паттерн Adapter Delegates** для разделения логики отображения разных типов элементов (текст, изображения, комбинированные). Каждый делегат отвечает за свой тип данных.
+
+**Подход**: Создать sealed class для типов данных, отдельные ViewHolder'ы и делегаты для каждого типа
+**Преимущества**: Разделение ответственности, переиспользование, масштабируемость
+
+### Базовая реализация
+
+**Модели данных**:
 
 ```kotlin
-// Base interface for list items
 sealed class ListItem
 
-data class TextItem(
-    val id: String,
-    val title: String,
-    val description: String
-) : ListItem()
-
-data class ImageItem(
-    val id: String,
-    val imageUrl: String,
-    val caption: String
-) : ListItem()
-
-data class TextImageItem(
-    val id: String,
-    val title: String,
-    val imageUrl: String,
-    val description: String
-) : ListItem()
+data class TextItem(val title: String, val description: String) : ListItem()
+data class ImageItem(val imageUrl: String, val caption: String) : ListItem()
+data class MixedItem(val title: String, val imageUrl: String) : ListItem()
 ```
 
-#### 2. Create ViewHolders for Each Type
-
-```kotlin
-// ViewHolder for text items
-class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val titleTextView: TextView = itemView.findViewById(R.id.titleText)
-    private val descriptionTextView: TextView = itemView.findViewById(R.id.descriptionText)
-
-    fun bind(item: TextItem) {
-        titleTextView.text = item.title
-        descriptionTextView.text = item.description
-    }
-}
-
-// ViewHolder for image items
-class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val imageView: ImageView = itemView.findViewById(R.id.image)
-    private val captionTextView: TextView = itemView.findViewById(R.id.caption)
-
-    fun bind(item: ImageItem) {
-        Glide.with(itemView.context)
-            .load(item.imageUrl)
-            .into(imageView)
-        captionTextView.text = item.caption
-    }
-}
-
-// ViewHolder for text + image items
-class TextImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val titleTextView: TextView = itemView.findViewById(R.id.title)
-    private val imageView: ImageView = itemView.findViewById(R.id.image)
-    private val descriptionTextView: TextView = itemView.findViewById(R.id.description)
-
-    fun bind(item: TextImageItem) {
-        titleTextView.text = item.title
-        descriptionTextView.text = item.description
-        Glide.with(itemView.context)
-            .load(item.imageUrl)
-            .placeholder(R.drawable.placeholder)
-            .error(R.drawable.error_image)
-            .into(imageView)
-    }
-}
-```
-
-#### 3. Create Adapter with Delegates
+**Адаптер с делегатами**:
 
 ```kotlin
 class MultiTypeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     private val items = mutableListOf<ListItem>()
 
-    companion object {
-        private const val TYPE_TEXT = 0
-        private const val TYPE_IMAGE = 1
-        private const val TYPE_TEXT_IMAGE = 2
+    override fun getItemViewType(position: Int) = when (items[position]) {
+        is TextItem -> TYPE_TEXT
+        is ImageItem -> TYPE_IMAGE
+        is MixedItem -> TYPE_MIXED
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is TextItem -> TYPE_TEXT
-            is ImageItem -> TYPE_IMAGE
-            is TextImageItem -> TYPE_TEXT_IMAGE
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            TYPE_TEXT -> {
-                val view = inflater.inflate(R.layout.item_text, parent, false)
-                TextViewHolder(view)
-            }
-            TYPE_IMAGE -> {
-                val view = inflater.inflate(R.layout.item_image, parent, false)
-                ImageViewHolder(view)
-            }
-            TYPE_TEXT_IMAGE -> {
-                val view = inflater.inflate(R.layout.item_text_image, parent, false)
-                TextImageViewHolder(view)
-            }
-            else -> throw IllegalArgumentException("Unknown view type: $viewType")
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+        TYPE_TEXT -> TextViewHolder(inflate(R.layout.item_text, parent))
+        TYPE_IMAGE -> ImageViewHolder(inflate(R.layout.item_image, parent))
+        TYPE_MIXED -> MixedViewHolder(inflate(R.layout.item_mixed, parent))
+        else -> error("Unknown type")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
             is TextItem -> (holder as TextViewHolder).bind(item)
             is ImageItem -> (holder as ImageViewHolder).bind(item)
-            is TextImageItem -> (holder as TextImageViewHolder).bind(item)
+            is MixedItem -> (holder as MixedViewHolder).bind(item)
         }
     }
+}
+```
 
-    override fun getItemCount() = items.size
+**ViewHolder с изображениями**:
 
-    fun submitList(newItems: List<ListItem>) {
-        items.clear()
-        items.addAll(newItems)
-        notifyDataSetChanged()
+```kotlin
+class ImageViewHolder(private val binding: ItemImageBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(item: ImageItem) = binding.apply {
+        caption.text = item.caption
+        // ✅ Используйте Glide/Coil для эффективной загрузки
+        Glide.with(root.context)
+            .load(item.imageUrl)
+            .placeholder(R.drawable.placeholder)
+            .into(image)
     }
 }
 ```
 
-### Using Adapter Delegates Library
+### Библиотека AdapterDelegates
 
-For more complex scenarios, use the **AdapterDelegates** library by Hannes Dorfmann:
-
-```kotlin
-// build.gradle
-dependencies {
-    implementation 'com.hannesdorfmann:adapterdelegates4:4.3.2'
-}
-```
+Для сложных сценариев используйте готовое решение:
 
 ```kotlin
-// Text delegate
-class TextAdapterDelegate : AdapterDelegate<List<ListItem>>() {
+class TextDelegate : AdapterDelegate<List<ListItem>>() {
+    override fun isForViewType(items: List<ListItem>, position: Int) =
+        items[position] is TextItem
 
-    override fun isForViewType(items: List<ListItem>, position: Int): Boolean {
-        return items[position] is TextItem
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_text, parent, false)
-        return TextViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup) =
+        TextViewHolder(inflate(R.layout.item_text, parent))
 
     override fun onBindViewHolder(
         items: List<ListItem>,
@@ -185,107 +110,149 @@ class TextAdapterDelegate : AdapterDelegate<List<ListItem>>() {
         holder: RecyclerView.ViewHolder,
         payloads: List<Any>
     ) {
-        val item = items[position] as TextItem
-        (holder as TextViewHolder).bind(item)
-    }
-
-    class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: TextItem) {
-            // Bind text
-        }
+        (holder as TextViewHolder).bind(items[position] as TextItem)
     }
 }
 
-// Image delegate
-class ImageAdapterDelegate : AdapterDelegate<List<ListItem>>() {
-    // Similar implementation for images
-}
-
-// Adapter using delegates
 class DelegateAdapter : ListDelegationAdapter<List<ListItem>>() {
     init {
-        delegatesManager.addDelegate(TextAdapterDelegate())
-        delegatesManager.addDelegate(ImageAdapterDelegate())
-        delegatesManager.addDelegate(TextImageAdapterDelegate())
+        delegatesManager.addDelegate(TextDelegate())
+            .addDelegate(ImageDelegate())
+            .addDelegate(MixedDelegate())
     }
 }
 ```
 
-### Best Practices for Text and Images
+**Преимущества**:
+- Каждый делегат независим и переиспользуем
+- Легко добавлять новые типы элементов
+- Типобезопасность через sealed classes
+- Упрощенное тестирование
 
-#### 1. Efficient Image Loading
+## Answer (EN)
+
+Use the **Adapter Delegates pattern** to separate display logic for different item types (text, images, combined). Each delegate handles one data type.
+
+**Approach**: Create sealed class for data types, separate ViewHolders and delegates for each type
+**Benefits**: Separation of concerns, reusability, scalability
+
+### Basic Implementation
+
+**Data models**:
 
 ```kotlin
-class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val imageView: ImageView = itemView.findViewById(R.id.image)
+sealed class ListItem
 
-    fun bind(item: ImageItem) {
-        // Use Glide or Coil for efficient image loading
-        Glide.with(itemView.context)
-            .load(item.imageUrl)
-            .placeholder(R.drawable.placeholder)
-            .error(R.drawable.error_image)
-            .centerCrop()
-            .into(imageView)
-    }
-}
+data class TextItem(val title: String, val description: String) : ListItem()
+data class ImageItem(val imageUrl: String, val caption: String) : ListItem()
+data class MixedItem(val title: String, val imageUrl: String) : ListItem()
 ```
 
-#### 2. Text Optimization
+**Adapter with delegates**:
 
 ```kotlin
-class TextViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val titleTextView: TextView = itemView.findViewById(R.id.title)
+class MultiTypeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val items = mutableListOf<ListItem>()
 
-    fun bind(item: TextItem) {
-        // Set text efficiently
-        titleTextView.text = item.title
-
-        // Use spans for styled text
-        val spannableString = SpannableString(item.description)
-        spannableString.setSpan(
-            StyleSpan(Typeface.BOLD),
-            0, 5,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        titleTextView.text = spannableString
+    override fun getItemViewType(position: Int) = when (items[position]) {
+        is TextItem -> TYPE_TEXT
+        is ImageItem -> TYPE_IMAGE
+        is MixedItem -> TYPE_MIXED
     }
-}
-```
 
-#### 3. ViewBinding for Type Safety
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+        TYPE_TEXT -> TextViewHolder(inflate(R.layout.item_text, parent))
+        TYPE_IMAGE -> ImageViewHolder(inflate(R.layout.item_image, parent))
+        TYPE_MIXED -> MixedViewHolder(inflate(R.layout.item_mixed, parent))
+        else -> error("Unknown type")
+    }
 
-```kotlin
-class TextImageViewHolder(
-    private val binding: ItemTextImageBinding
-) : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(item: TextImageItem) {
-        binding.apply {
-            title.text = item.title
-            description.text = item.description
-
-            Glide.with(root.context)
-                .load(item.imageUrl)
-                .into(image)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = items[position]) {
+            is TextItem -> (holder as TextViewHolder).bind(item)
+            is ImageItem -> (holder as ImageViewHolder).bind(item)
+            is MixedItem -> (holder as MixedViewHolder).bind(item)
         }
     }
 }
 ```
 
-### Benefits of Delegate Pattern
+**ViewHolder with images**:
 
-1. **Separation of Concerns** - Each delegate handles one item type
-2. **Reusability** - Delegates can be reused across different adapters
-3. **Maintainability** - Easier to modify and test individual delegates
-4. **Scalability** - Easy to add new item types without modifying existing code
-5. **Type Safety** - Clear type handling with sealed classes
+```kotlin
+class ImageViewHolder(private val binding: ItemImageBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
-## Ответ (RU)
-Для управления текстом и картинками в RecyclerView используйте делегаты, которые разделяют логику отображения разных типов данных. Это упрощает код и улучшает его поддержку.
+    fun bind(item: ImageItem) = binding.apply {
+        caption.text = item.caption
+        // ✅ Use Glide/Coil for efficient loading
+        Glide.with(root.context)
+            .load(item.imageUrl)
+            .placeholder(R.drawable.placeholder)
+            .into(image)
+    }
+}
+```
+
+### AdapterDelegates Library
+
+For complex scenarios, use the library:
+
+```kotlin
+class TextDelegate : AdapterDelegate<List<ListItem>>() {
+    override fun isForViewType(items: List<ListItem>, position: Int) =
+        items[position] is TextItem
+
+    override fun onCreateViewHolder(parent: ViewGroup) =
+        TextViewHolder(inflate(R.layout.item_text, parent))
+
+    override fun onBindViewHolder(
+        items: List<ListItem>,
+        position: Int,
+        holder: RecyclerView.ViewHolder,
+        payloads: List<Any>
+    ) {
+        (holder as TextViewHolder).bind(items[position] as TextItem)
+    }
+}
+
+class DelegateAdapter : ListDelegationAdapter<List<ListItem>>() {
+    init {
+        delegatesManager.addDelegate(TextDelegate())
+            .addDelegate(ImageDelegate())
+            .addDelegate(MixedDelegate())
+    }
+}
+```
+
+**Benefits**:
+- Each delegate is independent and reusable
+- Easy to add new item types
+- Type safety through sealed classes
+- Simplified testing
+
+---
+
+## Follow-ups
+
+- How to handle click events in different delegate types?
+- When to use DiffUtil with adapter delegates?
+- How to optimize image loading in RecyclerView with delegates?
+- What are alternatives to the AdapterDelegates library?
+
+## References
+
+- [[c-recyclerview]]
+- [[q-which-layout-for-large-list--android--easy]]
+- Android RecyclerView documentation
 
 ## Related Questions
 
+### Prerequisites (Easier)
 - [[q-which-layout-for-large-list--android--easy]]
+
+### Related (Same Level)
 - [[q-room-code-generation-timing--android--medium]]
+
+### Advanced (Harder)
 - [[q-fakes-vs-mocks-testing--android--medium]]

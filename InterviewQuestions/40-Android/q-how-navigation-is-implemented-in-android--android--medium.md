@@ -1,297 +1,276 @@
 ---
-id: 20251012-1227164
+id: 20251012-122716
 title: "How Navigation Is Implemented In Android / Как реализована навигация в Android"
+aliases: ["How Navigation Is Implemented In Android", "Как реализована навигация в Android", "Navigation Implementation", "Реализация навигации"]
 topic: android
+subtopics: [ui-navigation, activity, fragment]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-graphql-vs-rest--networking--easy, q-strictmode-debugging--android--medium, q-workmanager-data-passing--android--medium]
+related: [q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+sources: []
 created: 2025-10-15
-tags: [android/navigation, android/ui, difficulty/medium, gestures, navigation, ui]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:40:06 pm
+updated: 2025-10-28
+tags: [android/ui-navigation, android/activity, android/fragment, difficulty/medium, navigation, ui]
+---
+# Вопрос (RU)
+
+Каким образом осуществляется навигация в Android?
+
+# Question (EN)
+
+How is navigation implemented in Android?
+
 ---
 
-# Каким Образом Осуществляется Навигация В Android?
+## Ответ (RU)
 
-**English**: How is navigation implemented in Android?
+Навигация в Android реализуется на двух уровнях: **системном** (между приложениями) и **уровне приложения** (внутри приложения).
 
-## Answer (EN)
-Navigation in Android is implemented through several methods, both at the system level (user navigation between apps) and application level (in-app navigation). The approach depends on Android version and UI patterns.
+### Системная навигация
 
-### System-Level Navigation
+#### Жесты (Android 10+)
 
-#### 1. Gesture Navigation (Android 10+)
-
-Modern navigation using swipe gestures:
+Современные устройства используют жесты:
+- Свайп снизу — возврат на главный экран
+- Свайп снизу с задержкой — список недавних приложений
+- Свайп от краев — возврат назад
 
 ```kotlin
-// Handle gesture navigation in your app
+// ✅ Адаптация UI под жесты
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    // Make content edge-to-edge for gesture navigation
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
-    // Handle insets for gesture areas
     ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
         val gestureInsets = insets.getInsets(WindowInsetsCompat.Type.systemGestures())
-        view.updatePadding(
-            left = gestureInsets.left,
-            right = gestureInsets.right,
-            bottom = gestureInsets.bottom
-        )
+        view.updatePadding(bottom = gestureInsets.bottom)
         insets
     }
 }
-
-// Detect gesture navigation mode
-fun isGestureNavigation(): Boolean {
-    val resources = context.resources
-    val resourceId = resources.getIdentifier(
-        "config_navBarInteractionMode",
-        "integer",
-        "android"
-    )
-    return if (resourceId > 0) {
-        resources.getInteger(resourceId) == 2
-    } else {
-        false
-    }
-}
 ```
 
-#### 2. Button Navigation (Legacy)
+#### Кнопки (Legacy)
 
-Traditional three-button navigation:
-- **Back button**: Navigate to previous screen
-- **Home button**: Return to home screen
-- **Recent apps**: View recent apps
+Три экранные кнопки: Назад, Домой, Недавние приложения.
 
-```kotlin
-// Handle back button
-override fun onBackPressed() {
-    if (fragmentManager.backStackEntryCount > 0) {
-        fragmentManager.popBackStack()
-    } else {
-        super.onBackPressed()
-    }
-}
-
-// Predictive back gesture (Android 13+)
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun setupPredictiveBackGesture() {
-    onBackPressedDispatcher.addCallback(this) {
-        // Handle back with animation preview
-        finish()
-    }
-}
-```
-
-### Application-Level Navigation
+### Навигация в приложении
 
 #### 1. Activity Navigation
 
 ```kotlin
-// Start new activity
+// ✅ Базовый переход
 val intent = Intent(this, DetailActivity::class.java)
 startActivity(intent)
 
-// With animation
+// ✅ Управление задачами
+val intent = Intent(this, MainActivity::class.java).apply {
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+}
 startActivity(intent)
-overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-
-// Finish current activity
-finish()
 ```
 
 #### 2. Fragment Navigation
 
 ```kotlin
-// Replace fragment
+// ✅ FragmentManager
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, DetailFragment())
     .addToBackStack(null)
     .commit()
 
-// Navigate with Navigation Component
+// ✅ Navigation Component (рекомендуется)
 findNavController().navigate(R.id.action_home_to_detail)
 ```
 
-#### 3. Task and Back Stack Management
+#### 3. Навигационные паттерны
 
-```kotlin
-// Create new task
-val intent = Intent(this, MainActivity::class.java).apply {
-    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-}
-startActivity(intent)
-
-// Navigate up
-override fun onSupportNavigateUp(): Boolean {
-    return findNavController().navigateUp() || super.onSupportNavigateUp()
-}
-
-// Clear back stack
-supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-```
-
-### Navigation Patterns
-
-#### Bottom Navigation
-
-```xml
-<com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/bottom_nav"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:menu="@menu/bottom_nav_menu" />
-```
+**Bottom Navigation** — для 3-5 главных разделов:
 
 ```kotlin
 bottomNav.setOnItemSelectedListener { item ->
     when (item.itemId) {
         R.id.nav_home -> loadFragment(HomeFragment())
         R.id.nav_search -> loadFragment(SearchFragment())
-        R.id.nav_profile -> loadFragment(ProfileFragment())
         else -> false
     }
 }
 ```
 
-#### Navigation Drawer
+**Navigation Drawer** — для многочисленных разделов.
+
+**Tabs** — для связанных экранов одного уровня.
+
+#### 4. Predictive Back (Android 13+)
+
+Показ превью предыдущего экрана при жесте назад:
 
 ```kotlin
-val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-val navView: NavigationView = findViewById(R.id.nav_view)
+onBackPressedDispatcher.addCallback(
+    this,
+    object : OnBackPressedCallback(true) {
+        override fun handleOnBackProgressed(backEvent: BackEventCompat) {
+            // Анимация прогресса жеста
+            val progress = backEvent.progress
+            binding.root.scaleX = 1 - (progress * 0.1f)
+        }
 
-navView.setNavigationItemSelectedListener { menuItem ->
-    when (menuItem.itemId) {
-        R.id.nav_home -> navigateToHome()
-        R.id.nav_settings -> navigateToSettings()
+        override fun handleOnBackCancelled() {
+            // Отмена — возврат к исходному состоянию
+            binding.root.animate().scaleX(1f).start()
+        }
     }
-    drawerLayout.closeDrawers()
-    true
-}
+)
 ```
 
-#### Tab Navigation
+### Best Practices
+
+1. **Уважайте системную навигацию** — не блокируйте жесты назад
+2. **Следуйте соглашениям платформы** — используйте знакомые паттерны
+3. **Сохраняйте состояние** — восстанавливайте навигацию после пересоздания Activity
+4. **Поддержка deep linking** — позволяйте открывать экраны напрямую
+5. **Реализуйте predictive back** — улучшает UX на современных устройствах
+
+## Answer (EN)
+
+Navigation in Android is implemented at two levels: **system-level** (between apps) and **application-level** (within apps).
+
+### System-Level Navigation
+
+#### Gestures (Android 10+)
+
+Modern devices use gesture navigation:
+- Swipe up from bottom — home screen
+- Swipe up with hold — recent apps
+- Swipe from edges — back navigation
 
 ```kotlin
-val tabLayout: TabLayout = findViewById(R.id.tab_layout)
-val viewPager: ViewPager2 = findViewById(R.id.view_pager)
-
-viewPager.adapter = ViewPagerAdapter(this)
-TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-    tab.text = tabTitles[position]
-}.attach()
-```
-
-### Handling System Navigation
-
-#### Edge-to-Edge and Gesture Insets
-
-```kotlin
+// ✅ Adapt UI for gesture navigation
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    // Enable edge-to-edge
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
-    binding.root.setOnApplyWindowInsetsListener { view, windowInsets ->
-        val insets = windowInsets.getInsets(
-            WindowInsetsCompat.Type.systemBars() or
-            WindowInsetsCompat.Type.displayCutout()
-        )
-
-        view.updatePadding(
-            left = insets.left,
-            top = insets.top,
-            right = insets.right,
-            bottom = insets.bottom
-        )
-
-        WindowInsetsCompat.CONSUMED
+    ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+        val gestureInsets = insets.getInsets(WindowInsetsCompat.Type.systemGestures())
+        view.updatePadding(bottom = gestureInsets.bottom)
+        insets
     }
 }
 ```
 
-#### Handling Different Navigation Modes
+#### Button Navigation (Legacy)
+
+Three on-screen buttons: Back, Home, Recent Apps.
+
+### Application-Level Navigation
+
+#### 1. Activity Navigation
 
 ```kotlin
-fun setupNavigationMode() {
-    when (getNavigationMode()) {
-        NavigationMode.GESTURE -> {
-            // Adjust UI for gesture navigation
-            binding.bottomContent.updatePadding(bottom = 0)
-        }
-        NavigationMode.BUTTON -> {
-            // Adjust UI for button navigation
-            binding.bottomContent.updatePadding(bottom = buttonNavBarHeight)
-        }
-        NavigationMode.THREE_BUTTON -> {
-            // Adjust UI for three-button navigation
-            binding.bottomContent.updatePadding(bottom = threeButtonNavBarHeight)
-        }
-    }
-}
+// ✅ Basic transition
+val intent = Intent(this, DetailActivity::class.java)
+startActivity(intent)
 
-enum class NavigationMode {
-    GESTURE, BUTTON, THREE_BUTTON
+// ✅ Task management
+val intent = Intent(this, MainActivity::class.java).apply {
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 }
+startActivity(intent)
 ```
 
-### Navigation Best Practices
-
-1. **Respect system navigation**: Don't block back gestures
-2. **Provide consistent navigation**: Follow platform conventions
-3. **Handle configuration changes**: Preserve navigation state
-4. **Support deep linking**: Allow direct navigation to screens
-5. **Implement predictive back**: Show preview of previous screen (Android 13+)
+#### 2. Fragment Navigation
 
 ```kotlin
-// Predictive back example
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-class MyActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+// ✅ FragmentManager approach
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, DetailFragment())
+    .addToBackStack(null)
+    .commit()
 
-        onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    // Animate back gesture
-                    finish()
-                }
+// ✅ Navigation Component (recommended)
+findNavController().navigate(R.id.action_home_to_detail)
+```
 
-                override fun handleOnBackProgressed(backEvent: BackEventCompat) {
-                    // Show progress of back gesture
-                    val progress = backEvent.progress
-                    binding.root.scaleX = 1 - (progress * 0.1f)
-                    binding.root.scaleY = 1 - (progress * 0.1f)
-                }
+#### 3. Navigation Patterns
 
-                override fun handleOnBackCancelled() {
-                    // Restore view state
-                    binding.root.animate().scaleX(1f).scaleY(1f).start()
-                }
-            }
-        )
+**Bottom Navigation** — for 3-5 top-level destinations:
+
+```kotlin
+bottomNav.setOnItemSelectedListener { item ->
+    when (item.itemId) {
+        R.id.nav_home -> loadFragment(HomeFragment())
+        R.id.nav_search -> loadFragment(SearchFragment())
+        else -> false
     }
 }
 ```
 
-## Ответ (RU)
-Навигация в Android осуществляется несколькими способами, в зависимости от версии системы и используемых приложений. Основные методы включают жесты (свайпы, тапы), нажатия на экранные кнопки (на старых версиях), а также использование виртуальных или физических кнопок навигации (Домой, Назад, Последние приложения). Более современные версии Android полагаются преимущественно на жесты для навигации между приложениями и внутри них.
+**Navigation Drawer** — for many destinations.
 
+**Tabs** — for related destinations at the same level.
+
+#### 4. Predictive Back (Android 13+)
+
+Shows preview of previous screen during back gesture:
+
+```kotlin
+onBackPressedDispatcher.addCallback(
+    this,
+    object : OnBackPressedCallback(true) {
+        override fun handleOnBackProgressed(backEvent: BackEventCompat) {
+            // Animate gesture progress
+            val progress = backEvent.progress
+            binding.root.scaleX = 1 - (progress * 0.1f)
+        }
+
+        override fun handleOnBackCancelled() {
+            // Cancel — restore original state
+            binding.root.animate().scaleX(1f).start()
+        }
+    }
+)
+```
+
+### Best Practices
+
+1. **Respect system navigation** — don't block back gestures
+2. **Follow platform conventions** — use familiar patterns
+3. **Preserve state** — restore navigation after Activity recreation
+4. **Support deep linking** — allow direct screen access
+5. **Implement predictive back** — improves UX on modern devices
 
 ---
 
+## Follow-ups
+
+- How do you handle navigation state restoration after process death?
+- What are the differences between `launchMode` flags and how do they affect back stack?
+- How would you implement a custom back stack for a complex multi-module navigation?
+- How does Navigation Component handle deep links and argument passing?
+- What are the trade-offs between single-Activity architecture and multi-Activity?
+
+## References
+
+- [Android Navigation Guide](https://developer.android.com/guide/navigation)
+- [Gesture Navigation](https://developer.android.com/develop/ui/views/layout/edge-to-edge)
+- [Predictive Back](https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture)
+
 ## Related Questions
 
-### Related (Medium)
-- [[q-compose-navigation-advanced--android--medium]] - Navigation
-- [[q-compose-navigation-advanced--android--medium]] - Navigation
-- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
-- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
-- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation
+### Prerequisites
+- [[q-what-navigation-methods-do-you-know--android--medium]] - Overview of navigation approaches
+
+### Related
+- [[q-activity-navigation-how-it-works--android--medium]] - Activity navigation details
+- [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose navigation
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep linking challenges
+
+### Advanced
+- Multi-module navigation architecture with dynamic features
+- Custom navigation transitions and SharedElement animations
+- Type-safe navigation with compile-time route validation

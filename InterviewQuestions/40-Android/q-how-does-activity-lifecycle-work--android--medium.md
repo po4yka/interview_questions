@@ -1,320 +1,261 @@
 ---
 id: 20251012-1227157
-title: "How is Fragment lifecycle connected with Activity?"
+title: "Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment и Activity"
+aliases: ["Fragment Lifecycle Connection", "Связь жизненных циклов Fragment и Activity"]
 topic: android
+subtopics: [lifecycle, fragment, activity]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [android]
+updated: 2025-10-28
+tags: [android, android/lifecycle, android/fragment, android/activity, difficulty/medium]
 moc: moc-android
 related: [q-android-runtime-art--android--medium, q-compose-side-effects-advanced--jetpack-compose--hard, q-view-composition-strategy-compose--android--medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:40:13 pm
+sources: []
 ---
 
-# How is Fragment Lifecycle Connected with Activity?
-
 # Вопрос (RU)
-Как жизненный цикл фрагмента связан с активностью?
 
-## Answer (EN)
-Fragment lifecycle is **tightly coupled** with Activity lifecycle. When Activity lifecycle changes, it triggers corresponding Fragment lifecycle callbacks. However, Fragment has **additional lifecycle states** that Activity doesn't have.
+Как жизненный цикл Fragment связан с Activity?
 
-### Lifecycle Dependency Diagram
+# Question (EN)
 
-```
-Activity State          Fragment State
+How is Fragment lifecycle connected with Activity?
 
-onCreate()
-                    onAttach()
-                    onCreate()
-                    onCreateView()
-                    onViewCreated()
-                    onStart()
+---
 
-onStart()           [Fragment onStart already called]
+## Ответ (RU)
 
-onResume()          onResume()
+Жизненный цикл Fragment **тесно связан** с жизненным циклом Activity. Fragment никогда не может превысить состояние жизненного цикла Activity, но имеет **дополнительные колбэки** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
 
-[Activity running, Fragment active]
+### Ключевые правила зависимости
 
-onPause()           onPause()
-
-onStop()            onStop()
-
-onDestroy()         onDestroyView()
-                    onDestroy()
-                    onDetach()
-```
-
-### Key Lifecycle Rules
-
-**1. Fragment lifecycle never exceeds Activity lifecycle:**
+**1. Fragment не превышает состояние Activity:**
 ```kotlin
-// Fragment can only be STARTED when Activity is STARTED
-// Fragment can only be RESUMED when Activity is RESUMED
+// Fragment может быть STARTED только когда Activity STARTED
+// Fragment может быть RESUMED только когда Activity RESUMED
 ```
 
-**2. Fragment callbacks happen AFTER Activity callbacks on the way up:**
+**2. При запуске — Fragment колбэки ПОСЛЕ Activity:**
 ```
 Activity.onCreate() → Fragment.onCreate()
 Activity.onStart() → Fragment.onStart()
 Activity.onResume() → Fragment.onResume()
 ```
 
-**3. Fragment callbacks happen BEFORE Activity callbacks on the way down:**
+**3. При остановке — Fragment колбэки ПЕРЕД Activity:**
 ```
 Fragment.onPause() → Activity.onPause()
 Fragment.onStop() → Activity.onStop()
 Fragment.onDestroy() → Activity.onDestroy()
 ```
 
-### Complete Lifecycle Flow
+### Диаграмма полного цикла
+
+```
+Activity              Fragment
+
+onCreate()
+                      onAttach()
+                      onCreate()
+                      onCreateView()
+                      onViewCreated()
+                      onStart()
+onStart()
+onResume()            onResume()
+
+[работает приложение]
+
+onPause()
+                      onPause()
+onStop()
+                      onStop()
+                      onDestroyView()
+                      onDestroy()
+                      onDetach()
+onDestroy()
+```
+
+### Раздельный жизненный цикл View
+
+Fragment имеет **два владельца жизненного цикла**:
 
 ```kotlin
-// Activity starts → Fragment attaches
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+class MyFragment : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        Log.d("Lifecycle", "Activity.onCreate()")
+        // ❌ НЕПРАВИЛЬНО — наблюдатель останется после onDestroyView()
+        viewModel.data.observe(this) { data ->
+            textView.text = data // CRASH если View уже уничтожен
+        }
 
-        // Fragment lifecycle begins here
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, MyFragment())
-            .commit()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("Lifecycle", "Activity.onStart()")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Lifecycle", "Activity.onResume()")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("Lifecycle", "Activity.onPause()")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("Lifecycle", "Activity.onStop()")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("Lifecycle", "Activity.onDestroy()")
+        // ✅ ПРАВИЛЬНО — автоматически отписывается в onDestroyView()
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            textView.text = data
+        }
     }
 }
+```
 
+**Жизненные циклы:**
+```
+Fragment:     onCreate ————————————————→ onDestroy
+View:              onCreateView ——→ onDestroyView
+```
+
+### BackStack поведение
+
+**При replace с addToBackStack():**
+```kotlin
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, NewFragment())
+    .addToBackStack(null)
+    .commit()
+
+// Старый Fragment:
+// onPause() → onStop() → onDestroyView()
+// ⚠️ Fragment остаётся в памяти (НЕ вызывается onDestroy/onDetach)
+
+// При возврате назад:
+// onCreateView() → onViewCreated() → onStart() → onResume()
+```
+
+### Управление ресурсами View
+
+```kotlin
 class MyFragment : Fragment() {
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d("Lifecycle", "  Fragment.onAttach()")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("Lifecycle", "  Fragment.onCreate()")
-    }
+    private var binding: FragmentBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Log.d("Lifecycle", "  Fragment.onCreateView()")
-        return inflater.inflate(R.layout.fragment_my, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d("Lifecycle", "  Fragment.onViewCreated()")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("Lifecycle", "  Fragment.onStart()")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("Lifecycle", "  Fragment.onResume()")
-    }
-
-    override fun onPause() {
-        Log.d("Lifecycle", "  Fragment.onPause()")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d("Lifecycle", "  Fragment.onStop()")
-        super.onStop()
+    ): View {
+        binding = FragmentBinding.inflate(inflater, container, false)
+        return binding!!.root
     }
 
     override fun onDestroyView() {
-        Log.d("Lifecycle", "  Fragment.onDestroyView()")
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        Log.d("Lifecycle", "  Fragment.onDestroy()")
-        super.onDestroy()
-    }
-
-    override fun onDetach() {
-        Log.d("Lifecycle", "  Fragment.onDetach()")
-        super.onDetach()
+        // ✅ ОБЯЗАТЕЛЬНО — предотвращаем утечку памяти
+        binding = null
     }
 }
 ```
 
-**Log Output:**
-```
-Activity.onCreate()
-  Fragment.onAttach()
-  Fragment.onCreate()
-  Fragment.onCreateView()
-  Fragment.onViewCreated()
-  Fragment.onStart()
-Activity.onStart()
-  Fragment.onResume()
-Activity.onResume()
-[App running]
-  Fragment.onPause()
-Activity.onPause()
-  Fragment.onStop()
-Activity.onStop()
-  Fragment.onDestroyView()
-  Fragment.onDestroy()
-  Fragment.onDetach()
-Activity.onDestroy()
+### Лучшие практики
+
+**1. Используйте viewLifecycleOwner для UI:**
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+    viewModel.uiState.collect { state ->
+        // Отменяется в onDestroyView()
+    }
+}
 ```
 
-### Fragment-Specific Lifecycle States
+**2. Инициализация в правильных колбэках:**
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    // Инициализация без UI (ViewModel, данные)
+    viewModel.loadData()
+}
 
-Fragment has **view lifecycle** separate from Fragment lifecycle:
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    // Инициализация UI компонентов
+    setupRecyclerView()
+}
+```
+
+## Answer (EN)
+
+Fragment lifecycle is **tightly coupled** with Activity lifecycle. Fragment can never exceed the Activity's lifecycle state but has **additional callbacks** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
+
+### Key dependency rules
+
+**1. Fragment never exceeds Activity state:**
+```kotlin
+// Fragment can only be STARTED when Activity is STARTED
+// Fragment can only be RESUMED when Activity is RESUMED
+```
+
+**2. On startup — Fragment callbacks AFTER Activity:**
+```
+Activity.onCreate() → Fragment.onCreate()
+Activity.onStart() → Fragment.onStart()
+Activity.onResume() → Fragment.onResume()
+```
+
+**3. On shutdown — Fragment callbacks BEFORE Activity:**
+```
+Fragment.onPause() → Activity.onPause()
+Fragment.onStop() → Activity.onStop()
+Fragment.onDestroy() → Activity.onDestroy()
+```
+
+### Complete lifecycle diagram
+
+```
+Activity              Fragment
+
+onCreate()
+                      onAttach()
+                      onCreate()
+                      onCreateView()
+                      onViewCreated()
+                      onStart()
+onStart()
+onResume()            onResume()
+
+[app running]
+
+onPause()
+                      onPause()
+onStop()
+                      onStop()
+                      onDestroyView()
+                      onDestroy()
+                      onDetach()
+onDestroy()
+```
+
+### Separate View lifecycle
+
+Fragment has **two lifecycle owners**:
 
 ```kotlin
 class MyFragment : Fragment() {
-    // Fragment lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Fragment created, but no View yet
-    }
-
-    // View lifecycle starts
-    override fun onCreateView(...): View? {
-        // View is being created
-        return inflater.inflate(R.layout.fragment, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // View created, safe to access UI
-        view.findViewById<TextView>(R.id.textView).text = "Hello"
-    }
 
-    // View lifecycle ends
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // View destroyed, but Fragment still alive
-        // Must null out view references!
-    }
+        // ❌ WRONG — observer stays active after onDestroyView()
+        viewModel.data.observe(this) { data ->
+            textView.text = data // CRASH if View is destroyed
+        }
 
-    // Fragment lifecycle ends
-    override fun onDestroy() {
-        super.onDestroy()
-        // Fragment destroyed
+        // ✅ CORRECT — auto-unsubscribed in onDestroyView()
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            textView.text = data
+        }
     }
 }
 ```
 
-### Configuration Change Behavior
-
-**During rotation (Activity recreated):**
-
+**Lifecycles:**
 ```
-Fragment.onPause()
-Activity.onPause()
-Fragment.onStop()
-Activity.onStop()
-Fragment.onDestroyView()
-Fragment.onDestroy()
-Fragment.onDetach()
-Activity.onDestroy()
-
-[Activity recreated]
-
-Activity.onCreate()
-Fragment.onAttach()
-Fragment.onCreate()
-Fragment.onCreateView()
-Fragment.onViewCreated()
-Fragment.onStart()
-Activity.onStart()
-Fragment.onResume()
-Activity.onResume()
+Fragment:     onCreate ————————————————→ onDestroy
+View:              onCreateView ——→ onDestroyView
 ```
 
-**Using ViewModel (state preserved):**
-```kotlin
-class MyFragment : Fragment() {
-    private val viewModel: MyViewModel by viewModels()
+### BackStack behavior
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ViewModel survives configuration change
-        viewModel.loadData() // Only called once
-    }
-}
-```
-
-### Fragment Transaction Impact
-
-**Adding Fragment:**
-```kotlin
-supportFragmentManager.beginTransaction()
-    .add(R.id.container, MyFragment())
-    .commit()
-
-// Lifecycle:
-// Fragment.onAttach()
-// Fragment.onCreate()
-// Fragment.onCreateView()
-// Fragment.onViewCreated()
-// Fragment.onStart()  (if Activity is STARTED)
-// Fragment.onResume() (if Activity is RESUMED)
-```
-
-**Replacing Fragment:**
-```kotlin
-supportFragmentManager.beginTransaction()
-    .replace(R.id.container, NewFragment())
-    .commit()
-
-// Old Fragment:
-// Fragment.onPause()
-// Fragment.onStop()
-// Fragment.onDestroyView()
-// Fragment.onDestroy()
-// Fragment.onDetach()
-
-// New Fragment:
-// Fragment.onAttach()
-// Fragment.onCreate()
-// Fragment.onCreateView()
-// Fragment.onViewCreated()
-// Fragment.onStart()
-// Fragment.onResume()
-```
-
-**Replacing with BackStack:**
+**On replace with addToBackStack():**
 ```kotlin
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, NewFragment())
@@ -322,241 +263,88 @@ supportFragmentManager.beginTransaction()
     .commit()
 
 // Old Fragment:
-// Fragment.onPause()
-// Fragment.onStop()
-// Fragment.onDestroyView()
-// [Fragment and its state retained in memory]
-// [NO onDestroy(), NO onDetach()]
+// onPause() → onStop() → onDestroyView()
+// ⚠️ Fragment stays in memory (NO onDestroy/onDetach called)
 
-// New Fragment:
-// Fragment.onAttach()
-// Fragment.onCreate()
-// Fragment.onCreateView()
-// Fragment.onViewCreated()
-// Fragment.onStart()
-// Fragment.onResume()
+// On back press:
+// onCreateView() → onViewCreated() → onStart() → onResume()
 ```
 
-### ViewLifecycleOwner
+### View resource management
 
-Fragment has **two lifecycle owners:**
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // DON'T observe with Fragment lifecycle
-        viewModel.data.observe(this) { data ->
-            // This observer stays active even after onDestroyView()!
-            textView.text = data // CRASH if textView is null
-        }
-
-        // DO observe with viewLifecycleOwner
-        viewModel.data.observe(viewLifecycleOwner) { data ->
-            // Automatically unsubscribed in onDestroyView()
-            textView.text = data
-        }
-    }
-}
-```
-
-**Lifecycle comparison:**
-```
-Fragment Lifecycle:        onCreate → onDestroy
-View Lifecycle:           onCreateView → onDestroyView
-
-With BackStack:
-Fragment:                 [Stays alive]
-View:                     [Destroyed and recreated]
-```
-
-### Practical Scenarios
-
-#### Scenario 1: Activity Paused (Phone call)
-
-```
-Fragment.onPause() → Activity.onPause()
-[Phone call ends]
-Activity.onResume() → Fragment.onResume()
-```
-
-#### Scenario 2: Activity Stopped (Home pressed)
-
-```
-Fragment.onPause() → Activity.onPause()
-Fragment.onStop() → Activity.onStop()
-[User returns]
-Activity.onRestart() → Activity.onStart() → Fragment.onStart()
-Activity.onResume() → Fragment.onResume()
-```
-
-#### Scenario 3: Fragment Replaced with BackStack
-
-```
-// User navigates to Fragment B
-FragmentA.onPause()
-FragmentA.onStop()
-FragmentA.onDestroyView()
-[FragmentA retained in memory]
-
-FragmentB.onAttach()
-FragmentB.onCreate()
-FragmentB.onCreateView()
-FragmentB.onViewCreated()
-FragmentB.onStart()
-FragmentB.onResume()
-
-// User presses Back
-FragmentB.onPause()
-FragmentB.onStop()
-FragmentB.onDestroyView()
-FragmentB.onDestroy()
-FragmentB.onDetach()
-
-FragmentA.onCreateView()  // View recreated
-FragmentA.onViewCreated()
-FragmentA.onStart()
-FragmentA.onResume()
-```
-
-### Best Practices
-
-**1. Use viewLifecycleOwner for View-related operations:**
-```kotlin
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-
-    viewModel.data.observe(viewLifecycleOwner) { data ->
-        // Safe - auto-cleaned in onDestroyView()
-    }
-
-    lifecycleScope.launch {
-        viewModel.uiState.collect { state ->
-            // Cancelled in onDestroy()
-        }
-    }
-
-    viewLifecycleOwner.lifecycleScope.launch {
-        // Cancelled in onDestroyView()
-    }
-}
-```
-
-**2. Clear view references in onDestroyView():**
 ```kotlin
 class MyFragment : Fragment() {
     private var binding: FragmentBinding? = null
 
-    override fun onCreateView(...): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentBinding.inflate(inflater, container, false)
         return binding!!.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null  // Prevent memory leak!
+        // ✅ REQUIRED — prevent memory leak
+        binding = null
     }
 }
 ```
 
-**3. Initialize in appropriate callbacks:**
+### Best practices
+
+**1. Use viewLifecycleOwner for UI:**
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+    viewModel.uiState.collect { state ->
+        // Cancelled in onDestroyView()
+    }
+}
+```
+
+**2. Initialize in appropriate callbacks:**
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    // Initialize non-UI components (ViewModel, etc.)
-    viewModel.loadInitialData()
+    // Initialize non-UI (ViewModel, data)
+    viewModel.loadData()
 }
 
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     // Initialize UI components
     setupRecyclerView()
-    observeViewModel()
 }
 ```
-
-### Summary
-
-**Fragment lifecycle connection to Activity:**
-- Fragment lifecycle **depends on** Activity lifecycle
-- Fragment **never exceeds** Activity lifecycle state
-- Fragment has **additional states** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach)
-- Fragment callbacks occur **after** Activity callbacks (up) and **before** Activity callbacks (down)
-- Fragment has **separate view lifecycle** (viewLifecycleOwner)
-- Use **viewLifecycleOwner** for view-related observations
-- Always **null view references** in onDestroyView()
-
-**English Summary**: Fragment lifecycle is synchronized with Activity lifecycle but has additional states. Fragment callbacks occur after Activity callbacks when starting up (onCreate → onStart → onResume) and before Activity callbacks when shutting down (onPause → onStop → onDestroy). Fragment has separate view lifecycle (onCreateView → onDestroyView) independent of Fragment lifecycle. Use viewLifecycleOwner for view-related LiveData/Flow observations to prevent memory leaks. Fragment lifecycle never exceeds Activity lifecycle - if Activity is PAUSED, Fragment is also PAUSED.
-
-## Ответ (RU)
-Жизненный цикл фрагмента **тесно связан** с жизненным циклом активности. Когда изменяется жизненный цикл активности, это вызывает соответствующие обратные вызовы жизненного цикла фрагмента. Однако у фрагмента есть **дополнительные состояния жизненного цикла**, которых нет у активности.
-
-### Ключевые Правила Жизненного Цикла
-
-**1. Жизненный цикл фрагмента никогда не превышает жизненный цикл активности:**
-```kotlin
-// Фрагмент может быть в состоянии STARTED, только когда активность в состоянии STARTED
-// Фрагмент может быть в состоянии RESUMED, только когда активность в состоянии RESUMED
-```
-
-**2. Обратные вызовы фрагмента происходят ПОСЛЕ обратных вызовов активности при запуске:**
-```
-Activity.onCreate() → Fragment.onCreate()
-Activity.onStart() → Fragment.onStart()
-Activity.onResume() → Fragment.onResume()
-```
-
-**3. Обратные вызовы фрагмента происходят ПЕРЕД обратными вызовами активности при остановке:**
-```
-Fragment.onPause() → Activity.onPause()
-Fragment.onStop() → Activity.onStop()
-Fragment.onDestroy() → Activity.onDestroy()
-```
-
-### Раздельный Жизненный Цикл View
-
-У фрагмента есть **отдельный жизненный цикл для его View**:
-
-```kotlin
-// Жизненный цикл фрагмента:        onCreate → onDestroy
-// Жизненный цикл View:           onCreateView → onDestroyView
-```
-
-### ViewLifecycleOwner
-
-У фрагмента **два владельца жизненного цикла:**
-
-```kotlin
-class MyFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // НЕПРАВИЛЬНО: наблюдать с жизненным циклом фрагмента
-        viewModel.data.observe(this) { /* ... */ }
-
-        // ПРАВИЛЬНО: наблюдать с viewLifecycleOwner
-        viewModel.data.observe(viewLifecycleOwner) { /* ... */ }
-    }
-}
-```
-
-### Лучшие Практики
-
-**1. Используйте `viewLifecycleOwner` для операций, связанных с View.**
-**2. Обнуляйте ссылки на View в `onDestroyView()`.**
-**3. Инициализируйте в соответствующих обратных вызовах.**
 
 ---
+
+## Follow-ups
+
+- What happens to Fragment when Activity is destroyed due to configuration change?
+- How does ViewModel survive Fragment recreation in BackStack scenarios?
+- When should you use Fragment lifecycle vs viewLifecycleOwner for coroutines?
+- What are the differences between replace(), add(), and show()/hide() Fragment transactions?
+- How does setRetainInstance(true) affect Fragment lifecycle (deprecated)?
+
+## References
+
+- Android Official: [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- Android Official: [ViewLifecycleOwner](https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner())
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+- Activity lifecycle basics — understand Activity states first
+- Fragment basics — what is Fragment and why use it
 
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle, Activity
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+### Related (Same Level)
+- [[q-android-runtime-art--android--medium]] — Understanding Android runtime
+- [[q-view-composition-strategy-compose--android--medium]] — Modern UI lifecycle
+
+### Advanced (Harder)
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] — Lifecycle in Compose
+- Fragment BackStack state management — complex navigation scenarios
+- Fragment shared element transitions — coordinating lifecycle with animations

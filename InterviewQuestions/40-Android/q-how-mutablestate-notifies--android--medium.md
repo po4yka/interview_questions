@@ -1,145 +1,93 @@
 ---
 id: 20251012-1227163
-title: "How Mutablestate Notifies / Как MutableState уведомляет"
+title: "How MutableState Notifies / Как MutableState уведомляет"
+aliases: [MutableState notifications, MutableState уведомления, Snapshot system]
 topic: android
+subtopics: [ui-compose, ui-state, architecture-mvvm]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [android/jetpack-compose, difficulty/medium, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state, state-management]
+updated: 2025-10-28
+tags: [android/ui-compose, android/ui-state, android/architecture-mvvm, difficulty/medium, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state-management]
 moc: moc-android
-related: [q-baseline-profiles-optimization--performance--medium, q-mlkit-face-detection--ml--medium, q-recomposition-choreographer--android--hard]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:40:07 pm
+related: [c-compose-state, c-recomposition, q-recomposition-choreographer--android--hard]
+sources: []
 ---
 
-# Как mutableState Сообщает О Том, Что Он Изменился?
+# Вопрос (RU)
+> Как MutableState уведомляет о том, что он изменился?
 
-**English**: How does MutableState notify that it has changed?
-
-## Answer (EN)
-Each **MutableState** has **subscribers** that are **automatically notified** about changes. When the value is updated, Compose **sends a signal** to trigger recomposition for those UI elements that use this state.
-
-## Notification Mechanism
-
-### Observer Pattern
-
-`MutableState` uses the **Observer pattern** with Compose's **Snapshot system**.
-
-```
-
- MutableState 
-   (Subject)  
-
-       
-        notifies
-       ↓
-
-   Subscribers    
-  (Composables)   
-
-```
+# Question (EN)
+> How does MutableState notify that it has changed?
 
 ---
 
-## How It Works Step-by-Step
+## Ответ (RU)
 
-### 1. Subscription (Read Phase)
+**MutableState** использует **Observer pattern** с **Snapshot system** для автоматического уведомления подписчиков об изменениях.
 
-When a Composable **reads** a MutableState, it automatically **subscribes** to changes.
+### Механизм работы
+
+**1. Подписка (Read Phase)**
+Composable автоматически подписывается при **чтении** state:
 
 ```kotlin
 @Composable
 fun Counter() {
     var count by remember { mutableStateOf(0) }
 
-    Column {
-        // Reading count subscribes this Text to count changes
-        Text("Count: $count")  //  SUBSCRIBES to count
+    // Чтение count - автоматическая подписка
+    Text("Count: $count")  // ✅ Подписка на count
 
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
+    Button(onClick = { count++ }) {
+        Text("Increment")
     }
 }
 ```
 
-**What happens during composition:**
-1. `Text("Count: $count")` reads `count.value`
-2. Compose **registers** this `Text` as a subscriber to `count`
-3. Compose tracks: "If `count` changes, recompose `Text`"
+**2. Уведомление (Write Phase)**
+При изменении значения:
+1. `count++` записывает новое значение
+2. `MutableState` обнаруживает изменение
+3. Уведомляются все подписчики
+4. Compose планирует рекомпозицию
+5. **Только** `Text("Count: $count")` перерисовывается
 
----
+### Система Snapshot
 
-### 2. Notification (Write Phase)
-
-When the value is **updated**, subscribers are **notified**.
-
-```kotlin
-count++  // or count = count + 1
-```
-
-**What happens:**
-1. `count++` writes new value to `MutableState`
-2. `MutableState` detects the change
-3. `MutableState` **notifies all subscribers**
-4. Compose schedules recomposition for subscribed Composables
-5. **Only** `Text("Count: $count")` recomposes (not the whole `Column` or `Button`)
-
----
-
-## Snapshot System
-
-Compose uses a **Snapshot system** to track state changes efficiently.
-
-### Snapshots Explained
-
-A **Snapshot** is an immutable view of all state at a specific point in time.
+**Snapshot** - неизменяемый снимок всех состояний в конкретный момент:
 
 ```kotlin
 // Snapshot 1: count = 0
-Snapshot {
-    count = 0
-    // UI shows "Count: 0"
-}
+Snapshot { count = 0 }
 
-// User clicks increment button
+// User clicks increment
 
 // Snapshot 2: count = 1
-Snapshot {
-    count = 1
-    // UI shows "Count: 1"
-}
+Snapshot { count = 1 }
 ```
 
-**Benefits:**
-- **Isolation** - Reads always see consistent state
-- **Thread-safety** - Multiple threads can read safely
-- **Rollback** - Can discard changes if needed
+**Преимущества:**
+- **Изоляция** - чтения видят консистентное состояние
+- **Потокобезопасность** - несколько потоков могут безопасно читать
+- **Откат** - можно отменить изменения
 
----
+### Гранулярная рекомпозиция
 
-## Granular Recomposition
-
-Only **Composables that read the changed state** are recomposed.
-
-### Example: Multiple States
+Только Composable, которые **читают** изменённое состояние, перерисовываются:
 
 ```kotlin
 @Composable
 fun Screen() {
     var name by remember { mutableStateOf("Alice") }
     var age by remember { mutableStateOf(25) }
-    var city by remember { mutableStateOf("New York") }
 
     Column {
-        // Subscriber 1: Only recomposes when `name` changes
-        Text("Name: $name")
-
-        // Subscriber 2: Only recomposes when `age` changes
-        Text("Age: $age")
-
-        // Subscriber 3: Only recomposes when `city` changes
-        Text("City: $city")
+        Text("Name: $name")  // ✅ Рекомпозиция только при изменении name
+        Text("Age: $age")    // ✅ Рекомпозиция только при изменении age
 
         Button(onClick = { age++ }) {
             Text("Increment Age")
@@ -148,100 +96,36 @@ fun Screen() {
 }
 ```
 
-**When user clicks "Increment Age":**
-1. `age++` notifies subscribers
-2. **Only** `Text("Age: $age")` recomposes
-3. `Text("Name: $name")` and `Text("City: $city")` are **NOT** recomposed
+**При клике на кнопку:**
+- `age++` уведомляет подписчиков
+- Только `Text("Age: $age")` перерисовывается
+- `Text("Name: $name")` **НЕ** перерисовывается
 
----
-
-## Implementation Details
-
-### Simplified Internal Flow
+### Упрощённая реализация
 
 ```kotlin
-// Simplified version of MutableState
 class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
     private val subscribers = mutableListOf<() -> Unit>()
 
     override var value: T
         get() {
-            // Register current Composable as subscriber (during composition)
-            Snapshot.registerRead(this)
+            Snapshot.registerRead(this)  // Регистрация подписчика
             return _value
         }
         set(newValue) {
             if (_value != newValue) {
                 _value = newValue
-                // Notify all subscribers
-                notifySubscribers()
+                notifySubscribers()  // Уведомление
             }
         }
 
     private fun notifySubscribers() {
-        subscribers.forEach { it.invoke() }  // Trigger recomposition
+        subscribers.forEach { it.invoke() }
     }
 }
 ```
 
----
-
-## Practical Example
-
-### Counter with Multiple Displays
-
-```kotlin
-@Composable
-fun CounterScreen() {
-    var count by remember { mutableStateOf(0) }
-
-    println("CounterScreen composing")  //  This runs only ONCE
-
-    Column {
-        // These subscribe to `count`
-        Text("Count: $count")
-        Text("Double: ${count * 2}")
-        Text("Triple: ${count * 3}")
-
-        // This doesn't subscribe to `count`
-        Text("Static text")
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-```
-
-**Execution flow:**
-
-**Initial composition:**
-```
-CounterScreen composing        // Column composes
-Count: 0                       // Text 1 subscribes to count
-Double: 0                      // Text 2 subscribes to count
-Triple: 0                      // Text 3 subscribes to count
-Static text                    // Text 4 does NOT subscribe
-```
-
-**After clicking button (count becomes 1):**
-```
-
-# CounterScreen NOT recomposed (no println)
-
-# Only these recompose:
-Count: 1                       // Text 1 recomposes
-Double: 2                      // Text 2 recomposes
-Triple: 3                      // Text 3 recomposes
-
-# Static text NOT recomposed
-```
-
----
-
-## ViewModel Integration
-
-### StateFlow Notifications
+### Интеграция с ViewModel
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -249,38 +133,27 @@ class CounterViewModel : ViewModel() {
     val count: StateFlow<Int> = _count.asStateFlow()
 
     fun increment() {
-        _count.value++  // Notifies collectors
+        _count.value++  // ✅ Уведомляет коллекторов
     }
 }
 
 @Composable
 fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
-    // collectAsState subscribes to StateFlow
     val count by viewModel.count.collectAsState()
 
-    Column {
-        Text("Count: $count")  // Recomposes when StateFlow emits
-
-        Button(onClick = { viewModel.increment() }) {
-            Text("Increment")
-        }
-    }
+    Text("Count: $count")  // ✅ Рекомпозиция при изменении StateFlow
 }
 ```
 
-**Flow:**
-1. `viewModel.increment()` changes `_count.value`
-2. `StateFlow` emits new value
-3. `collectAsState()` receives new value
-4. Updates internal `MutableState`
-5. `MutableState` notifies subscribers
-6. `Text` recomposes
+**Поток:**
+1. `viewModel.increment()` изменяет `_count.value`
+2. `StateFlow` эмитит новое значение
+3. `collectAsState()` получает значение
+4. Обновляет внутренний `MutableState`
+5. `MutableState` уведомляет подписчиков
+6. `Text` перерисовывается
 
----
-
-## Subscription Lifecycle
-
-### When Composable Leaves Composition
+### Жизненный цикл подписок
 
 ```kotlin
 @Composable
@@ -293,152 +166,198 @@ fun ConditionalDisplay() {
             Text("Toggle Details")
         }
 
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-
         if (showDetails) {
-            // This Text subscribes to count only when visible
-            Text("Count: $count")
+            Text("Count: $count")  // ✅ Подписка только когда видимо
         }
     }
 }
 ```
 
-**When `showDetails = false`:**
-- `Text("Count: $count")` is **not in composition**
-- It is **NOT subscribed** to `count`
-- Incrementing `count` doesn't trigger its recomposition (it doesn't exist)
+Compose автоматически управляет подписками:
+- Подписка при входе в композицию
+- Отписка при выходе из композиции
 
-**When `showDetails = true`:**
-- `Text("Count: $count")` **enters composition**
-- It **subscribes** to `count`
-- Incrementing `count` triggers its recomposition
+---
 
-**Compose automatically manages subscriptions:**
+## Answer (EN)
+
+**MutableState** uses the **Observer pattern** with Compose's **Snapshot system** to automatically notify subscribers about changes.
+
+### How It Works
+
+**1. Subscription (Read Phase)**
+Composables automatically subscribe when they **read** the state:
+
+```kotlin
+@Composable
+fun Counter() {
+    var count by remember { mutableStateOf(0) }
+
+    // Reading count subscribes this Text
+    Text("Count: $count")  // ✅ Subscribes to count
+
+    Button(onClick = { count++ }) {
+        Text("Increment")
+    }
+}
+```
+
+**2. Notification (Write Phase)**
+When the value is updated:
+1. `count++` writes new value
+2. `MutableState` detects the change
+3. All subscribers are notified
+4. Compose schedules recomposition
+5. **Only** `Text("Count: $count")` recomposes
+
+### Snapshot System
+
+A **Snapshot** is an immutable view of all state at a specific point in time:
+
+```kotlin
+// Snapshot 1: count = 0
+Snapshot { count = 0 }
+
+// User clicks increment
+
+// Snapshot 2: count = 1
+Snapshot { count = 1 }
+```
+
+**Benefits:**
+- **Isolation** - reads always see consistent state
+- **Thread-safety** - multiple threads can read safely
+- **Rollback** - can discard changes if needed
+
+### Granular Recomposition
+
+Only Composables that **read** the changed state are recomposed:
+
+```kotlin
+@Composable
+fun Screen() {
+    var name by remember { mutableStateOf("Alice") }
+    var age by remember { mutableStateOf(25) }
+
+    Column {
+        Text("Name: $name")  // ✅ Recomposes only when name changes
+        Text("Age: $age")    // ✅ Recomposes only when age changes
+
+        Button(onClick = { age++ }) {
+            Text("Increment Age")
+        }
+    }
+}
+```
+
+**When user clicks the button:**
+- `age++` notifies subscribers
+- Only `Text("Age: $age")` recomposes
+- `Text("Name: $name")` is **NOT** recomposed
+
+### Simplified Implementation
+
+```kotlin
+class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
+    private val subscribers = mutableListOf<() -> Unit>()
+
+    override var value: T
+        get() {
+            Snapshot.registerRead(this)  // Register subscriber
+            return _value
+        }
+        set(newValue) {
+            if (_value != newValue) {
+                _value = newValue
+                notifySubscribers()  // Notify
+            }
+        }
+
+    private fun notifySubscribers() {
+        subscribers.forEach { it.invoke() }
+    }
+}
+```
+
+### ViewModel Integration
+
+```kotlin
+class CounterViewModel : ViewModel() {
+    private val _count = MutableStateFlow(0)
+    val count: StateFlow<Int> = _count.asStateFlow()
+
+    fun increment() {
+        _count.value++  // ✅ Notifies collectors
+    }
+}
+
+@Composable
+fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
+    val count by viewModel.count.collectAsState()
+
+    Text("Count: $count")  // ✅ Recomposes when StateFlow emits
+}
+```
+
+**Flow:**
+1. `viewModel.increment()` changes `_count.value`
+2. `StateFlow` emits new value
+3. `collectAsState()` receives value
+4. Updates internal `MutableState`
+5. `MutableState` notifies subscribers
+6. `Text` recomposes
+
+### Subscription Lifecycle
+
+```kotlin
+@Composable
+fun ConditionalDisplay() {
+    var count by remember { mutableStateOf(0) }
+    var showDetails by remember { mutableStateOf(false) }
+
+    Column {
+        Button(onClick = { showDetails = !showDetails }) {
+            Text("Toggle Details")
+        }
+
+        if (showDetails) {
+            Text("Count: $count")  // ✅ Subscribes only when visible
+        }
+    }
+}
+```
+
+Compose automatically manages subscriptions:
 - Subscribe when Composable enters composition
 - Unsubscribe when Composable leaves composition
 
 ---
 
-## Performance Implications
+## Follow-ups
 
-### Smart Recomposition
+- How does Compose avoid unnecessary recompositions with structural equality checks?
+- What happens if MutableState is modified from multiple threads?
+- How does remember preserve state across recompositions?
+- Can you manually control which Composables subscribe to a state?
+- How does derivedStateOf optimize recompositions?
 
-```kotlin
-@Composable
-fun ExpensiveScreen() {
-    var count by remember { mutableStateOf(0) }
+## References
 
-    Column {
-        // Expensive computation
-        ExpensiveComponent()  // NOT recomposed when count changes
-
-        // Simple text
-        Text("Count: $count")  // Only this recomposes
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-
-@Composable
-fun ExpensiveComponent() {
-    println("ExpensiveComponent composing")  //  Only prints once
-    // Heavy computation here
-    LazyColumn {
-        items(10000) { index ->
-            Text("Item $index")
-        }
-    }
-}
-```
-
-**Result:**
-- `ExpensiveComponent` composes **only once**
-- When `count` changes, **only** `Text("Count: $count")` recomposes
-- Huge performance benefit!
-
----
-
-## Debugging Subscriptions
-
-### Composition Tracing
-
-```kotlin
-@Composable
-fun DebugCounter() {
-    var count by remember { mutableStateOf(0) }
-
-    Column {
-        Text("Count: $count").also {
-            println("Text composing with count = $count")
-        }
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-```
-
-**Output:**
-```
-// Initial composition
-Text composing with count = 0
-
-// After first click
-Text composing with count = 1
-
-// After second click
-Text composing with count = 2
-```
-
----
-
-## Summary
-
-**How MutableState notifies about changes:**
-
-1. **Subscription** - Composables automatically subscribe when they **read** the state
-2. **Change detection** - When state value changes, `MutableState` detects it
-3. **Notification** - All subscribers are notified
-4. **Recomposition** - Only subscribed Composables recompose
-5. **Snapshot system** - Ensures consistent, thread-safe state reads
-
-**Key benefits:**
-- **Granular recomposition** - Only affected Composables update
-- **Automatic subscription management** - No manual subscribe/unsubscribe
-- **Performance** - Minimal UI updates
-- **Thread-safe** - Snapshot system ensures consistency
-
-**Observer pattern in Compose:**
-```
-MutableState (Subject)
-    ↓ notifies
-Composables (Observers)
-    ↓ trigger
-Recomposition (Action)
-```
-
----
-
-## Ответ (RU)
-Каждый **MutableState** имеет **подписчиков**, которые автоматически уведомляются об изменениях. При обновлении значения Compose отправляет сигнал о необходимости рекомпозиции тем элементам, которые используют это состояние.
-
-**Механизм:**
-1. **Подписка** - Composable автоматически подписывается при **чтении** состояния
-2. **Обнаружение изменения** - `MutableState` детектирует изменение значения
-3. **Уведомление** - Все подписчики уведомляются
-4. **Рекомпозиция** - Только подписанные Composable перерисовываются
-
-**Система Snapshot** обеспечивает консистентность и потокобезопасность.
-
-**Гранулярная рекомпозиция:** Только те Composable, которые **читают** изменённое состояние, перерисовываются.
+- [[c-compose-state]]
+- [[c-recomposition]]
+- [[c-snapshot-system]]
+- [[moc-android]]
 
 ## Related Questions
 
-- q-mlkit-face-detection--ml--medium
+### Prerequisites (Easier)
+- [[q-compose-state-basics--android--easy]]
+- [[q-remember-mutablestateof--android--easy]]
+
+### Related (Same Level)
+- [[q-compose-state--android--medium]]
+- [[q-derivedstateof-optimization--android--medium]]
+
+### Advanced (Harder)
 - [[q-recomposition-choreographer--android--hard]]
-- [[q-baseline-profiles-optimization--android--medium]]
+- [[q-snapshot-isolation--android--hard]]

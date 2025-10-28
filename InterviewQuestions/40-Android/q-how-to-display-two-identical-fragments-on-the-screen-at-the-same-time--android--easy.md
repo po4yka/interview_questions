@@ -1,140 +1,78 @@
 ---
-id: 20251012-1227179
+id: 20251012-122717
 title: "How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно"
+aliases:
+  - Display Two Identical Fragments
+  - Два одинаковых фрагмента
+  - Multiple Fragment Instances
+  - Несколько экземпляров Fragment
 topic: android
+subtopics: [fragment, lifecycle, ui-views]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-graphql-vs-rest--networking--easy, q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy, q-which-class-to-catch-gestures--android--easy]
+related: [q-fragment-basics--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-save-data-outside-fragment--android--medium]
 created: 2025-10-15
-tags: [android/fragments, difficulty/easy, fragments, ui]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:39:48 pm
+updated: 2025-10-28
+sources: []
+tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/easy, fragments, ui]
 ---
 
-# Как На Экране Одновременно Отобразить Два Одинаковых Фрагмента?
+# Вопрос (RU)
 
-**English**: How to display two identical fragments on the screen at the same time?
+> Как на экране одновременно отобразить два одинаковых Fragment?
 
-## Answer (EN)
-To simultaneously display two identical fragments on one screen in an Android application, you need to add two instances of the fragment to different containers in the activity layout. In this case, each fragment will work independently, even if they use the same class.
+# Question (EN)
 
-### Steps to Display Two Identical Fragments
+> How to display two identical fragments on the screen at the same time?
 
-#### 1. Create Activity Layout with Two Containers
+---
 
-Create a layout for the activity that will contain two containers for fragments. This is typically done using `FrameLayout` or `LinearLayout`.
+## Ответ (RU)
+
+Добавьте два экземпляра одного класса Fragment в разные контейнеры макета Activity. Каждый экземпляр работает независимо с собственным состоянием.
+
+### Основной подход
+
+**1. Макет Activity с двумя контейнерами**
 
 ```xml
-<!-- activity_main.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- First fragment container -->
     <FrameLayout
         android:id="@+id/fragment_container_1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/container_1_bg" />
+        android:layout_weight="1" />
 
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider" />
-
-    <!-- Second fragment container -->
     <FrameLayout
         android:id="@+id/fragment_container_2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/container_2_bg" />
-
+        android:layout_weight="1" />
 </LinearLayout>
 ```
 
-#### Alternative: Horizontal Layout
-
-```xml
-<!-- activity_main_horizontal.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
-
-    <!-- Left fragment container -->
-    <FrameLayout
-        android:id="@+id/fragment_container_left"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-    <!-- Vertical divider -->
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/divider" />
-
-    <!-- Right fragment container -->
-    <FrameLayout
-        android:id="@+id/fragment_container_right"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-</LinearLayout>
-```
-
-#### 2. Create Fragment Class
-
-Create the fragment class that will be used for displaying both instances.
+**2. Fragment с factory-методом**
 
 ```kotlin
 class CounterFragment : Fragment() {
-
     private var count = 0
-    private lateinit var binding: FragmentCounterBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCounterBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Get title from arguments
         val title = arguments?.getString(ARG_TITLE) ?: "Counter"
-        binding.titleText.text = title
-
-        // Restore count from saved state
-        savedInstanceState?.let {
-            count = it.getInt(KEY_COUNT, 0)
-        }
-
-        updateCountText()
-
-        binding.incrementButton.setOnClickListener {
-            count++
-            updateCountText()
-        }
-
-        binding.decrementButton.setOnClickListener {
-            count--
-            updateCountText()
-        }
-    }
-
-    private fun updateCountText() {
-        binding.countText.text = count.toString()
+        savedInstanceState?.let { count = it.getInt(KEY_COUNT, 0) }
+        // Setup UI
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -146,278 +84,163 @@ class CounterFragment : Fragment() {
         private const val ARG_TITLE = "title"
         private const val KEY_COUNT = "count"
 
-        fun newInstance(title: String): CounterFragment {
-            return CounterFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_TITLE, title)
-                }
-            }
+        fun newInstance(title: String) = CounterFragment().apply {
+            arguments = Bundle().apply { putString(ARG_TITLE, title) }
         }
     }
 }
 ```
 
-#### 3. Fragment Layout
-
-```xml
-<!-- fragment_counter.xml -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
-
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Counter"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/countText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/titleText"
-        app:layout_constraintBottom_toTopOf="@id/incrementButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/incrementButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/decrementButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed" />
-
-    <Button
-        android:id="@+id/decrementButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="-"
-        android:textSize="24sp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/incrementButton"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-```
-
-#### 4. Add Fragments to Activity
-
-Add two instances of the fragment to your activity.
+**3. Добавление в Activity**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Only add fragments if this is the first creation
-        if (savedInstanceState == null) {
-            addFragments()
-        }
-    }
-
-    private fun addFragments() {
-        // Create two instances of the same fragment
-        val fragment1 = CounterFragment.newInstance("Counter 1")
-        val fragment2 = CounterFragment.newInstance("Counter 2")
-
-        // Add both fragments to their respective containers
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container_1, fragment1, "fragment_1")
-            .add(R.id.fragment_container_2, fragment2, "fragment_2")
-            .commit()
-    }
-}
-```
-
-### Alternative: Using replace() Instead of add()
-
-```kotlin
-private fun replaceFragments() {
-    val fragment1 = CounterFragment.newInstance("First")
-    val fragment2 = CounterFragment.newInstance("Second")
-
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.fragment_container_1, fragment1)
-        .replace(R.id.fragment_container_2, fragment2)
-        .commit()
-}
-```
-
-### Advanced: Dynamic Fragment Management
-
-```kotlin
-class MultiFragmentActivity : AppCompatActivity() {
-
-    private val fragmentCount = 2
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_multi_fragment)
-
-        if (savedInstanceState == null) {
-            addMultipleFragments()
-        }
-    }
-
-    private fun addMultipleFragments() {
-        val transaction = supportFragmentManager.beginTransaction()
-
-        repeat(fragmentCount) { index ->
-            val fragment = CounterFragment.newInstance("Counter ${index + 1}")
-            val containerId = when (index) {
-                0 -> R.id.fragment_container_1
-                1 -> R.id.fragment_container_2
-                else -> return@repeat
-            }
-            transaction.add(containerId, fragment, "fragment_$index")
-        }
-
-        transaction.commit()
-    }
-
-    // Accessing specific fragment
-    fun updateFragmentTitle(fragmentIndex: Int, newTitle: String) {
-        val fragment = supportFragmentManager.findFragmentByTag("fragment_$fragmentIndex") as? CounterFragment
-        fragment?.updateTitle(newTitle)
-    }
-}
-
-// Update fragment to support title updates
-class CounterFragment : Fragment() {
-    // ... existing code ...
-
-    fun updateTitle(newTitle: String) {
-        binding.titleText.text = newTitle
-    }
-}
-```
-
-### Using ConstraintLayout for More Complex Layouts
-
-```xml
-<!-- activity_main_constraint.xml -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Top fragment container -->
-    <FrameLayout
-        android:id="@+id/fragment_container_top"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <!-- Bottom fragment container -->
-    <FrameLayout
-        android:id="@+id/fragment_container_bottom"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/guideline"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-```
-
-### Communication Between Fragment Instances
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            val fragment1 = CounterFragment.newInstance("Counter 1")
-            val fragment2 = CounterFragment.newInstance("Counter 2")
-
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_1, fragment1, "fragment_1")
-                .add(R.id.fragment_container_2, fragment2, "fragment_2")
+                .add(R.id.fragment_container_1,
+                     CounterFragment.newInstance("Counter 1"), "fragment_1")
+                .add(R.id.fragment_container_2,
+                     CounterFragment.newInstance("Counter 2"), "fragment_2")
                 .commit()
         }
     }
-
-    // Synchronize fragments
-    fun syncFragmentCounts() {
-        val fragment1 = supportFragmentManager.findFragmentByTag("fragment_1") as? CounterFragment
-        val fragment2 = supportFragmentManager.findFragmentByTag("fragment_2") as? CounterFragment
-
-        val count1 = fragment1?.getCount() ?: 0
-        fragment2?.setCount(count1)
-    }
 }
+```
 
-// Update CounterFragment with getCount and setCount methods
+### Ключевые принципы
+
+✅ **Используйте уникальные теги** - для идентификации экземпляров
+✅ **Проверяйте savedInstanceState** - чтобы не создавать дубликаты при пересоздании Activity
+✅ **Сохраняйте состояние** - каждый Fragment независимо сохраняет свое состояние
+✅ **Factory-метод newInstance()** - стандартный паттерн для передачи аргументов
+
+❌ Не создавайте фрагменты повторно при каждом onCreate()
+❌ Не используйте один тег для разных экземпляров
+
+---
+
+## Answer (EN)
+
+Add two instances of the same Fragment class to separate container views in the Activity layout. Each instance maintains independent state.
+
+### Basic Approach
+
+**1. Activity Layout with Two Containers**
+
+```xml
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fragment_container_1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container_2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
+```
+
+**2. Fragment with Factory Method**
+
+```kotlin
 class CounterFragment : Fragment() {
-    // ... existing code ...
+    private var count = 0
 
-    fun getCount(): Int = count
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val title = arguments?.getString(ARG_TITLE) ?: "Counter"
+        savedInstanceState?.let { count = it.getInt(KEY_COUNT, 0) }
+        // Setup UI
+    }
 
-    fun setCount(newCount: Int) {
-        count = newCount
-        updateCountText()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_COUNT, count)
+    }
+
+    companion object {
+        private const val ARG_TITLE = "title"
+        private const val KEY_COUNT = "count"
+
+        fun newInstance(title: String) = CounterFragment().apply {
+            arguments = Bundle().apply { putString(ARG_TITLE, title) }
+        }
     }
 }
 ```
 
-### Key Points
+**3. Adding to Activity**
 
-1. **Each fragment is an independent instance** - They maintain separate state even though they use the same class
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-2. **Use unique container IDs** - Each fragment needs its own container in the layout
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container_1,
+                     CounterFragment.newInstance("Counter 1"), "fragment_1")
+                .add(R.id.fragment_container_2,
+                     CounterFragment.newInstance("Counter 2"), "fragment_2")
+                .commit()
+        }
+    }
+}
+```
 
-3. **Use unique tags** - Tags help identify and retrieve specific fragment instances
+### Key Principles
 
-4. **State is preserved independently** - Each fragment saves and restores its own state
+✅ **Use unique tags** - to identify fragment instances
+✅ **Check savedInstanceState** - to avoid creating duplicates on Activity recreation
+✅ **Save state independently** - each Fragment manages its own state
+✅ **Factory method newInstance()** - standard pattern for passing arguments
 
-5. **Communication through Activity** - Fragments can communicate via the parent activity
-
-## Ответ (RU)
-Чтобы одновременно отобразить два одинаковых фрагмента на одном экране в Android-приложении, вам нужно добавить два экземпляра фрагмента в разные контейнеры в макете активности. В этом случае каждый фрагмент будет работать независимо, даже если они используют один и тот же класс. 1. Создайте макет для активности который будет содержать два контейнера для фрагментов. Обычно это делается с помощью FrameLayout или LinearLayout. 2. Создайте класс фрагмента который будет использоваться для отображения обоих экземпляров. 3. Добавьте фрагменты в активность Теперь добавьте два экземпляра фрагмента в вашу активность. 4. Создайте макет для фрагмента Это может быть любой макет, который вы хотите использовать.
-
+❌ Don't recreate fragments on every onCreate()
+❌ Don't use the same tag for different instances
 
 ---
 
+## Follow-ups
+
+- What happens if you don't check savedInstanceState before adding fragments?
+- How can fragments communicate with each other through the parent Activity?
+- What's the difference between add() and replace() for fragment transactions?
+- How do you handle configuration changes with multiple fragment instances?
+- Can you use the same Fragment instance in multiple containers?
+
+## References
+
+- [Android Fragments Documentation](https://developer.android.com/guide/fragments)
+- [FragmentTransaction API](https://developer.android.com/reference/androidx/fragment/app/FragmentTransaction)
+- [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [Best Practices for Fragments](https://developer.android.com/guide/fragments/best-practices)
+
 ## Related Questions
 
-### Related (Easy)
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
-- [[q-fragment-basics--android--easy]] - Fragment
+### Prerequisites (Easier)
+- [[q-fragment-basics--android--easy]] - Fragment basics
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment layouts
+
+### Related (Same Level)
+- [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] - View lifecycle
+- [[q-which-class-to-catch-gestures--android--easy]] - Touch handling
 
 ### Advanced (Harder)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment
-- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Fragment
+- [[q-save-data-outside-fragment--android--medium]] - Fragment data persistence
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment use cases
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Fragment vs Activity

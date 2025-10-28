@@ -1,191 +1,92 @@
 ---
-id: 20251012-1227182
-title: "How To Draw Ui Without Xml / Как рисовать UI без XML"
+id: 20251012-122718
+title: "How To Draw UI Without XML / Как рисовать UI без XML"
+aliases: [Draw UI Without XML, Рисовать UI без XML, Jetpack Compose, Programmatic Views]
 topic: android
+subtopics: [ui-compose, ui-views]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-flaky-test-prevention--testing--medium, q-how-to-draw-ui-without-xml--android--easy, q-what-each-android-component-represents--android--easy]
+related: [c-jetpack-compose, c-android-views, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
-tags: [android, difficulty/easy, languages]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:39:47 pm
+updated: 2025-10-28
+tags: [android/ui-compose, android/ui-views, compose, views, ui, difficulty/easy]
+sources: []
+---
+# Вопрос (RU)
+
+> Как создать пользовательский интерфейс в Android без использования XML файлов разметки?
+
+# Question (EN)
+
+> How can you create user interfaces in Android without using XML layout files?
+
 ---
 
-# Как Рисовать UI Без Xml?
+## Ответ (RU)
 
-## Answer (EN)
-In Android, you can create UI without XML using **Jetpack Compose** (modern, declarative approach) or **programmatic View creation** (traditional approach).
+В Android существует два основных способа создания UI без XML:
 
-### 1. Jetpack Compose (Recommended)
+**1. Jetpack Compose** (современный, декларативный подход):
+- ✅ Декларативный синтаксис
+- ✅ Автоматическое обновление состояния
+- ✅ Меньше шаблонного кода
+- ✅ Встроенный предпросмотр
+
+**2. Программное создание View** (традиционный подход):
+- ✅ Полный контроль над созданием
+- ✅ Динамическое создание UI
+- ❌ Императивный стиль
+- ❌ Больше шаблонного кода
+
+### Пример Jetpack Compose
 
 ```kotlin
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             MaterialTheme {
-                MainScreen()
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("Hello, Compose!")
+                    Button(onClick = { /* действие */ }) {
+                        Text("Нажми")
+                    }
+                }
             }
-        }
-    }
-}
-
-@Composable
-fun MainScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Hello, Compose!",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { /* action */ }) {
-            Text("Click Me")
         }
     }
 }
 ```
 
-### 2. Programmatic View Creation
+### Пример программного создания View
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Create layout programmatically
-        val linearLayout = LinearLayout(this).apply {
+        val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
             setPadding(16.dp, 16.dp, 16.dp, 16.dp)
-            gravity = Gravity.CENTER
-        }
 
-        // Add TextView
-        val textView = TextView(this).apply {
-            text = "Hello, Android!"
-            textSize = 24f
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
+            addView(TextView(context).apply {
+                text = "Hello, Android!"
+            })
 
-        // Add Button
-        val button = Button(this).apply {
-            text = "Click Me"
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                topMargin = 16.dp
-            }
-            setOnClickListener {
-                Toast.makeText(context, "Button clicked!", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        // Add views to layout
-        linearLayout.addView(textView)
-        linearLayout.addView(button)
-
-        // Set as content view
-        setContentView(linearLayout)
-    }
-
-    private val Int.dp: Int
-        get() = (this * resources.displayMetrics.density).toInt()
-}
-```
-
-### 3. Complex Layout Example (Programmatic)
-
-```kotlin
-class ProgrammaticLayoutActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val rootLayout = createRootLayout()
-        setContentView(rootLayout)
-    }
-
-    private fun createRootLayout(): View {
-        return LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-
-            // Add header
-            addView(createHeader())
-
-            // Add content
-            addView(createContent())
-
-            // Add footer
-            addView(createFooter())
-        }
-    }
-
-    private fun createHeader(): View {
-        return TextView(this).apply {
-            text = "Header"
-            textSize = 20f
-            gravity = Gravity.CENTER
-            setBackgroundColor(Color.LTGRAY)
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
-    }
-
-    private fun createContent(): View {
-        return ScrollView(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                0,
-                1f // weight
-            )
-
-            addView(LinearLayout(context).apply {
-                orientation = LinearLayout.VERTICAL
-
-                repeat(20) { index ->
-                    addView(TextView(context).apply {
-                        text = "Item $index"
-                        setPadding(16.dp, 8.dp, 16.dp, 8.dp)
-                    })
-                }
+            addView(Button(context).apply {
+                text = "Нажми"
+                setOnClickListener { /* действие */ }
             })
         }
-    }
 
-    private fun createFooter(): View {
-        return Button(this).apply {
-            text = "Action"
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(16.dp, 8.dp, 16.dp, 16.dp)
-            }
-        }
+        setContentView(layout)
     }
 
     private val Int.dp: Int
@@ -193,65 +94,133 @@ class ProgrammaticLayoutActivity : AppCompatActivity() {
 }
 ```
 
-### 4. Compose Vs Programmatic Views
-
-| Aspect | Jetpack Compose | Programmatic Views |
-|--------|-----------------|-------------------|
-| Syntax | Declarative | Imperative |
-| Code | Cleaner, less verbose | More boilerplate |
-| State | Automatic updates | Manual updates |
-| Preview | Built-in | Requires running app |
-| Modern | Yes | Legacy approach |
-
-### 5. Hybrid Approach - Compose in View
+### Гибридный подход
 
 ```kotlin
-class HybridActivity : AppCompatActivity() {
+// ComposeView в традиционной иерархии View
+val composeView = ComposeView(context).apply {
+    setContent {
+        MaterialTheme {
+            Text("Compose в View")
+        }
+    }
+}
+linearLayout.addView(composeView)
+```
 
+**Рекомендация**: Используйте [[c-jetpack-compose]] для новых проектов, программные View для поддержки legacy кода или специфичных случаев.
+
+## Answer (EN)
+
+Android provides two main approaches to create UI without XML:
+
+**1. Jetpack Compose** (modern, declarative):
+- ✅ Declarative syntax
+- ✅ Automatic state updates
+- ✅ Less boilerplate
+- ✅ Built-in preview support
+
+**2. Programmatic View creation** (traditional):
+- ✅ Full control over creation
+- ✅ Dynamic UI generation
+- ❌ Imperative style
+- ❌ More boilerplate
+
+### Jetpack Compose Example
+
+```kotlin
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val rootLayout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-        }
-
-        // Add traditional View
-        rootLayout.addView(TextView(this).apply {
-            text = "Traditional View"
-        })
-
-        // Add Compose View
-        val composeView = ComposeView(this).apply {
-            setContent {
-                MaterialTheme {
-                    Text("Compose View", modifier = Modifier.padding(16.dp))
+        setContent {
+            MaterialTheme {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text("Hello, Compose!")
+                    Button(onClick = { /* action */ }) {
+                        Text("Click Me")
+                    }
                 }
             }
         }
-        rootLayout.addView(composeView)
-
-        setContentView(rootLayout)
     }
 }
 ```
 
+### Programmatic View Creation Example
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+
+            addView(TextView(context).apply {
+                text = "Hello, Android!"
+            })
+
+            addView(Button(context).apply {
+                text = "Click Me"
+                setOnClickListener { /* action */ }
+            })
+        }
+
+        setContentView(layout)
+    }
+
+    private val Int.dp: Int
+        get() = (this * resources.displayMetrics.density).toInt()
+}
+```
+
+### Hybrid Approach
+
+```kotlin
+// ComposeView in traditional View hierarchy
+val composeView = ComposeView(context).apply {
+    setContent {
+        MaterialTheme {
+            Text("Compose in View")
+        }
+    }
+}
+linearLayout.addView(composeView)
+```
+
+**Recommendation**: Use [[c-jetpack-compose]] for new projects, programmatic Views for legacy support or specific use cases.
+
 ---
 
-# Как Рисовать UI Без Xml
+## Follow-ups
 
-## Ответ (RU)
-В Android можно создавать интерфейс без XML с помощью Jetpack Compose или программного кода (View в Kotlin/Java).
+- What are the performance implications of Compose vs programmatic Views?
+- How do you handle complex layouts programmatically?
+- Can you mix Compose and traditional Views in the same screen?
+- When would you choose programmatic Views over Compose?
+- How do you test UI created without XML?
 
----
+## References
+
+- [[c-jetpack-compose]] - Modern declarative UI framework
+- [[c-android-views]] - Traditional View system
+- [[moc-android]] - Android development guide
+- [Compose documentation](https://developer.android.com/jetpack/compose)
+- [View system guide](https://developer.android.com/develop/ui/views)
 
 ## Related Questions
 
-### Related (Easy)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+### Prerequisites (Easier)
+- [[q-what-each-android-component-represents--android--easy]] - Android components overview
+
+### Related (Same Level)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - UI architecture
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI basics
 
 ### Advanced (Harder)
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- q-rxjava-pagination-recyclerview--android--medium - Ui
-- [[q-build-optimization-gradle--android--medium]] - Ui
+- [[q-compose-state-management--android--medium]] - State in Compose
+- [[q-compose-recomposition--android--medium]] - Recomposition optimization
