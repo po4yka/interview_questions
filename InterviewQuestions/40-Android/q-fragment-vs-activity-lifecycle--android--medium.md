@@ -1,51 +1,59 @@
 ---
 id: 20251017-144927
-title: "Fragment Vs Activity Lifecycle"
+title: "Чем Жизненный Цикл Fragment Отличается От Activity / Fragment vs Activity Lifecycle"
+aliases: ["Fragment vs Activity Lifecycle", "Чем отличается жизненный цикл Fragment от Activity"]
 topic: android
+subtopics: [lifecycle, fragment, activity]
+question_kind: android
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-is-layoutinflater-a-singleton-and-why--programming-languages--medium, q-privacy-sandbox-fledge--privacy--hard]
 created: 2025-10-15
-tags: [difficulty/medium, fragments, lifecycle]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:47:11 pm
+updated: 2025-10-28
+sources: []
+tags: [android/lifecycle, android/fragment, android/activity, difficulty/medium, fragments, lifecycle]
 ---
 
-# Чем Жизненный Цикл Фрагмента Отличается От Activity
+# Вопрос (RU)
 
-**English**: How does Fragment lifecycle differ from Activity lifecycle?
+Чем жизненный цикл Fragment отличается от жизненного цикла Activity?
 
-## Answer (EN)
-Жизненный цикл фрагмента похож на жизненный цикл активити, но имеет дополнительные состояния и события, отражающие его уникальную способность быть добавленным, удалённым, заменённым или восстановленным в рамках активити.
+# Question (EN)
 
-### Key Differences
+How does the Fragment lifecycle differ from the Activity lifecycle?
 
-#### 1. Nesting within Activity
+---
 
-Фрагменты существуют внутри активити и зависят от её жизненного цикла.
+## Ответ (RU)
+
+Fragment имеет более детализированный жизненный цикл по сравнению с Activity, включая дополнительные состояния для привязки к Activity и управления View.
+
+### Ключевые отличия
+
+**1. Дополнительные состояния привязки**
+
+Fragment имеет состояния `onAttach()` и `onDetach()`, которые отражают привязку к Activity:
 
 ```kotlin
 class MyFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        // Фрагмент связывается с Activity
+        // ✅ Fragment привязан к Activity
     }
 
     override fun onDetach() {
         super.onDetach()
-        // Фрагмент отсоединяется от Activity
+        // ✅ Fragment отвязан от Activity
     }
 }
 ```
 
-Фрагменты имеют дополнительные события:
-- `onAttach()` - когда фрагмент связывается с активити
-- `onDetach()` - когда фрагмент отсоединяется от активити
+**2. Отдельный жизненный цикл View**
 
-#### 2. View Management
-
-Фрагменты имеют отдельный жизненный цикл для управления своим представлением.
+Fragment разделяет свой собственный жизненный цикл и жизненный цикл View, что позволяет уничтожать и пересоздавать View без уничтожения самого Fragment:
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -53,165 +61,185 @@ class MyFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        // Создание представления фрагмента
-        return inflater.inflate(R.layout.fragment_my, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // View создан, можно инициализировать UI
-    }
+    ): View = inflater.inflate(R.layout.fragment_my, container, false)
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // View удаляется, но фрагмент может быть восстановлен
+        // ✅ View уничтожен, но Fragment может быть восстановлен
     }
 }
 ```
 
-**Важно**: Фрагмент может быть удалён из UI и затем вновь добавлен без уничтожения самого фрагмента.
+**3. Порядок состояний**
 
-#### 3. More Granular State Management
-
-**Жизненный цикл Activity**:
-
+**Activity** (6 состояний):
 ```
-onCreate() → onStart() → onResume() → onPause() → onStop() → onDestroy()
+onCreate → onStart → onResume → onPause → onStop → onDestroy
 ```
 
-**Жизненный цикл Fragment** (расширенный):
-
+**Fragment** (11 состояний):
 ```
-onAttach() →
-onCreate() →
-onCreateView() →
-onViewCreated() →
-onStart() →
-onResume() →
-onPause() →
-onStop() →
-onDestroyView() →  ← Дополнительное состояние
-onDestroy() →
-onDetach()
+onAttach → onCreate → onCreateView → onViewCreated →
+onStart → onResume → onPause → onStop →
+onDestroyView → onDestroy → onDetach
 ```
 
-#### 4. Interaction with Other Fragments
+**4. ViewLifecycleOwner**
 
-Фрагменты взаимодействуют через родительскую активити или через shared ViewModel.
+Fragment предоставляет отдельный `viewLifecycleOwner` для наблюдения за данными только пока View существует:
 
 ```kotlin
-// Через Activity
-class ListFragment : Fragment() {
-    interface OnItemSelectedListener {
-        fun onItemSelected(id: Int)
-    }
-
-    private var listener: OnItemSelectedListener? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? OnItemSelectedListener
-    }
-}
-
-// Через shared ViewModel (современный подход)
-class ListFragment : Fragment() {
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-
-    private fun selectItem(id: Int) {
-        sharedViewModel.selectItem(id)
-    }
-}
-
-class DetailFragment : Fragment() {
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-
+class MyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        sharedViewModel.selectedItem.observe(viewLifecycleOwner) { item ->
-            // Обновить UI
+        // ✅ Использовать viewLifecycleOwner вместо this
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            // Подписка автоматически отменится при onDestroyView
         }
     }
 }
 ```
 
-#### 5. Reusability and Multiple Embedding
+**5. Программный back stack**
 
-Фрагменты разработаны для многократного встраивания в различные активити или даже в другие фрагменты.
-
-```kotlin
-// Один фрагмент, несколько мест использования
-class ProfileFragment : Fragment() {
-    companion object {
-        fun newInstance(userId: Int): ProfileFragment {
-            return ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putInt("USER_ID", userId)
-                }
-            }
-        }
-    }
-}
-
-// Использование в MainActivity
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, ProfileFragment.newInstance(123))
-            .commit()
-    }
-}
-
-// Использование в SettingsActivity
-class SettingsActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, ProfileFragment.newInstance(456))
-            .commit()
-    }
-}
-```
-
-#### 6. Back Stack Management
-
-Фрагменты поддерживают back stack, позволяя пользователю вернуться к предыдущему состоянию.
+Fragment поддерживает собственный back stack независимо от системного:
 
 ```kotlin
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, DetailFragment())
-    .addToBackStack("detail")  // Добавить в back stack
+    .addToBackStack(null) // ✅ Добавить в back stack
     .commit()
+```
 
-// Пользователь нажимает "Назад" - вернётся к предыдущему фрагменту
+### Сравнительная таблица
+
+| Аспект | Activity | Fragment |
+|--------|----------|----------|
+| Количество состояний | 6 | 11 |
+| View lifecycle | Совпадает с Activity | Отдельный от Fragment |
+| Привязка к родителю | — | onAttach/onDetach |
+| Back stack | Системный | Программный |
+| Вложенность | — | Поддерживает child fragments |
+
+---
+
+## Answer (EN)
+
+Fragment has a more granular lifecycle than Activity, with additional states for Activity binding and View management.
+
+### Key Differences
+
+**1. Additional Attachment States**
+
+Fragment has `onAttach()` and `onDetach()` states that reflect binding to Activity:
+
+```kotlin
+class MyFragment : Fragment() {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // ✅ Fragment attached to Activity
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        // ✅ Fragment detached from Activity
+    }
+}
+```
+
+**2. Separate View Lifecycle**
+
+Fragment separates its own lifecycle from its View lifecycle, allowing View destruction and recreation without destroying the Fragment itself:
+
+```kotlin
+class MyFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_my, container, false)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // ✅ View destroyed, but Fragment can be restored
+    }
+}
+```
+
+**3. State Order**
+
+**Activity** (6 states):
+```
+onCreate → onStart → onResume → onPause → onStop → onDestroy
+```
+
+**Fragment** (11 states):
+```
+onAttach → onCreate → onCreateView → onViewCreated →
+onStart → onResume → onPause → onStop →
+onDestroyView → onDestroy → onDetach
+```
+
+**4. ViewLifecycleOwner**
+
+Fragment provides a separate `viewLifecycleOwner` to observe data only while View exists:
+
+```kotlin
+class MyFragment : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // ✅ Use viewLifecycleOwner instead of this
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            // Subscription automatically cancelled on onDestroyView
+        }
+    }
+}
+```
+
+**5. Programmatic Back Stack**
+
+Fragment supports its own back stack independent of the system back stack:
+
+```kotlin
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, DetailFragment())
+    .addToBackStack(null) // ✅ Add to back stack
+    .commit()
 ```
 
 ### Comparison Table
 
-| Аспект | Activity | Fragment |
+| Aspect | Activity | Fragment |
 |--------|----------|----------|
-| **Зависимость** | Независима | Зависит от Activity |
-| **Количество состояний** | 7 основных | 11 (включая onAttach, onCreateView и т.д.) |
-| **View lifecycle** | Привязан к активити | Отдельный от фрагмента |
-| **Переиспользование** | Сложно | Легко |
-| **Back stack** | Системный | Управляемый программно |
-| **Вложенность** | Нет | Может содержать child fragments |
-
-**English**: Fragment lifecycle is more granular than Activity, with additional states like onAttach/onDetach for Activity binding and onCreateView/onDestroyView for view management. Fragments can be reused across activities, support programmatic back stack, and have separate view lifecycle allowing view destruction without fragment destruction.
+| Number of states | 6 | 11 |
+| View lifecycle | Same as Activity | Separate from Fragment |
+| Parent binding | — | onAttach/onDetach |
+| Back stack | System | Programmatic |
+| Nesting | — | Supports child fragments |
 
 ---
 
+## Follow-ups
+
+- What happens if you observe LiveData with Fragment instead of viewLifecycleOwner?
+- How do nested fragments affect the lifecycle order?
+- When should you use `setRetainInstance(true)` and is it still recommended?
+- How does configuration change affect Fragment lifecycle differently from Activity?
+
+## References
+
+- [Android Fragment Lifecycle Documentation](https://developer.android.com/guide/fragments/lifecycle)
+- [ViewLifecycleOwner Best Practices](https://developer.android.com/topic/libraries/architecture/lifecycle)
+
 ## Related Questions
 
-### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle, Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle, Activity
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Lifecycle, Activity
-- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]] - Lifecycle, Activity
+### Prerequisites
+- [[q-activity-lifecycle-methods--android--medium]] — Activity lifecycle basics
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] — Fragment purpose
 
-### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Activity, Fragment
+### Related
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] — Lifecycle dependency
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] — Alternative perspective
+
+### Advanced
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] — Fragment design rationale
+- [[q-fragments-and-activity-relationship--android--hard]] — Deep dive into relationship
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] — Callback differences

@@ -3,7 +3,7 @@ id: 20251012-400007
 title: "Flow Testing with Turbine / Тестирование Flow с Turbine"
 aliases: ["Flow Testing with Turbine", "Тестирование Flow с Turbine"]
 topic: android
-subtopics: [kotlin-flow, testing]
+subtopics: [testing-unit, coroutines, flow]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,11 +12,9 @@ status: draft
 moc: moc-android
 related: [c-turbine-testing, q-compose-testing--android--medium, q-unit-testing-coroutines-flow--android--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [android/kotlin-flow, android/testing, coroutines, difficulty/medium, kotlin-flow, turbine, unit-testing]
+updated: 2025-10-28
+tags: [android/testing-unit, android/coroutines, android/flow, difficulty/medium, turbine, unit-testing]
 sources: [https://github.com/cashapp/turbine]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:51:58 pm
 ---
 
 # Вопрос (RU)
@@ -29,601 +27,323 @@ date modified: Saturday, October 25th 2025, 4:51:58 pm
 
 ## Ответ (RU)
 
-**Теория Turbine:**
-Turbine - это библиотека тестирования, которая упрощает тестирование Kotlin Flows предоставлением интуитивных APIs для проверки эмиссий. Решает проблему сложности тестирования асинхронных Flow из-за их недетерминированной природы.
+**Что такое Turbine:**
+Turbine — библиотека для тестирования Kotlin Flow от Cash App, предоставляющая декларативный API для проверки асинхронных эмиссий. Решает проблему недетерминированности Flow-тестов и упрощает верификацию последовательности событий.
 
-**Основные концепции:**
-- Упрощает тестирование Flow с помощью декларативных API
-- Предоставляет методы для ожидания эмиссий, завершения и ошибок
-- Работает с TestScope для контроля времени
-- Поддерживает StateFlow, SharedFlow и обычные Flow
-- Автоматически обрабатывает отмену и очистку ресурсов
+**Ключевые возможности:**
+- Декларативные методы для проверки эмиссий (`awaitItem`, `awaitComplete`, `awaitError`)
+- Интеграция с `kotlinx-coroutines-test` для контроля виртуального времени
+- Поддержка StateFlow, SharedFlow и холодных Flow
+- Автоматическая очистка ресурсов и обработка отмены
 
-**Настройка Turbine:**
+**Основной API:**
+
 ```kotlin
-// Добавляем зависимость
-dependencies {
-    testImplementation "app.cash.turbine:turbine:1.0.0"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
-}
-
-// Базовое использование
+// ✅ Базовый паттерн тестирования Flow
 @Test
-fun `test simple flow`() = runTest {
+fun `test flow emissions`() = runTest {
     val flow = flowOf(1, 2, 3)
 
     flow.test {
-        assertEquals(1, awaitItem())
+        assertEquals(1, awaitItem())  // ждем первую эмиссию
         assertEquals(2, awaitItem())
         assertEquals(3, awaitItem())
-        awaitComplete()
+        awaitComplete()               // проверяем завершение
+    }
+}
+
+// ✅ Тестирование ошибок
+@Test
+fun `test flow error`() = runTest {
+    val flow = flow {
+        emit("data")
+        throw IOException("Network error")
+    }
+
+    flow.test {
+        assertEquals("data", awaitItem())
+        val error = awaitError()
+        assertTrue(error is IOException)
+    }
+}
+
+// ✅ Проверка отсутствия событий
+@Test
+fun `test delayed emission`() = runTest {
+    val flow = flow {
+        delay(100)
+        emit(42)
+    }
+
+    flow.test {
+        expectNoEvents()           // нет эмиссий до истечения delay
+        advanceTimeBy(100)
+        assertEquals(42, awaitItem())
     }
 }
 ```
 
-**Основные API Turbine:**
-```kotlin
-class FlowTurbineBasicsTest {
+**Тестирование StateFlow в ViewModel:**
 
-    @Test
-    fun `awaitItem - wait for next emission`() = runTest {
-        val flow = flow {
-            emit(1)
-            emit(2)
-            emit(3)
-        }
-
-        flow.test {
-            assertEquals(1, awaitItem())
-            assertEquals(2, awaitItem())
-            assertEquals(3, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `awaitComplete - wait for flow completion`() = runTest {
-        val flow = flowOf(1, 2, 3)
-
-        flow.test {
-            awaitItem()  // 1
-            awaitItem()  // 2
-            awaitItem()  // 3
-            awaitComplete()  // Проверяет завершение Flow
-        }
-    }
-
-    @Test
-    fun `awaitError - wait for flow error`() = runTest {
-        val flow = flow {
-            emit(1)
-            throw IllegalStateException("Error!")
-        }
-
-        flow.test {
-            assertEquals(1, awaitItem())
-            val error = awaitError()
-            assertTrue(error is IllegalStateException)
-            assertEquals("Error!", error.message)
-        }
-    }
-
-    @Test
-    fun `expectNoEvents - assert no emissions`() = runTest {
-        val flow = flow<Int> {
-            delay(100)
-            emit(1)
-        }
-
-        flow.test {
-            expectNoEvents()  // Нет событий короткое время
-            advanceTimeBy(100)
-            assertEquals(1, awaitItem())
-        }
-    }
-}
-```
-
-**Тестирование StateFlow:**
 ```kotlin
 class CounterViewModel : ViewModel() {
     private val _count = MutableStateFlow(0)
-    val count: StateFlow<Int> = _count.asStateFlow()
+    val count = _count.asStateFlow()
 
-    fun increment() {
-        _count.value++
-    }
-
-    fun decrement() {
-        _count.value--
-    }
+    fun increment() { _count.value++ }
 }
 
-class CounterViewModelTest {
-    private lateinit var viewModel: CounterViewModel
+@Test
+fun `increment updates state correctly`() = runTest {
+    Dispatchers.setMain(StandardTestDispatcher())
+    val viewModel = CounterViewModel()
 
-    @Before
-    fun setup() {
-        Dispatchers.setMain(StandardTestDispatcher())
-        viewModel = CounterViewModel()
+    viewModel.count.test {
+        assertEquals(0, awaitItem())  // ✅ StateFlow всегда имеет начальное значение
+
+        viewModel.increment()
+        assertEquals(1, awaitItem())
+
+        cancelAndIgnoreRemainingEvents()  // ✅ завершаем тест без ожидания
     }
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `increment updates count`() = runTest {
-        viewModel.count.test {
-            // StateFlow всегда имеет начальное значение
-            assertEquals(0, awaitItem())
-
-            viewModel.increment()
-            assertEquals(1, awaitItem())
-
-            viewModel.increment()
-            assertEquals(2, awaitItem())
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+    Dispatchers.resetMain()
 }
 ```
 
-**Тестирование SharedFlow:**
+**Тестирование UI State паттерна:**
+
 ```kotlin
-class EventBus {
-    private val _events = MutableSharedFlow<Event>()
-    val events: SharedFlow<Event> = _events.asSharedFlow()
-
-    suspend fun emit(event: Event) {
-        _events.emit(event)
-    }
+sealed interface UiState {
+    data object Loading : UiState
+    data class Success(val data: String) : UiState
+    data class Error(val msg: String) : UiState
 }
 
-sealed interface Event {
-    data class UserLoggedIn(val userId: String) : Event
-    data class UserLoggedOut(val userId: String) : Event
-    data class ErrorOccurred(val message: String) : Event
-}
+class DataViewModel(private val repo: Repository) : ViewModel() {
+    private val _state = MutableStateFlow<UiState>(UiState.Loading)
+    val state = _state.asStateFlow()
 
-class EventBusTest {
-
-    @Test
-    fun `emitted events are received`() = runTest {
-        val eventBus = EventBus()
-
-        eventBus.events.test {
-            // SharedFlow не имеет начального значения
-            expectNoEvents()
-
-            eventBus.emit(Event.UserLoggedIn("user123"))
-            val event1 = awaitItem()
-            assertTrue(event1 is Event.UserLoggedIn)
-            assertEquals("user123", (event1 as Event.UserLoggedIn).userId)
-
-            eventBus.emit(Event.ErrorOccurred("Network error"))
-            val event2 = awaitItem()
-            assertTrue(event2 is Event.ErrorOccurred)
-            assertEquals("Network error", (event2 as Event.ErrorOccurred).message)
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-}
-```
-
-**Тестирование Repository Flow:**
-```kotlin
-interface UserRepository {
-    fun getUser(userId: String): Flow<Result<User>>
-}
-
-sealed class Result<out T> {
-    data object Loading : Result<Nothing>()
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-}
-
-class UserRepositoryTest {
-
-    @Test
-    fun `getUser emits loading then success`() = runTest {
-        val mockApi = mockk<ApiService>()
-        coEvery { mockApi.getUser("123") } returns User("123", "John Doe")
-
-        val repository = UserRepositoryImpl(mockApi)
-
-        repository.getUser("123").test {
-            // Первая эмиссия: Loading
-            val loading = awaitItem()
-            assertTrue(loading is Result.Loading)
-
-            // Вторая эмиссия: Success
-            val success = awaitItem()
-            assertTrue(success is Result.Success)
-            assertEquals("John Doe", (success as Result.Success).data.name)
-
-            awaitComplete()
-        }
-
-        coVerify { mockApi.getUser("123") }
-    }
-}
-```
-
-**Тестирование ViewModel UI State:**
-```kotlin
-sealed interface ProfileUiState {
-    data object Loading : ProfileUiState
-    data class Success(val user: User) : ProfileUiState
-    data class Error(val message: String) : ProfileUiState
-}
-
-class ProfileViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-    private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
-    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
-
-    fun loadProfile(userId: String) {
+    fun load() {
         viewModelScope.launch {
-            _uiState.value = ProfileUiState.Loading
-
-            repository.getUser(userId).collect { result ->
-                _uiState.value = when (result) {
-                    is Result.Loading -> ProfileUiState.Loading
-                    is Result.Success -> ProfileUiState.Success(result.data)
-                    is Result.Error -> ProfileUiState.Error(result.exception.message ?: "Unknown error")
-                }
-            }
+            repo.getData()
+                .onStart { _state.value = UiState.Loading }
+                .catch { _state.value = UiState.Error(it.message ?: "Unknown") }
+                .collect { _state.value = UiState.Success(it) }
         }
     }
 }
 
-class ProfileViewModelTest {
-    private lateinit var viewModel: ProfileViewModel
-    private lateinit var mockRepository: UserRepository
-    private val testDispatcher = StandardTestDispatcher()
+@Test
+fun `load transitions through states correctly`() = runTest {
+    val mockRepo = mockk<Repository>()
+    coEvery { mockRepo.getData() } returns flowOf("result")
 
-    @Before
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-        mockRepository = mockk()
+    val viewModel = DataViewModel(mockRepo)
+
+    viewModel.state.test {
+        assertTrue(awaitItem() is UiState.Loading)  // начальное
+
+        viewModel.load()
+        advanceUntilIdle()  // ✅ пропускаем виртуальное время до завершения корутин
+
+        // ❌ НЕ используйте skipItems() без понимания, сколько эмиссий пропустить
+        val final = awaitItem()
+        assertTrue(final is UiState.Success)
+        assertEquals("result", (final as UiState.Success).data)
+
+        cancelAndIgnoreRemainingEvents()
     }
+}
+```
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+**Частые ошибки:**
 
-    @Test
-    fun `loadProfile updates uiState correctly`() = runTest {
-        val user = User("123", "John Doe")
-        coEvery { mockRepository.getUser("123") } returns flowOf(
-            Result.Loading,
-            Result.Success(user)
-        )
+```kotlin
+// ❌ Забыли awaitComplete/cancelAndIgnoreRemainingEvents
+flow.test {
+    assertEquals(1, awaitItem())
+    // тест зависнет, ожидая завершения Flow
+}
 
-        viewModel = ProfileViewModel(mockRepository)
+// ✅ Всегда явно завершайте
+flow.test {
+    assertEquals(1, awaitItem())
+    awaitComplete()  // или cancelAndIgnoreRemainingEvents()
+}
 
-        viewModel.uiState.test {
-            // Начальное состояние
-            assertTrue(awaitItem() is ProfileUiState.Loading)
+// ❌ Не учли начальное значение StateFlow
+stateFlow.test {
+    viewModel.update()
+    assertEquals(newValue, awaitItem())  // пропустили начальное!
+}
 
-            // Загружаем профиль
-            viewModel.loadProfile("123")
-            advanceUntilIdle()
-
-            // Должно быть успешное состояние
-            val state = awaitItem()
-            assertTrue(state is ProfileUiState.Success)
-            assertEquals("John Doe", (state as ProfileUiState.Success).user.name)
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+// ✅ Обрабатываем начальную эмиссию
+stateFlow.test {
+    awaitItem()  // пропускаем начальное
+    viewModel.update()
+    assertEquals(newValue, awaitItem())
 }
 ```
 
 ## Answer (EN)
 
-**Turbine Theory:**
-Turbine is a testing library that simplifies testing Kotlin Flows by providing intuitive APIs for asserting emissions. It solves the complexity of testing asynchronous Flows due to their non-deterministic nature.
+**What is Turbine:**
+Turbine is a Flow testing library by Cash App that provides a declarative API for verifying asynchronous emissions. It solves the non-determinism problem in Flow tests and simplifies event sequence verification.
 
-**Main concepts:**
-- Simplifies Flow testing with declarative APIs
-- Provides methods for awaiting emissions, completion, and errors
-- Works with TestScope for time control
-- Supports StateFlow, SharedFlow, and regular Flows
-- Automatically handles cancellation and resource cleanup
+**Key capabilities:**
+- Declarative methods for emission verification (`awaitItem`, `awaitComplete`, `awaitError`)
+- Integration with `kotlinx-coroutines-test` for virtual time control
+- Support for StateFlow, SharedFlow, and cold Flows
+- Automatic resource cleanup and cancellation handling
 
-**Turbine setup:**
+**Core API:**
+
 ```kotlin
-// Add dependency
-dependencies {
-    testImplementation "app.cash.turbine:turbine:1.0.0"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
-}
-
-// Basic usage
+// ✅ Basic Flow testing pattern
 @Test
-fun `test simple flow`() = runTest {
+fun `test flow emissions`() = runTest {
     val flow = flowOf(1, 2, 3)
 
     flow.test {
-        assertEquals(1, awaitItem())
+        assertEquals(1, awaitItem())  // wait for first emission
         assertEquals(2, awaitItem())
         assertEquals(3, awaitItem())
-        awaitComplete()
+        awaitComplete()               // verify completion
+    }
+}
+
+// ✅ Testing errors
+@Test
+fun `test flow error`() = runTest {
+    val flow = flow {
+        emit("data")
+        throw IOException("Network error")
+    }
+
+    flow.test {
+        assertEquals("data", awaitItem())
+        val error = awaitError()
+        assertTrue(error is IOException)
+    }
+}
+
+// ✅ Verifying no events
+@Test
+fun `test delayed emission`() = runTest {
+    val flow = flow {
+        delay(100)
+        emit(42)
+    }
+
+    flow.test {
+        expectNoEvents()           // no emissions before delay expires
+        advanceTimeBy(100)
+        assertEquals(42, awaitItem())
     }
 }
 ```
 
-**Core Turbine APIs:**
-```kotlin
-class FlowTurbineBasicsTest {
+**Testing StateFlow in ViewModel:**
 
-    @Test
-    fun `awaitItem - wait for next emission`() = runTest {
-        val flow = flow {
-            emit(1)
-            emit(2)
-            emit(3)
-        }
-
-        flow.test {
-            assertEquals(1, awaitItem())
-            assertEquals(2, awaitItem())
-            assertEquals(3, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `awaitComplete - wait for flow completion`() = runTest {
-        val flow = flowOf(1, 2, 3)
-
-        flow.test {
-            awaitItem()  // 1
-            awaitItem()  // 2
-            awaitItem()  // 3
-            awaitComplete()  // Asserts flow completed
-        }
-    }
-
-    @Test
-    fun `awaitError - wait for flow error`() = runTest {
-        val flow = flow {
-            emit(1)
-            throw IllegalStateException("Error!")
-        }
-
-        flow.test {
-            assertEquals(1, awaitItem())
-            val error = awaitError()
-            assertTrue(error is IllegalStateException)
-            assertEquals("Error!", error.message)
-        }
-    }
-
-    @Test
-    fun `expectNoEvents - assert no emissions`() = runTest {
-        val flow = flow<Int> {
-            delay(100)
-            emit(1)
-        }
-
-        flow.test {
-            expectNoEvents()  // No events for short duration
-            advanceTimeBy(100)
-            assertEquals(1, awaitItem())
-        }
-    }
-}
-```
-
-**Testing StateFlow:**
 ```kotlin
 class CounterViewModel : ViewModel() {
     private val _count = MutableStateFlow(0)
-    val count: StateFlow<Int> = _count.asStateFlow()
+    val count = _count.asStateFlow()
 
-    fun increment() {
-        _count.value++
-    }
-
-    fun decrement() {
-        _count.value--
-    }
+    fun increment() { _count.value++ }
 }
 
-class CounterViewModelTest {
-    private lateinit var viewModel: CounterViewModel
+@Test
+fun `increment updates state correctly`() = runTest {
+    Dispatchers.setMain(StandardTestDispatcher())
+    val viewModel = CounterViewModel()
 
-    @Before
-    fun setup() {
-        Dispatchers.setMain(StandardTestDispatcher())
-        viewModel = CounterViewModel()
+    viewModel.count.test {
+        assertEquals(0, awaitItem())  // ✅ StateFlow always has initial value
+
+        viewModel.increment()
+        assertEquals(1, awaitItem())
+
+        cancelAndIgnoreRemainingEvents()  // ✅ finish test without waiting
     }
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `increment updates count`() = runTest {
-        viewModel.count.test {
-            // StateFlow always has initial value
-            assertEquals(0, awaitItem())
-
-            viewModel.increment()
-            assertEquals(1, awaitItem())
-
-            viewModel.increment()
-            assertEquals(2, awaitItem())
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+    Dispatchers.resetMain()
 }
 ```
 
-**Testing SharedFlow:**
+**Testing UI State pattern:**
+
 ```kotlin
-class EventBus {
-    private val _events = MutableSharedFlow<Event>()
-    val events: SharedFlow<Event> = _events.asSharedFlow()
-
-    suspend fun emit(event: Event) {
-        _events.emit(event)
-    }
+sealed interface UiState {
+    data object Loading : UiState
+    data class Success(val data: String) : UiState
+    data class Error(val msg: String) : UiState
 }
 
-sealed interface Event {
-    data class UserLoggedIn(val userId: String) : Event
-    data class UserLoggedOut(val userId: String) : Event
-    data class ErrorOccurred(val message: String) : Event
-}
+class DataViewModel(private val repo: Repository) : ViewModel() {
+    private val _state = MutableStateFlow<UiState>(UiState.Loading)
+    val state = _state.asStateFlow()
 
-class EventBusTest {
-
-    @Test
-    fun `emitted events are received`() = runTest {
-        val eventBus = EventBus()
-
-        eventBus.events.test {
-            // SharedFlow doesn't have initial value
-            expectNoEvents()
-
-            eventBus.emit(Event.UserLoggedIn("user123"))
-            val event1 = awaitItem()
-            assertTrue(event1 is Event.UserLoggedIn)
-            assertEquals("user123", (event1 as Event.UserLoggedIn).userId)
-
-            eventBus.emit(Event.ErrorOccurred("Network error"))
-            val event2 = awaitItem()
-            assertTrue(event2 is Event.ErrorOccurred)
-            assertEquals("Network error", (event2 as Event.ErrorOccurred).message)
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-}
-```
-
-**Testing Repository Flow:**
-```kotlin
-interface UserRepository {
-    fun getUser(userId: String): Flow<Result<User>>
-}
-
-sealed class Result<out T> {
-    data object Loading : Result<Nothing>()
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-}
-
-class UserRepositoryTest {
-
-    @Test
-    fun `getUser emits loading then success`() = runTest {
-        val mockApi = mockk<ApiService>()
-        coEvery { mockApi.getUser("123") } returns User("123", "John Doe")
-
-        val repository = UserRepositoryImpl(mockApi)
-
-        repository.getUser("123").test {
-            // First emission: Loading
-            val loading = awaitItem()
-            assertTrue(loading is Result.Loading)
-
-            // Second emission: Success
-            val success = awaitItem()
-            assertTrue(success is Result.Success)
-            assertEquals("John Doe", (success as Result.Success).data.name)
-
-            awaitComplete()
-        }
-
-        coVerify { mockApi.getUser("123") }
-    }
-}
-```
-
-**Testing ViewModel UI State:**
-```kotlin
-sealed interface ProfileUiState {
-    data object Loading : ProfileUiState
-    data class Success(val user: User) : ProfileUiState
-    data class Error(val message: String) : ProfileUiState
-}
-
-class ProfileViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-    private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
-    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
-
-    fun loadProfile(userId: String) {
+    fun load() {
         viewModelScope.launch {
-            _uiState.value = ProfileUiState.Loading
-
-            repository.getUser(userId).collect { result ->
-                _uiState.value = when (result) {
-                    is Result.Loading -> ProfileUiState.Loading
-                    is Result.Success -> ProfileUiState.Success(result.data)
-                    is Result.Error -> ProfileUiState.Error(result.exception.message ?: "Unknown error")
-                }
-            }
+            repo.getData()
+                .onStart { _state.value = UiState.Loading }
+                .catch { _state.value = UiState.Error(it.message ?: "Unknown") }
+                .collect { _state.value = UiState.Success(it) }
         }
     }
 }
 
-class ProfileViewModelTest {
-    private lateinit var viewModel: ProfileViewModel
-    private lateinit var mockRepository: UserRepository
-    private val testDispatcher = StandardTestDispatcher()
+@Test
+fun `load transitions through states correctly`() = runTest {
+    val mockRepo = mockk<Repository>()
+    coEvery { mockRepo.getData() } returns flowOf("result")
 
-    @Before
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-        mockRepository = mockk()
+    val viewModel = DataViewModel(mockRepo)
+
+    viewModel.state.test {
+        assertTrue(awaitItem() is UiState.Loading)  // initial state
+
+        viewModel.load()
+        advanceUntilIdle()  // ✅ skip virtual time until coroutines complete
+
+        // ❌ DON'T use skipItems() without knowing how many emissions to skip
+        val final = awaitItem()
+        assertTrue(final is UiState.Success)
+        assertEquals("result", (final as UiState.Success).data)
+
+        cancelAndIgnoreRemainingEvents()
     }
+}
+```
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+**Common mistakes:**
 
-    @Test
-    fun `loadProfile updates uiState correctly`() = runTest {
-        val user = User("123", "John Doe")
-        coEvery { mockRepository.getUser("123") } returns flowOf(
-            Result.Loading,
-            Result.Success(user)
-        )
+```kotlin
+// ❌ Forgot awaitComplete/cancelAndIgnoreRemainingEvents
+flow.test {
+    assertEquals(1, awaitItem())
+    // test will hang waiting for Flow completion
+}
 
-        viewModel = ProfileViewModel(mockRepository)
+// ✅ Always explicitly finish
+flow.test {
+    assertEquals(1, awaitItem())
+    awaitComplete()  // or cancelAndIgnoreRemainingEvents()
+}
 
-        viewModel.uiState.test {
-            // Initial state
-            assertTrue(awaitItem() is ProfileUiState.Loading)
+// ❌ Didn't account for StateFlow initial value
+stateFlow.test {
+    viewModel.update()
+    assertEquals(newValue, awaitItem())  // missed initial!
+}
 
-            // Load profile
-            viewModel.loadProfile("123")
-            advanceUntilIdle()
-
-            // Should be success state
-            val state = awaitItem()
-            assertTrue(state is ProfileUiState.Success)
-            assertEquals("John Doe", (state as ProfileUiState.Success).user.name)
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+// ✅ Handle initial emission
+stateFlow.test {
+    awaitItem()  // skip initial
+    viewModel.update()
+    assertEquals(newValue, awaitItem())
 }
 ```
 
@@ -631,21 +351,33 @@ class ProfileViewModelTest {
 
 ## Follow-ups
 
-- How does Turbine handle backpressure in Flow testing?
-- What are the differences between test and testIn methods?
-- How do you test cold vs hot flows with Turbine?
+- How does Turbine handle backpressure when testing high-frequency emissions?
+- What's the difference between `test()` and `testIn()` methods, and when to use each?
+- How to test cold vs hot Flows with Turbine?
+- When should you use `expectNoEvents()` vs `expectMostRecentItem()`?
+- How to test Flows with multiple collectors using Turbine?
+- How does Turbine integrate with TestScope's virtual time control?
+
+## References
+
+- [[c-kotlin-flow]] - Kotlin Flow fundamentals
+- [[c-coroutines-testing]] - Coroutines testing concepts
+- Official Turbine documentation: https://github.com/cashapp/turbine
+- kotlinx-coroutines-test guide: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-kotlin-flow-basics--kotlin--easy]] - Flow basics
-- [[q-unit-testing-basics--android--easy]] - Unit testing basics
+### Prerequisites
+- [[q-kotlin-flow-basics--kotlin--easy]] - Understanding Flow fundamentals
+- [[q-coroutines-basics--kotlin--easy]] - Coroutines and structured concurrency
+- [[q-unit-testing-basics--android--easy]] - Unit testing foundations
 
-### Related (Same Level)
-- [[q-unit-testing-coroutines-flow--android--medium]] - Coroutines testing
-- [[q-compose-testing--android--medium]] - Compose testing
-- [[q-viewmodel-testing--android--medium]] - ViewModel testing
+### Related
+- [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flows
+- [[q-viewmodel-testing--android--medium]] - Testing ViewModels with Flows
+- [[q-compose-testing--android--medium]] - Testing Compose UI with state Flows
 
-### Advanced (Harder)
-- [[q-advanced-flow-testing--android--hard]] - Advanced Flow testing
-- [[q-testing-multiplatform--android--hard]] - Multiplatform testing
+### Advanced
+- Testing SharedFlow vs StateFlow differences and best practices
+- Advanced Flow operators testing (debounce, combine, flatMapLatest)
+- Testing Flow with custom CoroutineContext and dispatchers
