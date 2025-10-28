@@ -1,58 +1,48 @@
 ---
 id: 20251011-220007
 title: App Size Optimization / Оптимизация размера приложения
-aliases: [App Size Optimization, Оптимизация размера приложения]
+aliases: ["App Size Optimization", "Оптимизация размера приложения"]
 topic: android
-subtopics:
-  - gradle
-  - performance-memory
+subtopics: [gradle, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-app-bundles--android--easy
-  - q-android-build-optimization--android--medium
-  - q-android-performance-measurement-tools--android--medium
+related: [q-android-app-bundles--android--easy, q-android-build-optimization--android--medium, q-android-performance-measurement-tools--android--medium]
+sources: []
 created: 2025-10-11
-updated: 2025-10-15
+updated: 2025-10-28
 tags: [android/gradle, android/performance-memory, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:03 pm
----
-
-# Вопрос (RU)
-> Что такое Оптимизация размера приложения?
-
 ---
 
 # Question (EN)
-> What is App Size Optimization?
+> What is App Size Optimization and what techniques are used to reduce Android app size?
+
+---
+
+# Вопрос (RU)
+> Что такое оптимизация размера приложения и какие техники используются для уменьшения размера Android-приложения?
+
+---
 
 ## Answer (EN)
-**App Size Optimization** reduces APK/AAB size through resource shrinking, code minification, native library filtering, and Android App Bundle configuration. Smaller apps improve download conversion rates and user experience.
 
-**Size Optimization Theory:**
-App size directly impacts user acquisition - download conversion rates drop 1% per 6MB. Optimization strategies include removing unused code/resources with c-proguard, compressing assets, filtering languages/architectures, and using dynamic delivery to reduce initial install size.
+**App Size Optimization** reduces APK/AAB size through code shrinking, resource optimization, and smart distribution. Download conversion rates drop ~1% per 6MB, making size optimization critical for user acquisition.
 
-**1. R8 Code Minification:**
+### Core Techniques
 
-**Code Shrinking Configuration:**
-R8 removes unused code, obfuscates class/method names, and optimizes bytecode. Enables aggressive optimization while preserving necessary classes for reflection and native methods.
+**1. R8 Code Shrinking & Obfuscation**
+R8 removes unused code, shortens class/method names, and optimizes bytecode at build time.
 
 ```kotlin
-// build.gradle (app)
+// build.gradle.kts
 android {
     buildTypes {
         release {
-            // Enable code shrinking and obfuscation
-            isMinifyEnabled = true
-            // Enable resource shrinking
-            isShrinkResources = true
+            isMinifyEnabled = true        // ✅ Enables R8
+            isShrinkResources = true       // ✅ Removes unused resources
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -62,207 +52,144 @@ android {
 }
 ```
 
-**ProGuard Rules:**
-```proguard
-# Remove logging in release builds
--assumenosideeffects class android.util.Log {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-}
-
-# Keep data classes for serialization
--keep class com.example.model.** { *; }
-
-# Keep Parcelable implementations
--keep class * implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator *;
-}
-
-# Keep native methods
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-```
-
-**2. Resource Shrinking:**
-
-**Automatic Resource Removal:**
-Removes unused resources automatically when minification is enabled. Can specify resources to keep or discard explicitly.
-
-```kotlin
-android {
-    buildTypes {
-        release {
-            isShrinkResources = true
-            isMinifyEnabled = true
-        }
-    }
-
-    // Keep specific resources
-    resourceConfigurations += listOf("en", "ru")
-}
-```
-
-**Resource Keep Configuration:**
-```xml
-<!-- res/raw/keep.xml -->
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@layout/used_by_reflection,@drawable/used_in_code"
-    tools:discard="@layout/unused*,@drawable/unused*" />
-```
-
-**3. Language and Density Filtering:**
-
-**Resource Configuration:**
-Filters out unsupported languages and densities to reduce resource size. Only includes necessary translations and screen densities.
+**2. Resource Optimization**
+Combine automatic shrinking with manual configuration filtering:
 
 ```kotlin
 android {
     defaultConfig {
-        // Only include supported languages
-        resourceConfigurations += listOf("en", "ru", "es")
+        // ✅ Only ship supported languages
+        resourceConfigurations += listOf("en", "ru")
 
-        // Support common densities only
-        resourceConfigurations += listOf(
-            "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
-        )
+        // ✅ Target common densities only
+        resourceConfigurations += listOf("xxhdpi", "xxxhdpi")
     }
 }
 ```
 
-**4. Image Optimization:**
+**3. Image Compression**
+- Convert PNG/JPG → WebP (70-80% smaller)
+- Use vector drawables for icons (90%+ reduction)
+- Avoid shipping unused drawable densities
 
-**WebP Conversion:**
-Converts PNG images to WebP format for 70-80% size reduction while maintaining quality. WebP provides better compression than PNG.
-
-```kotlin
-// Convert PNG to WebP
-// Before: icon_large.png (2.4MB)
-// After: icon_large.webp (0.6MB) - 75% reduction
-```
-
-**Vector Drawables:**
-Uses vector drawables for simple icons and graphics, providing 90%+ size reduction compared to PNG bitmaps.
-
-```xml
-<!-- res/drawable/icon.xml -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M12,2l3.09,6.26L22,9.27l-5,4.87L18.18,22L12,18.77L5.82,22L7,14.14L2,9.27l6.91,-1.01L12,2z"/>
-</vector>
-```
-
-**5. Native Library Filtering:**
-
-**ABI Splits:**
-Creates separate APKs for different CPU architectures instead of including all architectures in one APK.
-
-```kotlin
-android {
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-            isUniversalApk = false
-        }
-    }
-}
-```
-
-**6. Android App Bundle:**
-
-**Dynamic Delivery:**
-Uses Android App Bundle for automatic optimization. Google Play generates optimized APKs for each device configuration.
+**4. Android App Bundle (AAB)**
+Google Play generates device-specific APKs, reducing download size by 40-60%:
 
 ```kotlin
 android {
     bundle {
-        language { enableSplit = true }
-        density { enableSplit = true }
-        abi { enableSplit = true }
+        language.enableSplit = true  // ✅ Language splits
+        density.enableSplit = true   // ✅ Density splits
+        abi.enableSplit = true       // ✅ ABI splits
     }
+}
+```
 
-    defaultConfig {
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+**5. Dependency Management**
+```kotlin
+// ❌ Avoid: Includes entire library
+implementation("com.google.android.gms:play-services")
+
+// ✅ Better: Cherry-pick modules
+implementation("com.google.android.gms:play-services-maps")
+```
+
+---
+
+## Ответ (RU)
+
+**Оптимизация размера приложения** уменьшает размер APK/AAB через сжатие кода, оптимизацию ресурсов и умную дистрибуцию. Конверсия загрузок падает ~1% на каждые 6МБ, что делает оптимизацию критичной для привлечения пользователей.
+
+### Основные техники
+
+**1. Сжатие и обфускация кода с R8**
+R8 удаляет неиспользуемый код, сокращает имена классов/методов и оптимизирует байткод на этапе сборки.
+
+```kotlin
+// build.gradle.kts
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true        // ✅ Включает R8
+            isShrinkResources = true       // ✅ Удаляет неиспользуемые ресурсы
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
 ```
 
-**7. Dynamic Feature Modules:**
-
-**On-Demand Loading:**
-Loads features dynamically to reduce initial app size. Features are downloaded only when needed.
+**2. Оптимизация ресурсов**
+Комбинируйте автоматическое сжатие с ручной фильтрацией конфигураций:
 
 ```kotlin
-// Add dynamic feature module
-implementation project(':feature_module')
+android {
+    defaultConfig {
+        // ✅ Поставляйте только поддерживаемые языки
+        resourceConfigurations += listOf("en", "ru")
 
-// Request dynamic feature
-val request = SplitInstallRequest.newBuilder()
-    .addModule("feature_module")
-    .build()
-
-splitInstallManager.startInstall(request)
-```
-
-**8. Dependency Optimization:**
-
-**Library Analysis:**
-Excludes unused modules from large libraries and uses lightweight alternatives where possible.
-
-```kotlin
-// Exclude unused modules
-implementation("com.squareup.retrofit2:retrofit") {
-    exclude(group = "com.squareup.okhttp3", module = "okhttp")
+        // ✅ Только распространённые плотности экрана
+        resourceConfigurations += listOf("xxhdpi", "xxxhdpi")
+    }
 }
-
-// Use lightweight alternatives
-implementation("com.squareup.okhttp3:okhttp") // Instead of full OkHttp
 ```
 
-**Size Optimization Checklist:**
-- Enable R8 full mode for maximum code optimization
-- Use Android App Bundle for 40-60% size reduction
-- Convert PNG images to WebP format
-- Use vector drawables for simple graphics
-- Filter languages to supported ones only
-- Split APKs by CPU architecture
-- Remove unused resources automatically
-- Use dynamic feature modules for optional features
-- Exclude unused library modules
-- Regular APK analysis with APK Analyzer tool
+**3. Сжатие изображений**
+- Конвертируйте PNG/JPG → WebP (на 70-80% меньше)
+- Используйте vector drawables для иконок (уменьшение на 90%+)
+- Не включайте неиспользуемые плотности drawable
+
+**4. Android App Bundle (AAB)**
+Google Play генерирует APK под конкретные устройства, уменьшая размер загрузки на 40-60%:
+
+```kotlin
+android {
+    bundle {
+        language.enableSplit = true  // ✅ Разделение по языкам
+        density.enableSplit = true   // ✅ Разделение по плотности
+        abi.enableSplit = true       // ✅ Разделение по ABI
+    }
+}
+```
+
+**5. Управление зависимостями**
+```kotlin
+// ❌ Избегайте: включает всю библиотеку
+implementation("com.google.android.gms:play-services")
+
+// ✅ Лучше: выбирайте конкретные модули
+implementation("com.google.android.gms:play-services-maps")
+```
+
+---
 
 ## Follow-ups
 
-- How do you measure app size impact on user acquisition?
-- What's the difference between R8 and ProGuard?
-- How do you handle app size optimization for different device types?
-- What are the trade-offs of dynamic feature modules?
+- How do you measure the impact of app size on conversion rates?
+- When should you use dynamic feature modules vs. instant apps?
+- How does R8 differ from ProGuard in terms of optimization capabilities?
+- What are the trade-offs between AAB splits and maintaining a universal APK?
+- How do you prevent R8 from removing code used via reflection?
 
 ## References
 
-- [Shrink Your App](https://developer.android.com/studio/build/shrink-code)
-- [Android App Bundle](https://developer.android.com/guide/app-bundle)
+- [Shrink Your App (Official Docs)](https://developer.android.com/studio/build/shrink-code)
+- [Android App Bundle Guide](https://developer.android.com/guide/app-bundle)
+- [R8 Optimization](https://developer.android.com/studio/build/r8)
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]]
-- [[q-android-project-parts--android--easy]]
+### Prerequisites
+- [[q-android-app-bundles--android--easy]] - Understanding AAB format and benefits
+- [[q-gradle-build-basics--android--easy]] - Gradle configuration fundamentals
 
-### Related (Same Level)
-- [[q-android-build-optimization--android--medium]]
-- [[q-android-performance-measurement-tools--android--medium]]
-- [[q-android-app-bundles--android--easy]]
+### Related
+- [[q-android-build-optimization--android--medium]] - Build performance and optimization
+- [[q-android-performance-measurement-tools--android--medium]] - Profiling and analysis tools
+- [[q-proguard-r8-configuration--android--medium]] - Advanced R8/ProGuard rules
 
-### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
+### Advanced
+- [[q-dynamic-feature-modules--android--hard]] - On-demand feature delivery
+- [[q-android-security-obfuscation--android--hard]] - Code protection and reverse engineering

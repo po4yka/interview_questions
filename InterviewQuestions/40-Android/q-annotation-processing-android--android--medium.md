@@ -1,201 +1,179 @@
 ---
 id: 20251006-100012
 title: Annotation Processing in Android / Обработка аннотаций в Android
-aliases: [Annotation Processing in Android, Обработка аннотаций в Android]
+aliases: ["Annotation Processing in Android", "Обработка аннотаций в Android"]
 topic: android
-subtopics:
-  - gradle
+subtopics: [gradle]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-build-optimization--android--medium
-  - q-android-modularization--android--medium
-  - q-android-project-parts--android--easy
+related: [q-android-build-optimization--android--medium, q-android-modularization--android--medium, q-android-project-parts--android--easy]
+sources: []
 created: 2025-10-06
-updated: 2025-10-15
+updated: 2025-10-28
 tags: [android/gradle, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:06 pm
 ---
-
 # Вопрос (RU)
-> Что такое Обработка аннотаций в Android?
+> Что такое обработка аннотаций в Android и зачем она нужна?
 
 ---
 
 # Question (EN)
-> What is Annotation Processing in Android?
+> What is annotation processing in Android and why is it needed?
 
-## Answer (EN)
-**Annotation Processing** is a compile-time code generation technique that reads annotations in source code and generates new code based on them, reducing boilerplate and enabling powerful frameworks.
+---
 
-**Annotation Processing Theory:**
-Annotation processing occurs during compilation when processors analyze source code annotations and generate additional code. This enables frameworks like [[c-room]], [[c-hilt]], and Retrofit to create boilerplate-free implementations automatically.
+## Ответ (RU)
 
-**How Annotation Processing Works:**
+**Обработка аннотаций** — это compile-time механизм генерации кода на основе аннотаций в исходном коде. Процессор анализирует аннотации во время компиляции и создает дополнительные файлы .kt/.java, которые компилируются вместе с основным кодом.
 
-```
-Source Code with Annotations
-         ↓
-Annotation Processor (compile-time)
-         ↓
-Generated Code
-         ↓
-Final Compiled App
-```
-
-**1. Basic Example:**
+**Основной принцип:**
 
 ```kotlin
-// Define annotation
-@Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.SOURCE)
-annotation class AutoToString
-
-// Use annotation
-@AutoToString
-data class User(val id: String, val name: String, val email: String)
-
-// Processor generates code
-fun User.toDetailedString(): String {
-    return """
-        User {
-            id=$id,
-            name=$name,
-            email=$email
-        }
-    """.trimIndent()
-}
+Source Code + Annotations → Annotation Processor → Generated Code → Compiled App
 ```
 
-**2. Room Database Example:**
+**Пример: Room Database**
 
 ```kotlin
-// User defines annotation
-@Entity(tableName = "users")
-data class User(
-    @PrimaryKey val id: String,
-    @ColumnInfo(name = "user_name") val name: String,
-    val email: String
-)
-
+// ✅ Аннотированный интерфейс
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUserById(userId: String): User?
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun getUser(id: String): User?
 
     @Insert
-    suspend fun insertUser(user: User)
+    suspend fun insert(user: User)
 }
 
-// Room annotation processor generates:
-// UserDao_Impl.kt - DAO implementation
-// User_Table.kt - Table creation SQL
-// Database schema files
+// ✅ Room генерирует UserDao_Impl.kt с полной реализацией
+// Разработчик пишет только интерфейс
 ```
 
-**3. KAPT vs KSP Comparison:**
+**KAPT vs KSP:**
 
-**KAPT (Kotlin Annotation Processing Tool):**
+KAPT (устаревший подход) конвертирует Kotlin → Java stubs → Java annotation processors, что замедляет сборку в 2x. KSP работает напрямую с Kotlin AST и обеспечивает нативную поддержку Kotlin-специфичных конструкций.
+
 ```kotlin
-// build.gradle.kts
+// ❌ KAPT (deprecated)
 plugins {
     id("kotlin-kapt")
 }
-```
+dependencies {
+    kapt("androidx.room:room-compiler")
+}
 
-**KSP (Kotlin Symbol Processing):**
-```kotlin
-// build.gradle.kts
+// ✅ KSP (preferred)
 plugins {
     id("com.google.devtools.ksp")
 }
-```
-
-**Performance Comparison:**
-
-| Feature | KAPT | KSP | Improvement |
-|---------|------|-----|-------------|
-| **Speed** | Baseline | 2x faster | 2x faster |
-| **Memory** | High | Low | 50% less |
-| **Kotlin Support** | Limited | Native | Full support |
-| **Library Support** | Wide | Growing | Expanding |
-
-**4. Popular Libraries Using Annotation Processing:**
-
-**Room (Database ORM):**
-```kotlin
-@Database(entities = [User::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
+dependencies {
+    ksp("androidx.room:room-compiler")
 }
-// Generates: AppDatabase_Impl, User_Table, UserDao_Impl
 ```
 
-**Hilt/Dagger (Dependency Injection):**
+**Популярные библиотеки:**
+- Room — генерация SQL и DAO реализаций
+- Hilt/Dagger — DI граф и инъекции
+- Moshi — JSON адаптеры
+- Glide — RequestManager и GlideApp
+
+**Best practices:**
+- Мигрируйте на KSP для новых проектов
+- Изолируйте процессоры в отдельных модулях для incremental compilation
+- Кешируйте generated код в CI
+
+---
+
+## Answer (EN)
+
+**Annotation processing** is a compile-time code generation mechanism that analyzes annotations in source code and generates additional .kt/.java files, which are compiled alongside the main code.
+
+**Core principle:**
+
 ```kotlin
-@HiltAndroidApp
-class MyApplication : Application()
-
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity()
-
-@HiltViewModel
-class UserViewModel @Inject constructor(
-    private val repository: UserRepository
-) : ViewModel()
-// Generates DI components
+Source Code + Annotations → Annotation Processor → Generated Code → Compiled App
 ```
 
-**Moshi (JSON Parsing):**
+**Example: Room Database**
+
 ```kotlin
-@JsonClass(generateAdapter = true)
-data class User(val id: String, val name: String)
-// Generates optimized UserJsonAdapter
+// ✅ Annotated interface
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun getUser(id: String): User?
+
+    @Insert
+    suspend fun insert(user: User)
+}
+
+// ✅ Room generates UserDao_Impl.kt with full implementation
+// Developer writes only the interface
 ```
 
-**Key Benefits:**
-- Compile-time code generation
-- Type safety
-- Reduced boilerplate code
-- Better performance than reflection
-- Framework enablement
+**KAPT vs KSP:**
 
-**Best Practices:**
-- Use KSP instead of KAPT for new projects (2x faster)
-- Isolate processors in separate Gradle modules
-- Declare dependencies correctly for incremental compilation
-- Test generated code like regular code
-- Document annotations for developers
+KAPT (legacy approach) converts Kotlin → Java stubs → Java annotation processors, slowing builds by 2x. KSP works directly with Kotlin AST and provides native support for Kotlin-specific constructs.
+
+```kotlin
+// ❌ KAPT (deprecated)
+plugins {
+    id("kotlin-kapt")
+}
+dependencies {
+    kapt("androidx.room:room-compiler")
+}
+
+// ✅ KSP (preferred)
+plugins {
+    id("com.google.devtools.ksp")
+}
+dependencies {
+    ksp("androidx.room:room-compiler")
+}
+```
+
+**Popular libraries:**
+- Room — SQL and DAO implementation generation
+- Hilt/Dagger — DI graph and injections
+- Moshi — JSON adapters
+- Glide — RequestManager and GlideApp
+
+**Best practices:**
+- Migrate to KSP for new projects
+- Isolate processors in separate modules for incremental compilation
+- Cache generated code in CI
+
+---
 
 ## Follow-ups
 
-- How do you debug annotation processing issues?
-- What's the difference between compile-time and runtime code generation?
-- How do you migrate from KAPT to KSP?
-- What are the performance implications of annotation processing?
+- How do you debug annotation processor errors during compilation?
+- What's the difference between SOURCE, CLASS, and RUNTIME retention policies?
+- How do you migrate an existing project from KAPT to KSP?
+- What are the build performance implications of multiple annotation processors?
+- How does incremental annotation processing work?
 
 ## References
 
 - [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
-- [KAPT Documentation](https://kotlinlang.org/docs/kapt.html)
+- [KSP vs KAPT Comparison](https://android-developers.googleblog.com/2021/09/accelerated-kotlin-build-times-with.html)
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-project-parts--android--easy]]
-- [[q-android-app-components--android--easy]]
+### Prerequisites
+- [[q-android-project-parts--android--easy]] — Understanding Gradle modules and build configuration
+- Annotation basics and Java/Kotlin reflection fundamentals
 
-### Related (Same Level)
-- [[q-android-build-optimization--android--medium]]
-- [[q-android-modularization--android--medium]]
-- [[q-android-testing-strategies--android--medium]]
+### Related
+- [[q-android-build-optimization--android--medium]] — Build performance and caching strategies
+- [[q-android-modularization--android--medium]] — Organizing processors in separate modules
+- Room database architecture and code generation patterns
 
-### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
+### Advanced
+- Writing custom KSP processors for domain-specific code generation
+- Incremental annotation processing and build cache optimization

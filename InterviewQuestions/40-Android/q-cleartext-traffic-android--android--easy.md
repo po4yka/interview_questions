@@ -3,55 +3,40 @@ id: 20251006-100011
 title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
 aliases: [Cleartext traffic, Незашифрованный трафик]
 topic: android
-subtopics:
-  - networking-http
-  - permissions
+subtopics: [networking-http, network-security-config]
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-keystore-system--security--medium
-  - q-android-security-practices-checklist--android--medium
-  - q-certificate-pinning--security--medium
+related: [q-android-keystore-system--security--medium, q-android-security-practices-checklist--android--medium, q-certificate-pinning--security--medium]
 created: 2025-10-06
-updated: 2025-10-20
-tags: [android/networking-http, android/permissions, difficulty/easy]
-source: https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted
-source_note: Android docs
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:42 pm
+updated: 2025-10-28
+tags: [android/networking-http, android/network-security-config, difficulty/easy]
+sources: [https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted]
 ---
-
 # Вопрос (RU)
-> Что такое cleartext traffic в Android??
+> Что такое cleartext traffic в Android?
 
 # Question (EN)
-> What is cleartext traffic in Android??
+> What is cleartext traffic in Android?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+**Cleartext traffic** — незашифрованная HTTP-связь без TLS/SSL. Любая сторона на пути передачи может читать и модифицировать данные. Для защиты используйте [[c-encryption]].
 
-## Answer (EN)
+**Политика Android**:
+- Android 9+ (API 28+): cleartext **заблокирован по умолчанию**
+- Старые версии: разрешён по умолчанию
 
-### Definition
-- Cleartext traffic = unencrypted HTTP communication (no TLS). Anyone on path can read/modify. Use [[c-encryption]] for all sensitive data.
-
-### Android Policy
-- Android 9+ (API 28): cleartext is blocked by default to enforce c-secure-storage
-- Older versions: allowed by default
-
-### Allow only for Development (per‑domain)
+**Для разработки** (только конкретные домены):
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
+  <!-- ✅ Разрешить cleartext только для localhost -->
   <domain-config cleartextTrafficPermitted="true">
     <domain includeSubdomains="true">localhost</domain>
     <domain includeSubdomains="true">10.0.2.2</domain>
@@ -64,36 +49,78 @@ date modified: Saturday, October 25th 2025, 4:52:42 pm
 <application android:networkSecurityConfig="@xml/network_security_config" />
 ```
 
-### Do NOT Enable Globally
+**Не использовать** (включает cleartext для всех доменов):
 ```xml
-<!-- Not recommended (enables cleartext for ALL domains) -->
+<!-- ❌ Небезопасно для production -->
 <application android:usesCleartextTraffic="true" />
 ```
 
-### Production Best Practice
-- Enforce HTTPS everywhere; optionally add certificate pinning for sensitive APIs
+**Production**: используйте HTTPS везде, для критичных API добавьте certificate pinning.
 
-### Error you’ll See
+**Типичная ошибка**:
+```text
+java.net.UnknownServiceException: CLEARTEXT communication not permitted by network security policy
 ```
-java.net.UnknownServiceException: CLEARTEXT communication ... not permitted by network security policy
+
+## Answer (EN)
+
+**Cleartext traffic** is unencrypted HTTP communication without TLS/SSL. Anyone on the network path can read and modify the data. Use [[c-encryption]] for secure communication.
+
+**Android Policy**:
+- Android 9+ (API 28+): cleartext is **blocked by default**
+- Older versions: allowed by default
+
+**For development** (specific domains only):
+```xml
+<!-- res/xml/network_security_config.xml -->
+<network-security-config>
+  <!-- ✅ Allow cleartext only for localhost -->
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="true">localhost</domain>
+    <domain includeSubdomains="true">10.0.2.2</domain>
+  </domain-config>
+  <base-config cleartextTrafficPermitted="false" />
+</network-security-config>
+```
+```xml
+<!-- AndroidManifest.xml -->
+<application android:networkSecurityConfig="@xml/network_security_config" />
+```
+
+**Do NOT use** (enables cleartext for all domains):
+```xml
+<!-- ❌ Unsafe for production -->
+<application android:usesCleartextTraffic="true" />
+```
+
+**Production**: enforce HTTPS everywhere, add certificate pinning for sensitive APIs.
+
+**Common error**:
+```text
+java.net.UnknownServiceException: CLEARTEXT communication not permitted by network security policy
 ```
 
 ## Follow-ups
-- When should certificate pinning be added on top of HTTPS?
-- How to enable cleartext only for internal dev environments?
-- How to detect accidental cleartext usage in CI?
+- When should certificate pinning be used in addition to HTTPS?
+- How to enable cleartext only for debug builds using build variants?
+- How to detect cleartext traffic violations during testing?
+- What happens when an app tries cleartext on API 28+ without configuration?
 
 ## References
-- https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted
+- [Android Network Security Configuration](https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted)
+- [[q-android-security-practices-checklist--android--medium]]
+- [[q-certificate-pinning--security--medium]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-security-practices-checklist--android--medium]]
+- Basic HTTP vs HTTPS understanding
+- Android manifest configuration basics
 
 ### Related (Same Level)
+- [[q-android-security-practices-checklist--android--medium]]
 - [[q-certificate-pinning--security--medium]]
-- [[q-android-keystore-system--security--medium]]
 
 ### Advanced (Harder)
-- [[q-android-runtime-art--android--medium]]
+- [[q-android-keystore-system--security--medium]]
+- Certificate pinning implementation patterns

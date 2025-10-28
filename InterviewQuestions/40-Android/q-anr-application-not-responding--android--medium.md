@@ -1,33 +1,93 @@
 ---
 id: 20251012-122778
 title: ANR (Application Not Responding) / ANR (Приложение не отвечает)
-aliases: [ANR (Application Not Responding), ANR (Приложение не отвечает)]
+aliases: ["ANR (Application Not Responding)", "ANR (Приложение не отвечает)"]
 topic: android
-subtopics:
-  - performance-rendering
-  - profiling
-  - strictmode-anr
+subtopics: [performance-rendering, profiling, strictmode-anr]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-build-optimization--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-testing-strategies--android--medium
+related: [q-android-build-optimization--android--medium, q-android-performance-measurement-tools--android--medium, q-android-testing-strategies--android--medium]
 created: 2025-10-05
-updated: 2025-10-15
+updated: 2025-10-28
+sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:53:05 pm
 ---
-
 # Вопрос (RU)
 > Что такое ANR (Приложение не отвечает)?
+
+## Ответ (RU)
+
+**ANR (Application Not Responding)** — это ошибка, возникающая когда UI-поток Android-приложения блокируется на слишком длительное время. Система отображает диалог, позволяющий пользователю принудительно завершить приложение.
+
+**Причины возникновения ANR:**
+
+Main-поток (UI-поток) отвечает за обработку пользовательского ввода и обновление интерфейса. Android-система мониторит отзывчивость этого потока и показывает ANR-диалог при превышении таймаутов:
+
+- **Input dispatching timeout**: Нет ответа на события ввода в течение 5 секунд
+- **Service timeout**: Методы сервиса выполняются слишком долго (20 сек для фоновых, 10 сек для foreground)
+- **BroadcastReceiver timeout**: Receiver не завершается в пределах 10 секунд
+
+**Типичные ошибки:**
+
+```kotlin
+// ❌ ПЛОХО: Блокирующие операции на main thread
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val data = File("large_file.txt").readText()  // I/O блокировка
+        val result = calculateFibonacci(40)            // CPU-интенсивная операция
+        val response = httpClient.get(url).execute()   // Синхронный network call
+    }
+}
+
+// ✅ ХОРОШО: Асинхронное выполнение с корутинами
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val data = File("large_file.txt").readText()
+            withContext(Dispatchers.Main) {
+                updateUI(data)  // Обновление UI на main thread
+            }
+        }
+    }
+}
+```
+
+**Предотвращение ANR:**
+
+1. **Используйте WorkManager** для длительных фоновых операций
+2. **Минимизируйте работу в lifecycle callbacks** (onCreate, onStart)
+3. **Избегайте синхронизации с длинными блокировками**
+4. **Используйте goAsync()** в BroadcastReceiver для асинхронной работы
+
+**Диагностика в production:**
+
+- **Android Vitals** в Play Console показывает ANR rate
+- **ANR traces** (`/data/anr/traces.txt`) содержат стек всех потоков в момент ANR
+- **StrictMode** помогает детектировать ANR-причины во время разработки
+
+```kotlin
+// Включение StrictMode для детекции проблем
+if (BuildConfig.DEBUG) {
+    StrictMode.setThreadPolicy(
+        StrictMode.ThreadPolicy.Builder()
+            .detectDiskReads()
+            .detectDiskWrites()
+            .detectNetwork()
+            .penaltyLog()
+            .build()
+    )
+}
+```
+
+**Ключевой принцип:** Main thread должен выполнять только лёгкие UI-операции (< 16ms для 60 FPS). Всё остальное — на background потоки или корутины с Dispatchers.IO/Default.
 
 ---
 
@@ -35,159 +95,103 @@ date modified: Saturday, October 25th 2025, 4:53:05 pm
 > What is ANR (Application Not Responding)?
 
 ## Answer (EN)
-**ANR (Application Not Responding)** occurs when the UI thread of an Android app is blocked for too long, causing the system to display a dialog allowing users to force quit the app.
 
-**ANR Theory:**
-ANRs happen when the main thread, responsible for UI updates and user input processing, becomes unresponsive. The system monitors main thread responsiveness and triggers ANR dialogs when timeouts are exceeded. Understanding [[c-coroutines]] helps avoid ANRs by moving work off the main thread.
+**ANR (Application Not Responding)** is an error that occurs when the Android UI thread is blocked for too long. The system displays a dialog allowing the user to force close the application.
 
 **ANR Triggers:**
+
+The main thread handles user input and UI updates. The Android system monitors thread responsiveness and shows an ANR dialog when timeouts are exceeded:
+
 - **Input dispatching timeout**: No response to input events within 5 seconds
-- **Service execution**: Service methods take too long to complete
-- **Foreground service**: `startForeground()` not called within 5 seconds
-- **Broadcast receiver**: Receiver doesn't finish within timeout period
-- **JobScheduler**: Job service methods exceed time limits
+- **Service timeout**: Service methods take too long (20 sec for background, 10 sec for foreground)
+- **BroadcastReceiver timeout**: Receiver doesn't finish within 10 seconds
 
-**Common Causes:**
-
-**System Issues:**
-- Slow binder calls due to system server issues
-- High device load preventing thread scheduling
-
-**App Issues:**
-- Blocking I/O operations on main thread
-- Long calculations on main thread
-- Synchronous binder calls to slow processes
-- Lock contention with other threads
-- Deadlocks between threads
-
-**ANR Detection and Diagnosis:**
+**Common Mistakes:**
 
 ```kotlin
-// Common ANR causes in code
+// ❌ BAD: Blocking operations on main thread
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // BAD: Blocking I/O on main thread
-        val data = File("large_file.txt").readText()
-
-        // BAD: Long calculation on main thread
-        val result = calculateFibonacci(40)
-
-        // BAD: Synchronous network call
-        val response = httpClient.get("https://api.example.com/data").execute()
+        val data = File("large_file.txt").readText()  // I/O blocking
+        val result = calculateFibonacci(40)            // CPU-intensive operation
+        val response = httpClient.get(url).execute()   // Synchronous network call
     }
 }
 
-// GOOD: Move blocking operations off main thread
+// ✅ GOOD: Asynchronous execution with coroutines
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch(Dispatchers.IO) {
             val data = File("large_file.txt").readText()
-            val result = calculateFibonacci(40)
-            val response = httpClient.get("https://api.example.com/data").execute()
-
             withContext(Dispatchers.Main) {
-                // Update UI with results
+                updateUI(data)  // Update UI on main thread
             }
         }
     }
 }
 ```
 
-**ANR Prevention Strategies:**
+**ANR Prevention:**
 
-**1. Keep Main Thread Unblocked:**
+1. **Use WorkManager** for long-running background operations
+2. **Minimize work in lifecycle callbacks** (onCreate, onStart)
+3. **Avoid synchronization with long locks**
+4. **Use goAsync()** in BroadcastReceiver for async work
+
+**Production Diagnostics:**
+
+- **Android Vitals** in Play Console shows ANR rate
+- **ANR traces** (`/data/anr/traces.txt`) contain stack traces of all threads at ANR time
+- **StrictMode** helps detect ANR causes during development
+
 ```kotlin
-// Use background threads for heavy work
-lifecycleScope.launch(Dispatchers.IO) {
-    val result = performHeavyWork()
-    withContext(Dispatchers.Main) {
-        updateUI(result)
-    }
+// Enable StrictMode for problem detection
+if (BuildConfig.DEBUG) {
+    StrictMode.setThreadPolicy(
+        StrictMode.ThreadPolicy.Builder()
+            .detectDiskReads()
+            .detectDiskWrites()
+            .detectNetwork()
+            .penaltyLog()
+            .build()
+    )
 }
 ```
 
-**2. Optimize Service Operations:**
-```kotlin
-class MyService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Do minimal work here
-        lifecycleScope.launch(Dispatchers.IO) {
-            performBackgroundWork()
-        }
-        return START_STICKY
-    }
-}
-```
+**Key principle:** Main thread should only handle lightweight UI operations (< 16ms for 60 FPS). Everything else goes to background threads or coroutines with Dispatchers.IO/Default.
 
-**3. Use Async Broadcast Receivers:**
-```kotlin
-class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val pendingResult = goAsync()
-        Thread {
-            // Do work in background
-            performWork()
-            pendingResult.finish()
-        }.start()
-    }
-}
-```
-
-**4. Minimize Lock Contention:**
-```kotlin
-// BAD: Long operation holding lock
-synchronized(lockObject) {
-    performLongOperation()
-    updateUI()
-}
-
-// GOOD: Minimize lock scope
-val result = synchronized(lockObject) {
-    performLongOperation()
-}
-updateUI(result)
-```
-
-**ANR Monitoring:**
-- **Android Vitals**: Monitor ANR rates in Play Console
-- **StrictMode**: Detect ANR-causing operations in debug builds
-- **Profiling**: Use Android Studio Profiler to identify bottlenecks
-
-**Best Practices:**
-- Move all blocking I/O off main thread
-- Use coroutines or background threads for heavy work
-- Minimize work in lifecycle methods
-- Optimize app startup time
-- Use async operations for network calls
-- Avoid tight loops on main thread
-- Test on low-end devices
+---
 
 ## Follow-ups
 
-- How do you debug ANR issues in production?
-- What's the difference between ANR and crash?
-- How do you use StrictMode to detect ANR causes?
-- What are the best practices for handling background tasks?
+- How do you analyze ANR traces in production to identify root causes?
+- What's the relationship between ANR rate and app quality metrics in Play Console?
+- How does Baseline Profiles optimization help reduce ANR occurrences?
+- When should you use WorkManager vs coroutines for background operations?
+- How do you handle ANRs caused by system-level issues (e.g., slow Binder calls)?
 
 ## References
 
 - [Android ANR Documentation](https://developer.android.com/topic/performance/vitals/anr)
-- [ANR Diagnosis Guide](https://developer.android.com/topic/performance/anrs/diagnose-and-fix-anrs)
+- [Diagnose and Fix ANRs](https://developer.android.com/topic/performance/anrs/diagnose-and-fix-anrs)
+- [[c-coroutines]]
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]]
-- [[q-android-project-parts--android--easy]]
+### Prerequisites
+- [[q-android-app-components--android--easy]] — Understanding Android components and their lifecycle
+- [[q-android-project-parts--android--easy]] — Basic Android application structure
 
-### Related (Same Level)
-- [[q-android-performance-measurement-tools--android--medium]]
-- [[q-android-testing-strategies--android--medium]]
-- [[q-android-build-optimization--android--medium]]
+### Related
+- [[q-android-performance-measurement-tools--android--medium]] — Tools for measuring and profiling performance
+- [[q-android-testing-strategies--android--medium]] — Testing approaches including performance testing
+- [[q-android-build-optimization--android--medium]] — Build optimizations that can affect app performance
 
-### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
+### Advanced
+- [[q-android-runtime-internals--android--hard]] — Deep dive into Android runtime architecture
+- Questions about memory leaks and their impact on ANR
+- Questions about Binder IPC and cross-process communication performance

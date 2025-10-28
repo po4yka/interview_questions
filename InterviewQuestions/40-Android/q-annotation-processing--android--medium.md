@@ -18,13 +18,9 @@ related:
   - q-android-modularization--android--medium
   - q-android-project-parts--android--easy
 created: 2025-10-12
-updated: 2025-10-15
+updated: 2025-10-28
 tags: [android/gradle, difficulty/medium]
-kapt: 45 секунд
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:06 pm
 ---
-
 # Вопрос (RU)
 > Что такое Обработка аннотаций в Android?
 
@@ -33,15 +29,168 @@ date modified: Saturday, October 25th 2025, 4:53:06 pm
 # Question (EN)
 > What is Annotation Processing in Android?
 
+---
+
+## Ответ (RU)
+
+**Обработка аннотаций** — это техника генерации кода на этапе компиляции, при которой процессоры анализируют аннотации и автоматически создают дополнительные классы, уменьшая boilerplate-код и обеспечивая мощные фреймворки.
+
+**Теория обработки аннотаций:**
+Обработка аннотаций происходит во время компиляции, когда процессоры анализируют аннотации в исходном коде и генерируют дополнительный код. Это позволяет фреймворкам, таким как [[c-room]], [[c-hilt]], и Moshi, автоматически создавать реализации без boilerplate-кода.
+
+**Как работает обработка аннотаций:**
+
+```text
+Исходный код (.kt/.java)
+    ↓
+Компилятор читает аннотации
+    ↓
+Выполняются процессоры аннотаций
+    ↓
+Генерируется код (.kt/.java)
+    ↓
+Весь код компилируется вместе
+    ↓
+APK/AAR
+```
+
+**1. Базовый пример:**
+
+```kotlin
+// Определяем аннотацию
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.SOURCE)
+annotation class AutoViewModel
+
+// Аннотируем класс
+@AutoViewModel
+class UserRepository(private val api: UserApi)
+
+// Процессор генерирует код
+class UserRepositoryFactory {
+    fun create(api: UserApi): UserRepository {
+        return UserRepository(api)
+    }
+}
+```
+
+**2. kapt (Kotlin Annotation Processing Tool):**
+Связывает Java-процессоры аннотаций с Kotlin-кодом через генерацию Java-заглушек.
+
+```kotlin
+// build.gradle.kts
+plugins {
+    id("kotlin-kapt")
+}
+
+dependencies {
+    implementation("androidx.room:room-runtime")
+    kapt("androidx.room:room-compiler") // ✅ Используется kapt для процессора
+}
+
+// Пример Room
+@Entity(tableName = "users")
+data class User(@PrimaryKey val id: String, val name: String)
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<User>
+}
+
+// kapt генерирует: UserDao_Impl, User_Table и др.
+```
+
+**3. KSP (Kotlin Symbol Processing):**
+Kotlin-ориентированная обработка аннотаций, в 2 раза быстрее kapt.
+
+```kotlin
+// build.gradle.kts
+plugins {
+    id("com.google.devtools.ksp")
+}
+
+dependencies {
+    implementation("androidx.room:room-runtime")
+    ksp("androidx.room:room-compiler") // ✅ Используется KSP вместо kapt
+}
+
+// Тот же код Room работает с KSP
+// Генерирует тот же вывод, но быстрее
+```
+
+**4. Популярные библиотеки с обработкой аннотаций:**
+
+**Room (Database ORM):**
+```kotlin
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+// Генерирует: AppDatabase_Impl, User_Table, UserDao_Impl
+```
+
+**Hilt/Dagger (Dependency Injection):**
+```kotlin
+@HiltAndroidApp
+class MyApplication : Application()
+
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity()
+
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel()
+// ✅ Генерирует компоненты DI автоматически
+```
+
+**Moshi (JSON Parsing):**
+```kotlin
+@JsonClass(generateAdapter = true)
+data class User(
+    @Json(name = "user_id") val id: String,
+    val name: String
+)
+// Генерирует оптимизированный UserJsonAdapter
+```
+
+**Сравнение kapt vs KSP:**
+
+| Характеристика | kapt | KSP |
+|----------------|------|-----|
+| **Скорость** | Базовая | В 2 раза быстрее |
+| **Язык** | На основе Java | Kotlin-ориентированная |
+| **API** | Java Annotation Processing | Kotlin Symbol Processing |
+| **Генерация заглушек** | Да (медленно) | Нет (быстро) |
+| **Поддержка Kotlin** | Ограниченная | Полная |
+
+**Пример времени сборки:**
+```text
+Проект с Room + Hilt:
+kapt:  45 секунд
+KSP:   23 секунды  (на 48% быстрее)
+```
+
+**Лучшие практики:**
+- Используйте KSP вместо kapt для новых проектов (в 2 раза быстрее)
+- Изолируйте процессоры в отдельных Gradle-модулях
+- Правильно объявляйте зависимости для инкрементальной компиляции
+- Тестируйте сгенерированный код как обычный код
+- Документируйте аннотации для разработчиков
+- Сопоставляйте версии процессоров и аннотаций
+- Отслеживайте время сборки с помощью `--profile`
+
 ## Answer (EN)
+
 **Annotation Processing** is a compile-time code generation technique where processors analyze annotations and automatically generate additional classes, reducing boilerplate and enabling powerful frameworks.
 
 **Annotation Processing Theory:**
-Annotation processing occurs during compilation when processors analyze source code annotations and generate additional code. This enables frameworks like Room, Hilt, and Moshi to create boilerplate-free implementations automatically.
+Annotation processing occurs during compilation when processors analyze source code annotations and generate additional code. This enables frameworks like [[c-room]], [[c-hilt]], and Moshi to create boilerplate-free implementations automatically.
 
 **How Annotation Processing Works:**
 
-```
+```text
 Source Code (.kt/.java)
     ↓
 Compiler reads annotations
@@ -86,7 +235,7 @@ plugins {
 
 dependencies {
     implementation("androidx.room:room-runtime")
-    kapt("androidx.room:room-compiler")
+    kapt("androidx.room:room-compiler") // ✅ Uses kapt for processor
 }
 
 // Room example
@@ -99,7 +248,7 @@ interface UserDao {
     suspend fun getAllUsers(): List<User>
 }
 
-// kapt generates UserDao_Impl, User_Table, etc.
+// kapt generates: UserDao_Impl, User_Table, etc.
 ```
 
 **3. KSP (Kotlin Symbol Processing):**
@@ -113,7 +262,7 @@ plugins {
 
 dependencies {
     implementation("androidx.room:room-runtime")
-    ksp("androidx.room:room-compiler")
+    ksp("androidx.room:room-compiler") // ✅ Uses KSP instead of kapt
 }
 
 // Same Room code works with KSP
@@ -143,7 +292,7 @@ class MainActivity : AppCompatActivity()
 class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel()
-// Generates DI components
+// ✅ Generates DI components automatically
 ```
 
 **Moshi (JSON Parsing):**
@@ -167,7 +316,7 @@ data class User(
 | **Kotlin Support** | Limited | Full |
 
 **Build Time Example:**
-```
+```text
 Project with Room + Hilt:
 kapt:  45 seconds
 KSP:   23 seconds  (48% faster)
@@ -182,29 +331,36 @@ KSP:   23 seconds  (48% faster)
 - Match processor and annotation versions
 - Monitor build times with `--profile`
 
+---
+
 ## Follow-ups
 
-- How do you debug annotation processing issues?
-- What's the difference between compile-time and runtime code generation?
-- How do you migrate from kapt to KSP?
-- What are the performance implications of annotation processing?
+- How do you debug annotation processing errors when generated code fails to compile?
+- What's the difference between `SOURCE`, `BINARY`, and `RUNTIME` retention policies?
+- How do you migrate an existing project from kapt to KSP?
+- What are the performance trade-offs between compile-time and runtime code generation?
+- How do you write a custom annotation processor with KSP?
 
 ## References
 
-- c-annotation-processing
+- [[c-room]] - ORM using annotation processing
+- [[c-hilt]] - DI framework using annotation processing
+- [[c-gradle]] - Build system integration
 - [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 - [kapt Documentation](https://kotlinlang.org/docs/kapt.html)
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-android-project-parts--android--easy]]
-- [[q-android-app-components--android--easy]]
+### Prerequisites
+- [[q-android-project-parts--android--easy]] - Understanding Android project structure
+- [[q-gradle-basics--android--easy]] - Gradle fundamentals
 
-### Related (Same Level)
-- [[q-android-build-optimization--android--medium]]
-- [[q-android-modularization--android--medium]]
-- [[q-android-testing-strategies--android--medium]]
+### Related
+- [[q-android-build-optimization--android--medium]] - Optimizing build performance
+- [[q-android-modularization--android--medium]] - Module structure for processors
+- [[q-room-library-definition--android--easy]] - Room ORM basics
+- [[q-gradle-build-system--android--medium]] - Gradle build system
 
-### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
+### Advanced
+- [[q-android-runtime-internals--android--hard]] - Runtime vs compile-time processing
+- [[q-room-code-generation-timing--android--medium]] - Code generation timing

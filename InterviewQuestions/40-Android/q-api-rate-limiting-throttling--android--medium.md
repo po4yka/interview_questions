@@ -3,371 +3,326 @@ id: 20251012-122780
 title: API Rate Limiting and Throttling / Ограничение скорости API и троттлинг
 aliases: [API Rate Limiting and Throttling, Ограничение скорости API и троттлинг]
 topic: android
-subtopics:
-  - networking-http
-question_kind: android
+subtopics: [networking-http]
+question_kind: theory
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-build-optimization--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-testing-strategies--android--medium
+related: [q-android-build-optimization--android--medium, q-android-performance-measurement-tools--android--medium, q-android-testing-strategies--android--medium]
+sources: []
 created: 2025-10-15
-updated: 2025-10-15
-tags: [android/networking-http, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:53:04 pm
+updated: 2025-10-28
+tags: [android/networking-http, networking, http, okhttp, difficulty/medium]
 ---
+
+# Question (EN)
+> What is API Rate Limiting and Throttling?
 
 # Вопрос (RU)
 > Что такое Ограничение скорости API и троттлинг?
 
 ---
 
-# Question (EN)
-> What is API Rate Limiting and Throttling?
-
 ## Answer (EN)
-**API Rate Limiting and Throttling** prevents clients from exceeding server request quotas, protecting servers from overload and ensuring fair resource distribution through client-side request management.
 
-**Rate Limiting Theory:**
-Rate limiting controls the number of requests per time window to prevent server overload. Client-side throttling improves app efficiency by batching requests, implementing backoff strategies, and respecting server limits before making requests.
+**API Rate Limiting and Throttling** are techniques to control request frequency, protecting servers from overload and ensuring fair resource distribution.
 
-**1. OkHttp Interceptor for Rate Limiting:**
+**Core Concepts:**
+- **Rate Limiting**: Server-enforced limits on requests per time window (e.g., 100 req/min)
+- **Throttling**: Client-side request pacing to stay within limits
+- **Common Algorithms**: Token bucket, sliding window, fixed window
 
-**Sliding Window Rate Limiter:**
-Implements a sliding window algorithm that tracks request timestamps and blocks requests when the limit is exceeded. Automatically waits for the time window to reset before allowing new requests.
+**1. Sliding Window Rate Limiter (OkHttp Interceptor)**
+
+Tracks timestamps to enforce limits; blocks when exceeded.
 
 ```kotlin
 class RateLimitInterceptor(
     private val maxRequests: Int = 60,
-    private val timeWindowMs: Long = 60_000 // 1 minute
+    private val timeWindowMs: Long = 60_000
 ) : Interceptor {
-
-    // Thread-safe queue to store request timestamps
-    private val requestTimestamps = ConcurrentLinkedQueue<Long>()
+    private val timestamps = ConcurrentLinkedQueue<Long>()
     private val lock = ReentrantLock()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         lock.withLock {
             val now = System.currentTimeMillis()
-
-            // Remove timestamps outside the time window
-            while (requestTimestamps.isNotEmpty() &&
-                now - requestTimestamps.peek() > timeWindowMs
-            ) {
-                requestTimestamps.poll()
+            // ✅ Remove expired timestamps
+            while (timestamps.peek()?.let { now - it > timeWindowMs } == true) {
+                timestamps.poll()
             }
-
-            // Check if rate limit is exceeded
-            if (requestTimestamps.size >= maxRequests) {
-                val oldestTimestamp = requestTimestamps.peek()
-                val waitTime = timeWindowMs - (now - oldestTimestamp)
-
-                if (waitTime > 0) {
-                    // Block thread until time window resets
-                    Thread.sleep(waitTime)
-                }
+            // ❌ Don't forget to enforce limit
+            if (timestamps.size >= maxRequests) {
+                Thread.sleep(timeWindowMs - (now - timestamps.peek()))
             }
-
-            // Record this request timestamp
-            requestTimestamps.offer(System.currentTimeMillis())
+            timestamps.offer(now)
         }
-
-        // Proceed with the actual request
         return chain.proceed(chain.request())
     }
 }
 ```
 
-**2. Token Bucket Algorithm:**
+**2. Token Bucket Algorithm**
 
-**Token-Based Rate Limiting:**
-Uses a token bucket that refills at a fixed rate. Each request consumes a token, allowing for burst traffic while maintaining average rate limits. More flexible than fixed window approaches.
+Allows burst traffic while maintaining average rate; tokens refill over time.
 
 ```kotlin
 class TokenBucketRateLimiter(
     private val capacity: Int,
-    private val refillRate: Int, // tokens per second
-    private val refillPeriodMs: Long = 1000
+    private val refillRate: Int // tokens/sec
 ) : Interceptor {
-
-    // Current number of available tokens
     private var tokens = capacity
-    private var lastRefillTime = System.currentTimeMillis()
-    private val lock = ReentrantLock()
+    private var lastRefill = System.currentTimeMillis()
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        lock.withLock {
-            // Refill tokens based on time elapsed
+        synchronized(this) {
             refillTokens()
-
-            // Wait if no tokens available
+            // ✅ Wait for token availability
             while (tokens < 1) {
-                val waitTime = refillPeriodMs / refillRate
-                Thread.sleep(waitTime)
+                Thread.sleep(1000 / refillRate)
                 refillTokens()
             }
-
-            // Consume one token for this request
             tokens--
         }
-
         return chain.proceed(chain.request())
     }
 
     private fun refillTokens() {
-        val now = System.currentTimeMillis()
-        val timePassed = now - lastRefillTime
-
-        // Add tokens based on time elapsed
-        if (timePassed >= refillPeriodMs) {
-            val tokensToAdd = ((timePassed / refillPeriodMs) * refillRate).toInt()
-            // Don't exceed bucket capacity
-            tokens = minOf(capacity, tokens + tokensToAdd)
-            lastRefillTime = now
-        }
+        val elapsed = System.currentTimeMillis() - lastRefill
+        val tokensToAdd = (elapsed * refillRate / 1000).toInt()
+        tokens = minOf(capacity, tokens + tokensToAdd)
+        lastRefill = System.currentTimeMillis()
     }
 }
 ```
 
-**3. Retry with Exponential Backoff:**
+**3. Exponential Backoff for Retries**
 
-**Automatic Retry Strategy:**
-Handles rate limit responses (429) and server errors (5xx) with exponential backoff. Respects Retry-After headers and implements intelligent retry logic to avoid overwhelming servers.
+Handles 429 (Too Many Requests) and 5xx errors with increasing delays.
 
 ```kotlin
 class RetryInterceptor(
     private val maxRetries: Int = 3,
-    private val initialDelayMs: Long = 1000
+    private val initialDelay: Long = 1000
 ) : Interceptor {
-
     override fun intercept(chain: Interceptor.Chain): Response {
-        var attempt = 0
-        var response: Response? = null
-        var lastException: IOException? = null
-
-        // Retry loop with exponential backoff
-        while (attempt < maxRetries) {
-            try {
-                response = chain.proceed(chain.request())
-
-                when {
-                    response.isSuccessful -> return response
-
-                    response.code == 429 -> { // Too Many Requests
-                        // Respect server's Retry-After header
-                        val retryAfter = response.header("Retry-After")?.toLongOrNull()
-                        val delay = retryAfter?.let { it * 1000 } ?: calculateDelay(attempt)
-
-                        response.close()
-                        Thread.sleep(delay)
-                        attempt++
-                    }
-
-                    response.code in 500..599 -> { // Server errors
-                        val delay = calculateDelay(attempt)
-                        response.close()
-                        Thread.sleep(delay)
-                        attempt++
-                    }
-
-                    else -> return response // Don't retry other errors
+        repeat(maxRetries) { attempt ->
+            val response = chain.proceed(chain.request())
+            when (response.code) {
+                429 -> {
+                    // ✅ Respect Retry-After header
+                    val delay = response.header("Retry-After")
+                        ?.toLongOrNull()?.times(1000)
+                        ?: (initialDelay shl attempt)
+                    response.close()
+                    Thread.sleep(delay)
                 }
-            } catch (e: IOException) {
-                lastException = e
-                if (attempt >= maxRetries - 1) break
-
-                val delay = calculateDelay(attempt)
-                Thread.sleep(delay)
-                attempt++
+                in 200..299 -> return response
+                in 500..599 -> Thread.sleep(initialDelay shl attempt)
+                else -> return response
             }
         }
-
-        throw lastException ?: IOException("Max retries exceeded")
-    }
-
-    private fun calculateDelay(attempt: Int): Long {
-        // Exponential backoff: 1s, 2s, 4s, 8s...
-        return initialDelayMs * (1 shl attempt)
+        throw IOException("Max retries exceeded")
     }
 }
 ```
 
-**4. Request Throttling with Debounce:**
+**4. Debouncing User Input (Flow)**
 
-**User Input Throttling:**
-Implements debouncing for search inputs and throttling for frequent events. Prevents excessive API calls from rapid user interactions by waiting for input to stabilize.
-
-```kotlin
-class ThrottledSearchViewModel(
-    private val searchRepository: SearchRepository
-) : ViewModel() {
-
-    // Mutable state for search query
-    private val searchQuery = MutableStateFlow("")
-
-    // Debounce: Wait for user to stop typing
-    val searchResults = searchQuery
-        .debounce(300) // Wait 300ms after last input
-        .distinctUntilChanged() // Only emit if query actually changed
-        .flatMapLatest { query ->
-            if (query.isBlank()) {
-                // Return empty list for blank queries
-                flowOf(emptyList())
-            } else {
-                // Perform search and handle errors gracefully
-                searchRepository.search(query)
-                    .catch { emit(emptyList()) }
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000), // Stop after 5s of no subscribers
-            initialValue = emptyList()
-        )
-
-    fun search(query: String) {
-        searchQuery.value = query
-    }
-}
-```
-
-**5. Request Queue with Priority:**
-
-**Priority-Based Request Management:**
-Implements a priority queue system that processes critical requests first while maintaining rate limits. Ensures important requests get through even during high traffic periods.
+Prevents excessive API calls from rapid typing.
 
 ```kotlin
-class PriorityRequestQueue(
-    private val maxConcurrentRequests: Int = 5
-) {
-    // Priority queue for request ordering
-    private val requestQueue = PriorityBlockingQueue<RequestItem>()
-    private val activeRequests = AtomicInteger(0)
-    private val executor = Executors.newFixedThreadPool(maxConcurrentRequests)
+class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
+    private val query = MutableStateFlow("")
 
-    fun enqueue(request: Request, priority: Priority = Priority.NORMAL) {
-        // Add request to priority queue
-        requestQueue.offer(RequestItem(request, priority))
-        processNext()
-    }
-
-    private fun processNext() {
-        // Process requests if under concurrency limit
-        if (activeRequests.get() < maxConcurrentRequests) {
-            val requestItem = requestQueue.poll() ?: return
-
-            activeRequests.incrementAndGet()
-            executor.submit {
-                try {
-                    // Process request
-                    processRequest(requestItem.request)
-                } finally {
-                    activeRequests.decrementAndGet()
-                    processNext() // Process next request
-                }
-            }
+    val results = query
+        .debounce(300) // ✅ Wait for typing to stop
+        .distinctUntilChanged()
+        .flatMapLatest { q ->
+            if (q.isBlank()) flowOf(emptyList())
+            else repo.search(q).catch { emit(emptyList()) }
         }
-    }
-}
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-enum class Priority {
-    HIGH, NORMAL, LOW
-}
-```
-
-**6. Caching Strategy:**
-
-**Response Caching:**
-Implements intelligent caching to reduce API calls. Uses ETag headers for conditional requests and implements cache invalidation strategies.
-
-```kotlin
-class CacheInterceptor : Interceptor {
-    // LRU cache for storing responses
-    private val cache = LruCache<String, Response>(100)
-
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-
-        // Only cache GET requests
-        if (request.method != "GET") {
-            return chain.proceed(request)
-        }
-
-        val cacheKey = request.url.toString()
-        val cachedResponse = cache.get(cacheKey)
-
-        if (cachedResponse != null) {
-            // Use ETag for conditional request
-            val etag = cachedResponse.header("ETag")
-            val conditionalRequest = request.newBuilder()
-                .header("If-None-Match", etag ?: "")
-                .build()
-
-            val response = chain.proceed(conditionalRequest)
-
-            if (response.code == 304) { // Not Modified
-                // Return cached response with 200 status
-                return cachedResponse.newBuilder()
-                    .code(200)
-                    .build()
-            }
-        }
-
-        // Make actual request
-        val response = chain.proceed(request)
-
-        // Cache successful responses
-        if (response.isSuccessful) {
-            cache.put(cacheKey, response)
-        }
-
-        return response
-    }
+    fun search(q: String) { query.value = q }
 }
 ```
 
 **Best Practices:**
-- Implement token bucket or sliding window algorithms
-- Use exponential backoff for retries
-- Respect Retry-After headers from server
-- Cache responses aggressively to reduce API calls
-- Batch requests when possible
-- Implement request debouncing for user input
-- Monitor rate limit headers (X-RateLimit-*)
-- Use conditional requests (ETag, If-Modified-Since)
+- Use token bucket for flexible burst handling
+- Implement exponential backoff (1s, 2s, 4s...)
+- Respect `Retry-After` and `X-RateLimit-*` headers
+- Cache aggressively; use ETags for conditional requests
+- Debounce user input (300-500ms)
+- Monitor 429 responses for tuning
 - Implement offline-first architecture
-- Track rate limit violations for monitoring
+
+## Ответ (RU)
+
+**API Rate Limiting и Throttling** — техники контроля частоты запросов для защиты серверов от перегрузки и обеспечения справедливого распределения ресурсов.
+
+**Основные концепции:**
+- **Rate Limiting**: серверные ограничения на количество запросов за период (напр., 100 req/мин)
+- **Throttling**: клиентская регулировка для соблюдения лимитов
+- **Популярные алгоритмы**: Token bucket, скользящее окно, фиксированное окно
+
+**1. Rate Limiter со скользящим окном (OkHttp Interceptor)**
+
+Отслеживает временные метки для применения лимитов; блокирует при превышении.
+
+```kotlin
+class RateLimitInterceptor(
+    private val maxRequests: Int = 60,
+    private val timeWindowMs: Long = 60_000
+) : Interceptor {
+    private val timestamps = ConcurrentLinkedQueue<Long>()
+    private val lock = ReentrantLock()
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        lock.withLock {
+            val now = System.currentTimeMillis()
+            // ✅ Удаление устаревших меток
+            while (timestamps.peek()?.let { now - it > timeWindowMs } == true) {
+                timestamps.poll()
+            }
+            // ❌ Не забывайте применять лимит
+            if (timestamps.size >= maxRequests) {
+                Thread.sleep(timeWindowMs - (now - timestamps.peek()))
+            }
+            timestamps.offer(now)
+        }
+        return chain.proceed(chain.request())
+    }
+}
+```
+
+**2. Алгоритм Token Bucket**
+
+Позволяет всплески трафика при сохранении средней скорости; токены пополняются со временем.
+
+```kotlin
+class TokenBucketRateLimiter(
+    private val capacity: Int,
+    private val refillRate: Int // токенов/сек
+) : Interceptor {
+    private var tokens = capacity
+    private var lastRefill = System.currentTimeMillis()
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        synchronized(this) {
+            refillTokens()
+            // ✅ Ожидание доступности токена
+            while (tokens < 1) {
+                Thread.sleep(1000 / refillRate)
+                refillTokens()
+            }
+            tokens--
+        }
+        return chain.proceed(chain.request())
+    }
+
+    private fun refillTokens() {
+        val elapsed = System.currentTimeMillis() - lastRefill
+        val tokensToAdd = (elapsed * refillRate / 1000).toInt()
+        tokens = minOf(capacity, tokens + tokensToAdd)
+        lastRefill = System.currentTimeMillis()
+    }
+}
+```
+
+**3. Экспоненциальная задержка для повторов**
+
+Обрабатывает 429 (Too Many Requests) и 5xx ошибки с увеличивающимися задержками.
+
+```kotlin
+class RetryInterceptor(
+    private val maxRetries: Int = 3,
+    private val initialDelay: Long = 1000
+) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        repeat(maxRetries) { attempt ->
+            val response = chain.proceed(chain.request())
+            when (response.code) {
+                429 -> {
+                    // ✅ Учитываем заголовок Retry-After
+                    val delay = response.header("Retry-After")
+                        ?.toLongOrNull()?.times(1000)
+                        ?: (initialDelay shl attempt)
+                    response.close()
+                    Thread.sleep(delay)
+                }
+                in 200..299 -> return response
+                in 500..599 -> Thread.sleep(initialDelay shl attempt)
+                else -> return response
+            }
+        }
+        throw IOException("Превышено максимальное количество попыток")
+    }
+}
+```
+
+**4. Debouncing пользовательского ввода (Flow)**
+
+Предотвращает избыточные API вызовы от быстрого набора текста.
+
+```kotlin
+class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
+    private val query = MutableStateFlow("")
+
+    val results = query
+        .debounce(300) // ✅ Ожидание завершения ввода
+        .distinctUntilChanged()
+        .flatMapLatest { q ->
+            if (q.isBlank()) flowOf(emptyList())
+            else repo.search(q).catch { emit(emptyList()) }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun search(q: String) { query.value = q }
+}
+```
+
+**Лучшие практики:**
+- Используйте token bucket для гибкой обработки всплесков
+- Применяйте экспоненциальную задержку (1с, 2с, 4с...)
+- Учитывайте заголовки `Retry-After` и `X-RateLimit-*`
+- Кешируйте агрессивно; используйте ETags для условных запросов
+- Применяйте debounce для ввода (300-500мс)
+- Мониторьте 429 ответы для настройки
+- Реализуйте offline-first архитектуру
+
+---
 
 ## Follow-ups
 
-- How do you handle rate limiting in offline scenarios?
-- What's the difference between rate limiting and throttling?
-- How do you implement adaptive rate limiting based on server responses?
-- What are the trade-offs between different rate limiting algorithms?
+- How do you test rate limiting logic in unit and integration tests?
+- What's the difference between token bucket and leaky bucket algorithms?
+- How do you handle rate limiting for multiple API endpoints with different limits?
+- When would you choose client-side vs server-side rate limiting?
+- How do you implement adaptive rate limiting that adjusts based on server responses?
+- What are the trade-offs between blocking (Thread.sleep) and suspending in coroutines?
 
 ## References
 
-- c-networking
+- [[c-networking]]
+- [[c-okhttp-interceptors]]
 - [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
 - [Rate Limiting Patterns](https://cloud.google.com/architecture/rate-limiting-strategies-techniques)
+- [HTTP 429 Too Many Requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]]
-- [[q-android-project-parts--android--easy]]
+- [[q-okhttp-basics--android--easy]] - Understanding OkHttp fundamentals
+- [[q-coroutines-flow-basics--kotlin--easy]] - Flow operators for debouncing
 
 ### Related (Same Level)
-- [[q-android-testing-strategies--android--medium]]
-- [[q-android-build-optimization--android--medium]]
-- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-retrofit-error-handling--android--medium]] - Handling API errors including rate limits
+- [[q-android-caching-strategies--android--medium]] - Reducing API calls through caching
+- [[q-workmanager-scheduling--android--medium]] - Background task scheduling and rate limiting
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
+- [[q-reactive-backpressure--kotlin--hard]] - Advanced flow control patterns
+- [[q-distributed-rate-limiting--system-design--hard]] - Rate limiting in distributed systems

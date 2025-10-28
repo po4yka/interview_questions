@@ -1,56 +1,44 @@
 ---
 id: 20251015-100154
 title: Compose Multiplatform / Compose Multiplatform (обзор)
-aliases: [Compose Multiplatform, Compose Multiplatform overview]
+aliases: [Compose Multiplatform, Compose Multiplatform overview, Мультиплатформенный Compose]
 topic: android
-subtopics:
-  - ui-compose
+subtopics: [ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
   - q-compose-compiler-plugin--android--hard
   - q-compose-custom-layout--android--hard
   - q-compose-lazy-layout-optimization--android--hard
+sources: []
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-10-28
 tags: [android/ui-compose, difficulty/hard]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:38 pm
 ---
-
 # Вопрос (RU)
-> Compose Multiplatform (обзор)?
+> Что такое Compose Multiplatform и как его использовать для кроссплатформенной разработки?
 
 # Question (EN)
-> Compose Multiplatform?
+> What is Compose Multiplatform and how to use it for cross-platform development?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Определение
+- Compose Multiplatform (CMP) - это расширение Jetpack Compose для создания UI на нескольких платформах: Android, iOS, Desktop, Web
+- Использует Kotlin Multiplatform для шаринга кода между платформами
+- Позволяет переиспользовать UI компоненты, состояние, навигацию и тему
 
-## Answer (EN)
+### CMP vs KMM
+- **KMM**: шаринг бизнес-логики и данных; UI остается нативным для каждой платформы
+- **CMP**: шаринг UI + логики; единый UI фреймворк для всех платформ
 
-### Definition and Scope
-- Compose Multiplatform (CMP) brings Compose UI to multiple targets with Kotlin Multiplatform (KMP): Android, iOS, Desktop, Web.
-- You share UI, state, navigation, theming; platform entry points and interop remain platform‑specific.
-
-### CMP Vs KMM
-- KMM: share domain/data; UI is native per platform (Android Compose, iOS SwiftUI).
-- CMP: share UI + domain; one UI framework across targets, with platform shims when needed.
-
-### Project Structure (minimal)
-- Modules: `shared` (commonMain + platform source sets), platform apps (androidApp, iosApp, desktopApp, jsApp).
-- Targets: `androidTarget()`, `ios*()`, `jvm("desktop")`, `js(IR)`.
-
-Minimal Gradle setup (no versions):
+### Структура проекта
 ```kotlin
 // shared/build.gradle.kts
 plugins {
@@ -60,8 +48,11 @@ plugins {
 }
 
 kotlin {
-  androidTarget(); jvm("desktop"); js(IR) { browser() }
+  androidTarget()
+  jvm("desktop")
+  js(IR) { browser() }
   listOf(iosX64(), iosArm64(), iosSimulatorArm64())
+
   sourceSets {
     val commonMain by getting
     val androidMain by getting
@@ -72,55 +63,152 @@ kotlin {
 }
 ```
 
-### Shared UI + Platform Adaptations
-- Share composables/screens/navigation/theme in `commonMain`.
-- Use `expect/actual` for platform APIs (logging, resources, window size, haptics).
-
-Minimal expect/actual:
+### Expect/Actual для платформенных API
 ```kotlin
 // commonMain
 expect fun platformName(): String
 
 // androidMain
 actual fun platformName() = "Android"
+
+// iosMain
+actual fun platformName() = "iOS"
 ```
 
-Entry points (shared App + platform wrapper):
+### Точки входа
 ```kotlin
-// commonMain
-@Composable fun App() { /* Navigation + Screens */ }
+// commonMain - общий UI
+@Composable
+fun App() {
+  MaterialTheme {
+    Navigation()
+  }
+}
 
-// androidApp
+// ✅ Android
 class MainActivity: ComponentActivity() {
-  override fun onCreate(b: Bundle?) { super.onCreate(b); setContent { App() } }
+  override fun onCreate(b: Bundle?) {
+    super.onCreate(b)
+    setContent { App() }
+  }
+}
+
+// ✅ Desktop
+fun main() = application {
+  Window(onCloseRequest = ::exitApplication) {
+    App()
+  }
 }
 ```
 
-### Responsive Layouts
-- Derive window classes (compact/medium/expanded) and branch UI.
-- Keep measurement simple; avoid deep trees in shared UI for desktop/web.
+### Best Practices
+- **Shared**: state holders, screens, theming, navigation
+- **Platform-specific**: gestures, windowing, resources
+- **Performance**: stable keys, `remember` для вычислений, профилирование на каждой платформе
+- **Testing**: скриншотные тесты на всех таргетах
+
+### Ограничения
+- iOS: интеграция через UIViewController, ограниченная интеропа с SwiftUI
+- Web: canvas-based рендеринг, вопросы bundle size и accessibility
+- Desktop: различия в windowing и input обработке
+
+## Answer (EN)
+
+### Definition
+- Compose Multiplatform (CMP) brings Compose UI to Android, iOS, Desktop, and Web targets
+- Built on Kotlin Multiplatform for code sharing across platforms
+- Allows sharing UI components, state management, navigation, and theming
+
+### CMP vs KMM
+- **KMM**: shares domain/data logic; UI remains platform-native (Compose on Android, SwiftUI on iOS)
+- **CMP**: shares UI + logic; one UI framework across all targets
+
+### Project Structure
+```kotlin
+// shared/build.gradle.kts
+plugins {
+  kotlin("multiplatform")
+  id("org.jetbrains.compose")
+  id("com.android.library")
+}
+
+kotlin {
+  androidTarget()
+  jvm("desktop")
+  js(IR) { browser() }
+  listOf(iosX64(), iosArm64(), iosSimulatorArm64())
+
+  sourceSets {
+    val commonMain by getting
+    val androidMain by getting
+    val iosMain by creating { dependsOn(commonMain) }
+    val desktopMain by getting
+    val jsMain by getting
+  }
+}
+```
+
+### Expect/Actual for Platform APIs
+```kotlin
+// commonMain
+expect fun platformName(): String
+
+// androidMain
+actual fun platformName() = "Android"
+
+// iosMain
+actual fun platformName() = "iOS"
+```
+
+### Entry Points
+```kotlin
+// commonMain - shared UI
+@Composable
+fun App() {
+  MaterialTheme {
+    Navigation()
+  }
+}
+
+// ✅ Android
+class MainActivity: ComponentActivity() {
+  override fun onCreate(b: Bundle?) {
+    super.onCreate(b)
+    setContent { App() }
+  }
+}
+
+// ✅ Desktop
+fun main() = application {
+  Window(onCloseRequest = ::exitApplication) {
+    App()
+  }
+}
+```
 
 ### Best Practices
-- Share: state holders, screens, theming, navigation; keep interop thin.
-- Adapt: gestures, windowing, typography, spacing per platform.
-- Performance: stable keys in lists, precompute with `remember`, profile on each target.
-- Resources: use compose resources where possible; centralize strings.
-- Testing: golden/screenshot across targets; exercise navigation and state.
+- **Share**: state holders, screens, theming, navigation
+- **Platform-specific**: gestures, windowing, resources
+- **Performance**: stable keys, `remember` for computations, profile each target
+- **Testing**: screenshot tests across all targets
 
-### Limitations (today)
-- iOS embedding via UIViewController wrapper; SwiftUI interop limited.
-- Web is canvas‑based; bundle size and accessibility require care.
-- Desktop windowing/inputs differ; shortcut/hover patterns diverge.
+### Limitations
+- iOS: integration via UIViewController wrapper, limited SwiftUI interop
+- Web: canvas-based rendering, bundle size and accessibility concerns
+- Desktop: windowing and input handling differences
+
+---
 
 ## Follow-ups
 - How to structure expect/actual for filesystem, haptics, and secure storage?
-- Strategies to keep bundle size small on Web while sharing UI?
-- Approaches to platform navigation parity without leaking internals into common code?
+- Strategies to minimize bundle size on Web while sharing UI code?
+- How to handle platform-specific navigation patterns without leaking into common code?
+- What are the performance trade-offs between CMP and native UI on iOS?
 
 ## References
 - https://www.jetbrains.com/lp/compose-multiplatform/
+- https://github.com/JetBrains/compose-multiplatform
 - https://developer.android.com/develop/ui/compose
-- [[c-coroutines]]
 
 ## Related Questions
 
@@ -133,5 +221,4 @@ class MainActivity: ComponentActivity() {
 - [[q-compose-lazy-layout-optimization--android--hard]]
 
 ### Advanced (Harder)
-- [[q-compose-modifier-order-performance--android--medium]]
-- [[q-compose-gesture-detection--android--medium]]
+- None

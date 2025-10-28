@@ -3,55 +3,50 @@ id: 20251012-122710
 title: Compose remember/derivedStateOf / remember и derivedStateOf в Compose
 aliases: [Compose remember and derivedStateOf, remember и derivedStateOf]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, ui-state]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
   - q-compose-compiler-plugin--android--hard
   - q-compose-performance-optimization--android--hard
   - q-remember-vs-remembersaveable-compose--android--medium
+  - q-compose-slot-table-recomposition--android--hard
+sources: [https://developer.android.com/develop/ui/compose/state]
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-10-28
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
-source: https://developer.android.com/develop/ui/compose/state
-source_note: Official Compose state docs
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:37 pm
 ---
 
 # Вопрос (RU)
-> remember и derivedStateOf в Compose?
+> Что такое remember и derivedStateOf в Jetpack Compose? Когда и как их использовать?
 
 # Question (EN)
-> Compose remember/derivedStateOf?
+> What are remember and derivedStateOf in Jetpack Compose? When and how to use them?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Основные концепции
 
-## Answer (EN)
+**remember** — кеширует значения в композиции; переживает рекомпозицию, но не переживает пересоздание активити.
 
-### Concepts
-- remember: caches values in composition; survives recomposition only.
-- rememberSaveable: persists across config changes and process death (uses Bundle/Saver).
-- derivedStateOf: computes a value that only invalidates when RESULT changes.
-- Builds on [[c-data-structures]] for efficient state caching and [[c-algorithms]] for change detection.
+**rememberSaveable** — сохраняет значения через изменения конфигурации и смерть процесса (использует Bundle/Saver).
 
-### Minimal Patterns
+**derivedStateOf** — вычисляет производное состояние, которое инвалидируется только при изменении результата, а не зависимостей.
 
-remember (composition‑scoped)
-- Use for temporary UI state or cached computations tied to parameters.
+### Паттерны использования
+
+#### remember (область композиции)
+
+Используйте для временного UI-состояния или кешированных вычислений, привязанных к параметрам.
+
 ```kotlin
+// ✅ Простой счетчик в UI
 @Composable
 fun Counter() {
   var count by remember { mutableStateOf(0) }
@@ -59,62 +54,188 @@ fun Counter() {
 }
 ```
 
-remember with keys
-- Resets cached value when key(s) change.
+#### remember с ключами
+
+Сбрасывает кешированное значение при изменении ключа.
+
 ```kotlin
-val userData by remember(userId) { mutableStateOf<User?>(null) }
+// ✅ Пересоздание состояния при смене userId
+val userData by remember(userId) {
+  mutableStateOf<User?>(null)
+}
 ```
 
-rememberSaveable (persists)
-- Use for inputs/navigation state that must survive recreation; provide Saver for complex types.
+#### rememberSaveable (персистентность)
+
+Используйте для input-полей и навигационного состояния, которое должно пережить пересоздание.
+
 ```kotlin
+// ✅ Форма логина переживает поворот экрана
 @Composable
 fun Login() {
   var email by rememberSaveable { mutableStateOf("") }
   var password by rememberSaveable { mutableStateOf("") }
-  TextField(email, { email = it }); TextField(password, { password = it })
+  TextField(email, { email = it })
+  TextField(password, { password = it })
 }
 ```
 
-Custom Saver
+#### Custom Saver для сложных типов
+
 ```kotlin
-@Stable data class Form(val email: String, val agree: Boolean)
+@Stable
+data class Form(val email: String, val agree: Boolean)
+
 val FormSaver = mapSaver(
   save = { mapOf("e" to it.email, "a" to it.agree) },
   restore = { Form(it["e"] as String, it["a"] as Boolean) }
 )
-var form by rememberSaveable(stateSaver = FormSaver) { mutableStateOf(Form("", false)) }
+
+var form by rememberSaveable(stateSaver = FormSaver) {
+  mutableStateOf(Form("", false))
+}
 ```
 
-derivedStateOf (computed state)
-- Reduces invalidations; recomposes only when computed value changes, not every dependency change.
+#### derivedStateOf (вычисляемое состояние)
+
+Уменьшает количество рекомпозиций: перерисовка происходит только когда меняется вычисленное значение, а не зависимости.
+
 ```kotlin
+// ✅ FAB показывается только когда прокрутили вниз
 val listState = rememberLazyListState()
-val showFab by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
+val showFab by remember {
+  derivedStateOf { listState.firstVisibleItemIndex > 0 }
+}
+
+// ❌ Без derivedStateOf — рекомпозиция при каждом скролле
+val showFabWrong = listState.firstVisibleItemIndex > 0
 ```
 
-Comparison (when to use)
-- remember: cache within composition; not for persistence.
-- rememberSaveable: persist user input/navigation; requires supported types or Saver.
-- derivedStateOf: cache computed value that changes infrequently; pair with remember.
+### Когда что использовать
+
+| Функция | Область видимости | Персистентность | Применение |
+|---------|-------------------|-----------------|------------|
+| **remember** | Композиция | Нет | Временное UI-состояние, кеш |
+| **rememberSaveable** | Процесс + Bundle | Да | Формы, input, навигация |
+| **derivedStateOf** | С remember | Как remember | Вычисляемые значения |
+
+## Answer (EN)
+
+### Core Concepts
+
+**remember** — caches values in composition; survives recomposition but not activity recreation.
+
+**rememberSaveable** — persists across config changes and process death (uses Bundle/Saver).
+
+**derivedStateOf** — computes derived state that invalidates only when result changes, not dependencies.
+
+### Usage Patterns
+
+#### remember (composition-scoped)
+
+Use for temporary UI state or cached computations tied to parameters.
+
+```kotlin
+// ✅ Simple counter in UI
+@Composable
+fun Counter() {
+  var count by remember { mutableStateOf(0) }
+  Button({ count++ }) { Text("Count: $count") }
+}
+```
+
+#### remember with keys
+
+Resets cached value when key changes.
+
+```kotlin
+// ✅ Recreate state when userId changes
+val userData by remember(userId) {
+  mutableStateOf<User?>(null)
+}
+```
+
+#### rememberSaveable (persistence)
+
+Use for input fields and navigation state that must survive recreation.
+
+```kotlin
+// ✅ Login form survives screen rotation
+@Composable
+fun Login() {
+  var email by rememberSaveable { mutableStateOf("") }
+  var password by rememberSaveable { mutableStateOf("") }
+  TextField(email, { email = it })
+  TextField(password, { password = it })
+}
+```
+
+#### Custom Saver for complex types
+
+```kotlin
+@Stable
+data class Form(val email: String, val agree: Boolean)
+
+val FormSaver = mapSaver(
+  save = { mapOf("e" to it.email, "a" to it.agree) },
+  restore = { Form(it["e"] as String, it["a"] as Boolean) }
+)
+
+var form by rememberSaveable(stateSaver = FormSaver) {
+  mutableStateOf(Form("", false))
+}
+```
+
+#### derivedStateOf (computed state)
+
+Reduces recompositions: redraws only when computed value changes, not dependencies.
+
+```kotlin
+// ✅ FAB shows only when scrolled down
+val listState = rememberLazyListState()
+val showFab by remember {
+  derivedStateOf { listState.firstVisibleItemIndex > 0 }
+}
+
+// ❌ Without derivedStateOf — recomposition on every scroll
+val showFabWrong = listState.firstVisibleItemIndex > 0
+```
+
+### When to Use What
+
+| Function | Scope | Persistence | Use Case |
+|----------|-------|-------------|----------|
+| **remember** | Composition | No | Temporary UI state, cache |
+| **rememberSaveable** | Process + Bundle | Yes | Forms, inputs, navigation |
+| **derivedStateOf** | With remember | Like remember | Computed values |
+
+---
 
 ## Follow-ups
-- When does derivedStateOf hurt performance (overuse on fast‑changing inputs)?
-- How to design Savers for nested immutable models?
-- How to test process‑death resilience of forms and wizards?
+
+- When does derivedStateOf hurt performance (overuse on fast-changing inputs)?
+- How to design Savers for deeply nested immutable models?
+- How to test process-death resilience of multi-step forms and wizards?
+- What happens if you use derivedStateOf without remember?
+- How does remember compare to LaunchedEffect for side effects?
 
 ## References
-- https://developer.android.com/develop/ui/compose/state
-- https://developer.android.com/jetpack/compose/performance
+
+- [Compose State Documentation](https://developer.android.com/develop/ui/compose/state)
+- [Compose Performance Guide](https://developer.android.com/jetpack/compose/performance)
+- [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-remember-vs-remembersaveable-compose--android--medium]]
+- [[q-compose-state-hoisting--android--easy]]
 
 ### Related (Same Level)
-- [[q-compose-performance-optimization--android--hard]]
-- [[q-compose-compiler-plugin--android--hard]]
+- [[q-compose-side-effects--android--medium]]
+- [[q-compose-state-flow-integration--android--medium]]
 
 ### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]]
+- [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-slot-table-recomposition--android--hard]]

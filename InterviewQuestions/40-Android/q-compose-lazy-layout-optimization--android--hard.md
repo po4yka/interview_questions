@@ -1,120 +1,294 @@
 ---
 id: 20251017-115547
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
-aliases: [Compose Lazy Layout Optimization, Оптимизация Lazy‑layout в Compose]
+aliases: [Compose Lazy Layout Optimization, Оптимизация Lazy‑layout в Compose, LazyColumn optimization, LazyRow optimization, Оптимизация LazyColumn]
 topic: android
-subtopics:
-  - performance-memory
-  - ui-compose
+subtopics: [performance-memory, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
   - q-android-performance-measurement-tools--android--medium
   - q-compose-compiler-plugin--android--hard
   - q-compose-custom-layout--android--hard
+  - q-compose-performance-optimization--android--hard
 created: 2025-10-15
-updated: 2025-10-20
+updated: 2025-10-28
+sources: []
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:39 pm
 ---
-
 # Вопрос (RU)
-> Оптимизация Lazy‑layout в Compose?
+> Как оптимизировать производительность Lazy-layout (LazyColumn, LazyRow) в Jetpack Compose?
 
 # Question (EN)
-> Compose Lazy Layout Optimization?
+> How to optimize performance of Lazy layouts (LazyColumn, LazyRow) in Jetpack Compose?
 
 ---
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
+### Ключевые принципы оптимизации
 
-## Answer (EN)
+**1. Стабильные ключи**
+- Используйте уникальные стабильные ключи для элементов (`key = { item.id }`)
+- [[c-jetpack-compose|Compose]] использует ключи для отслеживания изменений и предотвращения ненужных рекомпозиций
+- Без ключей элементы пересоздаются при изменении списка
 
-### Core Principles
-- Stable keys: ensure identity across updates (`key = item.id`)
-- Hoist state: keep per‑item state outside items or keyed by stable id
-- Avoid capturing changing lambdas/state in item scope; use `rememberUpdatedState`
-- Prefetch/layout: enable prefetch, use item placeholders/shimmer if needed
-- Avoid nested scroll/layout thrash; constrain measure work; reuse shapes/brushes
-- Leverages [[c-data-structures]] like hash maps for efficient item lookup and [[c-algorithms]] for scroll optimization
+**2. Управление состоянием**
+- Поднимайте состояние элементов наверх или храните по стабильному ID
+- Используйте `mutableStateMapOf` для отслеживания состояния множества элементов
+- Избегайте захвата изменяющихся лямбд в scope элемента
 
-### Minimal Patterns
+**3. Минимизация рекомпозиций**
+- Применяйте `rememberUpdatedState` для обновляемых callback'ов
+- Используйте `remember` для тяжелых вычислений
+- Избегайте создания новых объектов при каждой рекомпозиции
 
-Stable keys and no recomposition captures:
+**4. Prefetch и Layout**
+- Включена по умолчанию, но можно настроить через `LazyListPrefetchStrategy`
+- Используйте placeholder/shimmer для загружаемого контента
+- Мониторьте видимые элементы для подгрузки данных
+
+### Паттерны оптимизации
+
+**✅ Стабильные ключи и оптимизированные callback'ы:**
 ```kotlin
 LazyColumn {
   items(items = data, key = { it.id }) { item ->
-    val onClick by rememberUpdatedState(newValue = { onItemClick(item.id) })
-    Row(Modifier.clickable { onClick() }) { Text(item.title) }
+    val onClick by rememberUpdatedState { onItemClick(item.id) }
+    Row(Modifier.clickable { onClick() }) {
+      Text(item.title)
+    }
   }
 }
 ```
 
-Hoist per‑row state by id:
+**❌ Без ключей - элементы пересоздаются:**
 ```kotlin
-@Composable
-fun ListScreen(data: List<Item>) {
-  val selection = remember { mutableStateMapOf<String, Boolean>() }
-  LazyColumn { items(data, key = { it.id }) { item ->
-    val selected = selection[item.id] == true
-    Row(Modifier.toggleable(selected, onValueChange = { selection[item.id] = it })) {
-      Text(item.title)
-    }
-  } }
+LazyColumn {
+  items(data) { item -> // Без key
+    Row { Text(item.title) }
+  }
 }
 ```
 
-Prefetching (paging integration):
+**✅ Управление состоянием множества элементов:**
+```kotlin
+@Composable
+fun SelectableList(data: List<Item>) {
+  val selection = remember { mutableStateMapOf<String, Boolean>() }
+  LazyColumn {
+    items(data, key = { it.id }) { item ->
+      val selected = selection[item.id] == true
+      Row(
+        Modifier.toggleable(
+          value = selected,
+          onValueChange = { selection[item.id] = it }
+        )
+      ) {
+        Text(item.title)
+      }
+    }
+  }
+}
+```
+
+**✅ Prefetching для пагинации:**
 ```kotlin
 val lazyState = rememberLazyListState()
 LaunchedEffect(lazyState) {
-  snapshotFlow { lazyState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+  snapshotFlow {
+    lazyState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+  }
     .distinctUntilChanged()
-    .collect { last -> if (last != null && last > data.size - 10) viewModel.loadMore() }
+    .collect { lastVisible ->
+      if (lastVisible != null && lastVisible > data.size - 10) {
+        viewModel.loadMore()
+      }
+    }
 }
 ```
 
-Avoid heavy recomposition in items:
+**✅ Кеширование тяжелых вычислений:**
 ```kotlin
 @Composable
 fun PriceTag(price: BigDecimal) {
-  val formatted = remember(price) { priceFormatter.format(price) }
-  Text(formatted) // precompute once per price change
+  val formatted = remember(price) {
+    priceFormatter.format(price)
+  }
+  Text(formatted)
 }
 ```
 
-### Measurement/perf Tips
-- Avoid costly intrinsics; provide fixed sizes where possible
-- Reuse `Brush`, `Shape`, `Painter`; avoid recreating per item
-- Use `mutableStateListOf`/snapshot state collections with stable keys
-- Profile with Layout Inspector/Perfetto; monitor recomposition counts
+**❌ Вычисления при каждой рекомпозиции:**
+```kotlin
+@Composable
+fun PriceTag(price: BigDecimal) {
+  Text(priceFormatter.format(price)) // Повторные вычисления
+}
+```
+
+### Дополнительные оптимизации
+
+**Переиспользование объектов:**
+- Создавайте `Brush`, `Shape`, `Painter` вне item scope
+- Используйте `remember` для объектов, общих для всех элементов
+
+**Фиксированные размеры:**
+- Указывайте `Modifier.height()` где возможно
+- Избегайте сложных intrinsic measurements
+
+**Профилирование:**
+- Layout Inspector для анализа иерархии
+- Compose Compiler Metrics для подсчета рекомпозиций
+- Perfetto для измерения frame timing
+- См. [[c-memory-management]] для глубокого анализа утечек памяти
+
+## Answer (EN)
+
+### Core Optimization Principles
+
+**1. Stable Keys**
+- Use unique stable keys for items (`key = { item.id }`)
+- Compose uses keys to track changes and prevent unnecessary recompositions
+- Without keys, items are recreated when list changes
+
+**2. State Management**
+- Hoist per-item state or store it by stable ID
+- Use `mutableStateMapOf` to track state of multiple items
+- Avoid capturing changing lambdas in item scope
+
+**3. Minimize Recompositions**
+- Apply `rememberUpdatedState` for updatable callbacks
+- Use `remember` for expensive computations
+- Avoid creating new objects on every recomposition
+
+**4. Prefetch and Layout**
+- Enabled by default, configurable via `LazyListPrefetchStrategy`
+- Use placeholder/shimmer for loading content
+- Monitor visible items to trigger data loading
+
+### Optimization Patterns
+
+**✅ Stable keys and optimized callbacks:**
+```kotlin
+LazyColumn {
+  items(items = data, key = { it.id }) { item ->
+    val onClick by rememberUpdatedState { onItemClick(item.id) }
+    Row(Modifier.clickable { onClick() }) {
+      Text(item.title)
+    }
+  }
+}
+```
+
+**❌ Without keys - items recreated:**
+```kotlin
+LazyColumn {
+  items(data) { item -> // No key
+    Row { Text(item.title) }
+  }
+}
+```
+
+**✅ Managing state for multiple items:**
+```kotlin
+@Composable
+fun SelectableList(data: List<Item>) {
+  val selection = remember { mutableStateMapOf<String, Boolean>() }
+  LazyColumn {
+    items(data, key = { it.id }) { item ->
+      val selected = selection[item.id] == true
+      Row(
+        Modifier.toggleable(
+          value = selected,
+          onValueChange = { selection[item.id] = it }
+        )
+      ) {
+        Text(item.title)
+      }
+    }
+  }
+}
+```
+
+**✅ Prefetching for pagination:**
+```kotlin
+val lazyState = rememberLazyListState()
+LaunchedEffect(lazyState) {
+  snapshotFlow {
+    lazyState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+  }
+    .distinctUntilChanged()
+    .collect { lastVisible ->
+      if (lastVisible != null && lastVisible > data.size - 10) {
+        viewModel.loadMore()
+      }
+    }
+}
+```
+
+**✅ Caching expensive computations:**
+```kotlin
+@Composable
+fun PriceTag(price: BigDecimal) {
+  val formatted = remember(price) {
+    priceFormatter.format(price)
+  }
+  Text(formatted)
+}
+```
+
+**❌ Computing on every recomposition:**
+```kotlin
+@Composable
+fun PriceTag(price: BigDecimal) {
+  Text(priceFormatter.format(price)) // Repeated computation
+}
+```
+
+### Additional Optimizations
+
+**Object Reuse:**
+- Create `Brush`, `Shape`, `Painter` outside item scope
+- Use `remember` for objects shared across items
+
+**Fixed Sizes:**
+- Specify `Modifier.height()` where possible
+- Avoid complex intrinsic measurements
+
+**Profiling:**
+- Layout Inspector for hierarchy analysis
+- Compose Compiler Metrics for recomposition counts
+- Perfetto for frame timing measurement
+
+---
 
 ## Follow-ups
-- How to design item scopes to minimize captures and recompositions?
-- When to use derivedStateOf in lazy items?
-- How to measure item jank and tune prefetch/window sizes?
+- How to configure custom prefetch strategies for different scroll patterns?
+- When should you use `derivedStateOf` vs `rememberUpdatedState` in lazy items?
+- How to measure and analyze item-level jank using Perfetto traces?
+- What are the trade-offs between `items()` with keys vs manual composition?
 
 ## References
 - https://developer.android.com/develop/ui/compose/lists
 - https://developer.android.com/develop/ui/compose/performance
+- https://developer.android.com/develop/ui/compose/performance/stability
 
 ## Related Questions
 
 ### Prerequisites (Easier)
+- [[q-compose-performance-optimization--android--hard]]
 - [[q-animated-visibility-vs-content--android--medium]]
 
 ### Related (Same Level)
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
+- [[q-android-performance-measurement-tools--android--medium]]
 
 ### Advanced (Harder)
-- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-compose-stability-skippability--android--hard]]
+- [[q-compose-slot-table-recomposition--android--hard]]
