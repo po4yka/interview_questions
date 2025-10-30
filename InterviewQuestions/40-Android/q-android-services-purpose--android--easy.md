@@ -3,7 +3,7 @@ id: 20251012-122774
 title: Android Services Purpose / Назначение Service в Android
 aliases: ["Android Services Purpose", "Назначение Service в Android"]
 topic: android
-subtopics: [service, background-execution]
+subtopics: [service, background-execution, lifecycle]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -16,8 +16,8 @@ related:
   - q-android-architectural-patterns--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
-tags: [android/service, android/background-execution, difficulty/easy]
+updated: 2025-10-30
+tags: [android/service, android/background-execution, android/lifecycle, difficulty/easy]
 ---
 # Вопрос (RU)
 > Для чего используются Service-компоненты в Android и когда они необходимы?
@@ -29,122 +29,95 @@ tags: [android/service, android/background-execution, difficulty/easy]
 
 ## Ответ (RU)
 
-**Service** — компонент для длительных фоновых операций без UI.
+**Service** — компонент для длительных операций без UI.
 
-**Основные сценарии:**
+**Типы Services:**
 
-**1. Foreground Services**
-Видимые операции (медиа-плейбак, навигация, фитнес-трекинг):
+**1. Foreground Service (рекомендуемый)**
+Видимые пользователю операции с обязательным уведомлением:
 
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, notification) // ✅ Видим пользователю
-        return START_STICKY // ✅ Перезапуск при убийстве системой
+        startForeground(NOTIFICATION_ID, notification) // ✅ Обязательно
+        return START_STICKY // ✅ Перезапуск при убийстве
     }
 }
 ```
 
-**2. Bound Services**
-IPC между процессами или компонентами:
+Примеры: музыка, навигация, фитнес-трекинг.
+
+**2. Bound Service**
+IPC между компонентами:
 
 ```kotlin
-class DataService : Service() {
-    private val binder = LocalBinder()
-
-    inner class LocalBinder : Binder() {
-        fun getService() = this@DataService // ✅ Доступ к методам
-    }
-
-    override fun onBind(intent: Intent) = binder
+inner class LocalBinder : Binder() {
+    fun getService() = this@DataService // ✅ Доступ к методам
 }
 ```
 
-**3. Started Services (устарело)**
-Фоновая работа без привязки к lifecycle клиента:
-
-```kotlin
-class UploadService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Работа в фоне
-        stopSelf() // ❌ Забыли вызвать — утечка ресурсов
-        return START_NOT_STICKY
-    }
-}
-```
+**3. Started Service (❌ устарел)**
+Фоновая работа без привязки к lifecycle. Background execution limits (Android 8+) убивают такие сервисы.
 
 **Современные альтернативы:**
-- **WorkManager** — отложенные задачи с гарантией выполнения
-- **JobScheduler** — задачи по расписанию
-- **Foreground Services** — единственный легитимный use case для Service
+- **WorkManager** — отложенные задачи с гарантией (рекомендуется)
+- **JobScheduler** — условные задачи
+- **AlarmManager** — точное время
 
-**Критично:** Background execution limits сильно ограничивают обычные Services. Используйте только Foreground Services (с обязательным уведомлением) или переходите на WorkManager.
+**Критично:** Используйте Foreground Services только для user-visible операций или переходите на WorkManager.
 
 ## Answer (EN)
 
-**Service** is a component for long-running background operations without UI.
+**Service** is a component for long-running operations without UI.
 
-**Primary Use Cases:**
+**Service Types:**
 
-**1. Foreground Services**
-User-visible operations (media playback, navigation, fitness tracking):
+**1. Foreground Service (recommended)**
+User-visible operations with mandatory notification:
 
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, notification) // ✅ Visible to user
-        return START_STICKY // ✅ Restart if killed by system
+        startForeground(NOTIFICATION_ID, notification) // ✅ Mandatory
+        return START_STICKY // ✅ Restart if killed
     }
 }
 ```
 
-**2. Bound Services**
-IPC between processes or components:
+Examples: music, navigation, fitness tracking.
+
+**2. Bound Service**
+IPC between components:
 
 ```kotlin
-class DataService : Service() {
-    private val binder = LocalBinder()
-
-    inner class LocalBinder : Binder() {
-        fun getService() = this@DataService // ✅ Access to methods
-    }
-
-    override fun onBind(intent: Intent) = binder
+inner class LocalBinder : Binder() {
+    fun getService() = this@DataService // ✅ Method access
 }
 ```
 
-**3. Started Services (deprecated pattern)**
-Background work not tied to client lifecycle:
+**3. Started Service (❌ deprecated)**
+Background work not tied to lifecycle. Background execution limits (Android 8+) kill such services.
 
-```kotlin
-class UploadService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Background work
-        stopSelf() // ❌ Forgot to call — resource leak
-        return START_NOT_STICKY
-    }
-}
-```
+**Modern alternatives:**
+- **WorkManager** — deferrable tasks with guarantees (recommended)
+- **JobScheduler** — conditional tasks
+- **AlarmManager** — exact timing
 
-**Modern Alternatives:**
-- **WorkManager** — deferrable tasks with guaranteed execution
-- **JobScheduler** — scheduled tasks
-- **Foreground Services** — only legitimate Service use case
-
-**Critical:** Background execution limits severely restrict regular Services. Use only Foreground Services (with mandatory notification) or migrate to WorkManager.
+**Critical:** Use Foreground Services only for user-visible operations or migrate to WorkManager.
 
 ## Follow-ups
 
-- When must you use Foreground Service instead of WorkManager?
-- What are background execution limits and how do they affect Services?
-- How does WorkManager guarantee task execution after process death?
 - What notification requirements exist for Foreground Services?
-- How do you properly stop a Service to avoid resource leaks?
+- How do background execution limits affect Services?
+- When to choose WorkManager over Foreground Service?
+- What happens without calling `stopSelf()` in Started Service?
+- How does the system prioritize Services during low memory?
 
 ## References
 
 - [[c-service]] - Service component concept
 - [[c-lifecycle]] - Android component lifecycle
+- [[c-workmanager]] - WorkManager for background tasks
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/guide/background
 
@@ -152,10 +125,12 @@ class UploadService : Service() {
 
 ### Prerequisites
 - [[q-android-app-components--android--easy]] - Android app components overview
+- [[q-android-lifecycle--android--easy]] - Component lifecycle basics
 
 ### Related
 - [[q-android-service-types--android--easy]] - Service types and lifecycle
-- [[q-android-async-primitives--android--easy]] - Asynchronous primitives in Android
+- [[q-android-async-primitives--android--easy]] - Asynchronous primitives
 
 ### Advanced
 - [[q-android-architectural-patterns--android--medium]] - Architectural patterns for background work
+- [[q-foreground-service-restrictions--android--hard]] - Foreground Service restrictions

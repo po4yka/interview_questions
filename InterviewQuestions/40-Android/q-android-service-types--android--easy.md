@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [q-android-app-components--android--easy, q-android-async-primitives--android--easy, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/service, android/background-execution, difficulty/easy]
 sources: []
 ---
@@ -32,7 +32,7 @@ Android предоставляет три типа Service:
 Запускается через `startService()` и работает независимо до явной остановки или уничтожения системой при нехватке памяти.
 
 **2. Foreground Service**
-Выполняет видимую пользователю работу с обязательной нотификацией. Защищен от уничтожения системой. Требует permission и тип foreground service.
+Выполняет видимую пользователю работу с обязательной нотификацией. Защищен от уничтожения системой. Требует permission и указание типа foreground service.
 
 ```kotlin
 class MusicService : Service() {
@@ -44,7 +44,7 @@ class MusicService : Service() {
 ```
 
 **3. Bound Service**
-Предоставляет клиент-серверный интерфейс. Живет пока есть привязанные клиенты.
+Предоставляет клиент-серверный интерфейс. Живет только пока есть привязанные клиенты.
 
 ```kotlin
 class LocalService : Service() {
@@ -77,7 +77,7 @@ Android provides three Service types:
 Launched via `startService()` and runs independently until explicitly stopped or killed by system under memory pressure.
 
 **2. Foreground Service**
-Performs user-visible work with mandatory notification. Protected from system termination. Requires permission and foreground service type.
+Performs user-visible work with mandatory notification. Protected from system termination. Requires permission and foreground service type declaration.
 
 ```kotlin
 class MusicService : Service() {
@@ -118,11 +118,11 @@ class LocalService : Service() {
 
 ## Follow-ups
 
-- What are the Foreground Service types and required permissions?
-- How does `START_STICKY` differ from `START_NOT_STICKY`?
+- What are the Foreground Service types and when are they required?
+- How does `START_STICKY` differ from `START_NOT_STICKY` and `START_REDELIVER_INTENT`?
 - When should you use WorkManager instead of a Service?
 - How do you implement a hybrid Service (both started and bound)?
-- What happens to a Bound Service when all clients unbind?
+- What happens to a Bound Service when the last client unbinds?
 
 ## References
 
@@ -138,7 +138,7 @@ class LocalService : Service() {
 
 ### Related
 - [[q-android-async-primitives--android--easy]] - Async execution options
-- Foreground Service types and permissions (Android 14+)
+- Foreground Service types and permissions
 
 ### Advanced
 - [[q-android-architectural-patterns--android--medium]] - MVVM and service integration

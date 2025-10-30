@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-encryption, c-permissions, q-runtime-permissions--android--medium, q-android-manifest-file--android--easy]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, security, encryption, difficulty/medium]
 sources: []
 ---
@@ -26,14 +26,14 @@ sources: []
 
 ## Ответ (RU)
 
-**Принцип глубокоэшелонированной защиты (Defense-in-Depth):**
-Android использует многоуровневую безопасность: изоляция процессов, система разрешений, [[c-encryption|шифрование]] данных и защищенная сетевая коммуникация. Каждый уровень защищает от специфических векторов атак.
+**Принцип многоуровневой защиты (Defense-in-Depth):**
+Android использует изоляцию процессов, систему разрешений, [[c-encryption|шифрование]] данных и защищенную сетевую коммуникацию. Каждый уровень защищает от конкретных векторов атак.
 
 **1. Система разрешений:**
-Runtime permissions контролируют доступ к чувствительным ресурсам (камера, местоположение, контакты). Используйте signature-based permissions для защиты внутренних API от сторонних приложений.
+Runtime permissions контролируют доступ к чувствительным ресурсам. Signature-permissions защищают внутренние API от сторонних приложений.
 
 ```xml
-<!-- ✅ Защита внутреннего API signature-permission -->
+<!-- ✅ Защита внутреннего API -->
 <permission
     android:name="com.myapp.INTERNAL_API"
     android:protectionLevel="signature" />
@@ -45,7 +45,7 @@ Runtime permissions контролируют доступ к чувствите�
 ```
 
 **2. Безопасное хранение данных:**
-Jetpack Security (EncryptedSharedPreferences, EncryptedFile) использует [[c-encryption|AES-256-GCM]] шифрование с ключами из Android Keystore, защищенными аппаратно.
+Jetpack Security (EncryptedSharedPreferences, EncryptedFile) использует [[c-encryption|AES-256-GCM]] с ключами из Android Keystore, защищенными аппаратно.
 
 ```kotlin
 // ✅ Шифрование чувствительных данных
@@ -61,15 +61,15 @@ val encryptedPrefs = EncryptedSharedPreferences.create(
     PrefValueEncryptionScheme.AES256_GCM
 )
 
-// ❌ Небезопасное хранение токенов
+// ❌ Небезопасное хранение
 // sharedPrefs.edit().putString("auth_token", token).apply()
 ```
 
 **3. Сетевая безопасность:**
-Network Security Config принудительно использует HTTPS и certificate pinning для защиты от MITM атак. Блокируйте cleartext traffic по умолчанию.
+Network Security Config принудительно использует HTTPS и certificate pinning для защиты от MITM атак.
 
 ```xml
-<!-- ✅ Network Security Config с pinning -->
+<!-- ✅ Network Security Config -->
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
@@ -88,60 +88,60 @@ Network Security Config принудительно использует HTTPS и
 ```
 
 **4. Защита компонентов:**
-Экспортированные компоненты доступны другим приложениям. Используйте `android:exported="false"` для внутренних Activity/Service/Provider.
+Используйте `android:exported="false"` для внутренних Activity/Service/Provider. Валидируйте Intent от внешних источников.
 
 ```kotlin
-// ✅ Валидация Intent от внешних источников
+// ✅ Валидация Intent
 override fun onCreate(savedInstanceState: Bundle?) {
     if (intent.action == Intent.ACTION_VIEW) {
         val uri = intent.data ?: return finish()
         if (!isValidDeepLink(uri)) return finish()
-        // Обработка только после валидации
+        processDeepLink(uri)
     }
 }
 
-// ❌ Прямое использование данных из Intent без проверки
+// ❌ Прямое использование без проверки
 // val userId = intent.getStringExtra("user_id")
 // deleteUser(userId)  // Опасно!
 ```
 
 **5. WebView безопасность:**
-Отключите JavaScript если не требуется, заблокируйте file:// доступ, валидируйте сообщения между JS и нативным кодом через postMessage.
+Отключите JavaScript если не требуется, заблокируйте file:// доступ, валидируйте JS-нативное взаимодействие.
 
 ```kotlin
-// ✅ Минимально необходимые разрешения
+// ✅ Минимальные разрешения
 webView.settings.apply {
-    javaScriptEnabled = false
+    javaScriptEnabled = false  // Включать только при необходимости
     allowFileAccess = false
     allowContentAccess = false
     mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 }
 
-// Если JS необходим - безопасный JavascriptInterface
+// Безопасный JavascriptInterface
 webView.addJavascriptInterface(object {
     @JavascriptInterface
-    fun sendMessage(message: String) {
-        if (isValidMessage(message)) processMessage(message)
+    fun sendMessage(msg: String) {
+        if (isValidMessage(msg)) processMessage(msg)
     }
 }, "NativeInterface")
 ```
 
-**Дополнительные практики:**
-- Обфускация кода (R8/ProGuard) для защиты от реверс-инжиниринга
+**Дополнительные меры:**
+- R8/ProGuard для обфускации кода
 - BiometricPrompt для криптографически стойкой аутентификации
-- Android Lint/StrictMode для выявления security vulnerabilities
-- Регулярные security audits и dependency scanning (OWASP Dependency-Check)
+- Android Lint/StrictMode для выявления уязвимостей
+- Dependency scanning (OWASP Dependency-Check)
 
 ## Answer (EN)
 
 **Defense-in-Depth Principle:**
-Android employs multi-layered security: process isolation, permission system, data [[c-encryption|encryption]], and secure network communication. Each layer protects against specific attack vectors.
+Android employs process isolation, permission system, data [[c-encryption|encryption]], and secure network communication. Each layer protects against specific attack vectors.
 
 **1. Permission System:**
-Runtime permissions control access to sensitive resources (camera, location, contacts). Use signature-based permissions to protect internal APIs from third-party apps.
+Runtime permissions control access to sensitive resources. Signature-permissions protect internal APIs from third-party apps.
 
 ```xml
-<!-- ✅ Protect internal API with signature-permission -->
+<!-- ✅ Protect internal API -->
 <permission
     android:name="com.myapp.INTERNAL_API"
     android:protectionLevel="signature" />
@@ -153,7 +153,7 @@ Runtime permissions control access to sensitive resources (camera, location, con
 ```
 
 **2. Secure Data Storage:**
-Jetpack Security (EncryptedSharedPreferences, EncryptedFile) uses [[c-encryption|AES-256-GCM]] encryption with keys from Android Keystore with hardware-backed protection.
+Jetpack Security (EncryptedSharedPreferences, EncryptedFile) uses [[c-encryption|AES-256-GCM]] with keys from Android Keystore with hardware-backed protection.
 
 ```kotlin
 // ✅ Encrypt sensitive data
@@ -169,15 +169,15 @@ val encryptedPrefs = EncryptedSharedPreferences.create(
     PrefValueEncryptionScheme.AES256_GCM
 )
 
-// ❌ Insecure token storage
+// ❌ Insecure storage
 // sharedPrefs.edit().putString("auth_token", token).apply()
 ```
 
 **3. Network Security:**
-Network Security Config enforces HTTPS and certificate pinning to protect against MITM attacks. Block cleartext traffic by default.
+Network Security Config enforces HTTPS and certificate pinning to protect against MITM attacks.
 
 ```xml
-<!-- ✅ Network Security Config with pinning -->
+<!-- ✅ Network Security Config -->
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
@@ -196,49 +196,49 @@ Network Security Config enforces HTTPS and certificate pinning to protect agains
 ```
 
 **4. Component Protection:**
-Exported components are accessible to other apps. Use `android:exported="false"` for internal Activity/Service/Provider.
+Use `android:exported="false"` for internal Activity/Service/Provider. Validate Intent from external sources.
 
 ```kotlin
-// ✅ Validate Intent from external sources
+// ✅ Validate Intent
 override fun onCreate(savedInstanceState: Bundle?) {
     if (intent.action == Intent.ACTION_VIEW) {
         val uri = intent.data ?: return finish()
         if (!isValidDeepLink(uri)) return finish()
-        // Process only after validation
+        processDeepLink(uri)
     }
 }
 
-// ❌ Direct use of Intent data without validation
+// ❌ Direct use without validation
 // val userId = intent.getStringExtra("user_id")
 // deleteUser(userId)  // Dangerous!
 ```
 
 **5. WebView Security:**
-Disable JavaScript unless required, block file:// access, validate messages between JS and native code via postMessage.
+Disable JavaScript unless required, block file:// access, validate JS-native interactions.
 
 ```kotlin
-// ✅ Minimal necessary permissions
+// ✅ Minimal permissions
 webView.settings.apply {
-    javaScriptEnabled = false
+    javaScriptEnabled = false  // Enable only when necessary
     allowFileAccess = false
     allowContentAccess = false
     mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 }
 
-// If JS is needed - secure JavascriptInterface
+// Secure JavascriptInterface
 webView.addJavascriptInterface(object {
     @JavascriptInterface
-    fun sendMessage(message: String) {
-        if (isValidMessage(message)) processMessage(message)
+    fun sendMessage(msg: String) {
+        if (isValidMessage(msg)) processMessage(msg)
     }
 }, "NativeInterface")
 ```
 
-**Additional Practices:**
-- Code obfuscation (R8/ProGuard) to prevent reverse engineering
+**Additional Measures:**
+- R8/ProGuard for code obfuscation
 - BiometricPrompt for cryptographically strong authentication
-- Android Lint/StrictMode to detect security vulnerabilities
-- Regular security audits and dependency scanning (OWASP Dependency-Check)
+- Android Lint/StrictMode to detect vulnerabilities
+- Dependency scanning (OWASP Dependency-Check)
 
 ---
 
@@ -247,7 +247,7 @@ webView.addJavascriptInterface(object {
 - How do you implement certificate pinning across different build variants (dev/staging/prod)?
 - What are the security implications of using reflection and dynamic code loading?
 - How do you securely store API keys and prevent extraction from APK?
-- What's the difference between `BIOMETRIC_STRONG` and `BIOMETRIC_WEAK` authenticators?
+- What's the difference between BIOMETRIC_STRONG and BIOMETRIC_WEAK authenticators?
 - How do you handle sensitive data in memory to prevent memory dumps and cold boot attacks?
 
 ## References
