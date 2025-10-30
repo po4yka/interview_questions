@@ -15,14 +15,17 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android, android/activity, android/service, android/content-provider, components, difficulty/easy]
+date created: Tuesday, October 28th 2025, 9:35:52 pm
+date modified: Thursday, October 30th 2025, 3:12:54 pm
 ---
+
 # Вопрос (RU)
 
-Какие основные компоненты Android-приложения?
+> Какие основные компоненты Android-приложения?
 
 # Question (EN)
 
-What are the main Android application components?
+> What are the main Android application components?
 
 ## Ответ (RU)
 

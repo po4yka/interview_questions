@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-01-27
 tags: [android/camera, android/performance-rendering, android/ui-graphics, kotlin, machine-learning, face-detection, difficulty/medium]
+date created: Monday, October 27th 2025, 5:12:57 pm
+date modified: Thursday, October 30th 2025, 3:13:30 pm
 ---
+
 # Вопрос (RU)
 > Объясните как реализовать распознавание и анализ лиц с помощью ML Kit. Как детектировать лица, landmarks, контуры и классифицировать выражения лица? Каковы best practices для real-time отслеживания, оптимизации производительности и приватности?
 

@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-workmanager-decision-guide--android--medium, q-kapt-ksp-migration--gradle--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium]
 created: 2025-10-15
 tags: [viewmodel, lifecycle, mvvm, architecture, difficulty/medium]
+date created: Saturday, October 18th 2025, 2:15:16 pm
+date modified: Thursday, October 30th 2025, 3:17:22 pm
 ---
 
 # Why is ViewModel needed and what happens in it?

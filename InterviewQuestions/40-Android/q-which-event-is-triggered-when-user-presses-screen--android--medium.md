@@ -22,7 +22,10 @@ tags:
   - motion-event
   - gesture-detection
   - difficulty/medium
+date created: Wednesday, October 29th 2025, 12:16:10 pm
+date modified: Thursday, October 30th 2025, 3:18:01 pm
 ---
+
 # Вопрос (RU)
 
 Какое событие срабатывает когда пользователь нажимает на экран?

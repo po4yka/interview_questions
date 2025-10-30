@@ -1,52 +1,57 @@
 ---
 id: 20251012-12271127
-title: "Leakcanary Heap Dump Analysis"
+title: "LeakCanary Heap Dump Analysis / Анализ дампа памяти в LeakCanary"
+aliases: ["LeakCanary Heap Dump Analysis", "Анализ дампа памяти в LeakCanary"]
 topic: android
+subtopics: [performance-memory, profiling, debugging]
+question_kind: android
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [android/memory-management, heap-dump, leakcanary, memory-analysis, memory-management, shark, difficulty/medium]
+updated: 2025-10-30
+tags: [android/performance-memory, android/profiling, android/debugging, leakcanary, heap-dump, memory-analysis, shark, difficulty/medium]
 moc: moc-android
-related: [q-privacy-sandbox-fledge--privacy--hard, q-main-thread-android--android--medium, q-canvas-optimization--graphics--medium]
+related: [q-main-thread-android--android--medium, q-canvas-optimization--graphics--medium]
+sources: []
 ---
 
-# Как понять что в дампе есть утечка?
+# Вопрос (RU)
 
-**English**: How to find a leak in a heap dump?
+> Как понять что в heap dump есть утечка памяти?
 
-## Answer (EN)
-If an object was not freed after attempts to trigger garbage collection, LeakCanary creates a **heap dump**. LeakCanary uses the **Shark library** to analyze the heap dump.
+# Question (EN)
 
-**Process:**
+> How to detect a memory leak in a heap dump?
 
-**1. Heap Dump Creation**
+---
+
+## Ответ (RU)
+
+Если объект не был освобожден после вызова сборщика мусора, LeakCanary создает **heap dump** (снимок кучи) и анализирует его библиотекой **Shark**.
+
+**Процесс обнаружения утечки:**
+
+**1. Создание heap dump**
 
 ```kotlin
-// When leak suspected
+// LeakCanary проверяет WeakReference после GC
 if (weakReference.get() != null) {
-    // Object not collected - create heap dump
+    // ✅ Объект должен был быть собран, но все еще жив
     val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
     Debug.dumpHprofData(heapDumpFile.absolutePath)
-
-    // Analyze heap dump
     analyzeHeap(heapDumpFile)
 }
 ```
 
-**2. Shark Library Analysis**
+**2. Анализ через Shark**
 
-Checks all objects in the heap and their references.
+Shark строит граф объектов и находит пути от GC roots до подозрительных объектов:
 
 ```kotlin
-import shark.AndroidObjectInspectors
-import shark.HeapAnalyzer
-import shark.OnAnalysisProgressListener
-
-// Analyze heap dump with Shark
 fun analyzeHeap(heapDumpFile: File) {
-    val heapAnalyzer = HeapAnalyzer(
-        OnAnalysisProgressListener.NO_OP
-    )
+    val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
 
     val analysis = heapAnalyzer.analyze(
         heapDumpFile = heapDumpFile,
@@ -54,225 +59,207 @@ fun analyzeHeap(heapDumpFile: File) {
             AndroidObjectInspectors.appLeakingObjectFilters
         ),
         referenceMatchers = AndroidReferenceMatchers.appDefaults,
-        computeRetainedHeapSize = true,
-        objectInspectors = AndroidObjectInspectors.appDefaults,
-        metadataExtractor = AndroidMetadataExtractor
+        computeRetainedHeapSize = true
     )
 
     when (analysis) {
         is HeapAnalysisSuccess -> {
             analysis.applicationLeaks.forEach { leak ->
-                println("Leak found: ${leak.leakTraces.first()}")
+                // ❌ Найдена цепочка удержания от GC root
+                println("Leak: ${leak.leakTraces.first()}")
             }
         }
-        is HeapAnalysisFailure -> {
-            println("Analysis failed: ${analysis.exception}")
-        }
+        is HeapAnalysisFailure -> println("Failed: ${analysis.exception}")
     }
 }
 ```
 
-**3. Reference Chain Verification**
+**3. Проверка retention chain**
 
-Shark checks which references hold the object in memory.
-
-**If an object should have been collected but is held by a reference chain, this indicates a leak.**
-
-**4. Retention Chain Display**
-
-The retention chain shows which objects and references prevent garbage collector from freeing memory.
-
-**Example Leak Trace:**
-
-```
-
- LEAK FOUND                                     
-
-                                                
- GC Root: Local variable in thread             
-     ↓                                          
- MyApplication (instance)                       
-     ↓ static MyApplication.sInstance           
- MainActivity (instance)                        
-     ↓ leaking                                  
-                                                
- Leak: MainActivity leaked!                     
- Retained: 2.5 MB                               
-
-```
-
-**Leak Detection Logic:**
-
-```kotlin
-// Simplified Shark leak finding
-fun findLeaks(heapGraph: HeapGraph): List<Leak> {
-    val leaks = mutableListOf<Leak>()
-
-    // Find objects that should be collected
-    val leakingObjects = heapGraph.objects
-        .filter { obj ->
-            // Check if object is a known leaked type
-            obj.instanceClassName == "android.app.Activity" &&
-            obj.instance["mDestroyed"]?.value == true
-        }
-
-    leakingObjects.forEach { leakingObject ->
-        // Find path from GC root to leaked object
-        val path = heapGraph.findPathFromGcRoot(leakingObject)
-
-        if (path != null) {
-            // Leak found! Object held by reference chain
-            leaks.add(Leak(
-                leakingObject = leakingObject,
-                retentionChain = path,
-                retainedBytes = calculateRetainedSize(leakingObject)
-            ))
-        }
-    }
-
-    return leaks
-}
-```
-
-**Leak Example:**
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    private val handler = Handler()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // - Delayed runnable holds Activity reference
-        handler.postDelayed({
-            // This holds MainActivity even after destruction
-            updateUI()
-        }, 60000)  // 60 seconds
-    }
-}
-```
-
-**Shark finds:**
+Shark находит цепочку ссылок от GC root к объекту, который должен был быть собран:
 
 ```
 GC Root: Thread (main)
   ↓ HandlerThread.mQueue
   ↓ MessageQueue.mMessages
   ↓ Message.callback (Runnable)
-  ↓ Lambda holding MainActivity reference
+  ↓ Lambda → MainActivity reference
   ↓ MainActivity (LEAKED!)
 
 Retained size: 3.2 MB
 ```
 
-**Retention Chain Components:**
+**Типичные паттерны утечек:**
 
-| Element | Description |
-|---------|-------------|
-| **GC Root** | Starting point (Thread, static field, etc.) |
-| **Reference Chain** | Path of references from root to leaked object |
-| **Leaked Object** | Object that should be collected but isn't |
-| **Retained Size** | Memory held by leaked object and its references |
-
-**Common Leak Patterns Detected:**
-
-**1. Static Reference Leak:**
+**Статическая ссылка:**
 ```kotlin
+// ❌ Activity в static поле
 companion object {
-    var activity: Activity? = null  // BAD
+    var activity: Activity? = null
 }
+
+// Trace: GC Root (Class) → static field → Activity
 ```
 
-**Trace:**
-```
-GC Root: Class object
-  ↓ static companion.activity
-  ↓ MainActivity (LEAKED)
-```
-
-**2. Inner Class Leak:**
+**Inner class с неявной ссылкой:**
 ```kotlin
+// ❌ AsyncTask держит неявную ссылку на outer class
 class MyActivity : AppCompatActivity() {
     inner class MyTask : AsyncTask<Void, Void, Void>() {
-        // - Holds implicit reference to MyActivity
+        // this$0 → MyActivity
     }
 }
 ```
 
-**Trace:**
-```
-GC Root: Thread
-  ↓ MyTask.this$0 (implicit outer class reference)
-  ↓ MyActivity (LEAKED)
-```
-
-**3. Listener Leak:**
+**Listener без отписки:**
 ```kotlin
+// ❌ Anonymous listener держит Activity
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    // - Anonymous class holds Activity reference
     someService.addListener(object : Listener {
-        override fun onEvent() {
-            updateUI()
-        }
+        override fun onEvent() { updateUI() }
     })
+    // Нет removeListener() в onDestroy()
 }
 ```
 
-**LeakCanary Report Example:**
+**Итоговая логика:**
 
+1. Объект не собран после GC → heap dump
+2. Shark строит граф объектов
+3. Поиск путей от GC roots к "мертвым" объектам
+4. Если путь найден → утечка с retention chain и размером
+
+## Answer (EN)
+
+If an object wasn't freed after garbage collection, LeakCanary creates a **heap dump** and analyzes it using the **Shark library**.
+
+**Leak detection process:**
+
+**1. Heap dump creation**
+
+```kotlin
+// LeakCanary checks WeakReference after GC
+if (weakReference.get() != null) {
+    // ✅ Object should be collected but still alive
+    val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
+    Debug.dumpHprofData(heapDumpFile.absolutePath)
+    analyzeHeap(heapDumpFile)
+}
 ```
 
-HEAP ANALYSIS RESULT
+**2. Analysis via Shark**
 
+Shark builds an object graph and finds paths from GC roots to suspicious objects:
 
-1 APPLICATION LEAKS
+```kotlin
+fun analyzeHeap(heapDumpFile: File) {
+    val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
 
-Leak pattern: Activity retained by static field
+    val analysis = heapAnalyzer.analyze(
+        heapDumpFile = heapDumpFile,
+        leakingObjectFinder = FilteringLeakingObjectFinder(
+            AndroidObjectInspectors.appLeakingObjectFilters
+        ),
+        referenceMatchers = AndroidReferenceMatchers.appDefaults,
+        computeRetainedHeapSize = true
+    )
 
-* GC ROOT static MyApp.sInstance
-* MyApp
-  ↓ MyApp.currentActivity
-  ↓ MainActivity (leaked)
-
-Retained: 5.4 MB
-
-Leak trace:
-  MyApp.currentActivity is holding MainActivity
-  Fix: Set MyApp.currentActivity = null in onDestroy()
-
+    when (analysis) {
+        is HeapAnalysisSuccess -> {
+            analysis.applicationLeaks.forEach { leak ->
+                // ❌ Found retention chain from GC root
+                println("Leak: ${leak.leakTraces.first()}")
+            }
+        }
+        is HeapAnalysisFailure -> println("Failed: ${analysis.exception}")
+    }
+}
 ```
 
-**Summary:**
+**3. Retention chain verification**
 
-1. **Object not collected** after GC → Create heap dump
-2. **Shark library** analyzes heap dump
-3. **Checks all objects** and their references in heap
-4. **Finds retention chains** from GC roots to leaked objects
-5. **Reports leak** with reference chain and retained size
+Shark finds reference chains from GC roots to objects that should have been collected:
 
-## Ответ (RU)
-Если объект не был освобожден после попыток вызвать сборку мусора, LeakCanary создает **дамп памяти**.
+```
+GC Root: Thread (main)
+  ↓ HandlerThread.mQueue
+  ↓ MessageQueue.mMessages
+  ↓ Message.callback (Runnable)
+  ↓ Lambda → MainActivity reference
+  ↓ MainActivity (LEAKED!)
 
-LeakCanary использует библиотеку **Shark** для анализа дампа памяти. Он проверяет все объекты в куче и их ссылки.
+Retained size: 3.2 MB
+```
 
-Shark проверяет какие ссылки удерживают объект в памяти. Если объект должен был быть собран но удерживается цепочкой ссылок это указывает на утечку.
+**Common leak patterns:**
 
-Цепочка удержания показывает какие объекты и ссылки не позволяют сборщику мусора освободить память.
+**Static reference:**
+```kotlin
+// ❌ Activity in static field
+companion object {
+    var activity: Activity? = null
+}
 
+// Trace: GC Root (Class) → static field → Activity
+```
+
+**Inner class with implicit reference:**
+```kotlin
+// ❌ AsyncTask holds implicit reference to outer class
+class MyActivity : AppCompatActivity() {
+    inner class MyTask : AsyncTask<Void, Void, Void>() {
+        // this$0 → MyActivity
+    }
+}
+```
+
+**Listener without unsubscribe:**
+```kotlin
+// ❌ Anonymous listener holds Activity
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    someService.addListener(object : Listener {
+        override fun onEvent() { updateUI() }
+    })
+    // No removeListener() in onDestroy()
+}
+```
+
+**Detection logic summary:**
+
+1. Object not collected after GC → heap dump
+2. Shark builds object graph
+3. Find paths from GC roots to "dead" objects
+4. If path exists → leak with retention chain and size
 
 ---
 
+## Follow-ups
+
+- How does LeakCanary distinguish between intended long-lived objects and memory leaks?
+- What are the performance implications of enabling LeakCanary in debug builds?
+- How to configure custom leak detection rules for domain-specific objects?
+- What role do reference matchers play in filtering false positives?
+- How does Shark optimize heap dump analysis for large applications?
+
+## References
+
+- [LeakCanary Documentation](https://square.github.io/leakcanary/)
+- [Shark Library](https://square.github.io/leakcanary/shark/)
+- [[c-memory-management]]
+- [[c-garbage-collection]]
+
 ## Related Questions
 
-### Kotlin Language Features
-- [[q-heap-pollution-generics--kotlin--hard]] - Data Structures
-- [[q-kotlin-collections--kotlin--medium]] - Data Structures
-- [[q-kotlin-native--kotlin--hard]] - Memory Management
-- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management
+### Prerequisites (Easier)
+- [[q-main-thread-android--android--medium]] - Understanding Android threading model
+- [[q-activity-lifecycle--android--easy]] - Activity lifecycle and destruction
 
-### Related Algorithms
-- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Data Structures
-- [[q-advanced-graph-algorithms--algorithms--hard]] - Data Structures
-- [[q-binary-search-trees-bst--algorithms--hard]] - Data Structures
+### Related (Same Level)
+- [[q-memory-profiler-android--android--medium]] - Alternative memory analysis tools
+- [[q-weakreference-android--android--medium]] - WeakReference usage patterns
+
+### Advanced (Harder)
+- [[q-bitmap-memory-optimization--android--hard]] - Memory optimization strategies
+- [[q-custom-memory-leak-detection--android--hard]] - Building custom leak detectors

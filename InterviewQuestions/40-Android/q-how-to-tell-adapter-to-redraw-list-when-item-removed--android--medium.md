@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-recyclerview, android/ui-adapter, android/ui-animation, adapter, recyclerview, diffutil, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:11:31 pm
+date modified: Thursday, October 30th 2025, 3:09:39 pm
 ---
 
 # Вопрос (RU)

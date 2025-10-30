@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/ui-compose, android/architecture-mvvm, android/testing-unit, jetpack-compose, migration, xml-to-compose, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:36:25 pm
+date modified: Thursday, October 30th 2025, 3:13:23 pm
 ---
+
 # Вопрос (RU)
 
 > Какая стратегия миграции большого проекта на Jetpack Compose?

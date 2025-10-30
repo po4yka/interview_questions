@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/di-koin, android/lifecycle, android/architecture-mvvm, dependency-injection, koin, scopes, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:23:52 pm
+date modified: Thursday, October 30th 2025, 3:11:52 pm
 ---
+
 # Вопрос (RU)
 
 > Как управлять scope в Koin? Реализуйте зависимости с ограниченным временем жизни для Activity и Fragment с правильной обработкой жизненного цикла.

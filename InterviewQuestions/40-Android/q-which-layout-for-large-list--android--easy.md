@@ -25,7 +25,10 @@ updated: 2025-10-29
 
 # Tags (EN only; no leading #)
 tags: [android/ui-views, android/performance-memory, recyclerview, ui, layout, difficulty/easy]
+date created: Wednesday, October 29th 2025, 12:16:29 pm
+date modified: Thursday, October 30th 2025, 3:17:46 pm
 ---
+
 # Вопрос (RU)
 
 > Какой layout выбрать для списка из большого количества элементов?

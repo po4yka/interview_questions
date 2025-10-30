@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/ui-views, android/ui-compose, touch-events, ui, difficulty/medium]
+date created: Monday, October 27th 2025, 4:02:54 pm
+date modified: Thursday, October 30th 2025, 3:18:01 pm
 ---
+
 # Вопрос (RU)
 
 > Какое событие вызывается, когда пользователь касается экрана?

@@ -15,7 +15,10 @@ created: 2025-10-12
 updated: 2025-10-29
 tags: [android/background-execution, workmanager, background-processing, jetpack, difficulty/medium]
 sources: [https://developer.android.com/topic/libraries/architecture/workmanager]
+date created: Wednesday, October 29th 2025, 1:00:28 pm
+date modified: Thursday, October 30th 2025, 3:16:48 pm
 ---
+
 # Вопрос (RU)
 > Какие продвинутые возможности WorkManager?
 

@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/kmm, android/databases, Database, difficulty/medium, KMM, Kotlin, SQLDelight, multiplatform]
+date created: Tuesday, October 28th 2025, 9:23:21 pm
+date modified: Thursday, October 30th 2025, 3:11:49 pm
 ---
 
 # Вопрос (RU)

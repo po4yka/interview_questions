@@ -15,14 +15,17 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/architecture-mvvm, android/architecture-clean, android/lifecycle, architecture-patterns, viewmodel, presenter, data-binding, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:52:28 pm
+date modified: Thursday, October 30th 2025, 3:14:38 pm
 ---
+
 # Вопрос (RU)
 
-Чем MVVM отличается от MVP?
+> Чем MVVM отличается от MVP?
 
 # Question (EN)
 
-What is the difference between MVVM and MVP?
+> What is the difference between MVVM and MVP?
 
 ## Ответ (RU)
 

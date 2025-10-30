@@ -32,6 +32,8 @@ tags:
   - message-queue
   - blocking
   - difficulty/medium
+date created: Tuesday, October 28th 2025, 9:35:15 pm
+date modified: Thursday, October 30th 2025, 3:12:39 pm
 ---
 
 # Вопрос (RU)

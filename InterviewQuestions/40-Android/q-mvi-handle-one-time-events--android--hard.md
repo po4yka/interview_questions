@@ -1,36 +1,378 @@
 ---
 id: 20251012-12271147
-title: "Mvi Handle One Time Events / Обработка одноразовых событий в MVI"
+title: "MVI Handle One Time Events / Обработка одноразовых событий в MVI"
+aliases: [MVI One-Time Events, SingleLiveEvent, Event Wrapper, Обработка событий MVI, Одноразовые события]
+
+# Classification
 topic: android
+subtopics: [architecture-mvi, ui-state, coroutines, flow]
+question_kind: android
 difficulty: hard
+
+# Language
+original_language: ru
+language_tags: [ru, en]
+
+# Workflow
 status: draft
+
+# Links
 moc: moc-android
-related: [q-view-methods-and-their-purpose--android--medium, q-annotation-processing--android--medium, q-what-each-android-component-represents--android--easy]
+related: [q-mvi-architecture--android--hard, q-stateflow-flow-sharedflow-livedata--android--medium, q-mvi-one-time-events--android--medium, q-sharedflow-stateflow--kotlin--medium]
+
+# Timestamps
 created: 2025-10-15
-tags: [android/architecture-mvi, android/lifecycle, architecture-mvi, lifecycle, livedata, mvi, platform/android, sharedflow, stateflow, viewmodel, difficulty/hard]
+updated: 2025-10-30
+
+# Tags
+tags: [android/architecture-mvi, android/ui-state, android/coroutines, android/flow, architecture-mvi, stateflow, sharedflow, viewmodel, difficulty/hard]
 ---
 
-# Как с MVI обрабатывать события, которые не нужно хранить?
+# Вопрос (RU)
+> Как в MVI-архитектуре правильно обрабатывать одноразовые события (one-time events), которые не должны храниться в State и пересылаться при пересоздании экрана?
 
-**English**: How to handle events in MVI that don't need to be stored?
+# Question (EN)
+> How to properly handle one-time events in MVI architecture that should not be stored in State and re-delivered on screen recreation?
 
-## Answer (EN)
-In MVI (Model-View-Intent), to handle events that don't need to be stored in State and avoid re-displaying them when the screen is recreated, you can use: 1. SingleLiveEvent - LiveData that sends an event only once and doesn't resend it to new subscribers. 2. SharedFlow with replay = 0 for events that shouldn't repeat on new subscriber. 3. EventWrapper as a workaround for StateFlow - a class that checks if an event was already handled and doesn't show it again.
+---
 
 ## Ответ (RU)
-В MVI (Model-View-Intent) для обработки событий, которые не нужно хранить в State и избежать их повторного отображения при пересоздании экрана можно использовать следующие подходы: 1. Использовать SingleLiveEvent - LiveData, которая отправляет событие только один раз и не пересылает его новым подписчикам. Пример реализации SingleLiveEvent и использования в ViewModel показаны в тексте вопроса. 2. Использовать SharedFlow с replay = 0 для событий, которые не должны повторяться при подписке новых потребителей. Пример реализации SharedFlow в ViewModel и подписки на него показаны в тексте вопроса. 3. Использовать EventWrapper как обходной путь для StateFlow - класс, который позволяет проверять было ли событие уже обработано и не показывать его повторно.
 
+В MVI существует фундаментальное противоречие: State должен быть воспроизводимым и surviv configuration changes, но события (навигация, toast, snackbar) должны показываться только один раз. Существует несколько паттернов решения этой проблемы.
 
+### 1. SharedFlow с replay = 0 (Рекомендуемый подход)
+
+✅ **Best Practice** - чистое reactive решение для событий:
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val _events = MutableSharedFlow<Event>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val events: SharedFlow<Event> = _events.asSharedFlow()
+
+    fun performAction() {
+        viewModelScope.launch {
+            _events.emit(Event.ShowToast("Success"))
+        }
+    }
+}
+
+// View
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is Event.ShowToast -> showToast(event.message)
+                is Event.Navigate -> navigate(event.route)
+            }
+        }
+    }
+}
+```
+
+**Ключевые параметры**:
+- `replay = 0` - новые подписчики не получают старые события
+- `extraBufferCapacity = 1` - буфер для событий при отсутствии активных подписчиков
+- `BufferOverflow.DROP_OLDEST` - при переполнении удаляет старейшие события
+
+### 2. Канал (Channel) для гарантированной доставки
+
+✅ **Для критичных событий** - гарантирует доставку:
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val _events = Channel<Event>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
+
+    fun performAction() {
+        _events.trySend(Event.ShowError("Failed"))
+    }
+}
+
+// View собирает события из канала
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.events.collect { event ->
+            handleEvent(event)
+        }
+    }
+}
+```
+
+**Гарантии**: события не теряются даже если View временно неактивна.
+
+### 3. EventWrapper для StateFlow
+
+❌ **Legacy подход** - используется, если нужна совместимость с StateFlow:
+
+```kotlin
+data class Event<out T>(private val content: T) {
+    private var hasBeenHandled = false
+
+    fun getContentIfNotHandled(): T? {
+        return if (!hasBeenHandled) {
+            hasBeenHandled = true
+            content
+        } else null
+    }
+}
+
+data class UiState(
+    val data: String,
+    val event: Event<String>? = null
+)
+```
+
+**Недостатки**: mutable state в immutable объекте, сложное тестирование.
+
+### 4. Разделение State и Effects
+
+✅ **Архитектурный подход** - разделение ответственности:
+
+```kotlin
+data class UiState(val data: String, val isLoading: Boolean)
+sealed interface Effect {
+    data class ShowToast(val message: String) : Effect
+    data class Navigate(val route: String) : Effect
+}
+
+class MyViewModel : ViewModel() {
+    private val _state = MutableStateFlow(UiState())
+    val state = _state.asStateFlow()
+
+    private val _effects = MutableSharedFlow<Effect>()
+    val effects = _effects.asSharedFlow()
+}
+```
+
+### Edge Cases для HARD уровня
+
+**1. Потеря событий при быстрой ротации**:
+```kotlin
+// ❌ Проблема: события могут теряться
+lifecycleScope.launch {
+    viewModel.events.collect { ... }
+}
+
+// ✅ Решение: repeatOnLifecycle
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.events.collect { ... }
+    }
+}
+```
+
+**2. Race condition при emit во время пересоздания**:
+```kotlin
+// Используем extraBufferCapacity для буферизации
+MutableSharedFlow<Event>(
+    replay = 0,
+    extraBufferCapacity = 64,  // достаточный буфер
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+)
+```
+
+**3. Memory leaks при долгоживущих событиях**:
+```kotlin
+// ❌ Утечка - события держат ссылки на большие объекты
+sealed class Event {
+    data class ShowImage(val bitmap: Bitmap) : Event
+}
+
+// ✅ Решение - передавать только ID, данные получать из Repository
+sealed class Event {
+    data class ShowImage(val imageId: String) : Event
+}
+```
+
+**4. Тестирование событий**:
+```kotlin
+@Test
+fun `event emitted once`() = runTest {
+    val events = mutableListOf<Event>()
+    val job = launch(UnconfinedTestDispatcher()) {
+        viewModel.events.take(1).toList(events)
+    }
+
+    viewModel.performAction()
+    advanceUntilIdle()
+
+    assertEquals(1, events.size)
+    job.cancel()
+}
+```
+
+### Рекомендации по выбору подхода
+
+| Сценарий | Решение | Причина |
+|----------|---------|---------|
+| Обычные события (toast, snackbar) | SharedFlow (replay=0) | Простота, потеря некритична |
+| Критичные события (оплата, навигация) | Channel | Гарантия доставки |
+| Совместимость с LiveData | EventWrapper | Миграция legacy кода |
+| Сложная бизнес-логика | State + Effects разделение | Чистая архитектура |
+
+## Answer (EN)
+
+In MVI, there's a fundamental contradiction: State should be reproducible and survive configuration changes, but events (navigation, toast, snackbar) should be shown only once. Several patterns exist to solve this problem.
+
+### 1. SharedFlow with replay = 0 (Recommended)
+
+✅ **Best Practice** - pure reactive solution for events:
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val _events = MutableSharedFlow<Event>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val events: SharedFlow<Event> = _events.asSharedFlow()
+
+    fun performAction() {
+        viewModelScope.launch {
+            _events.emit(Event.ShowToast("Success"))
+        }
+    }
+}
+```
+
+**Key parameters**:
+- `replay = 0` - new subscribers don't receive old events
+- `extraBufferCapacity = 1` - buffer for events when no active subscribers
+- `BufferOverflow.DROP_OLDEST` - drops oldest events on overflow
+
+### 2. Channel for Guaranteed Delivery
+
+✅ **For critical events** - guarantees delivery:
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val _events = Channel<Event>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
+}
+```
+
+**Guarantees**: events not lost even if View temporarily inactive.
+
+### 3. EventWrapper for StateFlow
+
+❌ **Legacy approach** - use only for StateFlow compatibility:
+
+```kotlin
+data class Event<out T>(private val content: T) {
+    private var hasBeenHandled = false
+
+    fun getContentIfNotHandled(): T? {
+        return if (!hasBeenHandled) {
+            hasBeenHandled = true
+            content
+        } else null
+    }
+}
+```
+
+**Drawbacks**: mutable state in immutable object, difficult testing.
+
+### 4. Separation of State and Effects
+
+✅ **Architectural approach** - separation of concerns:
+
+```kotlin
+data class UiState(val data: String, val isLoading: Boolean)
+sealed interface Effect {
+    data class ShowToast(val message: String) : Effect
+    data class Navigate(val route: String) : Effect
+}
+```
+
+### Edge Cases for HARD Level
+
+**1. Event loss during rapid rotation**:
+```kotlin
+// ✅ Solution: use repeatOnLifecycle
+lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.events.collect { ... }
+    }
+}
+```
+
+**2. Race condition during recreation**:
+```kotlin
+MutableSharedFlow<Event>(
+    replay = 0,
+    extraBufferCapacity = 64,  // sufficient buffer
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+)
+```
+
+**3. Memory leaks with long-lived events**:
+```kotlin
+// ✅ Solution - pass only IDs, fetch data from Repository
+sealed class Event {
+    data class ShowImage(val imageId: String) : Event
+}
+```
+
+**4. Testing events**:
+```kotlin
+@Test
+fun `event emitted once`() = runTest {
+    val events = mutableListOf<Event>()
+    val job = launch(UnconfinedTestDispatcher()) {
+        viewModel.events.take(1).toList(events)
+    }
+
+    viewModel.performAction()
+    advanceUntilIdle()
+
+    assertEquals(1, events.size)
+    job.cancel()
+}
+```
+
+### Selection Guidelines
+
+| Scenario | Solution | Reason |
+|----------|---------|---------|
+| Regular events (toast, snackbar) | SharedFlow (replay=0) | Simple, loss non-critical |
+| Critical events (payment, navigation) | Channel | Delivery guarantee |
+| LiveData compatibility | EventWrapper | Legacy code migration |
+| Complex business logic | State + Effects separation | Clean architecture |
 
 ---
+
+## Follow-ups
+
+1. How does `extraBufferCapacity` differ from `replay` in SharedFlow, and when would you use each?
+2. What happens if you emit an event while no collectors are active with `replay = 0` and `extraBufferCapacity = 0`?
+3. How would you implement event priority system where critical events override non-critical ones?
+4. What are the threading implications of using `Channel.CONFLATED` vs `Channel.BUFFERED` for events?
+5. How would you design event system that supports event cancellation/rollback (e.g., undo navigation)?
+
+## References
+
+- [[q-mvi-architecture--android--hard]] - MVI architecture fundamentals
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - Flow types comparison
+- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
+- [Kotlin Flow Documentation - SharedFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
+- [Android Lifecycle - repeatOnLifecycle](https://developer.android.com/topic/libraries/architecture/coroutines)
 
 ## Related Questions
 
-### Hub
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+### Prerequisites (Medium)
+- [[q-mvi-one-time-events--android--medium]] - Basic one-time events handling
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - Flow types overview
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - StateFlow vs SharedFlow usage
 
 ### Related (Hard)
-- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
-- [[q-kmm-architecture--android--hard]] - KMM architecture patterns
+- [[q-mvi-architecture--android--hard]] - MVI architecture deep dive
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture patterns
+- [[q-offline-first-architecture--android--hard]] - Offline-first state management
 
+### Advanced Topics
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing Flow-based events
+- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - SharedFlow configuration

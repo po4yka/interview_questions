@@ -15,12 +15,17 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android, android/ui-views, android/architecture-mvvm, difficulty/medium, context, system-services]
 sources: []
+date created: Monday, October 27th 2025, 3:32:43 pm
+date modified: Thursday, October 30th 2025, 3:10:59 pm
 ---
+
 # Вопрос (RU)
-Является ли LayoutInflater синглтоном и почему?
+
+> Является ли LayoutInflater синглтоном и почему?
 
 # Question (EN)
-Is LayoutInflater a singleton and why?
+
+> Is LayoutInflater a singleton and why?
 
 ---
 

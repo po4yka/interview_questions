@@ -15,15 +15,17 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/architecture-patterns, kmm, kotlin, multiplatform, difficulty/hard]
+date created: Tuesday, October 28th 2025, 9:23:29 pm
+date modified: Thursday, October 30th 2025, 3:11:36 pm
 ---
 
 # Вопрос (RU)
 
-Объясните архитектуру Kotlin Multiplatform Mobile (KMM) и структуру проекта. Как организовать shared код между Android и iOS? Что такое expect/actual механизмы? Как обрабатывать platform-specific реализации максимизируя переиспользование кода?
+> Объясните архитектуру Kotlin Multiplatform Mobile (KMM) и структуру проекта. Как организовать shared код между Android и iOS? Что такое expect/actual механизмы? Как обрабатывать platform-specific реализации максимизируя переиспользование кода?
 
 # Question (EN)
 
-Explain Kotlin Multiplatform Mobile (KMM) architecture and project structure. How do you organize shared code between Android and iOS? What are expect/actual mechanisms? How do you handle platform-specific implementations while maximizing code reuse?
+> Explain Kotlin Multiplatform Mobile (KMM) architecture and project structure. How do you organize shared code between Android and iOS? What are expect/actual mechanisms? How do you handle platform-specific implementations while maximizing code reuse?
 
 ---
 

@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/performance-memory, android/serialization, json, xml, optimization, difficulty/medium]
+date created: Monday, October 27th 2025, 3:43:24 pm
+date modified: Thursday, October 30th 2025, 3:15:54 pm
 ---
+
 # Вопрос (RU)
 
 > Где можно оптимизировать парсинг в Android-приложениях?

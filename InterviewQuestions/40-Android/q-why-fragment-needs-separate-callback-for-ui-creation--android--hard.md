@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium, q-shared-preferences--android--easy, q-annotation-processing-android--android--medium]
 created: 2025-10-15
 tags: [android/fragments, android/lifecycle, fragments, lifecycle, difficulty/hard]
+date created: Sunday, October 12th 2025, 12:27:49 pm
+date modified: Thursday, October 30th 2025, 3:17:25 pm
 ---
 
 # Why Fragment needs separate callback for UI creation?

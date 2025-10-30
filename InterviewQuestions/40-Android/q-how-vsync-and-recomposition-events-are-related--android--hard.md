@@ -15,7 +15,10 @@ created: 2025-10-13
 updated: 2025-10-28
 sources: []
 tags: [android, android/ui-compose, android/performance-rendering, compose, vsync, performance, difficulty/hard]
+date created: Tuesday, October 28th 2025, 9:12:56 pm
+date modified: Thursday, October 30th 2025, 3:10:21 pm
 ---
+
 # Вопрос (RU)
 
 > Как связаны VSYNC и события рекомпозиции в Jetpack Compose?

@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/lifecycle, android/architecture-mvvm, android/performance-memory, architecture-components, memory-leaks, difficulty/hard]
+date created: Wednesday, October 29th 2025, 1:02:47 pm
+date modified: Thursday, October 30th 2025, 3:16:50 pm
 ---
+
 # Вопрос (RU)
 
 Почему была создана библиотека Lifecycle?

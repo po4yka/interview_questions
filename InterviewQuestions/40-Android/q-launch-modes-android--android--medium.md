@@ -25,6 +25,8 @@ created: 2025-10-05
 updated: 2025-10-05
 
 tags: [android/activity, android/ui-navigation, en, ru, difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:51 pm
+date modified: Thursday, October 30th 2025, 3:12:11 pm
 ---
 
 # Question (EN)

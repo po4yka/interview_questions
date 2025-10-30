@@ -17,7 +17,10 @@ created: 2025-10-05
 updated: 2025-01-25
 tags: [android/notifications, android/ui-widgets, notifications, notification-channels, android8, importance, difficulty/medium]
 sources: [https://developer.android.com/guide/topics/ui/notifiers/notifications]
+date created: Monday, October 27th 2025, 6:48:56 pm
+date modified: Thursday, October 30th 2025, 3:15:09 pm
 ---
+
 # Вопрос (RU)
 > Что такое каналы уведомлений в Android?
 

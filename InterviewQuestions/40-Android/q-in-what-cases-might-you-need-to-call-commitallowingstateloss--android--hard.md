@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/fragments, android/lifecycle, fragments, lifecycle, difficulty/hard]
+date created: Tuesday, October 28th 2025, 9:11:11 pm
+date modified: Thursday, October 30th 2025, 3:10:27 pm
 ---
 
 # Вопрос (RU)

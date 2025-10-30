@@ -17,6 +17,8 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [android/ui-compose, android/lazy-layout, jetpack-compose, lazy-layout, grid, performance, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/lists]
+date created: Sunday, October 12th 2025, 10:43:54 pm
+date modified: Thursday, October 30th 2025, 3:12:12 pm
 ---
 
 # Вопрос (RU)

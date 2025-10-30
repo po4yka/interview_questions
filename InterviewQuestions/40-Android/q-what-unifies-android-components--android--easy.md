@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-how-navigation-is-implemented-in-android--android--medium, q-architecture-components-libraries--android--easy, q-recyclerview-async-list-differ--recyclerview--medium]
 created: 2025-10-15
 tags: [android-components, android/android-components, android/context, android/manifest, components, context, intent, manifest, difficulty/easy]
+date created: Sunday, October 12th 2025, 12:27:49 pm
+date modified: Thursday, October 30th 2025, 3:18:10 pm
 ---
 
 # What unifies Android components?

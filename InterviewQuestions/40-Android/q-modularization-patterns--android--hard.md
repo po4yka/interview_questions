@@ -25,6 +25,8 @@ created: 2025-10-05
 updated: 2025-10-05
 
 tags: [android/architecture-clean, android/architecture-modularization, en, ru, difficulty/hard]
+date created: Sunday, October 12th 2025, 12:27:49 pm
+date modified: Thursday, October 30th 2025, 3:13:52 pm
 ---
 
 # Question (EN)

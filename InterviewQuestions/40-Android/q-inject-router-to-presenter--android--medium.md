@@ -1,45 +1,45 @@
 ---
 id: 20251012-12271106
 title: "Inject Router To Presenter / Инъекция Router в Presenter"
+aliases: ["Inject Router To Presenter", "Инъекция Router в Presenter", "Router DI", "Инъекция роутера"]
 topic: android
+subtopics: [architecture-mvi, di-hilt, di-koin]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-reduce-number-of-recompositions-besides-side-effects--programming-languages--hard, q-play-feature-delivery--android--medium, q-state-hoisting-compose--android--medium]
+related: [q-play-feature-delivery--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
-tags: [android/architecture-mvi, android/di-hilt, architecture-mvi, dagger/hilt, dependency-injection, di-hilt, difficulty/medium, koin, platform/android]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:11:04 pm
+updated: 2025-10-30
+tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-injection, router, navigation, difficulty/medium]
 ---
 
-# How to Inject Router Directly into Presenter?
+# Вопрос (RU)
 
-**Russian**: Что использовать для того чтобы роутер инжектился напрямую в презентер?
+> Что использовать для того, чтобы роутер инжектился напрямую в презентер?
 
-**English**: What to use to inject router directly into presenter?
+# Question (EN)
 
-## Answer (EN)
-To inject a router into a presenter, use **Dependency Injection (DI)** frameworks:
-
-1. **Hilt** (recommended) - Official Android DI
-2. **Dagger 2** - Compile-time DI
-3. **Koin** - Kotlin-first, runtime DI
-
-This ensures:
-- Loose coupling between presenter and router
-- Easy unit testing with mock routers
-- Single responsibility principle
-- Inversion of control
+> What to use to inject router directly into presenter?
 
 ---
 
-## Implementation Examples
+## Ответ (RU)
 
-### 1. Hilt (Recommended)
+Для внедрения роутера в презентер используйте **Dependency Injection (DI)** фреймворки. Они обеспечивают слабую связанность, упрощают тестирование и позволяют следовать SOLID-принципам.
 
-#### Router Interface
+**Основные подходы**:
+
+1. **Hilt** — официальный Android DI, минимальный boilerplate
+2. **Dagger 2** — compile-time DI, больше контроля
+3. **Koin** — runtime DI, Kotlin DSL, простая настройка
+
+### Ключевой Паттерн: Interface-Based Router
 
 ```kotlin
+// ✅ Интерфейс роутера — абстрагирует навигацию
 interface Router {
     fun navigateToDetails(itemId: String)
     fun navigateToSettings()
@@ -47,9 +47,10 @@ interface Router {
 }
 ```
 
-#### Router Implementation
+### Пример С Hilt (Рекомендуется)
 
 ```kotlin
+// Реализация роутера
 class AppRouter @Inject constructor(
     private val navController: NavController
 ) : Router {
@@ -65,643 +66,17 @@ class AppRouter @Inject constructor(
         navController.popBackStack()
     }
 }
-```
-
-#### Hilt Module
-
-```kotlin
-@Module
-@InstallIn(ActivityComponent::class)
-abstract class NavigationModule {
-
-    @Binds
-    abstract fun bindRouter(
-        appRouter: AppRouter
-    ): Router
-}
-
-@Module
-@InstallIn(ActivityComponent::class)
-object NavigationProviderModule {
-
-    @Provides
-    fun provideNavController(
-        activity: Activity
-    ): NavController {
-        val navHostFragment = (activity as MainActivity)
-            .supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        return navHostFragment.navController
-    }
-}
-```
-
-#### Presenter with Injected Router
-
-```kotlin
-class ProductListPresenter @Inject constructor(
-    private val router: Router,
-    private val productRepository: ProductRepository
-) {
-    fun onProductClicked(productId: String) {
-        router.navigateToDetails(productId)
-    }
-
-    fun onSettingsClicked() {
-        router.navigateToSettings()
-    }
-
-    fun onBackPressed() {
-        router.navigateBack()
-    }
-}
-```
-
-#### Fragment
-
-```kotlin
-@AndroidEntryPoint
-class ProductListFragment : Fragment() {
-
-    @Inject
-    lateinit var presenter: ProductListPresenter
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.productList.setOnItemClickListener { productId ->
-            presenter.onProductClicked(productId)
-        }
-    }
-}
-```
-
----
-
-### 2. Dagger 2
-
-#### Router Interface
-
-```kotlin
-interface Router {
-    fun openProfile(userId: String)
-    fun openChat(chatId: String)
-    fun goBack()
-}
-```
-
-#### Router Implementation
-
-```kotlin
-class NavigationRouter @Inject constructor(
-    @ActivityContext private val context: Context
-) : Router {
-    override fun openProfile(userId: String) {
-        val intent = Intent(context, ProfileActivity::class.java).apply {
-            putExtra("user_id", userId)
-        }
-        context.startActivity(intent)
-    }
-
-    override fun openChat(chatId: String) {
-        val intent = Intent(context, ChatActivity::class.java).apply {
-            putExtra("chat_id", chatId)
-        }
-        context.startActivity(intent)
-    }
-
-    override fun goBack() {
-        (context as? Activity)?.onBackPressed()
-    }
-}
-```
-
-#### Dagger Component
-
-```kotlin
-@ActivityScope
-@Component(
-    dependencies = [AppComponent::class],
-    modules = [ActivityModule::class, NavigationModule::class]
-)
-interface ActivityComponent {
-    fun inject(activity: MainActivity)
-    fun inject(fragment: HomeFragment)
-}
-```
-
-#### Dagger Module
-
-```kotlin
-@Module
-abstract class NavigationModule {
-
-    @Binds
-    @ActivityScope
-    abstract fun bindRouter(
-        navigationRouter: NavigationRouter
-    ): Router
-}
-
-@Module
-class ActivityModule(private val activity: Activity) {
-
-    @Provides
-    @ActivityContext
-    fun provideActivityContext(): Context = activity
-}
-```
-
-#### Presenter
-
-```kotlin
-class HomePresenter @Inject constructor(
-    private val router: Router,
-    private val userRepository: UserRepository
-) {
-    fun onUserClicked(userId: String) {
-        router.openProfile(userId)
-    }
-
-    fun onChatClicked(chatId: String) {
-        router.openChat(chatId)
-    }
-}
-```
-
-#### Activity
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var presenter: HomePresenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        DaggerActivityComponent.builder()
-            .appComponent((application as MyApp).appComponent)
-            .activityModule(ActivityModule(this))
-            .build()
-            .inject(this)
-    }
-}
-```
-
----
-
-### 3. Koin
-
-#### Router Interface
-
-```kotlin
-interface Router {
-    fun navigateToProductDetails(productId: String)
-    fun navigateToCart()
-    fun back()
-}
-```
-
-#### Router Implementation
-
-```kotlin
-class NavigationRouter(
-    private val findNavController: () -> NavController
-) : Router {
-
-    override fun navigateToProductDetails(productId: String) {
-        findNavController().navigate(
-            R.id.action_list_to_details,
-            bundleOf("product_id" to productId)
-        )
-    }
-
-    override fun navigateToCart() {
-        findNavController().navigate(R.id.action_to_cart)
-    }
-
-    override fun back() {
-        findNavController().popBackStack()
-    }
-}
-```
-
-#### Koin Module
-
-```kotlin
-val navigationModule = module {
-
-    // Scoped to Activity
-    scope<MainActivity> {
-        scoped {
-            NavigationRouter(
-                findNavController = {
-                    (getSource() as MainActivity).findNavController(R.id.nav_host_fragment)
-                }
-            ) as Router
-        }
-    }
-}
-
-val presenterModule = module {
-
-    scope<ProductListFragment> {
-        scoped {
-            ProductListPresenter(
-                router = get(), // Koin resolves Router
-                productRepository = get()
-            )
-        }
-    }
-}
-```
-
-#### Presenter
-
-```kotlin
-class ProductListPresenter(
-    private val router: Router,
-    private val productRepository: ProductRepository
-) {
-    fun onProductSelected(productId: String) {
-        router.navigateToProductDetails(productId)
-    }
-
-    fun onCartClicked() {
-        router.navigateToCart()
-    }
-}
-```
-
-#### Fragment
-
-```kotlin
-class ProductListFragment : Fragment() {
-
-    // Koin injection
-    private val presenter: ProductListPresenter by inject()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.productList.setOnClickListener { productId ->
-            presenter.onProductSelected(productId)
-        }
-    }
-}
-```
-
-#### Application
-
-```kotlin
-class MyApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-        startKoin {
-            androidContext(this@MyApp)
-            modules(navigationModule, presenterModule)
-        }
-    }
-}
-```
-
----
-
-## Advanced Patterns
-
-### Multi-Module Router
-
-```kotlin
-// Feature module interface
-interface FeatureRouter {
-    fun openFeature(params: FeatureParams)
-}
-
-// Main router delegates to feature routers
-class AppRouter @Inject constructor(
-    private val profileRouter: ProfileRouter,
-    private val checkoutRouter: CheckoutRouter,
-    private val settingsRouter: SettingsRouter
-) : Router {
-
-    fun navigateToProfile(userId: String) {
-        profileRouter.openProfile(userId)
-    }
-
-    fun navigateToCheckout(cartId: String) {
-        checkoutRouter.openCheckout(cartId)
-    }
-
-    fun navigateToSettings() {
-        settingsRouter.openSettings()
-    }
-}
-
-// Each feature has its own router
-class ProfileRouter @Inject constructor(
-    private val navController: NavController
-) {
-    fun openProfile(userId: String) {
-        navController.navigate("profile/$userId")
-    }
-
-    fun openEditProfile() {
-        navController.navigate("profile/edit")
-    }
-}
-```
-
-### Router with Result
-
-```kotlin
-interface Router {
-    suspend fun navigateForResult(destination: String): NavigationResult
-}
-
-class AppRouter @Inject constructor(
-    private val navController: NavController
-) : Router {
-
-    private val resultChannel = Channel<NavigationResult>(Channel.BUFFERED)
-
-    override suspend fun navigateForResult(destination: String): NavigationResult {
-        navController.navigate(destination)
-        return resultChannel.receive()
-    }
-
-    fun setResult(result: NavigationResult) {
-        resultChannel.trySend(result)
-    }
-}
-
-// Usage in Presenter
-class CheckoutPresenter @Inject constructor(
-    private val router: Router
-) {
-    suspend fun selectPaymentMethod() {
-        val result = router.navigateForResult("payment_methods")
-
-        when (result) {
-            is NavigationResult.PaymentMethodSelected -> {
-                processPayment(result.paymentMethod)
-            }
-            is NavigationResult.Cancelled -> {
-                // User cancelled
-            }
-        }
-    }
-}
-```
-
-### Router with Deep Link Support
-
-```kotlin
-interface Router {
-    fun navigate(route: String)
-    fun handleDeepLink(uri: Uri): Boolean
-}
-
-class DeepLinkRouter @Inject constructor(
-    private val navController: NavController
-) : Router {
-
-    override fun navigate(route: String) {
-        navController.navigate(route)
-    }
-
-    override fun handleDeepLink(uri: Uri): Boolean {
-        return when (uri.host) {
-            "product" -> {
-                val productId = uri.lastPathSegment
-                navController.navigate("product/$productId")
-                true
-            }
-            "user" -> {
-                val userId = uri.lastPathSegment
-                navController.navigate("user/$userId")
-                true
-            }
-            else -> false
-        }
-    }
-}
-```
-
----
-
-## Testing with Mock Router
-
-### Unit Test
-
-```kotlin
-class ProductListPresenterTest {
-
-    private lateinit var presenter: ProductListPresenter
-    private lateinit var mockRouter: Router
-    private lateinit var mockRepository: ProductRepository
-
-    @Before
-    fun setup() {
-        mockRouter = mockk(relaxed = true)
-        mockRepository = mockk()
-
-        presenter = ProductListPresenter(
-            router = mockRouter,
-            productRepository = mockRepository
-        )
-    }
-
-    @Test
-    fun `when product clicked, should navigate to details`() {
-        // Given
-        val productId = "product123"
-
-        // When
-        presenter.onProductClicked(productId)
-
-        // Then
-        verify { mockRouter.navigateToDetails(productId) }
-    }
-
-    @Test
-    fun `when back pressed, should navigate back`() {
-        // When
-        presenter.onBackPressed()
-
-        // Then
-        verify { mockRouter.navigateBack() }
-    }
-}
-```
-
-### Fake Router for Tests
-
-```kotlin
-class FakeRouter : Router {
-    val navigationHistory = mutableListOf<String>()
-
-    override fun navigateToDetails(itemId: String) {
-        navigationHistory.add("details/$itemId")
-    }
-
-    override fun navigateToSettings() {
-        navigationHistory.add("settings")
-    }
-
-    override fun navigateBack() {
-        if (navigationHistory.isNotEmpty()) {
-            navigationHistory.removeLast()
-        }
-    }
-
-    fun assertNavigatedTo(route: String) {
-        assertTrue(navigationHistory.contains(route))
-    }
-}
-```
-
----
-
-## Comparison: Hilt Vs Dagger Vs Koin
-
-| Feature | Hilt | Dagger 2 | Koin |
-|---------|------|----------|------|
-| **Setup** | Medium | Complex | Simple |
-| **Compile-time** | Yes | Yes | No (runtime) |
-| **Performance** | Fast | Fast | Slower |
-| **Boilerplate** | Low | High | Very low |
-| **Learning Curve** | Medium | Steep | Easy |
-| **Android Support** | Native | Good | Native |
-| **Testing** | Easy | Medium | Easy |
-| **Multimodule** | Excellent | Good | Good |
-
----
-
-## Best Practices
-
-### 1. Use Interface for Router
-
-```kotlin
-// Good - testable, flexible
-interface Router {
-    fun navigate(destination: String)
-}
-
-// Bad - hard to test, coupled
-class Presenter(private val navController: NavController) {
-    // Directly coupled to NavController
-}
-```
-
-### 2. Scope Router Appropriately
-
-```kotlin
-// Activity-scoped router
-@Module
-@InstallIn(ActivityComponent::class)
-abstract class NavigationModule {
-    @Binds
-    @ActivityScoped
-    abstract fun bindRouter(impl: AppRouter): Router
-}
-```
-
-### 3. Inject Constructor, Not Fields
-
-```kotlin
-// Good - clear dependencies
-class Presenter @Inject constructor(
-    private val router: Router
-) {
-    // Constructor injection
-}
-
-// Bad - hidden dependencies
-class Presenter {
-    @Inject
-    lateinit var router: Router // Field injection
-}
-```
-
-### 4. Use Qualifier for Multiple Routers
-
-```kotlin
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class MainRouter
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class FeatureRouter
-
-class Presenter @Inject constructor(
-    @MainRouter private val mainRouter: Router,
-    @FeatureRouter private val featureRouter: Router
-) {
-    // Multiple routers
-}
-```
-
----
-
-## Summary
-
-**To inject Router into Presenter:**
-
-1. **Define Router interface** - abstracts navigation logic
-2. **Implement Router** - uses NavController/Intent
-3. **Configure DI framework**:
-   - **Hilt**: `@Inject` constructor, `@Binds` in module
-   - **Dagger**: Manual component setup
-   - **Koin**: DSL-based module definition
-4. **Inject into Presenter** - constructor injection
-5. **Test with mocks** - easy unit testing
-
-**Recommendation**: Use **Hilt** for new projects (official, less boilerplate, better Android integration).
-
----
-
-## Ответ (RU)
-Для внедрения роутера в презентер используйте **Dependency Injection (DI)**:
-
-1. **Hilt** (рекомендуется) - официальный Android DI
-2. **Dagger 2** - compile-time DI
-3. **Koin** - Kotlin-first, runtime DI
-
-### Пример С Hilt
-
-```kotlin
-// Интерфейс роутера
-interface Router {
-    fun navigateToDetails(itemId: String)
-    fun navigateBack()
-}
-
-// Реализация роутера
-class AppRouter @Inject constructor(
-    private val navController: NavController
-) : Router {
-    override fun navigateToDetails(itemId: String) {
-        navController.navigate("details/$itemId")
-    }
-
-    override fun navigateBack() {
-        navController.popBackStack()
-    }
-}
 
 // Модуль Hilt
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class NavigationModule {
     @Binds
-    abstract fun bindRouter(appRouter: AppRouter): Router
+    abstract fun bindRouter(impl: AppRouter): Router
 }
 
-// Презентер с инжектом
-class ProductPresenter @Inject constructor(
+// ✅ Презентер с конструкторной инъекцией
+class ProductListPresenter @Inject constructor(
     private val router: Router,
     private val repository: ProductRepository
 ) {
@@ -713,8 +88,7 @@ class ProductPresenter @Inject constructor(
 // Fragment
 @AndroidEntryPoint
 class ProductListFragment : Fragment() {
-    @Inject
-    lateinit var presenter: ProductPresenter
+    @Inject lateinit var presenter: ProductListPresenter
 }
 ```
 
@@ -723,22 +97,125 @@ class ProductListFragment : Fragment() {
 ```kotlin
 // Модуль Koin
 val navigationModule = module {
-    single<Router> {
-        NavigationRouter(get())
+    scope<MainActivity> {
+        scoped<Router> {
+            NavigationRouter(
+                findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
+            )
+        }
     }
 }
 
 val presenterModule = module {
-    factory {
-        ProductPresenter(
-            router = get(),
-            repository = get()
-        )
+    scope<ProductListFragment> {
+        scoped { ProductListPresenter(router = get(), repository = get()) }
     }
 }
 
-// Презентер
-class ProductPresenter(
+// Fragment
+class ProductListFragment : Fragment() {
+    private val presenter: ProductListPresenter by inject()
+}
+```
+
+### Тестирование С Mock Роутером
+
+```kotlin
+class ProductPresenterTest {
+    private val mockRouter = mockk<Router>(relaxed = true)
+    private lateinit var presenter: ProductPresenter
+
+    @Before
+    fun setup() {
+        presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
+    }
+
+    @Test
+    fun `when product clicked, should navigate to details`() {
+        presenter.onProductClicked("123")
+
+        verify { mockRouter.navigateToDetails("123") }
+    }
+}
+```
+
+### Преимущества DI Для Роутеров
+
+1. **Слабая связанность** — презентер не зависит от NavController
+2. **Легкое тестирование** — mock-роутер в unit-тестах
+3. **Single Responsibility** — презентер не знает о навигации
+4. **Переиспользование** — один роутер для многих презентеров
+5. **Изоляция модулей** — feature модули не зависят от реализации навигации
+
+### Best Practices
+
+```kotlin
+// ✅ GOOD: Interface + constructor injection
+class Presenter @Inject constructor(private val router: Router)
+
+// ❌ BAD: Direct NavController dependency
+class Presenter @Inject constructor(private val navController: NavController)
+
+// ✅ GOOD: Activity-scoped router
+@InstallIn(ActivityComponent::class)
+
+// ❌ BAD: Singleton router with NavController (lifecycle issues)
+@InstallIn(SingletonComponent::class)
+```
+
+---
+
+## Answer (EN)
+
+To inject a router into a presenter, use **Dependency Injection (DI)** frameworks. They ensure loose coupling, facilitate testing, and help follow SOLID principles.
+
+**Main Approaches**:
+
+1. **Hilt** — official Android DI, minimal boilerplate
+2. **Dagger 2** — compile-time DI, more control
+3. **Koin** — runtime DI, Kotlin DSL, simple setup
+
+### Key Pattern: Interface-Based Router
+
+```kotlin
+// ✅ Router interface — abstracts navigation logic
+interface Router {
+    fun navigateToDetails(itemId: String)
+    fun navigateToSettings()
+    fun navigateBack()
+}
+```
+
+### Hilt Example (Recommended)
+
+```kotlin
+// Router implementation
+class AppRouter @Inject constructor(
+    private val navController: NavController
+) : Router {
+    override fun navigateToDetails(itemId: String) {
+        navController.navigate("details/$itemId")
+    }
+
+    override fun navigateToSettings() {
+        navController.navigate("settings")
+    }
+
+    override fun navigateBack() {
+        navController.popBackStack()
+    }
+}
+
+// Hilt module
+@Module
+@InstallIn(ActivityComponent::class)
+abstract class NavigationModule {
+    @Binds
+    abstract fun bindRouter(impl: AppRouter): Router
+}
+
+// ✅ Presenter with constructor injection
+class ProductListPresenter @Inject constructor(
     private val router: Router,
     private val repository: ProductRepository
 ) {
@@ -748,49 +225,112 @@ class ProductPresenter(
 }
 
 // Fragment
+@AndroidEntryPoint
 class ProductListFragment : Fragment() {
-    private val presenter: ProductPresenter by inject()
+    @Inject lateinit var presenter: ProductListPresenter
 }
 ```
 
-### Преимущества DI Для Роутеров:
+### Koin Example
 
-1. **Слабая связанность** - презентер не зависит от реализации навигации
-2. **Легкое тестирование** - можно подменить роутер на mock
-3. **Single Responsibility** - презентер не знает о NavController/Intent
-4. **Переиспользование** - один роутер для многих презентеров
-5. **Изоляция модулей** - feature модули не зависят от основного модуля
+```kotlin
+// Koin module
+val navigationModule = module {
+    scope<MainActivity> {
+        scoped<Router> {
+            NavigationRouter(
+                findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
+            )
+        }
+    }
+}
 
-### Тестирование С Mock Роутером
+val presenterModule = module {
+    scope<ProductListFragment> {
+        scoped { ProductListPresenter(router = get(), repository = get()) }
+    }
+}
+
+// Fragment
+class ProductListFragment : Fragment() {
+    private val presenter: ProductListPresenter by inject()
+}
+```
+
+### Testing With Mock Router
 
 ```kotlin
 class ProductPresenterTest {
-    private lateinit var presenter: ProductPresenter
     private val mockRouter = mockk<Router>(relaxed = true)
+    private lateinit var presenter: ProductPresenter
 
     @Before
     fun setup() {
-        presenter = ProductPresenter(
-            router = mockRouter,
-            repository = mockRepository
-        )
+        presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
     }
 
     @Test
     fun `when product clicked, should navigate to details`() {
-        val productId = "123"
+        presenter.onProductClicked("123")
 
-        presenter.onProductClicked(productId)
-
-        verify { mockRouter.navigateToDetails(productId) }
+        verify { mockRouter.navigateToDetails("123") }
     }
 }
 ```
 
-**Рекомендация**: Используйте **Hilt** для новых проектов (официальный, меньше boilerplate, лучшая интеграция с Android)
+### Benefits of DI for Routers
+
+1. **Loose coupling** — presenter doesn't depend on NavController
+2. **Easy testing** — mock router in unit tests
+3. **Single Responsibility** — presenter doesn't handle navigation
+4. **Reusability** — one router for multiple presenters
+5. **Module isolation** — feature modules don't depend on navigation implementation
+
+### Best Practices
+
+```kotlin
+// ✅ GOOD: Interface + constructor injection
+class Presenter @Inject constructor(private val router: Router)
+
+// ❌ BAD: Direct NavController dependency
+class Presenter @Inject constructor(private val navController: NavController)
+
+// ✅ GOOD: Activity-scoped router
+@InstallIn(ActivityComponent::class)
+
+// ❌ BAD: Singleton router with NavController (lifecycle issues)
+@InstallIn(SingletonComponent::class)
+```
+
+---
+
+## Follow-ups
+
+1. How to handle navigation results (e.g., selecting payment method and returning result to caller)?
+2. How to implement deep link routing in multi-module app with feature-based navigation?
+3. What are the lifecycle implications of different DI scopes (Activity vs Fragment) for routers?
+4. How to test navigation flows in integration tests without mocking the router?
+5. How to migrate from Activity-based navigation (Intent) to Fragment-based (NavController) while keeping presenters unchanged?
+
+## References
+
+- [[c-dependency-injection]] — DI principles
+- [[c-navigation-component]] — Android Navigation Component
+- [[c-mvp-pattern]] — Presenter pattern
+- [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
+- [Koin Documentation](https://insert-koin.io/)
+- [Navigation Component Guide](https://developer.android.com/guide/navigation)
 
 ## Related Questions
 
-- [[q-play-feature-delivery--android--medium]]
-- [[q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]]
-- [[q-state-hoisting-compose--android--medium]]
+### Prerequisites (Easier)
+- [[q-what-is-dependency-injection--android--easy]] — DI basics
+- [[q-hilt-vs-koin--android--easy]] — DI framework comparison
+
+### Related (Same Level)
+- [[q-play-feature-delivery--android--medium]] — Feature modules with navigation
+- [[q-state-hoisting-compose--android--medium]] — State management patterns
+
+### Advanced (Harder)
+- [[q-multi-module-navigation--android--hard]] — Deep link routing across modules
+- [[q-navigation-result-api--android--hard]] — Navigation with results

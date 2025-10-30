@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-android-lint-tool--android--medium, q-app-security-best-practices--security--medium, q-local-notification-exact-time--android--medium]
 created: 2025-10-15
 tags: [components, activity, service, broadcastreceiver, contentprovider, difficulty/medium]
+date created: Friday, October 17th 2025, 10:50:05 am
+date modified: Thursday, October 30th 2025, 3:18:11 pm
 ---
 
 # What unites the main components of an Android application?

@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-mvp-pattern--android--medium, q-why-use-diffutil--android--medium, q-compositionlocal-compose--android--hard]
 created: 2025-10-15
 tags: [mockk, mocking, kotlin, unit-testing, coroutines, difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:49 pm
+date modified: Thursday, October 30th 2025, 3:13:53 pm
 ---
 
 # MockK Advanced Features

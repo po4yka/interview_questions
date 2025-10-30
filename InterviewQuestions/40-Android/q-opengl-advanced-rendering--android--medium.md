@@ -15,14 +15,17 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-graphics, android/performance-rendering, android/profiling, opengl-es, 3d-graphics, shaders, rendering, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:52:21 pm
+date modified: Thursday, October 30th 2025, 3:15:32 pm
 ---
+
 # Вопрос (RU)
 
-Как реализовать продвинутые техники рендеринга с использованием OpenGL ES в Android? Каковы лучшие практики для управления текстурами, framebuffer objects и пользовательских шейдеров?
+> Как реализовать продвинутые техники рендеринга с использованием OpenGL ES в Android? Каковы лучшие практики для управления текстурами, framebuffer objects и пользовательских шейдеров?
 
 # Question (EN)
 
-How do you implement advanced rendering techniques using OpenGL ES in Android? What are best practices for texture management, framebuffer objects, and custom shaders?
+> How do you implement advanced rendering techniques using OpenGL ES in Android? What are best practices for texture management, framebuffer objects, and custom shaders?
 
 ---
 

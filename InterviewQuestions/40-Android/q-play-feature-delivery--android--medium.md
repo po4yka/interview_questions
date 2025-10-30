@@ -1,367 +1,44 @@
 ---
 id: 20251012-12271165
-title: "Play Feature Delivery"
+title: Play Feature Delivery / Play Feature Delivery
+aliases: [Play Feature Delivery, Dynamic Feature Modules, App Bundle, Динамические модули]
 topic: android
+subtopics: [app-bundle, gradle, build-variants]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-anr-application-not-responding--android--medium, q-which-class-to-use-for-detecting-gestures--android--medium, q-handler-looper-comprehensive--android--medium]
 created: 2025-10-15
-tags: [play-feature-delivery, dynamic-modules, app-bundle, difficulty/medium]
+updated: 2025-10-30
+tags: [android, android/app-bundle, android/gradle, android/build-variants, app-bundle, dynamic-modules, difficulty/medium]
+sources: []
 ---
 
-# Play Feature Delivery / Play Feature Delivery
+# Вопрос (RU)
 
-**English**: What do you know about Play Feature Delivery?
+Что вы знаете о Play Feature Delivery?
 
-## Answer (EN)
-**Play Feature Delivery** uses advanced capabilities of Android App Bundles, allowing certain features of your app to be **delivered conditionally or downloaded on demand**. This enables you to reduce initial download size and deliver features only when needed.
+# Question (EN)
 
-Google Play's app serving model uses Android App Bundles to generate and serve optimized APKs for each user's device configuration, so users download only the code and resources they need to run your app.
+What do you know about Play Feature Delivery?
 
-To implement Play Feature Delivery, you need to separate features from your base app into **feature modules**.
-
-**Feature Module Build Configuration:**
-
-When you create a new feature module using Android Studio, the IDE applies the following Gradle plugin:
-
-```gradle
-// The dynamic-feature plugin is required for feature modules
-plugins {
-    id 'com.android.dynamic-feature'
-}
-```
-
-Many of the properties available to the standard application plugin are also available to feature modules.
-
-**What NOT to include in feature module build configuration:**
-
-Because each feature module depends on the base module, it inherits certain configurations. You should omit the following:
-
-1. **Signing configurations**: App bundles are signed using signing configurations from the base module
-
-2. **The `minifyEnabled` property**: Enable code shrinking for your entire app project from only the base module's build configuration. You can specify additional ProGuard rules for each feature module
-
-3. **`versionCode` and `versionName`**: When building your app bundle, Gradle uses app version information that the base module provides
-
-**Establishing relationship to the base module:**
-
-When Android Studio creates your feature module, it makes it visible to the base module:
-
-```gradle
-// In the base module's build.gradle file
-android {
-    ...
-    // Specifies feature modules that have a dependency on this base module
-    dynamicFeatures = [":dynamic_feature", ":dynamic_feature2"]
-}
-```
-
-Additionally, the feature module includes the base module as a dependency:
-
-```gradle
-// In the feature module's build.gradle file
-dependencies {
-    ...
-    // Declares a dependency on the base module, ':app'
-    implementation project(':app')
-}
-```
-
-**Delivery Options:**
-
-**1. Install-time delivery:**
-
-Features delivered at install time are installed automatically when the app is installed. This is the default delivery option.
-
-```xml
-<!-- AndroidManifest.xml in feature module -->
-<manifest ...>
-    <dist:module
-        dist:instant="false"
-        dist:title="@string/feature_title">
-        <dist:delivery>
-            <dist:install-time />
-        </dist:delivery>
-    </dist:module>
-</manifest>
-```
-
-**2. On-demand delivery:**
-
-Features delivered on demand can be downloaded and installed after app installation, when the user needs them.
-
-```xml
-<manifest ...>
-    <dist:module
-        dist:instant="false"
-        dist:title="@string/feature_title">
-        <dist:delivery>
-            <dist:on-demand />
-        </dist:delivery>
-    </dist:module>
-</manifest>
-```
-
-**Requesting on-demand module:**
-
-```kotlin
-// Create a request
-val request = SplitInstallRequest.newBuilder()
-    .addModule("dynamic_feature")
-    .build()
-
-// Start the installation
-splitInstallManager.startInstall(request)
-    .addOnSuccessListener { sessionId ->
-        // Handle successful request
-    }
-    .addOnFailureListener { exception ->
-        // Handle failure
-    }
-```
-
-**3. Conditional delivery:**
-
-Deliver features based on device capabilities (features, API level, user country, etc.):
-
-```xml
-<manifest ...>
-    <dist:module
-        dist:instant="false"
-        dist:title="@string/ar_feature_title">
-        <dist:delivery>
-            <dist:install-time>
-                <dist:conditions>
-                    <!-- Only deliver to devices with AR support -->
-                    <dist:device-feature dist:name="android.hardware.camera.ar" />
-                </dist:conditions>
-            </dist:install-time>
-        </dist:delivery>
-    </dist:module>
-</manifest>
-```
-
-**Real-World Example:**
-
-Consider an app that allows users to buy and sell goods in an online marketplace. You can modularize features:
-
-```
-:app (base module)
- :feature:login (install-time)
- :feature:browse (install-time)
- :feature:sell (on-demand - only for sellers)
- :feature:payment (on-demand - only when needed)
- :feature:ar-preview (conditional - AR-capable devices only)
-```
-
-**Monitoring Download Progress:**
-
-```kotlin
-class MyActivity : AppCompatActivity() {
-    private lateinit var splitInstallManager: SplitInstallManager
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        splitInstallManager = SplitInstallManagerFactory.create(this)
-
-        // Register listener
-        splitInstallManager.registerListener(listener)
-    }
-
-    private val listener = SplitInstallStateUpdatedListener { state ->
-        when (state.status()) {
-            SplitInstallSessionStatus.DOWNLOADING -> {
-                val progress = (state.bytesDownloaded() * 100 / state.totalBytesToDownload()).toInt()
-                updateProgressBar(progress)
-            }
-            SplitInstallSessionStatus.INSTALLED -> {
-                // Module installed successfully
-                // Might need to recreate activity
-                if (state.moduleNames().contains("dynamic_feature")) {
-                    recreate()
-                }
-            }
-            SplitInstallSessionStatus.FAILED -> {
-                // Handle installation failure
-                showError(state.errorCode())
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        splitInstallManager.unregisterListener(listener)
-    }
-}
-```
-
-**Checking if module is installed:**
-
-```kotlin
-fun isModuleInstalled(moduleName: String): Boolean {
-    return splitInstallManager.installedModules.contains(moduleName)
-}
-
-// Usage
-if (isModuleInstalled("ar_preview")) {
-    // Launch AR feature
-    launchARPreview()
-} else {
-    // Request module download
-    requestModuleInstall("ar_preview")
-}
-```
-
-**Deferred Installation:**
-
-Request installation but don't wait for it:
-
-```kotlin
-val request = SplitInstallRequest.newBuilder()
-    .addModule("background_feature")
-    .build()
-
-splitInstallManager.deferredInstall(listOf("background_feature"))
-    .addOnSuccessListener {
-        // Installation will happen in the background
-    }
-```
-
-**Canceling Installation:**
-
-```kotlin
-splitInstallManager.cancelInstall(sessionId)
-```
-
-**Uninstalling a module:**
-
-```kotlin
-splitInstallManager.deferredUninstall(listOf("feature_to_remove"))
-    .addOnSuccessListener {
-        // Module will be uninstalled
-    }
-```
-
-**Considerations and Limitations:**
-
-1. **Module limit**: Installing 50 or more feature modules on a single device might lead to performance issues. Install-time modules configured as removable count separately
-
-2. **Removable install-time modules**: Limit to 10 or fewer, otherwise download/install time increases
-
-3. **Android version**: Only devices running Android 5.0 (API level 21) and higher support on-demand delivery. Enable **Fusing** for earlier versions
-
-4. **SplitCompat**: Enable SplitCompat so your app has access to downloaded feature modules
-
-5. **Exported activities**: Feature modules should not specify activities with `android:exported` set to `true` because there's no guarantee the module is downloaded
-
-6. **Check before access**: Always confirm a feature is downloaded before accessing its code/resources
-
-**Enable SplitCompat:**
-
-```kotlin
-// Option 1: In Application class
-class MyApplication : SplitCompatApplication() {
-    // SplitCompat is automatically installed
-}
-
-// Option 2: Manual installation
-class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        SplitCompat.install(this)
-    }
-}
-
-// Option 3: Per-activity
-class MyActivity : AppCompatActivity() {
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(newBase)
-        SplitCompat.install(this)
-    }
-}
-```
-
-**Dependencies:**
-
-```gradle
-// app/build.gradle
-dependencies {
-    implementation "com.google.android.play:core:1.10.3"
-    // Or the newer version
-    implementation "com.google.android.play:feature-delivery:2.1.0"
-}
-```
-
-**Benefits:**
-
--  **Reduced initial download size** — users download only what they need
--  **Modular architecture** — better code organization
--  **Targeted delivery** — features only for specific devices/conditions
--  **Storage savings** — users can uninstall unused features
--  **Faster updates** — update individual modules without updating entire app
-
-**Use Cases:**
-
-- AR features (only for AR-capable devices)
-- Advanced camera features (only for devices with certain cameras)
-- Regional features (only for specific countries)
-- Premium features (download when user subscribes)
-- Heavy assets (download when user needs them)
-- Educational content (download lessons as needed)
-
-**Summary:**
-
-- **Play Feature Delivery**: Advanced delivery options for app features
-- **Delivery types**: Install-time, on-demand, conditional
-- **Requirements**: Android 5.0+, SplitCompat, feature modules
-- **Benefits**: Reduced download size, modular architecture, targeted delivery
-- **Limitations**: Module count limits, version requirements, complexity
-- **Use cases**: AR features, regional content, premium features, large assets
-
-**Source**: [Overview of Play Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery)
+---
 
 ## Ответ (RU)
-**Play Feature Delivery** использует расширенные возможности Android App Bundles, позволяя доставлять определённые функции приложения **условно или по требованию**. Это позволяет уменьшить размер первоначальной загрузки и доставлять функции только когда они нужны.
 
-Google Play использует Android App Bundles для генерации и доставки оптимизированных APK для каждой конфигурации устройства пользователя, поэтому пользователи загружают только необходимый код и ресурсы.
+**Play Feature Delivery** — технология Android App Bundles для условной доставки или загрузки функций по требованию. Позволяет уменьшить размер первоначальной установки и доставлять функциональность только когда она необходима пользователю.
 
-Для реализации Play Feature Delivery необходимо отделить функции от базового приложения в **feature модули**.
+Google Play генерирует оптимизированные APK для конкретной конфигурации устройства из App Bundle, поэтому пользователи загружают только нужный код и ресурсы.
 
-**Конфигурация feature модуля:**
+### Типы доставки модулей
 
-```gradle
-// Плагин dynamic-feature необходим для feature модулей
-plugins {
-    id 'com.android.dynamic-feature'
-}
-```
-
-**Что НЕ включать в конфигурацию feature модуля:**
-
-1. **Конфигурации подписи** — App Bundle подписываются конфигурацией из базового модуля
-2. **Свойство `minifyEnabled`** — сжатие кода включается только из базового модуля
-3. **`versionCode` и `versionName`** — Gradle использует информацию о версии из базового модуля
-
-**Связь с базовым модулем:**
-
-```gradle
-// В build.gradle базового модуля
-android {
-    dynamicFeatures = [":dynamic_feature", ":dynamic_feature2"]
-}
-
-// В build.gradle feature модуля
-dependencies {
-    implementation project(':app')
-}
-```
-
-**Варианты доставки:**
-
-**1. Install-time delivery (доставка при установке):**
+**1. Install-time** — модуль устанавливается автоматически вместе с приложением:
 
 ```xml
+<!-- AndroidManifest.xml в feature-модуле -->
 <dist:module dist:title="@string/feature_title">
     <dist:delivery>
         <dist:install-time />
@@ -369,17 +46,7 @@ dependencies {
 </dist:module>
 ```
 
-**2. On-demand delivery (доставка по требованию):**
-
-```xml
-<dist:module dist:title="@string/feature_title">
-    <dist:delivery>
-        <dist:on-demand />
-    </dist:delivery>
-</dist:module>
-```
-
-**Запрос модуля по требованию:**
+**2. On-demand** — модуль загружается после установки, когда пользователю нужна функция:
 
 ```kotlin
 val request = SplitInstallRequest.newBuilder()
@@ -388,21 +55,20 @@ val request = SplitInstallRequest.newBuilder()
 
 splitInstallManager.startInstall(request)
     .addOnSuccessListener { sessionId ->
-        // Обработка успешного запроса
+        // ✅ Модуль загружается
     }
     .addOnFailureListener { exception ->
-        // Обработка ошибки
+        // ❌ Обработка ошибки
     }
 ```
 
-**3. Conditional delivery (условная доставка):**
+**3. Conditional** — модуль доставляется только на устройства с определёнными возможностями (AR, API level, регион):
 
 ```xml
-<dist:module dist:title="@string/ar_feature_title">
+<dist:module dist:title="@string/ar_feature">
     <dist:delivery>
         <dist:install-time>
             <dist:conditions>
-                <!-- Только для устройств с поддержкой AR -->
                 <dist:device-feature dist:name="android.hardware.camera.ar" />
             </dist:conditions>
         </dist:install-time>
@@ -410,58 +76,59 @@ splitInstallManager.startInstall(request)
 </dist:module>
 ```
 
-**Пример реального приложения:**
+### Конфигурация feature-модуля
 
-```
-:app (базовый модуль)
- :feature:login (install-time)
- :feature:browse (install-time)
- :feature:sell (on-demand - только для продавцов)
- :feature:payment (on-demand - только при необходимости)
- :feature:ar-preview (conditional - только AR-устройства)
+```gradle
+// Feature-модуль
+plugins {
+    id 'com.android.dynamic-feature'
+}
+
+dependencies {
+    implementation project(':app')  // ✅ Зависимость от базового модуля
+}
 ```
 
-**Мониторинг прогресса загрузки:**
+```gradle
+// Базовый модуль app/build.gradle
+android {
+    dynamicFeatures = [":feature_camera", ":feature_payment"]
+}
+```
+
+**Что НЕ включать в feature-модуль:**
+- Конфигурации подписи (используется из базового модуля)
+- `minifyEnabled` (настраивается только в базовом модуле)
+- `versionCode`, `versionName` (берутся из базового модуля)
+
+### Мониторинг загрузки
 
 ```kotlin
 private val listener = SplitInstallStateUpdatedListener { state ->
     when (state.status()) {
         SplitInstallSessionStatus.DOWNLOADING -> {
-            val progress = (state.bytesDownloaded() * 100 / state.totalBytesToDownload()).toInt()
-            updateProgressBar(progress)
+            val progress = state.bytesDownloaded() * 100 /
+                          state.totalBytesToDownload()
+            updateProgress(progress.toInt())
         }
         SplitInstallSessionStatus.INSTALLED -> {
-            // Модуль успешно установлен
-            recreate()
+            // ✅ Модуль установлен, может потребоваться recreate()
+            if (state.moduleNames().contains("feature_x")) {
+                recreate()
+            }
         }
         SplitInstallSessionStatus.FAILED -> {
-            showError(state.errorCode())
+            // ❌ Ошибка установки
+            handleError(state.errorCode())
         }
     }
 }
 ```
 
-**Проверка установки модуля:**
+### SplitCompat — доступ к загруженным модулям
 
 ```kotlin
-fun isModuleInstalled(moduleName: String): Boolean {
-    return splitInstallManager.installedModules.contains(moduleName)
-}
-```
-
-**Ограничения и соображения:**
-
-1. **Лимит модулей**: Установка 50+ feature модулей может привести к проблемам производительности
-2. **Removable install-time модули**: Ограничьте до 10 или меньше
-3. **Версия Android**: Только Android 5.0+ поддерживает on-demand доставку
-4. **SplitCompat**: Необходимо включить для доступа к загруженным модулям
-5. **Exported activities**: Feature модули не должны экспортировать активности
-6. **Проверка перед доступом**: Всегда подтверждайте, что feature загружен
-
-**Включение SplitCompat:**
-
-```kotlin
-// Вариант 1: В Application классе
+// Вариант 1: Наследование от SplitCompatApplication
 class MyApplication : SplitCompatApplication()
 
 // Вариант 2: Ручная установка
@@ -473,28 +140,232 @@ class MyApplication : Application() {
 }
 ```
 
-**Преимущества:**
+### Проверка установки модуля
 
-- Уменьшенный размер первоначальной загрузки
-- Модульная архитектура
-- Целевая доставка для определённых устройств
-- Экономия хранилища
-- Более быстрые обновления
+```kotlin
+fun isModuleInstalled(moduleName: String): Boolean {
+    return splitInstallManager.installedModules.contains(moduleName)
+}
 
-**Случаи использования:**
+// ✅ Всегда проверяйте перед использованием
+if (isModuleInstalled("ar_preview")) {
+    launchARFeature()
+} else {
+    requestModuleInstall("ar_preview")
+}
+```
 
-- AR функции (только для AR-устройств)
-- Региональные функции
-- Премиум функции (загрузка при подписке)
-- Тяжёлые ресурсы
-- Образовательный контент
+### Ограничения
 
-**Резюме:**
+1. **Лимит модулей**: 50+ feature-модулей → проблемы производительности
+2. **Removable install-time**: максимум 10 модулей
+3. **Минимальная версия**: Android 5.0+ для on-demand доставки
+4. **SplitCompat**: обязателен для доступа к модулям
+5. **Exported activities**: feature-модули не должны экспортировать активности (модуль может быть не загружен)
 
-Play Feature Delivery предоставляет расширенные опции доставки функций приложения через App Bundles. Поддерживает три типа доставки: при установке, по требованию и условную. Требует Android 5.0+, SplitCompat и feature модули. Основные преимущества: уменьшенный размер загрузки, модульная архитектура, целевая доставка.
+### Преимущества
+
+- Уменьшение размера первоначальной установки на 30-60%
+- Модульная архитектура и лучшая организация кода
+- Целевая доставка по конфигурации устройства
+- Возможность удаления неиспользуемых модулей
+- Быстрые обновления отдельных модулей
+
+### Примеры использования
+
+```
+:app (базовый модуль — списки товаров, навигация)
+:feature:auth (install-time — логин/регистрация)
+:feature:seller (on-demand — функции для продавцов)
+:feature:ar_preview (conditional — 3D-превью для AR-устройств)
+:feature:analytics (deferred — фоновая загрузка аналитики)
+```
+
+---
+
+## Answer (EN)
+
+**Play Feature Delivery** is an Android App Bundles technology for conditional or on-demand feature delivery. It reduces initial download size by delivering functionality only when users need it.
+
+Google Play generates optimized APKs for specific device configurations from App Bundles, so users download only the code and resources they need.
+
+### Module delivery types
+
+**1. Install-time** — module installed automatically with the app:
+
+```xml
+<!-- AndroidManifest.xml in feature module -->
+<dist:module dist:title="@string/feature_title">
+    <dist:delivery>
+        <dist:install-time />
+    </dist:delivery>
+</dist:module>
+```
+
+**2. On-demand** — module downloaded after installation when user needs the feature:
+
+```kotlin
+val request = SplitInstallRequest.newBuilder()
+    .addModule("dynamic_feature")
+    .build()
+
+splitInstallManager.startInstall(request)
+    .addOnSuccessListener { sessionId ->
+        // ✅ Module is being downloaded
+    }
+    .addOnFailureListener { exception ->
+        // ❌ Handle failure
+    }
+```
+
+**3. Conditional** — module delivered only to devices with specific capabilities (AR, API level, region):
+
+```xml
+<dist:module dist:title="@string/ar_feature">
+    <dist:delivery>
+        <dist:install-time>
+            <dist:conditions>
+                <dist:device-feature dist:name="android.hardware.camera.ar" />
+            </dist:conditions>
+        </dist:install-time>
+    </dist:delivery>
+</dist:module>
+```
+
+### Feature module configuration
+
+```gradle
+// Feature module
+plugins {
+    id 'com.android.dynamic-feature'
+}
+
+dependencies {
+    implementation project(':app')  // ✅ Dependency on base module
+}
+```
+
+```gradle
+// Base module app/build.gradle
+android {
+    dynamicFeatures = [":feature_camera", ":feature_payment"]
+}
+```
+
+**What NOT to include in feature module:**
+- Signing configurations (inherited from base module)
+- `minifyEnabled` (configured only in base module)
+- `versionCode`, `versionName` (taken from base module)
+
+### Download monitoring
+
+```kotlin
+private val listener = SplitInstallStateUpdatedListener { state ->
+    when (state.status()) {
+        SplitInstallSessionStatus.DOWNLOADING -> {
+            val progress = state.bytesDownloaded() * 100 /
+                          state.totalBytesToDownload()
+            updateProgress(progress.toInt())
+        }
+        SplitInstallSessionStatus.INSTALLED -> {
+            // ✅ Module installed, may need recreate()
+            if (state.moduleNames().contains("feature_x")) {
+                recreate()
+            }
+        }
+        SplitInstallSessionStatus.FAILED -> {
+            // ❌ Installation error
+            handleError(state.errorCode())
+        }
+    }
+}
+```
+
+### SplitCompat — accessing downloaded modules
+
+```kotlin
+// Option 1: Extend SplitCompatApplication
+class MyApplication : SplitCompatApplication()
+
+// Option 2: Manual installation
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        SplitCompat.install(this)
+    }
+}
+```
+
+### Checking module installation
+
+```kotlin
+fun isModuleInstalled(moduleName: String): Boolean {
+    return splitInstallManager.installedModules.contains(moduleName)
+}
+
+// ✅ Always check before using
+if (isModuleInstalled("ar_preview")) {
+    launchARFeature()
+} else {
+    requestModuleInstall("ar_preview")
+}
+```
+
+### Limitations
+
+1. **Module limit**: 50+ feature modules → performance issues
+2. **Removable install-time**: max 10 modules
+3. **Minimum version**: Android 5.0+ for on-demand delivery
+4. **SplitCompat**: required for module access
+5. **Exported activities**: feature modules should not export activities (module may not be downloaded)
+
+### Benefits
+
+- 30-60% reduction in initial download size
+- Modular architecture and better code organization
+- Targeted delivery based on device configuration
+- Ability to uninstall unused modules
+- Fast updates of individual modules
+
+### Example use cases
+
+```
+:app (base module — product listings, navigation)
+:feature:auth (install-time — login/registration)
+:feature:seller (on-demand — seller functionality)
+:feature:ar_preview (conditional — 3D preview for AR devices)
+:feature:analytics (deferred — background analytics download)
+```
+
+---
+
+## Follow-ups
+
+1. How do you handle lifecycle of dynamically loaded activities from feature modules?
+2. What happens when a user tries to access a feature module that failed to download?
+3. How does ProGuard/R8 work with feature modules and code obfuscation?
+4. Can feature modules share resources or code between each other without going through the base module?
+5. What are the testing strategies for on-demand modules (local testing, staging, production validation)?
+
+## References
+
+- [[c-app-bundle]]
+- [[c-gradle-build-system]]
+- https://developer.android.com/guide/playcore/feature-delivery
 
 ## Related Questions
 
+### Prerequisites (Easier)
+
+- [[q-what-is-app-bundle--android--easy]]
+- [[q-gradle-basics--android--easy]]
+
+### Related (Same Level)
+
 - [[q-anr-application-not-responding--android--medium]]
-- [[q-which-class-to-use-for-detecting-gestures--android--medium]]
 - [[q-handler-looper-comprehensive--android--medium]]
+
+### Advanced (Harder)
+
+- [[q-modularization-strategies--android--hard]]
+- [[q-build-optimization--android--hard]]

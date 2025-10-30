@@ -15,14 +15,17 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android, android/activity, android/ui-views, ui, difficulty/easy]
 sources: []
+date created: Monday, October 27th 2025, 3:42:02 pm
+date modified: Thursday, October 30th 2025, 3:10:06 pm
 ---
+
 # Вопрос (RU)
 
-Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
+> Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
 
 # Question (EN)
 
-What needs to be done in an Android project to start drawing UI on screen?
+> What needs to be done in an Android project to start drawing UI on screen?
 
 ## Ответ (RU)
 

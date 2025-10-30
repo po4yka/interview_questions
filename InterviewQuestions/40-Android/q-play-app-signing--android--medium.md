@@ -1,385 +1,324 @@
 ---
 id: 20251012-12271164
 title: "Play App Signing / Подписание приложений Play"
+aliases: ["Play App Signing", "Подписание приложений Play", "App Signing Key", "Upload Key"]
 topic: android
+subtopics: [app-bundle, play-console, keystore-crypto, gradle]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-singleton-scope-binding--android--medium, q-shared-element-transitions--jetpack-compose--hard, q-compose-gesture-detection--jetpack-compose--medium]
+related: [c-app-bundle, c-android-keystore, c-gradle, q-android-app-bundles--android--easy, q-gradle-build-system--android--medium, q-android-security-best-practices--android--medium]
 created: 2025-10-15
-tags: [play-app-signing, security, signing, keystore, google-play, app-bundle, difficulty/medium]
+updated: 2025-10-30
+tags: [android/app-bundle, android/play-console, android/keystore-crypto, android/gradle, play-app-signing, security, signing, difficulty/medium]
+sources: [https://developer.android.com/studio/publish/app-signing#app-signing-google-play, https://support.google.com/googleplay/android-developer/answer/9842756]
 ---
 
-# What is Play App Signing? / Что такое Play App Signing?
+# Вопрос (RU)
 
-**English**: What's Play App Signing?
+> Что такое Play App Signing и как он работает?
 
-## Answer (EN)
-**Play App Signing** is a service where Google manages and protects your app's signing key and uses it to sign optimized, distribution APKs that are generated from your app bundles. Play App Signing stores your app signing key on Google's secure infrastructure and offers upgrade options to increase security.
+# Question (EN)
 
-## Key Concepts
+> What is Play App Signing and how does it work?
 
-### Two-Key System
+---
 
-Play App Signing uses **two keys**: the **app signing key** and the **upload key**.
+## Ответ (RU)
+
+**Play App Signing** — это сервис Google, который управляет ключом подписи приложения и использует его для подписи APK, распространяемых пользователям. Ключ хранится в защищённой инфраструктуре Google, что повышает безопасность и упрощает управление ключами.
+
+### Система двух ключей
+
+Play App Signing использует **app signing key** (ключ подписи) и **upload key** (ключ загрузки):
 
 **App Signing Key:**
-- Managed and stored by Google on secure infrastructure
-- Used to sign APKs that are distributed to users
-- Never changes during the lifetime of your app (part of Android's secure update model)
-- Private key must be kept secret, but you can share the certificate
+- Хранится в инфраструктуре Google
+- Используется для подписи APK, распространяемых пользователям
+- Неизменен в течение жизни приложения (Android требует одинаковый ключ для обновлений)
+- Не доступен разработчику после передачи Google
 
 **Upload Key:**
-- Kept by the developer
-- Used to sign app bundles or APKs before uploading to Google Play Store
-- Google uses the upload certificate to verify your identity
-- Can be reset if lost or compromised
-- Must be kept secret, but you can share the certificate
+- Хранится у разработчика
+- Используется для подписи app bundle/APK перед загрузкой в Play Console
+- Может быть сброшен при компрометации через Play Console
+- Верифицирует идентичность разработчика
 
-**Flow Diagram:**
-
+**Процесс:**
 ```
-Developer → [Sign with Upload Key] → Upload to Play Store
+Разработчик → подпись upload key → загрузка в Play Console
                                            ↓
-                              Google verifies with Upload Certificate
+                            Google верифицирует upload certificate
                                            ↓
-                              Google signs with App Signing Key
+                            Google подписывает app signing key
                                            ↓
-                              Distribution to Users
+                            Распространение пользователям
 ```
 
-## Keystores, Keys, and Certificates
+### Настройка для новых приложений
 
-### Java Keystores
-- Binary files (.jks or .keystore)
-- Serve as repositories of certificates and private keys
+**Рекомендуемый способ: Google генерирует app signing key**
 
-### Public Key Certificate
-- Also known as digital certificate or identity certificate
-- Files: .der or .pem
-- Contains:
-  - Public key of a public/private key pair
-  - Metadata identifying the owner (name, location)
-  - Owner holds the corresponding private key
-
-### Types of Keys
-
-**1. App Signing Key:**
-- Used to sign APKs installed on user's device
-- Never changes during app's lifetime (Android's secure update model)
-- Private and must be kept secret
-- Certificate can be shared
-
-**2. Upload Key:**
-- Used to sign app bundle or APK before uploading to Play Store
-- Must be kept secret
-- Certificate can be shared
-- Generated in three ways:
-  1. **Google generates app signing key**: Your release signing key becomes upload key
-  2. **You provide app signing key**: Option to generate new upload key for increased security
-  3. **No new upload key**: Continue using app signing key as upload key
-
-## Setting Up Play App Signing
-
-### For New Apps
-
-**Option 1: Let Google Create App Signing Key (Recommended)**
 ```bash
-# 1. Create upload keystore
-keytool -genkey -v -keystore upload-keystore.jks \
+# 1. Создание upload keystore
+keytool -genkey -v -keystore upload.jks \
   -alias upload -keyalg RSA -keysize 2048 -validity 10000
 
-# 2. Sign your app bundle
-jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
-  -keystore upload-keystore.jks app-release.aab upload
-
-# 3. Upload to Play Console - Google creates app signing key
-```
-
-**Option 2: Use Existing Signing Key**
-```bash
-# 1. Export existing key certificate
-keytool -export -rfc -keystore existing-keystore.jks \
-  -alias existing-key -file certificate.pem
-
-# 2. Upload certificate to Play Console
-
-# 3. Optionally create new upload key for security
-keytool -genkey -v -keystore upload-keystore.jks \
-  -alias upload -keyalg RSA -keysize 2048 -validity 10000
-```
-
-### Gradle Configuration
-
-**app/build.gradle.kts (Kotlin DSL):**
-```kotlin
+# 2. Конфигурация Gradle
+# app/build.gradle.kts
 android {
     signingConfigs {
         create("release") {
-            storeFile = file("path/to/upload-keystore.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            storeFile = file("../upload.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")  # ✅ Секреты в env
             keyAlias = "upload"
             keyPassword = System.getenv("KEY_PASSWORD")
         }
     }
-
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
         }
     }
 }
+
+# ❌ Не хардкодить пароли в build.gradle
+# storePassword = "hardcoded_password"  # FORBIDDEN
 ```
 
-**Security Best Practice: Use Environment Variables**
+**Использование существующего ключа:**
 ```bash
-# Set in CI/CD or local environment
-export KEYSTORE_PASSWORD="your_keystore_password"
-export KEY_PASSWORD="your_key_password"
+# Экспорт сертификата
+keytool -export -rfc -keystore existing.jks \
+  -alias key-alias -file certificate.pem
 
-# Or use gradle.properties (add to .gitignore!)
-# ~/.gradle/gradle.properties
-KEYSTORE_PASSWORD=your_keystore_password
-KEY_PASSWORD=your_key_password
+# Загрузка в Play Console → App Signing
+# Опционально: создание отдельного upload key для безопасности
 ```
 
-## Best Practices
+### Преимущества
 
-### 1. Distribution Strategy
+**1. Безопасность:**
+- App signing key защищён инфраструктурой Google
+- Upload key можно сбросить при компрометации
+- App signing key остаётся в безопасности даже при утечке upload key
 
-**If distributing outside Google Play:**
-- **Option A (Recommended)**: Let Google generate the key, then download signed universal APK from App Bundle Explorer to distribute outside Play Store
-- **Option B**: Generate the app signing key for all app stores, then transfer a copy to Google when configuring Play App Signing
+**2. Android App Bundle:**
+- Требуется для публикации AAB (обязательно с августа 2021)
+- Уменьшает размер приложения на 15-35% через split APKs
+- Динамическая доставка модулей
 
-### 2. Security Measures
+**3. Key Upgrade:**
+- Однократное обновление app signing key для новых установок
+- Возможность миграции на более сильный криптографический ключ
+- Не влияет на обновления существующих пользователей
 
-**Enable 2-Step Verification:**
-- Turn on 2-Step Verification for accounts with Play Console access
-- Protects your account and signing keys
+### Интеграция с сервисами
 
-**Generate Separate Upload Key:**
-- For increased security, generate a new upload key different from app signing key
-- If upload key is compromised, you can reset it
-- App signing key remains safe with Google
+**Google APIs / Firebase:**
+```bash
+# Получение SHA-256 fingerprint upload key
+keytool -list -v -keystore upload.jks -alias upload
 
-### 3. API Integration
-
-**Google APIs:**
-- Register both upload key and app signing key certificates in Google Cloud Console
-- Ensures APIs work correctly after key rotation
+# Получение app signing key certificate:
+# Play Console → App → Setup → App Signing → App signing key certificate
+# Регистрация обоих в Google Cloud Console / Firebase
+```
 
 **Android App Links:**
-- Update keys in Digital Asset Links JSON file on your website
-- Required for deep linking to work properly
-
 ```json
-// assetlinks.json
+// assetlinks.json на вашем домене
 [{
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
     "package_name": "com.example.app",
     "sha256_cert_fingerprints": [
-      "14:6D:E9:83:C5:73:06:50:D8:EE:B9:95:2F:34:FC:64:16:A0:83:42:E6:1D:BE:A8:8A:04:96:B2:3F:CF:44:E5",
-      "ANOTHER_FINGERPRINT_FOR_UPLOAD_KEY"
+      "AA:BB:CC:...",  // app signing key fingerprint
+      "DD:EE:FF:..."   // upload key fingerprint (optional)
     ]
   }
 }]
 ```
 
-### 4. Testing and Distribution
+### Best Practices
 
-**App Bundle Explorer Features:**
-- **Internal app sharing links**: Test app bundle on different devices with single tap
-- **Download signed universal APK**: Get APK signed with app signing key for any device
-- **Download device-specific APKs**: Get ZIP with APKs for specific device
+✅ **DO:**
+- Используйте Play App Signing для всех новых приложений
+- Храните upload key в безопасном месте (password manager, secrets vault)
+- Используйте переменные окружения для паролей в Gradle
+- Включите 2FA на аккаунте Play Console
+- Регистрируйте оба ключа (app signing + upload) в Google Cloud Console
 
-**Install device-specific APKs:**
+❌ **DON'T:**
+- Не коммитьте keystores и пароли в git
+- Не используйте один keystore для нескольких приложений
+- Не храните пароли в gradle.properties (если он в git)
+- Не игнорируйте предупреждения о компрометации ключа
+
+## Answer (EN)
+
+**Play App Signing** is a Google service that manages your app's signing key and uses it to sign APKs distributed to users. The key is stored in Google's secure infrastructure, improving security and simplifying key management.
+
+### Two-Key System
+
+Play App Signing uses an **app signing key** and an **upload key**:
+
+**App Signing Key:**
+- Stored in Google's infrastructure
+- Used to sign APKs distributed to users
+- Immutable throughout app lifetime (Android requires same key for updates)
+- Not accessible to developer after transferring to Google
+
+**Upload Key:**
+- Stored by developer
+- Used to sign app bundles/APKs before uploading to Play Console
+- Can be reset if compromised via Play Console
+- Verifies developer identity
+
+**Flow:**
+```
+Developer → sign with upload key → upload to Play Console
+                                          ↓
+                          Google verifies upload certificate
+                                          ↓
+                          Google signs with app signing key
+                                          ↓
+                          Distribution to users
+```
+
+### Setup for New Apps
+
+**Recommended: Let Google generate app signing key**
+
 ```bash
-# Extract ZIP and install all APKs
-unzip device-specific-apks.zip
-adb install-multiple *.apk
+# 1. Create upload keystore
+keytool -genkey -v -keystore upload.jks \
+  -alias upload -keyalg RSA -keysize 2048 -validity 10000
+
+# 2. Configure Gradle
+# app/build.gradle.kts
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("../upload.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")  # ✅ Secrets in env
+            keyAlias = "upload"
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+# ❌ Don't hardcode passwords in build.gradle
+# storePassword = "hardcoded_password"  # FORBIDDEN
 ```
 
-## Advantages
-
-### 1. Android App Bundle Support
-- Makes app much smaller
-- Simplifies releases
-- Enables feature modules
-- Supports instant experiences
-- Dynamic delivery based on device configuration
-
-### 2. Increased Security
-- App signing key stored in Google's secure infrastructure
-- Separate upload key for daily operations
-- Can reset upload key if compromised
-- App signing key never exposed
-
-### 3. Key Upgrade
-- **One-time key upgrade** for new installs
-- Can change app signing key if:
-  - Existing one is compromised
-  - Need to migrate to cryptographically stronger key
-- Only affects new installs, not updates
-
-## Certificate Fingerprints
-
-**Get Upload Key Fingerprint:**
+**Using existing key:**
 ```bash
-keytool -list -v -keystore upload-keystore.jks -alias upload
+# Export certificate
+keytool -export -rfc -keystore existing.jks \
+  -alias key-alias -file certificate.pem
+
+# Upload to Play Console → App Signing
+# Optional: create separate upload key for security
 ```
 
-**Get App Signing Key Certificate from Play Console:**
-1. Go to Play Console → Your App → Setup → App Signing
-2. Copy SHA-256 certificate fingerprint
-3. Use for Google APIs, Firebase, or App Links configuration
+### Advantages
 
-## Migration from Legacy Signing
+**1. Security:**
+- App signing key protected by Google infrastructure
+- Upload key can be reset if compromised
+- App signing key remains safe even if upload key leaks
 
-**For Existing Apps:**
-1. Enroll in Play App Signing in Play Console
-2. Choose to let Google manage app signing key
-3. Optionally generate new upload key
-4. Update build configuration to use upload key
-5. Update API configurations with new certificates
+**2. Android App Bundle:**
+- Required for AAB publishing (mandatory since August 2021)
+- Reduces app size by 15-35% through split APKs
+- Dynamic delivery of modules
 
-## Conclusion
+**3. Key Upgrade:**
+- One-time app signing key upgrade for new installs
+- Ability to migrate to stronger cryptographic key
+- Does not affect updates for existing users
 
-Play App Signing is essential for modern Android app distribution:
+### Service Integration
 
-- **Security**: Google manages app signing key securely
-- **Flexibility**: Separate upload key can be reset
-- **App Bundle**: Required for Android App Bundle features
-- **Key Upgrade**: Can upgrade to stronger cryptographic keys
-- **Peace of Mind**: Google's infrastructure protects signing key
+**Google APIs / Firebase:**
+```bash
+# Get SHA-256 fingerprint of upload key
+keytool -list -v -keystore upload.jks -alias upload
 
-**Always use Play App Signing for new apps, and migrate existing apps when possible.**
-
-**Sources**:
-- [Play App Signing](https://developer.android.com/studio/publish/app-signing#app-signing-google-play)
-- [Use Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756)
-
-## Ответ (RU)
-**Play App Signing** — это сервис, в котором Google управляет и защищает ключ подписи вашего приложения и использует его для подписи оптимизированных дистрибутивных APK, которые генерируются из ваших app bundle. Play App Signing хранит ключ подписи приложения в защищённой инфраструктуре Google и предлагает варианты обновления для повышения безопасности.
-
-## Ключевые концепции
-
-### Система двух ключей
-
-Play App Signing использует **два ключа**: **ключ подписи приложения** (app signing key) и **ключ загрузки** (upload key).
-
-**Ключ подписи приложения (App Signing Key):**
-- Управляется и хранится Google в защищённой инфраструктуре
-- Используется для подписи APK, которые распространяются пользователям
-- Никогда не меняется в течение жизни приложения (часть модели безопасного обновления Android)
-- Приватный ключ должен храниться в секрете, но можно делиться сертификатом
-
-**Ключ загрузки (Upload Key):**
-- Хранится у разработчика
-- Используется для подписи app bundle или APK перед загрузкой в Google Play Store
-- Google использует сертификат загрузки для проверки вашей личности
-- Может быть сброшен, если утерян или скомпрометирован
-- Должен храниться в секрете, но можно делиться сертификатом
-
-**Схема потока:**
-
+# Get app signing key certificate:
+# Play Console → App → Setup → App Signing → App signing key certificate
+# Register both in Google Cloud Console / Firebase
 ```
-Разработчик → [Подпись ключом загрузки] → Загрузка в Play Store
-                                                ↓
-                                  Google проверяет сертификат загрузки
-                                                ↓
-                                  Google подписывает ключом подписи приложения
-                                                ↓
-                                  Распространение пользователям
-```
-
-## Хранилища ключей, ключи и сертификаты
-
-### Java Keystores (Хранилища ключей)
-- Бинарные файлы (.jks или .keystore)
-- Служат хранилищами сертификатов и приватных ключей
-
-### Сертификат публичного ключа
-- Также известен как цифровой сертификат или сертификат идентичности
-- Файлы: .der или .pem
-- Содержит:
-  - Публичный ключ пары публичный/приватный ключ
-  - Метаданные, идентифицирующие владельца (имя, местоположение)
-  - Владелец хранит соответствующий приватный ключ
-
-## Лучшие практики
-
-### 1. Стратегия распространения
-
-**При распространении вне Google Play:**
-- **Вариант A (Рекомендуется)**: Позвольте Google сгенерировать ключ, затем загрузите подписанный универсальный APK из App Bundle Explorer для распространения вне Play Store
-- **Вариант B**: Сгенерируйте ключ подписи приложения для всех магазинов приложений, затем передайте копию Google при настройке Play App Signing
-
-### 2. Меры безопасности
-
-**Включите двухфакторную аутентификацию:**
-- Включите 2-Step Verification для учётных записей с доступом к Play Console
-- Защищает вашу учётную запись и ключи подписи
-
-**Сгенерируйте отдельный ключ загрузки:**
-- Для повышения безопасности сгенерируйте новый ключ загрузки, отличный от ключа подписи приложения
-- Если ключ загрузки скомпрометирован, вы можете сбросить его
-- Ключ подписи приложения остаётся в безопасности у Google
-
-### 3. Интеграция API
-
-**Google APIs:**
-- Зарегистрируйте сертификаты как ключа загрузки, так и ключа подписи приложения в Google Cloud Console
-- Обеспечивает правильную работу API после ротации ключей
 
 **Android App Links:**
-- Обновите ключи в файле Digital Asset Links JSON на вашем веб-сайте
-- Требуется для правильной работы deep linking
+```json
+// assetlinks.json on your domain
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.example.app",
+    "sha256_cert_fingerprints": [
+      "AA:BB:CC:...",  // app signing key fingerprint
+      "DD:EE:FF:..."   // upload key fingerprint (optional)
+    ]
+  }
+}]
+```
 
-### 4. Тестирование и распространение
+### Best Practices
 
-**Возможности App Bundle Explorer:**
-- **Ссылки для внутреннего обмена приложениями**: Тестируйте app bundle на разных устройствах одним касанием
-- **Загрузка подписанного универсального APK**: Получите APK, подписанный ключом подписи приложения для любого устройства
-- **Загрузка APK для конкретного устройства**: Получите ZIP с APK для конкретного устройства
+✅ **DO:**
+- Use Play App Signing for all new apps
+- Store upload key in secure location (password manager, secrets vault)
+- Use environment variables for passwords in Gradle
+- Enable 2FA on Play Console account
+- Register both keys (app signing + upload) in Google Cloud Console
 
-## Преимущества
+❌ **DON'T:**
+- Don't commit keystores and passwords to git
+- Don't use one keystore for multiple apps
+- Don't store passwords in gradle.properties (if in git)
+- Don't ignore warnings about key compromise
 
-### 1. Поддержка Android App Bundle
-- Делает приложение намного меньше
-- Упрощает релизы
-- Позволяет использовать модули функций
-- Поддерживает мгновенные впечатления
-- Динамическая доставка на основе конфигурации устройства
+---
 
-### 2. Повышенная безопасность
-- Ключ подписи приложения хранится в защищённой инфраструктуре Google
-- Отдельный ключ загрузки для ежедневных операций
-- Можно сбросить ключ загрузки, если он скомпрометирован
-- Ключ подписи приложения никогда не раскрывается
+## Follow-ups
 
-### 3. Обновление ключа
-- **Однократное обновление ключа** для новых установок
-- Можно изменить ключ подписи приложения, если:
-  - Существующий скомпрометирован
-  - Необходимо перейти на криптографически более сильный ключ
-- Затрагивает только новые установки, а не обновления
+- How do you reset an upload key if it's compromised?
+- What happens if you lose the app signing key before enrolling in Play App Signing?
+- Can you migrate an existing app to Play App Signing?
+- How does key rotation affect Android App Links and deep linking?
+- What's the difference between debug and release signing configurations?
 
-## Заключение
+## References
 
-Play App Signing необходим для современного распространения приложений Android:
-
-- **Безопасность**: Google безопасно управляет ключом подписи приложения
-- **Гибкость**: Отдельный ключ загрузки может быть сброшен
-- **App Bundle**: Требуется для функций Android App Bundle
-- **Обновление ключа**: Можно обновить до более сильных криптографических ключей
-- **Спокойствие**: Инфраструктура Google защищает ключ подписи
-
-**Всегда используйте Play App Signing для новых приложений и мигрируйте существующие приложения, когда это возможно.**
+- [[c-app-bundle|Android App Bundle]]
+- [[c-android-keystore|Android Keystore System]]
+- [[c-gradle|Gradle Build System]]
+- [Play App Signing documentation](https://developer.android.com/studio/publish/app-signing#app-signing-google-play)
+- [Use Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756)
 
 ## Related Questions
 
-- [[q-singleton-scope-binding--android--medium]]
-- [[q-shared-element-transitions--android--hard]]
-- [[q-compose-gesture-detection--android--medium]]
+### Prerequisites (Easier)
+- [[q-android-app-bundles--android--easy|What is Android App Bundle?]]
+- [[q-gradle-basics--android--easy|Gradle basics]]
+
+### Related (Same Level)
+- [[q-gradle-build-system--android--medium|Gradle build system configuration]]
+- [[q-android-security-best-practices--android--medium|Android security best practices]]
+- [[q-alternative-distribution--android--medium|Alternative app distribution methods]]
+
+### Advanced (Harder)
+- [[q-internal-app-distribution--android--medium|Internal app distribution strategies]]

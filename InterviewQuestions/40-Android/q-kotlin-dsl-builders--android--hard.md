@@ -17,6 +17,8 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [android/kotlin, android/api-design, dsl, builders, api-design, lambdas, difficulty/hard]
 sources: [https://kotlinlang.org/docs/type-safe-builders.html]
+date created: Monday, October 13th 2025, 7:24:51 am
+date modified: Thursday, October 30th 2025, 3:11:55 pm
 ---
 
 # Вопрос (RU)

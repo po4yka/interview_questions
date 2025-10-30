@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-repository-multiple-sources--android--medium, q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard, q-how-to-display-snackbar-or-toast-based-on-results--android--medium]
 created: 2025-10-15
 tags: [android/concurrency, concurrency, multithreading, performance, threading, difficulty/easy]
+date created: Sunday, October 12th 2025, 12:27:52 pm
+date modified: Thursday, October 30th 2025, 3:17:05 pm
 ---
 
 # Для чего нужна многопоточность, какие инструменты использовать?

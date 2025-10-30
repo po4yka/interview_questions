@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-navigation, android/architecture, navigation, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:50:22 pm
+date modified: Thursday, October 30th 2025, 3:14:51 pm
 ---
 
 # Вопрос (RU)

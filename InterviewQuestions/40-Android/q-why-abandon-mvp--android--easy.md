@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-what-is-viewstub--android--medium, q-jank-detection-frame-metrics--performance--medium, q-module-types-android--android--medium]
 created: 2025-10-15
 tags: [android/architecture-mvp, architecture-mvp, architecture-patterns, lifecycle, mvi, mvp, mvvm, difficulty/easy]
+date created: Saturday, October 18th 2025, 12:57:42 pm
+date modified: Thursday, October 30th 2025, 3:17:42 pm
 ---
 
 # Почему многие отказываются от MVP?

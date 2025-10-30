@@ -1,520 +1,309 @@
 ---
 id: 20251012-1227196
-title: "How To Save And Apply Theme Settings / How To Save и Apply Theme Settings"
+title: "How to Save and Apply Theme Settings / Как сохранять и применять настройки темы"
+aliases: ["How to Save and Apply Theme Settings", "Как сохранять и применять настройки темы", "Theme Settings", "Настройки темы"]
 topic: android
+subtopics: [ui-theming, datastore, ui-views, ui-compose]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-save-scroll-state-when-activity-is-recreated--android--medium, q-kmm-sqldelight--multiplatform--medium, q-server-sent-events-sse--networking--medium]
+related: [q-datastore-preferences-proto--android--medium, q-dark-theme-android--android--medium, q-how-to-save-activity-state--android--medium, c-jetpack-compose, c-lifecycle]
 created: 2025-10-15
-tags: [dark-mode, datastore, difficulty/medium, sharedpreferences, themes, ui]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:11:17 pm
+updated: 2025-10-30
+tags: [android/ui-theming, android/datastore, android/ui-views, android/ui-compose, dark-mode, themes, sharedpreferences, difficulty/medium]
+sources: []
 ---
 
-# How to save and Apply Theme Settings?
+# Вопрос (RU)
 
-**Russian**: Как сохранять и применять настройки темы?
+Как сохранять и применять настройки темы в Android-приложении?
 
-## Answer (EN)
-Saving and applying theme settings in Android involves storing user preferences and applying them before the UI is rendered. The key is to apply the theme **before** `setContentView()` is called.
+# Question (EN)
 
-### 1. Basic Theme Switching with SharedPreferences
+How to save and apply theme settings in an Android application?
 
-```kotlin
-class MainActivity : AppCompatActivity() {
+---
 
-    companion object {
-        private const val PREFS_NAME = "theme_prefs"
-        private const val KEY_THEME = "selected_theme"
+## Ответ (RU)
 
-        const val THEME_LIGHT = "light"
-        const val THEME_DARK = "dark"
-        const val THEME_SYSTEM = "system"
-    }
+Сохранение и применение темы требует координации между хранением пользовательских предпочтений и их применением **до отрисовки UI**. Ключевой момент: тема должна применяться до `setContentView()` для традиционных Views или через `AppCompatDelegate` глобально для автоматического переключения.
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        // Apply theme BEFORE setContentView
-        applyTheme()
+### Основные подходы
 
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+**1. SharedPreferences + AppCompatDelegate (Views)**
 
-        setupThemeSelector()
-    }
-
-    private fun applyTheme() {
-        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val theme = prefs.getString(KEY_THEME, THEME_SYSTEM) ?: THEME_SYSTEM
-
-        when (theme) {
-            THEME_LIGHT -> setTheme(R.style.Theme_App_Light)
-            THEME_DARK -> setTheme(R.style.Theme_App_Dark)
-            THEME_SYSTEM -> {
-                // Use system theme - handled by DayNight theme
-                setTheme(R.style.Theme_App)
-            }
-        }
-    }
-
-    private fun saveTheme(theme: String) {
-        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .edit()
-            .putString(KEY_THEME, theme)
-            .apply()
-    }
-
-    private fun setupThemeSelector() {
-        findViewById<Button>(R.id.btnLight).setOnClickListener {
-            saveTheme(THEME_LIGHT)
-            recreate() // Restart activity to apply theme
-        }
-
-        findViewById<Button>(R.id.btnDark).setOnClickListener {
-            saveTheme(THEME_DARK)
-            recreate()
-        }
-
-        findViewById<Button>(R.id.btnSystem).setOnClickListener {
-            saveTheme(THEME_SYSTEM)
-            recreate()
-        }
-    }
-}
-```
-
-### 2. Using AppCompatDelegate for DayNight Theme
+Применять через `Application.onCreate()` для глобального эффекта:
 
 ```kotlin
-class ThemeManager(private val context: Context) {
-
-    companion object {
-        private const val PREFS_NAME = "theme_prefs"
-        private const val KEY_NIGHT_MODE = "night_mode"
-    }
-
-    private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-
-    fun applyTheme() {
-        val nightMode = prefs.getInt(
-            KEY_NIGHT_MODE,
-            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        )
-        AppCompatDelegate.setDefaultNightMode(nightMode)
-    }
-
-    fun setTheme(mode: Int) {
-        prefs.edit().putInt(KEY_NIGHT_MODE, mode).apply()
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        // ✅ Применить тему до создания Activity
+        val prefs = getSharedPreferences("theme", MODE_PRIVATE)
+        val mode = prefs.getInt("night_mode", MODE_NIGHT_FOLLOW_SYSTEM)
         AppCompatDelegate.setDefaultNightMode(mode)
     }
-
-    fun getCurrentMode(): Int {
-        return prefs.getInt(KEY_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-    }
 }
 
-// In Application class
-class MyApplication : Application() {
+class SettingsActivity : AppCompatActivity() {
+    private fun saveTheme(mode: Int) {
+        getSharedPreferences("theme", MODE_PRIVATE)
+            .edit()
+            .putInt("night_mode", mode)
+            .apply()
 
-    lateinit var themeManager: ThemeManager
-
-    override fun onCreate() {
-        super.onCreate()
-
-        themeManager = ThemeManager(this)
-        themeManager.applyTheme()
-    }
-}
-
-// In Activity
-class MainActivity : AppCompatActivity() {
-
-    private val themeManager by lazy {
-        (application as MyApplication).themeManager
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        setupThemeButtons()
-    }
-
-    private fun setupThemeButtons() {
-        findViewById<Button>(R.id.btnLightMode).setOnClickListener {
-            themeManager.setTheme(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-
-        findViewById<Button>(R.id.btnDarkMode).setOnClickListener {
-            themeManager.setTheme(AppCompatDelegate.MODE_NIGHT_YES)
-        }
-
-        findViewById<Button>(R.id.btnSystemMode).setOnClickListener {
-            themeManager.setTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        }
+        // ✅ Применить без recreate() через AppCompatDelegate
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 }
 ```
 
-### 3. Theme Definitions (styles.xml)
+**2. DataStore + Flow (Reactive)**
 
-```xml
-<!-- res/values/themes.xml -->
-<resources>
-    <!-- Base theme -->
-    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-    </style>
-
-    <!-- Light theme -->
-    <style name="Theme.App.Light" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:textColorPrimary">@color/black</item>
-    </style>
-
-    <!-- Dark theme -->
-    <style name="Theme.App.Dark" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="android:windowBackground">@color/dark_background</item>
-        <item name="android:textColorPrimary">@color/white</item>
-    </style>
-</resources>
-```
-
-### 4. DataStore Implementation (Modern Approach)
+Использовать для реактивного обновления:
 
 ```kotlin
-// Add dependency: implementation "androidx.datastore:datastore-preferences:1.0.0"
-
-class ThemePreferences(context: Context) {
-
-    private val dataStore = context.createDataStore(name = "theme_settings")
-
-    companion object {
-        val THEME_KEY = intPreferencesKey("theme_mode")
-    }
+class ThemeRepository(context: Context) {
+    private val dataStore = context.dataStore
 
     val themeMode: Flow<Int> = dataStore.data
-        .map { preferences ->
-            preferences[THEME_KEY] ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        }
+        .map { it[THEME_KEY] ?: MODE_NIGHT_FOLLOW_SYSTEM }
 
-    suspend fun setThemeMode(mode: Int) {
-        dataStore.edit { preferences ->
-            preferences[THEME_KEY] = mode
-        }
+    suspend fun setTheme(mode: Int) {
+        dataStore.edit { it[THEME_KEY] = mode }
+    }
+
+    companion object {
+        private val THEME_KEY = intPreferencesKey("theme_mode")
+        private val Context.dataStore by preferencesDataStore("theme")
     }
 }
 
-// In Application
-class MyApplication : Application() {
-
-    lateinit var themePreferences: ThemePreferences
+class App : Application() {
+    val themeRepo by lazy { ThemeRepository(this) }
 
     override fun onCreate() {
         super.onCreate()
-
-        themePreferences = ThemePreferences(this)
-
+        // ✅ Подписаться на изменения темы
         lifecycleScope.launch {
-            themePreferences.themeMode.collect { mode ->
+            themeRepo.themeMode.collect { mode ->
                 AppCompatDelegate.setDefaultNightMode(mode)
             }
         }
     }
 }
-
-// In Activity
-class MainActivity : AppCompatActivity() {
-
-    private val themePrefs by lazy {
-        (application as MyApplication).themePreferences
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        lifecycleScope.launch {
-            themePrefs.themeMode.collect { mode ->
-                // Update UI based on current theme
-                updateThemeButtons(mode)
-            }
-        }
-
-        setupThemeButtons()
-    }
-
-    private fun setupThemeButtons() {
-        findViewById<Button>(R.id.btnLight).setOnClickListener {
-            lifecycleScope.launch {
-                themePrefs.setThemeMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-
-        findViewById<Button>(R.id.btnDark).setOnClickListener {
-            lifecycleScope.launch {
-                themePrefs.setThemeMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-        }
-
-        findViewById<Button>(R.id.btnSystem).setOnClickListener {
-            lifecycleScope.launch {
-                themePrefs.setThemeMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            }
-        }
-    }
-
-    private fun updateThemeButtons(mode: Int) {
-        // Update UI to show which theme is selected
-        // ... implementation
-    }
-}
 ```
 
-### 5. Jetpack Compose Theme Switching
+**3. Jetpack Compose**
 
 ```kotlin
-// Theme preference repository
-class ThemeRepository(context: Context) {
-
-    private val dataStore = context.dataStore
-
-    companion object {
-        private val THEME_KEY = booleanPreferencesKey("is_dark_theme")
-        private val Context.dataStore by preferencesDataStore("theme_settings")
-    }
-
-    val isDarkTheme: Flow<Boolean> = dataStore.data
-        .map { preferences ->
-            preferences[THEME_KEY] ?: isSystemInDarkTheme()
-        }
-
-    suspend fun setDarkTheme(isDark: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[THEME_KEY] = isDark
-        }
-    }
-}
-
-// Theme composable
 @Composable
 fun AppTheme(
-    themeRepository: ThemeRepository,
+    themeMode: ThemeMode,
     content: @Composable () -> Unit
 ) {
-    val isDarkTheme by themeRepository.isDarkTheme.collectAsState(initial = false)
+    val isDark = when (themeMode) {
+        ThemeMode.DARK -> true
+        ThemeMode.LIGHT -> false
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
 
     MaterialTheme(
-        colors = if (isDarkTheme) DarkColorScheme else LightColorScheme,
+        colorScheme = if (isDark) darkColorScheme() else lightColorScheme(),
         content = content
     )
 }
 
-// Color schemes
-private val LightColorScheme = lightColorScheme(
-    primary = Purple500,
-    secondary = Teal200,
-    background = Color.White
-)
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple200,
-    secondary = Teal200,
-    background = Color(0xFF121212)
-)
-
-// Usage in Activity
 class MainActivity : ComponentActivity() {
-
-    private val themeRepository by lazy { ThemeRepository(this) }
+    private val themeRepo by lazy { ThemeRepository(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            AppTheme(themeRepository = themeRepository) {
-                MainScreen(
-                    onThemeToggle = { isDark ->
-                        lifecycleScope.launch {
-                            themeRepository.setDarkTheme(isDark)
-                        }
-                    }
-                )
+            val themeMode by themeRepo.themeMode.collectAsState(ThemeMode.SYSTEM)
+            AppTheme(themeMode = themeMode) {
+                MainScreen()
             }
         }
     }
 }
+```
 
-@Composable
-fun MainScreen(onThemeToggle: (Boolean) -> Unit) {
-    val isSystemInDarkTheme = isSystemInDarkTheme()
-    var isDarkTheme by remember { mutableStateOf(isSystemInDarkTheme) }
+### Важные детали
 
-    Column {
-        Text("Theme Settings")
+**Применение темы для Views:**
+- Глобально: `Application.onCreate()` → `AppCompatDelegate.setDefaultNightMode()`
+- Локально: `Activity.onCreate()` → `setTheme()` **до** `setContentView()`
 
-        Switch(
-            checked = isDarkTheme,
-            onCheckedChange = { isDark ->
-                isDarkTheme = isDark
-                onThemeToggle(isDark)
-            }
-        )
+**Режимы темы:**
+- `MODE_NIGHT_NO` — светлая
+- `MODE_NIGHT_YES` — тёмная
+- `MODE_NIGHT_FOLLOW_SYSTEM` — следовать системе
+
+**Обновление темы:**
+- ❌ **НЕ** использовать `recreate()` при AppCompatDelegate — тема применится автоматически
+- ✅ При локальном `setTheme()` требуется `recreate()`
+
+**Compose vs Views:**
+- Compose: реактивно через `State` и `Flow`
+- Views: императивно через `AppCompatDelegate` или `setTheme()`
+
+## Answer (EN)
+
+Saving and applying themes requires coordination between storing user preferences and applying them **before UI rendering**. Key insight: themes must be applied before `setContentView()` for traditional Views or via `AppCompatDelegate` globally for automatic switching.
+
+### Core Approaches
+
+**1. SharedPreferences + AppCompatDelegate (Views)**
+
+Apply through `Application.onCreate()` for global effect:
+
+```kotlin
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        // ✅ Apply theme before Activity creation
+        val prefs = getSharedPreferences("theme", MODE_PRIVATE)
+        val mode = prefs.getInt("night_mode", MODE_NIGHT_FOLLOW_SYSTEM)
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
+}
+
+class SettingsActivity : AppCompatActivity() {
+    private fun saveTheme(mode: Int) {
+        getSharedPreferences("theme", MODE_PRIVATE)
+            .edit()
+            .putInt("night_mode", mode)
+            .apply()
+
+        // ✅ Apply without recreate() via AppCompatDelegate
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 }
 ```
 
-### 6. Advanced Theme Manager
+**2. DataStore + Flow (Reactive)**
+
+Use for reactive updates:
 
 ```kotlin
-sealed class ThemeMode {
-    object Light : ThemeMode()
-    object Dark : ThemeMode()
-    object System : ThemeMode()
+class ThemeRepository(context: Context) {
+    private val dataStore = context.dataStore
 
-    fun toNightMode(): Int = when (this) {
-        Light -> AppCompatDelegate.MODE_NIGHT_NO
-        Dark -> AppCompatDelegate.MODE_NIGHT_YES
-        System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    val themeMode: Flow<Int> = dataStore.data
+        .map { it[THEME_KEY] ?: MODE_NIGHT_FOLLOW_SYSTEM }
+
+    suspend fun setTheme(mode: Int) {
+        dataStore.edit { it[THEME_KEY] = mode }
+    }
+
+    companion object {
+        private val THEME_KEY = intPreferencesKey("theme_mode")
+        private val Context.dataStore by preferencesDataStore("theme")
     }
 }
 
-class AdvancedThemeManager(context: Context) {
-
-    private val prefs = context.getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
-
-    fun getCurrentTheme(): ThemeMode {
-        return when (prefs.getString("theme", "system")) {
-            "light" -> ThemeMode.Light
-            "dark" -> ThemeMode.Dark
-            else -> ThemeMode.System
-        }
-    }
-
-    fun setTheme(theme: ThemeMode) {
-        val themeString = when (theme) {
-            ThemeMode.Light -> "light"
-            ThemeMode.Dark -> "dark"
-            ThemeMode.System -> "system"
-        }
-
-        prefs.edit().putString("theme", themeString).apply()
-        AppCompatDelegate.setDefaultNightMode(theme.toNightMode())
-    }
-
-    fun applyTheme() {
-        AppCompatDelegate.setDefaultNightMode(getCurrentTheme().toNightMode())
-    }
-}
-```
-
-### 7. Theme Persistence Across App Restart
-
-```kotlin
-// In Application class
-class MyApp : Application() {
+class App : Application() {
+    val themeRepo by lazy { ThemeRepository(this) }
 
     override fun onCreate() {
         super.onCreate()
-
-        // Apply saved theme before any Activity is created
-        val prefs = getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
-        val nightMode = prefs.getInt(
-            "night_mode",
-            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        )
-
-        AppCompatDelegate.setDefaultNightMode(nightMode)
-    }
-}
-
-// Don't forget to register in AndroidManifest.xml
-<application
-    android:name=".MyApp"
-    ...>
-```
-
-### 8. Dynamic Theme Colors (Material 3)
-
-```kotlin
-@Composable
-fun DynamicThemeApp() {
-    val context = LocalContext.current
-    val isDarkTheme = isSystemInDarkTheme()
-
-    val dynamicColors = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        if (isDarkTheme) dynamicDarkColorScheme(context)
-        else dynamicLightColorScheme(context)
-    } else {
-        if (isDarkTheme) DarkColorScheme else LightColorScheme
-    }
-
-    MaterialTheme(
-        colorScheme = dynamicColors,
-        content = { /* Your content */ }
-    )
-}
-```
-
-### Best Practices
-
-1. **Apply theme in Application class** for app-wide consistency
-2. **Save theme before setContentView()** in Activities
-3. **Use AppCompatDelegate** for DayNight themes
-4. **Use DataStore** instead of SharedPreferences for new projects
-5. **Handle system theme changes** gracefully
-6. **Provide smooth transitions** when changing themes
-7. **Test both light and dark themes** thoroughly
-
-### Common Patterns
-
-```kotlin
-// Theme selection dialog
-class ThemeDialog : DialogFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.dialog_theme, container, false).apply {
-            findViewById<RadioButton>(R.id.rbLight).setOnClickListener {
-                setTheme(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            findViewById<RadioButton>(R.id.rbDark).setOnClickListener {
-                setTheme(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-            findViewById<RadioButton>(R.id.rbSystem).setOnClickListener {
-                setTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        // ✅ Subscribe to theme changes
+        lifecycleScope.launch {
+            themeRepo.themeMode.collect { mode ->
+                AppCompatDelegate.setDefaultNightMode(mode)
             }
         }
     }
+}
+```
 
-    private fun setTheme(mode: Int) {
-        AppCompatDelegate.setDefaultNightMode(mode)
-        // Save to preferences
-        dismiss()
+**3. Jetpack Compose**
+
+```kotlin
+@Composable
+fun AppTheme(
+    themeMode: ThemeMode,
+    content: @Composable () -> Unit
+) {
+    val isDark = when (themeMode) {
+        ThemeMode.DARK -> true
+        ThemeMode.LIGHT -> false
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
+
+    MaterialTheme(
+        colorScheme = if (isDark) darkColorScheme() else lightColorScheme(),
+        content = content
+    )
+}
+
+class MainActivity : ComponentActivity() {
+    private val themeRepo by lazy { ThemeRepository(this) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            val themeMode by themeRepo.themeMode.collectAsState(ThemeMode.SYSTEM)
+            AppTheme(themeMode = themeMode) {
+                MainScreen()
+            }
+        }
     }
 }
 ```
 
+### Key Details
+
+**Theme Application for Views:**
+- Global: `Application.onCreate()` → `AppCompatDelegate.setDefaultNightMode()`
+- Local: `Activity.onCreate()` → `setTheme()` **before** `setContentView()`
+
+**Theme Modes:**
+- `MODE_NIGHT_NO` — light theme
+- `MODE_NIGHT_YES` — dark theme
+- `MODE_NIGHT_FOLLOW_SYSTEM` — follow system
+
+**Theme Updates:**
+- ❌ **DON'T** use `recreate()` with AppCompatDelegate — theme applies automatically
+- ✅ With local `setTheme()` requires `recreate()`
+
+**Compose vs Views:**
+- Compose: reactive via `State` and `Flow`
+- Views: imperative via `AppCompatDelegate` or `setTheme()`
+
 ---
 
-# Как Сохранять И Применять Настройки Темы
+## Follow-ups
 
-## Ответ (RU)
-Хранить выбранную тему в SharedPreferences. При старте приложения или Activity применять тему до setContentView. В случае использования DayNight можно использовать AppCompatDelegate.setDefaultNightMode.
+- What happens if `setTheme()` is called after `setContentView()`?
+- How to handle dynamic theme changes without restarting Activity?
+- What's the difference between `Theme.MaterialComponents.DayNight` and custom theme inheritance?
+- How to implement multiple theme variants (not just light/dark)?
+- How to test theme persistence across app restarts?
+
+## References
+
+- [[c-jetpack-compose]]
+- [[c-lifecycle]]
+- [[c-activity]]
+- [Material Design 3 theming](https://m3.material.io/styles/color/dynamic-color/overview)
+- [AppCompatDelegate documentation](https://developer.android.com/reference/androidx/appcompat/app/AppCompatDelegate)
 
 ## Related Questions
 
-- [[q-how-to-save-scroll-state-when-activity-is-recreated--android--medium]]
-- [[q-server-sent-events-sse--networking--medium]]
-- [[q-kmm-sqldelight--android--medium]]
+### Prerequisites (Easier)
+- [[q-sharedpreferences-definition--android--easy]]
+- [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
+
+### Related (Same Level)
+- [[q-datastore-preferences-proto--android--medium]]
+- [[q-dark-theme-android--android--medium]]
+- [[q-how-to-save-activity-state--android--medium]]
+- [[q-jetpack-compose-basics--android--medium]]
+
+### Advanced (Harder)
+- [[q-multi-module-best-practices--android--hard]]

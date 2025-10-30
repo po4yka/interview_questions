@@ -15,14 +15,17 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [networking, okhttp, interceptors, authentication, caching, retry, difficulty/medium]
+date created: Monday, October 27th 2025, 5:14:04 pm
+date modified: Thursday, October 30th 2025, 3:15:26 pm
 ---
+
 # Вопрос (RU)
 
-Реализовать пользовательские интерцепторы OkHttp для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки application vs network интерцепторов.
+> Реализовать пользовательские интерцепторы OkHttp для обновления аутентификации, повторных попыток запросов и кеширования ответов. Объяснить порядок цепочки application vs network интерцепторов.
 
 # Question (EN)
 
-Implement custom OkHttp interceptors for authentication refresh, request retry, and response caching. Explain application vs network interceptor chain order.
+> Implement custom OkHttp interceptors for authentication refresh, request retry, and response caching. Explain application vs network interceptor chain order.
 
 ## Ответ (RU)
 

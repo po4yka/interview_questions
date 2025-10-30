@@ -15,15 +15,17 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android, android/ui-views, android/recyclerview, recyclerview, adapter, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:11:36 pm
+date modified: Thursday, October 30th 2025, 3:09:50 pm
 ---
 
 # Вопрос (RU)
 
-Как правильно уведомить адаптер RecyclerView о том, что элемент был удален из списка?
+> Как правильно уведомить адаптер RecyclerView о том, что элемент был удален из списка?
 
 # Question (EN)
 
-How to properly notify a RecyclerView adapter that an item has been deleted from the list?
+> How to properly notify a RecyclerView adapter that an item has been deleted from the list?
 
 ---
 

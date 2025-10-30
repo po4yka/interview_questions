@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android/service, android/lifecycle, android/intents-deeplinks, binding, difficulty/medium, ipc, service]
 sources: []
+date created: Monday, October 27th 2025, 6:42:14 pm
+date modified: Thursday, October 30th 2025, 3:10:24 pm
 ---
+
 # Вопрос (RU)
 
 > Можно ли подключиться к Service, если Activity запустилась после него?

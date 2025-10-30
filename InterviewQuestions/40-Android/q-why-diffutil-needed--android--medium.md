@@ -9,6 +9,8 @@ related: [q-cleartext-traffic-android--android--easy, q-which-class-to-use-for-r
 created: 2025-10-15
 tags:
   - android
+date created: Saturday, October 18th 2025, 2:15:06 pm
+date modified: Thursday, October 30th 2025, 3:17:35 pm
 ---
 
 # Why do we need DiffUtil?

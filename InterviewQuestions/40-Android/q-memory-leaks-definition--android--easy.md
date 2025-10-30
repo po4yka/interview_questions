@@ -15,14 +15,17 @@ sources: []
 tags: [android/performance-memory, android/lifecycle, memory-leaks, performance, difficulty/easy]
 moc: moc-android
 related: [q-coroutine-memory-leaks--kotlin--hard, q-coroutine-memory-leak-detection--kotlin--hard]
+date created: Tuesday, October 28th 2025, 9:36:26 pm
+date modified: Thursday, October 30th 2025, 3:13:19 pm
 ---
+
 # Вопрос (RU)
 
-Что такое утечки памяти в Android и как они возникают?
+> Что такое утечки памяти в Android и как они возникают?
 
 # Question (EN)
 
-What are memory leaks in Android and how do they occur?
+> What are memory leaks in Android and how do they occur?
 
 ---
 

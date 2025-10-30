@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/background-execution, android/coroutines, android/performance-battery, workmanager, background-work, service, difficulty/medium]
+date created: Wednesday, October 29th 2025, 1:00:47 pm
+date modified: Thursday, October 30th 2025, 3:16:47 pm
 ---
 
 # Вопрос (RU)

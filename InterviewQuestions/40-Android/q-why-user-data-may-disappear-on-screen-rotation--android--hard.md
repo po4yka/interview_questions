@@ -21,6 +21,8 @@ tags:
   - configuration-change
   - state-preservation
   - difficulty/hard
+date created: Wednesday, October 29th 2025, 1:00:44 pm
+date modified: Thursday, October 30th 2025, 3:16:50 pm
 ---
 
 # Вопрос (RU)

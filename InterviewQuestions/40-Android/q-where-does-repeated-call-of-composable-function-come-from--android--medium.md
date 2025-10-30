@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android, android/ui-compose, android/ui-state, compose, recomposition, difficulty/medium]
+date created: Wednesday, October 29th 2025, 12:15:21 pm
+date modified: Thursday, October 30th 2025, 3:18:08 pm
 ---
+
 # Вопрос (RU)
 
 > Откуда происходит повторный вызов composable функции?

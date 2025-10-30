@@ -15,6 +15,8 @@ sources: []
 moc: moc-android
 related: [q-what-is-the-main-application-execution-thread--android--easy, c-surfaceview, c-textureview]
 tags: [android, android/ui-graphics, android/threads-sync, android/performance-rendering, graphics, multithreading, difficulty/hard]
+date created: Wednesday, October 29th 2025, 12:15:33 pm
+date modified: Thursday, October 30th 2025, 3:18:02 pm
 ---
 
 # Вопрос (RU)

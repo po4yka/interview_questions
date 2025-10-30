@@ -25,7 +25,10 @@ updated: 2025-10-29
 
 # Tags (EN only; no leading #)
 tags: [android/fragment, android/activity, android/architecture-modularization, fragments, activity, difficulty/medium]
+date created: Wednesday, October 29th 2025, 1:02:04 pm
+date modified: Thursday, October 30th 2025, 3:16:50 pm
 ---
+
 # Вопрос (RU)
 
 > Зачем использовать Fragments, если есть Activities?

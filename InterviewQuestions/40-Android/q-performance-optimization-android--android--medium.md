@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [performance, optimization, performance-rendering, performance-memory, checklist, difficulty/medium, android/performance-rendering, android/performance-memory, android/performance-battery]
+date created: Monday, October 27th 2025, 3:42:23 pm
+date modified: Thursday, October 30th 2025, 3:16:04 pm
 ---
+
 # Вопрос (RU)
 
 > Каков комплексный подход к оптимизации производительности Android-приложения? На какие ключевые области сосредоточиться?

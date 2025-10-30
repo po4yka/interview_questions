@@ -17,6 +17,8 @@ created: 2025-10-05
 updated: 2025-01-25
 tags: [android/app-bundle, android/architecture-modularization, play-feature-delivery, dynamic-modules, app-bundle, modularization, difficulty/medium]
 sources: [https://developer.android.com/guide/app-bundle/dynamic-delivery]
+date created: Sunday, October 12th 2025, 12:27:50 pm
+date modified: Thursday, October 30th 2025, 3:16:14 pm
 ---
 
 # Вопрос (RU)

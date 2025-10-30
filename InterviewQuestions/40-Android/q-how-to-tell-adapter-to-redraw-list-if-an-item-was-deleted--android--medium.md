@@ -15,14 +15,17 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/ui-views, android/ui-widgets, android/architecture-modularization, recyclerview, adapters, ui, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:12:57 pm
+date modified: Thursday, October 30th 2025, 3:09:58 pm
 ---
+
 # Вопрос (RU)
 
-Как сказать адаптеру перерисовать список, если какой-то элемент удалился?
+> Как сказать адаптеру перерисовать список, если какой-то элемент удалился?
 
 # Question (EN)
 
-How to tell adapter to redraw list if an item was deleted?
+> How to tell adapter to redraw list if an item was deleted?
 
 ---
 

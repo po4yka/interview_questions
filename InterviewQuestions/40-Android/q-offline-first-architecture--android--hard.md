@@ -15,14 +15,17 @@ tags: [android, android/architecture-clean, android/room, android/cache-offline,
 moc: moc-android
 related: [q-clean-architecture-android--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard]
 sources: []
+date created: Tuesday, October 28th 2025, 9:53:45 pm
+date modified: Thursday, October 30th 2025, 3:15:20 pm
 ---
+
 # Вопрос (RU)
 
-Как спроектировать и реализовать offline-first архитектуру в Android? Какие ключевые компоненты, паттерны и практики необходимо использовать?
+> Как спроектировать и реализовать offline-first архитектуру в Android? Какие ключевые компоненты, паттерны и практики необходимо использовать?
 
 # Question (EN)
 
-How do you design and implement an offline-first architecture in Android? What are the key components, patterns, and best practices?
+> How do you design and implement an offline-first architecture in Android? What are the key components, patterns, and best practices?
 
 ---
 

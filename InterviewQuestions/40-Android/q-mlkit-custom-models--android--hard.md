@@ -15,12 +15,17 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/performance-memory, android/ab-testing, android/analytics, ml-kit, tensorflow-lite, machine-learning, difficulty/hard]
+date created: Monday, October 27th 2025, 3:39:17 pm
+date modified: Thursday, October 30th 2025, 3:13:29 pm
 ---
+
 # Вопрос (RU)
-Как интегрировать пользовательские модели TensorFlow Lite с ML Kit? В чём разница между встроенными, динамическими и AutoML моделями? Как реализовать развёртывание моделей, обновления и A/B тестирование?
+
+> Как интегрировать пользовательские модели TensorFlow Lite с ML Kit? В чём разница между встроенными, динамическими и AutoML моделями? Как реализовать развёртывание моделей, обновления и A/B тестирование?
 
 # Question (EN)
-How do you integrate custom TensorFlow Lite models with ML Kit? What are the differences between bundled, dynamic, and AutoML models? How do you implement model deployment, updates, and A/B testing?
+
+> How do you integrate custom TensorFlow Lite models with ML Kit? What are the differences between bundled, dynamic, and AutoML models? How do you implement model deployment, updates, and A/B testing?
 
 ## Ответ (RU)
 

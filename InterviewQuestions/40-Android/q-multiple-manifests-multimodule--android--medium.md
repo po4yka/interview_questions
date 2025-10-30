@@ -1,674 +1,257 @@
 ---
 id: 20251012-12271144
 title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
+aliases: [
+  "Multiple Manifests Multimodule",
+  "Множественные манифесты в мультимодульных проектах",
+  "Android Manifest Merging",
+  "Слияние манифестов Android"
+]
 topic: android
+subtopics: [architecture-modularization, gradle, dependency-management]
+question_kind: theory
 difficulty: medium
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [q-what-is-diffutil-for--android--medium, q-android-jetpack-overview--android--easy, q-kmm-architecture--multiplatform--hard]
+related: [c-gradle, c-android-manifest, q-gradle-optimization--android--medium, q-dependency-injection-hilt--android--medium]
 created: 2025-10-15
-tags: [android-manifest, android/multi-module, android/project-structure, build-system, manifest-merging, modularization, multi-module, project-structure, difficulty/medium]
+updated: 2025-10-30
+tags: [android/architecture-modularization, android/gradle, android/dependency-management, manifest-merging, modularization, difficulty/medium]
+sources: [
+  "https://developer.android.com/build/manage-manifests",
+  "https://developer.android.com/studio/build/manifest-merge"
+]
 ---
 
-# Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
+# Вопрос (RU)
 
-**English**: In multi-module projects, there can be many AndroidManifest files. Why is this done?
+> Для проектов в которых есть несколько модулей, там может быть много Android Manifest'ов, для чего это делается?
 
-## Answer (EN)
-In multi-module projects, each module can have its own **AndroidManifest.xml** to:
+# Question (EN)
 
-1. **Declare module-specific dependencies** (`uses-permission`, `uses-feature`)
-2. **Define module components** (Activity, Service, BroadcastReceiver)
-3. **Automatically merge** all module manifests into the main app's AndroidManifest.xml
-
-This allows **modular independence** - each module declares only what it needs, and the build system merges everything automatically.
-
----
-
-## Why Multiple Manifests?
-
-### Problem: Monolithic Manifest
-
-In a single-module app, **one AndroidManifest.xml** contains everything:
-
-```xml
-<!-- app/src/main/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app">
-
-    <!-- - All permissions mixed together -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.LOCATION" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-    <application>
-        <!-- - All components mixed together -->
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".CameraActivity" />
-        <activity android:name=".MapActivity" />
-        <activity android:name=".ContactsActivity" />
-
-        <service android:name=".NetworkService" />
-        <service android:name=".LocationService" />
-    </application>
-</manifest>
-```
-
-**Problems:**
-- **Unclear ownership** - which feature needs which permission?
-- **Tight coupling** - can't remove a feature without manual manifest editing
-- **No reusability** - can't reuse modules in other projects
+> In multi-module projects, there can be many AndroidManifest files. Why is this done?
 
 ---
 
-### Solution: Module-Specific Manifests
+## Ответ (RU)
 
-Each module declares **only its own requirements**:
+В многомодульных проектах каждый модуль имеет свой **AndroidManifest.xml** для:
+
+1. **Модульной независимости** - модуль объявляет только свои зависимости
+2. **Инкапсуляции компонентов** - Activity/Service/Provider локализованы в модуле
+3. **Автоматического слияния** - build система объединяет все манифесты в один
+
+### Принцип работы
 
 ```
 project/
- app/
-    src/main/AndroidManifest.xml          ← Main app manifest
- feature-login/
-    src/main/AndroidManifest.xml          ← Login module manifest
- feature-camera/
-    src/main/AndroidManifest.xml          ← Camera module manifest
- feature-map/
-    src/main/AndroidManifest.xml          ← Map module manifest
- core-network/
-     src/main/AndroidManifest.xml          ← Network module manifest
+ app/src/main/AndroidManifest.xml          ← Главный манифест
+ feature-login/src/main/AndroidManifest.xml
+ feature-camera/src/main/AndroidManifest.xml
+ core-network/src/main/AndroidManifest.xml
+                       ↓ Gradle Merge Task
+ app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ```
 
----
-
-## Module Manifest Examples
-
-### 1. Feature Module: Login
-
-```xml
-<!-- feature-login/src/main/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.feature.login">
-
-    <!-- - Only permissions needed by login feature -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <application>
-        <!-- - Only login-related components -->
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false" />
-    </application>
-</manifest>
-```
-
-**Benefits:**
-- Clear: Login needs INTERNET
-- Modular: Can be reused in other apps
-- Maintainable: Easy to understand
-
----
-
-### 2. Feature Module: Camera
+### Пример: Feature-модуль Camera
 
 ```xml
 <!-- feature-camera/src/main/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.feature.camera">
-
-    <!-- - Camera-specific permissions -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-
-    <application>
-        <!-- - Camera-related components -->
-        <activity
-            android:name=".CameraActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <provider
-            android:name=".CameraFileProvider"
-            android:authorities="${applicationId}.camera.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/camera_file_paths" />
-        </provider>
-    </application>
-</manifest>
-```
-
----
-
-### 3. Feature Module: Map
-
-```xml
-<!-- feature-map/src/main/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.feature.map">
-
-    <!-- - Location permissions -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <application>
-        <!-- - Map-related components -->
-        <activity
-            android:name=".MapActivity"
-            android:exported="false" />
-
-        <service
-            android:name=".LocationTrackingService"
-            android:foregroundServiceType="location"
-            android:exported="false" />
-
-        <!-- Google Maps API Key -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
-    </application>
-</manifest>
-```
-
----
-
-### 4. Core Library Module: Network
-
-```xml
-<!-- core-network/src/main/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.core.network">
-
-    <!-- - Network permissions for all features using this module -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- No <application> section needed for library modules -->
-</manifest>
-```
-
----
-
-### 5. Main App Module
-
-```xml
-<!-- app/src/main/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app">
-
-    <!-- - Only app-level configuration -->
-    <application
-        android:name=".MyApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
-        <!-- Main launcher activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <!-- All module components are merged automatically! -->
-    </application>
-</manifest>
-```
-
----
-
-## Manifest Merging Process
-
-### How Merging Works
-
-The Android build system **automatically merges** all module manifests into the final app manifest.
-
-```
-Build Process:
-==============
-
-1. Collect manifests:
-    app/AndroidManifest.xml
-    feature-login/AndroidManifest.xml
-    feature-camera/AndroidManifest.xml
-    feature-map/AndroidManifest.xml
-    core-network/AndroidManifest.xml
-
-2. Merge manifests (priority: app > features > libraries):
-    Merged manifest with all components and permissions
-
-3. Generate final AndroidManifest.xml:
-    app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
-```
-
----
-
-### Merge Priority
-
-**Highest priority → Lowest priority:**
-
-1. **app module** (main manifest)
-2. **Feature modules** (dependencies)
-3. **Library modules** (transitive dependencies)
-
-**Example:**
-
-```xml
-<!-- feature-login/AndroidManifest.xml -->
-<activity
-    android:name=".LoginActivity"
-    android:screenOrientation="portrait" />
-
-<!-- app/AndroidManifest.xml -->
-<activity
-    android:name="com.example.feature.login.LoginActivity"
-    android:screenOrientation="landscape" />  <!-- - Overrides portrait -->
-```
-
-**Result:** `screenOrientation="landscape"` (app wins)
-
----
-
-### Viewing Merged Manifest
-
-**Android Studio:**
-
-1. Open **app/src/main/AndroidManifest.xml**
-2. Click **Merged Manifest** tab at the bottom
-3. View the final merged result
-
-**Command line:**
-
-```bash
-
-# Build the app
-./gradlew assembleDebug
-
-# View merged manifest
-cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
-```
-
----
-
-## Complete Multi-Module Example
-
-### Project Structure
-
-```
-project/
- app/
-    build.gradle.kts
-    src/main/AndroidManifest.xml
-
- core/
-    network/
-       build.gradle.kts
-       src/main/AndroidManifest.xml
-    database/
-        build.gradle.kts
-        src/main/AndroidManifest.xml
-
- feature/
-     login/
-        build.gradle.kts
-        src/main/AndroidManifest.xml
-     camera/
-        build.gradle.kts
-        src/main/AndroidManifest.xml
-     map/
-         build.gradle.kts
-         src/main/AndroidManifest.xml
-```
-
----
-
-### Module Dependencies
-
-```kotlin
-// app/build.gradle.kts
-dependencies {
-    implementation(project(":core:network"))
-    implementation(project(":core:database"))
-    implementation(project(":feature:login"))
-    implementation(project(":feature:camera"))
-    implementation(project(":feature:map"))
-}
-```
-
----
-
-### Final Merged Manifest
-
-```xml
-<!-- app/build/intermediates/merged_manifests/debug/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app">
-
-    <!-- - Merged from all modules -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
-
-    <application
-        android:name="com.example.app.MyApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-
-        <!-- From app module -->
-        <activity
-            android:name="com.example.app.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <!-- From feature-login module -->
-        <activity android:name="com.example.feature.login.LoginActivity" />
-        <activity android:name="com.example.feature.login.SignUpActivity" />
-
-        <!-- From feature-camera module -->
-        <activity android:name="com.example.feature.camera.CameraActivity" />
-        <provider
-            android:name="com.example.feature.camera.CameraFileProvider"
-            android:authorities="com.example.app.camera.fileprovider" />
-
-        <!-- From feature-map module -->
-        <activity android:name="com.example.feature.map.MapActivity" />
-        <service android:name="com.example.feature.map.LocationTrackingService" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
-    </application>
-</manifest>
-```
-
----
-
-## Benefits of Module Manifests
-
-### 1. Modular Independence
-
-```kotlin
-// feature-camera is self-contained
-// Declares its own permissions and components
-// Can be reused in other projects
-```
-
-**Remove camera feature?**
-```kotlin
-// app/build.gradle.kts
-dependencies {
-    // implementation(project(":feature:camera"))  // - Just comment out
-}
-
-// - Camera permissions and components automatically removed from merged manifest!
-```
-
----
-
-### 2. Clear Ownership
-
-```
-Which module needs CAMERA permission?
-→ Look at feature-camera/AndroidManifest.xml
-
-Which module needs LOCATION permission?
-→ Look at feature-map/AndroidManifest.xml
-```
-
-**Before (monolithic):**
-```xml
-<!-- - Unclear which feature needs what -->
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.LOCATION" />
-```
-
-**After (modular):**
-```xml
-<!-- feature-camera/AndroidManifest.xml -->
-<uses-permission android:name="android.permission.CAMERA" />  <!-- - Clear! -->
-
-<!-- feature-map/AndroidManifest.xml -->
-<uses-permission android:name="android.permission.LOCATION" />  <!-- - Clear! -->
-```
-
----
-
-### 3. Reusability
-
-```kotlin
-// Project A uses login feature
-dependencies {
-    implementation(project(":feature:login"))
-}
-
-// Project B also uses login feature (same module!)
-dependencies {
-    implementation(project(":feature:login"))
-}
-```
-
-**Login module is self-contained:**
-- Has own manifest
-- Declares own permissions
-- Works independently
-
----
-
-## Merge Conflicts and Resolution
-
-### Problem: Conflicting Attributes
-
-```xml
-<!-- feature-login/AndroidManifest.xml -->
-<activity
-    android:name=".LoginActivity"
-    android:screenOrientation="portrait" />
-
-<!-- feature-profile/AndroidManifest.xml -->
-<activity
-    android:name="com.example.feature.login.LoginActivity"
-    android:screenOrientation="landscape" />  <!-- - Conflict! -->
-```
-
-**Error:**
-```
-Manifest merger failed : Attribute android:screenOrientation@value=landscape
-from feature-profile conflicts with value=portrait from feature-login
-```
-
----
-
-### Solution 1: Remove Conflict
-
-```xml
-<!-- Remove conflicting attribute from one module -->
-<activity android:name=".LoginActivity" />
-```
-
----
-
-### Solution 2: Override in App Module
-
-```xml
-<!-- app/AndroidManifest.xml has highest priority -->
-<activity
-    android:name="com.example.feature.login.LoginActivity"
-    android:screenOrientation="portrait"
-    tools:replace="android:screenOrientation" />
-```
-
----
-
-### Solution 3: Merge Tools
-
-```xml
-<!-- feature-login/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <activity
-        android:name=".LoginActivity"
-        android:screenOrientation="portrait"
-        tools:node="replace" />  <!-- Replace entire node if conflict -->
-</manifest>
-```
-
-**Merge tools:**
-- `tools:node="merge"` - Merge attributes (default)
-- `tools:node="replace"` - Replace entire node
-- `tools:node="remove"` - Remove node
-- `tools:replace="attributeName"` - Replace specific attribute
-
----
-
-## Best Practices
-
-### 1. Minimal Main Manifest
-
-```xml
-<!-- app/AndroidManifest.xml -->
-<!-- - Only app-level config, no feature-specific items -->
-<manifest>
-    <application
-        android:name=".MyApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name">
-
-        <activity android:name=".MainActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-</manifest>
-```
-
----
-
-### 2. Module Self-Sufficiency
-
-```xml
-<!-- - Each module declares everything it needs -->
-<!-- feature-camera/AndroidManifest.xml -->
-<manifest>
+<manifest package="com.example.feature.camera">
+    <!-- ✅ Модуль сам объявляет свои зависимости -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
 
     <application>
         <activity android:name=".CameraActivity" />
-        <provider android:name=".CameraFileProvider" />
+        <provider
+            android:name=".CameraFileProvider"
+            android:authorities="${applicationId}.camera.provider" />
     </application>
 </manifest>
 ```
 
----
+**Преимущества:**
+- Удалили модуль → автоматически удалились permissions и компоненты
+- Модуль переносится между проектами без изменений
+- Ясно, какому модулю нужны какие разрешения
 
-### 3. Library Modules: No Application Tag
+### Приоритет слияния
+
+**app** > **feature modules** > **libraries**
 
 ```xml
-<!-- core-network/AndroidManifest.xml -->
-<!-- - Library modules: only permissions, NO <application> -->
-<manifest>
-    <uses-permission android:name="android.permission.INTERNET" />
+<!-- feature-login/AndroidManifest.xml -->
+<activity android:screenOrientation="portrait" />
+
+<!-- app/AndroidManifest.xml -->
+<activity android:screenOrientation="landscape" />  ← Побеждает app
+```
+
+### Разрешение конфликтов
+
+```xml
+<manifest xmlns:tools="http://schemas.android.com/tools">
+    <activity
+        android:name=".LoginActivity"
+        tools:replace="android:screenOrientation" />  <!-- Заменить атрибут -->
 </manifest>
+```
+
+**Merge tools:**
+- `tools:node="merge"` - слияние (по умолчанию)
+- `tools:node="replace"` - замена узла целиком
+- `tools:node="remove"` - удаление узла
+- `tools:replace="attr"` - замена конкретного атрибута
+
+### Best practices
+
+✅ **DO:**
+- App манифест минимален - только launcher activity и Application
+- Feature-модули самодостаточны - объявляют всё необходимое
+- Library-модули без `<application>` - только permissions
+
+❌ **DON'T:**
+- Дублировать permissions в app манифесте (они придут из модулей)
+- Хардкодить `android:authorities` (используй `${applicationId}`)
+- Игнорировать merge conflicts (проверяй Merged Manifest tab)
+
+### Просмотр результата
+
+**Android Studio:** `app/AndroidManifest.xml` → вкладка **Merged Manifest**
+
+**CLI:**
+```bash
+./gradlew :app:processDebugManifest
+cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ```
 
 ---
 
-## Summary
+## Answer (EN)
 
-**Why multiple AndroidManifest files in multi-module projects?**
+In multi-module projects, each module has its own **AndroidManifest.xml** for:
 
-1. **Module-specific dependencies:**
-   - Each module declares its own permissions (`uses-permission`)
-   - Each module declares its own features (`uses-feature`)
+1. **Modular independence** - module declares only its own dependencies
+2. **Component encapsulation** - Activity/Service/Provider scoped to module
+3. **Automatic merging** - build system merges all manifests into one
 
-2. **Module components:**
-   - Each module defines its own Activities, Services, etc.
-   - Components are scoped to the module
+### How it works
 
-3. **Automatic merging:**
-   - Build system merges all manifests into app's manifest
-   - Merge priority: app > features > libraries
-   - Conflicts handled with merge tools
+```
+project/
+ app/src/main/AndroidManifest.xml          ← Main manifest
+ feature-login/src/main/AndroidManifest.xml
+ feature-camera/src/main/AndroidManifest.xml
+ core-network/src/main/AndroidManifest.xml
+                       ↓ Gradle Merge Task
+ app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
+```
+
+### Example: Camera feature module
+
+```xml
+<!-- feature-camera/src/main/AndroidManifest.xml -->
+<manifest package="com.example.feature.camera">
+    <!-- ✅ Module declares its own dependencies -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application>
+        <activity android:name=".CameraActivity" />
+        <provider
+            android:name=".CameraFileProvider"
+            android:authorities="${applicationId}.camera.provider" />
+    </application>
+</manifest>
+```
 
 **Benefits:**
-- - **Modular independence** - modules are self-contained
-- - **Clear ownership** - easy to see what each module needs
-- - **Reusability** - modules can be reused across projects
-- - **Maintainability** - remove module = remove all its manifest entries
+- Remove module → permissions and components auto-removed
+- Module portable between projects without changes
+- Clear ownership of permissions per module
 
-**Best practices:**
-- Keep main app manifest minimal
-- Make modules self-sufficient
-- Library modules: no `<application>` tag
-- Use merge tools to resolve conflicts
+### Merge priority
 
-**View merged manifest:**
-- Android Studio: **Merged Manifest** tab
-- Command line: `app/build/intermediates/merged_manifests/debug/AndroidManifest.xml`
+**app** > **feature modules** > **libraries**
+
+```xml
+<!-- feature-login/AndroidManifest.xml -->
+<activity android:screenOrientation="portrait" />
+
+<!-- app/AndroidManifest.xml -->
+<activity android:screenOrientation="landscape" />  ← app wins
+```
+
+### Conflict resolution
+
+```xml
+<manifest xmlns:tools="http://schemas.android.com/tools">
+    <activity
+        android:name=".LoginActivity"
+        tools:replace="android:screenOrientation" />  <!-- Replace attribute -->
+</manifest>
+```
+
+**Merge tools:**
+- `tools:node="merge"` - merge nodes (default)
+- `tools:node="replace"` - replace entire node
+- `tools:node="remove"` - remove node
+- `tools:replace="attr"` - replace specific attribute
+
+### Best practices
+
+✅ **DO:**
+- Keep app manifest minimal - only launcher activity and Application
+- Make feature modules self-contained - declare everything needed
+- Library modules without `<application>` - only permissions
+
+❌ **DON'T:**
+- Duplicate permissions in app manifest (they come from modules)
+- Hardcode `android:authorities` (use `${applicationId}`)
+- Ignore merge conflicts (check Merged Manifest tab)
+
+### View merged result
+
+**Android Studio:** `app/AndroidManifest.xml` → **Merged Manifest** tab
+
+**CLI:**
+```bash
+./gradlew :app:processDebugManifest
+cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
+```
 
 ---
 
-## Ответ (RU)
-В многомодульных проектах каждый модуль может иметь свой **AndroidManifest.xml**, чтобы:
+## Follow-ups
 
-1. **Задавать зависимости** (`uses-permission`, `uses-feature`) для конкретного модуля
-2. **Определять компоненты** (Activity, Service, BroadcastReceiver) для каждого модуля
-3. **Автоматически объединять** манифесты всех модулей в AndroidManifest.xml главного (app) модуля
+1. How to debug manifest merge conflicts in Android Studio?
+2. What happens when two modules declare the same permission with different protection levels?
+3. How does `tools:node="removeAll"` differ from `tools:node="remove"`?
+4. Can library modules override attributes in the app manifest?
+5. How to exclude specific manifest entries from a dependency module?
 
-**Преимущества:**
-- Модульная независимость - каждый модуль самодостаточен
-- Чёткое владение - понятно какому модулю нужны какие разрешения
-- Переиспользуемость - модули можно использовать в других проектах
-- Поддерживаемость - удалили модуль = автоматически удалили все его записи из манифеста
+## References
 
-**Процесс слияния:**
-- Система сборки автоматически объединяет все манифесты
-- Приоритет: app > feature модули > библиотеки
-- Результат: `app/build/intermediates/merged_manifests/debug/AndroidManifest.xml`
-
-
----
+- [[c-gradle]]
+- [[c-android-manifest]]
+- [[c-modularization]]
+- [Merge multiple manifest files](https://developer.android.com/build/manage-manifests)
+- [Manifest merge tool](https://developer.android.com/studio/build/manifest-merge)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-architecture-components-libraries--android--easy]] - Fundamentals
-- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
-- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-what-unifies-android-components--android--easy]]
+- [[q-android-jetpack-overview--android--easy]]
 
-### Related (Medium)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-intent-filters-android--android--medium]] - Fundamentals
-- [[q-anr-application-not-responding--android--medium]] - Fundamentals
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
-- [[q-what-are-intents-for--android--medium]] - Fundamentals
+### Related (Same Level)
+- [[q-gradle-optimization--android--medium]]
+- [[q-dependency-injection-hilt--android--medium]]
+- [[q-intent-filters-android--android--medium]]
 
 ### Advanced (Harder)
-- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
-- [[q-kotlin-context-receivers--android--hard]] - Fundamentals
+- [[q-kmm-architecture--multiplatform--hard]]
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]]

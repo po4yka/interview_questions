@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration]
 tags: [android/background-execution, android/coroutines, background-processing, data-passing, workmanager, difficulty/medium]
+date created: Monday, October 27th 2025, 7:02:51 pm
+date modified: Thursday, October 30th 2025, 3:16:48 pm
 ---
+
 # Вопрос (RU)
 
 > Как передать данные в WorkManager Worker и получить результат обратно? Какие типы данных поддерживаются и какие есть ограничения?

@@ -15,14 +15,17 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/coroutines, android/threads-sync, handler, looper, message-queue, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:36:03 pm
+date modified: Thursday, October 30th 2025, 3:12:45 pm
 ---
+
 # Вопрос (RU)
 
-Как Looper связывается с потоком?
+> Как Looper связывается с потоком?
 
 # Question (EN)
 
-How does Looper connect to a thread?
+> How does Looper connect to a thread?
 
 ---
 

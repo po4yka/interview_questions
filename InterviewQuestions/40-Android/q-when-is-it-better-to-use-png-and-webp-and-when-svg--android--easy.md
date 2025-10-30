@@ -25,6 +25,8 @@ updated: 2025-10-29
 
 # Tags (EN only; no leading #)
 tags: [android/ui-graphics, android/performance-rendering, android/gradle, image-formats, ui, difficulty/easy]
+date created: Wednesday, October 29th 2025, 12:17:15 pm
+date modified: Thursday, October 30th 2025, 3:18:09 pm
 ---
 
 # Вопрос (RU)

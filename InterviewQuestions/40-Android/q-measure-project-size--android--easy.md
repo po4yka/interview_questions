@@ -15,15 +15,17 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/project-structure, project-metrics, codebase-analysis, difficulty/easy]
+date created: Tuesday, October 28th 2025, 9:35:54 pm
+date modified: Thursday, October 30th 2025, 3:13:08 pm
 ---
 
 # Вопрос (RU)
 
-Как можно измерить размер проекта?
+> Как можно измерить размер проекта?
 
 # Question (EN)
 
-How can you measure project size?
+> How can you measure project size?
 
 ---
 

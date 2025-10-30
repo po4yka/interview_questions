@@ -25,6 +25,8 @@ created: 2025-10-06
 updated: 2025-10-06
 
 tags: [android/notifications, android/background-execution, en, ru, difficulty/medium]
+date created: Saturday, October 18th 2025, 1:27:59 pm
+date modified: Thursday, October 30th 2025, 3:12:38 pm
 ---
 
 # Question (EN)

@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, android/lifecycle, android/fragment, difficulty/medium]
+date created: Monday, October 27th 2025, 5:03:51 pm
+date modified: Thursday, October 30th 2025, 3:10:53 pm
 ---
+
 # Вопрос (RU)
 
 > Связан ли жизненный цикл Fragment с Activity или независим?

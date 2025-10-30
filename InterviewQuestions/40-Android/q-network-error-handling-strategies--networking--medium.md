@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [error-handling, strategy, architecture, ux, difficulty/medium]
+date created: Monday, October 27th 2025, 4:02:02 pm
+date modified: Thursday, October 30th 2025, 3:15:00 pm
 ---
+
 # Вопрос (RU)
 
 > Спроектируйте стратегию обработки сетевых ошибок. Обрабатывайте таймауты, отсутствие интернета, 4xx/5xx ошибки по-разному с понятными сообщениями пользователю.

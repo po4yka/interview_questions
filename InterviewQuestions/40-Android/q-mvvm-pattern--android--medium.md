@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/architecture-mvvm, android/lifecycle, android/coroutines, architecture-patterns, mvvm, viewmodel, difficulty/medium]
+date created: Monday, October 27th 2025, 3:37:22 pm
+date modified: Thursday, October 30th 2025, 3:14:32 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое архитектурный паттерн MVVM (Model-View-ViewModel)? Объясните его компоненты и преимущества.

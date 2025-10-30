@@ -24,7 +24,10 @@ created: 2025-10-11
 updated: 2025-01-27
 
 tags: [android/testing-benchmark, android/profiling, macrobenchmark, performance, startup, perfetto, difficulty/medium]
+date created: Monday, October 27th 2025, 5:12:49 pm
+date modified: Thursday, October 30th 2025, 3:12:48 pm
 ---
+
 # Вопрос (RU)
 > Реализуйте macrobenchmark для запуска приложения. Измерьте холодный, теплый и горячий запуск. Используйте трассировку Perfetto для выявления узких мест и оптимизации на основе результатов.
 

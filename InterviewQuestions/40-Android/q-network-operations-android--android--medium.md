@@ -15,15 +15,17 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [networking, http, android/networking-http, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:50:52 pm
+date modified: Thursday, October 30th 2025, 3:15:05 pm
 ---
 
 # Вопрос (RU)
 
-Какие инструменты используются для работы с сетью в Android?
+> Какие инструменты используются для работы с сетью в Android?
 
 # Question (EN)
 
-What tools are used for network operations in Android?
+> What tools are used for network operations in Android?
 
 ---
 

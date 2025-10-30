@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/kmm, android/testing-unit, android/coroutines, kotlin, multiplatform, testing, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:24:32 pm
+date modified: Thursday, October 30th 2025, 3:11:50 pm
 ---
 
 # Вопрос (RU)

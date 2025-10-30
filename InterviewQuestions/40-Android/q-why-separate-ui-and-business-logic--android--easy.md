@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/architecture-mvvm, android/architecture-clean, separation-of-concerns, difficulty/easy]
+date created: Monday, October 27th 2025, 3:43:10 pm
+date modified: Thursday, October 30th 2025, 3:16:52 pm
 ---
+
 # Вопрос (RU)
 
 > Зачем нужно разделять отображение и бизнес-логику?

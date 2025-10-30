@@ -1,70 +1,181 @@
 ---
 id: 20251012-12271114
-title: "Jetpack Compose Lazy Column"
+title: "Jetpack Compose Lazy Column / LazyColumn в Jetpack Compose"
+aliases: ["Jetpack Compose Lazy Column", "LazyColumn в Jetpack Compose", "Compose список"]
 topic: android
+subtopics: [ui-compose, ui-widgets]
+question_kind: android
 difficulty: easy
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [q-privacy-sandbox-fledge--privacy--hard, q-sharedpreferences-commit-vs-apply--android--easy, q-what-is-a-view-and-what-is-responsible-for-its-visual-part--android--medium]
+related: [c-jetpack-compose, c-recyclerview, q-jetpack-compose-basics--android--medium, q-which-layout-for-large-list--android--easy]
 created: 2025-10-15
-tags: [android/ui-compose, difficulty/easy, jetpack-compose, lazy-column, platform/android, ui-compose]
-date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Saturday, October 25th 2025, 4:10:57 pm
+updated: 2025-10-30
+sources: []
+tags: [android/ui-compose, android/ui-widgets, jetpack-compose, lazy-list, difficulty/easy]
 ---
 
-# Как В Jetpack Compose Создать Список, Аналогичный RecyclerView?
+# Вопрос (RU)
 
-**English**: How to create a RecyclerView-like list in Jetpack Compose?
+Как в Jetpack Compose создать список, аналогичный RecyclerView?
 
-## Answer (EN)
-Use **LazyColumn** or **LazyRow**. They create and display items on demand, saving resources and providing smooth scrolling.
+# Question (EN)
 
-**Key points**:
-- LazyColumn/LazyRow are lazy composables
-- Items are composed and laid out only when visible
-- Similar to RecyclerView's recycling behavior
-- More efficient than regular Column/Row for large lists
+How to create a RecyclerView-like list in Jetpack Compose?
 
-**Example**:
-```kotlin
-LazyColumn {
-    items(itemsList) { item ->
-        ItemRow(item)
-    }
-}
-```
+---
 
 ## Ответ (RU)
-Используется **LazyColumn** или **LazyRow**. Они создают и отображают элементы по мере необходимости, экономя ресурсы и обеспечивая плавную прокрутку.
 
-**Ключевые моменты**:
-- LazyColumn/LazyRow — ленивые компоненты
-- Элементы создаются и размещаются только когда видимы
-- Аналогично поведению переработки RecyclerView
-- Более эффективны чем обычные Column/Row для больших списков
+Используйте **LazyColumn** или **LazyRow** для вертикальных и горизонтальных списков соответственно.
 
-**Пример**:
+### Основные характеристики
+
+LazyColumn создает элементы по требованию (lazy) — только видимые на экране:
+- Аналог RecyclerView с автоматическим переиспользованием
+- Не требует настройки Adapter и ViewHolder
+- Поддерживает разные типы элементов в одном списке
+
+### Базовый пример
+
 ```kotlin
-LazyColumn {
-    items(itemsList) { item ->
-        ItemRow(item)
+@Composable
+fun ContactsList(contacts: List<Contact>) {
+    LazyColumn {
+        items(contacts) { contact ->
+            ContactRow(contact)  // ✅ Простой синтаксис
+        }
     }
 }
 ```
 
+### Работа с индексами
 
+```kotlin
+LazyColumn {
+    itemsIndexed(items) { index, item ->
+        Text("$index: ${item.name}")  // ✅ Доступ к позиции
+    }
+}
+```
+
+### Разнородные элементы
+
+```kotlin
+LazyColumn {
+    item { HeaderView() }           // ✅ Одиночный элемент
+
+    items(messages) { message ->
+        MessageCard(message)
+    }
+
+    item { FooterView() }
+}
+```
+
+### Ключевые различия с RecyclerView
+
+| RecyclerView | LazyColumn |
+|--------------|------------|
+| Adapter + ViewHolder | Composable-функции напрямую |
+| notifyDataSetChanged() | Автоматическая реакция на State |
+| XML-разметка | Декларативный Compose-код |
+
+### Когда использовать
+
+- **LazyColumn/LazyRow**: динамические списки любого размера
+- **Column/Row**: статичный контент из 5-10 элементов (без lazy-загрузки)
+
+## Answer (EN)
+
+Use **LazyColumn** or **LazyRow** for vertical and horizontal lists respectively.
+
+### Core Characteristics
+
+LazyColumn creates items on demand (lazy) — only those visible on screen:
+- RecyclerView equivalent with automatic recycling
+- No need for Adapter or ViewHolder setup
+- Supports different item types in one list
+
+### Basic Example
+
+```kotlin
+@Composable
+fun ContactsList(contacts: List<Contact>) {
+    LazyColumn {
+        items(contacts) { contact ->
+            ContactRow(contact)  // ✅ Simple syntax
+        }
+    }
+}
+```
+
+### Working with Indexes
+
+```kotlin
+LazyColumn {
+    itemsIndexed(items) { index, item ->
+        Text("$index: ${item.name}")  // ✅ Access to position
+    }
+}
+```
+
+### Heterogeneous Items
+
+```kotlin
+LazyColumn {
+    item { HeaderView() }           // ✅ Single item
+
+    items(messages) { message ->
+        MessageCard(message)
+    }
+
+    item { FooterView() }
+}
+```
+
+### Key Differences from RecyclerView
+
+| RecyclerView | LazyColumn |
+|--------------|------------|
+| Adapter + ViewHolder | Composable functions directly |
+| notifyDataSetChanged() | Automatic State reaction |
+| XML layout | Declarative Compose code |
+
+### When to Use
+
+- **LazyColumn/LazyRow**: dynamic lists of any size
+- **Column/Row**: static content with 5-10 items (no lazy loading)
 
 ---
+
+## Follow-ups
+
+- How to add dividers between LazyColumn items?
+- What is the `key` parameter in `items()` and why is it important?
+- How to implement sticky headers in LazyColumn?
+- How does LazyColumn handle item animations?
+- What is the difference between `items()` and `itemsIndexed()`?
+
+## References
+
+- [[c-jetpack-compose]] - Jetpack Compose fundamentals
+- [[c-recyclerview]] - RecyclerView concept for comparison
+- [Compose Lists Documentation](https://developer.android.com/jetpack/compose/lists)
 
 ## Related Questions
 
-### Hub
+### Prerequisites (Easier)
+- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView basics
+
+### Related (Same Level)
+- [[q-which-layout-for-large-list--android--easy]] - When to use different list layouts
+- [[q-android-jetpack-overview--android--easy]] - Jetpack components overview
+
+### Advanced (Medium)
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
-
-### Next Steps (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
-
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Advanced LazyColumn patterns
+- [[q-mutable-state-compose--android--medium]] - State management in lists
+- [[q-recomposition-compose--android--medium]] - How list recomposition works

@@ -1,27 +1,39 @@
 ---
 id: 20251012-1227197
 title: "How To Save Scroll State When Activity Is Recreated / Как сохранить состояние скролла при пересоздании Activity"
+aliases: [Scroll State Persistence, Save RecyclerView Position, Сохранение позиции скролла, Восстановление состояния RecyclerView]
 topic: android
+subtopics: [lifecycle, ui-views]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-diffutil-background-calculation-issues--android--medium, q-spannable-text-styling--android--medium, q-touch-event-handling-custom-views--custom-views--medium]
+related: [c-savedstatehandle, c-viewmodel, q-activity-lifecycle-methods--android--medium, q-diffutil-background-calculation-issues--android--medium]
 created: 2025-10-15
-tags: [android]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:16 pm
+updated: 2025-10-30
+tags: [android, android/lifecycle, android/ui-views, state-preservation, recyclerview, scrollview, difficulty/medium]
 ---
 
-# How to save Scroll State when Activity is Recreated?
+# Вопрос (RU)
 
-## Answer (EN)
-When an Activity is recreated due to configuration changes or process death, scroll position in ScrollView or RecyclerView is reset. This can be prevented by saving and restoring scroll state.
+> Как сохранить позицию скролла при пересоздании Activity?
 
-### Method 1: ScrollView with onSaveInstanceState
+# Question (EN)
+
+> How to save scroll state when Activity is recreated?
+
+---
+
+## Ответ (RU)
+
+При пересоздании Activity (rotation, process death) позиция скролла сбрасывается. Существует несколько подходов для сохранения состояния.
+
+### Подход 1: ScrollView с onSaveInstanceState
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
     private lateinit var scrollView: ScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,39 +42,29 @@ class MainActivity : AppCompatActivity() {
 
         scrollView = findViewById(R.id.scrollView)
 
-        // Restore scroll position
         savedInstanceState?.let {
-            val scrollX = it.getInt(KEY_SCROLL_X, 0)
             val scrollY = it.getInt(KEY_SCROLL_Y, 0)
-
-            scrollView.post {
-                scrollView.scrollTo(scrollX, scrollY)
-            }
+            scrollView.post { scrollView.scrollTo(0, scrollY) }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        // Save current scroll position
-        outState.putInt(KEY_SCROLL_X, scrollView.scrollX)
         outState.putInt(KEY_SCROLL_Y, scrollView.scrollY)
     }
 
     companion object {
-        private const val KEY_SCROLL_X = "scroll_x"
         private const val KEY_SCROLL_Y = "scroll_y"
     }
 }
 ```
 
-### Method 2: RecyclerView with LayoutManager State
+### Подход 2: RecyclerView с LayoutManager State
 
-RecyclerView has built-in state saving mechanism:
+✅ **Рекомендуемый подход** - использует встроенный механизм:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: LinearLayoutManager
 
@@ -74,187 +76,47 @@ class MainActivity : AppCompatActivity() {
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-        // Restore RecyclerView state
-        savedInstanceState?.let {
-            val state = it.getParcelable<Parcelable>(KEY_RECYCLER_STATE)
-            layoutManager.onRestoreInstanceState(state)
+        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE)?.let {
+            layoutManager.onRestoreInstanceState(it)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        // Save RecyclerView state
-        val state = layoutManager.onSaveInstanceState()
-        outState.putParcelable(KEY_RECYCLER_STATE, state)
-    }
-
-    companion object {
-        private const val KEY_RECYCLER_STATE = "recycler_state"
-    }
-}
-```
-
-### Method 3: RecyclerView Simple Position Save
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private val adapter = MyAdapter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Restore scroll position
-        savedInstanceState?.let {
-            val position = it.getInt(KEY_SCROLL_POSITION, 0)
-            recyclerView.scrollToPosition(position)
+        layoutManager.onSaveInstanceState()?.let {
+            outState.putParcelable(KEY_STATE, it)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        // Save first visible item position
-        val position = (recyclerView.layoutManager as LinearLayoutManager)
-            .findFirstVisibleItemPosition()
-        outState.putInt(KEY_SCROLL_POSITION, position)
-    }
-
     companion object {
-        private const val KEY_SCROLL_POSITION = "scroll_position"
+        private const val KEY_STATE = "recycler_state"
     }
 }
 ```
 
-### Method 4: RecyclerView with Exact Position and Offset
+### Подход 3: SavedStateHandle в ViewModel
 
-For precise scroll position restoration:
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var layoutManager: LinearLayoutManager
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        recyclerView = findViewById(R.id.recyclerView)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-
-        // Restore scroll position with offset
-        savedInstanceState?.let {
-            val position = it.getInt(KEY_SCROLL_POSITION, 0)
-            val offset = it.getInt(KEY_SCROLL_OFFSET, 0)
-
-            (recyclerView.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(position, offset)
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-
-        // Save position and offset
-        val position = layoutManager.findFirstVisibleItemPosition()
-        val firstVisibleView = layoutManager.findViewByPosition(position)
-        val offset = firstVisibleView?.top ?: 0
-
-        outState.putInt(KEY_SCROLL_POSITION, position)
-        outState.putInt(KEY_SCROLL_OFFSET, offset)
-    }
-
-    companion object {
-        private const val KEY_SCROLL_POSITION = "scroll_position"
-        private const val KEY_SCROLL_OFFSET = "scroll_offset"
-    }
-}
-```
-
-### Method 5: ViewModel for Persistent State
-
-```kotlin
-class ScrollViewModel : ViewModel() {
-
-    // Survives configuration changes
-    var scrollPosition: Int = 0
-    var scrollOffset: Int = 0
-
-    // For process death survival, use SavedStateHandle
-    // private val savedStateHandle: SavedStateHandle
-}
-
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private val viewModel: ScrollViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        recyclerView = findViewById(R.id.recyclerView)
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-
-        // Restore from ViewModel
-        if (viewModel.scrollPosition > 0) {
-            layoutManager.scrollToPositionWithOffset(
-                viewModel.scrollPosition,
-                viewModel.scrollOffset
-            )
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        // Save to ViewModel
-        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        viewModel.scrollPosition = layoutManager.findFirstVisibleItemPosition()
-
-        val firstVisibleView = layoutManager.findViewByPosition(viewModel.scrollPosition)
-        viewModel.scrollOffset = firstVisibleView?.top ?: 0
-    }
-}
-```
-
-### Method 6: SavedStateHandle in ViewModel
-
-Best practice - combines ViewModel and process death survival:
+✅ **Best Practice** - переживает process death:
 
 ```kotlin
 class ScrollViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
     var scrollPosition: Int
-        get() = savedStateHandle.get<Int>(KEY_SCROLL_POSITION) ?: 0
-        set(value) { savedStateHandle.set(KEY_SCROLL_POSITION, value) }
+        get() = savedStateHandle[KEY_POSITION] ?: 0
+        set(value) { savedStateHandle[KEY_POSITION] = value }
 
     var scrollOffset: Int
-        get() = savedStateHandle.get<Int>(KEY_SCROLL_OFFSET) ?: 0
-        set(value) { savedStateHandle.set(KEY_SCROLL_OFFSET, value) }
+        get() = savedStateHandle[KEY_OFFSET] ?: 0
+        set(value) { savedStateHandle[KEY_OFFSET] = value }
 
     companion object {
-        private const val KEY_SCROLL_POSITION = "scroll_position"
-        private const val KEY_SCROLL_OFFSET = "scroll_offset"
+        private const val KEY_POSITION = "scroll_position"
+        private const val KEY_OFFSET = "scroll_offset"
     }
 }
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var recyclerView: RecyclerView
     private val viewModel: ScrollViewModel by viewModels()
 
@@ -263,20 +125,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupRecyclerView()
-
-        // Restore scroll state
         restoreScrollPosition()
     }
 
     private fun setupRecyclerView() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = MyAdapter()
 
-        // Save scroll position when scrolling stops
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            override fun onScrollStateChanged(rv: RecyclerView, state: Int) {
+                if (state == RecyclerView.SCROLL_STATE_IDLE) {
                     saveScrollPosition()
                 }
             }
@@ -287,8 +145,9 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
         viewModel.scrollPosition = layoutManager.findFirstVisibleItemPosition()
 
-        val firstVisibleView = layoutManager.findViewByPosition(viewModel.scrollPosition)
-        viewModel.scrollOffset = firstVisibleView?.top ?: 0
+        layoutManager.findViewByPosition(viewModel.scrollPosition)?.let {
+            viewModel.scrollOffset = it.top
+        }
     }
 
     private fun restoreScrollPosition() {
@@ -305,69 +164,53 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Method 7: GridLayoutManager
+### Сравнение подходов
 
-For grid layouts:
+| Подход | Config Changes | Process Death | Точность | Сложность |
+|--------|----------------|---------------|----------|-----------|
+| onSaveInstanceState | ✅ | ✅ | Высокая | Низкая |
+| LayoutManager state | ✅ | ✅ | Точная | Низкая |
+| ViewModel | ✅ | ❌ | Точная | Средняя |
+| SavedStateHandle | ✅ | ✅ | Точная | Средняя |
+
+### Best Practices
+
+✅ **DO:**
+- Используйте `LayoutManager.onSaveInstanceState()` для RecyclerView
+- Используйте `SavedStateHandle` в production
+- Вызывайте scroll операции через `post()` после layout
+- Тестируйте с включенной опцией "Don't keep activities"
+
+❌ **DON'T:**
+- Не используйте простой ViewModel без SavedStateHandle для критичного состояния
+- Не забывайте про process death сценарии
+- Не сохраняйте слишком много данных в Bundle (лимит ~1MB)
+
+## Answer (EN)
+
+When Activity is recreated (rotation, process death), scroll position resets. Several approaches exist for state preservation.
+
+### Approach 1: ScrollView with onSaveInstanceState
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var gridLayoutManager: GridLayoutManager
+    private lateinit var scrollView: ScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        gridLayoutManager = GridLayoutManager(this, 2) // 2 columns
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = gridLayoutManager
+        scrollView = findViewById(R.id.scrollView)
 
-        // Restore state
-        savedInstanceState?.let {
-            val state = it.getParcelable<Parcelable>(KEY_LAYOUT_STATE)
-            gridLayoutManager.onRestoreInstanceState(state)
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        val state = gridLayoutManager.onSaveInstanceState()
-        outState.putParcelable(KEY_LAYOUT_STATE, state)
-    }
-
-    companion object {
-        private const val KEY_LAYOUT_STATE = "layout_state"
-    }
-}
-```
-
-### Method 8: NestedScrollView
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var nestedScrollView: NestedScrollView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        nestedScrollView = findViewById(R.id.nestedScrollView)
-
-        // Restore scroll position
         savedInstanceState?.let {
             val scrollY = it.getInt(KEY_SCROLL_Y, 0)
-            nestedScrollView.post {
-                nestedScrollView.scrollTo(0, scrollY)
-            }
+            scrollView.post { scrollView.scrollTo(0, scrollY) }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(KEY_SCROLL_Y, nestedScrollView.scrollY)
+        outState.putInt(KEY_SCROLL_Y, scrollView.scrollY)
     }
 
     companion object {
@@ -376,48 +219,162 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Comparison of Methods
+### Approach 2: RecyclerView with LayoutManager State
 
-| Method | Survives Config Change | Survives Process Death | Precision | Complexity |
-|--------|------------------------|------------------------|-----------|------------|
-| onSaveInstanceState | Yes | Yes | High | Low |
-| LayoutManager state | Yes | Yes | Exact | Low |
-| Simple position | Yes | Yes | Medium | Very Low |
-| Position + offset | Yes | Yes | Exact | Medium |
-| ViewModel only | Yes | No | Exact | Medium |
-| SavedStateHandle | Yes | Yes | Exact | Medium |
+✅ **Recommended approach** - uses built-in mechanism:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var layoutManager: LinearLayoutManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+
+        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE)?.let {
+            layoutManager.onRestoreInstanceState(it)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        layoutManager.onSaveInstanceState()?.let {
+            outState.putParcelable(KEY_STATE, it)
+        }
+    }
+
+    companion object {
+        private const val KEY_STATE = "recycler_state"
+    }
+}
+```
+
+### Approach 3: SavedStateHandle in ViewModel
+
+✅ **Best Practice** - survives process death:
+
+```kotlin
+class ScrollViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var scrollPosition: Int
+        get() = savedStateHandle[KEY_POSITION] ?: 0
+        set(value) { savedStateHandle[KEY_POSITION] = value }
+
+    var scrollOffset: Int
+        get() = savedStateHandle[KEY_OFFSET] ?: 0
+        set(value) { savedStateHandle[KEY_OFFSET] = value }
+
+    companion object {
+        private const val KEY_POSITION = "scroll_position"
+        private const val KEY_OFFSET = "scroll_offset"
+    }
+}
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+    private val viewModel: ScrollViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        setupRecyclerView()
+        restoreScrollPosition()
+    }
+
+    private fun setupRecyclerView() {
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(rv: RecyclerView, state: Int) {
+                if (state == RecyclerView.SCROLL_STATE_IDLE) {
+                    saveScrollPosition()
+                }
+            }
+        })
+    }
+
+    private fun saveScrollPosition() {
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        viewModel.scrollPosition = layoutManager.findFirstVisibleItemPosition()
+
+        layoutManager.findViewByPosition(viewModel.scrollPosition)?.let {
+            viewModel.scrollOffset = it.top
+        }
+    }
+
+    private fun restoreScrollPosition() {
+        if (viewModel.scrollPosition > 0) {
+            recyclerView.post {
+                (recyclerView.layoutManager as LinearLayoutManager)
+                    .scrollToPositionWithOffset(
+                        viewModel.scrollPosition,
+                        viewModel.scrollOffset
+                    )
+            }
+        }
+    }
+}
+```
+
+### Comparison of Approaches
+
+| Approach | Config Changes | Process Death | Precision | Complexity |
+|----------|----------------|---------------|-----------|------------|
+| onSaveInstanceState | ✅ | ✅ | High | Low |
+| LayoutManager state | ✅ | ✅ | Exact | Low |
+| ViewModel | ✅ | ❌ | Exact | Medium |
+| SavedStateHandle | ✅ | ✅ | Exact | Medium |
 
 ### Best Practices
 
-1. **Use LayoutManager.onSaveInstanceState()**: Most reliable for RecyclerView
-2. **SavedStateHandle in ViewModel**: Best for production apps
-3. **Post scroll operations**: Ensure view is laid out
-4. **Save in onPause()**: For ViewModel approach
-5. **Test process death**: Enable "Don't keep activities"
+✅ **DO:**
+- Use `LayoutManager.onSaveInstanceState()` for RecyclerView
+- Use `SavedStateHandle` in production
+- Post scroll operations after layout pass
+- Test with "Don't keep activities" enabled
 
-## Ответ (RU)
-При пересоздании Activity состояние ScrollView или RecyclerView сбрасывается. Чтобы этого избежать, можно сохранить и восстановить позицию скролла. Использование onSaveInstanceState() позволяет сохранять данные в Bundle перед уничтожением Activity и восстанавливать их. Для RecyclerView можно использовать встроенный механизм сохранения состояния через LinearLayoutManager.
-
-## Related Topics
-- onSaveInstanceState
-- RecyclerView state management
-- LayoutManager
-- SavedStateHandle
-- ViewModel lifecycle
+❌ **DON'T:**
+- Don't use plain ViewModel without SavedStateHandle for critical state
+- Don't forget process death scenarios
+- Don't save too much data in Bundle (limit ~1MB)
 
 ---
+
+## Follow-ups
+
+- How does SavedStateHandle survive process death internally?
+- What's the Bundle size limit for onSaveInstanceState()?
+- Can you save RecyclerView scroll state for StaggeredGridLayoutManager?
+- How to handle scroll restoration when adapter data changes during recreation?
+- What happens if you restore scroll position before adapter data is loaded?
+
+## References
+
+- [[c-savedstatehandle]] - SavedStateHandle concept
+- [[c-viewmodel]] - ViewModel lifecycle
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
+- [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
+- [RecyclerView state management](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity
+- [[q-android-components-besides-activity--android--easy]] - Activity basics
 
-### Related (Medium)
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-- [[q-single-activity-pros-cons--android--medium]] - Activity
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Activity
+### Related (Same Level)
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Memory management
+- [[q-single-activity-pros-cons--android--medium]] - Architecture patterns
+- [[q-diffutil-background-calculation-issues--android--medium]] - RecyclerView optimization
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Architecture decisions

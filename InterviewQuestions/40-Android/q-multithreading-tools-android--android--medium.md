@@ -1,99 +1,123 @@
 ---
 id: 20251012-12271145
 title: "Multithreading Tools Android / Инструменты многопоточности Android"
+aliases: [Multithreading Tools Android, Инструменты многопоточности Android, Android Threading, Многопоточность Android]
 topic: android
+subtopics: [coroutines, background-execution, performance-startup]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-background-vs-foreground-service--android--medium, q-push-notification-navigation--android--medium, q-room-vs-sqlite--android--medium]
 created: 2025-10-15
-tags: [multithreading, concurrency, asynctask, workmanager, rxjava, coroutines, background-tasks, difficulty/medium]
+updated: 2025-10-30
+sources: [https://developer.android.com/kotlin/coroutines, https://developer.android.com/topic/libraries/architecture/workmanager]
+tags: [android/coroutines, android/background-execution, android/performance-startup, concurrency, workmanager, rxjava, difficulty/medium]
 ---
 
-# Multithreading Tools in Android / Инструменты многопоточности в Android
+# Вопрос (RU)
 
-**English**: What tools for multithreading do you know?
+> Какие инструменты для многопоточности в Android вы знаете?
 
-## Answer (EN)
-Android provides several tools and APIs for handling multithreading and asynchronous operations. Here's a comprehensive overview of the main tools:
+# Question (EN)
 
-## 1. AsyncTask (Deprecated)
+> What tools for multithreading in Android do you know?
 
-`AsyncTask` was intended to enable proper and easy use of the UI thread. However, it has been deprecated and should no longer be used.
+---
 
-**Why it was deprecated:**
-- The most common use case was integrating into UI, which caused **Context leaks**, **missed callbacks**, or **crashes on configuration changes**
-- **Inconsistent behavior** on different versions of the Android platform
-- **Swallows exceptions** from `doInBackground`
-- **Doesn't provide much utility** over using `Executors` directly
+## Ответ (RU)
 
-**How it worked:**
+Android предоставляет несколько инструментов для многопоточности и асинхронных операций:
 
-`AsyncTask` was designed to be a helper class around `Thread` and `Handler`. It was ideally used for short operations (a few seconds at most). An asynchronous task was defined by:
-- **3 generic types**: `Params`, `Progress`, and `Result`
-- **4 steps**: `onPreExecute`, `doInBackground`, `onProgressUpdate`, and `onPostExecute`
+### 1. Kotlin Coroutines (Рекомендуется)
+
+**Корутина** — паттерн для конкурентности, упрощающий асинхронный код.
+
+**Ключевые преимущества:**
+- **Легковесные** — множество корутин на одном потоке благодаря приостановке
+- **Структурированная конкурентность** — операции в области видимости, меньше утечек
+- **Автоматическая отмена** — распространяется через иерархию корутин
+- **Интеграция Jetpack** — полная поддержка в библиотеках
+
+**✅ Базовый пример:**
 
 ```kotlin
-// Example (DEPRECATED - Don't use in new code)
-class DownloadTask : AsyncTask<String, Int, String>() {
-    override fun onPreExecute() {
-        // Runs on UI thread before background work
-    }
-
-    override fun doInBackground(vararg params: String): String {
-        // Runs on background thread
-        // publishProgress() to update UI
-        return "Result"
-    }
-
-    override fun onProgressUpdate(vararg values: Int) {
-        // Runs on UI thread when publishProgress() is called
-    }
-
-    override fun onPostExecute(result: String) {
-        // Runs on UI thread with result
+class MyViewModel : ViewModel() {
+    fun fetchData() {
+        viewModelScope.launch {
+            try {
+                val data = withContext(Dispatchers.IO) {
+                    repository.fetchData()
+                }
+                _uiState.value = UiState.Success(data)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e)
+            }
+        }
     }
 }
 ```
 
-**Alternative**: Use `Executors` directly or modern alternatives like Coroutines or WorkManager.
+**Диспетчеры:**
+- `Dispatchers.Main` — UI поток
+- `Dispatchers.IO` — I/O операции (сеть, БД, файлы)
+- `Dispatchers.Default` — CPU-интенсивные вычисления
 
-## 2. WorkManager
-
-`WorkManager` is an API that makes it easy to schedule **deferrable, asynchronous tasks** that are expected to run even if the app exits or the device restarts.
-
-**Key Features:**
-- **Guaranteed execution**: Work will be executed even if app is killed or device restarts
-- **Constraint-based execution**: Run work only when specific conditions are met (network, battery, storage, etc.)
-- **Backward compatibility**: Works back to API level 14
-- **Battery-conscious**: Respects Doze mode and App Standby
-
-**Use Cases:**
-- Uploading logs or analytics
-- Syncing application data with a server
-- Downloading fresh content
-- Processing images or media
-- Backing up data
-
-**Example:**
+**✅ Структурированная конкурентность:**
 
 ```kotlin
-// Define Worker
-class UploadWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
-    override fun doWork(): Result {
-        // Perform background work
-        uploadData()
+coroutineScope {
+    val data1 = async(Dispatchers.IO) { fetchData1() }
+    val data2 = async(Dispatchers.IO) { fetchData2() }
+    val result = data1.await() + data2.await()
+}
+```
 
-        return Result.success()
-    }
+**Области видимости:**
+- `viewModelScope` — привязан к жизненному циклу ViewModel
+- `lifecycleScope` — привязан к Activity/Fragment
+- `GlobalScope` — уровень приложения (осторожно)
 
-    private fun uploadData() {
-        // Upload logic
+**✅ Flow для потоков данных:**
+
+```kotlin
+fun fetchUpdates(): Flow<Update> = flow {
+    while (true) {
+        emit(api.getUpdate())
+        delay(1000)
     }
 }
 
-// Schedule work
-val uploadWorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+viewModelScope.launch {
+    fetchUpdates()
+        .flowOn(Dispatchers.IO)
+        .collect { updateUI(it) }
+}
+```
+
+### 2. WorkManager
+
+API для планирования **отложенных асинхронных задач**, которые должны выполняться даже после закрытия приложения.
+
+**Ключевые особенности:**
+- **Гарантированное выполнение** — работа сохраняется при убийстве приложения/перезагрузке
+- **Ограничения** — запуск только при выполнении условий (сеть, батарея, хранилище)
+- **Обратная совместимость** — с API level 14
+- **Экономия батареи** — учитывает Doze и App Standby
+
+**✅ Пример:**
+
+```kotlin
+class UploadWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+    override fun doWork(): Result {
+        uploadData()
+        return Result.success()
+    }
+}
+
+val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
     .setConstraints(
         Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -102,106 +126,97 @@ val uploadWorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
     )
     .build()
 
-WorkManager.getInstance(context).enqueue(uploadWorkRequest)
-
-// Periodic work
-val periodicWorkRequest = PeriodicWorkRequestBuilder<UploadWorker>(
-    1, TimeUnit.HOURS
-).build()
-
-WorkManager.getInstance(context).enqueue(periodicWorkRequest)
+WorkManager.getInstance(context).enqueue(uploadRequest)
 ```
 
-**When to use WorkManager:**
-- Tasks that need to run even if app is closed
-- Tasks with specific constraints (network, charging, etc.)
-- Background sync operations
-- Scheduled periodic tasks
+**Когда использовать:**
+- Задачи должны выполняться даже при закрытом приложении
+- Специфические ограничения (сеть, зарядка)
+- Периодические задачи (синхронизация, бэкап)
 
-**Source**: [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+### 3. RxJava / RxAndroid
 
-## 3. RxJava / RxAndroid
+Reactive Extensions для Java VM — композиция асинхронных программ через наблюдаемые последовательности.
 
-RxJava is a Java VM implementation of [Reactive Extensions](https://reactivex.io/): a library for composing asynchronous and event-based programs by using observable sequences.
-
-**Key Concepts:**
-- Extends the **observer pattern** to support sequences of data/events
-- Provides **operators** to compose sequences together declaratively
-- Abstracts away concerns about **threading, synchronization, thread-safety**, and concurrent data structures
-
-**RxAndroid Extension:**
-- RxAndroid is an extension of RxJava specifically for Android
-- Introduces the **Main Thread** support required for Android
-- Provides `AndroidSchedulers.mainThread()` to perform actions on the UI thread
-
-**Threading in RxJava:**
+**✅ Пример с переключением потоков:**
 
 ```kotlin
-// Example: Network request with RxJava
-Observable.fromCallable {
-    // This runs on IO thread
-    fetchDataFromNetwork()
-}
-.subscribeOn(Schedulers.io())           // Specify thread for source
-.observeOn(AndroidSchedulers.mainThread())  // Specify thread for observer
-.subscribe(
-    { result ->
-        // Update UI with result (runs on main thread)
-        updateUI(result)
-    },
-    { error ->
-        // Handle error (runs on main thread)
-        showError(error)
-    }
-)
+Observable.fromCallable { fetchDataFromNetwork() }
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(
+        { result -> updateUI(result) },
+        { error -> showError(error) }
+    )
 ```
 
-**Common Schedulers:**
-- `Schedulers.io()` - I/O operations (network, database, file)
-- `Schedulers.computation()` - CPU-intensive computations
-- `Schedulers.newThread()` - Creates a new thread for each unit of work
-- `AndroidSchedulers.mainThread()` - Android UI thread
-- `Schedulers.trampoline()` - Execute immediately on current thread
+**Основные планировщики:**
+- `Schedulers.io()` — I/O операции
+- `Schedulers.computation()` — CPU-интенсивные вычисления
+- `AndroidSchedulers.mainThread()` — UI поток
 
-**Advantages:**
-- Powerful operators for data transformation
-- Easy thread switching
-- Excellent for complex asynchronous flows
-- Great for handling events and streams
+**Преимущества:**
+- Мощные операторы для трансформации данных
+- Легкое переключение потоков
+- Отлично для сложных асинхронных потоков
 
-**Disadvantages:**
-- Steep learning curve
-- Can lead to complex and hard-to-debug code
-- Large library size
-- Being superseded by Kotlin Coroutines for new projects
+**❌ Недостатки:**
+- Крутая кривая обучения
+- Большой размер библиотеки
+- Вытесняется Kotlin Coroutines
 
-**Source**: [RxJava For Android - RxAndroid](https://blog.mindorks.com/rxjava-for-android-rxandroid/)
+### 4. AsyncTask (❌ Устарел)
 
-## 4. Kotlin Coroutines
+`AsyncTask` был предназначен для UI потока, но **deprecated** и не должен использоваться.
 
-A **coroutine** is a concurrency design pattern that you can use on Android to simplify code that executes asynchronously. Coroutines were added to Kotlin in version 1.3 and are based on established concepts from other languages.
+**Почему устарел:**
+- Утечки Context, пропущенные коллбэки, сбои при изменении конфигурации
+- Несогласованное поведение на разных версиях Android
+- Поглощает исключения из `doInBackground`
+
+**Альтернатива:** Kotlin Coroutines или Executors
+
+### Сравнительная таблица
+
+| Инструмент | Статус | Лучше всего для | Сложность |
+|------------|--------|-----------------|-----------|
+| **Kotlin Coroutines** | ✅ Рекомендуется | Общие async/await, современная разработка | Низкая-Средняя |
+| **WorkManager** | ✅ Рекомендуется | Гарантированная фоновая работа с ограничениями | Средняя |
+| **RxJava** | Зрелый | Сложные потоки событий, реактивное программирование | Высокая |
+| **AsyncTask** | ❌ Устарел | Ничего (используйте альтернативы) | Низкая |
+
+### Современные рекомендации
+
+Для новой разработки Android:
+1. **Kotlin Coroutines** — для асинхронных операций, сетевых вызовов, доступа к БД
+2. **WorkManager** — для отложенных фоновых задач с гарантированным выполнением
+3. **RxJava** — только при существующей кодовой базе или специфических реактивных требованиях
+4. **❌ AsyncTask** — не использовать (устарел)
+
+## Answer (EN)
+
+Android provides several tools for multithreading and asynchronous operations:
+
+### 1. Kotlin Coroutines (Recommended)
+
+A **coroutine** is a concurrency design pattern that simplifies asynchronous code.
 
 **Key Benefits:**
-- **Lightweight**: You can run many coroutines on a single thread due to support for suspension
-- **Fewer memory leaks**: Use structured concurrency to run operations within a scope
-- **Built-in cancellation support**: Cancellation propagates automatically through the coroutine hierarchy
-- **Jetpack integration**: Many Jetpack libraries include extensions with full coroutines support
+- **Lightweight** — many coroutines on a single thread via suspension
+- **Structured concurrency** — operations within scope, fewer memory leaks
+- **Built-in cancellation** — propagates automatically through hierarchy
+- **Jetpack integration** — full support across libraries
 
-**Basic Example:**
+**✅ Basic Example:**
 
 ```kotlin
-// Launch coroutine in ViewModel
 class MyViewModel : ViewModel() {
     fun fetchData() {
         viewModelScope.launch {
             try {
-                // This suspends the coroutine, not the thread
                 val data = withContext(Dispatchers.IO) {
-                    // Network or database call
                     repository.fetchData()
                 }
-
-                // Back on Main thread automatically
                 _uiState.value = UiState.Success(data)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e)
@@ -212,186 +227,167 @@ class MyViewModel : ViewModel() {
 ```
 
 **Dispatchers:**
-- `Dispatchers.Main` - UI thread (Android main thread)
-- `Dispatchers.IO` - I/O operations (network, database, file)
-- `Dispatchers.Default` - CPU-intensive work
-- `Dispatchers.Unconfined` - Not confined to any specific thread
+- `Dispatchers.Main` — UI thread
+- `Dispatchers.IO` — I/O operations (network, database, files)
+- `Dispatchers.Default` — CPU-intensive work
 
-**Structured Concurrency:**
+**✅ Structured Concurrency:**
 
 ```kotlin
-// All child coroutines are cancelled if parent is cancelled
 coroutineScope {
     val data1 = async(Dispatchers.IO) { fetchData1() }
     val data2 = async(Dispatchers.IO) { fetchData2() }
-
-    // Wait for both to complete
     val result = data1.await() + data2.await()
 }
 ```
 
 **Coroutine Scopes:**
-- `viewModelScope` - Tied to ViewModel lifecycle
-- `lifecycleScope` - Tied to Activity/Fragment lifecycle
-- `GlobalScope` - Application-level scope (use carefully)
-- Custom scopes - For specific use cases
+- `viewModelScope` — tied to ViewModel lifecycle
+- `lifecycleScope` — tied to Activity/Fragment lifecycle
+- `GlobalScope` — application-level scope (use carefully)
 
-**Flow for Streams:**
+**✅ Flow for Streams:**
 
 ```kotlin
-// Emit values over time
 fun fetchUpdates(): Flow<Update> = flow {
     while (true) {
-        val update = api.getUpdate()
-        emit(update)
+        emit(api.getUpdate())
         delay(1000)
     }
 }
 
-// Collect values
 viewModelScope.launch {
     fetchUpdates()
-        .flowOn(Dispatchers.IO)  // Upstream operations on IO thread
-        .collect { update ->      // Collection on Main thread
-            updateUI(update)
-        }
+        .flowOn(Dispatchers.IO)
+        .collect { updateUI(it) }
 }
 ```
 
-**When to use Coroutines:**
-- Modern Android development (recommended by Google)
-- Asynchronous operations with clean, sequential code
-- Network requests and database operations
-- Any background task that needs to update UI
-- Complex concurrent operations with structured concurrency
+### 2. WorkManager
 
-**Source**: [Kotlin coroutines on Android](https://developer.android.com/kotlin/coroutines)
+API for scheduling **deferrable asynchronous tasks** that run even if app exits.
 
-## Comparison Summary
+**Key Features:**
+- **Guaranteed execution** — work persists through app kill/device restart
+- **Constraint-based** — run only when conditions met (network, battery, storage)
+- **Backward compatibility** — works back to API level 14
+- **Battery-conscious** — respects Doze mode and App Standby
 
-| Tool | Status | Best For | Complexity | Thread Management |
-|------|--------|----------|------------|-------------------|
-| **AsyncTask** | Deprecated | Nothing (use alternatives) | Low | Automatic |
-| **WorkManager** | Recommended | Guaranteed background work with constraints | Medium | Automatic |
-| **RxJava/RxAndroid** | Mature | Complex event streams, reactive programming | High | Manual (Schedulers) |
-| **Kotlin Coroutines** | Recommended | General async/await, modern Android development | Low-Medium | Dispatchers |
+**✅ Example:**
 
-## Modern Recommendations
+```kotlin
+class UploadWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+    override fun doWork(): Result {
+        uploadData()
+        return Result.success()
+    }
+}
+
+val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueue(uploadRequest)
+```
+
+**When to Use:**
+- Tasks need to run even if app closed
+- Specific constraints (network, charging)
+- Periodic tasks (sync, backup)
+
+### 3. RxJava / RxAndroid
+
+Reactive Extensions for Java VM — composing asynchronous programs via observable sequences.
+
+**✅ Thread Switching Example:**
+
+```kotlin
+Observable.fromCallable { fetchDataFromNetwork() }
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(
+        { result -> updateUI(result) },
+        { error -> showError(error) }
+    )
+```
+
+**Common Schedulers:**
+- `Schedulers.io()` — I/O operations
+- `Schedulers.computation()` — CPU-intensive computations
+- `AndroidSchedulers.mainThread()` — Android UI thread
+
+**Advantages:**
+- Powerful operators for data transformation
+- Easy thread switching
+- Excellent for complex asynchronous flows
+
+**❌ Disadvantages:**
+- Steep learning curve
+- Large library size
+- Being superseded by Kotlin Coroutines
+
+### 4. AsyncTask (❌ Deprecated)
+
+`AsyncTask` was designed for UI thread but is **deprecated** and should not be used.
+
+**Why Deprecated:**
+- Context leaks, missed callbacks, crashes on configuration changes
+- Inconsistent behavior across Android versions
+- Swallows exceptions from `doInBackground`
+
+**Alternative:** Kotlin Coroutines or Executors
+
+### Comparison Summary
+
+| Tool | Status | Best For | Complexity |
+|------|--------|----------|------------|
+| **Kotlin Coroutines** | ✅ Recommended | General async/await, modern Android development | Low-Medium |
+| **WorkManager** | ✅ Recommended | Guaranteed background work with constraints | Medium |
+| **RxJava** | Mature | Complex event streams, reactive programming | High |
+| **AsyncTask** | ❌ Deprecated | Nothing (use alternatives) | Low |
+
+### Modern Recommendations
 
 For new Android development:
-1. **Kotlin Coroutines** - For most asynchronous operations, network calls, database access
-2. **WorkManager** - For deferrable background tasks that need guaranteed execution
-3. **RxJava** - Only if you have existing RxJava codebase or specific reactive requirements
-4. **Never use AsyncTask** - It's deprecated and has many issues
+1. **Kotlin Coroutines** — for async operations, network calls, database access
+2. **WorkManager** — for deferrable background tasks with guaranteed execution
+3. **RxJava** — only if existing RxJava codebase or specific reactive requirements
+4. **❌ AsyncTask** — never use (deprecated)
 
-## Other Threading Tools
+---
 
-- **Thread & Handler** - Low-level threading (rarely needed with modern tools)
-- **Executors** - Java's thread pool management (use directly or via Coroutines)
-- **IntentService** - Deprecated, use WorkManager instead
-- **JobScheduler** - Lower-level API, WorkManager is preferred
-- **Looper & HandlerThread** - For creating background threads with message queue
+## Follow-ups
 
-## Ответ (RU)
-Android предоставляет несколько инструментов и API для обработки многопоточности и асинхронных операций. Вот полный обзор основных инструментов:
+- How does structured concurrency prevent memory leaks in coroutines?
+- When should you choose WorkManager over a Foreground Service?
+- What are the differences between `flowOn()` and `withContext()` in coroutines?
+- How do you handle backpressure in RxJava vs Flow?
+- What happens to running coroutines when ViewModel is cleared?
 
-## 1. AsyncTask (Устарел)
+## References
 
-`AsyncTask` был предназначен для упрощения использования UI потока. Однако он устарел и больше не должен использоваться.
-
-**Почему устарел:**
-- Наиболее распространённый вариант использования был для интеграции в UI, что вызывало утечки Context, пропущенные коллбэки или сбои при изменении конфигурации
-- Несогласованное поведение на разных версиях платформы Android
-- Поглощает исключения из `doInBackground`
-- Не предоставляет большой пользы по сравнению с прямым использованием `Executors`
-
-**Альтернатива**: Используйте `Executors` напрямую или современные альтернативы, такие как Coroutines или WorkManager.
-
-## 2. WorkManager
-
-`WorkManager` — это API, который упрощает планирование отложенных асинхронных задач, которые должны выполняться, даже если приложение закрывается или устройство перезагружается.
-
-**Ключевые особенности:**
-- Гарантированное выполнение: работа будет выполнена, даже если приложение убито или устройство перезагружено
-- Выполнение на основе ограничений: запуск работы только при выполнении определённых условий (сеть, батарея, хранилище и т.д.)
-- Обратная совместимость: работает с API level 14
-- Экономия батареи: учитывает режим Doze и App Standby
-
-**Варианты использования:**
-- Загрузка логов или аналитики
-- Синхронизация данных приложения с сервером
-- Загрузка свежего контента
-- Обработка изображений или медиа
-- Резервное копирование данных
-
-## 3. RxJava / RxAndroid
-
-RxJava — это реализация Reactive Extensions для Java VM: библиотека для композиции асинхронных программ на основе событий с использованием наблюдаемых последовательностей.
-
-**Ключевые концепции:**
-- Расширяет паттерн наблюдателя для поддержки последовательностей данных/событий
-- Предоставляет операторы для декларативной композиции последовательностей
-- Абстрагирует вопросы о потоках, синхронизации, потокобезопасности и concurrent структурах данных
-
-**RxAndroid:**
-- RxAndroid — расширение RxJava специально для Android
-- Вводит поддержку Main Thread, необходимую для Android
-- Предоставляет `AndroidSchedulers.mainThread()` для выполнения действий в UI потоке
-
-**Преимущества:**
-- Мощные операторы для преобразования данных
-- Простое переключение потоков
-- Отлично подходит для сложных асинхронных потоков
-- Отлично для обработки событий и потоков
-
-**Недостатки:**
-- Крутая кривая обучения
-- Может привести к сложному и трудному для отладки коду
-- Большой размер библиотеки
-- Вытесняется Kotlin Coroutines для новых проектов
-
-## 4. Kotlin Coroutines (Корутины)
-
-**Корутина** — это паттерн проектирования для конкурентности, который можно использовать в Android для упрощения кода, выполняющегося асинхронно.
-
-**Ключевые преимущества:**
-- **Легковесные**: Можно запускать множество корутин в одном потоке благодаря поддержке приостановки
-- **Меньше утечек памяти**: Использование структурированной конкурентности для выполнения операций в области видимости
-- **Встроенная поддержка отмены**: Отмена распространяется автоматически через иерархию корутин
-- **Интеграция с Jetpack**: Многие библиотеки Jetpack включают расширения с полной поддержкой корутин
-
-**Диспетчеры (Dispatchers):**
-- `Dispatchers.Main` - UI поток (главный поток Android)
-- `Dispatchers.IO` - I/O операции (сеть, база данных, файлы)
-- `Dispatchers.Default` - CPU-интенсивная работа
-- `Dispatchers.Unconfined` - Не привязан к конкретному потоку
-
-**Когда использовать корутины:**
-- Современная разработка Android (рекомендуется Google)
-- Асинхронные операции с чистым последовательным кодом
-- Сетевые запросы и операции с базой данных
-- Любая фоновая задача, которая должна обновлять UI
-- Сложные конкурентные операции со структурированной конкурентностью
-
-## Сравнительная таблица
-
-| Инструмент | Статус | Лучше всего для | Сложность | Управление потоками |
-|------------|--------|-----------------|-----------|---------------------|
-| **AsyncTask** | Устарел | Ничего (используйте альтернативы) | Низкая | Автоматическое |
-| **WorkManager** | Рекомендуется | Гарантированная фоновая работа с ограничениями | Средняя | Автоматическое |
-| **RxJava/RxAndroid** | Зрелый | Сложные потоки событий, реактивное программирование | Высокая | Ручное (Schedulers) |
-| **Kotlin Coroutines** | Рекомендуется | Общие async/await, современная разработка Android | Низкая-Средняя | Диспетчеры |
-
-## Современные рекомендации
-
-Для новой разработки Android:
-1. **Kotlin Coroutines** - для большинства асинхронных операций, сетевых вызовов, доступа к БД
-2. **WorkManager** - для отложенных фоновых задач, требующих гарантированного выполнения
-3. **RxJava** - только если у вас есть существующая кодовая база RxJava или специфические реактивные требования
-4. **Никогда не используйте AsyncTask** - он устарел и имеет много проблем
+- [[c-coroutines]]
+- [[c-structured-concurrency]]
+- [[c-flow]]
+- [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
+- [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-what-is-coroutine--kotlin--easy]]
+- [[q-background-vs-foreground-service--android--easy]]
+
+### Related (Same Level)
 - [[q-background-vs-foreground-service--android--medium]]
 - [[q-push-notification-navigation--android--medium]]
 - [[q-room-vs-sqlite--android--medium]]
+
+### Advanced (Harder)
+- [[q-structured-concurrency--kotlin--hard]]
+- [[q-coroutine-context--kotlin--hard]]

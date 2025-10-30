@@ -20,7 +20,7 @@ related:
   - q-recyclerview-async-list-differ--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-30
 tags:
   - android
   - android/ui-views
@@ -31,6 +31,7 @@ tags:
   - prefetching
   - difficulty/medium
 ---
+
 # Вопрос (RU)
 
 Как можно писать RecyclerView, чтобы он кэшировал наперёд?

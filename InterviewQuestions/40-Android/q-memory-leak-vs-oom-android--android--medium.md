@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-13
 updated: 2025-10-28
 tags: [android, android/performance-memory, android/debugging, android/profiling, memory-leak, oom, leakcanary, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:35:38 pm
+date modified: Thursday, October 30th 2025, 3:13:10 pm
 ---
 
 # Вопрос (RU)

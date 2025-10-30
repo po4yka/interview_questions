@@ -15,7 +15,10 @@ created: 2025-10-13
 updated: 2025-10-28
 sources: []
 tags: [design, material3, animation, transitions, motion, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:36:31 pm
+date modified: Thursday, October 30th 2025, 3:12:59 pm
 ---
+
 # Вопрос (RU)
 
 > Каковы ключевые принципы движения в Material 3? Объясните shared element transitions, анимации предиктивного жеста назад и реализацию плавных переходов между composables в соответствии с рекомендациями Material Design.

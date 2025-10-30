@@ -1,220 +1,365 @@
 ---
 id: 20251012-12271143
 title: "Module Types Android / Типы модулей Android"
+aliases: [Android Module Types, Module Types, Типы модулей Android, Типы модулей]
 topic: android
+subtopics: [architecture-modularization, gradle, build-variants]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [modules, app-module, library-module, feature-module, difficulty/medium]
+updated: 2025-10-30
+tags: [android/architecture-modularization, android/gradle, android/build-variants, modularization, modules, architecture, difficulty/medium]
 moc: moc-android
-related: [q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-workmanager-execution-guarantee--android--medium, q-task-affinity--android--medium]
+related: [c-modularization, c-gradle, q-dependency-injection-android--android--medium]
+sources: [https://developer.android.com/topic/modularization/patterns]
 ---
 
-# Types of Android Modules / Типы модулей Android
+# Вопрос (RU)
 
-**English**: What types of modules do you know?
+> Какие типы модулей существуют в Android?
 
-## Answer (EN)
-In Android modularization, there are several types of modules, each serving a specific purpose in the app's architecture:
+# Question (EN)
 
-**1. Data Modules**
+> What types of modules do you know in Android?
 
-A data module usually contains a repository, data sources and model classes. The three primary responsibilities of a data module are:
+---
 
-- **Encapsulate all data and business logic of a certain domain**: Each data module should be responsible for handling data that represents a certain domain. It can handle many types of data as long as they are related
-- **Expose the repository as an external API**: The public API of a data module should be a repository as they are responsible for exposing the data to the rest of the app
-- **Hide all implementation details and data sources from the outside**: Data sources should only be accessible by repositories from the same module. They remain hidden to the outside. You can enforce this by using Kotlin's `private` or `internal` visibility keyword
+## Ответ (RU)
+
+В модуляризации Android существует 5 основных типов модулей:
+
+### 1. Data модули (Модули данных)
+
+Data модуль содержит репозиторий, источники данных и классы моделей. Три основные обязанности:
+
+- **Инкапсуляция данных и бизнес-логики домена** — каждый data модуль отвечает за обработку данных определённого домена
+- **Репозиторий как публичный API** — публичный API модуля должен быть репозиторием, отвечающим за предоставление данных остальной части приложения
+- **Скрытие деталей реализации** — источники данных доступны только репозиториям из того же модуля (использовать `private` или `internal`)
 
 ```kotlin
-// Example data module structure
+// ✅ Структура data модуля
 :core:data:user
  repository/
-    UserRepository.kt (public API)
+    UserRepository.kt          // публичный API
  datasource/
-    UserRemoteDataSource.kt (internal)
-    UserLocalDataSource.kt (internal)
+    UserRemoteDataSource.kt    // internal
+    UserLocalDataSource.kt     // internal
  model/
-     User.kt
+    User.kt
 ```
 
-**2. Feature Modules**
+### 2. Feature модули (Модули функций)
 
-A feature is an isolated part of an app's functionality that usually corresponds to a screen or series of closely related screens, like a sign up or checkout flow.
+Feature модуль — изолированная часть функциональности приложения, соответствующая экрану или серии связанных экранов (регистрация, checkout flow).
 
-Features are associated with screens or destinations in your app. Therefore, they're likely to have an associated UI and `ViewModel` to handle their logic and state. A single feature doesn't have to be limited to a single view or navigation destination. **Feature modules depend on data modules**.
+Feature модули:
+- Связаны с экранами/навигационными точками
+- Содержат UI и `ViewModel` для логики и состояния
+- **Зависят от data модулей**
 
 ```kotlin
-// Example feature module structure
+// ✅ Структура feature модуля
 :feature:profile
  ProfileScreen.kt
  ProfileViewModel.kt
  ProfileUiState.kt
  components/
-     ProfileHeader.kt
-     ProfileSettings.kt
+    ProfileHeader.kt
 ```
 
-**3. App Modules**
+### 3. App модули (Модули приложения)
 
-App modules are an entry point to the application. They depend on feature modules and usually provide root navigation. A single app module can be compiled to a number of different binaries thanks to build variants.
+App модули — точка входа в приложение:
+- Зависят от feature модулей
+- Предоставляют корневую навигацию
+- Компилируются в разные бинарные файлы благодаря build variants
 
 ```kotlin
-// Example app module structure
+// ✅ Структура app модуля
 :app
  MainActivity.kt
  MyApplication.kt
  navigation/
     NavGraph.kt
  di/
-     AppModule.kt
+    AppModule.kt
 ```
 
-If your app targets multiple device types, such as auto, wear or TV, define an app module per each. This helps separate platform specific dependencies.
+Для разных типов устройств создавать отдельные app модули:
 
 ```
-:app (mobile)
-:app-wear (wearOS)
-:app-tv (Android TV)
-:app-auto (Android Auto)
+:app              // mobile
+:app-wear         // wearOS
+:app-tv           // Android TV
+:app-auto         // Android Auto
 ```
 
-**4. Common Modules (Core Modules)**
+### 4. Common модули (Core модули)
 
-Common modules, also known as core modules, contain code that other modules frequently use. They reduce redundancy and don't represent any specific layer in an app's architecture. The following are examples of common modules:
+Common/core модули содержат код, часто используемый другими модулями. Уменьшают избыточность и не представляют конкретный слой архитектуры:
 
-- **UI module**: If you use custom UI elements or elaborate branding in your app, you should consider encapsulating your widget collection into a module for all the features to reuse. This could help make your UI consistent across different features. For example, if your theming is centralized, you can avoid a painful refactor when a rebrand happens
+**UI модуль** — пользовательские UI элементы и брендинг:
 
 ```kotlin
+// ✅ UI модуль
 :core:ui
  theme/
-    Color.kt
     Theme.kt
-    Type.kt
+    Color.kt
  components/
-     Button.kt
-     TextField.kt
-     Card.kt
+    Button.kt
+    TextField.kt
 ```
 
-- **Analytics module**: Tracking is often dictated by business requirements with little consideration to the software architecture. Analytics trackers are often used in many unrelated components. If that's the case for you, it might be a good idea to have a dedicated analytics module
+**Analytics модуль** — трекинг и метрики:
 
 ```kotlin
 :core:analytics
  AnalyticsTracker.kt
 ```
 
-- **Network module**: When many modules require a network connection, you might consider having a module dedicated to providing a http client. It is especially useful when your client requires custom configuration
+**Network модуль** — HTTP клиент с кастомной конфигурацией:
 
 ```kotlin
 :core:network
  RetrofitClient.kt
- NetworkConfig.kt
  interceptors/
-     AuthInterceptor.kt
+    AuthInterceptor.kt
 ```
 
-- **Utility module**: Utilities, also known as helpers, are usually small pieces of code that are reused across the application. Examples of utilities include testing helpers, a currency formatting function, email validator or a custom operator
+**Utility модуль** — вспомогательные функции:
 
 ```kotlin
 :core:common
  extensions/
     StringExt.kt
-    DateExt.kt
  utils/
-     EmailValidator.kt
-     CurrencyFormatter.kt
+    EmailValidator.kt
 ```
 
-**5. Test Modules**
+### 5. Test модули (Тестовые модули)
 
-Test modules are Android modules that are used for testing purposes only. The modules contain test code, test resources, and test dependencies that are only required for running tests and are not needed during the application's runtime. Test modules are created to separate test-specific code from the main application, making the module code easier to manage and maintain.
+Test модули используются только для тестирования. Содержат тестовый код, ресурсы и зависимости.
 
-**Use cases for test modules:**
-
-- **Shared test code**: If you have multiple modules in your project and some of the test code is applicable to more than one module, you can create a test module to share the code. This can help reduce duplication and make your test code easier to maintain. Shared test code can include utility classes or functions, such as custom assertions or matchers, as well as test data, such as simulated JSON responses
-
-- **Cleaner Build Configurations**: Test modules allow you to have cleaner build configurations, as they can have their own `build.gradle` file. You don't have to clutter your app module's `build.gradle` file with configurations that are only relevant for tests
-
-- **Integration Tests**: Test modules can be used to store integration tests that are used to test interactions between different parts of your app, including user interface, business logic, network requests, and database queries
-
-- **Large-scale applications**: Test modules are particularly useful for large-scale applications with complex codebases and multiple modules. In such cases, test modules can help improve code organization and maintainability
+**Варианты использования:**
+- **Общий тестовый код** — переиспользование тестовых утилит, ассертов, тестовых данных между модулями
+- **Чистые конфигурации сборки** — отдельный `build.gradle` для тестовых зависимостей
+- **Интеграционные тесты** — тестирование взаимодействия между частями приложения
+- **Крупные приложения** — улучшение организации кода в сложных кодовых базах
 
 ```kotlin
+// ✅ Структура test модуля
 :core:testing
  fakes/
     FakeUserRepository.kt
-    FakeNetworkDataSource.kt
  rules/
     MainDispatcherRule.kt
  data/
-     TestData.kt
+    TestData.kt
 ```
 
-**Module Dependency Example:**
+### Пример зависимостей модулей
 
 ```
 :app
-   depends on :feature:login, :feature:home
-       :feature:login depends on :core:data:auth, :core:ui
-           :core:data:auth depends on :core:network, :core:database
-               :core:network (no dependencies)
-               :core:database (no dependencies)
+   → :feature:login, :feature:home
+      → :feature:login
+         → :core:data:auth, :core:ui
+            → :core:data:auth
+               → :core:network, :core:database
 ```
 
-**Summary:**
+### Резюме
 
-- **Data modules**: Contain repositories, data sources, and models
-- **Feature modules**: Contain UI, ViewModels, and feature-specific logic
-- **App modules**: Entry points, navigation, dependency injection setup
-- **Common modules**: Shared code (UI, network, analytics, utilities)
-- **Test modules**: Shared test code, fakes, test utilities
+| Тип модуля | Назначение | Зависимости |
+|------------|-----------|------------|
+| **Data** | Репозитории, источники данных, модели | Core модули |
+| **Feature** | UI, ViewModel, логика функции | Data, Core модули |
+| **App** | Точка входа, навигация, DI | Feature модули |
+| **Common/Core** | Общий код (UI, network, analytics) | Минимальные |
+| **Test** | Фейки, тестовые утилиты | Тестируемые модули |
 
-**Source**: [Types of modules](https://developer.android.com/topic/modularization/patterns#types-of-modules)
+## Answer (EN)
 
-## Ответ (RU)
-В модуляризации Android существует несколько типов модулей, каждый из которых служит определённой цели в архитектуре приложения:
+In Android modularization, there are 5 main module types:
 
-**1. Data модули (Модули данных)**
+### 1. Data Modules
 
-Data модуль обычно содержит репозиторий, источники данных и классы моделей. Три основные обязанности data модуля:
-- Инкапсулировать все данные и бизнес-логику определённого домена
-- Предоставлять репозиторий как внешний API
-- Скрывать все детали реализации и источники данных от внешнего мира
+Data modules contain repositories, data sources, and model classes. Three primary responsibilities:
 
-**2. Feature модули (Модули функций)**
+- **Encapsulate domain data and business logic** — each data module handles data for a specific domain
+- **Expose repository as public API** — the public API should be a repository responsible for exposing data to the rest of the app
+- **Hide implementation details** — data sources accessible only by repositories from the same module (use `private` or `internal`)
 
-Feature модуль — это изолированная часть функциональности приложения, которая обычно соответствует экрану или серии тесно связанных экранов, например, процессу регистрации или оформления заказа. Feature модули зависят от data модулей и содержат UI и ViewModel для обработки логики и состояния.
+```kotlin
+// ✅ Data module structure
+:core:data:user
+ repository/
+    UserRepository.kt          // public API
+ datasource/
+    UserRemoteDataSource.kt    // internal
+    UserLocalDataSource.kt     // internal
+ model/
+    User.kt
+```
 
-**3. App модули (Модули приложения)**
+### 2. Feature Modules
 
-App модули — это точка входа в приложение. Они зависят от feature модулей и обычно предоставляют корневую навигацию. Один app модуль может быть скомпилирован в несколько различных бинарных файлов благодаря вариантам сборки. Если приложение ориентировано на несколько типов устройств (auto, wear, TV), следует определить отдельный app модуль для каждого.
+Feature modules are isolated parts of app functionality corresponding to a screen or series of related screens (sign up, checkout flow).
 
-**4. Common модули (Общие модули / Core модули)**
+Feature modules:
+- Associated with screens/navigation destinations
+- Contain UI and `ViewModel` for logic and state
+- **Depend on data modules**
 
-Common модули, также известные как core модули, содержат код, который часто используют другие модули. Они уменьшают избыточность и не представляют какой-либо конкретный слой в архитектуре приложения. Примеры:
-- **UI модуль** — пользовательские UI элементы, темы, компоненты
-- **Analytics модуль** — трекинг и аналитика
-- **Network модуль** — HTTP клиент и конфигурация сети
-- **Utility модуль** — вспомогательные функции, валидаторы, форматтеры
+```kotlin
+// ✅ Feature module structure
+:feature:profile
+ ProfileScreen.kt
+ ProfileViewModel.kt
+ ProfileUiState.kt
+ components/
+    ProfileHeader.kt
+```
 
-**5. Test модули (Тестовые модули)**
+### 3. App Modules
 
-Test модули — это Android модули, используемые только для целей тестирования. Они содержат тестовый код, тестовые ресурсы и тестовые зависимости. Варианты использования:
-- Совместно используемый тестовый код
-- Более чистые конфигурации сборки
-- Интеграционные тесты
-- Крупномасштабные приложения с сложной кодовой базой
+App modules are entry points to the application:
+- Depend on feature modules
+- Provide root navigation
+- Compile to different binaries via build variants
 
-**Резюме:**
+```kotlin
+// ✅ App module structure
+:app
+ MainActivity.kt
+ MyApplication.kt
+ navigation/
+    NavGraph.kt
+ di/
+    AppModule.kt
+```
 
-- **Data модули** содержат репозитории, источники данных и модели
-- **Feature модули** содержат UI, ViewModel и логику, специфичную для функции
-- **App модули** — точки входа, навигация, настройка внедрения зависимостей
-- **Common модули** — общий код (UI, сеть, аналитика, утилиты)
-- **Test модули** — общий тестовый код, фейки, тестовые утилиты
+For multiple device types, define separate app modules:
+
+```
+:app              // mobile
+:app-wear         // wearOS
+:app-tv           // Android TV
+:app-auto         // Android Auto
+```
+
+### 4. Common Modules (Core Modules)
+
+Common/core modules contain code frequently used by other modules. They reduce redundancy and don't represent specific architecture layers:
+
+**UI module** — custom UI elements and branding:
+
+```kotlin
+// ✅ UI module
+:core:ui
+ theme/
+    Theme.kt
+    Color.kt
+ components/
+    Button.kt
+    TextField.kt
+```
+
+**Analytics module** — tracking and metrics:
+
+```kotlin
+:core:analytics
+ AnalyticsTracker.kt
+```
+
+**Network module** — HTTP client with custom configuration:
+
+```kotlin
+:core:network
+ RetrofitClient.kt
+ interceptors/
+    AuthInterceptor.kt
+```
+
+**Utility module** — helper functions:
+
+```kotlin
+:core:common
+ extensions/
+    StringExt.kt
+ utils/
+    EmailValidator.kt
+```
+
+### 5. Test Modules
+
+Test modules are used for testing purposes only. They contain test code, resources, and dependencies.
+
+**Use cases:**
+- **Shared test code** — reuse test utilities, assertions, test data across modules
+- **Cleaner build configurations** — separate `build.gradle` for test dependencies
+- **Integration tests** — test interactions between different app parts
+- **Large-scale applications** — improve code organization in complex codebases
+
+```kotlin
+// ✅ Test module structure
+:core:testing
+ fakes/
+    FakeUserRepository.kt
+ rules/
+    MainDispatcherRule.kt
+ data/
+    TestData.kt
+```
+
+### Module Dependency Example
+
+```
+:app
+   → :feature:login, :feature:home
+      → :feature:login
+         → :core:data:auth, :core:ui
+            → :core:data:auth
+               → :core:network, :core:database
+```
+
+### Summary
+
+| Module Type | Purpose | Dependencies |
+|------------|---------|--------------|
+| **Data** | Repositories, data sources, models | Core modules |
+| **Feature** | UI, ViewModel, feature logic | Data, Core modules |
+| **App** | Entry point, navigation, DI | Feature modules |
+| **Common/Core** | Shared code (UI, network, analytics) | Minimal |
+| **Test** | Fakes, test utilities | Modules under test |
+
+---
+
+## Follow-ups
+
+- How do you prevent circular dependencies between modules?
+- What are the performance implications of having too many modules?
+- How do you handle shared resources (strings, drawables) across modules?
+- What strategy do you use for inter-module communication?
+- How do you manage dependency injection across module boundaries?
+
+## References
+
+- [[c-modularization]]
+- [[c-gradle]]
+- [[c-dependency-injection]]
+- [Types of modules - Android Developers](https://developer.android.com/topic/modularization/patterns)
 
 ## Related Questions
 
+### Same Level (Medium)
+- [[q-dependency-injection-android--android--medium]]
 - [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]]
 - [[q-workmanager-execution-guarantee--android--medium]]
+
+### Advanced (Hard)
 - [[q-task-affinity--android--medium]]

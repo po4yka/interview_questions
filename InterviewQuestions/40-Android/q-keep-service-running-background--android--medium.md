@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/service, android/background-execution, android/coroutines, difficulty/medium, foreground-service, jobscheduler, workmanager]
+date created: Tuesday, October 28th 2025, 9:24:10 pm
+date modified: Thursday, October 30th 2025, 3:11:30 pm
 ---
+
 # Вопрос (RU)
 
 Что делать если нужно чтобы сервис продолжал работу в фоне?

@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/di-koin, android/architecture-clean, android/lifecycle, architecture, difficulty/medium, injection, koin, service-locator]
+date created: Tuesday, October 28th 2025, 9:24:37 pm
+date modified: Thursday, October 30th 2025, 3:11:51 pm
 ---
+
 # Вопрос (RU)
 
 > Чем Koin отличается от Dagger/Hilt? Реализуйте полный Koin модуль с определениями factory, single и viewModel.

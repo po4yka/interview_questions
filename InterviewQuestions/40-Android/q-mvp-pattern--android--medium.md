@@ -15,15 +15,17 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/architecture-mvvm, android/architecture-patterns, android/testing, architecture-patterns, mvp, model-view-presenter, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:50:53 pm
+date modified: Thursday, October 30th 2025, 3:14:31 pm
 ---
 
 # Вопрос (RU)
 
-Что такое архитектурный паттерн MVP (Model-View-Presenter)? Объясните его компоненты и отличия от других паттернов.
+> Что такое архитектурный паттерн MVP (Model-View-Presenter)? Объясните его компоненты и отличия от других паттернов.
 
 # Question (EN)
 
-What is the MVP (Model-View-Presenter) architectural pattern? Explain its components and how it differs from other patterns.
+> What is the MVP (Model-View-Presenter) architectural pattern? Explain its components and how it differs from other patterns.
 
 ---
 

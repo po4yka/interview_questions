@@ -15,15 +15,17 @@ sources: []
 tags: [android, android/navigation, android/ui-compose, android/architecture, architecture, compose, navigation, difficulty/medium]
 moc: moc-android
 related: [q-how-to-draw-ui-without-xml--android--easy, q-app-startup-optimization--performance--medium]
+date created: Tuesday, October 28th 2025, 9:51:01 pm
+date modified: Thursday, October 30th 2025, 3:14:42 pm
 ---
 
 # Вопрос (RU)
 
-Какие способы навигации знаешь в Android?
+> Какие способы навигации знаешь в Android?
 
 # Question (EN)
 
-What navigation methods do you know in Android?
+> What navigation methods do you know in Android?
 
 ---
 

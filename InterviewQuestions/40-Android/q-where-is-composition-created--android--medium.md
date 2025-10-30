@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-27
 sources: []
 tags: [android/ui-compose, android/lifecycle, android/ui-views, jetpack-compose, composition, difficulty/medium]
+date created: Monday, October 27th 2025, 6:53:26 pm
+date modified: Thursday, October 30th 2025, 3:18:07 pm
 ---
+
 # Вопрос (RU)
 
 Где создается композиция для вызова composable функций?

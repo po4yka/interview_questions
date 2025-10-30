@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/threads-sync, android/lifecycle, threading, ui-thread, difficulty/medium]
+date created: Monday, October 27th 2025, 3:41:42 pm
+date modified: Thursday, October 30th 2025, 3:12:55 pm
 ---
+
 # Вопрос (RU)
 
 > Какой основной поток выполнения в Android-приложении?

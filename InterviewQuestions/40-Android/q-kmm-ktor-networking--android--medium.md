@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android/networking-http, android/coroutines, difficulty/medium, kmm, ktor, multiplatform]
 sources: []
+date created: Monday, October 27th 2025, 5:12:45 pm
+date modified: Thursday, October 30th 2025, 3:11:47 pm
 ---
+
 # Вопрос (RU)
 
 > Объясните как использовать Ktor client для multiplatform networking в KMM проектах. Как настроить platform-specific engines, обработать аутентификацию, реализовать retry логику и управлять сетевыми ошибками на Android и iOS?

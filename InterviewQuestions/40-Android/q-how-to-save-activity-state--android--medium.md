@@ -1,118 +1,63 @@
 ---
 id: 20251012-1227195
 title: "How To Save Activity State / Как сохранить состояние Activity"
+aliases: ["How To Save Activity State", "Как сохранить состояние Activity", "Save Activity State", "Сохранение состояния Activity"]
 topic: android
+subtopics: [lifecycle, activity, architecture-mvvm, datastore]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-in-which-thread-does-a-regular-service-run--android--medium, q-intent-filters-android--android--medium, q-reduce-apk-size-techniques--android--medium]
+related: [q-activity-lifecycle-methods--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium]
 created: 2025-10-15
-tags: [android]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:18 pm
+updated: 2025-10-30
+tags: [android, android/lifecycle, android/activity, android/architecture-mvvm, android/datastore, state-management, difficulty/medium]
+sources: []
 ---
 
-# How to save Activity State?
+# Вопрос (RU)
 
-**English**: How to save Activity state?
+> Как сохранить состояние Activity?
 
-## Answer (EN)
-Android provides multiple mechanisms to save and restore Activity state across configuration changes (like screen rotation) and process death. The choice depends on the data type, size, and persistence requirements.
+# Question (EN)
+
+> How to save Activity state?
+
+---
+
+## Ответ (RU)
+
+Android предоставляет несколько механизмов для сохранения и восстановления состояния Activity при изменениях конфигурации (поворот экрана) и завершении процесса. Выбор зависит от типа данных, их размера и требований к постоянству.
 
 ### 1. onSaveInstanceState() / onRestoreInstanceState()
 
-The most common approach for saving lightweight UI state.
+Базовый механизм для сохранения легковесного UI-состояния.
 
-#### Basic Usage
+**Основное использование:**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private var counter = 0
-    private var userName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Restore state
-        if (savedInstanceState != null) {
-            counter = savedInstanceState.getInt("COUNTER", 0)
-            userName = savedInstanceState.getString("USER_NAME", "")
-        }
-
-        updateUI()
+        // ✅ Восстановление состояния
+        counter = savedInstanceState?.getInt("COUNTER", 0) ?: 0
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // Save state
+        // ✅ Сохранение критичных данных UI
         outState.putInt("COUNTER", counter)
-        outState.putString("USER_NAME", userName)
-    }
-
-    // Alternative: restore in onRestoreInstanceState
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        counter = savedInstanceState.getInt("COUNTER", 0)
-        userName = savedInstanceState.getString("USER_NAME", "")
-    }
-
-    private fun updateUI() {
-        counterText.text = "Count: $counter"
-        nameText.text = "User: $userName"
     }
 }
 ```
 
-#### Saving Complex Objects
-
-```kotlin
-data class UserProfile(
-    val id: Int,
-    val name: String,
-    val email: String,
-    val age: Int
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readInt()
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeString(name)
-        parcel.writeString(email)
-        parcel.writeInt(age)
-    }
-
-    override fun describeContents() = 0
-
-    companion object CREATOR : Parcelable.Creator<UserProfile> {
-        override fun createFromParcel(parcel: Parcel) = UserProfile(parcel)
-        override fun newArray(size: Int): Array<UserProfile?> = arrayOfNulls(size)
-    }
-}
-
-class ProfileActivity : AppCompatActivity() {
-    private var userProfile: UserProfile? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
-
-        userProfile = savedInstanceState?.getParcelable("USER_PROFILE")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable("USER_PROFILE", userProfile)
-    }
-}
-```
-
-#### Using @Parcelize (Kotlin)
+**Сложные объекты через Parcelable:**
 
 ```kotlin
 import kotlinx.parcelize.Parcelize
@@ -121,41 +66,49 @@ import kotlinx.parcelize.Parcelize
 data class UserProfile(
     val id: Int,
     val name: String,
-    val email: String,
-    val age: Int
+    val email: String
 ) : Parcelable
 
-// Usage is the same - no boilerplate needed!
+class ProfileActivity : AppCompatActivity() {
+    private var profile: UserProfile? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        profile = savedInstanceState?.getParcelable("PROFILE")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("PROFILE", profile)
+    }
+}
 ```
 
-### 2. ViewModel with SavedStateHandle
+**Ограничения:**
+- Максимум ~1 МБ данных
+- Только примитивы и Parcelable/Serializable объекты
+- Может не сработать при смерти процесса в фоне
 
-Recommended modern approach that survives both configuration changes and process death.
+### 2. ViewModel с SavedStateHandle (рекомендуется)
 
-#### ViewModel with Saved State
+Современный подход, переживающий и изменения конфигурации, и смерть процесса.
+
+**Базовое использование:**
 
 ```kotlin
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.SavedStateHandle
-
 class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    // Automatically saved/restored
+    // ✅ Автоматическое сохранение/восстановление
     var counter: Int
         get() = savedStateHandle.get<Int>("counter") ?: 0
         set(value) = savedStateHandle.set("counter", value)
 
-    var userName: String
-        get() = savedStateHandle.get<String>("userName") ?: ""
-        set(value) = savedStateHandle.set("userName", value)
-
-    // Or use LiveData
-    val counterLiveData: MutableLiveData<Int> = savedStateHandle.getLiveData("counter", 0)
-    val userNameLiveData: MutableLiveData<String> = savedStateHandle.getLiveData("userName", "")
+    // ✅ С LiveData
+    val userName: MutableLiveData<String> =
+        savedStateHandle.getLiveData("userName", "")
 
     fun incrementCounter() {
         counter++
-        counterLiveData.value = counter
     }
 }
 
@@ -164,21 +117,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        // Observe data
-        viewModel.counterLiveData.observe(this) { count ->
-            counterText.text = "Count: $count"
-        }
-
-        incrementButton.setOnClickListener {
-            viewModel.incrementCounter()
+        viewModel.userName.observe(this) { name ->
+            binding.nameText.text = name
         }
     }
 }
 ```
 
-#### SavedStateHandle with StateFlow
+**С StateFlow (современный подход):**
 
 ```kotlin
 class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -187,7 +134,7 @@ class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewMode
     val counter: StateFlow<Int> = _counter.asStateFlow()
 
     init {
-        // Save to savedStateHandle whenever value changes
+        // ✅ Автоматическая синхронизация с SavedStateHandle
         viewModelScope.launch {
             _counter.collect { value ->
                 savedStateHandle["counter"] = value
@@ -199,50 +146,13 @@ class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewMode
         _counter.value++
     }
 }
-
-// In Activity
-lifecycleScope.launch {
-    viewModel.counter.collect { count ->
-        counterText.text = "Count: $count"
-    }
-}
 ```
 
-### 3. Persistent Storage
+### 3. Постоянное Хранилище
 
-For data that needs to survive app termination.
+Для данных, которые должны пережить закрытие приложения.
 
-#### SharedPreferences
-
-```kotlin
-class SettingsActivity : AppCompatActivity() {
-
-    private val prefs by lazy {
-        getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-
-        // Load saved settings
-        val isDarkMode = prefs.getBoolean("dark_mode", false)
-        val fontSize = prefs.getInt("font_size", 14)
-
-        applySettings(isDarkMode, fontSize)
-    }
-
-    private fun saveSettings(isDarkMode: Boolean, fontSize: Int) {
-        prefs.edit {
-            putBoolean("dark_mode", isDarkMode)
-            putInt("font_size", fontSize)
-            apply()
-        }
-    }
-}
-```
-
-#### DataStore (Modern Alternative)
+**DataStore (рекомендуется для настроек):**
 
 ```kotlin
 import androidx.datastore.preferences.core.*
@@ -252,38 +162,25 @@ val Context.dataStore by preferencesDataStore(name = "settings")
 
 class SettingsRepository(private val context: Context) {
 
-    private val DARK_MODE_KEY = booleanPreferencesKey("dark_mode")
-    private val FONT_SIZE_KEY = intPreferencesKey("font_size")
+    private val DARK_MODE = booleanPreferencesKey("dark_mode")
 
     val darkMode: Flow<Boolean> = context.dataStore.data
-        .map { preferences -> preferences[DARK_MODE_KEY] ?: false }
+        .map { it[DARK_MODE] ?: false }
 
     suspend fun setDarkMode(enabled: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[DARK_MODE_KEY] = enabled
-        }
-    }
-
-    val fontSize: Flow<Int> = context.dataStore.data
-        .map { preferences -> preferences[FONT_SIZE_KEY] ?: 14 }
-
-    suspend fun setFontSize(size: Int) {
-        context.dataStore.edit { preferences ->
-            preferences[FONT_SIZE_KEY] = size
-        }
+        context.dataStore.edit { it[DARK_MODE] = enabled }
     }
 }
 ```
 
-#### Room Database
+**Room (для больших объемов данных):**
 
 ```kotlin
 @Entity(tableName = "user_state")
 data class UserState(
     @PrimaryKey val id: Int = 1,
     val scrollPosition: Int,
-    val selectedTab: Int,
-    val searchQuery: String
+    val selectedTab: Int
 )
 
 @Dao
@@ -294,232 +191,297 @@ interface UserStateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveUserState(state: UserState)
 }
-
-class MyViewModel(private val dao: UserStateDao) : ViewModel() {
-
-    val userState: Flow<UserState?> = dao.getUserState()
-
-    fun saveState(scrollPosition: Int, selectedTab: Int, searchQuery: String) {
-        viewModelScope.launch {
-            dao.saveUserState(UserState(1, scrollPosition, selectedTab, searchQuery))
-        }
-    }
-}
 ```
 
-### 4. Handling Fragment State
+### 4. Сравнение Подходов
 
-#### Fragment with onSaveInstanceState
+| Подход | Поворот экрана | Смерть процесса | Закрытие приложения | Применение |
+|--------|----------------|-----------------|---------------------|------------|
+| **onSaveInstanceState** | ✅ | ⚠️ ограниченно | ❌ | Легковесное UI-состояние |
+| **ViewModel (без SavedState)** | ✅ | ❌ | ❌ | UI-данные во время сессии |
+| **ViewModel + SavedStateHandle** | ✅ | ✅ | ❌ | UI-состояние + смерть процесса |
+| **DataStore** | ✅ | ✅ | ✅ | Настройки, preferences |
+| **Room** | ✅ | ✅ | ✅ | Большие наборы данных |
 
-```kotlin
-class MyFragment : Fragment() {
-    private var selectedItemId: Int = -1
+### 5. Лучшие Практики
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        selectedItemId = savedInstanceState?.getInt("SELECTED_ITEM") ?: -1
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("SELECTED_ITEM", selectedItemId)
-    }
-}
-```
-
-#### Fragment with ViewModel and SavedStateHandle
-
-```kotlin
-class FragmentViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-
-    var selectedItemId: Int
-        get() = savedStateHandle.get<Int>("selectedItem") ?: -1
-        set(value) = savedStateHandle.set("selectedItem", value)
-}
-
-class MyFragment : Fragment() {
-    private val viewModel: FragmentViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // selectedItemId automatically restored
-        displayItem(viewModel.selectedItemId)
-    }
-}
-```
-
-### 5. Comparison of Approaches
-
-| Approach | Survives Rotation | Survives Process Death | Survives App Close | Use Case |
-|----------|------------------|----------------------|-------------------|----------|
-| **onSaveInstanceState** | - Yes | - Yes (limited) | - No | Lightweight UI state |
-| **ViewModel (no SavedState)** | - Yes | - No | - No | UI-related data during session |
-| **ViewModel + SavedStateHandle** | - Yes | - Yes | - No | UI state across process death |
-| **SharedPreferences** | - Yes | - Yes | - Yes | User settings, small data |
-| **DataStore** | - Yes | - Yes | - Yes | Settings, preferences (modern) |
-| **Room Database** | - Yes | - Yes | - Yes | Large datasets, complex queries |
-
-### 6. Best Practices
-
-#### Combine Multiple Approaches
+**Комбинирование подходов:**
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
 
-    // ViewModel for UI state
+    // ✅ ViewModel для UI-состояния
     private val viewModel: UserViewModel by viewModels()
 
-    // Persistent storage
-    private val prefs by lazy {
-        getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-    }
+    // ✅ Постоянное хранилище для критичных данных
+    private lateinit var dataStore: SettingsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Restore from persistent storage
-        val userId = prefs.getInt("user_id", -1)
-        if (userId != -1) {
-            viewModel.loadUser(userId)
-        }
-
-        // UI state handled by ViewModel + SavedStateHandle
-        viewModel.userName.observe(this) { name ->
-            nameText.text = name
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Save important data persistently
-        prefs.edit {
-            putInt("user_id", viewModel.currentUserId)
-            apply()
-        }
-    }
-}
-```
-
-#### State Management Summary
-
-```kotlin
-class ComprehensiveActivity : AppCompatActivity() {
-
-    // 1. ViewModel for UI state (survives rotation)
-    private val viewModel: MyViewModel by viewModels()
-
-    // 2. SavedStateHandle for critical UI state (survives process death)
-    // Already integrated in ViewModel
-
-    // 3. Persistent storage for user data
-    private val dataStore by lazy { DataStoreRepository(this) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Load persistent user preferences
+        // Загрузка настроек из постоянного хранилища
         lifecycleScope.launch {
             dataStore.userSettings.collect { settings ->
                 applySettings(settings)
             }
         }
 
-        // Observe UI state from ViewModel
+        // UI-состояние из ViewModel
         viewModel.uiState.observe(this) { state ->
             updateUI(state)
         }
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // Only if ViewModel + SavedStateHandle not used
-        // outState.putString("temp_data", tempValue)
-    }
 }
 ```
 
-### Summary
+**Рекомендации:**
+- ViewModel + SavedStateHandle для большинства UI-состояния
+- DataStore или Room для постоянных данных
+- Избегайте хранения больших объектов в onSaveInstanceState (лимит ~1 МБ)
+- Не сохраняйте Context, View, Activity в ViewModel
 
-**Choose the right approach:**
+## Answer (EN)
 
-1. **Light UI state** (scroll position, selected tab) → `onSaveInstanceState()` or `SavedStateHandle`
-2. **UI-related data during session** → `ViewModel` (without SavedStateHandle)
-3. **Critical UI state across process death** → `ViewModel` + `SavedStateHandle`
-4. **User settings** → `SharedPreferences` or `DataStore`
-5. **Large datasets** → `Room` database
-6. **Combine approaches** for robust state management
-
-**Best Practice:**
-- Use `ViewModel + SavedStateHandle` for most UI state
-- Use `DataStore` or `Room` for persistent data
-- Avoid relying solely on `onSaveInstanceState()` (limited data size)
-
-## Ответ (RU)
-Android предоставляет несколько механизмов для сохранения и восстановления состояния Activity при изменениях конфигурации (например, поворот экрана) и завершении процесса. Выбор зависит от типа данных, их размера и требований к постоянству.
-
+Android provides multiple mechanisms to save and restore Activity state across configuration changes (like screen rotation) and process death. The choice depends on data type, size, and persistence requirements.
 
 ### 1. onSaveInstanceState() / onRestoreInstanceState()
 
-```kotlin
-override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putInt("counter", counter)
-    outState.putString("name", userName)
-}
+Basic mechanism for saving lightweight UI state.
 
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    if (savedInstanceState != null) {
-        counter = savedInstanceState.getInt("counter", 0)
-        userName = savedInstanceState.getString("name", "")
+**Basic usage:**
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private var counter = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // ✅ Restore state
+        counter = savedInstanceState?.getInt("COUNTER", 0) ?: 0
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // ✅ Save critical UI data
+        outState.putInt("COUNTER", counter)
     }
 }
 ```
 
-### 2. ViewModel С SavedStateHandle (рекомендуется)
+**Complex objects via Parcelable:**
 
 ```kotlin
-class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    var counter: Int
-        get() = savedStateHandle.get<Int>("counter") ?: 0
-        set(value) = savedStateHandle.set("counter", value)
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class UserProfile(
+    val id: Int,
+    val name: String,
+    val email: String
+) : Parcelable
+
+class ProfileActivity : AppCompatActivity() {
+    private var profile: UserProfile? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        profile = savedInstanceState?.getParcelable("PROFILE")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("PROFILE", profile)
+    }
 }
 ```
 
-### 3. Постоянное Хранилище
+**Limitations:**
+- Maximum ~1 MB of data
+- Only primitives and Parcelable/Serializable objects
+- May not survive process death in background
 
-- **SharedPreferences** - для настроек
-- **DataStore** - современная альтернатива SharedPreferences
-- **Room** - для больших данных
+### 2. ViewModel with SavedStateHandle (recommended)
 
-### Сравнение
+Modern approach surviving both configuration changes and process death.
 
-| Подход | Переживает поворот | Переживает смерть процесса | Переживает закрытие |
-|--------|-------------------|---------------------------|-------------------|
-| onSaveInstanceState | - | - (ограниченно) | - |
-| ViewModel | - | - | - |
-| ViewModel + SavedStateHandle | - | - | - |
-| SharedPreferences/DataStore | - | - | - |
-| Room | - | - | - |
+**Basic usage:**
 
-**Лучшая практика:** Используйте ViewModel + SavedStateHandle для UI состояния и DataStore/Room для постоянных данных.
+```kotlin
+class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
+    // ✅ Automatic save/restore
+    var counter: Int
+        get() = savedStateHandle.get<Int>("counter") ?: 0
+        set(value) = savedStateHandle.set("counter", value)
+
+    // ✅ With LiveData
+    val userName: MutableLiveData<String> =
+        savedStateHandle.getLiveData("userName", "")
+
+    fun incrementCounter() {
+        counter++
+    }
+}
+
+class MainActivity : AppCompatActivity() {
+    private val viewModel: MyViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.userName.observe(this) { name ->
+            binding.nameText.text = name
+        }
+    }
+}
+```
+
+**With StateFlow (modern approach):**
+
+```kotlin
+class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+
+    private val _counter = MutableStateFlow(savedStateHandle.get<Int>("counter") ?: 0)
+    val counter: StateFlow<Int> = _counter.asStateFlow()
+
+    init {
+        // ✅ Automatic sync with SavedStateHandle
+        viewModelScope.launch {
+            _counter.collect { value ->
+                savedStateHandle["counter"] = value
+            }
+        }
+    }
+
+    fun incrementCounter() {
+        _counter.value++
+    }
+}
+```
+
+### 3. Persistent Storage
+
+For data that needs to survive app termination.
+
+**DataStore (recommended for settings):**
+
+```kotlin
+import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.preferencesDataStore
+
+val Context.dataStore by preferencesDataStore(name = "settings")
+
+class SettingsRepository(private val context: Context) {
+
+    private val DARK_MODE = booleanPreferencesKey("dark_mode")
+
+    val darkMode: Flow<Boolean> = context.dataStore.data
+        .map { it[DARK_MODE] ?: false }
+
+    suspend fun setDarkMode(enabled: Boolean) {
+        context.dataStore.edit { it[DARK_MODE] = enabled }
+    }
+}
+```
+
+**Room (for large datasets):**
+
+```kotlin
+@Entity(tableName = "user_state")
+data class UserState(
+    @PrimaryKey val id: Int = 1,
+    val scrollPosition: Int,
+    val selectedTab: Int
+)
+
+@Dao
+interface UserStateDao {
+    @Query("SELECT * FROM user_state WHERE id = 1")
+    fun getUserState(): Flow<UserState?>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveUserState(state: UserState)
+}
+```
+
+### 4. Comparison of Approaches
+
+| Approach | Survives Rotation | Survives Process Death | Survives App Close | Use Case |
+|----------|------------------|----------------------|-------------------|----------|
+| **onSaveInstanceState** | ✅ | ⚠️ limited | ❌ | Lightweight UI state |
+| **ViewModel (no SavedState)** | ✅ | ❌ | ❌ | UI-related data during session |
+| **ViewModel + SavedStateHandle** | ✅ | ✅ | ❌ | UI state + process death |
+| **DataStore** | ✅ | ✅ | ✅ | Settings, preferences |
+| **Room** | ✅ | ✅ | ✅ | Large datasets |
+
+### 5. Best Practices
+
+**Combining approaches:**
+
+```kotlin
+class UserActivity : AppCompatActivity() {
+
+    // ✅ ViewModel for UI state
+    private val viewModel: UserViewModel by viewModels()
+
+    // ✅ Persistent storage for critical data
+    private lateinit var dataStore: SettingsRepository
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Load settings from persistent storage
+        lifecycleScope.launch {
+            dataStore.userSettings.collect { settings ->
+                applySettings(settings)
+            }
+        }
+
+        // UI state from ViewModel
+        viewModel.uiState.observe(this) { state ->
+            updateUI(state)
+        }
+    }
+}
+```
+
+**Recommendations:**
+- Use ViewModel + SavedStateHandle for most UI state
+- Use DataStore or Room for persistent data
+- Avoid storing large objects in onSaveInstanceState (limit ~1 MB)
+- Never store Context, View, Activity in ViewModel
 
 ---
+
+## Follow-ups
+
+1. What is the maximum size limit for data stored in onSaveInstanceState Bundle?
+2. How does SavedStateHandle differ from regular ViewModel state when process is killed?
+3. When should you choose DataStore over SharedPreferences?
+4. Can ViewModel survive process death without SavedStateHandle?
+5. What happens to saved state when user clears app data from Settings?
+
+## References
+
+- [[c-viewmodel]] - ViewModel architecture component
+- [[c-lifecycle]] - Android lifecycle management
+- [[c-coroutines]] - Kotlin coroutines for async operations
+- https://developer.android.com/topic/libraries/architecture/saving-states
+- https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate
+- https://developer.android.com/topic/libraries/architecture/datastore
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle basics
+- [[q-android-components-besides-activity--android--easy]] - Android core components
 
 ### Related (Medium)
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-- [[q-single-activity-pros-cons--android--medium]] - Activity
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Activity
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity memory management
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment state management
+- [[q-single-activity-pros-cons--android--medium]] - Single-activity architecture
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Advanced architectural patterns

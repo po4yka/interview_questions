@@ -15,14 +15,17 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-navigation, android/intents-deeplinks, android/architecture-modularization, navigation, ui, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:52:09 pm
+date modified: Thursday, October 30th 2025, 3:14:49 pm
 ---
+
 # Вопрос (RU)
 
-Какие способы навигации в Android знаешь?
+> Какие способы навигации в Android знаешь?
 
 # Question (EN)
 
-What navigation methods in Android do you know?
+> What navigation methods in Android do you know?
 
 ---
 

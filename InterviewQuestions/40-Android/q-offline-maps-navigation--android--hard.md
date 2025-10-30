@@ -32,6 +32,8 @@ tags:
         navigation,
         offline,
     ]
+date created: Wednesday, October 29th 2025, 5:02:58 pm
+date modified: Thursday, October 30th 2025, 3:15:12 pm
 ---
 
 # Вопрос (RU)

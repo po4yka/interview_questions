@@ -15,7 +15,10 @@ tags: [android/performance-memory, android/profiling, leakcanary, memory-leaks, 
 moc: moc-android
 related: [c-memory-management, q-test-doubles-dependency-injection--testing--medium, q-how-vsync-and-recomposition-events-are-related--android--hard]
 sources: []
+date created: Monday, October 27th 2025, 3:57:39 pm
+date modified: Thursday, October 30th 2025, 3:12:27 pm
 ---
+
 # Вопрос (RU)
 
 > Какая библиотека используется для нахождения утечек памяти в Android?

@@ -20,7 +20,10 @@ tags:
   - android/lifecycle
   - android/background-execution
   - difficulty/medium
+date created: Monday, October 27th 2025, 3:47:51 pm
+date modified: Thursday, October 30th 2025, 3:18:09 pm
 ---
+
 # Вопрос (RU)
 
 > Когда система может перезапустить сервис?

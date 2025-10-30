@@ -9,6 +9,8 @@ related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--androi
 created: 2025-10-15
 tags:
   - android
+date created: Sunday, October 12th 2025, 12:27:51 pm
+date modified: Thursday, October 30th 2025, 3:18:12 pm
 ---
 
 # What needs to be done in Android project to start drawing UI on screen?

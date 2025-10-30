@@ -15,14 +15,17 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/networking-http, android/background-execution, android/files-media, file-upload, workmanager, retrofit, multipart, difficulty/medium]
+date created: Monday, October 27th 2025, 3:33:06 pm
+date modified: Thursday, October 30th 2025, 3:12:02 pm
 ---
+
 # Вопрос (RU)
 
-Как загрузить большой файл на сервер в Android?
+> Как загрузить большой файл на сервер в Android?
 
 # Question (EN)
 
-How to upload large files to server in Android?
+> How to upload large files to server in Android?
 
 ---
 

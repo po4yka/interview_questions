@@ -1,653 +1,100 @@
 ---
 id: 20251017-105349
-title: "How To Show Svg String As Vector File / Как показать SVG строку как векторный файл"
+title: "How To Show SVG String As Vector File / Как показать SVG строку как векторный файл"
+aliases: ["SVG String Display", "Отображение SVG строки", "SVG Vector Rendering"]
 topic: android
+subtopics: [ui-graphics, ui-views, ui-compose]
+question_kind: android
 difficulty: medium
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [q-vector-graphics-animations--graphics--medium, q-what-is-known-about-view-lifecycles--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+related: [q-vector-graphics-animations--android--medium, q-what-is-known-about-view-lifecycles--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 created: 2025-10-15
-tags: [difficulty/medium, languages]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:15 pm
+updated: 2025-10-30
+sources: [https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources]
+tags: [android/ui-graphics, android/ui-views, android/ui-compose, difficulty/medium, svg, vector-graphics, image-loading]
 ---
 
-# Как SVG-строку Показать В Виде Векторного Файла?
+# Вопрос (RU)
 
-## Answer (EN)
-There are several approaches to display an SVG string as a vector image in Android. The methods range from using specialized libraries to converting the SVG to native Android vector drawables.
+> Как отобразить SVG строку в виде векторного изображения в Android?
 
-### 1. Using AndroidSVG Library
+# Question (EN)
 
-The most straightforward approach for SVG strings.
-
-```kotlin
-// Add dependency
-// implementation 'com.caverock:androidsvg-aar:1.4'
-
-class SvgActivity : AppCompatActivity() {
-
-    private fun displaySvgFromString(svgString: String, imageView: ImageView) {
-        try {
-            val svg = SVG.getFromString(svgString)
-            val drawable = PictureDrawable(svg.renderToPicture())
-            imageView.setImageDrawable(drawable)
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-        }
-    }
-
-    // Alternative: Set dimensions
-    private fun displaySvgWithSize(svgString: String, imageView: ImageView, width: Int, height: Int) {
-        try {
-            val svg = SVG.getFromString(svgString)
-
-            // Set SVG document dimensions
-            svg.documentWidth = width.toFloat()
-            svg.documentHeight = height.toFloat()
-
-            val picture = svg.renderToPicture(width, height)
-            val drawable = PictureDrawable(picture)
-            imageView.setImageDrawable(drawable)
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-        }
-    }
-
-    // Example usage
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_svg)
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        val svgString = """
-            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="40" fill="blue" />
-            </svg>
-        """.trimIndent()
-
-        displaySvgFromString(svgString, imageView)
-    }
-}
-```
-
-### 2. Using Coil with SVG Decoder
-
-Modern image loading library with SVG support.
-
-```kotlin
-// Add dependencies
-// implementation "io.coil-kt:coil:2.5.0"
-// implementation "io.coil-kt:coil-svg:2.5.0"
-
-class CoilSvgActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Setup ImageLoader with SVG support
-        val imageLoader = ImageLoader.Builder(this)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        val svgString = """
-            <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                <rect width="200" height="200" fill="red" />
-                <circle cx="100" cy="100" r="50" fill="yellow" />
-            </svg>
-        """.trimIndent()
-
-        // Convert string to ByteArray
-        val svgBytes = svgString.toByteArray()
-
-        // Load SVG from bytes
-        val request = ImageRequest.Builder(this)
-            .data(svgBytes)
-            .target(imageView)
-            .build()
-
-        imageLoader.enqueue(request)
-    }
-
-    // Load SVG from URL
-    private fun loadSvgFromUrl(url: String, imageView: ImageView) {
-        val imageLoader = ImageLoader.Builder(this)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-
-        val request = ImageRequest.Builder(this)
-            .data(url)
-            .target(imageView)
-            .build()
-
-        imageLoader.enqueue(request)
-    }
-}
-```
-
-### 3. Using Glide with SVG Module
-
-```kotlin
-// Add dependencies
-// implementation 'com.github.bumptech.glide:glide:4.16.0'
-// implementation 'com.caverock:androidsvg-aar:1.4'
-
-// Create SVG Decoder for Glide
-class SvgDecoder : ResourceDecoder<InputStream, SVG> {
-    override fun handles(source: InputStream, options: Options): Boolean = true
-
-    override fun decode(
-        source: InputStream,
-        width: Int,
-        height: Int,
-        options: Options
-    ): Resource<SVG>? {
-        return try {
-            val svg = SVG.getFromInputStream(source)
-            SimpleResource(svg)
-        } catch (e: SVGParseException) {
-            null
-        }
-    }
-}
-
-// SVG to Drawable transcoder
-class SvgDrawableTranscoder : ResourceTranscoder<SVG, PictureDrawable> {
-    override fun transcode(
-        toTranscode: Resource<SVG>,
-        options: Options
-    ): Resource<PictureDrawable> {
-        val svg = toTranscode.get()
-        val picture = svg.renderToPicture()
-        val drawable = PictureDrawable(picture)
-        return SimpleResource(drawable)
-    }
-}
-
-// Register in AppGlideModule
-@GlideModule
-class MyAppGlideModule : AppGlideModule() {
-    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        registry.register(SVG::class.java, PictureDrawable::class.java, SvgDrawableTranscoder())
-            .append(InputStream::class.java, SVG::class.java, SvgDecoder())
-    }
-
-    override fun isManifestParsingEnabled(): Boolean = false
-}
-
-// Usage
-class GlideSvgActivity : AppCompatActivity() {
-
-    private fun loadSvgString(svgString: String, imageView: ImageView) {
-        val svgBytes = svgString.toByteArray()
-
-        Glide.with(this)
-            .`as`(PictureDrawable::class.java)
-            .load(svgBytes)
-            .into(imageView)
-    }
-}
-```
-
-### 4. Save to File and Load
-
-```kotlin
-class SvgFileActivity : AppCompatActivity() {
-
-    private fun saveSvgStringToFile(svgString: String): File {
-        val file = File(cacheDir, "temp_svg_${System.currentTimeMillis()}.svg")
-        file.writeText(svgString)
-        return file
-    }
-
-    private fun loadSvgFromFile(file: File, imageView: ImageView) {
-        try {
-            val svg = SVG.getFromInputStream(file.inputStream())
-            val drawable = PictureDrawable(svg.renderToPicture())
-            imageView.setImageDrawable(drawable)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    // Complete flow
-    private fun displaySvgString(svgString: String, imageView: ImageView) {
-        val file = saveSvgStringToFile(svgString)
-        loadSvgFromFile(file, imageView)
-        file.delete() // Clean up
-    }
-}
-```
-
-### 5. Convert SVG to Bitmap
-
-```kotlin
-class SvgToBitmapConverter {
-
-    fun svgStringToBitmap(svgString: String, width: Int, height: Int): Bitmap? {
-        return try {
-            val svg = SVG.getFromString(svgString)
-
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-
-            svg.documentWidth = width.toFloat()
-            svg.documentHeight = height.toFloat()
-
-            svg.renderToCanvas(canvas)
-            bitmap
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    fun displayAsBitmap(svgString: String, imageView: ImageView) {
-        val bitmap = svgStringToBitmap(svgString, 500, 500)
-        imageView.setImageBitmap(bitmap)
-    }
-}
-```
-
-### 6. Custom Drawable from SVG String
-
-```kotlin
-class SvgDrawable(private val svgString: String) : Drawable() {
-
-    private var svg: SVG? = null
-
-    init {
-        try {
-            svg = SVG.getFromString(svgString)
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun draw(canvas: Canvas) {
-        svg?.let {
-            it.documentWidth = bounds.width().toFloat()
-            it.documentHeight = bounds.height().toFloat()
-            it.renderToCanvas(canvas)
-        }
-    }
-
-    override fun setAlpha(alpha: Int) {
-        // Implement if needed
-    }
-
-    override fun setColorFilter(colorFilter: ColorFilter?) {
-        // Implement if needed
-    }
-
-    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
-}
-
-// Usage
-class CustomDrawableActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val svgString = """
-            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="50,10 90,90 10,90" fill="green" />
-            </svg>
-        """.trimIndent()
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        imageView.setImageDrawable(SvgDrawable(svgString))
-    }
-}
-```
-
-### 7. Jetpack Compose Implementation
-
-```kotlin
-// Using Coil in Compose
-@Composable
-fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-
-    val imageLoader = remember {
-        ImageLoader.Builder(context)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-    }
-
-    AsyncImage(
-        model = ImageRequest.Builder(context)
-            .data(svgString.toByteArray())
-            .build(),
-        contentDescription = null,
-        imageLoader = imageLoader,
-        modifier = modifier
-    )
-}
-
-// Using AndroidSVG with Canvas
-@Composable
-fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
-    var svgDrawable by remember { mutableStateOf<Drawable?>(null) }
-
-    LaunchedEffect(svgString) {
-        withContext(Dispatchers.IO) {
-            try {
-                val svg = SVG.getFromString(svgString)
-                val pictureDrawable = PictureDrawable(svg.renderToPicture())
-                svgDrawable = pictureDrawable
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    Canvas(modifier = modifier) {
-        svgDrawable?.let { drawable ->
-            drawable.setBounds(0, 0, size.width.toInt(), size.height.toInt())
-            drawIntoCanvas { canvas ->
-                drawable.draw(canvas.nativeCanvas)
-            }
-        }
-    }
-}
-
-// Usage
-@Composable
-fun SvgScreen() {
-    val svgString = """
-        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="100" r="80" fill="purple" />
-        </svg>
-    """.trimIndent()
-
-    Column {
-        SvgImage(
-            svgString = svgString,
-            modifier = Modifier.size(200.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        SvgFromString(
-            svgString = svgString,
-            modifier = Modifier.size(200.dp)
-        )
-    }
-}
-```
-
-### 8. Network SVG Loading
-
-```kotlin
-class NetworkSvgLoader(private val context: Context) {
-
-    suspend fun loadSvgFromUrl(url: String): String? = withContext(Dispatchers.IO) {
-        try {
-            val connection = URL(url).openConnection() as HttpURLConnection
-            connection.inputStream.bufferedReader().use { it.readText() }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    suspend fun displaySvgFromUrl(url: String, imageView: ImageView) {
-        val svgString = loadSvgFromUrl(url)
-        svgString?.let {
-            withContext(Dispatchers.Main) {
-                try {
-                    val svg = SVG.getFromString(it)
-                    val drawable = PictureDrawable(svg.renderToPicture())
-                    imageView.setImageDrawable(drawable)
-                } catch (e: SVGParseException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
-}
-
-// Usage with coroutines
-class SvgNetworkActivity : AppCompatActivity() {
-    private val svgLoader = NetworkSvgLoader(this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-
-        lifecycleScope.launch {
-            svgLoader.displaySvgFromUrl(
-                "https://example.com/image.svg",
-                imageView
-            )
-        }
-    }
-}
-```
-
-### Comparison of Approaches
-
-| Approach | Pros | Cons | Best For |
-|----------|------|------|----------|
-| AndroidSVG | Simple, lightweight | Manual setup | Direct SVG strings |
-| Coil + SVG | Modern, caching | Additional dependency | Network SVGs |
-| Glide + SVG | Robust, familiar | More setup | Existing Glide projects |
-| File-based | Standard approach | I/O overhead | Large SVGs |
-| Bitmap conversion | Compatible everywhere | Memory intensive | Static images |
-
-### Best Practices
-
-1. **Use AndroidSVG** for simple SVG string display
-2. **Use Coil** for modern apps with network SVGs
-3. **Cache converted images** for better performance
-4. **Handle errors gracefully** - SVG parsing can fail
-5. **Consider memory usage** when converting to bitmap
-6. **Use appropriate image size** to avoid scaling issues
+> How to display an SVG string as a vector image in Android?
 
 ---
-
-# Как SVG-строку Показать В Виде Векторного Файла
 
 ## Ответ (RU)
 
-Существует несколько способов отображения SVG-строки как векторного изображения в Android, от использования специализированных библиотек до конвертации в нативные Android vector drawable.
+Android не поддерживает SVG нативно, но существует несколько проверенных подходов для отображения SVG-строк: AndroidSVG библиотека, Coil с SVG декодером, конвертация в Bitmap, или custom Drawable.
 
-### Основные Подходы
+### 1. AndroidSVG Библиотека — Прямая Работа со Строками
 
-1. **AndroidSVG библиотека** - прямая работа с SVG строками
-2. **Coil с SVG декодером** - современная загрузка изображений
-3. **Glide с SVG модулем** - интеграция с популярной библиотекой
-4. **Сохранение в файл** - классический подход
-5. **Конвертация в Bitmap** - совместимость везде
-6. **Custom Drawable** - полный контроль
-7. **Jetpack Compose** - декларативный UI
-
-### 1. AndroidSVG Библиотека
-
-Самый прямой подход для работы с SVG строками.
+✅ **Рекомендуемый подход** для большинства сценариев.
 
 ```kotlin
-// Добавить зависимость
 // implementation 'com.caverock:androidsvg-aar:1.4'
 
-class SvgActivity : AppCompatActivity() {
-
-    private fun displaySvgFromString(svgString: String, imageView: ImageView) {
-        try {
-            val svg = SVG.getFromString(svgString)
-            val drawable = PictureDrawable(svg.renderToPicture())
-            imageView.setImageDrawable(drawable)
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-        }
+fun displaySvgFromString(svgString: String, imageView: ImageView) {
+    try {
+        val svg = SVG.getFromString(svgString)
+        imageView.setImageDrawable(PictureDrawable(svg.renderToPicture()))
+    } catch (e: SVGParseException) {
+        Log.e("SVG", "Parse error", e)
+        imageView.setImageResource(R.drawable.placeholder)
     }
+}
 
-    // Альтернатива: указание размеров
-    private fun displaySvgWithSize(svgString: String, imageView: ImageView, width: Int, height: Int) {
-        try {
-            val svg = SVG.getFromString(svgString)
+// С явным указанием размеров
+fun displaySvgWithSize(svgString: String, imageView: ImageView, width: Int, height: Int) {
+    val svg = SVG.getFromString(svgString)
+    svg.documentWidth = width.toFloat()
+    svg.documentHeight = height.toFloat()
 
-            // Установка размеров SVG документа
-            svg.documentWidth = width.toFloat()
-            svg.documentHeight = height.toFloat()
-
-            val picture = svg.renderToPicture(width, height)
-            val drawable = PictureDrawable(picture)
-            imageView.setImageDrawable(drawable)
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-        }
-    }
-
-    // Пример использования
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_svg)
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        val svgString = """
-            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="40" fill="blue" />
-            </svg>
-        """.trimIndent()
-
-        displaySvgFromString(svgString, imageView)
-    }
+    val picture = svg.renderToPicture(width, height)
+    imageView.setImageDrawable(PictureDrawable(picture))
 }
 ```
 
-**Преимущества:**
-- Прямая работа со строками
-- Легкая интеграция
-- Хорошая производительность
+**Преимущества:** Легковесность, простота, хорошая производительность.
+**Недостатки:** Нет кэширования из коробки, ручное управление.
 
-**Недостатки:**
-- Дополнительная библиотека
-- Ручное управление
+### 2. Coil с SVG Декодером — Современный Подход
 
-### 2. Coil С SVG Декодером
-
-Современная библиотека загрузки изображений с поддержкой SVG.
+✅ **Лучший выбор** для приложений с загрузкой из сети.
 
 ```kotlin
-// Добавить зависимости
 // implementation "io.coil-kt:coil:2.5.0"
 // implementation "io.coil-kt:coil-svg:2.5.0"
 
-class CoilSvgActivity : AppCompatActivity() {
+val imageLoader = ImageLoader.Builder(context)
+    .components { add(SvgDecoder.Factory()) }
+    .build()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+fun loadSvgString(svgString: String, imageView: ImageView) {
+    val request = ImageRequest.Builder(context)
+        .data(svgString.toByteArray())
+        .target(imageView)
+        .build()
 
-        // Настройка ImageLoader с поддержкой SVG
-        val imageLoader = ImageLoader.Builder(this)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        val svgString = """
-            <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                <rect width="200" height="200" fill="red" />
-                <circle cx="100" cy="100" r="50" fill="yellow" />
-            </svg>
-        """.trimIndent()
-
-        // Конвертация строки в ByteArray
-        val svgBytes = svgString.toByteArray()
-
-        // Загрузка SVG из байтов
-        val request = ImageRequest.Builder(this)
-            .data(svgBytes)
-            .target(imageView)
-            .build()
-
-        imageLoader.enqueue(request)
-    }
-
-    // Загрузка SVG из URL
-    private fun loadSvgFromUrl(url: String, imageView: ImageView) {
-        val imageLoader = ImageLoader.Builder(this)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-
-        val request = ImageRequest.Builder(this)
-            .data(url)
-            .target(imageView)
-            .build()
-
-        imageLoader.enqueue(request)
-    }
+    imageLoader.enqueue(request)
 }
 ```
 
-**Преимущества:**
-- Современный API
-- Кэширование из коробки
-- Coroutines поддержка
+**Преимущества:** Кэширование, coroutines поддержка, современный API.
+**Недостатки:** Дополнительная зависимость.
 
-### 3. Конвертация В Bitmap
-
-Универсальный подход для совместимости.
-
-```kotlin
-class SvgToBitmapConverter {
-
-    fun svgStringToBitmap(svgString: String, width: Int, height: Int): Bitmap? {
-        return try {
-            val svg = SVG.getFromString(svgString)
-
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-
-            svg.documentWidth = width.toFloat()
-            svg.documentHeight = height.toFloat()
-
-            svg.renderToCanvas(canvas)
-            bitmap
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    fun displayAsBitmap(svgString: String, imageView: ImageView) {
-        val bitmap = svgStringToBitmap(svgString, 500, 500)
-        imageView.setImageBitmap(bitmap)
-    }
-}
-```
-
-### 4. Custom Drawable Из SVG Строки
-
-Полный контроль над отрисовкой.
+### 3. Custom Drawable — Полный Контроль
 
 ```kotlin
 class SvgDrawable(private val svgString: String) : Drawable() {
-
     private var svg: SVG? = null
 
     init {
-        try {
-            svg = SVG.getFromString(svgString)
-        } catch (e: SVGParseException) {
-            e.printStackTrace()
-        }
+        svg = SVG.getFromString(svgString)
     }
 
     override fun draw(canvas: Canvas) {
@@ -658,270 +105,98 @@ class SvgDrawable(private val svgString: String) : Drawable() {
         }
     }
 
-    override fun setAlpha(alpha: Int) {
-        // Реализовать при необходимости
-    }
-
-    override fun setColorFilter(colorFilter: ColorFilter?) {
-        // Реализовать при необходимости
-    }
-
+    override fun setAlpha(alpha: Int) {}
+    override fun setColorFilter(colorFilter: ColorFilter?) {}
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }
 
 // Использование
-class CustomDrawableActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val svgString = """
-            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="50,10 90,90 10,90" fill="green" />
-            </svg>
-        """.trimIndent()
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-        imageView.setImageDrawable(SvgDrawable(svgString))
-    }
-}
+imageView.setImageDrawable(SvgDrawable(svgString))
 ```
 
-### 5. Jetpack Compose Реализация
-
-Для современного декларативного UI.
+### 4. Jetpack Compose Реализация
 
 ```kotlin
-// Использование Coil в Compose
-@Composable
-fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-
-    val imageLoader = remember {
-        ImageLoader.Builder(context)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-    }
-
-    AsyncImage(
-        model = ImageRequest.Builder(context)
-            .data(svgString.toByteArray())
-            .build(),
-        contentDescription = null,
-        imageLoader = imageLoader,
-        modifier = modifier
-    )
-}
-
-// Использование AndroidSVG с Canvas
 @Composable
 fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
-    var svgDrawable by remember { mutableStateOf<Drawable?>(null) }
+    var drawable by remember { mutableStateOf<Drawable?>(null) }
 
     LaunchedEffect(svgString) {
         withContext(Dispatchers.IO) {
-            try {
-                val svg = SVG.getFromString(svgString)
-                val pictureDrawable = PictureDrawable(svg.renderToPicture())
-                svgDrawable = pictureDrawable
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            val svg = SVG.getFromString(svgString)
+            drawable = PictureDrawable(svg.renderToPicture())
         }
     }
 
     Canvas(modifier = modifier) {
-        svgDrawable?.let { drawable ->
-            drawable.setBounds(0, 0, size.width.toInt(), size.height.toInt())
+        drawable?.let {
+            it.setBounds(0, 0, size.width.toInt(), size.height.toInt())
             drawIntoCanvas { canvas ->
-                drawable.draw(canvas.nativeCanvas)
+                it.draw(canvas.nativeCanvas)
             }
         }
     }
 }
-
-// Использование
-@Composable
-fun SvgScreen() {
-    val svgString = """
-        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="100" r="80" fill="purple" />
-        </svg>
-    """.trimIndent()
-
-    Column {
-        SvgImage(
-            svgString = svgString,
-            modifier = Modifier.size(200.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        SvgFromString(
-            svgString = svgString,
-            modifier = Modifier.size(200.dp)
-        )
-    }
-}
 ```
 
-### 6. Загрузка SVG Из Сети
+### 5. Конвертация в Bitmap
 
-Работа с удаленными SVG файлами.
+❌ **Избегать** для векторной графики — теряется масштабируемость.
 
 ```kotlin
-class NetworkSvgLoader(private val context: Context) {
+fun svgToBitmap(svgString: String, width: Int, height: Int): Bitmap? {
+    return try {
+        val svg = SVG.getFromString(svgString)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
 
-    suspend fun loadSvgFromUrl(url: String): String? = withContext(Dispatchers.IO) {
-        try {
-            val connection = URL(url).openConnection() as HttpURLConnection
-            connection.inputStream.bufferedReader().use { it.readText() }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
+        svg.documentWidth = width.toFloat()
+        svg.documentHeight = height.toFloat()
+        svg.renderToCanvas(canvas)
 
-    suspend fun displaySvgFromUrl(url: String, imageView: ImageView) {
-        val svgString = loadSvgFromUrl(url)
-        svgString?.let {
-            withContext(Dispatchers.Main) {
-                try {
-                    val svg = SVG.getFromString(it)
-                    val drawable = PictureDrawable(svg.renderToPicture())
-                    imageView.setImageDrawable(drawable)
-                } catch (e: SVGParseException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
-}
-
-// Использование с корутинами
-class SvgNetworkActivity : AppCompatActivity() {
-    private val svgLoader = NetworkSvgLoader(this)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val imageView = findViewById<ImageView>(R.id.imageView)
-
-        lifecycleScope.launch {
-            svgLoader.displaySvgFromUrl(
-                "https://example.com/image.svg",
-                imageView
-            )
-        }
+        bitmap
+    } catch (e: SVGParseException) {
+        null
     }
 }
 ```
-
-### Сравнение Подходов
-
-| Подход | Плюсы | Минусы | Лучше для |
-|----------|------|------|----------|
-| AndroidSVG | Простота, легковесность | Ручная настройка | Прямые SVG строки |
-| Coil + SVG | Современный, кэширование | Доп. зависимость | Сетевые SVG |
-| Glide + SVG | Надежный, знакомый | Больше настройки | Существующие Glide проекты |
-| Файловый | Стандартный подход | Overhead I/O | Большие SVG |
-| Bitmap конвертация | Совместимость везде | Затраты памяти | Статические изображения |
-| Custom Drawable | Полный контроль | Больше кода | Специфичные требования |
-| Compose | Декларативный | Требует Compose | Современные UI |
 
 ### Лучшие Практики
 
-**1. Выбор библиотеки:**
-```kotlin
-// Для простых случаев - AndroidSVG
-fun simple(svgString: String, view: ImageView) {
-    val svg = SVG.getFromString(svgString)
-    view.setImageDrawable(PictureDrawable(svg.renderToPicture()))
-}
-
-// Для современных приложений - Coil
-fun modern(svgUrl: String, view: ImageView) {
-    view.load(svgUrl) {
-        decoder(SvgDecoder.Factory())
-    }
-}
-```
-
-**2. Обработка ошибок:**
+**Обработка ошибок:**
 ```kotlin
 fun safeSvgLoad(svgString: String, imageView: ImageView) {
     try {
         val svg = SVG.getFromString(svgString)
-        val drawable = PictureDrawable(svg.renderToPicture())
-        imageView.setImageDrawable(drawable)
+        imageView.setImageDrawable(PictureDrawable(svg.renderToPicture()))
     } catch (e: SVGParseException) {
-        Log.e("SVG", "Parsing error: ${e.message}")
-        // Показать placeholder
+        Log.e("SVG", "Parsing failed", e)
         imageView.setImageResource(R.drawable.placeholder)
-    } catch (e: Exception) {
-        Log.e("SVG", "Unknown error: ${e.message}")
-        imageView.setImageResource(R.drawable.error)
     }
 }
 ```
 
-**3. Оптимизация памяти:**
+**Кэширование:**
 ```kotlin
 class OptimizedSvgLoader {
-    // Кэширование загруженных SVG
     private val cache = LruCache<String, PictureDrawable>(10)
 
     fun loadSvg(svgString: String, imageView: ImageView) {
-        val cacheKey = svgString.hashCode().toString()
-
-        val cached = cache.get(cacheKey)
-        if (cached != null) {
-            imageView.setImageDrawable(cached)
+        val key = svgString.hashCode().toString()
+        cache.get(key)?.let {
+            imageView.setImageDrawable(it)
             return
         }
 
-        try {
-            val svg = SVG.getFromString(svgString)
-            val drawable = PictureDrawable(svg.renderToPicture())
-            cache.put(cacheKey, drawable)
-            imageView.setImageDrawable(drawable)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-}
-```
-
-**4. Размеры и масштабирование:**
-```kotlin
-fun loadSvgWithProperSize(
-    svgString: String,
-    imageView: ImageView,
-    targetWidth: Int,
-    targetHeight: Int
-) {
-    try {
         val svg = SVG.getFromString(svgString)
-
-        // Установка целевых размеров
-        svg.documentWidth = targetWidth.toFloat()
-        svg.documentHeight = targetHeight.toFloat()
-
-        // Создание Picture с указанными размерами
-        val picture = svg.renderToPicture(targetWidth, targetHeight)
-        val drawable = PictureDrawable(picture)
-
+        val drawable = PictureDrawable(svg.renderToPicture())
+        cache.put(key, drawable)
         imageView.setImageDrawable(drawable)
-    } catch (e: Exception) {
-        e.printStackTrace()
     }
 }
 ```
 
-**5. ViewModel интеграция:**
+**ViewModel интеграция:**
 ```kotlin
 class SvgViewModel : ViewModel() {
     private val _svgDrawable = MutableLiveData<PictureDrawable?>()
@@ -929,62 +204,252 @@ class SvgViewModel : ViewModel() {
 
     fun loadSvg(svgString: String) {
         viewModelScope.launch(Dispatchers.Default) {
-            try {
-                val svg = SVG.getFromString(svgString)
-                val drawable = PictureDrawable(svg.renderToPicture())
-                _svgDrawable.postValue(drawable)
-            } catch (e: Exception) {
-                _svgDrawable.postValue(null)
+            val svg = SVG.getFromString(svgString)
+            _svgDrawable.postValue(PictureDrawable(svg.renderToPicture()))
+        }
+    }
+}
+```
+
+### Сравнение Подходов
+
+| Подход | Производительность | Кэширование | Сложность | Сценарий |
+|--------|-------------------|-------------|-----------|----------|
+| AndroidSVG | Высокая | Ручное | Низкая | Простые случаи |
+| Coil | Высокая | Автоматическое | Средняя | Сеть, кэш |
+| Custom Drawable | Высокая | Ручное | Средняя | Особые требования |
+| Bitmap | Низкая | Ручное | Низкая | ❌ Не рекомендуется |
+
+**Рекомендации по выбору:**
+- **Простая интеграция** → AndroidSVG
+- **Сетевые SVG** → Coil с SVG декодером
+- **Compose UI** → Custom Canvas с LaunchedEffect
+- **Особая логика отрисовки** → Custom Drawable
+
+---
+
+## Answer (EN)
+
+Android doesn't support SVG natively, but there are several proven approaches to display SVG strings: AndroidSVG library, Coil with SVG decoder, Bitmap conversion, or custom Drawable.
+
+### 1. AndroidSVG Library — Direct String Handling
+
+✅ **Recommended approach** for most scenarios.
+
+```kotlin
+// implementation 'com.caverock:androidsvg-aar:1.4'
+
+fun displaySvgFromString(svgString: String, imageView: ImageView) {
+    try {
+        val svg = SVG.getFromString(svgString)
+        imageView.setImageDrawable(PictureDrawable(svg.renderToPicture()))
+    } catch (e: SVGParseException) {
+        Log.e("SVG", "Parse error", e)
+        imageView.setImageResource(R.drawable.placeholder)
+    }
+}
+
+// With explicit dimensions
+fun displaySvgWithSize(svgString: String, imageView: ImageView, width: Int, height: Int) {
+    val svg = SVG.getFromString(svgString)
+    svg.documentWidth = width.toFloat()
+    svg.documentHeight = height.toFloat()
+
+    val picture = svg.renderToPicture(width, height)
+    imageView.setImageDrawable(PictureDrawable(picture))
+}
+```
+
+**Pros:** Lightweight, simple, good performance.
+**Cons:** No built-in caching, manual management.
+
+### 2. Coil with SVG Decoder — Modern Approach
+
+✅ **Best choice** for apps with network loading.
+
+```kotlin
+// implementation "io.coil-kt:coil:2.5.0"
+// implementation "io.coil-kt:coil-svg:2.5.0"
+
+val imageLoader = ImageLoader.Builder(context)
+    .components { add(SvgDecoder.Factory()) }
+    .build()
+
+fun loadSvgString(svgString: String, imageView: ImageView) {
+    val request = ImageRequest.Builder(context)
+        .data(svgString.toByteArray())
+        .target(imageView)
+        .build()
+
+    imageLoader.enqueue(request)
+}
+```
+
+**Pros:** Caching, coroutines support, modern API.
+**Cons:** Additional dependency.
+
+### 3. Custom Drawable — Full Control
+
+```kotlin
+class SvgDrawable(private val svgString: String) : Drawable() {
+    private var svg: SVG? = null
+
+    init {
+        svg = SVG.getFromString(svgString)
+    }
+
+    override fun draw(canvas: Canvas) {
+        svg?.let {
+            it.documentWidth = bounds.width().toFloat()
+            it.documentHeight = bounds.height().toFloat()
+            it.renderToCanvas(canvas)
+        }
+    }
+
+    override fun setAlpha(alpha: Int) {}
+    override fun setColorFilter(colorFilter: ColorFilter?) {}
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+}
+
+// Usage
+imageView.setImageDrawable(SvgDrawable(svgString))
+```
+
+### 4. Jetpack Compose Implementation
+
+```kotlin
+@Composable
+fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
+    var drawable by remember { mutableStateOf<Drawable?>(null) }
+
+    LaunchedEffect(svgString) {
+        withContext(Dispatchers.IO) {
+            val svg = SVG.getFromString(svgString)
+            drawable = PictureDrawable(svg.renderToPicture())
+        }
+    }
+
+    Canvas(modifier = modifier) {
+        drawable?.let {
+            it.setBounds(0, 0, size.width.toInt(), size.height.toInt())
+            drawIntoCanvas { canvas ->
+                it.draw(canvas.nativeCanvas)
             }
         }
     }
 }
+```
 
-// Использование в Activity
-class SvgActivity : AppCompatActivity() {
-    private val viewModel: SvgViewModel by viewModels()
+### 5. Bitmap Conversion
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+❌ **Avoid** for vector graphics — loses scalability.
 
-        val imageView = findViewById<ImageView>(R.id.imageView)
+```kotlin
+fun svgToBitmap(svgString: String, width: Int, height: Int): Bitmap? {
+    return try {
+        val svg = SVG.getFromString(svgString)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
 
-        viewModel.svgDrawable.observe(this) { drawable ->
-            imageView.setImageDrawable(drawable)
-        }
+        svg.documentWidth = width.toFloat()
+        svg.documentHeight = height.toFloat()
+        svg.renderToCanvas(canvas)
 
-        viewModel.loadSvg(svgString)
+        bitmap
+    } catch (e: SVGParseException) {
+        null
     }
 }
 ```
 
-### Резюме
+### Best Practices
 
-**Рекомендации по выбору:**
-
-1. **AndroidSVG** - для прямой работы с SVG строками, простая интеграция
-2. **Coil** - для современных приложений с сетевыми SVG, отличное кэширование
-3. **Кэшируйте** преобразованные изображения для лучшей производительности
-4. **Обрабатывайте ошибки** - парсинг SVG может завершиться неудачей
-5. **Учитывайте память** при конвертации в bitmap
-6. **Используйте соответствующие размеры** для избежания проблем масштабирования
-7. **Для Compose** используйте Coil или custom Canvas решение
-
-**Зависимости для Gradle:**
-```gradle
-// AndroidSVG
-implementation 'com.caverock:androidsvg-aar:1.4'
-
-// Coil с SVG
-implementation "io.coil-kt:coil:2.5.0"
-implementation "io.coil-kt:coil-svg:2.5.0"
-
-// Glide (если используется)
-implementation 'com.github.bumptech.glide:glide:4.16.0'
+**Error Handling:**
+```kotlin
+fun safeSvgLoad(svgString: String, imageView: ImageView) {
+    try {
+        val svg = SVG.getFromString(svgString)
+        imageView.setImageDrawable(PictureDrawable(svg.renderToPicture()))
+    } catch (e: SVGParseException) {
+        Log.e("SVG", "Parsing failed", e)
+        imageView.setImageResource(R.drawable.placeholder)
+    }
+}
 ```
+
+**Caching:**
+```kotlin
+class OptimizedSvgLoader {
+    private val cache = LruCache<String, PictureDrawable>(10)
+
+    fun loadSvg(svgString: String, imageView: ImageView) {
+        val key = svgString.hashCode().toString()
+        cache.get(key)?.let {
+            imageView.setImageDrawable(it)
+            return
+        }
+
+        val svg = SVG.getFromString(svgString)
+        val drawable = PictureDrawable(svg.renderToPicture())
+        cache.put(key, drawable)
+        imageView.setImageDrawable(drawable)
+    }
+}
+```
+
+**ViewModel Integration:**
+```kotlin
+class SvgViewModel : ViewModel() {
+    private val _svgDrawable = MutableLiveData<PictureDrawable?>()
+    val svgDrawable: LiveData<PictureDrawable?> = _svgDrawable
+
+    fun loadSvg(svgString: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val svg = SVG.getFromString(svgString)
+            _svgDrawable.postValue(PictureDrawable(svg.renderToPicture()))
+        }
+    }
+}
+```
+
+### Approach Comparison
+
+| Approach | Performance | Caching | Complexity | Scenario |
+|----------|------------|---------|------------|----------|
+| AndroidSVG | High | Manual | Low | Simple cases |
+| Coil | High | Automatic | Medium | Network, cache |
+| Custom Drawable | High | Manual | Medium | Special requirements |
+| Bitmap | Low | Manual | Low | ❌ Not recommended |
+
+**Selection Recommendations:**
+- **Simple integration** → AndroidSVG
+- **Network SVG** → Coil with SVG decoder
+- **Compose UI** → Custom Canvas with LaunchedEffect
+- **Custom rendering logic** → Custom Drawable
+
+---
+
+## Follow-ups
+
+1. How to handle SVG parsing failures gracefully with fallback images?
+2. What memory optimizations are needed when caching multiple SVG drawables?
+3. How to implement SVG color tinting at runtime?
+4. What are the performance implications of SVG vs VectorDrawable in Android?
+5. How to batch-load multiple SVG strings efficiently in RecyclerView?
+
+## References
+
+- [[q-vector-graphics-animations--android--medium]]
+- [[q-what-is-known-about-view-lifecycles--android--medium]]
+- https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources
+- https://github.com/coil-kt/coil
+- https://github.com/BigBadaboom/androidsvg
 
 ## Related Questions
 
-- [[q-what-is-known-about-view-lifecycles--android--medium]]
+### Same Level (Medium)
 - [[q-vector-graphics-animations--android--medium]]
+- [[q-what-is-known-about-view-lifecycles--android--medium]]
+
+### Advanced (Hard)
 - [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]]

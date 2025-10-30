@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/ui-compose, android/ui-state, recomposition, jetpack-compose, compose, difficulty/medium]
+date created: Wednesday, October 29th 2025, 12:15:30 pm
+date modified: Thursday, October 30th 2025, 3:18:07 pm
 ---
+
 # Вопрос (RU)
 
 > Откуда происходит повторный вызов composable функции в Jetpack Compose?

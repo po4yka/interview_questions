@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/ui-compose, android/ui-theming, design, material3, dynamic-color, difficulty/medium]
+date created: Monday, October 27th 2025, 5:03:21 pm
+date modified: Thursday, October 30th 2025, 3:12:58 pm
 ---
+
 # Вопрос (RU)
 > Как работает динамический цвет Material 3? Объясните генерацию цветовой схемы из обоев, реализацию пользовательских тем и обработку светлого/тёмного режимов с динамической темизацией.
 

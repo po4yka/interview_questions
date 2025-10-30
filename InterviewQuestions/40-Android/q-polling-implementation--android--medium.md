@@ -1,36 +1,47 @@
 ---
 id: 20251017-144836
-title: "Polling Implementation / Polling Реализация"
+title: "Polling Implementation / Реализация Polling"
+aliases: ["Polling Implementation", "Реализация Polling", "Android Polling"]
 topic: android
+subtopics: [coroutines, background-execution, networking-http]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-dagger-build-time-optimization--android--medium, q-baseline-profiles-optimization--performance--medium, q-save-data-outside-fragment--android--medium]
+related: [q-workmanager-periodic-tasks--android--medium, q-coroutine-flow-basics--kotlin--medium, q-background-work--android--hard]
 created: 2025-10-15
-tags: [polling, background-tasks, coroutines, workmanager, difficulty/medium]
+updated: 2025-10-30
+tags: [android/coroutines, android/background-execution, android/networking-http, polling, background-tasks, difficulty/medium]
+sources: []
 ---
 
-# Как реализовать polling в Android?
+# Вопрос (RU)
 
-**English**: How to implement polling in Android?
+> Как реализовать polling в Android приложении? Какие подходы существуют и когда их использовать?
 
-## Answer (EN)
-Polling — это техника периодического получения обновленных данных с сервера. В Android можно использовать различные подходы в зависимости от требований к частоте опроса, надежности и энергоэффективности.
+# Question (EN)
 
-### 1. Coroutines + Flow (Recommended for UI)
+> How to implement polling in an Android application? What approaches exist and when to use them?
 
-Современный подход с использованием корутин для периодического опроса.
+---
+
+## Ответ (RU)
+
+Polling — периодическая проверка данных с сервера. Выбор реализации зависит от требований: частота опроса, работа в фоне, переживание перезагрузки.
+
+### 1. Coroutines + Flow (UI-bound)
+
+Рекомендуемый подход для UI-зависимых задач с автоматической отменой при lifecycle.
 
 ```kotlin
-// Repository с polling
-class DataRepository(private val apiService: ApiService) {
-
-    // Простой polling с фиксированным интервалом
+// Repository
+class DataRepository(private val api: ApiService) {
     fun pollData(intervalMs: Long = 5000): Flow<Result<Data>> = flow {
         while (currentCoroutineContext().isActive) {
             try {
-                val data = apiService.getData()
-                emit(Result.success(data))
+                emit(Result.success(api.getData()))
             } catch (e: Exception) {
                 emit(Result.failure(e))
             }
@@ -38,559 +49,324 @@ class DataRepository(private val apiService: ApiService) {
         }
     }.flowOn(Dispatchers.IO)
 
-    // Polling с условием остановки
+    // ✅ Polling с условием остановки
     fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
         while (currentCoroutineContext().isActive) {
-            val order = apiService.getOrder(orderId)
+            val order = api.getOrder(orderId)
             emit(order)
-
-            // Остановить polling когда заказ завершен
-            if (order.status == OrderStatus.COMPLETED) {
-                break
-            }
-
-            delay(3000) // 3 seconds
-        }
-    }.flowOn(Dispatchers.IO)
-
-    // Polling с экспоненциальной задержкой
-    fun pollWithBackoff(
-        maxAttempts: Int = 5,
-        initialDelayMs: Long = 1000
-    ): Flow<Result<Data>> = flow {
-        var attempt = 0
-        var delay = initialDelayMs
-
-        while (attempt < maxAttempts && currentCoroutineContext().isActive) {
-            try {
-                val data = apiService.getData()
-                emit(Result.success(data))
-
-                // Reset delay on success
-                delay = initialDelayMs
-                attempt = 0
-            } catch (e: Exception) {
-                emit(Result.failure(e))
-                attempt++
-
-                // Exponential backoff: 1s, 2s, 4s, 8s, 16s
-                delay *= 2
-            }
-
-            delay(delay)
+            if (order.status == OrderStatus.COMPLETED) break
+            delay(3000)
         }
     }.flowOn(Dispatchers.IO)
 }
 
 // ViewModel
-class OrderViewModel(
-    private val repository: DataRepository
-) : ViewModel() {
-
-    private val _orderStatus = MutableStateFlow<Order?>(null)
-    val orderStatus: StateFlow<Order?> = _orderStatus.asStateFlow()
-
-    fun startPolling(orderId: Int) {
-        viewModelScope.launch {
-            repository.pollUntilComplete(orderId)
-                .catch { e ->
-                    // Handle error
-                    Log.e("OrderViewModel", "Polling error", e)
-                }
-                .collect { order ->
-                    _orderStatus.value = order
-                }
-        }
-    }
-
-    fun stopPolling() {
-        // Автоматически останавливается при отмене корутины
-        viewModelScope.coroutineContext.cancelChildren()
-    }
-}
-
-// В Fragment/Activity
-class OrderFragment : Fragment() {
-    private val viewModel: OrderViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Начать polling
-        viewModel.startPolling(orderId = 123)
-
-        // Наблюдать за результатами
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.orderStatus.collect { order ->
-                order?.let { updateUI(it) }
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Остановить polling при уничтожении view
-        viewModel.stopPolling()
-    }
+class OrderViewModel(private val repo: DataRepository) : ViewModel() {
+    val orderStatus = repo.pollUntilComplete(123)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 }
 ```
 
-### 2. WorkManager (For Background Tasks)
+**Преимущества**: Простота, lifecycle-aware, автоотмена.
+**Недостатки**: Работает только пока Activity/Fragment активны.
 
-Гарантированное выполнение периодических задач даже при перезагрузке устройства.
+### 2. WorkManager (Background)
+
+Для гарантированного выполнения в фоне, переживает перезагрузку устройства.
 
 ```kotlin
-// Worker для polling
 class DataPollingWorker(
     context: Context,
     params: WorkerParameters
 ) : CoroutineWorker(context, params) {
-
     override suspend fun doWork(): Result {
         return try {
-            val apiService = RetrofitClient.apiService
-
-            // Получить данные
-            val data = apiService.getData()
-
-            // Сохранить в БД
-            val database = AppDatabase.getInstance(applicationContext)
-            database.dataDao().insertData(data)
-
-            // Показать уведомление если есть обновления
-            if (data.hasUpdates) {
-                showNotification(data)
-            }
-
+            val data = RetrofitClient.api.getData()
+            database.dataDao().insert(data)
+            // ✅ Retry с экспоненциальной задержкой
             Result.success()
         } catch (e: Exception) {
-            Log.e("DataPollingWorker", "Polling failed", e)
-
-            // Retry with backoff
-            if (runAttemptCount < 3) {
-                Result.retry()
-            } else {
-                Result.failure()
-            }
-        }
-    }
-
-    private fun showNotification(data: Data) {
-        val notificationManager = applicationContext.getSystemService(
-            Context.NOTIFICATION_SERVICE
-        ) as NotificationManager
-
-        val notification = NotificationCompat.Builder(
-            applicationContext,
-            "polling_channel"
-        )
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("New Updates")
-            .setContentText(data.message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
-
-        notificationManager.notify(1, notification)
-    }
-}
-
-// Настройка периодического polling
-class PollingScheduler(private val context: Context) {
-
-    fun startPeriodicPolling(intervalMinutes: Long = 15) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-
-        val pollingRequest = PeriodicWorkRequestBuilder<DataPollingWorker>(
-            repeatInterval = intervalMinutes,
-            repeatIntervalTimeUnit = TimeUnit.MINUTES
-        )
-            .setConstraints(constraints)
-            .setBackoffCriteria(
-                BackoffPolicy.EXPONENTIAL,
-                WorkRequest.MIN_BACKOFF_MILLIS,
-                TimeUnit.MILLISECONDS
-            )
-            .addTag("data_polling")
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "data_polling",
-            ExistingPeriodicWorkPolicy.KEEP,
-            pollingRequest
-        )
-    }
-
-    fun stopPolling() {
-        WorkManager.getInstance(context).cancelAllWorkByTag("data_polling")
-    }
-
-    fun checkPollingStatus(): LiveData<WorkInfo> {
-        return WorkManager.getInstance(context)
-            .getWorkInfosForUniqueWorkLiveData("data_polling")
-            .map { workInfos -> workInfos.firstOrNull() }
-    }
-}
-
-// Использование
-class MainActivity : AppCompatActivity() {
-    private val pollingScheduler by lazy { PollingScheduler(this) }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Начать периодический polling каждые 15 минут
-        pollingScheduler.startPeriodicPolling(intervalMinutes = 15)
-
-        // Наблюдать за статусом
-        pollingScheduler.checkPollingStatus().observe(this) { workInfo ->
-            when (workInfo?.state) {
-                WorkInfo.State.RUNNING -> Log.d("Polling", "Running")
-                WorkInfo.State.SUCCEEDED -> Log.d("Polling", "Succeeded")
-                WorkInfo.State.FAILED -> Log.d("Polling", "Failed")
-                else -> Unit
-            }
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
 }
+
+// Планирование
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
+
+val request = PeriodicWorkRequestBuilder<DataPollingWorker>(15, TimeUnit.MINUTES)
+    .setConstraints(constraints)
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.MINUTES)
+    .build()
+
+WorkManager.getInstance(context)
+    .enqueueUniquePeriodicWork("polling", ExistingPeriodicWorkPolicy.KEEP, request)
 ```
 
-### 3. Handler + Runnable (Simple Approach)
+**Преимущества**: Гарантированное выполнение, переживает перезагрузку, battery-aware.
+**Недостатки**: Минимальный интервал 15 минут, не подходит для real-time.
 
-Для простых задач, которые выполняются пока Activity/Fragment активны.
+### 3. Adaptive Intervals
 
-```kotlin
-class PollingHandler {
-    private val handler = Handler(Looper.getMainLooper())
-    private var pollingRunnable: Runnable? = null
-
-    fun startPolling(
-        intervalMs: Long = 5000,
-        onPoll: suspend () -> Unit
-    ) {
-        pollingRunnable = object : Runnable {
-            override fun run() {
-                // Выполнить polling в корутине
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        onPoll()
-                    } catch (e: Exception) {
-                        Log.e("PollingHandler", "Error", e)
-                    }
-                }
-
-                // Запланировать следующий запуск
-                handler.postDelayed(this, intervalMs)
-            }
-        }
-
-        // Запустить первый раз
-        handler.post(pollingRunnable!!)
-    }
-
-    fun stopPolling() {
-        pollingRunnable?.let { handler.removeCallbacks(it) }
-        pollingRunnable = null
-    }
-}
-
-// Использование в Fragment
-class StatusFragment : Fragment() {
-    private val pollingHandler = PollingHandler()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Начать polling
-        pollingHandler.startPolling(intervalMs = 5000) {
-            val status = repository.getStatus()
-            withContext(Dispatchers.Main) {
-                updateUI(status)
-            }
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        pollingHandler.stopPolling()
-    }
-}
-```
-
-### 4. AlarmManager (For Precise Intervals)
-
-Для задач, которые требуют выполнения в точное время.
+Оптимизация частоты опроса на основе результатов.
 
 ```kotlin
-class AlarmPollingScheduler(private val context: Context) {
-
-    fun schedulePolling(intervalMinutes: Long = 15) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val intent = Intent(context, PollingBroadcastReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val intervalMillis = TimeUnit.MINUTES.toMillis(intervalMinutes)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Exact alarm (Android 6.0+)
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + intervalMillis,
-                pendingIntent
-            )
-        } else {
-            // Repeating alarm
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + intervalMillis,
-                intervalMillis,
-                pendingIntent
-            )
-        }
-    }
-
-    fun cancelPolling() {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, PollingBroadcastReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            0,
-            intent,
-            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        pendingIntent?.let { alarmManager.cancel(it) }
-    }
-}
-
-// BroadcastReceiver
-class PollingBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        // Запустить работу в фоне
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val data = RetrofitClient.apiService.getData()
-                // Обработать данные
-                processData(data)
-
-                // Запланировать следующий опрос
-                AlarmPollingScheduler(context).schedulePolling()
-            } catch (e: Exception) {
-                Log.e("PollingReceiver", "Error", e)
-            }
-        }
-    }
-}
-```
-
-### 5. RxJava Observable.interval (Alternative)
-
-```kotlin
-class RxPollingManager {
-    private var disposable: Disposable? = null
-
-    fun startPolling(
-        intervalSeconds: Long = 5,
-        apiService: ApiService
-    ): Observable<Data> {
-        return Observable.interval(0, intervalSeconds, TimeUnit.SECONDS)
-            .flatMap {
-                apiService.getDataRx()
-                    .toObservable()
-                    .onErrorResumeNext { error: Throwable ->
-                        Observable.error(error)
-                    }
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    fun subscribe(
-        intervalSeconds: Long,
-        apiService: ApiService,
-        onNext: (Data) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
-        disposable = startPolling(intervalSeconds, apiService)
-            .subscribe(onNext, onError)
-    }
-
-    fun stop() {
-        disposable?.dispose()
-    }
-}
-```
-
-### 6. Smart Polling with Adaptive Intervals
-
-```kotlin
-class SmartPollingManager(
-    private val repository: DataRepository
-) {
-    private var currentInterval = 5000L // Start with 5 seconds
+class SmartPollingManager(private val repo: DataRepository) {
+    private var interval = 5000L // Начальный интервал
     private val minInterval = 1000L
     private val maxInterval = 60000L
 
     fun startAdaptivePolling(): Flow<Data> = flow {
         while (currentCoroutineContext().isActive) {
             try {
-                val data = repository.getData()
+                val data = repo.getData()
                 emit(data)
-
-                // Adjust interval based on data changes
-                if (data.hasChanges) {
-                    // Data is changing, poll more frequently
-                    currentInterval = max(minInterval, currentInterval / 2)
+                // ✅ Адаптация интервала
+                interval = if (data.hasChanges) {
+                    max(minInterval, interval / 2) // Чаще при изменениях
                 } else {
-                    // No changes, slow down polling
-                    currentInterval = min(maxInterval, currentInterval * 2)
+                    min(maxInterval, interval * 2) // Реже при отсутствии
                 }
             } catch (e: Exception) {
-                // On error, increase interval
-                currentInterval = min(maxInterval, currentInterval * 2)
-                throw e
+                // ❌ Не увеличивать интервал слишком агрессивно
+                interval = min(maxInterval, interval * 1.5)
             }
-
-            delay(currentInterval)
+            delay(interval)
         }
     }.flowOn(Dispatchers.IO)
 }
 ```
 
-### 7. Polling with WebSocket Fallback
+### 4. Exponential Backoff
+
+Retry-стратегия для устойчивости к ошибкам.
 
 ```kotlin
-class DataSyncManager(
-    private val apiService: ApiService,
-    private val webSocketClient: WebSocketClient
-) {
-    private var useWebSocket = true
+fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
+    var attempt = 0
+    var delay = 1000L
 
-    fun startDataSync(): Flow<Data> = flow {
-        if (useWebSocket) {
-            try {
-                // Try WebSocket first
-                webSocketClient.observeData()
-                    .collect { emit(it) }
-            } catch (e: Exception) {
-                // Fallback to polling
-                useWebSocket = false
-                pollData().collect { emit(it) }
-            }
-        } else {
-            pollData().collect { emit(it) }
+    while (attempt < maxAttempts && currentCoroutineContext().isActive) {
+        try {
+            emit(Result.success(api.getData()))
+            delay = 1000L // Сброс при успехе
+            attempt = 0
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+            attempt++
+            delay *= 2 // 1s, 2s, 4s, 8s, 16s
         }
+        delay(delay)
     }
-
-    private fun pollData(): Flow<Data> = flow {
-        while (currentCoroutineContext().isActive) {
-            val data = apiService.getData()
-            emit(data)
-            delay(5000)
-        }
-    }
-}
+}.flowOn(Dispatchers.IO)
 ```
 
 ### Best Practices
 
-**1. Использовать lifecycle-aware компоненты**
+1. **Lifecycle-aware cancellation**: Используйте `viewModelScope` для автоотмены.
+2. **Network checks**: Проверяйте доступность сети перед запросом.
+3. **Battery optimization**: Избегайте частых запросов в фоне, используйте WorkManager constraints.
+4. **Error handling**: Используйте exponential backoff для retry.
+5. **Adaptive intervals**: Подстраивайте частоту под реальные изменения данных.
+
+### Сравнение подходов
+
+| Метод | Use Case | Интервал | Lifecycle |
+|-------|----------|----------|-----------|
+| Coroutines + Flow | UI-bound | Любой | Привязан к Activity/Fragment |
+| WorkManager | Background | ≥15 минут | Переживает перезагрузку |
+| Handler + Runnable | Simple tasks | Любой | Ручное управление |
+| AlarmManager | Exact timing | Любой | Работает в фоне, battery drain |
+
+---
+
+## Answer (EN)
+
+Polling is periodic data fetching from a server. Implementation choice depends on requirements: frequency, background execution, surviving device reboot.
+
+### 1. Coroutines + Flow (UI-bound)
+
+Recommended approach for UI-dependent tasks with automatic lifecycle cancellation.
 
 ```kotlin
-class PollingViewModel : ViewModel() {
-    private var pollingJob: Job? = null
-
-    fun startPolling() {
-        pollingJob = viewModelScope.launch {
-            repository.pollData()
-                .collect { data ->
-                    // Process data
-                }
-        }
-    }
-
-    fun stopPolling() {
-        pollingJob?.cancel()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        stopPolling()
-    }
-}
-```
-
-**2. Обработка ошибок и retry**
-
-```kotlin
-fun pollWithRetry(): Flow<Data> = flow {
-    while (currentCoroutineContext().isActive) {
-        try {
-            val data = apiService.getData()
-            emit(data)
-            delay(5000)
-        } catch (e: Exception) {
-            // Log error but continue polling
-            Log.e("Polling", "Error: ${e.message}")
-            delay(10000) // Wait longer after error
-        }
-    }
-}
-```
-
-**3. Проверка сетевого подключения**
-
-```kotlin
-fun pollWhenOnline(context: Context): Flow<Data> = flow {
-    while (currentCoroutineContext().isActive) {
-        if (isNetworkAvailable(context)) {
+// Repository
+class DataRepository(private val api: ApiService) {
+    fun pollData(intervalMs: Long = 5000): Flow<Result<Data>> = flow {
+        while (currentCoroutineContext().isActive) {
             try {
-                val data = apiService.getData()
-                emit(data)
+                emit(Result.success(api.getData()))
             } catch (e: Exception) {
-                // Handle error
+                emit(Result.failure(e))
             }
+            delay(intervalMs)
         }
-        delay(5000)
-    }
+    }.flowOn(Dispatchers.IO)
+
+    // ✅ Polling with stop condition
+    fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
+        while (currentCoroutineContext().isActive) {
+            val order = api.getOrder(orderId)
+            emit(order)
+            if (order.status == OrderStatus.COMPLETED) break
+            delay(3000)
+        }
+    }.flowOn(Dispatchers.IO)
+}
+
+// ViewModel
+class OrderViewModel(private val repo: DataRepository) : ViewModel() {
+    val orderStatus = repo.pollUntilComplete(123)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 }
 ```
 
-### Comparison Table
+**Pros**: Simple, lifecycle-aware, auto-cancellation.
+**Cons**: Only works while Activity/Fragment is active.
 
-| Метод | Use Case | Преимущества | Недостатки |
-|-------|----------|--------------|------------|
-| **Coroutines + Flow** | UI-bound polling | Простота, lifecycle-aware | Работает только пока app активно |
-| **WorkManager** | Фоновые задачи | Гарантированное выполнение | Минимум 15 минут интервал |
-| **Handler** | Простые задачи | Легкость реализации | Ручное управление lifecycle |
-| **AlarmManager** | Точные интервалы | Работает в фоне | Battery drain |
-| **WebSocket** | Real-time данные | Мгновенные обновления | Сложность реализации |
+### 2. WorkManager (Background)
 
-**English**: Polling implementation methods: **Coroutines + Flow** (recommended for UI, lifecycle-aware), **WorkManager** (background tasks, guaranteed execution, min 15min interval), **Handler + Runnable** (simple tasks), **AlarmManager** (exact timing). Best practices: adaptive intervals, exponential backoff on errors, check network availability, lifecycle-aware cancellation. Use `flow { while(isActive) { fetchData(); delay(interval) } }` pattern for coroutines. WorkManager for reliable background polling with constraints.
+For guaranteed background execution that survives device reboots.
 
-## Ответ (RU)
+```kotlin
+class DataPollingWorker(
+    context: Context,
+    params: WorkerParameters
+) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        return try {
+            val data = RetrofitClient.api.getData()
+            database.dataDao().insert(data)
+            // ✅ Retry with exponential backoff
+            Result.success()
+        } catch (e: Exception) {
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
+        }
+    }
+}
 
-Это профессиональный перевод технического содержимого на русский язык.
+// Scheduling
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+val request = PeriodicWorkRequestBuilder<DataPollingWorker>(15, TimeUnit.MINUTES)
+    .setConstraints(constraints)
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.MINUTES)
+    .build()
 
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+WorkManager.getInstance(context)
+    .enqueueUniquePeriodicWork("polling", ExistingPeriodicWorkPolicy.KEEP, request)
+```
 
-Длина оригинального английского контента: 16847 символов.
+**Pros**: Guaranteed execution, survives reboot, battery-aware.
+**Cons**: Minimum interval 15 minutes, not suitable for real-time.
 
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+### 3. Adaptive Intervals
+
+Optimize polling frequency based on results.
+
+```kotlin
+class SmartPollingManager(private val repo: DataRepository) {
+    private var interval = 5000L // Initial interval
+    private val minInterval = 1000L
+    private val maxInterval = 60000L
+
+    fun startAdaptivePolling(): Flow<Data> = flow {
+        while (currentCoroutineContext().isActive) {
+            try {
+                val data = repo.getData()
+                emit(data)
+                // ✅ Adapt interval
+                interval = if (data.hasChanges) {
+                    max(minInterval, interval / 2) // Faster on changes
+                } else {
+                    min(maxInterval, interval * 2) // Slower when stable
+                }
+            } catch (e: Exception) {
+                // ❌ Don't increase interval too aggressively
+                interval = min(maxInterval, interval * 1.5)
+            }
+            delay(interval)
+        }
+    }.flowOn(Dispatchers.IO)
+}
+```
+
+### 4. Exponential Backoff
+
+Retry strategy for error resilience.
+
+```kotlin
+fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
+    var attempt = 0
+    var delay = 1000L
+
+    while (attempt < maxAttempts && currentCoroutineContext().isActive) {
+        try {
+            emit(Result.success(api.getData()))
+            delay = 1000L // Reset on success
+            attempt = 0
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+            attempt++
+            delay *= 2 // 1s, 2s, 4s, 8s, 16s
+        }
+        delay(delay)
+    }
+}.flowOn(Dispatchers.IO)
+```
+
+### Best Practices
+
+1. **Lifecycle-aware cancellation**: Use `viewModelScope` for auto-cancellation.
+2. **Network checks**: Verify network availability before requests.
+3. **Battery optimization**: Avoid frequent background polling, use WorkManager constraints.
+4. **Error handling**: Use exponential backoff for retries.
+5. **Adaptive intervals**: Adjust frequency based on actual data changes.
+
+### Comparison
+
+| Method | Use Case | Interval | Lifecycle |
+|--------|----------|----------|-----------|
+| Coroutines + Flow | UI-bound | Any | Tied to Activity/Fragment |
+| WorkManager | Background | ≥15 min | Survives reboot |
+| Handler + Runnable | Simple tasks | Any | Manual management |
+| AlarmManager | Exact timing | Any | Background, battery drain |
+
+---
+
+## Follow-ups
+
+1. How to implement polling with WebSocket fallback for unreliable connections?
+2. How to optimize battery consumption when polling in background?
+3. How to handle authentication token refresh during long-running polling?
+4. What are the trade-offs between polling and Server-Sent Events (SSE)?
+5. How to implement priority-based polling for multiple data sources?
+
+## References
+
+- [[c-coroutines]] - Coroutines fundamentals
+- [[c-flow]] - Flow basics and operators
+- [[c-workmanager]] - WorkManager architecture
+- [Android Background Work Guide](https://developer.android.com/guide/background)
+- [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
 ## Related Questions
 
-- [[q-dagger-build-time-optimization--android--medium]]
-- [[q-baseline-profiles-optimization--android--medium]]
-- [[q-save-data-outside-fragment--android--medium]]
+### Prerequisites (Easier)
+- [[q-coroutine-basics--kotlin--easy]] - Basic coroutine usage
+- [[q-retrofit-setup--android--easy]] - Network layer setup
+
+### Related (Same Level)
+- [[q-workmanager-periodic-tasks--android--medium]] - WorkManager periodic execution
+- [[q-coroutine-flow-basics--kotlin--medium]] - Flow operators and transformations
+- [[q-lifecycle-aware-components--android--medium]] - Lifecycle integration
+
+### Advanced (Harder)
+- [[q-background-work--android--hard]] - Complex background task orchestration
+- [[q-websocket-implementation--android--hard]] - Real-time alternatives to polling
+- [[q-battery-optimization--android--hard]] - Power-efficient background work

@@ -15,7 +15,10 @@ created: 2025-10-13
 updated: 2025-01-27
 tags: [android, android/ui-compose, android/ui-theming, material3, design-system, difficulty/easy]
 sources: []
+date created: Monday, October 27th 2025, 3:43:58 pm
+date modified: Thursday, October 30th 2025, 3:12:57 pm
 ---
+
 # Вопрос (RU)
 > Каковы ключевые различия между Material 2 и Material 3? Перечислите основные компоненты Material 3. Как мигрировать с Material 2 на Material 3?
 

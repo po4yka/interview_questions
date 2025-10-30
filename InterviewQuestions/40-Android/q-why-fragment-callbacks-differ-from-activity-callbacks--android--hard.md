@@ -9,6 +9,8 @@ related: [q-why-use-diffutil--android--medium, q-where-does-the-repeated-call-of
 created: 2025-10-15
 tags:
   - android
+date created: Saturday, October 18th 2025, 1:27:59 pm
+date modified: Thursday, October 30th 2025, 3:17:30 pm
 ---
 
 # Why Fragment callbacks differ from Activity callbacks?

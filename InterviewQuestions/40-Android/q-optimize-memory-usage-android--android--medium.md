@@ -15,7 +15,10 @@ tags: [android/performance-memory, android/profiling, performance, profiling, di
 moc: moc-android
 related: [q-list-to-detail-navigation--android--medium, q-how-to-fix-a-bad-element-layout--android--easy, c-memory-management]
 sources: []
+date created: Monday, October 27th 2025, 4:02:09 pm
+date modified: Thursday, October 30th 2025, 3:15:34 pm
 ---
+
 # Вопрос (RU)
 
 > Как оптимизировать использование памяти в Android-приложении?

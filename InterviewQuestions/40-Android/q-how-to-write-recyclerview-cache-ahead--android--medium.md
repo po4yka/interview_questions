@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/ui-views, android/performance-rendering, android/cache-offline, recyclerview, prefetching, optimization, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:12:06 pm
+date modified: Thursday, October 30th 2025, 3:09:40 pm
 ---
+
 # Вопрос (RU)
 
 > Как настроить RecyclerView для кеширования элементов вперед?

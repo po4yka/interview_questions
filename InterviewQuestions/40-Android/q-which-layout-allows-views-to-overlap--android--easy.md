@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android, android/ui-views, android/ui-compose, layouts, framelayout, compose, difficulty/easy]
+date created: Wednesday, October 29th 2025, 12:15:31 pm
+date modified: Thursday, October 30th 2025, 3:17:51 pm
 ---
+
 # Вопрос (RU)
 
 > Какой layout в Android позволяет View перекрываться друг с другом?

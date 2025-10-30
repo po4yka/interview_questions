@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, windowinsets, edge-to-edge, system-ui, immersive, difficulty/medium]
 sources: ["https://developer.android.com/develop/ui/views/layout/edge-to-edge"]
+date created: Wednesday, October 29th 2025, 1:00:50 pm
+date modified: Thursday, October 30th 2025, 3:16:49 pm
 ---
 
 # Вопрос (RU)

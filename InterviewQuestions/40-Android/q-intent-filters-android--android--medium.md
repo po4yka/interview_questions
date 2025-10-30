@@ -15,14 +15,17 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android/activity, android/intents-deeplinks, intent-filter, deep-linking, difficulty/medium]
 sources: []
+date created: Monday, October 27th 2025, 6:45:50 pm
+date modified: Thursday, October 30th 2025, 3:10:45 pm
 ---
+
 # Вопрос (RU)
 
-Что такое Intent Filters в Android и как они работают?
+> Что такое Intent Filters в Android и как они работают?
 
 # Question (EN)
 
-What are Intent Filters in Android and how do they work?
+> What are Intent Filters in Android and how do they work?
 
 ## Ответ (RU)
 

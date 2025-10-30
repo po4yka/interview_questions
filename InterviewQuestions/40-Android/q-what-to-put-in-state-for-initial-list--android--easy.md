@@ -8,6 +8,8 @@ created: 2025-10-13
 tags: [android/state-management, android/ui, data-loading, state, state-management, ui, difficulty/easy]
 moc: moc-android
 related: [q-mvi-architecture--android--hard, q-intent-filters-android--android--medium, q-unit-testing-coroutines-flow--android--medium]
+date created: Saturday, October 18th 2025, 1:29:53 pm
+date modified: Thursday, October 30th 2025, 3:18:12 pm
 ---
 
 # What to put in state for initial list?

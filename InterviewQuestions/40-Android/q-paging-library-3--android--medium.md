@@ -1,169 +1,263 @@
 ---
 id: 20251017-145100
 title: Paging Library 3 / Библиотека Paging 3
+aliases: [Paging Library 3, Библиотека Paging 3, Paging 3, Android Paging]
 topic: android
+subtopics: [performance-rendering, architecture-clean, room]
+question_kind: android
 difficulty: medium
-status: draft
-created: 2025-10-15
-tags: [paging, paging3, pagination, recyclerview, difficulty/medium, android/rendering, android/architecture-clean]
-language_tags: [paging, paging3, pagination, recyclerview, difficulty/medium, android/rendering, android/architecture-clean]
-moc: moc-android
-related: [q-gradle-kotlin-dsl-vs-groovy--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--programming-languages--easy]
 original_language: en
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:
-  - performance-rendering
-  - architecture-clean
+language_tags: [en, ru]
+status: draft
+moc: moc-android
+related: [c-recyclerview, c-room, c-viewmodel, q-recyclerview-optimization--android--medium]
+created: 2025-10-15
+updated: 2025-10-30
+tags: [android/performance-rendering, android/architecture-clean, android/room, paging, pagination, recyclerview, jetpack, difficulty/medium]
+sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 ---
 
-# Paging Library 3 / Библиотека Paging 3
+# Вопрос (RU)
 
-**English**: What do you know about paging library?
+> Что вы знаете о библиотеке Paging?
 
-**Русский**: Что вы знаете о библиотеке Paging?
+# Question (EN)
 
-## Answer (EN)
-**English**:
+> What do you know about the Paging Library?
 
-The **Paging Library** helps you load and display small chunks of data at a time. Loading partial data on demand reduces usage of network bandwidth and system resources.
-
-### Supported Data Architectures
-
-The Paging Library supports the following data architectures:
-- Served only from a backend server
-- Stored only in an on-device database
-- A combination of the other sources, using the on-device database as a cache
-
-In the case of a network-only or database-only solution, the data flows directly to your app's UI model. If you're using a combined approach, data flows from your backend server, into an on-device database, and then to your app's UI model. Every once in a while, the endpoint of each data flow runs out of data to load, at which point it requests more data from the component that provided the data.
-
-### Library Architecture
-
-#### PagedList
-
-The Paging Library's key component is the `PagedList` class, which loads chunks of your app's data, or *pages*. As more data is needed, it's paged into the existing `PagedList` object. If any loaded data changes, a new instance of `PagedList` is emitted to the observable data holder from a `LiveData` or RxJava2-based object. As `PagedList` objects are generated, your app's UI presents their contents, all while respecting your UI controllers' lifecycles.
-
-Example code showing how to configure your app's view model:
-
-```kotlin
-class ConcertViewModel(concertDao: ConcertDao) : ViewModel() {
-    val concertList: LiveData<PagedList<Concert>> =
-            concertDao.concertsByDate().toLiveData(pageSize = 50)
-}
-```
-
-#### Data Source
-
-Each instance of `PagedList` loads an up-to-date snapshot of your app's data from its corresponding `DataSource` object. Data flows from your app's backend or database into the `PagedList` object.
-
-Example using Room persistence library:
-
-```kotlin
-@Dao
-interface ConcertDao {
-    // The Int type parameter tells Room to use a PositionalDataSource object.
-    @Query("SELECT * FROM concerts ORDER BY date DESC")
-    fun concertsByDate(): DataSource.Factory<Int, Concert>
-}
-```
-
-#### UI Layer
-
-The `PagedList` class works with a `PagedListAdapter` to load items into a `RecyclerView`. These classes work together to fetch and display content as it's loaded, prefetching out-of-view content and animating content changes.
-
-### Benefits of Using the Paging Library
-
-- **In-memory caching** for your paged data. This ensures that your app uses system resources efficiently while working with paged data.
-
-- **Built-in request deduplication**, ensuring that your app uses network bandwidth and system resources efficiently.
-
-- **Configurable RecyclerView adapters** that automatically request data as the user scrolls toward the end of the loaded data.
-
-- **First-class support** for Kotlin coroutines and `Flow`, as well as `LiveData` and RxJava.
-
-- **Built-in support for error handling**, including refresh and retry capabilities.
-
-**Русский**:
-
-**Библиотека Paging** помогает загружать и отображать небольшие порции данных за раз. Загрузка частичных данных по требованию снижает использование пропускной способности сети и системных ресурсов.
-
-### Поддерживаемые архитектуры данных
-
-Библиотека Paging поддерживает следующие архитектуры данных:
-- Предоставление только с бэкенд-сервера
-- Хранение только в локальной базе данных
-- Комбинация других источников, использующая локальную базу данных в качестве кэша
-
-В случае решения только для сети или только для базы данных, данные поступают напрямую в UI-модель вашего приложения. Если вы используете комбинированный подход, данные поступают с бэкенд-сервера в локальную базу данных, а затем в UI-модель вашего приложения. Время от времени конечная точка каждого потока данных исчерпывает данные для загрузки, и в этот момент она запрашивает больше данных от компонента, который предоставил данные.
-
-### Архитектура библиотеки
-
-#### PagedList
-
-Ключевым компонентом библиотеки Paging является класс `PagedList`, который загружает фрагменты данных вашего приложения или *страницы*. По мере необходимости в дополнительных данных они добавляются в существующий объект `PagedList`. Если какие-либо загруженные данные изменяются, новый экземпляр `PagedList` отправляется в наблюдаемый держатель данных из объекта на основе `LiveData` или RxJava2. По мере генерации объектов `PagedList` UI вашего приложения представляет их содержимое, соблюдая при этом жизненные циклы UI-контроллеров.
-
-Пример кода, показывающий, как настроить view model вашего приложения:
-
-```kotlin
-class ConcertViewModel(concertDao: ConcertDao) : ViewModel() {
-    val concertList: LiveData<PagedList<Concert>> =
-            concertDao.concertsByDate().toLiveData(pageSize = 50)
-}
-```
-
-#### Data (Данные)
-
-Каждый экземпляр `PagedList` загружает актуальный снимок данных вашего приложения из соответствующего объекта `DataSource`. Данные поступают из бэкенда вашего приложения или базы данных в объект `PagedList`.
-
-Пример использования библиотеки Room:
-
-```kotlin
-@Dao
-interface ConcertDao {
-    // Параметр типа Int указывает Room использовать объект PositionalDataSource
-    @Query("SELECT * FROM concerts ORDER BY date DESC")
-    fun concertsByDate(): DataSource.Factory<Int, Concert>
-}
-```
-
-#### UI (Пользовательский интерфейс)
-
-Класс `PagedList` работает с `PagedListAdapter` для загрузки элементов в `RecyclerView`. Эти классы работают вместе, чтобы получать и отображать контент по мере его загрузки, предварительно загружая контент вне области просмотра и анимируя изменения контента.
-
-### Преимущества использования библиотеки Paging
-
-- **Кэширование в памяти** для ваших страничных данных. Это гарантирует, что ваше приложение эффективно использует системные ресурсы при работе со страничными данными.
-
-- **Встроенная дедупликация запросов**, гарантирующая, что ваше приложение эффективно использует пропускную способность сети и системные ресурсы.
-
-- **Настраиваемые адаптеры RecyclerView**, которые автоматически запрашивают данные, когда пользователь прокручивает до конца загруженных данных.
-
-- **Первоклассная поддержка** Kotlin coroutines и `Flow`, а также `LiveData` и RxJava.
-
-- **Встроенная поддержка обработки ошибок**, включая возможности обновления и повторной попытки.
-
+---
 
 ## Ответ (RU)
 
-Это профессиональный перевод технического содержимого на русский язык.
+**Библиотека Paging** помогает загружать и отображать данные порционно, снижая нагрузку на сеть и системные ресурсы.
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+### Архитектура данных
 
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+Библиотека поддерживает три подхода:
+- **Network-only**: прямая загрузка с сервера в UI
+- **Database-only**: данные только из локальной БД
+- **Network + Database**: сервер → Room → UI (кэширование)
 
-Длина оригинального английского контента: 6218 символов.
+### Ключевые компоненты Paging 3
 
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+**PagingSource**: источник данных с поддержкой инкрементальной загрузки
 
+```kotlin
+class ConcertPagingSource(
+    private val api: ConcertApi
+) : PagingSource<Int, Concert>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Concert> {
+        val page = params.key ?: 0
+        return try {
+            val response = api.getConcerts(page, params.loadSize)
+            LoadResult.Page(
+                data = response.concerts,
+                prevKey = if (page > 0) page - 1 else null,
+                nextKey = if (response.hasMore) page + 1 else null
+            )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
+        }
+    }
+}
+```
+
+✅ **Best Practice**: используйте `RemoteMediator` для network + database архитектуры
+
+**Pager**: конфигурация и создание Flow
+
+```kotlin
+class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
+    val concerts: Flow<PagingData<Concert>> = Pager(
+        config = PagingConfig(pageSize = 20, prefetchDistance = 5),
+        pagingSourceFactory = { dao.pagingSource() }
+    ).flow.cachedIn(viewModelScope)
+}
+```
+
+**PagingDataAdapter**: адаптер для RecyclerView
+
+```kotlin
+class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
+    override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Concert>() {
+            override fun areItemsTheSame(old: Concert, new: Concert) =
+                old.id == new.id
+            override fun areContentsTheSame(old: Concert, new: Concert) =
+                old == new
+        }
+    }
+}
+```
+
+### Room интеграция
+
+```kotlin
+@Dao
+interface ConcertDao {
+    @Query("SELECT * FROM concerts ORDER BY date DESC")
+    fun pagingSource(): PagingSource<Int, Concert>
+}
+```
+
+✅ Room автоматически генерирует `PagingSource` для запросов
+
+### Обработка состояний загрузки
+
+```kotlin
+adapter.addLoadStateListener { loadState ->
+    when (loadState.refresh) {
+        is LoadState.Loading -> showProgress()
+        is LoadState.Error -> showError((loadState.refresh as LoadState.Error).error)
+        is LoadState.NotLoading -> hideProgress()
+    }
+}
+```
+
+### Преимущества
+
+- **Автоматическая дедупликация запросов**: предотвращает дублирование загрузок
+- **Встроенное кэширование**: эффективное использование памяти
+- **Retry/Refresh API**: встроенная обработка ошибок
+- **Prefetching**: предзагрузка данных до прокрутки
+- **Kotlin Flow/LiveData**: нативная поддержка реактивности
+
+❌ **Anti-pattern**: загрузка всех данных сразу без пагинации
+
+## Answer (EN)
+
+The **Paging Library** helps load and display data in chunks, reducing network and system resource usage.
+
+### Data Architecture
+
+The library supports three approaches:
+- **Network-only**: direct loading from server to UI
+- **Database-only**: data only from local DB
+- **Network + Database**: server → Room → UI (caching)
+
+### Core Paging 3 Components
+
+**PagingSource**: data source with incremental loading support
+
+```kotlin
+class ConcertPagingSource(
+    private val api: ConcertApi
+) : PagingSource<Int, Concert>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Concert> {
+        val page = params.key ?: 0
+        return try {
+            val response = api.getConcerts(page, params.loadSize)
+            LoadResult.Page(
+                data = response.concerts,
+                prevKey = if (page > 0) page - 1 else null,
+                nextKey = if (response.hasMore) page + 1 else null
+            )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
+        }
+    }
+}
+```
+
+✅ **Best Practice**: use `RemoteMediator` for network + database architecture
+
+**Pager**: configuration and Flow creation
+
+```kotlin
+class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
+    val concerts: Flow<PagingData<Concert>> = Pager(
+        config = PagingConfig(pageSize = 20, prefetchDistance = 5),
+        pagingSourceFactory = { dao.pagingSource() }
+    ).flow.cachedIn(viewModelScope)
+}
+```
+
+**PagingDataAdapter**: RecyclerView adapter
+
+```kotlin
+class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
+    override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Concert>() {
+            override fun areItemsTheSame(old: Concert, new: Concert) =
+                old.id == new.id
+            override fun areContentsTheSame(old: Concert, new: Concert) =
+                old == new
+        }
+    }
+}
+```
+
+### Room Integration
+
+```kotlin
+@Dao
+interface ConcertDao {
+    @Query("SELECT * FROM concerts ORDER BY date DESC")
+    fun pagingSource(): PagingSource<Int, Concert>
+}
+```
+
+✅ Room automatically generates `PagingSource` for queries
+
+### Load State Handling
+
+```kotlin
+adapter.addLoadStateListener { loadState ->
+    when (loadState.refresh) {
+        is LoadState.Loading -> showProgress()
+        is LoadState.Error -> showError((loadState.refresh as LoadState.Error).error)
+        is LoadState.NotLoading -> hideProgress()
+    }
+}
+```
+
+### Benefits
+
+- **Automatic request deduplication**: prevents duplicate loads
+- **Built-in caching**: efficient memory usage
+- **Retry/Refresh API**: built-in error handling
+- **Prefetching**: data preloading before scrolling
+- **Kotlin Flow/LiveData**: native reactivity support
+
+❌ **Anti-pattern**: loading all data at once without pagination
+
+---
+
+## Follow-ups
+
+- How does `RemoteMediator` coordinate network and database sources?
+- What's the difference between `refresh`, `prepend`, and `append` load types?
+- How to implement custom retry logic for failed page loads?
+- What are the memory implications of `cachedIn()` vs uncached Flow?
+- How to handle deletions and insertions in paginated lists?
 
 ## References
 
+- [[c-recyclerview]]
+- [[c-room]]
+- [[c-viewmodel]]
 - [Paging Library Overview](https://developer.android.com/topic/libraries/architecture/paging)
-- [Paging 3 Overview](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
-- [Custom DataSource](https://developer.android.com/topic/libraries/architecture/paging/data#custom-data-source)
+- [Paging 3 Migration Guide](https://developer.android.com/topic/libraries/architecture/paging/v3-migration)
 
 ## Related Questions
 
-- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]]
-- [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
-- [[q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--easy]]
+### Prerequisites (Easier)
+- [[q-recyclerview-basics--android--easy]]
+- [[q-room-basics--android--easy]]
+
+### Related (Same Level)
+- [[q-recyclerview-optimization--android--medium]]
+- [[q-room-migration--android--medium]]
+- [[q-flow-state-flow--kotlin--medium]]
+
+### Advanced (Harder)
+- [[q-remotemediator-implementation--android--hard]]
+- [[q-custom-paging-source--android--hard]]

@@ -1,238 +1,257 @@
 ---
 id: 20251012-12271126
-title: "Leakcanary Detection Mechanism / Механизм обнаружения LeakCanary"
+title: "LeakCanary Detection Mechanism / Механизм обнаружения LeakCanary"
+aliases: ["LeakCanary Detection Mechanism", "Механизм обнаружения LeakCanary", "How LeakCanary Detects Memory Leaks", "Как LeakCanary обнаруживает утечки памяти"]
 topic: android
+subtopics: [performance-memory, profiling, debugging]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [android/memory-management, debugging, leakcanary, memory-leaks, memory-management, weakreference, difficulty/medium]
+updated: 2025-10-30
+tags: [android/performance-memory, android/profiling, android/debugging, memory-leaks, leakcanary, weakreference, difficulty/medium]
 moc: moc-android
 related: [q-recyclerview-itemdecoration-advanced--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-koin-scope-management--dependency-injection--medium]
+sources: []
 ---
 
-# Как LeakCanary понимает что произошла утечка памяти?
+# Вопрос (RU)
 
-**English**: How does LeakCanary understand that a memory leak occurred?
+Как LeakCanary обнаруживает утечки памяти?
 
-## Answer (EN)
-LeakCanary detects memory leaks through the following process:
+# Question (EN)
 
-**1. Integration with Component Lifecycle**
+How does LeakCanary detect memory leaks?
 
-The tool tracks destruction of Activity and Fragment through observers.
+---
+
+## Ответ (RU)
+
+LeakCanary обнаруживает утечки памяти через механизм слабых ссылок (WeakReference) и мониторинг жизненного цикла компонентов.
+
+**Процесс обнаружения:**
+
+**1. Интеграция с жизненным циклом**
+
+LeakCanary автоматически отслеживает уничтожение Activity и Fragment через lifecycle observers:
 
 ```kotlin
-// LeakCanary registers lifecycle observers
 class LeakCanaryLifecycleObserver : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(owner: LifecycleOwner) {
-        // Track destroyed component
-        watchObject(owner)
+        AppWatcher.objectWatcher.watch(owner)
     }
 }
 ```
 
-**2. Create Weak References**
+**2. Создание слабой ссылки**
 
-Creates weak references to objects after their destruction.
+После вызова `onDestroy()` создается WeakReference на объект:
 
 ```kotlin
-// Simplified LeakCanary logic
-fun watchObject(watchedObject: Any) {
+fun watch(watchedObject: Any) {
     val key = UUID.randomUUID().toString()
-    val watchUptimeMillis = clock.uptimeMillis()
-
-    // Create weak reference
     val reference = KeyedWeakReference(
         watchedObject,
         key,
-        queue
+        referenceQueue
     )
-
-    // Store for tracking
-    watchedObjects[key] = watchUptimeMillis
+    watchedObjects[key] = clock.uptimeMillis()
 }
 ```
 
-**3. Trigger Garbage Collection and Wait**
+**3. Проверка после GC**
+
+LeakCanary ждет 5 секунд, запускает сборщик мусора и проверяет, была ли очищена слабая ссылка:
 
 ```kotlin
-// Request GC
-private fun gcTrigger() {
-    // Suggest garbage collection
-    Runtime.getRuntime().gc()
-
-    // Give GC time to run
-    Thread.sleep(100)
-
-    // Finalization
-    System.runFinalization()
-}
-```
-
-**4. Check if Weak Reference Was Cleared**
-
-If weak reference is not null after GC, this indicates a memory leak.
-
-```kotlin
-// Check if object was collected
 fun checkForLeaks() {
-    // Trigger GC
-    gcTrigger()
+    gcTrigger() // Runtime.getRuntime().gc()
 
-    // Remove references that were cleared
-    var ref = queue.poll()
-    while (ref != null) {
-        watchedObjects.remove(ref.key)
-        ref = queue.poll()
-    }
+    // Удаляем очищенные ссылки из очереди
+    removeWeaklyReachableObjects()
 
-    // Remaining objects are leaked
-    val leakedObjects = watchedObjects.filter { (key, time) ->
-        // Object should have been collected by now
+    // Оставшиеся объекты = утечки
+    val leakedRefs = watchedObjects.filter { (_, time) ->
         clock.uptimeMillis() - time >= retainedDelayMillis
     }
 
-    if (leakedObjects.isNotEmpty()) {
-        // Heap dump for analysis
-        dumpHeap()
+    if (leakedRefs.isNotEmpty()) {
+        dumpHeap() // ✅ Создаем heap dump для анализа
     }
 }
 ```
 
-**Complete Flow:**
-
-```
-1. Activity.onDestroy() called
-         ↓
-2. LeakCanary creates WeakReference to Activity
-         ↓
-3. Wait 5 seconds
-         ↓
-4. Trigger System.gc()
-         ↓
-5. Check if WeakReference.get() == null
-         ↓
-    
-               
-   YES         NO
-               
-               ↓
-          Leak detected!
-               ↓
-          Create heap dump
-               ↓
-          Analyze with Shark
-    ↓
-No leak, continue monitoring
-```
-
-**Example Detection:**
+**Принцип работы WeakReference:**
 
 ```kotlin
-class MyActivity : AppCompatActivity() {
-    companion object {
-        // - Static reference causes leak
-        var leakedActivity: Activity? = null
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        leakedActivity = this  // Leak!
-    }
-}
-
-// LeakCanary detection:
-// 1. Activity destroyed
-// 2. WeakReference created
-// 3. GC triggered
-// 4. WeakReference.get() != null (Activity not collected)
-// 5. Leak detected!
-```
-
-**Weak Reference Behavior:**
-
-```kotlin
-// Normal case (no leak)
+// ✅ Нормальный случай (нет утечки)
 val activity = MyActivity()
 val weakRef = WeakReference(activity)
-
-activity = null  // Remove strong reference
+activity = null
 System.gc()
+weakRef.get() // null - объект собран GC
 
-weakRef.get()  // null - object was collected GOOD
-
-// Leak case
+// ❌ Утечка памяти
 companion object {
-    var staticRef: Activity? = null
+    var staticRef: Activity? = null // Сильная ссылка!
 }
-
 val activity = MyActivity()
-staticRef = activity  // Strong reference
+staticRef = activity
 val weakRef = WeakReference(activity)
-
-activity = null  // Local reference removed
+activity = null
 System.gc()
-
-weakRef.get()  // NOT null - static ref holds it BAD
+weakRef.get() // NOT null - staticRef удерживает объект
 ```
 
-**LeakCanary Setup:**
+**Архитектура LeakCanary:**
+
+1. **ObjectWatcher** - отслеживает объекты через WeakReference
+2. **ReferenceQueue** - получает уведомления об очищенных ссылках
+3. **HeapDumper** - создает heap dump при обнаружении утечки
+4. **Shark** - анализирует heap dump и строит граф ссылок
+
+**Кастомный мониторинг:**
 
 ```kotlin
-// build.gradle
-dependencies {
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
-}
-
-// Automatically initialized in debug builds
-// No code needed!
-```
-
-**Custom Watching:**
-
-```kotlin
-// Watch custom objects
 class MyViewModel : ViewModel() {
     init {
         AppWatcher.objectWatcher.watch(
             this,
-            "MyViewModel instance"
+            "MyViewModel should be cleared"
         )
     }
 }
 ```
 
-**Summary:**
+## Answer (EN)
 
-1. **Lifecycle Integration** - Observes Activity/Fragment destruction
-2. **Weak References** - Creates WeakReference after destruction
-3. **GC Trigger** - Calls System.gc() to attempt collection
-4. **Leak Detection** - If WeakReference.get() != null → leak!
-5. **Heap Dump** - Creates dump for detailed analysis
+LeakCanary detects memory leaks through weak references (WeakReference) and lifecycle monitoring.
 
-## Ответ (RU)
-LeakCanary понимает, что произошла утечка памяти следующим образом:
+**Detection Process:**
 
-1. **Интеграция с жизненным циклом компонентов** - инструмент отслеживает уничтожение Activity и Fragment через наблюдателей
-2. **Создание слабых ссылок** на объекты после их уничтожения
-3. **Вызов сборки мусора** и ожидание
-4. **Проверка** была ли слабая ссылка освобождена сборщиком мусора
+**1. Lifecycle Integration**
 
-Если слабая ссылка не равна null после GC, это указывает на утечку памяти.
+LeakCanary automatically tracks Activity and Fragment destruction via lifecycle observers:
 
+```kotlin
+class LeakCanaryLifecycleObserver : LifecycleObserver {
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy(owner: LifecycleOwner) {
+        AppWatcher.objectWatcher.watch(owner)
+    }
+}
+```
+
+**2. Weak Reference Creation**
+
+After `onDestroy()` is called, a WeakReference is created for the object:
+
+```kotlin
+fun watch(watchedObject: Any) {
+    val key = UUID.randomUUID().toString()
+    val reference = KeyedWeakReference(
+        watchedObject,
+        key,
+        referenceQueue
+    )
+    watchedObjects[key] = clock.uptimeMillis()
+}
+```
+
+**3. Post-GC Verification**
+
+LeakCanary waits 5 seconds, triggers garbage collection, and checks if the weak reference was cleared:
+
+```kotlin
+fun checkForLeaks() {
+    gcTrigger() // Runtime.getRuntime().gc()
+
+    // Remove cleared references from queue
+    removeWeaklyReachableObjects()
+
+    // Remaining objects = leaks
+    val leakedRefs = watchedObjects.filter { (_, time) ->
+        clock.uptimeMillis() - time >= retainedDelayMillis
+    }
+
+    if (leakedRefs.isNotEmpty()) {
+        dumpHeap() // ✅ Create heap dump for analysis
+    }
+}
+```
+
+**WeakReference Behavior:**
+
+```kotlin
+// ✅ Normal case (no leak)
+val activity = MyActivity()
+val weakRef = WeakReference(activity)
+activity = null
+System.gc()
+weakRef.get() // null - object was collected
+
+// ❌ Memory leak
+companion object {
+    var staticRef: Activity? = null // Strong reference!
+}
+val activity = MyActivity()
+staticRef = activity
+val weakRef = WeakReference(activity)
+activity = null
+System.gc()
+weakRef.get() // NOT null - staticRef holds the object
+```
+
+**LeakCanary Architecture:**
+
+1. **ObjectWatcher** - tracks objects via WeakReference
+2. **ReferenceQueue** - receives notifications about cleared references
+3. **HeapDumper** - creates heap dump when leak is detected
+4. **Shark** - analyzes heap dump and builds reference graph
+
+**Custom Monitoring:**
+
+```kotlin
+class MyViewModel : ViewModel() {
+    init {
+        AppWatcher.objectWatcher.watch(
+            this,
+            "MyViewModel should be cleared"
+        )
+    }
+}
+```
 
 ---
 
+## Follow-ups
+
+1. What happens if garbage collection doesn't run when `System.gc()` is called?
+2. How does LeakCanary distinguish between legitimate retained objects and actual leaks?
+3. What is the performance impact of LeakCanary in debug builds?
+4. How does the Shark library analyze heap dumps to identify leak causes?
+5. Can LeakCanary detect leaks in custom objects beyond Activity and Fragment?
+
+## References
+
+- [[c-memory-management]] - Memory management fundamentals
+- [[c-garbage-collection]] - Garbage collection concepts
+- [[c-weak-references]] - Weak reference patterns
+- https://square.github.io/leakcanary/ - Official LeakCanary documentation
+
 ## Related Questions
 
-### Computer Science Fundamentals
+### Prerequisites (Easier)
 - [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
 - [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
-- [[q-kotlin-reference-equality-operator--programming-languages--easy]] - Memory Management
-- [[q-reference-types-protect-from-deletion--programming-languages--easy]] - Memory Management
-- [[q-find-object-without-references--programming-languages--medium]] - Memory Management
 
-### Kotlin Language Features
-- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management
-- [[q-kotlin-native--kotlin--hard]] - Memory Management
+### Related (Same Level)
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Android Performance
+- [[q-koin-scope-management--dependency-injection--medium]] - Lifecycle Management
+
+### Advanced (Harder)
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Coroutine Memory Management
+- [[q-kotlin-native--kotlin--hard]] - Native Memory Management

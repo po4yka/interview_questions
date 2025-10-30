@@ -25,6 +25,8 @@ updated: 2025-10-29
 
 # Tags (EN only; no leading #)
 tags: [android/ui-views, android/ui-state, gestures, touch-events, difficulty/medium]
+date created: Wednesday, October 29th 2025, 12:15:08 pm
+date modified: Thursday, October 30th 2025, 3:18:03 pm
 ---
 
 # Вопрос (RU)

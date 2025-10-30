@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android, android/service, android/threads-sync, android/lifecycle, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:12:00 pm
+date modified: Thursday, October 30th 2025, 3:10:28 pm
 ---
+
 # Вопрос (RU)
 
 > В каком потоке работает обычный Service по умолчанию?

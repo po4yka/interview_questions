@@ -15,6 +15,8 @@ sources: []
 tags: [kotlin, kmp, production, best-practices, difficulty/hard]
 moc: moc-kotlin
 related: [q-handler-looper-comprehensive--android--medium, q-intent-filters-android--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
+date created: Tuesday, October 28th 2025, 9:23:20 pm
+date modified: Thursday, October 30th 2025, 3:11:49 pm
 ---
 
 # Вопрос (RU)

@@ -32,6 +32,8 @@ tags:
         telemetry,
         crash-reporting,
     ]
+date created: Wednesday, October 29th 2025, 5:03:55 pm
+date modified: Thursday, October 30th 2025, 3:15:10 pm
 ---
 
 # Вопрос (RU)
