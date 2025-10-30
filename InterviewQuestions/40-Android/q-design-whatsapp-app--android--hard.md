@@ -38,7 +38,7 @@ tags:
         lang/kotlin,
     ]
 date created: Tuesday, October 28th 2025, 9:23:06 am
-date modified: Wednesday, October 29th 2025, 3:32:14 pm
+date modified: Thursday, October 30th 2025, 12:47:40 pm
 ---
 
 # Вопрос (RU)

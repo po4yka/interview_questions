@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
 sources: [https://dagger.dev/api/latest/dagger/Scope.html]
+date created: Monday, October 27th 2025, 10:27:07 pm
+date modified: Thursday, October 30th 2025, 12:47:31 pm
 ---
+
 # Вопрос (RU)
 > Что такое scope в Dagger и как они работают?
 

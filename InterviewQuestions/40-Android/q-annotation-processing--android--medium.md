@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-12
 updated: 2025-10-30
 tags: [android/gradle, android/build-variants, annotation-processing, kapt, ksp, code-generation, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:36:02 am
+date modified: Thursday, October 30th 2025, 12:43:06 pm
 ---
 
 # Вопрос (RU)

@@ -18,7 +18,10 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/di-hilt, android/architecture-modularization, dagger, dependency-injection, multibinding, difficulty/hard]
 sources: []
+date created: Thursday, October 30th 2025, 12:03:46 pm
+date modified: Thursday, October 30th 2025, 12:47:29 pm
 ---
+
 # Вопрос (RU)
 > Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
 

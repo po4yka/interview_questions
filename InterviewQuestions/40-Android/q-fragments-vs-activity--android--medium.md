@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/fragment, android/lifecycle, android/ui-navigation, fragments, ui-architecture, difficulty/medium]
+date created: Tuesday, October 28th 2025, 7:38:39 am
+date modified: Thursday, October 30th 2025, 12:47:57 pm
 ---
+
 # Вопрос (RU)
 
 Для чего нужны Фрагменты если есть Activity?

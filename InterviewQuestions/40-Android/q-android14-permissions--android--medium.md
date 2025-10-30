@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/permissions, android/privacy-sdks, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:36:03 am
+date modified: Thursday, October 30th 2025, 12:43:04 pm
 ---
 
 # Вопрос (RU)

@@ -18,7 +18,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/intents-deeplinks, android/serialization, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:11:26 am
+date modified: Thursday, October 30th 2025, 12:43:28 pm
 ---
+
 # Вопрос (RU)
 > Какие типы данных поддерживает Bundle?
 

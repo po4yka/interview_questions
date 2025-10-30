@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/room, android/datastore, android/files-media, storage, persistence, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:36:48 am
+date modified: Thursday, October 30th 2025, 12:43:01 pm
 ---
+
 # Вопрос (RU)
 > Какие существуют типы хранилищ данных в Android и когда их использовать?
 

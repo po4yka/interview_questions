@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, android/ui-compose, android/ui-views, android/ui-graphics, difficulty/medium, ui]
+date created: Monday, October 27th 2025, 6:42:32 pm
+date modified: Thursday, October 30th 2025, 12:48:34 pm
 ---
+
 # Вопрос (RU)
 
 Как отобразить SVG-строку в виде векторного изображения в Android?

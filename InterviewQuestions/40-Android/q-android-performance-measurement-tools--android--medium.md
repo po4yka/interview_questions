@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-13
 updated: 2025-10-30
 tags: [android/performance-memory, android/profiling, android/testing-benchmark, performance, optimization, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:26:56 am
+date modified: Thursday, October 30th 2025, 12:42:53 pm
 ---
 
 # Вопрос (RU)

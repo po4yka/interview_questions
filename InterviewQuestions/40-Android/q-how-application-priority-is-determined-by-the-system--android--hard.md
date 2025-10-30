@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, difficulty/hard, android/lifecycle, android/processes, android/performance-memory, lifecycle, processes, performance-memory]
+date created: Monday, October 27th 2025, 3:35:47 pm
+date modified: Thursday, October 30th 2025, 12:48:08 pm
 ---
+
 # Вопрос (RU)
 
 > Как система определяет приоритет приложения?

@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-views, android/performance-rendering, layouts, performance, difficulty/easy]
+date created: Tuesday, October 28th 2025, 9:49:15 am
+date modified: Thursday, October 30th 2025, 12:48:37 pm
 ---
 
 # Вопрос (RU)

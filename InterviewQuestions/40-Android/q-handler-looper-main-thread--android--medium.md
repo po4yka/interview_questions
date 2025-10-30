@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/threads-sync, android/background-execution, concurrency, difficulty/medium, handler, looper, main-thread, message-queue]
+date created: Monday, October 27th 2025, 5:04:18 pm
+date modified: Thursday, October 30th 2025, 12:48:05 pm
 ---
+
 # Вопрос (RU)
 
 Как получить сообщения на главном потоке с помощью Handler и Looper?

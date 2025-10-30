@@ -19,6 +19,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:23:10 am
+date modified: Thursday, October 30th 2025, 12:43:49 pm
 ---
 
 # Вопрос (RU)

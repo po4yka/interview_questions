@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
 sources: ["https://developer.android.com/jetpack/compose/compositionlocal"]
+date created: Thursday, October 30th 2025, 11:56:59 am
+date modified: Thursday, October 30th 2025, 12:44:37 pm
 ---
+
 # Вопрос (RU)
 > Что такое CompositionLocal в Jetpack Compose и когда его использовать?
 

@@ -20,7 +20,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-startup, android/lifecycle, performance, startup, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:43:33 am
+date modified: Thursday, October 30th 2025, 12:43:11 pm
 ---
+
 # Вопрос (RU)
 > Какие существуют типы запуска Android-приложения и как оптимизировать каждый из них?
 

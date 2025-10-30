@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/gradle, android/ci-cd, android/play-console, ci-cd, deployment, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:19:02 am
+date modified: Thursday, October 30th 2025, 12:43:33 pm
 ---
 
 # Вопрос (RU)

@@ -19,7 +19,10 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/di-hilt, android/gradle, android/testing-unit, dagger, hilt, challenges, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 12:02:30 pm
+date modified: Thursday, October 30th 2025, 12:47:30 pm
 ---
+
 # Вопрос (RU)
 > Какие проблемы есть у Dagger?
 

@@ -19,7 +19,10 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, android/lifecycle, difficulty/hard]
 sources: ["https://developer.android.com/jetpack/compose/side-effects"]
+date created: Thursday, October 30th 2025, 11:23:25 am
+date modified: Thursday, October 30th 2025, 12:43:50 pm
 ---
+
 # Вопрос (RU)
 > Как выбирать и правильно использовать API побочных эффектов Compose (LaunchedEffect, DisposableEffect, SideEffect, produceState)?
 

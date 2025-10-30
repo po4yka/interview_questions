@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/ui-compose, android/architecture-mvvm, jetpack-compose, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:35:10 am
+date modified: Thursday, October 30th 2025, 12:48:17 pm
 ---
+
 # Вопрос (RU)
 
 > Как работает Jetpack Compose? Объясните основные принципы и внутреннее устройство.

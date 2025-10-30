@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android, android/ui-views, android/ui-compose, android/architecture-mvvm, difficulty/medium, notifications, snackbar, toast]
+date created: Tuesday, October 28th 2025, 9:49:45 am
+date modified: Thursday, October 30th 2025, 12:48:34 pm
 ---
+
 # Вопрос (RU)
 
 Как правильно отображать Toast и Snackbar в зависимости от результатов операций в Android-приложении?

@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/fragments, android/ui-views, android/bitmap, fragments, views, bitmap, canvas, imageview, difficulty/easy]
+date created: Tuesday, October 28th 2025, 9:48:51 am
+date modified: Thursday, October 30th 2025, 12:49:10 pm
 ---
 
 # Вопрос (RU)

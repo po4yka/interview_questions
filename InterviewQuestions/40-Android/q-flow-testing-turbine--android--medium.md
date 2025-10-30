@@ -15,6 +15,8 @@ created: 2025-10-12
 updated: 2025-10-28
 tags: [android/testing-unit, android/coroutines, android/flow, difficulty/medium, turbine, unit-testing]
 sources: [https://github.com/cashapp/turbine]
+date created: Tuesday, October 28th 2025, 7:39:15 am
+date modified: Thursday, October 30th 2025, 12:47:52 pm
 ---
 
 # Вопрос (RU)

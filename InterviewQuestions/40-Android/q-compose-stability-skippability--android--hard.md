@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources: []
+date created: Thursday, October 30th 2025, 11:51:52 am
+date modified: Thursday, October 30th 2025, 12:43:54 pm
 ---
 
 # Вопрос (RU)

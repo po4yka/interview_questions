@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/service, android/background-execution, difficulty/easy]
 sources: []
+date created: Thursday, October 30th 2025, 11:35:54 am
+date modified: Thursday, October 30th 2025, 12:43:00 pm
 ---
+
 # Вопрос (RU)
 > Какие типы Service существуют в Android?
 

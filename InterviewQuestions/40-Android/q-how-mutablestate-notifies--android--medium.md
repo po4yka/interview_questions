@@ -15,6 +15,8 @@ tags: [android/ui-compose, android/ui-state, android/architecture-mvvm, difficul
 moc: moc-android
 related: [c-compose-state, c-recomposition, q-recomposition-choreographer--android--hard]
 sources: []
+date created: Tuesday, October 28th 2025, 9:34:15 am
+date modified: Thursday, October 30th 2025, 12:48:18 pm
 ---
 
 # Вопрос (RU)

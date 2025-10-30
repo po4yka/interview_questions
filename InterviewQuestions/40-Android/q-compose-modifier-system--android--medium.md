@@ -19,7 +19,10 @@ created: 2025-10-06
 updated: 2025-10-30
 tags: [android/ui-compose, android/performance-memory, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/modifiers]
+date created: Thursday, October 30th 2025, 11:23:05 am
+date modified: Thursday, October 30th 2025, 12:43:46 pm
 ---
+
 # Вопрос (RU)
 > Как работает система Modifier в Jetpack Compose? Объясните порядок выполнения, влияние на производительность и основные паттерны использования.
 

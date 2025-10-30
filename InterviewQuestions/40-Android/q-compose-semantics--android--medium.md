@@ -15,6 +15,8 @@ created: 2025-10-06
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-accessibility, android/testing-ui, accessibility, compose, testing, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/semantics, https://developer.android.com/guide/topics/ui/accessibility]
+date created: Thursday, October 30th 2025, 11:23:06 am
+date modified: Thursday, October 30th 2025, 12:43:52 pm
 ---
 
 # Вопрос (RU)

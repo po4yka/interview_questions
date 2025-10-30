@@ -22,7 +22,10 @@ updated: 2025-10-30
 tags: [android/di-hilt, difficulty/hard, dependency-injection, dagger, hilt]
 sources:
   - https://dagger.dev/hilt/components.html
+date created: Thursday, October 30th 2025, 12:02:34 pm
+date modified: Thursday, October 30th 2025, 12:47:13 pm
 ---
+
 # Вопрос (RU)
 > Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между Singleton, кастомными скоупами и unscoped зависимостями. Когда и зачем создавать кастомный скоуп?
 

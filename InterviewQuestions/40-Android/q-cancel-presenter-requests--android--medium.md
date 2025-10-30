@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/architecture-clean, android/coroutines, android/lifecycle, mvp, presenter-pattern, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:11:14 am
+date modified: Thursday, October 30th 2025, 12:43:31 pm
 ---
 
 # Вопрос (RU)

@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-01-27
 tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
 sources: [https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime]
+date created: Monday, October 27th 2025, 3:46:58 pm
+date modified: Thursday, October 30th 2025, 12:47:32 pm
 ---
+
 # Вопрос (RU)
 > В чем различия между рантаймами Dalvik и ART в Android? Почему Android перешел с Dalvik на ART?
 

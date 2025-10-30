@@ -16,7 +16,10 @@ sources:
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/testing-unit, android/testing-instrumented, difficulty/medium, fakes, mocks, test-doubles]
+date created: Tuesday, October 28th 2025, 9:22:36 am
+date modified: Thursday, October 30th 2025, 12:47:46 pm
 ---
+
 # Вопрос (RU)
 > Объясните разницу между fakes, mocks и stubs. Когда следует использовать каждый?
 

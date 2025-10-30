@@ -18,7 +18,10 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/lifecycle, android/activity, android/app-startup, difficulty/medium]
 sources: ["https://developer.android.com/reference/android/content/Context"]
+date created: Thursday, October 30th 2025, 11:56:11 am
+date modified: Thursday, October 30th 2025, 12:44:38 pm
 ---
+
 # Вопрос (RU)
 > Какие типы Context существуют в Android и когда каждый из них использовать?
 

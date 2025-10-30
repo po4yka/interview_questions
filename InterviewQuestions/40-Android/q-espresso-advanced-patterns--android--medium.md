@@ -15,6 +15,8 @@ sources: [https://developer.android.com/training/testing/espresso]
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
+date created: Tuesday, October 28th 2025, 9:22:14 am
+date modified: Thursday, October 30th 2025, 12:47:45 pm
 ---
 
 # Вопрос (RU)

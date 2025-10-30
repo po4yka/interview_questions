@@ -1,15 +1,25 @@
 ---
 id: 20251012-1227176
-title: "How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения"
+title: How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения
 topic: android
 difficulty: medium
 status: draft
 moc: moc-android
-related: [q-fragments-history-and-purpose--android--hard, q-how-is-navigation-implemented--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium]
+related:
+  - q-fragments-history-and-purpose--android--hard
+  - q-how-is-navigation-implemented--android--medium
+  - q-how-to-add-fragment-synchronously-asynchronously--android--medium
 created: 2025-10-15
-tags: [android, difficulty/medium, dynamic UI, dynamic-ui, Fragment, jetpack-compose, RecyclerView, ui]
+tags:
+  - android
+  - difficulty/medium
+  - dynamic-ui
+  - Fragment
+  - jetpack-compose
+  - RecyclerView
+  - ui
 date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:39:53 pm
+date modified: Thursday, October 30th 2025, 12:48:32 pm
 ---
 
 # How to Create Dynamic Screens at Runtime?

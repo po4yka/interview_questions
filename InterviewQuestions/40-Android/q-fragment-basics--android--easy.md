@@ -15,7 +15,10 @@ sources: ["https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master
 tags: [android/fragment, android/lifecycle, android/ui-navigation, difficulty/easy, fragment, lifecycle, ui-component]
 moc: moc-android
 related: [q-android-build-optimization--android--medium, q-what-each-android-component-represents--android--easy]
+date created: Tuesday, October 28th 2025, 7:38:56 am
+date modified: Thursday, October 30th 2025, 12:47:54 pm
 ---
+
 # Вопрос (RU)
 > Что такое Fragment в Android и для чего он используется?
 

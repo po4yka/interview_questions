@@ -15,7 +15,10 @@ created: 2025-10-12
 updated: 2025-01-27
 tags: [android/service, android/background-execution, difficulty/medium, foreground-service, notifications]
 sources: [https://developer.android.com/guide/components/foreground-services]
+date created: Monday, October 27th 2025, 3:32:31 pm
+date modified: Thursday, October 30th 2025, 12:47:54 pm
 ---
+
 # Вопрос (RU)
 > Что такое типы Foreground Service в Android? Как правильно реализовать foreground services?
 

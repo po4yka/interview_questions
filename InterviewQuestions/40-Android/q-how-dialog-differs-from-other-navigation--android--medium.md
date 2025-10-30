@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android, android/ui-navigation, android/ui-compose, navigation, dialog, difficulty/medium]
 sources: []
+date created: Monday, October 27th 2025, 3:36:06 pm
+date modified: Thursday, October 30th 2025, 12:48:09 pm
 ---
+
 # Вопрос (RU)
 
 > Чем dialog отличается от остальной навигации?

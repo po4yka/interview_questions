@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, android/ui-views, android/ui-widgets, recyclerview, grid-layout, difficulty/easy]
+date created: Monday, October 27th 2025, 3:57:01 pm
+date modified: Thursday, October 30th 2025, 12:48:22 pm
 ---
+
 # Вопрос (RU)
 
 Как изменить количество колонок в RecyclerView в зависимости от ориентации устройства?

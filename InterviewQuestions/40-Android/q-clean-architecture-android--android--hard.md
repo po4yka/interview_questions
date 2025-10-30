@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/architecture-clean, android/architecture-modularization, android/di-hilt, difficulty/hard]
+date created: Thursday, October 30th 2025, 11:18:04 am
+date modified: Thursday, October 30th 2025, 12:43:37 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать Clean Architecture в Android?
 

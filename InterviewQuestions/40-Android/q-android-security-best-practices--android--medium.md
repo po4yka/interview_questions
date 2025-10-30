@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, security, encryption, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 11:36:07 am
+date modified: Thursday, October 30th 2025, 12:42:59 pm
 ---
+
 # Вопрос (RU)
 > Какие основные практики безопасности нужно соблюдать при разработке Android приложений?
 

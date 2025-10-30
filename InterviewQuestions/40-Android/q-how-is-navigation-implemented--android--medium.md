@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-navigation, android/fragment, difficulty/medium, navigation, ui, fragments, navigation-component]
+date created: Tuesday, October 28th 2025, 9:35:24 am
+date modified: Thursday, October 30th 2025, 12:48:17 pm
 ---
+
 # Вопрос (RU)
 
 Как реализована навигация в Android приложениях?

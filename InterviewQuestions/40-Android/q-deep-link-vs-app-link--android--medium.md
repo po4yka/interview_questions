@@ -15,6 +15,8 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/ui-navigation, android/intents-deeplinks, app-links, deep-linking, difficulty/medium]
 sources: [https://developer.android.com/training/app-links]
+date created: Monday, October 27th 2025, 10:26:58 pm
+date modified: Thursday, October 30th 2025, 12:47:38 pm
 ---
 
 # Вопрос (RU)

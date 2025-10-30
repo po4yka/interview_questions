@@ -18,6 +18,8 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard, custom-layout, layout-measurement]
+date created: Thursday, October 30th 2025, 11:18:12 am
+date modified: Thursday, October 30th 2025, 12:43:42 pm
 ---
 
 # Вопрос (RU)

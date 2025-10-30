@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-compose, android/architecture-mvvm, compose, declarative-ui, recomposition, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:34:08 am
+date modified: Thursday, October 30th 2025, 12:48:15 pm
 ---
 
 # Вопрос (RU)

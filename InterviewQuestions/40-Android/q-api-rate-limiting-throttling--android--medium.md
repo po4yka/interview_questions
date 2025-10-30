@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/networking-http, android/performance-startup, okhttp, retrofit, networking, performance, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:43:21 am
+date modified: Thursday, October 30th 2025, 12:43:09 pm
 ---
 
 # Вопрос (RU)

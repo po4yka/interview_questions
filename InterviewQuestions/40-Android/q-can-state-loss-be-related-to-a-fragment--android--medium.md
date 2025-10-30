@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/fragment, android/lifecycle, android/processes, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:10:50 am
+date modified: Thursday, October 30th 2025, 12:43:30 pm
 ---
+
 # Вопрос (RU)
 > Бывает ли потеря состояния у Fragment?
 

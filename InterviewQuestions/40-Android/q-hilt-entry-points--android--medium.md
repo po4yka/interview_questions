@@ -15,7 +15,10 @@ created: 2025-10-11
 updated: 2025-01-27
 tags: [android/di-hilt, android/lifecycle, hilt, dependency-injection, difficulty/medium]
 sources: [https://dagger.dev/hilt/entry-points.html]
+date created: Monday, October 27th 2025, 3:36:30 pm
+date modified: Thursday, October 30th 2025, 12:48:07 pm
 ---
+
 # Вопрос (RU)
 > Что такое Hilt Entry Points и когда их использовать?
 

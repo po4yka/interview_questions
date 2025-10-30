@@ -18,7 +18,10 @@ created: 2025-10-11
 updated: 2025-10-29
 sources: []
 tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:18:34 am
+date modified: Thursday, October 30th 2025, 12:43:36 pm
 ---
+
 # Вопрос (RU)
 > Как построить эффективный CI/CD пайплайн для Android-приложения?
 

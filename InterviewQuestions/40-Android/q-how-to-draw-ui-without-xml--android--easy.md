@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-28
 tags: [android/ui-compose, android/ui-views, compose, views, ui, difficulty/easy]
 sources: []
+date created: Tuesday, October 28th 2025, 9:49:16 am
+date modified: Thursday, October 30th 2025, 12:48:36 pm
 ---
+
 # Вопрос (RU)
 
 > Как создать пользовательский интерфейс в Android без использования XML файлов разметки?

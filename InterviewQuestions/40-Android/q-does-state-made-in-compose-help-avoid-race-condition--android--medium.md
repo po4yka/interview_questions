@@ -34,6 +34,8 @@ tags:
   - difficulty/medium
   - state
   - thread-safety
+date created: Tuesday, October 28th 2025, 9:22:03 am
+date modified: Thursday, October 30th 2025, 12:47:42 pm
 ---
 
 # Вопрос (RU)

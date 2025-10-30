@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/service, android/notifications, service-ui-communication, foreground-service, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:11:11 am
+date modified: Thursday, October 30th 2025, 12:43:29 pm
 ---
+
 # Вопрос (RU)
 > Может ли сервис общаться с пользователем?
 

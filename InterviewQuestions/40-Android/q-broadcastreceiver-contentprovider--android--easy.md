@@ -24,7 +24,10 @@ sources:
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
+date created: Thursday, October 30th 2025, 11:11:16 am
+date modified: Thursday, October 30th 2025, 12:43:27 pm
 ---
+
 # Вопрос (RU)
 > Что такое BroadcastReceiver и ContentProvider в Android?
 

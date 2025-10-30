@@ -19,7 +19,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/kmp, android/compose-multiplatform, android/ui-compose, compose, kmp, multiplatform, difficulty/hard]
+date created: Thursday, October 30th 2025, 11:23:12 am
+date modified: Thursday, October 30th 2025, 12:43:46 pm
 ---
+
 # Вопрос (RU)
 > Что такое Compose Multiplatform и как реализовать кроссплатформенную UI-архитектуру?
 

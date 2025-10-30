@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/gradle, android/static-analysis, android/build-variants, static-analysis, code-quality, difficulty/medium]
 sources: [https://developer.android.com/studio/write/lint]
+date created: Thursday, October 30th 2025, 11:26:40 am
+date modified: Thursday, October 30th 2025, 12:42:49 pm
 ---
 
 # Вопрос (RU)

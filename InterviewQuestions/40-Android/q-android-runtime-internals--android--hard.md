@@ -15,7 +15,10 @@ created: 2025-10-13
 updated: 2025-10-30
 tags: [android/performance-memory, android/profiling, android/processes, difficulty/hard]
 sources: []
+date created: Thursday, October 30th 2025, 11:27:26 am
+date modified: Thursday, October 30th 2025, 12:42:58 pm
 ---
+
 # Вопрос (RU)
 > Как устроено внутреннее функционирование Android Runtime (ART)?
 

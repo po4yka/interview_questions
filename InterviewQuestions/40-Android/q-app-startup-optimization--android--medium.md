@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-startup, android/performance-memory, android/app-startup, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:43:03 am
+date modified: Thursday, October 30th 2025, 12:43:13 pm
 ---
+
 # Вопрос (RU)
 > Как оптимизировать время запуска Android-приложения?
 

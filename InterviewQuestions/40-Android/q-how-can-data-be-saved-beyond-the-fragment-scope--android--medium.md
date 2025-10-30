@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/lifecycle, android/architecture-mvvm, android/data-storage, fragment, viewmodel, state-management, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:34:22 am
+date modified: Thursday, October 30th 2025, 12:48:09 pm
 ---
 
 # Вопрос (RU)

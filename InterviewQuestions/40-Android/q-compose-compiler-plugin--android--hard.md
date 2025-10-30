@@ -34,7 +34,10 @@ tags:
   - compiler
   - performance
   - difficulty/hard
+date created: Thursday, October 30th 2025, 11:17:58 am
+date modified: Thursday, October 30th 2025, 12:43:40 pm
 ---
+
 # Вопрос (RU)
 > Как работает плагин компилятора Compose и как он оптимизирует перекомпозицию?
 

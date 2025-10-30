@@ -15,6 +15,8 @@ tags: [android/performance-rendering, android/strictmode-anr, android/profiling,
 moc: moc-android
 related: [c-android-frame-budget, c-choreographer, q-optimize-recyclerview-performance--android--medium]
 sources: []
+date created: Tuesday, October 28th 2025, 7:38:35 am
+date modified: Thursday, October 30th 2025, 12:47:58 pm
 ---
 
 # Вопрос (RU)

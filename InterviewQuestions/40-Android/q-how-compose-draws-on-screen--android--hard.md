@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android, android/ui-compose, android/performance-rendering, compose, rendering, difficulty/medium]
 sources: []
+date created: Monday, October 27th 2025, 4:02:03 pm
+date modified: Thursday, October 30th 2025, 12:48:11 pm
 ---
+
 # Вопрос (RU)
 
 > Как Jetpack Compose отрисовывает UI на экране? Опишите трёхфазный процесс рендеринга.

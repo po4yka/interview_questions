@@ -15,7 +15,10 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/ui-views, android/ui-theming, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 11:56:26 am
+date modified: Thursday, October 30th 2025, 12:44:41 pm
 ---
+
 # Вопрос (RU)
 > Как работают кастомные атрибуты в Custom View и как их правильно объявлять и считывать?
 

@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/keystore-crypto, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
 sources: [https://developer.android.com/topic/security/data]
+date created: Monday, October 27th 2025, 10:27:23 pm
+date modified: Thursday, October 30th 2025, 12:47:35 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать шифрование базы данных в Android? Какие лучшие практики и доступные библиотеки?
 

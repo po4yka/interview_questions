@@ -15,6 +15,8 @@ tags: [android, android/lifecycle, android/fragment, android/activity, difficult
 moc: moc-android
 related: [q-android-runtime-art--android--medium, q-compose-side-effects-advanced--jetpack-compose--hard, q-view-composition-strategy-compose--android--medium]
 sources: []
+date created: Tuesday, October 28th 2025, 9:34:34 am
+date modified: Thursday, October 30th 2025, 12:48:11 pm
 ---
 
 # Вопрос (RU)

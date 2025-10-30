@@ -32,6 +32,8 @@ tags:
   - difficulty/medium
   - compose
   - optimization
+date created: Thursday, October 30th 2025, 11:23:09 am
+date modified: Thursday, October 30th 2025, 12:43:45 pm
 ---
 
 # Вопрос (RU)

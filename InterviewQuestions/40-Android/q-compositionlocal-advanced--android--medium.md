@@ -15,13 +15,15 @@ sources: []
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/ui-compose, android/architecture-mvvm, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:56:35 am
+date modified: Thursday, October 30th 2025, 12:44:35 pm
 ---
 
 # Вопрос (RU)
-> Когда использовать CompositionLocal? Чем различаются staticCompositionLocalOf и compositionLocalOf?
+> Когда использовать `CompositionLocal`? Чем различаются `staticCompositionLocalOf` и `compositionLocalOf`?
 
 # Question (EN)
-> When to use CompositionLocal? What's the difference between staticCompositionLocalOf and compositionLocalOf?
+> When to use `CompositionLocal`? What's the difference between `staticCompositionLocalOf` and `compositionLocalOf`?
 
 ---
 

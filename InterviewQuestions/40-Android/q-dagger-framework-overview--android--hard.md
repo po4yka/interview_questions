@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/di-hilt, android/architecture-mvvm, android/architecture-clean, dagger, dependency-injection, hilt, difficulty/hard]
 sources: [https://dagger.dev/]
+date created: Thursday, October 30th 2025, 12:01:59 pm
+date modified: Thursday, October 30th 2025, 12:47:14 pm
 ---
+
 # Вопрос (RU)
 > Что известно про фреймворк Dagger?
 

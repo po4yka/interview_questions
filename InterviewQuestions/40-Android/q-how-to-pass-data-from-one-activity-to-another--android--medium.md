@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 tags: [android, android/activity, android/intent, android/navigation, activity, intent, navigation, difficulty/medium]
 sources: []
+date created: Tuesday, October 28th 2025, 9:48:44 am
+date modified: Thursday, October 30th 2025, 12:49:12 pm
 ---
 
 # Вопрос (RU)

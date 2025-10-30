@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/app-startup, android/performance-startup, jetpack, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:43:07 am
+date modified: Thursday, October 30th 2025, 12:43:13 pm
 ---
 
 # Вопрос (RU)

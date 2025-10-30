@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-views, android/lifecycle, custom-view, difficulty/easy, ui, view-lifecycle]
+date created: Tuesday, October 28th 2025, 9:49:46 am
+date modified: Thursday, October 30th 2025, 12:49:11 pm
 ---
+
 # Вопрос (RU)
 
 Как можно реализовать поведение View при её добавлении в дерево?

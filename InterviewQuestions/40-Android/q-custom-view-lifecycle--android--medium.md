@@ -15,7 +15,10 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/lifecycle, android/ui-views, android/ui-graphics, custom-views, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 11:56:31 am
+date modified: Thursday, October 30th 2025, 12:44:42 pm
 ---
+
 # Вопрос (RU)
 > Каков жизненный цикл Custom View в Android? Какие методы вызываются при создании, отрисовке и удалении view?
 

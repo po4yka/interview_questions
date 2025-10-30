@@ -18,6 +18,8 @@ sources: []
 created: 2025-10-12
 updated: 2025-10-30
 tags: [android/permissions, android/keystore-crypto, biometric, authentication, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:51:48 am
+date modified: Thursday, October 30th 2025, 12:43:25 pm
 ---
 
 # Вопрос (RU)

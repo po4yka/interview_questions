@@ -15,7 +15,10 @@ related: [c-content-provider, q-runtime-permissions-best-practices--permissions-
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/files-media, android/permissions, content-provider, difficulty/medium, file-sharing, security]
+date created: Tuesday, October 28th 2025, 7:39:08 am
+date modified: Thursday, October 30th 2025, 12:47:50 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о FileProvider?
 

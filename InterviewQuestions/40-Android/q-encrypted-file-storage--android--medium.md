@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-28
 sources: [https://developer.android.com/topic/security/data]
 tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore]
+date created: Tuesday, October 28th 2025, 9:23:47 am
+date modified: Thursday, October 30th 2025, 12:47:43 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать зашифрованное хранение файлов с использованием EncryptedFile API?
 

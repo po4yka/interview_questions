@@ -15,7 +15,10 @@ created: 2025-10-05
 updated: 2025-10-30
 sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, performance, debugging, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:43:26 am
+date modified: Thursday, October 30th 2025, 12:43:08 pm
 ---
+
 # Вопрос (RU)
 > Что такое ANR (Application Not Responding) и как его предотвратить?
 

@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/processes, android/performance-memory, runtime, compilation, gc, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 11:26:48 am
+date modified: Thursday, October 30th 2025, 12:42:57 pm
 ---
 
 # Вопрос (RU)

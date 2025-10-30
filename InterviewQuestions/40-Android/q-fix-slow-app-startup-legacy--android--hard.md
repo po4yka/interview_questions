@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/performance-startup, android/architecture-modularization, android/profiling, app-startup, difficulty/hard, lazy-init, legacy-code, optimization]
+date created: Tuesday, October 28th 2025, 7:38:29 am
+date modified: Thursday, October 30th 2025, 12:47:50 pm
 ---
 
 # Вопрос (RU)

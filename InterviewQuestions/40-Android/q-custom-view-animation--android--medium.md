@@ -30,7 +30,10 @@ tags:
   - android/ui-animation
   - android/ui-views
   - difficulty/medium
+date created: Thursday, October 30th 2025, 11:56:25 am
+date modified: Thursday, October 30th 2025, 12:44:40 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать анимацию в Custom View?
 

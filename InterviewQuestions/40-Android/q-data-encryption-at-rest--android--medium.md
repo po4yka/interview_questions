@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/files-media, android/keystore-crypto, encryption, difficulty/medium]
 sources: ["https://developer.android.com/guide/topics/security/encryption"]
+date created: Monday, October 27th 2025, 10:28:06 pm
+date modified: Thursday, October 30th 2025, 12:47:32 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать шифрование данных в покое с помощью EncryptedSharedPreferences и SQLCipher для Room? Сравните подходы, влияние на производительность и стратегии управления ключами.
 

@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/ui-navigation, android/activity, android/fragment, difficulty/medium, navigation, ui]
+date created: Tuesday, October 28th 2025, 9:35:54 am
+date modified: Thursday, October 30th 2025, 12:48:19 pm
 ---
+
 # Вопрос (RU)
 
 Каким образом осуществляется навигация в Android?

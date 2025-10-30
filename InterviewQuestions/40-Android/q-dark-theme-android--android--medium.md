@@ -15,6 +15,8 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/ui-theming, dark-theme, daynight, difficulty/medium, material-design, theming]
 sources: [https://developer.android.com/guide/topics/ui/look-and-feel/darktheme]
+date created: Monday, October 27th 2025, 10:26:54 pm
+date modified: Thursday, October 30th 2025, 12:47:33 pm
 ---
 
 # Вопрос (RU)

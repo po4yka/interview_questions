@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/architecture-modularization, android/gradle, android/ci-cd, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:18:32 am
+date modified: Thursday, October 30th 2025, 12:43:34 pm
 ---
 
 # Вопрос (RU)

@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android, android/threads-sync, android/performance-rendering, android/lifecycle, difficulty/medium]
+date created: Tuesday, October 28th 2025, 9:35:37 am
+date modified: Thursday, October 30th 2025, 12:48:17 pm
 ---
+
 # Вопрос (RU)
 
 > Как работает главный поток в Android?

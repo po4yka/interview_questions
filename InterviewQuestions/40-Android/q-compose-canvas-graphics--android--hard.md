@@ -22,6 +22,8 @@ created: 2025-10-11
 updated: 2025-10-30
 sources: []
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
+date created: Thursday, October 30th 2025, 11:18:11 am
+date modified: Thursday, October 30th 2025, 12:43:39 pm
 ---
 
 # Вопрос (RU)

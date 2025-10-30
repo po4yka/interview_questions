@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-30
 sources: []
 tags: [android/di-hilt, android/dependency-management, dagger, hilt, dependency-injection, difficulty/easy]
+date created: Thursday, October 30th 2025, 12:02:51 pm
+date modified: Thursday, October 30th 2025, 12:47:27 pm
 ---
+
 # Вопрос (RU)
 > Как указать Dagger, где выполнить инъекцию зависимостей?
 

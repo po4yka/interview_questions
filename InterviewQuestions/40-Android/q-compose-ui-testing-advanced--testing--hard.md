@@ -15,6 +15,8 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/testing-ui, android/ui-compose, compose-testing, accessibility, semantics, difficulty/hard]
 moc: moc-android
+date created: Thursday, October 30th 2025, 11:56:49 am
+date modified: Thursday, October 30th 2025, 12:43:58 pm
 ---
 
 # Вопрос (RU)

@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-modularization, android/gradle, android/dependency-management, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 11:26:58 am
+date modified: Thursday, October 30th 2025, 12:42:52 pm
 ---
+
 # Вопрос (RU)
 > Что такое модуляризация Android-приложений и какие основные преимущества она даёт?
 

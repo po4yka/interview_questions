@@ -14,7 +14,10 @@ related: [q-can-a-service-communicate-with-the-user--android--medium, q-how-did-
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android, android/fragment, android/lifecycle, android/architecture-mvvm, difficulty/hard, fragments, ui]
+date created: Tuesday, October 28th 2025, 7:39:14 am
+date modified: Thursday, October 30th 2025, 12:47:56 pm
 ---
+
 # Вопрос (RU)
 
 Как существуют и к чему привязаны фрагменты в Activity?

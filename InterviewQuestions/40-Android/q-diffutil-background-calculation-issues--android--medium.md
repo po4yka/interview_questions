@@ -15,6 +15,8 @@ sources: [https://developer.android.com/reference/androidx/recyclerview/widget/D
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/performance-memory, android/ui-views, difficulty/medium, diffutil, recyclerview]
+date created: Tuesday, October 28th 2025, 9:22:13 am
+date modified: Thursday, October 30th 2025, 12:47:42 pm
 ---
 
 # Вопрос (RU)

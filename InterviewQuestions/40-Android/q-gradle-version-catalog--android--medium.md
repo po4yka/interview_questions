@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-27
 tags: [android/gradle, android/dependency-management, android/build-variants, gradle, dependency-management, toml, difficulty/medium]
 sources: [Kirchhoff repo, Android Developer Docs]
+date created: Monday, October 27th 2025, 6:55:47 pm
+date modified: Thursday, October 30th 2025, 12:48:01 pm
 ---
+
 # Вопрос (RU)
 
 Что вы знаете о Gradle Version Catalog?

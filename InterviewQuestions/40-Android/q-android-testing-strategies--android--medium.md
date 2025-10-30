@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/testing-unit, android/testing-instrumented, android/testing-ui, testing, junit, espresso, mockk, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:36:54 am
+date modified: Thursday, October 30th 2025, 12:43:03 pm
 ---
+
 # Вопрос (RU)
 > Какие существуют стратегии тестирования Android приложений и как построить эффективную пирамиду тестов?
 

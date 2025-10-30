@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/room, android/datastore, database, difficulty/easy]
 sources: [https://developer.android.com/training/data-storage]
+date created: Monday, October 27th 2025, 10:28:31 pm
+date modified: Thursday, October 30th 2025, 12:47:37 pm
 ---
+
 # Вопрос (RU)
 > Какие базы данных можно использовать в Android?
 

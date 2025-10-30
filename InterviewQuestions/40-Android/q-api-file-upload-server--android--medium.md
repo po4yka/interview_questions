@@ -24,7 +24,10 @@ created: 2025-10-15
 updated: 2025-10-30
 
 tags: [android/networking-http, android/files-media, android/background-execution, retrofit, okhttp, workmanager, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:43:56 am
+date modified: Thursday, October 30th 2025, 12:43:08 pm
 ---
+
 # Вопрос (RU)
 
 > Как реализовать загрузку файлов на сервер через API в Android?

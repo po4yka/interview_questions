@@ -15,13 +15,11 @@ related:
   - q-dagger-framework-overview--android--hard
   - q-hilt-components-scope--android--medium
 created: 2025-10-20
-updated: 2025-10-27
+updated: 2025-10-30
 tags: [android/di-hilt, difficulty/hard]
-sources:
-  - url: https://dagger.dev/api/latest/dagger/Component.html
-    title: Dagger Component API documentation
-date created: Monday, October 27th 2025, 6:50:08 pm
-date modified: Thursday, October 30th 2025, 11:51:12 am
+sources: [https://dagger.dev/api/latest/dagger/Component.html]
+date created: Thursday, October 30th 2025, 12:45:42 pm
+date modified: Thursday, October 30th 2025, 12:47:12 pm
 ---
 
 # Вопрос (RU)
@@ -237,6 +235,15 @@ object AppModule {
 - How do you handle circular dependencies between components?
 - What are the performance implications of each approach?
 - How does Hilt manage component lifecycles automatically?
+- When should you prefer Subcomponents over Component Dependencies?
+- How do you test components with dependencies?
+
+## References
+
+- [[c-dagger]]
+- [[c-hilt]]
+- [[c-dependency-injection]]
+- https://dagger.dev/api/latest/dagger/Component.html
 
 ## Related Questions
 

@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ci-cd, android/gradle, android/testing-unit, devops, automation, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:18:03 am
+date modified: Thursday, October 30th 2025, 12:43:36 pm
 ---
 
 # Вопрос (RU)

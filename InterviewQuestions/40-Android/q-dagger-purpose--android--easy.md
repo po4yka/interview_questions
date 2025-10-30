@@ -18,7 +18,10 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources: [https://dagger.dev/]
+date created: Thursday, October 30th 2025, 12:02:39 pm
+date modified: Thursday, October 30th 2025, 12:47:30 pm
 ---
+
 # Вопрос (RU)
 > Для чего нужен Dagger?
 

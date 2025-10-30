@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/datastore, datastore, preferences, proto-datastore, storage, difficulty/medium]
 sources: [https://developer.android.com/topic/libraries/architecture/datastore]
+date created: Monday, October 27th 2025, 10:27:18 pm
+date modified: Thursday, October 30th 2025, 12:47:37 pm
 ---
+
 # Вопрос (RU)
 > Что вы знаете о DataStore?
 

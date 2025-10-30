@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/performance-rendering, android/ui-views, custom-views, performance, canvas, difficulty/hard]
+date created: Thursday, October 30th 2025, 11:11:20 am
+date modified: Thursday, October 30th 2025, 12:43:32 pm
 ---
+
 # Вопрос (RU)
 > Как оптимизировать отрисовку в Canvas для достижения 60 FPS в кастомных View?
 

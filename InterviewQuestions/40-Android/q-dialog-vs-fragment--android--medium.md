@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 tags: [android/lifecycle, android/ui-components, dialog, difficulty/medium, fragment, lifecycle]
 sources: [https://developer.android.com/guide/fragments, https://developer.android.com/develop/ui/views/components/dialogs]
+date created: Tuesday, October 28th 2025, 9:22:38 am
+date modified: Thursday, October 30th 2025, 12:47:41 pm
 ---
 
 # Вопрос (RU)

@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, sql]
 sources: [https://developer.android.com/training/data-storage/room]
+date created: Monday, October 27th 2025, 10:27:30 pm
+date modified: Thursday, October 30th 2025, 12:47:36 pm
 ---
+
 # Вопрос (RU)
 > Какие лучшие практики и техники для оптимизации базы данных в Android приложениях?
 

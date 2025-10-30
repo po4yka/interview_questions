@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/ui-views, android/ui-graphics, custom-views, layout, difficulty/hard]
 sources: []
+date created: Thursday, October 30th 2025, 12:03:04 pm
+date modified: Thursday, October 30th 2025, 12:44:44 pm
 ---
+
 # Вопрос (RU)
 
 > Как создать кастомный ViewGroup? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.

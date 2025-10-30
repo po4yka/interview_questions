@@ -15,6 +15,8 @@ sources: []
 created: 2025-10-13
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/ui-compose, android/lifecycle, jetpack, difficulty/easy]
+date created: Thursday, October 30th 2025, 11:26:44 am
+date modified: Thursday, October 30th 2025, 12:42:48 pm
 ---
 
 # Вопрос (RU)

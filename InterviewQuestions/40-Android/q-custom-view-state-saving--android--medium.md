@@ -15,7 +15,10 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/lifecycle, android/ui-views, custom-view, state-management, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 12:02:06 pm
+date modified: Thursday, October 30th 2025, 12:44:43 pm
 ---
+
 # Вопрос (RU)
 > Как реализовать сохранение состояния в Custom View при configuration changes?
 

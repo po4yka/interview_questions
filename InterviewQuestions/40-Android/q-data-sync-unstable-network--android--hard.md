@@ -22,7 +22,10 @@ created: 2025-10-20
 updated: 2025-01-27
 tags: [android/architecture-clean, android/networking-http, data-sync, difficulty/hard, networking, offline-first, workmanager]
 sources: [https://developer.android.com/guide/background/processing-data/sync]
+date created: Monday, October 27th 2025, 3:32:30 pm
+date modified: Thursday, October 30th 2025, 12:47:34 pm
 ---
+
 # Вопрос (RU)
 > Как бы вы обрабатывали синхронизацию данных в Android приложении при нестабильном сетевом соединении?
 

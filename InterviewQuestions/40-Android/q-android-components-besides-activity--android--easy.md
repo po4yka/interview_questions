@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/service, android/broadcast-receiver, android/content-provider, difficulty/easy]
 sources: []
+date created: Thursday, October 30th 2025, 11:26:39 am
+date modified: Thursday, October 30th 2025, 12:42:46 pm
 ---
+
 # Вопрос (RU)
 
 Какие компоненты Android существуют помимо Activity?

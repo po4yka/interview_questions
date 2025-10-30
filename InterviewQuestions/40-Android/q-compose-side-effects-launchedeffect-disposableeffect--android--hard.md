@@ -15,6 +15,8 @@ created: 2025-10-13
 updated: 2025-10-30
 tags: [android/ui-compose, android/lifecycle, compose, difficulty/hard, side-effects]
 sources: [https://developer.android.com/jetpack/compose/side-effects, https://developer.android.com/jetpack/compose/lifecycle]
+date created: Thursday, October 30th 2025, 11:51:33 am
+date modified: Thursday, October 30th 2025, 12:43:52 pm
 ---
 
 # Вопрос (RU)

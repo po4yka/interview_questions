@@ -20,6 +20,8 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/coroutines, android/background-execution, android/threads-sync, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:51:35 am
+date modified: Thursday, October 30th 2025, 12:43:21 pm
 ---
 
 # Вопрос (RU)

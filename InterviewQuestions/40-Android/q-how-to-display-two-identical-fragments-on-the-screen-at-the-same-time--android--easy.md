@@ -19,6 +19,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/easy, fragments, ui]
+date created: Tuesday, October 28th 2025, 9:49:43 am
+date modified: Thursday, October 30th 2025, 12:48:35 pm
 ---
 
 # Вопрос (RU)

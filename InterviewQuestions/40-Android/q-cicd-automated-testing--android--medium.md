@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/gradle, android/testing-instrumented, android/testing-unit, android/ci-cd, ci-cd, testing, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:10:59 am
+date modified: Thursday, October 30th 2025, 12:43:34 pm
 ---
 
 # Вопрос (RU)

@@ -15,6 +15,8 @@ created: 2025-10-13
 updated: 2025-10-30
 tags: [android/ui-animation, android/ui-compose, compose, animation, difficulty/medium]
 sources: []
+date created: Thursday, October 30th 2025, 11:36:05 am
+date modified: Thursday, October 30th 2025, 12:43:05 pm
 ---
 
 # Вопрос (RU)

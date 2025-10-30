@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/kmp, android/architecture-clean, cross-platform, multiplatform, difficulty/medium]
+date created: Tuesday, October 28th 2025, 7:40:08 am
+date modified: Thursday, October 30th 2025, 12:47:52 pm
 ---
+
 # Вопрос (RU)
 
 > Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки. Каковы архитектурные различия, характеристики производительности и trade-offs? Когда выбирать KMM вместо Flutter и наоборот?

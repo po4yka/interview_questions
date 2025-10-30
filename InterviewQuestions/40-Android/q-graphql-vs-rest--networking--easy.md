@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [api-design, graphql, rest, difficulty/easy]
+date created: Monday, October 27th 2025, 3:57:25 pm
+date modified: Thursday, October 30th 2025, 12:48:02 pm
 ---
+
 # Вопрос (RU)
 
 > Сравните GraphQL и REST API. Когда стоит выбрать GraphQL? Обсудите over-fetching, under-fetching, версионирование, кеширование.

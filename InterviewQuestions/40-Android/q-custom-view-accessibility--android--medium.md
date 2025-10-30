@@ -15,7 +15,10 @@ sources: [https://developer.android.com/guide/topics/ui/accessibility]
 created: 2025-10-21
 updated: 2025-10-30
 tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
+date created: Thursday, October 30th 2025, 11:56:22 am
+date modified: Thursday, October 30th 2025, 12:44:40 pm
 ---
+
 # Вопрос (RU)
 > Как правильно реализовать доступность для custom view в Android?
 

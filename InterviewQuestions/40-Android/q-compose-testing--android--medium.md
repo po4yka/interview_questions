@@ -15,6 +15,8 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/testing-unit, android/ui-compose, compose, testing, semantics, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/testing]
+date created: Thursday, October 30th 2025, 11:56:28 am
+date modified: Thursday, October 30th 2025, 12:43:57 pm
 ---
 
 # Вопрос (RU)

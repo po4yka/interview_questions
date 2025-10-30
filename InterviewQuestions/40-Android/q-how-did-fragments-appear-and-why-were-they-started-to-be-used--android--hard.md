@@ -15,6 +15,8 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/fragments, android/architecture-patterns, android/lifecycle, ui, difficulty/hard]
+date created: Tuesday, October 28th 2025, 9:34:06 am
+date modified: Thursday, October 30th 2025, 12:48:12 pm
 ---
 
 # Вопрос (RU)
