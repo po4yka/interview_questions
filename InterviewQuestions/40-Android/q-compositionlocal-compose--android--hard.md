@@ -12,11 +12,10 @@ status: draft
 moc: moc-android
 related: [q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compositionlocal-advanced--android--medium]
 created: 2025-10-15
-updated: 2025-10-27
+updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
 sources: ["https://developer.android.com/jetpack/compose/compositionlocal"]
 ---
-
 # Вопрос (RU)
 > Что такое CompositionLocal в Jetpack Compose и когда его использовать?
 
@@ -30,13 +29,15 @@ sources: ["https://developer.android.com/jetpack/compose/compositionlocal"]
 CompositionLocal — механизм передачи данных через дерево композиций без явного пробрасывания параметров. Решает проблему "prop drilling" для окружающих зависимостей (тема, локаль, imageLoader).
 
 ### Назначение
-- Окружающие зависимости: theme, locale, density, haptics
-- Альтернатива явным параметрам для cross-cutting concerns
-- НЕ замена DI: бизнес-логику и репозитории передавать через DI
 
-### Параметры vs CompositionLocal
-- **Параметры**: локальные зависимости, частые изменения, ясность API
-- **CompositionLocal**: сквозные зависимости, редкие изменения, окружение
+**Используй для**:
+- Окружающих зависимостей: theme, locale, density, haptics
+- Cross-cutting concerns, избегающих многоуровневый prop drilling
+
+**Не используй для**:
+- Бизнес-логики и репозиториев (используй DI: Hilt/Koin)
+- Локальных зависимостей с явным API
+- Часто меняющихся данных на верхних уровнях
 
 ### Dynamic vs Static
 
@@ -50,35 +51,46 @@ val LocalScrollY = compositionLocalOf { 0 }
 
 **staticCompositionLocalOf** (статический):
 ```kotlin
-val LocalTheme = staticCompositionLocalOf<Theme> { error("No theme") }
+val LocalTheme = staticCompositionLocalOf<Theme> {
+    error("No theme provided")
+}
 // ✅ Дешёвое чтение — нет отслеживания
 // ✅ Для редко меняющихся, широко используемых значений
 // ❌ Обновление инвалидирует всё поддерево Provider
 ```
 
-**Правило**: часто меняется + узкая рекомпозиция → `compositionLocalOf`; редко меняется + широкое использование → `staticCompositionLocalOf`.
+**Правило выбора**: часто меняется + узкая рекомпозиция → `compositionLocalOf`; редко меняется + широкое использование → `staticCompositionLocalOf`.
 
 ### Границы инвалидации
-- Граница — `CompositionLocalProvider`
-- Dynamic: инвалидирует только читателей
-- Static: инвалидирует всё поддерево
-- Размещать Provider близко к потребителям при частых обновлениях
+
+- **Dynamic**: инвалидирует только читателей
+- **Static**: инвалидирует всё поддерево от Provider
+- **Оптимизация**: размещай Provider близко к потребителям при частых обновлениях
 
 ### Безопасные дефолты
+
 ```kotlin
-// ✅ Падаем явно
-val LocalAuth = compositionLocalOf<Auth> { error("No Auth") }
+// ✅ Падаем явно — обнаруживаем ошибку сразу
+val LocalAuth = compositionLocalOf<Auth> {
+    error("No Auth provided")
+}
 
 // ❌ Молчаливый null может скрыть ошибку
 val LocalAuth = compositionLocalOf<Auth?> { null }
 ```
 
-### Паттерны
+### Типичный паттерн
+
 ```kotlin
 // Статический контекст приложения
-data class AppEnv(val locale: Locale, val haptics: Haptics)
+data class AppEnv(
+    val locale: Locale,
+    val haptics: Haptics,
+    val imageLoader: ImageLoader
+)
+
 val LocalAppEnv = staticCompositionLocalOf<AppEnv> {
-    error("No AppEnv")
+    error("No AppEnv provided")
 }
 
 @Composable
@@ -87,25 +99,35 @@ fun App(env: AppEnv) {
         AppContent()
     }
 }
+
+@Composable
+fun SomeScreen() {
+    val env = LocalAppEnv.current
+    // Используй env.locale, env.haptics...
+}
 ```
 
-### Типичные ошибки
-- Чтение Local вне композиции (долгоживущие lambda)
+### Анти-паттерны
+
+- Чтение Local вне композиции (в долгоживущих lambda)
 - Использование для бизнес-логики вместо DI
 - Provider слишком высоко для часто меняющихся значений
+- Nullable дефолты вместо явных ошибок
 
 ## Answer (EN)
 
 CompositionLocal is a mechanism for passing data through the composition tree without explicit parameter passing. Solves "prop drilling" for ambient dependencies (theme, locale, imageLoader).
 
 ### Purpose
-- Ambient dependencies: theme, locale, density, haptics
-- Alternative to explicit parameters for cross-cutting concerns
-- NOT a DI replacement: business logic and repositories go through DI
 
-### Parameters vs CompositionLocal
-- **Parameters**: local dependencies, frequent changes, API clarity
-- **CompositionLocal**: cross-cutting dependencies, rare changes, environment
+**Use for**:
+- Ambient dependencies: theme, locale, density, haptics
+- Cross-cutting concerns avoiding multi-level prop drilling
+
+**Don't use for**:
+- Business logic and repositories (use DI: Hilt/Koin)
+- Local dependencies with explicit API
+- Frequently changing data at high levels
 
 ### Dynamic vs Static
 
@@ -119,35 +141,46 @@ val LocalScrollY = compositionLocalOf { 0 }
 
 **staticCompositionLocalOf** (static):
 ```kotlin
-val LocalTheme = staticCompositionLocalOf<Theme> { error("No theme") }
+val LocalTheme = staticCompositionLocalOf<Theme> {
+    error("No theme provided")
+}
 // ✅ Cheap reads — no tracking
 // ✅ For rarely changing, widely used values
 // ❌ Update invalidates entire Provider subtree
 ```
 
-**Rule**: changes often + narrow recomposition → `compositionLocalOf`; rarely changes + wide readership → `staticCompositionLocalOf`.
+**Selection rule**: changes often + narrow recomposition → `compositionLocalOf`; rarely changes + wide readership → `staticCompositionLocalOf`.
 
 ### Invalidation Boundaries
-- Boundary is `CompositionLocalProvider`
-- Dynamic: invalidates only readers
-- Static: invalidates entire subtree
-- Place Provider close to consumers for frequent updates
+
+- **Dynamic**: invalidates only readers
+- **Static**: invalidates entire subtree from Provider
+- **Optimization**: place Provider close to consumers for frequent updates
 
 ### Safe Defaults
+
 ```kotlin
-// ✅ Fail explicitly
-val LocalAuth = compositionLocalOf<Auth> { error("No Auth") }
+// ✅ Fail explicitly — detect error immediately
+val LocalAuth = compositionLocalOf<Auth> {
+    error("No Auth provided")
+}
 
 // ❌ Silent null can hide bugs
 val LocalAuth = compositionLocalOf<Auth?> { null }
 ```
 
-### Patterns
+### Typical Pattern
+
 ```kotlin
 // Static application context
-data class AppEnv(val locale: Locale, val haptics: Haptics)
+data class AppEnv(
+    val locale: Locale,
+    val haptics: Haptics,
+    val imageLoader: ImageLoader
+)
+
 val LocalAppEnv = staticCompositionLocalOf<AppEnv> {
-    error("No AppEnv")
+    error("No AppEnv provided")
 }
 
 @Composable
@@ -156,26 +189,38 @@ fun App(env: AppEnv) {
         AppContent()
     }
 }
+
+@Composable
+fun SomeScreen() {
+    val env = LocalAppEnv.current
+    // Use env.locale, env.haptics...
+}
 ```
 
-### Common Pitfalls
-- Reading Local outside composition (long-lived lambdas)
+### Anti-patterns
+
+- Reading Local outside composition (in long-lived lambdas)
 - Using for business logic instead of DI
 - Provider too high for frequently changing values
+- Nullable defaults instead of explicit errors
 
 ---
 
 ## Follow-ups
+
 - How to test components that depend on CompositionLocal?
 - When should you use parameters instead of CompositionLocal?
 - How to scope providers across feature modules?
-- How to debug recomposition issues caused by Local updates?
-- What are the performance implications of nested CompositionLocalProviders?
+- How do nested CompositionLocalProviders affect performance?
+- How to migrate from manual prop drilling to CompositionLocal?
 
 ## References
+
+- [[c-compose-state]]
+- [[c-dependency-injection]]
+- [[c-recomposition]]
 - [CompositionLocal (Official Docs)](https://developer.android.com/jetpack/compose/compositionlocal)
 - [Compose Mental Model](https://developer.android.com/develop/ui/compose/mental-model)
-- [[c-dependency-injection]]
 
 ## Related Questions
 
@@ -186,7 +231,9 @@ fun App(env: AppEnv) {
 ### Related
 - [[q-compositionlocal-advanced--android--medium]] — Advanced CompositionLocal patterns
 - [[q-compose-state-hoisting--android--medium]] — State management alternatives
+- [[q-compose-side-effects--android--medium]] — Side effects and composition lifecycle
 
 ### Advanced
 - [[q-compose-performance-optimization--android--hard]] — Performance optimization strategies
 - [[q-compose-stability--android--hard]] — Stability and skippability
+- [[q-compose-compiler-intrinsics--android--hard]] — Compiler optimizations

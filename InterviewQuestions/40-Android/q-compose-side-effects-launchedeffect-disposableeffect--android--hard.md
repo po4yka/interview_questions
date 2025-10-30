@@ -1,33 +1,27 @@
 ---
 id: 20251017-145045
 title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect"
-aliases: [Compose LaunchedEffect vs DisposableEffect, Compose Side Effects, Побочные эффекты Compose]
+aliases: ["Compose LaunchedEffect vs DisposableEffect", "Compose Side Effects", "Побочные эффекты Compose", "LaunchedEffect", "DisposableEffect"]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-state
+subtopics: [ui-compose, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-compose-performance-optimization--android--hard
-  - q-compose-remember-derived-state--android--medium
-  - q-compose-side-effects-advanced--android--hard
+related: [q-compose-remember-derived-state--android--medium, q-compose-performance-optimization--android--hard]
 created: 2025-10-13
-updated: 2025-10-27
-tags: [android/ui-compose, android/ui-state, compose, difficulty/hard, disposable-effect, launched-effect, side-effects]
+updated: 2025-10-30
+tags: [android/ui-compose, android/lifecycle, compose, difficulty/hard, side-effects]
 sources: [https://developer.android.com/jetpack/compose/side-effects, https://developer.android.com/jetpack/compose/lifecycle]
 ---
+
 # Вопрос (RU)
 > В чем разница между побочными эффектами Compose: LaunchedEffect vs DisposableEffect?
 
 # Question (EN)
-> What is the difference between compose side effects: launchedeffect vs disposableeffect?
+> What is the difference between compose side effects: LaunchedEffect vs DisposableEffect?
 
 ---
 
@@ -36,140 +30,225 @@ sources: [https://developer.android.com/jetpack/compose/side-effects, https://de
 ### Основные Различия
 
 **LaunchedEffect**
-- Запускает корутину, привязанную к композиции
-- Автоматически отменяется при изменении ключей или выходе из композиции
-- Применяется для suspend-функций, Flow, асинхронных операций
+- Запускает корутину в composition scope
+- Автоматически отменяется при изменении ключей или recomposition выходе
+- Для suspend-функций, Flow, асинхронных операций
 
 **DisposableEffect**
-- Регистрирует внешние ресурсы (слушатели, обсерверы)
+- Регистрирует внешние ресурсы (listeners, observers, callbacks)
 - Требует явного cleanup через `onDispose`
-- Применяется для lifecycle-aware ресурсов
+- Для lifecycle-aware и non-suspend ресурсов
 
-### Примеры
+### Примеры Использования
 
-LaunchedEffect с ключами:
+**LaunchedEffect с автоперезапуском:**
 ```kotlin
-LaunchedEffect(userId) { // ✅ Корутина перезапустится при изменении userId
-  runCatching { viewModel.loadUser(userId) }
+LaunchedEffect(userId) { // ✅ Перезапуск при изменении userId
+  repository.loadUser(userId)
+    .onSuccess { state.value = it }
     .onFailure { showError(it) }
 }
 ```
 
-LaunchedEffect + Flow:
+**LaunchedEffect + Flow:**
 ```kotlin
-LaunchedEffect(orderId) { // ✅ Отменяется при dispose
-  repository.observeOrder(orderId)
-    .collect { state -> viewModel.update(state) }
+LaunchedEffect(Unit) { // ✅ Единожды за lifecycle
+  viewModel.events.collect { event ->
+    when (event) {
+      is NavigateEvent -> navigator.navigate(event.route)
+    }
+  }
 }
 ```
 
-DisposableEffect для сенсоров:
+**DisposableEffect для внешних callbacks:**
+```kotlin
+DisposableEffect(lifecycleOwner) {
+  val observer = LifecycleEventObserver { _, event ->
+    if (event == Lifecycle.Event.ON_RESUME) {
+      // ✅ Реакция на lifecycle
+    }
+  }
+  lifecycleOwner.lifecycle.addObserver(observer)
+  onDispose { // ✅ Обязательная очистка
+    lifecycleOwner.lifecycle.removeObserver(observer)
+  }
+}
+```
+
+**DisposableEffect для сенсоров:**
 ```kotlin
 DisposableEffect(sensorType) {
-  val manager = context.getSystemService<SensorManager>()
   val listener = object : SensorEventListener {
-    override fun onSensorChanged(event: SensorEvent) { /* обновление */ }
-    override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+    override fun onSensorChanged(e: SensorEvent) { /* update */ }
+    override fun onAccuracyChanged(s: Sensor, a: Int) {}
   }
-  manager?.registerListener(listener, manager.getDefaultSensor(sensorType), SENSOR_DELAY_NORMAL)
-  onDispose { manager?.unregisterListener(listener) } // ✅ Обязательная очистка
+  sensorManager.registerListener(listener, sensor, SENSOR_DELAY_NORMAL)
+  onDispose { sensorManager.unregisterListener(listener) } // ✅ Cleanup
 }
 ```
 
 ### Выбор API
 
-- **LaunchedEffect** — асинхронная работа, перезапускающаяся при изменении ключей
-- **DisposableEffect** — ресурсы с явной очисткой (сенсоры, ресиверы, плееры)
-- **rememberCoroutineScope** — event-driven корутины (клики, жесты)
-- **SideEffect** — синхронизация после recomposition (без тяжелой работы)
+| API | Когда использовать |
+|-----|-------------------|
+| **LaunchedEffect** | Suspend-операции, Flow, API calls, таймеры |
+| **DisposableEffect** | Listeners, observers, native ресурсы, lifecycle callbacks |
+| **rememberCoroutineScope** | Event-driven корутины (клики, swipe) |
+| **SideEffect** | Синхронизация state после recomposition (без suspend) |
 
 ### Распространенные Ошибки
 
-- Неверные ключи → избыточные перезапуски
-- Отсутствие `onDispose` → утечки ресурсов
-- Изменение callback → ненужные рестарты: используйте `rememberUpdatedState`
+❌ **Неверные ключи:**
+```kotlin
+LaunchedEffect(callback) { // ❌ Перезапуск при каждой recomposition
+  callback()
+}
+```
+
+✅ **Стабильные ключи:**
+```kotlin
+val stableCallback = rememberUpdatedState(callback)
+LaunchedEffect(Unit) { // ✅ Единожды
+  stableCallback.value()
+}
+```
+
+❌ **Отсутствие cleanup:**
+```kotlin
+DisposableEffect(Unit) {
+  player.start() // ❌ Утечка ресурса
+  // Нет onDispose!
+}
+```
 
 ## Answer (EN)
 
 ### Core Differences
 
 **LaunchedEffect**
-- Launches coroutine tied to composition lifecycle
-- Auto-cancels on key change or composition exit
+- Launches coroutine in composition scope
+- Auto-cancels on key change or recomposition exit
 - For suspend functions, Flow, async operations
 
 **DisposableEffect**
-- Registers external resources (listeners, observers)
+- Registers external resources (listeners, observers, callbacks)
 - Requires explicit cleanup via `onDispose`
-- For lifecycle-aware resources
+- For lifecycle-aware and non-suspend resources
 
-### Examples
+### Usage Examples
 
-LaunchedEffect with keys:
+**LaunchedEffect with auto-restart:**
 ```kotlin
 LaunchedEffect(userId) { // ✅ Restarts when userId changes
-  runCatching { viewModel.loadUser(userId) }
+  repository.loadUser(userId)
+    .onSuccess { state.value = it }
     .onFailure { showError(it) }
 }
 ```
 
-LaunchedEffect + Flow:
+**LaunchedEffect + Flow:**
 ```kotlin
-LaunchedEffect(orderId) { // ✅ Cancels on dispose
-  repository.observeOrder(orderId)
-    .collect { state -> viewModel.update(state) }
+LaunchedEffect(Unit) { // ✅ Once per lifecycle
+  viewModel.events.collect { event ->
+    when (event) {
+      is NavigateEvent -> navigator.navigate(event.route)
+    }
+  }
 }
 ```
 
-DisposableEffect for sensors:
+**DisposableEffect for external callbacks:**
+```kotlin
+DisposableEffect(lifecycleOwner) {
+  val observer = LifecycleEventObserver { _, event ->
+    if (event == Lifecycle.Event.ON_RESUME) {
+      // ✅ React to lifecycle
+    }
+  }
+  lifecycleOwner.lifecycle.addObserver(observer)
+  onDispose { // ✅ Mandatory cleanup
+    lifecycleOwner.lifecycle.removeObserver(observer)
+  }
+}
+```
+
+**DisposableEffect for sensors:**
 ```kotlin
 DisposableEffect(sensorType) {
-  val manager = context.getSystemService<SensorManager>()
   val listener = object : SensorEventListener {
-    override fun onSensorChanged(event: SensorEvent) { /* update */ }
-    override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+    override fun onSensorChanged(e: SensorEvent) { /* update */ }
+    override fun onAccuracyChanged(s: Sensor, a: Int) {}
   }
-  manager?.registerListener(listener, manager.getDefaultSensor(sensorType), SENSOR_DELAY_NORMAL)
-  onDispose { manager?.unregisterListener(listener) } // ✅ Mandatory cleanup
+  sensorManager.registerListener(listener, sensor, SENSOR_DELAY_NORMAL)
+  onDispose { sensorManager.unregisterListener(listener) } // ✅ Cleanup
 }
 ```
 
 ### API Selection
 
-- **LaunchedEffect** — async work restarting on key changes
-- **DisposableEffect** — resources requiring explicit cleanup (sensors, receivers, players)
-- **rememberCoroutineScope** — event-driven coroutines (clicks, gestures)
-- **SideEffect** — syncing state post-recomposition (no heavy work)
+| API | When to use |
+|-----|-------------|
+| **LaunchedEffect** | Suspend operations, Flow, API calls, timers |
+| **DisposableEffect** | Listeners, observers, native resources, lifecycle callbacks |
+| **rememberCoroutineScope** | Event-driven coroutines (clicks, swipes) |
+| **SideEffect** | Sync state after recomposition (no suspend) |
 
 ### Common Pitfalls
 
-- Wrong keys → unnecessary restarts
-- Missing `onDispose` → resource leaks
-- Callback changes → unwanted restarts: use `rememberUpdatedState`
+❌ **Unstable keys:**
+```kotlin
+LaunchedEffect(callback) { // ❌ Restarts every recomposition
+  callback()
+}
+```
+
+✅ **Stable keys:**
+```kotlin
+val stableCallback = rememberUpdatedState(callback)
+LaunchedEffect(Unit) { // ✅ Once
+  stableCallback.value()
+}
+```
+
+❌ **Missing cleanup:**
+```kotlin
+DisposableEffect(Unit) {
+  player.start() // ❌ Resource leak
+  // No onDispose!
+}
+```
 
 ---
 
 ## Follow-ups
 
 - How does `rememberUpdatedState` prevent unnecessary effect restarts?
-- When should side effects live in ViewModel versus composable?
-- How to test effects for proper cleanup and leak prevention?
-- What's the difference between `SideEffect` and `LaunchedEffect`?
+- When should effects live in ViewModel versus Composable?
+- How to test side effects for proper cleanup and leak prevention?
+- What is the difference between `SideEffect` and `LaunchedEffect`?
+- How do effect keys interact with recomposition and smart recomposition?
 
 ## References
 
 - [[c-coroutines]]
+- [[c-compose-lifecycle]]
+- [[c-structured-concurrency]]
 - https://developer.android.com/jetpack/compose/side-effects
 - https://developer.android.com/jetpack/compose/lifecycle
+- https://developer.android.com/jetpack/compose/mental-model
 
 ## Related Questions
 
-### Prerequisites
+### Prerequisites (Easier)
 - [[q-android-jetpack-overview--android--easy]]
 - [[q-compose-remember-derived-state--android--medium]]
+- [[q-kotlin-coroutines-basics--kotlin--medium]]
 
-### Related
+### Related (Same Level)
 - [[q-compose-performance-optimization--android--hard]]
+- [[q-compose-lifecycle-awareness--android--hard]]
 
-### Advanced
-- [[q-compose-side-effects-advanced--android--hard]]
+### Advanced (Harder)
+- [[q-compose-custom-effects--android--hard]]
+- [[q-compose-effect-memory-leaks--android--hard]]

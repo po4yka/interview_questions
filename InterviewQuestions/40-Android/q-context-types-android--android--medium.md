@@ -3,7 +3,7 @@ id: 20251021-130000
 title: Context Types in Android / Типы Context в Android
 aliases: ["Context Types in Android", "Типы Context в Android"]
 topic: android
-subtopics: [activity, app-startup, lifecycle]
+subtopics: [lifecycle, activity, app-startup]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -15,8 +15,8 @@ related:
   - q-memory-leaks-definition--android--easy
   - q-usecase-pattern-android--android--medium
 created: 2025-10-21
-updated: 2025-10-27
-tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
+updated: 2025-10-30
+tags: [android/lifecycle, android/activity, android/app-startup, difficulty/medium]
 sources: ["https://developer.android.com/reference/android/content/Context"]
 ---
 # Вопрос (RU)
@@ -29,24 +29,24 @@ sources: ["https://developer.android.com/reference/android/content/Context"]
 
 ## Ответ (RU)
 
-Context — абстрактный класс, предоставляющий доступ к ресурсам приложения, системным сервисам и операциям уровня приложения. Каждый тип Context имеет свой жизненный цикл и область применения.
+Context — абстрактный класс, предоставляющий доступ к ресурсам приложения, системным сервисам и операциям уровня приложения. Каждый тип имеет свой lifecycle и область применения.
 
 ### Основные типы
 
 **Application Context**
-- Привязан к жизненному циклу всего приложения
+- Привязан к lifecycle всего приложения
 - Получение: `applicationContext` или `getApplicationContext()`
 - Используется для: singleton-объектов, операций БД/сети, запуска сервисов
-- Не может: создавать диалоги, запускать Activity без флага `FLAG_ACTIVITY_NEW_TASK`
+- Не может: создавать диалоги, запускать Activity без `FLAG_ACTIVITY_NEW_TASK`
 
 **Activity Context**
-- Привязан к жизненному циклу Activity
+- Привязан к lifecycle Activity
 - Получение: `this` внутри Activity
 - Используется для: UI-операций (диалоги, layout inflation), запуска Activity, тем оформления
 - Риск: memory leak при передаче в долгоживущие объекты
 
 **Service Context**
-- Привязан к жизненному циклу Service
+- Привязан к lifecycle Service
 - Получение: `this` внутри Service
 - Используется для: фоновых операций, запуска других сервисов
 
@@ -61,7 +61,7 @@ Context (abstract)
               └── Activity
 ```
 
-### Когда использовать
+### Таблица использования
 
 | Операция | Application | Activity | Service |
 |----------|-------------|----------|---------|
@@ -82,7 +82,7 @@ fun onCreate() {
     context = this // утечка Activity
 }
 
-// ✅ Правильно: Application Context
+// ✅ Application Context для долгоживущих объектов
 companion object {
     lateinit var appContext: Context
 }
@@ -106,7 +106,7 @@ AlertDialog.Builder(this@MyActivity)
 
 ## Answer (EN)
 
-Context is an abstract class providing access to application resources, system services, and application-level operations. Each Context type has its own lifecycle and use cases.
+Context is an abstract class providing access to application resources, system services, and application-level operations. Each type has its own lifecycle and use cases.
 
 ### Main Types
 
@@ -138,7 +138,7 @@ Context (abstract)
               └── Activity
 ```
 
-### When to Use
+### Usage Table
 
 | Operation | Application | Activity | Service |
 |-----------|-------------|----------|---------|
@@ -159,7 +159,7 @@ fun onCreate() {
     context = this // Activity leaked
 }
 
-// ✅ Correct: Application Context
+// ✅ Application Context for long-lived objects
 companion object {
     lateinit var appContext: Context
 }
@@ -193,18 +193,19 @@ AlertDialog.Builder(this@MyActivity)
 
 ## References
 
-- Official Android docs: https://developer.android.com/reference/android/content/Context
-- [[c-lifecycle]] - Understanding lifecycle implications
-- [[q-memory-leaks-definition--android--easy]] - Memory leak patterns
+- [[q-activity-lifecycle-methods--android--medium]]
+- [[q-memory-leaks-definition--android--easy]]
+- [[q-usecase-pattern-android--android--medium]]
+- https://developer.android.com/reference/android/content/Context
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle basics
-- [[q-memory-leaks-definition--android--easy]] - Memory leak fundamentals
+- [[q-activity-lifecycle-methods--android--medium]]
+- [[q-memory-leaks-definition--android--easy]]
 
 ### Related
-- [[q-usecase-pattern-android--android--medium]] - Dependency injection patterns
+- [[q-usecase-pattern-android--android--medium]]
 - Service lifecycle and Context usage
 - Fragment Context considerations
 

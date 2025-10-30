@@ -16,7 +16,7 @@ related:
   - q-app-startup-optimization--android--medium
   - q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 sources: []
 tags: [android/performance-startup, android/gradle, android/profiling, performance, aot, difficulty/medium]
 ---

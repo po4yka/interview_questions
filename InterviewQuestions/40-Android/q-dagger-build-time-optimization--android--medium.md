@@ -23,7 +23,10 @@ updated: 2025-01-27
 tags: [android/di-hilt, android/gradle, difficulty/medium]
 sources:
   - https://dagger.dev/hilt/
+date created: Monday, October 27th 2025, 3:27:45 pm
+date modified: Thursday, October 30th 2025, 11:51:12 am
 ---
+
 # Вопрос (RU)
 > Как минимизировать влияние Dagger на время сборки?
 

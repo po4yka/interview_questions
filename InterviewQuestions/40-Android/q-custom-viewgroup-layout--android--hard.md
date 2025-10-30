@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [q-custom-drawable-implementation--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium]
 created: 2025-10-20
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/ui-views, android/ui-graphics, custom-views, layout, difficulty/hard]
 sources: []
 ---
@@ -31,19 +31,21 @@ sources: []
 ### Двухпроходный Алгоритм
 
 **Проход 1: onMeasure**
-- ViewGroup измеряет каждый дочерний элемент через `child.measure()`
-- Рассчитывает собственный размер на основе размеров детей
+- Измеряет каждый дочерний элемент через `measureChild()` или `measureChildWithMargins()`
+- Рассчитывает собственный размер на основе размеров детей и `MeasureSpec` от родителя
 - ОБЯЗАН вызвать `setMeasuredDimension(width, height)`
 
 **Проход 2: onLayout**
-- ViewGroup позиционирует каждый дочерний элемент через `child.layout(left, top, right, bottom)`
-- Координаты задаются относительно родителя
+- Позиционирует каждый дочерний элемент через `child.layout(left, top, right, bottom)`
+- Координаты относительно родителя; учитывает padding и margins
 
-### MeasureSpec Режимы
+### MeasureSpec
 
-- `EXACTLY` — точный размер (`match_parent` или конкретное значение)
+`MeasureSpec` — 32-битное число: старшие 2 бита — режим, остальные 30 — размер.
+
+- `EXACTLY` — точный размер (`match_parent` или конкретное значение `dp`)
 - `AT_MOST` — максимальный размер (`wrap_content`)
-- `UNSPECIFIED` — без ограничений (редко)
+- `UNSPECIFIED` — без ограничений (ScrollView, ListView)
 
 ### Реализация FlowLayout
 
@@ -135,43 +137,46 @@ class FlowLayout @JvmOverloads constructor(
 ### Критические Правила
 
 **ОБЯЗАТЕЛЬНО:**
-- Измерять дочерние элементы перед родителем
+- Измерять детей перед вызовом `setMeasuredDimension()`
 - Вызывать `setMeasuredDimension()` в конце `onMeasure()`
-- Пропускать `GONE` элементы
-- Учитывать padding родителя
+- Пропускать `GONE` элементы (`child.visibility == GONE`)
+- Учитывать padding родителя и margins детей
 
 **ЗАПРЕЩЕНО:**
-- ❌ Вызывать `requestLayout()` внутри `onLayout()` (бесконечный цикл)
+- ❌ Вызывать `requestLayout()` внутри `onLayout()` → бесконечный цикл
 - ❌ Использовать `measuredWidth/Height` до вызова `measure()`
-- ❌ Игнорировать `MeasureSpec` от родителя
+- ❌ Игнорировать `MeasureSpec` от родителя — нарушение контракта
 
 ### Оптимизации
 
-**Кэширование:** Сохранить результаты `onMeasure()` для `onLayout()`:
+**1. Кэширование bounds между onMeasure/onLayout:**
 
 ```kotlin
 private val childBounds = mutableListOf<Rect>()
 
 override fun onMeasure(widthSpec: Int, heightSpec: Int) {
     childBounds.clear()
-    // Во время измерения сохраняем bounds
     for (i in 0 until childCount) {
-        // ... измерение
+        // Во время измерения сохраняем bounds
         childBounds.add(Rect(left, top, right, bottom))
     }
     setMeasuredDimension(w, h)
 }
 
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    // ✅ Используем сохранённые bounds
-    for (i in 0 until childCount) {
-        val bounds = childBounds[i]
+    // ✅ Избегаем повторных вычислений
+    childBounds.forEachIndexed { i, bounds ->
         getChildAt(i).layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
     }
 }
 ```
 
-**RTL Support:** Используйте `ViewCompat.getLayoutDirection()` для поддержки RTL-раскладок.
+**2. RTL Support:**
+
+```kotlin
+val isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
+val startX = if (isRtl) width - paddingRight else paddingLeft
+```
 
 ## Answer (EN)
 
@@ -180,19 +185,21 @@ Creating a custom ViewGroup requires understanding the two-pass algorithm: **mea
 ### Two-Pass Algorithm
 
 **Pass 1: onMeasure**
-- ViewGroup measures each child via `child.measure()`
-- Calculates its own size based on children's sizes
+- Measures each child via `measureChild()` or `measureChildWithMargins()`
+- Calculates its own size based on children's sizes and parent's `MeasureSpec`
 - MUST call `setMeasuredDimension(width, height)`
 
 **Pass 2: onLayout**
-- ViewGroup positions each child via `child.layout(left, top, right, bottom)`
-- Coordinates are relative to parent
+- Positions each child via `child.layout(left, top, right, bottom)`
+- Coordinates relative to parent; accounts for padding and margins
 
-### MeasureSpec Modes
+### MeasureSpec
 
-- `EXACTLY` — exact size (`match_parent` or specific value)
+`MeasureSpec` is a 32-bit value: upper 2 bits = mode, lower 30 bits = size.
+
+- `EXACTLY` — exact size (`match_parent` or specific `dp` value)
 - `AT_MOST` — maximum size (`wrap_content`)
-- `UNSPECIFIED` — no constraints (rare)
+- `UNSPECIFIED` — no constraints (ScrollView, ListView)
 
 ### FlowLayout Implementation
 
@@ -284,72 +291,76 @@ class FlowLayout @JvmOverloads constructor(
 ### Critical Rules
 
 **MUST:**
-- Measure children before parent
+- Measure children before calling `setMeasuredDimension()`
 - Call `setMeasuredDimension()` at end of `onMeasure()`
-- Skip `GONE` children
-- Account for parent's padding
+- Skip `GONE` children (`child.visibility == GONE`)
+- Account for parent's padding and child margins
 
 **FORBIDDEN:**
-- ❌ Call `requestLayout()` inside `onLayout()` (infinite loop)
+- ❌ Call `requestLayout()` inside `onLayout()` → infinite loop
 - ❌ Use `measuredWidth/Height` before calling `measure()`
-- ❌ Ignore `MeasureSpec` from parent
+- ❌ Ignore `MeasureSpec` from parent — contract violation
 
 ### Optimizations
 
-**Caching:** Save `onMeasure()` results for `onLayout()`:
+**1. Cache bounds between onMeasure/onLayout:**
 
 ```kotlin
 private val childBounds = mutableListOf<Rect>()
 
 override fun onMeasure(widthSpec: Int, heightSpec: Int) {
     childBounds.clear()
-    // During measure, save bounds
     for (i in 0 until childCount) {
-        // ... measurement
+        // Save bounds during measurement
         childBounds.add(Rect(left, top, right, bottom))
     }
     setMeasuredDimension(w, h)
 }
 
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    // ✅ Use cached bounds
-    for (i in 0 until childCount) {
-        val bounds = childBounds[i]
+    // ✅ Avoid recalculation
+    childBounds.forEachIndexed { i, bounds ->
         getChildAt(i).layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
     }
 }
 ```
 
-**RTL Support:** Use `ViewCompat.getLayoutDirection()` for RTL layouts.
+**2. RTL Support:**
+
+```kotlin
+val isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
+val startX = if (isRtl) width - paddingRight else paddingLeft
+```
 
 ## Follow-ups
 
-- How do you handle dynamic child addition/removal efficiently?
-- What's the difference between `measureChild()` and `measureChildWithMargins()`?
-- How do you implement custom LayoutParams with additional attributes?
-- How would you optimize performance for 100+ children?
-- How do you support RTL (right-to-left) layouts?
+- How would you handle dynamic child addition/removal without triggering full remeasurement?
+- What's the difference between `measureChild()` and `measureChildWithMargins()`? When to use each?
+- How would you implement baseline alignment across rows in FlowLayout?
+- How would you optimize performance for 100+ children? Consider view recycling strategies.
+- How does `requestLayout()` differ from `invalidate()`? When does each trigger measurement vs. drawing?
 
 ## References
 
-- [[c-custom-views]]
-- [[c-view-measurement]]
 - [ViewGroup Documentation](https://developer.android.com/reference/android/view/ViewGroup)
-- [Custom Views Tutorial](https://developer.android.com/guide/topics/ui/custom-components)
+- [Custom Views Guide](https://developer.android.com/guide/topics/ui/custom-components)
+- [View Measurement Process](https://developer.android.com/guide/topics/ui/how-android-draws)
 
 ## Related Questions
 
-### Prerequisites (Easier)
+### Prerequisites
 
-- [[q-custom-view-lifecycle--android--medium]] - Understanding View lifecycle
-- [[q-custom-view-attributes--android--medium]] - Custom attributes basics
+- [[q-custom-view-lifecycle--android--medium]] - View lifecycle and drawing order
+- [[q-custom-view-attributes--android--medium]] - Custom XML attributes
 
-### Related (Same Level)
+### Related
 
-- [[q-custom-drawable-implementation--android--medium]] - Custom drawing
-- [[q-constraint-layout-internals--android--hard]] - Complex layout system
+- [[q-custom-drawable-implementation--android--medium]] - Custom drawing in Views
+- Custom ConstraintLayout-like system - Layout constraint solving
+- View performance optimization - Layout pass optimization
 
-### Advanced (Harder)
+### Advanced
 
-- [[q-view-performance-optimization--android--hard]] - Layout optimization
-- [[q-async-layout-inflation--android--hard]] - Async inflation techniques
+- Complex FlowLayout with baseline alignment
+- AsyncLayoutInflater implementation - Background layout inflation
+- RecyclerView layout manager internals

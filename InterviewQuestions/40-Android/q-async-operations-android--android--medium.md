@@ -3,7 +3,7 @@ id: 20251012-122785
 title: Async Operations in Android / Асинхронные операции в Android
 aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android
-subtopics: [background-execution, coroutines, threads-sync]
+subtopics: [coroutines, background-execution, threads-sync]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,13 +12,16 @@ status: draft
 moc: moc-android
 related:
   - q-android-async-primitives--android--easy
-  - q-android-performance-measurement-tools--android--medium
   - q-anr-application-not-responding--android--medium
+  - q-android-performance-measurement-tools--android--medium
+  - c-coroutines
+  - c-lifecycle
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 sources: []
-tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
+tags: [android/coroutines, android/background-execution, android/threads-sync, difficulty/medium]
 ---
+
 # Вопрос (RU)
 > Какие существуют способы выполнения асинхронных операций в Android?
 
@@ -33,20 +36,22 @@ tags: [android/background-execution, android/coroutines, android/threads-sync, d
 
 Главный поток — только для UI, остальное — в фон. Выбор зависит от задачи: корутины (по умолчанию), WorkManager (отложенные задачи), Executor/HandlerThread (легаси), RxJava (реактивность).
 
-### 1) Kotlin Coroutines — выбор по умолчанию
+### Kotlin Coroutines — выбор по умолчанию
 
-Структурированная конкурентность, lifecycle-scopes, автоматическая отмена.
+Структурированная конкурентность с автоматической отменой через lifecycle-scopes.
 
 **Ключевые концепции**:
 - Parent/child связь — отмена распространяется автоматически
-- `withContext(Dispatchers.IO)` для переключения потоков
+- `withContext()` для переключения диспетчеров
 - `lifecycleScope`/`viewModelScope` вместо `GlobalScope`
 - `coroutineScope` (fail-fast) vs `supervisorScope` (изоляция)
 
 ```kotlin
 // ✅ Правильно: lifecycle-aware scope
 lifecycleScope.launch {
-  val data = withContext(Dispatchers.IO) { repository.fetchData() }
+  val data = withContext(Dispatchers.IO) {
+    repository.fetchData()
+  }
   updateUI(data) // Main thread
 }
 
@@ -54,17 +59,19 @@ lifecycleScope.launch {
 GlobalScope.launch { /* ... */ }
 ```
 
-### 2) WorkManager — гарантированное выполнение
+### WorkManager — гарантированное выполнение
 
 Переживает перезапуск, поддерживает constraints (сеть, батарея), цепочки задач.
 
-**Ключевые концепции**:
-- Идемпотентность обязательна — worker может запуститься повторно
-- Unique work предотвращает дублирование
-- Не для точного времени или foreground задач
+**Когда использовать**:
+- Deferrable задачи (синхронизация, загрузка)
+- Требуется гарантия выполнения
+- Нужны constraints (WiFi, зарядка)
 
 ```kotlin
-class UploadWorker(ctx: Context, p: WorkerParameters): CoroutineWorker(ctx, p) {
+class UploadWorker(ctx: Context, p: WorkerParameters):
+  CoroutineWorker(ctx, p) {
+
   override suspend fun doWork(): Result {
     uploadFile()
     return Result.success()
@@ -76,27 +83,27 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
     Constraints.Builder()
       .setRequiredNetworkType(NetworkType.CONNECTED)
       .build()
-  )
-  .build()
+  ).build()
 ```
 
-### 3) ExecutorService — Java interop
+**Важно**: Worker должен быть идемпотентным — может запуститься повторно.
 
-Thread pools с ручным управлением.
+### ExecutorService — Java interop
+
+Thread pools с ручным управлением, используется в легаси коде.
 
 ```kotlin
-// ✅ Правильно: с shutdown
 val executor = Executors.newFixedThreadPool(2)
 val mainHandler = Handler(Looper.getMainLooper())
 
 executor.execute {
   val result = computeData()
-  mainHandler.post { updateUI(result) }
+  mainHandler.post { updateUI(result) } // ✅ UI update на main
 }
-// В onDestroy: executor.shutdown()
+// ⚠️ Обязательно: executor.shutdown() в onDestroy
 ```
 
-### 4) HandlerThread — message queue поток
+### HandlerThread — message queue
 
 Один фоновый Looper для последовательной обработки.
 
@@ -105,13 +112,12 @@ val handlerThread = HandlerThread("bg").apply { start() }
 val bgHandler = Handler(handlerThread.looper)
 
 bgHandler.post {
-  val result = processData()
-  Handler(Looper.getMainLooper()).post { render(result) }
+  processData()
 }
 // Cleanup: handlerThread.quitSafely()
 ```
 
-### 5) RxJava — reactive streams
+### RxJava — reactive streams
 
 Используйте если проект стандартизирован на Rx, иначе корутины.
 
@@ -122,26 +128,29 @@ disposables.add(
   repository.getUser()
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe({ user -> render(user) }, { error -> showError(error) })
+    .subscribe(
+      { user -> render(user) }, // ✅ onNext
+      { error -> showError(error) } // ✅ onError
+    )
 )
 // В onDestroy: disposables.clear()
 ```
 
-**Сравнение подходов**
+**Сравнение**
 
 | Инструмент | Применение |
 |------------|-----------|
 | Coroutines | In-process задачи, UI updates, network |
-| WorkManager | Deferrable tasks, выживает при process death |
-| Executor | Java interop, legacy |
-| HandlerThread | Sequential message processing |
+| WorkManager | Deferrable work, переживает process death |
+| Executor | Java interop, legacy код |
+| HandlerThread | Sequential processing |
 | RxJava | Reactive streams, существующая Rx база |
 
 **Распространённые ошибки**:
-- Обновление UI вне main thread → Main dispatcher/Handlers
-- Не отменили работу при lifecycle events → lifecycle scopes
-- WorkManager для точного времени → AlarmManager
-- Утечка threads/executors → shutdown в onDestroy
+- Обновление UI вне main thread
+- Не отменена работа при lifecycle events
+- WorkManager для точного времени (используйте AlarmManager)
+- Утечка threads/executors — не вызван shutdown
 
 ---
 
@@ -149,20 +158,22 @@ disposables.add(
 
 Main thread for UI only, offload everything else to background. Choice depends on use case: coroutines (default), WorkManager (deferrable work), Executor/HandlerThread (legacy), RxJava (reactive).
 
-### 1) Kotlin Coroutines — Default Choice
+### Kotlin Coroutines — Default Choice
 
-Structured concurrency, lifecycle-scopes, automatic cancellation.
+Structured concurrency with automatic cancellation via lifecycle-scopes.
 
 **Key Concepts**:
 - Parent/child relationship — cancellation propagates automatically
-- `withContext(Dispatchers.IO)` for thread switching
+- `withContext()` for dispatcher switching
 - `lifecycleScope`/`viewModelScope` instead of `GlobalScope`
 - `coroutineScope` (fail-fast) vs `supervisorScope` (isolation)
 
 ```kotlin
 // ✅ Correct: lifecycle-aware scope
 lifecycleScope.launch {
-  val data = withContext(Dispatchers.IO) { repository.fetchData() }
+  val data = withContext(Dispatchers.IO) {
+    repository.fetchData()
+  }
   updateUI(data) // Main thread
 }
 
@@ -170,17 +181,19 @@ lifecycleScope.launch {
 GlobalScope.launch { /* ... */ }
 ```
 
-### 2) WorkManager — Guaranteed Execution
+### WorkManager — Guaranteed Execution
 
 Survives app restarts, supports constraints (network, battery), task chaining.
 
-**Key Concepts**:
-- Idempotency required — worker may run multiple times
-- Unique work prevents duplication
-- Not for exact timing or foreground tasks
+**When to Use**:
+- Deferrable tasks (sync, upload)
+- Requires execution guarantee
+- Needs constraints (WiFi, charging)
 
 ```kotlin
-class UploadWorker(ctx: Context, p: WorkerParameters): CoroutineWorker(ctx, p) {
+class UploadWorker(ctx: Context, p: WorkerParameters):
+  CoroutineWorker(ctx, p) {
+
   override suspend fun doWork(): Result {
     uploadFile()
     return Result.success()
@@ -192,27 +205,27 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
     Constraints.Builder()
       .setRequiredNetworkType(NetworkType.CONNECTED)
       .build()
-  )
-  .build()
+  ).build()
 ```
 
-### 3) ExecutorService — Java Interop
+**Important**: Worker must be idempotent — may run multiple times.
 
-Thread pools with manual management.
+### ExecutorService — Java Interop
+
+Thread pools with manual management, used in legacy code.
 
 ```kotlin
-// ✅ Correct: with shutdown
 val executor = Executors.newFixedThreadPool(2)
 val mainHandler = Handler(Looper.getMainLooper())
 
 executor.execute {
   val result = computeData()
-  mainHandler.post { updateUI(result) }
+  mainHandler.post { updateUI(result) } // ✅ UI update on main
 }
-// In onDestroy: executor.shutdown()
+// ⚠️ Required: executor.shutdown() in onDestroy
 ```
 
-### 4) HandlerThread — Message Queue Thread
+### HandlerThread — Message Queue
 
 Single background Looper for sequential processing.
 
@@ -221,13 +234,12 @@ val handlerThread = HandlerThread("bg").apply { start() }
 val bgHandler = Handler(handlerThread.looper)
 
 bgHandler.post {
-  val result = processData()
-  Handler(Looper.getMainLooper()).post { render(result) }
+  processData()
 }
 // Cleanup: handlerThread.quitSafely()
 ```
 
-### 5) RxJava — Reactive Streams
+### RxJava — Reactive Streams
 
 Use if project is standardized on Rx, otherwise prefer coroutines.
 
@@ -238,7 +250,10 @@ disposables.add(
   repository.getUser()
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe({ user -> render(user) }, { error -> showError(error) })
+    .subscribe(
+      { user -> render(user) }, // ✅ onNext
+      { error -> showError(error) } // ✅ onError
+    )
 )
 // In onDestroy: disposables.clear()
 ```
@@ -248,43 +263,46 @@ disposables.add(
 | Tool | When to Use |
 |------|------------|
 | Coroutines | In-process tasks, UI updates, network |
-| WorkManager | Deferrable tasks, survives process death |
-| Executor | Java interop, legacy |
-| HandlerThread | Sequential message processing |
+| WorkManager | Deferrable work, survives process death |
+| Executor | Java interop, legacy code |
+| HandlerThread | Sequential processing |
 | RxJava | Reactive streams, existing Rx codebase |
 
 **Common Pitfalls**:
-- Updating UI off main thread → Main dispatcher/Handlers
-- Forgetting to cancel work on lifecycle events → lifecycle scopes
-- WorkManager for exact timing → AlarmManager
-- Leaking threads/executors → shutdown in onDestroy
+- Updating UI off main thread
+- Forgetting to cancel work on lifecycle events
+- WorkManager for exact timing (use AlarmManager)
+- Leaking threads/executors — missing shutdown
 
 ---
 
 ## Follow-ups
 
 - How do you choose between WorkManager and ForegroundService for long-running tasks?
-- What are the performance implications of different Dispatcher types in coroutines?
-- How do you handle cancellation propagation across multiple layers?
+- What are the trade-offs between different Dispatcher types in coroutines?
+- How do you handle cancellation propagation across multiple repository/domain layers?
 - When should you use `async/await` vs `withContext` in coroutines?
-- How do you implement backpressure in RxJava vs Flow?
+- How do you test coroutine-based async code with TestDispatchers?
 
 ## References
 
 - [[c-coroutines]]
-- [[c-workmanager]]
 - [[c-lifecycle]]
-- https://developer.android.com/topic/libraries/architecture/coroutines
+- [[c-structured-concurrency]]
+- https://developer.android.com/kotlin/coroutines
 - https://developer.android.com/topic/libraries/architecture/workmanager
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-async-primitives--android--easy]]
+- [[q-android-main-thread-ui-thread--android--easy]]
 
 ### Related (Same Level)
 - [[q-anr-application-not-responding--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
+- [[q-workmanager-constraints--android--medium]]
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
+- [[q-structured-concurrency-advanced--android--hard]]

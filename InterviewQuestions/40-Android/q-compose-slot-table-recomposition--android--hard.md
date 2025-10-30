@@ -3,7 +3,7 @@ id: 20251012-122710
 title: Compose Slot Table & Recomposition / Slot Table и рекомпозиция Compose
 aliases: ["Compose Slot Table and Recomposition", "Slot Table и рекомпозиция"]
 topic: android
-subtopics: [processes, ui-compose]
+subtopics: [ui-compose, performance-rendering]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
 created: 2025-10-15
-updated: 2025-10-27
-tags: [android/processes, android/ui-compose, difficulty/hard]
-sources: ["https://developer.android.com/jetpack/compose/mental-model"]
+updated: 2025-10-30
+tags: [android/ui-compose, android/performance-rendering, difficulty/hard]
+sources: []
 ---
 
 # Вопрос (RU)
@@ -28,127 +28,173 @@ How do Slot Table and recomposition work in Jetpack Compose? Explain the interna
 ## Ответ (RU)
 
 ### Основная идея
-Slot Table — компактная линейная структура данных (подобна gap buffer), которая записывает группы композиции (groups) и слоты (slots) для эффективного хранения UI-дерева:
+Slot Table — компактная линейная структура данных (gap buffer), хранящая UI-дерево композиции и оптимизирующая рекомпозицию через инвалидацию групп.
 
-- **Groups** кодируют структуру дерева (операции входа/выхода из группы)
-- **Slots** хранят запомненные значения (`remember`), state-объекты, ссылки на узлы (layout/text)
-- **Recomposition** находит инвалидированные группы и перевыполняет только затронутые лямбды
+**Архитектура**:
+- **Groups (группы)** — древовидная структура с ключами, арностью и флагами для быстрого пропуска неизменённых участков
+- **Slots (слоты)** — хранилище для `remember`, state-объектов, ссылок на узлы (LayoutNode)
+- **Anchors (якоря)** — позиционная идентичность для сохранения состояния при структурных изменениях
 
-### Ключевые компоненты
+### Механизм рекомпозиции
 
-**Group (группа)** — заголовок узла с ключом, арностью и флагами, ограничивающий поддерево. Позволяет быстро пропустить неизменённые участки композиции.
+**Фаза инвалидации**:
+1. Запись state → snapshot mutation → invalidation scope добавляется в очередь
+2. Composer помечает затронутые группы по anchor-позициям
+3. Scheduler планирует recompose на следующий frame
 
-**Slot (слот)** — хранилище для значений `remember`, state-объектов, узлов (TextView, Layout и т.д.).
+**Фаза рекомпозиции**:
+```kotlin
+// ✅ Пример: композиция с инвалидацией
+@Composable
+fun Counter(count: Int) {  // Group start
+  Text("Count: $count")    // Slot: текстовый узел
+}                          // Group end
 
-**Key/Anchor** — позиционная идентичность для сохранения состояния при структурных изменениях (перемещение элементов в списке).
+// При изменении count:
+// 1. Группа Counter инвалидирована
+// 2. Composer пропускает стабильные соседние группы
+// 3. Перевыполняется только лямбда Counter
+// 4. Обновляется slot текстового узла
+```
 
-### Паттерны оптимизации
+**Оптимизация: skippability** — компилятор генерирует `if ($changed == 0) skip`, если параметры стабильны и не изменились.
 
-**Стабильные ключи в ленивых списках**
+### Критичные паттерны
+
+**Стабильные ключи для сохранения идентичности**:
 ```kotlin
 LazyColumn {
-  items(items = data, key = { it.id }) { item ->  // ✅ Сохраняет идентичность группы
-    Text(item.title)
+  items(data, key = { it.id }) { item ->  // ✅ Group anchor привязан к id
+    ItemRow(item)
   }
 }
 ```
 
-**Использование remember для кэширования**
+**derivedStateOf для снижения инвалидаций**:
 ```kotlin
-val formatter = remember(locale) { // ✅ Пересоздаётся только при смене locale
-  NumberFormat.getInstance(locale)
+val firstVisible by remember {
+  derivedStateOf {  // ✅ Инвалидирует только при изменении результата
+    listState.firstVisibleItemIndex > 0
+  }
 }
 ```
 
-**derivedStateOf для избирательной инвалидации**
+**remember(deps) для контроля пересоздания**:
 ```kotlin
-val showFab by remember {
-  derivedStateOf { listState.firstVisibleItemIndex > 0 }  // ✅ Инвалидирует только при изменении результата
+val formatter = remember(locale) {  // ✅ Пересоздание только при смене locale
+  DateTimeFormatter.ofPattern("dd MMM", locale)
 }
 ```
 
-**Skippability через стабильные типы**
-- `@Stable`/`@Immutable` аннотации позволяют компилятору пропускать рекомпозицию групп со стабильными параметрами
+### Производительность
 
-### Процесс рекомпозиции
-1. Инвалидации помещаются в очередь (запись state, изменение snapshot) с якорями
-2. Composer обходит группы; если группа не инвалидирована → пропуск
-3. Если инвалидирована → выполнение лямбды, обновление groups/slots, запись якорей
+**Сложность операций**:
+- Чтение слота: O(1)
+- Пропуск группы: O(1) по размеру группы
+- Вставка/удаление группы: O(n) для gap buffer реорганизации
+
+**Сравнение с View**:
+- View hierarchy: глубокие деревья с measure/layout для всех дочерних
+- Slot Table: плоская структура, локальная рекомпозиция без полного обхода
 
 ## Answer (EN)
 
 ### Core Idea
-Slot Table is a compact linear data structure (gap-buffer-like) that records composition groups and slots for efficient UI tree storage:
+Slot Table is a compact linear data structure (gap buffer) storing the composition UI tree and optimizing recomposition through group invalidation.
 
-- **Groups** encode tree structure (enter/exit group operations)
-- **Slots** store remembered values (`remember`), state objects, node references (layout/text)
-- **Recomposition** finds invalidated groups and re-executes only affected lambdas
+**Architecture**:
+- **Groups** — tree structure with keys, arity, flags enabling fast skipping of unchanged regions
+- **Slots** — storage for `remember` values, state objects, node references (LayoutNode)
+- **Anchors** — positional identity preserving state during structural changes
 
-### Key Components
+### Recomposition Mechanism
 
-**Group** — node header with key, arity, and flags delimiting a subtree. Enables fast skipping of unchanged composition regions.
+**Invalidation phase**:
+1. State write → snapshot mutation → invalidation scope enqueued
+2. Composer marks affected groups by anchor positions
+3. Scheduler plans recompose for next frame
 
-**Slot** — storage for `remember` values, state objects, nodes (TextView, Layout, etc.).
+**Recomposition phase**:
+```kotlin
+// ✅ Example: composition with invalidation
+@Composable
+fun Counter(count: Int) {  // Group start
+  Text("Count: $count")    // Slot: text node
+}                          // Group end
 
-**Key/Anchor** — positional identity to preserve state during structural changes (list item reordering).
+// When count changes:
+// 1. Counter group invalidated
+// 2. Composer skips stable neighboring groups
+// 3. Only Counter lambda re-executed
+// 4. Text node slot updated
+```
 
-### Optimization Patterns
+**Optimization: skippability** — compiler generates `if ($changed == 0) skip` when parameters are stable and unchanged.
 
-**Stable keys in lazy lists**
+### Critical Patterns
+
+**Stable keys preserve identity**:
 ```kotlin
 LazyColumn {
-  items(items = data, key = { it.id }) { item ->  // ✅ Preserves group identity
-    Text(item.title)
+  items(data, key = { it.id }) { item ->  // ✅ Group anchor tied to id
+    ItemRow(item)
   }
 }
 ```
 
-**Using remember for caching**
+**derivedStateOf reduces invalidations**:
 ```kotlin
-val formatter = remember(locale) { // ✅ Recreates only when locale changes
-  NumberFormat.getInstance(locale)
+val firstVisible by remember {
+  derivedStateOf {  // ✅ Invalidates only when result changes
+    listState.firstVisibleItemIndex > 0
+  }
 }
 ```
 
-**derivedStateOf for selective invalidation**
+**remember(deps) controls recreation**:
 ```kotlin
-val showFab by remember {
-  derivedStateOf { listState.firstVisibleItemIndex > 0 }  // ✅ Invalidates only when result changes
+val formatter = remember(locale) {  // ✅ Recreates only on locale change
+  DateTimeFormatter.ofPattern("dd MMM", locale)
 }
 ```
 
-**Skippability via stable types**
-- `@Stable`/`@Immutable` annotations allow compiler to skip recomposition of groups with stable parameters
+### Performance
 
-### Recomposition Process
-1. Invalidations enqueued (state write, snapshot change) with anchors
-2. Composer traverses groups; if group not invalid → skip
-3. If invalid → execute lambda, update groups/slots, record anchors
+**Operation complexity**:
+- Slot read: O(1)
+- Group skip: O(1) in group size
+- Group insert/delete: O(n) for gap buffer reorganization
+
+**Comparison with View**:
+- View hierarchy: deep trees with measure/layout for all children
+- Slot Table: flat structure, local recomposition without full traversal
 
 ---
 
 ## Follow-ups
-- How do anchors enable list item reordering without full recomposition?
-- What causes unstable parameters and how does it impact slot table efficiency?
+- How do anchors enable list item reordering without losing state?
+- What causes parameter instability and how does it impact skippability?
 - How does the Compose runtime detect which groups need recomposition?
-- What's the memory overhead of Slot Table compared to traditional View hierarchy?
+- What's the memory overhead of Slot Table compared to View hierarchy?
+- How does gap buffer reorganization affect performance during rapid list mutations?
 
 ## References
-- [Compose Mental Model (Official)](https://developer.android.com/jetpack/compose/mental-model)
-- [Compose Performance](https://developer.android.com/jetpack/compose/performance)
-- [Thinking in Compose](https://developer.android.com/jetpack/compose/mental-model)
+- [[c-compose-remember]]
+- [[c-compose-state]]
+- [[c-compose-recomposition]]
+- [[c-compose-stability]]
 
 ## Related Questions
 
 ### Prerequisites
 - [[q-compose-state-management--android--medium]] — Understanding state before optimization
-- [[q-compose-remember-vs-remember-saveable--android--medium]] — remember mechanism
+- [[q-compose-remember-vs-remember-saveable--android--medium]] — remember mechanism basics
 
 ### Related
 - [[q-compose-compiler-plugin--android--hard]] — How compiler generates slot table code
-- [[q-compose-performance-optimization--android--hard]] — Broader optimization strategies
 - [[q-compose-stability-skippability--android--hard]] — Stability inference details
+- [[q-compose-performance-optimization--android--hard]] — Broader optimization strategies
 
 ### Advanced
-- [[q-compose-custom-layout-modifiers--android--hard]] — Low-level composition control
 - [[q-compose-snapshot-system--android--hard]] — Snapshot isolation mechanics
+- [[q-compose-custom-layout-modifiers--android--hard]] — Low-level composition control

@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-custom-scopes--android--hard]
 created: 2025-10-20
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/di-hilt, android/architecture-mvvm, android/architecture-clean, dagger, dependency-injection, hilt, difficulty/hard]
 sources: [https://dagger.dev/]
 ---
@@ -224,11 +224,11 @@ class UserViewModel @Inject constructor(
 
 ## Follow-ups
 
-- How does Dagger detect and report cyclic dependencies at compile time?
-- What are the trade-offs between constructor injection and field injection?
-- How do custom scopes work in Dagger, and when should you create them?
-- What happens if you inject a non-scoped dependency into a scoped component?
-- How does Hilt's component hierarchy map to Android component lifecycles?
+- How does Dagger detect and report cyclic dependencies at compile time, and what graph traversal algorithm does it use?
+- What are the trade-offs between constructor injection and field injection in terms of immutability, testability, and lifecycle management?
+- How do custom scopes work in Dagger, and when should you create them versus reusing standard scopes?
+- What happens if you inject a non-scoped dependency into a scoped component, and how does this affect instance creation?
+- How does Hilt's component hierarchy map to Android component lifecycles, and what are the implications for memory leaks?
 
 ## References
 

@@ -13,7 +13,7 @@ moc: moc-android
 related: [q-accessibility-compose--android--medium, q-accessibility-talkback--android--medium, q-compose-semantics--android--medium]
 sources: [https://developer.android.com/guide/topics/ui/accessibility]
 created: 2025-10-21
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
 ---
 # Вопрос (RU)
@@ -78,7 +78,6 @@ class ScrollableCustomView : View {
         info.contentDescription = "Прокручиваемый список"
         info.isScrollable = true
 
-        // Добавляем доступные действия
         if (canScrollForward()) {
             info.addAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
         }
@@ -205,7 +204,6 @@ class ScrollableCustomView : View {
         info.contentDescription = "Scrollable list"
         info.isScrollable = true
 
-        // Add available actions
         if (canScrollForward()) {
             info.addAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
         }
@@ -290,20 +288,25 @@ class ProgressView : View {
 
 ## References
 
-- [[c-accessibility]] - Accessibility fundamentals
+- [[c-accessibility]]
+- [[c-android-views]]
+- [[c-talkback]]
 - [Android Accessibility Guide](https://developer.android.com/guide/topics/ui/accessibility)
 - [AccessibilityNodeInfo API](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo)
+- [Custom View Accessibility](https://developer.android.com/guide/topics/ui/accessibility/custom-views)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-accessibility-text-scaling--android--medium]]
-- [[q-accessibility-color-contrast--android--medium]]
+- [[q-accessibility-basics--android--easy]] - Understanding accessibility fundamentals
+- [[q-content-description--android--easy]] - Using content descriptions properly
 
 ### Related (Same Level)
-- [[q-compose-semantics--android--medium]]
-- [[q-accessibility-talkback--android--medium]]
-- [[q-accessibility-compose--android--medium]]
+- [[q-compose-semantics--android--medium]] - Compose accessibility semantics
+- [[q-accessibility-talkback--android--medium]] - TalkBack integration patterns
+- [[q-accessibility-compose--android--medium]] - Compose accessibility implementation
 
 ### Advanced (Harder)
-- [[q-accessibility-testing--android--medium]]
+- [[q-accessibility-testing--android--hard]] - Comprehensive accessibility testing
+- [[q-accessibility-services--android--hard]] - Building custom accessibility services
+- [[q-viewgroup-accessibility--android--hard]] - Complex ViewGroup accessibility

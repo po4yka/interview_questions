@@ -20,7 +20,10 @@ tags: [android/di-hilt, difficulty/hard]
 sources:
   - url: https://dagger.dev/api/latest/dagger/Component.html
     title: Dagger Component API documentation
+date created: Monday, October 27th 2025, 6:50:08 pm
+date modified: Thursday, October 30th 2025, 11:51:12 am
 ---
+
 # Вопрос (RU)
 > В чем разница между Component Dependencies и Subcomponents в Dagger? Когда использовать один подход вместо другого?
 

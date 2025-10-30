@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-custom-view-lifecycle--android--medium]
 created: 2025-10-21
-updated: 2025-10-29
-tags: [android/lifecycle, android/ui-views, difficulty/medium]
+updated: 2025-10-30
+tags: [android/lifecycle, android/ui-views, custom-view, state-management, difficulty/medium]
 sources: []
 ---
 # Вопрос (RU)
@@ -26,16 +26,21 @@ sources: []
 
 ## Ответ (RU)
 
-**State saving** в custom views обеспечивает выживание UI при configuration changes и process death. Система вызывает `onSaveInstanceState()` и `onRestoreInstanceState()` автоматически.
+**State saving** в custom views обеспечивает выживание UI состояния при configuration changes (поворот экрана) и process death. Система вызывает `onSaveInstanceState()` и `onRestoreInstanceState()` автоматически, если View имеет ID.
+
+### Концепция
+
+Custom View должен самостоятельно управлять своим состоянием через `Parcelable`. Ключевые принципы:
+- Использовать `BaseSavedState` для сохранения родительского состояния
+- Реализовать `Parcelable.Creator` для десериализации
+- Всегда вызывать `super` методы
+- Проверять тип состояния при восстановлении
 
 ### Базовая Реализация
 
-**Минимальный пример с BaseSavedState:**
-
 ```kotlin
 class CounterView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
     private var count = 0
 
@@ -81,8 +86,6 @@ class CounterView @JvmOverloads constructor(
 
 ### Сложные Типы Данных
 
-**Сохранение списков и enum:**
-
 ```kotlin
 class ComplexView : View {
     private var items = mutableListOf<String>()
@@ -90,7 +93,7 @@ class ComplexView : View {
 
     override fun onSaveInstanceState(): Parcelable {
         return SavedState(super.onSaveInstanceState()).apply {
-            this.items = this@ComplexView.items
+            this.items = ArrayList(this@ComplexView.items)
             this.modeName = this@ComplexView.mode.name
         }
     }
@@ -98,7 +101,7 @@ class ComplexView : View {
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is SavedState) {
             super.onRestoreInstanceState(state.superState)
-            items = state.items
+            items = state.items.toMutableList()
             mode = Mode.valueOf(state.modeName)
         } else {
             super.onRestoreInstanceState(state)
@@ -106,13 +109,13 @@ class ComplexView : View {
     }
 
     private class SavedState : BaseSavedState {
-        var items = mutableListOf<String>()
+        var items = ArrayList<String>()
         var modeName = ""
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
-            parcel.readStringList(items) // ✅ Списки
+            parcel.readStringList(items) // ✅ Поддержка списков
             modeName = parcel.readString() ?: ""
         }
 
@@ -134,30 +137,35 @@ class ComplexView : View {
 
 ### Ключевые Правила
 
-1. **Всегда вызывать super** - сохраняет базовое состояние View
-2. **Использовать BaseSavedState** - правильная реализация для View
-3. **Проверять типы** - state может быть null или другого типа
-4. **Минимизировать данные** - только критичное состояние
+1. **ID обязателен** — View должен иметь `android:id` в layout
+2. **BaseSavedState** — использовать для сохранения цепочки наследования
+3. **Проверка типов** — state может быть null или другого типа
+4. **Минимизация** — сохранять только критичное состояние (< 500 KB)
 
 ### Pitfalls
 
-- ❌ Забыть `super.onSaveInstanceState()`
-- ❌ Сохранение Context/Activity (утечки памяти)
-- ❌ Неправильный CREATOR
-- ❌ Отсутствие проверки типа при восстановлении
+- ❌ Отсутствие ID у View — состояние не сохранится
+- ❌ Забыть `super.onSaveInstanceState()` — потеря базового состояния
+- ❌ Сохранение Context/Activity — утечки памяти
+- ❌ Сохранение больших объектов — `TransactionTooLargeException`
 
 ## Answer (EN)
 
-**State saving** in custom views ensures UI survival during configuration changes and process death. The system calls `onSaveInstanceState()` and `onRestoreInstanceState()` automatically.
+**State saving** in custom views ensures UI state survival during configuration changes (screen rotation) and process death. The system calls `onSaveInstanceState()` and `onRestoreInstanceState()` automatically if the View has an ID.
+
+### Concept
+
+Custom Views must manage their state through `Parcelable`. Key principles:
+- Use `BaseSavedState` to preserve parent state
+- Implement `Parcelable.Creator` for deserialization
+- Always call `super` methods
+- Check state type during restoration
 
 ### Basic Implementation
 
-**Minimal example with BaseSavedState:**
-
 ```kotlin
 class CounterView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
     private var count = 0
 
@@ -203,8 +211,6 @@ class CounterView @JvmOverloads constructor(
 
 ### Complex Data Types
 
-**Saving lists and enums:**
-
 ```kotlin
 class ComplexView : View {
     private var items = mutableListOf<String>()
@@ -212,7 +218,7 @@ class ComplexView : View {
 
     override fun onSaveInstanceState(): Parcelable {
         return SavedState(super.onSaveInstanceState()).apply {
-            this.items = this@ComplexView.items
+            this.items = ArrayList(this@ComplexView.items)
             this.modeName = this@ComplexView.mode.name
         }
     }
@@ -220,7 +226,7 @@ class ComplexView : View {
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is SavedState) {
             super.onRestoreInstanceState(state.superState)
-            items = state.items
+            items = state.items.toMutableList()
             mode = Mode.valueOf(state.modeName)
         } else {
             super.onRestoreInstanceState(state)
@@ -228,13 +234,13 @@ class ComplexView : View {
     }
 
     private class SavedState : BaseSavedState {
-        var items = mutableListOf<String>()
+        var items = ArrayList<String>()
         var modeName = ""
 
         constructor(superState: Parcelable?) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
-            parcel.readStringList(items) // ✅ Lists
+            parcel.readStringList(items) // ✅ List support
             modeName = parcel.readString() ?: ""
         }
 
@@ -256,44 +262,47 @@ class ComplexView : View {
 
 ### Key Rules
 
-1. **Always call super** - saves base View state
-2. **Use BaseSavedState** - proper implementation for View
-3. **Check types** - state can be null or different type
-4. **Minimize data** - only critical state
+1. **ID required** — View must have `android:id` in layout
+2. **BaseSavedState** — use to preserve inheritance chain
+3. **Type checking** — state can be null or different type
+4. **Minimize** — save only critical state (< 500 KB)
 
 ### Pitfalls
 
-- ❌ Forgetting `super.onSaveInstanceState()`
-- ❌ Saving Context/Activity (memory leaks)
-- ❌ Incorrect CREATOR implementation
-- ❌ Missing type check when restoring
+- ❌ Missing View ID — state won't be saved
+- ❌ Forgetting `super.onSaveInstanceState()` — losing base state
+- ❌ Saving Context/Activity — memory leaks
+- ❌ Saving large objects — `TransactionTooLargeException`
 
 ---
 
 ## Follow-ups
 
-1. How to handle state saving in ViewGroups with multiple children?
-2. What are the size limits for saved state bundles?
-3. How to test state restoration with process death?
-4. When to use Serializable vs Parcelable for custom objects?
-5. How does state saving interact with view recycling in RecyclerView?
+1. Как тестировать state restoration с process death?
+2. В чём разница между `onSaveInstanceState` View и Activity?
+3. Как сохранять состояние ViewGroup с множественными children?
+4. Какие ограничения на размер Bundle для saved state?
+5. Когда использовать ViewModel вместо View state saving?
 
 ## References
 
 - [[c-lifecycle]]
 - [[c-state-management]]
 - [[c-parcelable]]
-- [Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
-- [Parcelable Documentation](https://developer.android.com/reference/android/os/Parcelable)
+- [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
+- [Parcelable and Bundle](https://developer.android.com/reference/android/os/Parcelable)
 
 ## Related Questions
 
-### Prerequisites (Easier)
+### Prerequisites
 - [[q-activity-lifecycle-methods--android--medium]]
+- [[q-parcelable-vs-serializable--android--easy]]
 
-### Related (Same Level)
+### Related
 - [[q-custom-view-lifecycle--android--medium]]
 - [[q-fragment-savedinstancestate--android--medium]]
+- [[q-viewmodel-vs-savedstate--android--medium]]
 
-### Advanced (Harder)
+### Advanced
 - [[q-custom-viewgroup-layout--android--hard]]
+- [[q-process-death-recovery--android--hard]]

@@ -15,11 +15,10 @@ related:
   - q-dagger-custom-scopes--android--hard
   - q-dagger-framework-overview--android--hard
 created: 2025-10-20
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/di-hilt, android/architecture-modularization, dagger, dependency-injection, multibinding, difficulty/hard]
 sources: []
 ---
-
 # Вопрос (RU)
 > Объясните Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). Как бы вы использовали это для реализации плагинной архитектуры или системы feature-модулей?
 
@@ -34,7 +33,7 @@ Multibinding позволяет множественным модулям вно
 
 ### Типы Multibinding
 
-**@IntoSet** - добавление элемента в Set:
+**@IntoSet** - добавление элемента в Set. Каждый модуль независимо добавляет свой элемент:
 
 ```kotlin
 // ✅ Правильно: каждый модуль добавляет плагин
@@ -44,19 +43,12 @@ abstract class AnalyticsModule {
     abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
 }
 
-@Module
-abstract class LoggingModule {
-    @Binds @IntoSet
-    abstract fun plugin(impl: LoggingPlugin): AppPlugin
-}
-
-// Использование: получаем все плагины
 class PluginManager @Inject constructor(
     private val plugins: Set<@JvmSuppressWildcards AppPlugin>
 )
 ```
 
-**@IntoMap** - добавление в Map по ключу:
+**@IntoMap** - добавление в Map по ключу для динамической маршрутизации:
 
 ```kotlin
 // ✅ Правильно: feature registry с ключами
@@ -65,41 +57,18 @@ annotation class FeatureKey(val value: String)
 
 @Module
 abstract class FeatureModule {
-    @Binds @IntoMap
-    @FeatureKey("login")
+    @Binds @IntoMap @FeatureKey("login")
     abstract fun login(impl: LoginFeature): Feature
-
-    @Binds @IntoMap
-    @FeatureKey("payment")
-    abstract fun payment(impl: PaymentFeature): Feature
 }
 
-class FeatureRouter @Inject constructor(
+class Router @Inject constructor(
     private val features: Map<String, @JvmSuppressWildcards Feature>
-) {
-    fun route(key: String) = features[key]?.execute()
-}
+)
 ```
 
-**@ElementsIntoSet** - добавление нескольких элементов:
+**@Multibinds** - декларация пустой коллекции (для опциональных зависимостей):
 
 ```kotlin
-// ✅ Правильно: bulk добавление
-@Module
-object ConfigModule {
-    @Provides @ElementsIntoSet
-    fun providers(): Set<ConfigProvider> = setOf(
-        RemoteConfig(),
-        LocalConfig(),
-        DefaultConfig()
-    )
-}
-```
-
-**@Multibinds** - декларация пустой коллекции:
-
-```kotlin
-// ✅ Правильно: опциональные коллекции
 @Module
 abstract class BaseModule {
     @Multibinds
@@ -109,14 +78,14 @@ abstract class BaseModule {
 
 ### Plugin Architecture
 
+Независимые модули регистрируют плагины, менеджер инициализирует их с учетом приоритета:
+
 ```kotlin
-// Интерфейс плагина
 interface AppPlugin {
     val priority: Int
     fun initialize(context: Context)
 }
 
-// Модули добавляют плагины независимо
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AnalyticsModule {
@@ -124,41 +93,31 @@ abstract class AnalyticsModule {
     abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
 }
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class CrashModule {
-    @Binds @IntoSet
-    abstract fun plugin(impl: CrashPlugin): AppPlugin
-}
-
-// Менеджер инициализирует все плагины
 @Singleton
 class PluginManager @Inject constructor(
     private val plugins: Set<@JvmSuppressWildcards AppPlugin>
 ) {
     fun initialize(context: Context) {
-        plugins.sortedBy { it.priority }
-            .forEach { it.initialize(context) }
+        plugins.sortedBy { it.priority }.forEach { it.initialize(context) }
     }
 }
 ```
 
 ### Feature Module System
 
+Динамическая навигация без прямых зависимостей между модулями:
+
 ```kotlin
 // ❌ Неправильно: жесткая зависимость
 class MainActivity {
-    fun navigate(screen: String) {
-        when (screen) {
-            "login" -> startActivity<LoginActivity>()
-            "payment" -> startActivity<PaymentActivity>()
-        }
+    fun navigate(screen: String) = when (screen) {
+        "login" -> startActivity<LoginActivity>()  // Прямая зависимость
+        else -> {}
     }
 }
 
 // ✅ Правильно: динамическая навигация через Map
 @MapKey
-@Retention(AnnotationRetention.RUNTIME)
 annotation class FeatureKey(val value: String)
 
 interface FeatureEntry {
@@ -168,17 +127,8 @@ interface FeatureEntry {
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class LoginModule {
-    @Binds @IntoMap
-    @FeatureKey("login")
+    @Binds @IntoMap @FeatureKey("login")
     abstract fun entry(impl: LoginFeatureEntry): FeatureEntry
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class PaymentModule {
-    @Binds @IntoMap
-    @FeatureKey("payment")
-    abstract fun entry(impl: PaymentFeatureEntry): FeatureEntry
 }
 
 class Navigator @Inject constructor(
@@ -190,16 +140,15 @@ class Navigator @Inject constructor(
 }
 ```
 
-### Advanced: Qualified Multibindings
+### Qualified Multibindings
+
+Разделение коллекций по назначению через квалификаторы:
 
 ```kotlin
-// Разные коллекции для разных целей
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
 annotation class StartupPlugins
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
 annotation class BackgroundPlugins
 
 @Module
@@ -224,7 +173,7 @@ Multibinding allows multiple modules to contribute elements to a shared collecti
 
 ### Multibinding Types
 
-**@IntoSet** - adds element to Set:
+**@IntoSet** - adds element to Set. Each module independently contributes its element:
 
 ```kotlin
 // ✅ Correct: each module contributes plugin
@@ -234,19 +183,12 @@ abstract class AnalyticsModule {
     abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
 }
 
-@Module
-abstract class LoggingModule {
-    @Binds @IntoSet
-    abstract fun plugin(impl: LoggingPlugin): AppPlugin
-}
-
-// Usage: receive all plugins
 class PluginManager @Inject constructor(
     private val plugins: Set<@JvmSuppressWildcards AppPlugin>
 )
 ```
 
-**@IntoMap** - adds to Map by key:
+**@IntoMap** - adds to Map by key for dynamic routing:
 
 ```kotlin
 // ✅ Correct: feature registry with keys
@@ -255,41 +197,18 @@ annotation class FeatureKey(val value: String)
 
 @Module
 abstract class FeatureModule {
-    @Binds @IntoMap
-    @FeatureKey("login")
+    @Binds @IntoMap @FeatureKey("login")
     abstract fun login(impl: LoginFeature): Feature
-
-    @Binds @IntoMap
-    @FeatureKey("payment")
-    abstract fun payment(impl: PaymentFeature): Feature
 }
 
-class FeatureRouter @Inject constructor(
+class Router @Inject constructor(
     private val features: Map<String, @JvmSuppressWildcards Feature>
-) {
-    fun route(key: String) = features[key]?.execute()
-}
+)
 ```
 
-**@ElementsIntoSet** - adds multiple elements:
+**@Multibinds** - declares empty collection (for optional dependencies):
 
 ```kotlin
-// ✅ Correct: bulk addition
-@Module
-object ConfigModule {
-    @Provides @ElementsIntoSet
-    fun providers(): Set<ConfigProvider> = setOf(
-        RemoteConfig(),
-        LocalConfig(),
-        DefaultConfig()
-    )
-}
-```
-
-**@Multibinds** - declares empty collection:
-
-```kotlin
-// ✅ Correct: optional collections
 @Module
 abstract class BaseModule {
     @Multibinds
@@ -299,14 +218,14 @@ abstract class BaseModule {
 
 ### Plugin Architecture
 
+Independent modules register plugins, manager initializes them with priority ordering:
+
 ```kotlin
-// Plugin interface
 interface AppPlugin {
     val priority: Int
     fun initialize(context: Context)
 }
 
-// Modules add plugins independently
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AnalyticsModule {
@@ -314,41 +233,31 @@ abstract class AnalyticsModule {
     abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
 }
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class CrashModule {
-    @Binds @IntoSet
-    abstract fun plugin(impl: CrashPlugin): AppPlugin
-}
-
-// Manager initializes all plugins
 @Singleton
 class PluginManager @Inject constructor(
     private val plugins: Set<@JvmSuppressWildcards AppPlugin>
 ) {
     fun initialize(context: Context) {
-        plugins.sortedBy { it.priority }
-            .forEach { it.initialize(context) }
+        plugins.sortedBy { it.priority }.forEach { it.initialize(context) }
     }
 }
 ```
 
 ### Feature Module System
 
+Dynamic navigation without direct dependencies between modules:
+
 ```kotlin
 // ❌ Wrong: tight coupling
 class MainActivity {
-    fun navigate(screen: String) {
-        when (screen) {
-            "login" -> startActivity<LoginActivity>()
-            "payment" -> startActivity<PaymentActivity>()
-        }
+    fun navigate(screen: String) = when (screen) {
+        "login" -> startActivity<LoginActivity>()  // Direct dependency
+        else -> {}
     }
 }
 
 // ✅ Correct: dynamic navigation via Map
 @MapKey
-@Retention(AnnotationRetention.RUNTIME)
 annotation class FeatureKey(val value: String)
 
 interface FeatureEntry {
@@ -358,17 +267,8 @@ interface FeatureEntry {
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class LoginModule {
-    @Binds @IntoMap
-    @FeatureKey("login")
+    @Binds @IntoMap @FeatureKey("login")
     abstract fun entry(impl: LoginFeatureEntry): FeatureEntry
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class PaymentModule {
-    @Binds @IntoMap
-    @FeatureKey("payment")
-    abstract fun entry(impl: PaymentFeatureEntry): FeatureEntry
 }
 
 class Navigator @Inject constructor(
@@ -380,16 +280,15 @@ class Navigator @Inject constructor(
 }
 ```
 
-### Advanced: Qualified Multibindings
+### Qualified Multibindings
+
+Separate collections by purpose using qualifiers:
 
 ```kotlin
-// Different collections for different purposes
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
 annotation class StartupPlugins
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
 annotation class BackgroundPlugins
 
 @Module
@@ -429,7 +328,7 @@ class App : Application() {
 
 ### Prerequisites (Easier)
 - [[q-dagger-inject-annotation--android--easy]] - Basic injection
-- [[q-dagger-provides-binds--android--medium]] - Module binding methods
+- [[q-dagger-main-elements--android--medium]] - Module binding methods
 
 ### Related (Same Level)
 - [[q-dagger-custom-scopes--android--hard]] - Custom scope creation

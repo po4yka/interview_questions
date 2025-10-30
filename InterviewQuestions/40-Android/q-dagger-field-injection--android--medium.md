@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-hilt-components-scope--android--medium]
 sources: []
 created: 2025-10-20
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/di-hilt, android/architecture-mvvm, dependency-injection, dagger, difficulty/medium]
 ---
 
@@ -25,36 +25,29 @@ tags: [android/di-hilt, android/architecture-mvvm, dependency-injection, dagger,
 
 ## Ответ (RU)
 
-Field injection в Dagger позволяет внедрять зависимости в поля класса с помощью `@Inject`. Этот подход имеет специфические характеристики и ограничения по сравнению с constructor injection.
+Field injection в Dagger внедряет зависимости в поля класса через `@Inject` **после создания объекта**. Используется для Android компонентов (Activity, Fragment, Service), где конструктор недоступен для модификации.
 
-### Принципы работы
+### Жизненный цикл
 
-Field injection происходит **после создания объекта**. Зависимости внедряются в поля через вызов метода `inject()` компонента. Этот подход используется для Android компонентов (Activity, Fragment, Service), где конструктор недоступен для модификации.
-
-**Жизненный цикл:**
 1. Создание объекта через конструктор по умолчанию
 2. Вызов метода `inject()` компонента
 3. Заполнение помеченных полей зависимостями
 4. Поля готовы к использованию
 
-### Основное использование
-
 ```kotlin
 // ❌ Неправильно - использование до inject()
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        repository.getUser() // CRASH - поле не инициализировано
+        repository.getUser() // CRASH
     }
 }
 
 // ✅ Правильно - inject() перед использованием
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,126 +57,81 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые особенности
+### Требования
 
-**1. Требуется метод inject() в компоненте**
-
+**Компонент с методом inject():**
 ```kotlin
 @Component(modules = [AppModule::class])
 interface AppComponent {
-    // Отдельный метод для каждого типа
-    fun inject(activity: MainActivity)
-    fun inject(fragment: UserFragment)
+    fun inject(activity: MainActivity) // ✅ Отдельный метод для каждого типа
 }
 ```
 
-**2. Поля должны быть lateinit var**
-
+**Поля должны быть lateinit var:**
 ```kotlin
-// ✅ Правильно
-@Inject lateinit var repository: UserRepository
-
-// ❌ Неправильно - не компилируется
-@Inject val repository: UserRepository
-@Inject var repository: UserRepository? = null
+@Inject lateinit var repository: UserRepository // ✅
+@Inject val repository: UserRepository // ❌ Не компилируется
 ```
 
-**3. Проверка инициализации в Kotlin**
+### Hilt упрощение
 
-```kotlin
-@Inject lateinit var apiService: ApiService
-
-fun makeRequest() {
-    if (::apiService.isInitialized) {
-        apiService.fetchData()
-    } else {
-        // Обработка ошибки инициализации
-    }
-}
-```
-
-### Подход с Hilt
-
-Hilt автоматизирует field injection для Android компонентов:
+Hilt автоматизирует field injection:
 
 ```kotlin
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 
-    // Hilt автоматически вызывает inject() перед onCreate()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        repository.getUser() // Безопасно использовать
+        repository.getUser() // ✅ Hilt вызвал inject() автоматически
     }
 }
 ```
 
-### Когда использовать
+### Применимость
 
-**Подходит для:**
+**Используйте для:**
 - Android framework компонентов (Activity, Fragment, Service)
-- Классов, созданных системой (где конструктор недоступен)
-- Legacy кода с ограничениями архитектуры
+- Классов, созданных системой
 
-**Не подходит для:**
-- ViewModel, Repository, UseCase (используйте constructor injection)
-- Тестируемых классов (field injection усложняет тесты)
-- Новых компонентов (предпочтителен constructor injection)
-
-### Производительность
-
-Field injection медленнее constructor injection из-за использования reflection для доступа к полям. Dagger кэширует reflection metadata, но накладные расходы остаются.
-
-**Сравнение:**
-- Constructor injection: прямой вызов конструктора (быстро)
-- Field injection: reflection + вызов setter (медленнее)
-- Разница заметна при создании тысяч объектов
+**Избегайте для:**
+- ViewModel, Repository, UseCase → constructor injection
+- Тестируемых классов → усложняет моки
+- Новых компонентов → предпочтителен constructor injection
 
 ### Ограничения
 
-**Технические:**
-- Не работает с `final` полями (только `var`)
-- Требует ручного вызова `inject()`
-- Reflection overhead на производительность
-
-**Архитектурные:**
-- Менее безопасен чем constructor injection (возможны null поля)
-- Скрывает зависимости (не видны в конструкторе)
-- Усложняет тестирование (нужно мокировать поля)
+- Reflection overhead → медленнее constructor injection
+- Менее безопасен → возможны null поля до inject()
+- Скрывает зависимости → не видны в сигнатуре класса
+- Усложняет тестирование → требуется мокирование полей
 
 ## Answer (EN)
 
-Field injection in Dagger allows injecting dependencies into class fields using `@Inject`. This approach has specific characteristics and limitations compared to constructor injection.
+Field injection in Dagger injects dependencies into class fields via `@Inject` **after object creation**. Used for Android components (Activity, Fragment, Service) where constructor modification is unavailable.
 
-### Working Principles
+### Lifecycle
 
-Field injection occurs **after object creation**. Dependencies are injected into fields through a component's `inject()` method call. This approach is used for Android components (Activity, Fragment, Service) where the constructor is unavailable for modification.
-
-**Lifecycle:**
 1. Object creation via default constructor
 2. Component's `inject()` method call
 3. Populating marked fields with dependencies
 4. Fields ready for use
 
-### Basic Usage
-
 ```kotlin
 // ❌ Wrong - using before inject()
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        repository.getUser() // CRASH - field not initialized
+        repository.getUser() // CRASH
     }
 }
 
 // ✅ Correct - inject() before usage
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -193,101 +141,63 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Key Features
+### Requirements
 
-**1. Component requires inject() method**
-
+**Component with inject() method:**
 ```kotlin
 @Component(modules = [AppModule::class])
 interface AppComponent {
-    // Separate method for each type
-    fun inject(activity: MainActivity)
-    fun inject(fragment: UserFragment)
+    fun inject(activity: MainActivity) // ✅ Separate method for each type
 }
 ```
 
-**2. Fields must be lateinit var**
-
+**Fields must be lateinit var:**
 ```kotlin
-// ✅ Correct
-@Inject lateinit var repository: UserRepository
-
-// ❌ Wrong - won't compile
-@Inject val repository: UserRepository
-@Inject var repository: UserRepository? = null
+@Inject lateinit var repository: UserRepository // ✅
+@Inject val repository: UserRepository // ❌ Won't compile
 ```
 
-**3. Initialization check in Kotlin**
+### Hilt Simplification
 
-```kotlin
-@Inject lateinit var apiService: ApiService
-
-fun makeRequest() {
-    if (::apiService.isInitialized) {
-        apiService.fetchData()
-    } else {
-        // Handle initialization error
-    }
-}
-```
-
-### Hilt Approach
-
-Hilt automates field injection for Android components:
+Hilt automates field injection:
 
 ```kotlin
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 
-    // Hilt automatically calls inject() before onCreate()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        repository.getUser() // Safe to use
+        repository.getUser() // ✅ Hilt called inject() automatically
     }
 }
 ```
 
-### When to Use
+### Applicability
 
-**Suitable for:**
+**Use for:**
 - Android framework components (Activity, Fragment, Service)
-- System-created classes (where constructor is unavailable)
-- Legacy code with architectural constraints
+- System-created classes
 
-**Not suitable for:**
-- ViewModel, Repository, UseCase (use constructor injection)
-- Testable classes (field injection complicates testing)
-- New components (constructor injection preferred)
-
-### Performance
-
-Field injection is slower than constructor injection due to reflection usage for field access. Dagger caches reflection metadata, but overhead remains.
-
-**Comparison:**
-- Constructor injection: direct constructor call (fast)
-- Field injection: reflection + setter call (slower)
-- Difference noticeable when creating thousands of objects
+**Avoid for:**
+- ViewModel, Repository, UseCase → constructor injection
+- Testable classes → complicates mocking
+- New components → constructor injection preferred
 
 ### Limitations
 
-**Technical:**
-- Doesn't work with `final` fields (only `var`)
-- Requires manual `inject()` call
-- Reflection overhead on performance
-
-**Architectural:**
-- Less safe than constructor injection (possible null fields)
-- Hides dependencies (not visible in constructor)
-- Complicates testing (need to mock fields)
+- Reflection overhead → slower than constructor injection
+- Less safe → possible null fields before inject()
+- Hides dependencies → not visible in class signature
+- Complicates testing → requires field mocking
 
 ## Follow-ups
 
-- When should you prefer constructor injection over field injection in Android?
-- How does Hilt eliminate the need for manual inject() calls?
-- What testing strategies work best with field injection?
-- How does field injection impact app startup performance?
-- What are the alternatives to field injection for Activity/Fragment?
+- How does Hilt automate inject() calls for Android framework components?
+- Why is constructor injection preferred for ViewModel and Repository classes?
+- What happens if you access an @Inject field before calling inject()?
+- How does field injection affect unit testing and mocking strategies?
+- What are the performance implications of reflection in field injection?
 
 ## References
 

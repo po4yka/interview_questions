@@ -13,7 +13,7 @@ moc: moc-android
 related: [q-android-performance-measurement-tools--android--medium, q-app-startup-optimization--android--medium]
 sources: []
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
 ---
 # Вопрос (RU)
@@ -26,14 +26,15 @@ tags: [android/gradle, android/performance-startup, android/profiling, difficult
 
 ## Ответ (RU)
 
-**Baseline Profiles** — механизм AOT-компиляции критических путей кода при установке. ART компилирует указанные методы заранее, минуя JIT, что ускоряет холодный старт на 30-40%.
+**Baseline Profiles** — механизм AOT-компиляции критических путей кода при установке приложения. ART предварительно компилирует указанные методы и классы, минуя JIT-интерпретацию, что ускоряет холодный старт на 30-40% и снижает джанк при первом рендеринге.
 
-**Без профиля**: Запуск → Интерпретация → JIT по мере использования
-**С профилем**: Установка → AOT критического кода → Быстрый запуск
+**Принцип работы**:
+- **Без профиля**: Запуск → Интерпретация байткода → Постепенная JIT-компиляция
+- **С профилем**: Установка → AOT-компиляция критических путей → Мгновенный нативный код
 
-### Реализация
+### Структура реализации
 
-**1. Модуль профилирования**:
+**1. Модуль генерации профиля**:
 ```kotlin
 // baseline-profile/build.gradle.kts
 plugins {
@@ -52,19 +53,22 @@ android {
 }
 ```
 
-**2. Генератор**:
+**2. Тест генерации**:
 ```kotlin
 @Test
-fun generate() = rule.collect(packageName = "com.example.app") {
-    // ✅ Только критические сценарии
+fun generateProfile() = baselineRule.collect(
+    packageName = "com.example.app"
+) {
+    // ✅ Критический сценарий: запуск + первый рендер
     pressHome()
     startActivityAndWait()
-    device.findObject(By.text("Home")).click()
-    // ❌ Избегайте редких user flows
+    device.findObject(By.res("home_screen")).click()
+
+    // ❌ Не включайте редкие сценарии
 }
 ```
 
-**3. Применение**:
+**3. Конфигурация приложения**:
 ```kotlin
 // app/build.gradle.kts
 plugins {
@@ -76,47 +80,33 @@ baselineProfile {
 }
 ```
 
-**4. Верификация**:
+**4. Проверка в production**:
 ```kotlin
-// ✅ Проверка в production
 val status = ProfileVerifier.getCompilationStatusAsync().get()
 when (status.profileInstallResultCode) {
-    CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> { /* OK */ }
-    CompilationStatus.RESULT_CODE_NO_PROFILE -> { /* Fallback to JIT */ }
+    RESULT_CODE_COMPILED_WITH_PROFILE -> logSuccess()
+    RESULT_CODE_NO_PROFILE -> logFallbackToJit()
 }
 ```
 
-**5. Бенчмаркинг**:
-```kotlin
-@Test
-fun startup() = benchmarkRule.measureRepeated(
-    packageName = "com.example.app",
-    metrics = listOf(StartupTimingMetric()),
-    startupMode = StartupMode.COLD
-) {
-    pressHome()
-    startActivityAndWait()
-}
-```
+### Критерии качества
 
-### Лучшие Практики
-
-- Покрывайте критические пути (запуск, первый рендер)
-- Размер профиля < 200KB
-- Тестируйте на реальных устройствах
-- Перегенерируйте после рефакторинга
-- Автоматизируйте в CI/CD
+- **Размер профиля** < 200KB (больше замедляет установку)
+- **Покрытие**: Запуск → Первый рендер → Основной user flow
+- **Регенерация**: После рефакторинга или изменения горячих путей
+- **CI/CD**: Автоматическая проверка размера и актуальности профиля
 
 ## Answer (EN)
 
-**Baseline Profiles** instruct Android Runtime to AOT-compile critical code paths at install time, bypassing JIT. This achieves 30-40% faster cold startup.
+**Baseline Profiles** enable AOT-compilation of critical code paths at install time. ART pre-compiles specified methods and classes, bypassing JIT interpretation, achieving 30-40% faster cold startup and reduced jank during first render.
 
-**Without Profile**: Launch → Interpret → JIT gradually
-**With Profile**: Install → AOT critical paths → Fast launch
+**How it works**:
+- **Without Profile**: Launch → Bytecode interpretation → Gradual JIT compilation
+- **With Profile**: Install → AOT-compile critical paths → Instant native code
 
-### Implementation
+### Implementation structure
 
-**1. Profile Generation Module**:
+**1. Profile generation module**:
 ```kotlin
 // baseline-profile/build.gradle.kts
 plugins {
@@ -135,19 +125,22 @@ android {
 }
 ```
 
-**2. Generator**:
+**2. Generation test**:
 ```kotlin
 @Test
-fun generate() = rule.collect(packageName = "com.example.app") {
-    // ✅ Cover critical flows only
+fun generateProfile() = baselineRule.collect(
+    packageName = "com.example.app"
+) {
+    // ✅ Critical scenario: startup + first render
     pressHome()
     startActivityAndWait()
-    device.findObject(By.text("Home")).click()
-    // ❌ Avoid rare user journeys
+    device.findObject(By.res("home_screen")).click()
+
+    // ❌ Don't include rare user journeys
 }
 ```
 
-**3. App Configuration**:
+**3. App configuration**:
 ```kotlin
 // app/build.gradle.kts
 plugins {
@@ -159,59 +152,47 @@ baselineProfile {
 }
 ```
 
-**4. Production Verification**:
+**4. Production verification**:
 ```kotlin
-// ✅ Check profile installation
 val status = ProfileVerifier.getCompilationStatusAsync().get()
 when (status.profileInstallResultCode) {
-    CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> { /* OK */ }
-    CompilationStatus.RESULT_CODE_NO_PROFILE -> { /* Fallback to JIT */ }
+    RESULT_CODE_COMPILED_WITH_PROFILE -> logSuccess()
+    RESULT_CODE_NO_PROFILE -> logFallbackToJit()
 }
 ```
 
-**5. Benchmarking**:
-```kotlin
-@Test
-fun startup() = benchmarkRule.measureRepeated(
-    packageName = "com.example.app",
-    metrics = listOf(StartupTimingMetric()),
-    startupMode = StartupMode.COLD
-) {
-    pressHome()
-    startActivityAndWait()
-}
-```
+### Quality criteria
 
-### Best Practices
-
-- Cover critical paths (startup, first render)
-- Keep profile size < 200KB
-- Test on real devices
-- Regenerate after refactoring
-- Automate in CI/CD
+- **Profile size** < 200KB (larger slows installation)
+- **Coverage**: Startup → First render → Primary user flow
+- **Regeneration**: After refactoring or hot path changes
+- **CI/CD**: Automated size and freshness validation
 
 ## Follow-ups
 
-- How does profile size correlate with compile time and app size?
+- How does profile size correlate with compile time and app size increase?
 - What happens when a profile references methods removed during R8 shrinking?
 - Can you combine baseline profiles with R8 full mode optimization?
-- How do you validate profile effectiveness across different API levels?
+- How do you validate profile effectiveness across different API levels and device tiers?
 - What strategies exist for profiling modularized apps with dynamic feature modules?
 
 ## References
 
 - [[q-android-performance-measurement-tools--android--medium]]
 - [[q-app-startup-optimization--android--medium]]
+- [[c-android-runtime-aot-jit]]
 - https://developer.android.com/topic/performance/baselineprofiles
+- https://developer.android.com/studio/profile/baselineprofiles
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-app-startup-optimization--android--medium]] - Startup optimization fundamentals
+- [[q-app-startup-optimization--android--medium]] - Startup optimization fundamentals before AOT compilation
 
 ### Related (Same Level)
-- [[q-android-performance-measurement-tools--android--medium]] - Macrobenchmark and profiling tools
+- [[q-android-performance-measurement-tools--android--medium]] - Macrobenchmark for profile validation
+- [[q-r8-code-shrinking-optimization--android--medium]] - R8 interaction with baseline profiles
 
 ### Advanced (Harder)
-- Understanding ART compilation strategies and dex2oat internals
-- Analyzing compiler output for profile verification
+- [[q-android-runtime-compilation-strategies--android--hard]] - ART internals: dex2oat, JIT, AOT trade-offs
+- [[q-modularized-app-performance-profiling--android--hard]] - Profile generation for multi-module apps

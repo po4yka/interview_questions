@@ -18,249 +18,216 @@ related:
   - q-dagger-component-dependencies--android--hard
   - q-hilt-components-scope--android--medium
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/di-hilt, difficulty/hard]
+updated: 2025-10-30
+tags: [android/di-hilt, difficulty/hard, dependency-injection, dagger, hilt]
 sources:
   - https://dagger.dev/hilt/components.html
 ---
 # Вопрос (RU)
-> Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между Singleton, кастомными скоупами и unscoped зависимостями. Приведите примеры когда и зачем создавать кастомный скоуп.
+> Как создать и использовать кастомные скоупы в Dagger/Hilt? Объясните разницу между Singleton, кастомными скоупами и unscoped зависимостями. Когда и зачем создавать кастомный скоуп?
 
 # Question (EN)
-> How do you create and use custom scopes in Dagger/Hilt? Explain the difference between Singleton, custom scopes, and unscoped dependencies. Provide examples of when and why you'd create a custom scope.
+> How do you create and use custom scopes in Dagger/Hilt? Explain the difference between Singleton, custom scopes, and unscoped dependencies. When and why would you create a custom scope?
+
+---
 
 ## Ответ (RU)
 
-Кастомные скоупы позволяют создавать зависимости с определенным жизненным циклом для конкретной функциональности.
+Кастомные скоупы позволяют управлять жизненным циклом зависимостей за рамками стандартных Android-компонентов, обеспечивая изоляцию состояния для специфической функциональности.
 
-### Стандартные vs Кастомные Скоупы
+### Типы Скоупов
 
-**Жизненный цикл:**
-- **@Singleton** - один экземпляр на приложение
-- **@ActivityScoped** - один экземпляр на Activity
-- **@FragmentScoped** - один экземпляр на Fragment
-- **Unscoped** - новый экземпляр при каждом запросе
-- **Custom** - определяется разработчиком
+**@Singleton** — единственный экземпляр на всё приложение. Живёт весь жизненный цикл процесса.
+
+**@ActivityScoped / @FragmentScoped** — привязка к Android-компоненту. Экземпляр освобождается с onDestroy.
+
+**Unscoped** — новый объект при каждой инъекции. Не кэшируется компонентом.
+
+**Custom scope** — разработчик контролирует создание и удаление компонента.
 
 ### Создание Кастомного Скоупа
 
-**Определение:**
 ```kotlin
-// ✅ Определяем аннотацию скоупа
+// ✅ Определяем аннотацию
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class UserSessionScope
 
-// ✅ Создаем компонент со скоупом
+// ✅ Создаём компонент
 @UserSessionScope
-@Component(
-    dependencies = [SingletonComponent::class],
-    modules = [UserSessionModule::class]
-)
+@Component(modules = [UserModule::class])
 interface UserSessionComponent {
-    fun inject(activity: UserActivity)
+    fun userManager(): UserManager
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance session: UserSession): UserSessionComponent
+        fun create(@BindsInstance userId: UserId): UserSessionComponent
     }
 }
 
-// ✅ Используем скоуп для зависимостей
+// ✅ Используем скоуп
 @UserSessionScope
-class UserSessionManager @Inject constructor(
-    private val apiService: ApiService,
-    private val session: UserSession
+class UserManager @Inject constructor(
+    private val userId: UserId,
+    private val api: ApiService
 ) {
-    fun logout() { /* ... */ }
-}
-```
-
-### Примеры Применения
-
-**User Session Scope (изоляция по пользователю):**
-```kotlin
-// ✅ Состояние живет пока пользователь авторизован
-@UserSessionScope
-class UserPreferences @Inject constructor() {
-    var theme: String = "light"
-}
-
-@UserSessionScope
-class UserApiClient @Inject constructor(
-    private val token: String
-) { /* ... */ }
-```
-
-**Feature Scope (изоляция по фиче):**
-```kotlin
-// ✅ Состояние живет на протяжении работы фичи
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class FeatureScope
-
-@FeatureScope
-class FeatureStateManager @Inject constructor() {
-    var currentStep: Int = 0
+    // Единственный экземпляр для этого UserSessionComponent
 }
 ```
 
 ### Управление Жизненным Циклом
 
 ```kotlin
-class UserActivity : AppCompatActivity() {
-    private lateinit var component: UserSessionComponent
+object UserSessionHolder {
+    private var component: UserSessionComponent? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ✅ Создаем скоуп при входе пользователя
+    fun login(userId: UserId) {
+        // ✅ Создаём скоуп при логине
         component = DaggerUserSessionComponent.factory()
-            .create(userSession)
+            .create(userId)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // ✅ Компонент и зависимости освобождаются автоматически
+    fun logout() {
+        // ✅ Скоуп освобождается, зависимости GC'атся
+        component = null
     }
+
+    fun get(): UserSessionComponent =
+        component ?: error("User not logged in")
 }
 ```
 
 ### Когда Использовать
 
-**Создавайте кастомный скоуп:**
-- Жизненный цикл отличается от стандартных
-- Нужна изоляция состояния между пользователями/фичами
-- Требуется кэширование на уровне функциональности
+**Создавайте кастомный скоуп для:**
+- Мультипользовательских приложений (скоуп на пользователя)
+- Feature-флоу с тяжёлыми зависимостями (скоуп на фичу)
+- Изоляции состояния между модулями
 
-**Используйте стандартные скоупы:**
-- Жизненный цикл совпадает с Activity/Fragment/App
-- Простые зависимости без сложного состояния
+**Используйте стандартные скоупы для:**
+- Зависимостей, совпадающих с жизненным циклом Activity/Fragment
+- Простого state без кросс-экранной логики
+
+### Сравнение с Hilt
+
+В Hilt кастомные скоупы ограничены. Можно создавать через `@EntryPoint`, но проще использовать встроенные:
+- `@Singleton`, `@ActivityRetainedScoped`, `@ActivityScoped`, `@ViewModelScoped`, `@FragmentScoped`, `@ViewScoped`
+
+Для произвольных скоупов нужен чистый Dagger-компонент вне Hilt-графа.
 
 ## Answer (EN)
 
-Custom scopes allow creating dependencies with specific lifecycles for particular functionality using [[c-dagger]]/[[c-hilt]] [[c-dependency-injection]].
+Custom scopes enable lifecycle management beyond standard Android components, providing state isolation for specific functionality.
 
-### Standard vs Custom Scopes
+### Scope Types
 
-**Lifecycle:**
-- **@Singleton** - one instance for entire application
-- **@ActivityScoped** - one instance per Activity
-- **@FragmentScoped** - one instance per Fragment
-- **Unscoped** - new instance on each request
-- **Custom** - developer-defined
+**@Singleton** — single instance for entire application. Lives for process lifetime.
+
+**@ActivityScoped / @FragmentScoped** — tied to Android component. Instance released on onDestroy.
+
+**Unscoped** — new object on each injection. Not cached by component.
+
+**Custom scope** — developer controls component creation and destruction.
 
 ### Creating Custom Scope
 
-**Definition:**
 ```kotlin
-// ✅ Define scope annotation
+// ✅ Define annotation
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class UserSessionScope
 
-// ✅ Create scoped component
+// ✅ Create component
 @UserSessionScope
-@Component(
-    dependencies = [SingletonComponent::class],
-    modules = [UserSessionModule::class]
-)
+@Component(modules = [UserModule::class])
 interface UserSessionComponent {
-    fun inject(activity: UserActivity)
+    fun userManager(): UserManager
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance session: UserSession): UserSessionComponent
+        fun create(@BindsInstance userId: UserId): UserSessionComponent
     }
 }
 
-// ✅ Use scope for dependencies
+// ✅ Apply scope
 @UserSessionScope
-class UserSessionManager @Inject constructor(
-    private val apiService: ApiService,
-    private val session: UserSession
+class UserManager @Inject constructor(
+    private val userId: UserId,
+    private val api: ApiService
 ) {
-    fun logout() { /* ... */ }
-}
-```
-
-### Use Cases
-
-**User Session Scope (user isolation):**
-```kotlin
-// ✅ State lives while user is authenticated
-@UserSessionScope
-class UserPreferences @Inject constructor() {
-    var theme: String = "light"
-}
-
-@UserSessionScope
-class UserApiClient @Inject constructor(
-    private val token: String
-) { /* ... */ }
-```
-
-**Feature Scope (feature isolation):**
-```kotlin
-// ✅ State lives during feature usage
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class FeatureScope
-
-@FeatureScope
-class FeatureStateManager @Inject constructor() {
-    var currentStep: Int = 0
+    // Single instance for this UserSessionComponent
 }
 ```
 
 ### Lifecycle Management
 
 ```kotlin
-class UserActivity : AppCompatActivity() {
-    private lateinit var component: UserSessionComponent
+object UserSessionHolder {
+    private var component: UserSessionComponent? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ✅ Create scope on user login
+    fun login(userId: UserId) {
+        // ✅ Create scope on login
         component = DaggerUserSessionComponent.factory()
-            .create(userSession)
+            .create(userId)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // ✅ Component and dependencies released automatically
+    fun logout() {
+        // ✅ Scope released, dependencies garbage collected
+        component = null
     }
+
+    fun get(): UserSessionComponent =
+        component ?: error("User not logged in")
 }
 ```
 
 ### When to Use
 
-**Create custom scope when:**
-- Lifecycle differs from standard scopes
-- Need state isolation between users/features
-- Require feature-level caching
+**Create custom scope for:**
+- Multi-user applications (scope per user)
+- Feature flows with heavy dependencies (scope per feature)
+- State isolation between modules
 
-**Use standard scopes when:**
-- Lifecycle matches Activity/Fragment/App
-- Simple dependencies without complex state
+**Use standard scopes for:**
+- Dependencies matching Activity/Fragment lifecycle
+- Simple state without cross-screen logic
+
+### Comparison with Hilt
+
+Hilt limits custom scopes. You can create via `@EntryPoint`, but built-in scopes are simpler:
+- `@Singleton`, `@ActivityRetainedScoped`, `@ActivityScoped`, `@ViewModelScoped`, `@FragmentScoped`, `@ViewScoped`
+
+For arbitrary scopes, use pure Dagger components outside Hilt graph.
+
+---
 
 ## Follow-ups
 
-- How do you handle scope lifecycle in multi-user applications?
-- What are the performance implications of custom scopes?
-- How do you test custom scope dependencies?
+- How do you prevent memory leaks with custom scopes?
+- Can a custom scope depend on another custom scope?
+- How do you test dependencies with custom scopes?
+- What happens if you inject an unscoped dependency into a scoped component?
+- How do you migrate from manual singleton management to custom scopes?
 
 ## References
 
-- [Hilt Components and Scopes](https://dagger.dev/hilt/components.html)
+- [[c-dagger]]
+- [[c-hilt]]
+- [[c-dependency-injection]]
 - [Dagger Scopes Documentation](https://dagger.dev/api/latest/dagger/Scope.html)
+- [Hilt Components and Scopes](https://dagger.dev/hilt/components.html)
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-dagger-build-time-optimization--android--medium]]
+### Prerequisites
+- [[q-hilt-components-scope--android--medium]] - Understanding standard Hilt scopes
+- [[c-dependency-injection]] - DI fundamentals
 
-### Related (Same Level)
-- [[q-hilt-components-scope--android--medium]]
+### Related
+- [[q-dagger-component-dependencies--android--hard]] - Component relationships
+- [[q-dagger-build-time-optimization--android--medium]] - Build performance with scopes
 
-### Advanced (Harder)
-- [[q-dagger-component-dependencies--android--hard]]
+### Advanced
+- Multi-module custom scope architectures
+- Scope composition patterns
+- Memory profiling for scoped dependencies

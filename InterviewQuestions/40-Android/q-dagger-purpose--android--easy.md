@@ -15,7 +15,7 @@ related:
   - q-dagger-inject-annotation--android--easy
   - q-dagger-main-elements--android--medium
 created: 2025-10-20
-updated: 2025-10-27
+updated: 2025-10-30
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources: [https://dagger.dev/]
 ---
@@ -27,31 +27,26 @@ sources: [https://dagger.dev/]
 
 ## Ответ (RU)
 
-**Dagger** - фреймворк для внедрения зависимостей (DI) с проверкой на этапе компиляции, автоматизирующий создание и управление объектами в Android-приложениях.
+**Dagger** - compile-time DI фреймворк, автоматизирующий создание и управление зависимостями в Android-приложениях.
 
-### Основные цели
+### Основные преимущества
 
-- **Слабая связанность** - объекты получают зависимости извне через конструктор или поля
-- **Тестируемость** - легкая замена реальных зависимостей на моки/стабы
-- **Compile-time проверка** - ошибки в графе зависимостей обнаруживаются до запуска приложения
-- **Управление жизненным циклом** - автоматическое создание и переиспользование объектов через scopes
+- **Слабая связанность** - объекты получают зависимости извне
+- **Тестируемость** - простая замена реальных зависимостей на моки
+- **Compile-time проверка** - ошибки графа обнаруживаются до сборки
+- **Управление lifecycle** - автоматическое создание/переиспользование через scopes
 
 ### Проблема без DI
 
 ```kotlin
 class UserRepository {
-    // ❌ Жесткая связанность, невозможно заменить при тестировании
+    // ❌ Жесткая связанность, нельзя заменить при тестировании
     private val api = RetrofitClient.create()
     private val db = Room.databaseBuilder(...)
 }
-
-class MainActivity : AppCompatActivity() {
-    // ❌ Создание зависимостей вручную, дублирование кода
-    private val repository = UserRepository()
-}
 ```
 
-**Проблемы:** тесная связанность, невозможность подмены зависимостей, дублирование логики создания объектов.
+**Проблемы:** тесная связанность, дублирование логики создания, невозможность тестирования.
 
 ### Решение с Dagger
 
@@ -63,55 +58,46 @@ class UserRepository @Inject constructor(
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var repository: UserRepository  // ✅ Dagger внедряет автоматически
+    @Inject lateinit var repository: UserRepository  // ✅ Автоинжект
 }
 ```
 
-**Преимущества:** слабая связанность, легкое тестирование, централизованное управление зависимостями.
+### Hilt - упрощение для Android
 
-### Hilt - упрощенный Dagger для Android
-
-**Hilt** автоматизирует настройку Dagger, предоставляя стандартные компоненты и интеграцию с Android lifecycle:
+**Hilt** автоматизирует настройку Dagger для Android lifecycle:
 
 ```kotlin
 @HiltAndroidApp
 class MyApp : Application()
 
-@AndroidEntryPoint  // ✅ Автоматическая интеграция с Activity/Fragment
+@AndroidEntryPoint  // ✅ Автоинтеграция с Android компонентами
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 }
 ```
 
-См. также: [[c-dependency-injection]]
-
 ## Answer (EN)
 
-**Dagger** is a compile-time dependency injection (DI) framework that automates object creation and management in Android applications.
+**Dagger** is a compile-time DI framework that automates dependency creation and management in Android applications.
 
-### Main Goals
+### Main Benefits
 
-- **Loose coupling** - objects receive dependencies externally via constructor or field injection
-- **Testability** - easy replacement of real dependencies with mocks/stubs
-- **Compile-time validation** - dependency graph errors are caught before runtime
-- **Lifecycle management** - automatic object creation and reuse via scopes
+- **Loose coupling** - objects receive dependencies externally
+- **Testability** - easy mocking of real dependencies
+- **Compile-time validation** - dependency graph errors caught before runtime
+- **Lifecycle management** - automatic creation/reuse via scopes
 
 ### Problem without DI
 
 ```kotlin
 class UserRepository {
-    // ❌ Tight coupling, impossible to replace during testing
+    // ❌ Tight coupling, cannot test
     private val api = RetrofitClient.create()
     private val db = Room.databaseBuilder(...)
 }
-
-class MainActivity : AppCompatActivity() {
-    // ❌ Manual dependency creation, code duplication
-    private val repository = UserRepository()
-}
 ```
 
-**Issues:** tight coupling, cannot substitute dependencies, duplication of object creation logic.
+**Issues:** tight coupling, duplication of creation logic, impossible to test.
 
 ### Solution with Dagger
 
@@ -123,27 +109,23 @@ class UserRepository @Inject constructor(
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var repository: UserRepository  // ✅ Dagger injects automatically
+    @Inject lateinit var repository: UserRepository  // ✅ Auto-injected
 }
 ```
 
-**Benefits:** loose coupling, easy testing, centralized dependency management.
+### Hilt - Android Simplification
 
-### Hilt - Simplified Dagger for Android
-
-**Hilt** automates Dagger setup by providing standard components and Android lifecycle integration:
+**Hilt** automates Dagger setup for Android lifecycle:
 
 ```kotlin
 @HiltAndroidApp
 class MyApp : Application()
 
-@AndroidEntryPoint  // ✅ Automatic integration with Activity/Fragment
+@AndroidEntryPoint  // ✅ Auto-integration with Android components
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository
 }
 ```
-
-See also: [[c-dependency-injection]]
 
 ## Follow-ups
 
@@ -151,6 +133,7 @@ See also: [[c-dependency-injection]]
 - How does compile-time validation work in Dagger?
 - What are scopes and how do they manage object lifecycle?
 - How would you test a class with Dagger dependencies?
+- When should you use constructor injection vs field injection?
 
 ## References
 

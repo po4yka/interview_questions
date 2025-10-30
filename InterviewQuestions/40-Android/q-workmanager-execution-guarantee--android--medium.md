@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/background-execution, android/service, workmanager, background-tasks, reliability, difficulty/medium]
+date created: Wednesday, October 29th 2025, 1:03:11 pm
+date modified: Thursday, October 30th 2025, 11:51:07 am
 ---
+
 # Вопрос (RU)
 
 Как WorkManager гарантирует выполнение задач?

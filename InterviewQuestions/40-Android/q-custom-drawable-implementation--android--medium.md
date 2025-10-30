@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-canvas-drawing-optimization--android--hard, q-custom-viewgroup-layout--android--hard]
 created: 2025-10-21
-updated: 2025-10-27
+updated: 2025-10-30
 tags: [android/ui-graphics, android/ui-views, difficulty/medium]
-sources: ["https://developer.android.com/reference/android/graphics/drawable/Drawable"]
+sources: []
 ---
 
 # Вопрос (RU)
@@ -28,68 +28,29 @@ sources: ["https://developer.android.com/reference/android/graphics/drawable/Dra
 ## Ответ (RU)
 
 ### Что такое Custom Drawable
-- Легковесная переиспользуемая графика для нескольких View
-- Эффективнее, чем кастомная View для простой графики без взаимодействия
-- Управляется системой Android, не требует сложного жизненного цикла
+Легковесный переиспользуемый графический примитив для отображения в нескольких View. Эффективнее кастомной View для простой неинтерактивной графики — не требует сложного жизненного цикла, управляется системой.
 
-Связано с концептами [[c-custom-views]], c-canvas-drawing и [[c-lifecycle]].
+**Когда использовать Drawable**: неинтерактивная графика (иконки, фоны), переиспользование в разных View, простые формы и анимации.
 
-### Drawable vs Custom View
+**Когда использовать Custom View**: обработка касаний, сложный жизненный цикл, требования доступности, координация анимаций.
 
-| Характеристика | Drawable | Custom View |
-|---------|----------|-------------|
-| **Случай использования** | Простая графика, иконки | Интерактивные UI элементы |
-| **Производительность** | Легковесная | Тяжелая (полноценная View) |
-| **Взаимодействие** | Без обработки касаний | Полная поддержка касаний |
-| **Жизненный цикл** | Простой | Сложный (attach/detach) |
-| **Переиспользуемость** | Высокая | Ниже |
-| **Состояние** | Ограниченное | Полное управление состоянием |
+### Ключевые методы
 
-**Используйте Drawable когда:**
-- Неинтерактивная графика
-- Переиспользование в разных View
-- Простые формы/анимации
-- Фоновая/передняя графика
+**draw(canvas: Canvas)** — основной метод отрисовки, вызывается системой.
 
-**Используйте Custom View когда:**
-- Нужно взаимодействие с касаниями
-- Сложный жизненный цикл
-- Требования доступности
-- Координация анимаций
+**setBounds()** — устанавливает область рисования (координаты и размер).
 
-### Жизненный цикл Drawable
-1. **Создание** - конструктор или фабричные методы
-2. **Установка границ** - `setBounds()` определяет область рисования
-3. **Отрисовка** - `draw()` вызывается системой
-4. **Изменения состояния** - `setState()` для обновления внешнего вида
-5. **Очистка** - автоматическое управление памятью
+**getOpacity()** — возвращает прозрачность (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT).
 
-### Ключевые методы для переопределения
+**setAlpha(alpha: Int)** — устанавливает альфа-канал.
 
-**draw(canvas: Canvas)**
-- Основной метод отрисовки
-- Вызывается системой для рендеринга
-
-**setBounds()**
-- Устанавливает границы области рисования
-- Определяет где и какого размера рисовать
-
-**getOpacity()**
-- Возвращает прозрачность drawable
-- PixelFormat.OPAQUE, TRANSLUCENT, TRANSPARENT
-
-**setAlpha(alpha: Int)**
-- Устанавливает альфа-канал
-- Влияет на прозрачность
-
-**setColorFilter(colorFilter: ColorFilter?)**
-- Применяет цветовой фильтр
-- Для тонирования и цветовых эффектов
+**setColorFilter(colorFilter: ColorFilter?)** — применяет цветовой фильтр для тонирования.
 
 ### Минимальная реализация
 
 ```kotlin
 class CircleDrawable : Drawable() {
+    // ✅ Кэшируем Paint — создаем один раз
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.BLUE
@@ -99,16 +60,16 @@ class CircleDrawable : Drawable() {
         get() = paint.color
         set(value) {
             paint.color = value
-            invalidateSelf() // Запрос перерисовки
+            invalidateSelf() // ✅ Запрос перерисовки
         }
 
     override fun draw(canvas: Canvas) {
-        val bounds = bounds
-        val centerX = bounds.centerX().toFloat()
-        val centerY = bounds.centerY().toFloat()
         val radius = min(bounds.width(), bounds.height()) / 2f
-
-        canvas.drawCircle(centerX, centerY, radius, paint)
+        canvas.drawCircle(
+            bounds.centerX().toFloat(),
+            bounds.centerY().toFloat(),
+            radius, paint
+        )
     }
 
     override fun setAlpha(alpha: Int) {
@@ -129,6 +90,11 @@ class CircleDrawable : Drawable() {
 }
 ```
 
+**Критичные моменты**:
+- Paint создается один раз, не в draw() — иначе аллокации на каждом фрейме
+- invalidateSelf() запрашивает перерисовку при изменении состояния
+- intrinsic размеры определяют дефолтные размеры для wrap_content
+
 ### Управление состоянием
 
 ```kotlin
@@ -137,7 +103,7 @@ class StatefulDrawable : Drawable() {
     private var isPressed = false
 
     override fun draw(canvas: Canvas) {
-        // ✅ Оптимально: выбор цвета по состоянию
+        // ✅ Выбор цвета по состоянию
         paint.color = if (isPressed) Color.RED else Color.BLUE
         canvas.drawRect(bounds, paint)
     }
@@ -148,117 +114,88 @@ class StatefulDrawable : Drawable() {
 
         if (wasPressed != isPressed) {
             invalidateSelf()
-            return true
+            return true // Состояние изменилось
         }
         return false
     }
 
     override fun isStateful(): Boolean = true
-
-    // ... остальные методы
 }
 ```
 
-### Анимированный Drawable
+**setState()** вызывается системой при изменении состояния View (pressed, focused, selected). Возвращайте true только если состояние реально изменилось — это триггерит перерисовку.
+
+### Анимация
 
 ```kotlin
-class AnimatedDrawable : Drawable() {
+class PulsingDrawable : Drawable() {
     private val paint = Paint()
-    private var animationProgress = 0f
+    private var scale = 1f
 
     override fun draw(canvas: Canvas) {
-        val bounds = bounds
-        val animatedRadius = bounds.width() * animationProgress / 2
-
+        val radius = min(bounds.width(), bounds.height()) / 2f * scale
         canvas.drawCircle(
             bounds.centerX().toFloat(),
             bounds.centerY().toFloat(),
-            animatedRadius,
-            paint
+            radius, paint
         )
     }
 
     fun startAnimation() {
-        // Использование ValueAnimator
-        ValueAnimator.ofFloat(0f, 1f).apply {
+        ValueAnimator.ofFloat(1f, 1.5f, 1f).apply {
             duration = 1000
+            repeatCount = ValueAnimator.INFINITE
             addUpdateListener { animator ->
-                animationProgress = animator.animatedValue as Float
-                invalidateSelf()
+                scale = animator.animatedValue as Float
+                invalidateSelf() // ✅ Перерисовка на каждом фрейме
             }
             start()
         }
     }
-
-    // ... остальные методы
 }
 ```
 
 ### Лучшие практики
 
-1. **Используйте Paint.ANTI_ALIAS_FLAG** для гладких краёв
-2. **Кэшируйте Paint объекты** - не создавайте в draw()
-3. **Вызывайте invalidateSelf()** при изменении внешнего вида
-4. **Реализуйте intrinsic размеры** для правильной разметки
-5. **Обрабатывайте состояния** через setState() для интерактивности
-6. **Избегайте сложных вычислений** в draw() - предварительно вычисляйте
-7. **Используйте правильные границы** через свойство bounds
+1. **Кэшируйте Paint** — не создавайте в draw(), это аллокации на каждом фрейме
+2. **Вызывайте invalidateSelf()** при изменении внешнего вида
+3. **Реализуйте intrinsic размеры** для корректной работы с wrap_content
+4. **Избегайте вычислений в draw()** — предварительно вычисляйте в setBounds()
+5. **Правильно обрабатывайте bounds** — система может их изменить
 
 ### Подводные камни
 
-- **Не создавайте объекты в draw()** - влияет на производительность
-- **Правильно обрабатывайте bounds** - система может их изменить
-- **Помните о прозрачности** - корректно реализуйте getOpacity()
-- **Не забывайте invalidateSelf()** при изменениях
-- **Тестируйте на разных размерах** - intrinsic размеры важны
+- **Аллокации в draw()** — критично для производительности, вызывается каждый фрейм
+- **Забыт invalidateSelf()** — изменения не отрисуются
+- **Игнорирование bounds** — неверный размер/позиция
+- **Неверный getOpacity()** — влияет на оптимизацию рендеринга
 
 ## Answer (EN)
 
 ### What is Custom Drawable
-- Lightweight, reusable graphics for multiple views
-- More efficient than custom View for simple graphics without interaction
-- Managed by Android system, no complex lifecycle needed
+Lightweight reusable graphic primitive for display in multiple Views. More efficient than Custom View for simple non-interactive graphics — no complex lifecycle needed, managed by system.
 
-Related to concepts [[c-custom-views]], c-canvas-drawing, and [[c-lifecycle]].
+**When to use Drawable**: non-interactive graphics (icons, backgrounds), reuse across Views, simple shapes and animations.
 
-### Drawable vs Custom View
+**When to use Custom View**: touch handling, complex lifecycle, accessibility requirements, animation coordination.
 
-| Feature | Drawable | Custom View |
-|---------|----------|-------------|
-| **Use case** | Simple graphics, icons | Interactive UI elements |
-| **Performance** | Lightweight | Heavier (full View) |
-| **Interaction** | No touch handling | Full touch support |
-| **Lifecycle** | Simple | Complex (attach/detach) |
-| **Reusability** | High | Lower |
+### Key Methods
 
-**Use Drawable when:** non-interactive graphics, reusable across views, simple shapes/animations.
+**draw(canvas: Canvas)** — main drawing method called by system.
 
-**Use Custom View when:** need touch interaction, complex lifecycle, accessibility requirements.
+**setBounds()** — sets drawing area (coordinates and size).
 
-### Drawable Lifecycle
-1. **Creation** - constructor or factory methods
-2. **Bounds setting** - `setBounds()` defines drawing area
-3. **Drawing** - `draw()` called by system
-4. **State changes** - `setState()` for appearance updates
-5. **Cleanup** - automatic memory management
+**getOpacity()** — returns transparency (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT).
 
-### Key Methods to Override
+**setAlpha(alpha: Int)** — sets alpha channel.
 
-**draw(canvas: Canvas)** - Main drawing method called by system for rendering
-
-**setBounds()** - Sets drawing area boundaries, defines where and how big to draw
-
-**getOpacity()** - Returns drawable transparency (PixelFormat.OPAQUE, TRANSLUCENT, TRANSPARENT)
-
-**setAlpha(alpha: Int)** - Sets alpha channel for transparency
-
-**setColorFilter(colorFilter: ColorFilter?)** - Applies color filter for tinting
+**setColorFilter(colorFilter: ColorFilter?)** — applies color filter for tinting.
 
 ### Minimal Implementation
 
 ```kotlin
 class CircleDrawable : Drawable() {
-    // ✅ Cache Paint - create once, reuse
+    // ✅ Cache Paint — create once
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.BLUE
@@ -292,8 +229,16 @@ class CircleDrawable : Drawable() {
 
     @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+
+    override fun getIntrinsicWidth(): Int = 48
+    override fun getIntrinsicHeight(): Int = 48
 }
 ```
+
+**Critical points**:
+- Paint created once, not in draw() — otherwise allocations every frame
+- invalidateSelf() requests redraw on state change
+- intrinsic sizes define default dimensions for wrap_content
 
 ### State Management
 
@@ -303,7 +248,7 @@ class StatefulDrawable : Drawable() {
     private var isPressed = false
 
     override fun draw(canvas: Canvas) {
-        // ✅ Optimal: select color by state
+        // ✅ Select color by state
         paint.color = if (isPressed) Color.RED else Color.BLUE
         canvas.drawRect(bounds, paint)
     }
@@ -314,7 +259,7 @@ class StatefulDrawable : Drawable() {
 
         if (wasPressed != isPressed) {
             invalidateSelf()
-            return true
+            return true // State changed
         }
         return false
     }
@@ -323,30 +268,62 @@ class StatefulDrawable : Drawable() {
 }
 ```
 
+**setState()** called by system when View state changes (pressed, focused, selected). Return true only if state actually changed — this triggers redraw.
+
+### Animation
+
+```kotlin
+class PulsingDrawable : Drawable() {
+    private val paint = Paint()
+    private var scale = 1f
+
+    override fun draw(canvas: Canvas) {
+        val radius = min(bounds.width(), bounds.height()) / 2f * scale
+        canvas.drawCircle(
+            bounds.centerX().toFloat(),
+            bounds.centerY().toFloat(),
+            radius, paint
+        )
+    }
+
+    fun startAnimation() {
+        ValueAnimator.ofFloat(1f, 1.5f, 1f).apply {
+            duration = 1000
+            repeatCount = ValueAnimator.INFINITE
+            addUpdateListener { animator ->
+                scale = animator.animatedValue as Float
+                invalidateSelf() // ✅ Redraw every frame
+            }
+            start()
+        }
+    }
+}
+```
+
 ### Best Practices
 
-1. **Use Paint.ANTI_ALIAS_FLAG** for smooth edges
-2. **Cache Paint objects** - don't create in draw()
-3. **Call invalidateSelf()** when appearance changes
-4. **Implement intrinsic sizes** for proper layout
-5. **Avoid complex calculations** in draw() - precompute
+1. **Cache Paint** — don't create in draw(), causes allocations every frame
+2. **Call invalidateSelf()** when appearance changes
+3. **Implement intrinsic sizes** for correct wrap_content behavior
+4. **Avoid calculations in draw()** — precompute in setBounds()
+5. **Handle bounds correctly** — system may change them
 
 ### Pitfalls
 
-- **Don't create objects in draw()** - affects performance
-- **Handle bounds correctly** - system may change them
-- **Remember invalidateSelf()** on changes
-- **Test on different sizes** - intrinsic sizes matter
+- **Allocations in draw()** — critical for performance, called every frame
+- **Forgot invalidateSelf()** — changes won't render
+- **Ignoring bounds** — wrong size/position
+- **Wrong getOpacity()** — affects rendering optimization
 
 ---
 
 ## Follow-ups
 
 - How to implement compound drawables using LayerDrawable or DrawableContainer?
-- When should you use VectorDrawable instead of custom Drawable?
-- How to handle density-independent sizing in custom Drawables?
-- What are the performance implications of complex draw() operations?
-- How to implement animated state transitions in Drawable?
+- When should you use VectorDrawable vs custom Drawable for scalable graphics?
+- How to properly handle density-independent sizing in custom Drawables?
+- What are performance trade-offs of complex draw() operations vs bitmap caching?
+- How to implement animated state transitions (StateListAnimator equivalent)?
 
 ## References
 
@@ -354,18 +331,18 @@ class StatefulDrawable : Drawable() {
 - [[c-canvas-drawing]] - Canvas drawing fundamentals
 - [[c-lifecycle]] - Android component lifecycle
 - [Drawable API Reference](https://developer.android.com/reference/android/graphics/drawable/Drawable)
-- [Custom Drawables Guide](https://developer.android.com/guide/topics/graphics/drawables)
+- [Custom Drawables Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
 ## Related Questions
 
 ### Prerequisites
 - [[q-canvas-drawing-basics--android--easy]] - Basic Canvas drawing operations
-- [[q-paint-and-canvas-api--android--easy]] - Understanding Paint and Canvas
+- [[q-paint-and-canvas-api--android--easy]] - Understanding Paint and Canvas API
 
 ### Related
-- [[q-custom-viewgroup-layout--android--hard]] - Custom ViewGroup implementation
 - [[q-vector-drawable-usage--android--medium]] - VectorDrawable vs custom Drawable
+- [[q-custom-view-basics--android--medium]] - When to use Custom View instead
 
 ### Advanced
 - [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas optimization techniques
-- [[q-hardware-acceleration-layers--android--hard]] - Hardware acceleration and layer types
+- [[q-custom-viewgroup-layout--android--hard]] - Custom ViewGroup implementation

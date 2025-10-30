@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/background-execution, android/coroutines, background-processing, coroutines, livedata, workmanager, difficulty/medium]
+date created: Wednesday, October 29th 2025, 1:01:15 pm
+date modified: Thursday, October 30th 2025, 11:51:06 am
 ---
+
 # Вопрос (RU)
 
 Как вернуть результат работы WorkManager в приложение?

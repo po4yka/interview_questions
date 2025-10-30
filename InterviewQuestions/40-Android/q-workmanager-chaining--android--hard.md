@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, android/background-execution, android/coroutines, workmanager, background, difficulty/hard]
+date created: Monday, October 27th 2025, 6:44:39 pm
+date modified: Thursday, October 30th 2025, 11:51:10 am
 ---
+
 # Вопрос (RU)
 
 > Объясните продвинутые паттерны цепочек WorkManager. Как реализовать параллельное выполнение, последовательные цепи и сложные графы зависимостей? Каковы best practices для обработки ошибок и передачи данных между воркерами?

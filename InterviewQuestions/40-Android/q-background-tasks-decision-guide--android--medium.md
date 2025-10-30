@@ -1,7 +1,7 @@
 ---
 id: 20251012-122786
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
-aliases: ["Background Tasks Decision Guide", "Руководство по фоновым задачам"]
+aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам]
 topic: android
 subtopics: [background-execution, coroutines, service]
 question_kind: android
@@ -10,10 +10,10 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-workmanager--android--medium, q-foreground-service-types--android--medium, q-async-operations-android--android--medium, c-coroutines]
+related: [q-what-is-workmanager--android--medium, q-foreground-service-types--android--medium, q-async-operations-android--android--medium, c-coroutines, c-service]
 sources: []
 created: 2025-10-05
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
 ---
 
@@ -29,28 +29,11 @@ tags: [android/background-execution, android/coroutines, android/service, diffic
 
 ## Ответ (RU)
 
-**Подход**: Выбор определяется тремя критериями: необходимость продолжения в фоне, возможность отложенного выполнения, критичность задачи.
-
-**Категории фоновых задач**:
-
-1. **Асинхронная работа** (coroutines/threads)
-   - Выполнение только при активном приложении
-   - Автоматическая отмена при уничтожении lifecycle scope
-   - Применение: загрузка данных, вычисления для UI
-
-2. **Отложенные задачи** (WorkManager)
-   - Гарантированное выполнение после закрытия приложения
-   - Соблюдение системных ограничений (сеть, батарея, Doze Mode)
-   - Применение: синхронизация, загрузка контента, очистка кэша
-
-3. **Foreground Services**
-   - Немедленное выполнение с обязательным уведомлением
-   - Строгие ограничения типов
-   - Применение: воспроизведение медиа, навигация, отслеживание тренировки
+**Подход**: Выбор механизма определяется тремя критериями — необходимость продолжения после закрытия UI, возможность отложенного выполнения, критичность немедленного старта.
 
 **Дерево решений**:
 ```
-Нужно продолжать в фоне? → НЕТ → Coroutines
+Нужно продолжать в фоне? → НЕТ → Coroutines (viewModelScope/lifecycleScope)
                         ↓ ДА
 Можно отложить? → ДА → WorkManager
                 ↓ НЕТ
@@ -61,26 +44,37 @@ tags: [android/background-execution, android/coroutines, android/service, diffic
                           → Regular Foreground Service
 ```
 
+**Категории**:
+
+**1. Coroutines (lifecycle-aware)**
+- Автоматическая отмена при уничтожении scope
+- Применение: загрузка данных UI, вычисления для экрана
+
+**2. WorkManager (отложенные задачи)**
+- Гарантированное выполнение с учетом ограничений системы (сеть, батарея, Doze Mode)
+- Применение: синхронизация, периодические загрузки, очистка кэша
+
+**3. Foreground Services (немедленное выполнение)**
+- Обязательное уведомление и строгие ограничения типов
+- Применение: медиа, навигация, отслеживание активности
+
 **Код**:
 
 ```kotlin
-// ✅ Coroutines: lifecycle-aware асинхронность
+// ✅ Coroutines: автоматическая отмена
 viewModelScope.launch {
-    // ✅ Автоматическая отмена при уничтожении ViewModel
     val result = withContext(Dispatchers.IO) {
         repository.fetchData()
     }
     _uiState.value = result
 }
-
-// ❌ Неправильно: GlobalScope живет вечно
-GlobalScope.launch { /* ❌ утечка памяти */ }
+// ❌ GlobalScope живет вечно — утечка памяти
 
 // ✅ WorkManager: отложенная задача с ограничениями
 val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
     .setConstraints(
         Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED) // только Wi-Fi
+            .setRequiredNetworkType(NetworkType.UNMETERED)
             .setRequiresBatteryNotLow(true)
             .build()
     )
@@ -103,49 +97,24 @@ class FileTransferService : Service() {
         return START_NOT_STICKY
     }
 }
-
-// ❌ Неправильно: обычный сервис для длительной работы
-class BadService : Service() {
-    override fun onStartCommand(...): Int {
-        // ❌ будет убит системой без foreground статуса
-        doLongRunningWork()
-        return START_STICKY
-    }
-}
+// ❌ Обычный Service будет убит системой без foreground статуса
 ```
 
 **Ключевые моменты**:
-- **Coroutines**: используйте `viewModelScope` / `lifecycleScope` для автоматической отмены
-- **WorkManager**: гарантирует выполнение даже после перезагрузки устройства
-- **ShortService**: требует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` и завершение <3 мин
-- **Избегайте**: обычных Service без foreground режима для любых задач >1 сек
+- **Coroutines**: используйте структурированные scope (`viewModelScope`, `lifecycleScope`) для автоотмены
+- **WorkManager**: гарантирует выполнение даже после перезагрузки устройства, соблюдает Doze Mode
+- **ShortService**: требует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` и завершение до 3 минут
+- **Избегайте**: обычных Service без foreground режима для задач длительнее 1 секунды
 
 ---
 
 ## Answer (EN)
 
-**Approach**: Selection is driven by three criteria: background continuation requirement, deferability, and task criticality.
-
-**Background Task Categories**:
-
-1. **Asynchronous work** (coroutines/threads)
-   - Execution only while app is active
-   - Automatic cancellation on lifecycle scope destruction
-   - Use cases: data loading, UI computations
-
-2. **Deferred tasks** (WorkManager)
-   - Guaranteed execution after app termination
-   - Respects system constraints (network, battery, Doze Mode)
-   - Use cases: synchronization, content downloads, cache cleanup
-
-3. **Foreground Services**
-   - Immediate execution with mandatory notification
-   - Strict type restrictions
-   - Use cases: media playback, navigation, workout tracking
+**Approach**: Selection is driven by three criteria — background continuation requirement, deferability, and criticality of immediate start.
 
 **Decision tree**:
 ```
-Need background continuation? → NO → Coroutines
+Need background continuation? → NO → Coroutines (viewModelScope/lifecycleScope)
                              ↓ YES
 Can be deferred? → YES → WorkManager
                  ↓ NO
@@ -156,26 +125,37 @@ Short task (<3 min)? → YES → ShortService
                      → Regular Foreground Service
 ```
 
+**Categories**:
+
+**1. Coroutines (lifecycle-aware)**
+- Automatic cancellation on scope destruction
+- Use cases: UI data loading, screen computations
+
+**2. WorkManager (deferred tasks)**
+- Guaranteed execution respecting system constraints (network, battery, Doze Mode)
+- Use cases: synchronization, periodic downloads, cache cleanup
+
+**3. Foreground Services (immediate execution)**
+- Mandatory notification and strict type restrictions
+- Use cases: media playback, navigation, activity tracking
+
 **Code**:
 
 ```kotlin
-// ✅ Coroutines: lifecycle-aware asynchronicity
+// ✅ Coroutines: automatic cancellation
 viewModelScope.launch {
-    // ✅ Automatic cancellation on ViewModel destruction
     val result = withContext(Dispatchers.IO) {
         repository.fetchData()
     }
     _uiState.value = result
 }
-
-// ❌ Wrong: GlobalScope lives forever
-GlobalScope.launch { /* ❌ memory leak */ }
+// ❌ GlobalScope lives forever — memory leak
 
 // ✅ WorkManager: deferred task with constraints
 val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
     .setConstraints(
         Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED) // Wi-Fi only
+            .setRequiredNetworkType(NetworkType.UNMETERED)
             .setRequiresBatteryNotLow(true)
             .build()
     )
@@ -198,36 +178,30 @@ class FileTransferService : Service() {
         return START_NOT_STICKY
     }
 }
-
-// ❌ Wrong: regular service for long-running work
-class BadService : Service() {
-    override fun onStartCommand(...): Int {
-        // ❌ will be killed by system without foreground status
-        doLongRunningWork()
-        return START_STICKY
-    }
-}
+// ❌ Regular Service will be killed by system without foreground status
 ```
 
 **Key points**:
-- **Coroutines**: use `viewModelScope` / `lifecycleScope` for automatic cancellation
-- **WorkManager**: guarantees execution even after device reboot
-- **ShortService**: requires `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` type and completion <3 min
-- **Avoid**: regular Services without foreground mode for any tasks >1 sec
+- **Coroutines**: use structured scopes (`viewModelScope`, `lifecycleScope`) for auto-cancellation
+- **WorkManager**: guarantees execution even after device reboot, respects Doze Mode
+- **ShortService**: requires `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` type and completion within 3 minutes
+- **Avoid**: regular Services without foreground mode for tasks longer than 1 second
 
 ---
 
 ## Follow-ups
 
-- How does Doze Mode affect WorkManager and foreground services differently?
-- What happens to ShortService if execution exceeds 3 minutes?
-- When should you use `ExactAlarmPermission` vs WorkManager for time-sensitive tasks?
+- How does Doze Mode affect WorkManager execution timing and constraints?
+- What happens to ShortService if execution exceeds 3 minutes timeout?
+- When to use ExactAlarmPermission vs WorkManager for time-sensitive operations?
 - How to implement graceful degradation when foreground service permission is denied?
-- What are the implications of using `START_STICKY` vs `START_NOT_STICKY` in services?
+- What are the battery implications of using START_STICKY vs START_NOT_STICKY?
 
 ## References
 
 - [[c-coroutines]]
+- [[c-service]]
+- [[c-workmanager]]
 - https://developer.android.com/develop/background-work/background-tasks
 - https://developer.android.com/develop/background-work/services/foreground-services
 

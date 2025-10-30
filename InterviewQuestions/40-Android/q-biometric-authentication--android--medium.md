@@ -16,7 +16,7 @@ related:
   - q-app-security-best-practices--android--medium
 sources: []
 created: 2025-10-12
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/permissions, android/keystore-crypto, biometric, authentication, difficulty/medium]
 ---
 
@@ -30,219 +30,255 @@ tags: [android/permissions, android/keystore-crypto, biometric, authentication, 
 
 ## Ответ (RU)
 
-### Обзор
+**Подход**: AndroidX Biometric предоставляет единый API для биометрии (отпечаток, лицо, радужка) с обратной совместимостью. Ключевые компоненты: `BiometricPrompt` (UI + callbacks), `BiometricManager` (проверка доступности), `CryptoObject` (привязка к Keystore).
 
-AndroidX Biometric предоставляет единый API для биометрической аутентификации (отпечаток, лицо, радужка) с поддержкой всех версий Android.
-
-**Компоненты**: `BiometricPrompt` (UI + callbacks), `BiometricManager` (проверка доступности), `CryptoObject` (привязка к Keystore).
-
-### Базовая Реализация
+### 1. Базовая Реализация
 
 ```kotlin
-// ✅ Setup с fallback на device credential
+// ✅ BiometricPrompt с fallback на device credential
+val executor = ContextCompat.getMainExecutor(context)
 val prompt = BiometricPrompt(
-    this, ContextCompat.getMainExecutor(this),
+    activity,
+    executor,
     object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-            // Успешная аутентификация
+        override fun onAuthenticationSucceeded(
+            result: BiometricPrompt.AuthenticationResult
+        ) {
+            // Успех: cryptoObject?.cipher для шифрования
         }
+
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-            // Обработка ошибок
+            when (errorCode) {
+                ERROR_LOCKOUT -> showRetryLater()
+                ERROR_LOCKOUT_PERMANENT -> showDeviceCredential()
+                ERROR_NO_BIOMETRICS -> navigateToEnrollment()
+            }
         }
     }
 )
 
 val promptInfo = BiometricPrompt.PromptInfo.Builder()
     .setTitle("Вход в приложение")
+    .setSubtitle("Используйте биометрию")
     .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
     .build()
 
 prompt.authenticate(promptInfo)
 ```
 
-### Типы Аутентификаторов
+### 2. Типы Аутентификаторов
+
+**Выбор по назначению**:
+- `BIOMETRIC_STRONG` — Class 3 (отпечаток, лицо), поддерживает `CryptoObject`, для криптографии
+- `BIOMETRIC_WEAK` — Class 2, НЕ поддерживает `CryptoObject`, для обычной аутентификации
+- `DEVICE_CREDENTIAL` — PIN/pattern/password, fallback для биометрии
 
 ```kotlin
-// ✅ Проверка доступности BIOMETRIC_STRONG (для чувствительных операций)
-val manager = BiometricManager.from(this)
+// ✅ Проверка доступности перед запросом
+val manager = BiometricManager.from(context)
 when (manager.canAuthenticate(BIOMETRIC_STRONG)) {
     BIOMETRIC_SUCCESS -> showBiometricPrompt()
-    BIOMETRIC_ERROR_NONE_ENROLLED -> showEnrollmentPrompt()
+    BIOMETRIC_ERROR_NONE_ENROLLED -> {
+        // Предложить зарегистрировать биометрию
+        val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+            putExtra(EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED, BIOMETRIC_STRONG)
+        }
+        startActivity(enrollIntent)
+    }
     else -> showPasswordFallback()
 }
-
-// ❌ BIOMETRIC_WEAK — не поддерживает CryptoObject
-val authenticators = BIOMETRIC_WEAK or DEVICE_CREDENTIAL
 ```
 
-### Интеграция с Keystore
+### 3. Интеграция с Keystore
+
+**Для критичных операций** (шифрование токенов, паролей):
 
 ```kotlin
-// ✅ Генерация ключа, привязанного к биометрии
+// ✅ Генерация ключа с биометрической привязкой
 private fun generateBiometricKey(): SecretKey {
     val keyGen = KeyGenerator.getInstance(KEY_ALGORITHM_AES, "AndroidKeyStore")
     keyGen.init(
-        KeyGenParameterSpec.Builder("biometric_key", PURPOSE_ENCRYPT or PURPOSE_DECRYPT)
+        KeyGenParameterSpec.Builder(
+            "biometric_key",
+            PURPOSE_ENCRYPT or PURPOSE_DECRYPT
+        )
             .setBlockModes(BLOCK_MODE_CBC)
             .setEncryptionPaddings(ENCRYPTION_PADDING_PKCS7)
             .setUserAuthenticationRequired(true)
-            .setInvalidatedByBiometricEnrollment(true) // Инвалидация при изменении
+            .setInvalidatedByBiometricEnrollment(true)  // ❗ Ключ инвалидируется при изменении биометрии
             .build()
     )
     return keyGen.generateKey()
 }
 
-// ✅ Использование CryptoObject для шифрования
-private fun authenticateWithCrypto() {
+// ✅ Использование CryptoObject
+fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
     val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
     cipher.init(Cipher.ENCRYPT_MODE, generateBiometricKey())
 
-    biometricPrompt.authenticate(
-        BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Шифрование данных")
-            .setNegativeButtonText("Отмена")
-            .build(),
-        BiometricPrompt.CryptoObject(cipher)
-    )
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Шифрование данных")
+        .setNegativeButtonText("Отмена")
+        .build()
+
+    biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
 }
 ```
 
-### Обработка Ошибок
+**Важно**: При `setInvalidatedByBiometricEnrollment(true)` ключ удаляется, если пользователь добавляет/удаляет отпечатки → нужен механизм перегенерации.
 
-```kotlin
-// ✅ Обработка основных сценариев
-override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-    when (errorCode) {
-        ERROR_LOCKOUT -> showError("Слишком много попыток")
-        ERROR_LOCKOUT_PERMANENT -> showPasswordFallback()
-        ERROR_NO_BIOMETRICS -> showEnrollmentPrompt()
-        ERROR_USER_CANCELED -> { /* Пользователь отменил */ }
-    }
-}
-```
+### 4. Best Practices
+
+**Обработка ошибок**:
+- `ERROR_LOCKOUT` (30 сек) → показать таймер
+- `ERROR_LOCKOUT_PERMANENT` → только device credential
+- `ERROR_NO_BIOMETRICS` → предложить регистрацию
+- `ERROR_USER_CANCELED` → не спамить, запомнить выбор
+
+**UX**:
+- Не показывать биометрию каждый раз — timeout (напр., 5 мин после успешной аутентификации)
+- Всегда предоставлять альтернативу (PIN/password)
+- Для `BIOMETRIC_STRONG or DEVICE_CREDENTIAL` не нужна кнопка Cancel (система покажет fallback)
 
 ## Answer (EN)
 
-### Overview
+**Approach**: AndroidX Biometric provides unified API for biometrics (fingerprint, face, iris) with backward compatibility. Key components: `BiometricPrompt` (UI + callbacks), `BiometricManager` (availability check), `CryptoObject` (Keystore binding).
 
-AndroidX Biometric provides unified API for biometric authentication (fingerprint, face, iris) with backward compatibility across Android versions.
-
-**Components**: `BiometricPrompt` (UI + callbacks), `BiometricManager` (availability check), `CryptoObject` (Keystore binding).
-
-### Basic Implementation
+### 1. Basic Implementation
 
 ```kotlin
-// ✅ Setup with device credential fallback
+// ✅ BiometricPrompt with device credential fallback
+val executor = ContextCompat.getMainExecutor(context)
 val prompt = BiometricPrompt(
-    this, ContextCompat.getMainExecutor(this),
+    activity,
+    executor,
     object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-            // Successful authentication
+        override fun onAuthenticationSucceeded(
+            result: BiometricPrompt.AuthenticationResult
+        ) {
+            // Success: result.cryptoObject?.cipher for encryption
         }
+
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-            // Handle errors
+            when (errorCode) {
+                ERROR_LOCKOUT -> showRetryLater()
+                ERROR_LOCKOUT_PERMANENT -> showDeviceCredential()
+                ERROR_NO_BIOMETRICS -> navigateToEnrollment()
+            }
         }
     }
 )
 
 val promptInfo = BiometricPrompt.PromptInfo.Builder()
-    .setTitle("Sign in")
+    .setTitle("Sign in to app")
+    .setSubtitle("Use biometric credentials")
     .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
     .build()
 
 prompt.authenticate(promptInfo)
 ```
 
-### Authenticator Types
+### 2. Authenticator Types
+
+**Choose by use case**:
+- `BIOMETRIC_STRONG` — Class 3 (fingerprint, face), supports `CryptoObject`, for cryptography
+- `BIOMETRIC_WEAK` — Class 2, does NOT support `CryptoObject`, for simple authentication
+- `DEVICE_CREDENTIAL` — PIN/pattern/password, fallback for biometrics
 
 ```kotlin
-// ✅ Check BIOMETRIC_STRONG availability (for sensitive operations)
-val manager = BiometricManager.from(this)
+// ✅ Check availability before prompting
+val manager = BiometricManager.from(context)
 when (manager.canAuthenticate(BIOMETRIC_STRONG)) {
     BIOMETRIC_SUCCESS -> showBiometricPrompt()
-    BIOMETRIC_ERROR_NONE_ENROLLED -> showEnrollmentPrompt()
+    BIOMETRIC_ERROR_NONE_ENROLLED -> {
+        // Prompt user to enroll biometrics
+        val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+            putExtra(EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED, BIOMETRIC_STRONG)
+        }
+        startActivity(enrollIntent)
+    }
     else -> showPasswordFallback()
 }
-
-// ❌ BIOMETRIC_WEAK — doesn't support CryptoObject
-val authenticators = BIOMETRIC_WEAK or DEVICE_CREDENTIAL
 ```
 
-### Keystore Integration
+### 3. Keystore Integration
+
+**For sensitive operations** (encrypting tokens, passwords):
 
 ```kotlin
 // ✅ Generate biometric-bound key
 private fun generateBiometricKey(): SecretKey {
     val keyGen = KeyGenerator.getInstance(KEY_ALGORITHM_AES, "AndroidKeyStore")
     keyGen.init(
-        KeyGenParameterSpec.Builder("biometric_key", PURPOSE_ENCRYPT or PURPOSE_DECRYPT)
+        KeyGenParameterSpec.Builder(
+            "biometric_key",
+            PURPOSE_ENCRYPT or PURPOSE_DECRYPT
+        )
             .setBlockModes(BLOCK_MODE_CBC)
             .setEncryptionPaddings(ENCRYPTION_PADDING_PKCS7)
             .setUserAuthenticationRequired(true)
-            .setInvalidatedByBiometricEnrollment(true) // Invalidate on enrollment change
+            .setInvalidatedByBiometricEnrollment(true)  // ❗ Key invalidated on enrollment change
             .build()
     )
     return keyGen.generateKey()
 }
 
-// ✅ Use CryptoObject for encryption
-private fun authenticateWithCrypto() {
+// ✅ Use CryptoObject
+fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
     val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
     cipher.init(Cipher.ENCRYPT_MODE, generateBiometricKey())
 
-    biometricPrompt.authenticate(
-        BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Encrypt Data")
-            .setNegativeButtonText("Cancel")
-            .build(),
-        BiometricPrompt.CryptoObject(cipher)
-    )
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle("Encrypt Data")
+        .setNegativeButtonText("Cancel")
+        .build()
+
+    biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
 }
 ```
 
-### Error Handling
+**Important**: With `setInvalidatedByBiometricEnrollment(true)`, key is deleted if user adds/removes fingerprints → need re-encryption mechanism.
 
-```kotlin
-// ✅ Handle main scenarios
-override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-    when (errorCode) {
-        ERROR_LOCKOUT -> showError("Too many attempts")
-        ERROR_LOCKOUT_PERMANENT -> showPasswordFallback()
-        ERROR_NO_BIOMETRICS -> showEnrollmentPrompt()
-        ERROR_USER_CANCELED -> { /* User canceled */ }
-    }
-}
-```
+### 4. Best Practices
+
+**Error handling**:
+- `ERROR_LOCKOUT` (30 sec) → show timer
+- `ERROR_LOCKOUT_PERMANENT` → device credential only
+- `ERROR_NO_BIOMETRICS` → offer enrollment
+- `ERROR_USER_CANCELED` → don't spam, remember choice
+
+**UX**:
+- Don't prompt every time — use timeout (e.g., 5 min after successful auth)
+- Always provide alternative (PIN/password)
+- For `BIOMETRIC_STRONG or DEVICE_CREDENTIAL`, no Cancel button needed (system shows fallback)
 
 ---
 
 ## Follow-ups
 
 - What happens to encrypted data when biometric enrollment changes with `setInvalidatedByBiometricEnrollment(true)`?
-- How does `BIOMETRIC_STRONG` vs `BIOMETRIC_WEAK` affect security model and CryptoObject support?
+- How does `BIOMETRIC_STRONG` vs `BIOMETRIC_WEAK` affect security guarantees and CryptoObject support?
 - When should you use `setUserAuthenticationRequired(true)` vs `setUserAuthenticationValidityDurationSeconds()`?
-- How to handle biometric authentication on multi-user devices?
+- How to implement biometric authentication for multi-user devices?
 - What's the recommended strategy for rate limiting authentication attempts beyond system lockout?
 
 ## References
 
-- Official AndroidX Biometric library documentation
-- Android Keystore System guide
-- [[q-android-keystore-system--security--medium]]
-- [[q-android-security-best-practices--android--medium]]
-- [[q-app-security-best-practices--android--medium]]
+- [[c-android-keystore]] — Cryptographic key storage fundamentals
+- [[c-android-security]] — Security architecture overview
+- https://developer.android.com/training/sign-in/biometric-auth
+- https://developer.android.com/reference/androidx/biometric/BiometricPrompt
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-security-best-practices--android--medium]] — Security fundamentals
-- [[q-app-security-best-practices--android--medium]] — App security patterns
-- [[q-android14-permissions--android--medium]] — Runtime permissions
+- [[q-runtime-permissions-android--android--medium]] — Runtime permissions system
 
 ### Related (Same Level)
-- [[q-android-keystore-system--security--medium]] — Cryptographic key storage
-- [[q-runtime-permissions-android--android--medium]] — Permissions system
+- [[q-android-keystore-system--security--medium]] — Keystore API and key generation
+- [[q-app-security-best-practices--android--medium]] — App-level security patterns
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]] — Platform security architecture
 - [[q-secure-storage-encryption--android--hard]] — Advanced encryption patterns
+- [[q-android-runtime-internals--android--hard]] — Platform security architecture

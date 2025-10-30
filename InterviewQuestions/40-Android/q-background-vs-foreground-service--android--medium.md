@@ -3,41 +3,41 @@ id: 20251016-161808
 title: Background vs Foreground Service / Фоновый vs активный сервис
 aliases: ["Background vs Foreground Service", "Фоновый vs активный сервис"]
 topic: android
-subtopics: [background-execution, service]
+subtopics: [service, background-execution]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-service, c-workmanager, q-android-service-types--android--easy, q-background-tasks-decision-guide--android--medium, q-foreground-service-types--background--medium]
+related: [c-service, c-workmanager, q-android-service-types--android--easy, q-background-tasks-decision-guide--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
-tags: [android/background-execution, android/service, difficulty/medium]
+updated: 2025-10-30
+tags: [android/service, android/background-execution, difficulty/medium]
 ---
 
 # Вопрос (RU)
-> В чём разница между Background и Foreground Service?
+> В чём разница между Background и Foreground Service в Android?
 
 ---
 
 # Question (EN)
-> What is the difference between background and foreground service?
+> What is the difference between background and foreground service in Android?
 
 ---
 
 ## Ответ (RU)
 
-### Основные различия
+### Ключевые различия
 
 | Характеристика | Background Service | Foreground Service |
 |----------------|-------------------|-------------------|
-| Уведомление | Не требуется | Обязательно |
-| Приоритет | Низкий | Высокий |
-| Завершение | Система может убить | Защищён от завершения |
-| Ограничения | Заблокирован с Android 8.0+ | Нужен тип сервиса с Android 14+ |
-| Применение | Устарел | Долгие видимые операции |
+| Уведомление | Не требуется | Обязательно (непрерывное) |
+| Приоритет процесса | Низкий | Высокий |
+| Завершение системой | Может быть убит | Защищён |
+| Ограничения запуска | Запрещён с API 26+ | Требует тип с API 34+ |
+| Применение | Устарел | Видимые долгие операции |
 
 ### Реализация
 
@@ -45,16 +45,16 @@ tags: [android/background-execution, android/service, difficulty/medium]
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ОБЯЗАТЕЛЬНО в течение 5 секунд после startForegroundService()
+        // ОБЯЗАТЕЛЬНО: в течение 5 секунд после startForegroundService()
         startForeground(NOTIFICATION_ID, buildNotification())
         playMusic()
         return START_STICKY
     }
 
     private fun buildNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
-        .setContentTitle("Playing music")
+        .setContentTitle("Воспроизведение музыки")
         .setSmallIcon(R.drawable.ic_music)
-        .setOngoing(true)
+        .setOngoing(true) // ✅ Непрерывное уведомление
         .build()
 }
 
@@ -62,7 +62,7 @@ class MusicService : Service() {
 context.startForegroundService(Intent(context, MusicService::class.java))
 ```
 
-**❌ Background Service (запрещён с Android 8.0+)**
+**❌ Background Service (запрещён с API 26+)**
 ```kotlin
 class BackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -73,7 +73,7 @@ class BackgroundService : Service() {
 }
 ```
 
-**✅ Альтернатива: WorkManager**
+**✅ Современная альтернатива: WorkManager**
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .setConstraints(
@@ -88,34 +88,36 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Ограничения платформы
 
-**Android 8.0 (API 26)+**
+**API 26+** (Android 8.0)
 - `startService()` → `IllegalStateException` для фоновых приложений
 - Решение: `startForegroundService()` + `startForeground()` за 5 секунд
 
-**Android 14 (API 34)+**
+**API 34+** (Android 14)
 - Обязательный тип сервиса в манифесте:
 ```xml
 <service android:name=".MusicService"
     android:foregroundServiceType="mediaPlayback" />
 ```
+- Типы: `camera`, `connectedDevice`, `dataSync`, `health`, `location`, `mediaPlayback`, `mediaProjection`, `microphone`, `phoneCall`, `remoteMessaging`, `shortService`, `specialUse`, `systemExempted`
 
 **Приоритет процессов**
-1. **Foreground** (Foreground Service) - не завершается
+1. Foreground (с Foreground Service) - защищён от завершения
 2. Visible - редко завершается
-3. **Service** (Background Service) - может быть убит
+3. Service (Background Service) - может быть убит при нехватке памяти
 4. Cached - убивается первым
 
 ### Выбор подхода
 
-**Foreground Service когда:**
-- Операция видима пользователю (музыка, навигация, загрузка)
+**Foreground Service:**
+- Операция видна пользователю (музыка, навигация, отслеживание тренировки)
 - Требуется немедленное выполнение
-- Долгая операция (> 10 минут)
+- Длительность > 10 минут
 
-**WorkManager когда:**
-- Можно отложить выполнение
-- Нужны ограничения (Wi-Fi, зарядка)
+**WorkManager:**
+- Отложенное выполнение допустимо
+- Нужны условия (Wi-Fi, зарядка)
 - Периодическая синхронизация
+- Гарантированное выполнение с повторными попытками
 
 ---
 
@@ -125,11 +127,11 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 | Feature | Background Service | Foreground Service |
 |---------|-------------------|-------------------|
-| Notification | Not required | Mandatory |
-| Priority | Low | High |
-| Termination | System can kill | Protected from termination |
-| Restrictions | Blocked since Android 8.0+ | Requires type since Android 14+ |
-| Use case | Deprecated | Long-running visible operations |
+| Notification | Not required | Mandatory (ongoing) |
+| Process priority | Low | High |
+| System termination | Can be killed | Protected |
+| Launch restrictions | Prohibited since API 26+ | Requires type since API 34+ |
+| Use case | Deprecated | Visible long operations |
 
 ### Implementation
 
@@ -137,7 +139,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // MUST call within 5 seconds of startForegroundService()
+        // REQUIRED: within 5 seconds of startForegroundService()
         startForeground(NOTIFICATION_ID, buildNotification())
         playMusic()
         return START_STICKY
@@ -146,7 +148,7 @@ class MusicService : Service() {
     private fun buildNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
         .setContentTitle("Playing music")
         .setSmallIcon(R.drawable.ic_music)
-        .setOngoing(true)
+        .setOngoing(true) // ✅ Ongoing notification
         .build()
 }
 
@@ -154,7 +156,7 @@ class MusicService : Service() {
 context.startForegroundService(Intent(context, MusicService::class.java))
 ```
 
-**❌ Background Service (prohibited since Android 8.0+)**
+**❌ Background Service (prohibited since API 26+)**
 ```kotlin
 class BackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -165,7 +167,7 @@ class BackgroundService : Service() {
 }
 ```
 
-**✅ Alternative: WorkManager**
+**✅ Modern alternative: WorkManager**
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .setConstraints(
@@ -180,44 +182,46 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Platform Restrictions
 
-**Android 8.0 (API 26)+**
+**API 26+** (Android 8.0)
 - `startService()` → `IllegalStateException` for background apps
 - Solution: `startForegroundService()` + `startForeground()` within 5 seconds
 
-**Android 14 (API 34)+**
+**API 34+** (Android 14)
 - Mandatory service type in manifest:
 ```xml
 <service android:name=".MusicService"
     android:foregroundServiceType="mediaPlayback" />
 ```
+- Types: `camera`, `connectedDevice`, `dataSync`, `health`, `location`, `mediaPlayback`, `mediaProjection`, `microphone`, `phoneCall`, `remoteMessaging`, `shortService`, `specialUse`, `systemExempted`
 
 **Process Priority**
-1. **Foreground** (Foreground Service) - never killed
+1. Foreground (with Foreground Service) - protected from termination
 2. Visible - rarely killed
-3. **Service** (Background Service) - can be killed
+3. Service (Background Service) - can be killed when low on memory
 4. Cached - killed first
 
 ### Choosing Approach
 
-**Foreground Service when:**
-- Operation is user-visible (music, navigation, download)
+**Foreground Service:**
+- User-visible operation (music, navigation, workout tracking)
 - Immediate execution required
-- Long operation (> 10 minutes)
+- Duration > 10 minutes
 
-**WorkManager when:**
-- Deferrable execution
+**WorkManager:**
+- Deferrable execution acceptable
 - Constraints needed (Wi-Fi, charging)
-- Periodic sync
+- Periodic synchronization
+- Guaranteed execution with retries
 
 ---
 
 ## Follow-ups
 
-- What are the 12 foreground service types introduced in Android 14 and when to use each?
-- How to properly stop a foreground service and remove notification?
-- What happens if `startForeground()` is not called within 5 seconds?
-- How to handle service lifecycle during process death and restoration?
-- What are the notification channel requirements for foreground services?
+- What happens if `startForeground()` is not called within 5 seconds after `startForegroundService()`?
+- How to properly stop a foreground service and remove its notification?
+- Which foreground service types require runtime permissions?
+- How does process priority affect service lifecycle during low memory?
+- What are the alternatives for immediate task execution without foreground service?
 
 ---
 
@@ -226,6 +230,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - [[c-service]]
 - [[c-workmanager]]
 - [[c-notification]]
+- [[c-process-lifecycle]]
 - https://developer.android.com/develop/background-work/services/foreground-services
 - https://developer.android.com/develop/background-work/background-tasks
 
@@ -234,14 +239,15 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]]
-- [[q-android-services-purpose--android--easy]]
+- [[q-android-service-types--android--easy]] - Understanding service types
+- [[q-android-services-purpose--android--easy]] - Why use services
 
 ### Related (Same Level)
-- [[q-background-tasks-decision-guide--android--medium]]
-- [[q-foreground-service-types--background--medium]]
-- [[q-workmanager-basics--android--medium]]
+- [[q-background-tasks-decision-guide--android--medium]] - Choosing background execution approach
+- [[q-workmanager-basics--android--medium]] - WorkManager fundamentals
+- [[q-notification-channels--android--medium]] - Notification requirements
 
 ### Advanced (Harder)
-- [[q-workmanager-advanced--android--hard]]
-- [[q-service-lifecycle-edge-cases--android--hard]]
+- [[q-workmanager-advanced--android--hard]] - Advanced WorkManager patterns
+- [[q-service-lifecycle-edge-cases--android--hard]] - Service lifecycle edge cases
+- [[q-background-restrictions-strategies--android--hard]] - Handling background restrictions
