@@ -8,6 +8,8 @@ moc: moc-android
 related: [q-websocket-implementation--networking--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-workmanager-execution-guarantee--android--medium]
 created: 2025-10-15
 tags: [activity, android, ui, difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:50 pm
+date modified: Thursday, October 30th 2025, 4:53:43 pm
 ---
 
 # What are fragments for if there is Activity?

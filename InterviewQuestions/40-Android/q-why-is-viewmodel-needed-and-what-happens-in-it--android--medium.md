@@ -1,39 +1,58 @@
 ---
 id: 20251012-122711195
-title: "Why Is Viewmodel Needed And What Happens In It / Why Is Viewmodel Needed и What Happens In It"
+title: "Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что в нем происходит"
+aliases: [ViewModel Purpose, Назначение ViewModel, ViewModel Responsibilities, Обязанности ViewModel]
+
+# Classification
 topic: android
+subtopics: [architecture-mvvm, lifecycle, ui-state]
+question_kind: android
 difficulty: medium
+
+# Language
+original_language: en
+language_tags: [en, ru]
+
+# Workflow
 status: draft
+
+# Links
 moc: moc-android
-related: [q-workmanager-decision-guide--android--medium, q-kapt-ksp-migration--gradle--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium]
+related: [q-mvvm-pattern--android--medium, q-how-to-save-activity-state--android--medium, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium]
+
+# Timestamps
 created: 2025-10-15
-tags: [viewmodel, lifecycle, mvvm, architecture, difficulty/medium]
-date created: Saturday, October 18th 2025, 2:15:16 pm
-date modified: Thursday, October 30th 2025, 3:17:22 pm
+updated: 2025-10-30
+
+# Tags
+tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, viewmodel, mvvm, jetpack, difficulty/medium]
 ---
 
-# Why is ViewModel needed and what happens in it?
+# Вопрос (RU)
 
-## EN (expanded)
+> Зачем нужен ViewModel и что в нем происходит?
 
-### Why ViewModel is Needed
+# Question (EN)
 
-**ViewModel** is an Android Architecture Component that stores and manages UI-related data in a lifecycle-aware way. It solves several critical problems in Android development.
+> Why is ViewModel needed and what happens in it?
 
-### Problems ViewModel Solves
+---
 
-#### 1. Configuration Change Survival
+## Ответ (RU)
 
-Without ViewModel, data is lost on screen rotation.
+**ViewModel** - это Android Architecture Component, который хранит UI-состояние и бизнес-логику отдельно от Activity/Fragment, переживая изменения конфигурации (поворот экрана).
+
+### Зачем нужен ViewModel
+
+#### 1. Переживание изменений конфигурации
 
 ```kotlin
-// - BAD: Data lost on rotation
+// ❌ БЕЗ ViewModel - данные теряются при повороте
 class MainActivity : AppCompatActivity() {
-    private var counter = 0  // Lost on rotation!
+    private var counter = 0  // Теряется при повороте!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         button.setOnClickListener {
             counter++
             textView.text = "Count: $counter"
@@ -41,20 +60,285 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// - GOOD: ViewModel survives rotation
+// ✅ С ViewModel - данные сохраняются
 class MainActivity : AppCompatActivity() {
     private val viewModel: CounterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         viewModel.count.observe(this) { count ->
             textView.text = "Count: $count"
         }
+        button.setOnClickListener { viewModel.increment() }
+    }
+}
 
+class CounterViewModel : ViewModel() {
+    private val _count = MutableLiveData(0)
+    val count: LiveData<Int> = _count
+
+    fun increment() {
+        _count.value = (_count.value ?: 0) + 1
+    }
+}
+```
+
+#### 2. Разделение ответственности (Separation of Concerns)
+
+```kotlin
+// ❌ БЕЗ ViewModel - бизнес-логика смешана с UI
+class UserActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         button.setOnClickListener {
-            viewModel.increment()
+            lifecycleScope.launch {
+                try {
+                    val user = api.getUser(userId)
+                    nameText.text = user.name
+                } catch (e: Exception) {
+                    Toast.makeText(this@UserActivity, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
+    }
+}
+
+// ✅ С ViewModel - бизнес-логика отдельно
+class UserActivity : AppCompatActivity() {
+    private val viewModel: UserViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.user.observe(this) { user -> nameText.text = user.name }
+        viewModel.error.observe(this) { msg -> Toast.makeText(this, msg, Toast.LENGTH_SHORT).show() }
+        button.setOnClickListener { viewModel.loadUser(userId) }
+    }
+}
+
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User> = _user
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> = _error
+
+    fun loadUser(userId: Int) {
+        viewModelScope.launch {
+            try {
+                _user.value = repository.getUser(userId)
+            } catch (e: Exception) {
+                _error.value = "Failed to load user"
+            }
+        }
+    }
+}
+```
+
+#### 3. Автоматическое управление жизненным циклом
+
+```kotlin
+class UserViewModel : ViewModel() {
+    // viewModelScope автоматически отменяет корутины при onCleared()
+    fun loadData() {
+        viewModelScope.launch {
+            val data = repository.fetchData()
+            _data.value = data
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // Очистка ресурсов
+        database.close()
+    }
+}
+```
+
+### Что происходит в ViewModel
+
+#### 1. Управление UI-состоянием
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun search(query: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val results = repository.search(query)
+                _uiState.value = UiState.Success(results)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+}
+
+sealed interface UiState {
+    object Loading : UiState
+    data class Success(val data: List<Product>) : UiState
+    data class Error(val message: String) : UiState
+}
+```
+
+#### 2. Бизнес-логика и валидация
+
+```kotlin
+class LoginViewModel : ViewModel() {
+    private val _loginState = MutableLiveData<LoginState>()
+    val loginState: LiveData<LoginState> = _loginState
+
+    fun login(email: String, password: String) {
+        if (email.isEmpty() || !email.contains("@")) {
+            _loginState.value = LoginState.Error("Invalid email")
+            return
+        }
+        if (password.length < 6) {
+            _loginState.value = LoginState.Error("Password too short")
+            return
+        }
+
+        _loginState.value = LoginState.Loading
+        viewModelScope.launch {
+            try {
+                val token = repository.login(email, password)
+                _loginState.value = LoginState.Success(token)
+            } catch (e: Exception) {
+                _loginState.value = LoginState.Error("Login failed")
+            }
+        }
+    }
+}
+```
+
+#### 3. Работа с репозиториями и данными
+
+```kotlin
+class PostsViewModel(private val repository: PostRepository) : ViewModel() {
+    private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> = _posts
+
+    init {
+        loadPosts()
+    }
+
+    private fun loadPosts() {
+        viewModelScope.launch {
+            _posts.value = repository.getPosts()
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _posts.value = repository.refreshPosts()
+        }
+    }
+}
+```
+
+#### 4. Совместное использование между Fragment
+
+```kotlin
+// Shared ViewModel с областью видимости Activity
+class SharedViewModel : ViewModel() {
+    private val _selectedItem = MutableLiveData<Item>()
+    val selectedItem: LiveData<Item> = _selectedItem
+
+    fun selectItem(item: Item) {
+        _selectedItem.value = item
+    }
+}
+
+// Fragment A
+class ListFragment : Fragment() {
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private fun onItemClick(item: Item) {
+        sharedViewModel.selectItem(item)
+    }
+}
+
+// Fragment B
+class DetailFragment : Fragment() {
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedViewModel.selectedItem.observe(viewLifecycleOwner) { item ->
+            displayItem(item)
+        }
+    }
+}
+```
+
+### Жизненный цикл ViewModel
+
+```
+Activity/Fragment создан
+         ↓
+    ViewModel создана
+         ↓
+    Изменение конфигурации (поворот)
+         ↓
+    Activity уничтожена → Activity пересоздана
+         ↓
+    ViewModel переиспользуется (тот же экземпляр)
+         ↓
+    Activity завершена (finish())
+         ↓
+    ViewModel.onCleared() → ViewModel уничтожена
+```
+
+### Best Practices
+
+✅ **DO**:
+- Используйте `viewModelScope` для корутин
+- Предоставляйте immutable состояние (`LiveData`/`StateFlow`, не `Mutable*`)
+- Держите UI-логику в UI-слое, бизнес-логику в ViewModel
+- Используйте Repository Pattern для разделения источников данных
+
+❌ **DON'T**:
+- Не передавайте Context в ViewModel (используйте `AndroidViewModel` если нужен Application Context)
+- Не ссылайтесь на View напрямую
+- Не держите Activity/Fragment ссылки (memory leak)
+- Не выполняйте UI-операции в ViewModel
+
+---
+
+## Answer (EN)
+
+**ViewModel** is an Android Architecture Component that stores UI state and business logic separately from Activity/Fragment, surviving configuration changes (screen rotation).
+
+### Why ViewModel is Needed
+
+#### 1. Configuration Change Survival
+
+```kotlin
+// ❌ WITHOUT ViewModel - data lost on rotation
+class MainActivity : AppCompatActivity() {
+    private var counter = 0  // Lost on rotation!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        button.setOnClickListener {
+            counter++
+            textView.text = "Count: $counter"
+        }
+    }
+}
+
+// ✅ WITH ViewModel - data preserved
+class MainActivity : AppCompatActivity() {
+    private val viewModel: CounterViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.count.observe(this) { count ->
+            textView.text = "Count: $count"
+        }
+        button.setOnClickListener { viewModel.increment() }
     }
 }
 
@@ -70,21 +354,16 @@ class CounterViewModel : ViewModel() {
 
 #### 2. Separation of Concerns
 
-ViewModel separates UI logic from business logic.
-
 ```kotlin
-// - BAD: Everything in Activity
+// ❌ WITHOUT ViewModel - business logic mixed with UI
 class UserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Business logic mixed with UI
         button.setOnClickListener {
             lifecycleScope.launch {
                 try {
-                    val response = api.getUser(userId)
-                    nameText.text = response.name
-                    emailText.text = response.email
+                    val user = api.getUser(userId)
+                    nameText.text = user.name
                 } catch (e: Exception) {
                     Toast.makeText(this@UserActivity, "Error", Toast.LENGTH_SHORT).show()
                 }
@@ -93,31 +372,19 @@ class UserActivity : AppCompatActivity() {
     }
 }
 
-// - GOOD: Business logic in ViewModel
+// ✅ WITH ViewModel - business logic separated
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel.user.observe(this) { user ->
-            nameText.text = user.name
-            emailText.text = user.email
-        }
-
-        viewModel.error.observe(this) { errorMessage ->
-            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-        }
-
-        button.setOnClickListener {
-            viewModel.loadUser(userId)
-        }
+        viewModel.user.observe(this) { user -> nameText.text = user.name }
+        viewModel.error.observe(this) { msg -> Toast.makeText(this, msg, Toast.LENGTH_SHORT).show() }
+        button.setOnClickListener { viewModel.loadUser(userId) }
     }
 }
 
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
     private val _user = MutableLiveData<User>()
     val user: LiveData<User> = _user
 
@@ -127,8 +394,7 @@ class UserViewModel(
     fun loadUser(userId: Int) {
         viewModelScope.launch {
             try {
-                val result = repository.getUser(userId)
-                _user.value = result
+                _user.value = repository.getUser(userId)
             } catch (e: Exception) {
                 _error.value = "Failed to load user"
             }
@@ -137,23 +403,18 @@ class UserViewModel(
 }
 ```
 
-#### 3. Lifecycle Management
-
-ViewModel handles lifecycle automatically with `viewModelScope`.
+#### 3. Automatic Lifecycle Management
 
 ```kotlin
 class UserViewModel : ViewModel() {
-
-    // Automatically cancelled when ViewModel is cleared
+    // viewModelScope automatically cancels coroutines on onCleared()
     fun loadData() {
         viewModelScope.launch {
-            // Coroutine automatically cancelled on ViewModel destruction
             val data = repository.fetchData()
             _data.value = data
         }
     }
 
-    // Called when ViewModel is no longer needed
     override fun onCleared() {
         super.onCleared()
         // Clean up resources
@@ -164,105 +425,34 @@ class UserViewModel : ViewModel() {
 
 ### What Happens in ViewModel
 
-#### 1. State Management
+#### 1. UI State Management
 
 ```kotlin
 class SearchViewModel : ViewModel() {
-    // Private mutable state
-    private val _searchResults = MutableLiveData<List<Product>>()
-    // Public immutable state
-    val searchResults: LiveData<List<Product>> = _searchResults
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
-
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun search(query: String) {
-        _loading.value = true
-        _error.value = null
-
         viewModelScope.launch {
+            _uiState.value = UiState.Loading
             try {
                 val results = repository.search(query)
-                _searchResults.value = results
+                _uiState.value = UiState.Success(results)
             } catch (e: Exception) {
-                _error.value = e.message
-            } finally {
-                _loading.value = false
+                _uiState.value = UiState.Error(e.message ?: "Unknown error")
             }
         }
     }
 }
-```
 
-#### 2. Business Logic
-
-```kotlin
-class ShoppingCartViewModel : ViewModel() {
-    private val _cartItems = MutableLiveData<List<CartItem>>()
-    val cartItems: LiveData<List<CartItem>> = _cartItems
-
-    // Derived state
-    val totalPrice: LiveData<Double> = _cartItems.map { items ->
-        items.sumOf { it.price * it.quantity }
-    }
-
-    val itemCount: LiveData<Int> = _cartItems.map { it.size }
-
-    fun addItem(product: Product) {
-        val currentItems = _cartItems.value.orEmpty().toMutableList()
-        val existingItem = currentItems.find { it.productId == product.id }
-
-        if (existingItem != null) {
-            existingItem.quantity++
-        } else {
-            currentItems.add(CartItem(product.id, product.name, product.price, 1))
-        }
-
-        _cartItems.value = currentItems
-    }
-
-    fun removeItem(itemId: Int) {
-        val currentItems = _cartItems.value.orEmpty().toMutableList()
-        currentItems.removeIf { it.productId == itemId }
-        _cartItems.value = currentItems
-    }
+sealed interface UiState {
+    object Loading : UiState
+    data class Success(val data: List<Product>) : UiState
+    data class Error(val message: String) : UiState
 }
 ```
 
-#### 3. Data Loading
-
-```kotlin
-class PostsViewModel(
-    private val repository: PostRepository
-) : ViewModel() {
-
-    private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> = _posts
-
-    init {
-        // Load data when ViewModel is created
-        loadPosts()
-    }
-
-    private fun loadPosts() {
-        viewModelScope.launch {
-            _posts.value = repository.getPosts()
-        }
-    }
-
-    fun refresh() {
-        viewModelScope.launch {
-            val freshPosts = repository.refreshPosts()
-            _posts.value = freshPosts
-        }
-    }
-}
-```
-
-#### 4. User Interactions
+#### 2. Business Logic and Validation
 
 ```kotlin
 class LoginViewModel : ViewModel() {
@@ -270,18 +460,15 @@ class LoginViewModel : ViewModel() {
     val loginState: LiveData<LoginState> = _loginState
 
     fun login(email: String, password: String) {
-        // Validation
         if (email.isEmpty() || !email.contains("@")) {
             _loginState.value = LoginState.Error("Invalid email")
             return
         }
-
         if (password.length < 6) {
             _loginState.value = LoginState.Error("Password too short")
             return
         }
 
-        // Network request
         _loginState.value = LoginState.Loading
         viewModelScope.launch {
             try {
@@ -293,88 +480,34 @@ class LoginViewModel : ViewModel() {
         }
     }
 }
-
-sealed class LoginState {
-    object Loading : LoginState()
-    data class Success(val token: String) : LoginState()
-    data class Error(val message: String) : LoginState()
-}
 ```
 
-### ViewModel Lifecycle
-
-```
-Activity/Fragment Created
-         ↓
-    ViewModel Created
-         ↓
-    Configuration Change (rotation)
-         ↓
-    Activity Destroyed
-         ↓
-    Activity Re-created
-         ↓
-    Same ViewModel Instance Reused
-         ↓
-    Activity Finished
-         ↓
-    ViewModel.onCleared() Called
-         ↓
-    ViewModel Destroyed
-```
-
-### ViewModel with StateFlow (Modern Approach)
+#### 3. Repository Integration and Data Loading
 
 ```kotlin
-class ModernViewModel : ViewModel() {
-    // StateFlow instead of LiveData
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+class PostsViewModel(private val repository: PostRepository) : ViewModel() {
+    private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> = _posts
 
     init {
-        loadData()
+        loadPosts()
     }
 
-    private fun loadData() {
+    private fun loadPosts() {
         viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            try {
-                val data = repository.fetchData()
-                _uiState.value = UiState.Success(data)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message ?: "Unknown error")
-            }
+            _posts.value = repository.getPosts()
         }
     }
-}
 
-sealed class UiState {
-    object Loading : UiState()
-    data class Success(val data: List<Item>) : UiState()
-    data class Error(val message: String) : UiState()
-}
-
-// In Activity/Fragment
-class MyActivity : AppCompatActivity() {
-    private val viewModel: ModernViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                when (state) {
-                    is UiState.Loading -> showLoading()
-                    is UiState.Success -> showData(state.data)
-                    is UiState.Error -> showError(state.message)
-                }
-            }
+    fun refresh() {
+        viewModelScope.launch {
+            _posts.value = repository.refreshPosts()
         }
     }
 }
 ```
 
-### Sharing ViewModel Between Fragments
+#### 4. Sharing Between Fragments
 
 ```kotlin
 // Shared ViewModel scoped to Activity
@@ -393,7 +526,6 @@ class ListFragment : Fragment() {
 
     private fun onItemClick(item: Item) {
         sharedViewModel.selectItem(item)
-        // Navigate to detail fragment
     }
 }
 
@@ -403,7 +535,6 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         sharedViewModel.selectedItem.observe(viewLifecycleOwner) { item ->
             displayItem(item)
         }
@@ -411,586 +542,73 @@ class DetailFragment : Fragment() {
 }
 ```
 
-### ViewModel with Repository Pattern
+### ViewModel Lifecycle
 
-```kotlin
-// Repository
-class UserRepository(
-    private val api: ApiService,
-    private val database: UserDao
-) {
-    suspend fun getUser(userId: Int): User {
-        return try {
-            // Try network first
-            val user = api.getUser(userId)
-            database.insert(user)
-            user
-        } catch (e: Exception) {
-            // Fallback to cache
-            database.getUser(userId)
-        }
-    }
-}
-
-// ViewModel
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> = _user
-
-    fun loadUser(userId: Int) {
-        viewModelScope.launch {
-            _user.value = repository.getUser(userId)
-        }
-    }
-}
-
-// ViewModelFactory for dependency injection
-class UserViewModelFactory(
-    private val repository: UserRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return UserViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
-// Usage in Activity
-class MainActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels {
-        UserViewModelFactory(
-            UserRepository(ApiClient.api, AppDatabase.userDao)
-        )
-    }
-}
+```
+Activity/Fragment Created
+         ↓
+    ViewModel Created
+         ↓
+    Configuration Change (rotation)
+         ↓
+    Activity Destroyed → Activity Re-created
+         ↓
+    ViewModel Reused (same instance)
+         ↓
+    Activity Finished (finish())
+         ↓
+    ViewModel.onCleared() → ViewModel Destroyed
 ```
 
 ### Best Practices
 
-1. **Never pass Context to ViewModel** (use AndroidViewModel if needed)
-2. **Never reference Views** from ViewModel
-3. **Use LiveData or StateFlow** to expose data
-4. **Keep UI logic in UI layer**, business logic in ViewModel
-5. **Use viewModelScope** for coroutines
-6. **Make state immutable** (expose LiveData, not MutableLiveData)
+✅ **DO**:
+- Use `viewModelScope` for coroutines
+- Expose immutable state (`LiveData`/`StateFlow`, not `Mutable*`)
+- Keep UI logic in UI layer, business logic in ViewModel
+- Use Repository Pattern to separate data sources
 
-### Summary
-
-**Why ViewModel is needed:**
-- Survives configuration changes (rotation)
-- Separates UI from business logic
-- Manages lifecycle automatically
-- Enables data sharing between fragments
-
-**What happens in ViewModel:**
-- State management (LiveData, StateFlow)
-- Business logic execution
-- Data loading from repositories
-- User interaction handling
-- Background task management
+❌ **DON'T**:
+- Don't pass Context to ViewModel (use `AndroidViewModel` if you need Application Context)
+- Don't reference Views directly
+- Don't hold Activity/Fragment references (memory leak)
+- Don't perform UI operations in ViewModel
 
 ---
 
-## RU (original)
+## Follow-ups
 
-### Зачем нужен ViewModel
+1. **What's the difference between ViewModel and onSaveInstanceState?** ViewModel survives configuration changes but not process death; onSaveInstanceState survives process death but has size limitations (1MB).
 
-**ViewModel** - это компонент Android Architecture Component, который хранит и управляет данными, связанными с UI, с учетом жизненного цикла. Он решает несколько критических проблем в Android-разработке.
+2. **How does ViewModel survive configuration changes internally?** ViewModelStore is retained in non-configuration instance via `onRetainNonConfigurationInstance()`, keyed by Activity/Fragment.
 
-### Проблемы, которые решает ViewModel
+3. **When should you use AndroidViewModel vs ViewModel?** Use AndroidViewModel only when you need Application Context (e.g., for resources, ContentResolver). Never pass Activity Context.
 
-#### 1. Переживание изменений конфигурации
+4. **How to handle one-time events in ViewModel (e.g., navigation)?** Use SingleLiveEvent, Event wrapper, or SharedFlow with replay=0 to prevent re-emission on configuration changes.
 
-Без ViewModel данные теряются при повороте экрана.
+5. **Can ViewModel survive process death?** No. Use SavedStateHandle for data that must survive process death (combined with ViewModel for configuration changes).
 
-```kotlin
-// - ПЛОХО: Данные теряются при повороте
-class MainActivity : AppCompatActivity() {
-    private var counter = 0  // Теряется при повороте!
+## References
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        button.setOnClickListener {
-            counter++
-            textView.text = "Count: $counter"
-        }
-    }
-}
-
-// - ХОРОШО: ViewModel переживает поворот
-class MainActivity : AppCompatActivity() {
-    private val viewModel: CounterViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.count.observe(this) { count ->
-            textView.text = "Count: $count"
-        }
-
-        button.setOnClickListener {
-            viewModel.increment()
-        }
-    }
-}
-
-class CounterViewModel : ViewModel() {
-    private val _count = MutableLiveData(0)
-    val count: LiveData<Int> = _count
-
-    fun increment() {
-        _count.value = (_count.value ?: 0) + 1
-    }
-}
-```
-
-#### 2. Разделение ответственности
-
-ViewModel отделяет логику UI от бизнес-логики.
-
-```kotlin
-// - ПЛОХО: Все в Activity
-class UserActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Бизнес-логика смешана с UI
-        button.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    val response = api.getUser(userId)
-                    nameText.text = response.name
-                    emailText.text = response.email
-                } catch (e: Exception) {
-                    Toast.makeText(this@UserActivity, "Error", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-}
-
-// - ХОРОШО: Бизнес-логика в ViewModel
-class UserActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.user.observe(this) { user ->
-            nameText.text = user.name
-            emailText.text = user.email
-        }
-
-        viewModel.error.observe(this) { errorMessage ->
-            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-        }
-
-        button.setOnClickListener {
-            viewModel.loadUser(userId)
-        }
-    }
-}
-
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> = _user
-
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
-
-    fun loadUser(userId: Int) {
-        viewModelScope.launch {
-            try {
-                val result = repository.getUser(userId)
-                _user.value = result
-            } catch (e: Exception) {
-                _error.value = "Failed to load user"
-            }
-        }
-    }
-}
-```
-
-#### 3. Управление жизненным циклом
-
-ViewModel автоматически управляет жизненным циклом через `viewModelScope`.
-
-```kotlin
-class UserViewModel : ViewModel() {
-
-    // Автоматически отменяется при очистке ViewModel
-    fun loadData() {
-        viewModelScope.launch {
-            // Корутина автоматически отменяется при уничтожении ViewModel
-            val data = repository.fetchData()
-            _data.value = data
-        }
-    }
-
-    // Вызывается когда ViewModel больше не нужна
-    override fun onCleared() {
-        super.onCleared()
-        // Очистка ресурсов
-        database.close()
-    }
-}
-```
-
-### Что происходит в ViewModel
-
-#### 1. Управление состоянием
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    // Приватное изменяемое состояние
-    private val _searchResults = MutableLiveData<List<Product>>()
-    // Публичное неизменяемое состояние
-    val searchResults: LiveData<List<Product>> = _searchResults
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
-
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
-
-    fun search(query: String) {
-        _loading.value = true
-        _error.value = null
-
-        viewModelScope.launch {
-            try {
-                val results = repository.search(query)
-                _searchResults.value = results
-            } catch (e: Exception) {
-                _error.value = e.message
-            } finally {
-                _loading.value = false
-            }
-        }
-    }
-}
-```
-
-#### 2. Бизнес-логика
-
-```kotlin
-class ShoppingCartViewModel : ViewModel() {
-    private val _cartItems = MutableLiveData<List<CartItem>>()
-    val cartItems: LiveData<List<CartItem>> = _cartItems
-
-    // Производное состояние
-    val totalPrice: LiveData<Double> = _cartItems.map { items ->
-        items.sumOf { it.price * it.quantity }
-    }
-
-    val itemCount: LiveData<Int> = _cartItems.map { it.size }
-
-    fun addItem(product: Product) {
-        val currentItems = _cartItems.value.orEmpty().toMutableList()
-        val existingItem = currentItems.find { it.productId == product.id }
-
-        if (existingItem != null) {
-            existingItem.quantity++
-        } else {
-            currentItems.add(CartItem(product.id, product.name, product.price, 1))
-        }
-
-        _cartItems.value = currentItems
-    }
-
-    fun removeItem(itemId: Int) {
-        val currentItems = _cartItems.value.orEmpty().toMutableList()
-        currentItems.removeIf { it.productId == itemId }
-        _cartItems.value = currentItems
-    }
-}
-```
-
-#### 3. Загрузка данных
-
-```kotlin
-class PostsViewModel(
-    private val repository: PostRepository
-) : ViewModel() {
-
-    private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> = _posts
-
-    init {
-        // Загрузка данных при создании ViewModel
-        loadPosts()
-    }
-
-    private fun loadPosts() {
-        viewModelScope.launch {
-            _posts.value = repository.getPosts()
-        }
-    }
-
-    fun refresh() {
-        viewModelScope.launch {
-            val freshPosts = repository.refreshPosts()
-            _posts.value = freshPosts
-        }
-    }
-}
-```
-
-#### 4. Обработка взаимодействий пользователя
-
-```kotlin
-class LoginViewModel : ViewModel() {
-    private val _loginState = MutableLiveData<LoginState>()
-    val loginState: LiveData<LoginState> = _loginState
-
-    fun login(email: String, password: String) {
-        // Валидация
-        if (email.isEmpty() || !email.contains("@")) {
-            _loginState.value = LoginState.Error("Invalid email")
-            return
-        }
-
-        if (password.length < 6) {
-            _loginState.value = LoginState.Error("Password too short")
-            return
-        }
-
-        // Сетевой запрос
-        _loginState.value = LoginState.Loading
-        viewModelScope.launch {
-            try {
-                val token = repository.login(email, password)
-                _loginState.value = LoginState.Success(token)
-            } catch (e: Exception) {
-                _loginState.value = LoginState.Error("Login failed")
-            }
-        }
-    }
-}
-
-sealed class LoginState {
-    object Loading : LoginState()
-    data class Success(val token: String) : LoginState()
-    data class Error(val message: String) : LoginState()
-}
-```
-
-### Жизненный цикл ViewModel
-
-```
-Activity/Fragment создан
-         ↓
-    ViewModel создана
-         ↓
-    Изменение конфигурации (поворот)
-         ↓
-    Activity уничтожена
-         ↓
-    Activity пересоздана
-         ↓
-    Тот же экземпляр ViewModel переиспользуется
-         ↓
-    Activity завершена
-         ↓
-    ViewModel.onCleared() вызван
-         ↓
-    ViewModel уничтожена
-```
-
-### ViewModel с StateFlow (современный подход)
-
-```kotlin
-class ModernViewModel : ViewModel() {
-    // StateFlow вместо LiveData
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    init {
-        loadData()
-    }
-
-    private fun loadData() {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            try {
-                val data = repository.fetchData()
-                _uiState.value = UiState.Success(data)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
-}
-
-sealed class UiState {
-    object Loading : UiState()
-    data class Success(val data: List<Item>) : UiState()
-    data class Error(val message: String) : UiState()
-}
-
-// В Activity/Fragment
-class MyActivity : AppCompatActivity() {
-    private val viewModel: ModernViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            viewModel.uiState.collect { state ->
-                when (state) {
-                    is UiState.Loading -> showLoading()
-                    is UiState.Success -> showData(state.data)
-                    is UiState.Error -> showError(state.message)
-                }
-            }
-        }
-    }
-}
-```
-
-### Совместное использование ViewModel между Fragment
-
-```kotlin
-// Общая ViewModel с областью видимости Activity
-class SharedViewModel : ViewModel() {
-    private val _selectedItem = MutableLiveData<Item>()
-    val selectedItem: LiveData<Item> = _selectedItem
-
-    fun selectItem(item: Item) {
-        _selectedItem.value = item
-    }
-}
-
-// Fragment A
-class ListFragment : Fragment() {
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-
-    private fun onItemClick(item: Item) {
-        sharedViewModel.selectItem(item)
-        // Переход к фрагменту деталей
-    }
-}
-
-// Fragment B
-class DetailFragment : Fragment() {
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        sharedViewModel.selectedItem.observe(viewLifecycleOwner) { item ->
-            displayItem(item)
-        }
-    }
-}
-```
-
-### ViewModel с паттерном Repository
-
-```kotlin
-// Repository
-class UserRepository(
-    private val api: ApiService,
-    private val database: UserDao
-) {
-    suspend fun getUser(userId: Int): User {
-        return try {
-            // Сначала пробуем сеть
-            val user = api.getUser(userId)
-            database.insert(user)
-            user
-        } catch (e: Exception) {
-            // Откат к кешу
-            database.getUser(userId)
-        }
-    }
-}
-
-// ViewModel
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> = _user
-
-    fun loadUser(userId: Int) {
-        viewModelScope.launch {
-            _user.value = repository.getUser(userId)
-        }
-    }
-}
-
-// ViewModelFactory для внедрения зависимостей
-class UserViewModelFactory(
-    private val repository: UserRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return UserViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
-// Использование в Activity
-class MainActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels {
-        UserViewModelFactory(
-            UserRepository(ApiClient.api, AppDatabase.userDao)
-        )
-    }
-}
-```
-
-### Лучшие практики
-
-1. **Никогда не передавайте Context в ViewModel** (используйте AndroidViewModel при необходимости)
-2. **Никогда не ссылайтесь на View** из ViewModel
-3. **Используйте LiveData или StateFlow** для предоставления данных
-4. **Держите UI-логику в UI-слое**, бизнес-логику в ViewModel
-5. **Используйте viewModelScope** для корутин
-6. **Делайте состояние неизменяемым** (предоставляйте LiveData, а не MutableLiveData)
-
-### Резюме
-
-**Зачем нужен ViewModel:**
-- Переживает изменения конфигурации (поворот экрана)
-- Отделяет UI от бизнес-логики
-- Автоматически управляет жизненным циклом
-- Позволяет делиться данными между фрагментами
-
-**Что происходит в ViewModel:**
-- Управление состоянием (LiveData, StateFlow)
-- Выполнение бизнес-логики
-- Загрузка данных из репозиториев
-- Обработка взаимодействий пользователя
-- Управление фоновыми задачами
-
-
----
+- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+- [[q-how-to-save-activity-state--android--medium]] - State preservation strategies
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation limits
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Comparison of state preservation techniques
+- https://developer.android.com/topic/libraries/architecture/viewmodel
 
 ## Related Questions
 
-### Hub
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+### Prerequisites (Easier)
+- [[q-main-android-components--android--easy]] - Android components overview
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Separation of concerns
 
-### Related (Medium)
-- [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
+### Related (Same Level)
+- [[q-mvvm-pattern--android--medium]] - MVVM architecture pattern
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - ViewModel vs onSavedInstanceState
+- [[q-how-to-save-activity-state--android--medium]] - Activity state preservation
+- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle
 
 ### Advanced (Harder)
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
-
+- [[q-offline-first-architecture--android--hard]] - Offline-first with ViewModel
+- [[q-modularization-patterns--android--hard]] - ViewModels in modular architecture

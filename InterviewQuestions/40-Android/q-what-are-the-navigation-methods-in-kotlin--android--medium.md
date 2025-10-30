@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/ui-navigation, android/activity, android/fragment, navigation, difficulty/medium]
+date created: Wednesday, October 29th 2025, 11:41:07 am
+date modified: Thursday, October 30th 2025, 4:53:33 pm
 ---
+
 # Вопрос (RU)
 
 > Какие существуют способы навигации в Android-приложениях на Kotlin?

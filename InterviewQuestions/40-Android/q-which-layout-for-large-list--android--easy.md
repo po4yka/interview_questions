@@ -21,12 +21,10 @@ related: [q-recyclerview-sethasfixedsize--android--easy, q-what-do-you-know-abou
 
 # Timestamps
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 
 # Tags (EN only; no leading #)
-tags: [android/ui-views, android/performance-memory, recyclerview, ui, layout, difficulty/easy]
-date created: Wednesday, October 29th 2025, 12:16:29 pm
-date modified: Thursday, October 30th 2025, 3:17:46 pm
+tags: [android/ui-views, android/performance-memory, recyclerview, difficulty/easy]
 ---
 
 # Вопрос (RU)
@@ -41,21 +39,19 @@ date modified: Thursday, October 30th 2025, 3:17:46 pm
 
 ## Ответ (RU)
 
-Для отображения больших списков используйте **RecyclerView** — современный компонент Android с эффективным переиспользованием представлений.
+Для больших списков используйте **RecyclerView** — современный компонент Android с переиспользованием views.
 
 ### Почему RecyclerView?
 
 **Ключевые преимущества**:
 1. **View Recycling** — переиспользует ViewHolder'ы вместо создания новых
 2. **Эффективная память** — держит в памяти только видимые элементы
-3. **Гибкие LayoutManager'ы** — списки, сетки, каскады, горизонтальная прокрутка
-4. **Встроенные анимации** — плавные insert/remove/change операции
-5. **Модульная архитектура** — разделение layout, data, view логики
+3. **Гибкие LayoutManager'ы** — вертикальные/горизонтальные списки, сетки
+4. **Встроенные анимации** — плавные изменения списка
 
 ### Базовая реализация
 
 ```kotlin
-// ViewHolder + Adapter
 class MyAdapter(private val items: List<String>) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
@@ -64,9 +60,8 @@ class MyAdapter(private val items: List<String>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // ✅ attachToRoot = false — правильно
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
+            .inflate(R.layout.item_layout, parent, false) // ✅ attachToRoot = false
         return ViewHolder(view)
     }
 
@@ -81,7 +76,6 @@ class MyAdapter(private val items: List<String>) :
 recyclerView.apply {
     layoutManager = LinearLayoutManager(context)
     adapter = MyAdapter(largeDataset)
-    setHasFixedSize(true) // ✅ оптимизация, если размер не меняется
 }
 ```
 
@@ -91,100 +85,43 @@ recyclerView.apply {
 // Вертикальный список
 LinearLayoutManager(context)
 
-// Сетка (2 колонки)
-GridLayoutManager(context, 2)
+// Сетка
+GridLayoutManager(context, spanCount = 2)
 
-// Каскадная сетка (Pinterest-style)
-StaggeredGridLayoutManager(2, VERTICAL)
-```
-
-### ListAdapter + DiffUtil (рекомендуется)
-
-Для динамических данных используйте `ListAdapter` с автоматическим diff:
-
-```kotlin
-class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(DiffCallback) {
-
-    object DiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
-        override fun areContentsTheSame(old: Item, new: Item) = old == new
-    }
-
-    // onCreateViewHolder, onBindViewHolder...
-}
-
-// Обновление данных — автоматический diff на фоновом потоке
-adapter.submitList(newList)
-```
-
-### Оптимизации производительности
-
-```kotlin
-// 1. Фиксированный размер (если не изменяется)
-recyclerView.setHasFixedSize(true)
-
-// 2. Item prefetch (включён по умолчанию в LinearLayoutManager)
-(layoutManager as? LinearLayoutManager)?.isItemPrefetchEnabled = true
-
-// 3. Shared RecycledViewPool для вложенных RecyclerView
-val sharedPool = RecyclerView.RecycledViewPool()
-recyclerView.setRecycledViewPool(sharedPool)
-
-// 4. ❌ Не создавайте объекты в onBindViewHolder
-override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    // ❌ Плохо: новый объект каждый раз
-    holder.textView.setOnClickListener { onClick(items[position]) }
-
-    // ✅ Хорошо: слушатель создаётся один раз в onCreateViewHolder
-}
+// Горизонтальный список
+LinearLayoutManager(context, HORIZONTAL, false)
 ```
 
 ### Сравнение: RecyclerView vs ListView
 
 | Критерий | RecyclerView | ListView |
 |----------|--------------|----------|
-| View Recycling | Обязательный ViewHolder | Опциональный |
-| Производительность | Отличная | Плохая для больших списков |
-| Layout варианты | Списки, сетки, каскады | Только вертикальный список |
-| Анимации | Встроенные | Ручная реализация |
+| View Recycling | ✅ Обязательный ViewHolder | Опциональный |
+| Производительность | ✅ Отличная | ❌ Плохая для больших списков |
+| Layout варианты | ✅ Списки, сетки | ❌ Только список |
 | Статус | ✅ Рекомендуется | ❌ Deprecated |
 
 ### Когда НЕ использовать RecyclerView
 
 Для маленьких статических списков (<20 элементов):
-- **LinearLayout + ScrollView** — простейший вариант для 5-10 элементов
+- **LinearLayout + ScrollView** — для 5-10 элементов
 - **Compose LazyColumn** — для проектов на Jetpack Compose
-
-### Jetpack Compose альтернатива
-
-```kotlin
-@Composable
-fun MyList(items: List<String>) {
-    LazyColumn {
-        items(items) { item ->
-            Text(item, modifier = Modifier.padding(16.dp))
-        }
-    }
-}
-```
 
 ## Answer (EN)
 
-For large lists, use **RecyclerView** — Android's modern component with efficient view recycling.
+For large lists, use **RecyclerView** — Android's modern component with view recycling.
 
 ### Why RecyclerView?
 
 **Key advantages**:
 1. **View Recycling** — reuses ViewHolders instead of creating new views
 2. **Memory Efficiency** — keeps only visible items in memory
-3. **Flexible LayoutManagers** — lists, grids, staggered grids, horizontal scrolling
-4. **Built-in Animations** — smooth insert/remove/change operations
-5. **Modular Architecture** — separates layout, data, view logic
+3. **Flexible LayoutManagers** — vertical/horizontal lists, grids
+4. **Built-in Animations** — smooth list changes
 
 ### Basic Implementation
 
 ```kotlin
-// ViewHolder + Adapter
 class MyAdapter(private val items: List<String>) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
@@ -193,9 +130,8 @@ class MyAdapter(private val items: List<String>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // ✅ attachToRoot = false — correct
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
+            .inflate(R.layout.item_layout, parent, false) // ✅ attachToRoot = false
         return ViewHolder(view)
     }
 
@@ -210,7 +146,6 @@ class MyAdapter(private val items: List<String>) :
 recyclerView.apply {
     layoutManager = LinearLayoutManager(context)
     adapter = MyAdapter(largeDataset)
-    setHasFixedSize(true) // ✅ optimization if size doesn't change
 }
 ```
 
@@ -220,112 +155,59 @@ recyclerView.apply {
 // Vertical list
 LinearLayoutManager(context)
 
-// Grid (2 columns)
-GridLayoutManager(context, 2)
+// Grid
+GridLayoutManager(context, spanCount = 2)
 
-// Staggered grid (Pinterest-style)
-StaggeredGridLayoutManager(2, VERTICAL)
-```
-
-### ListAdapter + DiffUtil (Recommended)
-
-For dynamic data, use `ListAdapter` with automatic diffing:
-
-```kotlin
-class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(DiffCallback) {
-
-    object DiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
-        override fun areContentsTheSame(old: Item, new: Item) = old == new
-    }
-
-    // onCreateViewHolder, onBindViewHolder...
-}
-
-// Update data — automatic diff on background thread
-adapter.submitList(newList)
-```
-
-### Performance Optimizations
-
-```kotlin
-// 1. Fixed size (if doesn't change)
-recyclerView.setHasFixedSize(true)
-
-// 2. Item prefetch (enabled by default in LinearLayoutManager)
-(layoutManager as? LinearLayoutManager)?.isItemPrefetchEnabled = true
-
-// 3. Shared RecycledViewPool for nested RecyclerViews
-val sharedPool = RecyclerView.RecycledViewPool()
-recyclerView.setRecycledViewPool(sharedPool)
-
-// 4. ❌ Don't create objects in onBindViewHolder
-override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    // ❌ Bad: new object every time
-    holder.textView.setOnClickListener { onClick(items[position]) }
-
-    // ✅ Good: listener created once in onCreateViewHolder
-}
+// Horizontal list
+LinearLayoutManager(context, HORIZONTAL, false)
 ```
 
 ### Comparison: RecyclerView vs ListView
 
 | Criterion | RecyclerView | ListView |
 |-----------|--------------|----------|
-| View Recycling | Mandatory ViewHolder | Optional |
-| Performance | Excellent | Poor for large lists |
-| Layout Options | Lists, grids, staggered | Vertical list only |
-| Animations | Built-in | Manual implementation |
+| View Recycling | ✅ Mandatory ViewHolder | Optional |
+| Performance | ✅ Excellent | ❌ Poor for large lists |
+| Layout Options | ✅ Lists, grids | ❌ List only |
 | Status | ✅ Recommended | ❌ Deprecated |
 
 ### When NOT to Use RecyclerView
 
 For small static lists (<20 items):
-- **LinearLayout + ScrollView** — simplest for 5-10 items
+- **LinearLayout + ScrollView** — for 5-10 items
 - **Compose LazyColumn** — for Jetpack Compose projects
-
-### Jetpack Compose Alternative
-
-```kotlin
-@Composable
-fun MyList(items: List<String>) {
-    LazyColumn {
-        items(items) { item ->
-            Text(item, modifier = Modifier.padding(16.dp))
-        }
-    }
-}
-```
 
 ---
 
 ## Follow-ups
 
-- When should you use `ListAdapter + DiffUtil` instead of plain `RecyclerView.Adapter`?
-- How does `setHasFixedSize(true)` improve performance and when shouldn't you use it?
-- What's the difference between `notifyDataSetChanged()` and `DiffUtil` for list updates?
-- How do you implement infinite scroll pagination with RecyclerView?
-- When would you choose Compose `LazyColumn` over RecyclerView?
+- What is the ViewHolder pattern and why is it mandatory in RecyclerView?
+- What are the main differences between RecyclerView and ListView?
+- What LayoutManagers does RecyclerView support out of the box?
+- When would you use GridLayoutManager instead of LinearLayoutManager?
+- How does RecyclerView handle memory efficiently for large lists?
 
 ## References
 
-- [RecyclerView Guide](https://developer.android.com/guide/topics/ui/layout/recyclerview) — Official Android documentation
-- [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil) — Efficient list updates
-- [LayoutManager Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.LayoutManager) — Layout manager reference
+- [[c-recyclerview]] — RecyclerView concept
+- [[c-view-recycling]] — View recycling pattern
+- [[c-adapter-pattern]] — Adapter design pattern
+- https://developer.android.com/guide/topics/ui/layout/recyclerview — RecyclerView guide
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
 - [[q-recyclerview-sethasfixedsize--android--easy]] — RecyclerView optimization
-- [[q-viewmodel-pattern--android--easy]] — ViewModel basics
+- [[q-what-is-view--android--easy]] — View basics
 
 ### Related (Same Level)
 
-- [[q-what-do-you-know-about-modifications--android--medium]] — UI modifications
-- [[q-what-events-are-activity-methods-tied-to--android--medium]] — Activity lifecycle
+- [[q-what-is-viewholder--android--easy]] — ViewHolder pattern
+- [[q-recyclerview-adapter--android--easy]] — RecyclerView adapter
 
 ### Advanced (Harder)
 
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] — Compose LazyColumn
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] — View redrawing
+- [[q-what-do-you-know-about-modifications--android--medium]] — List updates
+- [[q-diffutil-recyclerview--android--medium]] — DiffUtil for efficient updates

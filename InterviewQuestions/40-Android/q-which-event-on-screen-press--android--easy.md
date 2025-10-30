@@ -12,11 +12,8 @@ status: draft
 moc: moc-android
 related: [c-view-lifecycle, c-custom-views, q-custom-view-drawing--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
-sources: []
+updated: 2025-10-30
 tags: [android/ui-views, touch-events, event-handling, motionevent, difficulty/easy]
-date created: Wednesday, October 29th 2025, 12:16:27 pm
-date modified: Thursday, October 30th 2025, 3:17:59 pm
 ---
 
 # Вопрос (RU)

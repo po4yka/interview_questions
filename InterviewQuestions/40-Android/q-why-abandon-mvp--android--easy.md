@@ -1,204 +1,226 @@
 ---
 id: 20251012-122711190
-title: "Why Abandon Mvp / Почему отказаться от MVP"
+title: "Why Abandon MVP / Почему отказаться от MVP"
+aliases: [Why Abandon MVP, Почему отказаться от MVP, MVP problems, Проблемы MVP]
 topic: android
+subtopics: [architecture-mvp, architecture-mvvm, architecture-mvi]
+question_kind: theory
 difficulty: easy
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-viewstub--android--medium, q-jank-detection-frame-metrics--performance--medium, q-module-types-android--android--medium]
+related: [c-mvvm-pattern, q-mvvm-vs-mvp-differences--android--medium, q-why-separate-ui-and-business-logic--android--easy, q-android-architectural-patterns--android--medium, q-mvp-pattern--android--medium]
 created: 2025-10-15
-tags: [android/architecture-mvp, architecture-mvp, architecture-patterns, lifecycle, mvi, mvp, mvvm, difficulty/easy]
-date created: Saturday, October 18th 2025, 12:57:42 pm
-date modified: Thursday, October 30th 2025, 3:17:42 pm
+updated: 2025-10-30
+tags: [android/architecture-mvp, android/architecture-mvvm, android/architecture-mvi, architecture-patterns, difficulty/easy]
+sources: [Android Architecture Guide, Android Developers Blog]
 ---
 
-# Почему многие отказываются от MVP?
+# Вопрос (RU)
 
-**English**: Why do many developers abandon MVP?
+Почему многие отказываются от MVP?
 
-## Answer (EN)
-Many Android developers are moving away from MVP for several reasons:
+# Question (EN)
 
-**1. Too Much Boilerplate**
+Why do many developers abandon MVP?
 
-MVP requires extensive interface definitions for View-Presenter communication:
-
-```kotlin
-// MVP - verbose interfaces
-interface UserView {
-    fun showLoading()
-    fun hideLoading()
-    fun showUsers(users: List<User>)
-    fun showError(message: String)
-    fun showEmpty()
-}
-
-interface UserPresenter {
-    fun loadUsers()
-    fun onUserClicked(user: User)
-    fun onRetryClicked()
-}
-```
-
-**2. Hard to Scale**
-
-- Each screen needs View interface + Presenter
-- Complex screens require many interface methods
-- Difficult to manage multiple Presenters
-
-**3. Poor Async Data Handling**
-
-MVP wasn't designed for reactive streams:
-
-```kotlin
-// MVP struggles with Flows/LiveData
-class Presenter(private val view: View) {
-    fun loadData() {
-        // Manual subscription management
-        // Lifecycle handling is complex
-    }
-}
-```
-
-**4. Manual Lifecycle Management**
-
-MVP requires manual cleanup:
-
-```kotlin
-override fun onDestroy() {
-    super.onDestroy()
-    presenter.detachView()  // Manual!
-}
-```
-
-**5. Modern Alternatives Are Better**
-
-**MVVM:**
-- Lifecycle-aware (ViewModel)
-- Automatic data binding (LiveData/StateFlow)
-- Less boilerplate
-- Official Jetpack support
-
-**MVI:**
-- Unidirectional data flow
-- Better state management
-- Works well with Coroutines/Flow
-
-**Comparison:**
-
-| Issue | MVP | MVVM | MVI |
-|-------|-----|------|-----|
-| Boilerplate | High | Low | Medium |
-| Lifecycle | Manual | Automatic | Automatic |
-| Reactive | Poor | Good | Excellent |
-| State | Scattered | ViewModel | Single State |
-| Jetpack Support | - | - | - |
-
-**Summary:**
-
-MVP is being abandoned because:
-- - Too much boilerplate code
-- - Hard to scale
-- - Poor async/reactive support
-- - Manual lifecycle management
-- - Better alternatives exist (MVVM, MVI)
-
-Modern Android development favors **MVVM** with LiveData/Flow and Coroutines.
+---
 
 ## Ответ (RU)
 
-Многие Android разработчики отказываются от MVP по нескольким причинам:
+Android разработчики отказываются от MVP по нескольким ключевым причинам:
 
-### Основные проблемы MVP
+### 1. Слишком много шаблонного кода
 
-**1. Слишком много шаблонного кода**
-
-MVP требует обширных интерфейсов для коммуникации между View и Presenter:
+MVP требует создавать интерфейсы для каждого экрана:
 
 ```kotlin
-// MVP - многословные интерфейсы
+// ❌ Много повторяющегося кода
 interface UserView {
     fun showLoading()
     fun hideLoading()
     fun showUsers(users: List<User>)
     fun showError(message: String)
-    fun showEmpty()
 }
 
 interface UserPresenter {
     fun loadUsers()
     fun onUserClicked(user: User)
-    fun onRetryClicked()
 }
 ```
 
-**2. Сложно масштабировать**
+### 2. Ручное управление жизненным циклом
 
-- Каждый экран требует интерфейс View + Presenter
-- Сложные экраны требуют много методов в интерфейсе
-- Сложно управлять несколькими Presenter
-
-**3. Плохая обработка асинхронных данных**
-
-MVP не был разработан для реактивных потоков:
+Presenter не знает о жизненном цикле Activity/Fragment:
 
 ```kotlin
-// MVP плохо работает с Flow/LiveData
-class Presenter(private val view: View) {
-    fun loadData() {
-        // Ручное управление подписками
-        // Сложная обработка жизненного цикла
+// ❌ Нужно помнить про очистку
+override fun onDestroy() {
+    super.onDestroy()
+    presenter.detachView()  // Легко забыть!
+}
+```
+
+### 3. Плохая поддержка реактивности
+
+MVP создавался до появления LiveData, Flow и Coroutines:
+
+```kotlin
+// ❌ Сложно работать с асинхронными данными
+class UserPresenter(private val view: UserView) {
+    fun loadUsers() {
+        // Как обрабатывать Flow/LiveData?
+        // Как отписаться при уничтожении View?
     }
 }
 ```
 
-**4. Ручное управление жизненным циклом**
+### 4. Современные альтернативы лучше
 
-MVP требует ручной очистки:
-
-```kotlin
-override fun onDestroy() {
-    super.onDestroy()
-    presenter.detachView()  // Ручная очистка!
-}
-```
-
-### Современные альтернативы
-
-**MVVM:**
-- Lifecycle-aware (ViewModel автоматически учитывает жизненный цикл)
-- Автоматическая привязка данных (LiveData/StateFlow)
-- Меньше шаблонного кода
-- Официальная поддержка Jetpack
+**MVVM с ViewModel:**
+- ✅ Автоматический lifecycle (переживает rotation)
+- ✅ Встроенная поддержка LiveData/Flow
+- ✅ Меньше кода
+- ✅ Официальная поддержка Google
 
 **MVI:**
-- Однонаправленный поток данных
-- Лучшее управление состоянием
-- Хорошо работает с Coroutines/Flow
+- ✅ Однонаправленный поток данных
+- ✅ Предсказуемое состояние
+- ✅ Отлично работает с Compose
 
 ### Сравнение
 
-| Проблема | MVP | MVVM | MVI |
-|----------|-----|------|-----|
-| Шаблонный код | Много | Мало | Средне |
-| Жизненный цикл | Ручной | Автоматический | Автоматический |
-| Реактивность | Плохая | Хорошая | Отличная |
-| Состояние | Разрозненное | ViewModel | Единое состояние |
-| Поддержка Jetpack | Нет | Да | Частично |
+| Критерий | MVP | MVVM |
+|----------|-----|------|
+| Шаблонный код | Много | Мало |
+| Lifecycle | Ручной | Автоматический |
+| Rotation | Теряет данные | Сохраняет |
+| Поддержка Flow/LiveData | Нет | Да |
 
 ### Резюме
 
-MVP отходит на второй план потому что:
-- Слишком много шаблонного кода
-- Сложно масштабировать
-- Плохая поддержка асинхронных/реактивных операций
-- Ручное управление жизненным циклом
-- Существуют лучшие альтернативы (MVVM, MVI)
+MVP уступает современным паттернам из-за:
+- Избыточного кода (интерфейсы для каждого экрана)
+- Ручного управления жизненным циклом
+- Отсутствия поддержки реактивных потоков
+- Наличия лучших альтернатив (MVVM, MVI)
 
-Современная Android разработка отдает предпочтение **MVVM** с LiveData/Flow и Coroutines
+Сегодня стандарт — **MVVM** с Jetpack (ViewModel + LiveData/Flow).
+
+## Answer (EN)
+
+Android developers are abandoning MVP for several key reasons:
+
+### 1. Too Much Boilerplate Code
+
+MVP requires interfaces for every screen:
+
+```kotlin
+// ❌ Lots of repetitive code
+interface UserView {
+    fun showLoading()
+    fun hideLoading()
+    fun showUsers(users: List<User>)
+    fun showError(message: String)
+}
+
+interface UserPresenter {
+    fun loadUsers()
+    fun onUserClicked(user: User)
+}
+```
+
+### 2. Manual Lifecycle Management
+
+Presenter doesn't know about Activity/Fragment lifecycle:
+
+```kotlin
+// ❌ Need to remember cleanup
+override fun onDestroy() {
+    super.onDestroy()
+    presenter.detachView()  // Easy to forget!
+}
+```
+
+### 3. Poor Reactive Support
+
+MVP was created before LiveData, Flow, and Coroutines:
+
+```kotlin
+// ❌ Hard to work with async data
+class UserPresenter(private val view: UserView) {
+    fun loadUsers() {
+        // How to handle Flow/LiveData?
+        // How to unsubscribe when View destroyed?
+    }
+}
+```
+
+### 4. Modern Alternatives Are Better
+
+**MVVM with ViewModel:**
+- ✅ Automatic lifecycle (survives rotation)
+- ✅ Built-in LiveData/Flow support
+- ✅ Less code
+- ✅ Official Google support
+
+**MVI:**
+- ✅ Unidirectional data flow
+- ✅ Predictable state
+- ✅ Works great with Compose
+
+### Comparison
+
+| Criteria | MVP | MVVM |
+|----------|-----|------|
+| Boilerplate | High | Low |
+| Lifecycle | Manual | Automatic |
+| Rotation | Loses data | Preserves |
+| Flow/LiveData Support | No | Yes |
+
+### Summary
+
+MVP is inferior to modern patterns because of:
+- Excessive code (interfaces for each screen)
+- Manual lifecycle management
+- No reactive streams support
+- Better alternatives exist (MVVM, MVI)
+
+Today's standard is **MVVM** with Jetpack (ViewModel + LiveData/Flow).
+
+---
+
+## Follow-ups
+
+- How does ViewModel survive configuration changes?
+- What is the main difference between MVVM and MVI?
+- When would you still use MVP?
+- How does Jetpack Compose change architecture patterns?
+- What is the Repository pattern and how does it work with MVVM?
+
+## References
+
+- [[c-mvvm-pattern]]
+- [[c-mvvm]]
+- [Android Architecture Guide](https://developer.android.com/topic/architecture)
+- [Guide to app architecture](https://developer.android.com/jetpack/guide)
 
 ## Related Questions
 
-- [[q-what-is-viewstub--android--medium]]
-- [[q-jank-detection-frame-metrics--android--medium]]
-- [[q-module-types-android--android--medium]]
+### Prerequisites (Easier)
+- [[q-why-separate-ui-and-business-logic--android--easy]]
+- [[q-viewmodel-pattern--android--easy]]
+- [[q-architecture-components-libraries--android--easy]]
+
+### Related (Same Level)
+- [[q-android-jetpack-overview--android--easy]]
+- [[q-what-is-data-binding--android--easy]]
+
+### Advanced (Harder)
+- [[q-mvp-pattern--android--medium]]
+- [[q-mvvm-pattern--android--medium]]
+- [[q-mvvm-vs-mvp-differences--android--medium]]
+- [[q-android-architectural-patterns--android--medium]]
+- [[q-mvi-architecture--android--hard]]
+- [[q-clean-architecture-android--android--hard]]

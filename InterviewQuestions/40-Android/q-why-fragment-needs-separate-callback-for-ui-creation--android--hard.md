@@ -1,103 +1,98 @@
 ---
 id: 20251012-122711194
 title: "Why Fragment Needs Separate Callback For Ui Creation / Почему Fragment нужен отдельный колбэк для создания UI"
+aliases: [
+  "Fragment UI lifecycle separation",
+  "onCreateView vs onCreate",
+  "Fragment view lifecycle",
+  "Разделение UI lifecycle во Fragment",
+  "onCreateView против onCreate",
+  "Жизненный цикл view фрагмента"
+]
 topic: android
+subtopics: [fragment, lifecycle, architecture-mvvm]
+question_kind: android
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium, q-shared-preferences--android--easy, q-annotation-processing-android--android--medium]
+related: [c-fragment-lifecycle, c-viewmodel, c-view-binding, q-save-data-outside-fragment--android--medium]
 created: 2025-10-15
-tags: [android/fragments, android/lifecycle, fragments, lifecycle, difficulty/hard]
-date created: Sunday, October 12th 2025, 12:27:49 pm
-date modified: Thursday, October 30th 2025, 3:17:25 pm
+updated: 2025-10-30
+tags: [
+  android/fragment,
+  android/lifecycle,
+  android/architecture-mvvm,
+  fragments,
+  lifecycle,
+  viewmodel,
+  memory-management,
+  difficulty/hard
+]
 ---
 
-# Why Fragment needs separate callback for UI creation?
+# Вопрос (RU)
 
-**Russian**: Почему у Fragment отдельный callback для создания UI?
+> Почему у Fragment отдельный callback для создания UI (`onCreateView()`) вместо создания view в `onCreate()` как у Activity?
 
-**English**: Why does Fragment have a separate callback for UI creation?
+# Question (EN)
 
-## Answer (EN)
-Fragments have separate lifecycle callbacks (`onCreate()` vs `onCreateView()`) because:
-
-1. **Fragment can exist without a UI** (headless fragments)
-2. **View can be destroyed and recreated** while Fragment persists
-3. **Lifecycle independence** - Fragment lifecycle != View lifecycle
-4. **Configuration changes** - Views destroyed/recreated, Fragment state preserved
-5. **Memory optimization** - Views can be released while Fragment retained
-
-This separation enables **proper resource management** and **state preservation** across configuration changes.
+> Why does Fragment have a separate callback for UI creation (`onCreateView()`) instead of creating views in `onCreate()` like Activity?
 
 ---
 
-## Detailed Explanation
+## Ответ (RU)
 
-### Fragment vs Activity Lifecycle
+Fragment имеет отдельные lifecycle callbacks (`onCreate()` vs `onCreateView()`) из-за **независимости жизненных циклов Fragment и View**:
 
-**Activity**:
-```kotlin
-class MyActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // UI created here
-        // View and Activity lifecycle are tied
-    }
-}
+**Архитектурные причины**:
+1. **View может быть уничтожен без уничтожения Fragment** (BackStack, ViewPager)
+2. **Fragment может существовать без UI** (headless fragments для retained state)
+3. **Оптимизация памяти** - view освобождается, пока Fragment сохраняет данные
+4. **Configuration changes** - view пересоздается, Fragment и ViewModel выживают
+5. **ViewLifecycleOwner** - отдельный lifecycle для view-зависимых observers
+
+### Lifecycle Flow
+
+```
+Fragment Lifecycle:
+onCreate() ────────────────────────────────────── onDestroy()
+           └─> onCreateView() ──> onDestroyView() ─┘
+                      View Lifecycle (shorter!)
 ```
 
-**Fragment** (Separate callbacks):
+**Ключевые сценарии**:
+
 ```kotlin
-class MyFragment : Fragment() {
-    // 1. Fragment created
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Fragment exists, but NO VIEW yet
-        // Initialize non-UI components: ViewModel, data, etc.
-    }
+// ViewPager: view уничтожается при свайпе
+FragmentA visible → swipe → onDestroyView()
+Fragment ALIVE, view DESTROYED → swipe back → onCreateView() AGAIN
 
-    // 2. View created (separate callback)
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Create and return View
-        return inflater.inflate(R.layout.fragment_my, container, false)
-    }
+// BackStack: view уничтожается при замене
+FragmentA → replace FragmentB → FragmentA.onDestroyView()
+Fragment IN BACKSTACK → back → onCreateView() AGAIN
 
-    // 3. View ready
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // View exists, can access views
-        view.findViewById<TextView>(R.id.textView).text = "Hello"
-    }
-
-    // 4. View destroyed (Fragment still alive!)
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Clean up view references
-        // Fragment still exists!
-    }
-
-    // 5. Fragment destroyed
-    override fun onDestroy() {
-        super.onDestroy()
-        // Fragment destroyed
-    }
-}
+// Rotation: view пересоздается, Fragment выживает
+Rotate → onDestroyView() → onCreateView()
+onCreate() НЕ вызывается! Fragment survives
 ```
 
----
+### Правильная Работа с View References
 
-## Why Separate Callbacks?
-
-### 1. View Can Be Destroyed Without Destroying Fragment
-
+✅ **Правильно - ViewBinding**:
 ```kotlin
 class MyFragment : Fragment() {
     private var _binding: FragmentMyBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: MyViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // ViewModel инициализируется ОДИН раз
+        // Выживает при onDestroyView()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -108,481 +103,201 @@ class MyFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // IMPORTANT: Clean up view reference
-    }
-}
-```
-
-**Scenario**: ViewPager or BackStack
-```kotlin
-// Fragment in ViewPager
-ViewPager2 with FragmentStateAdapter:
-- Page 0: Fragment A (visible) - onCreateView() called
-- Swipe to Page 1: Fragment B (visible) - onCreateView() called
-- Fragment A still exists BUT onDestroyView() called (view destroyed!)
-- Swipe back to Page 0: Fragment A onCreateView() called AGAIN (view recreated)
-```
-
-**Fragment lifecycle**:
-```
-onCreate() → onCreateView() → onViewCreated() → [VISIBLE]
-↓
-[User swipes to next page]
-↓
-onDestroyView() (View destroyed, Fragment ALIVE)
-↓
-[User swipes back]
-↓
-onCreateView() → onViewCreated() (View recreated, Fragment STILL SAME)
-```
-
----
-
-### 2. Headless Fragments (No UI)
-
-```kotlin
-// Fragment without UI (for background work, retained state, etc.)
-class DataLoaderFragment : Fragment() {
-    lateinit var data: List<String>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true // (Deprecated but illustrates concept)
-
-        // Load data
-        data = loadDataFromDatabase()
-    }
-
-    // NO onCreateView() - this fragment has NO UI!
-}
-```
-
----
-
-### 3. Configuration Changes (Screen Rotation)
-
-**Without Fragment's approach** (hypothetical):
-```kotlin
-// If Fragment worked like Activity:
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.fragment_my) // - Would lose view on rotation
-    val textView = findViewById<TextView>(R.id.textView)
-    textView.text = viewModel.data // - Would be called again on rotation
-}
-```
-
-**With separate callbacks**:
-```kotlin
-class MyFragment : Fragment() {
-    // Created ONCE, survives rotation if in BackStack
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Initialize ViewModel (NOT recreated on rotation)
-        viewModel = ViewModelProvider(this)[MyViewModel::class.java]
-    }
-
-    // Called EVERY rotation (view destroyed/recreated)
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_my, container, false)
-    }
-
-    // View recreated, but ViewModel survives
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // ✅ ПРАВИЛЬНО: viewLifecycleOwner
         viewModel.data.observe(viewLifecycleOwner) { data ->
-            view.findViewById<TextView>(R.id.textView).text = data
+            binding.textView.text = data
+            // Автоматическая отписка при onDestroyView()
         }
-    }
-}
-```
-
-**Rotation flow**:
-```
-[Before rotation]
-onCreate() → onCreateView() → onViewCreated() → [VISIBLE]
-
-[User rotates device]
-onDestroyView() (View destroyed)
-↓
-onCreateView() (New view for new orientation)
-→ onViewCreated() (Bind to ViewModel again)
-
-onCreate() NOT called again! (Fragment still alive)
-```
-
----
-
-### 4. Memory Management
-
-```kotlin
-class ImageFragment : Fragment() {
-    private var imageView: ImageView? = null
-    private lateinit var imageData: ByteArray
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Load image data (can be large)
-        imageData = loadImageData()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val view = inflater.inflate(R.layout.fragment_image, container, false)
-        imageView = view.findViewById(R.id.imageView)
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        imageView?.setImageBitmap(decodeBitmap(imageData))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        imageView = null // Release view reference
-        // imageData still in memory (Fragment alive)
+        _binding = null // ✅ Освобождаем view reference
     }
 }
 ```
 
-When Fragment is in BackStack but not visible:
-- `onDestroyView()` called → View destroyed (frees memory)
-- `imageData` still retained (no need to reload)
-- When user navigates back → `onCreateView()` called again
-- Faster than recreating entire Fragment
-
----
-
-### 5. ViewLifecycleOwner
-
+❌ **Неправильно - Memory Leak**:
 ```kotlin
-class MyFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // - CORRECT: Observe using viewLifecycleOwner
-        viewModel.data.observe(viewLifecycleOwner) { data ->
-            textView.text = data
-        }
-
-        // - WRONG: Observe using fragment lifecycle
-        viewModel.data.observe(this) { data ->
-            textView.text = data // Memory leak!
-        }
-    }
-}
-```
-
-**Why viewLifecycleOwner?**
-
-Fragment lifecycle:
-```
-onCreate() → [Fragment alive] → onDestroy()
-```
-
-View lifecycle:
-```
-onCreateView() → [View alive] → onDestroyView()
-```
-
-**Problem without viewLifecycleOwner**:
-```
-Fragment created → onCreate()
-View created → onCreateView()
-User navigates away → onDestroyView() (View destroyed)
-Fragment still alive!
-
-If observing with "this" (Fragment lifecycle):
-- Observer still active
-- Tries to update destroyed view → CRASH or memory leak
-```
-
-**Solution**:
-```kotlin
-viewModel.data.observe(viewLifecycleOwner) { data ->
-    // Automatically unsubscribes when view destroyed
-}
-```
-
----
-
-## Lifecycle Comparison
-
-### Activity Lifecycle (Simple)
-
-```
-onCreate()
-   UI creation
-   State initialization
-   Everything together
-↓
-onDestroy()
-   Everything destroyed together
-```
-
-### Fragment Lifecycle (Complex)
-
-```
-onCreate()
-   Fragment instance created (no view)
-↓
-onCreateView()
-   View created
-↓
-onViewCreated()
-   View ready to use
-↓
-[Fragment visible]
-↓
-onDestroyView()
-   View destroyed (Fragment still alive!)
-↓
-[Can recreate view: onCreateView() again]
-↓
-onDestroy()
-   Fragment destroyed
-```
-
----
-
-## Real-World Scenarios
-
-### Scenario 1: ViewPager with 3 Fragments
-
-```kotlin
-class ViewPagerActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val fragments = listOf(
-            FragmentA(), // Page 0
-            FragmentB(), // Page 1
-            FragmentC()  // Page 2
-        )
-
-        viewPager.adapter = FragmentStateAdapter(fragments)
-        viewPager.offscreenPageLimit = 1 // Keep 1 page on each side
-    }
-}
-```
-
-**User interaction**:
-```
-[Initial state - Page 1 visible]
-- FragmentA: onCreate() → onCreateView() → onViewCreated()
-- FragmentB: onCreate() → onCreateView() → onViewCreated() [VISIBLE]
-- FragmentC: onCreate() (but NO onCreateView yet)
-
-[User swipes to Page 2]
-- FragmentA: onDestroyView() (view destroyed, Fragment alive)
-- FragmentB: still visible
-- FragmentC: onCreateView() → onViewCreated()
-
-[User swipes back to Page 1]
-- FragmentA: onCreateView() (view recreated, same Fragment instance!)
-- FragmentB: still visible
-- FragmentC: onDestroyView()
-```
-
-**Why?** Memory optimization. Only 3 views in memory at a time, even with 10 fragments.
-
----
-
-### Scenario 2: Fragment in BackStack
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    fun showFragmentB() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, FragmentB())
-            .addToBackStack("fragmentB")
-            .commit()
-    }
-}
-```
-
-**Flow**:
-```
-[FragmentA visible]
-FragmentA: onCreate() → onCreateView() → onViewCreated()
-
-[User clicks button → showFragmentB()]
-FragmentA: onDestroyView() (View destroyed, Fragment in BackStack)
-FragmentB: onCreate() → onCreateView() → onViewCreated()
-
-[User presses Back]
-FragmentB: onDestroyView() → onDestroy() (Fragment destroyed)
-FragmentA: onCreateView() → onViewCreated() (View recreated, SAME Fragment)
-```
-
-**FragmentA's onCreate() called only ONCE** even though view recreated twice!
-
----
-
-### Scenario 3: Configuration Change
-
-```kotlin
-class MyFragment : Fragment() {
-    private lateinit var viewModel: MyViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ViewModel survives rotation
-        viewModel = ViewModelProvider(this)[MyViewModel::class.java]
-        Log.d("Fragment", "onCreate called")
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Log.d("Fragment", "onCreateView called")
-        return inflater.inflate(R.layout.fragment_my, container, false)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("Fragment", "onDestroyView called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("Fragment", "onDestroy called")
-    }
-}
-```
-
-**Rotation log**:
-```
-[Initial]
-onCreate called
-onCreateView called
-
-[Rotate device]
-onDestroyView called
-onCreateView called
-
-[Rotate again]
-onDestroyView called
-onCreateView called
-
-[Navigate away]
-onDestroyView called
-onDestroy called
-```
-
-**onCreate() called only ONCE!**
-
----
-
-## Memory Leak Prevention
-
-### Wrong: Holding view reference in Fragment
-
-```kotlin
-// - MEMORY LEAK
 class BadFragment : Fragment() {
-    private lateinit var textView: TextView // - Holds view reference
+    private lateinit var textView: TextView // ❌ Держит reference на view
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val view = inflater.inflate(R.layout.fragment_bad, container, false)
+    override fun onCreateView(...): View {
+        val view = inflater.inflate(...)
         textView = view.findViewById(R.id.textView)
         return view
     }
 
-    // onDestroyView() not overridden - textView still references destroyed view!
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // ❌ НЕПРАВИЛЬНО: Fragment lifecycle
+        viewModel.data.observe(this) { data ->
+            textView.text = data
+            // Observer не отписывается при onDestroyView()
+            // Пытается обновить destroyed view → CRASH
+        }
+    }
+
+    // ❌ onDestroyView() не переопределен
+    // textView держит reference на destroyed view → MEMORY LEAK
 }
 ```
 
-**Problem**: When view destroyed (BackStack, ViewPager), `textView` still holds reference → memory leak.
+### Реальные Сценарии
 
-### Correct: Using ViewBinding
+**1. ViewPager с 5 фрагментами**:
+```kotlin
+viewPager.offscreenPageLimit = 1 // Только ±1 страница
+
+// Page 2 visible:
+Fragment 1: onCreate() done, onDestroyView() called (view destroyed)
+Fragment 2: onCreate() + onCreateView() (VISIBLE)
+Fragment 3: onCreate() + onCreateView() (offscreen)
+Fragment 4: onCreate() only (no view yet)
+Fragment 5: onCreate() only (no view yet)
+
+// Swipe to Page 3:
+Fragment 1: still alive (no view)
+Fragment 2: onDestroyView() called (view destroyed)
+Fragment 3: still has view (VISIBLE)
+Fragment 4: onCreateView() called (view created)
+Fragment 5: still no view
+
+// Memory: только 3 views из 5 fragments
+// onCreate() вызван 5 раз, onCreateView() только 3 раза
+```
+
+**2. Configuration Change (Rotation)**:
+```kotlin
+// Portrait mode:
+onCreate() → onCreateView() → onViewCreated()
+ViewModel initialized (data loaded)
+
+// Rotate to landscape:
+onDestroyView() called
+onCreateView() called (new layout for landscape)
+onViewCreated() called
+
+// onCreate() НЕ вызван!
+// ViewModel survived with data
+// Нет повторной загрузки данных
+```
+
+**3. Headless Fragment**:
+```kotlin
+// Fragment без UI для retained state
+class DataRetainerFragment : Fragment() {
+    lateinit var expensiveData: List<Item>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Загружаем данные ОДИН раз
+        expensiveData = loadFromDatabase()
+    }
+
+    // NO onCreateView() - фрагмент без UI!
+    // Используется для сохранения данных между rotation
+}
+```
+
+### Оптимизация Памяти
 
 ```kotlin
-// - CORRECT
-class GoodFragment : Fragment() {
-    private var _binding: FragmentGoodBinding? = null
-    private val binding get() = _binding!!
+class ImageGalleryFragment : Fragment() {
+    // Тяжелые данные в Fragment (survive view destruction)
+    private lateinit var imageData: List<ByteArray>
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentGoodBinding.inflate(inflater, container, false)
-        return binding.root
+    // View references nullable (destroyed in onDestroyView)
+    private var recyclerView: RecyclerView? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Загружаем данные ОДИН раз (дорогая операция)
+        imageData = loadImagesFromDatabase()
+    }
+
+    override fun onCreateView(...): View {
+        val view = inflater.inflate(R.layout.fragment_gallery, container, false)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textView.text = "Hello"
+        // Используем готовые данные (не перезагружаем)
+        recyclerView?.adapter = ImageAdapter(imageData)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // - Release view reference
+        recyclerView = null // Освобождаем UI (память)
+        // imageData остается (дешевое пересоздание view)
     }
 }
+
+// BackStack flow:
+// FragmentA → replace FragmentB:
+//   FragmentA.onDestroyView() → recyclerView freed (saves memory)
+//   imageData remains (no reload needed)
+// Press back:
+//   FragmentA.onCreateView() → fast (data ready)
+//   onCreate() NOT called → no expensive reload
 ```
 
 ---
 
-## Summary
+## Answer (EN)
 
-### Why Separate onCreate() and onCreateView()?
+Fragment has separate lifecycle callbacks (`onCreate()` vs `onCreateView()`) due to **independent Fragment and View lifecycles**:
 
-1. **View lifecycle != Fragment lifecycle**
-   - Fragment can survive without view (BackStack, ViewPager)
-   - View can be destroyed/recreated while Fragment persists
+**Architectural reasons**:
+1. **View can be destroyed without destroying Fragment** (BackStack, ViewPager)
+2. **Fragment can exist without UI** (headless fragments for retained state)
+3. **Memory optimization** - views released while Fragment retains data
+4. **Configuration changes** - views recreated, Fragment and ViewModel survive
+5. **ViewLifecycleOwner** - separate lifecycle for view-dependent observers
 
-2. **Memory optimization**
-   - Destroy views when not visible
-   - Keep Fragment data in memory
-   - Recreate view when needed
+### Lifecycle Flow
 
-3. **Configuration changes**
-   - Views destroyed/recreated on rotation
-   - Fragment state (ViewModel, data) survives
-   - No need to reload data
+```
+Fragment Lifecycle:
+onCreate() ────────────────────────────────────── onDestroy()
+           └─> onCreateView() ──> onDestroyView() ─┘
+                      View Lifecycle (shorter!)
+```
 
-4. **Headless fragments**
-   - Fragments can exist without UI
-   - Useful for retained state, background work
-
-5. **Proper lifecycle management**
-   - Separate `viewLifecycleOwner` for view-related observers
-   - Prevent memory leaks
-   - Clean resource management
-
-### Best Practices
+**Key scenarios**:
 
 ```kotlin
-class BestPracticeFragment : Fragment() {
-    // - ViewModel initialized in onCreate (survives view destruction)
-    private val viewModel: MyViewModel by viewModels()
+// ViewPager: view destroyed on swipe
+FragmentA visible → swipe → onDestroyView()
+Fragment ALIVE, view DESTROYED → swipe back → onCreateView() AGAIN
 
-    // - Binding nullable, cleaned up in onDestroyView
-    private var _binding: FragmentBinding? = null
+// BackStack: view destroyed on replace
+FragmentA → replace FragmentB → FragmentA.onDestroyView()
+Fragment IN BACKSTACK → back → onCreateView() AGAIN
+
+// Rotation: view recreated, Fragment survives
+Rotate → onDestroyView() → onCreateView()
+onCreate() NOT called! Fragment survives
+```
+
+### Proper View Reference Management
+
+✅ **Correct - ViewBinding**:
+```kotlin
+class MyFragment : Fragment() {
+    private var _binding: FragmentMyBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: MyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // - Initialize non-UI components here
+        // ViewModel initialized ONCE
+        // Survives onDestroyView()
     }
 
     override fun onCreateView(
@@ -590,113 +305,205 @@ class BestPracticeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentMyBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // - Observe using viewLifecycleOwner
+        // ✅ CORRECT: viewLifecycleOwner
         viewModel.data.observe(viewLifecycleOwner) { data ->
             binding.textView.text = data
+            // Auto-unsubscribes on onDestroyView()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // - Clean up view references
-        _binding = null
+        _binding = null // ✅ Release view reference
     }
 }
 ```
 
----
-
-## Ответ (RU)
-Фрагменты имеют отдельные callback'и для lifecycle (`onCreate()` vs `onCreateView()`) потому что:
-
-1. **Фрагмент может существовать без UI** (headless fragments)
-2. **View может быть уничтожен и пересоздан** пока Fragment жив
-3. **Независимость lifecycle** - жизненный цикл Fragment != жизненный цикл View
-4. **Configuration changes** - Views уничтожаются/пересоздаются, состояние Fragment сохраняется
-5. **Оптимизация памяти** - Views могут быть освобождены пока Fragment сохраняется
-
-### Примеры когда View уничтожается, но Fragment жив:
-
-**ViewPager**:
+❌ **Wrong - Memory Leak**:
 ```kotlin
-// Fragment A в BackStack ViewPager
-onCreateView() → [visible] → onDestroyView() (view destroyed)
-[User swipes back]
-onCreateView() again → [visible] (new view, SAME fragment)
-```
+class BadFragment : Fragment() {
+    private lateinit var textView: TextView // ❌ Holds view reference
 
-**BackStack**:
-```kotlin
-FragmentA → replace with FragmentB
-FragmentA: onDestroyView() (view destroyed, Fragment in BackStack)
-[User presses Back]
-FragmentA: onCreateView() (view recreated, SAME fragment)
-```
-
-**Rotation**:
-```kotlin
-[Rotate device]
-onDestroyView() → view destroyed for old orientation
-onCreateView() → new view for new orientation
-onCreate() NOT called (Fragment survives)
-```
-
-### ViewLifecycleOwner
-
-```kotlin
-override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    // - ПРАВИЛЬНО
-    viewModel.data.observe(viewLifecycleOwner) { data ->
-        textView.text = data // Отписка при onDestroyView()
+    override fun onCreateView(...): View {
+        val view = inflater.inflate(...)
+        textView = view.findViewById(R.id.textView)
+        return view
     }
 
-    // - НЕПРАВИЛЬНО
-    viewModel.data.observe(this) { data ->
-        textView.text = data // Утечка памяти!
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // ❌ WRONG: Fragment lifecycle
+        viewModel.data.observe(this) { data ->
+            textView.text = data
+            // Observer not unsubscribed on onDestroyView()
+            // Tries updating destroyed view → CRASH
+        }
     }
+
+    // ❌ onDestroyView() not overridden
+    // textView holds reference to destroyed view → MEMORY LEAK
 }
 ```
 
-### Best Practice
+### Real-World Scenarios
+
+**1. ViewPager with 5 fragments**:
+```kotlin
+viewPager.offscreenPageLimit = 1 // Only ±1 page
+
+// Page 2 visible:
+Fragment 1: onCreate() done, onDestroyView() called (view destroyed)
+Fragment 2: onCreate() + onCreateView() (VISIBLE)
+Fragment 3: onCreate() + onCreateView() (offscreen)
+Fragment 4: onCreate() only (no view yet)
+Fragment 5: onCreate() only (no view yet)
+
+// Swipe to Page 3:
+Fragment 1: still alive (no view)
+Fragment 2: onDestroyView() called (view destroyed)
+Fragment 3: still has view (VISIBLE)
+Fragment 4: onCreateView() called (view created)
+Fragment 5: still no view
+
+// Memory: only 3 views out of 5 fragments
+// onCreate() called 5 times, onCreateView() only 3 times
+```
+
+**2. Configuration Change (Rotation)**:
+```kotlin
+// Portrait mode:
+onCreate() → onCreateView() → onViewCreated()
+ViewModel initialized (data loaded)
+
+// Rotate to landscape:
+onDestroyView() called
+onCreateView() called (new layout for landscape)
+onViewCreated() called
+
+// onCreate() NOT called!
+// ViewModel survived with data
+// No data reload needed
+```
+
+**3. Headless Fragment**:
+```kotlin
+// Fragment without UI for retained state
+class DataRetainerFragment : Fragment() {
+    lateinit var expensiveData: List<Item>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Load data ONCE
+        expensiveData = loadFromDatabase()
+    }
+
+    // NO onCreateView() - fragment without UI!
+    // Used to retain data across rotation
+}
+```
+
+### Memory Optimization
 
 ```kotlin
-class MyFragment : Fragment() {
-    private var _binding: FragmentBinding? = null
-    private val binding get() = _binding!!
+class ImageGalleryFragment : Fragment() {
+    // Heavy data in Fragment (survives view destruction)
+    private lateinit var imageData: List<ByteArray>
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentBinding.inflate(inflater, container, false)
-        return binding.root
+    // View references nullable (destroyed in onDestroyView)
+    private var recyclerView: RecyclerView? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Load data ONCE (expensive operation)
+        imageData = loadImagesFromDatabase()
+    }
+
+    override fun onCreateView(...): View {
+        val view = inflater.inflate(R.layout.fragment_gallery, container, false)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Use ready data (no reload)
+        recyclerView?.adapter = ImageAdapter(imageData)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Освобождаем ссылку на view
+        recyclerView = null // Release UI (memory)
+        // imageData remains (cheap view recreation)
     }
 }
+
+// BackStack flow:
+// FragmentA → replace FragmentB:
+//   FragmentA.onDestroyView() → recyclerView freed (saves memory)
+//   imageData remains (no reload needed)
+// Press back:
+//   FragmentA.onCreateView() → fast (data ready)
+//   onCreate() NOT called → no expensive reload
 ```
 
-**Ключевая идея**: View lifecycle короче Fragment lifecycle. Отдельные callback'и позволяют:
-- Уничтожать views когда не видны (память)
-- Сохранять состояние Fragment (данные, ViewModel)
-- Быстро пересоздавать views когда нужно
+---
+
+## Follow-ups
+
+1. **What happens if you observe LiveData using Fragment's lifecycle instead of viewLifecycleOwner?**
+   - Observer remains active after view destroyed → memory leak
+   - Updates attempt on destroyed views → crash
+
+2. **How does ViewPager2 optimize memory with fragment view lifecycle?**
+   - `offscreenPageLimit` controls adjacent pages kept in memory
+   - Distant fragments: `onCreate()` called, view never created
+   - Swipe nearby: `onCreateView()` called, view created
+   - Swipe away: `onDestroyView()` called, fragment retained
+
+3. **Why can't Fragment use single lifecycle like Activity?**
+   - Fragments used in dynamic containers (ViewPager, BackStack, multi-pane)
+   - Need to exist without views for memory efficiency
+   - Activity always has window/decorView (single lifecycle works)
+
+4. **How to safely pass data between fragments considering view lifecycle?**
+   - Use shared ViewModel (survives view destruction)
+   - Use FragmentResultListener (lifecycle-aware)
+   - Avoid direct fragment references (view may be destroyed)
+
+5. **What's the performance impact of frequent onCreateView/onDestroyView cycles?**
+   - View inflation cost (layout parsing, object creation)
+   - Mitigate with RecyclerView inside Fragment (reuses views)
+   - ViewBinding reduces `findViewById()` overhead
+   - Heavy data in Fragment (onCreate), light view setup (onCreateView)
+
+---
+
+## References
+
+- [[c-fragment-lifecycle]] - Complete fragment lifecycle stages
+- [[c-viewmodel]] - ViewModel scope and survival
+- [[c-view-binding]] - Safe view reference management
+- [[c-livedata]] - Lifecycle-aware observers
+- [Android Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [ViewLifecycleOwner](https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner())
+- [Fragment Best Practices](https://developer.android.com/guide/fragments/best-practices)
 
 ---
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- q-rxjava-pagination-recyclerview--android--medium - Ui
+- [[q-save-data-outside-fragment--android--medium]] - Fragment data retention
+
+### Related (Same Level)
+- [[q-shared-preferences--android--easy]] - Data persistence
+- [[q-annotation-processing-android--android--medium]] - Code generation
+
+### Advanced (Harder)
+- [[q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium]] - RecyclerView optimization

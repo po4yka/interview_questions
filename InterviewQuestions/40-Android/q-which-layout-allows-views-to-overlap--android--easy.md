@@ -12,11 +12,9 @@ status: draft
 moc: moc-android
 related: [q-what-is-layout-types-and-when-to-use--android--easy, q-viewgroup-vs-view-differences--android--easy, q-jetpack-compose-lazy-column--android--easy]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 sources: []
 tags: [android, android/ui-views, android/ui-compose, layouts, framelayout, compose, difficulty/easy]
-date created: Wednesday, October 29th 2025, 12:15:31 pm
-date modified: Thursday, October 30th 2025, 3:17:51 pm
 ---
 
 # Вопрос (RU)
@@ -364,15 +362,17 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ## Related Questions
 
-### Prerequisites
+### Prerequisites (Easier)
 - [[q-viewgroup-vs-view-differences--android--easy]] — Understanding View hierarchy
 - [[q-what-is-layout-types-and-when-to-use--android--easy]] — Layout types overview
+- [[q-how-to-choose-layout-for-fragment--android--easy]] — Choosing the right layout
 
-### Related
+### Related (Same Level)
 - [[q-which-layout-for-large-list--android--easy]] — RecyclerView for lists
-- [[q-jetpack-compose-lazy-column--android--easy]] — LazyColumn in Compose
+- [[q-how-to-fix-a-bad-element-layout--android--easy]] — Layout debugging
 
-### Advanced
-- More complex positioning with ConstraintLayout
-- Custom ViewGroup for advanced overlay logic
-- Compose layout performance optimization
+### Advanced (Harder)
+- [[q-is-layoutinflater-a-singleton-and-why--android--medium]] — LayoutInflater internals
+- [[q-what-is-layout-performance-measured-in--android--medium]] — Layout performance
+- [[q-compose-custom-layout--android--hard]] — Custom Compose layouts
+- [[q-custom-viewgroup-layout--android--hard]] — Custom ViewGroup creation

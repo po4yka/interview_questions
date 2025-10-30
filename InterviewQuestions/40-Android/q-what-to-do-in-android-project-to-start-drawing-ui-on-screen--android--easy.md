@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, android/activity, android/ui-views, android/ui-compose, difficulty/easy]
+date created: Monday, October 27th 2025, 6:42:43 pm
+date modified: Thursday, October 30th 2025, 4:53:26 pm
 ---
+
 # Вопрос (RU)
 > Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
 
