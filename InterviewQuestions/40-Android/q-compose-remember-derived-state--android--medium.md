@@ -15,9 +15,9 @@ related:
   - q-compose-performance-optimization--android--hard
   - q-remember-vs-remembersaveable-compose--android--medium
   - q-compose-slot-table-recomposition--android--hard
-sources: [https://developer.android.com/develop/ui/compose/state]
+sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
 ---
 
@@ -33,7 +33,7 @@ tags: [android/ui-compose, android/ui-state, difficulty/medium]
 
 ### Основные концепции
 
-**remember** — кеширует значения в композиции; переживает рекомпозицию, но не переживает пересоздание активити.
+**remember** — кеширует значения в композиции; переживает рекомпозицию, но не пересоздание активити.
 
 **rememberSaveable** — сохраняет значения через изменения конфигурации и смерть процесса (использует Bundle/Saver).
 
@@ -83,7 +83,6 @@ fun Login() {
 #### Custom Saver для сложных типов
 
 ```kotlin
-@Stable
 data class Form(val email: String, val agree: Boolean)
 
 val FormSaver = mapSaver(
@@ -173,7 +172,6 @@ fun Login() {
 #### Custom Saver for complex types
 
 ```kotlin
-@Stable
 data class Form(val email: String, val agree: Boolean)
 
 val FormSaver = mapSaver(
@@ -213,29 +211,30 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 
 ## Follow-ups
 
-- When does derivedStateOf hurt performance (overuse on fast-changing inputs)?
-- How to design Savers for deeply nested immutable models?
-- How to test process-death resilience of multi-step forms and wizards?
-- What happens if you use derivedStateOf without remember?
-- How does remember compare to LaunchedEffect for side effects?
+- How does derivedStateOf affect performance when used with fast-changing state?
+- What are the Bundle size limitations for rememberSaveable and how to handle large objects?
+- Can you nest derivedStateOf calls, and what are the implications?
+- How does remember with keys compare to LaunchedEffect for triggering side effects on parameter changes?
+- What happens if you use derivedStateOf without wrapping it in remember?
 
 ## References
 
+- [[c-compose-state]]
+- [[c-compose-recomposition]]
 - [Compose State Documentation](https://developer.android.com/develop/ui/compose/state)
 - [Compose Performance Guide](https://developer.android.com/jetpack/compose/performance)
-- [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-remember-vs-remembersaveable-compose--android--medium]]
-- [[q-compose-state-hoisting--android--easy]]
+- [[q-remember-vs-remembersaveable-compose--android--medium]] — Basic difference between remember variants
+- [[q-compose-state-hoisting--android--easy]] — State management fundamentals
 
 ### Related (Same Level)
-- [[q-compose-side-effects--android--medium]]
-- [[q-compose-state-flow-integration--android--medium]]
+- [[q-compose-side-effects--android--medium]] — Side effect APIs in Compose
+- [[q-compose-state-flow-integration--android--medium]] — Integrating Flow with Compose state
 
 ### Advanced (Harder)
-- [[q-compose-performance-optimization--android--hard]]
-- [[q-compose-compiler-plugin--android--hard]]
-- [[q-compose-slot-table-recomposition--android--hard]]
+- [[q-compose-performance-optimization--android--hard]] — Advanced performance optimization techniques
+- [[q-compose-compiler-plugin--android--hard]] — How Compose compiler optimizes state
+- [[q-compose-slot-table-recomposition--android--hard]] — Deep dive into recomposition mechanics

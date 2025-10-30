@@ -12,12 +12,9 @@ status: draft
 moc: moc-android
 related: [q-android-app-components--android--easy, q-fragment-vs-activity-lifecycle--android--medium, q-service-types-android--android--easy, c-service, c-lifecycle]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/service, android/broadcast-receiver, android/content-provider, difficulty/easy]
-sources:
-  - https://developer.android.com/guide/components/fundamentals
-  - https://developer.android.com/guide/components/services
-  - https://developer.android.com/guide/components/broadcasts
+sources: []
 ---
 # Вопрос (RU)
 

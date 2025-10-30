@@ -15,7 +15,10 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
+date created: Wednesday, October 29th 2025, 4:48:34 pm
+date modified: Thursday, October 30th 2025, 11:13:04 am
 ---
+
 # Вопрос (RU)
 > Какие примитивы асинхронности предоставляет Android?
 

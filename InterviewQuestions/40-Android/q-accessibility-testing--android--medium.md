@@ -15,7 +15,10 @@ created: 2025-10-11
 updated: 2025-10-29
 tags: [android/testing-ui, android/ui-accessibility, testing, a11y, difficulty/medium]
 sources: []
+date created: Wednesday, October 29th 2025, 4:18:42 pm
+date modified: Thursday, October 30th 2025, 11:12:48 am
 ---
+
 # Вопрос (RU)
 > Как тестировать доступность в Android-приложениях?
 

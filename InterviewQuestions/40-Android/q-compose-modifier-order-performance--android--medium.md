@@ -19,17 +19,19 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - q-compose-compiler-plugin--android--hard
-  - q-compose-custom-layout--android--hard
-  - q-compose-gesture-detection--android--medium
+  - c-compose-phases
+  - c-compose-modifiers
   - q-compose-recomposition-optimization--android--hard
+  - q-compose-custom-layout--android--hard
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-30
 tags:
   - android/performance-memory
   - android/ui-compose
   - difficulty/medium
+  - compose
+  - optimization
 ---
 
 # Вопрос (RU)
@@ -42,239 +44,235 @@ tags:
 
 ## Ответ (RU)
 
-### Основные правила
+### Направление обработки
 
-**Направление обработки**:
-- Размер и ограничения: верх → низ
-- Отрисовка: низ → верх
-- Размещайте размерные модификаторы рано — сокращаете работу вниз по цепочке
+Модификаторы работают в двух фазах:
+- **Constraints & measurement** (верх → низ): размерные ограничения идут вниз
+- **Drawing** (низ → верх): отрисовка начинается от самого вложенного
 
-**Критичные зоны**:
-- Padding vs background: порядок меняет область отрисовки
-- Clickable area: где стоит модификатор — такая область клика
-- Переиспользуйте цепочки: избегайте условного построения, используйте `.then()`
+**Оптимизация**: размещайте size/width/height рано в цепочке — downstream модификаторы получают фиксированные constraints, избегая лишних измерений.
 
-**Производительность**:
-- Draw-only модификаторы дешевле layout-модификаторов
-- Переиспользуйте дорогие объекты (`Brush`, `Shape`, `Painter`)
-- Фиксированные размеры предпочтительнее intrinsic измерений
+### Критические паттерны
 
-### Паттерны
-
-**Padding + Background**
+**1. Padding + Background**
 ```kotlin
-// ❌ Background покрывает только внутреннюю область
-Modifier
-    .padding(16.dp)
-    .background(Color.Blue)
-
 // ✅ Background покрывает всю область
 Modifier
     .background(Color.Blue)
     .padding(16.dp)
+
+// ❌ Background только внутри padding
+Modifier
+    .padding(16.dp)
+    .background(Color.Blue)
 ```
 
-**Ранние ограничения**
+**2. Ранние размерные ограничения**
 ```kotlin
-// ✅ Размер рано → меньше работы downstream
+// ✅ Размер установлен — дальше по цепочке нет пересчётов
 Modifier
     .size(100.dp)
-    .background(Color.Blue)
     .padding(8.dp)
+    .background(Color.Blue)
 
-// ❌ Размер поздно → измерения проходят весь путь
+// ❌ Размер в конце — измерения проходят всю цепочку
 Modifier
     .padding(8.dp)
     .background(Color.Blue)
     .size(100.dp)
 ```
 
-**Область клика**
+**3. Область клика**
 ```kotlin
-// ❌ Маленькая область: 48×48dp
-Modifier
-    .size(48.dp)
-    .clickable { }
-
-// ✅ Большая область: 48dp + padding
+// ✅ Click область включает padding
 Modifier
     .padding(12.dp)
-    .clickable { }
+    .clickable { onClick() }
     .size(48.dp)
+
+// ❌ Click только на 48×48dp
+Modifier
+    .size(48.dp)
+    .clickable { onClick() }
 ```
 
-**Переиспользование цепочек**
+**4. Переиспользование с `.then()`**
 ```kotlin
-// ✅ Одна цепочка с .then()
-val baseModifier = Modifier.size(100.dp)
-val finalModifier = baseModifier
-    .then(if (isClickable) Modifier.clickable { onClick() } else Modifier)
+// ✅ Одна цепочка, избегаем аллокаций
+val modifier = Modifier.size(100.dp)
+    .then(if (clickable) Modifier.clickable { } else Modifier)
     .then(if (selected) Modifier.border(2.dp, Color.Blue) else Modifier)
 
-// ❌ Разные цепочки — реаллокации
-val modifier = if (isClickable) {
-    Modifier.size(100.dp).clickable { onClick() }
+// ❌ Условные построения создают новые цепочки
+val modifier = if (clickable) {
+    Modifier.size(100.dp).clickable { }
 } else {
     Modifier.size(100.dp)
 }
 ```
 
-**Draw vs Layout**
+**5. Draw vs Layout модификаторы**
 ```kotlin
-// ✅ Draw-only: без layout прохода
+// ✅ drawWithContent — только draw phase
 fun Modifier.debugBorder() = drawWithContent {
     drawContent()
     drawRect(Color.Red, style = Stroke(2.dp.toPx()))
 }
 
-// ❌ Layout модификатор: дороже
+// ❌ border() — проходит layout phase
 fun Modifier.debugBorder() = border(2.dp, Color.Red)
 ```
 
+### Ключевые принципы
+
+- **Draw-only дешевле layout**: используйте `drawBehind`/`drawWithContent` для визуальных эффектов
+- **Переиспользуйте объекты**: `Brush`, `Shape`, `Painter` — выносите в константы или `remember`
+- **Фиксированные размеры**: `size(100.dp)` предпочтительнее `wrapContentSize()` или intrinsic measurements
+- **Избегайте вложенных intrinsic**: `Row(Modifier.height(IntrinsicSize.Min))` внутри `Column(IntrinsicSize.Max)` вызывает multiple pass
+
 ### Профилирование
 
-**Инструменты**:
-- Layout Inspector: визуализация recomposition
-- Perfetto: трейсинг frame timing
-- Composition tracing: счётчик перекомпозиций
+- **Layout Inspector**: композиции + recomposition count
+- **Perfetto traces**: frame timing, skipped frames
+- **Composition tracing**: включить через `adb shell setprop debug.compose.trace true`
 
-**Метрики**:
-- Recomposition count: <3 на UI событие
-- Layout passes: избегайте вложенных intrinsic измерений
-- Аллокации: `Brush`/`Shape` переиспользуются
+**Целевые метрики**:
+- Recompositions на UI event: <3
+- Layout passes на frame: 1 (избегайте multi-pass)
+- Allocations: минимизировать в hot paths
 
 ## Answer (EN)
 
-### Core Rules
+### Processing direction
 
-**Processing direction**:
-- Size and constraints: top → bottom
-- Drawing: bottom → top
-- Place sizing modifiers early — reduces downstream work
+Modifiers operate in two phases:
+- **Constraints & measurement** (top → bottom): size constraints flow down
+- **Drawing** (bottom → top): drawing starts from innermost modifier
 
-**Critical zones**:
-- Padding vs background: order changes draw area
-- Clickable area: modifier placement defines touch target
-- Reuse chains: avoid conditional construction, use `.then()`
+**Optimization**: place size/width/height early in chain — downstream modifiers receive fixed constraints, avoiding unnecessary measurements.
 
-**Performance**:
-- Draw-only modifiers cheaper than layout modifiers
-- Reuse expensive objects (`Brush`, `Shape`, `Painter`)
-- Fixed sizes preferred over intrinsic measurements
+### Critical patterns
 
-### Patterns
-
-**Padding + Background**
+**1. Padding + Background**
 ```kotlin
-// ❌ Background covers only inner area
-Modifier
-    .padding(16.dp)
-    .background(Color.Blue)
-
 // ✅ Background covers full area
 Modifier
     .background(Color.Blue)
     .padding(16.dp)
+
+// ❌ Background only inside padding
+Modifier
+    .padding(16.dp)
+    .background(Color.Blue)
 ```
 
-**Early constraints**
+**2. Early size constraints**
 ```kotlin
-// ✅ Size early → less downstream work
+// ✅ Size set early — no recalculations downstream
 Modifier
     .size(100.dp)
-    .background(Color.Blue)
     .padding(8.dp)
+    .background(Color.Blue)
 
-// ❌ Size late → measurements traverse entire chain
+// ❌ Size at end — measurements traverse entire chain
 Modifier
     .padding(8.dp)
     .background(Color.Blue)
     .size(100.dp)
 ```
 
-**Click area**
+**3. Click area**
 ```kotlin
-// ❌ Small area: 48×48dp
-Modifier
-    .size(48.dp)
-    .clickable { }
-
-// ✅ Large area: 48dp + padding
+// ✅ Click area includes padding
 Modifier
     .padding(12.dp)
-    .clickable { }
+    .clickable { onClick() }
     .size(48.dp)
+
+// ❌ Click only on 48×48dp
+Modifier
+    .size(48.dp)
+    .clickable { onClick() }
 ```
 
-**Chain reuse**
+**4. Chain reuse with `.then()`**
 ```kotlin
-// ✅ Single chain with .then()
-val baseModifier = Modifier.size(100.dp)
-val finalModifier = baseModifier
-    .then(if (isClickable) Modifier.clickable { onClick() } else Modifier)
+// ✅ Single chain, avoid allocations
+val modifier = Modifier.size(100.dp)
+    .then(if (clickable) Modifier.clickable { } else Modifier)
     .then(if (selected) Modifier.border(2.dp, Color.Blue) else Modifier)
 
-// ❌ Different chains — reallocations
-val modifier = if (isClickable) {
-    Modifier.size(100.dp).clickable { onClick() }
+// ❌ Conditional constructions create new chains
+val modifier = if (clickable) {
+    Modifier.size(100.dp).clickable { }
 } else {
     Modifier.size(100.dp)
 }
 ```
 
-**Draw vs Layout**
+**5. Draw vs Layout modifiers**
 ```kotlin
-// ✅ Draw-only: no layout pass
+// ✅ drawWithContent — draw phase only
 fun Modifier.debugBorder() = drawWithContent {
     drawContent()
     drawRect(Color.Red, style = Stroke(2.dp.toPx()))
 }
 
-// ❌ Layout modifier: more expensive
+// ❌ border() — goes through layout phase
 fun Modifier.debugBorder() = border(2.dp, Color.Red)
 ```
 
+### Key principles
+
+- **Draw-only cheaper than layout**: use `drawBehind`/`drawWithContent` for visual effects
+- **Reuse objects**: `Brush`, `Shape`, `Painter` — extract to constants or `remember`
+- **Fixed sizes**: `size(100.dp)` preferred over `wrapContentSize()` or intrinsic measurements
+- **Avoid nested intrinsics**: `Row(Modifier.height(IntrinsicSize.Min))` inside `Column(IntrinsicSize.Max)` causes multiple passes
+
 ### Profiling
 
-**Tools**:
-- Layout Inspector: recomposition visualization
-- Perfetto: frame timing traces
-- Composition tracing: recomposition counters
+- **Layout Inspector**: compositions + recomposition counts
+- **Perfetto traces**: frame timing, skipped frames
+- **Composition tracing**: enable via `adb shell setprop debug.compose.trace true`
 
-**Metrics**:
-- Recomposition count: <3 per UI event
-- Layout passes: avoid nested intrinsic measurements
-- Allocations: `Brush`/`Shape` reuse
+**Target metrics**:
+- Recompositions per UI event: <3
+- Layout passes per frame: 1 (avoid multi-pass)
+- Allocations: minimize in hot paths
 
 ---
 
 ## Follow-ups
 
-- How to detect unnecessary re-measurements in modifier chains?
-- When to use `drawBehind` vs `drawWithContent` vs `drawWithCache`?
-- How does modifier chain allocation affect scrolling performance?
-- What's the impact of conditional modifiers on composition locality?
+- How does `Modifier.composed()` affect performance and when should it be avoided?
+- What is the cost of conditional modifiers vs using `Modifier.then()` in hot paths?
+- How do intrinsic measurements impact layout performance in nested Compose layouts?
+- When should custom `LayoutModifier` be used instead of built-in modifiers?
+- How can Layout Inspector be used to detect redundant recompositions caused by modifier chains?
 
 ## References
 
-- [[c-data-structures]]
 - [[c-compose-phases]]
+- [[c-compose-modifiers]]
+- [[c-compose-recomposition]]
 - https://developer.android.com/develop/ui/compose/performance
 - https://developer.android.com/develop/ui/compose/modifiers
+- https://developer.android.com/develop/ui/compose/modifiers-list
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-jetpack-overview--android--easy]]
 - [[q-compose-state-vs-remember--android--easy]]
+- [[q-compose-side-effects--android--medium]]
 
 ### Related (Same Level)
 - [[q-compose-gesture-detection--android--medium]]
-- [[q-animated-visibility-vs-content--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
+- [[q-compose-lazy-column-optimization--android--medium]]
 
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
-- [[q-compose-lazy-layout-optimization--android--hard]]
 - [[q-compose-recomposition-optimization--android--hard]]
+- [[q-compose-lazy-layout-optimization--android--hard]]

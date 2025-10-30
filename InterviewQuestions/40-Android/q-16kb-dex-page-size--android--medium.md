@@ -15,7 +15,10 @@ created: 2025-10-25
 updated: 2025-10-29
 sources: []
 tags: [android/gradle, android/performance-memory, difficulty/medium]
+date created: Wednesday, October 29th 2025, 4:18:15 pm
+date modified: Thursday, October 30th 2025, 11:12:44 am
 ---
+
 # Вопрос (RU)
 > Что такое проблема размера страницы DEX 16KB в Android?
 

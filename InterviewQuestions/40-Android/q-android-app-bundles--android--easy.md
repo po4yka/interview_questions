@@ -15,7 +15,10 @@ created: 2025-10-05
 updated: 2025-10-29
 sources: ["https://developer.android.com/guide/app-bundle"]
 tags: [android/app-bundle, android/gradle, difficulty/easy]
+date created: Wednesday, October 29th 2025, 4:18:34 pm
+date modified: Thursday, October 30th 2025, 11:12:59 am
 ---
+
 # Вопрос (RU)
 > Что такое Android App Bundle (AAB)?
 

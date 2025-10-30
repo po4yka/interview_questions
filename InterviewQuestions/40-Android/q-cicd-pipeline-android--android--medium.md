@@ -3,15 +3,11 @@ id: 20251012-122799
 title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
 aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android
-subtopics:
-  - ci-cd
-  - gradle
+subtopics: [ci-cd, gradle, testing-instrumented]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
@@ -19,21 +15,21 @@ related:
   - q-cicd-automated-testing--android--medium
   - q-cicd-deployment-automation--android--medium
 created: 2025-10-11
-updated: 2025-10-27
+updated: 2025-10-29
 sources: []
-tags: [android/ci-cd, android/gradle, difficulty/medium]
+tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/medium]
 ---
 # Вопрос (RU)
-> CI/CD пайплайн для Android?
+> Как построить эффективный CI/CD пайплайн для Android-приложения?
 
 # Question (EN)
-> CI/CD Pipeline for Android?
+> How to build an effective CI/CD pipeline for Android applications?
 
 ---
 
 ## Ответ (RU)
 
-### Цели CI/CD пайплайна
+### Цели пайплайна
 
 * **Скорость**: проверки PR ≤10 минут на средних проектах
 * **Воспроизводимость**: Gradle wrapper, зафиксированные версии SDK/build-tools
@@ -64,7 +60,7 @@ tasks.register("staticAnalysis") {
 }
 ```
 * ktlint, detekt, Android Lint (SARIF для аннотаций PR)
-* Dependency security scan (OWASP) с [[c-encryption]]
+* Dependency security scan (OWASP)
 
 **3. Unit тесты**
 ```kotlin
@@ -73,7 +69,7 @@ tasks.withType<Test> {
     // ✅ Retry plugin для flaky тестов (макс 1 retry)
 }
 ```
-* Kover/Jacoco для покрытия (XML + HTML), см. [[c-unit-testing]]
+* Kover/Jacoco для покрытия (XML + HTML)
 * Fail на новых flaky в изменённых модулях
 
 **4. Build**
@@ -83,7 +79,7 @@ tasks.withType<Test> {
   --configuration-cache
 # ✅ Производит AAB, mapping.txt, splits
 ```
-* R8 full mode, reproducible versioning, см. [[c-gradle]] и [[c-app-bundle]]
+* R8 full mode, reproducible versioning
 
 **5. Instrumented тесты**
 ```kotlin
@@ -102,27 +98,18 @@ testOptions {
 ```
 * Headless emulator (GPU swiftshader)
 * Sharding через Marathon/Flank для параллелизма
-* Capture logcat, screenshots, videos
 
 ### Оптимизация
 
 **Кэширование**
-```yaml
-# GitHub Actions
-- uses: actions/cache@v4
-  with:
-    key: gradle-${{ hashFiles('**/*.gradle*', 'gradle.properties') }}
-    path: |
-      ~/.gradle/caches
-      ~/.gradle/wrapper
-```
 * Configuration cache + remote build cache
-* AVD images cache (`~/.android/avd`)
+* AVD images cache
+* Gradle wrapper, dependencies, build outputs
 
 **Параллелизм**
 * `--parallel` + tune `org.gradle.workers.max`
 * Независимые jobs (checks/tests/build)
-* Matrix runs по API levels/ABIs
+* Matrix runs по API levels
 
 ### Quality gates
 
@@ -151,7 +138,7 @@ testOptions {
 
 ## Answer (EN)
 
-### CI/CD Pipeline Goals
+### Pipeline Goals
 
 * **Speed**: PR checks ≤10 min on mid-size projects
 * **Reproducibility**: Gradle wrapper, locked SDK/build-tools versions
@@ -220,27 +207,18 @@ testOptions {
 ```
 * Headless emulator (GPU swiftshader)
 * Sharding via Marathon/Flank for parallelism
-* Capture logcat, screenshots, videos
 
 ### Optimization
 
 **Caching**
-```yaml
-# GitHub Actions
-- uses: actions/cache@v4
-  with:
-    key: gradle-${{ hashFiles('**/*.gradle*', 'gradle.properties') }}
-    path: |
-      ~/.gradle/caches
-      ~/.gradle/wrapper
-```
 * Configuration cache + remote build cache
-* AVD images cache (`~/.android/avd`)
+* AVD images cache
+* Gradle wrapper, dependencies, build outputs
 
 **Parallelism**
 * `--parallel` + tune `org.gradle.workers.max`
 * Independent jobs (checks/tests/build)
-* Matrix runs across API levels/ABIs
+* Matrix runs across API levels
 
 ### Quality gates
 
@@ -267,14 +245,22 @@ testOptions {
 * Size budget enforcement (max delta MB)
 * ANR rate monitoring
 
+---
+
 ## Follow-ups
-- How do you handle flaky tests in CI without blocking PRs?
-- What's the trade-off between local vs remote build cache?
+
+- How do you handle flaky tests in CI without blocking PRs entirely?
+- What are the trade-offs between local vs remote build cache configurations?
 - How do you implement zero-downtime rollbacks for Android releases?
-- What metrics determine staged rollout promotion decisions?
-- How do you secure signing keys in cloud CI environments?
+- What metrics determine staged rollout promotion decisions (crash rate, ANR, install success)?
+- How do you secure signing keys and API credentials in cloud CI environments?
 
 ## References
+
+- [[c-gradle]] - Gradle build system fundamentals
+- [[c-app-bundle]] - Android App Bundle format
+- [[c-unit-testing]] - Unit testing best practices
+- [[c-encryption]] - Security and encryption concepts
 - https://docs.github.com/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 - https://developer.android.com/studio/test/gradle-managed-devices
 - https://docs.gradle.org/current/userguide/configuration_cache.html
@@ -285,13 +271,16 @@ testOptions {
 ### Prerequisites (Easier)
 - [[q-build-optimization-gradle--android--medium]] - Gradle build optimization basics
 - [[q-cicd-automated-testing--android--medium]] - Test automation strategies
+- Understanding of Gradle build lifecycle and tasks
 
 ### Related (Same Level)
 - [[q-cicd-deployment-automation--android--medium]] - Deployment automation details
 - Gradle dependency management and version catalogs
-- Android test sharding strategies
+- Android test sharding and parallelization strategies
+- ProGuard/R8 configuration for release builds
 
 ### Advanced (Harder)
-- Advanced build cache optimization and configuration
-- Custom Gradle plugins for CI/CD workflows
+- Advanced build cache optimization and Gradle Enterprise integration
+- Custom Gradle plugins for CI/CD workflow automation
 - Multi-module Android architecture for CI efficiency
+- Dynamic feature modules and staged rollout strategies

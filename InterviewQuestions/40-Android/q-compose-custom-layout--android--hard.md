@@ -3,7 +3,7 @@ id: 20251012-122804
 title: Compose Custom Layout / Кастомный layout в Compose
 aliases: [Compose Custom Layout, Кастомный layout в Compose, Custom Layout Jetpack Compose, Кастомная разметка Compose]
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics: [ui-compose, ui-graphics]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -13,11 +13,11 @@ moc: moc-android
 related:
   - q-compose-canvas-graphics--android--hard
   - q-compose-compiler-plugin--android--hard
-  - q-android-performance-measurement-tools--android--medium
+  - q-compose-recomposition-optimization--android--medium
 sources: []
 created: 2025-10-11
-updated: 2025-10-28
-tags: [android/ui-compose, android/ui-views, difficulty/hard, custom-layout, layout-measurement]
+updated: 2025-10-29
+tags: [android/ui-compose, android/ui-graphics, difficulty/hard, custom-layout, layout-measurement]
 ---
 
 # Вопрос (RU)
@@ -32,20 +32,17 @@ tags: [android/ui-compose, android/ui-views, difficulty/hard, custom-layout, lay
 
 ### Основные концепции
 
-**Constraints (ограничения)** - диапазон min/max width/height от родителя. Все дочерние элементы **обязаны** измеряться и размещаться в пределах этих constraints.
-
-**MeasurePolicy** - контракт из трех шагов:
-1. Измерить дочерние элементы (measurables)
-2. Вычислить итоговый размер layout
-3. Разместить дочерние элементы (place)
+**Layout** в Compose использует `MeasurePolicy` — контракт из трех шагов:
+1. **Measure** — каждый дочерний элемент измеряется с переданными `Constraints` (min/max width/height)
+2. **Calculate** — layout вычисляет собственный размер на основе измеренных дочерних элементов
+3. **Place** — размещение дочерних элементов в координатах layout
 
 **Ключевые правила**:
-- Каждый measurable измеряется **ровно один раз**
+- Каждый measurable измеряется **ровно один раз** (иначе exception)
 - Нельзя аллоцировать объекты в measure/place (performance)
 - Использовать `placeRelative` для RTL-поддержки
-- Параметры должны быть stable/immutable для skip-оптимизации
 
-### Минималистичный custom layout
+### Минимальный пример: TwoColumn
 
 ```kotlin
 @Composable
@@ -67,16 +64,14 @@ fun TwoColumn(
 
         // ✅ Измеряем с уменьшенными constraints
         val leftWidth = (constraints.maxWidth - gapPx) / 2
-        val rightWidth = constraints.maxWidth - leftWidth - gapPx
-
         val leftPlaceables = leftMeasurables.map {
             it.measure(constraints.copy(maxWidth = leftWidth))
         }
         val rightPlaceables = rightMeasurables.map {
-            it.measure(constraints.copy(maxWidth = rightWidth))
+            it.measure(constraints.copy(maxWidth = constraints.maxWidth - leftWidth - gapPx))
         }
 
-        // Вычисляем итоговую высоту
+        // Вычисляем высоту
         val leftHeight = leftPlaceables.sumOf { it.height }
         val rightHeight = rightPlaceables.sumOf { it.height }
         val totalHeight = maxOf(leftHeight, rightHeight)
@@ -85,7 +80,7 @@ fun TwoColumn(
         layout(constraints.maxWidth, totalHeight) {
             var yLeft = 0
             leftPlaceables.forEach { placeable ->
-                placeable.placeRelative(0, yLeft)
+                placeable.placeRelative(0, yLeft) // ✅ placeRelative для RTL
                 yLeft += placeable.height
             }
 
@@ -101,11 +96,12 @@ fun TwoColumn(
 
 ### Переиспользуемый MeasurePolicy
 
+Для оптимизации можно вынести `MeasurePolicy` как top-level объект:
+
 ```kotlin
 // ✅ MeasurePolicy вне composable для переиспользования
 private val twoColumnMeasurePolicy = MeasurePolicy { measurables, constraints ->
     // Та же логика, но без capture composable-параметров
-    // Все параметры должны быть stable
     // ...
 }
 
@@ -118,57 +114,50 @@ fun TwoColumn(
 }
 ```
 
-### Intrinsics (опционально)
+**Ограничение**: все параметры layout (gap, spacing) должны быть внешними, так как MeasurePolicy не может capture composable state.
 
-Intrinsics нужны для случаев, когда родителю нужно знать размер **до** реального measurement (например, для text wrapping).
+### Intrinsics
+
+Intrinsics позволяют parent узнать размер child **до** реального measurement (например, для text wrapping).
 
 ```kotlin
 val policy = object : MeasurePolicy {
     override fun MeasureScope.measure(
         measurables: List<Measurable>,
         constraints: Constraints
-    ): MeasureResult {
-        // Основная логика
-    }
+    ): MeasureResult = // ...
 
     // ❌ Без intrinsics Compose выдаст warning
     override fun IntrinsicMeasureScope.minIntrinsicHeight(
         measurables: List<IntrinsicMeasurable>,
         width: Int
     ) = measurables.sumOf { it.minIntrinsicHeight(width) }
-
-    override fun IntrinsicMeasureScope.maxIntrinsicHeight(
-        measurables: List<IntrinsicMeasurable>,
-        width: Int
-    ) = measurables.sumOf { it.maxIntrinsicHeight(width) }
 }
 ```
 
+**Используйте intrinsics** только если parent реально зависит от размера child (например, `Row` с `Modifier.weight`).
+
 ### Performance Tips
 
-- **Избегать аллокаций**: не создавать списки/массивы в measure-блоке
-- **Stable параметры**: `gap: Dp` вместо `gap: State<Dp>` для skip
+- **Stable параметры**: `gap: Dp` вместо `gap: State<Dp>` для skip-оптимизации
+- **Избегать аллокаций**: не создавать списки в measure-блоке, переиспользовать коллекции
 - **Детерминизм**: не читать composition state внутри measure
-- **Тестирование**: проверять с разными constraints, включая min=max
 
 ## Answer (EN)
 
 ### Core Concepts
 
-**Constraints** - min/max width/height range from parent. All children **must** measure and place within these constraints.
-
-**MeasurePolicy** - contract with three steps:
-1. Measure children (measurables)
-2. Calculate final layout size
-3. Place children
+**Layout** in Compose uses `MeasurePolicy` — a three-step contract:
+1. **Measure** — each child is measured with provided `Constraints` (min/max width/height)
+2. **Calculate** — layout calculates its own size based on measured children
+3. **Place** — position children in layout coordinates
 
 **Key Rules**:
-- Each measurable measured **exactly once**
+- Each measurable measured **exactly once** (otherwise exception)
 - No allocations in measure/place (performance)
 - Use `placeRelative` for RTL support
-- Parameters must be stable/immutable for skip optimization
 
-### Minimal Custom Layout
+### Minimal Example: TwoColumn
 
 ```kotlin
 @Composable
@@ -190,16 +179,14 @@ fun TwoColumn(
 
         // ✅ Measure with reduced constraints
         val leftWidth = (constraints.maxWidth - gapPx) / 2
-        val rightWidth = constraints.maxWidth - leftWidth - gapPx
-
         val leftPlaceables = leftMeasurables.map {
             it.measure(constraints.copy(maxWidth = leftWidth))
         }
         val rightPlaceables = rightMeasurables.map {
-            it.measure(constraints.copy(maxWidth = rightWidth))
+            it.measure(constraints.copy(maxWidth = constraints.maxWidth - leftWidth - gapPx))
         }
 
-        // Calculate final height
+        // Calculate height
         val leftHeight = leftPlaceables.sumOf { it.height }
         val rightHeight = rightPlaceables.sumOf { it.height }
         val totalHeight = maxOf(leftHeight, rightHeight)
@@ -208,7 +195,7 @@ fun TwoColumn(
         layout(constraints.maxWidth, totalHeight) {
             var yLeft = 0
             leftPlaceables.forEach { placeable ->
-                placeable.placeRelative(0, yLeft)
+                placeable.placeRelative(0, yLeft) // ✅ placeRelative for RTL
                 yLeft += placeable.height
             }
 
@@ -224,11 +211,12 @@ fun TwoColumn(
 
 ### Reusable MeasurePolicy
 
+For optimization, extract `MeasurePolicy` as top-level object:
+
 ```kotlin
 // ✅ MeasurePolicy outside composable for reuse
 private val twoColumnMeasurePolicy = MeasurePolicy { measurables, constraints ->
     // Same logic but without capturing composable parameters
-    // All parameters must be stable
     // ...
 }
 
@@ -241,62 +229,65 @@ fun TwoColumn(
 }
 ```
 
-### Intrinsics (Optional)
+**Limitation**: all layout parameters (gap, spacing) must be external, as MeasurePolicy cannot capture composable state.
 
-Intrinsics are needed when parent needs to know size **before** actual measurement (e.g., text wrapping).
+### Intrinsics
+
+Intrinsics allow parent to know child size **before** actual measurement (e.g., text wrapping).
 
 ```kotlin
 val policy = object : MeasurePolicy {
     override fun MeasureScope.measure(
         measurables: List<Measurable>,
         constraints: Constraints
-    ): MeasureResult {
-        // Main logic
-    }
+    ): MeasureResult = // ...
 
     // ❌ Without intrinsics Compose will show warning
     override fun IntrinsicMeasureScope.minIntrinsicHeight(
         measurables: List<IntrinsicMeasurable>,
         width: Int
     ) = measurables.sumOf { it.minIntrinsicHeight(width) }
-
-    override fun IntrinsicMeasureScope.maxIntrinsicHeight(
-        measurables: List<IntrinsicMeasurable>,
-        width: Int
-    ) = measurables.sumOf { it.maxIntrinsicHeight(width) }
 }
 ```
 
+**Use intrinsics** only if parent really depends on child size (e.g., `Row` with `Modifier.weight`).
+
 ### Performance Tips
 
-- **Avoid allocations**: don't create lists/arrays in measure block
-- **Stable parameters**: `gap: Dp` instead of `gap: State<Dp>` for skip
+- **Stable parameters**: `gap: Dp` instead of `gap: State<Dp>` for skip optimization
+- **Avoid allocations**: don't create lists in measure block, reuse collections
 - **Determinism**: don't read composition state inside measure
-- **Testing**: check with various constraints, including min=max
 
 ---
 
 ## Follow-ups
 
-- How to implement efficient grid layout with dynamic cell sizes?
-- When should you implement intrinsic measurements vs using default behavior?
-- How to debug over-measurement issues in nested custom layouts?
-- What are the performance implications of measuring all children vs lazy measurement?
+- Как обрабатывать случаи, когда children не помещаются в constraints? / How to handle cases when children don't fit within constraints?
+- В чем разница между `placeRelative` и `place`? / What's the difference between `placeRelative` and `place`?
+- Когда нужно реализовывать все 4 intrinsic метода (minWidth, maxWidth, minHeight, maxHeight)? / When should you implement all 4 intrinsic methods?
+- Как протестировать custom layout с разными constraints и RTL? / How to test custom layout with different constraints and RTL?
+- Какие проблемы performance возникают при многократном remeasure и как их избежать? / What performance issues arise from repeated remeasure and how to avoid them?
 
 ## References
 
+- [[c-compose-layout]]
+- [[c-compose-constraints]]
+- [[c-compose-intrinsics]]
 - [Custom layouts in Compose](https://developer.android.com/develop/ui/compose/layouts/custom)
-- [Compose performance best practices](https://developer.android.com/develop/ui/compose/performance)
 - [Layout basics - Constraints and measurement](https://developer.android.com/develop/ui/compose/layouts/basics)
+- [Compose performance best practices](https://developer.android.com/develop/ui/compose/performance)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-animated-visibility-vs-content--android--medium]]
+- [[q-compose-modifier-chain--android--medium]] — Understanding modifier chain is crucial before custom layouts
+- [[q-compose-recomposition-optimization--android--medium]] — Recomposition affects layout performance
 
 ### Related (Same Level)
-- [[q-compose-compiler-plugin--android--hard]]
-- [[q-compose-canvas-graphics--android--hard]]
+- [[q-compose-canvas-graphics--android--hard]] — Canvas for custom drawing, Layout for custom measurement
+- [[q-compose-compiler-plugin--android--hard]] — How Compose compiler optimizes layouts
 
 ### Advanced (Harder)
-- [[q-android-performance-measurement-tools--android--medium]]
+- Custom layouts with complex intrinsic calculations and nested constraints
+- Building layout modifiers that affect measurement behavior
+- Optimizing layout performance in deep hierarchies with thousands of nodes

@@ -3,7 +3,7 @@ id: 20251012-122771
 title: Android Runtime Internals / Внутреннее устройство Android Runtime
 aliases: ["Android Runtime Internals", "Внутреннее устройство Android Runtime"]
 topic: android
-subtopics: [performance-memory, processes, profiling]
+subtopics: [performance-memory, profiling, processes]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium, q-android-runtime-art--android--medium]
 created: 2025-10-13
-updated: 2025-10-29
-tags: [android/performance-memory, android/processes, android/profiling, difficulty/hard]
+updated: 2025-10-30
+tags: [android/performance-memory, android/profiling, android/processes, difficulty/hard]
 sources: []
 ---
 # Вопрос (RU)
@@ -26,55 +26,43 @@ sources: []
 
 ## Ответ (RU)
 
-**Android Runtime (ART)** — управляемая среда выполнения, объединяющая три режима исполнения: интерпретатор для первого запуска, JIT-компилятор для горячих участков и AOT-компилятор для предварительной оптимизации при установке. Использует поколенческую сборку мусора для минимизации пауз.
+**Android Runtime (ART)** — управляемая среда выполнения, объединяющая три режима исполнения кода: интерпретатор для первого запуска, JIT-компилятор для горячих участков и AOT-компилятор для предварительной оптимизации при установке. Использует поколенческую сборку мусора для минимизации пауз.
 
-**Компоненты ART:**
+**Архитектура ART:**
 
 ```text
-APK/DEX → ClassLoader → Верификатор →
-→ Интерпретатор/JIT/AOT → GC → Нативный код
+APK/DEX → ClassLoader → Верификатор → Интерпретатор/JIT/AOT → GC → Нативный код
 ```
 
-**DEX-формат:** Регистровый байткод, компактнее Java-байткода. Использует регистры вместо стека.
+**DEX-формат:** Регистровый байткод (компактнее стекового Java-байткода):
 
 ```kotlin
 // Исходный код
 fun add(a: Int, b: Int): Int = a + b
 
 // DEX байткод
-method public add(II)I
+method add(II)I
     .registers 3
-    add-int v0, p1, p2    // ✅ Регистровая модель (компактнее стековой)
+    add-int v0, p1, p2    // ✅ Регистровая модель
     return v0
 ```
 
 **Режимы выполнения:**
 
-- **Интерпретатор** — прямое выполнение, медленно но без задержек на компиляцию
-- **JIT** — компиляция горячих методов в фоне, профилирование во время работы
+- **Интерпретатор** — прямое выполнение без задержек на компиляцию
+- **JIT** — фоновая компиляция горячих методов после ~10k вызовов
 - **AOT** — предкомпиляция при установке (профилируемые методы или все)
-
-```kotlin
-// JIT: Профилирование → Компиляция горячих методов
-class HotPathExample {
-    fun processLoop(items: List<Item>) {
-        items.forEach {
-            calculateExpensive(it)  // ✅ Скомпилируется после ~10k вызовов
-        }
-    }
-}
-```
 
 **Фильтры AOT-компиляции:**
 
 ```kotlin
 enum class CompilationFilter {
-    QUICKEN,          // ❌ Только оптимизация DEX (без нативного кода)
+    QUICKEN,          // ❌ Только оптимизация DEX
     SPEED_PROFILE,    // ✅ Компиляция профилируемых методов (~20-30% кода)
     SPEED,            // Полная компиляция (долгая установка)
-    EVERYTHING        // Максимум оптимизаций (очень долго)
+    EVERYTHING        // Максимум оптимизаций
 }
-// По умолчанию: SPEED_PROFILE (баланс скорости/размера)
+// По умолчанию: SPEED_PROFILE
 ```
 
 **Поколенческая сборка мусора:**
@@ -86,33 +74,17 @@ enum class CompilationFilter {
 class GCRegions {
     val youngGen = Region("young")  // ✅ 95% объектов умирают здесь
     val oldGen = Region("old")      // Долгоживущие данные
-
-    fun minorGC() {
-        collectYoungGeneration()    // Быстро, параллельно
-    }
 }
 ```
 
-**Управление памятью:**
+**Управление памятью (Heap Spaces):**
 
 ```kotlin
-// Куча разделена на регионы
 class MemorySpaces {
     val imageSpace: Space       // ✅ Разделяемые классы фреймворка
     val zygoteSpace: Space      // Разделяемое между процессами
     val allocationSpace: Space  // Основная куча приложения
-    val largeObjectSpace: Space // ❌ Объекты > 12KB (без перемещения)
-}
-```
-
-**Типы ссылок и управление:**
-
-```kotlin
-class ReferencesExample {
-    val strong = Any()                   // Блокирует GC
-    val soft = SoftReference(cache)      // ✅ Кеш: очистка при нехватке памяти
-    val weak = WeakReference(listener)   // ✅ Слушатели: очистка при GC
-    val phantom = PhantomReference(obj, queue) // Отслеживание финализации
+    val largeObjectSpace: Space // ❌ Объекты >12KB (без перемещения)
 }
 ```
 
@@ -122,21 +94,18 @@ class ReferencesExample {
 // Встраивание (inlining)
 inline fun measure(block: () -> Unit) {
     val start = System.nanoTime()
-    block()  // ✅ Код block() встроен на месте вызова
+    block()  // ✅ Код встроен на месте вызова
     log("Time: ${System.nanoTime() - start}")
 }
 
-// Устранение виртуализации (devirtualization)
-open class Base { open fun compute() = 1 }
-class Derived : Base() { override fun compute() = 2 }
-
+// Устранение виртуализации
 fun test(obj: Derived) {
     obj.compute()  // ✅ Прямой вызов (JIT знает точный тип)
 }
 
 // Escape-анализ: выделение в стеке
 fun calculateDistance(x: Int, y: Int): Int {
-    val point = Point(x, y)  // ✅ Не попадает в кучу (локальный объект)
+    val point = Point(x, y)  // ✅ Не попадает в кучу
     return point.distance()
 }
 ```
@@ -152,53 +121,41 @@ fun calculateDistance(x: Int, y: Int): Int {
 
 **Android Runtime (ART)** is a managed execution environment combining three execution modes: interpreter for initial launch, JIT compiler for hot code paths, and AOT compiler for pre-compilation during installation. Uses generational garbage collection to minimize pause times.
 
-**ART Components:**
+**ART Architecture:**
 
 ```text
-APK/DEX → ClassLoader → Verifier →
-→ Interpreter/JIT/AOT → GC → Native Code
+APK/DEX → ClassLoader → Verifier → Interpreter/JIT/AOT → GC → Native Code
 ```
 
-**DEX Format:** Register-based bytecode, more compact than Java bytecode. Uses registers instead of stack.
+**DEX Format:** Register-based bytecode (more compact than stack-based Java bytecode):
 
 ```kotlin
 // Source code
 fun add(a: Int, b: Int): Int = a + b
 
 // DEX bytecode
-method public add(II)I
+method add(II)I
     .registers 3
-    add-int v0, p1, p2    // ✅ Register-based model (more compact than stack)
+    add-int v0, p1, p2    // ✅ Register-based model
     return v0
 ```
 
 **Execution Modes:**
 
-- **Interpreter** — direct execution, slow but no compilation delay
-- **JIT** — background compilation of hot methods, runtime profiling
+- **Interpreter** — direct execution without compilation delay
+- **JIT** — background compilation of hot methods after ~10k invocations
 - **AOT** — pre-compilation during install (profiled methods or all)
-
-```kotlin
-// JIT: Profiling → Hot method compilation
-class HotPathExample {
-    fun processLoop(items: List<Item>) {
-        items.forEach {
-            calculateExpensive(it)  // ✅ Compiled after ~10k invocations
-        }
-    }
-}
-```
 
 **AOT Compilation Filters:**
 
 ```kotlin
 enum class CompilationFilter {
-    QUICKEN,          // ❌ DEX optimization only (no native code)
+    QUICKEN,          // ❌ DEX optimization only
     SPEED_PROFILE,    // ✅ Compile profiled methods (~20-30% of code)
     SPEED,            // Full compilation (slow install)
-    EVERYTHING        // Maximum optimizations (very slow)
+    EVERYTHING        // Maximum optimizations
 }
-// Default: SPEED_PROFILE (balance speed/size)
+// Default: SPEED_PROFILE
 ```
 
 **Generational Garbage Collection:**
@@ -210,33 +167,17 @@ enum class CompilationFilter {
 class GCRegions {
     val youngGen = Region("young")  // ✅ 95% objects die here
     val oldGen = Region("old")      // Long-lived data
-
-    fun minorGC() {
-        collectYoungGeneration()    // Fast, concurrent
-    }
 }
 ```
 
-**Memory Management:**
+**Memory Management (Heap Spaces):**
 
 ```kotlin
-// Heap divided into regions
 class MemorySpaces {
     val imageSpace: Space       // ✅ Shared framework classes
     val zygoteSpace: Space      // Shared between processes
     val allocationSpace: Space  // Main app heap
-    val largeObjectSpace: Space // ❌ Objects > 12KB (no relocation)
-}
-```
-
-**Reference Types and Management:**
-
-```kotlin
-class ReferencesExample {
-    val strong = Any()                   // Prevents GC
-    val soft = SoftReference(cache)      // ✅ Cache: cleared under memory pressure
-    val weak = WeakReference(listener)   // ✅ Listeners: cleared at GC
-    val phantom = PhantomReference(obj, queue) // Finalization tracking
+    val largeObjectSpace: Space // ❌ Objects >12KB (no relocation)
 }
 ```
 
@@ -246,21 +187,18 @@ class ReferencesExample {
 // Inlining
 inline fun measure(block: () -> Unit) {
     val start = System.nanoTime()
-    block()  // ✅ block() code inlined at call site
+    block()  // ✅ Code inlined at call site
     log("Time: ${System.nanoTime() - start}")
 }
 
 // Devirtualization
-open class Base { open fun compute() = 1 }
-class Derived : Base() { override fun compute() = 2 }
-
 fun test(obj: Derived) {
     obj.compute()  // ✅ Direct call (JIT knows exact type)
 }
 
 // Escape analysis: stack allocation
 fun calculateDistance(x: Int, y: Int): Int {
-    val point = Point(x, y)  // ✅ Doesn't escape to heap (local object)
+    val point = Point(x, y)  // ✅ Doesn't escape to heap
     return point.distance()
 }
 ```
@@ -276,18 +214,17 @@ fun calculateDistance(x: Int, y: Int): Int {
 
 ## Follow-ups
 
-- How does ART's JIT compiler decide which methods to optimize based on profiling data?
-- What are the trade-offs between SPEED_PROFILE and SPEED compilation filters for app startup performance?
+- How does ART decide which methods to compile with JIT based on profiling data?
+- What are the trade-offs between SPEED_PROFILE and SPEED compilation filters?
 - How does generational GC reduce pause times compared to mark-and-sweep collectors?
-- What is the role of escape analysis in reducing heap allocations?
-- How do soft/weak references help manage memory-sensitive caches without causing OOM?
+- What triggers promotion of objects from young to old generation?
+- How does escape analysis determine if an object can be stack-allocated?
 
 ## References
 
 - [[c-memory-management]]
 - https://source.android.com/docs/core/runtime
 - https://developer.android.com/topic/performance/memory-overview
-- https://developer.android.com/studio/profile/jank-detection
 
 ## Related Questions
 

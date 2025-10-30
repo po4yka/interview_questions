@@ -22,7 +22,7 @@ sources:
   - https://developer.android.com/guide/components/broadcasts
   - https://developer.android.com/guide/topics/providers/content-provider-basics
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-29
 tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
 ---
 # Вопрос (RU)
@@ -37,19 +37,19 @@ tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
 
 ### BroadcastReceiver
 
-**Определение**: Компонент Android, который получает и обрабатывает широковещательные сообщения (broadcasts) от системы или других приложений.
+**Компонент для получения системных и пользовательских событий**. Реагирует на широковещательные сообщения (broadcasts) от системы или других приложений.
 
-**Основные виды**:
-- System broadcasts (батарея, сеть, загрузка и т.д.)
-- Custom broadcasts (между компонентами приложения)
+**Виды broadcasts**:
+- System: ACTION_BATTERY_LOW, ACTION_BOOT_COMPLETED, CONNECTIVITY_CHANGE
+- Custom: события между компонентами приложения
 
 **Регистрация**:
 ```kotlin
-// ✅ Динамическая регистрация (рекомендуется)
+// ✅ Динамическая (lifecycle-aware)
 class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            // Обработка события (макс. 10 сек)
+            // Обработка < 10 сек (иначе ANR)
         }
     }
 
@@ -59,68 +59,83 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
         unregisterReceiver(receiver)
+        super.onStop()
     }
 }
-
-// ❌ Статическая регистрация в Manifest (ограничена с Android 8+)
 ```
 
-**Важные ограничения**:
-- onReceive() должен завершиться за 10 сек (иначе ANR)
-- Для долгих операций используйте WorkManager или JobScheduler
+```kotlin
+// ❌ Статическая в Manifest (ограничена с API 26+)
+<receiver android:name=".MyReceiver">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+    </intent-filter>
+</receiver>
+```
+
+**Критичные ограничения**:
+- onReceive() выполняется на main thread (max 10 сек → ANR)
+- Для фоновой работы: WorkManager / JobScheduler
 
 ### ContentProvider
 
-**Определение**: Компонент для структурированного доступа к данным приложения. Предоставляет единый интерфейс для чтения/записи данных между приложениями.
+**Стандартизированный интерфейс для доступа к структурированным данным**. Обеспечивает CRUD операции и обмен данными между приложениями через URI.
 
-**Основные методы CRUD**:
+**Базовая реализация**:
 ```kotlin
-class MyProvider : ContentProvider() {
-    override fun onCreate(): Boolean = true
-
+class ContactsProvider : ContentProvider() {
     override fun query(
-        uri: Uri,
-        projection: Array<String>?,
-        selection: String?,
-        selectionArgs: Array<String>?,
+        uri: Uri, projection: Array<String>?,
+        selection: String?, selectionArgs: Array<String>?,
         sortOrder: String?
-    ): Cursor? {
-        // Чтение данных
-        return database.query(...)
-    }
+    ): Cursor? = db.query(...)
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        // Добавление записи
-        val id = database.insert(...)
+        val id = db.insert(...)
+        context?.contentResolver?.notifyChange(uri, null)
         return ContentUris.withAppendedId(uri, id)
+    }
+
+    override fun getType(uri: Uri): String? = when (uriMatcher.match(uri)) {
+        CONTACTS -> "vnd.android.cursor.dir/vnd.app.contact"
+        CONTACT_ID -> "vnd.android.cursor.item/vnd.app.contact"
+        else -> null
     }
 }
 ```
 
-**Когда использовать**:
-- Обмен данными между приложениями
-- Централизованное управление данными
-- Интеграция с системными провайдерами (Contacts, Calendar)
+**Примеры использования**:
+```kotlin
+// Чтение контактов
+val cursor = contentResolver.query(
+    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+    arrayOf(DISPLAY_NAME, NUMBER), null, null, null
+)
+```
+
+**Сценарии применения**:
+- Межпроцессное взаимодействие (IPC)
+- Интеграция с системными данными (Contacts, Calendar, MediaStore)
+- Централизованный контроль доступа к данным
 
 ## Answer (EN)
 
 ### BroadcastReceiver
 
-**Definition**: An Android component that receives and handles broadcast messages from the system or other applications.
+**Component for receiving system and custom events**. Responds to broadcast messages from the system or other applications.
 
-**Types**:
-- System broadcasts (battery, network, boot, etc.)
-- Custom broadcasts (between app components)
+**Broadcast types**:
+- System: ACTION_BATTERY_LOW, ACTION_BOOT_COMPLETED, CONNECTIVITY_CHANGE
+- Custom: events between app components
 
 **Registration**:
 ```kotlin
-// ✅ Dynamic registration (recommended)
+// ✅ Dynamic (lifecycle-aware)
 class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            // Handle event (max 10 sec)
+            // Process < 10 sec (otherwise ANR)
         }
     }
 
@@ -130,72 +145,89 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
         unregisterReceiver(receiver)
+        super.onStop()
     }
 }
-
-// ❌ Static registration in Manifest (restricted since Android 8+)
 ```
 
-**Key constraints**:
-- onReceive() must complete within 10 sec (otherwise ANR)
-- Use WorkManager or JobScheduler for long operations
+```kotlin
+// ❌ Static in Manifest (restricted since API 26+)
+<receiver android:name=".MyReceiver">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+    </intent-filter>
+</receiver>
+```
+
+**Critical constraints**:
+- onReceive() runs on main thread (max 10 sec → ANR)
+- For background work: WorkManager / JobScheduler
 
 ### ContentProvider
 
-**Definition**: A component for structured access to app data. Provides a unified interface for reading/writing data between applications.
+**Standardized interface for accessing structured data**. Provides CRUD operations and data sharing between apps via URI.
 
-**Core CRUD methods**:
+**Basic implementation**:
 ```kotlin
-class MyProvider : ContentProvider() {
-    override fun onCreate(): Boolean = true
-
+class ContactsProvider : ContentProvider() {
     override fun query(
-        uri: Uri,
-        projection: Array<String>?,
-        selection: String?,
-        selectionArgs: Array<String>?,
+        uri: Uri, projection: Array<String>?,
+        selection: String?, selectionArgs: Array<String>?,
         sortOrder: String?
-    ): Cursor? {
-        // Read data
-        return database.query(...)
-    }
+    ): Cursor? = db.query(...)
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        // Insert record
-        val id = database.insert(...)
+        val id = db.insert(...)
+        context?.contentResolver?.notifyChange(uri, null)
         return ContentUris.withAppendedId(uri, id)
+    }
+
+    override fun getType(uri: Uri): String? = when (uriMatcher.match(uri)) {
+        CONTACTS -> "vnd.android.cursor.dir/vnd.app.contact"
+        CONTACT_ID -> "vnd.android.cursor.item/vnd.app.contact"
+        else -> null
     }
 }
 ```
 
-**When to use**:
-- Sharing data between apps
-- Centralized data management
-- Integration with system providers (Contacts, Calendar)
+**Usage example**:
+```kotlin
+// Reading contacts
+val cursor = contentResolver.query(
+    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+    arrayOf(DISPLAY_NAME, NUMBER), null, null, null
+)
+```
+
+**Use cases**:
+- Inter-process communication (IPC)
+- Integration with system data (Contacts, Calendar, MediaStore)
+- Centralized data access control
 
 ---
 
 ## Follow-ups
 
-- How to avoid ANR in onReceive() and delegate longer work safely?
-- How to secure a ContentProvider (read/write permissions, Uri permissions)?
-- When to use WorkManager vs BroadcastReceiver for background work?
-- What's the difference between ordered and unordered broadcasts?
-- How to implement URI matching in ContentProvider?
+- How to avoid ANR in BroadcastReceiver when processing takes > 10 seconds?
+- What's the difference between ordered and normal broadcasts, and when to use each?
+- How to secure ContentProvider with read/write permissions and URI grants?
+- When to choose ContentProvider vs direct database access for data sharing?
+- How to implement UriMatcher for multi-table ContentProvider routing?
 
 ## References
 
+- Official: [Broadcasts Overview](https://developer.android.com/guide/components/broadcasts)
+- Official: [Content Provider Basics](https://developer.android.com/guide/topics/providers/content-provider-basics)
 - [[c-broadcast-receiver]]
 - [[c-content-provider]]
-- [[q-android-app-components--android--easy]]
+- [[c-ipc]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-manifest-file--android--easy]]
 - [[q-android-app-components--android--easy]]
+- [[q-android-manifest-file--android--easy]]
 
 ### Related (Same Level)
 - [[q-android-service-types--android--easy]]

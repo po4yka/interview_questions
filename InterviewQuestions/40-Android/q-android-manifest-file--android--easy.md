@@ -3,7 +3,7 @@ id: 20251015-094722
 title: AndroidManifest.xml / Файл манифеста Android
 aliases: ["AndroidManifest.xml", "Файл манифеста Android"]
 topic: android
-subtopics: [activity, app-startup, permissions]
+subtopics: [app-startup, permissions, intents-deeplinks]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-android-app-components--android--easy, q-intent-filters-android--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
-tags: [android/activity, android/app-startup, android/permissions, difficulty/easy]
+updated: 2025-10-30
+tags: [android/app-startup, android/permissions, android/intents-deeplinks, difficulty/easy]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 ---
 # Вопрос (RU)
@@ -24,13 +24,13 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 
 ## Ответ (RU)
 
-**AndroidManifest.xml** — главный конфигурационный файл Android-приложения, который объявляет структуру и требования приложения системе.
+**AndroidManifest.xml** — главный конфигурационный файл приложения, объявляющий его структуру системе Android.
 
 **Основные функции:**
 - **Регистрация компонентов** — Activities, Services, BroadcastReceivers, ContentProviders
-- **Управление разрешениями** — запрос системных и объявление пользовательских разрешений
+- **Управление разрешениями** — системные и пользовательские permissions
 - **Метаданные приложения** — package name, минимальный SDK, иконка, тема
-- **Intent-фильтры** — как система и другие приложения могут взаимодействовать с компонентами
+- **Intent-фильтры** — точки взаимодействия с системой и другими приложениями
 
 **Минимальная структура:**
 ```xml
@@ -43,7 +43,7 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name">
 
-        <!-- ✅ Точка входа с правильным exported -->
+        <!-- ✅ Точка входа с корректным exported -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -58,49 +58,54 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 
 **Критические требования:**
 ```xml
-<!-- ✅ Для SDK 31+ обязателен exported -->
+<!-- ✅ Для SDK 31+ обязателен exported при наличии intent-filter -->
 <activity android:name=".ShareActivity" android:exported="true">
     <intent-filter>
         <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
 
-<!-- ❌ Приложение упадет при установке на API 31+ -->
+<!-- ❌ Приложение не установится на API 31+ -->
 <activity android:name=".ShareActivity">
     <intent-filter>
         <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
+```
 
-<!-- ✅ Защита компонента подписью -->
+**Защита компонентов:**
+```xml
+<!-- Только приложения с той же подписью могут вызвать этот компонент -->
 <permission
     android:name="com.example.INTERNAL_ACTION"
     android:protectionLevel="signature" />
+
+<activity
+    android:name=".InternalActivity"
+    android:permission="com.example.INTERNAL_ACTION" />
 ```
 
 **Слияние манифестов:**
 ```xml
-<!-- build.gradle управляет версией, но базовая структура в manifest -->
+<!-- Основной manifest сливается с библиотечными и Gradle-плейсхолдерами -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Gradle placeholder -->
     <uses-sdk android:minSdkVersion="${minSdkVersion}" />
 
-    <!-- ✅ Переопределяется через Gradle flavors -->
     <application android:label="${appName}">
-        <!-- Модули библиотек автоматически сливаются -->
+        <!-- Компоненты из зависимостей добавляются автоматически -->
     </application>
 </manifest>
 ```
 
 ## Answer (EN)
 
-**AndroidManifest.xml** is the main configuration file of an Android application that declares the app's structure and requirements to the system.
+**AndroidManifest.xml** is the main configuration file that declares the app's structure to the Android system.
 
 **Core Functions:**
 - **Component Registration** — Activities, Services, BroadcastReceivers, ContentProviders
-- **Permission Management** — requesting system permissions and declaring custom permissions
+- **Permission Management** — system and custom permissions
 - **App Metadata** — package name, minimum SDK, icon, theme
-- **Intent Filters** — how the system and other apps can interact with components
+- **Intent Filters** — interaction points with system and other apps
 
 **Minimal Structure:**
 ```xml
@@ -113,7 +118,7 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name">
 
-        <!-- ✅ Entry point with proper exported -->
+        <!-- ✅ Entry point with correct exported -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -128,64 +133,69 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 
 **Critical Requirements:**
 ```xml
-<!-- ✅ For SDK 31+ exported is mandatory -->
+<!-- ✅ For SDK 31+ exported is mandatory with intent-filter -->
 <activity android:name=".ShareActivity" android:exported="true">
     <intent-filter>
         <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
 
-<!-- ❌ App will crash on install for API 31+ -->
+<!-- ❌ App won't install on API 31+ -->
 <activity android:name=".ShareActivity">
     <intent-filter>
         <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
+```
 
-<!-- ✅ Protect component with signature -->
+**Component Protection:**
+```xml
+<!-- Only apps with same signature can invoke this component -->
 <permission
     android:name="com.example.INTERNAL_ACTION"
     android:protectionLevel="signature" />
+
+<activity
+    android:name=".InternalActivity"
+    android:permission="com.example.INTERNAL_ACTION" />
 ```
 
 **Manifest Merging:**
 ```xml
-<!-- build.gradle controls version, but base structure in manifest -->
+<!-- Main manifest merges with library and Gradle placeholders -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Gradle placeholder -->
     <uses-sdk android:minSdkVersion="${minSdkVersion}" />
 
-    <!-- ✅ Overridden via Gradle flavors -->
     <application android:label="${appName}">
-        <!-- Library module manifests auto-merge -->
+        <!-- Components from dependencies added automatically -->
     </application>
 </manifest>
 ```
 
 ## Follow-ups
 
-- What happens if multiple library modules declare the same component?
-- How does manifest merging resolve conflicts between main and library manifests?
-- What is the impact of `android:exported` on API levels below 31?
-- How to declare features required by the app (camera, GPS, NFC)?
-- What security risks exist with overly permissive intent-filters?
+- Как разрешаются конфликты при слиянии манифестов из нескольких библиотек?
+- Какие атрибуты `<uses-feature>` влияют на видимость в Play Store?
+- В чем разница между `protectionLevel="signature"` и `"signatureOrSystem"`?
+- Можно ли полностью отказаться от AndroidManifest.xml в модульных приложениях?
+- Как проверить итоговый merged manifest перед релизом?
 
 ## References
 
-- [[c-android-components]] - Deep dive into Android components
-- [[c-permissions]] - Permission system architecture
-- https://developer.android.com/guide/topics/manifest/manifest-intro
+- [[c-android-components]] - Architecture of Android components
+- [[c-permissions]] - Permission system deep dive
+- https://developer.android.com/guide/topics/manifest/manifest-intro - Official manifest guide
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-app-components--android--easy]] - Understanding basic app components
+- [[q-android-app-components--android--easy]] - Understanding app components
 
 ### Related
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle and state
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
 - [[q-intent-filters-android--android--medium]] - Intent filter patterns
-- [[q-android-permissions-runtime--android--medium]] - Runtime permission model
+- [[q-android-permissions-runtime--android--medium]] - Runtime permissions
 
 ### Advanced
-- [[q-android-gradle-manifest-merge--android--hard]] - Manifest merging strategies
+- [[q-android-gradle-manifest-merge--android--hard]] - Manifest merge strategies
 - [[q-android-security-practices-checklist--android--medium]] - Security best practices

@@ -3,7 +3,7 @@ id: 20251012-122765
 title: Android Jetpack Overview / Обзор Android Jetpack
 aliases: ["Android Jetpack Overview", "Обзор Android Jetpack"]
 topic: android
-subtopics: [architecture-mvvm, ui-compose, lifecycle, room]
+subtopics: [architecture-mvvm, ui-compose, lifecycle]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -13,9 +13,10 @@ moc: moc-android
 related: [c-viewmodel, c-room, q-viewmodel-pattern--android--easy, q-room-library-definition--android--easy, q-workmanager-decision-guide--android--medium]
 sources: []
 created: 2025-10-13
-updated: 2025-10-29
-tags: [android/architecture-mvvm, android/ui-compose, android/lifecycle, android/room, jetpack, difficulty/easy]
+updated: 2025-10-30
+tags: [android/architecture-mvvm, android/ui-compose, android/lifecycle, jetpack, difficulty/easy]
 ---
+
 # Вопрос (RU)
 > Что такое Android Jetpack и какие его основные компоненты?
 
@@ -24,14 +25,16 @@ tags: [android/architecture-mvvm, android/ui-compose, android/lifecycle, android
 
 ## Ответ (RU)
 
-Android Jetpack — набор библиотек от Google для упрощения разработки. Четыре основные категории: Architecture, UI, Background, Data.
+Android Jetpack — набор библиотек от Google для упрощения разработки Android-приложений. Унифицирует подход к архитектуре, UI, фоновой работе и хранению данных.
 
-**Architecture Components**
+**Четыре категории:**
 
-[[c-viewmodel|ViewModel]] — сохраняет UI-данные при конфигурационных изменениях (поворот экрана)
-[[c-room|Room]] — type-safe ORM для SQLite с compile-time проверками
-Lifecycle — отслеживает жизненный цикл Activity/Fragment
-Navigation — декларативная навигация между экранами
+### Architecture Components
+
+**ViewModel** — сохраняет UI-данные при конфигурационных изменениях
+**Room** — type-safe ORM для SQLite с compile-time проверками
+**Lifecycle** — отслеживает жизненный цикл Activity/Fragment
+**Navigation** — декларативная навигация между экранами
 
 ```kotlin
 // ✅ ViewModel переживает поворот экрана
@@ -40,31 +43,33 @@ class UserViewModel : ViewModel() {
     val users: StateFlow<List<User>> = _users.asStateFlow()
 }
 
-// ❌ Данные в Activity теряются при recreation
+// ❌ Данные в Activity теряются
 class MainActivity : AppCompatActivity() {
-    var users: List<User> = emptyList()
+    var users: List<User> = emptyList() // потеряны при recreation
 }
 ```
 
-**UI Components**
+### UI Components
 
-Jetpack Compose — декларативный UI фреймворк
-Fragment — модульные UI-компоненты (для Views)
-ViewBinding — type-safe доступ к Views
+**Jetpack Compose** — декларативный UI фреймворк
+**Fragment** — модульные UI-компоненты для View-based UI
+**ViewBinding** — type-safe доступ к Views
 
 ```kotlin
 @Composable
 fun UserList(viewModel: UserViewModel = hiltViewModel()) {
     val users by viewModel.users.collectAsState()
     LazyColumn {
-        items(users) { UserItem(it) }
+        items(users) { user ->
+            UserItem(user)
+        }
     }
 }
 ```
 
-**Background Work**
+### Background Work
 
-WorkManager — гарантированное выполнение отложенных задач
+**WorkManager** — гарантированное выполнение отложенных задач даже после перезагрузки
 
 ```kotlin
 class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
@@ -72,32 +77,32 @@ class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         repository.sync()
         Result.success()
     } catch (e: Exception) {
-        Result.retry()
+        Result.retry() // автоматический retry с exponential backoff
     }
 }
 ```
 
-**Data & Storage**
+### Data & Storage
 
-Room — локальная БД с SQL-запросами в compile-time
-DataStore — type-safe замена SharedPreferences
-Paging — эффективная загрузка больших списков
+**Room** — SQL с compile-time проверками
+**DataStore** — type-safe замена SharedPreferences с корутинами
+**Paging** — эффективная загрузка больших списков
 
 ```kotlin
 // ✅ Room с suspend функциями
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM users")
-    suspend fun getAll(): List<User>
+    @Query("SELECT * FROM users WHERE active = 1")
+    suspend fun getActiveUsers(): List<User>
 }
 
-// ❌ Прямая работа с SQLite
-val cursor = db.query("SELECT * FROM users")
+// ❌ Ручная работа с SQLite
+val cursor = db.rawQuery("SELECT * FROM users WHERE active = 1", null)
 ```
 
 **Dependency Injection**
 
-Hilt — упрощенный DI на базе Dagger
+**Hilt** — упрощенный DI на базе Dagger с поддержкой Android компонентов
 
 ```kotlin
 @HiltViewModel
@@ -108,14 +113,16 @@ class UserViewModel @Inject constructor(
 
 ## Answer (EN)
 
-Android Jetpack is Google's suite of libraries for simplified development. Four core categories: Architecture, UI, Background, Data.
+Android Jetpack is Google's suite of libraries for simplified Android development. Unifies architecture, UI, background work, and data storage.
 
-**Architecture Components**
+**Four core categories:**
 
-[[c-viewmodel|ViewModel]] — survives configuration changes like screen rotation
-[[c-room|Room]] — type-safe ORM for SQLite with compile-time verification
-Lifecycle — tracks Activity/Fragment lifecycle states
-Navigation — declarative screen navigation
+### Architecture Components
+
+**ViewModel** — survives configuration changes like screen rotation
+**Room** — type-safe ORM for SQLite with compile-time verification
+**Lifecycle** — tracks Activity/Fragment lifecycle states
+**Navigation** — declarative screen navigation
 
 ```kotlin
 // ✅ ViewModel survives screen rotation
@@ -126,29 +133,31 @@ class UserViewModel : ViewModel() {
 
 // ❌ Activity data lost on recreation
 class MainActivity : AppCompatActivity() {
-    var users: List<User> = emptyList()
+    var users: List<User> = emptyList() // lost on recreation
 }
 ```
 
-**UI Components**
+### UI Components
 
-Jetpack Compose — declarative UI framework
-Fragment — modular UI components (for Views)
-ViewBinding — type-safe View access
+**Jetpack Compose** — declarative UI framework
+**Fragment** — modular UI components for View-based UI
+**ViewBinding** — type-safe View access
 
 ```kotlin
 @Composable
 fun UserList(viewModel: UserViewModel = hiltViewModel()) {
     val users by viewModel.users.collectAsState()
     LazyColumn {
-        items(users) { UserItem(it) }
+        items(users) { user ->
+            UserItem(user)
+        }
     }
 }
 ```
 
-**Background Work**
+### Background Work
 
-WorkManager — guaranteed execution of deferrable tasks
+**WorkManager** — guaranteed execution of deferrable tasks even after device reboot
 
 ```kotlin
 class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
@@ -156,32 +165,32 @@ class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         repository.sync()
         Result.success()
     } catch (e: Exception) {
-        Result.retry()
+        Result.retry() // automatic retry with exponential backoff
     }
 }
 ```
 
-**Data & Storage**
+### Data & Storage
 
-Room — local database with compile-time SQL verification
-DataStore — type-safe SharedPreferences replacement
-Paging — efficient loading of large lists
+**Room** — SQL with compile-time verification
+**DataStore** — type-safe SharedPreferences replacement with coroutines
+**Paging** — efficient loading of large lists
 
 ```kotlin
 // ✅ Room with suspend functions
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM users")
-    suspend fun getAll(): List<User>
+    @Query("SELECT * FROM users WHERE active = 1")
+    suspend fun getActiveUsers(): List<User>
 }
 
 // ❌ Raw SQLite access
-val cursor = db.query("SELECT * FROM users")
+val cursor = db.rawQuery("SELECT * FROM users WHERE active = 1", null)
 ```
 
 **Dependency Injection**
 
-Hilt — simplified DI built on Dagger
+**Hilt** — simplified DI built on Dagger with Android component support
 
 ```kotlin
 @HiltViewModel
@@ -194,14 +203,15 @@ class UserViewModel @Inject constructor(
 
 - When to use WorkManager vs AlarmManager vs Foreground Service?
 - How does ViewModel survive configuration changes internally?
-- What are the benefits of Room over raw SQLite?
-- When to migrate from View system to Jetpack Compose?
+- What's the migration path from View system to Jetpack Compose?
 - How does Hilt differ from manual Dagger setup?
+- What are the benefits of Room over raw SQLite?
 
 ## References
 
 - [[c-viewmodel]] - ViewModel architecture component
 - [[c-room]] - Room database library
+- [[c-lifecycle]] - Android lifecycle awareness
 - Official docs: https://developer.android.com/jetpack
 
 ## Related Questions
@@ -210,7 +220,7 @@ class UserViewModel @Inject constructor(
 - [[q-android-app-components--android--easy]] - Basic Android components
 
 ### Related
-- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern
+- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern details
 - [[q-room-library-definition--android--easy]] - Room database details
 - [[q-compose-state--android--medium]] - State management in Compose
 

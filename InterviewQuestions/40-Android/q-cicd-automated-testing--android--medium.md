@@ -1,7 +1,7 @@
 ---
 id: 20251012-122796
 title: CI/CD Automated Testing / Автоматизированное тестирование в CI/CD
-aliases: [CI/CD Automated Testing, Автоматизированное тестирование в CI/CD]
+aliases: ["CI/CD Automated Testing", "Автоматизированное тестирование в CI/CD"]
 topic: android
 subtopics: [gradle, testing-instrumented, testing-unit, ci-cd]
 question_kind: android
@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [q-android-lint-tool--android--medium, q-android-testing-strategies--android--medium, q-build-optimization-gradle--android--medium, c-gradle-build-cache, c-test-sharding]
 created: 2025-10-15
-updated: 2025-10-27
+updated: 2025-10-29
 sources: []
 tags: [android/gradle, android/testing-instrumented, android/testing-unit, android/ci-cd, ci-cd, testing, difficulty/medium]
 ---
@@ -27,30 +27,73 @@ tags: [android/gradle, android/testing-instrumented, android/testing-unit, andro
 
 ## Ответ (RU)
 
-### Цели
-- Быстрая обратная связь (проверки PR < 10 мин)
-- Детерминированные, изолированные сборки
-- Понятные, действенные отчеты (тесты, lint, покрытие)
+### Архитектура пайплайна
 
-### Пайплайн (типичный)
-- **Pre-merge**: статический анализ → юнит-тесты → инструментальные тесты (с шардингом) → артефакты + отчеты
-- **Post-merge/nightly**: полный набор тестов, долгие проверки, device lab, производительность
+**Pre-merge (быстрая обратная связь < 10 мин)**:
+- Статический анализ (lint/detekt)
+- Юнит-тесты (JVM)
+- Критические UI-тесты (sharded)
+- Генерация отчетов и артефактов
 
-### Тесты и область применения
-- **Unit**: JVM, быстрые, мокируем Android-зависимости через [[c-unit-testing]] и [[c-mockito]]
-- **Instrumented**: [[c-espresso]]/UI, реальные/эмулированные устройства, шардинг
-- **Lint/Detekt**: стиль и корректность кода
-- **Coverage**: объединение unit + instrumented; падение сборки при снижении порога
+**Post-merge/nightly (полное покрытие)**:
+- Все инструментальные тесты
+- Регрессионные проверки
+- Device farm на разных API/размерах
+- Производительность и метрики
 
-### Скорость и стабильность
-- **Кэширование**: Gradle build cache + кэш зависимостей; включение configuration cache
-- **Параллелизм**: `--parallel`, матрица (API уровни/ABI), шардинг тестов
-- **Разделение модулей**: независимые сборки/тесты, избегание пересборки всего проекта
-- **Нестабильные тесты**: карантин, повторный запуск с reruns, бэклог исправлений
-- **Изолированность**: фиксация toolchains, pin SDKs, без сети в тестах (использовать MockWebServer)
+### Стратегии тестирования
 
-### Минимальный CI-шаг (GitHub Actions)
+```kotlin
+// ✅ Unit-тесты: быстрые, изолированные, мокируем Android API
+class ViewModelTest {
+    @Test
+    fun `loadData updates state correctly`() = runTest {
+        val repo = FakeRepository()
+        val viewModel = MyViewModel(repo)
+
+        viewModel.loadData()
+
+        assertEquals(Success(data), viewModel.state.value)
+    }
+}
+```
+
+```kotlin
+// ✅ Инструментальные: реальное устройство, проверка UI
+@RunWith(AndroidJUnit4::class)
+class LoginFlowTest {
+    @get:Rule val composeRule = createComposeRule()
+
+    @Test
+    fun loginWithValidCredentials_navigatesToHome() {
+        composeRule.setContent { LoginScreen() }
+        composeRule.onNodeWithTag("email").performTextInput("test@test.com")
+        composeRule.onNodeWithTag("submit").performClick()
+        composeRule.onNodeWithTag("home").assertIsDisplayed()
+    }
+}
+```
+
+```kotlin
+// ❌ Не используйте сеть напрямую в тестах
+@Test
+fun loadData() {
+    val data = api.fetchData() // Нестабильно!
+}
+
+// ✅ Используйте MockWebServer
+@Test
+fun loadData() {
+    mockWebServer.enqueue(MockResponse().setBody("""{"id":1}"""))
+    val data = api.fetchData()
+    assertEquals(1, data.id)
+}
+```
+
+### Оптимизация скорости
+
 ```yaml
+# ✅ GitHub Actions с кэшированием
 name: Android CI
 on: [pull_request]
 jobs:
@@ -59,54 +102,159 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: '17' }
+        with:
+          distribution: temurin
+          java-version: 17
       - uses: gradle/gradle-build-action@v2
-      - name: Юнит-тесты (config + build cache)
-        run: ./gradlew testDebugUnitTest --configuration-cache --build-cache --parallel
+        with:
+          cache-read-only: false
+
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest --parallel --configuration-cache
+
       - name: Lint
-        run: ./gradlew lintDebug --configuration-cache --build-cache
-      - name: Загрузка отчетов
+        run: ./gradlew lintDebug --parallel
+
+      - name: Upload reports
+        if: failure()
         uses: actions/upload-artifact@v4
-        with: { name: reports, path: '**/build/reports/**' }
+        with:
+          name: test-reports
+          path: '**/build/reports/**'
 ```
 
-### Отчеты и артефакты
-- Сохранение JUnit XML, lint HTML, покрытия (Jacoco) для каждой задачи
-- Отображение ошибок через inline-аннотации; ссылка на список нестабильных тестов
+```kotlin
+// ✅ Шардинг для параллельного выполнения
+// build.gradle.kts
+android {
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        animationsDisabled = true
+    }
+}
 
-### Тесты на устройствах
-- Матрица эмуляторов для критичных PR; более широкая device farm для nightly
-- Шардинг по пакетам/классам; повтор только упавших шардов
+// CI: запуск шардов параллельно
+./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
+  -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
+```
 
-### Безопасность и compliance
-- Подписание/AAB в защищенной задаче; секреты через OIDC; проверка supply-chain (контрольные суммы)
+### Управление нестабильными тестами
+
+```kotlin
+// ✅ Стратегия карантина для flaky тестов
+@FlakyTest(bugId = "ISSUE-123")
+@Test
+fun animationTest() {
+    // Тест в карантине, не блокирует PR
+}
+
+// CI: автоматический retry
+./gradlew test --rerun-tasks --max-parallel-forks=4 \
+  -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
+```
+
+### Отчетность и артефакты
+
+**Что сохранять**:
+- JUnit XML (для CI-системы)
+- HTML отчеты (lint, test results)
+- Jacoco покрытие (объединенное: unit + instrumented)
+- APK/AAB для QA
+
+**Визуализация**:
+- Inline-аннотации для провалов
+- Дашборд с трендами (coverage, flakiness)
+- Ссылки на device farm результаты
+
+### Безопасность в CI
+
+```yaml
+# ✅ Подписание APK в защищенной среде
+- name: Sign APK
+  env:
+    KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+    KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+  run: |
+    echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
+    ./gradlew assembleRelease \
+      -Pandroid.injected.signing.store.file=keystore.jks \
+      -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
+    rm keystore.jks
+
+# ✅ Проверка зависимостей (supply-chain security)
+- name: Verify checksums
+  run: ./gradlew --write-verification-metadata sha256
+```
 
 ## Answer (EN)
 
-### Goals
-- Fast feedback (PR checks < 10 min)
-- Deterministic, hermetic builds
-- Clear, actionable reports (tests, lint, coverage)
+### Pipeline Architecture
 
-### Pipeline (typical)
-- Pre-merge: static checks → unit tests → instrumented tests (shards) → artifacts + reports
-- Post-merge/nightly: full suite, long‑running, device lab, performance checks
+**Pre-merge (fast feedback < 10 min)**:
+- Static analysis (lint/detekt)
+- Unit tests (JVM)
+- Critical UI tests (sharded)
+- Generate reports and artifacts
 
-### Tests and Scope
-- **Unit**: JVM, fast, mock Android deps using [[c-unit-testing]] and [[c-mockito]]
-- **Instrumented**: [[c-espresso]]/UI, real/emulated devices, sharding
-- **Lint/Detekt**: style and correctness
-- **Coverage**: merge unit + instrumented; fail on drop threshold
+**Post-merge/nightly (full coverage)**:
+- All instrumented tests
+- Regression checks
+- Device farm across API levels/screen sizes
+- Performance metrics
 
-### Speed and Stability
-- **Caching**: Gradle build cache + dependency cache; enable configuration cache
-- **Parallelism**: `--parallel`, matrix (API levels/ABIs), test sharding
-- **Split modules**: independent builds/tests, avoid rebuilding the world
-- **Flaky tests**: quarantine, retry with reruns, deflake backlog
-- **Hermeticity**: lock toolchains, pin SDKs, no network in tests (use [[c-mockwebserver]])
+### Testing Strategies
 
-### Minimal CI Step (GitHub Actions)
+```kotlin
+// ✅ Unit tests: fast, isolated, mock Android APIs
+class ViewModelTest {
+    @Test
+    fun `loadData updates state correctly`() = runTest {
+        val repo = FakeRepository()
+        val viewModel = MyViewModel(repo)
+
+        viewModel.loadData()
+
+        assertEquals(Success(data), viewModel.state.value)
+    }
+}
+```
+
+```kotlin
+// ✅ Instrumented: real device, UI verification
+@RunWith(AndroidJUnit4::class)
+class LoginFlowTest {
+    @get:Rule val composeRule = createComposeRule()
+
+    @Test
+    fun loginWithValidCredentials_navigatesToHome() {
+        composeRule.setContent { LoginScreen() }
+        composeRule.onNodeWithTag("email").performTextInput("test@test.com")
+        composeRule.onNodeWithTag("submit").performClick()
+        composeRule.onNodeWithTag("home").assertIsDisplayed()
+    }
+}
+```
+
+```kotlin
+// ❌ Don't use network directly in tests
+@Test
+fun loadData() {
+    val data = api.fetchData() // Flaky!
+}
+
+// ✅ Use MockWebServer
+@Test
+fun loadData() {
+    mockWebServer.enqueue(MockResponse().setBody("""{"id":1}"""))
+    val data = api.fetchData()
+    assertEquals(1, data.id)
+}
+```
+
+### Speed Optimization
+
 ```yaml
+# ✅ GitHub Actions with caching
 name: Android CI
 on: [pull_request]
 jobs:
@@ -115,38 +263,97 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: '17' }
+        with:
+          distribution: temurin
+          java-version: 17
       - uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: false
 
-      - name: Unit tests (config + build cache)
-        run: ./gradlew testDebugUnitTest --configuration-cache --build-cache --parallel
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest --parallel --configuration-cache
 
       - name: Lint
-        run: ./gradlew lintDebug --configuration-cache --build-cache
+        run: ./gradlew lintDebug --parallel
 
       - name: Upload reports
+        if: failure()
         uses: actions/upload-artifact@v4
-        with: { name: reports, path: '**/build/reports/**' }
+        with:
+          name: test-reports
+          path: '**/build/reports/**'
 ```
 
-### Reports and Artifacts
-- Store JUnit XML, lint HTML, coverage (Jacoco) per job
-- Surface failures with inline annotations; link to flaky quarantine list
+```kotlin
+// ✅ Sharding for parallel execution
+// build.gradle.kts
+android {
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        animationsDisabled = true
+    }
+}
 
-### Device Tests
-- Emulator matrix for critical PRs; broader device farm nightly
-- Shard by package/class; retry failed shards only
+// CI: run shards in parallel
+./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
+  -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
+```
 
-### Security and Compliance
-- Sign/AAB in protected job; secrets via OIDC; verify supply-chain (checksums)
+### Managing Flaky Tests
+
+```kotlin
+// ✅ Quarantine strategy for flaky tests
+@FlakyTest(bugId = "ISSUE-123")
+@Test
+fun animationTest() {
+    // Test in quarantine, doesn't block PRs
+}
+
+// CI: automatic retry
+./gradlew test --rerun-tasks --max-parallel-forks=4 \
+  -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
+```
+
+### Reporting and Artifacts
+
+**What to save**:
+- JUnit XML (for CI system)
+- HTML reports (lint, test results)
+- Jacoco coverage (merged: unit + instrumented)
+- APK/AAB for QA
+
+**Visualization**:
+- Inline annotations for failures
+- Dashboard with trends (coverage, flakiness)
+- Links to device farm results
+
+### Security in CI
+
+```yaml
+# ✅ Sign APK in secure environment
+- name: Sign APK
+  env:
+    KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+    KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+  run: |
+    echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
+    ./gradlew assembleRelease \
+      -Pandroid.injected.signing.store.file=keystore.jks \
+      -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
+    rm keystore.jks
+
+# ✅ Verify dependencies (supply-chain security)
+- name: Verify checksums
+  run: ./gradlew --write-verification-metadata sha256
+```
 
 ## Follow-ups
 
-- How to maintain a flaky test quarantine process and track deflake metrics?
+- How to maintain a flaky test quarantine process and track deflake metrics over time?
 - What criteria determine pre-merge vs nightly test scope for optimal cost/signal ratio?
-- How to effectively shard instrumented tests across devices and retry failed shards?
-- What caching strategies work best for Android CI (local, remote, configuration cache)?
-- How to integrate code coverage requirements without slowing down feedback loops?
+- How to effectively shard instrumented tests across devices and retry only failed shards?
+- What combination of local, remote, and configuration caching gives best CI performance?
+- How to integrate code coverage requirements without adding significant overhead to PR checks?
 
 ## References
 
@@ -160,15 +367,15 @@ jobs:
 
 ## Related Questions
 
-### Prerequisites
+### Prerequisites (Easier)
 - [[q-android-testing-strategies--android--medium]] - Testing strategies overview
 - [[q-gradle-basics--tools--easy]] - Gradle build system fundamentals
 
-### Related
+### Related (Same Level)
 - [[q-android-lint-tool--android--medium]] - Static analysis with Android Lint
 - [[q-build-optimization-gradle--android--medium]] - Gradle build optimization
 - [[q-test-coverage-android--android--medium]] - Code coverage measurement
 
-### Advanced
+### Advanced (Harder)
 - [[q-distributed-testing-infrastructure--system-design--hard]] - Distributed test infrastructure
 - [[q-performance-regression-testing--android--hard]] - Performance regression detection

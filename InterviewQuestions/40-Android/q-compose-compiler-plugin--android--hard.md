@@ -19,12 +19,14 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+  - c-compose-state
+  - c-compose-recomposition
+  - q-compose-state--android--medium
   - q-android-performance-measurement-tools--android--medium
-  - q-animated-visibility-vs-content--android--medium
-  - q-compose-canvas-graphics--android--hard
+  - q-compose-performance-benchmarking--android--hard
 sources: []
 created: 2025-10-11
-updated: 2025-10-28
+updated: 2025-10-29
 tags:
   - android/performance-memory
   - android/ui-compose
@@ -43,227 +45,171 @@ tags:
 
 ## Ответ (RU)
 
-### Что делает плагин
+### Трансформация @Composable функций
 
-Плагин компилятора Compose преобразует `@Composable` функции в машины состояний:
-- Добавляет параметры `Composer`, генерирует группы и ключи для отслеживания изменений
-- Анализирует стабильность параметров (Stable/Unstable) для пропуска ненужных перекомпозиций
-- Отмечает вызовы как restartable/skippable и генерирует операции чтения/записи slot table
-- Использует анализ потока данных для определения оптимизаций
+Компилятор преобразует `@Composable` функции в машины состояний:
+- Вставляет параметр `Composer` для управления slot table
+- Генерирует группы и ключи для отслеживания изменений UI
+- Анализирует стабильность параметров через data flow analysis
+- Помечает функции как restartable/skippable для оптимизации
 
-### Стабильность и пропуск перекомпозиций
+### Механизм стабильности
 
-**Стабильные параметры** → функция может быть пропущена при перекомпозиции:
+**Стабильные типы** → функция пропускается при одинаковых параметрах:
 - Примитивы (Int, String, Boolean)
 - Типы с `@Immutable` / `@Stable`
 - Referentially equal объекты
 
-**Нестабильные параметры** → всегда выполняется перекомпозиция:
+**Нестабильные типы** → всегда перекомпозируются:
 - Изменяемые коллекции (MutableList, MutableMap)
-- Классы без явной стабильности
-- Типы с изменяемыми полями
+- Классы без явных маркеров стабильности
+- Типы с var полями
 
-### Примеры стабильности
+### Примеры оптимизации
 
-✅ **Стабильная модель** — минимум перекомпозиций:
+✅ **Стабильная модель**:
 ```kotlin
 @Immutable
 data class User(val id: String, val name: String)
 
 @Composable
 fun UserRow(user: User) {
-    // Перекомпозиция только при изменении user
-    Text(text = user.name)
+    Text(text = user.name) // Перекомпозиция только при изменении user
 }
 ```
 
-❌ **Нестабильная модель** — избыточные перекомпозиции:
+❌ **Нестабильная модель**:
 ```kotlin
-// Без @Immutable компилятор не может гарантировать стабильность
-data class User(val id: String, var name: String)
+data class User(val id: String, var name: String) // var делает тип нестабильным
 
 @Composable
 fun UserRow(user: User) {
-    // Перекомпозиция при каждом изменении родителя
-    Text(text = user.name)
+    Text(text = user.name) // Перекомпозируется при каждом изменении родителя
 }
 ```
 
-✅ **Подъем состояния и стабильные параметры**:
+✅ **Неизменяемые интерфейсы**:
 ```kotlin
 @Composable
-fun Counter() {
-    var count by remember { mutableStateOf(0) }
-    // ✅ Только Text перекомпозируется
-    Button(onClick = { count++ }) {
-        Text("Count: $count")
-    }
-}
-```
-
-❌ **Передача изменяемых коллекций**:
-```kotlin
-// ❌ Каждое изменение MutableList вызывает перекомпозицию
-@Composable
-fun ItemList(items: MutableList<Item>) {
+fun ItemList(items: List<Item>) { // List вместо MutableList
     LazyColumn {
-        items(items) { item -> ItemRow(item) }
-    }
-}
-```
-
-✅ **Использование неизменяемых интерфейсов**:
-```kotlin
-// ✅ Передаем List вместо MutableList
-@Composable
-fun ItemList(items: List<Item>) {
-    LazyColumn {
-        items(items) { item -> ItemRow(item) }
+        items(items) { ItemRow(it) }
     }
 }
 ```
 
 ### Диагностика компилятора
 
-Включите метрики и отчеты для анализа решений компилятора:
+Включите отчеты для анализа решений компилятора:
 
 ```kotlin
 // gradle.properties
 compose.compiler.report=true
 compose.compiler.metrics=true
 compose.compiler.reportDestination=build/compose-reports
-compose.compiler.metricsDestination=build/compose-metrics
 ```
 
 Отчеты показывают:
 - Какие функции restartable/skippable
-- Какие типы нестабильны и почему
+- Причины нестабильности типов
 - Количество групп и сложность композиций
 
-### Практики оптимизации
+### Рекомендации по оптимизации
 
 1. **Используйте @Immutable/@Stable** для доменных моделей
-2. **Избегайте больших объектов в параметрах** — передавайте ID или ключи
-3. **Выносите тяжелые вычисления** — используйте `remember` и `derivedStateOf`
-4. **Разбивайте композиции** — декомпозируйте сложные UI на подкомпоненты
-5. **Контролируйте каскады** — используйте `key()` и локальное состояние
+2. **Передавайте ID вместо объектов** для снижения нагрузки
+3. **Выносите вычисления** в `remember` и `derivedStateOf`
+4. **Декомпозируйте UI** на мелкие composable функции
+5. **Используйте key()** для контроля области перекомпозиции
 
 ## Answer (EN)
 
-### What the Plugin Does
+### @Composable Function Transformation
 
-The Compose Compiler Plugin transforms `@Composable` functions into state machines:
-- Inserts `Composer` parameters, generates groups and keys for change tracking
-- Infers parameter stability (Stable/Unstable) to decide if recomposition can be skipped
-- Marks calls as restartable/skippable and generates slot table read/write operations
-- Uses data flow analysis to determine optimization decisions
+The compiler transforms `@Composable` functions into state machines:
+- Injects `Composer` parameter for slot table management
+- Generates groups and keys for UI change tracking
+- Analyzes parameter stability through data flow analysis
+- Marks functions as restartable/skippable for optimization
 
-### Stability and Skipping
+### Stability Mechanism
 
-**Stable parameters** → function can be skipped during recomposition:
+**Stable types** → function skips when parameters are equal:
 - Primitives (Int, String, Boolean)
 - Types annotated with `@Immutable` / `@Stable`
 - Referentially equal objects
 
-**Unstable parameters** → recomposition always executes:
+**Unstable types** → always recompose:
 - Mutable collections (MutableList, MutableMap)
 - Classes without explicit stability markers
-- Types with mutable fields
+- Types with var fields
 
-### Stability Examples
+### Optimization Examples
 
-✅ **Stable model** — minimal recompositions:
+✅ **Stable model**:
 ```kotlin
 @Immutable
 data class User(val id: String, val name: String)
 
 @Composable
 fun UserRow(user: User) {
-    // Recomposes only when user changes
-    Text(text = user.name)
+    Text(text = user.name) // Recomposes only when user changes
 }
 ```
 
-❌ **Unstable model** — excessive recompositions:
+❌ **Unstable model**:
 ```kotlin
-// Without @Immutable compiler cannot guarantee stability
-data class User(val id: String, var name: String)
+data class User(val id: String, var name: String) // var makes type unstable
 
 @Composable
 fun UserRow(user: User) {
-    // Recomposes on every parent change
-    Text(text = user.name)
+    Text(text = user.name) // Recomposes on every parent change
 }
 ```
 
-✅ **State hoisting with stable parameters**:
+✅ **Immutable interfaces**:
 ```kotlin
 @Composable
-fun Counter() {
-    var count by remember { mutableStateOf(0) }
-    // ✅ Only Text recomposes
-    Button(onClick = { count++ }) {
-        Text("Count: $count")
-    }
-}
-```
-
-❌ **Passing mutable collections**:
-```kotlin
-// ❌ Every MutableList change triggers recomposition
-@Composable
-fun ItemList(items: MutableList<Item>) {
+fun ItemList(items: List<Item>) { // List instead of MutableList
     LazyColumn {
-        items(items) { item -> ItemRow(item) }
-    }
-}
-```
-
-✅ **Using immutable interfaces**:
-```kotlin
-// ✅ Pass List instead of MutableList
-@Composable
-fun ItemList(items: List<Item>) {
-    LazyColumn {
-        items(items) { item -> ItemRow(item) }
+        items(items) { ItemRow(it) }
     }
 }
 ```
 
 ### Compiler Diagnostics
 
-Enable metrics and reports to analyze compiler decisions:
+Enable reports to analyze compiler decisions:
 
 ```kotlin
 // gradle.properties
 compose.compiler.report=true
 compose.compiler.metrics=true
 compose.compiler.reportDestination=build/compose-reports
-compose.compiler.metricsDestination=build/compose-metrics
 ```
 
 Reports show:
 - Which functions are restartable/skippable
-- Which types are unstable and why
+- Reasons for type instability
 - Group counts and composition complexity
 
-### Optimization Practices
+### Optimization Recommendations
 
 1. **Use @Immutable/@Stable** for domain models when semantics apply
-2. **Avoid large objects in parameters** — pass IDs or keys instead
-3. **Move heavy work off composition** — use `remember` and `derivedStateOf`
-4. **Break down compositions** — decompose complex UI into subcomposables
-5. **Control cascades** — use `key()` and local state management
+2. **Pass IDs instead of objects** to reduce payload
+3. **Move calculations** to `remember` and `derivedStateOf`
+4. **Decompose UI** into small composable functions
+5. **Use key()** to control recomposition scope
 
 ---
 
 ## Follow-ups
 
 - How to interpret compiler stability reports and fix unstable types?
-- What are trade-offs of @Stable/@Immutable annotations vs real immutability?
-- How to measure recomposition counts in production (Macrobenchmark, tracing)?
-- When should you use `key()` to control recomposition scope?
-- How does `derivedStateOf` prevent unnecessary recompositions?
+- What are the trade-offs of @Stable vs @Immutable annotations?
+- How does derivedStateOf prevent unnecessary recompositions?
+- When should you use key() to control recomposition scope?
+- How to measure recomposition counts in production using tracing?
 
 ## References
 
@@ -276,13 +222,13 @@ Reports show:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-performance-measurement-tools--android--medium]]
 - [[q-compose-state--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
 
 ### Related (Same Level)
 - [[q-animated-visibility-vs-content--android--medium]]
 - [[q-compose-canvas-graphics--android--hard]]
 
 ### Advanced (Harder)
-- [[q-android-runtime-art--android--medium]]
 - [[q-compose-performance-benchmarking--android--hard]]
+- [[q-android-runtime-art--android--medium]]

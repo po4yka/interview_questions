@@ -3,22 +3,20 @@ id: 20251012-122710
 title: Compose Navigation Advanced / Продвинутая навигация Compose
 aliases: [Compose Navigation Advanced, Продвинутая навигация Compose]
 topic: android
-subtopics:
-  - ui-compose
-  - ui-navigation
+subtopics: [ui-compose, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-animated-visibility-vs-content--android--medium
-  - q-compose-gesture-detection--android--medium
+  - c-compose-navigation
+  - c-deep-linking
+  - q-compose-navigation-basics--android--easy
+  - q-compose-state-management--android--medium
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-30
 tags: [android/ui-compose, android/ui-navigation, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/navigation]
 ---
@@ -33,200 +31,193 @@ sources: [https://developer.android.com/jetpack/compose/navigation]
 
 ## Ответ (RU)
 
-### Базовая настройка
-NavController управляет back stack и текущим экраном; NavHost связывает паттерны маршрутов с composable-функциями.
+### Типы аргументов
+
+**Path-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, с дефолтами, передаются через `?key=value`.
 
 ```kotlin
-@Composable
-fun AppNav() {
-  val nav = rememberNavController() // ✅ Создание один раз на верхнем уровне
-  NavHost(nav, startDestination = "home") {
-    composable("home") {
-      Home(onOpen = { id -> nav.navigate("details/$id") })
-    }
-    composable(
-      route = "details/{id}",
-      arguments = listOf(navArgument("id") { type = NavType.StringType })
-    ) { backStackEntry ->
-      Details(backStackEntry.arguments?.getString("id") ?: "")
-    }
-  }
-}
-```
-
-### Обязательные и опциональные аргументы
-- Path-аргументы обязательны и позиционные; query-аргументы опциональны с дефолтами.
-- NavType обеспечивает type-safety; используйте Uri.encode для спецсимволов.
-
-```kotlin
-// Обязательный path-аргумент
+// ✅ Path-аргумент (обязательный)
 composable(
   "profile/{userId}",
   listOf(navArgument("userId") { type = NavType.StringType })
-) { /* ... */ }
+) { entry ->
+  ProfileScreen(entry.arguments?.getString("userId") ?: "")
+}
 
-// Опциональный query-аргумент
+// ✅ Query-аргумент (опциональный)
 composable(
-  "search?query={q}",
-  listOf(navArgument("q") {
+  "search?q={query}",
+  listOf(navArgument("query") {
     type = NavType.StringType
-    nullable = true
-    defaultValue = "" // ✅ Значение по умолчанию
+    defaultValue = ""
   })
-) { /* ... */ }
+) { entry ->
+  SearchScreen(entry.arguments?.getString("query"))
+}
 ```
 
 ### Type-safe маршруты
-Централизуйте определения маршрутов для избежания строковых ошибок.
+
+Используйте sealed class для централизованного определения маршрутов и избежания строковых ошибок.
 
 ```kotlin
 sealed class Screen(val route: String) {
-  data object Home: Screen("home")
-  data object Profile: Screen("profile/{userId}") {
-    fun createRoute(id: String) = "profile/$id" // ✅ Type-safe builder
+  data object Home : Screen("home")
+  data object Profile : Screen("profile/{userId}") {
+    fun createRoute(userId: String) = "profile/$userId" // ✅ Type-safe
   }
 }
 
-NavHost(nav, Screen.Home.route) {
-  composable(Screen.Home.route) { HomeScreen() }
-  composable(Screen.Profile.route) {
-    val userId = it.arguments?.getString("userId") ?: ""
-    ProfileScreen(userId)
-  }
-}
+// Использование
+nav.navigate(Screen.Profile.createRoute("123"))
 ```
 
 ### Deep Links
-Deep links сопоставляют URI с маршрутами; требуют intent-filters в манифесте для app/https схем.
+
+Deep links связывают внешние URI с маршрутами навигации. Требуют intent-filter в манифесте для схем app:// или https://.
 
 ```kotlin
 composable(
-  route = "profile/{userId}",
-  arguments = listOf(navArgument("userId") { type = NavType.StringType }),
+  route = "product/{id}",
+  arguments = listOf(navArgument("id") { type = NavType.StringType }),
   deepLinks = listOf(
-    navDeepLink { uriPattern = "myapp://profile/{userId}" },
-    navDeepLink { uriPattern = "https://example.com/profile/{userId}" }
+    navDeepLink { uriPattern = "myapp://product/{id}" }, // ✅ App scheme
+    navDeepLink { uriPattern = "https://example.com/product/{id}" } // ✅ Web scheme
   )
-) { /* ... */ }
+) { entry ->
+  ProductScreen(entry.arguments?.getString("id") ?: "")
+}
 ```
 
-### Управление back stack
-- `launchSingleTop` предотвращает дублирование верхнего экрана
-- `popUpTo` очищает стек до указанного маршрута
+Манифест:
+```xml
+<intent-filter>
+  <action android:name="android.intent.action.VIEW" />
+  <category android:name="android.intent.category.DEFAULT" />
+  <category android:name="android.intent.category.BROWSABLE" />
+  <data android:scheme="myapp" android:host="product" />
+  <data android:scheme="https" android:host="example.com" android:pathPrefix="/product" />
+</intent-filter>
+```
+
+### Контроль back stack
+
+**launchSingleTop** — предотвращает дублирование верхней записи. **popUpTo** — очищает стек до указанного маршрута, `inclusive = true` удаляет и сам маршрут.
 
 ```kotlin
-// ✅ Избегаем дублирования
+// ✅ Избегаем дублей
 nav.navigate("home") { launchSingleTop = true }
 
-// ✅ Очистка стека до login
+// ✅ Очистка стека (login → main, удалить login)
 nav.navigate("main") {
   popUpTo("login") { inclusive = true }
 }
 
-// ❌ Без настроек создаст дубликаты
+// ❌ Без опций создаст дубликаты
 nav.navigate("home")
 ```
 
-### Передача сложных объектов
-Используйте shared ViewModel или SavedStateHandle вместо сериализации в URL.
+### Передача сложных данных
+
+Для объектов используйте **shared ViewModel** между экранами или **SavedStateHandle** для восстановления после гибели процесса. URL-параметры ограничены размером и типами.
 
 ```kotlin
 // ✅ Shared ViewModel
-val viewModel = hiltViewModel<SharedDataViewModel>()
-nav.navigate("details/$id")
+@HiltViewModel
+class SharedDataViewModel @Inject constructor() : ViewModel() {
+  private val _data = MutableStateFlow<Data?>(null)
+  val data = _data.asStateFlow()
+  fun setData(data: Data) { _data.value = data }
+}
 
-// ❌ Сериализация сложного объекта в URL
-nav.navigate("details?data=${complexObject.toJson()}") // Ограничения размера URL
+// В источнике
+viewModel.setData(complexObject)
+nav.navigate("details")
+
+// В назначении
+val data = viewModel.data.collectAsState().value
 ```
 
 ## Answer (EN)
 
-### Basic Setup
-NavController manages the back stack and current destination; NavHost maps route patterns to composable destinations.
+### Argument Types
+
+**Path arguments** are required, positional, part of the URL. **Query arguments** are optional, support defaults, passed via `?key=value`.
 
 ```kotlin
-@Composable
-fun AppNav() {
-  val nav = rememberNavController() // ✅ Create once at top level
-  NavHost(nav, startDestination = "home") {
-    composable("home") {
-      Home(onOpen = { id -> nav.navigate("details/$id") })
-    }
-    composable(
-      route = "details/{id}",
-      arguments = listOf(navArgument("id") { type = NavType.StringType })
-    ) { backStackEntry ->
-      Details(backStackEntry.arguments?.getString("id") ?: "")
-    }
-  }
-}
-```
-
-### Required vs Optional Arguments
-- Path arguments are positional and required; query arguments are named with optional defaults.
-- NavType enforces runtime type safety; use Uri.encode for special characters.
-
-```kotlin
-// Required path argument
+// ✅ Path argument (required)
 composable(
   "profile/{userId}",
   listOf(navArgument("userId") { type = NavType.StringType })
-) { /* ... */ }
+) { entry ->
+  ProfileScreen(entry.arguments?.getString("userId") ?: "")
+}
 
-// Optional query argument
+// ✅ Query argument (optional)
 composable(
-  "search?query={q}",
-  listOf(navArgument("q") {
+  "search?q={query}",
+  listOf(navArgument("query") {
     type = NavType.StringType
-    nullable = true
-    defaultValue = "" // ✅ Default value provided
+    defaultValue = ""
   })
-) { /* ... */ }
+) { entry ->
+  SearchScreen(entry.arguments?.getString("query"))
+}
 ```
 
 ### Type-safe Routes
-Centralize route definitions to avoid string typos in navigation calls.
+
+Use sealed classes for centralized route definitions and string-safety.
 
 ```kotlin
 sealed class Screen(val route: String) {
-  data object Home: Screen("home")
-  data object Profile: Screen("profile/{userId}") {
-    fun createRoute(id: String) = "profile/$id" // ✅ Type-safe builder
+  data object Home : Screen("home")
+  data object Profile : Screen("profile/{userId}") {
+    fun createRoute(userId: String) = "profile/$userId" // ✅ Type-safe
   }
 }
 
-NavHost(nav, Screen.Home.route) {
-  composable(Screen.Home.route) { HomeScreen() }
-  composable(Screen.Profile.route) {
-    val userId = it.arguments?.getString("userId") ?: ""
-    ProfileScreen(userId)
-  }
-}
+// Usage
+nav.navigate(Screen.Profile.createRoute("123"))
 ```
 
 ### Deep Links
-Deep links match incoming URIs to routes; require manifest intent filters for app/https schemes.
+
+Deep links map external URIs to navigation routes. Require manifest intent-filter for app:// or https:// schemes.
 
 ```kotlin
 composable(
-  route = "profile/{userId}",
-  arguments = listOf(navArgument("userId") { type = NavType.StringType }),
+  route = "product/{id}",
+  arguments = listOf(navArgument("id") { type = NavType.StringType }),
   deepLinks = listOf(
-    navDeepLink { uriPattern = "myapp://profile/{userId}" },
-    navDeepLink { uriPattern = "https://example.com/profile/{userId}" }
+    navDeepLink { uriPattern = "myapp://product/{id}" }, // ✅ App scheme
+    navDeepLink { uriPattern = "https://example.com/product/{id}" } // ✅ Web scheme
   )
-) { /* ... */ }
+) { entry ->
+  ProductScreen(entry.arguments?.getString("id") ?: "")
+}
+```
+
+Manifest:
+```xml
+<intent-filter>
+  <action android:name="android.intent.action.VIEW" />
+  <category android:name="android.intent.category.DEFAULT" />
+  <category android:name="android.intent.category.BROWSABLE" />
+  <data android:scheme="myapp" android:host="product" />
+  <data android:scheme="https" android:host="example.com" android:pathPrefix="/product" />
+</intent-filter>
 ```
 
 ### Back Stack Control
-- `launchSingleTop` prevents duplicate top entries
-- `popUpTo` clears the stack up to a target route
+
+**launchSingleTop** prevents duplicate top entries. **popUpTo** clears stack to target route, `inclusive = true` removes the target itself.
 
 ```kotlin
 // ✅ Avoid duplicates
 nav.navigate("home") { launchSingleTop = true }
 
-// ✅ Clear stack up to login
+// ✅ Clear stack (login → main, remove login)
 nav.navigate("main") {
   popUpTo("login") { inclusive = true }
 }
@@ -235,38 +226,54 @@ nav.navigate("main") {
 nav.navigate("home")
 ```
 
-### Passing Complex Objects
-Use shared ViewModel or SavedStateHandle instead of serializing to URL parameters.
+### Passing Complex Data
+
+For objects, use **shared ViewModel** between screens or **SavedStateHandle** for process death restoration. URL parameters have size and type limits.
 
 ```kotlin
 // ✅ Shared ViewModel
-val viewModel = hiltViewModel<SharedDataViewModel>()
-nav.navigate("details/$id")
+@HiltViewModel
+class SharedDataViewModel @Inject constructor() : ViewModel() {
+  private val _data = MutableStateFlow<Data?>(null)
+  val data = _data.asStateFlow()
+  fun setData(data: Data) { _data.value = data }
+}
 
-// ❌ Serializing complex object to URL
-nav.navigate("details?data=${complexObject.toJson()}") // URL size limits
+// In source
+viewModel.setData(complexObject)
+nav.navigate("details")
+
+// In destination
+val data = viewModel.data.collectAsState().value
 ```
 
 ## Follow-ups
-- How to implement nested navigation graphs for modular features?
-- What are best practices for multi-module navigation with type safety?
-- How to preserve state across bottom navigation tabs?
-- How to handle navigation testing with NavController?
+
+- How to implement nested navigation graphs for feature modules?
+- How to test navigation flows with NavController in unit/UI tests?
+- How to handle multi-backstack navigation (bottom nav with independent stacks)?
+- How to preserve/restore navigation state across process death?
+- How to implement conditional navigation (login gates, permissions)?
 
 ## References
+
+- [[c-compose-navigation]]
+- [[c-deep-linking]]
+- [[c-viewmodel-lifecycle]]
 - https://developer.android.com/jetpack/compose/navigation
-- https://developer.android.com/guide/navigation/navigation-principles
+- https://developer.android.com/guide/navigation/design
 
 ## Related Questions
 
 ### Prerequisites (Easier)
+- [[q-compose-navigation-basics--android--easy]]
 - [[q-android-jetpack-overview--android--easy]]
 
 ### Related (Same Level)
-- [[q-animated-visibility-vs-content--android--medium]]
-- [[q-compose-gesture-detection--android--medium]]
+- [[q-compose-state-management--android--medium]]
+- [[q-viewmodel-savedstate--android--medium]]
+- [[q-hilt-injection-compose--android--medium]]
 
 ### Advanced (Harder)
-- [[q-compose-compiler-plugin--android--hard]]
-- [[q-compose-custom-layout--android--hard]]
-- [[q-compose-lazy-layout-optimization--android--hard]]
+- [[q-compose-custom-navigation--android--hard]]
+- [[q-multi-module-navigation--android--hard]]

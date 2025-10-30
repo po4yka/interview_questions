@@ -18,7 +18,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/app-bundle, android/play-console, android/billing, difficulty/medium]
+date created: Wednesday, October 29th 2025, 4:19:48 pm
+date modified: Thursday, October 30th 2025, 11:12:56 am
 ---
+
 # Вопрос (RU)
 > Что такое альтернативное распространение Android-приложений и какие платформы существуют помимо Google Play?
 

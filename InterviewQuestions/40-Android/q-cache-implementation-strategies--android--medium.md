@@ -3,7 +3,7 @@ id: 20251012-122789
 title: Cache Implementation Strategies / Стратегии реализации кэша
 aliases: ["Cache Implementation Strategies", "Стратегии реализации кэша"]
 topic: android
-subtopics: [datastore, networking-http, room]
+subtopics: [cache-offline, networking-http, room]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -15,9 +15,9 @@ related:
   - q-android-storage-types--android--medium
   - q-database-optimization-android--android--medium
 created: 2025-10-13
-updated: 2025-01-27
+updated: 2025-10-29
 sources: []
-tags: [android/datastore, android/networking-http, android/room, difficulty/medium]
+tags: [android/cache-offline, android/networking-http, android/room, difficulty/medium]
 ---
 # Вопрос (RU)
 > Какие существуют стратегии реализации кэша в Android?
@@ -29,36 +29,24 @@ tags: [android/datastore, android/networking-http, android/room, difficulty/medi
 
 ## Ответ (RU)
 
-### Цели и уровни кэширования
-- Цели: снижение задержек, меньше сетевых вызовов, работа офлайн, предсказуемое использование памяти.
-- Уровни (многоуровневое кэширование): Память → Диск → Сеть.
-  - Память: самый быстрый, небольшой объем, LRU.
-  - Диск (Room/Files): больший объем, TTL/индексирование.
-  - Сеть: последний вариант; используем HTTP кэш.
+### Многоуровневая архитектура
 
-### Основные стратегии
-- **Cache-Aside** (ленивая загрузка): чтение через кэш + явное заполнение; самая простая.
-- **Write-Through**: запись в кэш и источник синхронно.
-- **Write-Back**: запись в кэш, отложенная запись в источник; требует очереди для надежности.
-- **Refresh-Ahead**: проактивное обновление ключей перед истечением TTL.
+**Память → Диск → Сеть**: стандартная трехуровневая иерархия в Android.
 
-Все стратегии требуют правильного управления памятью для предотвращения [[c-memory-leaks]].
+**Cache-Aside** (ленивая загрузка): проверка кэша перед запросом к источнику. Простейший паттерн.
 
-### Ключи, TTL, вытеснение
-- Ключи: стабильные, включают параметры (locale/userId).
-- TTL: по типу данных (новости=5m, профиль=1h).
-- Вытеснение: LRU для памяти; по размеру/времени для диска.
+**Write-Through**: синхронная запись в кэш и источник. Консистентность, но медленнее.
 
-### Инвалидация кэша
-- При изменении данных, смене версии схемы, смене пользователя, явной политике (pull-to-refresh).
+**Write-Back**: запись в кэш с отложенной синхронизацией через WorkManager.
 
-### Примеры кода
+**Refresh-Ahead**: проактивное обновление до истечения TTL.
+
 ```kotlin
-// ✅ Cache-aside pattern: memory → disk → network
+// ✅ Cache-aside: все слои
 suspend fun <K, V> get(key: K): V {
-  memory[key]?.let { return it } // ✅ Fastest path
+  memory[key]?.let { return it } // ✅ Горячий путь
   disk[key]?.let {
-    if (!stale(it)) return memory.putAndReturn(key, it)
+    if (!stale(it)) return it.also { memory.put(key, it) }
   }
   return network.load(key).also {
     memory.put(key, it)
@@ -66,57 +54,53 @@ suspend fun <K, V> get(key: K): V {
   }
 }
 
-// ❌ Don't skip memory layer
-suspend fun getBad(key: K): V {
-  return network.load(key) // ❌ Always hits network
-}
+// ❌ Пропуск кэша
+suspend fun getBad(key: K): V = network.load(key) // ❌ Всегда сеть
 ```
 
 ```kotlin
-// ✅ OkHttp HTTP cache with proper size
+// ✅ OkHttp HTTP cache
 val client = OkHttpClient.Builder()
   .cache(Cache(File(cacheDir, "http"), 10L * 1024 * 1024))
   .build()
+
+// ✅ Room entity с TTL
+@Entity data class CachedUser(
+  @PrimaryKey val id: String,
+  val name: String,
+  val cachedAt: Long = System.currentTimeMillis()
+)
 ```
 
-### Компоненты
-- DataStore: малые KV данные (flags, timestamps).
-- Room: структурированные закэшированные сущности с cachedAt, используем [[c-room]].
-- HTTP: OkHttp кэш + Cache-Control; ETag/If-None-Match.
-- Изображения: Glide/Coil встроенные кэши.
+### Управление
+
+**Ключи**: userId, locale, version в составе ключа
+**TTL**: по типу данных (новости 5м, профиль 1ч)
+**Вытеснение**: LruCache для памяти, FIFO для диска
+**Инвалидация**: при мутациях, смене пользователя, pull-to-refresh
+
+**Инструменты**: LruCache (память), Room (диск), DataStore (настройки), OkHttp Cache (HTTP), Glide/Coil (изображения)
 
 ## Answer (EN)
 
-### Goals and Layers
-- Goals: lower latency, fewer network calls, offline resilience, predictable memory use.
-- Layers (multi-level): Memory → Disk → Network.
-  - Memory: fastest, small size, LRU eviction.
-  - Disk (Room/Files): larger capacity, TTL/indexing.
-  - Network: last resort; respect HTTP cache.
+### Multi-tier Architecture
 
-### Core Strategies
-- **Cache-Aside** (lazy loading): read-through + explicit populate; simplest.
-- **Write-Through**: write to cache and source synchronously.
-- **Write-Back**: write to cache, delayed flush to source; needs durability queue.
-- **Refresh-Ahead**: proactively refresh near-expiry keys.
+**Memory → Disk → Network**: standard three-tier hierarchy in Android.
 
-All strategies require proper memory management to avoid [[c-memory-leaks]].
+**Cache-Aside** (lazy loading): check cache before fetching from source. Simplest pattern.
 
-### Keys, TTL, Eviction
-- Keys: stable, include parameters (locale/userId).
-- TTL: per data type (news=5m, profile=1h).
-- Eviction: LRU for memory; size/time-based for disk.
+**Write-Through**: synchronous write to cache and source. Consistency but slower.
 
-### Cache Invalidation
-- On data change, schema version change, user switch, explicit policy (pull-to-refresh).
+**Write-Back**: cache write with deferred sync via WorkManager.
 
-### Code Examples
+**Refresh-Ahead**: proactive refresh before TTL expiration.
+
 ```kotlin
-// ✅ Cache-aside pattern: memory → disk → network
+// ✅ Cache-aside: all layers
 suspend fun <K, V> get(key: K): V {
-  memory[key]?.let { return it } // ✅ Fastest path
+  memory[key]?.let { return it } // ✅ Hot path
   disk[key]?.let {
-    if (!stale(it)) return memory.putAndReturn(key, it)
+    if (!stale(it)) return it.also { memory.put(key, it) }
   }
   return network.load(key).also {
     memory.put(key, it)
@@ -124,36 +108,45 @@ suspend fun <K, V> get(key: K): V {
   }
 }
 
-// ❌ Don't skip memory layer
-suspend fun getBad(key: K): V {
-  return network.load(key) // ❌ Always hits network
-}
+// ❌ Skipping cache
+suspend fun getBad(key: K): V = network.load(key) // ❌ Always network
 ```
 
 ```kotlin
-// ✅ OkHttp HTTP cache with proper size
+// ✅ OkHttp HTTP cache
 val client = OkHttpClient.Builder()
   .cache(Cache(File(cacheDir, "http"), 10L * 1024 * 1024))
   .build()
+
+// ✅ Room entity with TTL
+@Entity data class CachedUser(
+  @PrimaryKey val id: String,
+  val name: String,
+  val cachedAt: Long = System.currentTimeMillis()
+)
 ```
 
-### Components
-- DataStore: small KV data (flags, timestamps).
-- Room: structured cached entities with cachedAt, see [[c-room]].
-- HTTP: OkHttp cache + Cache-Control; ETag/If-None-Match.
-- Images: Glide/Coil built-in caches.
+### Management
+
+**Keys**: userId, locale, version in key composition
+**TTL**: by data type (news 5m, profile 1h)
+**Eviction**: LruCache for memory, FIFO for disk
+**Invalidation**: on mutations, user switch, pull-to-refresh
+
+**Tools**: LruCache (memory), Room (disk), DataStore (settings), OkHttp Cache (HTTP), Glide/Coil (images)
 
 ## Follow-ups
 - How to balance TTL with server cache headers (Cache-Control, max-age)?
 - When to choose write-through vs write-back for mobile data consistency?
 - How to measure cache hit rate and eviction patterns in production?
 - What are memory pressure triggers for aggressive cache eviction?
+- How to implement stale-while-revalidate pattern for offline-first apps?
 
 ## References
-- [[c-room]]
-- [[c-memory-leaks]]
 - https://developer.android.com/topic/performance/memory
 - https://developer.android.com/training/data-storage
+- https://developer.android.com/reference/androidx/collection/LruCache
+- https://square.github.io/okhttp/features/caching/
 
 ## Related Questions
 

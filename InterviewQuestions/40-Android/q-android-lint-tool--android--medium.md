@@ -12,15 +12,16 @@ status: draft
 moc: moc-android
 related: [q-gradle-build-system--android--medium, q-android-testing-strategies--android--medium, q-proguard-r8--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/gradle, android/static-analysis, android/build-variants, static-analysis, code-quality, difficulty/medium]
 sources: [https://developer.android.com/studio/write/lint]
 ---
+
 # Вопрос (RU)
-> Что такое Android Lint и как его использовать для анализа кода?
+> Что такое Android Lint, его основные возможности и методы настройки для проекта?
 
 # Question (EN)
-> What is Android Lint and how to use it for code analysis?
+> What is Android Lint, its core capabilities, and how to configure it for a project?
 
 ---
 
@@ -28,24 +29,32 @@ sources: [https://developer.android.com/studio/write/lint]
 
 **Android Lint** — встроенный инструмент статического анализа для обнаружения проблем кода, ресурсов и конфигурации без запуска приложения.
 
-**Основные возможности:**
-- Анализ Java/Kotlin/XML файлов на структурные ошибки
-- Проверка ресурсов (layouts, drawables, strings) на несоответствия
-- Обнаружение проблем безопасности (hardcoded credentials, insecure APIs)
-- Выявление неоптимальных паттернов (unused resources, overdraw)
-- Настраиваемые правила через lint.xml и Gradle DSL
-
-**Категории проверок:**
-- **Correctness** — логические ошибки, NPE, wrong callbacks
-- **Security** — хардкод секретов, небезопасные сетевые запросы
+**Основные категории проверок:**
+- **Correctness** — логические ошибки (NPE, неправильные callbacks)
+- **Security** — хардкод credentials, небезопасные API
 - **Performance** — утечки памяти, неэффективный код
 - **Usability** — доступность, missing translations
-- **Internationalization** — hardcoded text, wrong locale handling
+- **Internationalization** — hardcoded text, неверная работа с locale
+
+**Конфигурация через Gradle DSL:**
+
+```kotlin
+// ✅ Современная настройка
+android {
+    lint {
+        checkReleaseBuilds = true
+        abortOnError = false
+
+        disable += listOf("ObsoleteSdkInt", "TypographyFractions")
+        enable += listOf("RtlHardcoded", "UnusedResources")
+    }
+}
+```
 
 **Конфигурация через lint.xml:**
 
 ```xml
-<!-- ✅ Project-specific rules -->
+<!-- ✅ Детальные правила на уровне проекта -->
 <lint>
     <issue id="HardcodedText" severity="error" />
     <issue id="UnusedResources" severity="warning" />
@@ -53,80 +62,71 @@ sources: [https://developer.android.com/studio/write/lint]
 </lint>
 ```
 
-**Конфигурация через Gradle DSL:**
+**Подавление в коде (минимально):**
 
 ```kotlin
-// ✅ Modern configuration (AGP 7.0+)
-android {
-    lint {
-        checkReleaseBuilds = true
-        abortOnError = false
-        warningsAsErrors = false
-
-        disable += listOf("TypographyFractions", "ObsoleteSdkInt")
-        enable += listOf("RtlHardcoded", "UnusedResources")
-    }
-}
-```
-
-**Подавление в коде (используйте осторожно):**
-
-```kotlin
-// ✅ Local suppression with justification
-@SuppressLint("SetTextI18n")  // Debug-only code
+// ✅ Локальное подавление с обоснованием
+@SuppressLint("SetTextI18n")  // Debug UI only
 textView.text = "Value: $value"
 
-// ❌ Broad suppression without explanation
-@SuppressLint("all")  // Never do this
-class MyActivity : AppCompatActivity()
+// ❌ Широкое подавление без причины
+@SuppressLint("all")  // Никогда так не делайте
 ```
 
-**Запуск и отчёты:**
-
-```bash
-# Анализ всего проекта
-./gradlew lint
-
-# Конкретный build variant
-./gradlew lintDebug
-
-# Baseline для legacy проектов
-./gradlew lintBaseline
-```
-
-**Baseline для постепенной миграции:**
+**Baseline для legacy проектов:**
 
 ```kotlin
-// ✅ Ignore existing issues, catch new ones
+// ✅ Игнорируем старые проблемы, ловим новые
 android {
     lint {
         baseline = file("lint-baseline.xml")
     }
 }
+
+// Генерация baseline:
+// ./gradlew lintBaseline
+```
+
+**Запуск через Gradle:**
+
+```bash
+# Полный анализ проекта
+./gradlew lint
+
+# Только для debug варианта
+./gradlew lintDebug
 ```
 
 ## Answer (EN)
 
 **Android Lint** is a built-in static analysis tool that detects code, resource, and configuration issues without running the application.
 
-**Key capabilities:**
-- Analyzes Java/Kotlin/XML files for structural errors
-- Validates resources (layouts, drawables, strings) for inconsistencies
-- Detects security issues (hardcoded credentials, insecure APIs)
-- Identifies inefficient patterns (unused resources, overdraw)
-- Customizable rules via lint.xml and Gradle DSL
-
-**Check categories:**
-- **Correctness** — logic errors, NPE, wrong callbacks
-- **Security** — hardcoded secrets, insecure network calls
+**Core check categories:**
+- **Correctness** — logic errors (NPE, wrong callbacks)
+- **Security** — hardcoded credentials, insecure APIs
 - **Performance** — memory leaks, inefficient code
 - **Usability** — accessibility, missing translations
-- **Internationalization** — hardcoded text, wrong locale handling
+- **Internationalization** — hardcoded text, incorrect locale handling
+
+**Configuration via Gradle DSL:**
+
+```kotlin
+// ✅ Modern configuration
+android {
+    lint {
+        checkReleaseBuilds = true
+        abortOnError = false
+
+        disable += listOf("ObsoleteSdkInt", "TypographyFractions")
+        enable += listOf("RtlHardcoded", "UnusedResources")
+    }
+}
+```
 
 **Configuration via lint.xml:**
 
 ```xml
-<!-- ✅ Project-specific rules -->
+<!-- ✅ Detailed project-level rules -->
 <lint>
     <issue id="HardcodedText" severity="error" />
     <issue id="UnusedResources" severity="warning" />
@@ -134,48 +134,18 @@ android {
 </lint>
 ```
 
-**Configuration via Gradle DSL:**
-
-```kotlin
-// ✅ Modern configuration (AGP 7.0+)
-android {
-    lint {
-        checkReleaseBuilds = true
-        abortOnError = false
-        warningsAsErrors = false
-
-        disable += listOf("TypographyFractions", "ObsoleteSdkInt")
-        enable += listOf("RtlHardcoded", "UnusedResources")
-    }
-}
-```
-
 **In-code suppression (use sparingly):**
 
 ```kotlin
 // ✅ Local suppression with justification
-@SuppressLint("SetTextI18n")  // Debug-only code
+@SuppressLint("SetTextI18n")  // Debug UI only
 textView.text = "Value: $value"
 
-// ❌ Broad suppression without explanation
+// ❌ Broad suppression without reason
 @SuppressLint("all")  // Never do this
-class MyActivity : AppCompatActivity()
 ```
 
-**Execution and reports:**
-
-```bash
-# Analyze entire project
-./gradlew lint
-
-# Specific build variant
-./gradlew lintDebug
-
-# Generate baseline for legacy projects
-./gradlew lintBaseline
-```
-
-**Baseline for gradual migration:**
+**Baseline for legacy projects:**
 
 ```kotlin
 // ✅ Ignore existing issues, catch new ones
@@ -184,6 +154,19 @@ android {
         baseline = file("lint-baseline.xml")
     }
 }
+
+// Generate baseline:
+// ./gradlew lintBaseline
+```
+
+**Execution via Gradle:**
+
+```bash
+# Full project analysis
+./gradlew lint
+
+# Debug variant only
+./gradlew lintDebug
 ```
 
 ---
@@ -191,31 +174,29 @@ android {
 ## Follow-ups
 
 - How to create custom Lint rules for project-specific architectural violations?
-- What is the performance impact of running Lint checks in CI/CD pipelines?
-- How does Lint baseline work for large legacy codebases?
-- Can Lint detect runtime issues or only static problems?
-- How to integrate Lint with code review tools (GitHub Actions, Danger)?
+- What is the performance impact of running Lint in CI/CD pipelines?
+- How does Lint baseline work for large legacy codebases with thousands of violations?
+- Can Lint detect runtime issues or only compile-time problems?
+- How to integrate Lint reports with code review tools like Danger or GitHub Actions?
 
 ## References
 
-- [[c-gradle]] — Gradle build system fundamentals
-- [[q-gradle-build-system--android--medium]] — Gradle configuration and build system
-- [[q-proguard-r8--android--medium]] — Code optimization and obfuscation
+- [[c-gradle]] — Build system fundamentals
+- [[c-static-analysis]] — Static analysis principles
 - https://developer.android.com/studio/write/lint — Official documentation
 - https://github.com/googlesamples/android-custom-lint-rules — Custom rules examples
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-gradle-build-system--android--medium]] — Understanding Gradle configuration
-- Android Studio basics — IDE integration with Lint
+- [[q-gradle-build-system--android--medium]] — Understanding Gradle configuration and build variants
 
 ### Related
-- [[q-android-testing-strategies--android--medium]] — Comprehensive quality assurance
-- [[q-proguard-r8--android--medium]] — Code optimization tools
-- Build variants and flavors — Lint per configuration
+- [[q-android-testing-strategies--android--medium]] — Comprehensive quality assurance approaches
+- [[q-proguard-r8--android--medium]] — Code optimization and obfuscation tools
+- Static code analysis tools (Detekt, ktlint, SonarQube)
 
 ### Advanced
-- Custom Lint rule development with PSI (Program Structure Interface)
-- Lint baseline strategy for gradual technical debt reduction
-- Integrating third-party Lint rules (Detekt, ktlint) into unified analysis
+- Writing custom Lint detectors using PSI (Program Structure Interface)
+- Lint baseline strategies for gradual technical debt reduction
+- CI/CD integration with parallel Lint execution per module

@@ -10,59 +10,52 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gradle-basics--android--easy, c-gradle, q-android-modularization--android--hard]
+related: [c-gradle, c-dependency-injection, c-modularization]
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/gradle, android/build-variants, android/dependency-management, gradle, performance, difficulty/medium]
 ---
+
 # Вопрос (RU)
-> Как оптимизировать сборку Android-приложения?
+> Как оптимизировать время сборки Android-приложения?
 
 ---
 
 # Question (EN)
-> How to optimize Android application build?
+> How to optimize Android application build time?
 
 ---
 
 ## Ответ (RU)
 
-**Стратегия оптимизации:**
-
-1. **Gradle Configuration** — параллелизм, кеширование, Configuration Cache
-2. **Модуляризация** — независимые модули компилируются параллельно
-3. **Управление зависимостями** — `implementation` vs `api`, KSP вместо Kapt
-4. **Профилирование** — выявление узких мест через `--scan`/`--profile`
+**Стратегия**: Gradle-конфигурация + модуляризация + управление зависимостями + профилирование.
 
 ### 1. Критичные настройки gradle.properties
 
 ```properties
-# ✅ Параллельная сборка (все ядра CPU)
+# ✅ Параллельная сборка
 org.gradle.parallel=true
 org.gradle.workers.max=8
 
-# ✅ Build cache (избегаем перекомпиляции)
+# ✅ Build cache (кеш артефактов)
 org.gradle.caching=true
-
-# ✅ Configuration cache (кеш фазы конфигурации)
 org.gradle.configuration-cache=true
 
-# ✅ File system watching (native FS events)
+# ✅ File system watching
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap (профилактика OOM)
+# ✅ JVM heap
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Non-transitive R classes (изолированные R.java)
+# ✅ Non-transitive R classes
 android.nonTransitiveRClass=true
 
-# ✅ Incremental Kotlin compilation
+# ✅ Incremental compilation
 kotlin.incremental=true
-kotlin.incremental.usePreciseJavaTracking=true
 ```
 
-**Эффект:** +30-70% на incremental builds, +15-30% на clean builds.
+**Эффект**: +30-70% на инкрементальных сборках, +15-30% на clean builds.
 
 ### 2. Зависимости: implementation vs api
 
@@ -72,30 +65,28 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.retrofit)
 
-    // ❌ api выставляет зависимости наружу
-    // Изменения в api-зависимости пересобирают всех потребителей
+    // ❌ api выставляет наружу → пересборка потребителей
     // api(libs.retrofit)
 
-    // ✅ KSP (2x быстрее Kapt)
+    // ✅ KSP вместо Kapt (2x быстрее)
     ksp(libs.hilt.compiler)
 }
 ```
 
-**Правило:** используйте `api` только если зависимость явно экспортируется в публичном API модуля.
+**Правило**: `api` только если зависимость в публичном API модуля.
 
 ### 3. Отключение неиспользуемых функций
 
 ```kotlin
 android {
     buildFeatures {
-        viewBinding = true
-        buildConfig = false  // ✅ Генерируем только если используем
+        buildConfig = false  // ✅ Только при использовании
         aidl = false
         renderScript = false
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Lint в CI, не локально
+        checkReleaseBuilds = false  // ✅ Lint в CI
     }
 }
 ```
@@ -108,16 +99,16 @@ include(":app")
 include(":feature:home", ":feature:profile")
 include(":core:network", ":core:database")
 
-// ✅ Независимые модули компилируются параллельно
-// ✅ Изменения в :core:network не пересобирают :feature:home
+// ✅ Параллельная компиляция независимых модулей
+// ✅ Изоляция изменений
 ```
 
-**Бонус:** возможность использовать Gradle Remote Build Cache для команды.
+**Бонус**: Gradle Remote Build Cache для команды.
 
 ### 5. Профилирование
 
 ```bash
-# Build scan (облачный отчет с визуализацией)
+# Build scan (облачный отчет)
 ./gradlew assembleDebug --scan
 
 # Profile report (локальный HTML)
@@ -125,49 +116,41 @@ include(":core:network", ":core:database")
 
 # Ищем:
 # - Slowest tasks (>5% build time)
-# - Cache misses (низкий cache hit rate)
-# - Sequential execution (возможность параллелизации)
+# - Cache misses (низкий hit rate)
+# - Sequential execution
 ```
 
 ---
 
 ## Answer (EN)
 
-**Optimization strategy:**
-
-1. **Gradle Configuration** — parallelism, caching, Configuration Cache
-2. **Modularization** — independent modules compile in parallel
-3. **Dependency management** — `implementation` vs `api`, KSP instead of Kapt
-4. **Profiling** — identify bottlenecks via `--scan`/`--profile`
+**Strategy**: Gradle configuration + modularization + dependency management + profiling.
 
 ### 1. Critical gradle.properties settings
 
 ```properties
-# ✅ Parallel build (all CPU cores)
+# ✅ Parallel build
 org.gradle.parallel=true
 org.gradle.workers.max=8
 
-# ✅ Build cache (avoid recompilation)
+# ✅ Build cache
 org.gradle.caching=true
-
-# ✅ Configuration cache (cache configuration phase)
 org.gradle.configuration-cache=true
 
-# ✅ File system watching (native FS events)
+# ✅ File system watching
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap (prevent OOM)
+# ✅ JVM heap
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Non-transitive R classes (isolated R.java)
+# ✅ Non-transitive R classes
 android.nonTransitiveRClass=true
 
-# ✅ Incremental Kotlin compilation
+# ✅ Incremental compilation
 kotlin.incremental=true
-kotlin.incremental.usePreciseJavaTracking=true
 ```
 
-**Impact:** +30-70% on incremental builds, +15-30% on clean builds.
+**Impact**: +30-70% on incremental builds, +15-30% on clean builds.
 
 ### 2. Dependencies: implementation vs api
 
@@ -177,30 +160,28 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.retrofit)
 
-    // ❌ api exposes dependencies outward
-    // Changes in api dependency rebuild all consumers
+    // ❌ api exposes dependencies → rebuilds consumers
     // api(libs.retrofit)
 
-    // ✅ KSP (2x faster than Kapt)
+    // ✅ KSP instead of Kapt (2x faster)
     ksp(libs.hilt.compiler)
 }
 ```
 
-**Rule:** use `api` only if dependency is explicitly exported in module's public API.
+**Rule**: Use `api` only if dependency is in module's public API.
 
 ### 3. Disable unused features
 
 ```kotlin
 android {
     buildFeatures {
-        viewBinding = true
         buildConfig = false  // ✅ Generate only if used
         aidl = false
         renderScript = false
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Lint in CI, not locally
+        checkReleaseBuilds = false  // ✅ Lint in CI
     }
 }
 ```
@@ -213,16 +194,16 @@ include(":app")
 include(":feature:home", ":feature:profile")
 include(":core:network", ":core:database")
 
-// ✅ Independent modules compile in parallel
-// ✅ Changes in :core:network don't rebuild :feature:home
+// ✅ Parallel compilation of independent modules
+// ✅ Change isolation
 ```
 
-**Bonus:** enables Gradle Remote Build Cache for team collaboration.
+**Bonus**: Gradle Remote Build Cache for team collaboration.
 
 ### 5. Profiling
 
 ```bash
-# Build scan (cloud report with visualization)
+# Build scan (cloud report)
 ./gradlew assembleDebug --scan
 
 # Profile report (local HTML)
@@ -230,24 +211,25 @@ include(":core:network", ":core:database")
 
 # Look for:
 # - Slowest tasks (>5% build time)
-# - Cache misses (low cache hit rate)
-# - Sequential execution (parallelization opportunities)
+# - Cache misses (low hit rate)
+# - Sequential execution
 ```
 
 ---
 
 ## Follow-ups
 
-- How does Configuration Cache differ from Build Cache and when to use each?
-- What are trade-offs of using `api` vs `implementation` in multi-module projects?
-- How to diagnose cache misses and improve cache hit rate in CI?
+- How does Configuration Cache differ from Build Cache?
+- What are the trade-offs of using api vs implementation in multi-module projects?
+- How to diagnose and improve cache hit rates in CI?
 - When should you split a feature module vs keeping it monolithic?
-- How to set up Remote Build Cache for team without security risks?
+- How to set up Gradle Remote Build Cache securely for team use?
 
 ## References
 
 - [[c-gradle]]
-- [[c-build-configuration]]
+- [[c-dependency-injection]]
+- [[c-modularization]]
 - https://docs.gradle.org/current/userguide/performance.html
 - https://developer.android.com/studio/build/optimize-your-build
 

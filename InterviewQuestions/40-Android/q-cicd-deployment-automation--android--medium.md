@@ -13,48 +13,79 @@ moc: moc-android
 related: [q-android-lint-tool--android--medium, q-app-store-optimization--android--medium, q-build-optimization-gradle--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-27
-tags: [android/gradle, android/ci-cd, android/play-console, difficulty/medium]
+updated: 2025-10-29
+tags: [android/gradle, android/ci-cd, android/play-console, ci-cd, deployment, difficulty/medium]
 ---
 
 # Вопрос (RU)
-> Автоматизация деплоя в CI/CD?
+> Как автоматизировать деплой Android-приложения через CI/CD?
 
 # Question (EN)
-> CI/CD Deployment Automation?
+> How to automate Android app deployment through CI/CD?
 
 ---
 
 ## Ответ (RU)
 
 ### Цели
-- Воспроизводимые подписанные сборки с трассируемыми версиями
-- Безопасный поэтапный релиз с быстрым откатом
-- Аудируемые артефакты и release notes
+Репродуцируемые подписанные сборки с трассируемым версионированием, безопасным staged rollout и мгновенным откатом.
 
-### Пайплайн релиза
-- Build → Sign → Scan (lint/tests) → Upload (internal) → Gates → Promote (alpha/beta/production) → Monitor → Rollback
+### Пайплайн
+```
+Build → Sign → Test/Lint → Upload Internal → Gates →
+Promote (alpha/beta/prod) → Monitor → Rollback
+```
+
+**Gates:** тесты прошли, lint чист, порог crash-free sessions в internal track.
 
 ### Версионирование
-- Единый источник истины (Gradle): автоинкремент на main; встраивание git SHA/date
-- Семантический или монотонный `versionCode`; автогенерация `versionName`
+Gradle как единый источник истины: автоинкремент `versionCode` на CI, встраивание Git SHA.
+
+```kotlin
+// ✅ Автоматизация версий
+android {
+    defaultConfig {
+        versionCode = System.getenv("CI_BUILD_NUMBER")?.toInt() ?: 1
+        versionName = "1.2.${versionCode}"
+        buildConfigField("String", "GIT_SHA", "\"${getGitSha()}\"")
+    }
+}
+
+fun getGitSha() = providers.exec {
+    commandLine("git", "rev-parse", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
+```
 
 ### Подписание
-- Использовать Play App Signing; хранить upload keystore в CI secrets (OIDC/vault)
-- Подписывать через Gradle `signingConfig` с инжектированными env-переменными; никогда не коммитить keystores
+**Play App Signing:** Google управляет production keystore, вы используете upload keystore из CI secrets.
+
+```kotlin
+// ✅ Подписание через env-переменные
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getenv("KEYSTORE_FILE") ?: "upload.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
+    }
+}
+```
+
+❌ Никогда не коммитить keystores/пароли в репозиторий.
 
 ### Артефакты
-- Генерировать AAB (основной) и APK (для внутреннего тестирования) + mapping.txt + ProGuard/R8 отчеты
-- Загружать артефакты в CI и Play internal track
+- **AAB** для Play Store
+- **APK** для internal тестирования
+- **mapping.txt** для деобфускации стектрейсов
+- **Release notes** автогенерируются из conventional commits
 
-### Дистрибуция
-- Internal track для PR merge; alpha/beta для staged rollout; повышение на основе SLOs/метрик
-- Release notes автогенерируются из conventional commits/CHANGELOG
-
-### Минимальный CI Deploy step (GitHub Actions)
+### CI конфигурация
 ```yaml
+# ✅ GitHub Actions deploy
 name: Deploy
-on: [workflow_dispatch]
+on: { push: { tags: ['v*'] } }
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -62,63 +93,94 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
-      - uses: gradle/gradle-build-action@v2
-      - name: Build release AAB
-        run: ./gradlew :app:bundleRelease --configuration-cache --build-cache
-      - name: Upload to Play (internal)
+      - name: Build & Upload
         env:
-          JSON_KEY: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_JSON }}
         run: |
-          echo "$JSON_KEY" > sa.json
-          ./gradlew publishBundle --no-daemon \
-            -Pandroid.injected.signing.store.file=$SIGN_STORE \
-            -Pandroid.injected.signing.store.password=$SIGN_PASS \
-            -Pandroid.injected.signing.key.alias=$SIGN_ALIAS \
-            -Pandroid.injected.signing.key.password=$KEY_PASS \
-            -Pplay.service.account.json=sa.json -Pplay.track=internal
+          ./gradlew bundleRelease --build-cache
+          ./gradlew publishBundle -Pplay.track=internal
 ```
 
-### Gates и Rollout
-- Gates: тесты пройдены, lint чист, минимальное покрытие, порог crash-free sessions в internal
-- Поэтапный rollout (например, 5% → 20% → 50% → 100%); автоповышение при хороших метриках
+### Staged rollout
+**Internal** (PR merge) → **Alpha** (5%) → **Beta** (20%) → **Production** (100%)
+
+Автоповышение при прохождении метрик: crash rate < 0.5%, ANR стабилен.
 
 ### Откат
-- Сохранять последний стабильный артефакт + mapping; Play Console поддерживает остановку и откат к предыдущему релизу
-- Автоматизировать команду "halt + promote previous build"
+Метрики для автоотката:
+- Crash-free sessions < 99%
+- ANR rate > baseline + 50%
+- Критичные ошибки в Crashlytics
 
-### Мониторинг
-- Release dashboard: build SHA, версия, track, rollout %, crash rate, ANR, ключевые KPI
+```bash
+# ✅ Автоматический откат
+./gradlew haltPlayRelease
+./gradlew promoteArtifact --from-version <previous>
+```
+
+Сохранять последний стабильный AAB + mapping.txt.
 
 ## Answer (EN)
 
 ### Goals
-- Reproducible signed builds with traceable versions
-- Safe staged rollout with fast rollback
-- Auditable artifacts and release notes
+Reproducible signed builds with traceable versioning, safe staged rollout, and instant rollback.
 
-### Release Pipeline
-- Build → Sign → Scan (lint/tests) → Upload (internal) → Gates → Promote (alpha/beta/production) → Monitor → Rollback
+### Pipeline
+```
+Build → Sign → Test/Lint → Upload Internal → Gates →
+Promote (alpha/beta/prod) → Monitor → Rollback
+```
+
+**Gates:** tests pass, lint clean, crash-free sessions threshold in internal track.
 
 ### Versioning
-- Single source of truth (Gradle): auto-bump on main; embed git SHA/date
-- Semantic or monotonic `versionCode`; auto-generate `versionName`
+Gradle as single source of truth: auto-increment `versionCode` on CI, embed Git SHA.
+
+```kotlin
+// ✅ Automated versioning
+android {
+    defaultConfig {
+        versionCode = System.getenv("CI_BUILD_NUMBER")?.toInt() ?: 1
+        versionName = "1.2.${versionCode}"
+        buildConfigField("String", "GIT_SHA", "\"${getGitSha()}\"")
+    }
+}
+
+fun getGitSha() = providers.exec {
+    commandLine("git", "rev-parse", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
+```
 
 ### Signing
-- Use Play App Signing; store upload keystore in CI secrets (OIDC/vault)
-- Sign via Gradle `signingConfig` with injected env secrets; never commit keystores
+**Play App Signing:** Google manages production keystore, you use upload keystore from CI secrets.
+
+```kotlin
+// ✅ Signing via environment variables
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getenv("KEYSTORE_FILE") ?: "upload.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
+    }
+}
+```
+
+❌ Never commit keystores/passwords to repository.
 
 ### Artifacts
-- Produce AAB (primary) and APK (for internal testing) + mapping.txt + ProGuard/R8 reports
-- Upload artifacts to CI and Play internal track
+- **AAB** for Play Store
+- **APK** for internal testing
+- **mapping.txt** for stack trace deobfuscation
+- **Release notes** auto-generated from conventional commits
 
-### Distribution
-- Internal track for PR merges; alpha/beta for staged rollout; promote based on SLOs/metrics
-- Release notes autogenerated from conventional commits/CHANGELOG
-
-### Minimal CI Deploy step (GitHub Actions)
+### CI Configuration
 ```yaml
+# ✅ GitHub Actions deploy
 name: Deploy
-on: [workflow_dispatch]
+on: { push: { tags: ['v*'] } }
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -126,60 +188,63 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
-      - uses: gradle/gradle-build-action@v2
-      - name: Build release AAB
-        run: ./gradlew :app:bundleRelease --configuration-cache --build-cache
-      - name: Upload to Play (internal)
+      - name: Build & Upload
         env:
-          JSON_KEY: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_JSON }}
         run: |
-          echo "$JSON_KEY" > sa.json
-          ./gradlew publishBundle --no-daemon \
-            -Pandroid.injected.signing.store.file=$SIGN_STORE \
-            -Pandroid.injected.signing.store.password=$SIGN_PASS \
-            -Pandroid.injected.signing.key.alias=$SIGN_ALIAS \
-            -Pandroid.injected.signing.key.password=$KEY_PASS \
-            -Pplay.service.account.json=sa.json -Pplay.track=internal
+          ./gradlew bundleRelease --build-cache
+          ./gradlew publishBundle -Pplay.track=internal
 ```
 
-### Gates and Rollout
-- Gates: tests pass, lint clean, minimum coverage, crash-free sessions threshold in internal track
-- Staged rollout (e.g., 5% → 20% → 50% → 100%); auto-promote if metrics are acceptable
+### Staged Rollout
+**Internal** (PR merge) → **Alpha** (5%) → **Beta** (20%) → **Production** (100%)
+
+Auto-promotion on passing metrics: crash rate < 0.5%, ANR stable.
 
 ### Rollback
-- Keep last stable artifact + mapping; Play Console supports halt and rollback to previous release
-- Automate "halt + promote previous build" command
+Metrics for auto-rollback:
+- Crash-free sessions < 99%
+- ANR rate > baseline + 50%
+- Critical errors in Crashlytics
 
-### Observability
-- Release dashboard: build SHA, version, track, rollout %, crash rate, ANR, key KPIs
+```bash
+# ✅ Automatic rollback
+./gradlew haltPlayRelease
+./gradlew promoteArtifact --from-version <previous>
+```
+
+Keep last stable AAB + mapping.txt.
 
 ---
 
 ## Follow-ups
-- How to secure signing keys and Play service accounts in CI environments?
-- What are best practices for staged rollout policies and auto-promote rules?
-- How to automate release notes generation from conventional commits?
-- How to handle rollback scenarios for database migrations?
-- What monitoring metrics indicate a healthy release?
-- How to implement feature flags for progressive rollout?
+
+- How to implement secure keystore management with Cloud KMS or HashiCorp Vault?
+- What strategies handle rollback when database migrations are incompatible?
+- How to automate Play Store metadata and screenshot updates?
+- What metrics define healthy staged rollout thresholds?
+- How to integrate feature flags with progressive delivery?
 
 ## References
+
+- [[c-gradle]] - Gradle build system
+- [[c-ci-cd]] - CI/CD pipeline patterns
 - https://developer.android.com/studio/publish
-- https://docs.gradle.org/current/userguide/build_cache.html
+- https://developer.android.com/studio/publish/app-signing
 - https://github.com/Triple-T/gradle-play-publisher
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-build-optimization-gradle--android--medium]] - Gradle build optimization for faster CI pipelines
-- Basic understanding of Android app signing and keystores
+- [[q-build-optimization-gradle--android--medium]] - Gradle optimization for CI
+- [[q-android-lint-tool--android--medium]] - Static analysis in CI
 
 ### Related
-- [[q-android-lint-tool--android--medium]] - Static analysis in CI pipeline
-- [[q-cicd-automated-testing--android--medium]] - Automated testing in CI/CD
-- Gradle build variants and product flavors
+- [[q-cicd-automated-testing--android--medium]] - Automated testing
+- [[q-app-store-optimization--android--medium]] - Play Store optimization
+- Build variants and product flavors
 
 ### Advanced
-- [[q-app-store-optimization--android--medium]] - App Store listing and conversion optimization
-- Multi-module build orchestration and caching strategies
-- Feature flag systems and progressive delivery
+- Multi-module build caching strategies
+- Feature flags with rollout integration
+- Automated A/B testing in releases

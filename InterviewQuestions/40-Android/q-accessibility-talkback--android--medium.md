@@ -17,7 +17,10 @@ tags: [android/ui-accessibility, android/ui-navigation, accessibility, talkback,
 sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/accessibility
+date created: Wednesday, October 29th 2025, 4:18:49 pm
+date modified: Thursday, October 30th 2025, 11:12:47 am
 ---
+
 # Вопрос (RU)
 > Как реализовать поддержку TalkBack в Android-приложениях?
 

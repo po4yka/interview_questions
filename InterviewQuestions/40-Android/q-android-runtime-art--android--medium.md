@@ -12,10 +12,11 @@ status: draft
 moc: moc-android
 related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium, q-android-build-optimization--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/processes, android/performance-memory, runtime, compilation, gc, difficulty/medium]
 sources: []
 ---
+
 # Вопрос (RU)
 > Что такое Android Runtime (ART) и чем он отличается от Dalvik?
 
@@ -30,19 +31,16 @@ sources: []
 
 ```kotlin
 // ✅ Установка: базовый профиль → быстрая установка
-// При первых запусках приложения:
 class HotPath {
     fun frequentOperation() {
-        // Профилируется JIT → выявляются "горячие" методы
+        // JIT профилирует "горячие" методы
         processData()
     }
 }
 
 // ❌ Редко используемый код остается интерпретированным
 class ColdPath {
-    fun rareOperation() {
-        cleanup()
-    }
+    fun rareOperation() { cleanup() }
 }
 ```
 
@@ -60,10 +58,7 @@ class MemoryExample {
 
     fun allocateMemory() {
         // GC работает параллельно с приложением
-        // Heap compaction устраняет фрагментацию
-        repeat(1000) {
-            largeList.add(createBitmap())
-        }
+        repeat(1000) { largeList.add(createBitmap()) }
     }
 }
 
@@ -74,7 +69,6 @@ class MemoryExample {
 
 ```kotlin
 // ✅ DEX: все классы в одном контейнере
-// dex/classes.dex: compact bytecode для Android
 val dexFormat = """
     Header
     StringIds → все строки
@@ -84,7 +78,6 @@ val dexFormat = """
 """
 
 // ❌ Java bytecode: отдельный .class для каждого класса
-// Больше overhead, медленнее загрузка
 ```
 
 ### ART vs Dalvik
@@ -97,7 +90,7 @@ val dexFormat = """
 | GC | Mark-and-sweep (паузы) | Concurrent copying (параллельная) |
 | Батарея | Больше расход (постоянная JIT) | Меньше расход |
 
-### Проверка runtime в коде
+### Проверка runtime
 
 ```kotlin
 fun detectRuntime(): String {
@@ -109,8 +102,7 @@ fun detectRuntime(): String {
 // Оптимизация под ART
 @Keep // Предотвращает удаление при ProGuard/R8
 class CriticalPath {
-    // Часто вызываемые методы → приоритет для AOT
-    fun criticalOperation() { /* ... */ }
+    fun criticalOperation() { /* приоритет для AOT */ }
 }
 ```
 
@@ -122,19 +114,16 @@ class CriticalPath {
 
 ```kotlin
 // ✅ Installation: baseline profile → fast install
-// During first app launches:
 class HotPath {
     fun frequentOperation() {
-        // Profiled by JIT → identifies "hot" methods
+        // JIT profiles "hot" methods
         processData()
     }
 }
 
 // ❌ Rarely used code remains interpreted
 class ColdPath {
-    fun rareOperation() {
-        cleanup()
-    }
+    fun rareOperation() { cleanup() }
 }
 ```
 
@@ -152,10 +141,7 @@ class MemoryExample {
 
     fun allocateMemory() {
         // GC runs concurrently with app
-        // Heap compaction eliminates fragmentation
-        repeat(1000) {
-            largeList.add(createBitmap())
-        }
+        repeat(1000) { largeList.add(createBitmap()) }
     }
 }
 
@@ -166,7 +152,6 @@ class MemoryExample {
 
 ```kotlin
 // ✅ DEX: all classes in single container
-// dex/classes.dex: compact bytecode for Android
 val dexFormat = """
     Header
     StringIds → all strings
@@ -176,7 +161,6 @@ val dexFormat = """
 """
 
 // ❌ Java bytecode: separate .class for each class
-// More overhead, slower loading
 ```
 
 ### ART vs Dalvik
@@ -189,7 +173,7 @@ val dexFormat = """
 | GC | Mark-and-sweep (pauses) | Concurrent copying (parallel) |
 | Battery | Higher drain (constant JIT) | Lower drain |
 
-### Runtime detection in code
+### Runtime Detection
 
 ```kotlin
 fun detectRuntime(): String {
@@ -201,18 +185,17 @@ fun detectRuntime(): String {
 // ART optimization
 @Keep // Prevents removal during ProGuard/R8
 class CriticalPath {
-    // Frequently called methods → priority for AOT
-    fun criticalOperation() { /* ... */ }
+    fun criticalOperation() { /* priority for AOT */ }
 }
 ```
 
 ## Follow-ups
 
-- Как профилирование JIT влияет на производительность в первых запусках?
-- Почему concurrent copying GC эффективнее mark-and-sweep для Android?
-- Как baseline profiles оптимизируют установку приложений?
-- В каких сценариях DEX-формат предпочтительнее стандартного Java bytecode?
-- Какие стратегии минимизации размера APK при AOT-компиляции?
+- Как baseline profiles влияют на время установки и первый запуск приложения?
+- В каких случаях AOT-компиляция может увеличить размер APK критично?
+- Почему concurrent copying GC эффективнее mark-and-sweep для mobile приложений?
+- Как профилировать JIT для выявления кандидатов на AOT-оптимизацию?
+- Какие методы маркировать `@Keep` для предотвращения проблем с reflection после R8?
 
 ## References
 

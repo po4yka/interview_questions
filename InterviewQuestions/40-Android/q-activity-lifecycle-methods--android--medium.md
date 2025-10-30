@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [android/activity, android/lifecycle, jetpack, difficulty/medium]
 sources: []
+date created: Wednesday, October 29th 2025, 4:18:27 pm
+date modified: Thursday, October 30th 2025, 11:12:49 am
 ---
+
 # Вопрос (RU)
 > Объясните методы жизненного цикла Activity и правила управления ресурсами в них.
 

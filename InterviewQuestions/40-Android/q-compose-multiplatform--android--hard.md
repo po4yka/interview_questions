@@ -1,9 +1,9 @@
 ---
 id: 20251015-100154
-title: Compose Multiplatform / Compose Multiplatform (обзор)
-aliases: [Compose Multiplatform, Compose Multiplatform overview, Мультиплатформенный Compose]
+title: Compose Multiplatform / Compose Multiplatform
+aliases: [Compose Multiplatform, KMP Compose, Мультиплатформенный Compose]
 topic: android
-subtopics: [ui-compose]
+subtopics: [kmp, compose-multiplatform, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -11,201 +11,238 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
+  - c-jetpack-compose
   - q-compose-compiler-plugin--android--hard
+  - q-kmm-architecture--android--hard
   - q-compose-custom-layout--android--hard
-  - q-compose-lazy-layout-optimization--android--hard
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/ui-compose, difficulty/hard]
+updated: 2025-10-30
+tags: [android/kmp, android/compose-multiplatform, android/ui-compose, compose, kmp, multiplatform, difficulty/hard]
 ---
 # Вопрос (RU)
-> Что такое Compose Multiplatform и как его использовать для кроссплатформенной разработки?
+> Что такое Compose Multiplatform и как реализовать кроссплатформенную UI-архитектуру?
 
 # Question (EN)
-> What is Compose Multiplatform and how to use it for cross-platform development?
+> What is Compose Multiplatform and how to implement cross-platform UI architecture?
 
 ---
 
 ## Ответ (RU)
 
-### Определение
-- Compose Multiplatform (CMP) - это расширение Jetpack Compose для создания UI на нескольких платформах: Android, iOS, Desktop, Web
-- Использует Kotlin Multiplatform для шаринга кода между платформами
-- Позволяет переиспользовать UI компоненты, состояние, навигацию и тему
+**Compose Multiplatform (CMP)** — декларативный UI-фреймворк от JetBrains, расширяющий Jetpack Compose на Android, iOS, Desktop (JVM) и Web (Canvas/WASM). Использует Kotlin Multiplatform для шаринга UI-кода и бизнес-логики между платформами.
 
-### CMP vs KMM
-- **KMM**: шаринг бизнес-логики и данных; UI остается нативным для каждой платформы
-- **CMP**: шаринг UI + логики; единый UI фреймворк для всех платформ
+**Основное отличие от KMM**:
+- KMM → шаринг domain/data слоя, нативный UI на каждой платформе
+- CMP → единый UI-фреймворк + логика, один набор компонентов
 
-### Структура проекта
+**Целевой use case**: проекты с высоким уровнем UI-переиспользования (внутренние инструменты, enterprise-приложения, MVP), где приоритет — скорость разработки над платформенной кастомизацией.
+
+### Project Structure
+
 ```kotlin
 // shared/build.gradle.kts
-plugins {
-  kotlin("multiplatform")
-  id("org.jetbrains.compose")
-  id("com.android.library")
-}
-
 kotlin {
   androidTarget()
   jvm("desktop")
-  js(IR) { browser() }
-  listOf(iosX64(), iosArm64(), iosSimulatorArm64())
+  iosX64(); iosArm64(); iosSimulatorArm64()
 
   sourceSets {
-    val commonMain by getting
-    val androidMain by getting
-    val iosMain by creating { dependsOn(commonMain) }
-    val desktopMain by getting
-    val jsMain by getting
+    commonMain.dependencies {
+      implementation(compose.runtime)
+      implementation(compose.foundation)
+      implementation(compose.material3)
+    }
+    androidMain.dependencies {
+      implementation(compose.uiTooling)
+    }
   }
 }
 ```
 
 ### Expect/Actual для платформенных API
+
 ```kotlin
-// commonMain
-expect fun platformName(): String
+// ✅ commonMain
+expect fun getPlatformName(): String
 
-// androidMain
-actual fun platformName() = "Android"
+// ✅ androidMain
+actual fun getPlatformName() = "Android"
 
-// iosMain
-actual fun platformName() = "iOS"
+// ✅ iosMain
+actual fun getPlatformName() = "iOS"
+
+// ❌ Избегать expect/actual для UI-компонентов
 ```
 
-### Точки входа
+### Entry Points
+
 ```kotlin
 // commonMain - общий UI
 @Composable
 fun App() {
   MaterialTheme {
-    Navigation()
+    Screen()
   }
 }
 
-// ✅ Android
-class MainActivity: ComponentActivity() {
+// androidMain
+class MainActivity : ComponentActivity() {
   override fun onCreate(b: Bundle?) {
     super.onCreate(b)
     setContent { App() }
   }
 }
 
-// ✅ Desktop
+// desktopMain
 fun main() = application {
-  Window(onCloseRequest = ::exitApplication) {
+  Window(onCloseRequest = ::exitApplication, title = "App") {
     App()
   }
 }
 ```
 
 ### Best Practices
-- **Shared**: state holders, screens, theming, navigation
-- **Platform-specific**: gestures, windowing, resources
-- **Performance**: stable keys, `remember` для вычислений, профилирование на каждой платформе
-- **Testing**: скриншотные тесты на всех таргетах
 
-### Ограничения
-- iOS: интеграция через UIViewController, ограниченная интеропа с SwiftUI
-- Web: canvas-based рендеринг, вопросы bundle size и accessibility
-- Desktop: различия в windowing и input обработке
+**Shared**:
+- State holders (ViewModel альтернативы)
+- Navigation logic
+- Screens, компоненты
+- Theming
+
+**Platform-specific**:
+- Gesture handling (iOS swipe-back)
+- Windowing (Desktop)
+- Resources (через expect/actual)
+- Performance profiling per target
+
+### Trade-offs
+
+**iOS Integration**:
+- `UIViewController` wrapper → overhead
+- Ограниченная SwiftUI interop
+- Lifecycle mapping iOS ↔ Compose
+
+**Web**:
+- Canvas-based → проблемы с accessibility
+- Bundle size (минимум ~2 MB)
+
+**Desktop**:
+- Windowing API различия (macOS/Windows/Linux)
 
 ## Answer (EN)
 
-### Definition
-- Compose Multiplatform (CMP) brings Compose UI to Android, iOS, Desktop, and Web targets
-- Built on Kotlin Multiplatform for code sharing across platforms
-- Allows sharing UI components, state management, navigation, and theming
+**Compose Multiplatform (CMP)** is a declarative UI framework by JetBrains extending Jetpack Compose to Android, iOS, Desktop (JVM), and Web (Canvas/WASM). Uses Kotlin Multiplatform to share UI code and business logic across platforms.
 
-### CMP vs KMM
-- **KMM**: shares domain/data logic; UI remains platform-native (Compose on Android, SwiftUI on iOS)
-- **CMP**: shares UI + logic; one UI framework across all targets
+**Key difference from KMM**:
+- KMM → shares domain/data layer, native UI per platform
+- CMP → unified UI framework + logic, one component set
+
+**Target use case**: projects with high UI reusability (internal tools, enterprise apps, MVPs) where development speed outweighs platform customization.
 
 ### Project Structure
+
 ```kotlin
 // shared/build.gradle.kts
-plugins {
-  kotlin("multiplatform")
-  id("org.jetbrains.compose")
-  id("com.android.library")
-}
-
 kotlin {
   androidTarget()
   jvm("desktop")
-  js(IR) { browser() }
-  listOf(iosX64(), iosArm64(), iosSimulatorArm64())
+  iosX64(); iosArm64(); iosSimulatorArm64()
 
   sourceSets {
-    val commonMain by getting
-    val androidMain by getting
-    val iosMain by creating { dependsOn(commonMain) }
-    val desktopMain by getting
-    val jsMain by getting
+    commonMain.dependencies {
+      implementation(compose.runtime)
+      implementation(compose.foundation)
+      implementation(compose.material3)
+    }
+    androidMain.dependencies {
+      implementation(compose.uiTooling)
+    }
   }
 }
 ```
 
 ### Expect/Actual for Platform APIs
+
 ```kotlin
-// commonMain
-expect fun platformName(): String
+// ✅ commonMain
+expect fun getPlatformName(): String
 
-// androidMain
-actual fun platformName() = "Android"
+// ✅ androidMain
+actual fun getPlatformName() = "Android"
 
-// iosMain
-actual fun platformName() = "iOS"
+// ✅ iosMain
+actual fun getPlatformName() = "iOS"
+
+// ❌ Avoid expect/actual for UI components
 ```
 
 ### Entry Points
+
 ```kotlin
 // commonMain - shared UI
 @Composable
 fun App() {
   MaterialTheme {
-    Navigation()
+    Screen()
   }
 }
 
-// ✅ Android
-class MainActivity: ComponentActivity() {
+// androidMain
+class MainActivity : ComponentActivity() {
   override fun onCreate(b: Bundle?) {
     super.onCreate(b)
     setContent { App() }
   }
 }
 
-// ✅ Desktop
+// desktopMain
 fun main() = application {
-  Window(onCloseRequest = ::exitApplication) {
+  Window(onCloseRequest = ::exitApplication, title = "App") {
     App()
   }
 }
 ```
 
 ### Best Practices
-- **Share**: state holders, screens, theming, navigation
-- **Platform-specific**: gestures, windowing, resources
-- **Performance**: stable keys, `remember` for computations, profile each target
-- **Testing**: screenshot tests across all targets
 
-### Limitations
-- iOS: integration via UIViewController wrapper, limited SwiftUI interop
-- Web: canvas-based rendering, bundle size and accessibility concerns
-- Desktop: windowing and input handling differences
+**Shared**:
+- State holders (ViewModel alternatives)
+- Navigation logic
+- Screens, components
+- Theming
+
+**Platform-specific**:
+- Gesture handling (iOS swipe-back)
+- Windowing (Desktop)
+- Resources (via expect/actual)
+- Performance profiling per target
+
+### Trade-offs
+
+**iOS Integration**:
+- `UIViewController` wrapper → overhead
+- Limited SwiftUI interop
+- Lifecycle mapping iOS ↔ Compose
+
+**Web**:
+- Canvas-based → accessibility challenges
+- Bundle size (minimum ~2 MB)
+
+**Desktop**:
+- Windowing API differences (macOS/Windows/Linux)
 
 ---
 
 ## Follow-ups
-- How to structure expect/actual for filesystem, haptics, and secure storage?
-- Strategies to minimize bundle size on Web while sharing UI code?
-- How to handle platform-specific navigation patterns without leaking into common code?
-- What are the performance trade-offs between CMP and native UI on iOS?
+- How to handle platform-specific navigation patterns (iOS back swipe) without leaking into common code?
+- What are performance implications of UIViewController wrapper on iOS vs native SwiftUI?
+- How to structure expect/actual for filesystem, haptics, and secure storage APIs?
+- When should you choose native UI over CMP for specific platform screens?
+- How to minimize Web bundle size while sharing UI code across platforms?
 
 ## References
+- [[c-jetpack-compose]]
 - https://www.jetbrains.com/lp/compose-multiplatform/
 - https://github.com/JetBrains/compose-multiplatform
 - https://developer.android.com/develop/ui/compose
@@ -214,11 +251,12 @@ fun main() = application {
 
 ### Prerequisites (Easier)
 - [[q-android-jetpack-overview--android--easy]]
+- [[q-how-jetpack-compose-works--android--medium]]
 
 ### Related (Same Level)
+- [[q-kmm-architecture--android--hard]]
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
-- [[q-compose-lazy-layout-optimization--android--hard]]
 
 ### Advanced (Harder)
-- None
+- [[q-compose-performance-optimization--android--hard]]

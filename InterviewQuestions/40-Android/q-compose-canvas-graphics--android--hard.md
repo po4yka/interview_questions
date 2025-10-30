@@ -19,7 +19,7 @@ related:
   - q-animated-visibility-vs-content--android--medium
   - q-canvas-drawing-optimization--android--hard
 created: 2025-10-11
-updated: 2025-10-28
+updated: 2025-10-30
 sources: []
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 ---
@@ -180,7 +180,10 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 - What's the difference between `drawWithCache` and `remember` for Canvas?
 
 ## References
-- [[c-algorithms]] - Drawing and rendering optimization algorithms
+- [[c-compose-state]] - State management in Compose
+- [[c-compose-recomposition]] - Recomposition lifecycle
+- [[c-remember-derivedstateof]] - Memoization patterns
+- [[c-android-graphics-pipeline]] - Graphics rendering fundamentals
 - https://developer.android.com/develop/ui/compose/graphics/draw/overview
 - https://perfetto.dev
 - https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview
@@ -188,11 +191,14 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-performance-measurement-tools--android--medium]]
-- [[q-animated-visibility-vs-content--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]] - Profiling and benchmarking tools
+- [[q-animated-visibility-vs-content--android--medium]] - Animation performance basics
 
 ### Related (Same Level)
-- [[q-canvas-drawing-optimization--android--hard]]
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced drawing optimization techniques
+- [[q-compose-custom-layout--android--hard]] - Custom layout performance
+- [[q-compose-remember-derivedstateof--android--medium]] - State optimization patterns
 
 ### Advanced (Harder)
-- [[q-android-runtime-art--android--medium]]
+- [[q-android-runtime-art--android--medium]] - Runtime and memory management
+- [[q-compose-performance-optimization--android--hard]] - Comprehensive Compose performance

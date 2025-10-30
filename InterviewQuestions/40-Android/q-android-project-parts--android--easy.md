@@ -3,7 +3,7 @@ id: 20251012-122769
 title: Android Project Parts / Части Android проекта
 aliases: ["Android Project Parts", "Части Android проекта"]
 topic: android
-subtopics: [gradle, architecture-modularization]
+subtopics: [gradle, build-variants]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -12,10 +12,11 @@ status: draft
 moc: moc-android
 related: [q-android-manifest-file--android--easy, q-gradle-build-system--android--medium, q-android-modularization--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
-tags: [android/gradle, android/architecture-modularization, build-system, project-structure, difficulty/easy]
+updated: 2025-10-30
+tags: [android/gradle, android/build-variants, build-system, project-structure, difficulty/easy]
 sources: []
 ---
+
 # Вопрос (RU)
 > Из каких основных частей состоит Android проект?
 
@@ -24,7 +25,7 @@ sources: []
 
 ## Ответ (RU)
 
-**Структура Android проекта** организована в виде каталогов и файлов с четко определенными обязанностями: исходный код, ресурсы, конфигурация и настройки сборки.
+**Структура Android проекта** организована в виде каталогов и файлов с четкими обязанностями: исходный код, ресурсы, конфигурация сборки.
 
 **Основные компоненты:**
 
@@ -41,21 +42,19 @@ app/
 └── build.gradle.kts              # Конфигурация сборки
 ```
 
-**Организация кода и ресурсов:**
+**Организация кода:**
 
 ```kotlin
-// ✅ Исходный код: src/main/java/com/example/app/
+// ✅ Type-safe доступ к ресурсам через R class
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val appName = getString(R.string.app_name)
+        val color = getColor(R.color.primary_color)
     }
 }
-
-// ✅ Type-safe доступ к ресурсам через R class
-val appName = getString(R.string.app_name)
-val color = getColor(R.color.primary_color)
-val icon = ContextCompat.getDrawable(this, R.drawable.ic_launcher)
 ```
 
 ```kotlin
@@ -70,9 +69,7 @@ val json = assets.open("config.json").bufferedReader().use { it.readText() }
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:label="@string/app_name">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -82,7 +79,7 @@ val json = assets.open("config.json").bufferedReader().use { it.readText() }
 </manifest>
 ```
 
-**Build конфигурация** (build.gradle.kts):
+**Build конфигурация:**
 
 ```kotlin
 android {
@@ -93,16 +90,6 @@ android {
         minSdk = 24
         targetSdk = 35
     }
-
-    buildFeatures {
-        viewBinding = true
-        compose = true
-    }
-}
-
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
 }
 ```
 
@@ -110,15 +97,14 @@ dependencies {
 
 | Компонент | Назначение | Доступ |
 |-----------|-----------|--------|
-| **res/** | Компилируемые ресурсы (layout, strings) | `R.layout.activity_main` (type-safe) |
-| **assets/** | Сырые файлы (JSON, шрифты, медиа) | `assets.open("file.json")` (строковый путь) |
-| **src/** | Исходный код Kotlin/Java | Компилируется в DEX bytecode |
-| **AndroidManifest.xml** | Метаданные приложения, permissions | Читается во время установки |
-| **build.gradle.kts** | Конфигурация сборки, зависимости | Обрабатывается Gradle |
+| **res/** | Компилируемые ресурсы | `R.layout.activity_main` (type-safe) |
+| **assets/** | Сырые файлы | `assets.open("file.json")` (строковый путь) |
+| **src/** | Исходный код | Компилируется в DEX bytecode |
+| **AndroidManifest.xml** | Метаданные, permissions | Читается при установке |
 
 ## Answer (EN)
 
-**Android Project Structure** organizes directories and files with clear responsibilities: source code, resources, configuration, and build settings.
+**Android Project Structure** organizes directories and files with clear responsibilities: source code, resources, build configuration.
 
 **Core Components:**
 
@@ -135,21 +121,19 @@ app/
 └── build.gradle.kts              # Build configuration
 ```
 
-**Code and Resource Organization:**
+**Code Organization:**
 
 ```kotlin
-// ✅ Source code: src/main/java/com/example/app/
+// ✅ Type-safe resource access via R class
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val appName = getString(R.string.app_name)
+        val color = getColor(R.color.primary_color)
     }
 }
-
-// ✅ Type-safe resource access via R class
-val appName = getString(R.string.app_name)
-val color = getColor(R.color.primary_color)
-val icon = ContextCompat.getDrawable(this, R.drawable.ic_launcher)
 ```
 
 ```kotlin
@@ -164,9 +148,7 @@ val json = assets.open("config.json").bufferedReader().use { it.readText() }
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:label="@string/app_name">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -176,7 +158,7 @@ val json = assets.open("config.json").bufferedReader().use { it.readText() }
 </manifest>
 ```
 
-**Build Configuration** (build.gradle.kts):
+**Build Configuration:**
 
 ```kotlin
 android {
@@ -187,16 +169,6 @@ android {
         minSdk = 24
         targetSdk = 35
     }
-
-    buildFeatures {
-        viewBinding = true
-        compose = true
-    }
-}
-
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
 }
 ```
 
@@ -204,22 +176,23 @@ dependencies {
 
 | Component | Purpose | Access |
 |-----------|---------|--------|
-| **res/** | Compiled resources (layout, strings) | `R.layout.activity_main` (type-safe) |
-| **assets/** | Raw files (JSON, fonts, media) | `assets.open("file.json")` (string path) |
-| **src/** | Source code Kotlin/Java | Compiled to DEX bytecode |
-| **AndroidManifest.xml** | App metadata, permissions | Read during installation |
-| **build.gradle.kts** | Build configuration, dependencies | Processed by Gradle |
+| **res/** | Compiled resources | `R.layout.activity_main` (type-safe) |
+| **assets/** | Raw files | `assets.open("file.json")` (string path) |
+| **src/** | Source code | Compiled to DEX bytecode |
+| **AndroidManifest.xml** | Metadata, permissions | Read during installation |
 
 ## Follow-ups
 
-- What is the difference between res/ and assets/ directories for storing files?
-- How does R class generation work and when is it triggered during the build process?
-- What are the different source sets (main, debug, release) and how do they merge?
-- When should you use version catalogs vs buildSrc for dependency management?
-- How does multi-module project structure differ from single-module?
+- What is the difference between res/ and assets/ directories for file access patterns?
+- How does R class generation work and when is it triggered during builds?
+- What are source sets (main, debug, release) and how do they merge?
+- How do version catalogs improve multi-module dependency management?
+- What happens when you exclude AndroidManifest.xml from a library module?
 
 ## References
 
+- [[c-gradle-build-system]]
+- [[c-android-resources]]
 - https://developer.android.com/studio/projects
 - https://developer.android.com/guide/topics/resources/providing-resources
 - https://developer.android.com/build

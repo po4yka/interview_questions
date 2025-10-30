@@ -3,18 +3,18 @@ id: 20251012-122710
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
 aliases: ["Semantics in Jetpack Compose", "Семантика в Jetpack Compose"]
 topic: android
-subtopics: [a11y, testing-unit, ui-compose]
+subtopics: [ui-compose, ui-accessibility, testing-ui]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-modifier-system--android--medium, q-compose-performance-optimization--android--hard, q-compose-testing--android--medium]
+related: [c-jetpack-compose, q-compose-modifier-system--android--medium, q-compose-testing--android--medium, q-android-accessibility-services--android--medium]
 created: 2025-10-06
-updated: 2025-10-27
-tags: [android/a11y, android/testing-unit, android/ui-compose, difficulty/medium]
-sources: [https://developer.android.com/jetpack/compose/semantics]
+updated: 2025-10-30
+tags: [android/ui-compose, android/ui-accessibility, android/testing-ui, accessibility, compose, testing, difficulty/medium]
+sources: [https://developer.android.com/jetpack/compose/semantics, https://developer.android.com/guide/topics/ui/accessibility]
 ---
 
 # Вопрос (RU)
@@ -28,38 +28,36 @@ sources: [https://developer.android.com/jetpack/compose/semantics]
 ## Ответ (RU)
 
 ### Концепция
-Semantics — это механизм в Compose для передачи смысла и структуры UI сервисам доступности (TalkBack, Switch Access) и тестовым API. Система семантики создаёт параллельное дерево узлов с метаданными, которое описывает *назначение* элементов, а не их визуальное представление.
+Semantics — механизм в Compose для передачи смысла UI элементов сервисам доступности (TalkBack, Switch Access) и тестовым фреймворкам. Создаёт параллельное дерево узлов с метаданными, описывающими *назначение* компонентов независимо от визуального представления.
 
-Ключевые свойства: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`.
+**Ключевые свойства**: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`, `onClick`.
 
 ### Основные паттерны
 
-**Доступная кнопка**
+**Доступная кнопка с ролью**
 ```kotlin
 Box(
   Modifier
     .clickable(onClick = onClick)
     .semantics {
-      contentDescription = "Отправить"
-      role = Role.Button
+      contentDescription = "Отправить форму"
+      role = Role.Button // ✅ Явно указываем роль
     }
-) {
-  Text("Отправить")
-}
+) { Icon(Icons.Default.Send) }
 ```
 
-**Изображение с описанием**
+**Описание изображений**
 ```kotlin
-// ✅ Правильно: описание для важного контента
+// ✅ Информативное изображение
 Image(
-  painter = painterResource(R.drawable.profile),
-  contentDescription = "Фото профиля пользователя"
+  painter = painterResource(R.drawable.user),
+  contentDescription = "Фото профиля: Иван Петров"
 )
 
 // ✅ Декоративное изображение
 Image(
   painter = painterResource(R.drawable.divider),
-  contentDescription = null // явно указываем отсутствие
+  contentDescription = null // TalkBack пропустит
 )
 ```
 
@@ -71,24 +69,24 @@ Box(
       current = progress,
       range = 0f..1f
     )
-    stateDescription = "${(progress * 100).toInt()}%"
+    stateDescription = "Загрузка: ${(progress * 100).toInt()}%"
   }
-) {
-  LinearProgressIndicator(progress)
-}
+) { LinearProgressIndicator(progress) }
 ```
 
 **Объединение дочерних элементов**
 ```kotlin
-// ✅ TalkBack прочитает "Иван Иванов" вместо двух отдельных текстов
+// ✅ TalkBack прочитает "Иван Иванов, 25 лет" как единое объявление
 Row(
   Modifier.semantics(mergeDescendants = true) {
-    contentDescription = "$firstName $lastName"
+    contentDescription = "$name, $age лет"
   }
 ) {
-  Text(firstName)
-  Text(lastName)
+  Text(name, style = MaterialTheme.typography.titleMedium)
+  Text("$age лет", style = MaterialTheme.typography.bodyMedium)
 }
+
+// ❌ Без merge TalkBack прочитает дважды с паузой
 ```
 
 **Тестовые селекторы**
@@ -96,58 +94,55 @@ Row(
 // UI
 Button(
   onClick = onSubmit,
-  modifier = Modifier.testTag("submit_button")
-) {
-  Text("Отправить")
-}
+  modifier = Modifier.testTag("submit_btn") // ✅ Стабильный селектор
+) { Text("Отправить") }
 
 // Тест
 composeTestRule
-  .onNodeWithTag("submit_button")
+  .onNodeWithTag("submit_btn")
   .assertIsEnabled()
   .performClick()
 ```
 
-### Рекомендации
-- Всегда устанавливайте `contentDescription` для информативных изображений и иконок
-- Используйте `mergeDescendants = true` для составных элементов, чтобы избежать дублирующихся объявлений
-- Применяйте `testTag` вместо текстовых селекторов для стабильности тестов
+### Критические правила
+- **Информативный контент**: всегда `contentDescription` для изображений/иконок с данными
+- **Декоративные элементы**: явно `contentDescription = null`, чтобы TalkBack пропускал
+- **Составные компоненты**: используйте `mergeDescendants = true` для предотвращения повторяющихся объявлений
+- **Тестирование**: применяйте `testTag` вместо текстовых селекторов для устойчивости к локализации
 
 ## Answer (EN)
 
 ### Concept
-Semantics is a Compose mechanism for exposing UI meaning and structure to accessibility services (TalkBack, Switch Access) and test APIs. The semantics system creates a parallel tree of nodes with metadata that describes the *purpose* of elements, not their visual representation.
+Semantics is Compose's mechanism for conveying UI element meaning to accessibility services (TalkBack, Switch Access) and test frameworks. Creates a parallel tree of nodes with metadata describing component *purpose* independently of visual representation.
 
-Key properties: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`.
+**Key properties**: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`, `onClick`.
 
 ### Core Patterns
 
-**Accessible button**
+**Accessible button with role**
 ```kotlin
 Box(
   Modifier
     .clickable(onClick = onClick)
     .semantics {
-      contentDescription = "Submit"
-      role = Role.Button
+      contentDescription = "Submit form"
+      role = Role.Button // ✅ Explicitly declare role
     }
-) {
-  Text("Submit")
-}
+) { Icon(Icons.Default.Send) }
 ```
 
-**Image with description**
+**Image descriptions**
 ```kotlin
-// ✅ Correct: description for meaningful content
+// ✅ Informative image
 Image(
-  painter = painterResource(R.drawable.profile),
-  contentDescription = "User profile photo"
+  painter = painterResource(R.drawable.user),
+  contentDescription = "Profile photo: John Doe"
 )
 
 // ✅ Decorative image
 Image(
   painter = painterResource(R.drawable.divider),
-  contentDescription = null // explicitly mark as decorative
+  contentDescription = null // TalkBack will skip
 )
 ```
 
@@ -159,24 +154,24 @@ Box(
       current = progress,
       range = 0f..1f
     )
-    stateDescription = "${(progress * 100).toInt()}%"
+    stateDescription = "Loading: ${(progress * 100).toInt()}%"
   }
-) {
-  LinearProgressIndicator(progress)
-}
+) { LinearProgressIndicator(progress) }
 ```
 
 **Merging child semantics**
 ```kotlin
-// ✅ TalkBack will read "John Doe" instead of two separate texts
+// ✅ TalkBack reads "John Doe, 25 years old" as single announcement
 Row(
   Modifier.semantics(mergeDescendants = true) {
-    contentDescription = "$firstName $lastName"
+    contentDescription = "$name, $age years old"
   }
 ) {
-  Text(firstName)
-  Text(lastName)
+  Text(name, style = MaterialTheme.typography.titleMedium)
+  Text("$age years old", style = MaterialTheme.typography.bodyMedium)
 }
+
+// ❌ Without merge TalkBack reads twice with pause
 ```
 
 **Test selectors**
@@ -184,43 +179,49 @@ Row(
 // UI
 Button(
   onClick = onSubmit,
-  modifier = Modifier.testTag("submit_button")
-) {
-  Text("Submit")
-}
+  modifier = Modifier.testTag("submit_btn") // ✅ Stable selector
+) { Text("Submit") }
 
 // Test
 composeTestRule
-  .onNodeWithTag("submit_button")
+  .onNodeWithTag("submit_btn")
   .assertIsEnabled()
   .performClick()
 ```
 
-### Guidelines
-- Always set `contentDescription` for informative images and icons
-- Use `mergeDescendants = true` for compound elements to avoid duplicate announcements
-- Apply `testTag` instead of text selectors for test stability
+### Critical Rules
+- **Informative content**: always provide `contentDescription` for images/icons conveying data
+- **Decorative elements**: explicitly set `contentDescription = null` so TalkBack skips them
+- **Compound components**: use `mergeDescendants = true` to prevent duplicate announcements
+- **Testing**: apply `testTag` instead of text selectors for localization resilience
 
 ## Follow-ups
-- How to handle live region announcements for dynamic content updates?
-- When should semantics be cleared with `clearAndSetSemantics` for performance?
-- How to implement custom semantics properties for domain-specific accessibility?
+
+- How do `clearAndSetSemantics` and `semantics(mergeDescendants = false) {}` differ in behavior?
+- When should you implement custom semantics properties using `SemanticsPropertyKey`?
+- How do live region announcements work for dynamic content updates (e.g., `LiveRegionMode`)?
+- What are the performance implications of deeply nested semantics trees in large lists?
+- How does semantics tree traversal work for multi-window and foldable device scenarios?
 
 ## References
+
 - [[c-jetpack-compose]]
+- [[c-android-accessibility]]
 - https://developer.android.com/jetpack/compose/semantics
 - https://developer.android.com/guide/topics/ui/accessibility
+- https://developer.android.com/jetpack/compose/testing
 
 ## Related Questions
 
-### Prerequisites
-- [[q-android-jetpack-overview--android--easy]]
-- [[q-compose-modifier-system--android--medium]]
+### Prerequisites (Easier)
+- [[q-android-jetpack-overview--android--easy]] — Understanding Jetpack libraries
+- [[q-compose-modifier-system--android--medium]] — Modifier chaining fundamentals
 
-### Related
-- [[q-compose-testing--android--medium]]
-- Understanding TalkBack behavior and gestures
+### Related (Same Level)
+- [[q-compose-testing--android--medium]] — Testing Compose UIs with semantics
+- [[q-android-accessibility-services--android--medium]] — TalkBack and accessibility service APIs
+- [[q-compose-custom-layout--android--medium]] — Custom layouts with semantic annotations
 
-### Advanced
-- [[q-compose-performance-optimization--android--hard]]
-- Implementing custom accessibility actions with `customActions`
+### Advanced (Harder)
+- [[q-compose-performance-optimization--android--hard]] — Optimizing semantics tree for large UIs
+- [[q-android-custom-accessibility-actions--android--hard]] — Implementing `customActions` for complex interactions

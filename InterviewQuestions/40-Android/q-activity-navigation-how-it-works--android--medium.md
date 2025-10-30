@@ -26,6 +26,8 @@ tags: [android/activity, android/ui-navigation, android/lifecycle, intent, back-
 sources:
   - https://developer.android.com/guide/components/activities/tasks-and-back-stack
   - https://developer.android.com/guide/navigation
+date created: Wednesday, October 29th 2025, 4:18:18 pm
+date modified: Thursday, October 30th 2025, 11:12:51 am
 ---
 
 # Вопрос (RU)

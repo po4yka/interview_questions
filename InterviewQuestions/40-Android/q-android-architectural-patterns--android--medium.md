@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [android/architecture-mvvm, android/architecture-mvi, android/architecture-clean, difficulty/medium]
 sources: []
+date created: Wednesday, October 29th 2025, 4:47:28 pm
+date modified: Thursday, October 30th 2025, 11:13:04 am
 ---
+
 # Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
 

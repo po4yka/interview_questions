@@ -27,6 +27,8 @@ tags:
   - fps
   - ui-thread
   - difficulty/medium
+date created: Wednesday, October 29th 2025, 4:46:47 pm
+date modified: Thursday, October 30th 2025, 11:13:02 am
 ---
 
 # Вопрос (RU)

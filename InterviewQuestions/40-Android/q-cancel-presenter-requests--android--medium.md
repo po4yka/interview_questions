@@ -10,11 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-android-testing-strategies--android--medium, q-async-operations-android--android--medium]
+related: [c-lifecycle, c-coroutines, q-activity-lifecycle-methods--android--medium, q-async-operations-android--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-27
-tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium]
+updated: 2025-10-29
+tags: [android/architecture-clean, android/coroutines, android/lifecycle, mvp, presenter-pattern, difficulty/medium]
 ---
 
 # Вопрос (RU)
@@ -27,148 +27,185 @@ tags: [android/architecture-clean, android/coroutines, android/lifecycle, diffic
 
 ## Ответ (RU)
 
-### Цели
-- Предотвратить обновление UI после уничтожения или паузы View
-- Избежать утечек памяти и напрасной работы
-- Централизованно управлять отменой при событиях жизненного цикла
+### Ключевая проблема
+Presenter не должен обновлять уничтоженную или detached View — это вызывает утечки памяти и крэши. Решение: привязать отмену запросов к lifecycle событиям View.
 
-### Стратегии отмены
+### Подход с Coroutines (рекомендуется)
 
-**Владение:** Presenter владеет механизмом отмены (Job/CompositeDisposable), очищает его в `onStop`/`onDestroy`.
-
-**Осведомлённость о жизненном цикле:** Наблюдать за lifecycle для старта/остановки работы, избегать жёстких ссылок на View.
-
-**Единая точка управления:** Все асинхронные операции регистрируются через механизм отмены.
-
-### Реализации
-
-**Coroutines (предпочтительно):**
 ```kotlin
-class UserPresenter {
+class UserPresenter(private val repo: UserRepository) {
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+  private var view: UserView? = null
 
-  fun loadUser() {
-    scope.launch { // ✅ Bound to presenter scope
-      val user = userRepo.fetch()
-      view?.displayUser(user)
+  fun attach(view: UserView) {
+    this.view = view
+  }
+
+  fun loadUser(id: String) {
+    scope.launch {
+      // ✅ Cancellable, bound to presenter scope
+      val user = repo.fetchUser(id)
+      view?.displayUser(user) // ✅ Null-safe
     }
   }
 
-  fun onStop() {
+  fun detach() {
+    view = null
     scope.coroutineContext.cancelChildren() // ✅ Cancel pending work
   }
 
-  fun onDestroy() {
-    scope.cancel() // ✅ Clean up scope completely
+  fun destroy() {
+    scope.cancel() // ✅ Clean up scope
   }
 }
 ```
 
-**RxJava:**
+**Почему `Main.immediate`:** избегает race condition, когда событие уже неактуально к моменту диспатча.
+
+### Подход с RxJava
+
 ```kotlin
-class UserPresenter {
+class UserPresenter(private val repo: UserRepository) {
   private val disposables = CompositeDisposable()
+  private var view: UserView? = null
 
-  fun loadUser() {
-    userRepo.getUser()
-      .subscribe({ view?.displayUser(it) }, { view?.showError(it) })
-      .also { disposables.add(it) } // ✅ Track subscription
+  fun loadUser(id: String) {
+    repo.getUser(id)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        { user -> view?.displayUser(user) }, // ✅ Null-safe
+        { error -> view?.showError(error) }
+      )
+      .also { disposables.add(it) } // ✅ Track for disposal
   }
 
-  fun onStop() { disposables.clear() } // ✅ Cancel in-flight
-  fun onDestroy() { disposables.dispose() }
+  fun detach() {
+    view = null
+    disposables.clear() // ❌ Disposes subscriptions
+  }
 }
 ```
 
-### Лучшие практики
-- Null-проверка View перед обновлением или использование no-op proxy при detach
-- Использовать `Main.immediate` для избежания устаревших событий
-- Разделять `onStop` (отмена задач) и `onDestroy` (полная очистка)
-- В тестах проверять отсутствие событий после detach
+### Альтернатива: No-op Proxy Pattern
+
+```kotlin
+class NoOpUserView : UserView {
+  override fun displayUser(user: User) { /* no-op */ }
+  override fun showError(error: Throwable) { /* no-op */ }
+}
+
+fun detach() {
+  view = NoOpUserView() // ✅ Avoids null-checks
+  scope.coroutineContext.cancelChildren()
+}
+```
 
 ## Answer (EN)
 
-### Goals
-- Prevent UI updates after View is destroyed or paused
-- Avoid memory leaks and wasted work
-- Centralize cancellation on lifecycle events
+### Core Problem
+A Presenter must not update a destroyed or detached View — this causes memory leaks and crashes. Solution: bind request cancellation to View lifecycle events.
 
-### Cancellation Strategies
+### Coroutines Approach (recommended)
 
-**Ownership:** Presenter owns a cancellation handle (Job/CompositeDisposable), clears it on `onStop`/`onDestroy`.
-
-**Lifecycle-awareness:** Observe lifecycle to start/stop work, avoid hard references to View.
-
-**Single source of truth:** All async operations register with the cancellation handle.
-
-### Implementations
-
-**Coroutines (preferred):**
 ```kotlin
-class UserPresenter {
+class UserPresenter(private val repo: UserRepository) {
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+  private var view: UserView? = null
 
-  fun loadUser() {
-    scope.launch { // ✅ Bound to presenter scope
-      val user = userRepo.fetch()
-      view?.displayUser(user)
+  fun attach(view: UserView) {
+    this.view = view
+  }
+
+  fun loadUser(id: String) {
+    scope.launch {
+      // ✅ Cancellable, bound to presenter scope
+      val user = repo.fetchUser(id)
+      view?.displayUser(user) // ✅ Null-safe
     }
   }
 
-  fun onStop() {
+  fun detach() {
+    view = null
     scope.coroutineContext.cancelChildren() // ✅ Cancel pending work
   }
 
-  fun onDestroy() {
-    scope.cancel() // ✅ Clean up scope completely
+  fun destroy() {
+    scope.cancel() // ✅ Clean up scope
   }
 }
 ```
 
-**RxJava:**
+**Why `Main.immediate`:** avoids race conditions where the event is stale by dispatch time.
+
+### RxJava Approach
+
 ```kotlin
-class UserPresenter {
+class UserPresenter(private val repo: UserRepository) {
   private val disposables = CompositeDisposable()
+  private var view: UserView? = null
 
-  fun loadUser() {
-    userRepo.getUser()
-      .subscribe({ view?.displayUser(it) }, { view?.showError(it) })
-      .also { disposables.add(it) } // ✅ Track subscription
+  fun loadUser(id: String) {
+    repo.getUser(id)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(
+        { user -> view?.displayUser(user) }, // ✅ Null-safe
+        { error -> view?.showError(error) }
+      )
+      .also { disposables.add(it) } // ✅ Track for disposal
   }
 
-  fun onStop() { disposables.clear() } // ✅ Cancel in-flight
-  fun onDestroy() { disposables.dispose() }
+  fun detach() {
+    view = null
+    disposables.clear() // ❌ Disposes subscriptions
+  }
 }
 ```
 
-### Best Practices
-- Null-check View before updates or use no-op proxy when detached
-- Use `Main.immediate` to avoid stale events
-- Separate `onStop` (cancel tasks) from `onDestroy` (full cleanup)
-- In tests, assert no emissions after detach
+### Alternative: No-op Proxy Pattern
+
+```kotlin
+class NoOpUserView : UserView {
+  override fun displayUser(user: User) { /* no-op */ }
+  override fun showError(error: Throwable) { /* no-op */ }
+}
+
+fun detach() {
+  view = NoOpUserView() // ✅ Avoids null-checks
+  scope.coroutineContext.cancelChildren()
+}
+```
 
 ## Follow-ups
-- How to scope Presenter lifecycle using DI frameworks (Hilt/Koin)?
-- What are trade-offs between coroutines and RxJava for cancellation?
-- How to test that requests are properly cancelled in unit tests?
-- When to use `cancelChildren()` vs `cancel()` on scope?
+
+1. How do `cancelChildren()` and `cancel()` differ, and when should each be used?
+2. What happens if a coroutine is cancelled while performing a suspend call?
+3. How would you test that a Presenter correctly cancels requests on `detach()`?
+4. Why prefer `Main.immediate` over `Main` dispatcher in Presenters?
+5. How can DI frameworks (Hilt, Koin) automate Presenter lifecycle scoping?
 
 ## References
-- [[c-coroutines]]
-- [[c-lifecycle]]
-- https://developer.android.com/kotlin/coroutines
-- https://reactivex.io/documentation/disposable.html
+
+- [[c-coroutines]] - Kotlin coroutines fundamentals
+- [[c-lifecycle]] - Android component lifecycle
+- [[c-mvp-pattern]] - Model-View-Presenter architecture
+- https://developer.android.com/kotlin/coroutines/coroutines-best-practices
+- https://developer.android.com/topic/architecture/ui-layer
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-activity-lifecycle-methods--android--medium]] - Understanding lifecycle events
-- Basic knowledge of MVP pattern and async operations
+- [[q-activity-lifecycle-methods--android--medium]] - Understanding Activity lifecycle callbacks
+- Understanding of MVP pattern and separation of concerns
+- Basic coroutine or RxJava knowledge
 
 ### Related
-- [[q-async-operations-android--android--medium]] - General async patterns in Android
-- [[q-android-testing-strategies--android--medium]] - Testing async behavior
+- [[q-async-operations-android--android--medium]] - General async handling strategies
+- [[q-viewmodel-lifecycle-scope--android--medium]] - Alternative approach with ViewModel
+- [[q-memory-leaks-android--android--medium]] - Detecting and preventing memory leaks
 
 ### Advanced
-- Implementing lifecycle-aware components with Architecture Components
-- Memory leak detection and prevention in long-running operations
+- [[q-lifecycle-aware-components--android--hard]] - Building lifecycle-aware observers
+- [[q-structured-concurrency-android--android--hard]] - Advanced coroutine cancellation patterns
+- Testing cancellation behavior in instrumented tests

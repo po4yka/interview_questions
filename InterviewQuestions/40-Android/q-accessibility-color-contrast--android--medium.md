@@ -15,7 +15,10 @@ created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 sources: []
+date created: Wednesday, October 29th 2025, 4:21:05 pm
+date modified: Thursday, October 30th 2025, 11:12:45 am
 ---
+
 # Вопрос (RU)
 > Как обеспечить доступную контрастность цветов в Android-приложении согласно WCAG?
 

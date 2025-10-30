@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/activity, android/service, android/broadcast-receiver, difficulty/easy]
+date created: Wednesday, October 29th 2025, 4:47:59 pm
+date modified: Thursday, October 30th 2025, 11:13:00 am
 ---
+
 # Вопрос (RU)
 > Назовите четыре основных компонента Android приложения и их назначение.
 

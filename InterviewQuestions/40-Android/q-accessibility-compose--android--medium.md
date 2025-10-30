@@ -17,7 +17,10 @@ sources:
   - https://developer.android.com/jetpack/compose/accessibility
   - https://developer.android.com/guide/topics/ui/accessibility
 tags: [android/ui-accessibility, android/ui-compose, accessibility, compose, talkback, semantics, difficulty/medium]
+date created: Wednesday, October 29th 2025, 4:19:08 pm
+date modified: Thursday, October 30th 2025, 11:12:46 am
 ---
+
 # Вопрос (RU)
 > Как обеспечить доступность в Jetpack Compose для людей с ограниченными возможностями?
 

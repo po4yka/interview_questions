@@ -3,7 +3,7 @@ id: 20251012-122710
 title: Modifier System in Compose / Система Modifier в Compose
 aliases: [Modifier System in Compose, Система Modifier в Compose]
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics: [ui-compose, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,10 @@ related:
   - q-animated-visibility-vs-content--android--medium
   - q-compose-compiler-plugin--android--hard
   - q-compose-gesture-detection--android--medium
+  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-06
-updated: 2025-10-28
-tags: [android/performance-memory, android/ui-compose, difficulty/medium]
+updated: 2025-10-30
+tags: [android/ui-compose, android/performance-memory, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/modifiers]
 ---
 # Вопрос (RU)
@@ -29,55 +30,49 @@ sources: [https://developer.android.com/jetpack/compose/modifiers]
 
 ## Ответ (RU)
 
-### Концепция Modifier
+### Концепция и архитектура
 
-Modifier — упорядоченная неизменяемая цепочка декораторов, которая добавляет поведение или визуальное оформление к Composable-функциям. Каждый Modifier в цепочке влияет на фазы measure, layout и draw.
+Modifier — упорядоченная неизменяемая цепочка декораторов, применяемая к Composable-функциям. Каждый элемент цепочки влияет на фазы measure, layout и draw, образуя конвейер трансформаций.
 
-### Модель выполнения
-
-**Measure и Layout** (сверху вниз):
-- Размеры и позиции вычисляются от внешнего Modifier к внутреннему
-- Каждый Modifier получает ограничения от предыдущего и передает их следующему
-
-**Draw** (снизу вверх):
-- Отрисовка происходит от внутреннего Modifier к внешнему
-- Позже добавленные Modifier рисуются поверх ранних
+**Модель выполнения**:
+- **Measure/Layout** (сверху вниз): внешний → внутренний. Каждый Modifier получает ограничения (constraints) от предыдущего и передает их следующему.
+- **Draw** (снизу вверх): внутренний → внешний. Поздние Modifier рисуются поверх ранних.
 
 ### Критическое влияние порядка
 
 **Padding и background**:
 ```kotlin
-// ❌ Background покрывает только внутреннюю область
+// ❌ Background только внутри (без padding)
 Modifier
-  .padding(16.dp)      // Отступ применяется первым
-  .background(Color.Red) // Background после padding
+  .padding(16.dp)
+  .background(Color.Red)
   .size(100.dp)
 
-// ✅ Background покрывает всю область
+// ✅ Background на всю область (включая padding)
 Modifier
-  .background(Color.Red) // Background на всю область
-  .padding(16.dp)       // Padding внутри background
+  .background(Color.Red)
+  .padding(16.dp)
   .size(100.dp)
 ```
 
-**Область нажатия**:
+**Область нажатия (hit area)**:
 ```kotlin
-// ❌ Маленькая область клика (48×48)
+// ❌ Маленькая область клика
 Modifier
   .size(48.dp)
   .clickable { /* action */ }
   .padding(12.dp)
 
-// ✅ Увеличенная область клика (включает padding)
+// ✅ Увеличенная область клика
 Modifier
   .padding(12.dp)
   .clickable { /* action */ }
   .size(48.dp)
 ```
 
-**Clip перед отрисовкой**:
+**Clipping перед отрисовкой**:
 ```kotlin
-// ✅ Скругленный background
+// ✅ Clip должен идти перед draw-операциями
 Modifier
   .clip(CircleShape)
   .background(Color.Red)
@@ -95,7 +90,7 @@ fun CustomButton(
   content: @Composable () -> Unit
 ) {
   Box(
-    modifier = modifier  // Внешний modifier применяется первым
+    modifier = modifier  // Внешний modifier имеет приоритет
       .clickable(onClick = onClick)
       .padding(16.dp)
   ) {
@@ -104,72 +99,67 @@ fun CustomButton(
 }
 ```
 
-**Переиспользование цепочек**:
+**Условные цепочки**:
 ```kotlin
-// ✅ Единая цепочка с условиями
+// ✅ Используйте then() для условной логики
 val modifier = Modifier
   .size(100.dp)
   .then(if (isClickable) Modifier.clickable { onClick() } else Modifier)
   .then(if (isSelected) Modifier.border(2.dp, Color.Blue) else Modifier)
 ```
 
-**Оптимизация производительности**:
-- Предпочитайте draw-only modifiers вместо layout modifiers для визуальных эффектов
-- Используйте `remember` для дорогих вычислений в Modifier
-- Избегайте глубоких цепочек Modifier (>10 элементов)
-- Минимизируйте использование intrinsic measurements
+### Оптимизация производительности
+
+- **Draw-only modifiers** предпочтительнее layout modifiers для визуальных эффектов (избегают перекомпоновки layout-фазы).
+- Используйте `remember {}` для дорогих вычислений внутри Modifier.
+- Избегайте глубоких цепочек (>10 элементов).
+- Минимизируйте intrinsic measurements — они требуют дополнительных проходов measure.
 
 ## Answer (EN)
 
-### Modifier Concept
+### Concept and Architecture
 
-Modifier is an ordered, immutable chain of decorators that adds behavior or visual styling to Composable functions. Each Modifier in the chain affects the measure, layout, and draw phases.
+Modifier is an ordered, immutable chain of decorators applied to Composable functions. Each element in the chain affects measure, layout, and draw phases, forming a transformation pipeline.
 
-### Execution Model
-
-**Measure and Layout** (top to bottom):
-- Sizes and positions are calculated from outer to inner Modifier
-- Each Modifier receives constraints from the previous one and passes them to the next
-
-**Draw** (bottom to top):
-- Drawing happens from inner to outer Modifier
-- Later-added Modifiers are drawn on top of earlier ones
+**Execution Model**:
+- **Measure/Layout** (top to bottom): outer → inner. Each Modifier receives constraints from the previous one and passes them to the next.
+- **Draw** (bottom to top): inner → outer. Later-added Modifiers are drawn on top of earlier ones.
 
 ### Critical Order Impact
 
 **Padding and background**:
 ```kotlin
-// ❌ Background covers only inner area
+// ❌ Background only inside (without padding)
 Modifier
-  .padding(16.dp)      // Padding applied first
-  .background(Color.Red) // Background after padding
+  .padding(16.dp)
+  .background(Color.Red)
   .size(100.dp)
 
-// ✅ Background covers full area
+// ✅ Background on full area (including padding)
 Modifier
-  .background(Color.Red) // Background on full area
-  .padding(16.dp)       // Padding inside background
+  .background(Color.Red)
+  .padding(16.dp)
   .size(100.dp)
 ```
 
-**Click area**:
+**Hit area**:
 ```kotlin
-// ❌ Small hit area (48×48)
+// ❌ Small click area
 Modifier
   .size(48.dp)
   .clickable { /* action */ }
   .padding(12.dp)
 
-// ✅ Extended hit area (includes padding)
+// ✅ Extended click area
 Modifier
   .padding(12.dp)
   .clickable { /* action */ }
   .size(48.dp)
 ```
 
-**Clip before draw**:
+**Clipping before draw**:
 ```kotlin
-// ✅ Rounded background
+// ✅ Clip must come before draw operations
 Modifier
   .clip(CircleShape)
   .background(Color.Red)
@@ -187,7 +177,7 @@ fun CustomButton(
   content: @Composable () -> Unit
 ) {
   Box(
-    modifier = modifier  // External modifier applied first
+    modifier = modifier  // External modifier has priority
       .clickable(onClick = onClick)
       .padding(16.dp)
   ) {
@@ -196,44 +186,50 @@ fun CustomButton(
 }
 ```
 
-**Chain reuse**:
+**Conditional chains**:
 ```kotlin
-// ✅ Single chain with conditions
+// ✅ Use then() for conditional logic
 val modifier = Modifier
   .size(100.dp)
   .then(if (isClickable) Modifier.clickable { onClick() } else Modifier)
   .then(if (isSelected) Modifier.border(2.dp, Color.Blue) else Modifier)
 ```
 
-**Performance optimization**:
-- Prefer draw-only modifiers over layout modifiers for visual effects
-- Use `remember` for expensive computations in Modifier
-- Avoid deep Modifier chains (>10 elements)
-- Minimize use of intrinsic measurements
+### Performance Optimization
+
+- **Draw-only modifiers** are preferable over layout modifiers for visual effects (avoid recomposing layout phase).
+- Use `remember {}` for expensive computations inside Modifier.
+- Avoid deep chains (>10 elements).
+- Minimize intrinsic measurements — they require additional measure passes.
 
 ## Follow-ups
 
-- When should you use custom Modifier implementations via `Modifier.Element`?
+- When should you implement custom Modifier via `Modifier.Element` vs using built-in modifiers?
 - How does the Compose compiler optimize Modifier chains during recomposition?
 - What's the performance difference between `.padding().background()` and `.background().padding()`?
 - How to debug Modifier execution order with Layout Inspector?
+- Why is `Modifier.then()` preferred over conditional `.let {}` blocks?
 
 ## References
 
 - [[c-jetpack-compose]]
+- [[c-compose-recomposition]]
+- [[c-android-performance-optimization]]
 - https://developer.android.com/jetpack/compose/modifiers
+- https://developer.android.com/jetpack/compose/modifiers-list
 - https://developer.android.com/develop/ui/compose/performance
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-jetpack-overview--android--easy]]
-- Basic understanding of Compose UI fundamentals
+- [[q-compose-basics--android--easy]]
 
 ### Related (Same Level)
 - [[q-animated-visibility-vs-content--android--medium]]
 - [[q-compose-gesture-detection--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
+- [[q-compose-recomposition-optimization--android--medium]]
 
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]]
