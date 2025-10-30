@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-lifecycle, c-coroutines, c-workmanager, q-strictmode-debugging--android--medium]
 created: 2025-10-05
-updated: 2025-10-29
+updated: 2025-10-30
 sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, performance, debugging, difficulty/medium]
 ---
@@ -34,14 +34,13 @@ tags: [android/performance-rendering, android/profiling, android/strictmode-anr,
 - **Service**: методы сервиса выполняются > 20 сек (background) или > 10 сек (foreground)
 - **BroadcastReceiver**: receiver не завершается за 10 секунд
 
-**Типичные антипаттерны:**
+**Типичные причины блокировки main thread:**
 
 ```kotlin
 // ❌ ПЛОХО: Блокировка main thread
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         File("large.txt").readText()  // I/O блокировка
         calculatePrimes(1_000_000)    // CPU-интенсивная задача
         httpClient.get(url).execute() // Синхронный network call
@@ -50,16 +49,13 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ```kotlin
-// ✅ ХОРОШО: Асинхронное выполнение с корутинами
+// ✅ ХОРОШО: Асинхронное выполнение
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         lifecycleScope.launch(Dispatchers.IO) {
             val data = File("large.txt").readText()
-            withContext(Dispatchers.Main) {
-                updateUI(data)
-            }
+            withContext(Dispatchers.Main) { updateUI(data) }
         }
     }
 }
@@ -68,16 +64,7 @@ class MainActivity : AppCompatActivity() {
 **BroadcastReceiver и goAsync():**
 
 ```kotlin
-// ❌ ПЛОХО: Долгая операция в onReceive
-class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        database.insert(data)  // Может занять > 10 сек
-    }
-}
-```
-
-```kotlin
-// ✅ ХОРОШО: goAsync() для асинхронной работы
+// ✅ goAsync() для асинхронной работы
 class MyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val pendingResult = goAsync()
@@ -92,10 +79,10 @@ class MyReceiver : BroadcastReceiver() {
 }
 ```
 
-**Диагностика ANR:**
+**Диагностика и мониторинг:**
 
 ```kotlin
-// StrictMode для детекции проблем в debug-сборках
+// StrictMode для детекции в debug
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
@@ -107,16 +94,17 @@ if (BuildConfig.DEBUG) {
 ```
 
 **Production-мониторинг:**
-- **Android Vitals** в Play Console показывает ANR rate и affected users
-- **ANR traces** (`/data/anr/traces.txt`) содержат stacktrace всех потоков
-- **Firebase Crashlytics** может собирать ANR-отчеты
+- **Android Vitals** в Play Console: ANR rate, affected users, traces
+- **ANR traces** (`/data/anr/traces.txt`): stacktrace всех потоков в момент ANR
+- **Firebase Crashlytics**: автоматический сбор ANR-отчетов
 
 **Стратегии предотвращения:**
 
 1. Main thread только для UI (< 16ms для 60 FPS)
 2. WorkManager для долгих фоновых задач
-3. Минимум работы в lifecycle callbacks
+3. Минимум работы в lifecycle callbacks (onCreate, onResume)
 4. Избегать длинных synchronized блоков
+5. Использовать Dispatchers.IO для I/O, Dispatchers.Default для CPU-задач
 
 ## Answer (EN)
 
@@ -128,14 +116,13 @@ if (BuildConfig.DEBUG) {
 - **Service**: methods take > 20 sec (background) or > 10 sec (foreground)
 - **BroadcastReceiver**: receiver doesn't finish within 10 seconds
 
-**Common Anti-patterns:**
+**Common Causes of Main Thread Blocking:**
 
 ```kotlin
 // ❌ BAD: Blocking main thread
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         File("large.txt").readText()  // I/O blocking
         calculatePrimes(1_000_000)    // CPU-intensive task
         httpClient.get(url).execute() // Synchronous network call
@@ -144,16 +131,13 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ```kotlin
-// ✅ GOOD: Asynchronous execution with coroutines
+// ✅ GOOD: Asynchronous execution
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         lifecycleScope.launch(Dispatchers.IO) {
             val data = File("large.txt").readText()
-            withContext(Dispatchers.Main) {
-                updateUI(data)
-            }
+            withContext(Dispatchers.Main) { updateUI(data) }
         }
     }
 }
@@ -162,16 +146,7 @@ class MainActivity : AppCompatActivity() {
 **BroadcastReceiver and goAsync():**
 
 ```kotlin
-// ❌ BAD: Long operation in onReceive
-class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        database.insert(data)  // May take > 10 sec
-    }
-}
-```
-
-```kotlin
-// ✅ GOOD: goAsync() for asynchronous work
+// ✅ goAsync() for asynchronous work
 class MyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val pendingResult = goAsync()
@@ -186,10 +161,10 @@ class MyReceiver : BroadcastReceiver() {
 }
 ```
 
-**ANR Diagnostics:**
+**Diagnostics and Monitoring:**
 
 ```kotlin
-// StrictMode for detecting issues in debug builds
+// StrictMode for debug detection
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
         StrictMode.ThreadPolicy.Builder()
@@ -201,44 +176,47 @@ if (BuildConfig.DEBUG) {
 ```
 
 **Production Monitoring:**
-- **Android Vitals** in Play Console shows ANR rate and affected users
-- **ANR traces** (`/data/anr/traces.txt`) contain stacktraces of all threads
-- **Firebase Crashlytics** can collect ANR reports
+- **Android Vitals** in Play Console: ANR rate, affected users, traces
+- **ANR traces** (`/data/anr/traces.txt`): stacktraces of all threads at ANR moment
+- **Firebase Crashlytics**: automatic ANR report collection
 
 **Prevention Strategies:**
 
 1. Main thread only for UI (< 16ms for 60 FPS)
 2. WorkManager for long background tasks
-3. Minimize work in lifecycle callbacks
+3. Minimize work in lifecycle callbacks (onCreate, onResume)
 4. Avoid long synchronized blocks
+5. Use Dispatchers.IO for I/O, Dispatchers.Default for CPU tasks
 
 ---
 
 ## Follow-ups
 
-- How do you analyze ANR traces from `/data/anr/traces.txt` to identify blocking operations?
-- What's the difference between WorkManager and coroutines for long-running tasks?
-- How does StrictMode penaltyDeath() differ from penaltyLog() in ANR prevention?
-- When is it acceptable to perform brief I/O operations on the main thread?
-- How do you handle ANRs caused by third-party SDK or system Binder calls?
+- How do you analyze ANR traces from `/data/anr/traces.txt` to identify the root cause of blocking?
+- What's the difference between WorkManager and coroutines for preventing ANRs in long-running tasks?
+- How does StrictMode penaltyDeath() differ from penaltyLog() in ANR detection?
+- Can brief I/O operations (< 50ms) ever be acceptable on the main thread, and when?
+- How do you handle ANRs caused by third-party SDKs or system Binder calls beyond your control?
 
 ## References
 
 - [[c-lifecycle]]
 - [[c-coroutines]]
 - [[c-workmanager]]
+- [[c-strictmode]]
 - https://developer.android.com/topic/performance/vitals/anr
 - https://developer.android.com/topic/performance/anrs/diagnose-and-fix-anrs
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-unifies-android-components--android--easy]]
-- [[q-what-is-broadcastreceiver--android--easy]]
+- [[q-what-unifies-android-components--android--easy]] - Understanding Android component lifecycle
+- [[q-what-is-broadcastreceiver--android--easy]] - BroadcastReceiver basics
 
 ### Related (Same Level)
-- [[q-strictmode-debugging--android--medium]]
-- [[q-multithreading-tools-android--android--medium]]
+- [[q-strictmode-debugging--android--medium]] - Using StrictMode for performance debugging
+- [[q-multithreading-tools-android--android--medium]] - Android threading mechanisms
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]]
+- [[q-service-lifecycle-binding--android--hard]] - Advanced service patterns
+- [[q-profiling-systrace--android--hard]] - Deep performance profiling

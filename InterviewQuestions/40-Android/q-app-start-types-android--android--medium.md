@@ -3,7 +3,7 @@ id: 20251012-122782
 title: App Start Types Android / Типы запуска приложения Android
 aliases: ["App Start Types Android", "Типы запуска приложения Android"]
 topic: android
-subtopics: [performance-startup, lifecycle, app-startup]
+subtopics: [performance-startup, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -18,17 +18,18 @@ related:
   - q-android-build-optimization--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
-tags: [android/performance-startup, android/lifecycle, android/app-startup, performance, startup, difficulty/medium]
+updated: 2025-10-30
+tags: [android/performance-startup, android/lifecycle, performance, startup, difficulty/medium]
 ---
 # Вопрос (RU)
 > Какие существуют типы запуска Android-приложения и как оптимизировать каждый из них?
 
 ## Ответ (RU)
 
-**Три типа запуска Android-приложения** различаются по состоянию процесса: холодный (процесс не существует), теплый (процесс жив, Activity пересоздается), горячий (Activity возобновляется). Каждый требует специфичной оптимизации с измеримыми метриками.
+**Три типа запуска** различаются по состоянию процесса: холодный (процесс не существует), теплый (процесс жив, Activity пересоздается), горячий (Activity возобновляется). Каждый требует специфичной оптимизации с измеримыми метриками.
 
 ### Метрики запуска
+
 - **TTID (Time To Initial Display)**: первый кадр UI
 - **TTFD (Time To Full Display)**: полная интерактивность; сигнализируем через `reportFullyDrawn()`
 - **Инструменты**: Android Vitals (prod), Macrobenchmark (CI), Perfetto (dev)
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ### Холодный старт (Cold Start)
+
 **Цель**: минимизировать критический путь (запуск процесса → первый кадр).
 
 ```kotlin
@@ -67,20 +69,8 @@ class App : Application() {
 
 **Baseline profiles**: предкомпилируйте горячие пути для устранения JIT-прогрева.
 
-```kotlin
-// ✅ Генерация baseline profiles через Macrobenchmark
-class StartupBench {
-    @get:Rule val rule = MacrobenchmarkRule()
-    @Test fun cold() = rule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(StartupTimingMetric()),
-        startupMode = StartupMode.COLD,
-        iterations = 5
-    ) { startActivityAndWait() }
-}
-```
-
 ### Теплый старт (Warm Start)
+
 **Цель**: быстрое восстановление UI/состояния.
 
 ```kotlin
@@ -101,6 +91,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ### Горячий старт (Hot Start)
+
 **Цель**: пустой `onResume`, группировка обновлений.
 
 ```kotlin
@@ -118,6 +109,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ### Бюджеты и гарантии
+
 - **Целевые бюджеты**: Холодный < 500ms, Теплый < 300ms, Горячий < 100ms
 - **Запреты**: нет disk/network на главном потоке при старте
 - **CI**: macrobench пороги + алерты на регрессии
@@ -132,6 +124,7 @@ class MainActivity : AppCompatActivity() {
 **Three Android app start types** differ by process state: cold (no process), warm (process alive, Activity recreated), hot (Activity resumed). Each requires specific optimization with measurable metrics.
 
 ### Startup Metrics
+
 - **TTID (Time To Initial Display)**: first UI frame
 - **TTFD (Time To Full Display)**: full interactivity; signal via `reportFullyDrawn()`
 - **Tools**: Android Vitals (prod), Macrobenchmark (CI), Perfetto (dev)
@@ -147,6 +140,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ### Cold Start
+
 **Goal**: minimize critical path (process start → first frame).
 
 ```kotlin
@@ -170,20 +164,8 @@ class App : Application() {
 
 **Baseline profiles**: precompile hot paths to eliminate JIT warmup.
 
-```kotlin
-// ✅ Generate baseline profiles via Macrobenchmark
-class StartupBench {
-    @get:Rule val rule = MacrobenchmarkRule()
-    @Test fun cold() = rule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(StartupTimingMetric()),
-        startupMode = StartupMode.COLD,
-        iterations = 5
-    ) { startActivityAndWait() }
-}
-```
-
 ### Warm Start
+
 **Goal**: fast UI/state reconstruction.
 
 ```kotlin
@@ -204,6 +186,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ### Hot Start
+
 **Goal**: empty `onResume`, batched updates.
 
 ```kotlin
@@ -221,6 +204,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ### Budgets and Guardrails
+
 - **Target budgets**: Cold < 500ms, Warm < 300ms, Hot < 100ms
 - **Prohibitions**: no main-thread disk/network on startup
 - **CI**: macrobench thresholds + regression alerts

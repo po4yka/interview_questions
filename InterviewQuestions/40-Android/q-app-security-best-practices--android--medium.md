@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-encryption, c-android-keystore, q-android-runtime-permissions--android--medium, q-android-network-security--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 sources: []
 tags: [android/keystore-crypto, android/permissions, android/network-security-config, security, owasp, difficulty/medium]
 ---

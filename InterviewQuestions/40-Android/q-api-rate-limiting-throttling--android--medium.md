@@ -13,7 +13,7 @@ moc: moc-android
 related: [c-okhttp-interceptors, c-networking, q-retrofit-error-handling--android--medium, q-android-caching-strategies--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/networking-http, android/performance-startup, okhttp, retrofit, networking, performance, difficulty/medium]
 ---
 
@@ -29,9 +29,7 @@ tags: [android/networking-http, android/performance-startup, okhttp, retrofit, n
 
 **Rate limiting** и **throttling** — техники контроля частоты запросов для защиты серверов от перегрузки и обеспечения стабильности приложения.
 
-**Ключевые подходы:**
-
-**1. Token Bucket Interceptor**
+### 1. Token Bucket Interceptor
 
 Позволяет всплески трафика при сохранении средней скорости.
 
@@ -45,13 +43,12 @@ class TokenBucketInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         synchronized(this) {
-            // ✅ Пополнение токенов
             val now = System.currentTimeMillis()
             val elapsed = now - lastRefill
             tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
             lastRefill = now
 
-            // ❌ Неправильно: блокировать основной поток
+            // ✅ Пополнение токенов основано на времени
             if (tokens < 1) throw TooManyRequestsException()
             tokens--
         }
@@ -60,7 +57,7 @@ class TokenBucketInterceptor(
 }
 ```
 
-**2. Exponential Backoff**
+### 2. Exponential Backoff
 
 Обрабатывает 429 и 5xx ошибки с увеличивающимися задержками.
 
@@ -80,7 +77,7 @@ class RetryInterceptor(
                     response.close()
                     if (attempt == maxRetries) throw MaxRetriesExceededException()
 
-                    // ✅ Учитываем Retry-After
+                    // ✅ Учитываем Retry-After header
                     val delay = response.header("Retry-After")?.toLongOrNull()?.times(1000)
                         ?: (initialDelay shl attempt)
                     Thread.sleep(delay)
@@ -94,7 +91,7 @@ class RetryInterceptor(
 }
 ```
 
-**3. Flow Debounce**
+### 3. Flow Debounce
 
 Ограничивает частые запросы от пользовательского ввода.
 
@@ -109,16 +106,11 @@ class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
             if (query.length < 3) flowOf(emptyList())
             else repo.search(query)
         }
-        .catch { emit(emptyList()) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-
-    fun onSearchQueryChanged(query: String) {
-        searchQuery.value = query
-    }
 }
 ```
 
-**4. WorkManager Constraints**
+### 4. WorkManager Rate Limiting
 
 Ограничивает фоновые задачи по сети и батарее.
 
@@ -128,33 +120,31 @@ val constraints = Constraints.Builder()
     .setRequiresBatteryNotLow(true)
     .build()
 
-// ✅ Используем ExistingWorkPolicy для ограничения частоты
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
     .setConstraints(constraints)
     .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
     .build()
 
+// ✅ KEEP предотвращает дублирование задач
 WorkManager.getInstance(context).enqueueUniquePeriodicWork(
     "sync",
-    ExistingPeriodicWorkPolicy.KEEP, // ❌ REPLACE создаёт новые задачи
+    ExistingPeriodicWorkPolicy.KEEP,
     syncRequest
 )
 ```
 
-**Практические советы:**
-- Используйте token bucket для API с burst traffic
-- Всегда учитывайте `Retry-After` header
-- Применяйте debounce 300-500ms для поиска
-- Кешируйте с ETag для условных запросов
-- Мониторьте 429 responses в analytics
+**Рекомендации:**
+- Token bucket для API с burst traffic
+- Учитывать `Retry-After` header
+- Debounce 300-500ms для поиска
+- Кешировать с ETag для условных запросов
+- Мониторить 429 responses в analytics
 
 ## Answer (EN)
 
 **Rate limiting** and **throttling** control request frequency to protect servers from overload and ensure app stability.
 
-**Key approaches:**
-
-**1. Token Bucket Interceptor**
+### 1. Token Bucket Interceptor
 
 Allows burst traffic while maintaining average rate.
 
@@ -168,13 +158,12 @@ class TokenBucketInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         synchronized(this) {
-            // ✅ Refill tokens
             val now = System.currentTimeMillis()
             val elapsed = now - lastRefill
             tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
             lastRefill = now
 
-            // ❌ Wrong: blocking main thread
+            // ✅ Token refill based on elapsed time
             if (tokens < 1) throw TooManyRequestsException()
             tokens--
         }
@@ -183,7 +172,7 @@ class TokenBucketInterceptor(
 }
 ```
 
-**2. Exponential Backoff**
+### 2. Exponential Backoff
 
 Handles 429 and 5xx errors with increasing delays.
 
@@ -217,7 +206,7 @@ class RetryInterceptor(
 }
 ```
 
-**3. Flow Debounce**
+### 3. Flow Debounce
 
 Limits frequent requests from user input.
 
@@ -232,16 +221,11 @@ class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
             if (query.length < 3) flowOf(emptyList())
             else repo.search(query)
         }
-        .catch { emit(emptyList()) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-
-    fun onSearchQueryChanged(query: String) {
-        searchQuery.value = query
-    }
 }
 ```
 
-**4. WorkManager Constraints**
+### 4. WorkManager Rate Limiting
 
 Limits background tasks based on network and battery.
 
@@ -251,15 +235,15 @@ val constraints = Constraints.Builder()
     .setRequiresBatteryNotLow(true)
     .build()
 
-// ✅ Use ExistingWorkPolicy to limit frequency
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
     .setConstraints(constraints)
     .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
     .build()
 
+// ✅ KEEP prevents duplicate tasks
 WorkManager.getInstance(context).enqueueUniquePeriodicWork(
     "sync",
-    ExistingPeriodicWorkPolicy.KEEP, // ❌ REPLACE creates new tasks
+    ExistingPeriodicWorkPolicy.KEEP,
     syncRequest
 )
 ```
@@ -276,10 +260,10 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 ## Follow-ups
 
 - How to test rate limiting interceptors with MockWebServer?
-- What's the difference between token bucket and leaky bucket?
+- What's the difference between token bucket and leaky bucket algorithms?
 - How to implement per-endpoint rate limiting with different limits?
-- When should you use coroutine delay() vs Thread.sleep()?
-- How to implement adaptive rate limiting based on server headers?
+- When to use coroutine delay() vs Thread.sleep() in interceptors?
+- How to implement adaptive rate limiting based on server response headers?
 
 ## References
 
@@ -287,6 +271,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - [[c-networking]]
 - [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
 - [Kotlin Flow Operators](https://kotlinlang.org/docs/flow.html)
+- [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 
 ## Related Questions
 

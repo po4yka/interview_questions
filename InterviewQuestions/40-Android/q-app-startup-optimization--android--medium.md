@@ -3,18 +3,18 @@ id: 20251011-220003
 title: App Startup Optimization / Оптимизация запуска приложения
 aliases: ["App Startup Optimization", "Оптимизация запуска приложения"]
 topic: android
-subtopics: [performance-startup, app-startup, performance-memory]
+subtopics: [performance-startup, performance-memory, app-startup]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-performance-measurement-tools--android--medium, q-app-start-types-android--android--medium, q-app-startup-library--android--medium]
+related: [c-app-startup, c-content-provider, c-lazy-initialization, q-android-performance-measurement-tools--android--medium, q-app-start-types-android--android--medium, q-app-startup-library--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
-tags: [android/performance-startup, android/app-startup, android/performance-memory, difficulty/medium]
+updated: 2025-10-30
+tags: [android/performance-startup, android/performance-memory, android/app-startup, difficulty/medium]
 ---
 # Вопрос (RU)
 > Как оптимизировать время запуска Android-приложения?
@@ -214,18 +214,26 @@ override fun onCreate() {
 
 ## Follow-ups
 
-- How do you measure startup performance in production environments?
-- What trade-offs exist between lazy initialization and memory usage?
-- When should initialization be deferred vs. made lazy?
-- How do you prioritize which ContentProviders to consolidate first?
-- What metrics indicate startup optimization is needed?
+- How does App Startup library handle dependency graphs between initializers?
+- What startup time targets are recommended for different app categories (games vs utilities)?
+- How do you measure startup performance in production without instrumenting every user?
+- What impact does Baseline Profile have on cold start times?
+- When is it better to defer initialization vs make it lazy?
 
 ## References
 
+**Concepts:**
+- [[c-app-startup]]
 - [[c-content-provider]]
+- [[c-lazy-initialization]]
+- [[c-application-class]]
+- [[c-process-lifecycle]]
+
+**Documentation:**
 - [App Startup Library](https://developer.android.com/topic/libraries/app-startup)
 - [Launch-time Performance](https://developer.android.com/topic/performance/vitals/launch-time)
 - [Perfetto Tracing](https://perfetto.dev/)
+- [Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles)
 
 ## Related Questions
 
@@ -236,6 +244,8 @@ override fun onCreate() {
 ### Related
 - [[q-app-startup-library--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
+- [[q-baseline-profiles--android--medium]]
 
 ### Advanced
 - [[q-android-runtime-internals--android--hard]]
+- [[q-android-process-optimization--android--hard]]

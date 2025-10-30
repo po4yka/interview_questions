@@ -10,39 +10,38 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-bundles--android--easy, q-android-build-optimization--android--medium, q-android-performance-measurement-tools--android--medium]
+related: [q-android-app-bundles--android--easy, q-android-build-optimization--android--medium, q-proguard-r8-configuration--android--medium]
 sources: []
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-10-30
 tags: [android/gradle, android/performance-memory, android/app-bundle, difficulty/medium]
 ---
 
 # Вопрос (RU)
-> Что такое оптимизация размера приложения и какие техники используются для уменьшения размера Android-приложения?
+> Какие техники используются для уменьшения размера Android-приложения?
 
 ---
 
 # Question (EN)
-> What is App Size Optimization and what techniques are used to reduce Android app size?
+> What techniques are used to reduce Android app size?
 
 ---
 
 ## Ответ (RU)
 
-**Оптимизация размера приложения** уменьшает размер APK/AAB через сжатие кода, оптимизацию ресурсов и умную дистрибуцию. Конверсия загрузок падает ~1% на каждые 6МБ, что делает оптимизацию критичной для привлечения пользователей.
+**Оптимизация размера** критична для конверсии: каждые 6 МБ снижают установки на ~1%. Основные векторы атаки — код, ресурсы, нативные библиотеки.
 
-### Основные техники
+### Сжатие кода (R8)
 
-**1. Сжатие и обфускация кода с R8**
-R8 удаляет неиспользуемый код, сокращает имена классов/методов и оптимизирует байткод на этапе сборки.
+R8 удаляет неиспользуемый код (shrinking), сокращает имена (obfuscation), оптимизирует байткод.
 
 ```kotlin
 // build.gradle.kts
 android {
     buildTypes {
         release {
-            isMinifyEnabled = true        // ✅ Включает R8
-            isShrinkResources = true       // ✅ Удаляет неиспользуемые ресурсы
+            isMinifyEnabled = true         // ✅ Включает R8
+            isShrinkResources = true        // ✅ Удаляет неиспользуемые ресурсы
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -52,65 +51,83 @@ android {
 }
 ```
 
-**2. Оптимизация ресурсов**
-Комбинируйте автоматическое сжатие с ручной фильтрацией конфигураций:
+**Результат**: 30-50% уменьшение кода в типичном проекте с зависимостями.
 
+### Оптимизация ресурсов
+
+**Фильтрация конфигураций**:
 ```kotlin
 android {
     defaultConfig {
-        // ✅ Поставляйте только поддерживаемые языки
-        resourceConfigurations += listOf("en", "ru")
-
-        // ✅ Только распространённые плотности экрана
-        resourceConfigurations += listOf("xxhdpi", "xxxhdpi")
+        resourceConfigurations += listOf("en", "ru")         // ✅ Только нужные языки
+        resourceConfigurations += listOf("xxhdpi", "xxxhdpi") // ✅ Целевые плотности
     }
 }
 ```
 
-**3. Сжатие изображений**
-- Конвертируйте PNG/JPG → WebP (на 70-80% меньше)
-- Используйте vector drawables для иконок (уменьшение на 90%+)
-- Не включайте неиспользуемые плотности drawable
+**Сжатие изображений**:
+- PNG/JPG → WebP: экономия 70-80%
+- Vector drawables для иконок: экономия 90%+
+- Удаление неиспользуемых densities через R8
 
-**4. Android App Bundle (AAB)**
-Google Play генерирует APK под конкретные устройства, уменьшая размер загрузки на 40-60%:
+### Android App Bundle (AAB)
+
+Google Play генерирует APK под конкретное устройство:
 
 ```kotlin
 android {
     bundle {
-        language.enableSplit = true  // ✅ Разделение по языкам
-        density.enableSplit = true   // ✅ Разделение по плотности
-        abi.enableSplit = true       // ✅ Разделение по ABI
+        language.enableSplit = true   // ✅ Разделение по языкам
+        density.enableSplit = true    // ✅ Разделение по плотности
+        abi.enableSplit = true        // ✅ Разделение по ABI (arm64, x86)
     }
 }
 ```
 
-**5. Управление зависимостями**
+**Результат**: экономия 40-60% размера установки против универсального APK.
+
+### Управление зависимостями
+
 ```kotlin
-// ❌ Избегайте: включает всю библиотеку
+// ❌ Избегайте: весь Google Play Services (~10 МБ)
 implementation("com.google.android.gms:play-services")
 
-// ✅ Лучше: выбирайте конкретные модули
+// ✅ Выбирайте модули: только Maps (~2 МБ)
 implementation("com.google.android.gms:play-services-maps")
+```
+
+**Аудит**: используйте `./gradlew app:dependencies` для анализа транзитивных зависимостей.
+
+### Нативные библиотеки
+
+```kotlin
+android {
+    defaultConfig {
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a") // ✅ Только ARM (99% устройств)
+            // ❌ Не включайте x86/x86_64 без необходимости
+        }
+    }
+}
 ```
 
 ---
 
 ## Answer (EN)
 
-**App Size Optimization** reduces APK/AAB size through code shrinking, resource optimization, and smart distribution. Download conversion rates drop ~1% per 6MB, making size optimization critical for user acquisition.
+**App Size Optimization** is critical for conversion: every 6 MB reduces installs by ~1%. Attack vectors: code, resources, native libraries.
 
-### Core Techniques
+### Code Shrinking (R8)
 
-**1. R8 Code Shrinking**
-Removes unused code, shortens identifiers, optimizes bytecode:
+R8 removes unused code (shrinking), shortens names (obfuscation), optimizes bytecode.
 
 ```kotlin
+// build.gradle.kts
 android {
     buildTypes {
         release {
-            isMinifyEnabled = true        // ✅ Enables R8
-            isShrinkResources = true       // ✅ Removes unused resources
+            isMinifyEnabled = true         // ✅ Enables R8
+            isShrinkResources = true        // ✅ Removes unused resources
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -120,56 +137,80 @@ android {
 }
 ```
 
-**2. Resource Filtering**
-Ship only necessary configurations:
+**Result**: 30-50% code reduction in typical projects with dependencies.
 
+### Resource Optimization
+
+**Configuration Filtering**:
 ```kotlin
 android {
     defaultConfig {
-        // ✅ Filter languages and densities
-        resourceConfigurations += listOf("en", "ru", "xxhdpi", "xxxhdpi")
+        resourceConfigurations += listOf("en", "ru")         // ✅ Only needed languages
+        resourceConfigurations += listOf("xxhdpi", "xxxhdpi") // ✅ Target densities
     }
 }
 ```
 
-**3. Image Optimization**
-- PNG/JPG → WebP: 70-80% smaller
+**Image Compression**:
+- PNG/JPG → WebP: 70-80% savings
 - Vector drawables for icons: 90%+ reduction
+- Remove unused densities via R8
 
-**4. Android App Bundle**
-Google Play generates device-specific APKs (40-60% smaller):
+### Android App Bundle (AAB)
+
+Google Play generates device-specific APKs:
 
 ```kotlin
 android {
     bundle {
-        language.enableSplit = true  // ✅ Language splits
-        density.enableSplit = true   // ✅ Density splits
-        abi.enableSplit = true       // ✅ ABI splits
+        language.enableSplit = true   // ✅ Language splits
+        density.enableSplit = true    // ✅ Density splits
+        abi.enableSplit = true        // ✅ ABI splits (arm64, x86)
     }
 }
 ```
 
-**5. Dependency Management**
+**Result**: 40-60% install size savings vs. universal APK.
+
+### Dependency Management
+
 ```kotlin
-// ❌ Avoid: entire library
+// ❌ Avoid: entire Google Play Services (~10 MB)
 implementation("com.google.android.gms:play-services")
 
-// ✅ Cherry-pick modules
+// ✅ Cherry-pick modules: only Maps (~2 MB)
 implementation("com.google.android.gms:play-services-maps")
+```
+
+**Audit**: use `./gradlew app:dependencies` to analyze transitive dependencies.
+
+### Native Libraries
+
+```kotlin
+android {
+    defaultConfig {
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a") // ✅ Only ARM (99% devices)
+            // ❌ Don't include x86/x86_64 unless required
+        }
+    }
+}
 ```
 
 ---
 
 ## Follow-ups
 
-- How do you measure the impact of app size on conversion rates?
+- How do you measure app size impact on conversion rates in production?
 - When should you use dynamic feature modules vs. instant apps?
-- How does R8 differ from ProGuard in terms of optimization capabilities?
-- What are the trade-offs between AAB splits and maintaining a universal APK?
-- How do you prevent R8 from removing code used via reflection?
+- What are the trade-offs of aggressive R8 optimization in debugging crashes?
+- How do you handle ProGuard rules for libraries using reflection or JNI?
+- What metrics indicate over-aggressive resource stripping in production?
 
 ## References
 
+- [[c-app-bundle]] - AAB format and split APK generation
+- [[c-r8-shrinking]] - R8 optimization internals
 - [Shrink Your App (Official Docs)](https://developer.android.com/studio/build/shrink-code)
 - [Android App Bundle Guide](https://developer.android.com/guide/app-bundle)
 - [R8 Optimization](https://developer.android.com/studio/build/r8)
@@ -181,10 +222,10 @@ implementation("com.google.android.gms:play-services-maps")
 - [[q-gradle-build-basics--android--easy]] - Gradle configuration fundamentals
 
 ### Related
-- [[q-android-build-optimization--android--medium]] - Build performance and optimization
-- [[q-android-performance-measurement-tools--android--medium]] - Profiling and analysis tools
+- [[q-android-build-optimization--android--medium]] - Build performance optimization
 - [[q-proguard-r8-configuration--android--medium]] - Advanced R8/ProGuard rules
+- [[q-android-performance-measurement-tools--android--medium]] - Profiling and analysis tools
 
 ### Advanced
 - [[q-dynamic-feature-modules--android--hard]] - On-demand feature delivery
-- [[q-android-security-obfuscation--android--hard]] - Code protection and reverse engineering
+- [[q-android-security-obfuscation--android--hard]] - Code protection strategies
