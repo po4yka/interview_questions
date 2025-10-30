@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android, android/ui-compose, android/performance-rendering, compose, recomposition, difficulty/hard]
+date created: Thursday, October 30th 2025, 12:57:11 pm
+date modified: Thursday, October 30th 2025, 2:17:18 pm
 ---
+
 # Вопрос (RU)
 
 Как можно уменьшить количество рекомпозиций помимо side-эффектов?

@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android, android/broadcast-receiver, android/lifecycle, difficulty/medium]
 sources: []
+date created: Monday, October 27th 2025, 5:05:25 pm
+date modified: Thursday, October 30th 2025, 2:17:32 pm
 ---
+
 # Вопрос (RU)
 
 Как зарегистрировать BroadcastReceiver для получения сообщений?

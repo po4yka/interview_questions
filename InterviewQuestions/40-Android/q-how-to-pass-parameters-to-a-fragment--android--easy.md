@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/fragment, android/serialization, fragment, bundle, data-passing, difficulty/easy]
+date created: Thursday, October 30th 2025, 12:57:36 pm
+date modified: Thursday, October 30th 2025, 2:17:20 pm
 ---
+
 # Вопрос (RU)
 
 Как передать параметры во фрагмент?

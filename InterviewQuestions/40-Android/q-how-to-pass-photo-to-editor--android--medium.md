@@ -15,7 +15,10 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, image-processing, difficulty/medium]
+date created: Thursday, October 30th 2025, 12:58:05 pm
+date modified: Thursday, October 30th 2025, 2:17:19 pm
 ---
+
 # Вопрос (RU)
 
 Как передать фотографию в редактор — внутри приложения и во внешнее приложение?
