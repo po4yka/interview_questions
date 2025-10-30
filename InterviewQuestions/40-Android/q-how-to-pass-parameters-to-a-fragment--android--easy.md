@@ -1,27 +1,50 @@
 ---
-id: 20251012-1227190
+id: 20251012-122719
 title: "How To Pass Parameters To A Fragment / Как передать параметры во Fragment"
+aliases: [Pass Parameters to Fragment, Передача параметров во фрагмент]
 topic: android
-difficulty: medium
+subtopics: [fragment, serialization]
+question_kind: android
+difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-internal-app-distribution--distribution--medium, q-proguard-r8--android--medium, q-what-is-broadcastreceiver--android--easy]
+related: [q-what-is-fragment--android--easy, q-fragment-lifecycle--android--easy, q-viewmodel-in-fragment--android--medium]
 created: 2025-10-15
-tags: [android, bundle, data-passing, difficulty/medium, ui]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:23 pm
+updated: 2025-10-30
+sources: []
+tags: [android/fragment, android/serialization, fragment, bundle, data-passing, difficulty/easy]
 ---
-
-# How to Pass Parameters to a Fragment?
-
 # Вопрос (RU)
 
-Как передать параметры во фрагмент
+Как передать параметры во фрагмент?
 
-## Answer (EN)
-The recommended and safe way to pass parameters to a Fragment in Android is using **Bundle** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
+# Question (EN)
 
-### 1. Basic Approach - Using Bundle
+How to pass parameters to a Fragment?
+
+---
+
+## Ответ (RU)
+
+Рекомендуемый и безопасный способ передачи параметров во фрагмент в Android — использование **Bundle** через свойство `arguments` фрагмента. Этот подход поддерживается системой Android и переживает изменения конфигурации (например, поворот экрана).
+
+### Основные принципы
+
+1. **Фабричный метод (Factory Method)**
+   Создайте статический метод `newInstance()` в companion object, который принимает параметры и возвращает экземпляр фрагмента с установленным Bundle.
+
+2. **Bundle для примитивов и простых типов**
+   Используйте `Bundle.putInt()`, `putString()`, `putBoolean()` и т.д. для передачи примитивных типов.
+
+3. **Parcelable для сложных объектов**
+   Для передачи пользовательских объектов используйте интерфейс `Parcelable` и аннотацию `@Parcelize`.
+
+4. **Извлечение в onCreate()**
+   Получайте аргументы в методе `onCreate()` через `requireArguments()` или `arguments?.let {}`.
+
+### Пример 1: Передача примитивных типов
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -30,7 +53,7 @@ class DetailsFragment : Fragment() {
         private const val ARG_ITEM_ID = "item_id"
         private const val ARG_ITEM_NAME = "item_name"
 
-        // Factory method to create fragment with arguments
+        // ✅ Фабричный метод создания фрагмента с аргументами
         fun newInstance(itemId: Int, itemName: String): DetailsFragment {
             return DetailsFragment().apply {
                 arguments = Bundle().apply {
@@ -41,102 +64,39 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private var itemId: Int = -1
-    private var itemName: String? = null
+    private val itemId: Int by lazy {
+        requireArguments().getInt(ARG_ITEM_ID)
+    }
+
+    private val itemName: String by lazy {
+        requireArguments().getString(ARG_ITEM_NAME) ?: ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Extract arguments
-        arguments?.let {
-            itemId = it.getInt(ARG_ITEM_ID, -1)
-            itemName = it.getString(ARG_ITEM_NAME)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_details, container, false)
-
-        // Use the parameters
-        view.findViewById<TextView>(R.id.textView).text = "ID: $itemId, Name: $itemName"
-
-        return view
+        // Параметры уже инициализированы через lazy-делегаты
     }
 }
 
-// Usage in Activity or another Fragment
-class MainActivity : AppCompatActivity() {
-    private fun showDetailsFragment() {
-        val fragment = DetailsFragment.newInstance(
-            itemId = 42,
-            itemName = "Sample Item"
-        )
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-}
+// Использование в Activity
+val fragment = DetailsFragment.newInstance(
+    itemId = 42,
+    itemName = "Sample Item"
+)
+supportFragmentManager.beginTransaction()
+    .replace(R.id.fragment_container, fragment)
+    .commit()
 ```
 
-### 2. Using requireArguments() - Kotlin Way
+### Пример 2: Передача сложных объектов через Parcelable
 
 ```kotlin
-class UserFragment : Fragment() {
-
-    companion object {
-        private const val ARG_USER_ID = "user_id"
-        private const val ARG_USER_EMAIL = "user_email"
-        private const val ARG_IS_PREMIUM = "is_premium"
-
-        fun newInstance(userId: Long, email: String, isPremium: Boolean) = UserFragment().apply {
-            arguments = Bundle().apply {
-                putLong(ARG_USER_ID, userId)
-                putString(ARG_USER_EMAIL, email)
-                putBoolean(ARG_IS_PREMIUM, isPremium)
-            }
-        }
-    }
-
-    // Lazy initialization from arguments
-    private val userId: Long by lazy {
-        requireArguments().getLong(ARG_USER_ID)
-    }
-
-    private val userEmail: String by lazy {
-        requireArguments().getString(ARG_USER_EMAIL) ?: ""
-    }
-
-    private val isPremium: Boolean by lazy {
-        requireArguments().getBoolean(ARG_IS_PREMIUM, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Use the arguments
-        view.findViewById<TextView>(R.id.tvUserId).text = "User ID: $userId"
-        view.findViewById<TextView>(R.id.tvEmail).text = "Email: $userEmail"
-        view.findViewById<TextView>(R.id.tvPremium).text = "Premium: $isPremium"
-    }
-}
-```
-
-### 3. Passing Complex Objects - Parcelable/Serializable
-
-```kotlin
-// Data class with Parcelable
+// Data класс с Parcelable
 @Parcelize
 data class User(
     val id: Long,
     val name: String,
-    val email: String,
-    val age: Int
+    val email: String
 ) : Parcelable
 
 class ProfileFragment : Fragment() {
@@ -152,6 +112,7 @@ class ProfileFragment : Fragment() {
     }
 
     private val user: User by lazy {
+        // ✅ Безопасное извлечение Parcelable для разных версий API
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requireArguments().getParcelable(ARG_USER, User::class.java)!!
         } else {
@@ -159,259 +120,65 @@ class ProfileFragment : Fragment() {
             requireArguments().getParcelable(ARG_USER)!!
         }
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        view.findViewById<TextView>(R.id.tvName).text = user.name
-        view.findViewById<TextView>(R.id.tvEmail).text = user.email
-        view.findViewById<TextView>(R.id.tvAge).text = "Age: ${user.age}"
-    }
 }
-
-// Usage
-val user = User(id = 1L, name = "John Doe", email = "john@example.com", age = 30)
-val fragment = ProfileFragment.newInstance(user)
 ```
 
-### 4. Passing Lists and Arrays
+### Пример 3: Использование requireArguments()
 
 ```kotlin
-class ItemListFragment : Fragment() {
+class UserFragment : Fragment() {
 
     companion object {
-        private const val ARG_ITEM_IDS = "item_ids"
-        private const val ARG_ITEM_NAMES = "item_names"
-        private const val ARG_ITEMS = "items"
+        private const val ARG_USER_ID = "user_id"
+        private const val ARG_EMAIL = "user_email"
 
-        // Passing primitive arrays
-        fun newInstance(ids: IntArray, names: Array<String>) = ItemListFragment().apply {
+        fun newInstance(userId: Long, email: String) = UserFragment().apply {
             arguments = Bundle().apply {
-                putIntArray(ARG_ITEM_IDS, ids)
-                putStringArray(ARG_ITEM_NAMES, names)
-            }
-        }
-
-        // Passing ArrayList of Parcelable
-        fun newInstance(items: ArrayList<Item>) = ItemListFragment().apply {
-            arguments = Bundle().apply {
-                putParcelableArrayList(ARG_ITEMS, items)
+                putLong(ARG_USER_ID, userId)
+                putString(ARG_EMAIL, email)
             }
         }
     }
 
-    private val itemIds: IntArray by lazy {
-        requireArguments().getIntArray(ARG_ITEM_IDS) ?: intArrayOf()
+    // ✅ Ленивая инициализация через requireArguments()
+    private val userId: Long by lazy {
+        requireArguments().getLong(ARG_USER_ID)
     }
 
-    private val itemNames: Array<String> by lazy {
-        requireArguments().getStringArray(ARG_ITEM_NAMES) ?: emptyArray()
-    }
-
-    private val items: ArrayList<Item> by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getParcelableArrayList(ARG_ITEMS, Item::class.java) ?: arrayListOf()
-        } else {
-            @Suppress("DEPRECATION")
-            requireArguments().getParcelableArrayList(ARG_ITEMS) ?: arrayListOf()
-        }
-    }
-}
-
-@Parcelize
-data class Item(val id: Int, val name: String) : Parcelable
-```
-
-### 5. Type-Safe Arguments with Kotlin Extensions
-
-```kotlin
-// Extension functions for type-safe argument handling
-inline fun <reified T : Fragment> T.withArgs(
-    argsBuilder: Bundle.() -> Unit
-): T {
-    return this.apply {
-        arguments = Bundle().apply(argsBuilder)
-    }
-}
-
-// Usage becomes cleaner
-class ProductFragment : Fragment() {
-
-    companion object {
-        private const val ARG_PRODUCT_ID = "product_id"
-        private const val ARG_PRODUCT_NAME = "product_name"
-        private const val ARG_PRICE = "price"
-
-        fun newInstance(productId: Long, name: String, price: Double) =
-            ProductFragment().withArgs {
-                putLong(ARG_PRODUCT_ID, productId)
-                putString(ARG_PRODUCT_NAME, name)
-                putDouble(ARG_PRICE, price)
-            }
-    }
-
-    private val productId by lazy { requireArguments().getLong(ARG_PRODUCT_ID) }
-    private val productName by lazy { requireArguments().getString(ARG_PRODUCT_NAME) ?: "" }
-    private val price by lazy { requireArguments().getDouble(ARG_PRICE) }
-}
-```
-
-### 6. Safe Args Plugin (Navigation Component)
-
-With Navigation Component, use Safe Args for compile-time safety:
-
-```kotlin
-// In build.gradle
-plugins {
-    id("androidx.navigation.safeargs.kotlin")
-}
-
-// In navigation XML
-<fragment
-    android:id="@+id/detailsFragment"
-    android:name="com.example.DetailsFragment"
-    tools:layout="@layout/fragment_details">
-
-    <argument
-        android:name="itemId"
-        app:argType="integer" />
-    <argument
-        android:name="itemName"
-        app:argType="string" />
-</fragment>
-
-// Generated code usage
-class DetailsFragment : Fragment() {
-
-    private val args: DetailsFragmentArgs by navArgs()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Type-safe access
-        val itemId = args.itemId
-        val itemName = args.itemName
-
-        view.findViewById<TextView>(R.id.textView).text = "ID: $itemId, Name: $itemName"
-    }
-}
-
-// Navigating with Safe Args
-class HomeFragment : Fragment() {
-    private fun navigateToDetails() {
-        val action = HomeFragmentDirections.actionHomeToDetails(
-            itemId = 42,
-            itemName = "Sample Item"
-        )
-        findNavController().navigate(action)
+    private val userEmail: String by lazy {
+        requireArguments().getString(ARG_EMAIL) ?: ""
     }
 }
 ```
 
-### 7. Arguments Validation
+### Лучшие практики
+
+1. ✅ **Всегда используйте Bundle и arguments** — не передавайте данные через конструктор
+2. ✅ **Создавайте фабричные методы** (`newInstance`) в companion object
+3. ✅ **Извлекайте аргументы в onCreate()** или используйте lazy-делегаты
+4. ✅ **Используйте константы** для ключей Bundle
+5. ✅ **Предпочитайте Parcelable вместо Serializable** для лучшей производительности
+6. ❌ **Никогда не передавайте данные через конструктор** — они теряются при пересоздании
+7. ❌ **Не используйте setter-методы** — небезопасно при изменении конфигурации
+
+### Распространённые ошибки
 
 ```kotlin
-class ValidatedFragment : Fragment() {
-
-    companion object {
-        private const val ARG_REQUIRED_ID = "required_id"
-        private const val ARG_OPTIONAL_NAME = "optional_name"
-
-        fun newInstance(id: Long, name: String? = null) = ValidatedFragment().apply {
-            arguments = Bundle().apply {
-                putLong(ARG_REQUIRED_ID, id)
-                name?.let { putString(ARG_OPTIONAL_NAME, it) }
-            }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Validate required arguments
-        val args = arguments ?: throw IllegalStateException("Fragment arguments are required")
-
-        if (!args.containsKey(ARG_REQUIRED_ID)) {
-            throw IllegalArgumentException("Required argument ARG_REQUIRED_ID is missing")
-        }
-    }
-
-    private val requiredId: Long by lazy {
-        requireArguments().getLong(ARG_REQUIRED_ID)
-    }
-
-    private val optionalName: String? by lazy {
-        arguments?.getString(ARG_OPTIONAL_NAME)
-    }
-}
-```
-
-### 8. Bundle Extension Functions
-
-```kotlin
-// Helper extension functions
-fun Bundle.putArguments(vararg pairs: Pair<String, Any?>) {
-    pairs.forEach { (key, value) ->
-        when (value) {
-            is String -> putString(key, value)
-            is Int -> putInt(key, value)
-            is Long -> putLong(key, value)
-            is Boolean -> putBoolean(key, value)
-            is Float -> putFloat(key, value)
-            is Double -> putDouble(key, value)
-            is Parcelable -> putParcelable(key, value)
-            is Serializable -> putSerializable(key, value)
-            else -> throw IllegalArgumentException("Unsupported type: ${value?.javaClass}")
-        }
-    }
-}
-
-// Usage
-class SimpleFragment : Fragment() {
-    companion object {
-        fun newInstance(id: Int, name: String, active: Boolean) = SimpleFragment().apply {
-            arguments = Bundle().apply {
-                putArguments(
-                    "id" to id,
-                    "name" to name,
-                    "active" to active
-                )
-            }
-        }
-    }
-}
-```
-
-### Best Practices
-
-1. - **Always use Bundle and arguments**
-2. - **Create factory methods** (newInstance) in companion object
-3. - **Extract arguments in onCreate()**, not in constructors
-4. - **Use requireArguments()** for required parameters
-5. - **Use constants** for argument keys
-6. - **Prefer Parcelable** over Serializable for better performance
-7. - **Use Safe Args** with Navigation Component for type safety
-8. - **Never pass data via constructor** - doesn't survive configuration changes
-9. - **Don't use setters** - not safe for configuration changes
-
-### Common Mistakes to Avoid
-
-```kotlin
-// WRONG - Using constructor (doesn't survive configuration changes)
+// ❌ НЕПРАВИЛЬНО - использование конструктора
 class WrongFragment(private val itemId: Int) : Fragment() {
-    // This will lose data on configuration change!
+    // Данные потеряются при повороте экрана!
 }
 
-// WRONG - Using setter methods
+// ❌ НЕПРАВИЛЬНО - использование setter-методов
 class WrongFragment : Fragment() {
     private var itemId: Int = 0
 
     fun setItemId(id: Int) {
-        this.itemId = id  // Lost on configuration change
+        this.itemId = id  // Потеряется при изменении конфигурации
     }
 }
 
-// CORRECT - Using Bundle
+// ✅ ПРАВИЛЬНО - использование Bundle
 class CorrectFragment : Fragment() {
     companion object {
         private const val ARG_ITEM_ID = "item_id"
@@ -423,28 +190,211 @@ class CorrectFragment : Fragment() {
         }
     }
 
-    private val itemId by lazy { requireArguments().getInt(ARG_ITEM_ID) }
+    private val itemId by lazy {
+        requireArguments().getInt(ARG_ITEM_ID)
+    }
 }
 ```
 
-## Ответ (RU)
+## Answer (EN)
 
-Рекомендуемый способ: создать Bundle, положить туда параметры через putString или putInt и установить arguments фрагменту. В onCreate() извлечь через requireArguments(). Это безопасный способ, поддерживаемый Android-системой
+The recommended and safe way to pass parameters to a Fragment in Android is using **Bundle** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
+
+### Basic Principles
+
+1. **Factory Method Pattern**
+   Create a static `newInstance()` method in the companion object that accepts parameters and returns a fragment instance with Bundle set.
+
+2. **Bundle for Primitives**
+   Use `Bundle.putInt()`, `putString()`, `putBoolean()`, etc., for primitive types.
+
+3. **Parcelable for Complex Objects**
+   For custom objects, use the `Parcelable` interface with `@Parcelize` annotation.
+
+4. **Extract in onCreate()**
+   Retrieve arguments in `onCreate()` using `requireArguments()` or `arguments?.let {}`.
+
+### Example 1: Passing Primitive Types
+
+```kotlin
+class DetailsFragment : Fragment() {
+
+    companion object {
+        private const val ARG_ITEM_ID = "item_id"
+        private const val ARG_ITEM_NAME = "item_name"
+
+        // ✅ Factory method to create fragment with arguments
+        fun newInstance(itemId: Int, itemName: String): DetailsFragment {
+            return DetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_ITEM_ID, itemId)
+                    putString(ARG_ITEM_NAME, itemName)
+                }
+            }
+        }
+    }
+
+    private val itemId: Int by lazy {
+        requireArguments().getInt(ARG_ITEM_ID)
+    }
+
+    private val itemName: String by lazy {
+        requireArguments().getString(ARG_ITEM_NAME) ?: ""
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Arguments already initialized via lazy delegates
+    }
+}
+
+// Usage in Activity
+val fragment = DetailsFragment.newInstance(
+    itemId = 42,
+    itemName = "Sample Item"
+)
+supportFragmentManager.beginTransaction()
+    .replace(R.id.fragment_container, fragment)
+    .commit()
+```
+
+### Example 2: Passing Complex Objects via Parcelable
+
+```kotlin
+// Data class with Parcelable
+@Parcelize
+data class User(
+    val id: Long,
+    val name: String,
+    val email: String
+) : Parcelable
+
+class ProfileFragment : Fragment() {
+
+    companion object {
+        private const val ARG_USER = "user"
+
+        fun newInstance(user: User) = ProfileFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(ARG_USER, user)
+            }
+        }
+    }
+
+    private val user: User by lazy {
+        // ✅ Safe Parcelable extraction for different API levels
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable(ARG_USER, User::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            requireArguments().getParcelable(ARG_USER)!!
+        }
+    }
+}
+```
+
+### Example 3: Using requireArguments()
+
+```kotlin
+class UserFragment : Fragment() {
+
+    companion object {
+        private const val ARG_USER_ID = "user_id"
+        private const val ARG_EMAIL = "user_email"
+
+        fun newInstance(userId: Long, email: String) = UserFragment().apply {
+            arguments = Bundle().apply {
+                putLong(ARG_USER_ID, userId)
+                putString(ARG_EMAIL, email)
+            }
+        }
+    }
+
+    // ✅ Lazy initialization using requireArguments()
+    private val userId: Long by lazy {
+        requireArguments().getLong(ARG_USER_ID)
+    }
+
+    private val userEmail: String by lazy {
+        requireArguments().getString(ARG_EMAIL) ?: ""
+    }
+}
+```
+
+### Best Practices
+
+1. ✅ **Always use Bundle and arguments** — never pass data via constructor
+2. ✅ **Create factory methods** (`newInstance`) in companion object
+3. ✅ **Extract arguments in onCreate()** or use lazy delegates
+4. ✅ **Use constants** for Bundle keys
+5. ✅ **Prefer Parcelable over Serializable** for better performance
+6. ❌ **Never pass data via constructor** — lost on configuration change
+7. ❌ **Don't use setter methods** — unsafe for configuration changes
+
+### Common Mistakes
+
+```kotlin
+// ❌ WRONG - Using constructor
+class WrongFragment(private val itemId: Int) : Fragment() {
+    // Data will be lost on screen rotation!
+}
+
+// ❌ WRONG - Using setter methods
+class WrongFragment : Fragment() {
+    private var itemId: Int = 0
+
+    fun setItemId(id: Int) {
+        this.itemId = id  // Lost on configuration change
+    }
+}
+
+// ✅ CORRECT - Using Bundle
+class CorrectFragment : Fragment() {
+    companion object {
+        private const val ARG_ITEM_ID = "item_id"
+
+        fun newInstance(itemId: Int) = CorrectFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_ITEM_ID, itemId)
+            }
+        }
+    }
+
+    private val itemId by lazy {
+        requireArguments().getInt(ARG_ITEM_ID)
+    }
+}
+```
 
 ---
+
+## Follow-ups
+
+1. What happens to fragment arguments during configuration changes?
+2. Why is Parcelable preferred over Serializable for Android?
+3. What is the difference between `arguments` and `requireArguments()`?
+4. Can you pass lambda functions or callbacks via Bundle?
+5. How do you handle optional vs required fragment arguments?
+
+## References
+
+- [[c-fragment]] - Fragment basics and lifecycle
+- [[c-bundle]] - Android Bundle data container
+- [[c-parcelable]] - Parcelable interface for efficient serialization
+- [Android Developer Guide: Fragments](https://developer.android.com/guide/fragments)
+- [Android Developer Guide: Parcelable](https://developer.android.com/reference/android/os/Parcelable)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
-- [[q-fragment-basics--android--easy]] - Fragment
+- [[q-what-is-fragment--android--easy]] - Fragment fundamentals
+- [[q-fragment-lifecycle--android--easy]] - Understanding fragment lifecycle
 
-### Related (Medium)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
-- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
-- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - Fragment
+### Related (Same Level)
+- [[q-fragment-communication--android--easy]] - Communication between fragments
+- [[q-bundle-vs-intent--android--easy]] - Difference between Bundle and Intent
 
 ### Advanced (Harder)
-- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment
+- [[q-viewmodel-in-fragment--android--medium]] - Using ViewModel with fragments
+- [[q-fragment-result-api--android--medium]] - Returning results from fragments
+- [[q-fragment-savedstate--android--hard]] - Fragment state preservation

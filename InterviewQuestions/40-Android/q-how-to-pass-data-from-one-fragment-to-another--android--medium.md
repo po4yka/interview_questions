@@ -1,72 +1,136 @@
 ---
 id: 20251012-1227189
-title: "How To Pass Data From One Fragment To Another / Как передать данные из одного Fragment в другой"
+title: How To Pass Data From One Fragment To Another / Как передать данные из одного Fragment в другой
+aliases: [Pass Data Between Fragments, Fragment Communication, Передача данных между фрагментами]
 topic: android
+subtopics: [fragment, lifecycle, architecture-mvvm]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-opengl-advanced-rendering--graphics--medium, q-primitive-maps-android--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+  - q-fragment-basics--android--easy
+  - q-save-data-outside-fragment--android--medium
+  - q-fragment-vs-activity-lifecycle--android--medium
 created: 2025-10-15
-tags: [android/fragments, android/views, communication, difficulty/medium, fragments, ui, viewmodel, views]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:23 pm
+updated: 2025-10-30
+tags: [android/fragment, android/lifecycle, android/architecture-mvvm, difficulty/medium]
+sources: []
+date created: Thursday, October 30th 2025, 12:51:22 pm
+date modified: Thursday, October 30th 2025, 12:53:12 pm
 ---
 
-# Как Передавать Данные Из Одного Фрагмента В Другой?
+# Вопрос (RU)
+> Как передавать данные из одного фрагмента в другой?
 
-**English**: How to pass data from one fragment to another?
+# Question (EN)
+> How to pass data from one fragment to another?
 
-## Answer (EN)
-Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other. Instead, they should communicate through their parent activity or use a shared ViewModel.
+## Ответ (RU)
 
-### Main Approaches to Passing Data Between Fragments
+Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить, что фрагменты не должны напрямую обмениваться данными друг с другом — они должны общаться через родительскую Activity или использовать общий [[c-viewmodel]].
 
-#### 1. Using Parent Activity as Intermediary
+### Основные Подходы
 
-Fragments communicate through the parent activity using interfaces or activity methods.
+**1. Shared ViewModel (Рекомендуется)**
+
+Современный подход через [[c-viewmodel]], доступный обоим фрагментам через `activityViewModels()`:
 
 ```kotlin
-// Define interface in fragment
-interface OnDataPassListener {
-    fun onDataPass(data: String)
+// ✅ Shared ViewModel для обмена данными
+class SharedViewModel : ViewModel() {
+    private val _selectedData = MutableLiveData<String>()
+    val selectedData: LiveData<String> = _selectedData
+
+    fun setData(data: String) {
+        _selectedData.value = data
+    }
 }
 
-// Fragment A
+// Fragment A — отправляет данные
 class FragmentA : Fragment() {
-    private var listener: OnDataPassListener? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? OnDataPassListener
-    }
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     fun sendData() {
-        listener?.onDataPass("Data from Fragment A")
+        sharedViewModel.setData("Data from Fragment A")  // ✅ Устанавливаем данные
     }
 }
 
-// Activity implements interface
-class MainActivity : AppCompatActivity(), OnDataPassListener {
-    override fun onDataPass(data: String) {
-        val fragmentB = supportFragmentManager.findFragmentByTag("FragmentB") as? FragmentB
-        fragmentB?.receiveData(data)
-    }
-}
-
-// Fragment B receives data
+// Fragment B — получает данные
 class FragmentB : Fragment() {
-    fun receiveData(data: String) {
-        // Use the data
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        sharedViewModel.selectedData.observe(viewLifecycleOwner) { data ->
+            // ✅ Реагируем на изменения данных
+        }
     }
 }
 ```
 
-#### 2. Using Shared ViewModel (Recommended)
+**2. Bundle и Arguments**
 
-Create a ViewModel containing LiveData or other observables for data storage. Access this ViewModel from both fragments through their parent activity.
+Передача данных при создании фрагмента:
 
 ```kotlin
-// Shared ViewModel
+// ✅ Создание фрагмента с данными
+fun createFragmentWithData(data: String): FragmentB {
+    return FragmentB().apply {
+        arguments = Bundle().apply {
+            putString("KEY_DATA", data)
+        }
+    }
+}
+
+// FragmentB — получение данных
+class FragmentB : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val data = arguments?.getString("KEY_DATA")  // ✅ Извлекаем данные
+    }
+}
+```
+
+**3. Activity как посредник (Устаревший)**
+
+```kotlin
+// ❌ Устаревший подход — создаёт связанность
+interface OnDataPassListener {
+    fun onDataPass(data: String)
+}
+
+class MainActivity : AppCompatActivity(), OnDataPassListener {
+    override fun onDataPass(data: String) {
+        val fragmentB = supportFragmentManager.findFragmentByTag("B") as? FragmentB
+        fragmentB?.receiveData(data)  // ❌ Прямая связь Activity → Fragment
+    }
+}
+```
+
+### Когда Использовать
+
+| Подход | Когда использовать |
+|--------|-------------------|
+| **Shared ViewModel** | Динамический обмен данными между фрагментами |
+| **Bundle Arguments** | Передача данных при создании фрагмента |
+| **Activity посредник** | Устаревший подход, избегать |
+
+## Answer (EN)
+
+Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other — they should communicate through their parent Activity or use a shared [[c-viewmodel]].
+
+### Main Approaches
+
+**1. Shared ViewModel (Recommended)**
+
+Modern approach using [[c-viewmodel]] accessible to both fragments via `activityViewModels()`:
+
+```kotlin
+// ✅ Shared ViewModel for data exchange
 class SharedViewModel : ViewModel() {
     private val _selectedData = MutableLiveData<String>()
     val selectedData: LiveData<String> = _selectedData
@@ -81,7 +145,7 @@ class FragmentA : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     fun sendData() {
-        sharedViewModel.setData("Data from Fragment A")
+        sharedViewModel.setData("Data from Fragment A")  // ✅ Set data
     }
 }
 
@@ -93,53 +157,73 @@ class FragmentB : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sharedViewModel.selectedData.observe(viewLifecycleOwner) { data ->
-            // Use the data
+            // ✅ React to data changes
         }
     }
 }
 ```
 
-#### 3. Using Bundle and Fragment Arguments
+**2. Bundle and Arguments**
 
-Create a Bundle and place data in it, use setArguments() to pass the Bundle to a new fragment instance. In the target fragment, extract data from the received Bundle using getArguments().
+Passing data when creating a fragment:
 
 ```kotlin
-// Creating fragment with arguments
+// ✅ Create fragment with data
 fun createFragmentWithData(data: String): FragmentB {
-    val fragment = FragmentB()
-    val bundle = Bundle().apply {
-        putString("KEY_DATA", data)
+    return FragmentB().apply {
+        arguments = Bundle().apply {
+            putString("KEY_DATA", data)
+        }
     }
-    fragment.arguments = bundle
-    return fragment
 }
 
-// Receiving data in target fragment
+// FragmentB - receive data
 class FragmentB : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val data = arguments?.getString("KEY_DATA")
-        // Use the data
+        val data = arguments?.getString("KEY_DATA")  // ✅ Extract data
     }
 }
-
-// Usage
-val fragmentB = createFragmentWithData("My data")
-supportFragmentManager.beginTransaction()
-    .replace(R.id.container, fragmentB)
-    .commit()
 ```
 
-### Best Practice
+**3. Activity as Intermediary (Deprecated)**
 
-The choice of method depends on the specific use case. Modern development often recommends using **ViewModel** for data exchange between fragments, as it promotes creating a reliable and testable application architecture.
+```kotlin
+// ❌ Deprecated approach - creates tight coupling
+interface OnDataPassListener {
+    fun onDataPass(data: String)
+}
 
-## Ответ (RU)
-Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить что фрагменты не должны напрямую обмениваться данными друг с другом. Вместо этого они должны общаться через свою родительскую активность или использовать общий ViewModel. Основные подходы к передаче данных между фрагментами: использование родительской активности как посредника через интерфейс или методы активности. Использование ViewModel для общения между фрагментами. Создайте ViewModel содержащую LiveData или другие обсерваблы для хранения данных. Доступ к этой ViewModel должен быть получен из обоих фрагментов через их родительскую активность. Использование Bundle и аргументов фрагмента для передачи данных при создании нового экземпляра фрагмента. Создайте Bundle и поместите в него данные используйте setArguments для передачи Bundle новому экземпляру фрагмента. В целевом фрагменте извлеките данные из полученного Bundle с помощью метода getArguments. Выбор метода зависит от конкретного случая использования в современной разработке часто рекомендуется использовать ViewModel для обмена данными между фрагментами так как это способствует созданию надежной и тестируемой архитектуры приложения
+class MainActivity : AppCompatActivity(), OnDataPassListener {
+    override fun onDataPass(data: String) {
+        val fragmentB = supportFragmentManager.findFragmentByTag("B") as? FragmentB
+        fragmentB?.receiveData(data)  // ❌ Direct coupling Activity → Fragment
+    }
+}
+```
 
+### When to Use
 
----
+| Approach | When to use |
+|----------|-------------|
+| **Shared ViewModel** | Dynamic data exchange between fragments |
+| **Bundle Arguments** | Passing data when creating fragment |
+| **Activity intermediary** | Deprecated, avoid |
+
+## Follow-ups
+
+- How does shared ViewModel lifecycle differ from fragment lifecycle?
+- What happens if you pass large data via Bundle arguments?
+- How to handle fragment-to-fragment communication in Navigation Component?
+- When should you use FragmentResult API instead of shared ViewModel?
+- How to test fragment communication with shared ViewModel?
+
+## References
+
+- [[c-viewmodel]]
+- [[c-fragments]]
+- [[c-activity-lifecycle]]
+- https://developer.android.com/topic/libraries/architecture/viewmodel
 
 ## Related Questions
 

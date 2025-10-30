@@ -1,58 +1,58 @@
 ---
-id: 20251012-1227192
+id: 20251012-122719
 title: "How To Pass Photo To Editor / Как передать фото в редактор"
+aliases: ["How To Pass Photo To Editor", "Как передать фото в редактор"]
 topic: android
+subtopics: [files-media, intents-deeplinks, ui-graphics]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-storage-types--android--medium, q-multi-module-best-practices--android--hard, q-which-event-is-triggered-when-user-presses-screen--android--medium]
+related: [q-fileprovider-secure-sharing--android--medium, q-what-are-intents-for--android--medium, q-android-storage-types--android--medium]
 created: 2025-10-15
-tags: [bitmap, difficulty/medium, fileprovider, image-processing, intent]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:21 pm
+updated: 2025-10-30
+sources: []
+tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, image-processing, difficulty/medium]
 ---
+# Вопрос (RU)
 
-# How to Pass a Photo to an Editor?
+Как передать фотографию в редактор — внутри приложения и во внешнее приложение?
 
-**Russian**: Как бы передавал фотографию в редактор
+# Question (EN)
 
-## Answer (EN)
-Passing a photo to an editor depends on whether it's an external app or an internal editor within your app.
+How to pass a photo to an editor — both within your app and to an external app?
 
-### 1. External Editor (Another App)
+## Ответ (RU)
 
-Use Intent with `ACTION_EDIT`:
+Передача фотографии зависит от того, внешний это редактор (другое приложение) или внутренний (ваше приложение).
+
+### 1. Внешний Редактор
+
+Используйте Intent с `ACTION_EDIT`:
 
 ```kotlin
-fun openPhotoInExternalEditor(context: Context, photoUri: Uri) {
+fun openExternalEditor(context: Context, photoUri: Uri) {
     val intent = Intent(Intent.ACTION_EDIT).apply {
         setDataAndType(photoUri, "image/*")
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 
+    // ✅ Проверка наличия редактора
     try {
-        context.startActivity(Intent.createChooser(intent, "Choose editor"))
+        context.startActivity(Intent.createChooser(intent, "Выберите редактор"))
     } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "No image editor found", Toast.LENGTH_SHORT).show()
+        // ❌ Редактор не найден
     }
 }
-
-// Usage
-val photoUri = FileProvider.getUriForFile(
-    context,
-    "${context.packageName}.fileprovider",
-    photoFile
-)
-openPhotoInExternalEditor(context, photoUri)
 ```
 
-### 2. Internal Editor (Your App)
+### 2. Внутренний Редактор
 
-#### Method A: Pass URI via Intent
+**Вариант A: Передача URI через Intent** (РЕКОМЕНДУЕТСЯ)
 
 ```kotlin
-// Open editor activity
 fun openInternalEditor(context: Context, photoFile: File) {
     val uri = FileProvider.getUriForFile(
         context,
@@ -61,441 +61,33 @@ fun openInternalEditor(context: Context, photoFile: File) {
     )
 
     val intent = Intent(context, PhotoEditorActivity::class.java).apply {
-        putExtra(EXTRA_PHOTO_URI, uri.toString())
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-
-    context.startActivity(intent)
-}
-
-// PhotoEditorActivity
-class PhotoEditorActivity : AppCompatActivity() {
-
-    companion object {
-        const val EXTRA_PHOTO_URI = "photo_uri"
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_editor)
-
-        val uriString = intent.getStringExtra(EXTRA_PHOTO_URI)
-        val uri = uriString?.let { Uri.parse(it) }
-
-        uri?.let {
-            loadImage(it)
-        }
-    }
-
-    private fun loadImage(uri: Uri) {
-        // Load image from URI
-        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
-        } else {
-            MediaStore.Images.Media.getBitmap(contentResolver, uri)
-        }
-
-        imageView.setImageBitmap(bitmap)
-    }
-}
-```
-
-#### Method B: Pass Bitmap via Intent (Small Images Only)
-
-```kotlin
-fun openEditorWithBitmap(context: Context, bitmap: Bitmap) {
-    // Compress bitmap
-    val stream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-    val byteArray = stream.toByteArray()
-
-    // WARNING: Bitmaps have size limit (~1MB for Intents)
-    if (byteArray.size < 1_000_000) {
-        val intent = Intent(context, PhotoEditorActivity::class.java).apply {
-            putExtra("PHOTO_BYTES", byteArray)
-        }
-        context.startActivity(intent)
-    } else {
-        // Use file-based approach instead
-        Toast.makeText(context, "Image too large for direct transfer", Toast.LENGTH_SHORT).show()
-    }
-}
-
-// Receive in editor
-class PhotoEditorActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val byteArray = intent.getByteArrayExtra("PHOTO_BYTES")
-        byteArray?.let {
-            val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
-            imageView.setImageBitmap(bitmap)
-        }
-    }
-}
-```
-
-#### Method C: Save to Temp File and Pass Path
-
-```kotlin
-fun openEditorWithTempFile(context: Context, bitmap: Bitmap) {
-    // Save to temp file
-    val tempFile = File(context.cacheDir, "temp_edit_${System.currentTimeMillis()}.jpg")
-    FileOutputStream(tempFile).use { out ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-    }
-
-    // Pass file URI
-    val uri = FileProvider.getUriForFile(
-        context,
-        "${context.packageName}.fileprovider",
-        tempFile
-    )
-
-    val intent = Intent(context, PhotoEditorActivity::class.java).apply {
         putExtra("PHOTO_URI", uri.toString())
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-
     context.startActivity(intent)
 }
 ```
 
-### 3. Complete Example with FileProvider
-
-#### AndroidManifest.xml
-
-```xml
-<application>
-    <provider
-        android:name="androidx.core.content.FileProvider"
-        android:authorities="${applicationId}.fileprovider"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/file_paths" />
-    </provider>
-
-    <activity android:name=".PhotoEditorActivity" />
-</application>
-```
-
-#### res/xml/file_paths.xml
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <cache-path name="shared_images" path="images/" />
-    <files-path name="app_images" path="images/" />
-    <external-files-path name="external_images" path="images/" />
-</paths>
-```
-
-#### PhotoManager.kt
+**Вариант B: ByteArray** (только для маленьких изображений < 1MB)
 
 ```kotlin
-class PhotoManager(private val context: Context) {
-
-    fun openPhotoEditor(photoFile: File) {
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            photoFile
-        )
-
-        val intent = Intent(context, PhotoEditorActivity::class.java).apply {
-            putExtra(PhotoEditorActivity.EXTRA_PHOTO_URI, uri.toString())
-            putExtra(PhotoEditorActivity.EXTRA_PHOTO_PATH, photoFile.absolutePath)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        }
-
-        context.startActivity(intent)
-    }
-
-    fun savePhotoToCache(bitmap: Bitmap): File {
-        val imagesDir = File(context.cacheDir, "images")
-        imagesDir.mkdirs()
-
-        val imageFile = File(imagesDir, "photo_${System.currentTimeMillis()}.jpg")
-        FileOutputStream(imageFile).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-        }
-
-        return imageFile
-    }
-}
-```
-
-#### PhotoEditorActivity.kt
-
-```kotlin
-class PhotoEditorActivity : AppCompatActivity() {
-
-    companion object {
-        const val EXTRA_PHOTO_URI = "photo_uri"
-        const val EXTRA_PHOTO_PATH = "photo_path"
-    }
-
-    private lateinit var originalBitmap: Bitmap
-    private var currentBitmap: Bitmap? = null
-    private var photoPath: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_editor)
-
-        photoPath = intent.getStringExtra(EXTRA_PHOTO_PATH)
-        val uriString = intent.getStringExtra(EXTRA_PHOTO_URI)
-        val uri = uriString?.let { Uri.parse(it) }
-
-        uri?.let {
-            loadImage(it)
-        }
-
-        setupEditorControls()
-    }
-
-    private fun loadImage(uri: Uri) {
-        try {
-            originalBitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
-            } else {
-                @Suppress("DEPRECATION")
-                MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            }
-
-            currentBitmap = originalBitmap.copy(originalBitmap.config, true)
-            imageView.setImageBitmap(currentBitmap)
-
-        } catch (e: Exception) {
-            Toast.makeText(this, "Error loading image", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-    }
-
-    private fun setupEditorControls() {
-        btnRotate.setOnClickListener {
-            currentBitmap = rotateBitmap(currentBitmap!!, 90f)
-            imageView.setImageBitmap(currentBitmap)
-        }
-
-        btnCrop.setOnClickListener {
-            // Implement crop functionality
-        }
-
-        btnFilter.setOnClickListener {
-            // Implement filter functionality
-        }
-
-        btnSave.setOnClickListener {
-            saveEditedImage()
-        }
-
-        btnCancel.setOnClickListener {
-            finish()
-        }
-    }
-
-    private fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
-        val matrix = Matrix().apply { postRotate(degrees) }
-        return Bitmap.createBitmap(
-            bitmap,
-            0,
-            0,
-            bitmap.width,
-            bitmap.height,
-            matrix,
-            true
-        )
-    }
-
-    private fun saveEditedImage() {
-        currentBitmap?.let { bitmap ->
-            photoPath?.let { path ->
-                try {
-                    FileOutputStream(path).use { out ->
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-                    }
-
-                    setResult(RESULT_OK, Intent().apply {
-                        putExtra("edited_path", path)
-                    })
-                    finish()
-
-                } catch (e: Exception) {
-                    Toast.makeText(this, "Error saving image", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        currentBitmap?.recycle()
-        if (currentBitmap != originalBitmap) {
-            originalBitmap.recycle()
-        }
-    }
-}
-```
-
-### 4. From Network (Byte Array)
-
-```kotlin
-// Downloading image from server
-suspend fun downloadAndEdit(imageUrl: String) {
-    withContext(Dispatchers.IO) {
-        val response = apiService.downloadImage(imageUrl)
-        val byteArray = response.bytes()
-
-        withContext(Dispatchers.Main) {
-            // Save to temp file
-            val tempFile = File(context.cacheDir, "downloaded_image.jpg")
-            tempFile.writeBytes(byteArray)
-
-            // Open editor
-            val uri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.fileprovider",
-                tempFile
-            )
-
-            openEditor(uri)
-        }
-    }
-}
-```
-
-### 5. Jetpack Compose Approach
-
-```kotlin
-@Composable
-fun PhotoEditScreen(photoUri: Uri) {
-    val context = LocalContext.current
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
-
-    LaunchedEffect(photoUri) {
-        withContext(Dispatchers.IO) {
-            try {
-                val loadedBitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(context.contentResolver, photoUri)
-                    )
-                } else {
-                    @Suppress("DEPRECATION")
-                    MediaStore.Images.Media.getBitmap(context.contentResolver, photoUri)
-                }
-                bitmap = loadedBitmap
-            } catch (e: Exception) {
-                // Handle error
-            }
-        }
-    }
-
-    bitmap?.let {
-        PhotoEditor(
-            bitmap = it,
-            onSave = { editedBitmap ->
-                // Save edited bitmap
-            },
-            onCancel = {
-                // Handle cancel
-            }
-        )
-    }
-}
-
-@Composable
-fun PhotoEditor(
-    bitmap: Bitmap,
-    onSave: (Bitmap) -> Unit,
-    onCancel: () -> Unit
-) {
-    Column {
-        Image(
-            bitmap = bitmap.asImageBitmap(),
-            contentDescription = "Photo to edit"
-        )
-
-        Row {
-            Button(onClick = { onSave(bitmap) }) {
-                Text("Save")
-            }
-            Button(onClick = onCancel) {
-                Text("Cancel")
-            }
-        }
-    }
-}
-```
-
-### Best Practices
-
-1. **Use FileProvider** for Android 7.0+ (API 24+)
-2. **Grant URI permissions** when sharing with external apps
-3. **Handle large images carefully** - don't pass via Intent extras
-4. **Use proper image formats** - JPEG for photos, PNG for graphics
-5. **Manage memory** - recycle bitmaps when done
-6. **Handle errors gracefully** - check if editor app exists
-7. **Save to appropriate location** - cache for temp, files for permanent
-
-### Common Pitfalls
-
-```kotlin
-// - BAD: Large bitmap via Intent
-val bitmap = BitmapFactory.decodeFile(largefile)
+// ❌ ПЛОХО: Большой bitmap через Intent
+val bitmap = BitmapFactory.decodeFile(largeFile)
 intent.putExtra("bitmap", bitmap) // TransactionTooLargeException!
 
-// - GOOD: Use URI
-val uri = FileProvider.getUriForFile(context, authority, file)
-intent.putExtra("uri", uri.toString())
-```
+// ✅ ХОРОШО: Проверка размера
+val stream = ByteArrayOutputStream()
+bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+val bytes = stream.toByteArray()
 
----
-
-## Ответ (RU)
-
-Передача фото в редактор зависит от того, является ли он внешним приложением или встроенным редактором.
-
-### 1. Внешний Редактор (Другое приложение)
-
-Используйте Intent с `ACTION_EDIT`:
-
-```kotlin
-fun openPhotoInExternalEditor(context: Context, photoUri: Uri) {
-    val intent = Intent(Intent.ACTION_EDIT).apply {
-        setDataAndType(photoUri, "image/*")
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-    }
-
-    try {
-        context.startActivity(Intent.createChooser(intent, "Выберите редактор"))
-    } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "Редактор изображений не найден", Toast.LENGTH_SHORT).show()
-    }
+if (bytes.size < 1_000_000) {
+    intent.putExtra("PHOTO_BYTES", bytes)
+} else {
+    // Используйте вариант A
 }
 ```
 
-### 2. Внутренний Редактор (Ваше приложение)
-
-**Метод A: Передача URI через Intent**
-
-Используйте FileProvider для безопасной передачи URI файла между компонентами приложения. Создайте PhotoEditorActivity и передайте URI через Intent extras.
-
-**Метод B: Передача Bitmap через Intent (Только для маленьких изображений)**
-
-Сжимайте bitmap в ByteArray и передавайте через Intent. Внимание: размер ограничен ~1MB.
-
-**Метод C: Сохранение во временный файл и передача пути**
-
-Сохраните bitmap во временный файл в cache директории, затем передайте URI файла через Intent.
-
-### 3. Полный Пример С FileProvider
-
-Для безопасной передачи файлов между компонентами используйте FileProvider:
+### 3. FileProvider Setup
 
 **AndroidManifest.xml:**
 ```xml
@@ -515,56 +107,15 @@ fun openPhotoInExternalEditor(context: Context, photoUri: Uri) {
 <paths>
     <cache-path name="shared_images" path="images/" />
     <files-path name="app_images" path="images/" />
-    <external-files-path name="external_images" path="images/" />
 </paths>
 ```
 
-### 4. PhotoManager Класс
-
-Создайте централизованный класс для управления фотографиями:
-
-```kotlin
-class PhotoManager(private val context: Context) {
-
-    fun openPhotoEditor(photoFile: File) {
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            photoFile
-        )
-
-        val intent = Intent(context, PhotoEditorActivity::class.java).apply {
-            putExtra("PHOTO_URI", uri.toString())
-            putExtra("PHOTO_PATH", photoFile.absolutePath)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-
-        context.startActivity(intent)
-    }
-
-    fun savePhotoToCache(bitmap: Bitmap): File {
-        val imagesDir = File(context.cacheDir, "images")
-        imagesDir.mkdirs()
-
-        val imageFile = File(imagesDir, "photo_${System.currentTimeMillis()}.jpg")
-        FileOutputStream(imageFile).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
-        }
-
-        return imageFile
-    }
-}
-```
-
-### 5. PhotoEditorActivity
-
-Редактор получает фото и обрабатывает его:
+### 4. PhotoEditorActivity
 
 ```kotlin
 class PhotoEditorActivity : AppCompatActivity() {
 
-    private lateinit var originalBitmap: Bitmap
-    private var currentBitmap: Bitmap? = null
+    private var bitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -576,49 +127,247 @@ class PhotoEditorActivity : AppCompatActivity() {
     }
 
     private fun loadImage(uri: Uri) {
-        try {
-            originalBitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
+        } else {
+            @Suppress("DEPRECATION")
+            MediaStore.Images.Media.getBitmap(contentResolver, uri)
+        }
+        imageView.setImageBitmap(bitmap)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // ✅ Освобождение памяти
+        bitmap?.recycle()
+    }
+}
+```
+
+### 5. Jetpack Compose
+
+```kotlin
+@Composable
+fun PhotoEditorScreen(photoUri: Uri) {
+    val context = LocalContext.current
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    LaunchedEffect(photoUri) {
+        withContext(Dispatchers.IO) {
+            bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 ImageDecoder.decodeBitmap(
-                    ImageDecoder.createSource(contentResolver, uri)
+                    ImageDecoder.createSource(context.contentResolver, photoUri)
                 )
             } else {
-                MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                @Suppress("DEPRECATION")
+                MediaStore.Images.Media.getBitmap(context.contentResolver, photoUri)
             }
-
-            currentBitmap = originalBitmap.copy(originalBitmap.config, true)
-            imageView.setImageBitmap(currentBitmap)
-        } catch (e: Exception) {
-            Toast.makeText(this, "Ошибка загрузки изображения", Toast.LENGTH_SHORT).show()
-            finish()
         }
+    }
+
+    bitmap?.let {
+        Image(
+            bitmap = it.asImageBitmap(),
+            contentDescription = "Редактируемое фото"
+        )
     }
 }
 ```
 
 ### Лучшие Практики
 
-1. **Используйте FileProvider** для Android 7.0+ (API 24+)
-2. **Предоставляйте разрешения URI** при обмене с внешними приложениями
-3. **Осторожно обрабатывайте большие изображения** - не передавайте через Intent extras
-4. **Используйте подходящие форматы изображений** - JPEG для фотографий, PNG для графики
-5. **Управляйте памятью** - освобождайте bitmap когда закончили
-6. **Обрабатывайте ошибки корректно** - проверяйте существование редактора
-7. **Сохраняйте в подходящее место** - cache для временных, files для постоянных
+1. **Используйте FileProvider** для Android 7.0+ (обязательно)
+2. **Предоставляйте разрешения URI** для внешних приложений
+3. **Не передавайте большие bitmap** через Intent extras (лимит ~1MB)
+4. **Освобождайте память** — `bitmap.recycle()` в `onDestroy()`
+5. **Сохраняйте временные файлы** в `cacheDir`
+6. **Обрабатывайте ошибки** — проверяйте наличие редактора
 
-### Распространенные Ошибки
+## Answer (EN)
+
+Passing a photo depends on whether it's an external editor (another app) or internal (your app).
+
+### 1. External Editor
+
+Use Intent with `ACTION_EDIT`:
 
 ```kotlin
-// ✗ ПЛОХО: Большой bitmap через Intent
+fun openExternalEditor(context: Context, photoUri: Uri) {
+    val intent = Intent(Intent.ACTION_EDIT).apply {
+        setDataAndType(photoUri, "image/*")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    }
+
+    // ✅ Check editor exists
+    try {
+        context.startActivity(Intent.createChooser(intent, "Choose editor"))
+    } catch (e: ActivityNotFoundException) {
+        // ❌ No editor found
+    }
+}
+```
+
+### 2. Internal Editor
+
+**Option A: Pass URI via Intent** (RECOMMENDED)
+
+```kotlin
+fun openInternalEditor(context: Context, photoFile: File) {
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        photoFile
+    )
+
+    val intent = Intent(context, PhotoEditorActivity::class.java).apply {
+        putExtra("PHOTO_URI", uri.toString())
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    context.startActivity(intent)
+}
+```
+
+**Option B: ByteArray** (only for small images < 1MB)
+
+```kotlin
+// ❌ BAD: Large bitmap via Intent
 val bitmap = BitmapFactory.decodeFile(largeFile)
 intent.putExtra("bitmap", bitmap) // TransactionTooLargeException!
 
-// ✓ ХОРОШО: Используйте URI
-val uri = FileProvider.getUriForFile(context, authority, file)
-intent.putExtra("uri", uri.toString())
+// ✅ GOOD: Check size
+val stream = ByteArrayOutputStream()
+bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+val bytes = stream.toByteArray()
+
+if (bytes.size < 1_000_000) {
+    intent.putExtra("PHOTO_BYTES", bytes)
+} else {
+    // Use Option A instead
+}
 ```
+
+### 3. FileProvider Setup
+
+**AndroidManifest.xml:**
+```xml
+<provider
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="${applicationId}.fileprovider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths" />
+</provider>
+```
+
+**res/xml/file_paths.xml:**
+```xml
+<paths>
+    <cache-path name="shared_images" path="images/" />
+    <files-path name="app_images" path="images/" />
+</paths>
+```
+
+### 4. PhotoEditorActivity
+
+```kotlin
+class PhotoEditorActivity : AppCompatActivity() {
+
+    private var bitmap: Bitmap? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val uriString = intent.getStringExtra("PHOTO_URI")
+        val uri = uriString?.let { Uri.parse(it) }
+
+        uri?.let { loadImage(it) }
+    }
+
+    private fun loadImage(uri: Uri) {
+        bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
+        } else {
+            @Suppress("DEPRECATION")
+            MediaStore.Images.Media.getBitmap(contentResolver, uri)
+        }
+        imageView.setImageBitmap(bitmap)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // ✅ Free memory
+        bitmap?.recycle()
+    }
+}
+```
+
+### 5. Jetpack Compose
+
+```kotlin
+@Composable
+fun PhotoEditorScreen(photoUri: Uri) {
+    val context = LocalContext.current
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    LaunchedEffect(photoUri) {
+        withContext(Dispatchers.IO) {
+            bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(
+                    ImageDecoder.createSource(context.contentResolver, photoUri)
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                MediaStore.Images.Media.getBitmap(context.contentResolver, photoUri)
+            }
+        }
+    }
+
+    bitmap?.let {
+        Image(
+            bitmap = it.asImageBitmap(),
+            contentDescription = "Photo to edit"
+        )
+    }
+}
+```
+
+### Best Practices
+
+1. **Use FileProvider** for Android 7.0+ (mandatory)
+2. **Grant URI permissions** for external apps
+3. **Don't pass large bitmaps** via Intent extras (limit ~1MB)
+4. **Free memory** — call `bitmap.recycle()` in `onDestroy()`
+5. **Save temp files** to `cacheDir`
+6. **Handle errors** — check if editor exists
+
+## Follow-ups
+
+1. What happens if FileProvider authority doesn't match the manifest?
+2. How to handle photo rotation metadata (EXIF orientation)?
+3. What's the memory overhead of loading large images directly vs using BitmapFactory.Options?
+4. How to implement undo/redo for image editing operations?
+5. When should you use MediaStore vs FileProvider for sharing images?
+
+## References
+
+- Android FileProvider Guide: https://developer.android.com/reference/androidx/core/content/FileProvider
+- Sharing Files Documentation: https://developer.android.com/training/secure-file-sharing
+- Intent Documentation: https://developer.android.com/reference/android/content/Intent
 
 ## Related Questions
 
-- [[q-multi-module-best-practices--android--hard]]
-- [[q-android-storage-types--android--medium]]
-- [[q-which-event-is-triggered-when-user-presses-screen--android--medium]]
+### Prerequisites
+- [[q-what-are-intents-for--android--medium]] — Understanding Intent basics
+- [[q-android-storage-types--android--medium]] — Storage options in Android
+
+### Related
+- [[q-fileprovider-secure-sharing--android--medium]] — FileProvider secure file sharing
+- [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]] — Photo editor architecture
+- [[q-encrypted-file-storage--android--medium]] — Secure image storage
+
+### Advanced
+- Image optimization and memory management for large photos
+- Custom ContentProvider for complex file sharing scenarios
+- Implementing image filters and transformations efficiently
