@@ -3,17 +3,17 @@ id: 20251012-122769
 title: Android Project Parts / Части Android проекта
 aliases: ["Android Project Parts", "Части Android проекта"]
 topic: android
-subtopics: [architecture-modularization, gradle, ui-theming]
+subtopics: [gradle, architecture-modularization]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-manifest-file--android--easy, q-android-modularization--android--medium, q-gradle-build-system--android--medium]
+related: [q-android-manifest-file--android--easy, q-gradle-build-system--android--medium, q-android-modularization--android--medium]
 created: 2025-10-15
-updated: 2025-10-27
-tags: [android/architecture-modularization, android/gradle, android/ui-theming, difficulty/easy]
+updated: 2025-10-29
+tags: [android/gradle, android/architecture-modularization, build-system, project-structure, difficulty/easy]
 sources: []
 ---
 # Вопрос (RU)
@@ -28,52 +28,51 @@ sources: []
 
 **Основные компоненты:**
 
-- **src/**: исходный код (Kotlin/Java)
-- **res/**: компилируемые ресурсы (layouts, strings, изображения)
-- **AndroidManifest.xml**: конфигурация приложения и объявление компонентов
-- **build.gradle**: конфигурация сборки и зависимости
-- **assets/**: сырые файлы для runtime доступа
-
-**Структура проекта:**
-
 ```text
 app/
 ├── src/main/
-│   ├── java/              # Исходный код
-│   ├── res/               # Ресурсы (layouts, strings, drawable)
-│   ├── assets/            # Сырые файлы
-│   └── AndroidManifest.xml
-└── build.gradle.kts       # Конфигурация сборки
+│   ├── java/                    # Исходный код (Kotlin/Java)
+│   ├── res/                     # Компилируемые ресурсы
+│   │   ├── layout/             # XML макеты UI
+│   │   ├── values/             # strings, colors, dimens
+│   │   └── drawable/           # Изображения и векторы
+│   ├── assets/                  # Сырые файлы (JSON, шрифты)
+│   └── AndroidManifest.xml      # Конфигурация приложения
+└── build.gradle.kts              # Конфигурация сборки
 ```
 
-**Организация кода:**
+**Организация кода и ресурсов:**
 
 ```kotlin
-// src/main/java/com/example/app/MainActivity.kt
+// ✅ Исходный код: src/main/java/com/example/app/
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // ✅ Доступ через R class
+        setContentView(R.layout.activity_main)
     }
 }
-```
 
-**Доступ к ресурсам:**
+// ✅ Type-safe доступ к ресурсам через R class
+val appName = getString(R.string.app_name)
+val color = getColor(R.color.primary_color)
+val icon = ContextCompat.getDrawable(this, R.drawable.ic_launcher)
+```
 
 ```kotlin
-val appName = getString(R.string.app_name)        // ✅ Type-safe
-val color = getColor(R.color.primary_color)
-val padding = resources.getDimensionPixelSize(R.dimen.padding)
+// ❌ Строковый доступ к assets (не type-safe)
+val json = assets.open("config.json").bufferedReader().use { it.readText() }
 ```
 
-**AndroidManifest.xml:**
+**AndroidManifest.xml** - декларация компонентов:
 
 ```xml
 <manifest package="com.example.app">
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:label="@string/app_name">
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -83,26 +82,39 @@ val padding = resources.getDimensionPixelSize(R.dimen.padding)
 </manifest>
 ```
 
-**Build конфигурация:**
+**Build конфигурация** (build.gradle.kts):
 
 ```kotlin
 android {
     namespace = "com.example.app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
     }
+
+    buildFeatures {
+        viewBinding = true
+        compose = true
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 }
 ```
 
 **Ключевые различия:**
 
-- **res/**: компилируемые ресурсы, type-safe доступ через R class
-- **assets/**: сырые файлы, доступ через AssetManager по строковому пути
-- **src/**: исходный код, компилируется в bytecode
-- **AndroidManifest.xml**: метаданные приложения, декларация компонентов
+| Компонент | Назначение | Доступ |
+|-----------|-----------|--------|
+| **res/** | Компилируемые ресурсы (layout, strings) | `R.layout.activity_main` (type-safe) |
+| **assets/** | Сырые файлы (JSON, шрифты, медиа) | `assets.open("file.json")` (строковый путь) |
+| **src/** | Исходный код Kotlin/Java | Компилируется в DEX bytecode |
+| **AndroidManifest.xml** | Метаданные приложения, permissions | Читается во время установки |
+| **build.gradle.kts** | Конфигурация сборки, зависимости | Обрабатывается Gradle |
 
 ## Answer (EN)
 
@@ -110,52 +122,51 @@ android {
 
 **Core Components:**
 
-- **src/**: source code (Kotlin/Java)
-- **res/**: compiled resources (layouts, strings, images)
-- **AndroidManifest.xml**: app configuration and component declarations
-- **build.gradle**: build configuration and dependencies
-- **assets/**: raw files for runtime access
-
-**Project Structure:**
-
 ```text
 app/
 ├── src/main/
-│   ├── java/              # Source code
-│   ├── res/               # Resources (layouts, strings, drawable)
-│   ├── assets/            # Raw files
-│   └── AndroidManifest.xml
-└── build.gradle.kts       # Build configuration
+│   ├── java/                    # Source code (Kotlin/Java)
+│   ├── res/                     # Compiled resources
+│   │   ├── layout/             # XML UI layouts
+│   │   ├── values/             # strings, colors, dimens
+│   │   └── drawable/           # Images and vectors
+│   ├── assets/                  # Raw files (JSON, fonts)
+│   └── AndroidManifest.xml      # App configuration
+└── build.gradle.kts              # Build configuration
 ```
 
-**Code Organization:**
+**Code and Resource Organization:**
 
 ```kotlin
-// src/main/java/com/example/app/MainActivity.kt
+// ✅ Source code: src/main/java/com/example/app/
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // ✅ Access via R class
+        setContentView(R.layout.activity_main)
     }
 }
-```
 
-**Resource Access:**
+// ✅ Type-safe resource access via R class
+val appName = getString(R.string.app_name)
+val color = getColor(R.color.primary_color)
+val icon = ContextCompat.getDrawable(this, R.drawable.ic_launcher)
+```
 
 ```kotlin
-val appName = getString(R.string.app_name)        // ✅ Type-safe
-val color = getColor(R.color.primary_color)
-val padding = resources.getDimensionPixelSize(R.dimen.padding)
+// ❌ String-based assets access (not type-safe)
+val json = assets.open("config.json").bufferedReader().use { it.readText() }
 ```
 
-**AndroidManifest.xml:**
+**AndroidManifest.xml** - component declarations:
 
 ```xml
 <manifest package="com.example.app">
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:label="@string/app_name">
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -165,37 +176,53 @@ val padding = resources.getDimensionPixelSize(R.dimen.padding)
 </manifest>
 ```
 
-**Build Configuration:**
+**Build Configuration** (build.gradle.kts):
 
 ```kotlin
 android {
     namespace = "com.example.app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
     }
+
+    buildFeatures {
+        viewBinding = true
+        compose = true
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 }
 ```
 
 **Key Differences:**
 
-- **res/**: compiled resources, type-safe access via R class
-- **assets/**: raw files, accessed via AssetManager by string path
-- **src/**: source code, compiled to bytecode
-- **AndroidManifest.xml**: app metadata, component declarations
+| Component | Purpose | Access |
+|-----------|---------|--------|
+| **res/** | Compiled resources (layout, strings) | `R.layout.activity_main` (type-safe) |
+| **assets/** | Raw files (JSON, fonts, media) | `assets.open("file.json")` (string path) |
+| **src/** | Source code Kotlin/Java | Compiled to DEX bytecode |
+| **AndroidManifest.xml** | App metadata, permissions | Read during installation |
+| **build.gradle.kts** | Build configuration, dependencies | Processed by Gradle |
 
 ## Follow-ups
 
-- What is the difference between res/ and assets/ directories?
-- How does R class generation work during build?
-- When should you use buildSrc vs version catalogs for dependency management?
+- What is the difference between res/ and assets/ directories for storing files?
+- How does R class generation work and when is it triggered during the build process?
+- What are the different source sets (main, debug, release) and how do they merge?
+- When should you use version catalogs vs buildSrc for dependency management?
+- How does multi-module project structure differ from single-module?
 
 ## References
 
 - https://developer.android.com/studio/projects
-- https://developer.android.com/guide/topics/resources
+- https://developer.android.com/guide/topics/resources/providing-resources
+- https://developer.android.com/build
 
 ## Related Questions
 
@@ -204,7 +231,8 @@ android {
 
 ### Related
 - [[q-gradle-build-system--android--medium]]
-- [[q-android-modularization--android--medium]]
+- [[q-android-resources-qualifiers--android--medium]]
 
 ### Advanced
+- [[q-android-modularization--android--medium]]
 - [[q-android-build-optimization--android--medium]]

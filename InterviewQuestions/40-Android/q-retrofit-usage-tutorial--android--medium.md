@@ -1,518 +1,89 @@
 ---
 id: 20251017-150432
 title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
+aliases: ["Retrofit Usage Tutorial", "Retrofit Использование Tutorial"]
 topic: android
+subtopics: [networking-http, architecture-mvvm, coroutines]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-what-is-data-binding--android--easy, q-flow-testing-turbine--testing--medium, q-compose-navigation-advanced--jetpack-compose--medium]
 created: 2025-10-15
-tags: [retrofit, networking, tutorial, difficulty/medium]
+updated: 2025-10-28
+sources: []
+tags: [android/networking-http, android/architecture-mvvm, android/coroutines, retrofit, networking, difficulty/medium]
 ---
 
-# Как делать сетевые запросы с помощью Retrofit?
+# Вопрос (RU)
 
-**English**: How to make network requests with Retrofit?
+Как делать сетевые запросы с помощью Retrofit?
 
-## Answer (EN)
-Retrofit — это type-safe HTTP клиент для Android и Java. Вот пошаговое руководство по его использованию.
+# Question (EN)
 
-### Step 1: Adding dependencies
+How to make network requests with Retrofit?
 
-```gradle
-// app/build.gradle
-dependencies {
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-
-    // Конвертер JSON (выберите один)
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    // или Moshi
-    // implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
-
-    // Для корутин (опционально)
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-
-    // Логирование (для отладки)
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
-}
-```
-
-### Step 2: Creating data model
-
-```kotlin
-// User.kt
-data class User(
-    val id: Int,
-    val name: String,
-    val email: String,
-    val username: String
-)
-
-// Post.kt
-data class Post(
-    val userId: Int,
-    val id: Int,
-    val title: String,
-    val body: String
-)
-
-// For POST requests
-data class CreateUserRequest(
-    val name: String,
-    val email: String
-)
-```
-
-### Step 3: Defining API interface
-
-```kotlin
-// ApiService.kt
-interface ApiService {
-    // GET request
-    @GET("users")
-    suspend fun getUsers(): List<User>
-
-    // GET with path parameter
-    @GET("users/{id}")
-    suspend fun getUser(@Path("id") userId: Int): User
-
-    // GET with query parameters
-    @GET("posts")
-    suspend fun getPosts(
-        @Query("userId") userId: Int,
-        @Query("_limit") limit: Int = 10
-    ): List<Post>
-
-    // POST request
-    @POST("users")
-    suspend fun createUser(@Body user: CreateUserRequest): User
-
-    // PUT request
-    @PUT("users/{id}")
-    suspend fun updateUser(
-        @Path("id") userId: Int,
-        @Body user: User
-    ): User
-
-    // DELETE request
-    @DELETE("users/{id}")
-    suspend fun deleteUser(@Path("id") userId: Int): Response<Unit>
-
-    // Headers
-    @GET("users/{id}")
-    suspend fun getUserWithAuth(
-        @Path("id") userId: Int,
-        @Header("Authorization") token: String
-    ): User
-
-    // Multiple query parameters
-    @GET("search")
-    suspend fun search(
-        @QueryMap parameters: Map<String, String>
-    ): List<User>
-}
-```
-
-### Step 4: Creating Retrofit instance
-
-```kotlin
-// RetrofitClient.kt
-object RetrofitClient {
-    private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
-
-    // OkHttp client with logging
-    private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
-        .addInterceptor(HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        })
-        .addInterceptor { chain ->
-            // Add headers to all requests
-            val request = chain.request().newBuilder()
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build()
-            chain.proceed(request)
-        }
-        .build()
-
-    // Retrofit instance
-    val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    // API Service
-    val apiService: ApiService by lazy {
-        retrofit.create(ApiService::class.java)
-    }
-}
-```
-
-### Step 5: Using in ViewModel
-
-```kotlin
-// UserViewModel.kt
-class UserViewModel : ViewModel() {
-    private val apiService = RetrofitClient.apiService
-
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
-
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            _loading.value = true
-            try {
-                val result = apiService.getUsers()
-                _users.value = result
-            } catch (e: HttpException) {
-                // HTTP error (4xx, 5xx)
-                _error.value = "HTTP Error: ${e.code()}"
-            } catch (e: IOException) {
-                // Network error
-                _error.value = "Network Error: ${e.message}"
-            } catch (e: Exception) {
-                // Other errors
-                _error.value = "Error: ${e.message}"
-            } finally {
-                _loading.value = false
-            }
-        }
-    }
-
-    fun createUser(name: String, email: String) {
-        viewModelScope.launch {
-            try {
-                val request = CreateUserRequest(name, email)
-                val newUser = apiService.createUser(request)
-                // Update user list
-                _users.value = _users.value?.plus(newUser)
-            } catch (e: Exception) {
-                _error.value = e.message
-            }
-        }
-    }
-}
-```
-
-### Step 6: Using in Activity/Fragment
-
-```kotlin
-// MainActivity.kt
-class MainActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-    private lateinit var adapter: UserAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        setupRecyclerView()
-        observeViewModel()
-
-        // Load data
-        viewModel.loadUsers()
-    }
-
-    private fun setupRecyclerView() {
-        adapter = UserAdapter()
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = this@MainActivity.adapter
-        }
-    }
-
-    private fun observeViewModel() {
-        // Observe users
-        viewModel.users.observe(this) { users ->
-            adapter.submitList(users)
-        }
-
-        // Observe loading
-        viewModel.loading.observe(this) { isLoading ->
-            progressBar.isVisible = isLoading
-        }
-
-        // Observe errors
-        viewModel.error.observe(this) { errorMessage ->
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-        }
-    }
-}
-```
-
-### Handling different request types
-
-#### Form URL Encoded
-
-```kotlin
-interface ApiService {
-    @FormUrlEncoded
-    @POST("login")
-    suspend fun login(
-        @Field("username") username: String,
-        @Field("password") password: String
-    ): LoginResponse
-}
-
-// Использование
-val response = apiService.login("user@example.com", "password123")
-```
-
-#### Multipart (Загрузка файлов)
-
-```kotlin
-interface ApiService {
-    @Multipart
-    @POST("upload")
-    suspend fun uploadFile(
-        @Part("description") description: RequestBody,
-        @Part file: MultipartBody.Part
-    ): UploadResponse
-}
-
-// Использование
-fun uploadImage(imageFile: File) {
-    viewModelScope.launch {
-        val requestFile = imageFile.asRequestBody("image/*".toMediaType())
-        val filePart = MultipartBody.Part.createFormData(
-            "image",
-            imageFile.name,
-            requestFile
-        )
-        val description = "Profile picture".toRequestBody("text/plain".toMediaType())
-
-        val response = apiService.uploadFile(description, filePart)
-    }
-}
-```
-
-#### Headers
-
-```kotlin
-interface ApiService {
-    // Статический header
-    @Headers("Cache-Control: max-age=640000")
-    @GET("users")
-    suspend fun getUsers(): List<User>
-
-    // Динамический header
-    @GET("users/{id}")
-    suspend fun getUserWithToken(
-        @Path("id") userId: Int,
-        @Header("Authorization") token: String
-    ): User
-
-    // Множественные headers
-    @GET("users")
-    suspend fun getUsersWithHeaders(
-        @HeaderMap headers: Map<String, String>
-    ): List<User>
-}
-```
-
-### Error handling with sealed class
-
-```kotlin
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-    object Loading : Result<Nothing>()
-}
-
-class UserRepository {
-    suspend fun getUsers(): Result<List<User>> {
-        return try {
-            Result.Loading
-            val users = RetrofitClient.apiService.getUsers()
-            Result.Success(users)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
-}
-
-// В ViewModel
-viewModelScope.launch {
-    when (val result = repository.getUsers()) {
-        is Result.Success -> _users.value = result.data
-        is Result.Error -> _error.value = result.exception.message
-        is Result.Loading -> _loading.value = true
-    }
-}
-```
-
-### Полный пример с Repository pattern
-
-```kotlin
-// UserRepository.kt
-class UserRepository {
-    private val apiService = RetrofitClient.apiService
-
-    suspend fun getUsers(): List<User> {
-        return withContext(Dispatchers.IO) {
-            apiService.getUsers()
-        }
-    }
-
-    suspend fun getUserById(id: Int): User {
-        return withContext(Dispatchers.IO) {
-            apiService.getUser(id)
-        }
-    }
-}
-
-// UserViewModel.kt
-class UserViewModel(
-    private val repository: UserRepository = UserRepository()
-) : ViewModel() {
-
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            try {
-                val result = repository.getUsers()
-                _users.value = result
-            } catch (e: Exception) {
-                // Handle error
-            }
-        }
-    }
-}
-```
-
-**English**: Retrofit usage steps: 1) Add dependencies (Retrofit + converter), 2) Create data models, 3) Define API interface with annotations (@GET, @POST, @Path, @Query, @Body), 4) Create Retrofit instance with baseUrl and converter, 5) Use in ViewModel with coroutines, 6) Observe in Activity/Fragment. Supports form-urlencoded, multipart uploads, headers, and error handling with sealed classes.
-
+---
 
 ## Ответ (RU)
 
-Retrofit — это type-safe HTTP клиент для Android и Java. Вот пошаговое руководство по его использованию.
+Retrofit — это type-safe HTTP клиент для Android. Основная идея: вы описываете API через интерфейс с аннотациями, а Retrofit генерирует реализацию.
 
-### Шаг 1: Добавление зависимостей
+### Основные шаги
+
+**1. Добавить зависимости**
 
 ```gradle
 // app/build.gradle
 dependencies {
-    // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-
-    // Конвертер JSON (выберите один)
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    // или Moshi
-    // implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
-
-    // Для корутин (опционально)
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-
-    // Логирование (для отладки)
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
 }
 ```
 
-### Шаг 2: Создание модели данных
+**2. Создать модель данных**
 
 ```kotlin
-// User.kt
 data class User(
     val id: Int,
-    val name: String,
-    val email: String,
-    val username: String
-)
-
-// Post.kt
-data class Post(
-    val userId: Int,
-    val id: Int,
-    val title: String,
-    val body: String
-)
-
-// Для POST запросов
-data class CreateUserRequest(
     val name: String,
     val email: String
 )
 ```
 
-### Шаг 3: Определение API интерфейса
+**3. Определить API интерфейс**
 
 ```kotlin
-// ApiService.kt
 interface ApiService {
-    // GET запрос
     @GET("users")
     suspend fun getUsers(): List<User>
 
-    // GET с параметром пути
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: Int): User
 
-    // GET с query параметрами
-    @GET("posts")
-    suspend fun getPosts(
-        @Query("userId") userId: Int,
-        @Query("_limit") limit: Int = 10
-    ): List<Post>
-
-    // POST запрос
     @POST("users")
-    suspend fun createUser(@Body user: CreateUserRequest): User
-
-    // PUT запрос
-    @PUT("users/{id}")
-    suspend fun updateUser(
-        @Path("id") userId: Int,
-        @Body user: User
-    ): User
-
-    // DELETE запрос
-    @DELETE("users/{id}")
-    suspend fun deleteUser(@Path("id") userId: Int): Response<Unit>
-
-    // Заголовки
-    @GET("users/{id}")
-    suspend fun getUserWithAuth(
-        @Path("id") userId: Int,
-        @Header("Authorization") token: String
-    ): User
-
-    // Множественные query параметры
-    @GET("search")
-    suspend fun search(
-        @QueryMap parameters: Map<String, String>
-    ): List<User>
+    suspend fun createUser(@Body user: User): User
 }
 ```
 
-### Шаг 4: Создание экземпляра Retrofit
+**Аннотации Retrofit**:
+- `@GET`, `@POST`, `@PUT`, `@DELETE` — HTTP методы
+- `@Path` — параметр пути URL (users/{id})
+- `@Query` — query параметры (?userId=123)
+- `@Body` — тело запроса (JSON)
+- `@Header` — заголовок запроса
+
+**4. Создать экземпляр Retrofit**
 
 ```kotlin
-// RetrofitClient.kt
 object RetrofitClient {
-    private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
+    private const val BASE_URL = "https://api.example.com/"
 
-    // OkHttp клиент с логированием
+    // ✅ Правильно: OkHttp с логированием для отладки
     private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -521,251 +92,50 @@ object RetrofitClient {
             }
         })
         .addInterceptor { chain ->
-            // Добавление заголовков ко всем запросам
             val request = chain.request().newBuilder()
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
                 .build()
             chain.proceed(request)
         }
         .build()
 
-    // Экземпляр Retrofit
-    val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    // API Service
     val apiService: ApiService by lazy {
-        retrofit.create(ApiService::class.java)
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
     }
 }
 ```
 
-### Шаг 5: Использование в ViewModel
+**5. Использовать в Repository**
 
 ```kotlin
-// UserViewModel.kt
-class UserViewModel : ViewModel() {
-    private val apiService = RetrofitClient.apiService
+class UserRepository {
+    private val api = RetrofitClient.apiService
 
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
-
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            _loading.value = true
-            try {
-                val result = apiService.getUsers()
-                _users.value = result
-            } catch (e: HttpException) {
-                // HTTP ошибка (4xx, 5xx)
-                _error.value = "HTTP Error: ${e.code()}"
-            } catch (e: IOException) {
-                // Сетевая ошибка
-                _error.value = "Network Error: ${e.message}"
-            } catch (e: Exception) {
-                // Другие ошибки
-                _error.value = "Error: ${e.message}"
-            } finally {
-                _loading.value = false
-            }
-        }
-    }
-
-    fun createUser(name: String, email: String) {
-        viewModelScope.launch {
-            try {
-                val request = CreateUserRequest(name, email)
-                val newUser = apiService.createUser(request)
-                // Обновление списка пользователей
-                _users.value = _users.value?.plus(newUser)
-            } catch (e: Exception) {
-                _error.value = e.message
-            }
-        }
+    suspend fun getUsers(): Result<List<User>> = try {
+        Result.Success(api.getUsers())
+    } catch (e: HttpException) {
+        Result.Error("HTTP ${e.code()}: ${e.message()}")
+    } catch (e: IOException) {
+        Result.Error("Network error: ${e.message}")
     }
 }
-```
 
-### Шаг 6: Использование в Activity/Fragment
-
-```kotlin
-// MainActivity.kt
-class MainActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-    private lateinit var adapter: UserAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        setupRecyclerView()
-        observeViewModel()
-
-        // Загрузка данных
-        viewModel.loadUsers()
-    }
-
-    private fun setupRecyclerView() {
-        adapter = UserAdapter()
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = this@MainActivity.adapter
-        }
-    }
-
-    private fun observeViewModel() {
-        // Наблюдение за пользователями
-        viewModel.users.observe(this) { users ->
-            adapter.submitList(users)
-        }
-
-        // Наблюдение за загрузкой
-        viewModel.loading.observe(this) { isLoading ->
-            progressBar.isVisible = isLoading
-        }
-
-        // Наблюдение за ошибками
-        viewModel.error.observe(this) { errorMessage ->
-            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-        }
-    }
-}
-```
-
-### Обработка различных типов запросов
-
-#### Form URL Encoded
-
-```kotlin
-interface ApiService {
-    @FormUrlEncoded
-    @POST("login")
-    suspend fun login(
-        @Field("username") username: String,
-        @Field("password") password: String
-    ): LoginResponse
-}
-
-// Использование
-val response = apiService.login("user@example.com", "password123")
-```
-
-#### Multipart (Загрузка файлов)
-
-```kotlin
-interface ApiService {
-    @Multipart
-    @POST("upload")
-    suspend fun uploadFile(
-        @Part("description") description: RequestBody,
-        @Part file: MultipartBody.Part
-    ): UploadResponse
-}
-
-// Использование
-fun uploadImage(imageFile: File) {
-    viewModelScope.launch {
-        val requestFile = imageFile.asRequestBody("image/*".toMediaType())
-        val filePart = MultipartBody.Part.createFormData(
-            "image",
-            imageFile.name,
-            requestFile
-        )
-        val description = "Profile picture".toRequestBody("text/plain".toMediaType())
-
-        val response = apiService.uploadFile(description, filePart)
-    }
-}
-```
-
-#### Заголовки
-
-```kotlin
-interface ApiService {
-    // Статический заголовок
-    @Headers("Cache-Control: max-age=640000")
-    @GET("users")
-    suspend fun getUsers(): List<User>
-
-    // Динамический заголовок
-    @GET("users/{id}")
-    suspend fun getUserWithToken(
-        @Path("id") userId: Int,
-        @Header("Authorization") token: String
-    ): User
-
-    // Множественные заголовки
-    @GET("users")
-    suspend fun getUsersWithHeaders(
-        @HeaderMap headers: Map<String, String>
-    ): List<User>
-}
-```
-
-### Обработка ошибок с sealed class
-
-```kotlin
 sealed class Result<out T> {
     data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-    object Loading : Result<Nothing>()
-}
-
-class UserRepository {
-    suspend fun getUsers(): Result<List<User>> {
-        return try {
-            Result.Loading
-            val users = RetrofitClient.apiService.getUsers()
-            Result.Success(users)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
-}
-
-// В ViewModel
-viewModelScope.launch {
-    when (val result = repository.getUsers()) {
-        is Result.Success -> _users.value = result.data
-        is Result.Error -> _error.value = result.exception.message
-        is Result.Loading -> _loading.value = true
-    }
+    data class Error(val message: String) : Result<Nothing>()
 }
 ```
 
-### Полный пример с Repository pattern
+**6. Вызвать из ViewModel**
 
 ```kotlin
-// UserRepository.kt
-class UserRepository {
-    private val apiService = RetrofitClient.apiService
-
-    suspend fun getUsers(): List<User> {
-        return withContext(Dispatchers.IO) {
-            apiService.getUsers()
-        }
-    }
-
-    suspend fun getUserById(id: Int): User {
-        return withContext(Dispatchers.IO) {
-            apiService.getUser(id)
-        }
-    }
-}
-
-// UserViewModel.kt
 class UserViewModel(
-    private val repository: UserRepository = UserRepository()
+    private val repository: UserRepository
 ) : ViewModel() {
 
     private val _users = MutableLiveData<List<User>>()
@@ -773,34 +143,279 @@ class UserViewModel(
 
     fun loadUsers() {
         viewModelScope.launch {
-            try {
-                val result = repository.getUsers()
-                _users.value = result
-            } catch (e: Exception) {
-                // Обработка ошибки
+            when (val result = repository.getUsers()) {
+                is Result.Success -> _users.value = result.data
+                is Result.Error -> /* показать ошибку */
             }
         }
     }
 }
 ```
 
-Шаги использования Retrofit: 1) Добавить зависимости (Retrofit + конвертер), 2) Создать модели данных, 3) Определить API интерфейс с аннотациями (@GET, @POST, @Path, @Query, @Body), 4) Создать экземпляр Retrofit с baseUrl и конвертером, 5) Использовать в ViewModel с корутинами, 6) Наблюдать в Activity/Fragment. Поддерживает form-urlencoded, multipart загрузки, заголовки и обработку ошибок с sealed classes.
+### Особые случаи
 
+**Form URL Encoded (логин)**
+
+```kotlin
+@FormUrlEncoded
+@POST("login")
+suspend fun login(
+    @Field("username") username: String,
+    @Field("password") password: String
+): LoginResponse
+```
+
+**Multipart (загрузка файлов)**
+
+```kotlin
+@Multipart
+@POST("upload")
+suspend fun uploadFile(
+    @Part file: MultipartBody.Part
+): UploadResponse
+
+// Использование
+val requestFile = imageFile.asRequestBody("image/*".toMediaType())
+val filePart = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+val response = api.uploadFile(filePart)
+```
+
+**Query параметры**
+
+```kotlin
+// ✅ Правильно: опциональные параметры с default значениями
+@GET("posts")
+suspend fun getPosts(
+    @Query("userId") userId: Int? = null,
+    @Query("_limit") limit: Int = 10
+): List<Post>
+
+// ❌ Неправильно: без default, клиент должен всегда передавать
+@GET("posts")
+suspend fun getPosts(
+    @Query("userId") userId: Int,
+    @Query("_limit") limit: Int
+): List<Post>
+```
+
+### Лучшие практики
+
+1. **Используйте suspend функции** с корутинами вместо Call<T>
+2. **Оборачивайте в Result/Either** для обработки ошибок
+3. **Выносите в Repository** — не вызывайте API напрямую из ViewModel
+4. **Логируйте только в DEBUG** — HttpLoggingInterceptor с проверкой BuildConfig
+5. **Добавляйте timeouts** в OkHttp (connectTimeout, readTimeout)
+
+## Answer (EN)
+
+Retrofit is a type-safe HTTP client for Android. The core concept: you describe the API through an interface with annotations, and Retrofit generates the implementation.
+
+### Key Steps
+
+**1. Add dependencies**
+
+```gradle
+// app/build.gradle
+dependencies {
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+}
+```
+
+**2. Create data model**
+
+```kotlin
+data class User(
+    val id: Int,
+    val name: String,
+    val email: String
+)
+```
+
+**3. Define API interface**
+
+```kotlin
+interface ApiService {
+    @GET("users")
+    suspend fun getUsers(): List<User>
+
+    @GET("users/{id}")
+    suspend fun getUser(@Path("id") userId: Int): User
+
+    @POST("users")
+    suspend fun createUser(@Body user: User): User
+}
+```
+
+**Retrofit annotations**:
+- `@GET`, `@POST`, `@PUT`, `@DELETE` — HTTP methods
+- `@Path` — URL path parameter (users/{id})
+- `@Query` — query parameters (?userId=123)
+- `@Body` — request body (JSON)
+- `@Header` — request header
+
+**4. Create Retrofit instance**
+
+```kotlin
+object RetrofitClient {
+    private const val BASE_URL = "https://api.example.com/"
+
+    // ✅ Correct: OkHttp with logging for debugging
+    private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        })
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Content-Type", "application/json")
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
+    val apiService: ApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+    }
+}
+```
+
+**5. Use in Repository**
+
+```kotlin
+class UserRepository {
+    private val api = RetrofitClient.apiService
+
+    suspend fun getUsers(): Result<List<User>> = try {
+        Result.Success(api.getUsers())
+    } catch (e: HttpException) {
+        Result.Error("HTTP ${e.code()}: ${e.message()}")
+    } catch (e: IOException) {
+        Result.Error("Network error: ${e.message}")
+    }
+}
+
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+}
+```
+
+**6. Call from ViewModel**
+
+```kotlin
+class UserViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
+    private val _users = MutableLiveData<List<User>>()
+    val users: LiveData<List<User>> = _users
+
+    fun loadUsers() {
+        viewModelScope.launch {
+            when (val result = repository.getUsers()) {
+                is Result.Success -> _users.value = result.data
+                is Result.Error -> /* show error */
+            }
+        }
+    }
+}
+```
+
+### Special Cases
+
+**Form URL Encoded (login)**
+
+```kotlin
+@FormUrlEncoded
+@POST("login")
+suspend fun login(
+    @Field("username") username: String,
+    @Field("password") password: String
+): LoginResponse
+```
+
+**Multipart (file uploads)**
+
+```kotlin
+@Multipart
+@POST("upload")
+suspend fun uploadFile(
+    @Part file: MultipartBody.Part
+): UploadResponse
+
+// Usage
+val requestFile = imageFile.asRequestBody("image/*".toMediaType())
+val filePart = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+val response = api.uploadFile(filePart)
+```
+
+**Query parameters**
+
+```kotlin
+// ✅ Correct: optional parameters with defaults
+@GET("posts")
+suspend fun getPosts(
+    @Query("userId") userId: Int? = null,
+    @Query("_limit") limit: Int = 10
+): List<Post>
+
+// ❌ Wrong: no defaults, client must always provide
+@GET("posts")
+suspend fun getPosts(
+    @Query("userId") userId: Int,
+    @Query("_limit") limit: Int
+): List<Post>
+```
+
+### Best Practices
+
+1. **Use suspend functions** with coroutines instead of Call<T>
+2. **Wrap in Result/Either** for error handling
+3. **Extract to Repository** — don't call API directly from ViewModel
+4. **Log only in DEBUG** — HttpLoggingInterceptor with BuildConfig check
+5. **Add timeouts** in OkHttp (connectTimeout, readTimeout)
 
 ---
+
+## Follow-ups
+
+- How to handle authentication tokens with Retrofit interceptors?
+- What's the difference between suspend functions and Call<T> in Retrofit?
+- How to implement retry logic for failed network requests?
+- When should you use @QueryMap vs individual @Query parameters?
+- How to test Retrofit API calls with MockWebServer?
+
+## References
+
+- [[c-retrofit]] - Retrofit concept note
+- [[c-okhttp]] - OkHttp concept note
+- [[c-coroutines]] - Coroutines concept note
+- [Retrofit Documentation](https://square.github.io/retrofit/)
+- [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-graphql-vs-rest--networking--easy]] - Networking
+- [[q-what-is-data-binding--android--easy]] - Android data binding basics
+- [[q-graphql-vs-rest--networking--easy]] - REST API concepts
 
 ### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
-- [[q-retrofit-path-parameter--android--medium]] - Networking
-- [[q-retrofit-library--android--medium]] - Networking
-- [[q-kmm-ktor-networking--android--medium]] - Networking
+- [[q-flow-testing-turbine--testing--medium]] - Testing with Flow
+- [[q-http-protocols-comparison--android--medium]] - HTTP protocols
+- [[q-retrofit-path-parameter--android--medium]] - Retrofit path parameters
+- [[q-retrofit-library--android--medium]] - Retrofit library overview
+- [[q-kmm-ktor-networking--android--medium]] - KMM with Ktor
 
 ### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-retrofit-modify-all-requests--android--hard]] - Networking
+- [[q-data-sync-unstable-network--android--hard]] - Network resilience
+- [[q-retrofit-modify-all-requests--android--hard]] - Advanced Retrofit interceptors

@@ -1,12 +1,10 @@
 ---
 id: 20251012-12271188
 title: "Room Library Definition / Определение библиотеки Room"
-aliases:
-  - "Room Library Definition"
-  - "Определение библиотеки Room"
+aliases: ["Room Library Definition", "Определение библиотеки Room"]
 topic: android
-subtopics: [data-storage, room]
-question_kind: android
+subtopics: [room]
+question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
@@ -14,9 +12,9 @@ status: draft
 moc: moc-android
 related: [c-room-library, q-room-basics--android--easy, q-sqlite-vs-room--android--medium]
 created: 2025-10-13
-updated: 2025-01-25
-tags: [android/data-storage, android/room, room, database, orm, sqlite, difficulty/easy]
-sources: [https://developer.android.com/training/data-storage/room]
+updated: 2025-10-28
+tags: [android/room, room, database, orm, sqlite, difficulty/easy]
+sources: []
 ---
 
 # Вопрос (RU)
@@ -29,124 +27,102 @@ sources: [https://developer.android.com/training/data-storage/room]
 
 ## Ответ (RU)
 
-**Теория Room:**
-Room - это библиотека управления базами данных, которая служит абстрактным слоем над SQLite. Она обеспечивает типобезопасность, уменьшает шаблонный код и предоставляет удобную интеграцию с современными архитектурными компонентами Android.
+Room — это ORM-библиотека от Google, предоставляющая абстракцию над SQLite с типобезопасностью на этапе компиляции и проверкой SQL-запросов.
 
-**Основные преимущества:**
-- Типобезопасность на этапе компиляции
-- Проверка SQL-запросов во время компиляции
-- Интеграция с LiveData, Flow, RxJava
-- Автоматические миграции базы данных
-- Уменьшение шаблонного кода
+**Ключевые преимущества:**
+- Проверка SQL во время компиляции
+- Интеграция с Flow, LiveData, Coroutines
+- Автоматические миграции схемы
+- Минимум шаблонного кода
 
-**Три основных компонента:**
+**Три компонента архитектуры:**
 
-**1. Entity (Сущность):**
+**1. Entity (таблица):**
 ```kotlin
 @Entity(tableName = "users")
 data class User(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val name: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,  // ✅ автогенерация ID
+    @ColumnInfo(name = "user_name") val name: String,
     val email: String
 )
 ```
 
-**2. DAO (Data Access Object):**
+**2. DAO (доступ к данным):**
 ```kotlin
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM users")
-    fun getAllUsers(): Flow<List<User>>
+    @Query("SELECT * FROM users WHERE email = :email")
+    suspend fun getUserByEmail(email: String): User?  // ✅ suspend для корутин
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
-
-    @Delete
-    suspend fun deleteUser(user: User)
+    suspend fun insert(user: User)  // ✅ обработка конфликтов
 }
 ```
 
-**3. Database (База данных):**
+**3. Database (точка входа):**
 ```kotlin
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-}
-```
 
-**Использование в ViewModel:**
-```kotlin
-class UserViewModel(private val userDao: UserDao) : ViewModel() {
-    val allUsers: Flow<List<User>> = userDao.getAllUsers()
+    companion object {
+        @Volatile private var INSTANCE: AppDatabase? = null
 
-    fun addUser(name: String, email: String) {
-        viewModelScope.launch {
-            val user = User(name = name, email = email)
-            userDao.insertUser(user)
-        }
+        fun getDatabase(context: Context): AppDatabase =
+            INSTANCE ?: synchronized(this) {  // ✅ потокобезопасный singleton
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+            }
     }
 }
 ```
 
 ## Answer (EN)
 
-**Room Theory:**
-Room is a database management library that serves as an abstraction layer over SQLite. It provides type safety, reduces boilerplate code, and offers convenient integration with modern Android architectural components.
+Room is Google's ORM library providing an abstraction over SQLite with compile-time type safety and SQL query validation.
 
-**Main advantages:**
-- Compile-time type safety
-- SQL query validation at compile time
-- Integration with LiveData, Flow, RxJava
-- Automatic database migrations
-- Reduced boilerplate code
+**Key advantages:**
+- SQL verification at compile time
+- Integration with Flow, LiveData, Coroutines
+- Automatic schema migrations
+- Minimal boilerplate code
 
-**Three main components:**
+**Three architecture components:**
 
-**1. Entity:**
+**1. Entity (table):**
 ```kotlin
 @Entity(tableName = "users")
 data class User(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val name: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,  // ✅ auto-generated ID
+    @ColumnInfo(name = "user_name") val name: String,
     val email: String
 )
 ```
 
-**2. DAO (Data Access Object):**
+**2. DAO (data access):**
 ```kotlin
 @Dao
 interface UserDao {
-    @Query("SELECT * FROM users")
-    fun getAllUsers(): Flow<List<User>>
+    @Query("SELECT * FROM users WHERE email = :email")
+    suspend fun getUserByEmail(email: String): User?  // ✅ suspend for coroutines
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
-
-    @Delete
-    suspend fun deleteUser(user: User)
+    suspend fun insert(user: User)  // ✅ conflict handling
 }
 ```
 
-**3. Database:**
+**3. Database (entry point):**
 ```kotlin
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-}
-```
 
-**Usage in ViewModel:**
-```kotlin
-class UserViewModel(private val userDao: UserDao) : ViewModel() {
-    val allUsers: Flow<List<User>> = userDao.getAllUsers()
+    companion object {
+        @Volatile private var INSTANCE: AppDatabase? = null
 
-    fun addUser(name: String, email: String) {
-        viewModelScope.launch {
-            val user = User(name = name, email = email)
-            userDao.insertUser(user)
-        }
+        fun getDatabase(context: Context): AppDatabase =
+            INSTANCE ?: synchronized(this) {  // ✅ thread-safe singleton
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+            }
     }
 }
 ```
@@ -155,21 +131,32 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
 ## Follow-ups
 
-- How does Room compare to raw SQLite?
-- What are the benefits of using Room over other ORMs?
-- How do you handle database migrations in Room?
+- How does Room handle database migrations between schema versions?
+- What are the threading rules for Room operations?
+- How do you implement complex queries with relationships (one-to-many, many-to-many)?
+- What's the difference between `@Insert`, `@Update`, and `@Upsert`?
+- How does Room support RxJava and Kotlin Flow for reactive queries?
+
+## References
+
+- [[c-room-library]] - Room library concept
+- [[c-sqlite]] - SQLite database basics
+- [[c-orm]] - Object-Relational Mapping patterns
+- https://developer.android.com/training/data-storage/room - Official Room documentation
+- https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Room codelab
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] - App components
-- [[q-data-storage-basics--android--easy]] - Data storage basics
+- [[q-data-storage-options--android--easy]] - Android data storage options
+- [[q-sqlite-basics--android--easy]] - SQLite fundamentals
 
 ### Related (Same Level)
-- [[q-room-basics--android--easy]] - Room basics
-- [[q-sqlite-vs-room--android--medium]] - SQLite vs Room
-- [[q-data-persistence--android--medium]] - Data persistence
+- [[q-room-basics--android--easy]] - Room basic operations
+- [[q-room-entities--android--easy]] - Defining Room entities
+- [[q-room-dao--android--medium]] - DAO implementation patterns
 
 ### Advanced (Harder)
-- [[q-room-advanced--android--hard]] - Room advanced
-- [[q-database-optimization--android--hard]] - Database optimization
+- [[q-room-migrations--android--medium]] - Database schema migrations
+- [[q-room-relationships--android--medium]] - Modeling table relationships
+- [[q-room-testing--android--hard]] - Testing Room databases

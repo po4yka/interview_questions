@@ -1,121 +1,256 @@
 ---
 id: 20251016-174927
 title: "Keep Service Running Background / Удержание Service в фоне"
+aliases: ["Keep Service Running Background", "Удержание Service в фоне", "Background Service", "Фоновый сервис"]
 topic: android
+subtopics: [service, background-execution, coroutines]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-cicd-automated-testing--devops--medium, q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-how-to-display-snackbar-or-toast-based-on-results--android--medium]
+related: [q-android-service-types--android--easy, q-service-component--android--medium, q-foreground-service-types--android--medium]
+sources: []
 created: 2025-10-15
-tags: [android/background-processing, android/services, android/workmanager, background-processing, difficulty/medium, foreground-service, jobscheduler, services, workmanager]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:08:02 pm
+updated: 2025-10-28
+tags: [android/service, android/background-execution, android/coroutines, difficulty/medium, foreground-service, jobscheduler, workmanager]
 ---
+# Вопрос (RU)
 
-# How to Keep Service Running in Background?
+Что делать если нужно чтобы сервис продолжал работу в фоне?
 
-**Russian**: Что делать если нужно чтобы сервис продолжал работу в фоне?
+# Question (EN)
 
-**English**: What to do if you need a service to continue running in the background?
-
-## Answer (EN)
-To keep a service running in the background, choose the right approach based on your needs:
-
-1. **`startForegroundService()`** - For high-priority tasks that need user awareness
-2. **`WorkManager`** - For long-running tasks with power efficiency considerations
-3. **`JobScheduler`** - For tasks requiring network connectivity or specific conditions
-
-Each has different guarantees, restrictions, and use cases.
+What to do if you need a service to continue running in the background?
 
 ---
 
-## Option 1: Foreground Service (High Priority)
+## Ответ (RU)
 
-### When to Use
+Для продолжения работы сервиса в фоне выберите правильный подход:
 
-**Use foreground service when:**
-- - Task is **user-initiated** and **time-sensitive**
-- - User **expects** the task to continue (music playback, navigation)
-- - Task requires **immediate execution**
-- - You can show a **persistent notification**
+### 1. Foreground Service (Высокий приоритет)
 
-**Don't use when:**
-- - Task is **deferrable** (can wait until better conditions)
-- - User is **unaware** of the task
-- - Task is **periodic** (daily sync, etc.)
+**Когда использовать:**
+- Задача инициирована пользователем и срочна
+- Пользователь ожидает продолжения (музыка, навигация)
+- Требуется немедленное выполнение
+- Можете показать постоянное уведомление
 
----
-
-### Implementation
+**Ключевые характеристики:**
+- Требует постоянного уведомления (обязательно с Android 8.0+)
+- Высокий приоритет - система не убивает сервис
+- Должен вызвать `startForeground()` в течение 5 секунд
+- Требует разрешения `FOREGROUND_SERVICE` в манифесте
 
 ```kotlin
 class DownloadService : Service() {
-    private val NOTIFICATION_ID = 1
-
     override fun onCreate() {
         super.onCreate()
-        // Must call startForeground() within 5 seconds on Android 8.0+
+        // ✅ Must call startForeground within 5 seconds
         startForeground(NOTIFICATION_ID, createNotification())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Start long-running task
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 downloadLargeFile()
-                // Task completes successfully
-                stopForeground(STOP_FOREGROUND_REMOVE)
-                stopSelf()
-            } catch (e: Exception) {
-                // Handle error
+            } finally {
+                // ✅ Always stop when done
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
             }
         }
-
-        return START_STICKY  // Restart if killed
+        return START_STICKY
     }
 
-    private fun createNotification(): Notification {
-        val channelId = "download_channel"
+    override fun onBind(intent: Intent?): IBinder? = null
+}
+```
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Downloads",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            getSystemService(NotificationManager::class.java)
-                .createNotificationChannel(channel)
+**Запуск сервиса:**
+```kotlin
+val intent = Intent(this, DownloadService::class.java)
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    startForegroundService(intent) // ✅ API 26+
+} else {
+    startService(intent) // ❌ Deprecated for foreground on API 26+
+}
+```
+
+### 2. WorkManager (Рекомендуется)
+
+**Когда использовать:**
+- Задача может быть отложена
+- Задача должна пережить перезапуск приложения
+- Нужно гарантированное выполнение
+- Важна оптимизация батареи
+
+**Примеры:** загрузка логов, периодическая синхронизация, резервное копирование при WiFi
+
+```kotlin
+class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        return try {
+            val fileUrl = inputData.getString("file_url") ?: return Result.failure()
+            setForeground(createForegroundInfo()) // ✅ For long-running work
+            uploadFile(fileUrl)
+            Result.success()
+        } catch (e: Exception) {
+            // ✅ Retry with exponential backoff
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
+    }
+}
+```
 
-        return NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Downloading file")
-            .setContentText("Download in progress...")
-            .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setOngoing(true)
-            .build()
+**Планирование работы:**
+```kotlin
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
+
+val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+    .setInputData(workDataOf("file_url" to fileUrl))
+    .setConstraints(constraints)
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+    .build()
+
+WorkManager.getInstance(this).enqueue(uploadRequest)
+```
+
+### 3. JobScheduler (Управляется системой)
+
+**Когда использовать:**
+- Задача требует специфических условий (сеть, зарядка, idle)
+- Задача не критична по времени
+- Не нужны функции WorkManager (chaining, unique work)
+
+**Примечание:** WorkManager использует JobScheduler внутри на Android 6.0+, поэтому WorkManager обычно предпочтительнее.
+
+```kotlin
+class SyncJobService : JobService() {
+    private var job: Job? = null
+
+    override fun onStartJob(params: JobParameters?): Boolean {
+        job = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                performSync()
+                jobFinished(params, false) // ✅ false = don't reschedule
+            } catch (e: Exception) {
+                jobFinished(params, true) // ✅ true = reschedule on failure
+            }
+        }
+        return true // Work is ongoing
     }
 
-    private suspend fun downloadLargeFile() {
-        // Actual download logic
-        for (i in 1..100) {
-            delay(100)
-            updateProgress(i)
+    override fun onStopJob(params: JobParameters?): Boolean {
+        job?.cancel()
+        return true // Reschedule
+    }
+}
+```
+
+### Сравнение подходов
+
+| Критерий | Foreground Service | WorkManager | JobScheduler |
+|----------|-------------------|-------------|--------------|
+| **Уведомление пользователя** | Требуется | Опционально | Не требуется |
+| **Приоритет** | Высокий | Средний | Низкий |
+| **Время выполнения** | Немедленное | Отложенное | Отложенное |
+| **Constraints** | Нет | Сеть, батарея, хранилище | Сеть, зарядка, idle |
+| **Переживает перезагрузку** | Нет | Да | Да (если persisted) |
+| **Случай использования** | Музыка, навигация | Фоновая синхронизация | Периодическая очистка |
+
+### Лучшие практики
+
+**1. Выбирайте правильный инструмент:**
+```kotlin
+// ❌ BAD: Foreground service для периодической синхронизации
+class PeriodicSyncService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(1, notification) // Пользователь не должен это видеть!
+        syncData()
+        return START_STICKY
+    }
+}
+
+// ✅ GOOD: WorkManager для периодической синхронизации
+val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES).build()
+WorkManager.getInstance(context).enqueue(syncRequest)
+```
+
+**2. Учитывайте различия версий Android:**
+- Android 12+ имеет ограничения на запуск foreground service из фона
+- Android 8+ требует `startForegroundService()` вместо `startService()`
+- Android 14+ требует `foregroundServiceType` в манифесте
+
+**3. Всегда останавливайте сервисы:**
+```kotlin
+override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            performTask()
+        } finally {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf() // ✅ Always stop when done
         }
     }
+    return START_NOT_STICKY
+}
+```
 
-    private fun updateProgress(progress: Int) {
-        val notification = NotificationCompat.Builder(this, "download_channel")
-            .setContentTitle("Downloading file")
-            .setContentText("Progress: $progress%")
-            .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setProgress(100, progress, false)
-            .setOngoing(true)
-            .build()
+### Алгоритм выбора
 
-        val notificationManager = getSystemService(NotificationManager::class.java)
-        notificationManager.notify(NOTIFICATION_ID, notification)
+```text
+Задача инициирована пользователем и срочна?
+ ДА → Foreground Service
+ НЕТ → Задача может быть отложена?
+     ДА → WorkManager
+     НЕТ → Пересмотрите необходимость задачи
+```
+
+---
+
+## Answer (EN)
+
+To keep a service running in the background, choose the right approach:
+
+### 1. Foreground Service (High Priority)
+
+**When to use:**
+- Task is user-initiated and time-sensitive
+- User expects the task to continue (music playback, navigation)
+- Task requires immediate execution
+- You can show a persistent notification
+
+**Key characteristics:**
+- Requires persistent notification (mandatory on Android 8.0+)
+- High priority - system won't kill the service
+- Must call `startForeground()` within 5 seconds
+- Requires `FOREGROUND_SERVICE` permission in manifest
+
+```kotlin
+class DownloadService : Service() {
+    override fun onCreate() {
+        super.onCreate()
+        // ✅ Must call startForeground within 5 seconds
+        startForeground(NOTIFICATION_ID, createNotification())
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                downloadLargeFile()
+            } finally {
+                // ✅ Always stop when done
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
+        }
+        return START_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -123,620 +258,176 @@ class DownloadService : Service() {
 ```
 
 **Starting the service:**
-
 ```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private fun startDownload() {
-        val intent = Intent(this, DownloadService::class.java)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
-        }
-    }
+val intent = Intent(this, DownloadService::class.java)
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    startForegroundService(intent) // ✅ API 26+
+} else {
+    startService(intent) // ❌ Deprecated for foreground on API 26+
 }
 ```
 
-**Manifest:**
+### 2. WorkManager (Recommended)
 
-```xml
-<manifest>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+**When to use:**
+- Task is deferrable
+- Task should survive app restarts
+- You need guaranteed execution
+- Battery optimization is important
 
-    <application>
-        <service
-            android:name=".DownloadService"
-            android:foregroundServiceType="dataSync"
-            android:exported="false" />
-    </application>
-</manifest>
-```
-
----
-
-## Option 2: WorkManager (Recommended for Most Cases)
-
-### When to Use
-
-**Use WorkManager when:**
-- - Task is **deferrable** (can wait for optimal conditions)
-- - Task should **survive app restarts**
-- - You need **guaranteed execution** (even after device reboot)
-- - You care about **battery optimization**
-
-**Examples:**
-- Uploading logs to server
-- Syncing data periodically
-- Backing up photos when on WiFi
-- Processing images in background
-
----
-
-### Implementation
-
-**1. Create a Worker:**
+**Examples:** log uploads, periodic sync, WiFi-based photo backup
 
 ```kotlin
-class UploadWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
-
+class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         return try {
-            // Get input data
             val fileUrl = inputData.getString("file_url") ?: return Result.failure()
-
-            // Show notification for long-running work
-            setForeground(createForegroundInfo())
-
-            // Perform upload
+            setForeground(createForegroundInfo()) // ✅ For long-running work
             uploadFile(fileUrl)
-
-            // Return success
             Result.success()
         } catch (e: Exception) {
-            // Retry on failure
-            if (runAttemptCount < 3) {
-                Result.retry()
-            } else {
-                Result.failure()
-            }
+            // ✅ Retry with exponential backoff
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
-    }
-
-    private fun createForegroundInfo(): ForegroundInfo {
-        val channelId = "upload_channel"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Uploads",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            val notificationManager = applicationContext.getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val notification = NotificationCompat.Builder(applicationContext, channelId)
-            .setContentTitle("Uploading file")
-            .setContentText("Upload in progress...")
-            .setSmallIcon(android.R.drawable.stat_sys_upload)
-            .setOngoing(true)
-            .build()
-
-        return ForegroundInfo(NOTIFICATION_ID, notification)
-    }
-
-    private suspend fun uploadFile(fileUrl: String) {
-        // Actual upload logic
-        withContext(Dispatchers.IO) {
-            // Upload implementation
-        }
-    }
-
-    companion object {
-        private const val NOTIFICATION_ID = 2
     }
 }
 ```
 
-**2. Schedule the Work:**
-
+**Scheduling work:**
 ```kotlin
-class MainActivity : AppCompatActivity() {
+val constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
 
-    private fun scheduleUpload(fileUrl: String) {
-        // Create input data
-        val inputData = workDataOf("file_url" to fileUrl)
+val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+    .setInputData(workDataOf("file_url" to fileUrl))
+    .setConstraints(constraints)
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+    .build()
 
-        // Create constraints
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)  // Needs internet
-            .setRequiresBatteryNotLow(true)  // Wait until battery is OK
-            .build()
-
-        // Create work request
-        val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
-            .setInputData(inputData)
-            .setConstraints(constraints)
-            .setBackoffCriteria(
-                BackoffPolicy.EXPONENTIAL,
-                WorkRequest.MIN_BACKOFF_MILLIS,
-                TimeUnit.MILLISECONDS
-            )
-            .build()
-
-        // Enqueue work
-        WorkManager.getInstance(this).enqueue(uploadRequest)
-    }
-
-    private fun schedulePeriodicSync() {
-        val syncRequest = PeriodicWorkRequestBuilder<UploadWorker>(
-            15,  // Minimum interval: 15 minutes
-            TimeUnit.MINUTES
-        )
-            .setConstraints(
-                Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.UNMETERED)  // WiFi only
-                    .build()
-            )
-            .build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "periodic_sync",
-            ExistingPeriodicWorkPolicy.KEEP,
-            syncRequest
-        )
-    }
-}
+WorkManager.getInstance(this).enqueue(uploadRequest)
 ```
 
-**3. Observe Work Status:**
+### 3. JobScheduler (System-Managed)
 
-```kotlin
-WorkManager.getInstance(this)
-    .getWorkInfoByIdLiveData(uploadRequest.id)
-    .observe(this) { workInfo ->
-        when (workInfo?.state) {
-            WorkInfo.State.ENQUEUED -> Log.d("Upload", "Queued")
-            WorkInfo.State.RUNNING -> Log.d("Upload", "Running")
-            WorkInfo.State.SUCCEEDED -> Log.d("Upload", "Success")
-            WorkInfo.State.FAILED -> Log.d("Upload", "Failed")
-            WorkInfo.State.CANCELLED -> Log.d("Upload", "Cancelled")
-            else -> {}
-        }
-    }
-```
-
-**Dependencies:**
-
-```gradle
-// build.gradle
-dependencies {
-    implementation "androidx.work:work-runtime-ktx:2.9.0"
-}
-```
-
----
-
-## Option 3: JobScheduler (System-Managed)
-
-### When to Use
-
-**Use JobScheduler when:**
-- - Task requires **specific conditions** (network type, charging, idle)
-- - Task is **not time-critical**
-- - You want **system to optimize** execution time
-- - You don't need WorkManager features (chaining, unique work)
+**When to use:**
+- Task requires specific conditions (network, charging, idle)
+- Task is not time-critical
+- You don't need WorkManager features (chaining, unique work)
 
 **Note:** WorkManager uses JobScheduler internally on Android 6.0+, so WorkManager is usually preferred.
 
----
-
-### Implementation
-
-**1. Create a JobService:**
-
 ```kotlin
 class SyncJobService : JobService() {
-
     private var job: Job? = null
 
     override fun onStartJob(params: JobParameters?): Boolean {
-        // Return true if work is ongoing (asynchronous)
         job = CoroutineScope(Dispatchers.IO).launch {
             try {
                 performSync()
-                // Notify system job is complete
-                jobFinished(params, false)  // false = don't reschedule
+                jobFinished(params, false) // ✅ false = don't reschedule
             } catch (e: Exception) {
-                // Reschedule on failure
-                jobFinished(params, true)  // true = reschedule
+                jobFinished(params, true) // ✅ true = reschedule on failure
             }
         }
-
-        return true  // Work is ongoing
+        return true // Work is ongoing
     }
 
     override fun onStopJob(params: JobParameters?): Boolean {
-        // Called when system decides to stop job early
         job?.cancel()
-        return true  // true = reschedule, false = drop
-    }
-
-    private suspend fun performSync() {
-        // Actual sync logic
-        delay(5000)
-        Log.d("JobService", "Sync completed")
+        return true // Reschedule
     }
 }
 ```
 
-**2. Schedule the Job:**
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private fun scheduleJob() {
-        val jobScheduler = getSystemService(JobScheduler::class.java)
-
-        val job = JobInfo.Builder(
-            JOB_ID,
-            ComponentName(this, SyncJobService::class.java)
-        )
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-            .setPersisted(true)  // Survive reboot
-            .setPeriodic(15 * 60 * 1000L)  // Every 15 minutes
-            .build()
-
-        val result = jobScheduler.schedule(job)
-
-        if (result == JobScheduler.RESULT_SUCCESS) {
-            Log.d("JobScheduler", "Job scheduled successfully")
-        } else {
-            Log.e("JobScheduler", "Job scheduling failed")
-        }
-    }
-
-    companion object {
-        private const val JOB_ID = 100
-    }
-}
-```
-
-**Manifest:**
-
-```xml
-<manifest>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <application>
-        <service
-            android:name=".SyncJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true" />
-    </application>
-</manifest>
-```
-
----
-
-## Comparison: Which to Choose?
+### Comparison
 
 | Criteria | Foreground Service | WorkManager | JobScheduler |
 |----------|-------------------|-------------|--------------|
-| **User awareness** | Required (notification) | Optional | Not required |
-| **Priority** | High (won't be killed) | Medium | Low |
-| **Execution timing** | Immediate | Deferred (optimized) | Deferred (system decides) |
+| **User notification** | Required | Optional | Not required |
+| **Priority** | High | Medium | Low |
+| **Execution timing** | Immediate | Deferred | Deferred |
 | **Constraints** | None | Network, battery, storage | Network, charging, idle |
 | **Survives reboot** | No | Yes | Yes (if persisted) |
-| **Min Android version** | All | 4.0+ (API 14+) | 5.0+ (API 21+) |
-| **Use case** | Music, navigation, download | Background sync, uploads | Periodic sync, cleanup |
+| **Use case** | Music, navigation | Background sync | Periodic cleanup |
 
----
+### Best Practices
 
-## Advanced: Combining Approaches
-
-### Example: Smart Upload Service
-
+**1. Choose the right tool:**
 ```kotlin
-class SmartUploadManager(private val context: Context) {
-
-    fun uploadFile(fileUrl: String, isUrgent: Boolean) {
-        if (isUrgent) {
-            // User-initiated, immediate upload
-            startForegroundServiceUpload(fileUrl)
-        } else {
-            // Background upload, use WorkManager
-            scheduleWorkManagerUpload(fileUrl)
-        }
-    }
-
-    private fun startForegroundServiceUpload(fileUrl: String) {
-        val intent = Intent(context, UploadService::class.java).apply {
-            putExtra("file_url", fileUrl)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent)
-        } else {
-            context.startService(intent)
-        }
-    }
-
-    private fun scheduleWorkManagerUpload(fileUrl: String) {
-        val inputData = workDataOf("file_url" to fileUrl)
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED)  // WiFi only
-            .setRequiresBatteryNotLow(true)
-            .build()
-
-        val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
-            .setInputData(inputData)
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(context).enqueue(uploadRequest)
-    }
-}
-```
-
-**Usage:**
-
-```kotlin
-val uploadManager = SmartUploadManager(this)
-
-// User taps "Upload Now" button
-uploadManager.uploadFile(fileUrl, isUrgent = true)  // Foreground service
-
-// Auto-backup in background
-uploadManager.uploadFile(fileUrl, isUrgent = false)  // WorkManager
-```
-
----
-
-## Best Practices
-
-### 1. Choose the Right Tool
-
-```kotlin
-// - BAD: Foreground service for periodic sync
+// ❌ BAD: Foreground service for periodic sync
 class PeriodicSyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, notification)  // User doesn't need to see this!
+        startForeground(1, notification) // User doesn't need to see this!
         syncData()
         return START_STICKY
     }
 }
 
-// - GOOD: WorkManager for periodic sync
-val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
-    .build()
+// ✅ GOOD: WorkManager for periodic sync
+val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES).build()
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
-### 2. Handle Android Version Differences
+**2. Handle Android version differences:**
+- Android 12+ has restrictions on foreground service starts from background
+- Android 8+ requires `startForegroundService()` instead of `startService()`
+- Android 14+ requires `foregroundServiceType` in manifest
 
+**3. Always stop services:**
 ```kotlin
-fun startBackgroundTask() {
-    when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            // Android 12+: Restrictions on foreground service starts from background
-            useWorkManager()
-        }
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-            // Android 8+: Must use startForegroundService()
-            startForegroundService()
-        }
-        else -> {
-            // Older versions: Regular service
-            startService()
-        }
-    }
-}
-```
-
-### 3. Stop Services When Done
-
-```kotlin
-// - Always stop service when task completes
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     CoroutineScope(Dispatchers.IO).launch {
         try {
             performTask()
         } finally {
             stopForeground(STOP_FOREGROUND_REMOVE)
-            stopSelf()  // Don't forget this!
+            stopSelf() // ✅ Always stop when done
         }
     }
     return START_NOT_STICKY
 }
 ```
 
----
+### Decision flowchart
 
-## Summary
-
-**How to keep a service running in background:**
-
-### 1. **Foreground Service**
-- **Use for:** User-visible, time-sensitive tasks
-- **Method:** `startForegroundService()` + `startForeground()`
-- **Pros:** High priority, won't be killed
-- **Cons:** Requires notification, user awareness
-
-### 2. **WorkManager** (Recommended)
-- **Use for:** Deferrable background tasks
-- **Method:** Create Worker, enqueue with constraints
-- **Pros:** Battery efficient, survives reboot, guaranteed execution
-- **Cons:** Not immediate execution
-
-### 3. **JobScheduler**
-- **Use for:** System-optimized periodic tasks
-- **Method:** Create JobService, schedule with JobScheduler
-- **Pros:** System-managed, constraint-based
-- **Cons:** Requires API 21+, less flexible than WorkManager
-
-**Decision flowchart:**
-```
+```text
 Is task user-initiated and time-sensitive?
  YES → Foreground Service
  NO → Is task deferrable?
      YES → WorkManager
-     NO → Consider task necessity
-        (Most tasks are deferrable!)
+     NO → Reconsider task necessity
 ```
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Для продолжения работы сервиса в фоне выберите правильный подход в зависимости от ваших потребностей:
+- How to handle battery optimization restrictions (Doze mode, App Standby)?
+- What happens if foreground service doesn't call `startForeground()` within 5 seconds?
+- How to chain multiple WorkManager tasks sequentially or in parallel?
+- What are the differences between `START_STICKY`, `START_NOT_STICKY`, and `START_REDELIVER_INTENT`?
+- How to test background services and WorkManager in unit tests?
 
-1. **`startForegroundService()`** - для задач с высоким приоритетом, требующих уведомления пользователя
-2. **`WorkManager`** - для длительных задач с учётом энергопотребления (рекомендуется)
-3. **`JobScheduler`** - для задач, требующих сетевого подключения или определенных условий
+## References
 
-Каждый имеет разные гарантии, ограничения и случаи использования.
-
-### Вариант 1: Foreground Service (Высокий приоритет)
-
-**Используйте foreground service когда**:
-- Задача инициирована пользователем и срочна
-- Пользователь ожидает продолжения задачи (воспроизведение музыки, навигация)
-- Задача требует немедленного выполнения
-- Можете показать постоянное уведомление
-
-**Не используйте когда**:
-- Задача может быть отложена (подождать лучших условий)
-- Пользователь не знает о задаче
-- Задача периодическая (ежедневная синхронизация и т.д.)
-
-**Ключевые характеристики**:
-- Требует постоянного уведомления (обязательно с Android 8.0+)
-- Высокий приоритет - система не убивает сервис
-- Должен вызвать startForeground() в течение 5 секунд после onCreate()
-- Требует разрешения FOREGROUND_SERVICE в манифесте
-- С Android 14 требует указание foregroundServiceType
-
-**Распространенные типы foreground services**:
-- dataSync - синхронизация данных
-- mediaPlayback - воспроизведение медиа
-- location - отслеживание местоположения
-- camera - использование камеры
-- microphone - запись аудио
-
-### Вариант 2: WorkManager (Рекомендуется Для Большинства случаев)
-
-**Используйте WorkManager когда**:
-- Задача может быть отложена (подождать оптимальных условий)
-- Задача должна пережить перезапуск приложения
-- Нужно гарантированное выполнение (даже после перезагрузки устройства)
-- Важна оптимизация батареи
-
-**Примеры использования**:
-- Загрузка логов на сервер
-- Периодическая синхронизация данных
-- Резервное копирование фото при подключении к WiFi
-- Обработка изображений в фоне
-
-**Преимущества WorkManager**:
-- Автоматический выбор лучшего API (JobScheduler, AlarmManager, BroadcastReceiver)
-- Поддержка constraints (сеть, батарея, хранилище)
-- Backoff политики для повторных попыток
-- Chaining работ (последовательное и параллельное выполнение)
-- Наблюдение за статусом работы через LiveData
-- Тестируемость
-
-**Constraints (ограничения)**:
-- NetworkType - требуется подключение к сети (CONNECTED, UNMETERED)
-- BatteryNotLow - батарея не должна быть низкой
-- RequiresCharging - устройство должно заряжаться
-- DeviceIdle - устройство в режиме ожидания
-- StorageNotLow - достаточно свободного места
-
-### Вариант 3: JobScheduler (Управляется системой)
-
-**Используйте JobScheduler когда**:
-- Задача требует специфических условий (тип сети, зарядка, idle)
-- Задача не критична по времени
-- Хотите чтобы система оптимизировала время выполнения
-- Не нужны функции WorkManager (chaining, unique work)
-
-**Примечание**: WorkManager использует JobScheduler внутри на Android 6.0+, поэтому WorkManager обычно предпочтительнее.
-
-**Характеристики JobScheduler**:
-- Минимальный интервал: 15 минут для periodic jobs
-- Система может объединять задачи для экономии батареи
-- Может переживать перезагрузку устройства (с setPersisted(true))
-- Гибкие constraints (network, charging, idle)
-
-### Сравнение: Что Выбрать?
-
-| Критерий | Foreground Service | WorkManager | JobScheduler |
-|----------|-------------------|-------------|--------------|
-| **Осведомленность пользователя** | Требуется (уведомление) | Опционально | Не требуется |
-| **Приоритет** | Высокий (не будет убит) | Средний | Низкий |
-| **Время выполнения** | Немедленное | Отложенное (оптимизировано) | Отложенное (система решает) |
-| **Constraints** | Нет | Сеть, батарея, хранилище | Сеть, зарядка, idle |
-| **Переживает перезагрузку** | Нет | Да | Да (если persisted) |
-| **Мин. версия Android** | Все | 4.0+ (API 14+) | 5.0+ (API 21+) |
-| **Случай использования** | Музыка, навигация, загрузка | Фоновая синхронизация, uploads | Периодическая синхронизация, очистка |
-
-### Лучшие Практики
-
-**1. Выбирайте правильный инструмент**:
-- Используйте Foreground Service только когда пользователь должен знать о задаче
-- Предпочитайте WorkManager для фоновых задач
-- Избегайте JobScheduler напрямую - используйте WorkManager
-
-**2. Учитывайте различия версий Android**:
-- Android 12+ имеет ограничения на запуск foreground service из фона
-- Android 8+ требует startForegroundService() вместо startService()
-- Android 14+ требует foregroundServiceType в манифесте
-
-**3. Останавливайте сервисы когда закончили**:
-- Всегда вызывайте stopSelf() или stopForeground()
-- Не оставляйте сервисы работающими без необходимости
-- Используйте START_NOT_STICKY если не нужен restart
-
-**4. Обрабатывайте ошибки корректно**:
-- Реализуйте retry логику в WorkManager
-- Используйте ExponentialBackoff для повторных попыток
-- Логируйте ошибки для отладки
-
-**5. Тестируйте на реальных устройствах**:
-- Doze mode может влиять на выполнение
-- App Standby может задерживать работы
-- Разные производители имеют разную агрессивность battery optimization
-
-### Когда Что Использовать:
-
-**Foreground Service**: музыка, навигация, срочная загрузка, фитнес-трекинг, видеозвонки
-
-**WorkManager**: синхронизация данных, загрузка файлов в фоне, периодические задачи, обработка изображений, отправка аналитики
-
-**JobScheduler**: периодическая очистка кеша, автоматическое обновление контента (только если не используете WorkManager)
-
-
----
+- [Android Developer Guide: Background Work](https://developer.android.com/guide/background)
+- [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
+- [Foreground Services](https://developer.android.com/guide/components/foreground-services)
+- [JobScheduler API](https://developer.android.com/reference/android/app/job/JobScheduler)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service
+- [[q-android-service-types--android--easy]] - Types of Android services
 
-### Related (Medium)
-- [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--android--medium]] - Service
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
-- [[q-background-vs-foreground-service--android--medium]] - Service
+### Related (Same Level)
+- [[q-service-component--android--medium]] - Service component lifecycle
+- [[q-foreground-service-types--android--medium]] - Foreground service types
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior
+- [[q-background-vs-foreground-service--android--medium]] - Comparing service types
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] - Service
+- [[q-service-lifecycle-binding--android--hard]] - Complex service binding scenarios
+- [[q-compose-side-effects-launchedeffect-disposableeffect--android--hard]] - Handling background work in Compose

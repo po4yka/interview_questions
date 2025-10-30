@@ -1,105 +1,54 @@
 ---
 id: 20251012-122711123
-title: "V Chyom Izmeryaetsya Proizvoditelnost Layout / В чем измеряется производительность layout"
+title: "В чём измеряется производительность layout / How is layout performance measured"
+aliases: ["В чём измеряется производительность layout", "How is layout performance measured", "Layout performance metrics", "Метрики производительности layout"]
 topic: android
+subtopics: [performance-rendering, ui-views, profiling]
+question_kind: theory
 difficulty: medium
+original_language: ru
+language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [q-kmm-production-readiness--multiplatform--hard, q-testing-viewmodels-turbine--testing--medium, q-main-causes-ui-lag--android--medium]
+related: [q-main-causes-ui-lag--android--medium, c-choreographer, c-systrace]
 created: 2025-10-15
-tags: [languages, difficulty/medium]
+updated: 2025-10-28
+sources: []
+tags: [android, android/performance-rendering, android/ui-views, android/profiling, performance, rendering, frame-timing, difficulty/medium]
 ---
 
-# В чём измеряется производительность layout
+# Вопрос (RU)
 
-## Answer (EN)
-Layout performance in Android is measured in **milliseconds (ms)** of rendering time, specifically tracking the time spent in three main phases: **measure**, **layout**, and **draw**. Additionally, in modern Android development, we measure **recomposition count** and **frame drops**.
+> В чём измеряется производительность layout в Android?
 
-### 1. Three Phases of Rendering
+# Question (EN)
 
-Android renders UI in three phases, each measured in milliseconds:
+> How is layout performance measured in Android?
 
-```kotlin
-// Each frame must complete in ~16ms (60fps) or ~11ms (90fps)
-val frameTime = 16.67ms  // 60 FPS target
-val frameTime90 = 11.11ms // 90 FPS target
-val frameTime120 = 8.33ms // 120 FPS target
+---
 
-// Three phases:
-// 1. Measure phase  - determine size of views
-// 2. Layout phase   - position views
-// 3. Draw phase     - render to screen
-```
+## Ответ (RU)
 
-#### Measuring Performance
+Производительность layout измеряется в **миллисекундах (ms)** времени отрисовки каждого кадра. Android отрисовывает UI в три фазы: **measure**, **layout**, **draw**. Для плавной работы весь кадр должен укладываться в бюджет времени (16.67ms для 60fps, 11.11ms для 90fps).
 
-```kotlin
-class PerformanceActivity : AppCompatActivity() {
+### Основные метрики
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+**Целевое время кадра:**
+- 60 FPS → 16.67ms на кадр
+- 90 FPS → 11.11ms на кадр
+- 120 FPS → 8.33ms на кадр
 
-        val rootView = layoutInflater.inflate(R.layout.activity_main, null)
+**Бюджет по фазам (для 60fps):**
+- Measure: до 5ms
+- Layout: до 5ms
+- Draw: до 6.67ms
 
-        // Measure phase timing
-        val measureStart = System.nanoTime()
-        rootView.measure(
-            View.MeasureSpec.makeMeasureSpec(resources.displayMetrics.widthPixels, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(resources.displayMetrics.heightPixels, View.MeasureSpec.EXACTLY)
-        )
-        val measureTime = (System.nanoTime() - measureStart) / 1_000_000.0
-        Log.d("Performance", "Measure: ${measureTime}ms")
+### 1. Измерение через Choreographer
 
-        // Layout phase timing
-        val layoutStart = System.nanoTime()
-        rootView.layout(0, 0, rootView.measuredWidth, rootView.measuredHeight)
-        val layoutTime = (System.nanoTime() - layoutStart) / 1_000_000.0
-        Log.d("Performance", "Layout: ${layoutTime}ms")
-
-        setContentView(rootView)
-    }
-}
-```
-
-### 2. Frame Rate Metrics
-
-Performance is often measured in frames per second (FPS) and dropped frames.
+`Choreographer` синхронизирует анимации с частотой обновления экрана:
 
 ```kotlin
-class FrameRateMonitor {
-
-    private var frameCount = 0
-    private var lastTime = System.currentTimeMillis()
-
-    fun onFrame() {
-        frameCount++
-        val currentTime = System.currentTimeMillis()
-
-        if (currentTime - lastTime >= 1000) {
-            val fps = frameCount
-            Log.d("FPS", "Current FPS: $fps")
-
-            frameCount = 0
-            lastTime = currentTime
-        }
-    }
-
-    // Check for dropped frames
-    fun checkFrameDrop(frameTimeMs: Long) {
-        val targetFrameTime = 16.67 // 60fps
-        if (frameTimeMs > targetFrameTime) {
-            val droppedFrames = (frameTimeMs / targetFrameTime).toInt()
-            Log.w("Performance", "Dropped $droppedFrames frames (${frameTimeMs}ms)")
-        }
-    }
-}
-```
-
-### 3. Using Choreographer for Frame Timing
-
-```kotlin
-class ChoreographerMonitor(private val context: Context) {
-
+class FrameMonitor {
     private val choreographer = Choreographer.getInstance()
     private var lastFrameTime = 0L
 
@@ -111,339 +60,355 @@ class ChoreographerMonitor(private val context: Context) {
         override fun doFrame(frameTimeNanos: Long) {
             if (lastFrameTime != 0L) {
                 val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
-                val fps = 1000.0 / frameTime
-
-                Log.d("Choreographer", "Frame time: ${frameTime}ms, FPS: $fps")
 
                 if (frameTime > 16.67) {
-                    Log.w("Performance", "Slow frame detected: ${frameTime}ms")
+                    // ❌ Пропущен кадр
+                    Log.w("Frame", "Slow frame: ${frameTime}ms")
+                } else {
+                    // ✅ Кадр в пределах нормы
                 }
             }
-
             lastFrameTime = frameTimeNanos
-            choreographer.postFrameCallback(this)
+            choreographer.postFrameCallback(this) // Следующий кадр
         }
-    }
-
-    fun stop() {
-        choreographer.removeFrameCallback(frameCallback)
     }
 }
 ```
 
-### 4. Systrace and Performance Profiling
-
-Android provides tools to measure performance in detail:
+### 2. Измерение фаз через FrameMetrics (API 24+)
 
 ```kotlin
-class SystemTraceExample {
+class DetailedFrameMonitor(activity: Activity) {
 
-    fun measurePerformance() {
-        // Add trace sections
-        Trace.beginSection("loadData")
-        loadDataFromDatabase()
-        Trace.endSection()
+    init {
+        activity.window.addOnFrameMetricsAvailableListener(
+            { _, metrics, _ ->
+                val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
+                val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+                val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
 
-        Trace.beginSection("renderUI")
-        renderComplexUI()
-        Trace.endSection()
-    }
-
-    private fun loadDataFromDatabase() {
-        // Database operations
-    }
-
-    private fun renderComplexUI() {
-        // UI rendering
-    }
-}
-
-// View in Systrace:
-// adb shell atrace --async_start view gfx input
-// (perform actions)
-// adb shell atrace --async_stop > trace.html
-```
-
-### 5. Layout Complexity Metrics
-
-```kotlin
-class LayoutComplexityAnalyzer {
-
-    fun analyzeLayout(view: View): LayoutMetrics {
-        var viewCount = 0
-        var maxDepth = 0
-
-        fun traverse(v: View, depth: Int) {
-            viewCount++
-            maxDepth = maxOf(maxDepth, depth)
-
-            if (v is ViewGroup) {
-                for (i in 0 until v.childCount) {
-                    traverse(v.getChildAt(i), depth + 1)
-                }
-            }
-        }
-
-        traverse(view, 0)
-
-        return LayoutMetrics(
-            viewCount = viewCount,
-            maxDepth = maxDepth,
-            complexity = viewCount * maxDepth
+                // ✅ Детальная статистика по фазам
+                Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
+            },
+            Handler(Looper.getMainLooper())
         )
     }
-
-    data class LayoutMetrics(
-        val viewCount: Int,
-        val maxDepth: Int,
-        val complexity: Int
-    )
 }
-
-// Usage
-val analyzer = LayoutComplexityAnalyzer()
-val metrics = analyzer.analyzeLayout(rootView)
-Log.d("Layout", """
-    Views: ${metrics.viewCount}
-    Depth: ${metrics.maxDepth}
-    Complexity: ${metrics.complexity}
-""".trimIndent())
 ```
 
-### 6. Jetpack Compose Recomposition Metrics
+### 3. Трассировка через Trace API
+
+```kotlin
+class OptimizedView : View(context) {
+
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        Trace.beginSection("OptimizedView:measure") // ✅ Начало секции
+        super.onMeasure(widthSpec, heightSpec)
+        Trace.endSection() // ✅ Конец секции
+    }
+
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        Trace.beginSection("OptimizedView:layout")
+        super.onLayout(changed, l, t, r, b)
+        Trace.endSection()
+    }
+}
+```
+
+Просмотр трассировки:
+```bash
+# Запуск трассировки
+adb shell atrace --async_start view gfx input
+
+# Остановка и сохранение
+adb shell atrace --async_stop > trace.html
+```
+
+### 4. Анализ сложности иерархии
+
+```kotlin
+data class LayoutComplexity(
+    val viewCount: Int,
+    val maxDepth: Int
+)
+
+fun analyzeHierarchy(view: View): LayoutComplexity {
+    var viewCount = 0
+    var maxDepth = 0
+
+    fun traverse(v: View, depth: Int) {
+        viewCount++
+        maxDepth = maxOf(maxDepth, depth)
+
+        if (v is ViewGroup) {
+            for (i in 0 until v.childCount) {
+                traverse(v.getChildAt(i), depth + 1)
+            }
+        }
+    }
+
+    traverse(view, 0)
+
+    return LayoutComplexity(viewCount, maxDepth).also {
+        if (it.maxDepth > 10) {
+            // ❌ Слишком глубокая иерархия
+            Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
+        }
+        if (it.viewCount > 80) {
+            // ❌ Слишком много view
+            Log.w("Layout", "Too many views: ${it.viewCount}")
+        }
+    }
+}
+```
+
+### 5. Recomposition в Jetpack Compose
+
+В Compose производительность измеряется количеством recomposition:
+
+```kotlin
+@Composable
+fun MonitoredComposable() {
+    val recompositions = remember { mutableStateOf(0) }
+
+    SideEffect {
+        recompositions.value++ // ✅ Считаем перекомпоновки
+    }
+
+    Text("Recompositions: ${recompositions.value}")
+}
+```
+
+Включение метрик в `build.gradle.kts`:
+```kotlin
+kotlinOptions {
+    freeCompilerArgs += listOf(
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+        "${project.buildDir}/compose_metrics"
+    )
+}
+```
+
+### Таблица метрик производительности
+
+| Метрика | Единица | Целевое значение (60fps) |
+|---------|---------|--------------------------|
+| Время кадра | ms | < 16.67 |
+| Measure | ms | < 5 |
+| Layout | ms | < 5 |
+| Draw | ms | < 6.67 |
+| Глубина иерархии | уровни | < 10 |
+| Количество View | шт. | < 80 |
+| Recomposition | количество | минимизировать |
+
+---
+
+## Answer (EN)
+
+Layout performance is measured in **milliseconds (ms)** of frame rendering time. Android renders UI in three phases: **measure**, **layout**, **draw**. For smooth operation, each frame must fit within the time budget (16.67ms for 60fps, 11.11ms for 90fps).
+
+### Key Metrics
+
+**Target frame time:**
+- 60 FPS → 16.67ms per frame
+- 90 FPS → 11.11ms per frame
+- 120 FPS → 8.33ms per frame
+
+**Phase budget (for 60fps):**
+- Measure: up to 5ms
+- Layout: up to 5ms
+- Draw: up to 6.67ms
+
+### 1. Measuring with Choreographer
+
+`Choreographer` synchronizes animations with screen refresh rate:
+
+```kotlin
+class FrameMonitor {
+    private val choreographer = Choreographer.getInstance()
+    private var lastFrameTime = 0L
+
+    fun start() {
+        choreographer.postFrameCallback(frameCallback)
+    }
+
+    private val frameCallback = object : Choreographer.FrameCallback {
+        override fun doFrame(frameTimeNanos: Long) {
+            if (lastFrameTime != 0L) {
+                val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
+
+                if (frameTime > 16.67) {
+                    // ❌ Dropped frame
+                    Log.w("Frame", "Slow frame: ${frameTime}ms")
+                } else {
+                    // ✅ Frame within budget
+                }
+            }
+            lastFrameTime = frameTimeNanos
+            choreographer.postFrameCallback(this) // Next frame
+        }
+    }
+}
+```
+
+### 2. Measuring Phases with FrameMetrics (API 24+)
+
+```kotlin
+class DetailedFrameMonitor(activity: Activity) {
+
+    init {
+        activity.window.addOnFrameMetricsAvailableListener(
+            { _, metrics, _ ->
+                val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
+                val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+                val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
+
+                // ✅ Detailed phase statistics
+                Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
+            },
+            Handler(Looper.getMainLooper())
+        )
+    }
+}
+```
+
+### 3. Tracing with Trace API
+
+```kotlin
+class OptimizedView : View(context) {
+
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        Trace.beginSection("OptimizedView:measure") // ✅ Start section
+        super.onMeasure(widthSpec, heightSpec)
+        Trace.endSection() // ✅ End section
+    }
+
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        Trace.beginSection("OptimizedView:layout")
+        super.onLayout(changed, l, t, r, b)
+        Trace.endSection()
+    }
+}
+```
+
+Viewing traces:
+```bash
+# Start tracing
+adb shell atrace --async_start view gfx input
+
+# Stop and save
+adb shell atrace --async_stop > trace.html
+```
+
+### 4. Analyzing Hierarchy Complexity
+
+```kotlin
+data class LayoutComplexity(
+    val viewCount: Int,
+    val maxDepth: Int
+)
+
+fun analyzeHierarchy(view: View): LayoutComplexity {
+    var viewCount = 0
+    var maxDepth = 0
+
+    fun traverse(v: View, depth: Int) {
+        viewCount++
+        maxDepth = maxOf(maxDepth, depth)
+
+        if (v is ViewGroup) {
+            for (i in 0 until v.childCount) {
+                traverse(v.getChildAt(i), depth + 1)
+            }
+        }
+    }
+
+    traverse(view, 0)
+
+    return LayoutComplexity(viewCount, maxDepth).also {
+        if (it.maxDepth > 10) {
+            // ❌ Hierarchy too deep
+            Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
+        }
+        if (it.viewCount > 80) {
+            // ❌ Too many views
+            Log.w("Layout", "Too many views: ${it.viewCount}")
+        }
+    }
+}
+```
+
+### 5. Recomposition in Jetpack Compose
 
 In Compose, performance is measured by recomposition count:
 
 ```kotlin
 @Composable
-fun RecompositionCounter() {
+fun MonitoredComposable() {
     val recompositions = remember { mutableStateOf(0) }
 
     SideEffect {
-        recompositions.value++
+        recompositions.value++ // ✅ Count recompositions
     }
 
     Text("Recompositions: ${recompositions.value}")
 }
-
-// Measure recomposition with Compose Compiler Metrics
-// In build.gradle:
-// kotlinOptions {
-//     freeCompilerArgs += [
-//         "-P",
-//         "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-//         project.buildDir.absolutePath + "/compose_metrics"
-//     ]
-// }
 ```
 
-### 7. Performance Monitoring Tools
-
+Enable metrics in `build.gradle.kts`:
 ```kotlin
-class PerformanceMonitor(private val activity: Activity) {
-
-    private val frameMetrics = SparseIntArray()
-
-    fun startMonitoring() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            activity.window.addOnFrameMetricsAvailableListener(
-                { _, frameMetrics, dropCount ->
-                    val totalDuration = frameMetrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
-                    val layoutDuration = frameMetrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-                    val drawDuration = frameMetrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-
-                    Log.d("FrameMetrics", """
-                        Total: ${totalDuration}ms
-                        Layout: ${layoutDuration}ms
-                        Draw: ${drawDuration}ms
-                        Dropped: $dropCount
-                    """.trimIndent())
-                },
-                Handler(Looper.getMainLooper())
-            )
-        }
-    }
-}
-```
-
-### 8. Benchmarking with Macrobenchmark
-
-```kotlin
-@RunWith(AndroidJUnit4::class)
-class LayoutBenchmark {
-
-    @get:Rule
-    val benchmarkRule = MacrobenchmarkRule()
-
-    @Test
-    fun scrollBenchmark() = benchmarkRule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(
-            FrameTimingMetric(),
-            TraceSectionMetric("RecyclerView:onLayout")
-        ),
-        iterations = 10,
-        setupBlock = {
-            pressHome()
-            startActivityAndWait()
-        }
-    ) {
-        val recycler = device.findObject(By.res("recycler_view"))
-        recycler.setGestureMargin(device.displayWidth / 5)
-
-        repeat(3) {
-            recycler.fling(Direction.DOWN)
-            device.waitForIdle()
-        }
-    }
-}
-```
-
-### 9. Custom Performance Metrics
-
-```kotlin
-class CustomPerformanceMetrics {
-
-    data class RenderMetrics(
-        val measureTimeMs: Double,
-        val layoutTimeMs: Double,
-        val drawTimeMs: Double,
-        val totalTimeMs: Double,
-        val recompositionCount: Int = 0
-    )
-
-    fun measureRenderPerformance(view: View): RenderMetrics {
-        var measureTime = 0.0
-        var layoutTime = 0.0
-        var drawTime = 0.0
-
-        // Measure phase
-        measureTime = measureTime {
-            view.measure(
-                View.MeasureSpec.UNSPECIFIED,
-                View.MeasureSpec.UNSPECIFIED
-            )
-        }
-
-        // Layout phase
-        layoutTime = measureTime {
-            view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-        }
-
-        // Draw phase (approximate)
-        val bitmap = Bitmap.createBitmap(
-            view.measuredWidth,
-            view.measuredHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        drawTime = measureTime {
-            view.draw(canvas)
-        }
-
-        return RenderMetrics(
-            measureTimeMs = measureTime,
-            layoutTimeMs = layoutTime,
-            drawTimeMs = drawTime,
-            totalTimeMs = measureTime + layoutTime + drawTime
-        )
-    }
-
-    private fun measureTime(block: () -> Unit): Double {
-        val start = System.nanoTime()
-        block()
-        return (System.nanoTime() - start) / 1_000_000.0
-    }
-}
-```
-
-### 10. Performance Thresholds
-
-```kotlin
-object PerformanceThresholds {
-    // Target frame times
-    const val TARGET_60FPS_MS = 16.67
-    const val TARGET_90FPS_MS = 11.11
-    const val TARGET_120FPS_MS = 8.33
-
-    // Phase targets (for 60fps)
-    const val MAX_MEASURE_MS = 5.0
-    const val MAX_LAYOUT_MS = 5.0
-    const val MAX_DRAW_MS = 6.67
-
-    // Complexity limits
-    const val MAX_VIEW_HIERARCHY_DEPTH = 10
-    const val MAX_VIEWS_PER_LAYOUT = 80
-
-    // Recomposition limits (Compose)
-    const val MAX_RECOMPOSITIONS_PER_FRAME = 10
-
-    fun checkPerformance(metrics: RenderMetrics): PerformanceReport {
-        return PerformanceReport(
-            isWithinBudget = metrics.totalTimeMs <= TARGET_60FPS_MS,
-            warnings = buildList {
-                if (metrics.measureTimeMs > MAX_MEASURE_MS) {
-                    add("Measure phase too slow: ${metrics.measureTimeMs}ms")
-                }
-                if (metrics.layoutTimeMs > MAX_LAYOUT_MS) {
-                    add("Layout phase too slow: ${metrics.layoutTimeMs}ms")
-                }
-                if (metrics.drawTimeMs > MAX_DRAW_MS) {
-                    add("Draw phase too slow: ${metrics.drawTimeMs}ms")
-                }
-            }
-        )
-    }
-
-    data class PerformanceReport(
-        val isWithinBudget: Boolean,
-        val warnings: List<String>
+kotlinOptions {
+    freeCompilerArgs += listOf(
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+        "${project.buildDir}/compose_metrics"
     )
 }
 ```
 
-### Summary: Key Performance Metrics
+### Performance Metrics Table
 
 | Metric | Unit | Target (60fps) |
 |--------|------|----------------|
-| Frame time | milliseconds | < 16.67ms |
-| Measure phase | milliseconds | < 5ms |
-| Layout phase | milliseconds | < 5ms |
-| Draw phase | milliseconds | < 6.67ms |
-| Recomposition count | number | Minimize |
-| View hierarchy depth | levels | < 10 |
-| Total views | count | < 80 |
-
-### Best Practices
-
-1. **Monitor frame time** - Keep under 16.67ms for 60fps
-2. **Minimize recompositions** in Compose
-3. **Flatten view hierarchy** - Reduce depth
-4. **Use ConstraintLayout** - Avoid nested layouts
-5. **Profile with Systrace** - Identify bottlenecks
-6. **Batch updates** - Avoid multiple invalidations
+| Frame time | ms | < 16.67 |
+| Measure | ms | < 5 |
+| Layout | ms | < 5 |
+| Draw | ms | < 6.67 |
+| Hierarchy depth | levels | < 10 |
+| View count | count | < 80 |
+| Recomposition | count | minimize |
 
 ---
 
-# В чём измеряется производительность layout
+## Follow-ups
 
-## Ответ (RU)
-Производительность измеряется в миллисекундах времени отрисовки (measure, layout, draw). Также учитывается количество операций пересчёта и перекомпоновки. В Jetpack Compose оценивается количеством recomposition и snapshot изменений.
+1. How does ConstraintLayout improve performance compared to nested LinearLayouts?
+2. What causes jank and how to detect it with Android Profiler?
+3. How do Compose recomposition scopes affect performance?
+4. When should you use `Trace.beginSection()` vs Android Studio Profiler?
+5. What's the difference between Macrobenchmark and Microbenchmark for layout testing?
 
----
+## References
+
+- [[c-choreographer]] - Frame timing synchronization
+- [[c-systrace]] - System-wide tracing tool
+- [[c-android-profiler]] - Performance profiling tool
+- [Android Performance Patterns](https://developer.android.com/topic/performance)
+- [FrameMetrics API](https://developer.android.com/reference/android/view/FrameMetrics)
+- [Compose Performance](https://developer.android.com/jetpack/compose/performance)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-what-is-view-lifecycle--android--easy]]
+- [[q-recyclerview-sethasfixedsize--android--easy]]
 
-### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+### Related (Same Level)
+- [[q-main-causes-ui-lag--android--medium]]
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]]
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]]
+- [[q-optimize-complex-recyclerview--android--hard]]

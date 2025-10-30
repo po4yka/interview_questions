@@ -4,7 +4,7 @@ title: Database migration purpose / Цель миграции баз данны�
 aliases: []
 
 # Classification
-topic: backend
+topic: databases
 subtopics: [databases, migration]
 question_kind: theory
 difficulty: medium
@@ -16,18 +16,24 @@ source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
 status: draft
-moc: moc-backend
-related: [q-virtual-tables-disadvantages--backend--medium, q-sql-join-algorithms-complexity--backend--hard, q-relational-table-unique-data--backend--medium]
-  - c-database-design
-  - c-migrations
+moc: moc-system-design
+related: [
+  q-virtual-tables-disadvantages--backend--medium,
+  q-sql-join-algorithms-complexity--backend--hard,
+  c-database-design,
+  c-migrations
+]
 
 # Timestamps
 created: 2025-10-03
 updated: 2025-10-03
 
 # Tags
-tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, lang/ru, backend]
+tags: [database, migration, schema-evolution, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
+date created: Friday, October 3rd 2025, 4:45:02 pm
+date modified: Wednesday, October 29th 2025, 2:56:23 pm
 ---
+
 # Question (EN)
 > What is database migration and what is it used for
 # Вопрос (RU)

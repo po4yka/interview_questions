@@ -1,153 +1,150 @@
 ---
-id: 20251012-122711108
+id: 20251012-122711
 title: "SparseArray Optimization / Оптимизация SparseArray"
-aliases:
-  - "SparseArray Optimization"
-  - "Оптимизация SparseArray"
+aliases: ["SparseArray Optimization", "Оптимизация SparseArray"]
 topic: android
-subtopics: [performance-memory, data-structures]
+subtopics: [performance-memory, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-sparsearray, q-android-memory-optimization--android--medium, q-data-structures-performance--android--medium]
+related: [c-sparsearray, q-android-memory-optimization--android--medium, q-hashmap-vs-sparsearray--android--medium]
 created: 2025-10-05
-updated: 2025-01-25
-tags: [android/performance-memory, android/data-structures, sparsearray, data-structures, performance, memory-optimization, difficulty/medium]
-sources: [https://developer.android.com/reference/android/util/SparseArray]
+updated: 2025-10-28
+tags: [android/performance-memory, android/profiling, sparsearray, memory-optimization, difficulty/medium]
+sources: []
 ---
-
 # Вопрос (RU)
-> Что такое SparseArray и когда его использовать?
+> Что такое SparseArray и когда его использовать вместо HashMap?
 
 # Question (EN)
-> What is SparseArray and when to use it?
+> What is SparseArray and when to use it instead of HashMap?
 
 ---
 
 ## Ответ (RU)
 
-**Теория SparseArray:**
-SparseArray - это оптимизированная структура данных для отображения целых чисел на объекты. Она более эффективна по памяти, чем HashMap, поскольку избегает автоупаковки ключей и не создает дополнительные объекты для каждой записи.
+**Концепция:**
+SparseArray — оптимизированная структура данных для отображения int → Object. Избегает автоупаковки ключей (Integer boxing) и использует два массива: int[] для ключей и Object[] для значений. Внутри — бинарный поиск вместо хеширования.
 
-**Основные преимущества:**
-- Экономия памяти за счет использования примитивов
-- Отсутствие автоупаковки ключей
-- Меньше аллокаций объектов
+**Компромиссы:**
+- Экономия памяти: ~30–50% по сравнению с HashMap<Integer, V>
+- Производительность: O(log n) вместо O(1), критично при >1000 элементов
+- Подходит для: небольших коллекций (<100 элементов), разреженных ключей
 
 ```kotlin
-// Создание и использование SparseArray
-val sparseArray = SparseArray<String>()
-sparseArray[0] = "Первый элемент"
-sparseArray[10] = "Второй элемент"
-sparseArray[24] = "Третий элемент"
+// ✅ Эффективное использование SparseArray
+val viewCache = SparseArray<View>(8) // preallocate capacity
+viewCache.put(R.id.button, button)
+viewCache.put(R.id.text_view, textView)
 
-// Итерация по элементам
-for (i in 0 until sparseArray.size()) {
-    val key = sparseArray.keyAt(i)
-    val value = sparseArray.valueAt(i)
-    println("Ключ: $key, Значение: $value")
+// Итерация без автоупаковки
+for (i in 0 until viewCache.size()) {
+    val viewId = viewCache.keyAt(i)  // ✅ Примитив int
+    val view = viewCache.valueAt(i)
 }
 ```
 
-**Оптимизация памяти:**
-SparseArray использует бинарный поиск для поиска ключей и отложенную сборку мусора для удаленных элементов.
-
 ```kotlin
-// Удаление элементов с оптимизацией
-sparseArray.remove(10) // Помечает как удаленный, не сжимает сразу
-sparseArray.put(10, "Новое значение") // Переиспользует удаленную позицию
+// ❌ Антипаттерн: большие коллекции
+val userMap = SparseArray<User>(10_000)  // ❌ Медленно из-за бинарного поиска
+userMap[userId] = user
+
+// ✅ Лучше использовать HashMap для больших данных
+val userMap = HashMap<Int, User>(10_000)
 ```
 
-**Варианты SparseArray:**
-Android предоставляет специализированные версии для разных типов данных.
-
+**Специализированные варианты:**
 ```kotlin
-// Различные типы SparseArray
-val sparseIntArray = SparseIntArray() // int -> int
-val sparseBooleanArray = SparseBooleanArray() // int -> boolean
-val sparseLongArray = SparseLongArray() // int -> long
-val longSparseArray = LongSparseArray<String>() // long -> Object
+SparseIntArray()      // int → int (без объектов)
+SparseBooleanArray()  // int → boolean
+SparseLongArray()     // int → long
+LongSparseArray<T>()  // long → Object
 ```
 
-**Когда использовать:**
-- Ключи - целые числа
-- Небольшое количество элементов (до сотен)
-- Память важнее скорости поиска
-- Нужно избежать автоупаковки
+**Оптимизация удаления:**
+```kotlin
+// Ленивое удаление: remove() помечает как DELETE, сжатие откладывается
+sparseArray.remove(key)  // Не вызывает System.arraycopy сразу
+sparseArray.put(key, newValue)  // Может переиспользовать слот
+```
 
 ## Answer (EN)
 
-**SparseArray Theory:**
-SparseArray is an optimized data structure for mapping integers to objects. It's more memory-efficient than HashMap because it avoids auto-boxing keys and doesn't create additional objects for each entry.
+**Concept:**
+SparseArray is an optimized data structure for int → Object mapping. Avoids Integer boxing by using two arrays: int[] for keys and Object[] for values. Internally uses binary search instead of hashing.
 
-**Main advantages:**
-- Memory savings through primitive usage
-- No auto-boxing of keys
-- Fewer object allocations
+**Trade-offs:**
+- Memory savings: ~30–50% compared to HashMap<Integer, V>
+- Performance: O(log n) instead of O(1), critical above 1000 elements
+- Suitable for: small collections (<100 elements), sparse keys
 
 ```kotlin
-// Creating and using SparseArray
-val sparseArray = SparseArray<String>()
-sparseArray[0] = "First element"
-sparseArray[10] = "Second element"
-sparseArray[24] = "Third element"
+// ✅ Efficient SparseArray usage
+val viewCache = SparseArray<View>(8) // preallocate capacity
+viewCache.put(R.id.button, button)
+viewCache.put(R.id.text_view, textView)
 
-// Iterating over elements
-for (i in 0 until sparseArray.size()) {
-    val key = sparseArray.keyAt(i)
-    val value = sparseArray.valueAt(i)
-    println("Key: $key, Value: $value")
+// Iteration without boxing
+for (i in 0 until viewCache.size()) {
+    val viewId = viewCache.keyAt(i)  // ✅ Primitive int
+    val view = viewCache.valueAt(i)
 }
 ```
 
-**Memory optimization:**
-SparseArray uses binary search for key lookup and delayed garbage collection for removed elements.
-
 ```kotlin
-// Removing elements with optimization
-sparseArray.remove(10) // Marks as deleted, doesn't compact immediately
-sparseArray.put(10, "New value") // Reuses deleted position
+// ❌ Anti-pattern: large collections
+val userMap = SparseArray<User>(10_000)  // ❌ Slow due to binary search
+userMap[userId] = user
+
+// ✅ Prefer HashMap for large datasets
+val userMap = HashMap<Int, User>(10_000)
 ```
 
-**SparseArray variants:**
-Android provides specialized versions for different data types.
-
+**Specialized variants:**
 ```kotlin
-// Different SparseArray types
-val sparseIntArray = SparseIntArray() // int -> int
-val sparseBooleanArray = SparseBooleanArray() // int -> boolean
-val sparseLongArray = SparseLongArray() // int -> long
-val longSparseArray = LongSparseArray<String>() // long -> Object
+SparseIntArray()      // int → int (no objects)
+SparseBooleanArray()  // int → boolean
+SparseLongArray()     // int → long
+LongSparseArray<T>()  // long → Object
 ```
 
-**When to use:**
-- Keys are integers
-- Small number of elements (up to hundreds)
-- Memory is more important than lookup speed
-- Need to avoid auto-boxing
+**Deletion optimization:**
+```kotlin
+// Lazy deletion: remove() marks as DELETE, compaction is deferred
+sparseArray.remove(key)  // Doesn't call System.arraycopy immediately
+sparseArray.put(key, newValue)  // May reuse the slot
+```
 
 ---
 
 ## Follow-ups
 
-- How does SparseArray compare to HashMap in performance?
-- What are the memory implications of using SparseArray?
-- When should you avoid SparseArray?
+- What's the memory overhead difference between SparseArray and HashMap quantitatively?
+- When does the O(log n) lookup cost outweigh memory savings?
+- How does SparseArray handle collisions compared to HashMap?
+- What happens during SparseArray compaction (gc() method)?
+- Are there thread-safety considerations with SparseArray?
+
+## References
+
+- [[c-sparsearray]] - SparseArray concept note
+- [[c-hash-map]] - HashMap internals
+- https://developer.android.com/reference/android/util/SparseArray
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] - App components
-- [[q-data-structures-basics--android--easy]] - Data structures basics
+- [[q-collections-basics--kotlin--easy]] - Collections fundamentals
+- [[q-boxing-unboxing--kotlin--easy]] - Boxing overhead
 
 ### Related (Same Level)
-- [[q-android-memory-optimization--android--medium]] - Memory optimization
-- [[q-data-structures-performance--android--medium]] - Data structures performance
-- [[q-android-performance-basics--android--medium]] - Performance basics
+- [[q-android-memory-optimization--android--medium]] - Memory optimization strategies
+- [[q-hashmap-vs-sparsearray--android--medium]] - Performance comparison
+- [[q-view-holder-pattern--android--medium]] - SparseArray in ViewHolder
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]] - Runtime internals
-- [[q-memory-management--android--hard]] - Memory management
+- [[q-memory-profiling--android--hard]] - Profiling memory allocations
+- [[q-custom-data-structures--android--hard]] - Building optimized collections

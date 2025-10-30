@@ -4,7 +4,7 @@ title: Android 14 Permissions / Разрешения Android 14
 aliases: ["Android 14 Permissions", "Разрешения Android 14"]
 topic: android
 subtopics: [permissions, privacy-sdks]
-question_kind: theory
+question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
@@ -13,7 +13,7 @@ moc: moc-android
 related: [q-android-manifest-file--android--easy, q-android-security-best-practices--android--medium, q-android-security-practices-checklist--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-29
 tags: [android/permissions, android/privacy-sdks, difficulty/medium]
 ---
 # Вопрос (RU)
@@ -24,219 +24,247 @@ tags: [android/permissions, android/privacy-sdks, difficulty/medium]
 
 ## Ответ (RU)
 
-**Основные изменения в разрешениях Android 14:**
+Android 13+ (API 33+) кардинально изменил систему разрешений, заменив широкие разрешения на хранилище гранулярными медиа-разрешениями и добавив обязательное разрешение на уведомления.
 
-Android 14 (API 34) и Android 13 (API 33) внесли значительные изменения в систему разрешений, фокусируясь на конфиденциальности пользователя через гранулярный доступ к медиа, обязательные разрешения для уведомлений и более строгие требования для фоновой геолокации.
+**1. Photo Picker — доступ без разрешений**
 
-**1. Photo Picker (Android 13+):**
-Современный подход к выбору медиа без запроса разрешений на хранилище.
+Photo Picker позволяет выбирать медиа без запроса разрешений:
 
 ```kotlin
-// Реализация Photo Picker
 class PhotoPickerManager(private val activity: AppCompatActivity) {
-    private val photoPickerLauncher = activity.registerForActivityResult(
+    private val picker = activity.registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        uri?.let { handlePhoto(it) }
-    }
+    ) { uri -> uri?.let { handlePhoto(it) } }
 
     fun pickPhoto() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // ✅ Разрешения не требуются
-            photoPickerLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            )
-        } else {
-            // ❌ Устаревший подход с разрешениями
-            requestLegacyPermission()
-        }
+        // ✅ Разрешения не требуются
+        picker.launch(PickVisualMediaRequest(
+            ActivityResultContracts.PickVisualMedia.ImageOnly
+        ))
     }
 }
 ```
 
-**2. Гранулярные медиа-разрешения (Android 13+):**
-Раздельные разрешения для изображений, видео и аудио вместо единого разрешения на хранилище.
+**2. Гранулярные медиа-разрешения**
+
+Вместо `READ_EXTERNAL_STORAGE` используются раздельные разрешения:
 
 ```kotlin
-// Запрос разрешений в зависимости от типа медиа
-fun getMediaPermissions(needsImages: Boolean, needsVideos: Boolean): Array<String> {
+fun getMediaPermissions(needsImages: Boolean, needsVideo: Boolean): Array<String> {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         buildList {
             if (needsImages) add(Manifest.permission.READ_MEDIA_IMAGES)
-            if (needsVideos) add(Manifest.permission.READ_MEDIA_VIDEO)
+            if (needsVideo) add(Manifest.permission.READ_MEDIA_VIDEO)
         }.toTypedArray()
     } else {
+        // ❌ Устаревший подход
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 }
 ```
 
-**3. Разрешение на уведомления (Android 13+):**
-Обязательное разрешение `POST_NOTIFICATIONS` для отправки уведомлений.
+**3. Разрешение на уведомления**
+
+С Android 13 требуется явное разрешение `POST_NOTIFICATIONS`:
 
 ```kotlin
-// Запрос разрешения на уведомления
-fun requestNotificationPermission(context: Context): Boolean {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        // ✅ Проверяем и запрашиваем разрешение
-        return ContextCompat.checkSelfPermission(
+fun checkNotificationPermission(context: Context): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        // ✅ Проверяем разрешение
+        ContextCompat.checkSelfPermission(
             context, Manifest.permission.POST_NOTIFICATIONS
         ) == PackageManager.PERMISSION_GRANTED
+    } else {
+        true  // На старых версиях не требуется
     }
-    // ❌ На старых версиях разрешение не требуется
-    return true
 }
 ```
 
-**4. Манифест (AndroidManifest.xml):**
+**4. Частичный доступ к медиа (Android 14)**
+
+Пользователь может предоставить доступ только к выбранным фото/видео:
+
+```kotlin
+// Обработка частичного доступа
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+    when {
+        checkSelfPermission(READ_MEDIA_VISUAL_USER_SELECTED) == GRANTED -> {
+            // ✅ Частичный доступ предоставлен
+            loadSelectedMedia()
+        }
+        checkSelfPermission(READ_MEDIA_IMAGES) == GRANTED -> {
+            // ✅ Полный доступ
+            loadAllMedia()
+        }
+    }
+}
+```
+
+**5. Конфигурация манифеста**
 
 ```xml
 <!-- Уведомления (Android 13+) -->
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-<!-- Гранулярный доступ к медиа (Android 13+) -->
+<!-- Гранулярные медиа (Android 13+) -->
 <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
-<!-- Устаревший доступ к хранилищу (Android 12 и ниже) -->
+<!-- Частичный доступ (Android 14+) -->
+<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+<!-- Устаревший API (до Android 13) -->
 <uses-permission
     android:name="android.permission.READ_EXTERNAL_STORAGE"
     android:maxSdkVersion="32" />
 ```
 
-**Ключевые изменения по версиям:**
-- **Android 14 (API 34)**: Частичный доступ к фото/видео, разрешения Health Connect
-- **Android 13 (API 33)**: Разрешение на уведомления, гранулярные медиа-разрешения
-- **Android 12 (API 31)**: Приблизительная геолокация, разрешения Bluetooth
+**Ключевые версии:**
+- API 34 (Android 14): частичный доступ к медиа, Health Connect
+- API 33 (Android 13): гранулярные медиа-разрешения, POST_NOTIFICATIONS
+- API 31 (Android 12): приблизительная геолокация, Bluetooth-разрешения
 
-**Лучшие практики:**
-- Использовать Photo Picker вместо разрешений на хранилище
-- Запрашивать разрешения в контексте функциональности
-- Корректно обрабатывать различия между версиями API
-- Объяснять пользователю, зачем нужно разрешение
-- Тестировать на нескольких версиях Android
+**Стратегия миграции:**
+1. Приоритет Photo Picker для выбора медиа
+2. Запрос разрешений в контексте использования
+3. Graceful degradation для старых версий
+4. Объяснение необходимости разрешений пользователю
 
 ## Answer (EN)
 
-**Core Permission Changes in Android 14:**
+Android 13+ (API 33+) fundamentally changed the permission system, replacing broad storage permissions with granular media permissions and adding mandatory notification permissions.
 
-Android 14 (API 34) and Android 13 (API 33) introduced significant permission system changes, focusing on user privacy through granular media access, mandatory notification permissions, and stricter background location requirements.
+**1. Photo Picker — Permission-Free Access**
 
-**1. Photo Picker (Android 13+):**
-Modern approach for media selection without requesting storage permissions.
+Photo Picker allows media selection without requesting permissions:
 
 ```kotlin
-// Photo Picker implementation
 class PhotoPickerManager(private val activity: AppCompatActivity) {
-    private val photoPickerLauncher = activity.registerForActivityResult(
+    private val picker = activity.registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        uri?.let { handlePhoto(it) }
-    }
+    ) { uri -> uri?.let { handlePhoto(it) } }
 
     fun pickPhoto() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // ✅ No permission required
-            photoPickerLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            )
-        } else {
-            // ❌ Legacy approach with permissions
-            requestLegacyPermission()
-        }
+        // ✅ No permission required
+        picker.launch(PickVisualMediaRequest(
+            ActivityResultContracts.PickVisualMedia.ImageOnly
+        ))
     }
 }
 ```
 
-**2. Granular Media Permissions (Android 13+):**
-Separate permissions for images, videos, and audio instead of single storage permission.
+**2. Granular Media Permissions**
+
+Instead of `READ_EXTERNAL_STORAGE`, use separate permissions:
 
 ```kotlin
-// Request permissions based on media type
-fun getMediaPermissions(needsImages: Boolean, needsVideos: Boolean): Array<String> {
+fun getMediaPermissions(needsImages: Boolean, needsVideo: Boolean): Array<String> {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         buildList {
             if (needsImages) add(Manifest.permission.READ_MEDIA_IMAGES)
-            if (needsVideos) add(Manifest.permission.READ_MEDIA_VIDEO)
+            if (needsVideo) add(Manifest.permission.READ_MEDIA_VIDEO)
         }.toTypedArray()
     } else {
+        // ❌ Legacy approach
         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
     }
 }
 ```
 
-**3. Notification Permission (Android 13+):**
-Mandatory `POST_NOTIFICATIONS` permission for sending notifications.
+**3. Notification Permission**
+
+Android 13 requires explicit `POST_NOTIFICATIONS` permission:
 
 ```kotlin
-// Request notification permission
-fun requestNotificationPermission(context: Context): Boolean {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        // ✅ Check and request permission
-        return ContextCompat.checkSelfPermission(
+fun checkNotificationPermission(context: Context): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        // ✅ Check permission
+        ContextCompat.checkSelfPermission(
             context, Manifest.permission.POST_NOTIFICATIONS
         ) == PackageManager.PERMISSION_GRANTED
+    } else {
+        true  // Not required on older versions
     }
-    // ❌ Not required on older versions
-    return true
 }
 ```
 
-**4. Manifest Configuration (AndroidManifest.xml):**
+**4. Partial Media Access (Android 14)**
+
+Users can grant access to selected photos/videos only:
+
+```kotlin
+// Handle partial access
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+    when {
+        checkSelfPermission(READ_MEDIA_VISUAL_USER_SELECTED) == GRANTED -> {
+            // ✅ Partial access granted
+            loadSelectedMedia()
+        }
+        checkSelfPermission(READ_MEDIA_IMAGES) == GRANTED -> {
+            // ✅ Full access
+            loadAllMedia()
+        }
+    }
+}
+```
+
+**5. Manifest Configuration**
 
 ```xml
 <!-- Notifications (Android 13+) -->
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-<!-- Granular media access (Android 13+) -->
+<!-- Granular media (Android 13+) -->
 <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
-<!-- Legacy storage access (Android 12 and below) -->
+<!-- Partial access (Android 14+) -->
+<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+<!-- Legacy API (pre-Android 13) -->
 <uses-permission
     android:name="android.permission.READ_EXTERNAL_STORAGE"
     android:maxSdkVersion="32" />
 ```
 
-**Key Changes by Version:**
-- **Android 14 (API 34)**: Partial photo/video access, Health Connect permissions
-- **Android 13 (API 33)**: Notification permission, granular media permissions
-- **Android 12 (API 31)**: Approximate location, Bluetooth permissions
+**Key Versions:**
+- API 34 (Android 14): partial media access, Health Connect
+- API 33 (Android 13): granular media permissions, POST_NOTIFICATIONS
+- API 31 (Android 12): approximate location, Bluetooth permissions
 
-**Best Practices:**
-- Use Photo Picker instead of storage permissions
-- Request permissions contextually when functionality is needed
-- Handle API version differences gracefully
-- Explain to users why permission is needed
-- Test across multiple Android versions
+**Migration Strategy:**
+1. Prioritize Photo Picker for media selection
+2. Request permissions contextually when needed
+3. Graceful degradation for older versions
+4. Explain permission necessity to users
 
 ## Follow-ups
 
-- How should you handle permission denial with rationale UI?
-- What's the two-step background location request flow in Android 11+?
-- How do you migrate from READ_EXTERNAL_STORAGE to granular media permissions?
-- When should you use Photo Picker vs. requesting media permissions?
-- What are Health Connect permissions in Android 14?
+- How do you handle permission denial with rationale UI using `shouldShowRequestPermissionRationale`?
+- What is the two-step background location request flow introduced in Android 11?
+- How do you migrate from `READ_EXTERNAL_STORAGE` to granular media permissions while maintaining backward compatibility?
+- When should you use Photo Picker versus requesting `READ_MEDIA_IMAGES` permission?
+- What are Health Connect permissions in Android 14 and how do they differ from standard permissions?
 
 ## References
 
-- [[c-permissions]] - Permission model concepts
-- [Android 14 Privacy Changes](https://developer.android.com/about/versions/14/privacy)
-- [Permissions Best Practices](https://developer.android.com/training/permissions/requesting)
-- [Photo Picker Guide](https://developer.android.com/training/data-storage/shared/photopicker)
+- [[c-permissions]] - Permission model fundamentals
+- [Android 14 Behavior Changes](https://developer.android.com/about/versions/14/behavior-changes-14)
+- [Granular Media Permissions](https://developer.android.com/about/versions/13/behavior-changes-13#granular-media-permissions)
+- [Photo Picker API](https://developer.android.com/training/data-storage/shared/photopicker)
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-manifest-file--android--easy]] - AndroidManifest.xml structure
-- Runtime permission basics
+- [[q-android-manifest-file--android--easy]] - AndroidManifest.xml structure and permission declaration
+- Runtime permission model (Activity Result API)
 
 ### Related
-- [[q-android-security-best-practices--android--medium]] - Security implementation patterns
-- Permission handling strategies
-- Activity result contracts usage
+- [[q-android-security-best-practices--android--medium]] - Security implementation patterns and permission best practices
+- [[q-android-security-practices-checklist--android--medium]] - Comprehensive security checklist
+- Scoped storage and MediaStore API usage
 
 ### Advanced
-- Background location two-step flow
-- Permission revocation handling
-- Scoped storage migration strategies
+- Background location two-step flow with foreground-first requirement
+- Permission revocation handling and app lifecycle integration
+- Scoped storage migration strategies for legacy apps

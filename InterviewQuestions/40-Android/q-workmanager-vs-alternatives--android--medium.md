@@ -1,7 +1,7 @@
 ---
 id: 20251017-114414
 title: "WorkManager vs Alternatives / WorkManager против альтернатив"
-aliases: [WorkManager vs Alternatives, WorkManager против альтернатив]
+aliases: ["WorkManager vs Alternatives", "WorkManager против альтернатив"]
 topic: android
 subtopics: [background-execution]
 question_kind: android
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [c-workmanager, c-alarmmanager, q-workmanager-return-result--android--medium]
 created: 2025-10-12
-updated: 2025-01-25
+updated: 2025-10-29
 tags: [android/background-execution, workmanager, alarmmanager, jobscheduler, foreground-service, difficulty/medium]
-sources: [https://developer.android.com/topic/libraries/architecture/workmanager]
+sources: []
 ---
 
 # Вопрос (RU)
@@ -30,14 +30,22 @@ sources: [https://developer.android.com/topic/libraries/architecture/workmanager
 **Теория выбора API:**
 Android предоставляет несколько API для фоновой работы с разными гарантиями и ограничениями. Выбор зависит от требований к таймингу, гарантиям выполнения и видимости для пользователя.
 
-**WorkManager:**
-Гарантированное выполнение с гибким таймингом и поддержкой ограничений. Переживает перезагрузки и обновления приложения.
+**Критерии выбора:**
+
+| API | Когда использовать | Ключевая особенность |
+|-----|-------------------|---------------------|
+| **WorkManager** | Отложенная работа с гарантией выполнения | Переживает перезагрузки, поддерживает ограничения |
+| **AlarmManager** | Точный тайминг (будильники, напоминания) | Может будить устройство, точность до миллисекунд |
+| **Foreground Service** | Долгие задачи с видимостью пользователю | Обязательное уведомление, защита от kill |
+| **JobScheduler** | Прямой доступ к планировщику (API 21+) | WorkManager использует его внутри |
+
+**WorkManager — гарантированное выполнение:**
 
 ```kotlin
-// Периодическая синхронизация с ограничениями
+// ✅ Правильно: периодическая синхронизация с ограничениями
 val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.UNMETERED)
-    .setRequiresBatteryNotLow(true)
+    .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ Только Wi-Fi
+    .setRequiresBatteryNotLow(true)                // ✅ Экономия батареи
     .build()
 
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(24, TimeUnit.HOURS)
@@ -48,73 +56,61 @@ WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
 ```
 
-**AlarmManager:**
-Точный тайминг для критичных по времени операций. Может будить устройство из сна.
+**AlarmManager — точный тайминг:**
 
 ```kotlin
-// Точный будильник
+// ✅ Правильно: точный будильник для критичных событий
 val alarmManager = context.getSystemService(AlarmManager::class.java)
-val intent = Intent(context, AlarmReceiver::class.java)
-val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+val pendingIntent = PendingIntent.getBroadcast(
+    context, 0,
+    Intent(context, AlarmReceiver::class.java),
+    PendingIntent.FLAG_IMMUTABLE // ✅ Безопасность
+)
 
 alarmManager.setExactAndAllowWhileIdle(
-    AlarmManager.RTC_WAKEUP,
+    AlarmManager.RTC_WAKEUP, // ✅ Будит устройство
     triggerTime,
     pendingIntent
 )
 ```
 
-**JobScheduler:**
-Планировщик задач с ограничениями для API 21+. WorkManager использует его внутри.
+**Foreground Service — видимая работа:**
 
 ```kotlin
-// Очистка базы данных при зарядке
-val jobInfo = JobInfo.Builder(JOB_ID, ComponentName(context, CleanupJobService::class.java))
-    .setRequiresCharging(true)
-    .setRequiresDeviceIdle(true)
-    .setPeriodic(TimeUnit.DAYS.toMillis(1))
-    .build()
-
-context.getSystemService(JobScheduler::class.java).schedule(jobInfo)
-```
-
-**Foreground Service:**
-Долгосрочные операции с обязательным уведомлением для пользователя.
-
-```kotlin
-// Музыкальный плеер
+// ✅ Правильно: музыкальный плеер с уведомлением
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_music)
-            .setContentTitle("Now Playing")
-            .build()
-
+        val notification = createNotification() // ✅ Обязательное уведомление
         startForeground(NOTIFICATION_ID, notification)
-        return START_STICKY
+        return START_STICKY // ✅ Перезапуск после kill
     }
 }
-```
 
-**Критерии выбора:**
-- Нужен точный тайминг? → AlarmManager
-- Работа должна завершиться гарантированно? → WorkManager
-- Пользователь должен видеть процесс? → Foreground Service
-- Быстрая операция в UI? → Coroutines
+// ❌ Неправильно: использовать для скрытой работы без уведомления
+// ❌ Неправильно: использовать для быстрых операций (используй WorkManager)
+```
 
 ## Answer (EN)
 
 **API Selection Theory:**
 Android provides multiple APIs for background work with different guarantees and constraints. Choice depends on timing requirements, execution guarantees, and user visibility.
 
-**WorkManager:**
-Guaranteed execution with flexible timing and constraint support. Survives reboots and app updates.
+**Selection Criteria:**
+
+| API | When to Use | Key Feature |
+|-----|------------|-------------|
+| **WorkManager** | Deferrable guaranteed work | Survives reboots, supports constraints |
+| **AlarmManager** | Exact timing (alarms, reminders) | Can wake device, millisecond precision |
+| **Foreground Service** | Long tasks with user visibility | Mandatory notification, kill protection |
+| **JobScheduler** | Direct scheduler access (API 21+) | WorkManager uses it internally |
+
+**WorkManager — guaranteed execution:**
 
 ```kotlin
-// Periodic sync with constraints
+// ✅ Correct: periodic sync with constraints
 val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.UNMETERED)
-    .setRequiresBatteryNotLow(true)
+    .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ Wi-Fi only
+    .setRequiresBatteryNotLow(true)                // ✅ Battery saving
     .build()
 
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(24, TimeUnit.HOURS)
@@ -125,67 +121,57 @@ WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
 ```
 
-**AlarmManager:**
-Exact timing for time-critical operations. Can wake device from sleep.
+**AlarmManager — exact timing:**
 
 ```kotlin
-// Exact alarm
+// ✅ Correct: exact alarm for critical events
 val alarmManager = context.getSystemService(AlarmManager::class.java)
-val intent = Intent(context, AlarmReceiver::class.java)
-val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+val pendingIntent = PendingIntent.getBroadcast(
+    context, 0,
+    Intent(context, AlarmReceiver::class.java),
+    PendingIntent.FLAG_IMMUTABLE // ✅ Security
+)
 
 alarmManager.setExactAndAllowWhileIdle(
-    AlarmManager.RTC_WAKEUP,
+    AlarmManager.RTC_WAKEUP, // ✅ Wakes device
     triggerTime,
     pendingIntent
 )
 ```
 
-**JobScheduler:**
-Task scheduler with constraints for API 21+. WorkManager uses it internally.
+**Foreground Service — visible work:**
 
 ```kotlin
-// Database cleanup while charging
-val jobInfo = JobInfo.Builder(JOB_ID, ComponentName(context, CleanupJobService::class.java))
-    .setRequiresCharging(true)
-    .setRequiresDeviceIdle(true)
-    .setPeriodic(TimeUnit.DAYS.toMillis(1))
-    .build()
-
-context.getSystemService(JobScheduler::class.java).schedule(jobInfo)
-```
-
-**Foreground Service:**
-Long-running operations with mandatory user notification.
-
-```kotlin
-// Music player
+// ✅ Correct: music player with notification
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_music)
-            .setContentTitle("Now Playing")
-            .build()
-
+        val notification = createNotification() // ✅ Mandatory notification
         startForeground(NOTIFICATION_ID, notification)
-        return START_STICKY
+        return START_STICKY // ✅ Restart after kill
     }
 }
-```
 
-**Selection Criteria:**
-- Need exact timing? → AlarmManager
-- Work must complete guaranteed? → WorkManager
-- User must see process? → Foreground Service
-- Quick UI operation? → Coroutines
+// ❌ Wrong: use for hidden work without notification
+// ❌ Wrong: use for quick operations (use WorkManager instead)
+```
 
 ---
 
 ## Follow-ups
 
-- How do you handle WorkManager constraints for different Android versions?
-- What are the battery optimization implications of each approach?
-- How do you migrate from deprecated APIs to WorkManager?
+- How does WorkManager handle constraints on different Android versions (API 14+ vs 23+ vs 26+)?
+- What are the battery optimization implications of each approach, and how does Doze mode affect them?
+- How do you migrate from deprecated JobScheduler or AlarmManager APIs to WorkManager?
+- When would you combine multiple approaches (e.g., WorkManager + Foreground Service)?
+- What are the trade-offs between exact alarms and inexact window-based alarms for battery life?
+
+## References
+
+- [[c-workmanager]] - WorkManager concept
+- [[c-alarmmanager]] - AlarmManager concept
+- [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
+- [Background Execution Limits](https://developer.android.com/about/versions/oreo/background)
+- [Schedule Tasks with WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
 
 ## Related Questions
 

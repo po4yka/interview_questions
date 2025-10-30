@@ -1,11 +1,9 @@
 ---
 id: 20251012-12271184
 title: "Retrofit Modify All Requests / Изменение всех запросов Retrofit"
-aliases:
-  - "Retrofit Modify All Requests"
-  - "Изменение всех запросов Retrofit"
+aliases: ["Retrofit Modify All Requests", "Изменение всех запросов Retrofit"]
 topic: android
-subtopics: [networking, retrofit]
+subtopics: [networking-http, di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -14,180 +12,295 @@ status: draft
 moc: moc-android
 related: [c-retrofit-interceptors, q-retrofit-basics--android--medium, q-okhttp-interceptors--android--medium]
 created: 2025-10-13
-updated: 2025-01-25
-tags: [android/networking, android/retrofit, authentication, interceptor, logging, networking, okhttp, retrofit, difficulty/hard]
+updated: 2025-10-28
+tags: [android/networking-http, android/di-hilt, authentication, interceptor, logging, okhttp, difficulty/hard]
 sources: [https://square.github.io/okhttp/interceptors/]
 ---
 
 # Вопрос (RU)
-> Как в Retrofit изменять все запросы глобально?
+> Как в Retrofit изменять все запросы глобально (добавлять заголовки, параметры, логирование)?
 
 # Question (EN)
-> How to modify all requests globally in Retrofit?
+> How to modify all requests globally in Retrofit (add headers, parameters, logging)?
 
 ---
 
 ## Ответ (RU)
 
-**Теория Interceptors:**
-Interceptors в OkHttp позволяют перехватывать и модифицировать все HTTP-запросы и ответы. Это основной механизм для глобального изменения запросов в Retrofit.
+**Концепция:**
+OkHttp Interceptors - это цепочка обработчиков, которые перехватывают каждый запрос и ответ. Используются для кросс-cutting concerns: аутентификация, логирование, добавление общих параметров.
 
-**Типы Interceptors:**
-- Application Interceptor - выполняется первым, до сетевого соединения
-- Network Interceptor - выполняется ближе к сети, после переписывания URL
+**Два типа:**
+- **Application Interceptor** - выполняется до кеширования, видит только запросы приложения
+- **Network Interceptor** - выполняется после кеширования, видит все сетевые запросы (включая редиректы)
 
-**Основные применения:**
-- Добавление заголовков авторизации
-- Логирование запросов/ответов
-- Добавление общих параметров
-- Обновление токенов
-- Модификация URL
+**Порядок выполнения:**
+Application Interceptors → Cache → Network Interceptors → Network
+
+### Пример 1: Авторизация
 
 ```kotlin
-// Создание OkHttpClient с interceptor
-val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(AuthInterceptor { getAuthToken() })
-    .addInterceptor(LoggingInterceptor())
-    .build()
+// ✅ Best: Инжектируем TokenManager для тестируемости
+class AuthInterceptor @Inject constructor(
+    private val tokenManager: TokenManager
+) : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val token = tokenManager.getToken() ?: return chain.proceed(chain.request())
 
-val retrofit = Retrofit.Builder()
-    .baseUrl("https://api.example.com/")
-    .client(okHttpClient)
-    .build()
-```
-
-**Authorization Interceptor:**
-```kotlin
-class AuthInterceptor(private val tokenProvider: () -> String) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-
-        val requestWithAuth = originalRequest.newBuilder()
-            .addHeader("Authorization", "Bearer ${tokenProvider()}")
+        val authenticatedRequest = chain.request().newBuilder()
+            .header("Authorization", "Bearer $token") // ✅ header заменяет предыдущие значения
             .build()
 
-        return chain.proceed(requestWithAuth)
+        return chain.proceed(authenticatedRequest)
+    }
+}
+
+// ❌ Wrong: Hardcoded dependencies, нет DI
+class BadAuthInterceptor : Interceptor {
+    private val sharedPrefs = context.getSharedPreferences(...) // ❌ Context leak
+    override fun intercept(chain: Chain) = ...
+}
+```
+
+### Пример 2: Обработка 401 с обновлением токена
+
+```kotlin
+class TokenRefreshInterceptor @Inject constructor(
+    private val tokenManager: TokenManager,
+    private val authApi: AuthApi
+) : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val request = chain.request()
+        val response = chain.proceed(request)
+
+        // ✅ Best: Синхронизируем обновление токена
+        if (response.code == 401) {
+            synchronized(this) {
+                val newToken = tokenManager.refreshTokenSync() // Блокирующий вызов
+                return if (newToken != null) {
+                    response.close() // ✅ Важно: закрываем старый response
+                    chain.proceed(request.newBuilder()
+                        .header("Authorization", "Bearer $newToken")
+                        .build())
+                } else {
+                    response // Logout или показ экрана логина
+                }
+            }
+        }
+        return response
     }
 }
 ```
 
-**Query Parameters Interceptor:**
+### Пример 3: Общие query-параметры
+
 ```kotlin
-class QueryParameterInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-        val originalUrl = originalRequest.url
-
-        val urlWithParams = originalUrl.newBuilder()
-            .addQueryParameter("api_version", "v1")
-            .addQueryParameter("platform", "android")
+// ✅ Best: Добавляем только если параметр отсутствует
+class CommonParamsInterceptor : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val original = chain.request()
+        val url = original.url.newBuilder()
+            .apply {
+                if (original.url.queryParameter("platform") == null) {
+                    addQueryParameter("platform", "android")
+                }
+            }
             .build()
 
-        val requestWithParams = originalRequest.newBuilder()
-            .url(urlWithParams)
-            .build()
-
-        return chain.proceed(requestWithParams)
+        return chain.proceed(original.newBuilder().url(url).build())
     }
 }
 ```
 
-**Logging Interceptor:**
+### Пример 4: Логирование (только для debug)
+
 ```kotlin
-// Использование встроенного logging interceptor
-val loggingInterceptor = HttpLoggingInterceptor().apply {
-    level = HttpLoggingInterceptor.Level.BODY
+// ✅ Best: Conditional logging с разными уровнями
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY // ✅ Полное логирование в debug
+                })
+            }
+        }
+        .addInterceptor(AuthInterceptor(tokenManager))
+        .connectTimeout(30, TimeUnit.SECONDS) // ✅ Настройки таймаутов
+        .build()
 }
 
-val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(loggingInterceptor)
-    .build()
+// ❌ Wrong: Логируем все в production
+addInterceptor(HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.BODY // ❌ Утечка данных, performance hit
+})
 ```
+
+**Ключевые паттерны:**
+- Используйте DI (Hilt/Koin) для инжекта interceptors
+- Application interceptor для auth, query params
+- Network interceptor для логирования сетевых деталей
+- Синхронизация при обновлении токенов
+- Закрывайте Response при retry
+- Условное логирование только в debug builds
 
 ## Answer (EN)
 
-**Interceptors Theory:**
-Interceptors in OkHttp allow intercepting and modifying all HTTP requests and responses. This is the primary mechanism for globally modifying requests in Retrofit.
+**Concept:**
+OkHttp Interceptors are a chain of handlers that intercept every request and response. Used for cross-cutting concerns: authentication, logging, adding common parameters.
 
-**Interceptor Types:**
-- Application Interceptor - runs first, before network connection
-- Network Interceptor - runs closer to network, after URL rewriting
+**Two types:**
+- **Application Interceptor** - runs before caching, sees only app requests
+- **Network Interceptor** - runs after caching, sees all network requests (including redirects)
 
-**Main use cases:**
-- Adding authorization headers
-- Logging requests/responses
-- Adding common parameters
-- Token refresh
-- URL modification
+**Execution order:**
+Application Interceptors → Cache → Network Interceptors → Network
+
+### Example 1: Authorization
 
 ```kotlin
-// Creating OkHttpClient with interceptor
-val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(AuthInterceptor { getAuthToken() })
-    .addInterceptor(LoggingInterceptor())
-    .build()
+// ✅ Best: Inject TokenManager for testability
+class AuthInterceptor @Inject constructor(
+    private val tokenManager: TokenManager
+) : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val token = tokenManager.getToken() ?: return chain.proceed(chain.request())
 
-val retrofit = Retrofit.Builder()
-    .baseUrl("https://api.example.com/")
-    .client(okHttpClient)
-    .build()
-```
-
-**Authorization Interceptor:**
-```kotlin
-class AuthInterceptor(private val tokenProvider: () -> String) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-
-        val requestWithAuth = originalRequest.newBuilder()
-            .addHeader("Authorization", "Bearer ${tokenProvider()}")
+        val authenticatedRequest = chain.request().newBuilder()
+            .header("Authorization", "Bearer $token") // ✅ header replaces previous values
             .build()
 
-        return chain.proceed(requestWithAuth)
+        return chain.proceed(authenticatedRequest)
+    }
+}
+
+// ❌ Wrong: Hardcoded dependencies, no DI
+class BadAuthInterceptor : Interceptor {
+    private val sharedPrefs = context.getSharedPreferences(...) // ❌ Context leak
+    override fun intercept(chain: Chain) = ...
+}
+```
+
+### Example 2: Handle 401 with token refresh
+
+```kotlin
+class TokenRefreshInterceptor @Inject constructor(
+    private val tokenManager: TokenManager,
+    private val authApi: AuthApi
+) : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val request = chain.request()
+        val response = chain.proceed(request)
+
+        // ✅ Best: Synchronize token refresh
+        if (response.code == 401) {
+            synchronized(this) {
+                val newToken = tokenManager.refreshTokenSync() // Blocking call
+                return if (newToken != null) {
+                    response.close() // ✅ Important: close old response
+                    chain.proceed(request.newBuilder()
+                        .header("Authorization", "Bearer $newToken")
+                        .build())
+                } else {
+                    response // Logout or show login screen
+                }
+            }
+        }
+        return response
     }
 }
 ```
 
-**Query Parameters Interceptor:**
+### Example 3: Common query parameters
+
 ```kotlin
-class QueryParameterInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val originalRequest = chain.request()
-        val originalUrl = originalRequest.url
-
-        val urlWithParams = originalUrl.newBuilder()
-            .addQueryParameter("api_version", "v1")
-            .addQueryParameter("platform", "android")
+// ✅ Best: Add only if parameter is missing
+class CommonParamsInterceptor : Interceptor {
+    override fun intercept(chain: Chain): Response {
+        val original = chain.request()
+        val url = original.url.newBuilder()
+            .apply {
+                if (original.url.queryParameter("platform") == null) {
+                    addQueryParameter("platform", "android")
+                }
+            }
             .build()
 
-        val requestWithParams = originalRequest.newBuilder()
-            .url(urlWithParams)
-            .build()
-
-        return chain.proceed(requestWithParams)
+        return chain.proceed(original.newBuilder().url(url).build())
     }
 }
 ```
 
-**Logging Interceptor:**
+### Example 4: Logging (debug only)
+
 ```kotlin
-// Using built-in logging interceptor
-val loggingInterceptor = HttpLoggingInterceptor().apply {
-    level = HttpLoggingInterceptor.Level.BODY
+// ✅ Best: Conditional logging with different levels
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY // ✅ Full logging in debug
+                })
+            }
+        }
+        .addInterceptor(AuthInterceptor(tokenManager))
+        .connectTimeout(30, TimeUnit.SECONDS) // ✅ Timeout configuration
+        .build()
 }
 
-val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(loggingInterceptor)
-    .build()
+// ❌ Wrong: Log everything in production
+addInterceptor(HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.BODY // ❌ Data leaks, performance hit
+})
 ```
+
+**Key patterns:**
+- Use DI (Hilt/Koin) to inject interceptors
+- Application interceptor for auth, query params
+- Network interceptor for logging network details
+- Synchronize token refresh operations
+- Close Response on retry
+- Conditional logging in debug builds only
 
 ---
 
 ## Follow-ups
 
-- What's the difference between Application and Network interceptors?
-- How do you handle token refresh in interceptors?
-- What are the performance implications of interceptors?
+- What's the difference between Application and Network interceptors in terms of caching behavior?
+- How do you handle concurrent token refresh requests in interceptors (race condition)?
+- What are the performance implications of adding multiple interceptors?
+- How do you test interceptors in unit tests without making real network calls?
+- When should you use Authenticator vs Interceptor for handling 401 responses?
+- How do you implement request prioritization or retry logic in interceptors?
+- What's the order of execution when you have multiple interceptors?
+
+## References
+
+**Concepts:**
+- [[c-retrofit-interceptors]] - Interceptor patterns and chain of responsibility
+- [[c-okhttp-architecture]] - OkHttp architecture and request lifecycle
+- [[c-dependency-injection]] - DI patterns for network layer
+- [[c-token-management]] - Token storage and refresh strategies
+
+**Official Documentation:**
+- https://square.github.io/okhttp/interceptors/
+- https://square.github.io/okhttp/features/interceptors/
+- https://square.github.io/retrofit/
+- https://developer.android.com/training/articles/security-config
+
+**Related Resources:**
+- OkHttp Authenticator for 401 handling
+- HttpLoggingInterceptor levels and security
+- Certificate pinning with CertificatePinner
 
 ## Related Questions
 
@@ -199,7 +312,9 @@ val okHttpClient = OkHttpClient.Builder()
 - [[q-retrofit-basics--android--medium]] - Retrofit basics
 - [[q-okhttp-interceptors--android--medium]] - OkHttp interceptors
 - [[q-authentication-patterns--android--medium]] - Authentication patterns
+- [[q-hilt-modules--android--medium]] - DI with Hilt modules
 
 ### Advanced (Harder)
 - [[q-retrofit-advanced--android--hard]] - Retrofit advanced
 - [[q-network-security--android--hard]] - Network security
+- [[q-concurrent-token-refresh--android--hard]] - Race condition handling

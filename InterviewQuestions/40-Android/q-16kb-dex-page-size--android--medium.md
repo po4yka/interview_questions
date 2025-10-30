@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-gradle, q-proguard-r8--android--medium]
+related: [c-gradle, c-app-bundle, q-proguard-r8--android--medium, q-build-optimization-gradle--android--medium, q-android-app-bundles--android--easy]
 created: 2025-10-25
-updated: 2025-10-27
+updated: 2025-10-29
 sources: []
 tags: [android/gradle, android/performance-memory, difficulty/medium]
 ---
@@ -111,14 +111,28 @@ android {
 - How do App Bundles mitigate this issue?
 - What's the difference between R8 and ProGuard handling?
 - How to detect alignment issues in CI/CD?
+- Why does R8 optimization sometimes increase APK size?
+- How does dex page alignment affect cold start performance?
 
 ## References
 
 - [[c-gradle]] - Build system
+- [[c-app-bundle]] - App distribution format
 - [R8 Optimization](https://developer.android.com/studio/build/shrink-code)
 - [App Bundle Guide](https://developer.android.com/guide/app-bundle)
+- [DEX Format Specification](https://source.android.com/docs/core/runtime/dex-format)
 
 ## Related Questions
 
+### Prerequisites (Easy)
+- [[q-gradle-basics--android--easy]]
+- [[q-android-app-bundles--android--easy]]
+
 ### Related (Medium)
 - [[q-proguard-r8--android--medium]]
+- [[q-build-optimization-gradle--android--medium]]
+- [[q-gradle-build-system--android--medium]]
+
+### Advanced (Hard)
+- APK size analysis and optimization strategies
+- Custom R8 rules for extreme size reduction

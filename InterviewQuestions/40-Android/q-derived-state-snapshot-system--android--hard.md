@@ -15,7 +15,10 @@ created: 2025-10-20
 updated: 2025-10-27
 tags: [android/performance-memory, android/ui-compose, compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
 sources: [https://developer.android.com/jetpack/compose/state]
+date created: Monday, October 27th 2025, 10:27:49 pm
+date modified: Wednesday, October 29th 2025, 5:07:37 pm
 ---
+
 # Вопрос (RU)
 > Объясните систему снимков (snapshot system) Compose. Как derivedStateOf оптимизирует перекомпозиции?
 

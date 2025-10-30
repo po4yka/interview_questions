@@ -3,19 +3,20 @@ id: 20251005-215456
 title: Android Security Practices Checklist / Чек-лист практик безопасности Android
 aliases: ["Android Security Practices Checklist", "Чек-лист практик безопасности Android"]
 topic: android
-subtopics: [keystore-crypto, permissions, architecture-clean]
+subtopics: [keystore-crypto, permissions, network-security-config]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-manifest-file--android--easy, c-encryption]
+related: [c-encryption, q-android-manifest-file--android--easy]
 created: 2025-10-05
-updated: 2025-01-27
-tags: [android/keystore-crypto, android/permissions, android/architecture-clean, difficulty/medium]
-sources: ["https://developer.android.com/topic/security/best-practices"]
+updated: 2025-10-29
+tags: [android/keystore-crypto, android/permissions, android/network-security-config, security, difficulty/medium]
+sources: []
 ---
+
 # Вопрос (RU)
 > Какой минимальный чек-лист безопасности Android приложения для production?
 
@@ -24,218 +25,278 @@ sources: ["https://developer.android.com/topic/security/best-practices"]
 # Question (EN)
 > What is the essential Android security practices checklist for production apps?
 
+---
+
 ## Ответ (RU)
 
-**Чек-лист практик безопасности Android** — систематический подход к защите приложения от типичных уязвимостей через использование [[c-encryption|шифрования]], Android Keystore, Network Security Config и обфускации кода.
+**Систематический подход** к защите Android приложения через [[c-encryption|шифрование]], Android Keystore, Network Security Config и обфускацию кода.
 
-**Ключевые области безопасности:**
+### 1. Защита данных
 
-**1. Защита данных:**
-- Используйте internal storage для конфиденциальных данных
-- Применяйте [[c-encryption|EncryptedSharedPreferences]] для токенов и ключей
-- Избегайте хранения чувствительных данных в external storage
+**EncryptedSharedPreferences** для конфиденциальных данных:
 
 ```kotlin
-// ✅ Правильно: зашифрованное хранилище
+// ✅ Безопасное хранилище
 val masterKey = MasterKey.Builder(context)
     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
     .build()
 
 val encryptedPrefs = EncryptedSharedPreferences.create(
-    context,
-    "secure_prefs",
-    masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    context, "secure_prefs", masterKey,
+    PrefKeyEncryptionScheme.AES256_SIV,
+    PrefValueEncryptionScheme.AES256_GCM
 )
 
-// ❌ Неправильно: открытое хранилище для токенов
+// ❌ Незащищённое хранилище
 val prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE)
 prefs.edit().putString("api_token", token).apply()
 ```
 
-**2. Сетевая безопасность:**
+**Правила хранения**:
+- Internal storage для чувствительных данных
+- [[c-encryption|EncryptedSharedPreferences]] для токенов/ключей
+- Избегать external storage для конфиденциальной информации
 
-Network Security Config принудительно использует HTTPS и предотвращает cleartext-трафик.
+### 2. Сетевая безопасность
+
+**Network Security Config** принудительно использует HTTPS:
 
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
-    <!-- ✅ Правильно: только HTTPS -->
+    <!-- ✅ Только HTTPS -->
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">api.example.com</domain>
+    </domain-config>
+
+    <!-- Certificate pinning для критичных доменов -->
+    <domain-config>
+        <domain includeSubdomains="true">secure.example.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">base64hash==</pin>
+        </pin-set>
     </domain-config>
 </network-security-config>
 ```
 
-**3. Защита компонентов:**
+### 3. Защита компонентов
 
-Отключайте экспорт компонентов по умолчанию.
+**Отключение экспорта** по умолчанию:
 
 ```xml
-<!-- ✅ Правильно: отключен экспорт -->
+<!-- ✅ Безопасно: только внутреннее использование -->
 <provider
     android:name="androidx.core.content.FileProvider"
     android:authorities="${applicationId}.fileprovider"
-    android:exported="false" />
+    android:exported="false"
+    android:grantUriPermissions="true" />
 
-<!-- ❌ Неправильно: доступен всем приложениям -->
+<!-- ❌ Небезопасно: доступен всем -->
 <provider
     android:name="com.example.DataProvider"
     android:exported="true" />
 ```
 
-**4. Обфускация кода:**
+**Правило**: Компоненты exported="false" по умолчанию, except explicit API.
 
-R8 защищает от обратной инженерии.
+### 4. Обфускация кода
+
+**R8** защищает от обратной инженерии:
 
 ```kotlin
 // build.gradle.kts
 android {
     buildTypes {
         release {
-            isMinifyEnabled = true  // ✅ Обфускация включена
+            isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
 ```
 
-**5. Аутентификация:**
+### 5. Биометрическая аутентификация
 
-Используйте биометрию для критичных операций.
+**BiometricPrompt** для критичных операций:
 
 ```kotlin
-// ✅ Правильно: биометрия для платежей
+// ✅ Биометрия для платежей
 val biometricPrompt = BiometricPrompt(
-    this,
-    executor,
+    this, executor,
     object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+        override fun onAuthenticationSucceeded(
+            result: BiometricPrompt.AuthenticationResult
+        ) {
             executePayment()
+        }
+
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            showError(errString)
         }
     }
 )
+
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Подтверждение платежа")
+    .setNegativeButtonText("Отмена")
+    .build()
+
+biometricPrompt.authenticate(promptInfo)
 ```
 
 ## Answer (EN)
 
-**Android Security Practices Checklist** is a systematic approach to protecting apps from common vulnerabilities through [[c-encryption|encryption]], Android Keystore, Network Security Config, and code obfuscation.
+**Systematic approach** to Android app security through [[c-encryption|encryption]], Android Keystore, Network Security Config, and code obfuscation.
 
-**Key security domains:**
+### 1. Data Protection
 
-**1. Data Protection:**
-- Use internal storage for sensitive data
-- Apply [[c-encryption|EncryptedSharedPreferences]] for tokens and keys
-- Avoid storing sensitive data in external storage
+**EncryptedSharedPreferences** for sensitive data:
 
 ```kotlin
-// ✅ Correct: encrypted storage
+// ✅ Secure storage
 val masterKey = MasterKey.Builder(context)
     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
     .build()
 
 val encryptedPrefs = EncryptedSharedPreferences.create(
-    context,
-    "secure_prefs",
-    masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    context, "secure_prefs", masterKey,
+    PrefKeyEncryptionScheme.AES256_SIV,
+    PrefValueEncryptionScheme.AES256_GCM
 )
 
-// ❌ Wrong: plaintext storage for tokens
+// ❌ Insecure storage
 val prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE)
 prefs.edit().putString("api_token", token).apply()
 ```
 
-**2. Network Security:**
+**Storage rules**:
+- Internal storage for sensitive data
+- [[c-encryption|EncryptedSharedPreferences]] for tokens/keys
+- Avoid external storage for confidential information
 
-Network Security Config enforces HTTPS-only communication.
+### 2. Network Security
+
+**Network Security Config** enforces HTTPS:
 
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
-    <!-- ✅ Correct: HTTPS only -->
+    <!-- ✅ HTTPS only -->
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">api.example.com</domain>
+    </domain-config>
+
+    <!-- Certificate pinning for critical domains -->
+    <domain-config>
+        <domain includeSubdomains="true">secure.example.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">base64hash==</pin>
+        </pin-set>
     </domain-config>
 </network-security-config>
 ```
 
-**3. Component Protection:**
+### 3. Component Protection
 
-Disable component export by default.
+**Disable export** by default:
 
 ```xml
-<!-- ✅ Correct: export disabled -->
+<!-- ✅ Secure: internal use only -->
 <provider
     android:name="androidx.core.content.FileProvider"
     android:authorities="${applicationId}.fileprovider"
-    android:exported="false" />
+    android:exported="false"
+    android:grantUriPermissions="true" />
 
-<!-- ❌ Wrong: accessible to all apps -->
+<!-- ❌ Insecure: accessible to all -->
 <provider
     android:name="com.example.DataProvider"
     android:exported="true" />
 ```
 
-**4. Code Obfuscation:**
+**Rule**: Components exported="false" by default, except explicit API.
 
-R8 protects against reverse engineering.
+### 4. Code Obfuscation
+
+**R8** protects against reverse engineering:
 
 ```kotlin
 // build.gradle.kts
 android {
     buildTypes {
         release {
-            isMinifyEnabled = true  // ✅ Obfuscation enabled
+            isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
 ```
 
-**5. Authentication:**
+### 5. Biometric Authentication
 
-Use biometrics for critical operations.
+**BiometricPrompt** for critical operations:
 
 ```kotlin
-// ✅ Correct: biometric for payments
+// ✅ Biometric for payments
 val biometricPrompt = BiometricPrompt(
-    this,
-    executor,
+    this, executor,
     object : BiometricPrompt.AuthenticationCallback() {
-        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+        override fun onAuthenticationSucceeded(
+            result: BiometricPrompt.AuthenticationResult
+        ) {
             executePayment()
+        }
+
+        override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+            showError(errString)
         }
     }
 )
+
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Confirm Payment")
+    .setNegativeButtonText("Cancel")
+    .build()
+
+biometricPrompt.authenticate(promptInfo)
 ```
+
+---
 
 ## Follow-ups
 
-- How would you implement certificate pinning for a banking app with multiple backend domains?
-- What are the security implications of using WebView with JavaScript enabled for OAuth flows?
-- How do you balance security hardening with app performance in resource-constrained devices?
+- How would you implement certificate pinning for a multi-tenant API with dynamic domain rotation?
+- What security implications arise when using WebView with JavaScript enabled for OAuth authentication flows?
+- How do you prevent security token extraction through memory dumps on rooted devices?
+- What strategies mitigate man-in-the-middle attacks when certificate pinning fails or expires?
+- How would you design secure key rotation for encrypted database migrations without data loss?
 
 ## References
 
-- [[c-encryption]] - Encryption fundamentals
+- [[c-encryption]] - Encryption fundamentals and Android implementation
+- [[c-android-keystore]] - Android Keystore system architecture
 - https://developer.android.com/topic/security/best-practices
+- https://developer.android.com/privacy-and-security/security-tips
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-manifest-file--android--easy]] - Manifest configuration basics
+- [[q-android-manifest-file--android--easy]] - Manifest configuration basics and permissions
 
 ### Related (Medium)
-- Android Keystore implementation patterns
-- Network security configuration for hybrid apps
-- ProGuard rules for third-party SDKs
+- [[q-android-keystore-implementation--android--medium]] - Android Keystore patterns and key management
+- [[q-network-security-config--android--medium]] - Advanced network security configurations
+- [[q-proguard-rules-optimization--android--medium]] - R8/ProGuard rules for third-party libraries
 
 ### Advanced (Harder)
-- Runtime security monitoring and threat detection
-- Secure multi-process architecture design
-- Hardware-backed key attestation implementation
+- [[q-runtime-security-monitoring--android--hard]] - Runtime threat detection and response strategies
+- [[q-secure-multiprocess-architecture--android--hard]] - Inter-process security in modular apps
+- [[q-hardware-key-attestation--android--hard]] - Hardware-backed key attestation implementation

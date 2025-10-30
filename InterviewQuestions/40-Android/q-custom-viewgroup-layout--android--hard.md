@@ -1,393 +1,355 @@
 ---
 id: 20251020-200000
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
-aliases: [Custom ViewGroup Layout, Layout кастомных ViewGroup]
+aliases: ["Custom ViewGroup Layout", "Layout кастомных ViewGroup"]
 topic: android
-subtopics:
-  - ui-views
+subtopics: [ui-views, ui-graphics]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-custom-drawable-implementation--android--medium
-  - q-custom-view-attributes--android--medium
-  - q-custom-view-lifecycle--android--medium
+related: [q-custom-drawable-implementation--android--medium, q-custom-view-attributes--android--medium, q-custom-view-lifecycle--android--medium]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/ui-views, difficulty/hard]
-source: https://developer.android.com/reference/android/view/ViewGroup
-source_note: Official ViewGroup documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:21 pm
+updated: 2025-10-29
+tags: [android/ui-views, android/ui-graphics, custom-views, layout, difficulty/hard]
+sources: []
 ---
-
 # Вопрос (RU)
-> Как создать кастомный ViewGroup? Объясните процесс измерения и компоновки. Реализуйте кастомный FlowLayout, который располагает дочерние элементы в ряды, переносясь на следующий ряд при необходимости.
+
+> Как создать кастомный ViewGroup? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.
 
 # Question (EN)
-> How do you create a custom ViewGroup? Explain the measurement and layout process. Implement a custom FlowLayout that arranges children in rows, wrapping to the next row when needed.
+
+> How do you create a custom ViewGroup? Explain the measurement and layout process. Implement a FlowLayout that arranges children in rows, wrapping to the next row when needed.
 
 ## Ответ (RU)
 
-Создание **кастомного ViewGroup** сложнее простого кастомного View, поскольку нужно управлять измерением и компоновкой как собственного элемента, так и всех дочерних элементов.
+Создание кастомного ViewGroup требует понимания двухпроходного алгоритма: **измерение** (onMeasure) и **компоновка** (onLayout).
 
-Требует понимания [[c-custom-views]], c-view-measurement и c-layout-algorithms.
+### Двухпроходный Алгоритм
 
-### Теория: Двухпроходный Алгоритм Компоновки
+**Проход 1: onMeasure**
+- ViewGroup измеряет каждый дочерний элемент через `child.measure()`
+- Рассчитывает собственный размер на основе размеров детей
+- ОБЯЗАН вызвать `setMeasuredDimension(width, height)`
 
-**1. Проход измерения (onMeasure)**
-- Родитель измеряет каждый дочерний элемент через `child.measure()`
-- Родитель рассчитывает собственный размер на основе размеров дочерних элементов
-- Обязательно вызывается `setMeasuredDimension()`
+**Проход 2: onLayout**
+- ViewGroup позиционирует каждый дочерний элемент через `child.layout(left, top, right, bottom)`
+- Координаты задаются относительно родителя
 
-**2. Проход компоновки (onLayout)**
-- Родитель позиционирует каждый дочерний элемент через `child.layout()`
-- Дочерние элементы получают свои координаты в системе родителя
+### MeasureSpec Режимы
 
-### Ключевые Концепции
+- `EXACTLY` — точный размер (`match_parent` или конкретное значение)
+- `AT_MOST` — максимальный размер (`wrap_content`)
+- `UNSPECIFIED` — без ограничений (редко)
 
-**MeasureSpec** определяет требования к размеру:
-- `EXACTLY` - точный размер (match_parent, конкретное значение)
-- `AT_MOST` - максимальный размер (wrap_content)
-- `UNSPECIFIED` - без ограничений (редко используется)
-
-**LayoutParams** определяют параметры дочернего элемента:
-- `MarginLayoutParams` - поддерживает margins
-- Кастомные LayoutParams - для специфичных требований
-
-### Базовая Реализация FlowLayout
+### Реализация FlowLayout
 
 ```kotlin
 class FlowLayout @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr) {
+    attrs: AttributeSet? = null
+) : ViewGroup(context, attrs) {
 
-    var horizontalSpacing: Int = 0
-    var verticalSpacing: Int = 0
+    var horizontalSpacing = 0
+    var verticalSpacing = 0
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        val availableWidth = MeasureSpec.getSize(widthSpec) - paddingLeft - paddingRight
 
-        val availableWidth = if (widthMode == MeasureSpec.UNSPECIFIED) {
-            Int.MAX_VALUE
-        } else {
-            widthSize - paddingLeft - paddingRight
-        }
+        var rowWidth = 0
+        var rowHeight = 0
+        var totalHeight = paddingTop + paddingBottom
 
-        var currentRowWidth = 0
-        var currentRowHeight = 0
-        var totalHeight = 0
-
-        // Измеряем каждый дочерний элемент
+        // ✅ Измеряем детей и считаем высоту
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             if (child.visibility == GONE) continue
 
-            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+            measureChildWithMargins(child, widthSpec, 0, heightSpec, 0)
+            val lp = child.layoutParams as MarginLayoutParams
+            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
+            val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            val childWidth = child.measuredWidth + (child.layoutParams as? MarginLayoutParams)?.let {
-                it.leftMargin + it.rightMargin
-            } ?: 0
-
-            val childHeight = child.measuredHeight + (child.layoutParams as? MarginLayoutParams)?.let {
-                it.topMargin + it.bottomMargin
-            } ?: 0
-
-            // Проверяем нужен ли перенос
-            if (currentRowWidth + childWidth > availableWidth && currentRowWidth > 0) {
-                totalHeight += currentRowHeight + verticalSpacing
-                currentRowWidth = childWidth
-                currentRowHeight = childHeight
+            // Нужен ли перенос на новую строку?
+            if (rowWidth + childWidth > availableWidth && rowWidth > 0) {
+                totalHeight += rowHeight + verticalSpacing
+                rowWidth = childWidth
+                rowHeight = childHeight
             } else {
-                currentRowWidth += childWidth + horizontalSpacing
-                currentRowHeight = max(currentRowHeight, childHeight)
+                rowWidth += childWidth + horizontalSpacing
+                rowHeight = max(rowHeight, childHeight)
             }
         }
+        totalHeight += rowHeight
 
-        totalHeight += currentRowHeight + paddingTop + paddingBottom
-        val finalWidth = resolveSize(widthSize, widthMeasureSpec)
-        val finalHeight = resolveSize(totalHeight, heightMeasureSpec)
-
-        setMeasuredDimension(finalWidth, finalHeight)
+        setMeasuredDimension(
+            resolveSize(MeasureSpec.getSize(widthSpec), widthSpec),
+            resolveSize(totalHeight, heightSpec)
+        )
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         val availableWidth = right - left - paddingLeft - paddingRight
-        var currentX = paddingLeft
-        var currentY = paddingTop
-        var currentRowHeight = 0
+        var x = paddingLeft
+        var y = paddingTop
+        var rowHeight = 0
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             if (child.visibility == GONE) continue
 
-            val childWidth = child.measuredWidth
-            val childHeight = child.measuredHeight
-            val lp = child.layoutParams as? MarginLayoutParams
+            val lp = child.layoutParams as MarginLayoutParams
+            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
 
-            val totalChildWidth = childWidth + (lp?.leftMargin ?: 0) + (lp?.rightMargin ?: 0)
-
-            // Проверяем нужен ли перенос
-            if (currentX + totalChildWidth > paddingLeft + availableWidth && currentX > paddingLeft) {
-                currentX = paddingLeft
-                currentY += currentRowHeight + verticalSpacing
-                currentRowHeight = 0
+            // Перенос на новую строку
+            if (x + childWidth > paddingLeft + availableWidth && x > paddingLeft) {
+                x = paddingLeft
+                y += rowHeight + verticalSpacing
+                rowHeight = 0
             }
 
-            val childLeft = currentX + (lp?.leftMargin ?: 0)
-            val childTop = currentY + (lp?.topMargin ?: 0)
-
+            // ✅ Позиционируем элемент
             child.layout(
-                childLeft,
-                childTop,
-                childLeft + childWidth,
-                childTop + childHeight
+                x + lp.leftMargin,
+                y + lp.topMargin,
+                x + lp.leftMargin + child.measuredWidth,
+                y + lp.topMargin + child.measuredHeight
             )
 
-            currentX += totalChildWidth + horizontalSpacing
-            currentRowHeight = max(currentRowHeight, childHeight + (lp?.topMargin ?: 0) + (lp?.bottomMargin ?: 0))
+            x += childWidth + horizontalSpacing
+            rowHeight = max(rowHeight, child.measuredHeight + lp.topMargin + lp.bottomMargin)
         }
     }
 
-    // Поддержка MarginLayoutParams
-    override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams {
-        return MarginLayoutParams(context, attrs)
-    }
+    // ✅ Поддержка MarginLayoutParams
+    override fun generateLayoutParams(attrs: AttributeSet?) = MarginLayoutParams(context, attrs)
+    override fun generateDefaultLayoutParams() = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+    override fun generateLayoutParams(p: LayoutParams?) = MarginLayoutParams(p)
+    override fun checkLayoutParams(p: LayoutParams?) = p is MarginLayoutParams
+}
+```
 
-    override fun generateDefaultLayoutParams(): LayoutParams {
-        return MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-    }
+### Критические Правила
 
-    override fun generateLayoutParams(p: LayoutParams?): LayoutParams {
-        return MarginLayoutParams(p)
-    }
+**ОБЯЗАТЕЛЬНО:**
+- Измерять дочерние элементы перед родителем
+- Вызывать `setMeasuredDimension()` в конце `onMeasure()`
+- Пропускать `GONE` элементы
+- Учитывать padding родителя
 
-    override fun checkLayoutParams(p: LayoutParams?): Boolean {
-        return p is MarginLayoutParams
+**ЗАПРЕЩЕНО:**
+- ❌ Вызывать `requestLayout()` внутри `onLayout()` (бесконечный цикл)
+- ❌ Использовать `measuredWidth/Height` до вызова `measure()`
+- ❌ Игнорировать `MeasureSpec` от родителя
+
+### Оптимизации
+
+**Кэширование:** Сохранить результаты `onMeasure()` для `onLayout()`:
+
+```kotlin
+private val childBounds = mutableListOf<Rect>()
+
+override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+    childBounds.clear()
+    // Во время измерения сохраняем bounds
+    for (i in 0 until childCount) {
+        // ... измерение
+        childBounds.add(Rect(left, top, right, bottom))
+    }
+    setMeasuredDimension(w, h)
+}
+
+override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+    // ✅ Используем сохранённые bounds
+    for (i in 0 until childCount) {
+        val bounds = childBounds[i]
+        getChildAt(i).layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
     }
 }
 ```
 
-### Лучшие Практики
-
-**Измерение:**
-- Всегда измеряйте дочерние элементы перед родительским
-- Используйте `measureChildWithMargins()` для поддержки margins
-- Пропускайте элементы с `visibility == GONE`
-- Обязательно вызывайте `setMeasuredDimension()`
-
-**Компоновка:**
-- Используйте измеренные размеры из `onMeasure()`
-- Учитывайте padding родителя
-- Поддерживайте RTL-компоновки
-
-**Производительность:**
-- Кэшируйте вычисления между `onMeasure()` и `onLayout()`
-- Избегайте создания объектов в циклах измерения/компоновки
-
-### Распространенные Ошибки
-
-**Забыли `setMeasuredDimension()`** - приводит к краху
-**Не измерили дочерние элементы** - `measuredWidth/Height` будут равны 0
-**Вызов `requestLayout()` в `onLayout()`** - создает бесконечный цикл
-**Игнорирование `MeasureSpec`** - нарушает контракт с родителем
+**RTL Support:** Используйте `ViewCompat.getLayoutDirection()` для поддержки RTL-раскладок.
 
 ## Answer (EN)
 
-Creating a **custom ViewGroup** is more complex than a simple custom View because you need to handle measurement and layout for both your own element and all child elements.
+Creating a custom ViewGroup requires understanding the two-pass algorithm: **measure** (onMeasure) and **layout** (onLayout).
 
-Requires understanding of [[c-custom-views]], c-view-measurement, and c-layout-algorithms.
+### Two-Pass Algorithm
 
-### Theory: Two-Pass Layout Algorithm
+**Pass 1: onMeasure**
+- ViewGroup measures each child via `child.measure()`
+- Calculates its own size based on children's sizes
+- MUST call `setMeasuredDimension(width, height)`
 
-**1. Measure Pass (onMeasure)**
-- Parent measures each child via `child.measure()`
-- Parent calculates its own size based on children's sizes
-- Must call `setMeasuredDimension()`
+**Pass 2: onLayout**
+- ViewGroup positions each child via `child.layout(left, top, right, bottom)`
+- Coordinates are relative to parent
 
-**2. Layout Pass (onLayout)**
-- Parent positions each child via `child.layout()`
-- Children receive their coordinates in parent's coordinate system
+### MeasureSpec Modes
 
-### Key Concepts
+- `EXACTLY` — exact size (`match_parent` or specific value)
+- `AT_MOST` — maximum size (`wrap_content`)
+- `UNSPECIFIED` — no constraints (rare)
 
-**MeasureSpec** defines size requirements:
-- `EXACTLY` - exact size (match_parent, specific value)
-- `AT_MOST` - maximum size (wrap_content)
-- `UNSPECIFIED` - no constraints (rarely used)
-
-**LayoutParams** define child parameters:
-- `MarginLayoutParams` - supports margins
-- Custom LayoutParams - for specific requirements
-
-### Basic FlowLayout Implementation
+### FlowLayout Implementation
 
 ```kotlin
 class FlowLayout @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr) {
+    attrs: AttributeSet? = null
+) : ViewGroup(context, attrs) {
 
-    var horizontalSpacing: Int = 0
-    var verticalSpacing: Int = 0
+    var horizontalSpacing = 0
+    var verticalSpacing = 0
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        val availableWidth = MeasureSpec.getSize(widthSpec) - paddingLeft - paddingRight
 
-        val availableWidth = if (widthMode == MeasureSpec.UNSPECIFIED) {
-            Int.MAX_VALUE
-        } else {
-            widthSize - paddingLeft - paddingRight
-        }
+        var rowWidth = 0
+        var rowHeight = 0
+        var totalHeight = paddingTop + paddingBottom
 
-        var currentRowWidth = 0
-        var currentRowHeight = 0
-        var totalHeight = 0
-
-        // Measure each child
+        // ✅ Measure children and calculate height
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             if (child.visibility == GONE) continue
 
-            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+            measureChildWithMargins(child, widthSpec, 0, heightSpec, 0)
+            val lp = child.layoutParams as MarginLayoutParams
+            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
+            val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            val childWidth = child.measuredWidth + (child.layoutParams as? MarginLayoutParams)?.let {
-                it.leftMargin + it.rightMargin
-            } ?: 0
-
-            val childHeight = child.measuredHeight + (child.layoutParams as? MarginLayoutParams)?.let {
-                it.topMargin + it.bottomMargin
-            } ?: 0
-
-            // Check if wrapping is needed
-            if (currentRowWidth + childWidth > availableWidth && currentRowWidth > 0) {
-                totalHeight += currentRowHeight + verticalSpacing
-                currentRowWidth = childWidth
-                currentRowHeight = childHeight
+            // Do we need to wrap to next row?
+            if (rowWidth + childWidth > availableWidth && rowWidth > 0) {
+                totalHeight += rowHeight + verticalSpacing
+                rowWidth = childWidth
+                rowHeight = childHeight
             } else {
-                currentRowWidth += childWidth + horizontalSpacing
-                currentRowHeight = max(currentRowHeight, childHeight)
+                rowWidth += childWidth + horizontalSpacing
+                rowHeight = max(rowHeight, childHeight)
             }
         }
+        totalHeight += rowHeight
 
-        totalHeight += currentRowHeight + paddingTop + paddingBottom
-        val finalWidth = resolveSize(widthSize, widthMeasureSpec)
-        val finalHeight = resolveSize(totalHeight, heightMeasureSpec)
-
-        setMeasuredDimension(finalWidth, finalHeight)
+        setMeasuredDimension(
+            resolveSize(MeasureSpec.getSize(widthSpec), widthSpec),
+            resolveSize(totalHeight, heightSpec)
+        )
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         val availableWidth = right - left - paddingLeft - paddingRight
-        var currentX = paddingLeft
-        var currentY = paddingTop
-        var currentRowHeight = 0
+        var x = paddingLeft
+        var y = paddingTop
+        var rowHeight = 0
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             if (child.visibility == GONE) continue
 
-            val childWidth = child.measuredWidth
-            val childHeight = child.measuredHeight
-            val lp = child.layoutParams as? MarginLayoutParams
+            val lp = child.layoutParams as MarginLayoutParams
+            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
 
-            val totalChildWidth = childWidth + (lp?.leftMargin ?: 0) + (lp?.rightMargin ?: 0)
-
-            // Check if wrapping is needed
-            if (currentX + totalChildWidth > paddingLeft + availableWidth && currentX > paddingLeft) {
-                currentX = paddingLeft
-                currentY += currentRowHeight + verticalSpacing
-                currentRowHeight = 0
+            // Wrap to next row
+            if (x + childWidth > paddingLeft + availableWidth && x > paddingLeft) {
+                x = paddingLeft
+                y += rowHeight + verticalSpacing
+                rowHeight = 0
             }
 
-            val childLeft = currentX + (lp?.leftMargin ?: 0)
-            val childTop = currentY + (lp?.topMargin ?: 0)
-
+            // ✅ Position the child
             child.layout(
-                childLeft,
-                childTop,
-                childLeft + childWidth,
-                childTop + childHeight
+                x + lp.leftMargin,
+                y + lp.topMargin,
+                x + lp.leftMargin + child.measuredWidth,
+                y + lp.topMargin + child.measuredHeight
             )
 
-            currentX += totalChildWidth + horizontalSpacing
-            currentRowHeight = max(currentRowHeight, childHeight + (lp?.topMargin ?: 0) + (lp?.bottomMargin ?: 0))
+            x += childWidth + horizontalSpacing
+            rowHeight = max(rowHeight, child.measuredHeight + lp.topMargin + lp.bottomMargin)
         }
     }
 
-    // Support MarginLayoutParams
-    override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams {
-        return MarginLayoutParams(context, attrs)
-    }
+    // ✅ Support MarginLayoutParams
+    override fun generateLayoutParams(attrs: AttributeSet?) = MarginLayoutParams(context, attrs)
+    override fun generateDefaultLayoutParams() = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+    override fun generateLayoutParams(p: LayoutParams?) = MarginLayoutParams(p)
+    override fun checkLayoutParams(p: LayoutParams?) = p is MarginLayoutParams
+}
+```
 
-    override fun generateDefaultLayoutParams(): LayoutParams {
-        return MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-    }
+### Critical Rules
 
-    override fun generateLayoutParams(p: LayoutParams?): LayoutParams {
-        return MarginLayoutParams(p)
-    }
+**MUST:**
+- Measure children before parent
+- Call `setMeasuredDimension()` at end of `onMeasure()`
+- Skip `GONE` children
+- Account for parent's padding
 
-    override fun checkLayoutParams(p: LayoutParams?): Boolean {
-        return p is MarginLayoutParams
+**FORBIDDEN:**
+- ❌ Call `requestLayout()` inside `onLayout()` (infinite loop)
+- ❌ Use `measuredWidth/Height` before calling `measure()`
+- ❌ Ignore `MeasureSpec` from parent
+
+### Optimizations
+
+**Caching:** Save `onMeasure()` results for `onLayout()`:
+
+```kotlin
+private val childBounds = mutableListOf<Rect>()
+
+override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+    childBounds.clear()
+    // During measure, save bounds
+    for (i in 0 until childCount) {
+        // ... measurement
+        childBounds.add(Rect(left, top, right, bottom))
+    }
+    setMeasuredDimension(w, h)
+}
+
+override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+    // ✅ Use cached bounds
+    for (i in 0 until childCount) {
+        val bounds = childBounds[i]
+        getChildAt(i).layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
     }
 }
 ```
 
-### Best Practices
-
-**Measurement:**
-- Always measure children before parent
-- Use `measureChildWithMargins()` for margin support
-- Skip elements with `visibility == GONE`
-- Must call `setMeasuredDimension()`
-
-**Layout:**
-- Use measured dimensions from `onMeasure()`
-- Account for parent's padding
-- Support RTL layouts
-
-**Performance:**
-- Cache calculations between `onMeasure()` and `onLayout()`
-- Avoid object creation in measure/layout loops
-
-### Common Pitfalls
-
-**Forgot `setMeasuredDimension()`** - causes crash
-**Didn't measure children** - `measuredWidth/Height` will be 0
-**Calling `requestLayout()` in `onLayout()`** - creates infinite loop
-**Ignoring `MeasureSpec`** - violates parent contract
+**RTL Support:** Use `ViewCompat.getLayoutDirection()` for RTL layouts.
 
 ## Follow-ups
 
-- How to handle dynamic child addition/removal?
+- How do you handle dynamic child addition/removal efficiently?
 - What's the difference between `measureChild()` and `measureChildWithMargins()`?
-- How to implement custom LayoutParams?
-- How to optimize performance for large child counts?
+- How do you implement custom LayoutParams with additional attributes?
+- How would you optimize performance for 100+ children?
+- How do you support RTL (right-to-left) layouts?
 
 ## References
 
-- [Android ViewGroup Documentation](https://developer.android.com/reference/android/view/ViewGroup)
-- [Custom ViewGroup Tutorial](https://developer.android.com/guide/topics/ui/custom-components#custom-layout)
+- [[c-custom-views]]
+- [[c-view-measurement]]
+- [ViewGroup Documentation](https://developer.android.com/reference/android/view/ViewGroup)
+- [Custom Views Tutorial](https://developer.android.com/guide/topics/ui/custom-components)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-custom-view-lifecycle--android--medium]]
+
+- [[q-custom-view-lifecycle--android--medium]] - Understanding View lifecycle
+- [[q-custom-view-attributes--android--medium]] - Custom attributes basics
 
 ### Related (Same Level)
-- [[q-custom-view-attributes--android--medium]]
-- [[q-custom-drawable-implementation--android--medium]]
+
+- [[q-custom-drawable-implementation--android--medium]] - Custom drawing
+- [[q-constraint-layout-internals--android--hard]] - Complex layout system
 
 ### Advanced (Harder)
-- [[q-custom-view-animation--android--medium]]
+
+- [[q-view-performance-optimization--android--hard]] - Layout optimization
+- [[q-async-layout-inflation--android--hard]] - Async inflation techniques

@@ -1,575 +1,60 @@
 ---
 id: 20251017-104930
 title: "Which Layout Allows Views To Overlap / Какой layout позволяет View перекрываться"
+aliases: ["Which Layout Allows Views To Overlap", "Какой layout позволяет View перекрываться"]
 topic: android
+subtopics: [ui-views, ui-compose]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compositionlocal-advanced--jetpack-compose--medium, q-android-build-optimization--android--medium, q-what-is-intent--android--easy]
+related: [q-what-is-layout-types-and-when-to-use--android--easy, q-viewgroup-vs-view-differences--android--easy, q-jetpack-compose-lazy-column--android--easy]
 created: 2025-10-15
-tags: [layouts, framelayout, ui, difficulty/easy]
+updated: 2025-10-29
+sources: []
+tags: [android, android/ui-views, android/ui-compose, layouts, framelayout, compose, difficulty/easy]
 ---
+# Вопрос (RU)
 
-# Which layout allows views to overlap?
+> Какой layout в Android позволяет View перекрываться друг с другом?
 
-## Answer (EN)
-In Android, there are two main approaches for creating layouts where UI elements can overlay each other: **FrameLayout** (traditional View system) and **Box** (Jetpack Compose).
+# Question (EN)
 
-### FrameLayout (Traditional View System)
-
-`FrameLayout` is designed to display a single view, but it can hold multiple children that stack on top of each other, with the last child drawn on top.
-
-#### Basic FrameLayout Example (XML)
-
-```xml
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="300dp">
-
-    <!-- Background image (bottom layer) -->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background"
-        android:scaleType="centerCrop" />
-
-    <!-- Middle layer - semi-transparent overlay -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000" />
-
-    <!-- Top layer - text -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Overlay Text"
-        android:textColor="@android:color/white"
-        android:textSize="24sp" />
-</FrameLayout>
-```
-
-#### FrameLayout with Positioning
-
-```xml
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="200dp">
-
-    <!-- Base layer -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/blue" />
-
-    <!-- Top-left corner -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_margin="16dp"
-        android:text="Top Left" />
-
-    <!-- Center -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Center" />
-
-    <!-- Bottom-right corner -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:text="Bottom Right" />
-</FrameLayout>
-```
-
-#### Programmatic FrameLayout
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val frameLayout = FrameLayout(this).apply {
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                800
-            )
-        }
-
-        // Add background image
-        val imageView = ImageView(this).apply {
-            setImageResource(R.drawable.background)
-            scaleType = ImageView.ScaleType.CENTER_CROP
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // Add overlay text
-        val textView = TextView(this).apply {
-            text = "Overlay Text"
-            setTextColor(Color.WHITE)
-            textSize = 24f
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER
-            )
-        }
-
-        frameLayout.addView(imageView)
-        frameLayout.addView(textView)
-
-        setContentView(frameLayout)
-    }
-}
-```
-
-### Common FrameLayout Use Cases
-
-#### 1. Image with Overlay Badge
-
-```xml
-<FrameLayout
-    android:layout_width="100dp"
-    android:layout_height="100dp">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/user_avatar"
-        android:scaleType="centerCrop" />
-
-    <!-- Badge overlay -->
-    <TextView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="top|end"
-        android:layout_margin="4dp"
-        android:background="@drawable/circle_red"
-        android:gravity="center"
-        android:text="5"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
-</FrameLayout>
-```
-
-#### 2. Loading Overlay
-
-```xml
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Main content -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <!-- Content here -->
-    </LinearLayout>
-
-    <!-- Loading overlay -->
-    <FrameLayout
-        android:id="@+id/loadingOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#CC000000"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
-</FrameLayout>
-```
-
-```kotlin
-// Show/hide loading overlay
-fun showLoading(show: Boolean) {
-    findViewById<View>(R.id.loadingOverlay).visibility =
-        if (show) View.VISIBLE else View.GONE
-}
-```
-
-### Box in Jetpack Compose
-
-`Box` is the Compose equivalent of `FrameLayout`, providing a composable that places its children on top of each other.
-
-#### Basic Box Example
-
-```kotlin
-@Composable
-fun OverlayExample() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp)
-    ) {
-        // Background layer
-        Image(
-            painter = painterResource(R.drawable.background),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        // Semi-transparent overlay
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-        )
-
-        // Top layer - text
-        Text(
-            text = "Overlay Text",
-            color = Color.White,
-            fontSize = 24.sp,
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
-```
-
-#### Box with Multiple Alignments
-
-```kotlin
-@Composable
-fun MultiAlignmentBox() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .background(Color.Blue)
-    ) {
-        // Top-left
-        Text(
-            text = "Top Left",
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(16.dp)
-        )
-
-        // Center
-        Text(
-            text = "Center",
-            modifier = Modifier.align(Alignment.Center)
-        )
-
-        // Bottom-right
-        Text(
-            text = "Bottom Right",
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        )
-    }
-}
-```
-
-#### Practical Compose Examples
-
-##### Card with Badge
-
-```kotlin
-@Composable
-fun BadgedProfileImage(
-    imageUrl: String,
-    badgeCount: Int
-) {
-    Box(
-        modifier = Modifier.size(100.dp)
-    ) {
-        // Profile image
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = "Profile",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
-        // Badge
-        if (badgeCount > 0) {
-            Box(
-                modifier = Modifier
-                    .size(24.dp)
-                    .align(Alignment.TopEnd)
-                    .offset(x = (-4).dp, y = 4.dp)
-                    .background(Color.Red, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = badgeCount.toString(),
-                    color = Color.White,
-                    fontSize = 12.sp
-                )
-            }
-        }
-    }
-}
-```
-
-##### Loading Overlay
-
-```kotlin
-@Composable
-fun ScreenWithLoading(
-    isLoading: Boolean,
-    content: @Composable () -> Unit
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Main content
-        content()
-
-        // Loading overlay
-        if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.8f))
-                    .clickable(enabled = false) { }, // Block interactions
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = Color.White)
-            }
-        }
-    }
-}
-```
-
-##### Floating Action Button
-
-```kotlin
-@Composable
-fun ContentWithFAB() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Scrollable content
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(50) { index ->
-                Text(
-                    text = "Item $index",
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        }
-
-        // Floating Action Button overlay
-        FloatingActionButton(
-            onClick = { /* Action */ },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add"
-            )
-        }
-    }
-}
-```
-
-### Comparison: FrameLayout vs Box
-
-| Feature | FrameLayout | Box (Compose) |
-|---------|-------------|---------------|
-| System | View System | Jetpack Compose |
-| Definition | XML or Kotlin | Kotlin @Composable |
-| Children Order | Last child on top | Last child on top |
-| Alignment | `layout_gravity` | `Modifier.align()` |
-| Z-index Control | Add order | Add order / `zIndex()` |
-
-### Advanced Box Features
-
-```kotlin
-@Composable
-fun AdvancedBoxExample() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Layer 1 (bottom)
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Blue)
-        )
-
-        // Layer 2 (middle) - with custom z-index
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.Center)
-                .zIndex(1f) // Explicit z-ordering
-                .background(Color.Green)
-        )
-
-        // Layer 3 (top by default)
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .align(Alignment.Center)
-                .background(Color.Red)
-        )
-    }
-}
-```
-
-### Summary
-
-- **FrameLayout** (View System): Simple container for overlaying views
-- **Box** (Jetpack Compose): Modern declarative approach for stacking composables
-- Both place children on top of each other in the order they are added
-- Use `layout_gravity` (FrameLayout) or `Modifier.align()` (Box) for positioning
-- Common uses: badges, overlays, floating buttons, loading indicators
+> Which layout in Android allows views to overlap each other?
 
 ---
-
-# Как называется лейаут, в котором объекты могут наслаиваться друг на друга?
 
 ## Ответ (RU)
 
-В Android существует два основных подхода для создания макетов, в которых UI элементы могут накладываться друг на друга: **FrameLayout** (традиционная система View) и **Box** (Jetpack Compose).
+В Android существует два основных способа создания макетов с наложением элементов:
 
-### FrameLayout (Традиционная система View)
+### FrameLayout (Система View)
 
-`FrameLayout` предназначен для отображения одного view, но может содержать несколько дочерних элементов, которые накладываются друг на друга, при этом последний дочерний элемент рисуется поверх.
+**FrameLayout** — простейший контейнер для наложения views. Дочерние элементы размещаются один поверх другого, последний добавленный отображается сверху.
 
-#### Базовый пример FrameLayout (XML)
+**Ключевые особенности**:
+- Дочерние элементы рисуются в порядке добавления
+- Позиционирование через `layout_gravity` (center, top|start, bottom|end и т.д.)
+- Оптимален для одного основного view с небольшими наложениями
+- Z-порядок определяется очередностью добавления
 
-```xml
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="300dp">
-
-    <!-- Фоновое изображение (нижний слой) -->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background"
-        android:scaleType="centerCrop" />
-
-    <!-- Средний слой - полупрозрачное наложение -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000" />
-
-    <!-- Верхний слой - текст -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Наложенный текст"
-        android:textColor="@android:color/white"
-        android:textSize="24sp" />
-</FrameLayout>
-```
-
-#### FrameLayout с позиционированием
-
-```xml
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="200dp">
-
-    <!-- Базовый слой -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/blue" />
-
-    <!-- Верхний левый угол -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_margin="16dp"
-        android:text="Верхний левый" />
-
-    <!-- Центр -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Центр" />
-
-    <!-- Нижний правый угол -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:text="Нижний правый" />
-</FrameLayout>
-```
-
-#### Программное создание FrameLayout
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val frameLayout = FrameLayout(this).apply {
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                800
-            )
-        }
-
-        // Добавление фонового изображения
-        val imageView = ImageView(this).apply {
-            setImageResource(R.drawable.background)
-            scaleType = ImageView.ScaleType.CENTER_CROP
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // Добавление наложенного текста
-        val textView = TextView(this).apply {
-            text = "Наложенный текст"
-            setTextColor(Color.WHITE)
-            textSize = 24f
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER
-            )
-        }
-
-        frameLayout.addView(imageView)
-        frameLayout.addView(textView)
-
-        setContentView(frameLayout)
-    }
-}
-```
-
-### Типичные случаи использования FrameLayout
-
-#### 1. Изображение с наложенным значком
+**Пример: Изображение со значком**:
 
 ```xml
 <FrameLayout
     android:layout_width="100dp"
     android:layout_height="100dp">
 
+    <!-- ✅ Базовый слой -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/user_avatar"
+        android:src="@drawable/avatar"
         android:scaleType="centerCrop" />
 
-    <!-- Наложенный значок -->
+    <!-- ✅ Наложенный значок -->
     <TextView
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -578,149 +63,61 @@ class MainActivity : AppCompatActivity() {
         android:background="@drawable/circle_red"
         android:gravity="center"
         android:text="5"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:textColor="@android:color/white" />
 </FrameLayout>
 ```
 
-#### 2. Наложение загрузки
-
-```xml
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Основное содержимое -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <!-- Содержимое здесь -->
-    </LinearLayout>
-
-    <!-- Наложение загрузки -->
-    <FrameLayout
-        android:id="@+id/loadingOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#CC000000"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
-</FrameLayout>
-```
+**Программное создание**:
 
 ```kotlin
-// Показать/скрыть наложение загрузки
-fun showLoading(show: Boolean) {
-    findViewById<View>(R.id.loadingOverlay).visibility =
-        if (show) View.VISIBLE else View.GONE
+val frameLayout = FrameLayout(context).apply {
+    addView(ImageView(context).apply {
+        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        setImageResource(R.drawable.background)
+    })
+
+    // ✅ Правильно: последний добавленный view будет сверху
+    addView(TextView(context).apply {
+        text = "Overlay"
+        layoutParams = FrameLayout.LayoutParams(
+            WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER
+        )
+    })
 }
 ```
 
-### Box в Jetpack Compose
+**Типичные use cases**:
+- Экран загрузки поверх контента
+- Значки на изображениях (notifications badge)
+- Простые наложения с затемнением
 
-`Box` - это Compose эквивалент `FrameLayout`, предоставляющий composable, который размещает свои дочерние элементы друг на друге.
+---
 
-#### Базовый пример Box
+### Box (Jetpack Compose)
+
+**Box** — Compose-эквивалент FrameLayout с декларативным API.
+
+**Ключевые особенности**:
+- Дочерние composables накладываются в порядке объявления
+- Выравнивание через `Modifier.align(Alignment.TopStart)` и т.д.
+- Явный контроль z-порядка через `Modifier.zIndex()`
+- Более гибкое позиционирование с `offset()`
+
+**Пример: Badge на изображении**:
 
 ```kotlin
 @Composable
-fun OverlayExample() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp)
-    ) {
-        // Фоновый слой
-        Image(
-            painter = painterResource(R.drawable.background),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
+fun BadgedImage(count: Int) {
+    Box(modifier = Modifier.size(100.dp)) {
+        // ✅ Базовый слой
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = "Profile",
             modifier = Modifier.fillMaxSize()
         )
 
-        // Полупрозрачное наложение
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-        )
-
-        // Верхний слой - текст
-        Text(
-            text = "Наложенный текст",
-            color = Color.White,
-            fontSize = 24.sp,
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
-```
-
-#### Box с множественным выравниванием
-
-```kotlin
-@Composable
-fun MultiAlignmentBox() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .background(Color.Blue)
-    ) {
-        // Верхний левый
-        Text(
-            text = "Верхний левый",
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(16.dp)
-        )
-
-        // Центр
-        Text(
-            text = "Центр",
-            modifier = Modifier.align(Alignment.Center)
-        )
-
-        // Нижний правый
-        Text(
-            text = "Нижний правый",
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        )
-    }
-}
-```
-
-#### Практические примеры Compose
-
-##### Карточка со значком
-
-```kotlin
-@Composable
-fun BadgedProfileImage(
-    imageUrl: String,
-    badgeCount: Int
-) {
-    Box(
-        modifier = Modifier.size(100.dp)
-    ) {
-        // Изображение профиля
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = "Профиль",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
-        // Значок
-        if (badgeCount > 0) {
+        // ✅ Badge с правильным z-index
+        if (count > 0) {
             Box(
                 modifier = Modifier
                     .size(24.dp)
@@ -730,7 +127,7 @@ fun BadgedProfileImage(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = badgeCount.toString(),
+                    text = count.toString(),
                     color = Color.White,
                     fontSize = 12.sp
                 )
@@ -740,61 +137,239 @@ fun BadgedProfileImage(
 }
 ```
 
-##### Наложение загрузки
+**Loading overlay**:
 
 ```kotlin
 @Composable
-fun ScreenWithLoading(
-    isLoading: Boolean,
-    content: @Composable () -> Unit
-) {
+fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
-        // Основное содержимое
         content()
 
-        // Наложение загрузки
+        // ✅ Правильно: блокирует взаимодействие
         if (isLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.8f))
-                    .clickable(enabled = false) { }, // Блокировка взаимодействий
+                    .background(Color.Black.copy(alpha = 0.7f))
+                    .clickable(enabled = false) { },  // ✅ Блокирует клики
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = Color.White)
+                CircularProgressIndicator()
             }
         }
     }
 }
 ```
 
+---
+
 ### Сравнение: FrameLayout vs Box
 
-| Функция | FrameLayout | Box (Compose) |
-|---------|-------------|---------------|
-| Система | Система View | Jetpack Compose |
-| Определение | XML или Kotlin | Kotlin @Composable |
-| Порядок дочерних элементов | Последний дочерний элемент сверху | Последний дочерний элемент сверху |
-| Выравнивание | `layout_gravity` | `Modifier.align()` |
-| Контроль Z-индекса | Порядок добавления | Порядок добавления / `zIndex()` |
+| Критерий | FrameLayout | Box |
+|----------|-------------|-----|
+| **Система** | View System | Jetpack Compose |
+| **Определение** | XML/Kotlin | @Composable функция |
+| **Выравнивание** | `layout_gravity` | `Modifier.align()` |
+| **Z-контроль** | Порядок добавления | Порядок + `zIndex()` |
+| **Производительность** | Базовая отрисовка | Recomposition overhead |
 
-### Резюме
+---
 
-- **FrameLayout** (система View): Простой контейнер для наложения views
-- **Box** (Jetpack Compose): Современный декларативный подход для наложения composables
-- Оба размещают дочерние элементы друг на друге в порядке их добавления
-- Используйте `layout_gravity` (FrameLayout) или `Modifier.align()` (Box) для позиционирования
-- Распространенные применения: значки, наложения, плавающие кнопки, индикаторы загрузки
+**Резюме**:
+- **FrameLayout** — для View System, простое наложение views
+- **Box** — для Compose, декларативное наложение composables
+- Оба используют принцип "последний сверху" по умолчанию
+- Box предоставляет более гибкий контроль через модификаторы
+
+---
+
+## Answer (EN)
+
+In Android, there are two main approaches for creating layouts where UI elements can overlap:
+
+### FrameLayout (View System)
+
+**FrameLayout** is the simplest container for overlaying views. Child views are stacked on top of each other, with the last added view drawn on top.
+
+**Key characteristics**:
+- Children are drawn in the order they're added
+- Positioning via `layout_gravity` (center, top|start, bottom|end, etc.)
+- Optimal for one primary view with small overlays
+- Z-order determined by addition sequence
+
+**Example: Image with badge**:
+
+```xml
+<FrameLayout
+    android:layout_width="100dp"
+    android:layout_height="100dp">
+
+    <!-- ✅ Base layer -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/avatar"
+        android:scaleType="centerCrop" />
+
+    <!-- ✅ Overlay badge -->
+    <TextView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="4dp"
+        android:background="@drawable/circle_red"
+        android:gravity="center"
+        android:text="5"
+        android:textColor="@android:color/white" />
+</FrameLayout>
+```
+
+**Programmatic creation**:
+
+```kotlin
+val frameLayout = FrameLayout(context).apply {
+    addView(ImageView(context).apply {
+        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        setImageResource(R.drawable.background)
+    })
+
+    // ✅ Correct: last added view will be on top
+    addView(TextView(context).apply {
+        text = "Overlay"
+        layoutParams = FrameLayout.LayoutParams(
+            WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER
+        )
+    })
+}
+```
+
+**Common use cases**:
+- Loading screen over content
+- Badges on images (notification badge)
+- Simple overlays with dimming
+
+---
+
+### Box (Jetpack Compose)
+
+**Box** is the Compose equivalent of FrameLayout with a declarative API.
+
+**Key characteristics**:
+- Child composables are stacked in declaration order
+- Alignment via `Modifier.align(Alignment.TopStart)`, etc.
+- Explicit z-order control via `Modifier.zIndex()`
+- More flexible positioning with `offset()`
+
+**Example: Badge on image**:
+
+```kotlin
+@Composable
+fun BadgedImage(count: Int) {
+    Box(modifier = Modifier.size(100.dp)) {
+        // ✅ Base layer
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = "Profile",
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // ✅ Badge with proper z-index
+        if (count > 0) {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = (-4).dp, y = 4.dp)
+                    .background(Color.Red, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = count.toString(),
+                    color = Color.White,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+}
+```
+
+**Loading overlay**:
+
+```kotlin
+@Composable
+fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        content()
+
+        // ✅ Correct: blocks interaction
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.7f))
+                    .clickable(enabled = false) { },  // ✅ Blocks clicks
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+    }
+}
+```
+
+---
+
+### Comparison: FrameLayout vs Box
+
+| Criterion | FrameLayout | Box |
+|-----------|-------------|-----|
+| **System** | View System | Jetpack Compose |
+| **Definition** | XML/Kotlin | @Composable function |
+| **Alignment** | `layout_gravity` | `Modifier.align()` |
+| **Z-control** | Addition order | Order + `zIndex()` |
+| **Performance** | Basic rendering | Recomposition overhead |
+
+---
+
+**Summary**:
+- **FrameLayout** — for View System, simple view overlay
+- **Box** — for Compose, declarative composable overlay
+- Both use "last on top" principle by default
+- Box provides more flexible control via modifiers
+
+---
+
+## Follow-ups
+
+- How does `ConstraintLayout` handle overlapping views with `elevation` or `translationZ`?
+- What's the performance impact of deeply nested `Box` composables in Compose?
+- How do `zIndex()` and drawing order interact in Compose?
+- When should you use `Box` with `Modifier.offset()` vs `ConstraintLayout` for complex positioning?
+- How do you prevent click events from propagating through overlays in both View System and Compose?
+
+---
+
+## References
+
+- [[q-what-is-layout-types-and-when-to-use--android--easy]] — Overview of Android layout types
+- [[q-viewgroup-vs-view-differences--android--easy]] — View hierarchy fundamentals
+- [Android Layouts Documentation](https://developer.android.com/develop/ui/views/layout/declaring-layout)
+- [Jetpack Compose Layout Documentation](https://developer.android.com/jetpack/compose/layouts/basics)
 
 ---
 
 ## Related Questions
 
-### Related (Easy)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+### Prerequisites
+- [[q-viewgroup-vs-view-differences--android--easy]] — Understanding View hierarchy
+- [[q-what-is-layout-types-and-when-to-use--android--easy]] — Layout types overview
 
-### Advanced (Harder)
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
+### Related
+- [[q-which-layout-for-large-list--android--easy]] — RecyclerView for lists
+- [[q-jetpack-compose-lazy-column--android--easy]] — LazyColumn in Compose
+
+### Advanced
+- More complex positioning with ConstraintLayout
+- Custom ViewGroup for advanced overlay logic
+- Compose layout performance optimization

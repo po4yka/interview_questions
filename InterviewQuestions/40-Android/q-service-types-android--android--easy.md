@@ -1,67 +1,163 @@
 ---
 id: 20251012-122711101
 title: "Service Types Android / Типы Service в Android"
+aliases: ["Service Types Android", "Типы Service в Android"]
+
+# Classification
 topic: android
+subtopics: [service, background-execution]
+question_kind: android
 difficulty: easy
+
+# Language & provenance
+original_language: ru
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-compose-stability-skippability--jetpack-compose--hard, q-alternative-distribution--distribution--medium, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium]
+related: [q-foreground-service-types--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+
+# Timestamps
 created: 2025-10-15
-tags: [services, background-tasks, difficulty/easy]
+updated: 2025-10-28
+
+# Tags (EN only; no leading #)
+tags: [android/service, android/background-execution, background-tasks, difficulty/easy]
 ---
 
-# Какие есть виды сервисов?
+# Вопрос (RU)
 
-**English**: What types of services exist in Android?
+Какие существуют типы Service в Android?
 
-## Answer (EN)
-В Android существуют следующие основные виды сервисов:
+# Question (EN)
 
-### 1. Foreground Service
+What types of Service exist in Android?
 
-Выполняет операции, видимые пользователю (например, воспроизведение музыки). Должен отображать постоянное уведомление.
-
-### 2. Background Service
-
-Выполняет операции, не видимые пользователю напрямую (синхронизация данных, загрузка файлов).
-
-**Важно**: С Android 8.0 (API 26) есть ограничения на background services. Рекомендуется использовать WorkManager.
-
-### 3. Bound Service
-
-Позволяет компонентам приложения (Activity, другие Services) привязываться к нему и взаимодействовать через интерфейс.
-
-### 4. IntentService (deprecated)
-
-Упрощённый вариант Service для последовательного выполнения задач в рабочем потоке.
-
-**Примечание**: Устарел с API 30. Рекомендуется использовать WorkManager или JobIntentService.
-
-**English**: Android service types: **Foreground Service** (user-visible operations with notification), **Background Service** (non-visible operations, restricted since Android 8.0), **Bound Service** (allows component binding and interaction), and **IntentService** (deprecated, use WorkManager instead).
-
+---
 
 ## Ответ (RU)
 
-Это профессиональный перевод технического содержимого на русский язык.
+В Android существуют три основных типа Service:
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+### 1. Foreground Service
 
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+Выполняет операции, видимые пользователю, и **обязан** отображать постоянное уведомление (persistent notification). Используется для задач, о которых пользователь должен знать: воспроизведение музыки, навигация, отслеживание тренировки.
 
-Длина оригинального английского контента: 1109 символов.
+```kotlin
+// ✅ Правильно: запуск Foreground Service с уведомлением
+val notification = createNotification()
+startForeground(NOTIFICATION_ID, notification)
+```
 
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+### 2. Background Service
 
+Выполняет операции, не требующие прямого взаимодействия с пользователем: синхронизация данных, загрузка файлов.
+
+**Критическое ограничение**: с Android 8.0 (API 26) система жёстко ограничивает Background Services для приложений в фоне. Рекомендуется использовать WorkManager или Foreground Service.
+
+```kotlin
+// ❌ Неправильно: Background Service ограничен с API 26+
+startService(Intent(this, BackgroundService::class.java))
+
+// ✅ Правильно: использовать WorkManager
+val request = OneTimeWorkRequestBuilder<SyncWorker>().build()
+WorkManager.getInstance(context).enqueue(request)
+```
+
+### 3. Bound Service
+
+Предоставляет интерфейс для взаимодействия с другими компонентами через `bindService()`. Работает только пока к нему привязан хотя бы один клиент.
+
+```kotlin
+// ✅ Пример Bound Service
+class LocalService : Service() {
+    private val binder = LocalBinder()
+
+    inner class LocalBinder : Binder() {
+        fun getService(): LocalService = this@LocalService
+    }
+
+    override fun onBind(intent: Intent): IBinder = binder
+}
+```
+
+**Важно**: IntentService устарел (deprecated с API 30). Для последовательного выполнения задач используйте WorkManager.
+
+## Answer (EN)
+
+Android has three main types of Service:
+
+### 1. Foreground Service
+
+Performs user-visible operations and **must** display a persistent notification. Used for tasks the user should be aware of: music playback, navigation, workout tracking.
+
+```kotlin
+// ✅ Correct: start Foreground Service with notification
+val notification = createNotification()
+startForeground(NOTIFICATION_ID, notification)
+```
+
+### 2. Background Service
+
+Performs operations that don't require direct user interaction: data synchronization, file downloads.
+
+**Critical limitation**: since Android 8.0 (API 26), the system strictly limits Background Services for apps in the background. Use WorkManager or Foreground Service instead.
+
+```kotlin
+// ❌ Wrong: Background Service is restricted on API 26+
+startService(Intent(this, BackgroundService::class.java))
+
+// ✅ Correct: use WorkManager
+val request = OneTimeWorkRequestBuilder<SyncWorker>().build()
+WorkManager.getInstance(context).enqueue(request)
+```
+
+### 3. Bound Service
+
+Provides an interface for interaction with other components via `bindService()`. Lives only while at least one client is bound to it.
+
+```kotlin
+// ✅ Bound Service example
+class LocalService : Service() {
+    private val binder = LocalBinder()
+
+    inner class LocalBinder : Binder() {
+        fun getService(): LocalService = this@LocalService
+    }
+
+    override fun onBind(intent: Intent): IBinder = binder
+}
+```
+
+**Important**: IntentService is deprecated (since API 30). Use WorkManager for sequential task execution.
 
 ---
 
+## Follow-ups
+
+- What are Foreground Service types and when were they introduced?
+- How does WorkManager differ from Services in terms of execution guarantees?
+- What happens to a Bound Service when all clients unbind?
+- What are the specific background execution limits on API 26+?
+- Can a Service be both foreground and bound simultaneously?
+
+## References
+
+- [[c-service]] - Service component fundamentals
+- [[c-workmanager]] - WorkManager architecture
+- https://developer.android.com/guide/components/services
+- https://developer.android.com/guide/background
+
 ## Related Questions
 
-### Related (Easy)
-- [[q-android-service-types--android--easy]] - Service
+### Prerequisites (Easier)
+- [[q-four-main-components-of-android--android--easy]] - Android components overview
+
+### Related (Same Level)
+- [[q-service-component--android--medium]] - Service lifecycle and implementation
 
 ### Advanced (Harder)
-- [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--android--medium]] - Service
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
+- [[q-foreground-service-types--android--medium]] - Foreground Service type categories
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior

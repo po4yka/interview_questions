@@ -1,7 +1,13 @@
 ---
 id: 20251020-200000
 title: Design Uber App / Проектирование приложения Uber
-aliases: [Design Uber App, Проектирование приложения Uber, Uber Android architecture, Архитектура Uber Android]
+aliases:
+    [
+        Design Uber App,
+        Проектирование приложения Uber,
+        Uber Android architecture,
+        Архитектура Uber Android,
+    ]
 topic: android
 subtopics: [location, networking-http, service]
 question_kind: android
@@ -10,20 +16,50 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-performance-optimization--android--medium, q-data-sync-unstable-network--android--hard, q-deep-link-vs-app-link--android--medium, c-microservices, c-real-time-systems]
-sources: [https://developers.google.com/location-context/fused-location-provider]
+related:
+    [
+        q-data-sync-unstable-network--android--hard,
+        q-deep-link-vs-app-link--android--medium,
+        q-load-balancing-strategies--system-design--medium,
+        c-service,
+        c-workmanager,
+    ]
+sources:
+    [https://developers.google.com/location-context/fused-location-provider]
 created: 2025-10-20
 updated: 2025-10-28
-tags: [android/location, android/networking-http, android/service, difficulty/hard, maps, realtime]
+tags:
+    [
+        android/location,
+        android/networking-http,
+        android/service,
+        difficulty/hard,
+        maps,
+        realtime,
+        platform/android,
+        lang/kotlin,
+    ]
+date created: Tuesday, October 28th 2025, 9:22:54 am
+date modified: Wednesday, October 29th 2025, 5:07:35 pm
 ---
 
 # Вопрос (RU)
+
 > Как спроектировать приложение Uber для Android?
 
 # Question (EN)
+
 > How to design Uber for Android?
 
 ---
+
+### Upgraded Interview Prompt (RU)
+
+Спроектируйте Android‑приложение для заказа поездок в мегаполисе. Цели: взаимодействие с картой <200мс input→render, холодный старт <2.5с (p95) на Pixel‑классе, батарея <3%/ч в ФГ‑треккинге и <1%/ч в фоне ожидания. Предусмотреть прерывистую сеть. Показать: архитектуру, стратегию локации и машину состояний поездки, план фонового выполнения (Android 14+), realtime‑канал для ETA/обновлений, анти‑абьюз/интегрити, fallback без Play Services, наблюдаемость и стратегию поэтапного релиза.
+
+### Upgraded Interview Prompt (EN)
+
+Design the rider Android app for requesting rides in a tier‑1 city. Targets: map interaction <200ms input→render, cold start <2.5s (p95) on a Pixel‑class device, battery <3%/hr foreground during tracking and <1%/hr background while waiting. Assume intermittent connectivity. Deliver: app architecture, location sampling & trip state machine, background execution plan (Android 14+ rules), realtime channel for driver ETA/updates, anti‑abuse & integrity, no Google Play services fallback, observability, and staged rollout strategy.
 
 ## Ответ (RU)
 
@@ -32,8 +68,9 @@ Uber включает: отслеживание местоположения в 
 ### Требования
 
 **Функциональные:**
-- Пассажир: карта ближайших водителей, запрос поездки, ETA/стоимость, трекинг, оплата, история.
-- Водитель: онлайн/офлайн, заявки, принятие/отклонение, навигация, заработок.
+
+-   Пассажир: карта ближайших водителей, запрос поездки, ETA/стоимость, трекинг, оплата, история.
+-   Водитель: онлайн/офлайн, заявки, принятие/отклонение, навигация, заработок.
 
 **Нефункциональные:** обновления 3–5s, матчинг <2s, высокая доступность, точность GPS, экономия батареи, офлайн.
 
@@ -108,68 +145,102 @@ rideRepo.observeRide(rideId)
 ### Сервер: Архитектурный Анализ
 
 **Границы сервисов:**
-- **Location Service**: принимает координаты, валидирует физику движения (скорость <150 km/h), обновляет геоиндекс, публикует события в Kafka. Хранит только горячие данные (последние 30 минут).
-- **Matching Service**: выполняет геопоиск доступных водителей в радиусе, применяет scoring (рейтинг·0.4 + 1/distance·0.3 + 1/ETA·0.3), резервирует водителя с optimistic lock, отправляет push. Обрабатывает accept/reject с timeout.
-- **Ride Service**: управляет FSM поездки (REQUESTED→ACCEPTED→ARRIVED→IN_PROGRESS→COMPLETED/CANCELLED), хранит аудит переходов, обеспечивает идемпотентность через requestId, координирует с Payment через события.
-- **Pricing Service**: вычисляет базовый тариф по расстоянию/времени, применяет surge multiplier, генерирует котировку с TTL (2-5 минут), привязывает quoteId к ride.
-- **Payment Service**: pre-authorization при запросе, charge при завершении, refund при отмене, PCI DSS compliance.
+
+-   **Location Service**: принимает координаты, валидирует физику движения (скорость <150 km/h), обновляет геоиндекс, публикует события в Kafka. Хранит только горячие данные (последние 30 минут).
+-   **Matching Service**: выполняет геопоиск доступных водителей в радиусе, применяет scoring (рейтинг·0.4 + 1/distance·0.3 + 1/ETA·0.3), резервирует водителя с optimistic lock, отправляет push. Обрабатывает accept/reject с timeout.
+-   **Ride Service**: управляет FSM поездки (REQUESTED→ACCEPTED→ARRIVED→IN_PROGRESS→COMPLETED/CANCELLED), хранит аудит переходов, обеспечивает идемпотентность через requestId, координирует с Payment через события.
+-   **Pricing Service**: вычисляет базовый тариф по расстоянию/времени, применяет surge multiplier, генерирует котировку с TTL (2-5 минут), привязывает quoteId к ride.
+-   **Payment Service**: pre-authorization при запросе, charge при завершении, refund при отмене, PCI DSS compliance.
 
 **Доменные модели:**
-- **Ride**: id, riderId, driverId, pickup/dest (lat/lng), quoteId, fareAmount, vehicleType, timestamps, status (FSM).
-- **Driver**: id, status (ONLINE/OFFLINE/BUSY), currentLocation, rating, completedRides, acceptanceRate.
-- **Quote**: id, pickupZone, destZone, baseFare, surgeMultiplier, totalFare, validUntil, vehicleType.
+
+-   **Ride**: id, riderId, driverId, pickup/dest (lat/lng), quoteId, fareAmount, vehicleType, timestamps, status (FSM).
+-   **Driver**: id, status (ONLINE/OFFLINE/BUSY), currentLocation, rating, completedRides, acceptanceRate.
+-   **Quote**: id, pickupZone, destZone, baseFare, surgeMultiplier, totalFare, validUntil, vehicleType.
 
 **Хранение данных:**
-- **PostgreSQL**: rides, payments с ACID, партиционирование по created_at, индексы на rider_id/driver_id/status, репликация master-slave.
-- **Redis Geo**: активные водители (TTL 5 мин), GEOADD/GEORADIUS для мгновенного поиска.
-- **Redis Cache**: котировки (TTL 5 мин), session tokens, rate limit counters.
-- **S3 + Parquet**: архив завершённых поездок, траектории для ML/аналитики.
+
+-   **PostgreSQL**: rides, payments с ACID, партиционирование по created_at, индексы на rider_id/driver_id/status, репликация master-slave.
+-   **Redis Geo**: активные водители (TTL 5 мин), GEOADD/GEORADIUS для мгновенного поиска.
+-   **Redis Cache**: котировки (TTL 5 мин), session tokens, rate limit counters.
+-   **S3 + Parquet**: архив завершённых поездок, траектории для ML/аналитики.
 
 **Согласованность:**
-- **Outbox pattern**: событие в локальную таблицу outbox в той же транзакции, отдельный процесс публикует в Kafka (at-least-once).
-- **Идемпотентность**: requestId от клиента, unique constraint на (riderId, requestId) для create-ride.
-- **Saga**: Ride → PAYMENT_REQUESTED → Payment → PAYMENT_COMPLETED/FAILED → Ride. При FAILED: компенсация (отмена поездки, возврат водителя).
+
+-   **Outbox pattern**: событие в локальную таблицу outbox в той же транзакции, отдельный процесс публикует в Kafka (at-least-once).
+-   **Идемпотентность**: requestId от клиента, unique constraint на (riderId, requestId) для create-ride.
+-   **Saga**: Ride → PAYMENT_REQUESTED → Payment → PAYMENT_COMPLETED/FAILED → Ride. При FAILED: компенсация (отмена поездки, возврат водителя).
 
 **Алгоритм матчинга:**
-- **Эвристический**: score = rating·0.4 + (1/distance)·0.3 + (1/ETA)·0.3, сортировка, топ-1. O(n log n), <100ms.
-- **Оптимальный (batch)**: Hungarian Algorithm для 50-100 поездок раз в 10-30 сек. Trade-off: задержка vs общее ETA.
+
+-   **Эвристический**: score = rating·0.4 + (1/distance)·0.3 + (1/ETA)·0.3, сортировка, топ-1. O(n log n), <100ms.
+-   **Оптимальный (batch)**: Hungarian Algorithm для 50-100 поездок раз в 10-30 сек. Trade-off: задержка vs общее ETA.
 
 **Surge pricing:**
-- Зонирование: гексагоны H3, multiplier = min(max_cap, base + α·(demand/supply - threshold)).
-- Демпфер (EMA): new_surge = 0.7·old_surge + 0.3·computed_surge.
-- Привязка quoteId к surge на момент запроса, валидация при создании ride.
+
+-   Зонирование: гексагоны H3, multiplier = min(max_cap, base + α·(demand/supply - threshold)).
+-   Демпфер (EMA): new_surge = 0.7·old_surge + 0.3·computed_surge.
+-   Привязка quoteId к surge на момент запроса, валидация при создании ride.
 
 **Отказоустойчивость:**
-- WebSocket → long-polling fallback при disconnect.
-- Redis Geo → PostGIS fallback (100-500ms vs <10ms).
-- Retry с jitter, circuit breaker к внешним API (Maps, Payment).
-- Rate limiting: token bucket per riderId/driverId (10 req/min для ride, 100/min для location).
+
+-   WebSocket → long-polling fallback при disconnect.
+-   Redis Geo → PostGIS fallback (100-500ms vs <10ms).
+-   Retry с jitter, circuit breaker к внешним API (Maps, Payment).
+-   Rate limiting: token bucket per riderId/driverId (10 req/min для ride, 100/min для location).
 
 **Безопасность:**
-- JWT с короткими TTL (15 мин), refresh token.
-- TLS, координаты шифруются AES-256 в БД (KMS).
-- Retention: 30 дней, затем агрегация для аналитики. GDPR compliance.
-- Валидация физики движения, fingerprinting устройств, блокировка mock location.
+
+-   JWT с короткими TTL (15 мин), refresh token.
+-   TLS, координаты шифруются AES-256 в БД (KMS).
+-   Retention: 30 дней, затем агрегация для аналитики. GDPR compliance.
+-   Валидация физики движения, fingerprinting устройств, блокировка mock location.
 
 **Наблюдаемость:**
-- Метрики: P99 matching latency <2s, match success >95%, ETA accuracy ±20%, battery ≤5%/hour, WebSocket uptime >99.9%.
-- Distributed tracing (Jaeger/Zipkin), Prometheus + Alertmanager, structured logging (ELK).
+
+-   Метрики: P99 matching latency <2s, match success >95%, ETA accuracy ±20%, battery ≤5%/hour, WebSocket uptime >99.9%.
+-   Distributed tracing (Jaeger/Zipkin), Prometheus + Alertmanager, structured logging (ELK).
 
 **Масштабирование:**
-- Шардирование по географическим регионам (US-West, EU, APAC).
-- Sticky routing для consistency (L7 load balancer).
-- Multi-region для GDPR/data residency.
-- CDN для map tiles, Kubernetes HPA.
+
+-   Шардирование по географическим регионам (US-West, EU, APAC).
+-   Sticky routing для consistency (L7 load balancer).
+-   Multi-region для GDPR/data residency.
+-   CDN для map tiles, Kubernetes HPA.
 
 ### Оптимизация
 
-- **Батарея**: адаптивная точность и частота, пауза в фоне, Doze-aware.
-- **Сеть**: батчинг координат, компрессия, WebSocket вместо polling.
-- **Карты**: кластеризация, рендер только видимых объектов.
+-   **Батарея**: адаптивная точность и частота, пауза в фоне, Doze-aware.
+-   **Сеть**: батчинг координат, компрессия, WebSocket вместо polling.
+-   **Карты**: кластеризация, рендер только видимых объектов.
 
 ### Офлайн
 
 Кэширование незавершенных действий, очередь синхронизации, авто-ресенд при восстановлении сети.
+
+### Staff-level Model Answer (RU)
+
+Архитектура: модули feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI по экранам; TripRepository объединяет Room + сеть; флаги для протоколов и частоты семплинга.
+
+Карта/перф: бюджет кадра 16ms, интерполяции и кластеризацию выполнять вне UI‑потока.
+
+Локация: FusedLocationProvider; без Play Services — GNSS+сенсоры. Семплинг: idle 0.2–0.5 Гц (significant‑motion), в пути 1 Гц с батчингом 5–10с; сглаживание (Kalman), физпроверки против спуфинга. FG‑сервис при активной поездке.
+
+Машина состояний: IDLE→REQUESTING→MATCHING→DRIVER_EN_ROUTE→PICKUP→ON_TRIP→DROPOFF→RECEIPT. Персист в Room (vectorClock/lastServerVersion) на случай смерти процесса.
+
+Realtime: FCM‑nudges + WebSocket; heartbeat, backoff, обновление токена; в фоне — редкие дельты по push. Идемпотентность и порядковые номера.
+
+Офлайн/сбои: очередь запросов с оптимистичным UI; reconnect с ключами идемпотентности; fallback long‑poll при блокировке WS.
+
+Анти‑абьюз/интегрити: isFromMockProvider, сенсорный фьюжн и Play Integrity сигналы; деградация UX при подозрении.
+
+Батарея/термал: 1 Гц при движении, coalesce записи; significant‑motion при стазисе; избегать wakeful loops; push‑driven дельты.
+
+Наблюдаемость/релиз: метрики (cold start p95, map frame p95, accuracy, battery/100км, WS reconnect, ANR/crash). Health gates + staged rollout; kill‑switch для WS.
+
+Тестирование: симулированные GPS‑трассы, сетевой хаос, смерть процесса/отзыв разрешений, jank‑профилирование.
+
+Последовательность: MVP (поиск адреса→запрос→ETA через polling→треккинг) → упрочнение (WS, офлайн‑очередь, FG‑сервис, батарея) → масштаб (анти‑абьюз, интегрити, I18N, богатые карты).
 
 ---
 
@@ -180,8 +251,9 @@ Uber involves realtime location tracking, driver matching, pricing, routing, pay
 ### Requirements
 
 **Functional:**
-- Rider: nearby drivers map, request ride, ETA/fare, tracking, payment, history.
-- Driver: online/offline toggle, ride requests, accept/reject, navigation, earnings.
+
+-   Rider: nearby drivers map, request ride, ETA/fare, tracking, payment, history.
+-   Driver: online/offline toggle, ride requests, accept/reject, navigation, earnings.
 
 **Non-functional:** 3–5s updates, <2s matching, high availability, GPS accuracy, battery efficiency, offline support.
 
@@ -209,97 +281,138 @@ Ride FSM (REQUESTED→COMPLETED), route + ETA via Maps, WebSocket updates.
 ### Server: Architecture Analysis
 
 **Service boundaries:**
-- **Location Service**: accepts coordinates, validates movement physics (speed <150 km/h), updates geo-index, publishes events to Kafka. Stores only hot data (last 30 minutes).
-- **Matching Service**: performs geo-search for available drivers in radius, applies scoring (rating·0.4 + 1/distance·0.3 + 1/ETA·0.3), reserves driver with optimistic lock, sends push. Handles accept/reject with timeout.
-- **Ride Service**: manages ride FSM (REQUESTED→ACCEPTED→ARRIVED→IN_PROGRESS→COMPLETED/CANCELLED), stores audit trail, ensures idempotency via requestId, coordinates with Payment through events.
-- **Pricing Service**: calculates base fare by distance/time, applies surge multiplier, generates quote with TTL (2-5 minutes), binds quoteId to ride.
-- **Payment Service**: pre-authorization on request, charge on completion, refund on cancellation, PCI DSS compliance.
+
+-   **Location Service**: accepts coordinates, validates movement physics (speed <150 km/h), updates geo-index, publishes events to Kafka. Stores only hot data (last 30 minutes).
+-   **Matching Service**: performs geo-search for available drivers in radius, applies scoring (rating·0.4 + 1/distance·0.3 + 1/ETA·0.3), reserves driver with optimistic lock, sends push. Handles accept/reject with timeout.
+-   **Ride Service**: manages ride FSM (REQUESTED→ACCEPTED→ARRIVED→IN_PROGRESS→COMPLETED/CANCELLED), stores audit trail, ensures idempotency via requestId, coordinates with Payment through events.
+-   **Pricing Service**: calculates base fare by distance/time, applies surge multiplier, generates quote with TTL (2-5 minutes), binds quoteId to ride.
+-   **Payment Service**: pre-authorization on request, charge on completion, refund on cancellation, PCI DSS compliance.
 
 **Domain models:**
-- **Ride**: id, riderId, driverId, pickup/dest (lat/lng), quoteId, fareAmount, vehicleType, timestamps, status (FSM).
-- **Driver**: id, status (ONLINE/OFFLINE/BUSY), currentLocation, rating, completedRides, acceptanceRate.
-- **Quote**: id, pickupZone, destZone, baseFare, surgeMultiplier, totalFare, validUntil, vehicleType.
+
+-   **Ride**: id, riderId, driverId, pickup/dest (lat/lng), quoteId, fareAmount, vehicleType, timestamps, status (FSM).
+-   **Driver**: id, status (ONLINE/OFFLINE/BUSY), currentLocation, rating, completedRides, acceptanceRate.
+-   **Quote**: id, pickupZone, destZone, baseFare, surgeMultiplier, totalFare, validUntil, vehicleType.
 
 **Data storage:**
-- **PostgreSQL**: rides, payments with ACID, partitioning by created_at, indexes on rider_id/driver_id/status, master-slave replication.
-- **Redis Geo**: active drivers (TTL 5 min), GEOADD/GEORADIUS for instant search.
-- **Redis Cache**: quotes (TTL 5 min), session tokens, rate limit counters.
-- **S3 + Parquet**: archive completed rides, trajectories for ML/analytics.
+
+-   **PostgreSQL**: rides, payments with ACID, partitioning by created_at, indexes on rider_id/driver_id/status, master-slave replication.
+-   **Redis Geo**: active drivers (TTL 5 min), GEOADD/GEORADIUS for instant search.
+-   **Redis Cache**: quotes (TTL 5 min), session tokens, rate limit counters.
+-   **S3 + Parquet**: archive completed rides, trajectories for ML/analytics.
 
 **Consistency:**
-- **Outbox pattern**: write event to local outbox table in same transaction, separate process publishes to Kafka (at-least-once).
-- **Idempotency**: requestId from client, unique constraint on (riderId, requestId) for create-ride.
-- **Saga**: Ride → PAYMENT_REQUESTED → Payment → PAYMENT_COMPLETED/FAILED → Ride. On FAILED: compensation (cancel ride, return driver).
+
+-   **Outbox pattern**: write event to local outbox table in same transaction, separate process publishes to Kafka (at-least-once).
+-   **Idempotency**: requestId from client, unique constraint on (riderId, requestId) for create-ride.
+-   **Saga**: Ride → PAYMENT_REQUESTED → Payment → PAYMENT_COMPLETED/FAILED → Ride. On FAILED: compensation (cancel ride, return driver).
 
 **Matching algorithm:**
-- **Heuristic**: score = rating·0.4 + (1/distance)·0.3 + (1/ETA)·0.3, sort, pick top-1. O(n log n), <100ms.
-- **Optimal (batch)**: Hungarian Algorithm for 50-100 rides every 10-30 sec. Trade-off: delay vs overall ETA.
+
+-   **Heuristic**: score = rating·0.4 + (1/distance)·0.3 + (1/ETA)·0.3, sort, pick top-1. O(n log n), <100ms.
+-   **Optimal (batch)**: Hungarian Algorithm for 50-100 rides every 10-30 sec. Trade-off: delay vs overall ETA.
 
 **Surge pricing:**
-- Zoning: H3 hexagons, multiplier = min(max_cap, base + α·(demand/supply - threshold)).
-- Dampener (EMA): new_surge = 0.7·old_surge + 0.3·computed_surge.
-- Bind quoteId to surge at request time, validate on ride creation.
+
+-   Zoning: H3 hexagons, multiplier = min(max_cap, base + α·(demand/supply - threshold)).
+-   Dampener (EMA): new_surge = 0.7·old_surge + 0.3·computed_surge.
+-   Bind quoteId to surge at request time, validate on ride creation.
 
 **Resilience:**
-- WebSocket → long-polling fallback on disconnect.
-- Redis Geo → PostGIS fallback (100-500ms vs <10ms).
-- Retry with jitter, circuit breaker to external APIs (Maps, Payment).
-- Rate limiting: token bucket per riderId/driverId (10 req/min for ride, 100/min for location).
+
+-   WebSocket → long-polling fallback on disconnect.
+-   Redis Geo → PostGIS fallback (100-500ms vs <10ms).
+-   Retry with jitter, circuit breaker to external APIs (Maps, Payment).
+-   Rate limiting: token bucket per riderId/driverId (10 req/min for ride, 100/min for location).
 
 **Security:**
-- JWT with short TTL (15 min), refresh token.
-- TLS, coordinates encrypted AES-256 in DB (KMS).
-- Retention: 30 days, then aggregated for analytics. GDPR compliance.
-- Movement physics validation, device fingerprinting, block mock location.
+
+-   JWT with short TTL (15 min), refresh token.
+-   TLS, coordinates encrypted AES-256 in DB (KMS).
+-   Retention: 30 days, then aggregated for analytics. GDPR compliance.
+-   Movement physics validation, device fingerprinting, block mock location.
 
 **Observability:**
-- Metrics: P99 matching latency <2s, match success >95%, ETA accuracy ±20%, battery ≤5%/hour, WebSocket uptime >99.9%.
-- Distributed tracing (Jaeger/Zipkin), Prometheus + Alertmanager, structured logging (ELK).
+
+-   Metrics: P99 matching latency <2s, match success >95%, ETA accuracy ±20%, battery ≤5%/hour, WebSocket uptime >99.9%.
+-   Distributed tracing (Jaeger/Zipkin), Prometheus + Alertmanager, structured logging (ELK).
 
 **Scalability:**
-- Sharding by geographic regions (US-West, EU, APAC).
-- Sticky routing for consistency (L7 load balancer).
-- Multi-region for GDPR/data residency.
-- CDN for map tiles, Kubernetes HPA.
+
+-   Sharding by geographic regions (US-West, EU, APAC).
+-   Sticky routing for consistency (L7 load balancer).
+-   Multi-region for GDPR/data residency.
+-   CDN for map tiles, Kubernetes HPA.
 
 ### Optimization
 
-- **Battery**: adaptive precision/frequency, pause in background, Doze-aware.
-- **Network**: batch coordinates, compression, WebSocket over polling.
-- **Maps**: clustering, render only visible objects.
+-   **Battery**: adaptive precision/frequency, pause in background, Doze-aware.
+-   **Network**: batch coordinates, compression, WebSocket over polling.
+-   **Maps**: clustering, render only visible objects.
 
 ### Offline
 
 Cache incomplete actions, sync queue, auto-resend on network restore.
 
+### Staff-level Model Answer (EN)
+
+Architecture overview: feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI; TripRepository orchestrates Room + network; feature flags for protocols and sampling.
+
+Map performance: frame budget <16ms; offload interpolation/clustering; keep main-thread work minimal.
+
+Location strategy: FusedLocationProvider; fallback to GNSS+sensor fusion. Sampling idle 0.2–0.5 Hz with significant‑motion; en‑route 1 Hz with 5–10s batching; Kalman smoothing; spoofing checks. Foreground service during active trip.
+
+Trip state machine: IDLE→REQUESTING→MATCHING→DRIVER_EN_ROUTE→PICKUP→ON_TRIP→DROPOFF→RECEIPT. Persist in Room with vectorClock/lastServerVersion.
+
+Realtime updates: FCM nudge → WebSocket; heartbeat, backoff, token refresh; background relies on push with sparse deltas. Apply updates by sequence number; drop dups/out-of-order.
+
+Offline/failure modes: idempotency-keyed queue with optimistic UI; reconnect and resend; long‑poll fallback.
+
+Anti‑abuse & integrity: mock detection, sensor inconsistencies, Play Integrity; degrade to manual verification on suspicion.
+
+Battery/thermal: 1 Hz sampling with coalesced writes; switch to significant‑motion when stationary; push‑driven deltas; avoid wakeful loops.
+
+Observability & rollout: cold start p95, map frame p95, accuracy, battery/100km, WS reconnect, crash/ANR; health gates, staged rollout, kill‑switch for WS.
+
+Testing: GPS trace sims; network chaos; process-death and permission-revocation tests; jank profiling.
+
+Sequencing: MVP → Hardening → Scale; WS latency vs background limits tradeoffs.
+
 ---
 
 ## Follow-ups
 
-- How to implement surge pricing fairly and at scale?
-- How to detect and mitigate driver/rider fraud (GPS spoofing, fake rides)?
-- How to design fallback when WebSocket is unavailable?
-- How to optimize battery for continuous location tracking?
-- How to handle cross-region rides (data residency, latency)?
+-   How to implement surge pricing fairly and at scale?
+-   How to detect and mitigate driver/rider fraud (GPS spoofing, fake rides)?
+-   How to design fallback when WebSocket is unavailable?
+-   How to optimize battery for continuous location tracking?
+-   How to handle cross-region rides (data residency, latency)?
 
 ## References
 
-- [Fused Location Provider](https://developers.google.com/location-context/fused-location-provider)
-- [Google Maps Android SDK](https://developers.google.com/maps/documentation/android-sdk)
-- [Redis Geo Commands](https://redis.io/commands/geoadd/)
-- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
-- [Battery Performance](https://developer.android.com/topic/performance/power)
+-   [Fused Location Provider](https://developers.google.com/location-context/fused-location-provider)
+-   [Google Maps Android SDK](https://developers.google.com/maps/documentation/android-sdk)
+-   [Redis Geo Commands](https://redis.io/commands/geoadd/)
+-   [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+-   [Battery Performance](https://developer.android.com/topic/performance/power)
+-   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
+-   [[ANDROID-INTERVIEWER-GUIDE]]
+-   [[c-service]]
+-   [[c-workmanager]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-data-sync-unstable-network--android--hard]]
-- [[q-deep-link-vs-app-link--android--medium]]
+
+-   [[q-data-sync-unstable-network--android--hard]]
+-   [[q-deep-link-vs-app-link--android--medium]]
 
 ### Related (Same Level)
-- [[q-design-instagram-stories--android--hard]]
-- [[q-android-performance-optimization--android--medium]]
+
+-   [[q-design-instagram-stories--android--hard]]
+-   [[q-load-balancing-strategies--system-design--medium]]
 
 ### Advanced Concepts
-- [[c-microservices]]
-- [[c-real-time-systems]]
+
+-   [[q-microservices-vs-monolith--system-design--hard]]
+-   [[q-message-queues-event-driven--system-design--medium]]

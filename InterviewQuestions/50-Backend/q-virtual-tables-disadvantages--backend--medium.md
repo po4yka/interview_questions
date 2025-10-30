@@ -4,7 +4,7 @@ title: Virtual tables disadvantages / Недостатки виртуальны�
 aliases: []
 
 # Classification
-topic: backend
+topic: databases
 subtopics: [databases, performance]
 question_kind: theory
 difficulty: medium
@@ -16,18 +16,25 @@ source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
 status: draft
-moc: moc-backend
-related: [q-relational-table-unique-data--backend--medium, q-sql-join-algorithms-complexity--backend--hard, q-database-migration-purpose--backend--medium]
-  - c-database-performance
-  - c-views
+moc: moc-system-design
+related: [
+  q-relational-table-unique-data--backend--medium,
+  q-sql-join-algorithms-complexity--backend--hard,
+  q-database-migration-purpose--backend--medium,
+  c-database-performance,
+  c-views
+]
 
 # Timestamps
 created: 2025-10-03
 updated: 2025-10-03
 
 # Tags
-tags: [database, virtual-tables, views, performance, difficulty/medium, easy_kotlin, lang/ru, backend]
+tags: [database, virtual-tables, views, performance, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
+date created: Friday, October 3rd 2025, 4:45:56 pm
+date modified: Wednesday, October 29th 2025, 2:56:30 pm
 ---
+
 # Question (EN)
 > What are the disadvantages of virtual tables
 # Вопрос (RU)

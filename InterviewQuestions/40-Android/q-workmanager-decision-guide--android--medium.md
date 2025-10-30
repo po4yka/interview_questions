@@ -1,62 +1,67 @@
 ---
 id: 20251017-144931
-title: "Workmanager Decision Guide / Руководство по выбору WorkManager"
+title: "WorkManager Decision Guide / Руководство по выбору WorkManager"
+aliases: ["WorkManager Decision Guide", "Руководство по выбору WorkManager"]
 topic: android
+subtopics: [background-execution, coroutines, performance-battery]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-api-rate-limiting-throttling--android--medium, q-compose-modifier-system--android--medium, q-databases-android--android--easy]
 created: 2025-10-15
-tags: [workmanager, background-work, coroutines, service, difficulty/medium]
+updated: 2025-10-29
+sources: []
+tags: [android/background-execution, android/coroutines, android/performance-battery, workmanager, background-work, service, difficulty/medium]
 ---
 
-# WorkManager vs Coroutines vs Service - Decision Guide
+# Вопрос (RU)
 
-**English**: When should you use WorkManager vs Coroutines vs Service for background work?
+Когда использовать WorkManager vs Coroutines vs Service для фоновой работы в Android?
 
-## Answer (EN)
+# Question (EN)
 
-**WorkManager**, **Coroutines** и **Service** решают разные задачи фоновой работы в Android.
+When should you use WorkManager vs Coroutines vs Service for background work in Android?
 
-**WorkManager:** для отложенной гарантированной работы (загрузка файлов, синхронизация данных, аналитика, периодические задачи >= 15 мин). Гарантии: переживёт закрытие приложения, device reboot, автоматический retry, battery-эффективность. Поддержка: constraints (WiFi, charging), backoff policies, chaining, progress tracking.
-
-**Coroutines:** для async операций во время работы приложения (загрузка данных для UI, network запросы, database операции, Flow-based real-time данных). Ограничения: отменяются при закрытии приложения, не переживут process death, нет retry/backoff, нет constraints.
-
-**Foreground Service:** для long-running user-visible работы (music player, location tracking, fitness tracking, VoIP, active downloads). Требования: обязательно показывать notification, пользователь видит что работает, может работать при закрытом приложении.
-
-**Правила выбора:** нужна гарантия после закрытия → WorkManager. Нужен немедленный результат для UI → Coroutines. Нужна user-visible long-running работа → Foreground Service. Периодические задачи: <15min → Coroutines, >=15min → WorkManager.
+---
 
 ## Ответ (RU)
 
-**WorkManager**, **Coroutines** и **Service** решают разные задачи фоновой работы:
+**WorkManager**, **Coroutines** и **Service** решают разные задачи фоновой работы в Android.
 
-| Критерий | WorkManager | Coroutines | Service (Foreground) |
+### Критерии выбора
+
+| Критерий | WorkManager | Coroutines | Foreground Service |
 |----------|-------------|------------|---------------------|
-| **Гарантия выполнения** | - Да, даже после reboot | - Нет | WARNING: Пока процесс жив |
-| **Работает при закрытом приложении** | - Да | - Нет | WARNING: Foreground - да |
-| **Constraints** (WiFi, charging) | - Да | - Нет | - Нет |
-| **Retry/backoff** | - Автоматически | - Вручную | - Вручную |
-| **Периодические задачи** | - Да (min 15 min) | - Нет | WARNING: Вручную |
+| **Гарантия выполнения** | Да, даже после reboot | Нет | Пока процесс жив |
+| **Работает при закрытом приложении** | Да | Нет | Foreground - да |
+| **Constraints** (WiFi, charging) | Да | Нет | Нет |
+| **Retry/backoff** | Автоматически | Вручную | Вручную |
+| **Периодические задачи** | Да (min 15 min) | Нет | Вручную |
 | **Use case** | Deferrable гарантированная работа | Async операции в UI | Long-running foreground |
 
-### When to Use WorkManager
+### WorkManager
+
+**Когда использовать**: загрузка файлов, синхронизация данных, аналитика, очистка кэша, периодические задачи >= 15 мин.
+
+**Гарантии**: выполнится даже если приложение закрыто, переживет reboot, автоматический retry, battery-эффективность (соблюдает Doze Mode).
 
 ```kotlin
-// - Загрузка файлов - должна завершиться
-class UploadWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
+// Загрузка с constraints и retry
+class UploadWorker(context: Context, params: WorkerParameters) :
+    CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         val fileUri = inputData.getString("file_uri") ?: return Result.failure()
 
         return try {
-            uploadFile(fileUri)
+            uploadFile(fileUri)  // ✅ Выполнится даже если приложение закрыто
             Result.success()
         } catch (e: Exception) {
             if (runAttemptCount < 3) {
-                Result.retry() // Автоматический retry
+                Result.retry()  // ✅ Автоматический retry
             } else {
                 Result.failure()
             }
@@ -64,49 +69,32 @@ class UploadWorker(
     }
 }
 
-// Запуск с constraints
 fun scheduleUpload(fileUri: String) {
     val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
         .setInputData(workDataOf("file_uri" to fileUri))
         .setConstraints(
             Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED) // WiFi/Mobile
-                .setRequiresBatteryNotLow(true)                // Battery > 15%
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
                 .build()
         )
-        .setBackoffCriteria(
-            BackoffPolicy.EXPONENTIAL,
-            15,
-            TimeUnit.SECONDS
-        )
+        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
         .build()
 
     WorkManager.getInstance(context).enqueue(uploadRequest)
 }
 ```
 
-**Используйте WorkManager для**:
--  Загрузка файлов/данных (upload)
--  Синхронизация данных с сервером
--  Отправка аналитики/логов
--  Очистка кэша/старых данных
--  Обработка/сжатие изображений
--  Периодические задачи (sync каждые N часов)
+### Coroutines
 
-**Гарантии WorkManager**:
-- - Выполнится даже если приложение закрыто
-- - Переживет reboot устройства
-- - Автоматические retry при сбое
-- - Батарейно-эффективно (соблюдает Doze Mode)
+**Когда использовать**: загрузка данных для UI, network запросы для экрана, database операции, Flow-based real-time данных, любая работа привязанная к lifecycle компонента.
 
-### When to Use Coroutines
+**Ограничения**: отменяются при закрытии приложения, не переживут process death, нет retry/backoff из коробки.
 
 ```kotlin
-class ProductsViewModel(
-    private val repository: ProductsRepository
-) : ViewModel() {
+class ProductsViewModel(private val repository: ProductsRepository) : ViewModel() {
 
-    // - Загрузка данных для UI
+    // ✅ Загрузка данных для UI
     fun loadProducts() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -121,51 +109,28 @@ class ProductsViewModel(
         }
     }
 
-    // - Параллельные запросы
+    // ✅ Параллельные запросы
     suspend fun loadDashboard() = coroutineScope {
         val products = async { repository.getProducts() }
         val orders = async { repository.getOrders() }
-        val stats = async { repository.getStats() }
 
-        DashboardData(
-            products = products.await(),
-            orders = orders.await(),
-            stats = stats.await()
-        )
+        DashboardData(products.await(), orders.await())
     }
-
-    // - Flow для real-time данных
-    val orders: StateFlow<List<Order>> = repository.observeOrders()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
 }
 ```
 
-**Используйте Coroutines для**:
--  Загрузка данных для UI
--  Async операции во время работы приложения
--  Network запросы для экрана
--  Database операции
--  Flow-based real-time данных
--  Любая работа привязанная к lifecycle компонента
+### Foreground Service
 
-**Ограничения Coroutines**:
-- - Отменяются при закрытии приложения
-- - Не переживут process death
-- - Нет retry/backoff из коробки
-- - Нет constraints (WiFi, charging)
+**Когда использовать**: music/audio player, location tracking, fitness tracking, VoIP calls, active downloads с прогрессом.
 
-### When to Use Foreground Service
+**Требования**: ОБЯЗАТЕЛЬНО показывать notification, пользователь видит что приложение работает, может работать при закрытом приложении.
 
 ```kotlin
 class MusicPlayerService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        startForeground(NOTIFICATION_ID, createNotification())
+        startForeground(NOTIFICATION_ID, createNotification())  // ✅ Обязательно
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -176,60 +141,22 @@ class MusicPlayerService : Service() {
         }
         return START_STICKY
     }
-
-    private fun play() {
-        // Долгоиграющая работа с постоянным уведомлением
-        mediaPlayer.start()
-    }
-
-    private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Now Playing")
-            .setContentText(currentSong.title)
-            .setSmallIcon(R.drawable.ic_music)
-            .addAction(R.drawable.ic_pause, "Pause", pausePendingIntent)
-            .build()
-    }
-}
-
-// Запуск
-fun startMusicPlayer() {
-    val intent = Intent(context, MusicPlayerService::class.java).apply {
-        action = ACTION_PLAY
-    }
-    ContextCompat.startForegroundService(context, intent)
 }
 ```
 
-**Используйте Foreground Service для**:
--  Music/audio player
--  Location tracking
--  Fitness tracking
--  VoIP calls
--  Active downloads с прогрессом
--  Video recording
+### Примеры сравнения
 
-**Требования Foreground Service**:
-- - **ОБЯЗАТЕЛЬНО** показывать notification
-- WARNING: Пользователь видит что приложение работает
-- - Может работать пока приложение закрыто
-- WARNING: Система может убить при низкой памяти
-
-### Comparison with Examples
-
-#### Example 1: File Upload
+#### Загрузка файла
 
 ```kotlin
-// - НЕПРАВИЛЬНО - Coroutines
-// Проблема: отменится при закрытии приложения
+// ❌ НЕПРАВИЛЬНО - Coroutines (отменится при закрытии приложения)
 fun uploadFile(file: File) {
     viewModelScope.launch {
-        uploadToServer(file) // Может не завершиться!
+        uploadToServer(file)  // Может не завершиться!
     }
 }
 
-// - ПРАВИЛЬНО - WorkManager
-// Гарантия: загрузка завершится даже если приложение закрыто
+// ✅ ПРАВИЛЬНО - WorkManager (гарантия завершения)
 fun uploadFile(file: File) {
     val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
         .setInputData(workDataOf("file_path" to file.path))
@@ -244,29 +171,25 @@ fun uploadFile(file: File) {
 }
 ```
 
-#### Example 2: Periodic Synchronization
+#### Периодическая синхронизация
 
 ```kotlin
-// - НЕПРАВИЛЬНО - Coroutines с while loop
-// Проблема: убьется при закрытии приложения
+// ❌ НЕПРАВИЛЬНО - Coroutines (убьется при закрытии приложения)
 fun startSync() {
     viewModelScope.launch {
         while (isActive) {
             syncData()
-            delay(3600_000) // Каждый час
+            delay(3600_000)  // Каждый час
         }
     }
 }
 
-// - ПРАВИЛЬНО - WorkManager
-// Гарантия: будет работать в background
+// ✅ ПРАВИЛЬНО - WorkManager (минимум 15 минут!)
 fun schedulePeriodicSync() {
-    val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(
-        1, TimeUnit.HOURS // Минимум 15 минут!
-    )
+    val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
         .setConstraints(
             Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED) // WiFi only
+                .setRequiredNetworkType(NetworkType.UNMETERED)  // WiFi only
                 .setRequiresBatteryNotLow(true)
                 .build()
         )
@@ -280,61 +203,14 @@ fun schedulePeriodicSync() {
 }
 ```
 
-#### Example 3: Music Player
-
-```kotlin
-// - НЕПРАВИЛЬНО - WorkManager
-// Проблема: WorkManager для deferrable работы, не для long-running
-fun playMusic() {
-    val playWork = OneTimeWorkRequestBuilder<MusicWorker>().build()
-    WorkManager.getInstance(context).enqueue(playWork)
-}
-
-// - ПРАВИЛЬНО - Foreground Service
-// Пользователь видит что музыка играет
-class MusicPlayerService : Service() {
-    override fun onCreate() {
-        super.onCreate()
-        startForeground(NOTIFICATION_ID, createNotification())
-    }
-
-    fun play() {
-        mediaPlayer.start()
-        updateNotification("Now Playing: ${currentSong.title}")
-    }
-}
-```
-
-#### Example 4: Loading Data for UI
-
-```kotlin
-// - НЕПРАВИЛЬНО - WorkManager
-// Проблема: overkill для UI данных
-fun loadProducts() {
-    val loadWork = OneTimeWorkRequestBuilder<LoadProductsWorker>().build()
-    WorkManager.getInstance(context).enqueue(loadWork)
-    // Как получить результат для UI?
-}
-
-// - ПРАВИЛЬНО - Coroutines
-fun loadProducts() {
-    viewModelScope.launch {
-        _isLoading.value = true
-        val products = repository.getProducts()
-        _products.value = products
-        _isLoading.value = false
-    }
-}
-```
-
-### Combining Approaches
+### Комбинирование подходов
 
 ```kotlin
 class DataSyncManager(
     private val context: Context,
     private val repository: DataRepository
 ) {
-    // 1. Immediate sync - Coroutines
+    // Немедленная синхронизация - Coroutines
     suspend fun syncNow() {
         withContext(Dispatchers.IO) {
             val data = fetchFromServer()
@@ -342,7 +218,7 @@ class DataSyncManager(
         }
     }
 
-    // 2. Delayed guaranteed sync - WorkManager
+    // Отложенная гарантированная синхронизация - WorkManager
     fun scheduleSyncWhenOnline() {
         val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
             .setConstraints(
@@ -350,178 +226,9 @@ class DataSyncManager(
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build()
             )
-            .setInitialDelay(1, TimeUnit.HOURS)
             .build()
 
         WorkManager.getInstance(context).enqueue(syncWork)
-    }
-
-    // 3. Periodic sync - WorkManager
-    fun schedulePeriodicSync() {
-        val periodicSync = PeriodicWorkRequestBuilder<SyncWorker>(
-            6, TimeUnit.HOURS
-        ).build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "periodic_sync",
-            ExistingPeriodicWorkPolicy.KEEP,
-            periodicSync
-        )
-    }
-}
-
-// ViewModel использует immediate sync
-class DashboardViewModel(
-    private val syncManager: DataSyncManager
-) : ViewModel() {
-    fun refresh() {
-        viewModelScope.launch {
-            syncManager.syncNow() // Coroutines для UI
-        }
-    }
-}
-
-// Application запускает periodic sync
-class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        syncManager.schedulePeriodicSync() // WorkManager для background
-    }
-}
-```
-
-### WorkManager Best Practices
-
-```kotlin
-// - Unique work - предотвращает дубликаты
-fun scheduleUpload(fileId: String) {
-    val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
-        .setInputData(workDataOf("file_id" to fileId))
-        .build()
-
-    WorkManager.getInstance(context).enqueueUniqueWork(
-        "upload_$fileId",
-        ExistingWorkPolicy.KEEP, // Не запускать если уже идет
-        uploadWork
-    )
-}
-
-// - Chaining - последовательная работа
-fun processAndUpload(imageUri: String) {
-    val compressWork = OneTimeWorkRequestBuilder<CompressImageWorker>()
-        .setInputData(workDataOf("image_uri" to imageUri))
-        .build()
-
-    val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
-        .build()
-
-    WorkManager.getInstance(context)
-        .beginWith(compressWork)
-        .then(uploadWork)
-        .enqueue()
-}
-
-// - Observing work status
-fun observeUploadStatus(workId: UUID) {
-    WorkManager.getInstance(context)
-        .getWorkInfoByIdLiveData(workId)
-        .observe(lifecycleOwner) { workInfo ->
-            when (workInfo.state) {
-                WorkInfo.State.SUCCEEDED -> showSuccess()
-                WorkInfo.State.FAILED -> showError()
-                WorkInfo.State.RUNNING -> showProgress(workInfo.progress)
-                else -> {}
-            }
-        }
-}
-
-// - Progress updates
-class UploadWorker(context: Context, params: WorkerParameters) :
-    CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        val total = 100
-        for (i in 1..total) {
-            uploadChunk(i)
-
-            // Обновляем прогресс
-            setProgress(workDataOf("progress" to i))
-        }
-
-        return Result.success()
-    }
-}
-```
-
-### Coroutines Best Practices
-
-```kotlin
-// - Используйте правильный scope
-class MyViewModel : ViewModel() {
-    fun loadData() {
-        viewModelScope.launch { // Автоматически отменится
-            repository.getData()
-        }
-    }
-}
-
-// - withContext для смены диспетчера
-suspend fun loadFromDisk() {
-    withContext(Dispatchers.IO) {
-        file.readText()
-    }
-}
-
-// - Обрабатывайте ошибки
-viewModelScope.launch {
-    try {
-        val data = repository.getData()
-        _data.value = data
-    } catch (e: Exception) {
-        _error.value = e.message
-    }
-}
-
-// - async для параллельных операций
-suspend fun loadMultiple() = coroutineScope {
-    val user = async { userRepo.getUser() }
-    val posts = async { postsRepo.getPosts() }
-
-    UserData(user.await(), posts.await())
-}
-```
-
-### Service Best Practices
-
-```kotlin
-// - Всегда используйте Foreground для long-running
-class TrackingService : Service() {
-    override fun onCreate() {
-        super.onCreate()
-        startForeground(NOTIFICATION_ID, createNotification())
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
-            ACTION_START -> startTracking()
-            ACTION_STOP -> stopSelf()
-        }
-        return START_STICKY // Restart после kill
-    }
-
-    private fun startTracking() {
-        serviceScope.launch {
-            while (isActive) {
-                val location = getLocation()
-                sendToServer(location)
-                delay(5000)
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        serviceScope.cancel()
-        super.onDestroy()
     }
 }
 ```
@@ -543,64 +250,260 @@ class TrackingService : Service() {
          ДА (≥ 15 min): WorkManager Periodic
 ```
 
-### Migration Examples
+## Answer (EN)
+
+**WorkManager**, **Coroutines**, and **Services** solve different background work needs in Android.
+
+### Selection Criteria
+
+| Criterion | WorkManager | Coroutines | Foreground Service |
+|----------|-------------|------------|---------------------|
+| **Execution Guarantee** | Yes, even after reboot | No | While process alive |
+| **Works When App Closed** | Yes | No | Foreground - yes |
+| **Constraints** (WiFi, charging) | Yes | No | No |
+| **Retry/backoff** | Automatic | Manual | Manual |
+| **Periodic Tasks** | Yes (min 15 min) | No | Manual |
+| **Use Case** | Deferrable guaranteed work | Async UI operations | Long-running foreground |
+
+### WorkManager
+
+**When to use**: file uploads, data synchronization, analytics, cache cleanup, periodic tasks >= 15 min.
+
+**Guarantees**: executes even if app closed, survives reboot, automatic retry, battery-efficient (respects Doze Mode).
 
 ```kotlin
-// Было: AsyncTask (deprecated)
-class DownloadTask : AsyncTask<String, Int, File>() {
-    override fun doInBackground(vararg params: String): File {
-        return downloadFile(params[0])
-    }
+// Upload with constraints and retry
+class UploadWorker(context: Context, params: WorkerParameters) :
+    CoroutineWorker(context, params) {
 
-    override fun onPostExecute(result: File) {
-        updateUI(result)
-    }
-}
+    override suspend fun doWork(): Result {
+        val fileUri = inputData.getString("file_uri") ?: return Result.failure()
 
-// Стало: Coroutines для UI
-fun downloadForUI(url: String) {
-    viewModelScope.launch {
-        val file = withContext(Dispatchers.IO) {
-            downloadFile(url)
+        return try {
+            uploadFile(fileUri)  // ✅ Completes even if app closes
+            Result.success()
+        } catch (e: Exception) {
+            if (runAttemptCount < 3) {
+                Result.retry()  // ✅ Automatic retry
+            } else {
+                Result.failure()
+            }
         }
-        updateUI(file)
     }
 }
 
-// Или WorkManager для guaranteed
-fun downloadInBackground(url: String) {
-    val downloadWork = OneTimeWorkRequestBuilder<DownloadWorker>()
-        .setInputData(workDataOf("url" to url))
+fun scheduleUpload(fileUri: String) {
+    val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+        .setInputData(workDataOf("file_uri" to fileUri))
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .build()
+        )
+        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
         .build()
-    WorkManager.getInstance(context).enqueue(downloadWork)
+
+    WorkManager.getInstance(context).enqueue(uploadRequest)
 }
 ```
 
-**English**: **WorkManager**, **Coroutines**, and **Services** solve different background work needs:
+### Coroutines
 
-**WorkManager**: For **deferrable guaranteed work**. Use for: file uploads, data sync, analytics, periodic tasks (min 15 min), cache cleanup. Guarantees: survives app closure, device reboot, automatic retry, battery-efficient. Supports: constraints (WiFi, charging), backoff policies, chaining, progress tracking.
+**When to use**: UI data loading, network requests for screens, database operations, Flow-based real-time data, any lifecycle-bound work.
 
-**Coroutines**: For **async operations during app lifetime**. Use for: UI data loading, network requests for screens, database operations, Flow-based real-time data, lifecycle-bound work. Limitations: cancelled when app closes, no retry/backoff, no constraints, doesn't survive process death.
+**Limitations**: cancelled when app closes, doesn't survive process death, no out-of-the-box retry/backoff.
 
-**Foreground Service**: For **long-running user-visible work**. Use for: music player, location tracking, fitness tracking, VoIP, active downloads. Requirements: must show notification, user sees it's running, can work when app closed, system may kill under low memory.
+```kotlin
+class ProductsViewModel(private val repository: ProductsRepository) : ViewModel() {
 
-**Decision rules**: Need guaranteed execution after app closes → WorkManager. Need immediate UI result → Coroutines. Need user-visible long-running work → Foreground Service. Periodic tasks: <15min use Coroutines, ≥15min use WorkManager.
+    // ✅ Load data for UI
+    fun loadProducts() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val products = repository.getProducts()
+                _products.value = products
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 
-**Common mistakes**: Using Coroutines for uploads (won't complete if app closes). Using WorkManager for UI data (overkill). Using WorkManager for music player (use Foreground Service). Not using constraints with WorkManager.
+    // ✅ Parallel requests
+    suspend fun loadDashboard() = coroutineScope {
+        val products = async { repository.getProducts() }
+        val orders = async { repository.getOrders() }
 
+        DashboardData(products.await(), orders.await())
+    }
+}
+```
+
+### Foreground Service
+
+**When to use**: music/audio player, location tracking, fitness tracking, VoIP calls, active downloads with progress.
+
+**Requirements**: MUST show notification, user sees it's running, can work when app closed.
+
+```kotlin
+class MusicPlayerService : Service() {
+
+    override fun onCreate() {
+        super.onCreate()
+        startForeground(NOTIFICATION_ID, createNotification())  // ✅ Required
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            ACTION_PLAY -> play()
+            ACTION_PAUSE -> pause()
+            ACTION_STOP -> stopSelf()
+        }
+        return START_STICKY
+    }
+}
+```
+
+### Comparison Examples
+
+#### File Upload
+
+```kotlin
+// ❌ WRONG - Coroutines (cancelled when app closes)
+fun uploadFile(file: File) {
+    viewModelScope.launch {
+        uploadToServer(file)  // May not complete!
+    }
+}
+
+// ✅ CORRECT - WorkManager (guaranteed completion)
+fun uploadFile(file: File) {
+    val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
+        .setInputData(workDataOf("file_path" to file.path))
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+        )
+        .build()
+
+    WorkManager.getInstance(context).enqueue(uploadWork)
+}
+```
+
+#### Periodic Synchronization
+
+```kotlin
+// ❌ WRONG - Coroutines (killed when app closes)
+fun startSync() {
+    viewModelScope.launch {
+        while (isActive) {
+            syncData()
+            delay(3600_000)  // Every hour
+        }
+    }
+}
+
+// ✅ CORRECT - WorkManager (minimum 15 minutes!)
+fun schedulePeriodicSync() {
+    val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
+        .setConstraints(
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED)  // WiFi only
+                .setRequiresBatteryNotLow(true)
+                .build()
+        )
+        .build()
+
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        "data_sync",
+        ExistingPeriodicWorkPolicy.KEEP,
+        syncWork
+    )
+}
+```
+
+### Combining Approaches
+
+```kotlin
+class DataSyncManager(
+    private val context: Context,
+    private val repository: DataRepository
+) {
+    // Immediate sync - Coroutines
+    suspend fun syncNow() {
+        withContext(Dispatchers.IO) {
+            val data = fetchFromServer()
+            repository.save(data)
+        }
+    }
+
+    // Delayed guaranteed sync - WorkManager
+    fun scheduleSyncWhenOnline() {
+        val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            )
+            .build()
+
+        WorkManager.getInstance(context).enqueue(syncWork)
+    }
+}
+```
+
+### Decision Tree
+
+```
+Need guaranteed execution after app closes?
+ YES: Can defer execution?
+    YES: WorkManager
+    NO: User must see notification?
+        YES: Foreground Service
+        NO: WorkManager with Expedited Work
+
+ NO: Need immediate UI result?
+     YES: Coroutines (viewModelScope/lifecycleScope)
+     NO: Periodic work?
+         YES (< 15 min): Coroutines with delay
+         YES (≥ 15 min): WorkManager Periodic
+```
 
 ---
+
+## Follow-ups
+
+1. How does WorkManager handle device Doze mode and App Standby buckets?
+2. What are Expedited Jobs in WorkManager and when to use them?
+3. How to observe WorkManager progress and handle cancellation?
+4. What are the differences between START_STICKY, START_NOT_STICKY, and START_REDELIVER_INTENT for Services?
+5. How to chain multiple WorkManager tasks with proper error handling?
+
+## References
+
+- [[c-coroutines]]
+- [[c-structured-concurrency]]
+- https://developer.android.com/topic/libraries/architecture/workmanager
+- https://developer.android.com/develop/background-work/background-tasks
+- https://developer.android.com/develop/background-work/services/foreground-services
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Architecture fundamentals
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Android UI basics
+- [[q-databases-android--android--easy]] - Data persistence
 
-### Related (Medium)
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- q-rxjava-pagination-recyclerview--android--medium - Ui
-- [[q-build-optimization-gradle--android--medium]] - Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
-- [[q-testing-compose-ui--android--medium]] - Ui
+### Related (Same Level)
+- [[q-api-rate-limiting-throttling--android--medium]] - Network optimization
+- [[q-compose-modifier-system--android--medium]] - UI patterns
+- [[q-build-optimization-gradle--android--medium]] - Build performance
+
+### Advanced (Harder)
+- Design background sync system respecting battery constraints
+- Implement reliable file upload queue with retry and progress tracking
+- Build offline-first architecture with sync conflict resolution

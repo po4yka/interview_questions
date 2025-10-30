@@ -3,7 +3,7 @@ id: 20251011-220007
 title: App Size Optimization / Оптимизация размера приложения
 aliases: ["App Size Optimization", "Оптимизация размера приложения"]
 topic: android
-subtopics: [gradle, performance-memory]
+subtopics: [gradle, performance-memory, app-bundle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,13 +13,8 @@ moc: moc-android
 related: [q-android-app-bundles--android--easy, q-android-build-optimization--android--medium, q-android-performance-measurement-tools--android--medium]
 sources: []
 created: 2025-10-11
-updated: 2025-10-28
-tags: [android/gradle, android/performance-memory, difficulty/medium]
----
-
-# Question (EN)
-> What is App Size Optimization and what techniques are used to reduce Android app size?
-
+updated: 2025-10-29
+tags: [android/gradle, android/performance-memory, android/app-bundle, difficulty/medium]
 ---
 
 # Вопрос (RU)
@@ -27,72 +22,8 @@ tags: [android/gradle, android/performance-memory, difficulty/medium]
 
 ---
 
-## Answer (EN)
-
-**App Size Optimization** reduces APK/AAB size through code shrinking, resource optimization, and smart distribution. Download conversion rates drop ~1% per 6MB, making size optimization critical for user acquisition.
-
-### Core Techniques
-
-**1. R8 Code Shrinking & Obfuscation**
-R8 removes unused code, shortens class/method names, and optimizes bytecode at build time.
-
-```kotlin
-// build.gradle.kts
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true        // ✅ Enables R8
-            isShrinkResources = true       // ✅ Removes unused resources
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-```
-
-**2. Resource Optimization**
-Combine automatic shrinking with manual configuration filtering:
-
-```kotlin
-android {
-    defaultConfig {
-        // ✅ Only ship supported languages
-        resourceConfigurations += listOf("en", "ru")
-
-        // ✅ Target common densities only
-        resourceConfigurations += listOf("xxhdpi", "xxxhdpi")
-    }
-}
-```
-
-**3. Image Compression**
-- Convert PNG/JPG → WebP (70-80% smaller)
-- Use vector drawables for icons (90%+ reduction)
-- Avoid shipping unused drawable densities
-
-**4. Android App Bundle (AAB)**
-Google Play generates device-specific APKs, reducing download size by 40-60%:
-
-```kotlin
-android {
-    bundle {
-        language.enableSplit = true  // ✅ Language splits
-        density.enableSplit = true   // ✅ Density splits
-        abi.enableSplit = true       // ✅ ABI splits
-    }
-}
-```
-
-**5. Dependency Management**
-```kotlin
-// ❌ Avoid: Includes entire library
-implementation("com.google.android.gms:play-services")
-
-// ✅ Better: Cherry-pick modules
-implementation("com.google.android.gms:play-services-maps")
-```
+# Question (EN)
+> What is App Size Optimization and what techniques are used to reduce Android app size?
 
 ---
 
@@ -160,6 +91,70 @@ android {
 implementation("com.google.android.gms:play-services")
 
 // ✅ Лучше: выбирайте конкретные модули
+implementation("com.google.android.gms:play-services-maps")
+```
+
+---
+
+## Answer (EN)
+
+**App Size Optimization** reduces APK/AAB size through code shrinking, resource optimization, and smart distribution. Download conversion rates drop ~1% per 6MB, making size optimization critical for user acquisition.
+
+### Core Techniques
+
+**1. R8 Code Shrinking**
+Removes unused code, shortens identifiers, optimizes bytecode:
+
+```kotlin
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true        // ✅ Enables R8
+            isShrinkResources = true       // ✅ Removes unused resources
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+```
+
+**2. Resource Filtering**
+Ship only necessary configurations:
+
+```kotlin
+android {
+    defaultConfig {
+        // ✅ Filter languages and densities
+        resourceConfigurations += listOf("en", "ru", "xxhdpi", "xxxhdpi")
+    }
+}
+```
+
+**3. Image Optimization**
+- PNG/JPG → WebP: 70-80% smaller
+- Vector drawables for icons: 90%+ reduction
+
+**4. Android App Bundle**
+Google Play generates device-specific APKs (40-60% smaller):
+
+```kotlin
+android {
+    bundle {
+        language.enableSplit = true  // ✅ Language splits
+        density.enableSplit = true   // ✅ Density splits
+        abi.enableSplit = true       // ✅ ABI splits
+    }
+}
+```
+
+**5. Dependency Management**
+```kotlin
+// ❌ Avoid: entire library
+implementation("com.google.android.gms:play-services")
+
+// ✅ Cherry-pick modules
 implementation("com.google.android.gms:play-services-maps")
 ```
 

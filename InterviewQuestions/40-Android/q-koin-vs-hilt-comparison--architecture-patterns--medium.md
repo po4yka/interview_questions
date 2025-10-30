@@ -1,1090 +1,281 @@
 ---
 id: 20251016-174842
-title: "Koin Vs Hilt Comparison / Koin против Hilt Сравнение"
-topic: architecture-patterns
-difficulty: medium
-status: draft
-created: 2025-10-13
-tags: [architecture, comparison, difficulty/medium, hilt, injection, koin]
-moc: moc-architecture-patterns
-related: [q-app-start-types-android--android--medium, q-mlkit-object-detection--ml--medium, q-network-request-deduplication--networking--hard]
+title: "Koin Vs Hilt Comparison / Сравнение Koin и Hilt"
+aliases: ["Koin Vs Hilt Comparison", "Сравнение Koin и Hilt"]
+topic: android
 subtopics: [di-hilt, di-koin]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:07:49 pm
+question_kind: theory
+difficulty: medium
+original_language: en
+language_tags: [en, ru]
+status: draft
+moc: moc-android
+related: [q-app-start-types-android--android--medium, q-network-request-deduplication--networking--hard]
+created: 2025-10-13
+updated: 2025-10-28
+sources: []
+tags: [android, di, hilt, koin, architecture, difficulty/medium, android/di-hilt, android/di-koin]
 ---
+# Вопрос (RU)
 
-# Koin Vs Hilt Comparison / Сравнение Koin И Hilt
+Сравните Koin и Hilt детально. Когда вы бы выбрали один вместо другого? Обсудите compile-time vs runtime DI.
 
-**English**: Compare Koin and Hilt in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
+# Question (EN)
 
-## Answer (EN)
-### Deep Dive: Koin Vs Hilt
-
-Koin and Hilt are both popular dependency injection solutions for Android, but they take fundamentally different approaches to solving the same problem.
-
-### Architecture Comparison
-
-| Aspect | Koin | Hilt |
-|--------|------|------|
-| **Pattern** | Service Locator | True Dependency Injection |
-| **Resolution** | Runtime (reflection-based) | Compile-time (code generation) |
-| **Code Generation** | None | Extensive (via kapt/ksp) |
-| **Verification** | Runtime checks | Compile-time verification |
-| **Build Time Impact** | Minimal (~5-10s for module changes) | Significant (~30-60s for module changes) |
-| **Runtime Performance** | ~10-15% slower | Optimal (direct instantiation) |
-| **App Startup Overhead** | 50-100ms for large apps | 0ms (no runtime init) |
-| **APK Size** | +200KB (Koin library) | +500KB-1MB (generated code) |
-| **Learning Curve** | Easy (1-2 days) | Moderate (1-2 weeks) |
-| **Boilerplate** | Minimal | Moderate (annotations) |
-| **Multiplatform** | Full KMM support | Android only |
-| **Error Messages** | Runtime exceptions | Clear compile errors |
-| **Testing Complexity** | Simple (override modules) | Moderate (test components) |
-| **Circular Deps Detection** | Runtime only | Compile-time |
-| **IDE Support** | Basic | Excellent (navigation, warnings) |
-| **Community Size** | Medium (~8K GitHub stars) | Large (~15K GitHub stars) |
-
-### Compile-Time Vs Runtime Dependency Injection
-
-#### Compile-Time DI (Hilt/Dagger)
-
-**How it works:**
-1. Annotation processor analyzes code at compile time
-2. Generates boilerplate dependency injection code
-3. Creates component graphs and factory classes
-4. All wiring happens during compilation
-5. Runtime just executes generated code
-
-**Advantages:**
-- **Type Safety** - Catches errors at compile time
-- **Performance** - No reflection, direct instantiation
-- **Navigation** - IDE can navigate to generated code
-- **Verification** - Dependency graph validated before running
-- **No Startup Overhead** - Everything pre-computed
-
-**Disadvantages:**
-- **Build Time** - Slower builds (annotation processing)
-- **Complexity** - Steep learning curve
-- **Boilerplate** - More annotations and setup
-- **Flexibility** - Less dynamic, requires rebuild
-
-#### Runtime DI (Koin)
-
-**How it works:**
-1. DSL definitions loaded at app startup
-2. Dependencies resolved when requested
-3. Uses reflection and lazy instantiation
-4. Service locator pattern
-
-**Advantages:**
-- **Build Speed** - No code generation
-- **Simplicity** - Easy to learn and use
-- **Flexibility** - Can change at runtime
-- **Dynamic** - Conditional module loading
-- **Debugging** - See actual code, not generated
-
-**Disadvantages:**
-- **Runtime Errors** - Missing dependencies crash app
-- **Performance** - Slight overhead from reflection
-- **Startup Time** - Module validation takes time
-- **No Navigation** - Can't navigate to injections in IDE
-
-### Side-by-Side Implementation
-
-Let's implement the same feature with both frameworks:
-
-#### Scenario: User Authentication System
-
-**Koin Implementation:**
-
-```kotlin
-// 1. Define interfaces and classes
-interface AuthRepository {
-    suspend fun login(email: String, password: String): Result<User>
-    suspend fun logout(): Result<Unit>
-}
-
-class AuthRepositoryImpl(
-    private val api: AuthApi,
-    private val tokenStorage: TokenStorage,
-    private val userCache: UserCache
-) : AuthRepository {
-    override suspend fun login(email: String, password: String): Result<User> {
-        return try {
-            val response = api.login(LoginRequest(email, password))
-            tokenStorage.saveToken(response.token)
-            userCache.saveUser(response.user)
-            Result.success(response.user)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun logout(): Result<Unit> {
-        return try {
-            api.logout()
-            tokenStorage.clearToken()
-            userCache.clearUser()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-}
-
-// 2. Koin Modules - Simple DSL
-val networkModule = module {
-    single<OkHttpClient> {
-        OkHttpClient.Builder()
-            .addInterceptor(get<AuthInterceptor>())
-            .build()
-    }
-
-    single<Retrofit> {
-        Retrofit.Builder()
-            .baseUrl("https://api.example.com")
-            .client(get())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    single<AuthApi> { get<Retrofit>().create(AuthApi::class.java) }
-}
-
-val dataModule = module {
-    single<TokenStorage> { TokenStorageImpl(androidContext()) }
-    single<UserCache> { UserCacheImpl() }
-    single<AuthInterceptor> { AuthInterceptor(get()) }
-    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
-}
-
-val domainModule = module {
-    factory { LoginUseCase(get()) }
-    factory { LogoutUseCase(get()) }
-}
-
-val presentationModule = module {
-    viewModel { AuthViewModel(get(), get()) }
-}
-
-// 3. Initialize in Application
-class MyApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        startKoin {
-            androidContext(this@MyApp)
-            modules(networkModule, dataModule, domainModule, presentationModule)
-        }
-    }
-}
-
-// 4. Use in Activity
-class LoginActivity : AppCompatActivity() {
-    private val viewModel: AuthViewModel by viewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ViewModel automatically injected
-    }
-}
-
-// 5. Testing - Override modules easily
-class AuthRepositoryTest : KoinTest {
-    @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        modules(module {
-            single<AuthApi> { mockk<AuthApi>() }
-            single<TokenStorage> { mockk<TokenStorage>(relaxed = true) }
-            single<UserCache> { mockk<UserCache>(relaxed = true) }
-            single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
-        })
-    }
-
-    @Test
-    fun `login saves token and user`() = runTest {
-        val repository: AuthRepository by inject()
-        // Test implementation
-    }
-}
-```
-
-**Hilt Implementation:**
-
-```kotlin
-// 1. Same interfaces and classes
-
-// 2. Hilt Modules - Annotation-based
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(
-        authInterceptor: AuthInterceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthApi(retrofit: Retrofit): AuthApi {
-        return retrofit.create(AuthApi::class.java)
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
-
-    @Provides
-    @Singleton
-    fun provideTokenStorage(
-        @ApplicationContext context: Context
-    ): TokenStorage {
-        return TokenStorageImpl(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserCache(): UserCache {
-        return UserCacheImpl()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthInterceptor(
-        tokenStorage: TokenStorage
-    ): AuthInterceptor {
-        return AuthInterceptor(tokenStorage)
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindAuthRepository(
-        impl: AuthRepositoryImpl
-    ): AuthRepository
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-object DomainModule {
-
-    @Provides
-    fun provideLoginUseCase(
-        repository: AuthRepository
-    ): LoginUseCase {
-        return LoginUseCase(repository)
-    }
-
-    @Provides
-    fun provideLogoutUseCase(
-        repository: AuthRepository
-    ): LogoutUseCase {
-        return LogoutUseCase(repository)
-    }
-}
-
-// 3. Annotate Application
-@HiltAndroidApp
-class MyApp : Application()
-
-// 4. Annotate Activity
-@AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
-    private val viewModel: AuthViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ViewModel automatically injected
-    }
-}
-
-// 5. Annotate ViewModel
-@HiltViewModel
-class AuthViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
-    private val logoutUseCase: LogoutUseCase
-) : ViewModel()
-
-// 6. Annotate Repository with @Inject
-@Singleton
-class AuthRepositoryImpl @Inject constructor(
-    private val api: AuthApi,
-    private val tokenStorage: TokenStorage,
-    private val userCache: UserCache
-) : AuthRepository {
-    // Implementation
-}
-
-// 7. Testing - More setup required
-@HiltAndroidTest
-class AuthRepositoryTest {
-
-    @get:Rule
-    val hiltRule = HiltAndroidRule(this)
-
-    @Inject
-    lateinit var repository: AuthRepository
-
-    @BindValue
-    @JvmField
-    val mockApi: AuthApi = mockk()
-
-    @BindValue
-    @JvmField
-    val mockTokenStorage: TokenStorage = mockk(relaxed = true)
-
-    @BindValue
-    @JvmField
-    val mockUserCache: UserCache = mockk(relaxed = true)
-
-    @Before
-    fun setup() {
-        hiltRule.inject()
-    }
-
-    @Test
-    fun `login saves token and user`() = runTest {
-        // Test implementation
-    }
-}
-```
-
-### Decision Matrix
-
-#### Choose Koin When:
-
- **Kotlin Multiplatform** - Need shared code iOS/Android/Web
- **Fast Iteration** - Prototype or MVP development
- **Small/Medium App** - < 50 modules, < 500K lines
- **Team Experience** - Junior/mid-level team
- **Build Performance** - Build time is critical bottleneck
- **Dynamic Configuration** - Need runtime module switching
- **Quick Learning** - Need team productive in days
- **Testing Focus** - Frequent mock/fake swapping
-
-**Example Projects:**
-- MVP/Prototype apps
-- Kotlin Multiplatform Mobile (KMM)
-- Small business apps
-- Rapid development cycles
-- Learning/educational projects
-
-#### Choose Hilt When:
-
- **Android Only** - No multiplatform requirements
- **Large Scale** - > 50 modules, > 500K lines
- **Type Safety** - Want compile-time guarantees
- **Performance Critical** - Every millisecond matters
- **Experienced Team** - Team knows Dagger/DI patterns
- **Long-Term Maintenance** - App will live 5+ years
- **Complex Dependencies** - Many scopes and qualifiers
- **Google Ecosystem** - Using other Jetpack libraries
-
-**Example Projects:**
-- Enterprise applications
-- Financial/banking apps
-- High-performance games
-- Long-term products
-- Large team projects (10+ developers)
-
-### Performance Benchmarks
-
-**App Startup Time (Cold Start):**
-```
-Koin:  1200ms (including 80ms DI initialization)
-Hilt:  1150ms (no DI initialization overhead)
-```
-
-**Dependency Resolution (1000 injections):**
-```
-Koin:  25ms (runtime reflection)
-Hilt:  18ms (direct instantiation)
-```
-
-**Build Time (Clean Build):**
-```
-Koin:  45s
-Hilt:  78s (+73% slower due to kapt)
-```
-
-**Build Time (Incremental):**
-```
-Koin:  8s
-Hilt:  22s (+175% slower)
-```
-
-### Migration Strategy
-
-#### From Koin to Hilt:
-
-```kotlin
-// Step 1: Add Hilt alongside Koin
-// Step 2: Migrate modules one by one
-// Step 3: Replace Koin annotations
-
-// Before (Koin)
-class UserRepository(private val api: UserApi)
-
-val dataModule = module {
-    single { UserRepository(get()) }
-}
-
-// After (Hilt)
-@Singleton
-class UserRepository @Inject constructor(
-    private val api: UserApi
-)
-
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
-    // Module no longer needed if using @Inject
-}
-```
-
-#### From Hilt to Koin:
-
-```kotlin
-// Before (Hilt)
-@Singleton
-class UserRepository @Inject constructor(
-    private val api: UserApi
-)
-
-// After (Koin)
-class UserRepository(private val api: UserApi)
-
-val dataModule = module {
-    single { UserRepository(get()) }
-}
-```
-
-### Hybrid Approach
-
-You can use both in the same project:
-
-```kotlin
-// Use Hilt for critical paths
-@HiltViewModel
-class MainViewModel @Inject constructor(
-    private val repository: Repository
-) : ViewModel()
-
-// Use Koin for features/experiments
-val experimentModule = module {
-    viewModel { ExperimentViewModel(get()) }
-}
-
-// Access Koin from Hilt
-@Inject lateinit var koin: Koin
-```
-
-### Best Practices for Each
-
-**Koin Best Practices:**
-1. Use `checkModules()` in tests to verify graph
-2. Group modules by feature for clarity
-3. Use `single` for expensive objects
-4. Prefer `by inject()` over `get()` for lazy init
-5. Use named dependencies sparingly
-6. Document module dependencies
-
-**Hilt Best Practices:**
-1. Use `@Binds` instead of `@Provides` when possible
-2. Keep modules small and focused
-3. Use qualifiers for multiple implementations
-4. Prefer constructor injection
-5. Use scopes appropriately
-6. Consider KSP instead of kapt for faster builds
-
-### Common Mistakes
-
-**Koin Mistakes:**
-- Not calling `startKoin()` before first injection
-- Using `get()` instead of `by inject()` everywhere
-- Circular dependencies (not caught until runtime)
-- Not testing with `checkModules()`
-- Overusing named dependencies
-
-**Hilt Mistakes:**
-- Annotating Application but not building
-- Wrong component scope selection
-- Forgetting `@HiltViewModel` on ViewModels
-- Using field injection when constructor available
-- Not using `@Binds` for interfaces
-
-### Summary
-
-**Koin** is ideal for:
-- Kotlin Multiplatform projects
-- Fast iteration and prototyping
-- Teams prioritizing development speed
-- Projects where build time is critical
-
-**Hilt** is ideal for:
-- Android-only large-scale applications
-- Projects requiring maximum type safety
-- Performance-critical applications
-- Teams with DI experience
-
-Both are excellent choices. The decision depends on your specific constraints: team experience, project size, build time requirements, and platform targets.
-
----
+Compare Koin and Hilt in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
 
 ## Ответ (RU)
-### Глубокое Сравнение: Koin Vs Hilt
-
-Koin и Hilt — популярные решения для внедрения зависимостей в Android, но они используют фундаментально разные подходы к решению одной и той же проблемы.
 
 ### Архитектурное Сравнение
 
 | Аспект | Koin | Hilt |
 |--------|------|------|
-| **Паттерн** | Service Locator | Настоящий Dependency Injection |
-| **Разрешение зависимостей** | Runtime (на основе рефлексии) | Compile-time (генерация кода) |
-| **Генерация кода** | Нет | Обширная (через kapt/ksp) |
-| **Верификация** | Runtime проверки | Compile-time верификация |
-| **Влияние на время сборки** | Минимальное (~5-10с для изменений модуля) | Значительное (~30-60с для изменений модуля) |
-| **Runtime производительность** | ~10-15% медленнее | Оптимальная (прямое создание экземпляров) |
-| **Overhead старта приложения** | 50-100мс для больших приложений | 0мс (нет runtime инициализации) |
-| **Размер APK** | +200KB (библиотека Koin) | +500KB-1MB (сгенерированный код) |
-| **Кривая обучения** | Легкая (1-2 дня) | Средняя (1-2 недели) |
-| **Boilerplate код** | Минимальный | Умеренный (аннотации) |
-| **Multiplatform** | Полная поддержка KMM | Только Android |
-| **Сообщения об ошибках** | Runtime исключения | Понятные ошибки компиляции |
-| **Сложность тестирования** | Простая (переопределение модулей) | Умеренная (тестовые компоненты) |
-| **Обнаружение циклических зависимостей** | Только во время выполнения | Во время компиляции |
-| **Поддержка IDE** | Базовая | Отличная (навигация, предупреждения) |
-| **Размер сообщества** | Средний (~8K звезд на GitHub) | Большой (~15K звезд на GitHub) |
+| **Паттерн** | Service Locator | True Dependency Injection |
+| **Разрешение** | Runtime (рефлексия) | Compile-time (генерация кода) |
+| **Верификация** | Runtime | Compile-time |
+| **Время сборки** | Быстрое | Медленное (kapt/ksp) |
+| **Runtime производительность** | Небольшой overhead | Оптимальная |
+| **Overhead старта** | 50-100мс | 0мс |
+| **Multiplatform** | Да (KMM) | Только Android |
+| **Обучение** | Легко (1-2 дня) | Сложнее (1-2 недели) |
+| **Тестирование** | Простое | Умеренное |
 
-### Compile-Time Vs Runtime Dependency Injection
+### Compile-Time vs Runtime DI
 
-#### Compile-Time DI (Hilt/Dagger)
-
-**Как это работает:**
-1. Annotation processor анализирует код во время компиляции
-2. Генерирует boilerplate код для внедрения зависимостей
-3. Создаёт графы компонентов и классы-фабрики
-4. Всё связывание происходит на этапе компиляции
-5. Runtime просто выполняет сгенерированный код
-
-**Преимущества:**
-- **Типобезопасность** - Ловит ошибки на этапе компиляции
-- **Производительность** - Нет рефлексии, прямое создание экземпляров
-- **Навигация** - IDE может навигироваться к сгенерированному коду
-- **Верификация** - Граф зависимостей проверяется до запуска
-- **Нет Overhead при старте** - Всё предвычислено
-
-**Недостатки:**
-- **Время сборки** - Медленные сборки (обработка аннотаций)
-- **Сложность** - Крутая кривая обучения
-- **Boilerplate** - Больше аннотаций и настройки
-- **Гибкость** - Менее динамично, требует пересборки
-
-#### Runtime DI (Koin)
-
-**Как это работает:**
-1. DSL определения загружаются при старте приложения
-2. Зависимости разрешаются при запросе
-3. Использует рефлексию и ленивое создание экземпляров
-4. Паттерн Service Locator
-
-**Преимущества:**
-- **Скорость сборки** - Нет генерации кода
-- **Простота** - Легко изучить и использовать
-- **Гибкость** - Можно изменять во время выполнения
-- **Динамичность** - Условная загрузка модулей
-- **Отладка** - Видите реальный код, а не сгенерированный
-
-**Недостатки:**
-- **Runtime ошибки** - Отсутствующие зависимости вызывают крах приложения
-- **Производительность** - Небольшой overhead от рефлексии
-- **Время старта** - Валидация модулей занимает время
-- **Нет навигации** - Невозможно перейти к инъекциям в IDE
-
-### Параллельная Реализация
-
-Давайте реализуем одну и ту же функцию с обеими фреймворками:
-
-#### Сценарий: Система Аутентификации Пользователя
-
-**Реализация на Koin:**
+**Compile-Time DI (Hilt):**
+- Генерация кода на этапе компиляции
+- Граф зависимостей проверяется до запуска
+- Нет рефлексии → лучшая производительность
+- Ошибки обнаруживаются при сборке
 
 ```kotlin
-// 1. Определение интерфейсов и классов
-interface AuthRepository {
-    suspend fun login(email: String, password: String): Result<User>
-    suspend fun logout(): Result<Unit>
-}
+// ✅ Hilt - аннотации и генерация кода
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val repository: AuthRepository
+) : ViewModel()
 
-class AuthRepositoryImpl(
-    private val api: AuthApi,
-    private val tokenStorage: TokenStorage,
-    private val userCache: UserCache
-) : AuthRepository {
-    override suspend fun login(email: String, password: String): Result<User> {
-        return try {
-            val response = api.login(LoginRequest(email, password))
-            tokenStorage.saveToken(response.token)
-            userCache.saveUser(response.user)
-            Result.success(response.user)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
+@Singleton
+class AuthRepositoryImpl @Inject constructor(
+    private val api: AuthApi
+) : AuthRepository
+```
 
-    override suspend fun logout(): Result<Unit> {
-        return try {
-            api.logout()
-            tokenStorage.clearToken()
-            userCache.clearUser()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-}
+**Runtime DI (Koin):**
+- DSL модули загружаются при старте
+- Зависимости разрешаются по требованию
+- Простой синтаксис, но runtime ошибки
+- Гибкая конфигурация
 
-// 2. Модули Koin - Простой DSL
-val networkModule = module {
-    single<OkHttpClient> {
-        OkHttpClient.Builder()
-            .addInterceptor(get<AuthInterceptor>())
-            .build()
-    }
-
-    single<Retrofit> {
-        Retrofit.Builder()
-            .baseUrl("https://api.example.com")
-            .client(get())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    single<AuthApi> { get<Retrofit>().create(AuthApi::class.java) }
-}
-
+```kotlin
+// ✅ Koin - простой DSL
 val dataModule = module {
-    single<TokenStorage> { TokenStorageImpl(androidContext()) }
-    single<UserCache> { UserCacheImpl() }
-    single<AuthInterceptor> { AuthInterceptor(get()) }
-    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    viewModel { AuthViewModel(get()) }
 }
 
-val domainModule = module {
-    factory { LoginUseCase(get()) }
-    factory { LogoutUseCase(get()) }
-}
-
-val presentationModule = module {
-    viewModel { AuthViewModel(get(), get()) }
-}
-
-// 3. Инициализация в Application
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            androidContext(this@MyApp)
-            modules(networkModule, dataModule, domainModule, presentationModule)
+            modules(dataModule)
         }
-    }
-}
-
-// 4. Использование в Activity
-class LoginActivity : AppCompatActivity() {
-    private val viewModel: AuthViewModel by viewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ViewModel автоматически инжектирована
-    }
-}
-
-// 5. Тестирование - Легко переопределить модули
-class AuthRepositoryTest : KoinTest {
-    @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        modules(module {
-            single<AuthApi> { mockk<AuthApi>() }
-            single<TokenStorage> { mockk<TokenStorage>(relaxed = true) }
-            single<UserCache> { mockk<UserCache>(relaxed = true) }
-            single<AuthRepository> { AuthRepositoryImpl(get(), get(), get()) }
-        })
-    }
-
-    @Test
-    fun `login сохраняет токен и пользователя`() = runTest {
-        val repository: AuthRepository by inject()
-        // Реализация теста
-    }
-}
-```
-
-**Реализация на Hilt:**
-
-```kotlin
-// 1. Те же интерфейсы и классы
-
-// 2. Модули Hilt - На основе аннотаций
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(
-        authInterceptor: AuthInterceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthApi(retrofit: Retrofit): AuthApi {
-        return retrofit.create(AuthApi::class.java)
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
-
-    @Provides
-    @Singleton
-    fun provideTokenStorage(
-        @ApplicationContext context: Context
-    ): TokenStorage {
-        return TokenStorageImpl(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserCache(): UserCache {
-        return UserCacheImpl()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthInterceptor(
-        tokenStorage: TokenStorage
-    ): AuthInterceptor {
-        return AuthInterceptor(tokenStorage)
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindAuthRepository(
-        impl: AuthRepositoryImpl
-    ): AuthRepository
-}
-
-@Module
-@InstallIn(ViewModelComponent::class)
-object DomainModule {
-
-    @Provides
-    fun provideLoginUseCase(
-        repository: AuthRepository
-    ): LoginUseCase {
-        return LoginUseCase(repository)
-    }
-
-    @Provides
-    fun provideLogoutUseCase(
-        repository: AuthRepository
-    ): LogoutUseCase {
-        return LogoutUseCase(repository)
-    }
-}
-
-// 3. Аннотирование Application
-@HiltAndroidApp
-class MyApp : Application()
-
-// 4. Аннотирование Activity
-@AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
-    private val viewModel: AuthViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // ViewModel автоматически инжектирована
-    }
-}
-
-// 5. Аннотирование ViewModel
-@HiltViewModel
-class AuthViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
-    private val logoutUseCase: LogoutUseCase
-) : ViewModel()
-
-// 6. Аннотирование Repository с @Inject
-@Singleton
-class AuthRepositoryImpl @Inject constructor(
-    private val api: AuthApi,
-    private val tokenStorage: TokenStorage,
-    private val userCache: UserCache
-) : AuthRepository {
-    // Реализация
-}
-
-// 7. Тестирование - Требуется больше настройки
-@HiltAndroidTest
-class AuthRepositoryTest {
-
-    @get:Rule
-    val hiltRule = HiltAndroidRule(this)
-
-    @Inject
-    lateinit var repository: AuthRepository
-
-    @BindValue
-    @JvmField
-    val mockApi: AuthApi = mockk()
-
-    @BindValue
-    @JvmField
-    val mockTokenStorage: TokenStorage = mockk(relaxed = true)
-
-    @BindValue
-    @JvmField
-    val mockUserCache: UserCache = mockk(relaxed = true)
-
-    @Before
-    fun setup() {
-        hiltRule.inject()
-    }
-
-    @Test
-    fun `login сохраняет токен и пользователя`() = runTest {
-        // Реализация теста
     }
 }
 ```
 
 ### Матрица Решений
 
-#### Выбирайте Koin Когда:
+**Выбирайте Koin:**
+- Kotlin Multiplatform проекты
+- MVP/прототипы (быстрая итерация)
+- Небольшие/средние приложения
+- Время сборки критично
+- Простота важнее типобезопасности
 
-✅ **Kotlin Multiplatform** - Нужен общий код для iOS/Android/Web
-✅ **Быстрая итерация** - Разработка прототипа или MVP
-✅ **Малое/Среднее приложение** - < 50 модулей, < 500K строк
-✅ **Опыт команды** - Junior/mid-level команда
-✅ **Производительность сборки** - Время сборки - критичное узкое место
-✅ **Динамичная конфигурация** - Нужно переключение модулей в runtime
-✅ **Быстрое обучение** - Команда должна быть продуктивна за дни
-✅ **Фокус на тестирование** - Частая замена mock/fake
+**Выбирайте Hilt:**
+- Только Android приложения
+- Крупномасштабные проекты (50+ модулей)
+- Критична типобезопасность
+- Долгосрочная поддержка (5+ лет)
+- Опытная команда знает Dagger
 
-**Примеры проектов:**
-- MVP/Прототип приложений
-- Kotlin Multiplatform Mobile (KMM)
-- Небольшие бизнес-приложения
-- Циклы быстрой разработки
-- Обучающие/образовательные проекты
+### Лучшие Практики
 
-#### Выбирайте Hilt Когда:
-
-✅ **Только Android** - Нет multiplatform требований
-✅ **Большой масштаб** - > 50 модулей, > 500K строк
-✅ **Типобезопасность** - Нужны гарантии на этапе компиляции
-✅ **Критична производительность** - Важна каждая миллисекунда
-✅ **Опытная команда** - Команда знает Dagger/DI паттерны
-✅ **Долгосрочная поддержка** - Приложение будет жить 5+ лет
-✅ **Сложные зависимости** - Много scope и qualifiers
-✅ **Экосистема Google** - Использование других Jetpack библиотек
-
-**Примеры проектов:**
-- Корпоративные приложения
-- Финансовые/банковские приложения
-- Высокопроизводительные игры
-- Долгосрочные продукты
-- Проекты больших команд (10+ разработчиков)
-
-### Бенчмарки Производительности
-
-**Время старта приложения (холодный старт):**
-```
-Koin:  1200мс (включая 80мс инициализацию DI)
-Hilt:  1150мс (без overhead инициализации DI)
-```
-
-**Разрешение зависимостей (1000 инъекций):**
-```
-Koin:  25мс (runtime рефлексия)
-Hilt:  18мс (прямое создание экземпляров)
-```
-
-**Время сборки (Чистая сборка):**
-```
-Koin:  45с
-Hilt:  78с (+73% медленнее из-за kapt)
-```
-
-**Время сборки (Инкрементальная):**
-```
-Koin:  8с
-Hilt:  22с (+175% медленнее)
-```
-
-### Стратегия Миграции
-
-#### С Koin На Hilt:
-
+**Koin:**
 ```kotlin
-// Шаг 1: Добавить Hilt рядом с Koin
-// Шаг 2: Мигрировать модули один за другим
-// Шаг 3: Заменить аннотации Koin
-
-// До (Koin)
-class UserRepository(private val api: UserApi)
-
-val dataModule = module {
-    single { UserRepository(get()) }
+// ✅ Используйте checkModules() для валидации
+class AppTest : KoinTest {
+    @Test
+    fun verifyModules() = checkModules {
+        modules(appModule, dataModule)
+    }
 }
 
-// После (Hilt)
-@Singleton
-class UserRepository @Inject constructor(
-    private val api: UserApi
-)
+// ✅ Предпочитайте by inject() вместо get()
+class Repository {
+    private val api: Api by inject() // lazy
+}
 
+// ❌ Избегайте get() для ранней инициализации
+class Repository {
+    private val api: Api = get() // eager, может упасть
+}
+```
+
+**Hilt:**
+```kotlin
+// ✅ Используйте @Binds вместо @Provides
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
-    // Модуль больше не нужен при использовании @Inject
+abstract class DataModule {
+    @Binds
+    abstract fun bindRepository(impl: RepositoryImpl): Repository
 }
+
+// ❌ Избегайте @Provides для интерфейсов
+@Provides
+fun provideRepository(impl: RepositoryImpl): Repository = impl
 ```
 
-#### С Hilt На Koin:
+## Answer (EN)
+
+### Architecture Comparison
+
+| Aspect | Koin | Hilt |
+|--------|------|------|
+| **Pattern** | Service Locator | True Dependency Injection |
+| **Resolution** | Runtime (reflection) | Compile-time (code generation) |
+| **Verification** | Runtime | Compile-time |
+| **Build Time** | Fast | Slow (kapt/ksp) |
+| **Runtime Performance** | Small overhead | Optimal |
+| **Startup Overhead** | 50-100ms | 0ms |
+| **Multiplatform** | Yes (KMM) | Android only |
+| **Learning Curve** | Easy (1-2 days) | Moderate (1-2 weeks) |
+| **Testing** | Simple | Moderate |
+
+### Compile-Time vs Runtime DI
+
+**Compile-Time DI (Hilt):**
+- Code generation at compile time
+- Dependency graph verified before runtime
+- No reflection → better performance
+- Errors caught during build
 
 ```kotlin
-// До (Hilt)
-@Singleton
-class UserRepository @Inject constructor(
-    private val api: UserApi
-)
-
-// После (Koin)
-class UserRepository(private val api: UserApi)
-
-val dataModule = module {
-    single { UserRepository(get()) }
-}
-```
-
-### Гибридный Подход
-
-Вы можете использовать оба в одном проекте:
-
-```kotlin
-// Используйте Hilt для критичных путей
+// ✅ Hilt - annotations and code generation
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val repository: Repository
+class AuthViewModel @Inject constructor(
+    private val repository: AuthRepository
 ) : ViewModel()
 
-// Используйте Koin для функций/экспериментов
-val experimentModule = module {
-    viewModel { ExperimentViewModel(get()) }
-}
-
-// Доступ к Koin из Hilt
-@Inject lateinit var koin: Koin
+@Singleton
+class AuthRepositoryImpl @Inject constructor(
+    private val api: AuthApi
+) : AuthRepository
 ```
 
-### Лучшие Практики Для Каждого
+**Runtime DI (Koin):**
+- DSL modules loaded at startup
+- Dependencies resolved on demand
+- Simple syntax but runtime errors
+- Flexible configuration
 
-**Лучшие практики Koin:**
-1. Используйте `checkModules()` в тестах для проверки графа
-2. Группируйте модули по функциям для ясности
-3. Используйте `single` для дорогих объектов
-4. Предпочитайте `by inject()` вместо `get()` для ленивой инициализации
-5. Используйте именованные зависимости умеренно
-6. Документируйте зависимости модулей
+```kotlin
+// ✅ Koin - simple DSL
+val dataModule = module {
+    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    viewModel { AuthViewModel(get()) }
+}
 
-**Лучшие практики Hilt:**
-1. Используйте `@Binds` вместо `@Provides` когда возможно
-2. Держите модули маленькими и сфокусированными
-3. Используйте qualifiers для нескольких реализаций
-4. Предпочитайте constructor injection
-5. Используйте scope соответствующим образом
-6. Рассмотрите KSP вместо kapt для более быстрых сборок
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            modules(dataModule)
+        }
+    }
+}
+```
 
-### Распространенные Ошибки
+### Decision Matrix
 
-**Ошибки Koin:**
-- Не вызов `startKoin()` перед первой инъекцией
-- Использование `get()` вместо `by inject()` везде
-- Циклические зависимости (не обнаруживаются до runtime)
-- Не тестирование с `checkModules()`
-- Чрезмерное использование именованных зависимостей
+**Choose Koin:**
+- Kotlin Multiplatform projects
+- MVP/prototypes (fast iteration)
+- Small/medium apps
+- Build time is critical
+- Simplicity over type safety
 
-**Ошибки Hilt:**
-- Аннотирование Application но не сборка
-- Неправильный выбор scope компонента
-- Забывание `@HiltViewModel` на ViewModels
-- Использование field injection когда доступен constructor
-- Не использование `@Binds` для интерфейсов
+**Choose Hilt:**
+- Android-only apps
+- Large-scale projects (50+ modules)
+- Type safety critical
+- Long-term maintenance (5+ years)
+- Experienced team knows Dagger
 
-### Резюме
+### Best Practices
 
-**Koin** идеален для:
-- Kotlin Multiplatform проектов
-- Быстрой итерации и прототипирования
-- Команд, приоритизирующих скорость разработки
-- Проектов, где время сборки критично
+**Koin:**
+```kotlin
+// ✅ Use checkModules() for validation
+class AppTest : KoinTest {
+    @Test
+    fun verifyModules() = checkModules {
+        modules(appModule, dataModule)
+    }
+}
 
-**Hilt** идеален для:
-- Android-only крупномасштабных приложений
-- Проектов, требующих максимальной типобезопасности
-- Критичных по производительности приложений
-- Команд с опытом в DI
+// ✅ Prefer by inject() over get()
+class Repository {
+    private val api: Api by inject() // lazy
+}
 
-Оба — отличный выбор. Решение зависит от ваших конкретных ограничений: опыт команды, размер проекта, требования ко времени сборки и целевые платформы.
+// ❌ Avoid get() for eager initialization
+class Repository {
+    private val api: Api = get() // eager, may crash
+}
+```
+
+**Hilt:**
+```kotlin
+// ✅ Use @Binds instead of @Provides
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class DataModule {
+    @Binds
+    abstract fun bindRepository(impl: RepositoryImpl): Repository
+}
+
+// ❌ Avoid @Provides for interfaces
+@Provides
+fun provideRepository(impl: RepositoryImpl): Repository = impl
+```
+
+## Follow-ups
+
+- How would you handle scoped dependencies (Activity/Fragment scope) in both frameworks?
+- What are the strategies for migrating from Dagger2 to either Koin or Hilt?
+- How do you test modules with circular dependencies in Koin vs Hilt?
+- Can Koin and Hilt coexist in the same codebase during migration?
+
+## References
+
+- [Hilt Documentation](https://dagger.dev/hilt/)
+- [Koin Documentation](https://insert-koin.io/)
+- [[c-dependency-injection]]
+- [[c-service-locator-pattern]]
 
 ## Related Questions
 
-- q-mlkit-object-detection--ml--medium
-- [[q-network-request-deduplication--networking--hard]]
+### Prerequisites
+- [[q-what-is-dependency-injection--android--easy]]
+- [[q-dagger-basics--android--medium]]
+
+### Related
 - [[q-app-start-types-android--android--medium]]
+- [[q-viewmodel-factory-injection--android--medium]]
+
+### Advanced
+- [[q-network-request-deduplication--networking--hard]]
+- [[q-custom-scopes-hilt--android--hard]]

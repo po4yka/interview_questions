@@ -1,442 +1,230 @@
 ---
-id: 20251012-12271100
+id: 20251012-122711
 title: "How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед"
+aliases: [RecyclerView Cache Ahead, RecyclerView Prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
 topic: android
+subtopics: [ui-views, performance-rendering, cache-offline]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-navigation-advanced--android--medium, q-home-screen-widgets--android--medium, q-looper-thread-connection--android--medium]
+related: [q-recyclerview-sethasfixedsize--android--easy, q-recyclerview-async-list-differ--android--medium, q-how-animations-work-in-recyclerview--android--medium]
+sources: []
 created: 2025-10-15
-tags: [caching, difficulty/medium, optimization, performance, prefetching, recyclerview]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:11 pm
+updated: 2025-10-28
+tags: [android/ui-views, android/performance-rendering, android/cache-offline, recyclerview, prefetching, optimization, difficulty/medium]
+---
+# Вопрос (RU)
+
+> Как настроить RecyclerView для кеширования элементов вперед?
+
+# Question (EN)
+
+> How to configure RecyclerView to cache items ahead?
+
 ---
 
-# How to Write RecyclerView to Cache Ahead?
+## Ответ (RU)
 
-## Answer (EN)
-RecyclerView provides several mechanisms for caching items ahead to improve scrolling performance and user experience. Here are the main approaches:
+RecyclerView предоставляет несколько механизмов для кеширования элементов вперед:
 
-### 1. setItemViewCacheSize() - View Caching
-
-The view cache stores recently scrolled-off-screen views without rebinding data.
+**1. setItemViewCacheSize() - Кеш представлений**
 
 ```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-
-        // Default is 2, increase for better caching
-        recyclerView.setItemViewCacheSize(20)
-
-        // Setup adapter and layout manager
-        recyclerView.adapter = MyAdapter(items)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-    }
-}
+recyclerView.setItemViewCacheSize(20) // Default: 2
 ```
 
-#### Understanding View Cache Size
+Сохраняет недавно прокрученные view без ребиндинга данных.
+
+**2. Prefetching через LinearLayoutManager**
 
 ```kotlin
-class OptimizedRecyclerViewActivity : AppCompatActivity() {
-
-    private fun setupRecyclerView() {
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-
-        // Cache more views for smoother scrolling
-        // Rule of thumb: cache 2-3 screens worth of items
-        val itemsPerScreen = 10
-        val screensToCache = 2
-        recyclerView.setItemViewCacheSize(itemsPerScreen * screensToCache)
-
-        // Enable nested scrolling optimization
-        recyclerView.isNestedScrollingEnabled = true
-
-        // Setup adapter
-        val adapter = MyAdapter(generateItems())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-    }
+val layoutManager = LinearLayoutManager(context).apply {
+    isItemPrefetchEnabled = true // ✅ Default: true
+    initialPrefetchItemCount = 6  // Prefetch первые N элементов
 }
+recyclerView.layoutManager = layoutManager
 ```
 
-### 2. Prefetching with LinearLayoutManager
-
-RecyclerView automatically prefetches items when using LinearLayoutManager.
+**3. OnScrollListener для предзагрузки данных**
 
 ```kotlin
-class PrefetchingActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val layoutManager = LinearLayoutManager(this)
-
-        // Enable prefetching (enabled by default in LinearLayoutManager)
-        layoutManager.isItemPrefetchEnabled = true
-
-        // Set initial prefetch count
-        layoutManager.initialPrefetchItemCount = 4
-
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = MyAdapter(items)
-    }
-}
-```
-
-#### Custom Prefetch Configuration
-
-```kotlin
-class CustomPrefetchLayoutManager(
-    context: Context
-) : LinearLayoutManager(context) {
-
-    init {
-        // Enable prefetching
-        isItemPrefetchEnabled = true
-
-        // Prefetch more items for nested RecyclerViews
-        initialPrefetchItemCount = 6
-    }
-
-    override fun collectInitialPrefetchPositions(
-        adapterItemCount: Int,
-        layoutPrefetchRegistry: LayoutPrefetchRegistry
-    ) {
-        // Prefetch first N items when RecyclerView first appears
-        val itemsToPreload = minOf(initialPrefetchItemCount, adapterItemCount)
-        for (i in 0 until itemsToPreload) {
-            layoutPrefetchRegistry.addPosition(i, 0)
-        }
-    }
-}
-
-// Usage
-recyclerView.layoutManager = CustomPrefetchLayoutManager(this)
-```
-
-### 3. RecyclerView.OnScrollListener For Data Prefetching
-
-Implement custom logic to load data ahead of time.
-
-```kotlin
-class DataPrefetchingActivity : AppCompatActivity() {
-
-    private val items = mutableListOf<Item>()
-    private lateinit var adapter: MyAdapter
-    private var isLoading = false
-    private var currentPage = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        adapter = MyAdapter(items)
-        val layoutManager = LinearLayoutManager(this)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
-
-        // Add scroll listener for data prefetching
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                // Prefetch when approaching the end
-                val threshold = 5 // Start loading 5 items before the end
-                if (!isLoading &&
-                    (visibleItemCount + firstVisibleItemPosition + threshold) >= totalItemCount) {
-                    loadMoreData()
-                }
-            }
-        })
-
-        // Load initial data
-        loadMoreData()
-    }
-
-    private fun loadMoreData() {
-        if (isLoading) return
-
-        isLoading = true
-
-        // Simulate network call
-        lifecycleScope.launch {
-            val newItems = fetchItemsFromNetwork(currentPage)
-            items.addAll(newItems)
-            adapter.notifyItemRangeInserted(items.size - newItems.size, newItems.size)
-            currentPage++
-            isLoading = false
-        }
-    }
-
-    private suspend fun fetchItemsFromNetwork(page: Int): List<Item> {
-        // Simulate network delay
-        delay(1000)
-        return List(20) { Item("Item ${page * 20 + it}") }
-    }
-}
-```
-
-### 4. Advanced Prefetch with Custom LayoutManager
-
-```kotlin
-class AdvancedPrefetchLayoutManager(
-    context: Context,
-    private val prefetchItemCount: Int = 10
-) : LinearLayoutManager(context) {
-
-    init {
-        isItemPrefetchEnabled = true
-    }
-
-    override fun collectAdjacentPrefetchPositions(
-        dx: Int,
-        dy: Int,
-        state: RecyclerView.State,
-        layoutPrefetchRegistry: LayoutPrefetchRegistry
-    ) {
-        super.collectAdjacentPrefetchPositions(dx, dy, state, layoutPrefetchRegistry)
-
-        // Determine scroll direction
-        val scrollingDown = dy > 0
-
-        // Get currently visible range
-        val firstVisible = findFirstVisibleItemPosition()
-        val lastVisible = findLastVisibleItemPosition()
-
-        if (scrollingDown) {
-            // Prefetch items below
-            val startPos = lastVisible + 1
-            val endPos = minOf(startPos + prefetchItemCount, state.itemCount)
-            for (i in startPos until endPos) {
-                layoutPrefetchRegistry.addPosition(i, 0)
-            }
-        } else {
-            // Prefetch items above
-            val endPos = firstVisible - 1
-            val startPos = maxOf(endPos - prefetchItemCount, 0)
-            for (i in startPos..endPos) {
-                layoutPrefetchRegistry.addPosition(i, 0)
-            }
-        }
-    }
-}
-```
-
-### 5. Image Prefetching with Glide/Coil
-
-Prefetch images for upcoming items.
-
-```kotlin
-class ImagePrefetchAdapter(
-    private val items: List<ImageItem>
-) : RecyclerView.Adapter<ImagePrefetchAdapter.ViewHolder>() {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-
-        // Prefetch next images
-        prefetchUpcomingImages(position)
-    }
-
-    private fun prefetchUpcomingImages(currentPosition: Int) {
-        val prefetchCount = 5
-        val startPos = currentPosition + 1
-        val endPos = minOf(startPos + prefetchCount, items.size)
-
-        for (i in startPos until endPos) {
-            Glide.with(context)
-                .load(items[i].imageUrl)
-                .preload()
-        }
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
-
-        fun bind(item: ImageItem) {
-            Glide.with(itemView.context)
-                .load(item.imageUrl)
-                .into(imageView)
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_image, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun getItemCount() = items.size
-}
-```
-
-### 6. RecyclerView Pool for Nested RecyclerViews
-
-```kotlin
-class ParentAdapter(
-    private val items: List<ParentItem>
-) : RecyclerView.Adapter<ParentAdapter.ViewHolder>() {
-
-    // Shared pool for all nested RecyclerViews
-    private val sharedPool = RecyclerView.RecycledViewPool().apply {
-        setMaxRecycledViews(0, 20) // viewType 0, max 20 views
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nestedRecyclerView: RecyclerView = itemView.findViewById(R.id.nestedRecyclerView)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_parent, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-
-        holder.nestedRecyclerView.apply {
-            // Use shared pool
-            setRecycledViewPool(sharedPool)
-
-            // Increase cache size
-            setItemViewCacheSize(10)
-
-            // Setup layout manager with prefetching
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            ).apply {
-                isItemPrefetchEnabled = true
-                initialPrefetchItemCount = 4
-            }
-
-            // Set adapter
-            adapter = ChildAdapter(item.children)
-        }
-    }
-
-    override fun getItemCount() = items.size
-}
-```
-
-### 7. Complete Optimized Example
-
-```kotlin
-class OptimizedRecyclerViewSetup(
-    private val activity: AppCompatActivity
-) {
-
-    fun setupRecyclerView(
-        recyclerView: RecyclerView,
-        items: List<Item>
-    ) {
-        // 1. Configure view caching
-        recyclerView.setItemViewCacheSize(20)
-
-        // 2. Setup optimized layout manager
-        val layoutManager = LinearLayoutManager(activity).apply {
-            isItemPrefetchEnabled = true
-            initialPrefetchItemCount = 6
-        }
-        recyclerView.layoutManager = layoutManager
-
-        // 3. Configure RecycledViewPool
-        recyclerView.recycledViewPool.setMaxRecycledViews(0, 30)
-
-        // 4. Enable optimizations
-        recyclerView.setHasFixedSize(true) // If size doesn't change
-        recyclerView.isNestedScrollingEnabled = true
-
-        // 5. Setup adapter
-        val adapter = OptimizedAdapter(items)
-        recyclerView.adapter = adapter
-
-        // 6. Add data prefetching listener
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-
-                // Prefetch data when nearing end
-                if ((visibleItemCount + firstVisibleItem + 10) >= totalItemCount) {
-                    prefetchMoreData()
-                }
-            }
-        })
-    }
-
-    private fun prefetchMoreData() {
-        // Load more data from network/database
-    }
-}
-```
-
-### Best Practices Summary
-
-1. **setItemViewCacheSize(20-30)** - Cache views for smooth scrolling
-2. **Enable prefetching** - Use LinearLayoutManager with prefetching enabled
-3. **setInitialPrefetchItemCount()** - Prefetch items on initial load
-4. **Implement scroll listener** - Load data before reaching the end
-5. **Shared RecycledViewPool** - For nested RecyclerViews
-6. **Image prefetching** - Preload images using Glide/Coil
-7. **setHasFixedSize(true)** - If RecyclerView size doesn't change
-8. **Custom LayoutManager** - For advanced prefetching logic
-
-### Performance Metrics
-
-```kotlin
-// Monitor prefetching effectiveness
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-    private var totalScroll = 0
-
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-        totalScroll += abs(dy)
+        val visibleItemCount = layoutManager.childCount
+        val totalItemCount = layoutManager.itemCount
+        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
-        // Log metrics every 1000px of scroll
-        if (totalScroll > 1000) {
-            Log.d("Prefetch", "Cache hit rate: ${getCacheHitRate()}")
-            totalScroll = 0
+        val threshold = 5
+        if (!isLoading && (visibleItemCount + firstVisibleItem + threshold) >= totalItemCount) {
+            loadMoreData() // Загрузка следующей страницы
         }
     }
 })
 ```
 
+**4. Кастомный LayoutManager**
+
+```kotlin
+class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(context) {
+
+    override fun collectAdjacentPrefetchPositions(
+        dx: Int, dy: Int,
+        state: RecyclerView.State,
+        layoutPrefetchRegistry: LayoutPrefetchRegistry
+    ) {
+        super.collectAdjacentPrefetchPositions(dx, dy, state, layoutPrefetchRegistry)
+
+        val scrollingDown = dy > 0
+        val lastVisible = findLastVisibleItemPosition()
+
+        if (scrollingDown) {
+            val startPos = lastVisible + 1
+            val endPos = minOf(startPos + 10, state.itemCount)
+            for (i in startPos until endPos) {
+                layoutPrefetchRegistry.addPosition(i, 0) // ✅ Регистрация позиций для prefetch
+            }
+        }
+    }
+}
+```
+
+**5. RecycledViewPool для вложенных RecyclerView**
+
+```kotlin
+val sharedPool = RecyclerView.RecycledViewPool().apply {
+    setMaxRecycledViews(0, 20) // viewType, maxViews
+}
+
+// Использование в адаптере
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.nestedRecyclerView.apply {
+        setRecycledViewPool(sharedPool) // ✅ Переиспользование view pool
+        setItemViewCacheSize(10)
+    }
+}
+```
+
+**Рекомендации**:
+- setItemViewCacheSize(20-30) для гладкой прокрутки
+- initialPrefetchItemCount = 4-6 для вложенных RecyclerView
+- OnScrollListener для пагинации с threshold = 5-10
+- RecycledViewPool для вложенных списков
+
+## Answer (EN)
+
+RecyclerView provides several mechanisms for caching items ahead:
+
+**1. setItemViewCacheSize() - View Cache**
+
+```kotlin
+recyclerView.setItemViewCacheSize(20) // Default: 2
+```
+
+Stores recently scrolled-off views without rebinding data.
+
+**2. Prefetching with LinearLayoutManager**
+
+```kotlin
+val layoutManager = LinearLayoutManager(context).apply {
+    isItemPrefetchEnabled = true // ✅ Default: true
+    initialPrefetchItemCount = 6  // Prefetch first N items
+}
+recyclerView.layoutManager = layoutManager
+```
+
+**3. OnScrollListener for Data Prefetching**
+
+```kotlin
+recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        val visibleItemCount = layoutManager.childCount
+        val totalItemCount = layoutManager.itemCount
+        val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+
+        val threshold = 5
+        if (!isLoading && (visibleItemCount + firstVisibleItem + threshold) >= totalItemCount) {
+            loadMoreData() // Load next page
+        }
+    }
+})
+```
+
+**4. Custom LayoutManager**
+
+```kotlin
+class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(context) {
+
+    override fun collectAdjacentPrefetchPositions(
+        dx: Int, dy: Int,
+        state: RecyclerView.State,
+        layoutPrefetchRegistry: LayoutPrefetchRegistry
+    ) {
+        super.collectAdjacentPrefetchPositions(dx, dy, state, layoutPrefetchRegistry)
+
+        val scrollingDown = dy > 0
+        val lastVisible = findLastVisibleItemPosition()
+
+        if (scrollingDown) {
+            val startPos = lastVisible + 1
+            val endPos = minOf(startPos + 10, state.itemCount)
+            for (i in startPos until endPos) {
+                layoutPrefetchRegistry.addPosition(i, 0) // ✅ Register positions for prefetch
+            }
+        }
+    }
+}
+```
+
+**5. RecycledViewPool for Nested RecyclerViews**
+
+```kotlin
+val sharedPool = RecyclerView.RecycledViewPool().apply {
+    setMaxRecycledViews(0, 20) // viewType, maxViews
+}
+
+// Usage in adapter
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.nestedRecyclerView.apply {
+        setRecycledViewPool(sharedPool) // ✅ Reuse view pool
+        setItemViewCacheSize(10)
+    }
+}
+```
+
+**Best Practices**:
+- setItemViewCacheSize(20-30) for smooth scrolling
+- initialPrefetchItemCount = 4-6 for nested RecyclerViews
+- OnScrollListener for pagination with threshold = 5-10
+- RecycledViewPool for nested lists
+
 ---
 
-# Как Можно Писать RecyclerView, Чтобы Он Кэшировал Наперёд
+## Follow-ups
 
-## Ответ (RU)
-1. Использовать setItemViewCacheSize для кэширования определённого количества элементов. 2. Включить предзагрузку данных с помощью RecyclerView.OnScrollListener. 3. Реализовать Prefetching через LinearLayoutManager или RecyclerView.LayoutManager.
+- What's the difference between view cache and RecycledViewPool?
+- How does prefetching impact memory consumption?
+- When to use custom LayoutManager vs OnScrollListener?
+- How to measure cache hit rate in production?
 
----
+## References
+
+- [RecyclerView Performance Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
+- [Understanding RecyclerView Caching](https://proandroiddev.com/recyclerview-caching-8f3c5c6b4e92)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]]
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]]
 
 ### Related (Medium)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--android--medium]] - View, Ui
+- [[q-recyclerview-async-list-differ--android--medium]]
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+- [[q-recyclerview-itemdecoration-advanced--android--medium]]
+
+### Advanced (Harder)
+- Advanced RecyclerView optimization with custom ItemAnimator
+- Building infinite scroll with prefetching and error handling

@@ -1,608 +1,53 @@
 ---
-id: 20251012-12271124
-title: "Koin Scope Management / Koin Scope Управление"
-topic: dependency-injection
+id: 20251012-122711
+title: "Koin Scope Management / Управление Scope В Koin"
+aliases: [Koin Scope Management, Управление Scope В Koin, Koin Scopes, Жизненный цикл Koin]
+topic: android
+subtopics: [di-koin, lifecycle, architecture-mvvm]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-stable-classes-compose--android--hard, q-what-methods-redraw-views--android--medium]
+related: [c-dependency-injection, q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-stable-classes-compose--android--hard, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
-tags: [difficulty/medium, injection, koin, lifecycle, scopes]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:07:51 pm
+updated: 2025-10-28
+sources: []
+tags: [android/di-koin, android/lifecycle, android/architecture-mvvm, dependency-injection, koin, scopes, difficulty/medium]
 ---
+# Вопрос (RU)
 
-# Koin Scope Management / Управление Scope В Koin
+> Как управлять scope в Koin? Реализуйте зависимости с ограниченным временем жизни для Activity и Fragment с правильной обработкой жизненного цикла.
 
-**English**: How do you manage scopes in Koin? Implement Activity and Fragment scoped dependencies with proper lifecycle handling.
+# Question (EN)
 
-## Answer (EN)
-**Koin Scopes** provide a way to create dependencies with limited lifetimes, tied to specific components like Activities, Fragments, or custom logical boundaries. Scopes help manage memory and ensure proper lifecycle handling of dependencies.
-
-### What is a Scope?
-
-A **scope** in Koin is a container for definitions that:
-- Has a defined lifecycle (start and close)
-- Can be linked to Android components
-- Automatically cleans up resources when closed
-- Prevents memory leaks by releasing references
-
-### Scope Types
-
-1. **Root Scope** - Application-wide, never closes
-2. **Component Scope** - Tied to Android components (Activity, Fragment)
-3. **Custom Scope** - User-defined logical boundaries
-4. **Named Scope** - Multiple instances of same scope type
-
-### Defining Scopes
-
-```kotlin
-// Define a named scope
-val myScope = named("MY_SCOPE")
-
-// Module with scoped definitions
-val scopedModule = module {
-    // Root scope - lives forever
-    single { AppDatabase(androidContext()) }
-
-    // Scoped definition
-    scope<MyActivity> {
-        scoped { MyActivityPresenter(get()) }
-        scoped { MyActivityViewModel(get()) }
-    }
-
-    // Named scope
-    scope(named("user_session")) {
-        scoped { UserSession(get()) }
-        scoped { UserSettings(get()) }
-    }
-}
-```
-
-### Activity Scoped Dependencies
-
-#### Complete Activity Scope Implementation
-
-```kotlin
-// 1. Define Activity-specific dependencies
-data class ShoppingCart(val items: MutableList<Product> = mutableListOf())
-
-class ShoppingCartManager(
-    private val cart: ShoppingCart,
-    private val repository: ProductRepository
-) {
-    fun addToCart(product: Product) {
-        cart.items.add(product)
-    }
-
-    fun removeFromCart(product: Product) {
-        cart.items.remove(product)
-    }
-
-    fun getTotal(): Double = cart.items.sumOf { it.price }
-
-    suspend fun checkout(): Result<Order> {
-        return repository.createOrder(cart.items)
-    }
-
-    fun clear() {
-        cart.items.clear()
-    }
-}
-
-// 2. Create module with Activity scope
-val shoppingModule = module {
-    // Application-wide dependencies
-    single<ProductRepository> { ProductRepositoryImpl(get()) }
-
-    // Activity-scoped dependencies
-    scope<ShoppingActivity> {
-        scoped { ShoppingCart() }
-        scoped { ShoppingCartManager(get(), get()) }
-        scoped { PaymentProcessor(get()) }
-    }
-}
-
-// 3. Activity with scoped dependencies
-class ShoppingActivity : AppCompatActivity() {
-
-    // Create scope linked to Activity lifecycle
-    private val scope: Scope by activityScope()
-
-    // Inject scoped dependencies
-    private val cartManager: ShoppingCartManager by scope.inject()
-    private val paymentProcessor: PaymentProcessor by scope.inject()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_shopping)
-
-        // Scope is automatically created
-        // Dependencies are instantiated lazily
-    }
-
-    private fun addProductToCart(product: Product) {
-        cartManager.addToCart(product)
-        updateCartUI()
-    }
-
-    private fun checkout() {
-        lifecycleScope.launch {
-            paymentProcessor.processPayment(cartManager.getTotal())
-                .onSuccess {
-                    showSuccess()
-                    cartManager.clear()
-                }
-                .onFailure { showError(it.message) }
-        }
-    }
-
-    override fun onDestroy() {
-        // Scope is automatically closed
-        // All scoped instances are released
-        super.onDestroy()
-    }
-}
-
-// Alternative: Manual scope management
-class ShoppingActivityManual : AppCompatActivity() {
-
-    private lateinit var scope: Scope
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Manually create scope
-        scope = getKoin().createScope(
-            scopeId = "shopping_${System.currentTimeMillis()}",
-            qualifier = named<ShoppingActivity>()
-        )
-
-        val cartManager: ShoppingCartManager = scope.get()
-    }
-
-    override fun onDestroy() {
-        // Manually close scope
-        scope.close()
-        super.onDestroy()
-    }
-}
-```
-
-### Fragment Scoped Dependencies
-
-#### Complete Fragment Scope Implementation
-
-```kotlin
-// 1. Define Fragment-specific dependencies
-class UserProfileLoader(
-    private val userId: String,
-    private val repository: UserRepository,
-    private val imageLoader: ImageLoader
-) {
-    suspend fun loadProfile(): Result<UserProfile> {
-        return repository.getUserProfile(userId)
-    }
-
-    suspend fun loadAvatar(): Result<Bitmap> {
-        return imageLoader.loadUserAvatar(userId)
-    }
-}
-
-class ProfileEditState {
-    var hasUnsavedChanges: Boolean = false
-    val pendingChanges: MutableMap<String, Any> = mutableMapOf()
-
-    fun markChanged(field: String, value: Any) {
-        hasUnsavedChanges = true
-        pendingChanges[field] = value
-    }
-
-    fun clear() {
-        hasUnsavedChanges = false
-        pendingChanges.clear()
-    }
-}
-
-// 2. Create module with Fragment scope
-val profileModule = module {
-    // Application-wide
-    single<UserRepository> { UserRepositoryImpl(get()) }
-    single<ImageLoader> { ImageLoaderImpl(get()) }
-
-    // Fragment-scoped
-    scope<ProfileFragment> {
-        scoped { (userId: String) ->
-            UserProfileLoader(userId, get(), get())
-        }
-        scoped { ProfileEditState() }
-        scoped { ProfileValidator() }
-    }
-}
-
-// 3. Fragment with scoped dependencies
-class ProfileFragment : Fragment() {
-
-    // Create scope linked to Fragment lifecycle
-    private val scope: Scope by fragmentScope()
-
-    // Inject with parameters
-    private val userId: String by lazy {
-        requireArguments().getString("user_id")!!
-    }
-
-    private val profileLoader: UserProfileLoader by scope.inject {
-        parametersOf(userId)
-    }
-
-    private val editState: ProfileEditState by scope.inject()
-    private val validator: ProfileValidator by scope.inject()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Scope is automatically created
-        loadProfile()
-    }
-
-    private fun loadProfile() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            profileLoader.loadProfile()
-                .onSuccess { profile -> displayProfile(profile) }
-                .onFailure { error -> showError(error.message) }
-        }
-    }
-
-    private fun onFieldChanged(field: String, value: Any) {
-        if (validator.validate(field, value)) {
-            editState.markChanged(field, value)
-            updateSaveButtonState()
-        }
-    }
-
-    override fun onDestroyView() {
-        // Scope is automatically closed when Fragment is destroyed
-        super.onDestroyView()
-    }
-}
-```
-
-### Sharing Scopes Between Components
-
-#### Activity-Fragment Shared Scope
-
-```kotlin
-// 1. Define shared scope
-val sharedModule = module {
-    // Scope shared between Activity and its Fragments
-    scope<MainActivity> {
-        scoped { NavigationState() }
-        scoped { SharedViewModel(get()) }
-        scoped { AnalyticsTracker(get()) }
-    }
-}
-
-// 2. Activity creates and owns scope
-class MainActivity : AppCompatActivity() {
-
-    private val scope: Scope by activityScope()
-    private val navigationState: NavigationState by scope.inject()
-    private val sharedViewModel: SharedViewModel by scope.inject()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Navigate to fragments
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, HomeFragment())
-            .commit()
-    }
-}
-
-// 3. Fragments access Activity's scope
-class HomeFragment : Fragment() {
-
-    // Get parent Activity's scope
-    private val activityScope: Scope by activityRetainedScope()
-
-    // Inject from Activity scope
-    private val navigationState: NavigationState by activityScope.inject()
-    private val sharedViewModel: SharedViewModel by activityScope.inject()
-
-    // Fragment also has its own scope
-    private val fragmentScope: Scope by fragmentScope()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Use shared dependencies
-        navigationState.currentScreen = "home"
-
-        sharedViewModel.events.collect { event ->
-            handleEvent(event)
-        }
-    }
-}
-
-// Extension function to get Activity scope from Fragment
-fun Fragment.activityRetainedScope(): Lazy<Scope> = lazy {
-    (requireActivity() as? MainActivity)?.let {
-        getKoin().getScope(it.toString())
-    } ?: throw IllegalStateException("Activity must create scope first")
-}
-```
-
-### Custom Named Scopes
-
-```kotlin
-// 1. Define feature-based scopes
-val featureModule = module {
-    // User session scope - lives during user authentication
-    scope(named("user_session")) {
-        scoped { UserSession(get()) }
-        scoped { AuthenticatedApiClient(get()) }
-        scoped { UserPreferences(get()) }
-    }
-
-    // Chat conversation scope
-    scope(named("chat_conversation")) {
-        scoped { (conversationId: String) ->
-            ConversationManager(conversationId, get())
-        }
-        scoped { MessageQueue() }
-        scoped { TypingIndicator() }
-    }
-}
-
-// 2. Manage custom scopes
-class SessionManager(private val koin: Koin) {
-
-    private var sessionScope: Scope? = null
-
-    fun startSession(userId: String) {
-        // Create user session scope
-        sessionScope = koin.createScope(
-            scopeId = "session_$userId",
-            qualifier = named("user_session")
-        )
-
-        val userSession: UserSession = sessionScope!!.get()
-        userSession.start(userId)
-    }
-
-    fun endSession() {
-        // Close scope and clean up
-        sessionScope?.close()
-        sessionScope = null
-    }
-
-    fun <T> getSessionDependency(clazz: KClass<T>): T? {
-        return sessionScope?.get(clazz, null)
-    }
-}
-
-// 3. Use in Activity
-class ChatActivity : AppCompatActivity() {
-
-    private lateinit var conversationScope: Scope
-
-    private val sessionManager: SessionManager by inject()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val conversationId = intent.getStringExtra("conversation_id")!!
-
-        // Create conversation-specific scope
-        conversationScope = getKoin().createScope(
-            scopeId = "conversation_$conversationId",
-            qualifier = named("chat_conversation")
-        )
-
-        val conversationManager: ConversationManager =
-            conversationScope.get { parametersOf(conversationId) }
-
-        conversationManager.loadMessages()
-    }
-
-    override fun onDestroy() {
-        conversationScope.close()
-        super.onDestroy()
-    }
-}
-```
-
-### Scope Lifecycle Management
-
-#### Automatic Lifecycle Handling
-
-```kotlin
-// Extension to tie scope to lifecycle
-class ScopedActivity : AppCompatActivity() {
-
-    private val scope: Scope by lazy {
-        createScope(this)
-            .also { scope ->
-                // Automatically close scope when lifecycle ends
-                lifecycle.addObserver(object : DefaultLifecycleObserver {
-                    override fun onDestroy(owner: LifecycleOwner) {
-                        scope.close()
-                    }
-                })
-            }
-    }
-}
-
-// Helper function for lifecycle-aware scopes
-fun <T : Any> LifecycleOwner.scopedKoin(
-    scopeId: String,
-    qualifier: Qualifier? = null,
-    block: Scope.() -> Unit = {}
-): Lazy<Scope> = lazy {
-    val scope = getKoin().createScope(scopeId, qualifier)
-
-    lifecycle.addObserver(object : DefaultLifecycleObserver {
-        override fun onDestroy(owner: LifecycleOwner) {
-            scope.close()
-        }
-    })
-
-    scope.apply(block)
-}
-
-// Usage
-class MyActivity : AppCompatActivity() {
-    private val scope by scopedKoin("my_activity", named<MyActivity>())
-
-    private val presenter: Presenter by scope.inject()
-}
-```
-
-### Testing Scoped Dependencies
-
-```kotlin
-class ShoppingActivityTest {
-
-    @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        modules(
-            module {
-                scope<ShoppingActivity> {
-                    scoped { mockk<ShoppingCartManager>(relaxed = true) }
-                    scoped { mockk<PaymentProcessor>(relaxed = true) }
-                }
-            }
-        )
-    }
-
-    @Test
-    fun `test activity scope`() {
-        val activity = Robolectric.buildActivity(ShoppingActivity::class.java)
-            .create()
-            .get()
-
-        val scope = activity.scope
-        val cartManager: ShoppingCartManager = scope.get()
-
-        // Test with scoped dependency
-        assertNotNull(cartManager)
-    }
-
-    @Test
-    fun `scope is closed on destroy`() {
-        val activity = Robolectric.buildActivity(ShoppingActivity::class.java)
-            .create()
-            .get()
-
-        val scope = activity.scope
-
-        activity.finish()
-        Robolectric.flushForegroundThreadScheduler()
-
-        // Scope should be closed
-        assertTrue(scope.closed)
-    }
-}
-```
-
-### Best Practices
-
-1. **Match Scope to Lifecycle** - Scope lifetime should match component lifecycle
-2. **Avoid Memory Leaks** - Always close scopes when done
-3. **Use Activity Scope for Fragments** - Share state across fragment stack
-4. **Named Scopes for Features** - Logical grouping of related functionality
-5. **Lazy Injection** - Use `by inject()` for deferred instantiation
-6. **Clean Up Resources** - Implement cleanup in scoped classes
-7. **Test Scope Behavior** - Verify scope creation and destruction
-
-### Common Patterns
-
-**Pattern 1: Multi-Step Flow Scope**
-```kotlin
-// Checkout flow spanning multiple screens
-scope(named("checkout_flow")) {
-    scoped { CheckoutState() }
-    scoped { PaymentInfo() }
-    scoped { ShippingInfo() }
-}
-```
-
-**Pattern 2: Feature Module Scope**
-```kotlin
-// Isolated feature with its own dependencies
-scope(named("feature_messaging")) {
-    scoped { MessagingRepository(get()) }
-    scoped { MessageCache() }
-    scoped { NotificationManager(get()) }
-}
-```
-
-**Pattern 3: User Session Scope**
-```kotlin
-// Dependencies that exist only while user is logged in
-scope(named("authenticated_user")) {
-    scoped { AuthToken(get()) }
-    scoped { UserProfile(get()) }
-    scoped { SecureStorage(get()) }
-}
-```
-
-### Summary
-
-Koin scopes provide lifecycle-aware dependency management:
-- **Activity Scope** - For Activity-level dependencies
-- **Fragment Scope** - For Fragment-level dependencies
-- **Custom Scopes** - For logical boundaries (sessions, features)
-- **Automatic Cleanup** - Integrated with Android lifecycle
-- **Shared Scopes** - Communication between components
-- **Memory Safety** - Prevents leaks through proper disposal
-
-Use scopes to match dependency lifetime with component lifecycle, prevent memory leaks, and organize related dependencies.
+> How do you manage scopes in Koin? Implement Activity and Fragment scoped dependencies with proper lifecycle handling.
 
 ---
 
 ## Ответ (RU)
-**Scope в Koin** предоставляют способ создания зависимостей с ограниченным временем жизни, привязанных к конкретным компонентам (Activity, Fragment) или пользовательским логическим границам. Scope помогают управлять памятью и обеспечивают правильную обработку жизненного цикла зависимостей.
 
-### Что Такое Scope?
+**Scope в Koin** — это контейнеры для зависимостей с ограниченным временем жизни, привязанные к Android компонентам (Activity, Fragment) или пользовательским логическим границам. Они предотвращают утечки памяти и обеспечивают правильную обработку жизненного цикла.
 
-**Scope** в Koin — это контейнер для определений, который:
-- Имеет определённый жизненный цикл (start и close)
-- Может быть привязан к Android компонентам
-- Автоматически очищает ресурсы при закрытии
-- Предотвращает утечки памяти, освобождая ссылки
+### Основные Концепции
 
-### Типы Scope
+**Типы Scope**:
+1. **Root Scope** - на уровне приложения
+2. **Component Scope** - привязан к Activity/Fragment
+3. **Named Scope** - пользовательские логические границы
 
-1. **Root Scope** - на уровне приложения, никогда не закрывается
-2. **Component Scope** - привязан к Android компонентам
-3. **Custom Scope** - пользовательские логические границы
-4. **Named Scope** - множество экземпляров одного типа scope
+**Преимущества**:
+- Автоматическая очистка ресурсов
+- Предотвращение утечек памяти
+- Соответствие жизненному циклу компонентов
 
 ### Activity Scoped Dependencies
 
 ```kotlin
-// 1. Определение Activity-специфичных зависимостей
-data class ShoppingCart(val items: MutableList<Product> = mutableListOf())
-
-class ShoppingCartManager(
-    private val cart: ShoppingCart,
-    private val repository: ProductRepository
-) {
-    fun addToCart(product: Product) {
-        cart.items.add(product)
-    }
-
-    fun getTotal(): Double = cart.items.sumOf { it.price }
-
-    suspend fun checkout(): Result<Order> {
-        return repository.createOrder(cart.items)
-    }
-}
-
-// 2. Создание модуля с Activity scope
+// ✅ Определение модуля с Activity scope
 val shoppingModule = module {
-    // Зависимости уровня приложения
+    // Зависимость уровня приложения
     single<ProductRepository> { ProductRepositoryImpl(get()) }
 
     // Activity-scoped зависимости
@@ -613,72 +58,43 @@ val shoppingModule = module {
     }
 }
 
-// 3. Activity с scoped зависимостями
+// ✅ Activity с автоматическим управлением scope
 class ShoppingActivity : AppCompatActivity() {
 
-    // Создание scope привязанного к жизненному циклу Activity
     private val scope: Scope by activityScope()
-
-    // Инъекция scoped зависимостей
     private val cartManager: ShoppingCartManager by scope.inject()
-    private val paymentProcessor: PaymentProcessor by scope.inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_shopping)
-
         // Scope автоматически создан
-        // Зависимости инстанцируются лениво
-    }
-
-    private fun checkout() {
-        lifecycleScope.launch {
-            paymentProcessor.processPayment(cartManager.getTotal())
-                .onSuccess { showSuccess() }
-                .onFailure { showError(it.message) }
-        }
     }
 
     override fun onDestroy() {
         // Scope автоматически закрыт
-        // Все scoped экземпляры освобождены
         super.onDestroy()
     }
 }
 ```
 
+**Объяснение**:
+- `activityScope()` автоматически привязывает scope к жизненному циклу Activity
+- `scoped` создаёт один экземпляр на scope
+- При `onDestroy()` все зависимости автоматически освобождаются
+
 ### Fragment Scoped Dependencies
 
 ```kotlin
-// 1. Fragment-специфичные зависимости
-class UserProfileLoader(
-    private val userId: String,
-    private val repository: UserRepository
-) {
-    suspend fun loadProfile(): Result<UserProfile> {
-        return repository.getUserProfile(userId)
-    }
-}
-
-class ProfileEditState {
-    var hasUnsavedChanges: Boolean = false
-    val pendingChanges: MutableMap<String, Any> = mutableMapOf()
-}
-
-// 2. Модуль с Fragment scope
+// ✅ Модуль с Fragment scope
 val profileModule = module {
-    single<UserRepository> { UserRepositoryImpl(get()) }
-
     scope<ProfileFragment> {
         scoped { (userId: String) ->
             UserProfileLoader(userId, get())
         }
         scoped { ProfileEditState() }
-        scoped { ProfileValidator() }
     }
 }
 
-// 3. Fragment с scoped зависимостями
+// ✅ Fragment с scoped зависимостями
 class ProfileFragment : Fragment() {
 
     private val scope: Scope by fragmentScope()
@@ -691,13 +107,6 @@ class ProfileFragment : Fragment() {
         parametersOf(userId)
     }
 
-    private val editState: ProfileEditState by scope.inject()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        loadProfile()
-    }
-
     override fun onDestroyView() {
         // Scope автоматически закрывается
         super.onDestroyView()
@@ -705,41 +114,48 @@ class ProfileFragment : Fragment() {
 }
 ```
 
+**Ключевые моменты**:
+- `fragmentScope()` привязывает к жизненному циклу Fragment
+- `parametersOf()` передаёт runtime параметры
+- Scope закрывается при уничтожении Fragment
+
 ### Разделение Scope Между Компонентами
 
 ```kotlin
-// Activity создаёт и владеет scope
+// ✅ Activity создаёт shared scope
 class MainActivity : AppCompatActivity() {
 
     private val scope: Scope by activityScope()
-    private val navigationState: NavigationState by scope.inject()
     private val sharedViewModel: SharedViewModel by scope.inject()
 }
 
-// Fragment получает доступ к Activity scope
+// ✅ Fragment получает доступ к Activity scope
 class HomeFragment : Fragment() {
 
-    // Получить scope родительской Activity
     private val activityScope: Scope by activityRetainedScope()
-
-    // Инъекция из Activity scope
-    private val navigationState: NavigationState by activityScope.inject()
     private val sharedViewModel: SharedViewModel by activityScope.inject()
+}
+
+// Extension function
+fun Fragment.activityRetainedScope(): Lazy<Scope> = lazy {
+    (requireActivity() as? MainActivity)?.let {
+        getKoin().getScope(it.toString())
+    } ?: throw IllegalStateException("Activity scope not found")
 }
 ```
 
 ### Custom Named Scopes
 
 ```kotlin
+// ✅ Feature-based scope
 val featureModule = module {
-    // User session scope - живёт во время аутентификации
     scope(named("user_session")) {
         scoped { UserSession(get()) }
         scoped { AuthenticatedApiClient(get()) }
-        scoped { UserPreferences(get()) }
     }
 }
 
+// ✅ Ручное управление custom scope
 class SessionManager(private val koin: Koin) {
 
     private var sessionScope: Scope? = null
@@ -758,30 +174,211 @@ class SessionManager(private val koin: Koin) {
 }
 ```
 
+### Сравнение Подходов
+
+| Подход | Использование | Автоматическая очистка |
+|--------|---------------|------------------------|
+| `activityScope()` | Activity-зависимости | Да |
+| `fragmentScope()` | Fragment-зависимости | Да |
+| Named scope | Пользовательская логика | Нет (ручное управление) |
+
 ### Best Practices
 
-1. **Соответствие Scope жизненному циклу** - время жизни scope должно соответствовать жизненному циклу компонента
-2. **Избегать утечек памяти** - всегда закрывать scope
-3. **Activity Scope для Fragments** - разделять состояние между стеком фрагментов
-4. **Named Scopes для фич** - логическая группировка связанной функциональности
-5. **Lazy Injection** - использовать `by inject()` для отложенной инстанциации
-6. **Очистка ресурсов** - реализовывать cleanup в scoped классах
-7. **Тестирование Scope** - проверять создание и уничтожение scope
+1. **Соответствие жизненному циклу**: Используйте `activityScope()` / `fragmentScope()` для автоматического управления
+2. **Избегать утечек**: Всегда закрывайте custom scopes в `onDestroy()`
+3. **Shared state**: Используйте Activity scope для разделения состояния между фрагментами
+4. **Lazy injection**: Предпочитайте `by inject()` вместо прямого `get()`
 
-### Резюме
+---
 
-Koin scopes предоставляют lifecycle-aware управление зависимостями:
-- **Activity Scope** - для зависимостей уровня Activity
-- **Fragment Scope** - для зависимостей уровня Fragment
-- **Custom Scopes** - для логических границ (сессии, фичи)
-- **Автоматическая очистка** - интеграция с Android lifecycle
-- **Разделяемые Scopes** - коммуникация между компонентами
-- **Безопасность памяти** - предотвращает утечки через правильную утилизацию
+## Answer (EN)
 
-Используйте scopes для соответствия времени жизни зависимостей жизненному циклу компонентов, предотвращения утечек памяти и организации связанных зависимостей.
+**Koin Scopes** provide lifecycle-aware dependency management by creating containers for dependencies with limited lifetimes tied to Android components (Activity, Fragment) or custom logical boundaries. They prevent memory leaks and ensure proper lifecycle handling.
+
+### Core Concepts
+
+**Scope Types**:
+1. **Root Scope** - Application-wide, never closes
+2. **Component Scope** - Tied to Activity/Fragment lifecycle
+3. **Named Scope** - Custom logical boundaries
+
+**Benefits**:
+- Automatic resource cleanup
+- Memory leak prevention
+- Lifecycle alignment with components
+
+### Activity Scoped Dependencies
+
+```kotlin
+// ✅ Module with Activity scope
+val shoppingModule = module {
+    // Application-wide dependency
+    single<ProductRepository> { ProductRepositoryImpl(get()) }
+
+    // Activity-scoped dependencies
+    scope<ShoppingActivity> {
+        scoped { ShoppingCart() }
+        scoped { ShoppingCartManager(get(), get()) }
+        scoped { PaymentProcessor(get()) }
+    }
+}
+
+// ✅ Activity with automatic scope management
+class ShoppingActivity : AppCompatActivity() {
+
+    private val scope: Scope by activityScope()
+    private val cartManager: ShoppingCartManager by scope.inject()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Scope automatically created
+    }
+
+    override fun onDestroy() {
+        // Scope automatically closed
+        super.onDestroy()
+    }
+}
+```
+
+**Explanation**:
+- `activityScope()` automatically ties scope to Activity lifecycle
+- `scoped` creates one instance per scope
+- On `onDestroy()` all dependencies are automatically released
+
+### Fragment Scoped Dependencies
+
+```kotlin
+// ✅ Module with Fragment scope
+val profileModule = module {
+    scope<ProfileFragment> {
+        scoped { (userId: String) ->
+            UserProfileLoader(userId, get())
+        }
+        scoped { ProfileEditState() }
+    }
+}
+
+// ✅ Fragment with scoped dependencies
+class ProfileFragment : Fragment() {
+
+    private val scope: Scope by fragmentScope()
+
+    private val userId: String by lazy {
+        requireArguments().getString("user_id")!!
+    }
+
+    private val profileLoader: UserProfileLoader by scope.inject {
+        parametersOf(userId)
+    }
+
+    override fun onDestroyView() {
+        // Scope automatically closed
+        super.onDestroyView()
+    }
+}
+```
+
+**Key Points**:
+- `fragmentScope()` ties to Fragment lifecycle
+- `parametersOf()` passes runtime parameters
+- Scope closes when Fragment is destroyed
+
+### Sharing Scopes Between Components
+
+```kotlin
+// ✅ Activity creates shared scope
+class MainActivity : AppCompatActivity() {
+
+    private val scope: Scope by activityScope()
+    private val sharedViewModel: SharedViewModel by scope.inject()
+}
+
+// ✅ Fragment accesses Activity scope
+class HomeFragment : Fragment() {
+
+    private val activityScope: Scope by activityRetainedScope()
+    private val sharedViewModel: SharedViewModel by activityScope.inject()
+}
+
+// Extension function
+fun Fragment.activityRetainedScope(): Lazy<Scope> = lazy {
+    (requireActivity() as? MainActivity)?.let {
+        getKoin().getScope(it.toString())
+    } ?: throw IllegalStateException("Activity scope not found")
+}
+```
+
+### Custom Named Scopes
+
+```kotlin
+// ✅ Feature-based scope
+val featureModule = module {
+    scope(named("user_session")) {
+        scoped { UserSession(get()) }
+        scoped { AuthenticatedApiClient(get()) }
+    }
+}
+
+// ✅ Manual custom scope management
+class SessionManager(private val koin: Koin) {
+
+    private var sessionScope: Scope? = null
+
+    fun startSession(userId: String) {
+        sessionScope = koin.createScope(
+            scopeId = "session_$userId",
+            qualifier = named("user_session")
+        )
+    }
+
+    fun endSession() {
+        sessionScope?.close()
+        sessionScope = null
+    }
+}
+```
+
+### Comparison of Approaches
+
+| Approach | Use Case | Automatic Cleanup |
+|----------|----------|-------------------|
+| `activityScope()` | Activity-level dependencies | Yes |
+| `fragmentScope()` | Fragment-level dependencies | Yes |
+| Named scope | Custom logic boundaries | No (manual management) |
+
+### Best Practices
+
+1. **Match lifecycle**: Use `activityScope()` / `fragmentScope()` for automatic management
+2. **Prevent leaks**: Always close custom scopes in `onDestroy()`
+3. **Shared state**: Use Activity scope to share state between fragments
+4. **Lazy injection**: Prefer `by inject()` over direct `get()`
+
+---
+
+## Follow-ups
+
+- How to test scoped dependencies in unit tests?
+- What happens if you forget to close a custom named scope?
+- Can you nest scopes (scope within a scope)?
+- How to handle scope for ViewModel with SavedStateHandle?
+
+## References
+
+- Koin official documentation on Scopes
+- Android lifecycle documentation
+- Dependency injection patterns
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- Basic Koin setup and module configuration
+- Android lifecycle fundamentals
+
+### Related (Same Level)
 - [[q-how-to-display-snackbar-or-toast-based-on-results--android--medium]]
 - [[q-stable-classes-compose--android--hard]]
+
+### Advanced (Harder)
 - [[q-what-methods-redraw-views--android--medium]]
+- Custom scope implementation with lifecycle observers

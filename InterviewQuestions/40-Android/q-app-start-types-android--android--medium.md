@@ -1,42 +1,40 @@
 ---
 id: 20251012-122782
 title: App Start Types Android / Типы запуска приложения Android
-aliases: [App Start Types Android, Типы запуска приложения Android]
+aliases: ["App Start Types Android", "Типы запуска приложения Android"]
 topic: android
-subtopics:
-  - app-startup
-  - lifecycle
-  - performance-memory
+subtopics: [performance-startup, lifecycle, app-startup]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
+  - c-lifecycle
+  - c-viewmodel
   - q-android-app-lag-analysis--android--medium
-  - q-android-build-optimization--android--medium
   - q-android-performance-measurement-tools--android--medium
+  - q-android-build-optimization--android--medium
+sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/app-startup, android/lifecycle, android/performance-memory, difficulty/medium]
+updated: 2025-10-29
+tags: [android/performance-startup, android/lifecycle, android/app-startup, performance, startup, difficulty/medium]
 ---
 # Вопрос (RU)
 > Какие существуют типы запуска Android-приложения и как оптимизировать каждый из них?
 
 ## Ответ (RU)
 
-**Типы запуска приложения** классифицируют старт по состоянию процесса и памяти: холодный (процесс не существует), теплый (процесс жив, Activity пересоздается) и горячий (Activity возобновляется). Оптимизация под каждый тип требует соблюдения бюджетов производительности и строгой дисциплины работы с главным потоком. Понимание [[c-lifecycle]] и [[c-viewmodel]] критично для оптимизации каждого типа запуска.
+**Три типа запуска Android-приложения** различаются по состоянию процесса: холодный (процесс не существует), теплый (процесс жив, Activity пересоздается), горячий (Activity возобновляется). Каждый требует специфичной оптимизации с измеримыми метриками.
 
-### Терминология и метрики
-- **TTID (Time To Initial Display)**: время до отрисовки первого кадра; пользователь видит UI.
-- **TTFD (Time To Full Display)**: время до полной интерактивности UI; сигнализируйте через `reportFullyDrawn()`.
-- **Источники данных**: Android Vitals (prod), Perfetto/Startup Profiler (dev), Macrobenchmark (CI).
+### Метрики запуска
+- **TTID (Time To Initial Display)**: первый кадр UI
+- **TTFD (Time To Full Display)**: полная интерактивность; сигнализируем через `reportFullyDrawn()`
+- **Инструменты**: Android Vitals (prod), Macrobenchmark (CI), Perfetto (dev)
 
 ```kotlin
-// Сигнализация полной готовности UI (TTFD)
+// ✅ Сигнализация полной готовности UI
 class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
@@ -45,73 +43,32 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Холодный старт (процесс не существует)
-- **Цель**: минимизировать работу на критическом пути (запуск процесса → первый кадр).
-- **Тактика**:
-  - Отложите некритичные SDK; отключите авто-инициализацию (используйте `androidx.startup`).
-  - Удалите/объедините лишние `ContentProvider` — каждый добавляет IPC при старте.
-  - Держите `Application.onCreate()` быстрым; IO и вычисления — вне главного потока.
-  - Используйте **baseline profiles** для устранения JIT-прогрева при холодном старте.
+### Холодный старт (Cold Start)
+**Цель**: минимизировать критический путь (запуск процесса → первый кадр).
 
 ```kotlin
-// ✅ Строгий контроль главного потока при старте
+// ✅ Контроль инициализации + отложенная загрузка
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-            .detectAll().penaltyLog().build())
-        initCrashReporting()  // критичная инициализация
-        // ❌ Тяжелая работа откладывается
-        Handler(Looper.getMainLooper()).post { initAnalytics(); initAds() }
-    }
-}
-```
-
-### Теплый старт (процесс жив, Activity пересоздается)
-- **Цель**: восстановить UI/состояние с минимальными затратами.
-- **Тактика**:
-  - Используйте `ViewModel` + `SavedStateHandle` для избежания повторных вычислений.
-  - Сохраняйте только необходимое в `savedInstanceState` (следите за размером!).
-  - Избегайте глубоких иерархий View; предпочитайте ViewBinding/Compose.
-
-```kotlin
-class MainVm(state: SavedStateHandle) : ViewModel() {
-    val uiState = state.getLiveData("ui", defaultState())
-}
-
-class MainActivity : AppCompatActivity() {
-    private val vm by viewModels<MainVm>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        savedInstanceState?.getString("q")?.let { restoreQuery(it) }
-    }
-}
-```
-
-### Горячий старт (Activity возобновляется)
-- **Цель**: держать `onResume` почти пустым; группировать обновления.
-- **Тактика**:
-  - Используйте `lifecycleScope` с `repeatOnLifecycle` для возобновления потоков.
-  - Применяйте debounce для дорогих UI-операций.
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onResume() {
-        super.onResume()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) { refreshIfStale() }
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectAll().penaltyLog().build()
+        )
+        initCrashReporting()  // только критичное
+        // ❌ Тяжелые SDK отложены
+        Handler(Looper.getMainLooper()).post {
+            initAnalytics()
+            initAds()
         }
     }
 }
 ```
 
-### Baseline Profiles (критично для холодного старта)
-- Предкомпилируйте горячие пути (загрузка классов, DI-граф, первый экран), чтобы избежать JIT-прогрева.
-- Генерируйте через Macrobenchmark; поставляйте с `profileinstaller`, чтобы Play мог установить профили.
+**Baseline profiles**: предкомпилируйте горячие пути для устранения JIT-прогрева.
 
 ```kotlin
-// Macrobenchmark для измерения и сбора профилей
+// ✅ Генерация baseline profiles через Macrobenchmark
 class StartupBench {
     @get:Rule val rule = MacrobenchmarkRule()
     @Test fun cold() = rule.measureRepeated(
@@ -123,11 +80,47 @@ class StartupBench {
 }
 ```
 
-### Гарантии и бюджеты
-- **Бюджеты**: Холодный < 500ms, Теплый < 300ms, Горячий < 100ms (зависит от устройства).
-- **Нет disk/network на главном потоке** при старте.
-- **≤ 1 ContentProvider** на критическом пути; контролируйте новые SDK.
-- **CI**: порог macrobench + алерты на регрессии (фейлить сборку при дрейфе).
+### Теплый старт (Warm Start)
+**Цель**: быстрое восстановление UI/состояния.
+
+```kotlin
+// ✅ ViewModel + SavedStateHandle для избежания пересчетов
+class MainVm(state: SavedStateHandle) : ViewModel() {
+    val uiState = state.getLiveData("ui", defaultState())
+}
+
+// ✅ Минимальная работа в onCreate
+class MainActivity : AppCompatActivity() {
+    private val vm by viewModels<MainVm>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        savedInstanceState?.getString("q")?.let { restoreQuery(it) }
+    }
+}
+```
+
+### Горячий старт (Hot Start)
+**Цель**: пустой `onResume`, группировка обновлений.
+
+```kotlin
+// ✅ Lifecycle-aware возобновление потоков
+class MainActivity : AppCompatActivity() {
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                refreshIfStale()
+            }
+        }
+    }
+}
+```
+
+### Бюджеты и гарантии
+- **Целевые бюджеты**: Холодный < 500ms, Теплый < 300ms, Горячий < 100ms
+- **Запреты**: нет disk/network на главном потоке при старте
+- **CI**: macrobench пороги + алерты на регрессии
 
 ---
 
@@ -135,15 +128,16 @@ class StartupBench {
 > What are the Android app start types and how do you optimize each?
 
 ## Answer (EN)
-**App Start Types** categorize launches by memory/process state: cold (no process), warm (process alive, Activity recreated), hot (Activity resumed). Optimize per type with measurable budgets and strict main-thread discipline. Understanding [[c-lifecycle]] and [[c-viewmodel]] helps optimize each start type.
 
-### Terminology and Metrics
-- **TTID (Time To Initial Display)**: first frame drawn; user sees UI.
-- **TTFD (Time To Full Display)**: UI fully interactive; signal via `reportFullyDrawn()`.
-- **Sources**: Android Vitals (prod), Perfetto/Startup Profiler (dev), Macrobenchmark (CI).
+**Three Android app start types** differ by process state: cold (no process), warm (process alive, Activity recreated), hot (Activity resumed). Each requires specific optimization with measurable metrics.
+
+### Startup Metrics
+- **TTID (Time To Initial Display)**: first UI frame
+- **TTFD (Time To Full Display)**: full interactivity; signal via `reportFullyDrawn()`
+- **Tools**: Android Vitals (prod), Macrobenchmark (CI), Perfetto (dev)
 
 ```kotlin
-// Signal full display readiness (TTFD)
+// ✅ Signal full display readiness
 class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
@@ -152,73 +146,32 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Cold Start (no process)
-- **Goal**: minimize critical path work (process start → first frame).
-- **Tactics**:
-  - Defer non-critical SDKs; disable auto-init (use `androidx.startup`).
-  - Remove/merge unnecessary `ContentProvider`s—each adds IPC overhead.
-  - Keep `Application.onCreate()` fast; move IO off main thread.
-  - Ship **baseline profiles** to eliminate cold-start JIT warmup.
+### Cold Start
+**Goal**: minimize critical path (process start → first frame).
 
 ```kotlin
-// ✅ Strict main-thread discipline at startup
+// ✅ Initialization control + deferred loading
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
-            .detectAll().penaltyLog().build())
-        initCrashReporting()  // critical init only
-        // ❌ Heavy work deferred
-        Handler(Looper.getMainLooper()).post { initAnalytics(); initAds() }
-    }
-}
-```
-
-### Warm Start (process alive, Activity recreated)
-- **Goal**: reconstruct UI/state with minimal overhead.
-- **Tactics**:
-  - Use `ViewModel` + `SavedStateHandle` to avoid recomputation.
-  - Persist only essentials in `savedInstanceState` (watch size!).
-  - Avoid deep view hierarchies; prefer ViewBinding/Compose.
-
-```kotlin
-class MainVm(state: SavedStateHandle) : ViewModel() {
-    val uiState = state.getLiveData("ui", defaultState())
-}
-
-class MainActivity : AppCompatActivity() {
-    private val vm by viewModels<MainVm>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        savedInstanceState?.getString("q")?.let { restoreQuery(it) }
-    }
-}
-```
-
-### Hot Start (Activity resumed)
-- **Goal**: keep `onResume` nearly empty; batch updates.
-- **Tactics**:
-  - Use `lifecycleScope` with `repeatOnLifecycle` to resume flows.
-  - Debounce expensive UI operations.
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onResume() {
-        super.onResume()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) { refreshIfStale() }
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectAll().penaltyLog().build()
+        )
+        initCrashReporting()  // critical only
+        // ❌ Heavy SDKs deferred
+        Handler(Looper.getMainLooper()).post {
+            initAnalytics()
+            initAds()
         }
     }
 }
 ```
 
-### Baseline Profiles (critical for cold start)
-- Precompile hot paths (class loading, DI graph, first screen) to reduce JIT overhead.
-- Generate with Macrobenchmark; ship with `profileinstaller` for Play to install.
+**Baseline profiles**: precompile hot paths to eliminate JIT warmup.
 
 ```kotlin
-// Macrobenchmark for measurement and profile generation
+// ✅ Generate baseline profiles via Macrobenchmark
 class StartupBench {
     @get:Rule val rule = MacrobenchmarkRule()
     @Test fun cold() = rule.measureRepeated(
@@ -230,39 +183,77 @@ class StartupBench {
 }
 ```
 
-### Guardrails and Budgets
-- **Budgets**: Cold < 500ms, Warm < 300ms, Hot < 100ms (device-dependent).
-- **No main-thread disk/network** on startup path.
-- **≤ 1 ContentProvider** on critical path; gate new SDKs.
-- **CI**: macrobench thresholds + regression alerts (fail build on drift).
+### Warm Start
+**Goal**: fast UI/state reconstruction.
+
+```kotlin
+// ✅ ViewModel + SavedStateHandle to avoid recomputation
+class MainVm(state: SavedStateHandle) : ViewModel() {
+    val uiState = state.getLiveData("ui", defaultState())
+}
+
+// ✅ Minimal onCreate work
+class MainActivity : AppCompatActivity() {
+    private val vm by viewModels<MainVm>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        savedInstanceState?.getString("q")?.let { restoreQuery(it) }
+    }
+}
+```
+
+### Hot Start
+**Goal**: empty `onResume`, batched updates.
+
+```kotlin
+// ✅ Lifecycle-aware flow resumption
+class MainActivity : AppCompatActivity() {
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                refreshIfStale()
+            }
+        }
+    }
+}
+```
+
+### Budgets and Guardrails
+- **Target budgets**: Cold < 500ms, Warm < 300ms, Hot < 100ms
+- **Prohibitions**: no main-thread disk/network on startup
+- **CI**: macrobench thresholds + regression alerts
 
 ---
 
 ## Follow-ups
 
-- How do you measure TTID vs TTFD in production using Android Vitals?
-- What's the impact of baseline profiles on different startup types?
-- How do you balance startup speed with feature initialization requirements?
-- What are common ContentProvider anti-patterns that slow cold starts?
-- How does process importance level affect warm vs hot start behavior?
+- How does baseline profile generation impact different startup types and what metrics improve most?
+- What's the relationship between ContentProvider initialization order and cold start performance?
+- How do you measure and enforce startup budgets in CI without flaky tests?
+- When should you use App Startup library vs manual lazy initialization for SDK init?
+- How does process death/recreation differ from configuration changes in terms of warm start optimization?
 
 ## References
 
 - [[c-lifecycle]] - Activity and application lifecycle fundamentals
-- [[c-viewmodel]] - State preservation across configuration changes
-- [App Startup Library](https://developer.android.com/topic/libraries/app-startup) - Official startup optimization guide
-- [App Startup Performance](https://developer.android.com/topic/performance/vitals/launch-time) - Android Vitals metrics
+- [[c-viewmodel]] - State preservation and ViewModel scoping
+- https://developer.android.com/topic/performance/vitals/launch-time - App startup performance guide
+- https://developer.android.com/topic/libraries/app-startup - App Startup library documentation
+- https://developer.android.com/topic/performance/baselineprofiles - Baseline profiles implementation guide
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] - Fundamental Android components
-- [[q-android-project-parts--android--easy]] - Project structure basics
+- [[q-android-app-components--android--easy]] - Fundamental Android components understanding
+- [[q-android-lifecycle-callbacks--android--easy]] - Activity lifecycle basics
 
 ### Related (Same Level)
-- [[q-android-performance-measurement-tools--android--medium]] - Profiling and measurement
-- [[q-android-build-optimization--android--medium]] - Build-time optimizations
-- [[q-android-app-lag-analysis--android--medium]] - Frame jank and UI responsiveness
+- [[q-android-performance-measurement-tools--android--medium]] - Profiling and benchmarking tools
+- [[q-android-app-lag-analysis--android--medium]] - Frame rendering and jank analysis
+- [[q-android-build-optimization--android--medium]] - Build-time performance optimization
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]] - Deep dive into Android runtime
+- [[q-android-memory-management--android--hard]] - Process lifecycle and memory optimization
+- [[q-android-anr-debugging--android--hard]] - Main thread blocking and ANR prevention

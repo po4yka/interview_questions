@@ -3,24 +3,18 @@ id: 20251011-220008
 title: Baseline Profiles Optimization / Оптимизация с Baseline Profiles
 aliases: [Baseline Profiles Optimization, Оптимизация с Baseline Profiles]
 topic: android
-subtopics:
-  - gradle
-  - performance-startup
+subtopics: [gradle, performance-startup, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-performance-measurement-tools--android--medium
-  - q-app-startup-optimization--android--medium
+related: [q-android-performance-measurement-tools--android--medium, q-app-startup-optimization--android--medium]
 sources: []
 created: 2025-10-11
-updated: 2025-01-27
-tags: [android/gradle, android/performance-startup, difficulty/medium]
+updated: 2025-10-29
+tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
 ---
 # Вопрос (RU)
 > Как оптимизировать Android-приложение с помощью Baseline Profiles?
@@ -32,19 +26,16 @@ tags: [android/gradle, android/performance-startup, difficulty/medium]
 
 ## Ответ (RU)
 
-### Концепция
+**Baseline Profiles** — механизм AOT-компиляции критических путей кода при установке. ART компилирует указанные методы заранее, минуя JIT, что ускоряет холодный старт на 30-40%.
 
-**Baseline Profiles** — механизм AOT-компиляции критических путей кода при установке приложения. ART компилирует указанные методы и классы заранее, минуя JIT, что ускоряет холодный старт на 30-40% и снижает количество пропущенных кадров.
-
-**Как работает**:
-- Без профиля: Запуск → Интерпретация → JIT по мере использования
-- С профилем: Установка → AOT критического кода → Запуск сразу оптимизирован
+**Без профиля**: Запуск → Интерпретация → JIT по мере использования
+**С профилем**: Установка → AOT критического кода → Быстрый запуск
 
 ### Реализация
 
-**1. Структура модуля профилирования** (baseline-profile/build.gradle.kts):
+**1. Модуль профилирования**:
 ```kotlin
-// ✅ Модуль тестирования для генерации профиля
+// baseline-profile/build.gradle.kts
 plugins {
     id("com.android.test")
     id("androidx.baselineprofile")
@@ -61,31 +52,21 @@ android {
 }
 ```
 
-**2. Генератор профиля**:
+**2. Генератор**:
 ```kotlin
-@RunWith(AndroidJUnit4::class)
-class BaselineProfileGenerator {
-    @get:Rule
-    val rule = BaselineProfileRule()
-
-    @Test
-    fun generate() = rule.collect(
-        packageName = "com.example.app"
-    ) {
-        // ✅ Покрывайте только критические сценарии запуска
-        pressHome()
-        startActivityAndWait()
-
-        device.findObject(By.text("Home")).click()
-        device.findObject(By.text("Profile")).click()
-        // ❌ Не добавляйте редкие user flows
-    }
+@Test
+fun generate() = rule.collect(packageName = "com.example.app") {
+    // ✅ Только критические сценарии
+    pressHome()
+    startActivityAndWait()
+    device.findObject(By.text("Home")).click()
+    // ❌ Избегайте редких user flows
 }
 ```
 
-**3. Конфигурация app модуля**:
+**3. Применение**:
 ```kotlin
-// ✅ Включение применения профиля
+// app/build.gradle.kts
 plugins {
     id("androidx.baselineprofile")
 }
@@ -95,46 +76,49 @@ baselineProfile {
 }
 ```
 
-**4. Мониторинг в production**:
+**4. Верификация**:
 ```kotlin
-// ✅ Проверяйте установку профиля
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-    val status = ProfileVerifier.getCompilationStatusAsync().get()
-    when (status.profileInstallResultCode) {
-        CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> {
-            // Профиль применён
-        }
-        CompilationStatus.RESULT_CODE_NO_PROFILE -> {
-            // Профиль отсутствует
-        }
-    }
+// ✅ Проверка в production
+val status = ProfileVerifier.getCompilationStatusAsync().get()
+when (status.profileInstallResultCode) {
+    CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> { /* OK */ }
+    CompilationStatus.RESULT_CODE_NO_PROFILE -> { /* Fallback to JIT */ }
+}
+```
+
+**5. Бенчмаркинг**:
+```kotlin
+@Test
+fun startup() = benchmarkRule.measureRepeated(
+    packageName = "com.example.app",
+    metrics = listOf(StartupTimingMetric()),
+    startupMode = StartupMode.COLD
+) {
+    pressHome()
+    startActivityAndWait()
 }
 ```
 
 ### Лучшие Практики
 
-- Покрывайте только критические пути (запуск, главный экран)
+- Покрывайте критические пути (запуск, первый рендер)
+- Размер профиля < 200KB
 - Тестируйте на реальных устройствах
-- Держите размер профиля < 200KB
-- Перегенерируйте при крупных изменениях кодовой базы
-- Измеряйте эффект через [[q-android-performance-measurement-tools--android--medium|Macrobenchmark]]
-- Автоматизируйте генерацию в CI/CD
+- Перегенерируйте после рефакторинга
+- Автоматизируйте в CI/CD
 
 ## Answer (EN)
 
-### Concept
+**Baseline Profiles** instruct Android Runtime to AOT-compile critical code paths at install time, bypassing JIT. This achieves 30-40% faster cold startup.
 
-**Baseline Profiles** instruct Android Runtime (ART) to AOT-compile critical code paths at install time, bypassing JIT interpretation. This achieves 30-40% faster cold startup and reduces jank by pre-optimizing hot methods.
-
-**How It Works**:
-- Without Profile: App starts → Interpret code → JIT compile gradually
-- With Profile: Install → AOT compile critical paths → Launch immediately optimized
+**Without Profile**: Launch → Interpret → JIT gradually
+**With Profile**: Install → AOT critical paths → Fast launch
 
 ### Implementation
 
-**1. Profile Generation Module** (baseline-profile/build.gradle.kts):
+**1. Profile Generation Module**:
 ```kotlin
-// ✅ Test module for generating baseline profile
+// baseline-profile/build.gradle.kts
 plugins {
     id("com.android.test")
     id("androidx.baselineprofile")
@@ -151,31 +135,21 @@ android {
 }
 ```
 
-**2. Profile Generator**:
+**2. Generator**:
 ```kotlin
-@RunWith(AndroidJUnit4::class)
-class BaselineProfileGenerator {
-    @get:Rule
-    val rule = BaselineProfileRule()
-
-    @Test
-    fun generate() = rule.collect(
-        packageName = "com.example.app"
-    ) {
-        // ✅ Cover only critical startup flows
-        pressHome()
-        startActivityAndWait()
-
-        device.findObject(By.text("Home")).click()
-        device.findObject(By.text("Profile")).click()
-        // ❌ Don't include rare user journeys
-    }
+@Test
+fun generate() = rule.collect(packageName = "com.example.app") {
+    // ✅ Cover critical flows only
+    pressHome()
+    startActivityAndWait()
+    device.findObject(By.text("Home")).click()
+    // ❌ Avoid rare user journeys
 }
 ```
 
-**3. App Module Configuration**:
+**3. App Configuration**:
 ```kotlin
-// ✅ Enable profile consumption
+// app/build.gradle.kts
 plugins {
     id("androidx.baselineprofile")
 }
@@ -185,71 +159,59 @@ baselineProfile {
 }
 ```
 
-**4. Production Monitoring**:
+**4. Production Verification**:
 ```kotlin
-// ✅ Verify profile installation
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-    val status = ProfileVerifier.getCompilationStatusAsync().get()
-    when (status.profileInstallResultCode) {
-        CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> {
-            // Profile applied successfully
-        }
-        CompilationStatus.RESULT_CODE_NO_PROFILE -> {
-            // Profile missing
-        }
-    }
+// ✅ Check profile installation
+val status = ProfileVerifier.getCompilationStatusAsync().get()
+when (status.profileInstallResultCode) {
+    CompilationStatus.RESULT_CODE_COMPILED_WITH_PROFILE -> { /* OK */ }
+    CompilationStatus.RESULT_CODE_NO_PROFILE -> { /* Fallback to JIT */ }
 }
 ```
 
 **5. Benchmarking**:
 ```kotlin
-@RunWith(AndroidJUnit4::class)
-class StartupBenchmark {
-    @get:Rule
-    val benchmarkRule = MacrobenchmarkRule()
-
-    @Test
-    fun startup() = benchmarkRule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(StartupTimingMetric()),
-        startupMode = StartupMode.COLD
-    ) {
-        pressHome()
-        startActivityAndWait()
-    }
+@Test
+fun startup() = benchmarkRule.measureRepeated(
+    packageName = "com.example.app",
+    metrics = listOf(StartupTimingMetric()),
+    startupMode = StartupMode.COLD
+) {
+    pressHome()
+    startActivityAndWait()
 }
 ```
 
 ### Best Practices
 
-- Focus on critical paths (startup, main screen navigation)
-- Test on real devices for accurate profiling
+- Cover critical paths (startup, first render)
 - Keep profile size < 200KB
-- Regenerate after significant code changes
-- Measure impact with [[q-android-performance-measurement-tools--android--medium|Macrobenchmark]]
-- Automate generation in CI/CD pipeline
+- Test on real devices
+- Regenerate after refactoring
+- Automate in CI/CD
 
 ## Follow-ups
 
 - How does profile size correlate with compile time and app size?
-- What's the trade-off between baseline profiles and R8 full mode optimization?
-- How do you validate profile effectiveness for different Android API levels?
-- What happens when a baseline profile references methods removed during ProGuard/R8 shrinking?
+- What happens when a profile references methods removed during R8 shrinking?
+- Can you combine baseline profiles with R8 full mode optimization?
+- How do you validate profile effectiveness across different API levels?
+- What strategies exist for profiling modularized apps with dynamic feature modules?
 
 ## References
 
+- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-app-startup-optimization--android--medium]]
 - https://developer.android.com/topic/performance/baselineprofiles
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-performance-measurement-tools--android--medium]]
-- [[q-app-startup-optimization--android--medium]]
+- [[q-app-startup-optimization--android--medium]] - Startup optimization fundamentals
 
 ### Related (Same Level)
-- [[q-app-startup-optimization--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]] - Macrobenchmark and profiling tools
 
 ### Advanced (Harder)
-- Understanding ART compilation strategies
-- Analyzing dex2oat compiler output for profile verification
-
+- Understanding ART compilation strategies and dex2oat internals
+- Analyzing compiler output for profile verification

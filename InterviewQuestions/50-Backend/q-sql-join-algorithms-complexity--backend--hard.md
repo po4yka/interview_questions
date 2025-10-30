@@ -4,7 +4,7 @@ title: SQL JOIN algorithms and complexity / Алгоритмы SQL JOIN и их 
 aliases: []
 
 # Classification
-topic: backend
+topic: databases
 subtopics: [databases, sql, algorithms]
 question_kind: theory
 difficulty: hard
@@ -16,19 +16,26 @@ source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
 status: draft
-moc: moc-backend
-related: [q-virtual-tables-disadvantages--backend--medium, q-database-migration-purpose--backend--medium, q-relational-table-unique-data--backend--medium]
-  - c-sql-queries
-  - c-database-performance
-  - c-algorithms
+moc: moc-system-design
+related: [
+  q-virtual-tables-disadvantages--backend--medium,
+  q-database-migration-purpose--backend--medium,
+  q-relational-table-unique-data--backend--medium,
+  c-sql-queries,
+  c-database-performance,
+  c-algorithms
+]
 
 # Timestamps
 created: 2025-10-03
 updated: 2025-10-03
 
 # Tags
-tags: [sql, join, algorithms, complexity, database-performance, difficulty/hard, easy_kotlin, lang/ru, backend]
+tags: [sql, join, algorithms, complexity, database-performance, difficulty/hard, easy_kotlin, lang/ru, topic/databases]
+date created: Friday, October 3rd 2025, 4:45:20 pm
+date modified: Wednesday, October 29th 2025, 2:56:26 pm
 ---
+
 # Question (EN)
 > What does the algorithm for querying data from two tables look like and what is its complexity?
 # Вопрос (RU)

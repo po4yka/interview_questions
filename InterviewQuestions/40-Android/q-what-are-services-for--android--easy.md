@@ -1,178 +1,218 @@
 ---
-id: 20251012-122711139
+id: 20251015-000000
 title: "What Are Services For / Для чего нужны Service"
+aliases: ["What Are Services For", "Для чего нужны Service"]
+
+# Classification
 topic: android
+subtopics: [service, background-execution]
+question_kind: android
 difficulty: easy
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-raise-process-priority--android--medium, q-background-tasks-decision-guide--android--medium, q-how-to-display-svg-string-as-a-vector-file--android--medium]
+related: [c-service, c-workmanager, q-raise-process-priority--android--medium]
+
+# Timestamps
 created: 2025-10-15
-tags: [android/background-execution, android/service, background-execution, background-processing, long-running-tasks, service, difficulty/easy]
+updated: 2025-10-28
+
+# Tags (EN only; no leading #)
+tags: [android/service, android/background-execution, background-execution, service, difficulty/easy]
 ---
+# Вопрос (RU)
+
+> Для чего нужны сервисы (Services)?
 
 # Question (EN)
 
 > What are services for?
 
-# Вопрос (RU)
+---
 
-> Для чего нужны сервисы?
+## Ответ (RU)
+
+**Service** — компонент Android для выполнения длительных фоновых операций без UI.
+
+### Основные сценарии использования
+
+**1. Воспроизведение музыки**
+
+```kotlin
+class MusicService : Service() {
+    // ✅ Правильно: продолжает работу при сворачивании приложения
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        playMusic()
+        return START_STICKY // ❌ Неправильно для музыки — используйте Foreground Service
+    }
+}
+```
+
+**2. Синхронизация данных**
+
+```kotlin
+class DataSyncService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        syncDataWithServer()
+        stopSelf(startId) // ✅ Останавливаем после завершения
+        return START_NOT_STICKY
+    }
+}
+```
+
+**3. Загрузка файлов**
+
+```kotlin
+class DownloadService : Service() {
+    // ❌ Устаревший подход — используйте WorkManager
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        downloadFiles()
+        return START_REDELIVER_INTENT
+    }
+}
+```
+
+### Ключевые характеристики
+
+- Работает в фоне без UI
+- Выполняет длительные операции
+- Может работать после закрытия Activity
+- Ресурсоёмкий — влияет на батарею
+
+### Современная альтернатива
+
+```kotlin
+// ✅ Предпочитайте WorkManager для большинства фоновых задач
+val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueue(workRequest)
+```
+
+**Когда использовать Service:**
+- Foreground Service для музыки/навигации (требует notification)
+- Bound Service для межпроцессного взаимодействия (IPC)
+
+**Когда НЕ использовать:**
+- Простые фоновые задачи → WorkManager
+- Периодические задачи → WorkManager с PeriodicWorkRequest
+- Короткие задачи → Coroutines/Threads в ViewModel
 
 ---
 
 ## Answer (EN)
 
-**Services** are used for **long-running background operations** that don't require user interaction.
+**Service** is an Android component for long-running background operations without UI.
 
-**Key Use Cases:**
+### Primary Use Cases
 
-### 1. Background Tasks
+**1. Music Playback**
 
 ```kotlin
-class DataSyncService : Service() {
+class MusicService : Service() {
+    // ✅ Correct: continues running when app is minimized
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Sync data in background
-        syncDataWithServer()
-        return START_STICKY
+        playMusic()
+        return START_STICKY // ❌ Wrong for music — use Foreground Service
     }
 }
 ```
 
-### 2. Music Playback
+**2. Data Synchronization**
 
 ```kotlin
-class MusicService : Service() {
-    // Plays music even when app is closed
+class DataSyncService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        syncDataWithServer()
+        stopSelf(startId) // ✅ Stop after completion
+        return START_NOT_STICKY
+    }
 }
 ```
 
-### 3. Network Requests
+**3. File Downloads**
 
 ```kotlin
 class DownloadService : Service() {
-    // Download files in background
+    // ❌ Deprecated approach — use WorkManager
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        downloadFiles()
+        return START_REDELIVER_INTENT
+    }
 }
 ```
 
-### 4. Periodic Tasks
+### Key Characteristics
 
-```kotlin
-class LocationService : Service() {
-    // Track location periodically
-}
-```
-
-### Characteristics
-
--   Runs **in background**
--   **No UI**
--   Works when **app closed**
--   **Long-running** operations
-
-### Important Notes
-
-WARNING: Services are **resource-intensive**
-WARNING: Impact **battery life**
-WARNING: Use carefully and minimize usage
-
--   Consider **WorkManager** for modern apps
+- Runs in background without UI
+- Handles long-running operations
+- Can continue after Activity is closed
+- Resource-intensive — impacts battery
 
 ### Modern Alternative
 
 ```kotlin
-// Prefer WorkManager for background tasks
-val workRequest = OneTimeWorkRequestBuilder<MyWorker>().build()
+// ✅ Prefer WorkManager for most background tasks
+val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
----
+**When to use Service:**
+- Foreground Service for music/navigation (requires notification)
+- Bound Service for inter-process communication (IPC)
 
-## Ответ (RU)
-
-**Service** используются для **длительных фоновых операций**, которые не требуют взаимодействия с пользователем.
-
-**Основные сценарии использования:**
-
-### 1. Фоновые задачи
-
-```kotlin
-class DataSyncService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Синхронизация данных в фоне
-        syncDataWithServer()
-        return START_STICKY
-    }
-}
-```
-
-### 2. Воспроизведение музыки
-
-```kotlin
-class MusicService : Service() {
-    // Воспроизводит музыку даже когда приложение закрыто
-}
-```
-
-### 3. Сетевые запросы
-
-```kotlin
-class DownloadService : Service() {
-    // Загрузка файлов в фоне
-}
-```
-
-### 4. Периодические задачи
-
-```kotlin
-class LocationService : Service() {
-    // Отслеживание местоположения периодически
-}
-```
-
-### Характеристики
-
--   Работает **в фоне**
--   **Без UI**
--   Работает когда **приложение закрыто**
--   **Длительные** операции
-
-### Важные замечания
-
-ВНИМАНИЕ: Service **ресурсоёмкие**
-ВНИМАНИЕ: Влияют на **время работы батареи**
-ВНИМАНИЕ: Используйте осторожно и минимизируйте использование
-
--   Рассмотрите **WorkManager** для современных приложений
-
-### Современная альтернатива
-
-```kotlin
-// Предпочитайте WorkManager для фоновых задач
-val workRequest = OneTimeWorkRequestBuilder<MyWorker>().build()
-WorkManager.getInstance(context).enqueue(workRequest)
-```
+**When NOT to use:**
+- Simple background tasks → WorkManager
+- Periodic tasks → WorkManager with PeriodicWorkRequest
+- Short tasks → Coroutines/Threads in ViewModel
 
 ---
 
 ## Follow-ups
 
--   When should you use a Foreground Service vs WorkManager for file uploads?
--   How do Android 8.0+ background execution limits affect Service usage?
--   What's the difference between START_STICKY and START_NOT_STICKY?
+- What's the difference between Foreground Service and Background Service?
+- How do Android 8.0+ background execution limits affect Service usage?
+- When should you use START_STICKY vs START_NOT_STICKY vs START_REDELIVER_INTENT?
+- How does Bound Service differ from Started Service?
+- What are the alternatives to Service for background work in modern Android?
 
 ## References
 
--   `https://developer.android.com/guide/components/services` — Services
--   `https://developer.android.com/guide/background` — Background work overview
+- [[c-service]] — Android Service component concept
+- [[c-workmanager]] — Modern background work API
+- https://developer.android.com/guide/components/services — Official Services guide
+- https://developer.android.com/guide/background — Background work overview
 
 ## Related Questions
 
-### Related (Easy)
+### Prerequisites (Easier)
 
--   [[q-android-services-purpose--android--easy]] - Service
+- [[q-android-app-components--android--easy]] — Main Android components overview
+
+### Related (Same Level)
+
+- [[q-background-tasks-decision-guide--android--medium]] — Choosing the right background API
+- [[q-raise-process-priority--android--medium]] — Process priority management
+- [[q-background-vs-foreground-service--android--medium]] — Service types comparison
 
 ### Advanced (Harder)
 
--   [[q-service-component--android--medium]] - Service
--   [[q-what-are-services-used-for--android--medium]] - Service
--   [[q-foreground-service-types--android--medium]] - Service
+- [[q-foreground-service-types--android--medium]] — Foreground Service types and restrictions

@@ -1,38 +1,63 @@
 ---
 id: 20251012-122711137
 title: "What Are Intents For / Для чего нужны Intent"
+aliases: ["What Are Intents For", "Для чего нужны Intent"]
+
+# Classification
 topic: android
+subtopics: [intents-deeplinks, activity, service]
+question_kind: android
 difficulty: medium
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
 related: [q-annotation-processing--android--medium, q-android-components-besides-activity--android--easy, q-what-is-layout-types-and-when-to-use--android--easy]
+
+# Timestamps
 created: 2025-10-15
-tags:
-  - android
+updated: 2025-10-28
+
+# Tags (EN only; no leading #)
+tags: [android, android/intents-deeplinks, android/activity, android/service, difficulty/medium]
 ---
 
-# What are Intents for?
+# Вопрос (RU)
 
-## Answer (EN)
-Intents are the fundamental messaging objects in Android used for communication between app components. They serve as the primary mechanism for starting activities, services, broadcasting messages, and passing data.
+> Для чего нужны Intent в Android?
 
-### Core Purposes of Intents
+# Question (EN)
 
-#### 1. Starting Activities
+> What are Intents for in Android?
+
+---
+
+## Ответ (RU)
+
+Intent — это объект сообщения в Android для коммуникации между компонентами. Основные назначения: запуск Activity, Service, отправка Broadcast и передача данных между модулями.
+
+### Основные сценарии использования
+
+**1. Запуск Activity**
 
 ```kotlin
-// Start another Activity in the same app
+// Явный Intent — запуск конкретной Activity
 val intent = Intent(this, DetailActivity::class.java)
 startActivity(intent)
 
-// Start Activity with data
+// С передачей данных
 val intent = Intent(this, ProductActivity::class.java).apply {
     putExtra("product_id", 123)
     putExtra("product_name", "Laptop")
 }
 startActivity(intent)
 
-// Start Activity for result
+// Получение результата (современный способ)
 val launcher = registerForActivityResult(
     ActivityResultContracts.StartActivityForResult()
 ) { result ->
@@ -40,429 +65,290 @@ val launcher = registerForActivityResult(
         val data = result.data?.getStringExtra("result")
     }
 }
-
 launcher.launch(Intent(this, PickerActivity::class.java))
 ```
 
-#### 2. Starting Services
+**2. Запуск Service**
 
 ```kotlin
-// Start a Service
+// Запуск фонового сервиса
 val serviceIntent = Intent(this, DownloadService::class.java).apply {
     putExtra("file_url", "https://example.com/file.zip")
 }
-startService(serviceIntent)
+startService(serviceIntent) // ✅ Для одноразовых операций
 
-// Bind to a Service
+// Привязка к Service
 val connection = object : ServiceConnection {
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         val binder = service as MyService.MyBinder
-        val myService = binder.getService()
+        // ✅ Теперь можем вызывать методы сервиса
     }
-
-    override fun onServiceDisconnected(name: ComponentName?) {
-        // Service disconnected
-    }
+    override fun onServiceDisconnected(name: ComponentName?) {}
 }
-
-val bindIntent = Intent(this, MyService::class.java)
-bindService(bindIntent, connection, Context.BIND_AUTO_CREATE)
+bindService(Intent(this, MyService::class.java), connection, Context.BIND_AUTO_CREATE)
 ```
 
-#### 3. Broadcasting Messages
+**3. Отправка Broadcast**
 
 ```kotlin
-// Send broadcast
+// Broadcast для уведомления других компонентов
 val broadcastIntent = Intent("com.example.CUSTOM_ACTION").apply {
     putExtra("data", "Hello World")
 }
-sendBroadcast(broadcastIntent)
+sendBroadcast(broadcastIntent) // ✅ Подходит для внутренних событий
 
-// Send ordered broadcast
-sendOrderedBroadcast(
-    Intent("com.example.ORDER_ACTION"),
-    null // permission
-)
-
-// Send broadcast with permission
+// ❌ Избегайте для конфиденциальных данных без явных разрешений
 sendBroadcast(
     Intent("com.example.PROTECTED_ACTION"),
     "com.example.permission.CUSTOM"
 )
 ```
 
-#### 4. Passing Data Between Components
+**4. Неявные Intent (Implicit)**
+
+Система находит подходящий компонент по action и data:
 
 ```kotlin
-// Simple data types
-val intent = Intent(this, NextActivity::class.java).apply {
-    putExtra("string_key", "Hello")
-    putExtra("int_key", 42)
-    putExtra("boolean_key", true)
-    putExtra("double_key", 3.14)
-}
-
-// Arrays and lists
-intent.putExtra("int_array", intArrayOf(1, 2, 3))
-intent.putStringArrayListExtra("string_list", arrayListOf("a", "b", "c"))
-
-// Bundle for grouping
-val bundle = Bundle().apply {
-    putString("name", "John")
-    putInt("age", 30)
-}
-intent.putExtras(bundle)
-
-// Parcelable objects
-@Parcelize
-data class User(val id: Int, val name: String) : Parcelable
-
-intent.putExtra("user", User(1, "Alice"))
-
-// Receiving data
-class NextActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val stringData = intent.getStringExtra("string_key")
-        val intData = intent.getIntExtra("int_key", 0)
-        val user = intent.getParcelableExtra<User>("user")
-    }
-}
-```
-
-### Types of Intents
-
-#### Explicit Intents
-
-Target specific component by name:
-
-```kotlin
-// Explicit Intent - knows exact component
-val explicitIntent = Intent(this, SpecificActivity::class.java)
-startActivity(explicitIntent)
-
-// Start specific service
-val serviceIntent = Intent(this, MyService::class.java)
-startService(serviceIntent)
-
-// Component name
-val componentIntent = Intent().apply {
-    component = ComponentName(
-        "com.example.app",
-        "com.example.app.MainActivity"
-    )
-}
-startActivity(componentIntent)
-```
-
-#### Implicit Intents
-
-System finds appropriate component based on action and data:
-
-```kotlin
-// Open web browser
+// Открыть URL в браузере
 val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
 startActivity(webIntent)
 
-// Share text
+// Поделиться контентом
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
     type = "text/plain"
     putExtra(Intent.EXTRA_TEXT, "Check this out!")
 }
-startActivity(Intent.createChooser(shareIntent, "Share via"))
+startActivity(Intent.createChooser(shareIntent, "Share via")) // ✅ Всегда показывает диалог выбора
 
-// Make phone call
-val callIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1234567890"))
-startActivity(callIntent)
-
-// Open email app
-val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-    data = Uri.parse("mailto:")
-    putExtra(Intent.EXTRA_EMAIL, arrayOf("user@example.com"))
-    putExtra(Intent.EXTRA_SUBJECT, "Hello")
+// Проверка доступности Intent
+fun safeStartActivity(intent: Intent) {
+    if (intent.resolveActivity(packageManager) != null) { // ✅ Предотвращает краши
+        startActivity(intent)
+    } else {
+        Toast.makeText(this, "No app can handle this", Toast.LENGTH_SHORT).show()
+    }
 }
-startActivity(emailIntent)
+```
 
-// Take photo
-val photoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-cameraLauncher.launch(photoIntent)
+### Компоненты Intent
 
-// Pick image from gallery
-val galleryIntent = Intent(Intent.ACTION_PICK).apply {
-    type = "image/*"
+```kotlin
+val intent = Intent().apply {
+    action = Intent.ACTION_VIEW            // 1. Действие
+    data = Uri.parse("https://example.com") // 2. Данные
+    addCategory(Intent.CATEGORY_BROWSABLE)  // 3. Категория
+    type = "text/plain"                     // 4. MIME-тип
+    putExtra("key", "value")                // 5. Дополнительные данные
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK   // 6. Флаги поведения
 }
-galleryLauncher.launch(galleryIntent)
+```
 
-// Open map location
-val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:37.7749,-122.4194"))
-startActivity(mapIntent)
+### Intent Flags (важные)
+
+```kotlin
+// ✅ Очистить стек выше целевой Activity
+intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+// ✅ Не создавать новый экземпляр, если уже на вершине стека
+intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+// ✅ Комбинация: сбросить задачу и начать новую (для логаута)
+intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+```
+
+### PendingIntent
+
+Intent, который может быть выполнен другим приложением (для уведомлений, алармов):
+
+```kotlin
+val notificationIntent = Intent(this, MainActivity::class.java)
+val pendingIntent = PendingIntent.getActivity(
+    this, 0, notificationIntent,
+    PendingIntent.FLAG_IMMUTABLE // ✅ Обязателен с API 31+
+)
+
+val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+    .setContentIntent(pendingIntent)
+    .build()
+```
+
+### Когда использовать что
+
+| Тип Intent | Применение | Пример |
+|-----------|-----------|--------|
+| **Explicit** | Запуск компонента вашего приложения | `Intent(this, DetailActivity::class.java)` |
+| **Implicit** | Запуск системного компонента или другого приложения | `Intent.ACTION_VIEW` |
+| **PendingIntent** | Отложенное выполнение через другое приложение | Уведомления, алармы |
+
+## Answer (EN)
+
+Intent is a messaging object in Android for component communication. Core purposes: starting Activities, Services, broadcasting messages, and passing data between modules.
+
+### Main Use Cases
+
+**1. Starting Activities**
+
+```kotlin
+// Explicit Intent - start specific Activity
+val intent = Intent(this, DetailActivity::class.java)
+startActivity(intent)
+
+// With data
+val intent = Intent(this, ProductActivity::class.java).apply {
+    putExtra("product_id", 123)
+    putExtra("product_name", "Laptop")
+}
+startActivity(intent)
+
+// Get result (modern approach)
+val launcher = registerForActivityResult(
+    ActivityResultContracts.StartActivityForResult()
+) { result ->
+    if (result.resultCode == RESULT_OK) {
+        val data = result.data?.getStringExtra("result")
+    }
+}
+launcher.launch(Intent(this, PickerActivity::class.java))
+```
+
+**2. Starting Services**
+
+```kotlin
+// Start background service
+val serviceIntent = Intent(this, DownloadService::class.java).apply {
+    putExtra("file_url", "https://example.com/file.zip")
+}
+startService(serviceIntent) // ✅ For one-time operations
+
+// Bind to Service
+val connection = object : ServiceConnection {
+    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        val binder = service as MyService.MyBinder
+        // ✅ Now can call service methods
+    }
+    override fun onServiceDisconnected(name: ComponentName?) {}
+}
+bindService(Intent(this, MyService::class.java), connection, Context.BIND_AUTO_CREATE)
+```
+
+**3. Broadcasting Messages**
+
+```kotlin
+// Broadcast to notify other components
+val broadcastIntent = Intent("com.example.CUSTOM_ACTION").apply {
+    putExtra("data", "Hello World")
+}
+sendBroadcast(broadcastIntent) // ✅ Good for internal events
+
+// ❌ Avoid for sensitive data without explicit permissions
+sendBroadcast(
+    Intent("com.example.PROTECTED_ACTION"),
+    "com.example.permission.CUSTOM"
+)
+```
+
+**4. Implicit Intents**
+
+System finds appropriate component based on action and data:
+
+```kotlin
+// Open URL in browser
+val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
+startActivity(webIntent)
+
+// Share content
+val shareIntent = Intent(Intent.ACTION_SEND).apply {
+    type = "text/plain"
+    putExtra(Intent.EXTRA_TEXT, "Check this out!")
+}
+startActivity(Intent.createChooser(shareIntent, "Share via")) // ✅ Always shows chooser dialog
+
+// Check Intent availability
+fun safeStartActivity(intent: Intent) {
+    if (intent.resolveActivity(packageManager) != null) { // ✅ Prevents crashes
+        startActivity(intent)
+    } else {
+        Toast.makeText(this, "No app can handle this", Toast.LENGTH_SHORT).show()
+    }
+}
 ```
 
 ### Intent Components
 
 ```kotlin
 val intent = Intent().apply {
-    // 1. Action - what to do
-    action = Intent.ACTION_VIEW
-
-    // 2. Data - data to operate on
-    data = Uri.parse("https://example.com")
-
-    // 3. Category - additional info about action
-    addCategory(Intent.CATEGORY_BROWSABLE)
-
-    // 4. Type - MIME type of data
-    type = "text/plain"
-
-    // 5. Component - specific component to use
-    component = ComponentName(packageName, "com.example.TargetActivity")
-
-    // 6. Extras - additional data
-    putExtra("key", "value")
-
-    // 7. Flags - control behavior
-    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    action = Intent.ACTION_VIEW            // 1. Action
+    data = Uri.parse("https://example.com") // 2. Data
+    addCategory(Intent.CATEGORY_BROWSABLE)  // 3. Category
+    type = "text/plain"                     // 4. MIME type
+    putExtra("key", "value")                // 5. Extra data
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK   // 6. Behavior flags
 }
 ```
 
-### Intent Flags
-
-Control Activity behavior:
+### Intent Flags (important)
 
 ```kotlin
-// Start Activity in new task
-intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-// Clear all activities above target
+// ✅ Clear all activities above target
 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
 
-// Don't create new instance if already on top
+// ✅ Don't create new instance if already on top
 intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
-// Clear task and start new
+// ✅ Combination: clear task and start new (for logout)
 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-
-// Bring existing Activity to front
-intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-
-// Don't add to back stack
-intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-
-// Multiple flags
-intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-               Intent.FLAG_ACTIVITY_CLEAR_TOP or
-               Intent.FLAG_ACTIVITY_SINGLE_TOP
-```
-
-### Common Intent Actions
-
-```kotlin
-// View actions
-Intent.ACTION_VIEW          // Display data
-Intent.ACTION_EDIT          // Edit data
-Intent.ACTION_PICK          // Pick item from data
-
-// Communication
-Intent.ACTION_SEND          // Send data
-Intent.ACTION_SENDTO        // Send to someone
-Intent.ACTION_DIAL          // Dial phone number
-Intent.ACTION_CALL          // Call phone number (requires permission)
-
-// Media
-Intent.ACTION_IMAGE_CAPTURE     // Take photo
-Intent.ACTION_VIDEO_CAPTURE     // Record video
-MediaStore.ACTION_IMAGE_CAPTURE // Take photo (alternative)
-
-// System
-Intent.ACTION_MAIN          // Main entry point
-Intent.ACTION_SEARCH        // Perform search
-Intent.ACTION_WEB_SEARCH    // Web search
-Intent.ACTION_SETTINGS      // System settings
-```
-
-### Intent Filters
-
-Declare what Intents a component can handle:
-
-```xml
-<!-- In AndroidManifest.xml -->
-<activity android:name=".ViewerActivity">
-    <intent-filter>
-        <!-- Can view web pages -->
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" />
-    </intent-filter>
-
-    <intent-filter>
-        <!-- Can handle custom scheme -->
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <data android:scheme="myapp" android:host="product" />
-    </intent-filter>
-</activity>
-```
-
-### Checking Intent Availability
-
-```kotlin
-fun safeStartActivity(intent: Intent) {
-    if (intent.resolveActivity(packageManager) != null) {
-        startActivity(intent)
-    } else {
-        Toast.makeText(this, "No app can handle this action", Toast.LENGTH_SHORT).show()
-    }
-}
-
-// Query all apps that can handle intent
-val resolveInfoList = packageManager.queryIntentActivities(
-    intent,
-    PackageManager.MATCH_DEFAULT_ONLY
-)
-
-if (resolveInfoList.isNotEmpty()) {
-    startActivity(intent)
-}
 ```
 
 ### PendingIntent
 
-Intent that can be executed by another app:
+Intent that can be executed by another app (for notifications, alarms):
 
 ```kotlin
-// For notification
 val notificationIntent = Intent(this, MainActivity::class.java)
 val pendingIntent = PendingIntent.getActivity(
-    this,
-    0,
-    notificationIntent,
-    PendingIntent.FLAG_IMMUTABLE
+    this, 0, notificationIntent,
+    PendingIntent.FLAG_IMMUTABLE // ✅ Required on API 31+
 )
 
 val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-    .setContentTitle("Title")
-    .setContentText("Text")
     .setContentIntent(pendingIntent)
     .build()
-
-// For alarm
-val alarmIntent = Intent(this, AlarmReceiver::class.java)
-val alarmPendingIntent = PendingIntent.getBroadcast(
-    this,
-    0,
-    alarmIntent,
-    PendingIntent.FLAG_IMMUTABLE
-)
-
-val alarmManager = getSystemService(AlarmManager::class.java)
-alarmManager.setExact(
-    AlarmManager.RTC_WAKEUP,
-    triggerTime,
-    alarmPendingIntent
-)
 ```
 
-### Intent vs Bundle
+### When to Use What
 
-| Aspect | Intent | Bundle |
-|--------|--------|--------|
-| Purpose | Start components + carry data | Carry data only |
-| Can start components | Yes | No |
-| Contains extras | Yes (as Bundle) | N/A |
-| Has action/data | Yes | No |
-| Typical use | Component communication | Data passing, state saving |
-
-### Practical Examples
-
-```kotlin
-// Example 1: Social media share
-fun shareContent(text: String, imageUri: Uri?) {
-    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-        type = if (imageUri != null) "image/*" else "text/plain"
-        putExtra(Intent.EXTRA_TEXT, text)
-        imageUri?.let { putExtra(Intent.EXTRA_STREAM, it) }
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    startActivity(Intent.createChooser(shareIntent, "Share via"))
-}
-
-// Example 2: Open external app
-fun openInBrowser(url: String) {
-    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    if (browserIntent.resolveActivity(packageManager) != null) {
-        startActivity(browserIntent)
-    }
-}
-
-// Example 3: Custom deep link
-fun handleDeepLink(uri: Uri) {
-    val intent = Intent(Intent.ACTION_VIEW, uri).apply {
-        setPackage(packageName) // Force this app
-    }
-    startActivity(intent)
-}
-
-// Example 4: Result from Activity
-val pickContactLauncher = registerForActivityResult(
-    ActivityResultContracts.PickContact()
-) { contactUri: Uri? ->
-    contactUri?.let {
-        // Handle selected contact
-        val cursor = contentResolver.query(it, null, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val name = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-            }
-        }
-    }
-}
-
-fun pickContact() {
-    pickContactLauncher.launch(null)
-}
-```
-
-### Summary
-
-Intents are used for:
-1. **Starting Activities** - Navigate between screens
-2. **Starting Services** - Launch background operations
-3. **Broadcasting** - Send messages to multiple receivers
-4. **Passing data** - Transfer information between components
-5. **External app integration** - Share content, open URLs, etc.
-
-**Two types**:
-- **Explicit**: Targets specific component by name
-- **Implicit**: System finds suitable component based on action/data
-
-## Ответ (RU)
-Intents нужны для взаимодействия компонентов приложения: запуска Activity, Service, передачи данных или отправки Broadcast. Они являются основным способом коммуникации между модулями и приложениями в Android
-
-## Related Topics
-- Intent filters
-- Explicit vs Implicit Intents
-- PendingIntent
-- Activity launch modes
-- Deep linking
+| Intent Type | Use Case | Example |
+|-----------|----------|---------|
+| **Explicit** | Launch component in your app | `Intent(this, DetailActivity::class.java)` |
+| **Implicit** | Launch system component or other app | `Intent.ACTION_VIEW` |
+| **PendingIntent** | Deferred execution by another app | Notifications, alarms |
 
 ---
+
+## Follow-ups
+
+- How do Intent Filters work in AndroidManifest.xml?
+- What's the difference between startActivity() and startActivityForResult() (deprecated)?
+- When should you use LocalBroadcastManager vs system broadcasts?
+- What are the security implications of implicit Intents?
+- How do deep links and app links relate to Intents?
+
+## References
+
+- [[c-android-components]] - Overview of Android components
+- [[c-activity-lifecycle]] - Activity lifecycle and Intent handling
+- [Android Developer Guide: Intents and Intent Filters](https://developer.android.com/guide/components/intents-filters)
+- [Common Intents Reference](https://developer.android.com/guide/components/intents-common)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-architecture-components-libraries--android--easy]] - Fundamentals
-- [[q-what-is-the-main-application-execution-thread--android--easy]] - Fundamentals
-- [[q-what-unifies-android-components--android--easy]] - Fundamentals
+- [[q-android-components-besides-activity--android--easy]] - Understanding Android components
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread and component communication
 
 ### Related (Medium)
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Fundamentals
-- [[q-intent-filters-android--android--medium]] - Fundamentals
-- [[q-anr-application-not-responding--android--medium]] - Fundamentals
-- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Fundamentals
-- [[q-multiple-manifests-multimodule--android--medium]] - Fundamentals
+- [[q-intent-filters-android--android--medium]] - How apps declare Intent handling
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Component architecture
 
 ### Advanced (Harder)
-- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - Fundamentals
-- [[q-kotlin-context-receivers--android--hard]] - Fundamentals
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - System component management

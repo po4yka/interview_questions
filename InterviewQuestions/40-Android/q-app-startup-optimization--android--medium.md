@@ -1,9 +1,9 @@
 ---
 id: 20251011-220003
 title: App Startup Optimization / Оптимизация запуска приложения
-aliases: [App Startup Optimization, Оптимизация запуска приложения]
+aliases: ["App Startup Optimization", "Оптимизация запуска приложения"]
 topic: android
-subtopics: [app-startup, performance-memory]
+subtopics: [performance-startup, app-startup, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-android-performance-measurement-tools--android--medium, q-app-start-types-android--android--medium, q-app-startup-library--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/app-startup, android/performance-memory, difficulty/medium]
+updated: 2025-10-29
+tags: [android/performance-startup, android/app-startup, android/performance-memory, difficulty/medium]
 ---
 # Вопрос (RU)
 > Как оптимизировать время запуска Android-приложения?

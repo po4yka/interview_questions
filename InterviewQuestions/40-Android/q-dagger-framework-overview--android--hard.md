@@ -1,31 +1,21 @@
 ---
 id: 20251020-200000
 title: Dagger Framework Overview / Обзор фреймворка Dagger
-aliases: [Dagger Framework Overview, Обзор фреймворка Dagger]
+aliases: ["Dagger Framework Overview", "Обзор фреймворка Dagger"]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt, architecture-mvvm, architecture-clean]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-dagger-build-time-optimization--android--medium
-  - q-dagger-custom-scopes--android--hard
-  - q-dagger-field-injection--android--medium
+related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-custom-scopes--android--hard]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/di-hilt, dagger, dependency-injection, difficulty/hard, framework-overview, hilt]
-source: https://dagger.dev/
-source_note: Dagger official documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:18 pm
+updated: 2025-10-29
+tags: [android/di-hilt, android/architecture-mvvm, android/architecture-clean, dagger, dependency-injection, hilt, difficulty/hard]
+sources: [https://dagger.dev/]
 ---
-
 # Вопрос (RU)
 > Что известно про фреймворк Dagger?
 
@@ -34,233 +24,226 @@ date modified: Saturday, October 25th 2025, 4:52:18 pm
 
 ## Ответ (RU)
 
-Dagger — это мощный фреймворк для внедрения зависимостей (Dependency Injection), разработанный для автоматизации и упрощения процесса управления зависимостями в приложениях.
-
-### Теория: Принципы Dagger
-
-**Основные принципы:**
-- Компиляционная генерация кода вместо runtime рефлексии
-- Статическая типизация зависимостей
-- Потокобезопасность по умолчанию
-- Проверка зависимостей на этапе компиляции
-
-**Архитектурные преимущества:**
-- Улучшенная модульность приложения
-- Упрощение тестирования через мокирование
-- Повышение масштабируемости кода
-- Снижение связанности между компонентами
+[[c-dagger]] — это compile-time фреймворк для [[c-dependency-injection]], генерирующий код на этапе компиляции вместо использования reflection. Основной принцип: статическая типизация зависимостей с проверкой графа зависимостей до запуска приложения.
 
 ### Ключевые Компоненты
 
-**1. @Inject аннотация**
+**@Inject — Constructor Injection**
 ```kotlin
+// ✅ Предпочтительный способ: Dagger автоматически создает экземпляр
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
     private val database: UserDatabase
-) {
-    // Dagger автоматически создает экземпляр
+)
+
+// ❌ Field injection — менее предпочтительно (поздняя инициализация)
+class MainActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
 }
 ```
 
-**2. @Module классы**
+**@Module + @Provides — Сложные Зависимости**
 ```kotlin
 @Module
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideApiService(): ApiService {
-        return Retrofit.Builder()
+    fun provideRetrofit(okHttp: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .client(okHttp)
             .baseUrl("https://api.example.com/")
             .build()
-            .create(ApiService::class.java)
-    }
 }
 ```
 
-**3. @Component интерфейсы**
+**@Component — Граф Зависимостей**
 ```kotlin
+@Singleton
 @Component(modules = [NetworkModule::class, DatabaseModule::class])
 interface AppComponent {
     fun inject(activity: MainActivity)
-    fun inject(fragment: UserFragment)
+
+    // ✅ Лучше: явное предоставление через интерфейс
+    fun userRepository(): UserRepository
 }
 ```
 
-### Преимущества Над Другими DI Решениями
+**Scopes — Управление Жизненным Циклом**
+```kotlin
+@Singleton  // Один экземпляр на весь граф
+class ApiClient @Inject constructor()
 
-**Статическая генерация кода:**
-- Нет runtime overhead от рефлексии
-- Проверка типов на этапе компиляции
-- Лучшая производительность
+@ActivityScoped  // Один экземпляр на Activity
+class ViewModel @Inject constructor()
 
-**Thread Safety:**
-- Автоматическая потокобезопасность
-- Гарантированная инициализация
-- Отсутствие race conditions
+// ❌ Без scope — создается новый экземпляр при каждом запросе
+```
 
-**Compile-time проверки:**
-- Обнаружение циклических зависимостей
-- Проверка доступности зависимостей
-- Валидация scope'ов
+### [[c-hilt]] — Упрощенный Dagger для Android
 
-### Hilt — Современный Подход
-
-Hilt упрощает использование Dagger в Android:
+Hilt автоматизирует boilerplate-код и предоставляет стандартные компоненты:
 
 ```kotlin
+// ✅ Hilt автоматически создает компоненты и внедряет зависимости
+@HiltAndroidApp
+class App : Application()
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 }
 
-@HiltAndroidApp
-class MyApplication : Application()
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel()
 ```
 
-**Hilt автоматизирует:**
-- Создание компонентов по scope'ам
-- Управление жизненными циклами
-- Интеграцию с Android компонентами
+**Стандартные Scopes в Hilt:**
+- `@Singleton` — на уровне Application
+- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/ViewModel
+- `@ViewModelScoped` — ViewModel
+- `@FragmentScoped` — Fragment
 
-### Архитектурные Паттерны
+### Преимущества Compile-Time DI
 
-**Dependency Graph:**
+**Производительность:**
+- Нет runtime reflection overhead
 - Граф зависимостей строится на этапе компиляции
-- Автоматическое разрешение зависимостей
-- Оптимизация порядка создания объектов
+- Zero runtime initialization cost
 
-**Scope Management:**
-- Контроль жизненного цикла объектов
-- Изоляция состояний между scope'ами
-- Управление памятью
+**Безопасность:**
+- Compile-time проверка циклических зависимостей
+- Гарантия существования всех зависимостей
+- Thread-safe singleton creation
 
-**Modular Architecture:**
-- Разделение на логические модули
-- Переиспользование зависимостей
-- Тестируемость компонентов
+**Тестируемость:**
+- Простая замена модулей для тестов
+- Изолированное тестирование компонентов
+- Mock-friendly архитектура
 
 ## Answer (EN)
 
-[[c-dagger]] is a powerful [[c-dependency-injection]] framework designed to automate and simplify dependency management in applications.
-
-### Theory: Dagger Principles
-
-**Core Principles:**
-- Compile-time code generation instead of runtime reflection
-- Static typing of dependencies
-- Thread safety by default
-- Compile-time dependency validation
-
-**Architectural Benefits:**
-- Improved application modularity
-- Simplified testing through mocking
-- Enhanced code scalability
-- Reduced coupling between components
+[[c-dagger]] is a compile-time [[c-dependency-injection]] framework that generates code during compilation instead of using reflection. Core principle: static dependency typing with dependency graph validation before runtime.
 
 ### Key Components
 
-**1. @Inject Annotation**
+**@Inject — Constructor Injection**
 ```kotlin
+// ✅ Preferred: Dagger automatically creates instance
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
     private val database: UserDatabase
-) {
-    // Dagger automatically creates instance
+)
+
+// ❌ Field injection — less preferred (late initialization)
+class MainActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
 }
 ```
 
-**2. @Module Classes**
+**@Module + @Provides — Complex Dependencies**
 ```kotlin
 @Module
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideApiService(): ApiService {
-        return Retrofit.Builder()
+    fun provideRetrofit(okHttp: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .client(okHttp)
             .baseUrl("https://api.example.com/")
             .build()
-            .create(ApiService::class.java)
-    }
 }
 ```
 
-**3. @Component Interfaces**
+**@Component — Dependency Graph**
 ```kotlin
+@Singleton
 @Component(modules = [NetworkModule::class, DatabaseModule::class])
 interface AppComponent {
     fun inject(activity: MainActivity)
-    fun inject(fragment: UserFragment)
+
+    // ✅ Better: explicit provision via interface
+    fun userRepository(): UserRepository
 }
 ```
 
-### Advantages Over Other DI Solutions
+**Scopes — Lifecycle Management**
+```kotlin
+@Singleton  // One instance across entire graph
+class ApiClient @Inject constructor()
 
-**Static Code Generation:**
-- No runtime overhead from reflection
-- Compile-time type checking
-- Better performance
+@ActivityScoped  // One instance per Activity
+class ViewModel @Inject constructor()
 
-**Thread Safety:**
-- Automatic thread safety
-- Guaranteed initialization
-- No race conditions
+// ❌ No scope — new instance created on each request
+```
 
-**Compile-time Validation:**
-- Cyclic dependency detection
-- Dependency availability checking
-- Scope validation
+### [[c-hilt]] — Simplified Dagger for Android
 
-### Hilt — Modern Approach
-
-[[c-hilt]] simplifies Dagger usage in Android:
+Hilt automates boilerplate and provides standard components:
 
 ```kotlin
+// ✅ Hilt automatically creates components and injects dependencies
+@HiltAndroidApp
+class App : Application()
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 }
 
-@HiltAndroidApp
-class MyApplication : Application()
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel()
 ```
 
-**Hilt automates:**
-- Component creation by scopes
-- Lifecycle management
-- Android component integration
+**Standard Hilt Scopes:**
+- `@Singleton` — Application level
+- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/ViewModel
+- `@ViewModelScoped` — ViewModel
+- `@FragmentScoped` — Fragment
 
-### Architectural Patterns
+### Compile-Time DI Advantages
 
-**Dependency Graph:**
+**Performance:**
+- No runtime reflection overhead
 - Dependency graph built at compile time
-- Automatic dependency resolution
-- Object creation order optimization
+- Zero runtime initialization cost
 
-**Scope Management:**
-- Object lifecycle control
-- State isolation between scopes
-- Memory management
+**Safety:**
+- Compile-time cyclic dependency detection
+- Guaranteed existence of all dependencies
+- Thread-safe singleton creation
 
-**Modular Architecture:**
-- Logical module separation
-- Dependency reusability
-- Component testability
+**Testability:**
+- Simple module replacement for tests
+- Isolated component testing
+- Mock-friendly architecture
 
 ## Follow-ups
 
-- How does Dagger's compile-time code generation work internally?
-- What are the performance benefits of Dagger over reflection-based DI?
-- How does Hilt simplify Dagger usage in Android applications?
+- How does Dagger detect and report cyclic dependencies at compile time?
+- What are the trade-offs between constructor injection and field injection?
+- How do custom scopes work in Dagger, and when should you create them?
+- What happens if you inject a non-scoped dependency into a scoped component?
+- How does Hilt's component hierarchy map to Android component lifecycles?
+
+## References
+
+- [[c-dagger]] — Dagger framework concepts
+- [[c-dependency-injection]] — Dependency Injection pattern
+- [[c-hilt]] — Hilt wrapper for Android
+- https://dagger.dev/ — Official Dagger documentation
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-dagger-field-injection--android--medium]]
+- [[q-dagger-field-injection--android--medium]] — Understanding field vs constructor injection
 
 ### Related (Same Level)
-- [[q-dagger-build-time-optimization--android--medium]]
+- [[q-dagger-build-time-optimization--android--medium]] — Optimizing Dagger build times
 
 ### Advanced (Harder)
-- [[q-dagger-custom-scopes--android--hard]]
+- [[q-dagger-custom-scopes--android--hard]] — Creating and managing custom scopes

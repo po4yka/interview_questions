@@ -12,7 +12,7 @@ status: draft
 moc: moc-android
 related: [c-encryption, c-android-keystore, q-android-runtime-permissions--android--medium, q-android-network-security--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-29
 sources: []
 tags: [android/keystore-crypto, android/permissions, android/network-security-config, security, owasp, difficulty/medium]
 ---
@@ -23,32 +23,30 @@ tags: [android/keystore-crypto, android/permissions, android/network-security-co
 
 ## Ответ (RU)
 
-**Концепция**: Безопасность Android-приложения требует многоуровневой защиты (defense-in-depth): защита сети, данных, кода и runtime-среды. Ключевой принцип — каждый уровень обеспечивает защиту, даже если другие скомпрометированы.
+**Концепция**: Безопасность Android требует defense-in-depth — многоуровневой защиты сети, данных, кода и runtime. Если один слой скомпрометирован, остальные продолжают защищать приложение.
 
-### 1. Защита сетевого взаимодействия
+### 1. Защита сетевых соединений
 
-**Certificate Pinning** — привязка к конкретным сертификатам предотвращает MITM-атаки:
+**Certificate Pinning** предотвращает MITM-атаки:
 
 ```kotlin
-val certificatePinner = CertificatePinner.Builder()
-    .add("api.example.com", "sha256/BASE64_HASH=")
+val pinner = CertificatePinner.Builder()
+    .add("api.example.com", "sha256/ABC123...")  // ✅ Привязка к сертификату
     .build()
 
 val client = OkHttpClient.Builder()
-    .certificatePinner(certificatePinner)
-    // ✅ Принудительное использование HTTPS
+    .certificatePinner(pinner)
     .build()
 ```
 
-**Network Security Config** (XML) для системной защиты:
+**Network Security Config** запрещает HTTP:
 
 ```xml
 <network-security-config>
-    <!-- ✅ Запрет cleartext (HTTP) -->
-    <domain-config cleartextTrafficPermitted="false">
+    <domain-config cleartextTrafficPermitted="false">  <!-- ✅ Только HTTPS -->
         <domain includeSubdomains="true">api.example.com</domain>
         <pin-set>
-            <pin digest="SHA-256">BASE64_HASH=</pin>
+            <pin digest="SHA-256">ABC123...</pin>
         </pin-set>
     </domain-config>
 </network-security-config>
@@ -56,11 +54,11 @@ val client = OkHttpClient.Builder()
 
 ### 2. Защита данных
 
-**Android Keystore + EncryptedSharedPreferences** для безопасного хранения:
+**EncryptedSharedPreferences** с hardware-backed ключами:
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
-    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)  // ✅ AES-256-GCM
     .build()
 
 val prefs = EncryptedSharedPreferences.create(
@@ -68,22 +66,20 @@ val prefs = EncryptedSharedPreferences.create(
     PrefKeyEncryptionScheme.AES256_SIV,
     PrefValueEncryptionScheme.AES256_GCM
 )
-
-// ✅ Автоматическое шифрование/дешифрование
 prefs.edit().putString("token", authToken).apply()
 ```
 
-**Важно**: Ключи хранятся в hardware-backed Keystore (если поддерживается), защищены от извлечения.
+Ключи хранятся в Android Keystore и не могут быть извлечены.
 
 ### 3. Обфускация кода
 
-**R8/ProGuard** затрудняет реверс-инжиниринг:
+**R8** затрудняет реверс-инжиниринг:
 
 ```gradle
 android {
     buildTypes {
         release {
-            minifyEnabled true  // ✅ Включить обфускацию
+            minifyEnabled true  // ✅ Обфускация + удаление неиспользуемого кода
             proguardFiles(
                 getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.pro'
@@ -93,41 +89,24 @@ android {
 }
 ```
 
-### 4. Runtime-защита
-
-Обнаружение компрометации устройства:
+### 4. Защита от SQL-инъекций
 
 ```kotlin
-fun isDeviceCompromised(): Boolean {
-    // ✅ Проверка root
-    val rootPaths = listOf("/sbin/su", "/system/bin/su")
-    val hasRoot = rootPaths.any { File(it).exists() }
-
-    // ✅ Проверка отладчика
-    val isDebugged = Debug.isDebuggerConnected()
-
-    return hasRoot || isDebugged
-}
-```
-
-### 5. Валидация входных данных
-
-```kotlin
-// ✅ Параметризованные запросы (защита от SQL-инъекций)
+// ✅ Параметризованные запросы
 @Query("SELECT * FROM users WHERE email = :email")
 suspend fun findUser(email: String): User?
 
-// ❌ ОПАСНО: конкатенация строк
+// ❌ Конкатенация строк — уязвимость
 // db.rawQuery("SELECT * FROM users WHERE email = '$email'")
 ```
 
-### 6. Критические моменты
+### 5. Критические правила
 
-- **Permissions**: Запрашивать минимально необходимые, проверять runtime
-- **Biometric Auth**: Использовать BiometricPrompt для чувствительных операций
+- **Permissions**: Минимальный набор, проверка во время выполнения
 - **Logging**: Никогда не логировать токены, пароли, PII
-- **Session Management**: Таймауты, очистка токенов при выходе
-- **Dependencies**: Регулярные обновления, сканирование уязвимостей
+- **Biometric Auth**: BiometricPrompt для критичных операций
+- **Root Detection**: Ограничить функциональность на скомпрометированных устройствах
+- **Dependencies**: Регулярное обновление, сканирование уязвимостей
 
 ---
 
@@ -137,32 +116,30 @@ suspend fun findUser(email: String): User?
 
 ## Answer (EN)
 
-**Concept**: Android app security requires defense-in-depth: protecting network, data, code, and runtime. Key principle — each layer provides protection even if others are compromised.
+**Concept**: Android security requires defense-in-depth — layered protection of network, data, code, and runtime. If one layer is compromised, others continue to protect the app.
 
 ### 1. Network Security
 
-**Certificate Pinning** prevents MITM attacks by validating server certificates:
+**Certificate Pinning** prevents MITM attacks:
 
 ```kotlin
-val certificatePinner = CertificatePinner.Builder()
-    .add("api.example.com", "sha256/BASE64_HASH=")
+val pinner = CertificatePinner.Builder()
+    .add("api.example.com", "sha256/ABC123...")  // ✅ Pin to certificate
     .build()
 
 val client = OkHttpClient.Builder()
-    .certificatePinner(certificatePinner)
-    // ✅ Enforce HTTPS only
+    .certificatePinner(pinner)
     .build()
 ```
 
-**Network Security Config** (XML) for system-level protection:
+**Network Security Config** disables HTTP:
 
 ```xml
 <network-security-config>
-    <!-- ✅ Disable cleartext (HTTP) -->
-    <domain-config cleartextTrafficPermitted="false">
+    <domain-config cleartextTrafficPermitted="false">  <!-- ✅ HTTPS only -->
         <domain includeSubdomains="true">api.example.com</domain>
         <pin-set>
-            <pin digest="SHA-256">BASE64_HASH=</pin>
+            <pin digest="SHA-256">ABC123...</pin>
         </pin-set>
     </domain-config>
 </network-security-config>
@@ -170,11 +147,11 @@ val client = OkHttpClient.Builder()
 
 ### 2. Data Protection
 
-**Android Keystore + EncryptedSharedPreferences** for secure storage:
+**EncryptedSharedPreferences** with hardware-backed keys:
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
-    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)  // ✅ AES-256-GCM
     .build()
 
 val prefs = EncryptedSharedPreferences.create(
@@ -182,22 +159,20 @@ val prefs = EncryptedSharedPreferences.create(
     PrefKeyEncryptionScheme.AES256_SIV,
     PrefValueEncryptionScheme.AES256_GCM
 )
-
-// ✅ Automatic encryption/decryption
 prefs.edit().putString("token", authToken).apply()
 ```
 
-**Important**: Keys stored in hardware-backed Keystore (when supported), protected from extraction.
+Keys are stored in Android Keystore and cannot be extracted.
 
 ### 3. Code Obfuscation
 
-**R8/ProGuard** makes reverse engineering difficult:
+**R8** makes reverse engineering difficult:
 
 ```gradle
 android {
     buildTypes {
         release {
-            minifyEnabled true  // ✅ Enable obfuscation
+            minifyEnabled true  // ✅ Obfuscation + dead code removal
             proguardFiles(
                 getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.pro'
@@ -207,55 +182,38 @@ android {
 }
 ```
 
-### 4. Runtime Protection
-
-Detecting device compromise:
+### 4. SQL Injection Prevention
 
 ```kotlin
-fun isDeviceCompromised(): Boolean {
-    // ✅ Check for root
-    val rootPaths = listOf("/sbin/su", "/system/bin/su")
-    val hasRoot = rootPaths.any { File(it).exists() }
-
-    // ✅ Check for debugger
-    val isDebugged = Debug.isDebuggerConnected()
-
-    return hasRoot || isDebugged
-}
-```
-
-### 5. Input Validation
-
-```kotlin
-// ✅ Parameterized queries (SQL injection protection)
+// ✅ Parameterized queries
 @Query("SELECT * FROM users WHERE email = :email")
 suspend fun findUser(email: String): User?
 
-// ❌ DANGEROUS: string concatenation
+// ❌ String concatenation — vulnerability
 // db.rawQuery("SELECT * FROM users WHERE email = '$email'")
 ```
 
-### 6. Critical Considerations
+### 5. Critical Rules
 
-- **Permissions**: Request minimal necessary, validate at runtime
-- **Biometric Auth**: Use BiometricPrompt for sensitive operations
+- **Permissions**: Minimal set, runtime validation
 - **Logging**: Never log tokens, passwords, PII
-- **Session Management**: Timeouts, token clearing on logout
+- **Biometric Auth**: BiometricPrompt for sensitive operations
+- **Root Detection**: Limit functionality on compromised devices
 - **Dependencies**: Regular updates, vulnerability scanning
 
 ## Follow-ups
 
 - How do you rotate certificate pins without breaking existing app versions?
-- What's the difference between R8 obfuscation and code encryption?
-- How to balance security and performance for biometric authentication?
-- When should you reject rooted devices vs. just warning users?
-- How to implement secure key backup for encrypted data recovery?
+- What's the difference between R8 obfuscation and native code protection?
+- When should you reject rooted devices vs. warning users?
+- How to implement secure key rotation for EncryptedSharedPreferences?
+- What are the trade-offs between SafetyNet and Play Integrity API?
 
 ## References
 
 - [[c-encryption]] — Encryption fundamentals
 - [[c-android-keystore]] — Android Keystore system
-- [OWASP Mobile Top 10](https://owasp.org/www-project-mobile-top-10/)
+- [OWASP Mobile Security](https://owasp.org/www-project-mobile-top-10/)
 - [Android Security Best Practices](https://developer.android.com/topic/security/best-practices)
 
 ## Related Questions
@@ -266,8 +224,8 @@ suspend fun findUser(email: String): User?
 
 ### Related
 - [[q-android-runtime-permissions--android--medium]] — Permission handling patterns
-- [[q-android-network-security--android--medium]] — Network security in depth
-- [[q-android-data-encryption--android--medium]] — Encryption strategies
+- [[q-android-network-security--android--medium]] — Network security configuration
+- [[q-android-data-encryption--android--medium]] — Data encryption strategies
 
 ### Advanced
 - [[q-android-safetynet-attestation--android--hard]] — Device integrity verification

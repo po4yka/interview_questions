@@ -3,17 +3,17 @@ id: 20251012-122773
 title: Android Service Types / Типы Service в Android
 aliases: ["Android Service Types", "Типы Service в Android"]
 topic: android
-subtopics: [background-execution, service]
+subtopics: [service, background-execution]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy, q-android-architectural-patterns--android--medium, q-android-async-primitives--android--easy]
+related: [q-android-app-components--android--easy, q-android-async-primitives--android--easy, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
-updated: 2025-10-27
-tags: [android/background-execution, android/service, difficulty/easy]
+updated: 2025-10-29
+tags: [android/service, android/background-execution, difficulty/easy]
 sources: []
 ---
 # Вопрос (RU)
@@ -26,126 +26,120 @@ sources: []
 
 ## Ответ (RU)
 
-Android предоставляет три типа Service для выполнения фоновых операций:
-
-**1. Started Service (Запущенный сервис)**
-Выполняется независимо в фоне. Запускается через `startService()` и работает пока не будет явно остановлен или уничтожен системой.
-
-**2. Foreground Service (Приоритетный сервис)**
-Выполняет заметные для пользователя операции с постоянной нотификацией. Имеет высокий приоритет и защищен от уничтожения системой. Требует permission и notification.
-
-```kotlin
-class MusicService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(NOTIFICATION_ID, notification) // ✅ Required for foreground
-        // Perform work
-        return START_STICKY
-    }
-}
-```
-
-**3. Bound Service (Связанный сервис)**
-Предоставляет клиент-серверный интерфейс для взаимодействия между компонентами. Живет только пока есть привязанные клиенты. Используется для IPC внутри приложения.
-
-```kotlin
-class LocalService : Service() {
-    private val binder = LocalBinder()
-
-    inner class LocalBinder : Binder() {
-        fun getService(): LocalService = this@LocalService
-    }
-
-    override fun onBind(intent: Intent): IBinder = binder
-}
-```
-
-**Сравнение типов:**
-
-| Тип | Notification | Жизненный цикл | Когда использовать |
-|-----|-------------|----------------|-------------------|
-| Started | Нет | Независимый | Синхронизация данных, загрузка файлов |
-| Foreground | Да (обязательно) | Независимый | Музыка, навигация, отслеживание |
-| Bound | Нет | Зависит от клиентов | Локальное IPC, API для Activity |
-
-**Важные ограничения (Android 8.0+):**
-- Background execution limits требуют использования Foreground Service для long-running tasks
-- WorkManager предпочтителен для deferrable background work
-- Started Services могут быть killed системой при нехватке памяти
-
-## Answer (EN)
-
-Android provides three types of Services for background operations:
+Android предоставляет три типа Service:
 
 **1. Started Service**
-Runs independently in the background. Launched via `startService()` and continues until explicitly stopped or killed by the system.
+Запускается через `startService()` и работает независимо до явной остановки или уничтожения системой при нехватке памяти.
 
 **2. Foreground Service**
-Performs user-visible operations with a persistent notification. Has high priority and is protected from system termination. Requires permission and notification.
+Выполняет видимую пользователю работу с обязательной нотификацией. Защищен от уничтожения системой. Требует permission и тип foreground service.
 
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(NOTIFICATION_ID, notification) // ✅ Required for foreground
-        // Perform work
-        return START_STICKY
+        startForeground(NOTIFICATION_ID, createNotification()) // ✅ Обязательно
+        return START_STICKY // ✅ Перезапуск при убийстве
     }
 }
 ```
 
 **3. Bound Service**
-Provides client-server interface for component interaction. Lives only while clients are bound. Used for IPC within the app.
+Предоставляет клиент-серверный интерфейс. Живет пока есть привязанные клиенты.
 
 ```kotlin
 class LocalService : Service() {
-    private val binder = LocalBinder()
-
     inner class LocalBinder : Binder() {
-        fun getService(): LocalService = this@LocalService
+        fun getService() = this@LocalService // ✅ Прямой доступ
     }
 
-    override fun onBind(intent: Intent): IBinder = binder
+    override fun onBind(intent: Intent): IBinder = LocalBinder()
 }
 ```
 
-**Type Comparison:**
+**Ключевые отличия:**
+
+| Тип | Notification | Жизненный цикл | Когда использовать |
+|-----|-------------|----------------|-------------------|
+| Started | — | Независимый | Одноразовая фоновая работа |
+| Foreground | Обязательна | Независимый | Музыка, навигация, загрузка |
+| Bound | — | Зависит от клиентов | IPC между компонентами |
+
+**Ограничения:**
+- Android 8.0+ требует Foreground Service для длительных задач
+- WorkManager предпочтителен для отложенной работы
+- Started Service может быть убит системой
+
+## Answer (EN)
+
+Android provides three Service types:
+
+**1. Started Service**
+Launched via `startService()` and runs independently until explicitly stopped or killed by system under memory pressure.
+
+**2. Foreground Service**
+Performs user-visible work with mandatory notification. Protected from system termination. Requires permission and foreground service type.
+
+```kotlin
+class MusicService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(NOTIFICATION_ID, createNotification()) // ✅ Required
+        return START_STICKY // ✅ Restart after killed
+    }
+}
+```
+
+**3. Bound Service**
+Provides client-server interface. Lives only while clients are bound.
+
+```kotlin
+class LocalService : Service() {
+    inner class LocalBinder : Binder() {
+        fun getService() = this@LocalService // ✅ Direct access
+    }
+
+    override fun onBind(intent: Intent): IBinder = LocalBinder()
+}
+```
+
+**Key Differences:**
 
 | Type | Notification | Lifecycle | Use Case |
 |------|-------------|-----------|----------|
-| Started | No | Independent | Data sync, file upload |
-| Foreground | Yes (required) | Independent | Music, navigation, tracking |
-| Bound | No | Client-dependent | Local IPC, API for Activity |
+| Started | — | Independent | One-shot background work |
+| Foreground | Required | Independent | Music, navigation, download |
+| Bound | — | Client-dependent | IPC between components |
 
-**Important Constraints (Android 8.0+):**
-- Background execution limits require Foreground Service for long-running tasks
-- WorkManager is preferred for deferrable background work
-- Started Services can be killed by system under memory pressure
+**Constraints:**
+- Android 8.0+ requires Foreground Service for long-running tasks
+- WorkManager is preferred for deferrable work
+- Started Service can be killed by system
 
 ---
 
 ## Follow-ups
 
-- When should you use WorkManager instead of a Service?
 - What are the Foreground Service types and required permissions?
-- How do background execution limits affect Service behavior?
+- How does `START_STICKY` differ from `START_NOT_STICKY`?
+- When should you use WorkManager instead of a Service?
+- How do you implement a hybrid Service (both started and bound)?
+- What happens to a Bound Service when all clients unbind?
 
 ## References
 
+- [[c-service]] - Service lifecycle and implementation
+- [[c-lifecycle]] - Android component lifecycle
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/guide/components/foreground-services
-- [[c-service]]
-- [[c-lifecycle]]
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-app-components--android--easy]] - Android app components overview
+- [[q-android-app-components--android--easy]] - Core Android components
 
 ### Related
-- [[q-android-async-primitives--android--easy]] - Async execution primitives
-- [[q-android-architectural-patterns--android--medium]] - Architecture patterns
+- [[q-android-async-primitives--android--easy]] - Async execution options
+- Foreground Service types and permissions (Android 14+)
 
 ### Advanced
-- Background execution optimization strategies
-- Service lifecycle management in multi-module apps
+- [[q-android-architectural-patterns--android--medium]] - MVVM and service integration
+- Service lifecycle in multi-process architectures

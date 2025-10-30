@@ -1,44 +1,227 @@
 ---
 id: 20251012-122711169
-title: "What Is Viewstub / Что такое ViewStub"
+title: "What Is ViewStub / Что такое ViewStub"
+aliases: ["ViewStub", "ViewStub Android"]
 topic: android
+subtopics: [ui-views, performance-rendering]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-room-relations-embedded--room--medium, q-api-rate-limiting-throttling--android--medium, q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]
+related: [q-what-is-known-about-methods-that-redraw-view--android--medium, q-recyclerview-sethasfixedsize--android--easy]
 created: 2025-10-15
-tags: [viewstub, ui, performance, lazy-loading, optimization, difficulty/medium]
+updated: 2025-10-29
+sources: []
+tags: [android/ui-views, android/performance-rendering, viewstub, lazy-loading, optimization, difficulty/medium]
 ---
 
-# What is ViewStub?
+# Вопрос (RU)
 
-**Russian**: Что такое ViewStub?
+> Что такое ViewStub и когда его следует использовать?
 
-## Answer (EN)
-### Definition
+# Question (EN)
 
-A **ViewStub** is an **invisible, zero-sized View** that can be used to **lazily inflate layout resources at runtime**.
+> What is ViewStub and when should you use it?
 
-When a ViewStub is made visible, or when `inflate()` is invoked, the layout resource is inflated. The ViewStub then **replaces itself** in its parent with the inflated View or Views. Therefore, the ViewStub exists in the view hierarchy until `setVisibility(int)` or `inflate()` is invoked.
+---
 
-### Why Use ViewStub?
+## Ответ (RU)
 
-ViewStub is used for **performance optimization** when you have:
-- Complex layouts that are **not always needed**
-- UI elements that are **conditionally displayed**
-- Heavy views that should only be created **when necessary**
+**ViewStub** — это невидимый View нулевого размера, который используется для ленивой инфляции layout-ресурсов во время выполнения.
 
-**Benefits**:
-- - Reduces initial layout inflation time
-- - Saves memory (views not created until needed)
-- - Improves app startup performance
-- - Better for layouts with conditional sections
+### Основная концепция
 
-### Basic XML Example
+При вызове `inflate()` или `setVisibility(View.VISIBLE)` происходит:
+1. Инфляция указанного layout-ресурса
+2. ViewStub **заменяет себя** созданным View в родительской иерархии
+3. ViewStub перестает существовать (повторная инфляция невозможна)
+
+### Зачем нужен ViewStub
+
+ViewStub оптимизирует производительность для:
+- Сложных layout, которые не всегда нужны
+- Условно отображаемых UI элементов (ошибки, детали, премиум-функции)
+- Тяжелых View, которые должны создаваться только при необходимости
+
+**Преимущества**:
+- Ускоряет startup приложения
+- Экономит память до момента инфляции
+- Уменьшает время начальной инфляции layout
+
+### Базовый пример
 
 ```xml
+<!-- activity_main.xml -->
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Всегда видимый контент -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Main Content" />
+
+    <!-- ViewStub - инфлятится только при необходимости -->
+    <ViewStub
+        android:id="@+id/detailsStub"
+        android:inflatedId="@+id/detailsLayout"
+        android:layout="@layout/details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+```
+
+**Ключевые атрибуты**:
+- `android:id` — ID самого ViewStub (используется до инфляции)
+- `android:inflatedId` — ID созданного view (используется после инфляции)
+- `android:layout` — ресурс layout для инфляции
+
+### Инфляция ViewStub
+
+```kotlin
+// ✅ Правильно - получаем ссылку на созданный view
+val stub = findViewById<ViewStub>(R.id.detailsStub)
+val inflatedView = stub.inflate()  // ViewStub заменяется, возвращается view
+
+// Работаем с созданным view
+inflatedView.findViewById<TextView>(R.id.detailsText).text = "Details loaded"
+```
+
+```kotlin
+// ❌ Неправильно - попытка использовать ViewStub после инфляции
+val stub = findViewById<ViewStub>(R.id.detailsStub)
+stub.inflate()
+stub.inflate()  // Crash! ViewStub уже удален
+```
+
+### Типичный паттерн использования
+
+```kotlin
+class ProductActivity : AppCompatActivity() {
+    private var detailsView: View? = null
+
+    private fun showDetails() {
+        if (detailsView == null) {
+            // ✅ Инфлятим один раз, кешируем ссылку
+            val stub = findViewById<ViewStub>(R.id.detailsStub)
+            detailsView = stub.inflate()
+        }
+        detailsView?.visibility = View.VISIBLE
+    }
+
+    private fun hideDetails() {
+        detailsView?.visibility = View.GONE  // ✅ Скрываем, но не удаляем
+    }
+}
+```
+
+### Сценарии использования
+
+**1. Состояния ошибок**
+```xml
+<ViewStub
+    android:id="@+id/errorStub"
+    android:inflatedId="@+id/errorView"
+    android:layout="@layout/error_state"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+```
+
+**2. Раскрываемые секции**
+```kotlin
+// Показываем детали только когда пользователь нажал кнопку
+binding.btnShowDetails.setOnClickListener {
+    if (detailsView == null) {
+        detailsView = binding.detailsStub.inflate()
+    }
+    detailsView?.visibility = View.VISIBLE
+}
+```
+
+**3. Премиум-функции**
+```kotlin
+if (user.isPremium) {
+    val premiumView = findViewById<ViewStub>(R.id.premiumStub).inflate()
+    setupPremiumFeatures(premiumView)
+}
+```
+
+### ViewStub vs Include
+
+| Критерий | ViewStub | Include |
+|----------|----------|---------|
+| Инфляция | Ленивая (по требованию) | Немедленная |
+| Память до использования | Минимальная | Полная |
+| Startup time | Быстрее | Медленнее |
+| Повторная инфляция | Невозможна | — |
+| Use case | Условные view | Переиспользуемые layout |
+
+```xml
+<!-- Include - инфлятится сразу, даже если скрыт -->
+<include
+    layout="@layout/details"
+    android:visibility="gone" />  <!-- Все равно создан в памяти -->
+
+<!-- ViewStub - не создан до вызова inflate() -->
+<ViewStub
+    android:id="@+id/detailsStub"
+    android:layout="@layout/details" />  <!-- Нулевая стоимость -->
+```
+
+### Best Practices
+
+**DO**:
+- Используйте для сложных, условно отображаемых layout
+- Кешируйте ссылку на созданный view для повторного показа/скрытия
+- Применяйте для error/empty states, expandable sections, premium features
+
+**DON'T**:
+- Не используйте для всегда видимого контента
+- Не пытайтесь инфлятить ViewStub дважды
+- Не используйте для простых layout (overhead не оправдан)
+
+### Резюме
+
+ViewStub — легковесный механизм ленивой инфляции для оптимизации производительности и памяти:
+- Инфлятится только при необходимости
+- Удаляется из иерархии после инфляции
+- Идеален для условного UI
+- Однократная инфляция (требует кеширования ссылки)
+
+---
+
+## Answer (EN)
+
+**ViewStub** is an invisible, zero-sized View used for lazy inflation of layout resources at runtime.
+
+### Core Concept
+
+When `inflate()` or `setVisibility(View.VISIBLE)` is called:
+1. The specified layout resource is inflated
+2. ViewStub **replaces itself** with the inflated View in the parent hierarchy
+3. ViewStub ceases to exist (re-inflation is impossible)
+
+### Why Use ViewStub
+
+ViewStub optimizes performance for:
+- Complex layouts that aren't always needed
+- Conditionally displayed UI elements (errors, details, premium features)
+- Heavy views that should only be created when necessary
+
+**Benefits**:
+- Improves app startup time
+- Saves memory until inflation
+- Reduces initial layout inflation time
+
+### Basic Example
+
+```xml
+<!-- activity_main.xml -->
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -51,490 +234,158 @@ ViewStub is used for **performance optimization** when you have:
 
     <!-- ViewStub - inflated only when needed -->
     <ViewStub
-        android:id="@+id/stub"
-        android:inflatedId="@+id/subTree"
-        android:layout="@layout/mySubTree"
-        android:layout_width="120dp"
-        android:layout_height="40dp" />
-
-</LinearLayout>
-```
-
-The ViewStub defined above can be found using the id `"stub"`. After inflation of the layout resource `"mySubTree"`, the ViewStub is **removed from its parent**. The View created by inflating the layout resource `"mySubTree"` can be found using the id `"subTree"`, specified by the `inflatedId` property. The inflated View is finally assigned a width of **120dp** and a height of **40dp**.
-
-### Layout to Inflate (mySubTree.xml)
-
-```xml
-<!-- res/layout/mySubTree.xml -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <ImageView
-        android:id="@+id/detailImage"
+        android:id="@+id/detailsStub"
+        android:inflatedId="@+id/detailsLayout"
+        android:layout="@layout/details"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:id="@+id/detailText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp" />
-
+        android:layout_height="wrap_content" />
 </LinearLayout>
-```
-
-### How to Inflate ViewStub
-
-The preferred way to perform the inflation of the layout resource:
-
-```kotlin
-// Find the ViewStub
-val stub: ViewStub = findViewById(R.id.stub)
-
-// Inflate and get reference to inflated view
-val inflated: View = stub.inflate()
-
-// Now you can access views from the inflated layout
-val detailImage = inflated.findViewById<ImageView>(R.id.detailImage)
-val detailText = inflated.findViewById<TextView>(R.id.detailText)
-```
-
-When `inflate()` is invoked:
-1. The ViewStub is **replaced** by the inflated View
-2. The inflated View is **returned**
-3. This lets applications get a reference to the inflated View without executing an extra `findViewById()`
-
-### Alternative Inflation Method
-
-You can also inflate by making the ViewStub visible:
-
-```kotlin
-val stub: ViewStub = findViewById(R.id.stub)
-
-// Inflate by setting visibility to VISIBLE
-stub.visibility = View.VISIBLE
-
-// Access inflated content using inflatedId
-val inflatedView: View = findViewById(R.id.subTree)
-```
-
-WARNING: **Important**: After inflation, you cannot use the ViewStub reference anymore. You must use the `inflatedId` to find the inflated view.
-
-### ViewStub Attributes
-
-```xml
-<ViewStub
-    android:id="@+id/stub"
-
-    <!-- ID of the inflated view (used to find it after inflation) -->
-    android:inflatedId="@+id/inflated_layout"
-
-    <!-- Layout resource to inflate -->
-    android:layout="@layout/details_layout"
-
-    <!-- ViewStub dimensions (will be ignored, inflated view uses its own) -->
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
 ```
 
 **Key attributes**:
-- `android:id` - ID of the ViewStub itself (used before inflation)
-- `android:inflatedId` - ID of the inflated view (used after inflation)
-- `android:layout` - Layout resource to inflate
-- `android:layout_width/height` - Applied to the inflated view
+- `android:id` — ID of ViewStub itself (used before inflation)
+- `android:inflatedId` — ID of inflated view (used after inflation)
+- `android:layout` — Layout resource to inflate
 
-### Practical Example: Expandable Details Section
+### Inflating ViewStub
+
+```kotlin
+// ✅ Correct - get reference to inflated view
+val stub = findViewById<ViewStub>(R.id.detailsStub)
+val inflatedView = stub.inflate()  // ViewStub replaced, returns view
+
+// Work with inflated view
+inflatedView.findViewById<TextView>(R.id.detailsText).text = "Details loaded"
+```
+
+```kotlin
+// ❌ Wrong - attempting to use ViewStub after inflation
+val stub = findViewById<ViewStub>(R.id.detailsStub)
+stub.inflate()
+stub.inflate()  // Crash! ViewStub already removed
+```
+
+### Common Usage Pattern
 
 ```kotlin
 class ProductActivity : AppCompatActivity() {
-
-    private var isDetailsVisible = false
-    private var inflatedDetailsView: View? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product)
-
-        // Show details button
-        findViewById<Button>(R.id.btnShowDetails).setOnClickListener {
-            toggleDetails()
-        }
-    }
-
-    private fun toggleDetails() {
-        if (isDetailsVisible) {
-            // Hide details
-            inflatedDetailsView?.visibility = View.GONE
-            isDetailsVisible = false
-        } else {
-            // Show details
-            if (inflatedDetailsView == null) {
-                // First time - inflate ViewStub
-                val stub = findViewById<ViewStub>(R.id.detailsStub)
-                inflatedDetailsView = stub.inflate()
-
-                // Setup inflated view
-                setupDetailsView(inflatedDetailsView!!)
-            } else {
-                // Already inflated - just show it
-                inflatedDetailsView?.visibility = View.VISIBLE
-            }
-            isDetailsVisible = true
-        }
-    }
-
-    private fun setupDetailsView(view: View) {
-        view.findViewById<TextView>(R.id.detailsTitle).text = "Product Details"
-        view.findViewById<TextView>(R.id.detailsDescription).text = "Description..."
-    }
-}
-```
-
-XML Layout:
-
-```xml
-<!-- activity_product.xml -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <!-- Always visible content -->
-    <TextView
-        android:id="@+id/productName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Product Name"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/productPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="$99.99"
-        android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/btnShowDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show Details" />
-
-    <!-- ViewStub - details inflated only when button clicked -->
-    <ViewStub
-        android:id="@+id/detailsStub"
-        android:inflatedId="@+id/detailsLayout"
-        android:layout="@layout/product_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
-```
-
-### Common Use Cases
-
-**1. Error/Empty States**
-```xml
-<!-- Main content -->
-<RecyclerView
-    android:id="@+id/recyclerView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-
-<!-- Error state - only shown when error occurs -->
-<ViewStub
-    android:id="@+id/errorStub"
-    android:inflatedId="@+id/errorView"
-    android:layout="@layout/error_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-```
-
-```kotlin
-// Show error state
-fun showError(message: String) {
-    recyclerView.visibility = View.GONE
-
-    if (errorView == null) {
-        val stub = findViewById<ViewStub>(R.id.errorStub)
-        errorView = stub.inflate()
-    }
-
-    errorView?.visibility = View.VISIBLE
-    errorView?.findViewById<TextView>(R.id.errorMessage)?.text = message
-}
-```
-
-**2. Advanced Options/Settings**
-```xml
-<!-- Basic settings always visible -->
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <SwitchCompat
-        android:id="@+id/notificationsSwitch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enable Notifications" />
-
-    <!-- Advanced settings - loaded only if user clicks "Advanced" -->
-    <ViewStub
-        android:id="@+id/advancedSettingsStub"
-        android:inflatedId="@+id/advancedSettings"
-        android:layout="@layout/advanced_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
-```
-
-**3. Premium Features**
-```kotlin
-// Show premium features only for premium users
-if (user.isPremium) {
-    val premiumStub = findViewById<ViewStub>(R.id.premiumFeaturesStub)
-    val premiumView = premiumStub.inflate()
-    setupPremiumFeatures(premiumView)
-}
-```
-
-### ViewStub vs Include vs Merge
-
-| Feature | ViewStub | Include | Merge |
-|---------|----------|---------|-------|
-| **Inflation** | Lazy (on demand) | Immediate | Immediate |
-| **Performance** | Better (if not always needed) | Standard | Better (flattens hierarchy) |
-| **Runtime control** | - Yes | - No | - No |
-| **Memory usage** | Lower (until inflated) | Higher | Higher |
-| **Use case** | Conditional views | Reusable layouts | Reduce view hierarchy |
-
-**Example comparison**:
-
-```xml
-<!-- Include - inflated immediately -->
-<include
-    layout="@layout/details_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:visibility="gone" /> <!-- Still inflated, just hidden -->
-
-<!-- ViewStub - not inflated until needed -->
-<ViewStub
-    android:id="@+id/detailsStub"
-    android:layout="@layout/details_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" /> <!-- Not inflated at all -->
-```
-
-### Best Practices
-
-- **Do**:
-- Use ViewStub for complex layouts that are conditionally shown
-- Use for error states, empty states, loading indicators
-- Use for premium/advanced features shown to subset of users
-- Cache reference to inflated view if you need to show/hide multiple times
-
-- **Don't**:
-- Use for views that are always visible
-- Try to inflate the same ViewStub twice (will crash)
-- Keep reference to ViewStub after inflation
-- Use if the layout is simple and quick to inflate
-
-### Checking If ViewStub Is Inflated
-
-```kotlin
-class MyActivity : AppCompatActivity() {
     private var detailsView: View? = null
 
     private fun showDetails() {
         if (detailsView == null) {
-            // Not inflated yet
+            // ✅ Inflate once, cache reference
             val stub = findViewById<ViewStub>(R.id.detailsStub)
             detailsView = stub.inflate()
-            setupDetails(detailsView!!)
         }
-
-        // Show inflated view
         detailsView?.visibility = View.VISIBLE
     }
 
     private fun hideDetails() {
-        // Only hide if already inflated
-        detailsView?.visibility = View.GONE
+        detailsView?.visibility = View.GONE  // ✅ Hide, don't remove
     }
 }
 ```
 
-### Advanced: Inflate with Custom LayoutInflater
+### Use Cases
 
+**1. Error States**
+```xml
+<ViewStub
+    android:id="@+id/errorStub"
+    android:inflatedId="@+id/errorView"
+    android:layout="@layout/error_state"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+```
+
+**2. Expandable Sections**
 ```kotlin
-val stub = findViewById<ViewStub>(R.id.stub)
-
-// Set custom layout inflater
-stub.layoutInflater = LayoutInflater.from(customContext)
-
-// Inflate with custom inflater
-val inflated = stub.inflate()
+// Show details only when user clicks button
+binding.btnShowDetails.setOnClickListener {
+    if (detailsView == null) {
+        detailsView = binding.detailsStub.inflate()
+    }
+    detailsView?.visibility = View.VISIBLE
+}
 ```
 
-### Performance Impact Example
+**3. Premium Features**
+```kotlin
+if (user.isPremium) {
+    val premiumView = findViewById<ViewStub>(R.id.premiumStub).inflate()
+    setupPremiumFeatures(premiumView)
+}
+```
 
-Without ViewStub:
+### ViewStub vs Include
+
+| Criterion | ViewStub | Include |
+|-----------|----------|---------|
+| Inflation | Lazy (on demand) | Immediate |
+| Memory before use | Minimal | Full |
+| Startup time | Faster | Slower |
+| Re-inflation | Impossible | — |
+| Use case | Conditional views | Reusable layouts |
+
 ```xml
-<!-- All views created immediately, even if not visible -->
-<LinearLayout>
-    <TextView android:text="Main" />
-    <include layout="@layout/complex_details" /> <!-- Inflated immediately -->
-    <include layout="@layout/complex_settings" /> <!-- Inflated immediately -->
-    <include layout="@layout/complex_help" /> <!-- Inflated immediately -->
-</LinearLayout>
-```
-**Result**: Slower startup, higher memory usage
+<!-- Include - inflated immediately, even if hidden -->
+<include
+    layout="@layout/details"
+    android:visibility="gone" />  <!-- Still created in memory -->
 
-With ViewStub:
-```xml
-<!-- Only main content inflated initially -->
-<LinearLayout>
-    <TextView android:text="Main" />
-    <ViewStub android:id="@+id/detailsStub" android:layout="@layout/complex_details" />
-    <ViewStub android:id="@+id/settingsStub" android:layout="@layout/complex_settings" />
-    <ViewStub android:id="@+id/helpStub" android:layout="@layout/complex_help" />
-</LinearLayout>
+<!-- ViewStub - not created until inflate() called -->
+<ViewStub
+    android:id="@+id/detailsStub"
+    android:layout="@layout/details" />  <!-- Zero cost -->
 ```
-**Result**: Faster startup, lower initial memory usage
+
+### Best Practices
+
+**DO**:
+- Use for complex, conditionally displayed layouts
+- Cache reference to inflated view for repeated show/hide
+- Apply for error/empty states, expandable sections, premium features
+
+**DON'T**:
+- Don't use for always-visible content
+- Don't attempt to inflate ViewStub twice
+- Don't use for simple layouts (overhead not justified)
 
 ### Summary
 
-**ViewStub** is a lightweight, invisible, zero-sized view used for **lazy inflation** of layouts:
-
-- - **Performance**: Only inflates when needed
-- - **Memory**: Saves memory for unused views
-- - **Use cases**: Error states, conditional features, expandable sections
-- WARNING: **One-time**: Can only be inflated once
-- WARNING: **Replacement**: ViewStub is removed after inflation
--  **Best practice**: Cache inflated view reference for show/hide
-
-**When to use**:
-- Complex layouts shown conditionally
-- Error/empty/loading states
-- Advanced settings or premium features
-- Any UI that isn't always needed
-
-**When NOT to use**:
-- Always-visible content
-- Simple layouts (overhead not worth it)
-- Views you need to inflate multiple times
-
-## Ответ (Russian)
-
-**ViewStub** — это **невидимый View нулевого размера**, который используется для **ленивой инфляции layout ресурсов во время выполнения**.
-
-Когда ViewStub становится видимым или вызывается `inflate()`, layout ресурс инфлятится (создается). ViewStub затем **заменяет себя** в родительском контейнере созданными View. Таким образом, ViewStub существует в иерархии представлений до тех пор, пока не будет вызван `setVisibility(int)` или `inflate()`.
-
-### Зачем использовать ViewStub?
-
-ViewStub используется для **оптимизации производительности**, когда у вас есть:
-- Сложные layouts, которые **не всегда нужны**
-- UI элементы, которые **отображаются условно**
-- Тяжелые представления, которые должны создаваться **только при необходимости**
-
-**Преимущества**:
-- Сокращает время начальной инфляции layout
-- Экономит память (views не создаются до необходимости)
-- Улучшает производительность запуска приложения
-- Лучше для layouts с условными секциями
-
-### Базовый пример
-
-```xml
-<ViewStub
-    android:id="@+id/stub"
-    android:inflatedId="@+id/subTree"
-    android:layout="@layout/mySubTree"
-    android:layout_width="120dp"
-    android:layout_height="40dp" />
-```
-
-### Инфляция ViewStub
-
-Предпочтительный способ инфляции layout ресурса:
-
-```kotlin
-val stub: ViewStub = findViewById(R.id.stub)
-val inflated: View = stub.inflate()
-```
-
-Когда вызывается `inflate()`:
-1. ViewStub **заменяется** созданным View
-2. Созданный View **возвращается**
-3. Это позволяет получить ссылку на созданный View без дополнительного `findViewById()`
-
-### Ключевые атрибуты
-
-- `android:id` - ID самого ViewStub (используется до инфляции)
-- `android:inflatedId` - ID созданного view (используется после инфляции)
-- `android:layout` - Layout ресурс для инфляции
-- `android:layout_width/height` - Применяются к созданному view
-
-### Типичные случаи использования
-
-1. **Состояния ошибок/пустые состояния**
-2. **Расширенные опции/настройки**
-3. **Премиум функции**
-4. **Раскрываемые секции деталей**
-
-### ViewStub vs Include vs Merge
-
-| Особенность | ViewStub | Include | Merge |
-|-------------|----------|---------|-------|
-| **Инфляция** | Ленивая (по требованию) | Немедленная | Немедленная |
-| **Производительность** | Лучше (если не всегда нужен) | Стандартная | Лучше (уплощает иерархию) |
-| **Управление в runtime** | - Да | - Нет | - Нет |
-| **Использование памяти** | Ниже (до инфляции) | Выше | Выше |
-
-### Важные моменты
-
-- - Можно инфлятить только **один раз**
-- WARNING: ViewStub **удаляется** после инфляции
--  Кешируйте ссылку на созданный view для многократного показа/скрытия
-- - Используйте для сложных layouts, показываемых условно
-- - Не используйте для всегда видимого контента
-
-### Резюме
-
-ViewStub — это легковесный, невидимый view нулевого размера для ленивой инфляции layouts. Улучшает производительность и экономит память за счет создания views только при необходимости. Идеален для состояний ошибок, условных функций и раскрываемых секций.
+ViewStub is a lightweight lazy inflation mechanism for performance and memory optimization:
+- Inflates only when needed
+- Removed from hierarchy after inflation
+- Ideal for conditional UI
+- One-time inflation (requires caching reference)
 
 ---
 
-**Source**: [Kirchhoff Android Interview Questions](https://github.com/Kirchhoff-/Android-Interview-Questions)
+## Follow-ups
 
-## Links
+1. What happens if you try to inflate a ViewStub twice?
+2. How does ViewStub differ from setting `visibility="gone"` on an `<include>`?
+3. Can you change the layout resource of a ViewStub at runtime before inflation?
+4. What are the memory implications of using ViewStub vs include for rarely-shown UI?
+5. How would you handle multiple conditional sections that might need to be shown/hidden repeatedly?
+
+## References
 
 - [ViewStub - Android Developers](https://developer.android.com/reference/android/view/ViewStub)
-- [How to use View Stub in Android - Stack Overflow](https://stackoverflow.com/questions/11577777/how-to-use-view-stub-in-android)
-- [ViewStub: On-Demand Inflate View - ProAndroidDev](https://proandroiddev.com/viewstub-on-demand-inflate-view-or-inflate-lazily-layout-resource-e56b8c39398b)
-
----
+- [Improving Layout Performance - Android Documentation](https://developer.android.com/training/improving-layouts/loading-ondemand)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic view optimization
+- View lifecycle and inflation concepts
 
-### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+### Related (Same Level)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering methods
+- Layout inflation performance optimization
+- Error state handling patterns
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - Modern declarative UI approach
+- Custom ViewGroup implementation with lazy child inflation
+- Memory profiling for layout optimization

@@ -1,213 +1,113 @@
 ---
 id: 20251016-163920
 title: "Which Event On Screen Press / Какое событие при нажатии на экран"
+aliases: ["Which Event On Screen Press", "Какое событие при нажатии на экран", "Touch Events", "MotionEvent", "События касания"]
 topic: android
+subtopics: [ui-views]
+question_kind: android
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-list-elements-problems--android--medium, q-what-is-workmanager--android--medium, q-cicd-multi-module--devops--medium]
+related: [c-view-lifecycle, c-custom-views, q-custom-view-drawing--android--medium]
 created: 2025-10-15
-tags: [android/touch-events, android/ui, event handling, touch events, touch-events, ui, difficulty/easy]
+updated: 2025-10-29
+sources: []
+tags: [android/ui-views, touch-events, event-handling, motionevent, difficulty/easy]
+---
+# Вопрос (RU)
+
+Какое событие вызывается при нажатии пользователя на экран в Android?
+
 ---
 
-# Какое событие вызывается при нажатии юзера по экрану?
+# Question (EN)
 
-**English**: Which event is triggered when user presses on screen?
+Which event is triggered when a user presses on the screen in Android?
 
-## Answer (EN)
-When a user presses on the screen in Android, the **ACTION_DOWN** event is triggered via **MotionEvent**.
-
-### Touch Event Sequence
-
-```kotlin
-override fun onTouchEvent(event: MotionEvent): Boolean {
-    when (event.action) {
-        MotionEvent.ACTION_DOWN -> {
-            // User pressed the screen
-            val x = event.x
-            val y = event.y
-            return true
-        }
-        MotionEvent.ACTION_MOVE -> {
-            // User is moving finger while pressed
-            return true
-        }
-        MotionEvent.ACTION_UP -> {
-            // User released the screen
-            return true
-        }
-        MotionEvent.ACTION_CANCEL -> {
-            // Touch was cancelled
-            return true
-        }
-    }
-    return super.onTouchEvent(event)
-}
-```
-
-### Complete Touch Events
-
-| Event | Description |
-|-------|-------------|
-| ACTION_DOWN | Initial press |
-| ACTION_MOVE | Finger moving while pressed |
-| ACTION_UP | Finger lifted |
-| ACTION_CANCEL | Touch cancelled by system |
-| ACTION_POINTER_DOWN | Additional finger down (multi-touch) |
-| ACTION_POINTER_UP | Additional finger up (multi-touch) |
-
-### Example Usage
-
-```kotlin
-class TouchableView(context: Context) : View(context) {
-    private var touchX = 0f
-    private var touchY = 0f
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                touchX = event.x
-                touchY = event.y
-                Log.d("Touch", "Press at ($touchX, $touchY)")
-                invalidate()
-                return true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                touchX = event.x
-                touchY = event.y
-                invalidate()
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                Log.d("Touch", "Released at (${event.x}, ${event.y})")
-                return true
-            }
-        }
-        return super.onTouchEvent(event)
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        val paint = Paint().apply { color = Color.RED }
-        canvas.drawCircle(touchX, touchY, 50f, paint)
-    }
-}
-```
-
-### Setting Touch Listener
-
-```kotlin
-view.setOnTouchListener { v, event ->
-    when (event.action) {
-        MotionEvent.ACTION_DOWN -> {
-            // Handle press
-            true
-        }
-        else -> false
-    }
-}
-```
+---
 
 ## Ответ (RU)
 
-Когда пользователь нажимает на экран в Android, срабатывает событие **ACTION_DOWN** через **MotionEvent**.
+При нажатии на экран срабатывает **ACTION_DOWN** через **MotionEvent**.
 
-
-### Последовательность событий касания
+**Последовательность**: ACTION_DOWN → ACTION_MOVE → ACTION_UP (или ACTION_CANCEL)
 
 ```kotlin
 override fun onTouchEvent(event: MotionEvent): Boolean {
-    when (event.action) {
+    return when (event.action) {
         MotionEvent.ACTION_DOWN -> {
-            // Пользователь нажал на экран
-            val x = event.x
-            val y = event.y
-            return true
+            // ✅ Касание: event.x, event.y
+            true  // Обязательно true, иначе MOVE/UP не придут
         }
-        MotionEvent.ACTION_MOVE -> {
-            // Пользователь перемещает палец при нажатии
-            return true
-        }
-        MotionEvent.ACTION_UP -> {
-            // Пользователь отпустил экран
-            return true
-        }
-        MotionEvent.ACTION_CANCEL -> {
-            // Касание было отменено
-            return true
-        }
+        MotionEvent.ACTION_MOVE -> true    // ✅ Движение
+        MotionEvent.ACTION_UP -> true      // ✅ Отпускание
+        MotionEvent.ACTION_CANCEL -> true  // ❌ Отменено системой
+        else -> super.onTouchEvent(event)
     }
-    return super.onTouchEvent(event)
 }
+
+// ❌ WRONG
+view.setOnTouchListener { _, _ -> false }
+
+// ✅ CORRECT
+view.setOnTouchListener { _, e -> e.action == MotionEvent.ACTION_DOWN }
 ```
 
-### Полный список событий касания
+---
 
-| Событие | Описание |
-|---------|----------|
-| ACTION_DOWN | Начальное нажатие |
-| ACTION_MOVE | Палец перемещается при нажатии |
-| ACTION_UP | Палец поднят |
-| ACTION_CANCEL | Касание отменено системой |
-| ACTION_POINTER_DOWN | Дополнительный палец нажат (мультитач) |
-| ACTION_POINTER_UP | Дополнительный палец поднят (мультитач) |
+## Answer (EN)
 
-### Пример использования
+When the user presses the screen, **ACTION_DOWN** is triggered via **MotionEvent**.
+
+**Sequence**: ACTION_DOWN → ACTION_MOVE → ACTION_UP (or ACTION_CANCEL)
 
 ```kotlin
-class TouchableView(context: Context) : View(context) {
-    private var touchX = 0f
-    private var touchY = 0f
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                touchX = event.x
-                touchY = event.y
-                Log.d("Touch", "Нажатие в ($touchX, $touchY)")
-                invalidate()
-                return true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                touchX = event.x
-                touchY = event.y
-                invalidate()
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                Log.d("Touch", "Отпущено в (${event.x}, ${event.y})")
-                return true
-            }
-        }
-        return super.onTouchEvent(event)
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        val paint = Paint().apply { color = Color.RED }
-        canvas.drawCircle(touchX, touchY, 50f, paint)
-    }
-}
-```
-
-### Установка слушателя касания
-
-```kotlin
-view.setOnTouchListener { v, event ->
-    when (event.action) {
+override fun onTouchEvent(event: MotionEvent): Boolean {
+    return when (event.action) {
         MotionEvent.ACTION_DOWN -> {
-            // Обработка нажатия
-            true
+            // ✅ Touch: event.x, event.y
+            true  // Must return true or MOVE/UP won't arrive
         }
-        else -> false
+        MotionEvent.ACTION_MOVE -> true   // ✅ Moving
+        MotionEvent.ACTION_UP -> true     // ✅ Released
+        MotionEvent.ACTION_CANCEL -> true // ❌ Cancelled by system
+        else -> super.onTouchEvent(event)
     }
 }
+
+// ❌ WRONG
+view.setOnTouchListener { _, _ -> false }
+
+// ✅ CORRECT
+view.setOnTouchListener { _, e -> e.action == MotionEvent.ACTION_DOWN }
 ```
 
-**Резюме**: В Android при нажатии пользователя на экран вызывается событие **ACTION_DOWN** через **MotionEvent**. Полная последовательность событий: ACTION_DOWN (нажатие) → ACTION_MOVE (перемещение) → ACTION_UP (отпускание). Обработка осуществляется через метод `onTouchEvent()` или `setOnTouchListener()`.
+---
+
+## Follow-ups
+
+1. What's the difference between `onClick` and `onTouchEvent`?
+2. How to handle multi-touch (ACTION_POINTER_DOWN/UP)?
+3. When does ACTION_CANCEL occur?
+4. How to distinguish tap vs long-press vs scroll?
+5. What's the difference between `event.x` (view) and `event.rawX` (screen)?
+
+## References
+
+- [[c-view-lifecycle]] — View event dispatch mechanism
+- [[c-custom-views]] — Custom view patterns
+- [Touch & Input](https://developer.android.com/develop/ui/views/touch-and-input/gestures) — Official docs
 
 ## Related Questions
 
+### Prerequisites
+- [[c-view-lifecycle]]
+
+### Same Level
+- [[q-custom-view-drawing--android--medium]]
 - [[q-list-elements-problems--android--medium]]
-- [[q-what-is-workmanager--android--medium]]
-- [[q-cicd-multi-module--android--medium]]
+
+### Advanced
+- [[q-gesture-detector-implementation--android--hard]]

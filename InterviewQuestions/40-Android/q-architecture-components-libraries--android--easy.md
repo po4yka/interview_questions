@@ -1,9 +1,9 @@
 ---
 id: 20251012-122784
 title: Architecture Components Libraries / Библиотеки Architecture Components
-aliases: [Architecture Components Libraries, Библиотеки Architecture Components, Jetpack Architecture, Android Jetpack Libraries]
+aliases: ["Architecture Components Libraries", "Библиотеки Architecture Components"]
 topic: android
-subtopics: [architecture-clean, lifecycle]
+subtopics: [architecture-clean, lifecycle, room]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -13,318 +13,269 @@ moc: moc-android
 related: [q-android-architectural-patterns--android--medium, q-android-jetpack-overview--android--easy, q-android-manifest-file--android--easy]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/architecture-clean, android/lifecycle, difficulty/easy]
+updated: 2025-10-29
+tags: [android/architecture-clean, android/lifecycle, android/room, jetpack, difficulty/easy]
 ---
 
 # Вопрос (RU)
-> Что такое Библиотеки Architecture Components?
+> Что такое Библиотеки Architecture Components и для чего они используются?
 
 ## Ответ (RU)
 
-Android Architecture Components помогают строить надёжные, тестируемые, поддерживаемые приложения. Основные библиотеки: ViewModel, LiveData/StateFlow, Room, WorkManager, Data/ViewBinding, Paging, Navigation, Lifecycle.
+Android Architecture Components — набор библиотек для построения надёжных, тестируемых, поддерживаемых приложений. Основные: ViewModel, LiveData/StateFlow, Room, WorkManager, Paging, Navigation, Lifecycle.
 
-**Принципы проектирования**
-- Единственная ответственность модулей; разделение UI, domain, data
-- Lifecycle-aware по умолчанию; избегание утечек Activity/Fragment
-- Однонаправленный поток данных (ViewModel → UI)
+**Ключевые принципы**
+- Разделение ответственности: UI, domain, data
+- Lifecycle-aware: автоматическое управление жизненным циклом
+- Однонаправленный поток данных: ViewModel → UI
 - Тестируемость через чёткие границы
 
-**Паттерны интеграции**
-- Room → Flow/LiveData → ViewModel → UI (RecyclerView/Compose)
-- WorkManager для отложенных задач из репозиториев/UseCases
-- Navigation управляет экранами; ViewModel привязана к destination
+### 1) ViewModel — Хранение UI State
 
-### 1) ViewModel — Держатель UI State
-
-Переживает configuration changes; предоставляет UI state и события; без Android UI ссылок; ViewModelScope для корутин.
+Переживает configuration changes; отделяет бизнес-логику от UI; ViewModelScope для корутин.
 
 ```kotlin
+// ✅ Правильно: состояние переживает поворот
 class UserViewModel : ViewModel() {
-  private val _user = MutableLiveData<User>()
-  val user: LiveData<User> = _user
+  private val _state = MutableStateFlow<User?>(null)
+  val state: StateFlow<User?> = _state.asStateFlow()
+
+  fun load(id: String) = viewModelScope.launch {
+    _state.value = repository.getUser(id)
+  }
 }
 
-// во Fragment
-private val vm: UserViewModel by viewModels()
-vm.user.observe(viewLifecycleOwner) { render(it) }
+// ❌ Неправильно: утечка Context
+class BadViewModel(val context: Context) : ViewModel()
 ```
 
-### 2) LiveData / StateFlow — Observable State
+### 2) LiveData / StateFlow — Observable Состояние
 
-LiveData доставляет только когда STARTED/RESUMED; StateFlow горячий, conflated; предпочитайте Flow для потоков, LiveData для XML binding.
+LiveData lifecycle-aware; StateFlow требует ручного управления; Flow для потоков данных.
 
 ```kotlin
-// ✅ LiveData
+// ✅ LiveData: автоматическая отписка
 vm.user.observe(viewLifecycleOwner) { render(it) }
 
-// ✅ StateFlow
-lifecycleScope.launchWhenStarted {
+// ✅ StateFlow с lifecycle scope
+lifecycleScope.launch {
   vm.userFlow.collect { render(it) }
 }
 ```
 
-### 3) Room — SQLite с Type Safety
+### 3) Room — Type-Safe SQLite
 
-DAOs с compile-time SQL проверками; flows реагируют на изменения таблицы; off-main-thread по умолчанию; миграции для schema evolution.
+Compile-time проверка SQL; автоматическая генерация DAOs; Flow/LiveData для реактивности.
 
 ```kotlin
 @Entity
 data class User(@PrimaryKey val id: String, val name: String)
 
 @Dao interface UserDao {
-  @Query("SELECT * FROM User WHERE id=:id")
-  suspend fun get(id: String): User?
+  @Query("SELECT * FROM User WHERE id = :id")
+  suspend fun getUser(id: String): User?
+
+  @Query("SELECT * FROM User")
+  fun observeAll(): Flow<List<User>>
 }
 
 @Database(entities = [User::class], version = 1)
-abstract class DB : RoomDatabase() {
+abstract class AppDB : RoomDatabase() {
   abstract fun userDao(): UserDao
 }
 ```
 
-### 4) WorkManager — Гарантированная Отложенная Работа
+### 4) WorkManager — Отложенные Задачи
 
-Выполнение с ограничениями (network, charging); сохраняется после перезагрузки; идемпотентные задачи + backoff policies; не для точного времени.
+Гарантированное выполнение с ограничениями; переживает перезагрузку; backoff policies.
 
 ```kotlin
-class SyncWorker(ctx: Context, p: WorkerParameters)
-  : CoroutineWorker(ctx, p) {
-  override suspend fun doWork() = Result.success()
+// ✅ Отложенная синхронизация
+class SyncWorker(ctx: Context, params: WorkerParameters)
+  : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result {
+    return try {
+      syncRepository.sync()
+      Result.success()
+    } catch (e: Exception) {
+      Result.retry()
+    }
+  }
 }
 
-WorkManager.getInstance(ctx).enqueue(
-  OneTimeWorkRequestBuilder<SyncWorker>().build()
-)
+val request = OneTimeWorkRequestBuilder<SyncWorker>()
+  .setConstraints(
+    Constraints.Builder()
+      .setRequiredNetworkType(NetworkType.CONNECTED)
+      .build()
+  )
+  .build()
+WorkManager.getInstance(ctx).enqueue(request)
+
+// ❌ Неправильно: для срочных задач используй ForegroundService
 ```
 
-### 5) ViewBinding / Data Binding
+### 5) Navigation — Type-Safe Навигация
 
-ViewBinding для type-safe view refs; Data Binding позволяет выражения, но скрывает логику в XML — использовать экономно.
-
-```kotlin
-// ✅ ViewBinding
-val binding = ActivityMainBinding.inflate(layoutInflater)
-setContentView(binding.root)
-binding.text.text = "Hi"
-```
-
-### 6) Paging — Большие Списки
-
-Постраничная загрузка снижает память/латентность; работает с Room (invalidations) и сетью (RemoteMediator); immutable paging data.
+Централизованный граф; Safe Args для аргументов; ViewModel scope к графу.
 
 ```kotlin
-val flow: Flow<PagingData<User>> = Pager(
-  PagingConfig(pageSize = 20)
-) { UserPagingSource(api) }.flow
-
-lifecycleScope.launch {
-  flow.collectLatest(adapter::submitData)
-}
-```
-
-### 7) Navigation — Type-safe Navigation
-
-Центральный граф, Safe Args для compile-time аргументов, deep links и контроль back stack; ViewModel скопирован к графу.
-
-```kotlin
-val action = HomeFragmentDirections.actionHomeToProfile(userId)
+// ✅ Type-safe аргументы
+val action = HomeFragmentDirections.actionHomeToProfile(userId = "123")
 findNavController().navigate(action)
+
+// В destination
+val args: ProfileFragmentArgs by navArgs()
+val userId = args.userId
 ```
 
-### 8) Lifecycle — Lifecycle-aware Компоненты
+**Интеграция**
+Room → Repository → ViewModel → UI (Compose/Views) — чистая архитектура с реактивными потоками.
 
-Наблюдение lifecycle для запуска/остановки ресурсов; предпочитайте DefaultLifecycleObserver; ProcessLifecycleOwner для app-wide state.
-
-```kotlin
-class LocationObserver : DefaultLifecycleObserver {
-  override fun onStart(o: LifecycleOwner) { start() }
-  override fun onStop(o: LifecycleOwner) { stop() }
-}
-
-lifecycle.addObserver(LocationObserver())
-```
-
-**Выбор и сравнения**
-- LiveData vs StateFlow: LiveData = lifecycle-aware binding; StateFlow = Kotlin Flow ecosystem
-- ViewBinding vs Data Binding: ViewBinding предпочтительнее
-- WorkManager vs ForegroundService: WorkManager для отложенной гарантированной работы
-
-**Типичные ошибки**
-- ❌ Хранение Context/View в ViewModel (утечки); используйте Application или передавайте через методы
-- ❌ I/O на main thread с Room; держите запросы off main
-- ❌ Сложная логика в XML Data Binding; перенесите в ViewModel
-- ❌ WorkManager для точного расписания; используйте AlarmManager
-
-**Тестирование**
-- ViewModel: JUnit + coroutines test rules; Turbine для Flow
-- Room: in-memory DB, Robolectric/Instrumented по необходимости
-- WorkManager: WorkManagerTestInitHelper; expedited policy
+**Выбор решений**
+- LiveData для simple UI binding; StateFlow для Kotlin-first подхода
+- ViewBinding всегда; Data Binding только для простых case
+- WorkManager для deferrable; ForegroundService для срочных задач
 
 ---
 
 # Question (EN)
-> What are Architecture Components Libraries?
+> What are Architecture Components Libraries and what are they used for?
 
 ## Answer (EN)
 
-Android Architecture Components help build robust, testable, maintainable apps. Core libraries: ViewModel, LiveData/StateFlow, Room, WorkManager, Data/ViewBinding, Paging, Navigation, Lifecycle.
+Android Architecture Components are libraries for building robust, testable, maintainable apps. Core libraries: ViewModel, LiveData/StateFlow, Room, WorkManager, Paging, Navigation, Lifecycle.
 
-**Design principles**
-- Single-responsibility modules; separation of concerns (UI, domain, data)
-- Lifecycle-aware by default; avoid leaking Activities/Fragments
-- Unidirectional data flow (ViewModel → UI); single source of truth
-- Testability via clear boundaries and deterministic state holders
+**Key Principles**
+- Separation of concerns: UI, domain, data
+- Lifecycle-aware: automatic lifecycle management
+- Unidirectional data flow: ViewModel → UI
+- Testability via clear boundaries
 
-**Integration patterns**
-- Room → Flow/LiveData → ViewModel → UI (RecyclerView/Compose)
-- WorkManager for deferrable jobs triggered from repositories/UseCases
-- Navigation drives screens and argument passing; ViewModel scoped to destinations
+### 1) ViewModel — UI State Storage
 
-### 1) ViewModel — UI State Holder
-
-Survives configuration changes; exposes UI state and events; no Android UI references; use ViewModelScope for coroutines.
+Survives configuration changes; separates business logic from UI; ViewModelScope for coroutines.
 
 ```kotlin
+// ✅ Correct: state survives rotation
 class UserViewModel : ViewModel() {
-  private val _user = MutableLiveData<User>()
-  val user: LiveData<User> = _user
+  private val _state = MutableStateFlow<User?>(null)
+  val state: StateFlow<User?> = _state.asStateFlow()
+
+  fun load(id: String) = viewModelScope.launch {
+    _state.value = repository.getUser(id)
+  }
 }
 
-// in Fragment
-private val vm: UserViewModel by viewModels()
-vm.user.observe(viewLifecycleOwner) { render(it) }
+// ❌ Wrong: Context leak
+class BadViewModel(val context: Context) : ViewModel()
 ```
 
 ### 2) LiveData / StateFlow — Observable State
 
-LiveData delivers only when STARTED/RESUMED; StateFlow is hot, conflated, needs lifecycle-aware collection; prefer Flow for streams, LiveData for XML binding.
+LiveData is lifecycle-aware; StateFlow requires manual management; Flow for data streams.
 
 ```kotlin
-// ✅ LiveData
+// ✅ LiveData: automatic unsubscribe
 vm.user.observe(viewLifecycleOwner) { render(it) }
 
-// ✅ StateFlow
-lifecycleScope.launchWhenStarted {
+// ✅ StateFlow with lifecycle scope
+lifecycleScope.launch {
   vm.userFlow.collect { render(it) }
 }
 ```
 
-### 3) Room — SQLite with Type Safety
+### 3) Room — Type-Safe SQLite
 
-DAOs with compile-time SQL checks; flows emit on table invalidation; off-main-thread by default; migrations enforce schema evolution.
+Compile-time SQL validation; auto-generated DAOs; Flow/LiveData for reactivity.
 
 ```kotlin
 @Entity
 data class User(@PrimaryKey val id: String, val name: String)
 
 @Dao interface UserDao {
-  @Query("SELECT * FROM User WHERE id=:id")
-  suspend fun get(id: String): User?
+  @Query("SELECT * FROM User WHERE id = :id")
+  suspend fun getUser(id: String): User?
+
+  @Query("SELECT * FROM User")
+  fun observeAll(): Flow<List<User>>
 }
 
 @Database(entities = [User::class], version = 1)
-abstract class DB : RoomDatabase() {
+abstract class AppDB : RoomDatabase() {
   abstract fun userDao(): UserDao
 }
 ```
 
-### 4) WorkManager — Deferrable Guaranteed Work
+### 4) WorkManager — Deferred Tasks
 
-Executes with constraints (network, charging), persists across reboots; idempotent jobs + backoff policies; not for exact-time tasks.
+Guaranteed execution with constraints; survives reboots; backoff policies.
 
 ```kotlin
-class SyncWorker(ctx: Context, p: WorkerParameters)
-  : CoroutineWorker(ctx, p) {
-  override suspend fun doWork() = Result.success()
+// ✅ Deferred sync
+class SyncWorker(ctx: Context, params: WorkerParameters)
+  : CoroutineWorker(ctx, params) {
+  override suspend fun doWork(): Result {
+    return try {
+      syncRepository.sync()
+      Result.success()
+    } catch (e: Exception) {
+      Result.retry()
+    }
+  }
 }
 
-WorkManager.getInstance(ctx).enqueue(
-  OneTimeWorkRequestBuilder<SyncWorker>().build()
-)
+val request = OneTimeWorkRequestBuilder<SyncWorker>()
+  .setConstraints(
+    Constraints.Builder()
+      .setRequiredNetworkType(NetworkType.CONNECTED)
+      .build()
+  )
+  .build()
+WorkManager.getInstance(ctx).enqueue(request)
+
+// ❌ Wrong: for urgent tasks use ForegroundService
 ```
 
-### 5) ViewBinding / Data Binding
+### 5) Navigation — Type-Safe Navigation
 
-ViewBinding for type-safe view refs; Data Binding enables expressions but can hide logic in XML—use sparingly.
-
-```kotlin
-// ✅ ViewBinding
-val binding = ActivityMainBinding.inflate(layoutInflater)
-setContentView(binding.root)
-binding.text.text = "Hi"
-```
-
-### 6) Paging — Large Data Lists
-
-Paged loading reduces memory/latency; works with Room (invalidations) and network (RemoteMediator); immutable paging data.
+Centralized graph; Safe Args for arguments; ViewModel scoped to graph.
 
 ```kotlin
-val flow: Flow<PagingData<User>> = Pager(
-  PagingConfig(pageSize = 20)
-) { UserPagingSource(api) }.flow
-
-lifecycleScope.launch {
-  flow.collectLatest(adapter::submitData)
-}
-```
-
-### 7) Navigation — Type-safe Navigation
-
-Central graph, Safe Args for compile-time args, deep links and back stack control; scope ViewModels to graph.
-
-```kotlin
-val action = HomeFragmentDirections.actionHomeToProfile(userId)
+// ✅ Type-safe arguments
+val action = HomeFragmentDirections.actionHomeToProfile(userId = "123")
 findNavController().navigate(action)
+
+// In destination
+val args: ProfileFragmentArgs by navArgs()
+val userId = args.userId
 ```
 
-### 8) Lifecycle — Lifecycle-aware Components
+**Integration**
+Room → Repository → ViewModel → UI (Compose/Views) — clean architecture with reactive streams.
 
-Observe lifecycle to start/stop resources; prefer DefaultLifecycleObserver; ProcessLifecycleOwner for app-wide state.
-
-```kotlin
-class LocationObserver : DefaultLifecycleObserver {
-  override fun onStart(o: LifecycleOwner) { start() }
-  override fun onStop(o: LifecycleOwner) { stop() }
-}
-
-lifecycle.addObserver(LocationObserver())
-```
-
-**Comparisons & choices**
-- LiveData vs StateFlow: LiveData = lifecycle-aware binding; StateFlow = Kotlin Flow ecosystem, explicit collection
-- ViewBinding vs Data Binding: ViewBinding preferred; use Data Binding only for simple, testable expressions
-- WorkManager vs ForegroundService/AlarmManager: WorkManager for deferrable guaranteed work; not for real-time/foreground tasks
-
-**Common pitfalls**
-- ❌ Holding Context/View in ViewModel (leaks); use Application or pass via methods
-- ❌ Doing I/O on main thread with Room; keep queries off main
-- ❌ Complex logic in XML Data Binding; move to ViewModel
-- ❌ Misusing WorkManager for exact scheduling; use AlarmManager/Calendar APIs
-
-**Testing notes**
-- ViewModel: JUnit + coroutines test rules; use Turbine for Flow
-- Room: in-memory DB, run queries off main, use Robolectric/Instrumented as needed
-- WorkManager: WorkManagerTestInitHelper; set expedited policy
+**Decision Making**
+- LiveData for simple UI binding; StateFlow for Kotlin-first approach
+- ViewBinding always; Data Binding only for simple cases
+- WorkManager for deferrable; ForegroundService for urgent tasks
 
 ---
 
 ## Follow-ups
 
-- When to prefer StateFlow over LiveData?
-- How to migrate from AsyncTask/Services to WorkManager?
-- How to structure Room with repositories and DAOs?
-- How to test ViewModels with coroutines?
-- When to use Navigation Component vs manual fragment transactions?
+- When to use StateFlow vs LiveData in modern Android apps?
+- How does Room ensure type safety at compile-time?
+- What constraints can WorkManager enforce for background tasks?
+- How do ViewModels survive configuration changes without saving state?
+- When should you scope a ViewModel to a Navigation graph vs Activity?
 
 ## References
 
-- [[c-viewmodel]]
-- [[c-room]]
-- [[c-workmanager]]
-- [[c-lifecycle]]
 - https://developer.android.com/jetpack
-- https://developer.android.com/topic/libraries/architecture
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/topic/libraries/architecture/viewmodel
+- https://developer.android.com/training/data-storage/room
+- https://developer.android.com/topic/libraries/architecture/workmanager
 
 ## Related Questions
 

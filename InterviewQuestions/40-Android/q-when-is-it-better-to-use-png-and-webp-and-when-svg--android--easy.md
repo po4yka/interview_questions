@@ -1,427 +1,313 @@
 ---
 id: 20251016-161632
-title: "When Is It Better To Use Png And Webp And When Svg / When Is It Better To Use Png и Webp и When Svg"
+title: When to Use PNG, WebP, or SVG / Когда использовать PNG, WebP или SVG
+aliases: [Image Formats Android, Форматы изображений Android, PNG vs WebP vs SVG]
+
+# Classification
 topic: android
+subtopics: [ui-graphics, performance-rendering, gradle]
+question_kind: android
 difficulty: easy
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
 related: [q-dagger-purpose--android--easy, q-compose-ui-testing-advanced--testing--hard, q-dagger-build-time-optimization--android--medium]
+
+# Timestamps
 created: 2025-10-15
-tags: [image-formats, ui, difficulty/easy]
+updated: 2025-10-29
+
+# Tags (EN only; no leading #)
+tags: [android/ui-graphics, android/performance-rendering, android/gradle, image-formats, ui, difficulty/easy]
 ---
 
-# Когда лучше использовать png и webp, а когда svg?
+# Вопрос (RU)
+> Когда лучше использовать PNG и WebP, а когда SVG?
 
-**English**: When is it better to use png and webp, and when svg?
+# Question (EN)
+> When is it better to use PNG, WebP, and when SVG?
 
-## Answer (EN)
-Choosing the right image format is important for app performance, file size, and visual quality. Here's when to use each format:
+---
 
-### PNG (Portable Network Graphics)
+## Ответ (RU)
 
-**Best for:**
-- Simple images with transparency and high detail
-- Screenshots and UI mockups
-- Images requiring lossless compression
-- Small icons with transparency
+Выбор формата изображения влияет на производительность приложения, размер APK и визуальное качество. Правильный выбор зависит от типа контента.
 
-**Advantages:**
-- Lossless compression (no quality loss)
-- Excellent transparency support (alpha channel)
-- Wide compatibility across all Android versions
-- Good for images with sharp edges and text
+### Когда использовать Vector Drawables (SVG)
 
-**Disadvantages:**
-- Larger file sizes compared to WebP
-- Not ideal for photographs
-- No animation support
+**Лучший выбор для:**
+- Иконки и UI-элементы
+- Простая графика с геометрическими формами
+- Элементы, требующие масштабирования
 
-**Use cases:**
+**Преимущества:**
+- Масштабируется без потери качества
+- Один файл для всех плотностей экрана
+- Малый размер для простой графики
+- Программная раскраска через tint
 
-```xml
-<!-- PNG for app launcher icon with transparency -->
-<ImageView
-    android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:src="@drawable/app_logo"
-    android:contentDescription="App logo" />
-```
-
-**File structure:**
-```
-res/
-  drawable-mdpi/
-    icon.png (48x48)
-  drawable-hdpi/
-    icon.png (72x72)
-  drawable-xhdpi/
-    icon.png (96x96)
-  drawable-xxhdpi/
-    icon.png (144x144)
-```
-
-### WebP
-
-**Best for:**
-- Photographs and complex images
-- Images requiring compression with minimal quality loss
-- Reducing app size
-- Both lossy and lossless compression needs
-
-**Advantages:**
-- 25-35% smaller file size than PNG (lossless)
-- 25-34% smaller than JPEG (lossy)
-- Supports transparency (like PNG)
-- Supports animation (like GIF)
-- Excellent compression algorithms
-
-**Disadvantages:**
-- Requires Android 4.0+ (API 14+) for basic support
-- Full feature support from Android 4.3+ (API 18+)
-- Slightly more CPU intensive to decode
-
-**Use cases:**
-
-```xml
-<!-- WebP for photo backgrounds -->
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:src="@drawable/background_photo"
-    android:scaleType="centerCrop" />
-```
-
-**Conversion command:**
-```bash
-
-# Convert PNG to WebP (lossless)
-cwebp -lossless input.png -o output.webp
-
-# Convert PNG to WebP (lossy with quality 80)
-cwebp -q 80 input.png -o output.webp
-```
-
-**Gradle configuration:**
-```kotlin
-// build.gradle
-android {
-    defaultConfig {
-        // Enable WebP conversion
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    buildTypes {
-        release {
-            // Automatically convert PNG to WebP
-            crunchPngs = false
-        }
-    }
-}
-```
-
-### SVG / Vector Drawables (VectorDrawable)
-
-**Best for:**
-- Vector images requiring scaling without quality loss
-- Icons and simple graphics
-- UI elements that need to scale to different screen sizes
-- Images with solid colors and simple shapes
-
-**Advantages:**
-- Scalable to any size without quality loss
-- Single file for all screen densities
-- Smaller file size for simple graphics
-- Can be animated with AnimatedVectorDrawable
-- Can be tinted programmatically
-
-**Disadvantages:**
-- Not suitable for complex images or photographs
-- Higher CPU usage for complex paths
-- Rendering performance can be slower for very complex vectors
-
-**Use cases:**
-
+**Пример:**
 ```xml
 <!-- res/drawable/ic_home.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
-    android:viewportHeight="24"
-    android:tint="?attr/colorControlNormal">
+    android:viewportHeight="24">
     <path
         android:fillColor="@android:color/white"
-        android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/>
+        android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/> <!-- ✅ Простые пути -->
 </vector>
 
-<!-- Using in layout -->
+<!-- Использование с динамической раскраской -->
 <ImageView
-    android:layout_width="24dp"
-    android:layout_height="24dp"
     android:src="@drawable/ic_home"
-    app:tint="@color/primary" />
+    app:tint="@color/primary" /> <!-- ✅ Раскраска без новых файлов -->
 ```
 
-**Programmatic tinting:**
+**Ограничения:**
+- Не подходит для фотографий или сложной графики
+- Сложные векторы нагружают CPU при рендеринге
 
-```kotlin
-// Tint vector drawable
-val drawable = AppCompatResources.getDrawable(context, R.drawable.ic_home)
-DrawableCompat.setTint(drawable!!, ContextCompat.getColor(context, R.color.primary))
-imageView.setImageDrawable(drawable)
-```
+### Когда использовать WebP
 
-**Animated vector drawable:**
+**Лучший выбор для:**
+- Фотографии и сложные изображения
+- Фоны и декоративная графика
+- Уменьшение размера APK
 
+**Преимущества:**
+- На 25-35% меньше PNG при том же качестве
+- Поддержка прозрачности и анимации
+- Lossy и lossless сжатие
+
+**Пример:**
 ```xml
-<!-- res/drawable/animated_check.xml -->
-<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_check">
-    <target
-        android:name="check_path"
-        android:animation="@animator/check_animation" />
-</animated-vector>
-```
-
-### Comparison Table
-
-| Feature | PNG | WebP | SVG/Vector |
-|---------|-----|------|------------|
-| **File Size** | Large | Small | Very Small (simple) |
-| **Scalability** | No | No | Yes |
-| **Transparency** | Yes | Yes | Yes |
-| **Animation** | No | Yes | Yes (AnimatedVectorDrawable) |
-| **Compression** | Lossless | Both | N/A |
-| **Best For** | UI assets, logos | Photos, complex images | Icons, simple graphics |
-| **CPU Usage** | Low | Medium | Medium-High (complex) |
-| **Android Support** | All versions | 4.0+ | 5.0+ (full support) |
-
-### Decision Flow Chart
-
-```
-Is it a photograph or complex raster image?
- Yes → Use WebP (lossy compression)
- No → Is it a simple icon or geometric shape?
-     Yes → Use Vector Drawable (SVG)
-     No → Does it need transparency?
-         Yes → Use WebP (lossless) or PNG
-         No → Use WebP (lossy)
-```
-
-### Best Practices
-
-#### 1. Use Vector Drawables for Icons
-
-```kotlin
-// Enable vector drawable support in older Android versions
-android {
-    defaultConfig {
-        vectorDrawables.useSupportLibrary = true
-    }
-}
-```
-
-```xml
-<!-- In layout, use app:srcCompat for vectors -->
+<!-- WebP для фона -->
 <ImageView
-    android:layout_width="24dp"
-    android:layout_height="24dp"
-    app:srcCompat="@drawable/ic_star"
-    app:tint="@color/yellow" />
-```
-
-#### 2. Use WebP for Photos and Backgrounds
-
-```xml
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:src="@drawable/hero_image"
+    android:src="@drawable/background_photo" <!-- ✅ .webp формат -->
     android:scaleType="centerCrop" />
 ```
 
-#### 3. Optimize Image Loading
-
-```kotlin
-// Use Glide or Coil for efficient image loading
-Glide.with(context)
-    .load(R.drawable.large_webp_image)
-    .placeholder(R.drawable.placeholder)
-    .into(imageView)
-```
-
-#### 4. Convert PNG to WebP for Release
-
+**Конвертация:**
 ```bash
-
-# Find and convert all PNGs to WebP
-find ./res -name "*.png" -exec cwebp -q 90 {} -o {}.webp \;
+# PNG → WebP (lossy, качество 80)
+cwebp -q 80 input.png -o output.webp
 ```
 
-### Summary
+**Ограничения:**
+- Требуется Android 4.0+ (базовая поддержка)
+- Немного больше нагрузка на CPU при декодировании
 
-- **PNG**: Simple images with transparency, UI assets
-- **WebP**: Photographs, complex images, backgrounds (best compression)
-- **SVG/Vector**: Icons, logos, simple scalable graphics
+### Когда использовать PNG
 
-For modern Android apps, the recommended approach is:
-1. **Vector Drawables** for all icons and simple graphics
-2. **WebP** for all photographic content and complex images
-3. **PNG** only when WebP is not supported or for legacy compatibility
-
-## Ответ (RU)
-Выбор правильного формата изображения важен для производительности приложения, размера файла и визуального качества. Вот когда использовать каждый формат:
-
-### PNG (Portable Network Graphics)
-
-**Лучше всего для:**
-- Простых изображений с прозрачностью и высокой детализацией
-- Скриншотов и UI-макетов
-- Изображений, требующих сжатия без потерь
-- Небольших иконок с прозрачностью
+**Лучший выбор для:**
+- Легаси-совместимость
+- Изображения с прозрачностью, где WebP не подходит
+- Скриншоты и UI-макеты
 
 **Преимущества:**
-- Сжатие без потерь (без потери качества)
-- Отличная поддержка прозрачности (альфа-канал)
-- Широкая совместимость со всеми версиями Android
-- Хорошо для изображений с четкими краями и текстом
+- Сжатие без потерь
+- Полная поддержка на всех версиях Android
+- Отличная прозрачность (альфа-канал)
 
 **Недостатки:**
-- Большие размеры файлов по сравнению с WebP
-- Не идеально для фотографий
-- Нет поддержки анимации
+- Больший размер по сравнению с WebP
+- Требует разных файлов для разных плотностей
 
-### WebP
+```
+res/drawable-mdpi/icon.png    <!-- ❌ Много файлов -->
+res/drawable-hdpi/icon.png
+res/drawable-xhdpi/icon.png
+```
 
-**Лучше всего для:**
-- Фотографий и сложных изображений
-- Изображений, требующих сжатия с минимальной потерей качества
-- Уменьшения размера приложения
-- Потребностей в сжатии с потерями и без потерь
+### Сравнение форматов
 
-**Преимущества:**
-- На 25-35% меньше размер файла, чем PNG (без потерь)
-- На 25-34% меньше, чем JPEG (с потерями)
-- Поддерживает прозрачность (как PNG)
-- Поддерживает анимацию (как GIF)
-- Отличные алгоритмы сжатия
+| Критерий | Vector | WebP | PNG |
+|----------|--------|------|-----|
+| **Размер** | Малый | Средний | Большой |
+| **Масштабируемость** | ✅ Да | ❌ Нет | ❌ Нет |
+| **Фото** | ❌ Нет | ✅ Да | ⚠️ Да (большой размер) |
+| **Иконки** | ✅ Да | ⚠️ Да (больше) | ⚠️ Да (больше) |
+| **Прозрачность** | ✅ Да | ✅ Да | ✅ Да |
+| **Раскраска** | ✅ tint | ❌ Нет | ❌ Нет |
 
-**Недостатки:**
-- Требуется Android 4.0+ (API 14+) для базовой поддержки
-- Полная функциональность от Android 4.3+ (API 18+)
-- Немного более интенсивна для CPU при декодировании
+### Рекомендации
 
-**Конфигурация Gradle:**
+**Современный Android-проект:**
+1. **Vector Drawables** — все иконки и UI-элементы
+2. **WebP** — фотографии, сложная графика, фоны
+3. **PNG** — только для легаси-совместимости
+
+**Gradle конфигурация:**
 ```kotlin
 android {
     defaultConfig {
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true // ✅ Поддержка векторов
     }
-
     buildTypes {
         release {
-            crunchPngs = false
+            crunchPngs = false // ✅ Отключить PNG оптимизацию, использовать WebP
         }
     }
 }
 ```
 
-### SVG / Vector Drawables (VectorDrawable)
+## Answer (EN)
 
-**Лучше всего для:**
-- Векторных изображений, требующих масштабирования без потери качества
-- Иконок и простой графики
-- UI-элементов, которые должны масштабироваться для разных размеров экрана
-- Изображений со сплошными цветами и простыми формами
+Image format choice affects app performance, APK size, and visual quality. The right format depends on content type.
 
-**Преимущества:**
-- Масштабируется до любого размера без потери качества
-- Один файл для всех плотностей экрана
-- Меньший размер файла для простой графики
-- Может быть анимирован с помощью AnimatedVectorDrawable
-- Может быть окрашен программно
+### When to Use Vector Drawables (SVG)
 
-**Недостатки:**
-- Не подходит для сложных изображений или фотографий
-- Более высокое использование CPU для сложных путей
-- Производительность рендеринга может быть медленнее для очень сложных векторов
+**Best for:**
+- Icons and UI elements
+- Simple graphics with geometric shapes
+- Scalable elements
 
-**Программное окрашивание:**
-```kotlin
-val drawable = AppCompatResources.getDrawable(context, R.drawable.ic_home)
-DrawableCompat.setTint(drawable!!, ContextCompat.getColor(context, R.color.primary))
-imageView.setImageDrawable(drawable)
+**Advantages:**
+- Scales without quality loss
+- Single file for all screen densities
+- Small size for simple graphics
+- Programmatic tinting via tint attribute
+
+**Example:**
+```xml
+<!-- res/drawable/ic_home.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/> <!-- ✅ Simple paths -->
+</vector>
+
+<!-- Usage with dynamic tinting -->
+<ImageView
+    android:src="@drawable/ic_home"
+    app:tint="@color/primary" /> <!-- ✅ Tint without new files -->
 ```
 
-### Таблица сравнения
+**Limitations:**
+- Not suitable for photos or complex graphics
+- Complex vectors increase CPU rendering load
 
-| Функция | PNG | WebP | SVG/Vector |
-|---------|-----|------|------------|
-| **Размер файла** | Большой | Малый | Очень малый (простой) |
-| **Масштабируемость** | Нет | Нет | Да |
-| **Прозрачность** | Да | Да | Да |
-| **Анимация** | Нет | Да | Да (AnimatedVectorDrawable) |
-| **Сжатие** | Без потерь | Оба варианта | Н/Д |
-| **Лучше всего для** | UI-ресурсы, логотипы | Фото, сложные изображения | Иконки, простая графика |
-| **Использование CPU** | Низкое | Среднее | Среднее-Высокое (сложные) |
-| **Поддержка Android** | Все версии | 4.0+ | 5.0+ (полная поддержка) |
+### When to Use WebP
 
-### Блок-схема принятия решения
+**Best for:**
+- Photographs and complex images
+- Backgrounds and decorative graphics
+- Reducing APK size
+
+**Advantages:**
+- 25-35% smaller than PNG at same quality
+- Supports transparency and animation
+- Both lossy and lossless compression
+
+**Example:**
+```xml
+<!-- WebP for background -->
+<ImageView
+    android:src="@drawable/background_photo" <!-- ✅ .webp format -->
+    android:scaleType="centerCrop" />
+```
+
+**Conversion:**
+```bash
+# PNG → WebP (lossy, quality 80)
+cwebp -q 80 input.png -o output.webp
+```
+
+**Limitations:**
+- Requires Android 4.0+ (basic support)
+- Slightly higher CPU load for decoding
+
+### When to Use PNG
+
+**Best for:**
+- Legacy compatibility
+- Transparency where WebP doesn't fit
+- Screenshots and UI mockups
+
+**Advantages:**
+- Lossless compression
+- Full support on all Android versions
+- Excellent transparency (alpha channel)
+
+**Disadvantages:**
+- Larger size compared to WebP
+- Requires separate files for different densities
 
 ```
-Это фотография или сложное растровое изображение?
- Да → Используйте WebP (сжатие с потерями)
- Нет → Это простая иконка или геометрическая фигура?
-     Да → Используйте Vector Drawable (SVG)
-     Нет → Нужна прозрачность?
-         Да → Используйте WebP (без потерь) или PNG
-         Нет → Используйте WebP (с потерями)
+res/drawable-mdpi/icon.png    <!-- ❌ Many files -->
+res/drawable-hdpi/icon.png
+res/drawable-xhdpi/icon.png
 ```
 
-### Лучшие практики
+### Format Comparison
 
-#### 1. Использовать Vector Drawables для иконок
+| Criteria | Vector | WebP | PNG |
+|----------|--------|------|-----|
+| **Size** | Small | Medium | Large |
+| **Scalability** | ✅ Yes | ❌ No | ❌ No |
+| **Photos** | ❌ No | ✅ Yes | ⚠️ Yes (large) |
+| **Icons** | ✅ Yes | ⚠️ Yes (larger) | ⚠️ Yes (larger) |
+| **Transparency** | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Tinting** | ✅ tint | ❌ No | ❌ No |
 
+### Recommendations
+
+**Modern Android project:**
+1. **Vector Drawables** — all icons and UI elements
+2. **WebP** — photos, complex graphics, backgrounds
+3. **PNG** — legacy compatibility only
+
+**Gradle configuration:**
 ```kotlin
 android {
     defaultConfig {
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true // ✅ Enable vector support
+    }
+    buildTypes {
+        release {
+            crunchPngs = false // ✅ Disable PNG optimization, use WebP
+        }
     }
 }
 ```
 
-#### 2. Использовать WebP для фотографий и фонов
+---
 
-```xml
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:src="@drawable/hero_image"
-    android:scaleType="centerCrop" />
-```
+## Follow-ups
 
-#### 3. Оптимизировать загрузку изображений
+- How to convert existing PNG assets to WebP in Android Studio?
+- What's the performance impact of complex vector drawables on older devices?
+- Can WebP images be used for adaptive icons?
+- How to implement runtime tinting for bitmap drawables (PNG/WebP)?
+- What are best practices for managing multiple drawable densities vs single vector?
 
-```kotlin
-Glide.with(context)
-    .load(R.drawable.large_webp_image)
-    .placeholder(R.drawable.placeholder)
-    .into(imageView)
-```
+## References
 
-### Резюме
-
-- **PNG**: Простые изображения с прозрачностью, UI-ресурсы
-- **WebP**: Фотографии, сложные изображения, фоны (лучшее сжатие)
-- **SVG/Vector**: Иконки, логотипы, простая масштабируемая графика
-
-Для современных Android-приложений рекомендуемый подход:
-1. **Vector Drawables** для всех иконок и простой графики
-2. **WebP** для всего фотографического контента и сложных изображений
-3. **PNG** только когда WebP не поддерживается или для совместимости с устаревшими версиями
+- [[c-android-resources]]
+- [[c-performance-optimization]]
+- https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources
+- https://developer.android.com/develop/ui/views/graphics/drawables
+- https://developers.google.com/speed/webp
 
 ## Related Questions
 
+### Prerequisites (Easier)
 - [[q-dagger-purpose--android--easy]]
+
+### Related (Same Level)
 - [[q-compose-ui-testing-advanced--testing--hard]]
+
+### Advanced (Harder)
 - [[q-dagger-build-time-optimization--android--medium]]

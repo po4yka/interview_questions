@@ -1,16 +1,13 @@
 ---
 id: 20251020-200000
 title: Dagger Multibinding / Multibinding в Dagger
-aliases: [Dagger Multibinding, Multibinding в Dagger]
+aliases: ["Dagger Multibinding", "Multibinding в Dagger"]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt, architecture-modularization]
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
@@ -18,12 +15,9 @@ related:
   - q-dagger-custom-scopes--android--hard
   - q-dagger-framework-overview--android--hard
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/di-hilt, difficulty/hard]
-source: https://dagger.dev/api/latest/dagger/Multibinds.html
-source_note: Dagger Multibinds API documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:17 pm
+updated: 2025-10-29
+tags: [android/di-hilt, android/architecture-modularization, dagger, dependency-injection, multibinding, difficulty/hard]
+sources: []
 ---
 
 # Вопрос (RU)
@@ -32,433 +26,414 @@ date modified: Saturday, October 25th 2025, 4:52:17 pm
 # Question (EN)
 > Explain Dagger/Hilt Multibinding (IntoSet, IntoMap, Multibinds). How would you use it to implement a plugin architecture or feature module system?
 
+---
+
 ## Ответ (RU)
 
-Multibinding в Dagger/Hilt позволяет связывать множественные значения в коллекцию (Set или Map), которая может быть внедрена как единая зависимость. Это критически важно для плагинных архитектур, feature-модулей и расширяемых систем.
+Multibinding позволяет множественным модулям вносить элементы в общую коллекцию (Set/Map), инъецируемую как единая зависимость. Основа для plugin-based и feature-modular архитектур.
 
-### Теория: Принципы Multibinding
+### Типы Multibinding
 
-**Основные концепции:**
-- **Коллективная инъекция** - множественные реализации как единая зависимость
-- **Модульная архитектура** - добавление функций без изменения существующего кода
-- **Плагинная система** - динамическое расширение функциональности
-- **Feature-модули** - изолированные компоненты приложения
-
-**Типы Multibinding:**
-- `@IntoSet` - добавляет элемент в Set
-- `@ElementsIntoSet` - добавляет несколько элементов в Set
-- `@IntoMap` - добавляет запись в Map с ключом
-- `@Multibinds` - объявляет пустую коллекцию для инъекции
-
-### 1. @IntoSet - Коллекция Плагинов
-
-**Создание коллекции плагинов:**
+**@IntoSet** - добавление элемента в Set:
 
 ```kotlin
-// Интерфейс плагина
-interface Plugin {
-    val name: String
-    fun initialize(context: Context)
-}
-
-// Реализации плагинов
-class AnalyticsPlugin @Inject constructor() : Plugin {
-    override val name = "Analytics"
-    override fun initialize(context: Context) {
-        // Инициализация аналитики
-    }
-}
-
-class CrashReportingPlugin @Inject constructor() : Plugin {
-    override val name = "CrashReporting"
-    override fun initialize(context: Context) {
-        // Инициализация crash reporting
-    }
-}
-```
-
-**Модуль с @IntoSet:**
-
-```kotlin
+// ✅ Правильно: каждый модуль добавляет плагин
 @Module
-abstract class PluginModule {
-    @Binds
-    @IntoSet
-    abstract fun bindAnalyticsPlugin(plugin: AnalyticsPlugin): Plugin
-
-    @Binds
-    @IntoSet
-    abstract fun bindCrashReportingPlugin(plugin: CrashReportingPlugin): Plugin
+abstract class AnalyticsModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
 }
-```
 
-**Использование коллекции:**
+@Module
+abstract class LoggingModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: LoggingPlugin): AppPlugin
+}
 
-```kotlin
+// Использование: получаем все плагины
 class PluginManager @Inject constructor(
-    private val plugins: Set<Plugin>
-) {
-    fun initializeAll(context: Context) {
-        plugins.forEach { plugin ->
-            plugin.initialize(context)
-        }
-    }
-}
+    private val plugins: Set<@JvmSuppressWildcards AppPlugin>
+)
 ```
 
-### 2. @IntoMap - Ключевые Коллекции
-
-**Создание Map с ключами:**
+**@IntoMap** - добавление в Map по ключу:
 
 ```kotlin
-// Тип ключа для Map
+// ✅ Правильно: feature registry с ключами
 @MapKey
 annotation class FeatureKey(val value: String)
 
-// Интерфейс feature
-interface Feature {
-    fun execute()
-}
-
-// Реализации features
-class LoginFeature @Inject constructor() : Feature {
-    override fun execute() {
-        // Логика входа
-    }
-}
-
-class PaymentFeature @Inject constructor() : Feature {
-    override fun execute() {
-        // Логика платежей
-    }
-}
-```
-
-**Модуль с @IntoMap:**
-
-```kotlin
 @Module
 abstract class FeatureModule {
-    @Binds
-    @IntoMap
+    @Binds @IntoMap
     @FeatureKey("login")
-    abstract fun bindLoginFeature(feature: LoginFeature): Feature
+    abstract fun login(impl: LoginFeature): Feature
 
-    @Binds
-    @IntoMap
+    @Binds @IntoMap
     @FeatureKey("payment")
-    abstract fun bindPaymentFeature(feature: PaymentFeature): Feature
+    abstract fun payment(impl: PaymentFeature): Feature
 }
-```
 
-**Использование Map:**
-
-```kotlin
 class FeatureRouter @Inject constructor(
     private val features: Map<String, @JvmSuppressWildcards Feature>
 ) {
-    fun executeFeature(key: String) {
-        features[key]?.execute()
-    }
+    fun route(key: String) = features[key]?.execute()
 }
 ```
 
-### 3. @ElementsIntoSet - Множественные Элементы
-
-**Добавление нескольких элементов:**
+**@ElementsIntoSet** - добавление нескольких элементов:
 
 ```kotlin
+// ✅ Правильно: bulk добавление
 @Module
-object NotificationModule {
-    @Provides
-    @ElementsIntoSet
-    fun provideNotificationChannels(): Set<NotificationChannel> {
-        return setOf(
-            NotificationChannel("general", "General", NotificationManager.IMPORTANCE_DEFAULT),
-            NotificationChannel("urgent", "Urgent", NotificationManager.IMPORTANCE_HIGH)
-        )
-    }
+object ConfigModule {
+    @Provides @ElementsIntoSet
+    fun providers(): Set<ConfigProvider> = setOf(
+        RemoteConfig(),
+        LocalConfig(),
+        DefaultConfig()
+    )
 }
 ```
 
-### 4. @Multibinds - Пустые Коллекции
-
-**Объявление пустых коллекций:**
+**@Multibinds** - декларация пустой коллекции:
 
 ```kotlin
+// ✅ Правильно: опциональные коллекции
 @Module
-abstract class EmptyCollectionModule {
+abstract class BaseModule {
     @Multibinds
-    abstract fun emptyPluginSet(): Set<Plugin>
-
-    @Multibinds
-    abstract fun emptyFeatureMap(): Map<String, @JvmSuppressWildcards Feature>
-}
-```
-
-### Плагинная Архитектура
-
-**Полная реализация плагинной системы:**
-
-```kotlin
-// Plugin Registry
-class PluginRegistry @Inject constructor(
-    private val plugins: Set<Plugin>
-) {
-    private val pluginMap = plugins.associateBy { it.name }
-
-    fun getPlugin(name: String): Plugin? = pluginMap[name]
-    fun getAllPlugins(): Set<Plugin> = plugins
-}
-
-// Feature Module System
-class FeatureModuleManager @Inject constructor(
-    private val features: Map<String, @JvmSuppressWildcards Feature>
-) {
-    fun executeFeature(featureName: String) {
-        features[featureName]?.execute()
-    }
-
-    fun getAvailableFeatures(): Set<String> = features.keys
-}
-```
-
-### Hilt Интеграция
-
-**Автоматическое создание компонентов:**
-
-```kotlin
-@HiltAndroidApp
-class MyApplication : Application() {
-    @Inject
-    lateinit var pluginRegistry: PluginRegistry
-
-    @Inject
-    lateinit var featureManager: FeatureModuleManager
-}
-```
-
-## Answer (EN)
-
-Multibinding in [[c-dagger]]/[[c-hilt]] allows you to bind multiple values into a collection (Set or Map) using [[c-dependency-injection]] that can be injected as a single dependency. This is critically important for plugin architectures, feature modules, and extensible systems.
-
-### Theory: Multibinding Principles
-
-**Core Concepts:**
-- **Collective Injection** - multiple implementations as single dependency
-- **Modular Architecture** - adding functionality without modifying existing code
-- **Plugin System** - dynamic functional extension
-- **Feature Modules** - isolated application components
-
-**Multibinding Types:**
-- `@IntoSet` - adds element to Set
-- `@ElementsIntoSet` - adds multiple elements to Set
-- `@IntoMap` - adds entry to Map with key
-- `@Multibinds` - declares empty collection for injection
-
-### 1. @IntoSet - Plugin Collections
-
-**Creating plugin collections:**
-
-```kotlin
-// Plugin interface
-interface Plugin {
-    val name: String
-    fun initialize(context: Context)
-}
-
-// Plugin implementations
-class AnalyticsPlugin @Inject constructor() : Plugin {
-    override val name = "Analytics"
-    override fun initialize(context: Context) {
-        // Initialize analytics
-    }
-}
-
-class CrashReportingPlugin @Inject constructor() : Plugin {
-    override val name = "CrashReporting"
-    override fun initialize(context: Context) {
-        // Initialize crash reporting
-    }
-}
-```
-
-**Module with @IntoSet:**
-
-```kotlin
-@Module
-abstract class PluginModule {
-    @Binds
-    @IntoSet
-    abstract fun bindAnalyticsPlugin(plugin: AnalyticsPlugin): Plugin
-
-    @Binds
-    @IntoSet
-    abstract fun bindCrashReportingPlugin(plugin: CrashReportingPlugin): Plugin
-}
-```
-
-**Using collections:**
-
-```kotlin
-class PluginManager @Inject constructor(
-    private val plugins: Set<Plugin>
-) {
-    fun initializeAll(context: Context) {
-        plugins.forEach { plugin ->
-            plugin.initialize(context)
-        }
-    }
-}
-```
-
-### 2. @IntoMap - Keyed Collections
-
-**Creating Map with keys:**
-
-```kotlin
-// Key type for Map
-@MapKey
-annotation class FeatureKey(val value: String)
-
-// Feature interface
-interface Feature {
-    fun execute()
-}
-
-// Feature implementations
-class LoginFeature @Inject constructor() : Feature {
-    override fun execute() {
-        // Login logic
-    }
-}
-
-class PaymentFeature @Inject constructor() : Feature {
-    override fun execute() {
-        // Payment logic
-    }
-}
-```
-
-**Module with @IntoMap:**
-
-```kotlin
-@Module
-abstract class FeatureModule {
-    @Binds
-    @IntoMap
-    @FeatureKey("login")
-    abstract fun bindLoginFeature(feature: LoginFeature): Feature
-
-    @Binds
-    @IntoMap
-    @FeatureKey("payment")
-    abstract fun bindPaymentFeature(feature: PaymentFeature): Feature
-}
-```
-
-**Using Map:**
-
-```kotlin
-class FeatureRouter @Inject constructor(
-    private val features: Map<String, @JvmSuppressWildcards Feature>
-) {
-    fun executeFeature(key: String) {
-        features[key]?.execute()
-    }
-}
-```
-
-### 3. @ElementsIntoSet - Multiple Elements
-
-**Adding multiple elements:**
-
-```kotlin
-@Module
-object NotificationModule {
-    @Provides
-    @ElementsIntoSet
-    fun provideNotificationChannels(): Set<NotificationChannel> {
-        return setOf(
-            NotificationChannel("general", "General", NotificationManager.IMPORTANCE_DEFAULT),
-            NotificationChannel("urgent", "Urgent", NotificationManager.IMPORTANCE_HIGH)
-        )
-    }
-}
-```
-
-### 4. @Multibinds - Empty Collections
-
-**Declaring empty collections:**
-
-```kotlin
-@Module
-abstract class EmptyCollectionModule {
-    @Multibinds
-    abstract fun emptyPluginSet(): Set<Plugin>
-
-    @Multibinds
-    abstract fun emptyFeatureMap(): Map<String, @JvmSuppressWildcards Feature>
+    abstract fun plugins(): Set<AppPlugin>  // Может быть пустой
 }
 ```
 
 ### Plugin Architecture
 
-**Complete plugin system implementation:**
-
 ```kotlin
-// Plugin Registry
-class PluginRegistry @Inject constructor(
-    private val plugins: Set<Plugin>
-) {
-    private val pluginMap = plugins.associateBy { it.name }
-
-    fun getPlugin(name: String): Plugin? = pluginMap[name]
-    fun getAllPlugins(): Set<Plugin> = plugins
+// Интерфейс плагина
+interface AppPlugin {
+    val priority: Int
+    fun initialize(context: Context)
 }
 
-// Feature Module System
-class FeatureModuleManager @Inject constructor(
+// Модули добавляют плагины независимо
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AnalyticsModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class CrashModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: CrashPlugin): AppPlugin
+}
+
+// Менеджер инициализирует все плагины
+@Singleton
+class PluginManager @Inject constructor(
+    private val plugins: Set<@JvmSuppressWildcards AppPlugin>
+) {
+    fun initialize(context: Context) {
+        plugins.sortedBy { it.priority }
+            .forEach { it.initialize(context) }
+    }
+}
+```
+
+### Feature Module System
+
+```kotlin
+// ❌ Неправильно: жесткая зависимость
+class MainActivity {
+    fun navigate(screen: String) {
+        when (screen) {
+            "login" -> startActivity<LoginActivity>()
+            "payment" -> startActivity<PaymentActivity>()
+        }
+    }
+}
+
+// ✅ Правильно: динамическая навигация через Map
+@MapKey
+@Retention(AnnotationRetention.RUNTIME)
+annotation class FeatureKey(val value: String)
+
+interface FeatureEntry {
+    fun createIntent(context: Context): Intent
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class LoginModule {
+    @Binds @IntoMap
+    @FeatureKey("login")
+    abstract fun entry(impl: LoginFeatureEntry): FeatureEntry
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class PaymentModule {
+    @Binds @IntoMap
+    @FeatureKey("payment")
+    abstract fun entry(impl: PaymentFeatureEntry): FeatureEntry
+}
+
+class Navigator @Inject constructor(
+    private val entries: Map<String, @JvmSuppressWildcards FeatureEntry>
+) {
+    fun navigate(context: Context, feature: String) {
+        entries[feature]?.createIntent(context)?.let(context::startActivity)
+    }
+}
+```
+
+### Advanced: Qualified Multibindings
+
+```kotlin
+// Разные коллекции для разных целей
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class StartupPlugins
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class BackgroundPlugins
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class PluginModule {
+    @Binds @IntoSet @StartupPlugins
+    abstract fun startup(impl: AnalyticsPlugin): AppPlugin
+
+    @Binds @IntoSet @BackgroundPlugins
+    abstract fun background(impl: SyncPlugin): AppPlugin
+}
+
+class App : Application() {
+    @Inject @StartupPlugins
+    lateinit var startupPlugins: Set<@JvmSuppressWildcards AppPlugin>
+}
+```
+
+## Answer (EN)
+
+Multibinding allows multiple modules to contribute elements to a shared collection (Set/Map) injected as a single dependency. Foundation for plugin-based and feature-modular architectures.
+
+### Multibinding Types
+
+**@IntoSet** - adds element to Set:
+
+```kotlin
+// ✅ Correct: each module contributes plugin
+@Module
+abstract class AnalyticsModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
+}
+
+@Module
+abstract class LoggingModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: LoggingPlugin): AppPlugin
+}
+
+// Usage: receive all plugins
+class PluginManager @Inject constructor(
+    private val plugins: Set<@JvmSuppressWildcards AppPlugin>
+)
+```
+
+**@IntoMap** - adds to Map by key:
+
+```kotlin
+// ✅ Correct: feature registry with keys
+@MapKey
+annotation class FeatureKey(val value: String)
+
+@Module
+abstract class FeatureModule {
+    @Binds @IntoMap
+    @FeatureKey("login")
+    abstract fun login(impl: LoginFeature): Feature
+
+    @Binds @IntoMap
+    @FeatureKey("payment")
+    abstract fun payment(impl: PaymentFeature): Feature
+}
+
+class FeatureRouter @Inject constructor(
     private val features: Map<String, @JvmSuppressWildcards Feature>
 ) {
-    fun executeFeature(featureName: String) {
-        features[featureName]?.execute()
-    }
-
-    fun getAvailableFeatures(): Set<String> = features.keys
+    fun route(key: String) = features[key]?.execute()
 }
 ```
 
-### Hilt Integration
-
-**Automatic component creation:**
+**@ElementsIntoSet** - adds multiple elements:
 
 ```kotlin
-@HiltAndroidApp
-class MyApplication : Application() {
-    @Inject
-    lateinit var pluginRegistry: PluginRegistry
-
-    @Inject
-    lateinit var featureManager: FeatureModuleManager
+// ✅ Correct: bulk addition
+@Module
+object ConfigModule {
+    @Provides @ElementsIntoSet
+    fun providers(): Set<ConfigProvider> = setOf(
+        RemoteConfig(),
+        LocalConfig(),
+        DefaultConfig()
+    )
 }
 ```
+
+**@Multibinds** - declares empty collection:
+
+```kotlin
+// ✅ Correct: optional collections
+@Module
+abstract class BaseModule {
+    @Multibinds
+    abstract fun plugins(): Set<AppPlugin>  // Can be empty
+}
+```
+
+### Plugin Architecture
+
+```kotlin
+// Plugin interface
+interface AppPlugin {
+    val priority: Int
+    fun initialize(context: Context)
+}
+
+// Modules add plugins independently
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AnalyticsModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: AnalyticsPlugin): AppPlugin
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class CrashModule {
+    @Binds @IntoSet
+    abstract fun plugin(impl: CrashPlugin): AppPlugin
+}
+
+// Manager initializes all plugins
+@Singleton
+class PluginManager @Inject constructor(
+    private val plugins: Set<@JvmSuppressWildcards AppPlugin>
+) {
+    fun initialize(context: Context) {
+        plugins.sortedBy { it.priority }
+            .forEach { it.initialize(context) }
+    }
+}
+```
+
+### Feature Module System
+
+```kotlin
+// ❌ Wrong: tight coupling
+class MainActivity {
+    fun navigate(screen: String) {
+        when (screen) {
+            "login" -> startActivity<LoginActivity>()
+            "payment" -> startActivity<PaymentActivity>()
+        }
+    }
+}
+
+// ✅ Correct: dynamic navigation via Map
+@MapKey
+@Retention(AnnotationRetention.RUNTIME)
+annotation class FeatureKey(val value: String)
+
+interface FeatureEntry {
+    fun createIntent(context: Context): Intent
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class LoginModule {
+    @Binds @IntoMap
+    @FeatureKey("login")
+    abstract fun entry(impl: LoginFeatureEntry): FeatureEntry
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class PaymentModule {
+    @Binds @IntoMap
+    @FeatureKey("payment")
+    abstract fun entry(impl: PaymentFeatureEntry): FeatureEntry
+}
+
+class Navigator @Inject constructor(
+    private val entries: Map<String, @JvmSuppressWildcards FeatureEntry>
+) {
+    fun navigate(context: Context, feature: String) {
+        entries[feature]?.createIntent(context)?.let(context::startActivity)
+    }
+}
+```
+
+### Advanced: Qualified Multibindings
+
+```kotlin
+// Different collections for different purposes
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class StartupPlugins
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class BackgroundPlugins
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class PluginModule {
+    @Binds @IntoSet @StartupPlugins
+    abstract fun startup(impl: AnalyticsPlugin): AppPlugin
+
+    @Binds @IntoSet @BackgroundPlugins
+    abstract fun background(impl: SyncPlugin): AppPlugin
+}
+
+class App : Application() {
+    @Inject @StartupPlugins
+    lateinit var startupPlugins: Set<@JvmSuppressWildcards AppPlugin>
+}
+```
+
+---
 
 ## Follow-ups
 
-- How do you handle plugin lifecycle management with multibinding?
-- What are the performance implications of large multibinding collections?
-- How can you implement conditional plugin loading with multibinding?
+1. How do you handle ordering/priority between multibinding contributions?
+2. Can you combine @IntoSet with qualifiers for separate collections?
+3. What happens if multibinding Map has duplicate keys?
+4. How do you test classes that depend on multibinding collections?
+5. What's the performance impact of large multibinding collections at compile-time?
+
+## References
+
+- [[c-dagger]] - Dagger fundamentals
+- [[c-hilt]] - Hilt DI framework
+- [[c-dependency-injection]] - DI principles
+- https://dagger.dev/dev-guide/multibindings.html - Official multibinding guide
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-dagger-inject-annotation--android--easy]]
+- [[q-dagger-inject-annotation--android--easy]] - Basic injection
+- [[q-dagger-provides-binds--android--medium]] - Module binding methods
 
 ### Related (Same Level)
-- [[q-dagger-field-injection--android--medium]]
+- [[q-dagger-custom-scopes--android--hard]] - Custom scope creation
+- [[q-dagger-component-dependencies--android--hard]] - Component relationships
 
 ### Advanced (Harder)
-- [[q-dagger-framework-overview--android--hard]]
-- [[q-dagger-custom-scopes--android--hard]]
-- [[q-dagger-component-dependencies--android--hard]]
+- [[q-dagger-framework-overview--android--hard]] - Complete Dagger architecture

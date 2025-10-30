@@ -1,136 +1,62 @@
 ---
 id: 20251017-150431
 title: "Network Operations Android / Сетевые операции в Android"
+aliases: ["Network Operations Android", "Сетевые операции в Android"]
 topic: android
+subtopics: [networking-http]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-what-does-the-lifecycle-library-do--android--medium, q-android-app-components--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium]
 created: 2025-10-15
-tags: [networking, http, difficulty/medium]
+updated: 2025-10-28
+sources: []
+tags: [networking, http, android/networking-http, difficulty/medium]
 ---
 
-# Что используется для работы с сетью в Android?
+# Вопрос (RU)
 
-**English**: What is used for network operations in Android?
+Какие инструменты используются для работы с сетью в Android?
 
-## Answer (EN)
-Для работы с сетью в Android используются различные библиотеки и инструменты, обеспечивающие выполнение сетевых запросов, обработку ответов и управление асинхронными операциями.
+# Question (EN)
 
-### Main tools
+What tools are used for network operations in Android?
 
-#### 1. HttpURLConnection (built-in)
+---
 
-Basic tool for simple HTTP requests.
+## Ответ (RU)
 
-```kotlin
-fun fetchData(): String {
-    val url = URL("https://api.example.com/data")
-    val connection = url.openConnection() as HttpURLConnection
+В Android используется несколько библиотек для сетевых операций: от встроенного HttpURLConnection до современных решений вроде Retrofit и Ktor.
 
-    try {
-        connection.requestMethod = "GET"
-        connection.connectTimeout = 5000
-        connection.readTimeout = 5000
+### Основные инструменты
 
-        val responseCode = connection.responseCode
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            val inputStream = connection.inputStream
-            return inputStream.bufferedReader().use { it.readText() }
-        }
-    } finally {
-        connection.disconnect()
-    }
+**HttpURLConnection** — встроенный базовый HTTP-клиент. Требует много boilerplate-кода, нет автоматического парсинга JSON, сложно управлять асинхронностью.
 
-    return ""
-}
-```
+**OkHttp** — мощный HTTP-клиент от Square. Эффективный connection pooling, автоматический retry, поддержка HTTP/2 и WebSocket. Используется как базовый транспорт для Retrofit.
 
-**Cons:**
-- Lots of boilerplate code
-- No automatic JSON conversion
-- Difficult to manage async operations
-
-#### 2. OkHttp (recommended)
-
-Powerful HTTP client from Square.
+**Retrofit** — наиболее популярный тайп-сейф REST-клиент. Декларативный API через аннотации, интеграция с Kotlin coroutines, автоматическая сериализация/десериализация.
 
 ```kotlin
-// Зависимость
-// implementation 'com.squareup.okhttp3:okhttp:4.11.0'
-
-val client = OkHttpClient.Builder()
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .readTimeout(30, TimeUnit.SECONDS)
-    .addInterceptor(HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    })
-    .build()
-
-fun fetchData() {
-    val request = Request.Builder()
-        .url("https://api.example.com/data")
-        .get()
-        .build()
-
-    client.newCall(request).enqueue(object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            // Network error
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-            response.use {
-                if (it.isSuccessful) {
-                    val body = it.body?.string()
-                    // Process response
-                }
-            }
-        }
-    })
-}
-```
-
-**Advantages:**
-- Efficient connection management
-- Connection pooling
-- Automatic retry
-- HTTP/2 support
-- WebSocket support
-
-#### 3. Retrofit (most popular)
-
-Type-safe HTTP client, uses OkHttp internally.
-
-```kotlin
-// Dependencies
-// implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-// implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
-// API interface
+// Retrofit API interface
 interface ApiService {
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: Int): User
 
     @POST("users")
     suspend fun createUser(@Body user: User): User
-
-    @GET("users")
-    suspend fun getUsers(
-        @Query("page") page: Int,
-        @Query("limit") limit: Int
-    ): List<User>
 }
 
-// Create Retrofit
+// Создание клиента
 val retrofit = Retrofit.Builder()
     .baseUrl("https://api.example.com/")
     .addConverterFactory(GsonConverterFactory.create())
     .client(okHttpClient)
     .build()
 
-val apiService = retrofit.create(ApiService::class.java)
-
-// Using with coroutines
+// ✅ Использование с coroutines
 lifecycleScope.launch {
     try {
         val user = apiService.getUser(123)
@@ -141,77 +67,21 @@ lifecycleScope.launch {
 }
 ```
 
-#### 4. Volley (from Google)
+**Volley** — библиотека от Google для множества мелких запросов. Автоматическое кеширование, приоритезация запросов, встроенная поддержка изображений.
 
-Library for fast small requests.
+**Ktor Client** — асинхронный Kotlin-first клиент для Kotlin Multiplatform проектов. Корутины из коробки, расширяемая архитектура через plugins.
 
-```kotlin
-// implementation 'com.android.volley:volley:1.2.1'
+### Критические правила
 
-val queue = Volley.newRequestQueue(context)
-
-val request = StringRequest(
-    Request.Method.GET,
-    "https://api.example.com/data",
-    { response ->
-        // Successful response
-        Log.d("Response", response)
-    },
-    { error ->
-        // Error
-        Log.e("Error", error.toString())
-    }
-)
-
-queue.add(request)
-```
-
-**Features:**
-- Automatic caching
-- Request prioritization
-- Request cancellation
-- Good for multiple small requests
-
-#### 5. Ktor Client (Kotlin-first)
-
-Asynchronous HTTP client for Kotlin.
+**Фоновый поток обязателен**
 
 ```kotlin
-// implementation("io.ktor:ktor-client-android:2.3.0")
-// implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
-
-val client = HttpClient(Android) {
-    install(ContentNegotiation) {
-        json()
-    }
-}
-
-suspend fun fetchUser(id: Int): User {
-    return client.get("https://api.example.com/users/$id").body()
-}
-```
-
-### Comparison table
-
-| Библиотека | Простота | Производительность | Функциональность | Use Case |
-|------------|----------|-------------------|------------------|----------|
-| **HttpURLConnection** |  |  |  | Простые запросы |
-| **OkHttp** |  |  |  | Гибкий HTTP клиент |
-| **Retrofit** |  |  |  | RESTful API |
-| **Volley** |  |  |  | Множество мелких запросов |
-| **Ktor** |  |  |  | Kotlin multiplatform |
-
-### Important rules
-
-**1. Сетевые операции в фоновом потоке**
-
-```kotlin
-// - НЕПРАВИЛЬНО - в main thread
+// ❌ НЕПРАВИЛЬНО - NetworkOnMainThreadException
 button.setOnClickListener {
-    val data = fetchData()  // NetworkOnMainThreadException!
+    val data = fetchData()
 }
 
-//  ПРАВИЛЬНО - в фоновом потоке
+// ✅ ПРАВИЛЬНО - Dispatchers.IO
 button.setOnClickListener {
     lifecycleScope.launch(Dispatchers.IO) {
         val data = fetchData()
@@ -222,119 +92,223 @@ button.setOnClickListener {
 }
 ```
 
-**2. Разрешения в манифесте**
+**Манифест permissions**
 
 ```xml
 <manifest>
-    <!-- Обязательно! -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Опционально для проверки состояния сети -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
 ```
 
-**3. HTTPS вместо HTTP**
+**HTTPS required**
 
 ```kotlin
-// Android 9+ блокирует cleartext (HTTP) по умолчанию
-// Используйте HTTPS!
-const val BASE_URL = "https://api.example.com/"  // 
-const val BASE_URL = "http://api.example.com/"   // BAD
+// ✅ Android 9+ требует HTTPS по умолчанию
+const val BASE_URL = "https://api.example.com/"
+
+// ❌ HTTP блокируется (cleartext traffic)
+const val BASE_URL = "http://api.example.com/"
 ```
 
-**4. Обработка ошибок**
+**Error handling**
 
 ```kotlin
 suspend fun safeApiCall(): Result<User> {
     return try {
-        val user = apiService.getUser(123)
-        Result.success(user)
+        Result.success(apiService.getUser(123))
     } catch (e: HttpException) {
-        // HTTP ошибка (4xx, 5xx)
+        // HTTP ошибка 4xx/5xx
         Result.failure(e)
     } catch (e: IOException) {
         // Сетевая ошибка (нет интернета)
-        Result.failure(e)
-    } catch (e: Exception) {
-        // Другие ошибки
         Result.failure(e)
     }
 }
 ```
 
-### Checking internet connection
+### Проверка сети
 
 ```kotlin
 fun isNetworkAvailable(context: Context): Boolean {
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
-        as ConnectivityManager
+    val cm = context.getSystemService<ConnectivityManager>() ?: return false
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(network)
-            ?: return false
-
-        return capabilities.hasCapability(
-            NetworkCapabilities.NET_CAPABILITY_INTERNET
-        )
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NET_CAPABILITY_INTERNET)
     } else {
-        @Suppress("DEPRECATION")
-        val networkInfo = connectivityManager.activeNetworkInfo
-        @Suppress("DEPRECATION")
-        return networkInfo?.isConnected == true
+        return cm.activeNetworkInfo?.isConnected == true
     }
 }
 ```
 
 ### Рекомендации
 
-**Для большинства приложений:**
-```kotlin
-// Retrofit + OkHttp + Gson/Moshi + Coroutines
-```
+**Для большинства приложений**: Retrofit + OkHttp + Gson/Moshi + Coroutines
 
-**Для простых запросов:**
-```kotlin
-// OkHttp
-```
+**Для простых запросов**: OkHttp напрямую
 
-**Для Kotlin Multiplatform:**
-```kotlin
-// Ktor Client
-```
-
-**English**: Android network operations use: **HttpURLConnection** (basic, built-in), **OkHttp** (powerful HTTP client with connection pooling, HTTP/2), **Retrofit** (most popular, type-safe REST client), **Volley** (Google's library for multiple small requests), **Ktor** (Kotlin-first async client). Must run on background thread, require INTERNET permission, prefer HTTPS. Retrofit + OkHttp recommended for most apps.
-
-
-## Ответ (RU)
-
-Это профессиональный перевод технического содержимого на русский язык.
-
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
-
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
-
-Длина оригинального английского контента: 7254 символов.
-
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
-
+**Для Kotlin Multiplatform**: Ktor Client
 
 ---
+
+## Answer (EN)
+
+Android uses several libraries for network operations: from built-in HttpURLConnection to modern solutions like Retrofit and Ktor.
+
+### Core Tools
+
+**HttpURLConnection** — built-in basic HTTP client. Requires lots of boilerplate, no automatic JSON parsing, difficult async management.
+
+**OkHttp** — powerful HTTP client from Square. Efficient connection pooling, automatic retry, HTTP/2 and WebSocket support. Used as transport layer for Retrofit.
+
+**Retrofit** — most popular type-safe REST client. Declarative API via annotations, Kotlin coroutines integration, automatic serialization/deserialization.
+
+```kotlin
+// Retrofit API interface
+interface ApiService {
+    @GET("users/{id}")
+    suspend fun getUser(@Path("id") userId: Int): User
+
+    @POST("users")
+    suspend fun createUser(@Body user: User): User
+}
+
+// Create client
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://api.example.com/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .client(okHttpClient)
+    .build()
+
+// ✅ Usage with coroutines
+lifecycleScope.launch {
+    try {
+        val user = apiService.getUser(123)
+        updateUI(user)
+    } catch (e: Exception) {
+        handleError(e)
+    }
+}
+```
+
+**Volley** — Google's library for multiple small requests. Automatic caching, request prioritization, built-in image support.
+
+**Ktor Client** — asynchronous Kotlin-first client for Kotlin Multiplatform. Coroutines out of the box, extensible architecture through plugins.
+
+### Critical Rules
+
+**Background thread required**
+
+```kotlin
+// ❌ WRONG - NetworkOnMainThreadException
+button.setOnClickListener {
+    val data = fetchData()
+}
+
+// ✅ CORRECT - Dispatchers.IO
+button.setOnClickListener {
+    lifecycleScope.launch(Dispatchers.IO) {
+        val data = fetchData()
+        withContext(Dispatchers.Main) {
+            updateUI(data)
+        }
+    }
+}
+```
+
+**Manifest permissions**
+
+```xml
+<manifest>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>
+```
+
+**HTTPS required**
+
+```kotlin
+// ✅ Android 9+ requires HTTPS by default
+const val BASE_URL = "https://api.example.com/"
+
+// ❌ HTTP blocked (cleartext traffic)
+const val BASE_URL = "http://api.example.com/"
+```
+
+**Error handling**
+
+```kotlin
+suspend fun safeApiCall(): Result<User> {
+    return try {
+        Result.success(apiService.getUser(123))
+    } catch (e: HttpException) {
+        // HTTP error 4xx/5xx
+        Result.failure(e)
+    } catch (e: IOException) {
+        // Network error (no internet)
+        Result.failure(e)
+    }
+}
+```
+
+### Network Checking
+
+```kotlin
+fun isNetworkAvailable(context: Context): Boolean {
+    val cm = context.getSystemService<ConnectivityManager>() ?: return false
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NET_CAPABILITY_INTERNET)
+    } else {
+        return cm.activeNetworkInfo?.isConnected == true
+    }
+}
+```
+
+### Recommendations
+
+**For most apps**: Retrofit + OkHttp + Gson/Moshi + Coroutines
+
+**For simple requests**: OkHttp directly
+
+**For Kotlin Multiplatform**: Ktor Client
+
+---
+
+## Follow-ups
+
+- How to implement retry logic with exponential backoff?
+- What's the difference between OkHttp interceptors and Retrofit converters?
+- How to handle certificate pinning for security?
+- How to implement request deduplication for concurrent identical requests?
+- What are the best practices for caching network responses?
+
+## References
+
+- [[c-retrofit]] - Type-safe HTTP client for Android
+- [[c-okhttp]] - HTTP client library fundamentals
+- [[c-kotlin-coroutines]] - Asynchronous programming in Kotlin
+- [Android Developers: Connect to the network](https://developer.android.com/training/basics/network-ops/connecting)
+- [Retrofit documentation](https://square.github.io/retrofit/)
+- [OkHttp documentation](https://square.github.io/okhttp/)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-graphql-vs-rest--networking--easy]] - Networking
+- [[q-android-app-components--android--easy]] - Understanding Android components
+- [[q-graphql-vs-rest--networking--easy]] - API architecture comparison
 
 ### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-network-error-handling-strategies--networking--medium]] - Networking
-- [[q-kmm-ktor-networking--android--medium]] - Networking
-- [[q-retrofit-call-adapter-advanced--networking--medium]] - Networking
-- [[q-api-file-upload-server--android--medium]] - Networking
+- [[q-what-does-the-lifecycle-library-do--android--medium]] - Lifecycle-aware networking
+- [[q-http-protocols-comparison--android--medium]] - HTTP protocol details
+- [[q-network-error-handling-strategies--networking--medium]] - Error handling patterns
+- [[q-kmm-ktor-networking--android--medium]] - Multiplatform networking
+- [[q-api-file-upload-server--android--medium]] - File upload implementation
 
 ### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-network-request-deduplication--networking--hard]] - Networking
+- [[q-data-sync-unstable-network--android--hard]] - Sync strategies
+- [[q-network-request-deduplication--networking--hard]] - Request optimization

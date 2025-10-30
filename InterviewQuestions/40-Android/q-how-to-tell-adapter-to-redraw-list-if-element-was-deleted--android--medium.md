@@ -1,307 +1,297 @@
 ---
 id: 20251017-114527
-title: "How To Tell Adapter To Redraw List If Element Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален"
+title: "Как сказать адаптеру перерисовать список если элемент был удален / How To Tell Adapter To Redraw List If Element Was Deleted"
+aliases: ["Как сказать адаптеру перерисовать список", "How to tell adapter to redraw list", "RecyclerView adapter update", "Обновление адаптера RecyclerView"]
 topic: android
+subtopics: [ui-views, recyclerview]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-modifier-system--android--medium, q-recyclerview-itemdecoration-advanced--recyclerview--medium, q-splash-screen-api-android12--android--medium]
+related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-recyclerview-sethasfixedsize--android--easy]
+sources: []
 created: 2025-10-15
-tags: [android]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:11:13 pm
+updated: 2025-10-28
+tags: [android, android/ui-views, android/recyclerview, recyclerview, adapter, difficulty/medium]
 ---
 
-# How to Tell Adapter to Redraw List if an Element Was Deleted?
+# Вопрос (RU)
 
-## EN (expanded)
+Как правильно уведомить адаптер RecyclerView о том, что элемент был удален из списка?
 
-When an item is removed from a list, you need to update both the data source and notify the adapter to redraw only the affected items.
+# Question (EN)
 
-### Traditional RecyclerView.Adapter
+How to properly notify a RecyclerView adapter that an item has been deleted from the list?
 
-#### Method 1: Specific Item Notification (Best)
+---
 
-```kotlin
-class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-    private val items = mutableListOf<String>()
+## Ответ (RU)
 
-    fun removeItem(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-        // Optional: notify about range change if needed
-        notifyItemRangeChanged(position, items.size)
-    }
+При удалении элемента необходимо обновить источник данных и уведомить адаптер специфичным методом для эффективной перерисовки.
 
-    fun removeItem(item: String) {
-        val position = items.indexOf(item)
-        if (position != -1) {
-            items.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, items.size)
-        }
-    }
+### Три основных подхода
 
-    // ... rest of adapter
-}
-```
-
-#### Method 2: Using DiffUtil (Recommended)
+**1. ListAdapter (рекомендуется)**
 
 ```kotlin
-class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
-    private var items = listOf<Item>()
-
-    fun updateItems(newItems: List<Item>) {
-        val diffCallback = ItemDiffCallback(items, newItems)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-
-        items = newItems
-        diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun removeItem(position: Int) {
-        val newList = items.toMutableList().apply {
-            removeAt(position)
-        }
-        updateItems(newList)
-    }
-
-    class ItemDiffCallback(
-        private val oldList: List<Item>,
-        private val newList: List<Item>
-    ) : DiffUtil.Callback() {
-        override fun getOldListSize() = oldList.size
-        override fun getNewListSize() = newList.size
-
-        override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
-            return oldList[oldPos].id == newList[newPos].id
-        }
-
-        override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-            return oldList[oldPos] == newList[newPos]
-        }
-    }
-
-    // ... rest of adapter
-}
-```
-
-### ListAdapter (Modern Approach - Recommended)
-
-```kotlin
+// ✅ Современный подход - DiffUtil встроен
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator) {
-
-    fun removeItem(item: Item) {
-        val newList = currentList.toMutableList()
-        newList.remove(item)
-        submitList(newList)
-        // ListAdapter handles everything automatically
-    }
 
     fun removeItem(position: Int) {
         val newList = currentList.toMutableList()
         newList.removeAt(position)
-        submitList(newList)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemLayoutBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    class ViewHolder(private val binding: ItemLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Item) {
-            binding.titleText.text = item.title
-            binding.descriptionText.text = item.description
-        }
+        submitList(newList)  // DiffUtil работает автоматически
     }
 
     object ItemComparator : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem == newItem
-        }
+        override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
+        override fun areContentsTheSame(old: Item, new: Item) = old == new
     }
 }
 ```
 
-### Complete Example with Swipe to Delete
+**2. DiffUtil с RecyclerView.Adapter**
 
 ```kotlin
-class SwipeToDeleteActivity : AppCompatActivity() {
-    private lateinit var adapter: ModernAdapter
-    private val items = mutableListOf<Item>()
+// ✅ Эффективно для больших списков
+class SmartAdapter : RecyclerView.Adapter<ViewHolder>() {
+    private var items = listOf<Item>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        adapter = ModernAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Setup swipe to delete
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-            0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean = false
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val item = adapter.currentList[position]
-
-                // Remove item
-                val newList = adapter.currentList.toMutableList()
-                newList.removeAt(position)
-                adapter.submitList(newList)
-
-                // Show undo snackbar
-                Snackbar.make(recyclerView, "Item deleted", Snackbar.LENGTH_LONG)
-                    .setAction("Undo") {
-                        val restoreList = adapter.currentList.toMutableList()
-                        restoreList.add(position, item)
-                        adapter.submitList(restoreList)
-                    }
-                    .show()
-            }
-        })
-
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-
-        // Load initial data
-        loadItems()
-    }
-
-    private fun loadItems() {
-        // Load your items
-        adapter.submitList(items)
+    fun updateItems(newItems: List<Item>) {
+        val diff = DiffUtil.calculateDiff(ItemDiffCallback(items, newItems))
+        items = newItems
+        diff.dispatchUpdatesTo(this)
     }
 }
 ```
 
-### With Click Listener
+**3. Прямое уведомление**
 
 ```kotlin
-class ClickableAdapter(
-    private val onDeleteClick: (Item, Int) -> Unit
-) : ListAdapter<Item, ClickableAdapter.ViewHolder>(ItemComparator) {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onDeleteClick)
-    }
-
-    class ViewHolder(private val binding: ItemLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Item, onDeleteClick: (Item, Int) -> Unit) {
-            binding.apply {
-                titleText.text = item.title
-                deleteButton.setOnClickListener {
-                    onDeleteClick(item, adapterPosition)
-                }
-            }
-        }
-    }
-
-    // ... comparator
+// ✅ Для простых случаев
+fun removeItem(position: Int) {
+    items.removeAt(position)
+    notifyItemRemoved(position)
+    // Обновить индексы следующих элементов
+    notifyItemRangeChanged(position, items.size)
 }
 
-// Usage
-val adapter = ClickableAdapter { item, position ->
-    val newList = adapter.currentList.toMutableList()
-    newList.removeAt(position)
-    adapter.submitList(newList)
+// ❌ Избегать - перерисовывает весь список
+fun removeItemBad(position: Int) {
+    items.removeAt(position)
+    notifyDataSetChanged()  // Неэффективно, теряются анимации
 }
 ```
 
-### Jetpack Compose (LazyColumn)
+### Swipe to Delete с отменой
 
-In Compose, list updates are automatic:
+```kotlin
+val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+    0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+) {
+    override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+        val position = viewHolder.adapterPosition
+        val item = adapter.currentList[position]
+
+        val newList = adapter.currentList.toMutableList()
+        newList.removeAt(position)
+        adapter.submitList(newList)
+
+        Snackbar.make(recyclerView, "Элемент удален", Snackbar.LENGTH_LONG)
+            .setAction("Отменить") {
+                val restoreList = adapter.currentList.toMutableList()
+                restoreList.add(position, item)
+                adapter.submitList(restoreList)
+            }
+            .show()
+    }
+})
+itemTouchHelper.attachToRecyclerView(recyclerView)
+```
+
+### Важные особенности
+
+**Всегда используйте adapterPosition**
+
+```kotlin
+// ❌ Неправильно - позиция может устареть
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.deleteButton.setOnClickListener {
+        removeItem(position)  // position может быть неактуальной!
+    }
+}
+
+// ✅ Правильно - получаем текущую позицию
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.deleteButton.setOnClickListener {
+        val currentPos = holder.adapterPosition
+        if (currentPos != RecyclerView.NO_POSITION) {
+            removeItem(currentPos)
+        }
+    }
+}
+```
+
+### Jetpack Compose
+
+В Compose обновления списка автоматические через State:
 
 ```kotlin
 @Composable
 fun ItemList() {
-    var items by remember {
-        mutableStateOf(listOf(
-            Item("1", "Item 1"),
-            Item("2", "Item 2"),
-            Item("3", "Item 3")
-        ))
-    }
+    var items by remember { mutableStateOf(listOf<Item>()) }
 
     LazyColumn {
         items(
             items = items,
-            key = { it.id } // Important for animations
+            key = { it.id }  // Важно для анимаций
         ) { item ->
             ItemRow(
                 item = item,
-                onDelete = {
-                    // Remove item - Compose handles updates automatically
-                    items = items.filter { it.id != item.id }
-                }
+                onDelete = { items = items.filter { it.id != item.id } }
             )
-        }
-    }
-}
-
-@Composable
-fun ItemRow(item: Item, onDelete: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = item.title)
-        IconButton(onClick = onDelete) {
-            Icon(Icons.Default.Delete, contentDescription = "Delete")
         }
     }
 }
 ```
 
-### Compose with Animation
+### Лучшие практики
+
+1. **ListAdapter** - выбор по умолчанию для нового кода
+2. **Стабильные ключи** - используйте `key = { it.id }` для правильных анимаций
+3. **Избегайте `notifyDataSetChanged()`** - теряются анимации и производительность
+4. **Функция отмены** - улучшает UX через Snackbar
+5. **`adapterPosition`** - используйте вместо параметра `position`
+
+---
+
+## Answer (EN)
+
+When deleting an item, you need to update the data source and notify the adapter with specific methods for efficient redrawing.
+
+### Three Main Approaches
+
+**1. ListAdapter (recommended)**
+
+```kotlin
+// ✅ Modern approach - DiffUtil built-in
+class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator) {
+
+    fun removeItem(position: Int) {
+        val newList = currentList.toMutableList()
+        newList.removeAt(position)
+        submitList(newList)  // DiffUtil works automatically
+    }
+
+    object ItemComparator : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
+        override fun areContentsTheSame(old: Item, new: Item) = old == new
+    }
+}
+```
+
+**2. DiffUtil with RecyclerView.Adapter**
+
+```kotlin
+// ✅ Efficient for large lists
+class SmartAdapter : RecyclerView.Adapter<ViewHolder>() {
+    private var items = listOf<Item>()
+
+    fun updateItems(newItems: List<Item>) {
+        val diff = DiffUtil.calculateDiff(ItemDiffCallback(items, newItems))
+        items = newItems
+        diff.dispatchUpdatesTo(this)
+    }
+}
+```
+
+**3. Direct Notification**
+
+```kotlin
+// ✅ For simple cases
+fun removeItem(position: Int) {
+    items.removeAt(position)
+    notifyItemRemoved(position)
+    // Update indices of following items
+    notifyItemRangeChanged(position, items.size)
+}
+
+// ❌ Avoid - redraws entire list
+fun removeItemBad(position: Int) {
+    items.removeAt(position)
+    notifyDataSetChanged()  // Inefficient, loses animations
+}
+```
+
+### Swipe to Delete with Undo
+
+```kotlin
+val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+    0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+) {
+    override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+        val position = viewHolder.adapterPosition
+        val item = adapter.currentList[position]
+
+        val newList = adapter.currentList.toMutableList()
+        newList.removeAt(position)
+        adapter.submitList(newList)
+
+        Snackbar.make(recyclerView, "Item deleted", Snackbar.LENGTH_LONG)
+            .setAction("Undo") {
+                val restoreList = adapter.currentList.toMutableList()
+                restoreList.add(position, item)
+                adapter.submitList(restoreList)
+            }
+            .show()
+    }
+})
+itemTouchHelper.attachToRecyclerView(recyclerView)
+```
+
+### Important Considerations
+
+**Always use adapterPosition**
+
+```kotlin
+// ❌ Wrong - position may become stale
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.deleteButton.setOnClickListener {
+        removeItem(position)  // position may be outdated!
+    }
+}
+
+// ✅ Correct - get current position
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.deleteButton.setOnClickListener {
+        val currentPos = holder.adapterPosition
+        if (currentPos != RecyclerView.NO_POSITION) {
+            removeItem(currentPos)
+        }
+    }
+}
+```
+
+### Jetpack Compose
+
+In Compose, list updates are automatic through State:
 
 ```kotlin
 @Composable
-fun AnimatedItemList() {
-    var items by remember { mutableStateOf(getSampleItems()) }
+fun ItemList() {
+    var items by remember { mutableStateOf(listOf<Item>()) }
 
     LazyColumn {
         items(
             items = items,
-            key = { it.id }
+            key = { it.id }  // Important for animations
         ) { item ->
-            AnimatedVisibility(
-                visible = true,
-                exit = slideOutHorizontally() + fadeOut()
-            ) {
-                ItemRow(
-                    item = item,
-                    onDelete = {
-                        items = items.filter { it.id != item.id }
-                    }
-                )
-            }
+            ItemRow(
+                item = item,
+                onDelete = { items = items.filter { it.id != item.id } }
+            )
         }
     }
 }
@@ -309,525 +299,41 @@ fun AnimatedItemList() {
 
 ### Best Practices
 
-1. **Use ListAdapter** for new code - it handles DiffUtil automatically
-2. **Always use stable keys** - helps with animations and performance
-3. **Avoid notifyDataSetChanged()** - it's inefficient
-4. **Use specific notifications** - `notifyItemRemoved()`, `notifyItemInserted()`, etc.
-5. **Consider undo functionality** - improve UX with Snackbar
-6. **Animate deletions** - better visual feedback
-
-### Common Notification Methods
-
-```kotlin
-// Item removed
-notifyItemRemoved(position)
-
-// Item inserted
-notifyItemInserted(position)
-
-// Item changed
-notifyItemChanged(position)
-
-// Range changed
-notifyItemRangeChanged(positionStart, itemCount)
-
-// Range removed
-notifyItemRangeRemoved(positionStart, itemCount)
-
-// Item moved
-notifyItemMoved(fromPosition, toPosition)
-
-// Everything changed (avoid!)
-notifyDataSetChanged()
-```
+1. **ListAdapter** - default choice for new code
+2. **Stable keys** - use `key = { it.id }` for proper animations
+3. **Avoid `notifyDataSetChanged()`** - loses animations and performance
+4. **Undo functionality** - improves UX through Snackbar
+5. **`adapterPosition`** - use instead of `position` parameter
 
 ---
 
-## Ответ (RU)
-
-Когда элемент удаляется из списка, необходимо обновить как источник данных, так и уведомить адаптер для перерисовки только затронутых элементов.
-
-### Традиционный RecyclerView.Adapter
-
-#### Метод 1: Уведомление О Конкретном Элементе (Лучший подход)
-
-```kotlin
-class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-    private val items = mutableListOf<String>()
-
-    fun removeItem(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-        // Опционально: уведомить об изменении диапазона если нужно
-        notifyItemRangeChanged(position, items.size)
-    }
-
-    fun removeItem(item: String) {
-        val position = items.indexOf(item)
-        if (position != -1) {
-            items.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, items.size)
-        }
-    }
-
-    // ... остальная часть адаптера
-}
-```
-
-#### Метод 2: Использование DiffUtil (Рекомендуется)
-
-```kotlin
-class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
-    private var items = listOf<Item>()
-
-    fun updateItems(newItems: List<Item>) {
-        val diffCallback = ItemDiffCallback(items, newItems)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-
-        items = newItems
-        diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun removeItem(position: Int) {
-        val newList = items.toMutableList().apply {
-            removeAt(position)
-        }
-        updateItems(newList)
-    }
-
-    class ItemDiffCallback(
-        private val oldList: List<Item>,
-        private val newList: List<Item>
-    ) : DiffUtil.Callback() {
-        override fun getOldListSize() = oldList.size
-        override fun getNewListSize() = newList.size
-
-        override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
-            return oldList[oldPos].id == newList[newPos].id
-        }
-
-        override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-            return oldList[oldPos] == newList[newPos]
-        }
-    }
-
-    // ... остальная часть адаптера
-}
-```
-
-### ListAdapter (Современный Подход - Рекомендуется)
-
-```kotlin
-class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator) {
-
-    fun removeItem(item: Item) {
-        val newList = currentList.toMutableList()
-        newList.remove(item)
-        submitList(newList)
-        // ListAdapter обрабатывает все автоматически
-    }
-
-    fun removeItem(position: Int) {
-        val newList = currentList.toMutableList()
-        newList.removeAt(position)
-        submitList(newList)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemLayoutBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    class ViewHolder(private val binding: ItemLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Item) {
-            binding.titleText.text = item.title
-            binding.descriptionText.text = item.description
-        }
-    }
-
-    object ItemComparator : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem == newItem
-        }
-    }
-}
-```
-
-### Полный Пример Со Swipe to Delete
-
-```kotlin
-class SwipeToDeleteActivity : AppCompatActivity() {
-    private lateinit var adapter: ModernAdapter
-    private val items = mutableListOf<Item>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        adapter = ModernAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Настройка swipe to delete
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-            0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean = false
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val item = adapter.currentList[position]
-
-                // Удалить элемент
-                val newList = adapter.currentList.toMutableList()
-                newList.removeAt(position)
-                adapter.submitList(newList)
-
-                // Показать snackbar с отменой
-                Snackbar.make(recyclerView, "Элемент удален", Snackbar.LENGTH_LONG)
-                    .setAction("Отменить") {
-                        val restoreList = adapter.currentList.toMutableList()
-                        restoreList.add(position, item)
-                        adapter.submitList(restoreList)
-                    }
-                    .show()
-            }
-        })
-
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-
-        // Загрузить начальные данные
-        loadItems()
-    }
-
-    private fun loadItems() {
-        // Загрузить элементы
-        adapter.submitList(items)
-    }
-}
-```
-
-### С Click Listener
-
-```kotlin
-class ClickableAdapter(
-    private val onDeleteClick: (Item, Int) -> Unit
-) : ListAdapter<Item, ClickableAdapter.ViewHolder>(ItemComparator) {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position), onDeleteClick)
-    }
-
-    class ViewHolder(private val binding: ItemLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Item, onDeleteClick: (Item, Int) -> Unit) {
-            binding.apply {
-                titleText.text = item.title
-                deleteButton.setOnClickListener {
-                    onDeleteClick(item, adapterPosition)
-                }
-            }
-        }
-    }
-
-    // ... comparator
-}
-
-// Использование
-val adapter = ClickableAdapter { item, position ->
-    val newList = adapter.currentList.toMutableList()
-    newList.removeAt(position)
-    adapter.submitList(newList)
-}
-```
-
-### Jetpack Compose (LazyColumn)
-
-В Compose обновления списка автоматические:
-
-```kotlin
-@Composable
-fun ItemList() {
-    var items by remember {
-        mutableStateOf(listOf(
-            Item("1", "Элемент 1"),
-            Item("2", "Элемент 2"),
-            Item("3", "Элемент 3")
-        ))
-    }
-
-    LazyColumn {
-        items(
-            items = items,
-            key = { it.id } // Важно для анимаций
-        ) { item ->
-            ItemRow(
-                item = item,
-                onDelete = {
-                    // Удалить элемент - Compose обрабатывает обновления автоматически
-                    items = items.filter { it.id != item.id }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun ItemRow(item: Item, onDelete: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = item.title)
-        IconButton(onClick = onDelete) {
-            Icon(Icons.Default.Delete, contentDescription = "Удалить")
-        }
-    }
-}
-```
-
-### Compose С Анимацией
-
-```kotlin
-@Composable
-fun AnimatedItemList() {
-    var items by remember { mutableStateOf(getSampleItems()) }
-
-    LazyColumn {
-        items(
-            items = items,
-            key = { it.id }
-        ) { item ->
-            AnimatedVisibility(
-                visible = true,
-                exit = slideOutHorizontally() + fadeOut()
-            ) {
-                ItemRow(
-                    item = item,
-                    onDelete = {
-                        items = items.filter { it.id != item.id }
-                    }
-                )
-            }
-        }
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте ListAdapter** для нового кода - он обрабатывает DiffUtil автоматически
-2. **Всегда используйте стабильные ключи** - помогает с анимациями и производительностью
-3. **Избегайте notifyDataSetChanged()** - это неэффективно
-4. **Используйте специфичные уведомления** - `notifyItemRemoved()`, `notifyItemInserted()` и т.д.
-5. **Рассмотрите функциональность отмены** - улучшает UX с помощью Snackbar
-6. **Анимируйте удаления** - лучшая визуальная обратная связь
-
-### Распространенные Методы Уведомления
-
-```kotlin
-// Элемент удален
-notifyItemRemoved(position)
-
-// Элемент вставлен
-notifyItemInserted(position)
-
-// Элемент изменен
-notifyItemChanged(position)
-
-// Диапазон изменен
-notifyItemRangeChanged(positionStart, itemCount)
-
-// Диапазон удален
-notifyItemRangeRemoved(positionStart, itemCount)
-
-// Элемент перемещен
-notifyItemMoved(fromPosition, toPosition)
-
-// Все изменилось (избегайте!)
-notifyDataSetChanged()
-```
-
-### Сравнение Методов Уведомлений
-
-| Метод | Использование | Анимация | Производительность |
-|-------|---------------|----------|-------------------|
-| `notifyItemRemoved()` | Один элемент удален | Да | Отлично |
-| `notifyItemInserted()` | Один элемент добавлен | Да | Отлично |
-| `notifyItemChanged()` | Один элемент изменен | Да | Отлично |
-| `notifyItemRangeChanged()` | Диапазон изменен | Да | Хорошо |
-| `notifyDataSetChanged()` | Все изменилось | Нет | Плохо |
-| `submitList()` (ListAdapter) | Любые изменения | Да | Отлично |
-
-### Обработка Позиций После Удаления
-
-```kotlin
-// Проблема: позиции могут измениться после удаления
-class BadAdapter : RecyclerView.Adapter<BadAdapter.ViewHolder>() {
-    private val items = mutableListOf<String>()
-
-    // НЕПРАВИЛЬНО - сохранение позиции может быть неактуальным
-    fun setupDeleteButton(holder: ViewHolder, position: Int) {
-        holder.deleteButton.setOnClickListener {
-            items.removeAt(position) // Позиция может быть устаревшей!
-            notifyItemRemoved(position)
-        }
-    }
-}
-
-// Решение: используйте adapterPosition
-class GoodAdapter : RecyclerView.Adapter<GoodAdapter.ViewHolder>() {
-    private val items = mutableListOf<String>()
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-        holder.deleteButton.setOnClickListener {
-            val currentPosition = holder.adapterPosition
-            if (currentPosition != RecyclerView.NO_POSITION) {
-                items.removeAt(currentPosition)
-                notifyItemRemoved(currentPosition)
-                notifyItemRangeChanged(currentPosition, items.size)
-            }
-        }
-    }
-}
-```
-
-### Продвинутый Пример: Множественное Удаление
-
-```kotlin
-class MultiSelectAdapter : ListAdapter<Item, MultiSelectAdapter.ViewHolder>(ItemComparator) {
-    private val selectedItems = mutableSetOf<String>()
-
-    fun toggleSelection(item: Item) {
-        if (selectedItems.contains(item.id)) {
-            selectedItems.remove(item.id)
-        } else {
-            selectedItems.add(item.id)
-        }
-        // Перерисовать измененный элемент
-        val position = currentList.indexOfFirst { it.id == item.id }
-        if (position != -1) {
-            notifyItemChanged(position)
-        }
-    }
-
-    fun deleteSelectedItems() {
-        val newList = currentList.filter { !selectedItems.contains(it.id) }
-        selectedItems.clear()
-        submitList(newList)
-    }
-
-    fun isSelected(item: Item): Boolean = selectedItems.contains(item.id)
-
-    inner class ViewHolder(private val binding: ItemLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Item) {
-            binding.apply {
-                titleText.text = item.title
-                root.isActivated = isSelected(item)
-
-                root.setOnLongClickListener {
-                    toggleSelection(item)
-                    true
-                }
-            }
-        }
-    }
-}
-```
-
-### Обработка Анимаций
-
-```kotlin
-// Настройка кастомной анимации для RecyclerView
-class FadeInAnimator : DefaultItemAnimator() {
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
-            .alpha(1f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchAddFinished(holder)
-                }
-            })
-            .start()
-        return false
-    }
-
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchRemoveFinished(holder)
-                    holder.itemView.alpha = 1f
-                }
-            })
-            .start()
-        return false
-    }
-}
-
-// Использование
-recyclerView.itemAnimator = FadeInAnimator()
-```
-
-### Резюме
-
-**Удаление элемента из списка:**
-1. Удалить из источника данных
-2. Уведомить адаптер специфичным методом
-3. Избегать `notifyDataSetChanged()`
-
-**Лучшие подходы:**
-- **ListAdapter** - самый простой и рекомендуемый
-- **DiffUtil** - для традиционных адаптеров
-- **Специфичные notify методы** - для точечных обновлений
-
-**Ключевые моменты:**
-- Используйте `adapterPosition` вместо сохраненной позиции
-- Добавляйте функциональность отмены для лучшего UX
-- Используйте анимации для визуальной обратной связи
-- В Compose все обновления автоматические через state
-
----
+## Follow-ups
+
+- What are the performance implications of `notifyDataSetChanged()` vs `notifyItemRemoved()`?
+- How does DiffUtil determine which items changed?
+- When should you use `notifyItemRangeChanged()` after deletion?
+- How to handle item deletion in a multi-selection scenario?
+- What happens if you call `notifyItemRemoved()` without actually removing the item from the data source?
+
+## References
+
+- Android Documentation: [RecyclerView.Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter)
+- Android Documentation: [ListAdapter](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
+- Android Documentation: [DiffUtil](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Architecture fundamentals
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI fundamentals
 
-### Related (Medium)
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- q-rxjava-pagination-recyclerview--android--medium - Ui
-- [[q-build-optimization-gradle--android--medium]] - Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
-- [[q-testing-compose-ui--android--medium]] - Ui
+### Related (Same Level)
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
+- [[q-recyclerview-itemdecoration-advanced--recyclerview--medium]] - RecyclerView customization
+- [[q-testing-compose-ui--android--medium]] - Testing UI components
+
+### Advanced (Harder)
+- Performance optimization with large lists and complex diff calculations
+- Custom ItemAnimator implementation for deletion effects
+- Handling concurrent modifications and race conditions in adapter updates

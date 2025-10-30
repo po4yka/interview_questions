@@ -1,75 +1,56 @@
 ---
 id: 20251012-12271118
-title: "Kmm Architecture / Архитектура KMM"
+title: "KMM Architecture / Архитектура KMM"
+aliases: ["KMM Architecture", "Архитектура KMM", "Kotlin Multiplatform Mobile"]
 topic: android
+subtopics: [architecture-patterns, kmm, multiplatform]
+question_kind: android
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-app-size-optimization--performance--medium, q-how-mutablestate-notifies--android--medium, q-which-class-to-use-for-rendering-view-in-background-thread--android--hard]
+related: [q-clean-architecture-android--android--hard, q-mvi-architecture--android--hard, q-offline-first-architecture--android--hard]
 created: 2025-10-15
-tags: [Architecture, difficulty/hard, KMM, Kotlin, Multiplatform]
-date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Saturday, October 25th 2025, 4:08:01 pm
+updated: 2025-10-28
+sources: []
+tags: [android, android/architecture-patterns, kmm, kotlin, multiplatform, difficulty/hard]
 ---
 
-# Kotlin Multiplatform Mobile (KMM) Architecture
+# Вопрос (RU)
+
+Объясните архитектуру Kotlin Multiplatform Mobile (KMM) и структуру проекта. Как организовать shared код между Android и iOS? Что такое expect/actual механизмы? Как обрабатывать platform-specific реализации максимизируя переиспользование кода?
 
 # Question (EN)
-> 
+
 Explain Kotlin Multiplatform Mobile (KMM) architecture and project structure. How do you organize shared code between Android and iOS? What are expect/actual mechanisms? How do you handle platform-specific implementations while maximizing code reuse?
 
-## Answer (EN)
-Kotlin Multiplatform Mobile (KMM) enables sharing business logic, networking, and data layers between Android and iOS while keeping UI platform-specific, achieving significant code reuse without compromising native experience.
+---
 
-#### KMM Project Structure
+## Ответ (RU)
 
-**1. Multi-Module Setup**
+KMM позволяет делиться бизнес-логикой, сетью и data слоями между Android и iOS, сохраняя UI platform-specific, достигая 60-80% переиспользования кода.
+
+### Структура Проекта
+
+**Модули:**
+```
+shared/          # Общий Kotlin код
+  commonMain/    # Код для всех платформ
+  androidMain/   # Android-specific
+  iosMain/       # iOS-specific
+androidApp/      # Android приложение
+iosApp/          # iOS Xcode проект
+```
+
+**Build Configuration:**
 ```kotlin
-// settings.gradle.kts (root)
-rootProject.name = "TaskFlowKMM"
-
-include(":androidApp")
-include(":shared")
-include(":iosApp") // Xcode project reference
-
 // shared/build.gradle.kts
-plugins {
-    kotlin("multiplatform")
-    kotlin("native.cocoapods")
-    id("com.android.library")
-    kotlin("plugin.serialization")
-}
-
 kotlin {
-    android {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-    }
+    android()
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "shared"
-            isStatic = true
-
-            // Export dependencies to iOS
-            export("io.ktor:ktor-client-core:2.3.7")
-            export("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
-        }
-    }
-
-    cocoapods {
-        summary = "Shared business logic for TaskFlow"
-        homepage = "https://taskflow.app"
-        version = "1.0"
-        ios.deploymentTarget = "14.0"
-        framework {
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach {
+        it.binaries.framework {
             baseName = "shared"
             isStatic = true
         }
@@ -78,379 +59,91 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                // Networking
-                implementation("io.ktor:ktor-client-core:2.3.7")
-                implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
-
-                // Serialization
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
-
-                // DateTime
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
-
-                // Coroutines
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-
-                // Logging
-                implementation("co.touchlab:kermit:2.0.2")
-
-                // Dependency Injection
-                implementation("io.insert-koin:koin-core:3.5.3")
+                implementation("io.ktor:ktor-client-core")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
             }
         }
-
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-            }
-        }
-
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-android:2.3.7")
-                implementation("androidx.startup:startup-runtime:1.1.1")
-                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+                implementation("io.ktor:ktor-client-android")
             }
         }
-
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-
         val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.7")
+                implementation("io.ktor:ktor-client-darwin")
             }
         }
     }
 }
-
-android {
-    namespace = "com.taskflow.shared"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 24
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-}
 ```
 
-**2. Directory Structure**
-```
-project/
- androidApp/              # Android-specific app
-    src/main/
-       kotlin/
-          com/taskflow/android/
-              MainActivity.kt
-              ui/
-              di/
-       res/
-    build.gradle.kts
- iosApp/                  # iOS Xcode project
-    iosApp/
-       ContentView.swift
-       TaskListView.swift
-       ViewModel/
-    iosApp.xcodeproj
- shared/                  # Shared Kotlin code
-     src/
-        commonMain/kotlin/
-           com/taskflow/shared/
-               domain/
-                  model/
-                  repository/
-                  usecase/
-               data/
-                  remote/
-                  local/
-                  repository/
-               Platform.kt
-               di/
-        commonTest/kotlin/
-        androidMain/kotlin/
-           com/taskflow/shared/
-               PlatformAndroid.kt
-               database/
-        iosMain/kotlin/
-            com/taskflow/shared/
-                PlatformIOS.kt
-                database/
-     build.gradle.kts
-```
+### Expect/Actual Механизм
 
-#### Expect/Actual Mechanism
+**Назначение:** Абстракция platform-specific функционала
 
-**1. Platform Abstraction**
 ```kotlin
-// commonMain/Platform.kt - expect declaration
+// ✅ commonMain - expect declaration
 expect class Platform() {
     val name: String
     val version: String
-    val deviceModel: String
 }
 
 expect fun generateUUID(): String
 
-expect fun currentTimeMillis(): Long
-
-expect class Logger() {
-    fun debug(tag: String, message: String)
-    fun error(tag: String, message: String, throwable: Throwable?)
-}
-
-// androidMain/PlatformAndroid.kt - actual implementation
+// ✅ androidMain - actual implementation
 actual class Platform {
-    actual val name: String = "Android"
-    actual val version: String = Build.VERSION.RELEASE
-    actual val deviceModel: String = "${Build.MANUFACTURER} ${Build.MODEL}"
+    actual val name = "Android"
+    actual val version = Build.VERSION.RELEASE
 }
 
-actual fun generateUUID(): String = UUID.randomUUID().toString()
+actual fun generateUUID() = UUID.randomUUID().toString()
 
-actual fun currentTimeMillis(): Long = System.currentTimeMillis()
-
-actual class Logger {
-    actual fun debug(tag: String, message: String) {
-        Log.d(tag, message)
-    }
-
-    actual fun error(tag: String, message: String, throwable: Throwable?) {
-        Log.e(tag, message, throwable)
-    }
-}
-
-// iosMain/PlatformIOS.kt - actual implementation
-import platform.UIKit.UIDevice
-import platform.Foundation.NSUUID
-
+// ✅ iosMain - actual implementation
 actual class Platform {
-    actual val name: String = UIDevice.currentDevice.systemName
-    actual val version: String = UIDevice.currentDevice.systemVersion
-    actual val deviceModel: String = UIDevice.currentDevice.model
+    actual val name = UIDevice.currentDevice.systemName
+    actual val version = UIDevice.currentDevice.systemVersion
 }
 
-actual fun generateUUID(): String = NSUUID().UUIDString
-
-actual fun currentTimeMillis(): Long =
-    platform.Foundation.NSDate().timeIntervalSince1970.toLong() * 1000
-
-actual class Logger {
-    actual fun debug(tag: String, message: String) {
-        NSLog("[$tag] $message")
-    }
-
-    actual fun error(tag: String, message: String, throwable: Throwable?) {
-        NSLog("[$tag] ERROR: $message ${throwable?.message ?: ""}")
-    }
-}
+actual fun generateUUID() = NSUUID().UUIDString
 ```
 
-**2. Database Abstraction**
+**Применение:**
+- Database drivers (SQLDelight)
+- Logger (Logcat vs NSLog)
+- File system access
+- Platform-specific UI previews
+
+### Shared Business Logic
+
+**Repository Pattern:**
 ```kotlin
-// commonMain - Database interface
-interface TaskDatabase {
-    suspend fun getAllTasks(): List<Task>
-    suspend fun getTaskById(id: String): Task?
-    suspend fun insertTask(task: Task)
-    suspend fun updateTask(task: Task)
-    suspend fun deleteTask(id: String)
-    suspend fun searchTasks(query: String): List<Task>
-}
-
-// commonMain - expect declaration
-expect class DatabaseDriverFactory {
-    fun createDriver(): SqlDriver
-}
-
-// androidMain - Android implementation with SQLDelight
-actual class DatabaseDriverFactory(private val context: Context) {
-    actual fun createDriver(): SqlDriver {
-        return AndroidSqliteDriver(
-            schema = TaskFlowDatabase.Schema,
-            context = context,
-            name = "taskflow.db"
-        )
-    }
-}
-
-// iosMain - iOS implementation with SQLDelight
-actual class DatabaseDriverFactory {
-    actual fun createDriver(): SqlDriver {
-        return NativeSqliteDriver(
-            schema = TaskFlowDatabase.Schema,
-            name = "taskflow.db"
-        )
-    }
-}
-
-// commonMain - Database implementation
-class TaskDatabaseImpl(driverFactory: DatabaseDriverFactory) : TaskDatabase {
-    private val database = TaskFlowDatabase(driverFactory.createDriver())
-    private val queries = database.taskQueries
-
-    override suspend fun getAllTasks(): List<Task> = withContext(Dispatchers.Default) {
-        queries.selectAll().executeAsList().map { it.toDomain() }
-    }
-
-    override suspend fun getTaskById(id: String): Task? = withContext(Dispatchers.Default) {
-        queries.selectById(id).executeAsOneOrNull()?.toDomain()
-    }
-
-    override suspend fun insertTask(task: Task) = withContext(Dispatchers.Default) {
-        queries.insert(
-            id = task.id,
-            title = task.title,
-            description = task.description,
-            completed = task.completed.toLong(),
-            createdAt = task.createdAt,
-            updatedAt = task.updatedAt
-        )
-    }
-
-    override suspend fun updateTask(task: Task) = withContext(Dispatchers.Default) {
-        queries.update(
-            title = task.title,
-            description = task.description,
-            completed = task.completed.toLong(),
-            updatedAt = task.updatedAt,
-            id = task.id
-        )
-    }
-
-    override suspend fun deleteTask(id: String) = withContext(Dispatchers.Default) {
-        queries.deleteById(id)
-    }
-
-    override suspend fun searchTasks(query: String): List<Task> = withContext(Dispatchers.Default) {
-        queries.search("%$query%").executeAsList().map { it.toDomain() }
-    }
-}
-```
-
-**3. Network Client Abstraction**
-```kotlin
-// commonMain - HTTP Client configuration
-class NetworkClient {
-    val httpClient = HttpClient {
-        install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-            })
-        }
-
-        install(Logging) {
-            logger = object : io.ktor.client.plugins.logging.Logger {
-                override fun log(message: String) {
-                    Logger().debug("HTTP", message)
-                }
-            }
-            level = LogLevel.INFO
-        }
-
-        defaultRequest {
-            url("https://api.taskflow.app/")
-            contentType(ContentType.Application.Json)
-        }
-
-        // Platform-specific engine configured automatically
-        // Android: uses OkHttp
-        // iOS: uses NSURLSession
-    }
-}
-
-// commonMain - API Service
-class TaskApiService(private val client: NetworkClient) {
-    suspend fun getTasks(): List<TaskDto> {
-        return client.httpClient.get("tasks").body()
-    }
-
-    suspend fun createTask(task: CreateTaskRequest): TaskDto {
-        return client.httpClient.post("tasks") {
-            setBody(task)
-        }.body()
-    }
-
-    suspend fun updateTask(id: String, task: UpdateTaskRequest): TaskDto {
-        return client.httpClient.put("tasks/$id") {
-            setBody(task)
-        }.body()
-    }
-
-    suspend fun deleteTask(id: String) {
-        client.httpClient.delete("tasks/$id")
-    }
-}
-```
-
-#### Shared Business Logic
-
-**1. Repository Pattern**
-```kotlin
-// commonMain/domain/repository/TaskRepository.kt
+// ✅ commonMain - Repository interface
 interface TaskRepository {
-    suspend fun getTasks(forceRefresh: Boolean = false): Result<List<Task>>
-    suspend fun getTaskById(id: String): Result<Task>
+    suspend fun getTasks(): Result<List<Task>>
     suspend fun createTask(task: Task): Result<Task>
-    suspend fun updateTask(task: Task): Result<Task>
-    suspend fun deleteTask(id: String): Result<Unit>
     fun observeTasks(): Flow<List<Task>>
 }
 
-// commonMain/data/repository/TaskRepositoryImpl.kt
+// ✅ commonMain - Implementation with offline-first strategy
 class TaskRepositoryImpl(
     private val apiService: TaskApiService,
-    private val database: TaskDatabase,
-    private val logger: Logger
+    private val database: TaskDatabase
 ) : TaskRepository {
 
     private val tasksFlow = MutableStateFlow<List<Task>>(emptyList())
 
-    init {
-        // Initialize with local data
-        CoroutineScope(Dispatchers.Default).launch {
-            val localTasks = database.getAllTasks()
-            tasksFlow.value = localTasks
-        }
-    }
-
-    override suspend fun getTasks(forceRefresh: Boolean): Result<List<Task>> {
+    override suspend fun getTasks(): Result<List<Task>> {
         return try {
-            if (forceRefresh) {
-                // Fetch from network
-                val remoteTasks = apiService.getTasks().map { it.toDomain() }
+            // Fetch remote
+            val remoteTasks = apiService.getTasks().map { it.toDomain() }
 
-                // Update local database
-                remoteTasks.forEach { database.insertTask(it) }
+            // Update local cache
+            remoteTasks.forEach { database.insertTask(it) }
+            tasksFlow.value = remoteTasks
 
-                // Update flow
-                tasksFlow.value = remoteTasks
-
-                Result.success(remoteTasks)
-            } else {
-                // Return local data
-                val localTasks = database.getAllTasks()
-                tasksFlow.value = localTasks
-                Result.success(localTasks)
-            }
+            Result.success(remoteTasks)
         } catch (e: Exception) {
-            logger.error("TaskRepository", "Failed to get tasks", e)
-
-            // Fallback to local data
+            // ✅ Fallback to local cache on network failure
             val localTasks = database.getAllTasks()
             if (localTasks.isNotEmpty()) {
                 Result.success(localTasks)
@@ -460,97 +153,17 @@ class TaskRepositoryImpl(
         }
     }
 
-    override suspend fun getTaskById(id: String): Result<Task> {
-        return try {
-            // Try local first
-            val localTask = database.getTaskById(id)
-            if (localTask != null) {
-                return Result.success(localTask)
-            }
-
-            // Fetch from network if not found locally
-            val remoteTask = apiService.getTask(id).toDomain()
-            database.insertTask(remoteTask)
-
-            Result.success(remoteTask)
-        } catch (e: Exception) {
-            logger.error("TaskRepository", "Failed to get task", e)
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun createTask(task: Task): Result<Task> {
-        return try {
-            val createdTask = apiService.createTask(task.toCreateRequest()).toDomain()
-            database.insertTask(createdTask)
-
-            // Update flow
-            val updatedList = tasksFlow.value + createdTask
-            tasksFlow.value = updatedList
-
-            Result.success(createdTask)
-        } catch (e: Exception) {
-            logger.error("TaskRepository", "Failed to create task", e)
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun updateTask(task: Task): Result<Task> {
-        return try {
-            val updatedTask = apiService.updateTask(task.id, task.toUpdateRequest()).toDomain()
-            database.updateTask(updatedTask)
-
-            // Update flow
-            val updatedList = tasksFlow.value.map {
-                if (it.id == updatedTask.id) updatedTask else it
-            }
-            tasksFlow.value = updatedList
-
-            Result.success(updatedTask)
-        } catch (e: Exception) {
-            logger.error("TaskRepository", "Failed to update task", e)
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun deleteTask(id: String): Result<Unit> {
-        return try {
-            apiService.deleteTask(id)
-            database.deleteTask(id)
-
-            // Update flow
-            val updatedList = tasksFlow.value.filter { it.id != id }
-            tasksFlow.value = updatedList
-
-            Result.success(Unit)
-        } catch (e: Exception) {
-            logger.error("TaskRepository", "Failed to delete task", e)
-            Result.failure(e)
-        }
-    }
-
-    override fun observeTasks(): Flow<List<Task>> = tasksFlow.asStateFlow()
+    override fun observeTasks() = tasksFlow.asStateFlow()
 }
 ```
 
-**2. Use Cases**
+**Use Cases:**
 ```kotlin
-// commonMain/domain/usecase/GetTasksUseCase.kt
-class GetTasksUseCase(
-    private val repository: TaskRepository
-) {
-    suspend operator fun invoke(forceRefresh: Boolean = false): Result<List<Task>> {
-        return repository.getTasks(forceRefresh)
-    }
-}
-
-// commonMain/domain/usecase/CreateTaskUseCase.kt
-class CreateTaskUseCase(
-    private val repository: TaskRepository
-) {
+// ✅ Encapsulate business logic
+class CreateTaskUseCase(private val repository: TaskRepository) {
     suspend operator fun invoke(title: String, description: String): Result<Task> {
         if (title.isBlank()) {
-            return Result.failure(IllegalArgumentException("Title cannot be empty"))
+            return Result.failure(IllegalArgumentException("Title required"))
         }
 
         val task = Task(
@@ -558,406 +171,101 @@ class CreateTaskUseCase(
             title = title.trim(),
             description = description.trim(),
             completed = false,
-            createdAt = currentTimeMillis(),
-            updatedAt = currentTimeMillis()
+            createdAt = currentTimeMillis()
         )
 
         return repository.createTask(task)
     }
 }
-
-// commonMain/domain/usecase/ToggleTaskCompletionUseCase.kt
-class ToggleTaskCompletionUseCase(
-    private val repository: TaskRepository
-) {
-    suspend operator fun invoke(taskId: String): Result<Task> {
-        val taskResult = repository.getTaskById(taskId)
-
-        return taskResult.mapCatching { task ->
-            val updatedTask = task.copy(
-                completed = !task.completed,
-                updatedAt = currentTimeMillis()
-            )
-
-            repository.updateTask(updatedTask).getOrThrow()
-        }
-    }
-}
 ```
 
-**3. Shared ViewModel (for iOS)**
+### Platform Integration
+
+**Android (Compose):**
 ```kotlin
-// commonMain - Shared ViewModel for iOS
-class TaskListViewModel(
-    private val getTasksUseCase: GetTasksUseCase,
-    private val createTaskUseCase: CreateTaskUseCase,
-    private val toggleTaskUseCase: ToggleTaskCompletionUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase,
-    private val repository: TaskRepository
-) {
-    private val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-
-    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-    val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
-
-    init {
-        loadTasks()
-        observeTasks()
-    }
-
-    private fun observeTasks() {
-        viewModelScope.launch {
-            repository.observeTasks().collect { tasks ->
-                _tasks.value = tasks
-            }
-        }
-    }
-
-    fun loadTasks(forceRefresh: Boolean = false) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-
-            getTasksUseCase(forceRefresh)
-                .onSuccess { tasks ->
-                    _tasks.value = tasks
-                }
-                .onFailure { exception ->
-                    _error.value = exception.message ?: "Unknown error"
-                }
-
-            _isLoading.value = false
-        }
-    }
-
-    fun createTask(title: String, description: String) {
-        viewModelScope.launch {
-            createTaskUseCase(title, description)
-                .onFailure { exception ->
-                    _error.value = exception.message
-                }
-        }
-    }
-
-    fun toggleTaskCompletion(taskId: String) {
-        viewModelScope.launch {
-            toggleTaskUseCase(taskId)
-                .onFailure { exception ->
-                    _error.value = exception.message
-                }
-        }
-    }
-
-    fun deleteTask(taskId: String) {
-        viewModelScope.launch {
-            deleteTaskUseCase(taskId)
-                .onFailure { exception ->
-                    _error.value = exception.message
-                }
-        }
-    }
-
-    fun clearError() {
-        _error.value = null
-    }
-
-    // iOS compatibility - convert StateFlow to observable
-    fun observeTasksAsFlow(): Flow<List<Task>> = tasks
-
-    // Clean up when done
-    fun onCleared() {
-        viewModelScope.cancel()
-    }
-}
-```
-
-#### Platform Integration
-
-**1. Android Integration**
-```kotlin
-// androidApp - Compose UI
 @Composable
-fun TaskListScreen(
-    viewModel: TaskListViewModel = hiltViewModel()
-) {
+fun TaskListScreen(viewModel: TaskListViewModel = hiltViewModel()) {
     val tasks by viewModel.tasks.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Tasks") })
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { /* Show create dialog */ }) {
-                Icon(Icons.Default.Add, "Add task")
-            }
-        }
-    ) { padding ->
-        Box(modifier = Modifier.padding(padding)) {
-            when {
-                isLoading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-                error != null -> {
-                    ErrorView(
-                        message = error!!,
-                        onRetry = { viewModel.loadTasks(forceRefresh = true) }
-                    )
-                }
-                tasks.isEmpty() -> {
-                    EmptyView()
-                }
-                else -> {
-                    LazyColumn {
-                        items(tasks, key = { it.id }) { task ->
-                            TaskItem(
-                                task = task,
-                                onToggle = { viewModel.toggleTaskCompletion(task.id) },
-                                onDelete = { viewModel.deleteTask(task.id) }
-                            )
-                        }
-                    }
-                }
-            }
+    LazyColumn {
+        items(tasks, key = { it.id }) { task ->
+            TaskItem(
+                task = task,
+                onToggle = { viewModel.toggleTask(task.id) }
+            )
         }
     }
 }
 
-// Android Hilt Module
+// ✅ Hilt integration
 @Module
 @InstallIn(SingletonComponent::class)
 object SharedModule {
     @Provides
     @Singleton
-    fun provideDatabaseDriverFactory(
-        @ApplicationContext context: Context
-    ): DatabaseDriverFactory {
-        return DatabaseDriverFactory(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideTaskDatabase(
-        driverFactory: DatabaseDriverFactory
-    ): TaskDatabase {
-        return TaskDatabaseImpl(driverFactory)
-    }
-
-    @Provides
-    @Singleton
     fun provideTaskRepository(
         apiService: TaskApiService,
-        database: TaskDatabase,
-        logger: Logger
-    ): TaskRepository {
-        return TaskRepositoryImpl(apiService, database, logger)
-    }
+        database: TaskDatabase
+    ): TaskRepository = TaskRepositoryImpl(apiService, database)
 }
 ```
 
-**2. iOS Integration (SwiftUI)**
+**iOS (SwiftUI):**
 ```swift
-// iosApp - SwiftUI View
-import SwiftUI
-import shared
-
-struct TaskListView: View {
-    @StateObject private var viewModel: TaskListViewModelWrapper
-
-    init() {
-        _viewModel = StateObject(wrappedValue: TaskListViewModelWrapper())
-    }
-
-    var body: some View {
-        NavigationView {
-            ZStack {
-                if viewModel.isLoading {
-                    ProgressView()
-                } else if let error = viewModel.error {
-                    ErrorView(message: error) {
-                        viewModel.loadTasks(forceRefresh: true)
-                    }
-                } else if viewModel.tasks.isEmpty {
-                    EmptyView()
-                } else {
-                    List {
-                        ForEach(viewModel.tasks, id: \.id) { task in
-                            TaskRow(task: task) {
-                                viewModel.toggleTaskCompletion(taskId: task.id)
-                            } onDelete: {
-                                viewModel.deleteTask(taskId: task.id)
-                            }
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Tasks")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { /* Show create sheet */ }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-        }
-    }
-}
-
-// iosApp - ViewModel Wrapper for SwiftUI compatibility
+// ✅ Wrapper for StateFlow observation
 class TaskListViewModelWrapper: ObservableObject {
     private let viewModel: TaskListViewModel
-
     @Published var tasks: [Task] = []
-    @Published var isLoading: Bool = false
-    @Published var error: String? = nil
+    @Published var isLoading = false
 
     init() {
-        // Get shared ViewModel from DI
         viewModel = KoinKt.getTaskListViewModel()
-
-        // Observe StateFlows
         observeTasks()
-        observeLoading()
-        observeError()
     }
 
     private func observeTasks() {
+        // ✅ Bridge Kotlin Flow to Combine
         viewModel.tasks.watch { [weak self] tasks in
             self?.tasks = tasks?.compactMap { $0 as? Task } ?? []
         }
     }
-
-    private func observeLoading() {
-        viewModel.isLoading.watch { [weak self] loading in
-            self?.isLoading = loading?.boolValue ?? false
-        }
-    }
-
-    private func observeError() {
-        viewModel.error.watch { [weak self] error in
-            self?.error = error as? String
-        }
-    }
-
-    func loadTasks(forceRefresh: Bool = false) {
-        viewModel.loadTasks(forceRefresh: forceRefresh)
-    }
-
-    func toggleTaskCompletion(taskId: String) {
-        viewModel.toggleTaskCompletion(taskId: taskId)
-    }
-
-    func deleteTask(taskId: String) {
-        viewModel.deleteTask(taskId: taskId)
-    }
-
-    deinit {
-        viewModel.onCleared()
-    }
 }
 
-// Helper extension for StateFlow observation in Swift
-extension Kotlinx_coroutines_coreStateFlow {
-    func watch(block: @escaping (Any?) -> Void) {
-        let cancellable = self.collect(collector: FlowCollector(block: block))
-        // Store cancellable if needed
-    }
-}
+struct TaskListView: View {
+    @StateObject private var viewModel = TaskListViewModelWrapper()
 
-class FlowCollector: Kotlinx_coroutines_coreFlowCollector {
-    private let block: (Any?) -> Void
-
-    init(block: @escaping (Any?) -> Void) {
-        self.block = block
-    }
-
-    func emit(value: Any?) async throws {
-        await MainActor.run {
-            block(value)
+    var body: some View {
+        List(viewModel.tasks, id: \.id) { task in
+            TaskRow(task: task)
         }
     }
 }
 ```
 
-#### Dependency Injection
+### Dependency Injection (Koin)
 
-**1. Koin Setup**
 ```kotlin
-// commonMain/di/CommonModule.kt
+// ✅ commonMain - shared DI
 val commonModule = module {
-    // Network
     single { NetworkClient() }
-    single { TaskApiService(get()) }
-
-    // Database
-    single<TaskDatabase> { TaskDatabaseImpl(get()) }
-
-    // Repository
-    single<TaskRepository> { TaskRepositoryImpl(get(), get(), get()) }
-
-    // Use Cases
+    single<TaskRepository> { TaskRepositoryImpl(get(), get()) }
     factory { GetTasksUseCase(get()) }
     factory { CreateTaskUseCase(get()) }
-    factory { ToggleTaskCompletionUseCase(get()) }
-    factory { DeleteTaskUseCase(get()) }
-
-    // ViewModel
-    factory {
-        TaskListViewModel(
-            getTasksUseCase = get(),
-            createTaskUseCase = get(),
-            toggleTaskUseCase = get(),
-            deleteTaskUseCase = get(),
-            repository = get()
-        )
-    }
-
-    // Platform
     single { Logger() }
 }
 
-// androidMain/di/AndroidModule.kt
+// androidMain
 val androidModule = module {
     single { DatabaseDriverFactory(androidContext()) }
 }
 
-// iosMain/di/IOSModule.kt
+// iosMain
 val iosModule = module {
     single { DatabaseDriverFactory() }
 }
 
-// Initialize Koin
-fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
-    appDeclaration()
-    modules(commonModule)
-}
-
-// Android initialization
-class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        initKoin {
-            androidContext(this@MyApplication)
-            modules(androidModule)
-        }
-    }
-}
-
-// iOS initialization
-fun initKoinIOS() = initKoin {
-    modules(iosModule)
-}
-
-// Helper for iOS to get ViewModels
+// ✅ iOS helper
 object KoinKt {
     fun getTaskListViewModel(): TaskListViewModel {
         return KoinJavaComponent.get(TaskListViewModel::class.java)
@@ -965,187 +273,334 @@ object KoinKt {
 }
 ```
 
-#### Best Practices
+### Best Practices
 
-1. **Code Organization**:
-   - Keep business logic in commonMain
-   - UI layer platform-specific
-   - Use expect/actual only when necessary
-   - Minimize platform-specific code
+**Code Organization:**
+- Business logic in commonMain
+- UI layer platform-specific
+- Minimize expect/actual usage
+- Clean Architecture (Domain → Data → Presentation)
 
-2. **Architecture**:
-   - Clean Architecture (Domain, Data, Presentation)
-   - Repository pattern for data access
-   - Use cases for business logic
-   - Dependency Injection (Koin)
+**Swift-Friendly APIs:**
+- Avoid complex generics
+- Use `@Throws` annotation for iOS
+- Export dependencies to framework
+- Provide Flow wrappers for SwiftUI
 
-3. **State Management**:
-   - Use StateFlow for reactive state
-   - Provide Flow wrappers for iOS
-   - Keep ViewModels in shared code
-   - Handle lifecycle properly
+**Performance:**
+- Minimize JNI/ObjC bridge calls
+- Cache platform-specific instances
+- Profile memory usage on both platforms
+- Use inline functions appropriately
 
-4. **Platform Integration**:
-   - Provide Swift-friendly APIs
-   - Use typealias for complex generics
-   - Export necessary dependencies to iOS
-   - Test on both platforms
+### Common Pitfalls
 
-5. **Performance**:
-   - Minimize expect/actual overhead
-   - Use inline functions when appropriate
-   - Cache platform-specific instances
-   - Profile memory usage on both platforms
+❌ **Over-sharing:** Trying to share UI code leads to poor UX
+❌ **Complex Generics:** iOS struggles with Kotlin generics like `Flow<Result<List<T>>>`
+❌ **Missing @Throws:** iOS can't handle uncaught Kotlin exceptions
+❌ **Memory Leaks:** Improper lifecycle management in shared ViewModels
+❌ **Build Configuration:** Forgetting to update Podfile or export dependencies
 
-#### Common Pitfalls
+## Answer (EN)
 
-1. **Over-sharing**: Trying to share UI code leads to poor UX
-2. **Complex Generics**: iOS struggles with Kotlin generics
-3. **Missing @Throws**: iOS can't handle Kotlin exceptions properly
-4. **Memory Leaks**: Improper lifecycle management in shared ViewModels
-5. **Platform Assumptions**: Assuming Android APIs work on iOS
-6. **Build Configuration**: Forgetting to update Podfile
+KMM enables sharing business logic, networking, and data layers between Android and iOS while keeping UI platform-specific, achieving 60-80% code reuse.
 
-### Summary
+### Project Structure
 
-KMM enables significant code reuse while maintaining native UX:
-- **Shared Layer**: Business logic, networking, data, repositories
-- **Platform Layer**: UI, platform-specific APIs, lifecycle
-- **Expect/Actual**: Platform abstractions for database, logging, UUID
-- **Architecture**: Clean Architecture with Repository pattern
-- **Integration**: Hilt/Dagger on Android, Koin everywhere, SwiftUI on iOS
+**Modules:**
+```
+shared/          # Shared Kotlin code
+  commonMain/    # Platform-agnostic code
+  androidMain/   # Android-specific
+  iosMain/       # iOS-specific
+androidApp/      # Android application
+iosApp/          # iOS Xcode project
+```
 
-Key considerations: appropriate boundaries, Swift-friendly APIs, proper lifecycle management, and platform-specific optimizations where needed.
-
----
-
-# Вопрос (RU)
-> 
-Объясните архитектуру Kotlin Multiplatform Mobile (KMM) и структуру проекта. Как организовать shared код между Android и iOS? Что такое expect/actual механизмы? Как обрабатывать platform-specific реализации максимизируя переиспользование кода?
-
-## Ответ (RU)
-Kotlin Multiplatform Mobile (KMM) позволяет делиться бизнес-логикой, сетью и data слоями между Android и iOS, сохраняя UI platform-specific, достигая значительного переиспользования кода без ущерба нативному опыту.
-
-#### Структура Проекта
-
-**Модули**:
-- `shared/` - общий Kotlin код
-- `androidApp/` - Android приложение
-- `iosApp/` - iOS приложение (Xcode)
-
-**Source Sets**:
-- `commonMain` - код для всех платформ
-- `androidMain` - Android-specific код
-- `iosMain` - iOS-specific код
-- `commonTest` - общие тесты
-
-#### Expect/Actual
-
-**Назначение**: Абстракция platform-specific функционала
-
-**Примеры**:
-- Database driver (SQLDelight)
-- Logger (Logcat vs NSLog)
-- UUID generation
-- Current timestamp
-- File system access
-
-**Механизм**:
+**Build Configuration:**
 ```kotlin
-// commonMain - expect
+// shared/build.gradle.kts
+kotlin {
+    android()
+
+    listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-core")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-android")
+            }
+        }
+        val iosMain by creating {
+            dependencies {
+                implementation("io.ktor:ktor-client-darwin")
+            }
+        }
+    }
+}
+```
+
+### Expect/Actual Mechanism
+
+**Purpose:** Platform-specific abstraction
+
+```kotlin
+// ✅ commonMain - expect declaration
+expect class Platform() {
+    val name: String
+    val version: String
+}
+
 expect fun generateUUID(): String
 
-// androidMain - actual
+// ✅ androidMain - actual implementation
+actual class Platform {
+    actual val name = "Android"
+    actual val version = Build.VERSION.RELEASE
+}
+
 actual fun generateUUID() = UUID.randomUUID().toString()
 
-// iosMain - actual
+// ✅ iosMain - actual implementation
+actual class Platform {
+    actual val name = UIDevice.currentDevice.systemName
+    actual val version = UIDevice.currentDevice.systemVersion
+}
+
 actual fun generateUUID() = NSUUID().UUIDString
 ```
 
-#### Shared Код
+**Use Cases:**
+- Database drivers (SQLDelight)
+- Logger (Logcat vs NSLog)
+- File system access
+- Platform-specific UI previews
 
-**Что делить**:
--  Domain models
--  Repository interfaces & implementations
--  Use cases
--  Network layer (Ktor)
--  Database (SQLDelight)
--  Business logic
--  ViewModels (для iOS)
+### Shared Business Logic
 
-**Что НЕ делить**:
--  UI компоненты
--  Platform lifecycle
--  Navigation
--  Permissions handling
+**Repository Pattern:**
+```kotlin
+// ✅ commonMain - Repository interface
+interface TaskRepository {
+    suspend fun getTasks(): Result<List<Task>>
+    suspend fun createTask(task: Task): Result<Task>
+    fun observeTasks(): Flow<List<Task>>
+}
 
-#### Интеграция
+// ✅ commonMain - Implementation with offline-first strategy
+class TaskRepositoryImpl(
+    private val apiService: TaskApiService,
+    private val database: TaskDatabase
+) : TaskRepository {
 
-**Android**:
-- Compose UI
-- Hilt/Dagger для DI
-- Lifecycle-aware ViewModels
-- Coroutines Flow
+    private val tasksFlow = MutableStateFlow<List<Task>>(emptyList())
 
-**iOS**:
-- SwiftUI
-- Combine framework
-- ObservableObject wrapper
-- Async/await bridge
+    override suspend fun getTasks(): Result<List<Task>> {
+        return try {
+            // Fetch remote
+            val remoteTasks = apiService.getTasks().map { it.toDomain() }
 
-#### Dependency Injection
+            // Update local cache
+            remoteTasks.forEach { database.insertTask(it) }
+            tasksFlow.value = remoteTasks
 
-**Koin** - общий DI для обеих платформ:
-- commonModule - shared dependencies
-- androidModule - Android-specific
-- iosModule - iOS-specific
+            Result.success(remoteTasks)
+        } catch (e: Exception) {
+            // ✅ Fallback to local cache on network failure
+            val localTasks = database.getAllTasks()
+            if (localTasks.isNotEmpty()) {
+                Result.success(localTasks)
+            } else {
+                Result.failure(e)
+            }
+        }
+    }
 
-#### Best Practices
+    override fun observeTasks() = tasksFlow.asStateFlow()
+}
+```
 
-1. **Границы**:
-   - Четкое разделение shared/platform
-   - Минимизировать expect/actual
-   - UI всегда platform-specific
+**Use Cases:**
+```kotlin
+// ✅ Encapsulate business logic
+class CreateTaskUseCase(private val repository: TaskRepository) {
+    suspend operator fun invoke(title: String, description: String): Result<Task> {
+        if (title.isBlank()) {
+            return Result.failure(IllegalArgumentException("Title required"))
+        }
 
-2. **API Design**:
-   - Swift-friendly интерфейсы
-   - Избегать сложных generics
-   - @Throws для iOS
-   - Простые типы в public API
+        val task = Task(
+            id = generateUUID(),
+            title = title.trim(),
+            description = description.trim(),
+            completed = false,
+            createdAt = currentTimeMillis()
+        )
 
-3. **Архитектура**:
-   - Clean Architecture
-   - Repository pattern
-   - Use cases для бизнес-логики
-   - StateFlow для reactive state
+        return repository.createTask(task)
+    }
+}
+```
 
-4. **Производительность**:
-   - Минимизировать JNI calls (iOS)
-   - Кэшировать platform instances
-   - Профилировать обе платформы
-   - Оптимизировать memory usage
+### Platform Integration
 
-### Резюме
+**Android (Compose):**
+```kotlin
+@Composable
+fun TaskListScreen(viewModel: TaskListViewModel = hiltViewModel()) {
+    val tasks by viewModel.tasks.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-KMM позволяет значительное переиспользование кода:
-- **Shared**: Бизнес-логика, сеть, данные, репозитории (60-80% кода)
-- **Platform**: UI, lifecycle, permissions (20-40% кода)
-- **Expect/Actual**: Platform abstractions
-- **Architecture**: Clean Architecture + Repository pattern
-- **Integration**: Нативные UI frameworks, shared ViewModels
+    LazyColumn {
+        items(tasks, key = { it.id }) { task ->
+            TaskItem(
+                task = task,
+                onToggle = { viewModel.toggleTask(task.id) }
+            )
+        }
+    }
+}
 
-Ключевые моменты: правильные границы, Swift-friendly APIs, lifecycle management, platform-specific оптимизации.
+// ✅ Hilt integration
+@Module
+@InstallIn(SingletonComponent::class)
+object SharedModule {
+    @Provides
+    @Singleton
+    fun provideTaskRepository(
+        apiService: TaskApiService,
+        database: TaskDatabase
+    ): TaskRepository = TaskRepositoryImpl(apiService, database)
+}
+```
 
+**iOS (SwiftUI):**
+```swift
+// ✅ Wrapper for StateFlow observation
+class TaskListViewModelWrapper: ObservableObject {
+    private let viewModel: TaskListViewModel
+    @Published var tasks: [Task] = []
+    @Published var isLoading = false
+
+    init() {
+        viewModel = KoinKt.getTaskListViewModel()
+        observeTasks()
+    }
+
+    private func observeTasks() {
+        // ✅ Bridge Kotlin Flow to Combine
+        viewModel.tasks.watch { [weak self] tasks in
+            self?.tasks = tasks?.compactMap { $0 as? Task } ?? []
+        }
+    }
+}
+
+struct TaskListView: View {
+    @StateObject private var viewModel = TaskListViewModelWrapper()
+
+    var body: some View {
+        List(viewModel.tasks, id: \.id) { task in
+            TaskRow(task: task)
+        }
+    }
+}
+```
+
+### Dependency Injection (Koin)
+
+```kotlin
+// ✅ commonMain - shared DI
+val commonModule = module {
+    single { NetworkClient() }
+    single<TaskRepository> { TaskRepositoryImpl(get(), get()) }
+    factory { GetTasksUseCase(get()) }
+    factory { CreateTaskUseCase(get()) }
+    single { Logger() }
+}
+
+// androidMain
+val androidModule = module {
+    single { DatabaseDriverFactory(androidContext()) }
+}
+
+// iosMain
+val iosModule = module {
+    single { DatabaseDriverFactory() }
+}
+
+// ✅ iOS helper
+object KoinKt {
+    fun getTaskListViewModel(): TaskListViewModel {
+        return KoinJavaComponent.get(TaskListViewModel::class.java)
+    }
+}
+```
+
+### Best Practices
+
+**Code Organization:**
+- Business logic in commonMain
+- UI layer platform-specific
+- Minimize expect/actual usage
+- Clean Architecture (Domain → Data → Presentation)
+
+**Swift-Friendly APIs:**
+- Avoid complex generics
+- Use `@Throws` annotation for iOS
+- Export dependencies to framework
+- Provide Flow wrappers for SwiftUI
+
+**Performance:**
+- Minimize JNI/ObjC bridge calls
+- Cache platform-specific instances
+- Profile memory usage on both platforms
+- Use inline functions appropriately
+
+### Common Pitfalls
+
+❌ **Over-sharing:** Trying to share UI code leads to poor UX
+❌ **Complex Generics:** iOS struggles with Kotlin generics like `Flow<Result<List<T>>>`
+❌ **Missing @Throws:** iOS can't handle uncaught Kotlin exceptions
+❌ **Memory Leaks:** Improper lifecycle management in shared ViewModels
+❌ **Build Configuration:** Forgetting to update Podfile or export dependencies
 
 ---
 
+## Follow-ups
+
+- How do you handle coroutine cancellation in shared ViewModels accessed from iOS?
+- What strategies exist for debugging shared code on iOS devices?
+- How do you test platform-specific implementations (expect/actual) effectively?
+- What are the memory implications of keeping references to Kotlin objects from Swift?
+- How do you version and publish the shared framework for iOS consumption?
+
+## References
+
+- [[c-clean-architecture]] - Clean Architecture principles
+- [[c-repository-pattern]] - Repository pattern implementation
+- [[c-dependency-injection]] - Dependency injection patterns
+
 ## Related Questions
 
-### Hub
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+### Prerequisites (Medium)
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture on Android
+- [[q-repository-pattern--android--medium]] - Repository pattern basics
 
 ### Related (Hard)
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+- [[q-offline-first-architecture--android--hard]] - Offline-first architecture strategies
 
+### Advanced (Hard)
+- [[q-modularization-strategies--android--hard]] - Multi-module architecture patterns
+- [[q-gradle-dependency-management--android--hard]] - Complex build configuration

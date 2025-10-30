@@ -1,278 +1,258 @@
 ---
 id: 20251020-200000
 title: Dagger Inject Annotation / Аннотация Inject Dagger
-aliases: [Dagger Inject Annotation, Аннотация Inject Dagger]
+aliases: ["Dagger Inject Annotation", "Аннотация Inject Dagger"]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt, dependency-management]
 question_kind: android
 difficulty: easy
-original_language: en
-language_tags:
-  - en
-  - ru
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-dagger-field-injection--android--medium
-  - q-dagger-framework-overview--android--hard
-  - q-hilt-components-scope--android--medium
+related: [q-dagger-field-injection--android--medium, q-dagger-framework-overview--android--hard, q-hilt-components-scope--android--medium, c-dependency-injection, c-dagger]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/di-hilt, difficulty/easy]
-source: https://dagger.dev/api/latest/dagger/Inject.html
-source_note: Dagger Inject annotation documentation
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:18 pm
+updated: 2025-10-29
+sources: []
+tags: [android/di-hilt, android/dependency-management, dagger, hilt, dependency-injection, difficulty/easy]
 ---
 
 # Вопрос (RU)
-> Как сообщить Dagger, что мы собираемся что-то инжектить?
+> Как указать Dagger, где выполнить инъекцию зависимостей?
 
 # Question (EN)
-> How to tell Dagger we're going to inject something?
+> How to tell Dagger where to inject dependencies?
 
 ## Ответ (RU)
 
-Для сообщения Dagger о необходимости инъекции зависимостей используется аннотация **`@Inject`** в трех основных местах: конструктор, поля и методы.
+Используйте аннотацию **`@Inject`** в трех местах: конструктор (предпочтительно), поля (для Android компонентов) и методы (редко).
 
-### Теория: Принципы @Inject
+### Ключевые Принципы
 
-**Основные принципы:**
-- `@Inject` маркирует места для внедрения зависимостей
-- Dagger анализирует аннотации на этапе компиляции
-- Автоматическое разрешение зависимостей через граф
-- Статическая типизация и проверка на этапе компиляции
+`@Inject` сообщает Dagger:
+- **Где** внедрить зависимости (конструктор/поля/методы)
+- **Что** нужно предоставить (типы параметров)
+- **Когда** создавать экземпляры (анализ графа на этапе компиляции)
 
-**Типы инъекции:**
-- **Constructor injection** - рекомендуется для большинства случаев
-- **Field injection** - для Android компонентов
-- **Method injection** - для специальных случаев
+Dagger проверяет корректность на этапе компиляции и генерирует код для инъекции.
 
-### @Inject На Конструкторе (Рекомендуется)
+### 1. Constructor Injection (✅ Рекомендуется)
 
 ```kotlin
+// ✅ ПРЕДПОЧТИТЕЛЬНЫЙ способ - immutable, testable
 class UserRepository @Inject constructor(
     private val api: ApiService,
-    private val database: UserDatabase
-) {
-    fun getUser(id: String): User {
-        return database.getUser(id) ?: api.fetchUser(id)
-    }
-}
+    private val database: UserDao
+)
 ```
 
-**Dagger автоматически:**
-- Создает экземпляры `UserRepository`
-- Разрешает зависимости `ApiService` и `UserDatabase`
-- Внедряет их в конструктор
+**Преимущества:**
+- Immutable зависимости (`val`)
+- Легко тестировать (передать моки в конструктор)
+- Явные зависимости
+- Dagger автоматически создает фабрики
 
-### @Inject На Полях
+**Используйте для:** ViewModels, репозиториев, use cases, любых обычных классов.
 
-**В Activity/Fragment:**
+### 2. Field Injection (для Android компонентов)
+
 ```kotlin
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+// ✅ Для Activity/Fragment - конструктор недоступен
+@AndroidEntryPoint
+class ProfileActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Обязательно вызвать inject перед использованием
-        (application as MyApp).appComponent.inject(this)
-
-        repository.getUser("123")
+        // Hilt автоматически инжектит до onCreate
+        repository.loadProfile()
     }
 }
 ```
 
-**Особенности field injection:**
-- Поля должны быть `lateinit var`
-- Требует явного вызова `inject()` метода
-- Используется для Android компонентов
-
-### @Inject На Методах
-
 ```kotlin
-class UserService {
-    @Inject
-    fun setDependencies(
-        repository: UserRepository,
-        analytics: Analytics
-    ) {
-        this.repository = repository
-        this.analytics = analytics
-    }
-}
-```
-
-**Method injection используется для:**
-- Специальных случаев инициализации
-- Когда нужен доступ к инжектируемым параметрам
-- Callback методов
-
-### Когда Использовать Каждый Тип
-
-**Constructor injection:**
-- Обычные классы и бизнес-логика
-- Когда возможно модифицировать конструктор
-- Рекомендуемый подход для большинства случаев
-
-**Field injection:**
-- Android компоненты (Activity, Fragment, Service)
-- Когда конструктор недоступен для модификации
-- Framework-управляемые объекты
-
-**Method injection:**
-- Специальные случаи инициализации
-- Когда нужен доступ к параметрам инъекции
-- Callback методы
-
-### Hilt Автоматизация
-
-Hilt упрощает использование `@Inject`:
-
-```kotlin
-@AndroidEntryPoint
+// ❌ Без Hilt - требует ручного вызова inject()
 class MainActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (application as MyApp).appComponent.inject(this)
+        repository.loadData() // Только после inject()
+    }
+}
+```
+
+**Ограничения:**
+- Требует `lateinit var` (не `val`)
+- Без Hilt нужен ручной вызов `inject()`
+- Сложнее тестировать
+
+**Используйте для:** Activity, Fragment, Service, BroadcastReceiver, View (если нужно).
+
+### 3. Method Injection (редко)
+
+```kotlin
+// ❌ Редкий случай - используйте только если необходимо
+class AnalyticsTracker @Inject constructor() {
+    private lateinit var logger: Logger
+
     @Inject
-    lateinit var repository: UserRepository
-    // Hilt автоматически вызывает inject()
+    fun setup(logger: Logger) {
+        this.logger = logger
+        logger.init()
+    }
+}
+```
+
+**Используйте только для:**
+- Circular dependency resolution
+- Callback-методы с lifecycle awareness
+- Когда нужен доступ к `this` при инициализации
+
+### Hilt Упрощает Field Injection
+
+```kotlin
+// ✅ Hilt автоматизирует инъекцию в Activity
+@AndroidEntryPoint
+class ProfileActivity : AppCompatActivity() {
+    @Inject lateinit var viewModel: ProfileViewModel
+    // Нет ручного inject(), Hilt делает это автоматически
 }
 ```
 
 **Hilt автоматически:**
-- Создает компоненты
-- Управляет жизненными циклами
-- Вызывает методы инъекции
+- Генерирует компоненты
+- Управляет lifecycle scopes
+- Вызывает inject() перед `onCreate`
 
 ## Answer (EN)
 
-To tell [[c-dagger]] about [[c-dependency-injection]], use the **`@Inject`** annotation in three main places: constructor, fields, and methods.
+Use the **`@Inject`** annotation in three places: constructor (preferred), fields (for Android components), and methods (rarely).
 
-### Theory: @Inject Principles
+### Core Principles
 
-**Core Principles:**
-- `@Inject` marks places for dependency injection
-- Dagger analyzes annotations at compile time
-- Automatic dependency resolution through graph
-- Static typing and compile-time validation
+`@Inject` tells [[c-dagger]]:
+- **Where** to inject dependencies (constructor/fields/methods)
+- **What** to provide (parameter types)
+- **When** to create instances (compile-time graph analysis)
 
-**Injection Types:**
-- **Constructor injection** - recommended for most cases
-- **Field injection** - for Android components
-- **Method injection** - for special cases
+Dagger validates correctness at compile time and generates injection code.
 
-### @Inject On Constructor (Recommended)
+### 1. Constructor Injection (✅ Recommended)
 
 ```kotlin
+// ✅ PREFERRED way - immutable, testable
 class UserRepository @Inject constructor(
     private val api: ApiService,
-    private val database: UserDatabase
-) {
-    fun getUser(id: String): User {
-        return database.getUser(id) ?: api.fetchUser(id)
-    }
-}
+    private val database: UserDao
+)
 ```
 
-**Dagger automatically:**
-- Creates `UserRepository` instances
-- Resolves `ApiService` and `UserDatabase` dependencies
-- Injects them into constructor
+**Benefits:**
+- Immutable dependencies (`val`)
+- Easy to test (pass mocks to constructor)
+- Explicit dependencies
+- Dagger auto-generates factories
 
-### @Inject On Fields
+**Use for:** ViewModels, repositories, use cases, any regular classes.
 
-**In Activity/Fragment:**
+### 2. Field Injection (for Android components)
+
 ```kotlin
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+// ✅ For Activity/Fragment - constructor unavailable
+@AndroidEntryPoint
+class ProfileActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Must call inject before using
-        (application as MyApp).appComponent.inject(this)
-
-        repository.getUser("123")
+        // Hilt auto-injects before onCreate
+        repository.loadProfile()
     }
 }
 ```
 
-**Field injection features:**
-- Fields must be `lateinit var`
-- Requires explicit `inject()` method call
-- Used for Android components
-
-### @Inject On Methods
-
 ```kotlin
-class UserService {
-    @Inject
-    fun setDependencies(
-        repository: UserRepository,
-        analytics: Analytics
-    ) {
-        this.repository = repository
-        this.analytics = analytics
-    }
-}
-```
-
-**Method injection used for:**
-- Special initialization cases
-- When access to injected parameters is needed
-- Callback methods
-
-### When to Use Each Type
-
-**Constructor injection:**
-- Regular classes and business logic
-- When constructor can be modified
-- Recommended approach for most cases
-
-**Field injection:**
-- Android components (Activity, Fragment, Service)
-- When constructor is not available for modification
-- Framework-managed objects
-
-**Method injection:**
-- Special initialization cases
-- When access to injection parameters is needed
-- Callback methods
-
-### Hilt Automation
-
-[[c-hilt]] simplifies `@Inject` usage:
-
-```kotlin
-@AndroidEntryPoint
+// ❌ Without Hilt - requires manual inject() call
 class MainActivity : AppCompatActivity() {
+    @Inject lateinit var repository: UserRepository
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (application as MyApp).appComponent.inject(this)
+        repository.loadData() // Only after inject()
+    }
+}
+```
+
+**Limitations:**
+- Requires `lateinit var` (not `val`)
+- Without [[c-hilt]], needs manual `inject()` call
+- Harder to test
+
+**Use for:** Activity, Fragment, Service, BroadcastReceiver, View (if needed).
+
+### 3. Method Injection (rarely)
+
+```kotlin
+// ❌ Rare case - use only when necessary
+class AnalyticsTracker @Inject constructor() {
+    private lateinit var logger: Logger
+
     @Inject
-    lateinit var repository: UserRepository
-    // Hilt automatically calls inject()
+    fun setup(logger: Logger) {
+        this.logger = logger
+        logger.init()
+    }
+}
+```
+
+**Use only for:**
+- Circular dependency resolution
+- Lifecycle-aware callback methods
+- When `this` access needed during initialization
+
+### Hilt Simplifies Field Injection
+
+```kotlin
+// ✅ Hilt automates injection in Activity
+@AndroidEntryPoint
+class ProfileActivity : AppCompatActivity() {
+    @Inject lateinit var viewModel: ProfileViewModel
+    // No manual inject(), Hilt does it automatically
 }
 ```
 
 **Hilt automatically:**
-- Creates components
-- Manages lifecycles
-- Calls injection methods
+- Generates components
+- Manages lifecycle scopes
+- Calls inject() before `onCreate`
 
 ## Follow-ups
 
-- What's the difference between constructor injection and field injection?
-- How does Dagger resolve dependencies marked with @Inject?
-- When should you avoid using @Inject annotation?
+- Why is constructor injection preferred over field injection?
+- When must you use field injection instead of constructor?
+- How does Dagger resolve the dependency graph at compile time?
+- What happens if @Inject dependencies have circular references?
+- Why can't you use `val` with field injection?
+
+## References
+
+- [[c-dependency-injection]] - Dependency Injection pattern
+- [[c-dagger]] - Dagger dependency injection framework
+- [[c-hilt]] - Hilt Android DI library
+- https://dagger.dev/api/latest/dagger/Inject.html
+- https://developer.android.com/training/dependency-injection/dagger-basics
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-project-parts--android--easy]]
+- [[q-android-project-parts--android--easy]] - Android project structure basics
 
 ### Related (Same Level)
-- [[q-dagger-field-injection--android--medium]]
+- [[q-dagger-field-injection--android--medium]] - Field injection details
+- [[q-hilt-components-scope--android--medium]] - Hilt component scopes
 
 ### Advanced (Harder)
-- [[q-dagger-framework-overview--android--hard]]
+- [[q-dagger-framework-overview--android--hard]] - Dagger architecture overview

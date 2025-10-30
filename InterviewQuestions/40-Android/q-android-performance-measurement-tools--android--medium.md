@@ -1,9 +1,9 @@
 ---
 id: 20251012-122768
-title: Android Performance Measurement Tools / Инструменты измерения производительности
+title: Android Performance Measurement Tools / Инструменты измерения производительности Android
 aliases: ["Android Performance Measurement Tools", "Инструменты измерения производительности Android"]
 topic: android
-subtopics: [performance-memory, profiling, testing-unit]
+subtopics: [performance-memory, profiling, testing-benchmark]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,195 +11,188 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-android-app-lag-analysis--android--medium, q-android-architectural-patterns--android--medium, q-android-build-optimization--android--medium]
+sources: []
 created: 2025-10-13
-updated: 2025-10-27
-tags: [android/performance-memory, android/profiling, android/testing-unit, difficulty/medium]
+updated: 2025-10-29
+tags: [android/performance-memory, android/profiling, android/testing-benchmark, difficulty/medium]
 ---
 # Вопрос (RU)
-> Какие инструменты используются для измерения производительности Android приложений?
+> Какие инструменты используются для измерения производительности Android приложений и как их применять?
 
 # Question (EN)
-> What are Android Performance Measurement Tools?
+> What tools are used to measure Android app performance and how to apply them?
 
 ## Ответ (RU)
 
-**Инструменты измерения производительности Android** используются для количественного анализа и оптимизации приложений. Ключевые принципы: установка базовых метрик, систематическое измерение улучшений и выбор подходящего инструмента для конкретной задачи.
+**Инструменты измерения производительности** обеспечивают количественный анализ приложений. Принцип: устанавливай базовые метрики, измеряй изменения систематически, выбирай инструмент под задачу.
 
-**Основные инструменты:**
-- **Android Profiler**: анализ CPU, памяти, сети и энергопотребления в реальном времени
-- **GPU Rendering**: визуализация времени отрисовки кадров (цель: 16ms для 60 fps)
-- **Jetpack Benchmark**: количественное тестирование производительности кода
-- **Perfetto**: системная трассировка для глубокого анализа
-- **StrictMode**: обнаружение операций блокирующих главный поток
+**Ключевые категории:**
 
-**Jetpack Benchmark:**
+**1. Profiling в реальном времени**
+- **Android Profiler**: CPU, память, сеть, энергопотребление
+- **GPU Rendering**: время отрисовки кадров (цель: 16ms для 60fps)
+
+**2. Автоматизированные бенчмарки**
 ```kotlin
 // Микробенчмарк - производительность метода
 @RunWith(AndroidJUnit4::class)
-class PerformanceBenchmark {
+class DataBenchmark {
     @get:Rule
-    val benchmarkRule = BenchmarkRule()
+    val benchmark = BenchmarkRule()
 
     @Test
-    fun benchmarkDataProcessing() {
-        benchmarkRule.measureRepeated {
-            processData() // ✅ Измеряет чистую производительность метода
+    fun sortLargeList() {
+        val data = List(10_000) { it }
+        benchmark.measureRepeated {
+            data.sorted() // ✅ Измеряется чистая производительность
         }
-    }
-}
-
-// Макробенчмарк - производительность приложения
-@Test
-fun startup() {
-    benchmarkRule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(StartupTimingMetric()),
-        iterations = 5
-    ) {
-        pressHome()
-        startActivityAndWait() // ✅ Измеряет время запуска приложения
     }
 }
 ```
 
-**Пользовательское измерение:**
+**3. Макробенчмарки UI**
 ```kotlin
-class PerformanceMeasurer {
-    fun measureWithWarmup(operation: () -> Unit, iterations: Int = 1000): Double {
-        repeat(10) { operation() } // ✅ Прогрев для стабильных результатов
-
-        val times = mutableListOf<Long>()
-        repeat(iterations) {
-            val start = System.nanoTime()
-            operation()
-            times.add(System.nanoTime() - start)
-        }
-        return times.average() / 1_000_000.0 // в миллисекунды
-    }
+@Test
+fun appStartup() = benchmarkRule.measureRepeated(
+    packageName = "com.app",
+    metrics = listOf(StartupTimingMetric())
+) {
+    pressHome()
+    startActivityAndWait() // ✅ Время холодного старта
 }
 ```
 
-**StrictMode для отладки:**
+**4. StrictMode - детекция блокировок**
 ```kotlin
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
-        StrictMode.ThreadPolicy.Builder()
-            .detectDiskReads()    // ✅ Обнаружение чтения с диска
-            .detectDiskWrites()   // ✅ Обнаружение записи на диск
-            .detectNetwork()      // ✅ Обнаружение сетевых операций
-            .penaltyLog()         // ❌ В продакшене не используется
+        ThreadPolicy.Builder()
+            .detectDiskReads()   // ✅ Файловые операции
+            .detectNetwork()     // ✅ Сетевые вызовы
+            .penaltyLog()
             .build()
     )
 }
 ```
 
+**5. Perfetto - системная трассировка**
+Анализирует: frames, CPU scheduling, binder calls, memory allocations
+
 **Выбор инструмента:**
-- UI производительность → GPU Rendering, Macrobenchmark
-- Анализ CPU → Android Profiler, Perfetto
-- Проблемы с памятью → Android Profiler Memory
-- Оптимизация кода → Microbenchmark
-- Системный анализ → Perfetto
+- Jank в UI → GPU Rendering + Macrobenchmark
+- CPU hotspots → Android Profiler + Perfetto
+- Утечки памяти → Android Profiler Memory
+- Регрессии в коде → Microbenchmark в CI/CD
+
+**Паттерны измерения:**
+```kotlin
+// ✅ Прогрев JIT перед измерением
+repeat(100) { operation() }
+
+// ✅ Множественные итерации для стабильности
+val times = (1..1000).map { measureNanos { operation() } }
+
+// ✅ Исключение выбросов
+times.sorted().drop(times.size / 10).take(times.size * 8 / 10).average()
+```
 
 ## Answer (EN)
 
-**Android Performance Measurement Tools** quantify and analyze app performance. Core principles: establish baseline metrics, measure improvements systematically, and select the right tool for the task.
+**Performance measurement tools** provide quantitative app analysis. Principle: establish baseline metrics, measure changes systematically, select the right tool for the task.
 
-**Key Tools:**
-- **Android Profiler**: Real-time CPU, memory, network, and energy analysis
-- **GPU Rendering**: Frame timing visualization (target: 16ms for 60 fps)
-- **Jetpack Benchmark**: Quantitative code performance testing
-- **Perfetto**: System-wide tracing for deep analysis
-- **StrictMode**: Main thread blocking operation detection
+**Key Categories:**
 
-**Jetpack Benchmark:**
+**1. Real-time Profiling**
+- **Android Profiler**: CPU, memory, network, energy consumption
+- **GPU Rendering**: frame timing visualization (target: 16ms for 60fps)
+
+**2. Automated Benchmarks**
 ```kotlin
 // Microbenchmark - method-level performance
 @RunWith(AndroidJUnit4::class)
-class PerformanceBenchmark {
+class DataBenchmark {
     @get:Rule
-    val benchmarkRule = BenchmarkRule()
+    val benchmark = BenchmarkRule()
 
     @Test
-    fun benchmarkDataProcessing() {
-        benchmarkRule.measureRepeated {
-            processData() // ✅ Measures pure method performance
+    fun sortLargeList() {
+        val data = List(10_000) { it }
+        benchmark.measureRepeated {
+            data.sorted() // ✅ Measures pure performance
         }
-    }
-}
-
-// Macrobenchmark - app-level performance
-@Test
-fun startup() {
-    benchmarkRule.measureRepeated(
-        packageName = "com.example.app",
-        metrics = listOf(StartupTimingMetric()),
-        iterations = 5
-    ) {
-        pressHome()
-        startActivityAndWait() // ✅ Measures app startup time
     }
 }
 ```
 
-**Custom Measurement:**
+**3. UI Macrobenchmarks**
 ```kotlin
-class PerformanceMeasurer {
-    fun measureWithWarmup(operation: () -> Unit, iterations: Int = 1000): Double {
-        repeat(10) { operation() } // ✅ Warmup for stable results
-
-        val times = mutableListOf<Long>()
-        repeat(iterations) {
-            val start = System.nanoTime()
-            operation()
-            times.add(System.nanoTime() - start)
-        }
-        return times.average() / 1_000_000.0 // to milliseconds
-    }
+@Test
+fun appStartup() = benchmarkRule.measureRepeated(
+    packageName = "com.app",
+    metrics = listOf(StartupTimingMetric())
+) {
+    pressHome()
+    startActivityAndWait() // ✅ Cold startup time
 }
 ```
 
-**StrictMode for Debugging:**
+**4. StrictMode - Blocking Detection**
 ```kotlin
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
-        StrictMode.ThreadPolicy.Builder()
-            .detectDiskReads()    // ✅ Detect disk reads
-            .detectDiskWrites()   // ✅ Detect disk writes
-            .detectNetwork()      // ✅ Detect network operations
-            .penaltyLog()         // ❌ Not used in production
+        ThreadPolicy.Builder()
+            .detectDiskReads()   // ✅ File operations
+            .detectNetwork()     // ✅ Network calls
+            .penaltyLog()
             .build()
     )
 }
 ```
 
+**5. Perfetto - System Tracing**
+Analyzes: frames, CPU scheduling, binder calls, memory allocations
+
 **Tool Selection:**
-- UI performance → GPU Rendering, Macrobenchmark
-- CPU analysis → Android Profiler, Perfetto
-- Memory issues → Android Profiler Memory
-- Code optimization → Microbenchmark
-- System analysis → Perfetto
+- UI jank → GPU Rendering + Macrobenchmark
+- CPU hotspots → Android Profiler + Perfetto
+- Memory leaks → Android Profiler Memory
+- Code regressions → Microbenchmark in CI/CD
+
+**Measurement Patterns:**
+```kotlin
+// ✅ JIT warmup before measuring
+repeat(100) { operation() }
+
+// ✅ Multiple iterations for stability
+val times = (1..1000).map { measureNanos { operation() } }
+
+// ✅ Exclude outliers
+times.sorted().drop(times.size / 10).take(times.size * 8 / 10).average()
+```
 
 ## Follow-ups
 
-- How to integrate Jetpack Benchmark into CI/CD pipeline?
-- What metrics indicate memory leaks vs normal memory growth?
-- How to correlate Perfetto traces with user-reported jank?
-- Which tools work best for low-end device optimization?
+- How to integrate Jetpack Benchmark into CI/CD for regression detection?
+- What specific metrics indicate memory leaks vs normal memory growth patterns?
+- How to correlate Perfetto trace events with user-reported jank incidents?
+- Which measurement approaches work best for low-end device optimization?
+- How to establish baseline performance metrics for a new feature?
 
 ## References
 
-- [[c-memory-management]]
-- https://developer.android.com/topic/performance/measurement
-- https://developer.android.com/topic/performance/benchmarking
+- [[c-android-profiling]]
+- [[c-performance-optimization]]
+- https://developer.android.com/topic/performance
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-app-lag-analysis--android--medium]] - Analyzing performance issues
+- [[q-android-app-lag-analysis--android--medium]] - Understanding performance issues
 
 ### Related
-- [[q-android-architectural-patterns--android--medium]] - Architecture patterns
-- [[q-android-build-optimization--android--medium]] - Build optimization
+- [[q-android-build-optimization--android--medium]] - Build performance
+- [[q-android-memory-leaks--android--medium]] - Memory leak detection
 
 ### Advanced
-- [[q-android-modularization--android--medium]] - Modular architecture impact on performance
+- [[q-android-baseline-profiles--android--hard]] - Profile-guided optimization
+- [[q-android-render-optimization--android--hard]] - Advanced rendering optimization

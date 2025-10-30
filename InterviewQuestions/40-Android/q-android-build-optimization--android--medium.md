@@ -1,20 +1,20 @@
 ---
 id: 20251012-122763
 title: Android Build Optimization / Оптимизация сборки Android
-aliases: [Android Build Optimization, Оптимизация сборки Android]
+aliases: ["Android Build Optimization", "Оптимизация сборки Android"]
 topic: android
-subtopics: [gradle]
+subtopics: [gradle, build-variants, dependency-management]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gradle-basics--android--easy, c-gradle]
+related: [q-gradle-basics--android--easy, c-gradle, q-android-modularization--android--hard]
 sources: []
 created: 2025-10-15
-updated: 2025-01-27
-tags: [android/gradle, difficulty/medium]
+updated: 2025-10-29
+tags: [android/gradle, android/build-variants, android/dependency-management, gradle, performance, difficulty/medium]
 ---
 # Вопрос (RU)
 > Как оптимизировать сборку Android-приложения?
@@ -28,253 +28,238 @@ tags: [android/gradle, difficulty/medium]
 
 ## Ответ (RU)
 
-**Основные направления:**
+**Стратегия оптимизации:**
 
-1. **Gradle-конфигурация** — параллельная сборка, кеширование, Configuration Cache
-2. **Модуляризация** — параллельная компиляция независимых модулей
-3. **Управление зависимостями** — version catalogs, `implementation` вместо `api`
-4. **Kotlin-оптимизации** — инкрементальная компиляция, KSP вместо Kapt
+1. **Gradle Configuration** — параллелизм, кеширование, Configuration Cache
+2. **Модуляризация** — независимые модули компилируются параллельно
+3. **Управление зависимостями** — `implementation` vs `api`, KSP вместо Kapt
+4. **Профилирование** — выявление узких мест через `--scan`/`--profile`
 
-**gradle.properties (критичные настройки):**
+### 1. Критичные настройки gradle.properties
 
 ```properties
-# ✅ Параллельная сборка (используем все ядра CPU)
+# ✅ Параллельная сборка (все ядра CPU)
 org.gradle.parallel=true
+org.gradle.workers.max=8
 
-# ✅ Build cache (избегаем перекомпиляции неизменного кода)
+# ✅ Build cache (избегаем перекомпиляции)
 org.gradle.caching=true
 
-# ✅ Configuration cache (кешируем фазу конфигурации, +10-30%)
+# ✅ Configuration cache (кеш фазы конфигурации)
 org.gradle.configuration-cache=true
 
-# ✅ File system watching (нативные события FS вместо polling)
+# ✅ File system watching (native FS events)
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap (предотвращаем OOM, улучшаем GC)
+# ✅ JVM heap (профилактика OOM)
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Non-transitive R classes (каждый модуль получает свой R class)
+# ✅ Non-transitive R classes (изолированные R.java)
 android.nonTransitiveRClass=true
 
 # ✅ Incremental Kotlin compilation
 kotlin.incremental=true
+kotlin.incremental.usePreciseJavaTracking=true
 ```
 
-**Модульная структура:**
+**Эффект:** +30-70% на incremental builds, +15-30% на clean builds.
 
-```kotlin
-// settings.gradle.kts
-include(":app")
-include(":feature:home")
-include(":core:network")
-
-// ✅ Независимые модули компилируются параллельно
-// ✅ Изменения в :core:network не пересобирают :feature:home
-// ✅ Gradle кеширует отдельные модули
-```
-
-**Зависимости:**
+### 2. Зависимости: implementation vs api
 
 ```kotlin
 dependencies {
-    // ✅ implementation скрывает зависимости от потребителей
+    // ✅ implementation скрывает транзитивные зависимости
     implementation(libs.androidx.core)
+    implementation(libs.retrofit)
 
-    // ❌ api выставляет зависимости наружу (больше перекомпиляций)
-    // api(libs.androidx.core)
+    // ❌ api выставляет зависимости наружу
+    // Изменения в api-зависимости пересобирают всех потребителей
+    // api(libs.retrofit)
 
-    // ✅ KSP (в 2x быстрее Kapt)
+    // ✅ KSP (2x быстрее Kapt)
     ksp(libs.hilt.compiler)
-
-    // ❌ Kapt (legacy)
-    // kapt(libs.hilt.compiler)
 }
 ```
 
-**Build-скрипт:**
+**Правило:** используйте `api` только если зависимость явно экспортируется в публичном API модуля.
+
+### 3. Отключение неиспользуемых функций
 
 ```kotlin
 android {
     buildFeatures {
         viewBinding = true
-        buildConfig = false  // ✅ Отключаем неиспользуемые фичи
+        buildConfig = false  // ✅ Генерируем только если используем
         aidl = false
         renderScript = false
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Lint только в CI, не локально
-        abortOnError = false
-    }
-
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true  // ✅ Mock Android APIs
-        }
+        checkReleaseBuilds = false  // ✅ Lint в CI, не локально
     }
 }
 ```
 
-**Профилирование:**
+### 4. Модуляризация
+
+```kotlin
+// settings.gradle.kts
+include(":app")
+include(":feature:home", ":feature:profile")
+include(":core:network", ":core:database")
+
+// ✅ Независимые модули компилируются параллельно
+// ✅ Изменения в :core:network не пересобирают :feature:home
+```
+
+**Бонус:** возможность использовать Gradle Remote Build Cache для команды.
+
+### 5. Профилирование
 
 ```bash
-# Build scan (детальный cloud-отчет)
-./gradlew build --scan
+# Build scan (облачный отчет с визуализацией)
+./gradlew assembleDebug --scan
 
 # Profile report (локальный HTML)
 ./gradlew assembleDebug --profile
 
-# Анализируем: slowest tasks, cache hit rate, parallelization
+# Ищем:
+# - Slowest tasks (>5% build time)
+# - Cache misses (низкий cache hit rate)
+# - Sequential execution (возможность параллелизации)
 ```
-
-**Quick wins (эффект 20-80%):**
-
-- `org.gradle.parallel=true` → +20-40%
-- `org.gradle.caching=true` → +30-50% (incremental)
-- `org.gradle.configuration-cache=true` → +10-30%
-- Модуляризация → параллельная компиляция
-- KSP вместо Kapt → в 2x быстрее
-- Отключить Lint/Tests в debug → +15-25%
 
 ---
 
 ## Answer (EN)
 
-**Key optimization areas:**
+**Optimization strategy:**
 
-1. **Gradle configuration** — parallel builds, caching, Configuration Cache
-2. **Modularization** — parallel compilation of independent modules
-3. **Dependency management** — version catalogs, `implementation` over `api`
-4. **Kotlin optimizations** — incremental compilation, KSP instead of Kapt
+1. **Gradle Configuration** — parallelism, caching, Configuration Cache
+2. **Modularization** — independent modules compile in parallel
+3. **Dependency management** — `implementation` vs `api`, KSP instead of Kapt
+4. **Profiling** — identify bottlenecks via `--scan`/`--profile`
 
-**gradle.properties (critical settings):**
+### 1. Critical gradle.properties settings
 
 ```properties
-# ✅ Parallel build (use all CPU cores)
+# ✅ Parallel build (all CPU cores)
 org.gradle.parallel=true
+org.gradle.workers.max=8
 
-# ✅ Build cache (avoid recompiling unchanged code)
+# ✅ Build cache (avoid recompilation)
 org.gradle.caching=true
 
-# ✅ Configuration cache (cache configuration phase, +10-30%)
+# ✅ Configuration cache (cache configuration phase)
 org.gradle.configuration-cache=true
 
-# ✅ File system watching (native FS events instead of polling)
+# ✅ File system watching (native FS events)
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap (prevent OOM, improve GC)
+# ✅ JVM heap (prevent OOM)
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Non-transitive R classes (each module gets its own R class)
+# ✅ Non-transitive R classes (isolated R.java)
 android.nonTransitiveRClass=true
 
 # ✅ Incremental Kotlin compilation
 kotlin.incremental=true
+kotlin.incremental.usePreciseJavaTracking=true
 ```
 
-**Module structure:**
+**Impact:** +30-70% on incremental builds, +15-30% on clean builds.
 
-```kotlin
-// settings.gradle.kts
-include(":app")
-include(":feature:home")
-include(":core:network")
-
-// ✅ Independent modules compile in parallel
-// ✅ Changes in :core:network don't rebuild :feature:home
-// ✅ Gradle caches individual modules
-```
-
-**Dependencies:**
+### 2. Dependencies: implementation vs api
 
 ```kotlin
 dependencies {
-    // ✅ implementation hides dependencies from consumers
+    // ✅ implementation hides transitive dependencies
     implementation(libs.androidx.core)
+    implementation(libs.retrofit)
 
-    // ❌ api exposes dependencies (more recompilations)
-    // api(libs.androidx.core)
+    // ❌ api exposes dependencies outward
+    // Changes in api dependency rebuild all consumers
+    // api(libs.retrofit)
 
     // ✅ KSP (2x faster than Kapt)
     ksp(libs.hilt.compiler)
-
-    // ❌ Kapt (legacy)
-    // kapt(libs.hilt.compiler)
 }
 ```
 
-**Build script:**
+**Rule:** use `api` only if dependency is explicitly exported in module's public API.
+
+### 3. Disable unused features
 
 ```kotlin
 android {
     buildFeatures {
         viewBinding = true
-        buildConfig = false  // ✅ Disable unused features
+        buildConfig = false  // ✅ Generate only if used
         aidl = false
         renderScript = false
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Lint only in CI, not locally
-        abortOnError = false
-    }
-
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true  // ✅ Mock Android APIs
-        }
+        checkReleaseBuilds = false  // ✅ Lint in CI, not locally
     }
 }
 ```
 
-**Profiling:**
+### 4. Modularization
+
+```kotlin
+// settings.gradle.kts
+include(":app")
+include(":feature:home", ":feature:profile")
+include(":core:network", ":core:database")
+
+// ✅ Independent modules compile in parallel
+// ✅ Changes in :core:network don't rebuild :feature:home
+```
+
+**Bonus:** enables Gradle Remote Build Cache for team collaboration.
+
+### 5. Profiling
 
 ```bash
-# Build scan (detailed cloud report)
-./gradlew build --scan
+# Build scan (cloud report with visualization)
+./gradlew assembleDebug --scan
 
 # Profile report (local HTML)
 ./gradlew assembleDebug --profile
 
-# Analyze: slowest tasks, cache hit rate, parallelization
+# Look for:
+# - Slowest tasks (>5% build time)
+# - Cache misses (low cache hit rate)
+# - Sequential execution (parallelization opportunities)
 ```
-
-**Quick wins (20-80% improvement):**
-
-- `org.gradle.parallel=true` → +20-40%
-- `org.gradle.caching=true` → +30-50% (incremental)
-- `org.gradle.configuration-cache=true` → +10-30%
-- Modularization → parallel compilation
-- KSP instead of Kapt → 2x faster
-- Disable Lint/Tests in debug → +15-25%
 
 ---
 
 ## Follow-ups
 
-- How to identify which Gradle tasks cause bottlenecks using `--profile` and `--scan`?
-- What are trade-offs between Configuration Cache and Build Cache in CI environments?
-- How does `implementation` vs `api` affect incremental compilation boundaries?
-- When should you split a module further vs keep it monolithic?
-- How to configure remote build cache for team collaboration without conflicts?
+- How does Configuration Cache differ from Build Cache and when to use each?
+- What are trade-offs of using `api` vs `implementation` in multi-module projects?
+- How to diagnose cache misses and improve cache hit rate in CI?
+- When should you split a feature module vs keeping it monolithic?
+- How to set up Remote Build Cache for team without security risks?
 
 ## References
 
-- [[c-gradle]] - Build system fundamentals
+- [[c-gradle]]
+- [[c-build-configuration]]
 - https://docs.gradle.org/current/userguide/performance.html
 - https://developer.android.com/studio/build/optimize-your-build
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-gradle-basics--android--easy]] - Gradle fundamentals
+- [[q-gradle-basics--android--easy]]
 
 ### Related (Same Level)
-- Android modularization patterns
-- Version catalog best practices
-- Annotation processing alternatives (KSP vs Kapt)
+- [[q-android-modularization--android--hard]]
+- [[q-gradle-version-catalogs--android--medium]]
 
 ### Advanced (Harder)
-- Custom Gradle plugins for build optimization
-- Advanced caching strategies for monorepos
-- Bazel migration for large projects
+- [[q-custom-gradle-plugins--android--hard]]
+- [[q-remote-build-cache-setup--android--hard]]

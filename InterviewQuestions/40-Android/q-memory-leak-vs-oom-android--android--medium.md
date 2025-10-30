@@ -1,122 +1,85 @@
 ---
 id: 20251012-12271136
-title: "Memory Leak Vs Oom Android"
+title: "Memory Leak vs OOM / Утечка памяти vs OOM"
+aliases: ["Memory Leak vs OOM", "Утечка памяти vs OOM"]
 topic: android
+subtopics: [performance-memory, debugging, profiling]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [memory, memory-leak, oom, performance-memory, leakcanary, debugging, difficulty/medium]
 moc: moc-android
-related: [q-what-is-the-main-application-execution-thread--android--easy, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-play-feature-delivery-dynamic-modules--android--medium]
+related: [q-what-is-the-main-application-execution-thread--android--easy, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-coroutine-memory-leak-detection--kotlin--hard]
+sources: []
+created: 2025-10-13
+updated: 2025-10-28
+tags: [android, android/performance-memory, android/debugging, android/profiling, memory-leak, oom, leakcanary, difficulty/medium]
 ---
 
-# Memory Leak vs OutOfMemoryError in Android
+# Вопрос (RU)
+> В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
 
----
-
-## Answer (EN)
 # Question (EN)
-What is the difference between a memory leak and OutOfMemoryError in Android? How do you detect and fix them?
+> What is the difference between a memory leak and OutOfMemoryError in Android? How do you detect and fix them?
 
-## Answer (EN)
-Memory leaks and OutOfMemoryErrors are related but distinct issues. Memory leaks gradually consume memory, potentially leading to OutOfMemoryError crashes.
+---
 
-#### 1. **Memory Leak**
+## Ответ (RU)
 
-A memory leak occurs when objects are no longer needed but remain referenced, preventing garbage collection.
+**Утечки памяти** и **OutOfMemoryError** — разные проблемы. Утечки постепенно расходуют память, что может привести к OOM-краху.
 
-**Common Causes:**
+### 1. Утечка памяти
+
+**Определение**: Объекты больше не нужны, но остаются referenced — GC не может их собрать.
+
+**Типичные причины и решения:**
 
 ```kotlin
-// - BAD: Activity leak via static reference
+// ❌ Static-ссылка на Activity
 class LeakyActivity : AppCompatActivity() {
     companion object {
-        private var listener: OnDataListener? = null
+        var listener: OnDataListener? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Activity referenced by static field
-        // Never garbage collected even after finish()
         listener = object : OnDataListener {
             override fun onData(data: String) {
-                updateUI(data) // References Activity
+                updateUI(data)  // Удерживает Activity
             }
         }
     }
 }
 
-// - BAD: Handler leak
+// ✅ WeakReference
+class FixedActivity : AppCompatActivity() {
+    companion object {
+        var listenerRef: WeakReference<OnDataListener>? = null
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val listener = object : OnDataListener {
+            override fun onData(data: String) { updateUI(data) }
+        }
+        listenerRef = WeakReference(listener)
+    }
+}
+```
+
+```kotlin
+// ❌ Handler-утечка
 class HandlerLeakActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Non-static inner class holds implicit reference to Activity
-        handler.postDelayed({
-            updateUI() // Leaks Activity if posted long delay
-        }, 60000) // 1 minute
+        handler.postDelayed({ updateUI() }, 60_000)
     }
 }
 
-// - BAD: Anonymous listener leak
-class ListenerLeakActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // EventBus holds reference to Activity
-        EventBus.getDefault().register(object : EventListener {
-            override fun onEvent(event: Event) {
-                handleEvent(event)
-            }
-        })
-
-        // Never unregistered!
-    }
-}
-
-// - BAD: Thread leak
-class ThreadLeakActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Thread {
-            while (true) {
-                // Activity referenced by thread
-                runOnUiThread {
-                    updateUI() // Leaks Activity
-                }
-                Thread.sleep(1000)
-            }
-        }.start()
-    }
-}
-```
-
-**- Proper Solutions:**
-
-```kotlin
-// - GOOD: Use WeakReference
-class FixedActivity : AppCompatActivity() {
-    companion object {
-        private var listenerRef: WeakReference<OnDataListener>? = null
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val listener = object : OnDataListener {
-            override fun onData(data: String) {
-                updateUI(data)
-            }
-        }
-        listenerRef = WeakReference(listener)
-    }
-}
-
-// - GOOD: Static Handler + WeakReference
+// ✅ Static Handler + WeakReference + очистка
 class FixedHandlerActivity : AppCompatActivity() {
     private val handler = MyHandler(this)
 
@@ -124,9 +87,7 @@ class FixedHandlerActivity : AppCompatActivity() {
         private val activityRef = WeakReference(activity)
 
         override fun handleMessage(msg: Message) {
-            activityRef.get()?.let { activity ->
-                activity.updateUI()
-            }
+            activityRef.get()?.updateUI()
         }
     }
 
@@ -135,27 +96,10 @@ class FixedHandlerActivity : AppCompatActivity() {
         handler.removeCallbacksAndMessages(null)
     }
 }
+```
 
-// - GOOD: Proper lifecycle management
-class FixedListenerActivity : AppCompatActivity() {
-    private val eventListener = object : EventListener {
-        override fun onEvent(event: Event) {
-            handleEvent(event)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(eventListener)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(eventListener)
-    }
-}
-
-// - GOOD: Lifecycle-aware coroutines
+```kotlin
+// ✅ Lifecycle-aware coroutines (лучший подход)
 class CoroutineActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -165,448 +109,281 @@ class CoroutineActivity : AppCompatActivity() {
                 updateUI()
                 delay(1000)
             }
-            // Automatically cancelled when lifecycle destroyed
-        }
-    }
-}
-
-// - GOOD: ViewModel for data retention
-class ViewModelActivity : AppCompatActivity() {
-    private val viewModel: MyViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // ViewModel survives configuration changes
-        // No Activity leak
-        viewModel.data.observe(this) { data ->
-            updateUI(data)
+            // Автоматическая отмена при destroy
         }
     }
 }
 ```
 
-#### 2. **OutOfMemoryError (OOM)**
+### 2. OutOfMemoryError (OOM)
 
-OOM occurs when the app tries to allocate more memory than available.
+**Определение**: Попытка выделить больше памяти, чем доступно.
 
-**Common Causes:**
+**Типичные причины и решения:**
 
 ```kotlin
-// - BAD: Loading large bitmaps
-class OOMActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+// ❌ Загрузка больших изображений
+val bitmap = BitmapFactory.decodeFile("/sdcard/large_image.jpg")
 
-        // Loading large image without scaling
-        val bitmap = BitmapFactory.decodeFile("/sdcard/large_image.jpg")
-        // May throw OOM if image is too large
-        imageView.setImageBitmap(bitmap)
-    }
+// ✅ Glide с автоматическим управлением памятью
+Glide.with(this)
+    .load("/sdcard/large_image.jpg")
+    .override(imageView.width, imageView.height)
+    .into(imageView)
+```
+
+```kotlin
+// ❌ Избыточная аллокация
+val results = mutableListOf<Result>()
+repeat(1_000_000) {
+    results.add(Result(it, it.toString()))
 }
 
-// - BAD: Excessive object allocation
-fun processLargeDataset() {
-    val results = mutableListOf<Result>()
-
+// ✅ Lazy-генерация через Sequence
+fun processLargeDataset(): Sequence<Result> = sequence {
     repeat(1_000_000) {
-        // Allocating millions of objects
-        results.add(Result(it, it.toString()))
-    }
-    // OOM if dataset too large
-}
-
-// - BAD: Memory leak accumulation
-class LeakyService : Service() {
-    companion object {
-        private val leakedActivities = mutableListOf<Activity>()
-    }
-
-    fun registerActivity(activity: Activity) {
-        leakedActivities.add(activity)
-        // Activities never removed
-        // Eventually causes OOM
+        yield(Result(it, it.toString()))
     }
 }
 ```
 
-**- Solutions:**
+### 3. Инструменты обнаружения
 
-```kotlin
-// - GOOD: Proper bitmap loading
-class OptimizedActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Use Glide/Coil for automatic memory management
-        Glide.with(this)
-            .load("/sdcard/large_image.jpg")
-            .override(imageView.width, imageView.height)
-            .into(imageView)
-    }
-
-    // Or manual bitmap scaling
-    private fun decodeSampledBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap {
-        return BitmapFactory.Options().run {
-            inJustDecodeBounds = true
-            BitmapFactory.decodeFile(path, this)
-
-            inSampleSize = calculateInSampleSize(this, reqWidth, reqHeight)
-            inJustDecodeBounds = false
-
-            BitmapFactory.decodeFile(path, this)
-        }
-    }
-
-    private fun calculateInSampleSize(
-        options: BitmapFactory.Options,
-        reqWidth: Int,
-        reqHeight: Int
-    ): Int {
-        val (height, width) = options.run { outHeight to outWidth }
-        var inSampleSize = 1
-
-        if (height > reqHeight || width > reqWidth) {
-            val halfHeight = height / 2
-            val halfWidth = width / 2
-
-            while (halfHeight / inSampleSize >= reqHeight &&
-                halfWidth / inSampleSize >= reqWidth
-            ) {
-                inSampleSize *= 2
-            }
-        }
-
-        return inSampleSize
-    }
-}
-
-// - GOOD: Process data in chunks
-suspend fun processLargeDataset() = withContext(Dispatchers.Default) {
-    val results = mutableListOf<Result>()
-    val chunkSize = 1000
-
-    (0 until 1_000_000 step chunkSize).forEach { start ->
-        val chunk = (start until minOf(start + chunkSize, 1_000_000))
-            .map { Result(it, it.toString()) }
-
-        results.addAll(chunk)
-
-        // Allow GC between chunks
-        if (start % 10000 == 0) {
-            delay(1)
-        }
-    }
-
-    results
-}
-
-// - GOOD: Use Sequence for lazy evaluation
-fun processLargeDatasetLazy(): Sequence<Result> {
-    return sequence {
-        repeat(1_000_000) {
-            yield(Result(it, it.toString()))
-            // Items generated on-demand, not all at once
-        }
-    }
-}
-```
-
-#### 3. **Detection Tools**
-
-**3.1 LeakCanary (Memory Leaks)**
+**LeakCanary** (автоматическое обнаружение утечек):
 
 ```kotlin
 // build.gradle.kts
 dependencies {
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
 }
-
-// Automatically detects and reports leaks
-// No additional code needed
-
-// Custom leak detection
-class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-        if (BuildConfig.DEBUG) {
-            // Watch custom objects
-            AppWatcher.objectWatcher.watch(
-                watchedObject = myObject,
-                description = "My custom object"
-            )
-        }
-    }
-}
+// Zero configuration — работает из коробки
 ```
 
-**3.2 Android Profiler (Memory Analysis)**
+**Android Profiler** (мониторинг памяти):
 
 ```kotlin
-// Monitor memory in real-time
 class MemoryMonitor {
     fun logMemoryUsage() {
         val runtime = Runtime.getRuntime()
-        val usedMemory = runtime.totalMemory() - runtime.freeMemory()
-        val maxMemory = runtime.maxMemory()
+        val used = runtime.totalMemory() - runtime.freeMemory()
+        val max = runtime.maxMemory()
 
-        Log.d("Memory", """
-            Used: ${usedMemory / 1024 / 1024} MB
-            Max: ${maxMemory / 1024 / 1024} MB
-            Usage: ${usedMemory * 100 / maxMemory}%
-        """.trimIndent())
-    }
-
-    fun dumpHeap() {
-        if (BuildConfig.DEBUG) {
-            val heapDumpFile = File(
-                Environment.getExternalStorageDirectory(),
-                "heap_dump.hprof"
-            )
-            Debug.dumpHprofData(heapDumpFile.absolutePath)
-            Log.d("Memory", "Heap dumped to: ${heapDumpFile.absolutePath}")
-        }
+        Log.d("Memory", "Used: ${used / 1024 / 1024} MB / ${max / 1024 / 1024} MB")
     }
 }
 ```
 
-**3.3 Manual Leak Detection**
+### Предотвращение
+
+**Утечки памяти:**
+- WeakReference для долгоживущих объектов
+- Очистка listeners/observers в onDestroy
+- Lifecycle-aware компоненты (ViewModel, lifecycleScope)
+- Application context вместо Activity context
+- Отмена coroutines/jobs
+
+**OutOfMemoryError:**
+- Glide/Coil для изображений
+- LruCache для bitmap
+- Обработка данных частями (chunking)
+- Lazy evaluation (Sequence)
+- Pagination для больших наборов данных
+
+---
+
+## Answer (EN)
+
+**Memory leaks** and **OutOfMemoryError** are distinct issues. Memory leaks gradually consume memory, potentially leading to OOM crashes.
+
+### 1. Memory Leak
+
+**Definition**: Objects are no longer needed but remain referenced, preventing garbage collection.
+
+**Common causes and solutions:**
 
 ```kotlin
-class LeakDetector {
-    private val activityRefs = mutableListOf<WeakReference<Activity>>()
-
-    fun trackActivity(activity: Activity) {
-        activityRefs.add(WeakReference(activity))
-
-        activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                // Schedule leak check
-                Handler(Looper.getMainLooper()).postDelayed({
-                    checkForLeaks()
-                }, 5000)
-            }
-        })
-    }
-
-    private fun checkForLeaks() {
-        // Force GC
-        Runtime.getRuntime().gc()
-        System.runFinalization()
-        Runtime.getRuntime().gc()
-
-        // Check for leaked activities
-        activityRefs.removeAll { it.get() == null }
-
-        if (activityRefs.isNotEmpty()) {
-            Log.w("LeakDetector", "Potential leaks detected: ${activityRefs.size} activities")
-            activityRefs.forEach { ref ->
-                ref.get()?.let { activity ->
-                    Log.w("LeakDetector", "Leaked: ${activity.javaClass.simpleName}")
-                }
-            }
-        }
-    }
-}
-```
-
-#### 4. **Common Patterns**
-
-**4.1 Bitmap Management**
-
-```kotlin
-class BitmapManager {
-    private val bitmapCache = LruCache<String, Bitmap>(
-        (Runtime.getRuntime().maxMemory() / 1024 / 8).toInt()
-    ) {
-        override fun sizeOf(key: String, bitmap: Bitmap): Int {
-            return bitmap.byteCount / 1024
-        }
-    }
-
-    fun loadBitmap(key: String, loader: () -> Bitmap): Bitmap {
-        return bitmapCache.get(key) ?: run {
-            val bitmap = loader()
-            bitmapCache.put(key, bitmap)
-            bitmap
-        }
-    }
-
-    fun clear() {
-        bitmapCache.evictAll()
-    }
-}
-```
-
-**4.2 Context References**
-
-```kotlin
-// - BAD: Storing Activity context
-class BadSingleton private constructor(context: Context) {
+// ❌ Static reference to Activity
+class LeakyActivity : AppCompatActivity() {
     companion object {
-        private var instance: BadSingleton? = null
-
-        fun getInstance(context: Context): BadSingleton {
-            if (instance == null) {
-                instance = BadSingleton(context) // Leaks Activity!
-            }
-            return instance!!
-        }
+        var listener: OnDataListener? = null
     }
-}
-
-// - GOOD: Using Application context
-class GoodSingleton private constructor(context: Context) {
-    companion object {
-        private var instance: GoodSingleton? = null
-
-        fun getInstance(context: Context): GoodSingleton {
-            if (instance == null) {
-                instance = GoodSingleton(context.applicationContext)
-            }
-            return instance!!
-        }
-    }
-}
-```
-
-**4.3 Observable Patterns**
-
-```kotlin
-// - GOOD: Lifecycle-aware observers
-class DataObserver : AppCompatActivity() {
-    private val viewModel: DataViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Automatically unsubscribed when lifecycle destroyed
-        viewModel.data.observe(this) { data ->
-            updateUI(data)
+        listener = object : OnDataListener {
+            override fun onData(data: String) {
+                updateUI(data)  // Holds Activity reference
+            }
         }
     }
 }
 
-// - GOOD: Manual lifecycle management
-class ManualObserver : AppCompatActivity() {
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
+// ✅ WeakReference
+class FixedActivity : AppCompatActivity() {
+    companion object {
+        var listenerRef: WeakReference<OnDataListener>? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val listener = object : OnDataListener {
+            override fun onData(data: String) { updateUI(data) }
+        }
+        listenerRef = WeakReference(listener)
+    }
+}
+```
 
-        scope.launch {
-            dataFlow.collect { data ->
-                updateUI(data)
-            }
+```kotlin
+// ❌ Handler leak
+class HandlerLeakActivity : AppCompatActivity() {
+    private val handler = Handler(Looper.getMainLooper())
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        handler.postDelayed({ updateUI() }, 60_000)
+    }
+}
+
+// ✅ Static Handler + WeakReference + cleanup
+class FixedHandlerActivity : AppCompatActivity() {
+    private val handler = MyHandler(this)
+
+    class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
+        private val activityRef = WeakReference(activity)
+
+        override fun handleMessage(msg: Message) {
+            activityRef.get()?.updateUI()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel() // Prevent leak
+        handler.removeCallbacksAndMessages(null)
     }
 }
 ```
 
-### Prevention Checklist
+```kotlin
+// ✅ Lifecycle-aware coroutines (best approach)
+class CoroutineActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            while (isActive) {
+                updateUI()
+                delay(1000)
+            }
+            // Automatically cancelled on destroy
+        }
+    }
+}
+```
+
+### 2. OutOfMemoryError (OOM)
+
+**Definition**: App attempts to allocate more memory than available.
+
+**Common causes and solutions:**
+
+```kotlin
+// ❌ Loading large bitmaps
+val bitmap = BitmapFactory.decodeFile("/sdcard/large_image.jpg")
+
+// ✅ Glide with automatic memory management
+Glide.with(this)
+    .load("/sdcard/large_image.jpg")
+    .override(imageView.width, imageView.height)
+    .into(imageView)
+```
+
+```kotlin
+// ❌ Excessive allocation
+val results = mutableListOf<Result>()
+repeat(1_000_000) {
+    results.add(Result(it, it.toString()))
+}
+
+// ✅ Lazy generation with Sequence
+fun processLargeDataset(): Sequence<Result> = sequence {
+    repeat(1_000_000) {
+        yield(Result(it, it.toString()))
+    }
+}
+```
+
+### 3. Detection Tools
+
+**LeakCanary** (automatic leak detection):
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
+}
+// Zero configuration — works out of the box
+```
+
+**Android Profiler** (memory monitoring):
+
+```kotlin
+class MemoryMonitor {
+    fun logMemoryUsage() {
+        val runtime = Runtime.getRuntime()
+        val used = runtime.totalMemory() - runtime.freeMemory()
+        val max = runtime.maxMemory()
+
+        Log.d("Memory", "Used: ${used / 1024 / 1024} MB / ${max / 1024 / 1024} MB")
+    }
+}
+```
+
+### Prevention
 
 **Memory Leaks:**
-- [ ] Use WeakReference for long-lived objects
-- [ ] Clean up listeners/observers in onDestroy
-- [ ] Use lifecycle-aware components
-- [ ] Prefer Application context over Activity
-- [ ] Cancel coroutines/jobs properly
-- [ ] Remove Handler callbacks
-- [ ] Use ViewModel for data retention
-- [ ] Test with LeakCanary
+- WeakReference for long-lived objects
+- Clean up listeners/observers in onDestroy
+- Lifecycle-aware components (ViewModel, lifecycleScope)
+- Application context instead of Activity context
+- Cancel coroutines/jobs properly
 
 **OutOfMemoryError:**
-- [ ] Use image loading libraries (Glide/Coil)
-- [ ] Implement bitmap caching
-- [ ] Process large datasets in chunks
-- [ ] Use Sequence for lazy evaluation
-- [ ] Monitor memory usage
-- [ ] Handle large data with pagination
-- [ ] Compress/downsample images
-- [ ] Release resources when not needed
-
----
-
-
-
-# Вопрос (RU)
-> В чём разница между утечкой памяти и OutOfMemoryError в Android? Как их обнаружить и исправить?
-
-## Ответ (RU)
-
-#### Утечка памяти:
-
-**Определение:** Объекты больше не нужны, но остаются referenced, не могут быть собраны GC.
-
-**Частые причины:**
-- Static ссылки на Activity
-- Handler утечки
-- Неотписанные listeners
-- Thread утечки
-- Context утечки в Singleton
-
-**Решения:**
-- WeakReference для долгоживущих объектов
-- Очистка listeners в onDestroy
-- Lifecycle-aware компоненты
-- Application context вместо Activity
-- Отмена coroutines/jobs
-- ViewModel для данных
-
-#### OutOfMemoryError:
-
-**Определение:** Попытка выделить больше памяти, чем доступно.
-
-**Частые причины:**
-- Загрузка больших изображений
-- Избыточная аллокация объектов
-- Накопление утечек памяти
-
-**Решения:**
-- Glide/Coil для изображений
-- Bitmap sampling и caching
-- Обработка данных частями
+- Glide/Coil for images
+- LruCache for bitmaps
+- Process data in chunks
 - Lazy evaluation (Sequence)
-- Пагинация для больших наборов данных
-
-#### Инструменты обнаружения:
-
-**LeakCanary:**
-- Автоматическое обнаружение утечек
-- Подробные отчёты
-- Zero configuration
-
-**Android Profiler:**
-- Мониторинг памяти в реальном времени
-- Heap dumps
-- Allocation tracking
-
-**Чек-лист предотвращения:**
-- Используйте lifecycle-aware компоненты
-- Очищайте ресурсы
-- Мониторьте память
-- Тестируйте с LeakCanary
-- Оптимизируйте изображения
-- Обрабатывайте данные частями
+- Pagination for large datasets
 
 ---
+
+## Follow-ups
+
+- How does WeakReference differ from SoftReference in Android?
+- What are the memory implications of configuration changes (rotation)?
+- How does the garbage collector work in Android (ART vs Dalvik)?
+- What is the difference between heap memory and native memory?
+- How to handle memory pressure with ComponentCallbacks2?
+
+## References
+
+- Android Memory Management: https://developer.android.com/topic/performance/memory
+- LeakCanary Documentation: https://square.github.io/leakcanary/
+- [[c-android-lifecycle]]
+- [[c-coroutines]]
+- [[c-viewmodel]]
 
 ## Related Questions
 
-### Computer Science Fundamentals
-- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
-- [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
-- [[q-kotlin-reference-equality-operator--programming-languages--easy]] - Memory Management
-- [[q-reference-types-protect-from-deletion--programming-languages--easy]] - Memory Management
+### Prerequisites
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Understanding Android threading fundamentals
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory management basics
 
-### Kotlin Language Features
-- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Memory Management
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Memory Management
-- [[q-kotlin-native--kotlin--hard]] - Memory Management
+### Related
+- [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - UI lifecycle and memory
+- [[q-play-feature-delivery-dynamic-modules--android--medium]] - Memory-efficient modularization
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutine-specific memory issues
+
+### Advanced
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Advanced leak detection strategies
+- [[q-kotlin-native--kotlin--hard]] - Native memory management

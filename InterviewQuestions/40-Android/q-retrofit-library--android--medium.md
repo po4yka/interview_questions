@@ -1,250 +1,330 @@
 ---
 id: 20251017-144837
 title: "Retrofit Library / Библиотека Retrofit"
+aliases: ["Retrofit Library", "Библиотека Retrofit"]
 topic: android
+subtopics: [networking-http, architecture-mvvm, coroutines]
+question_kind: android
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-show-svg-string-as-vector-file--programming-languages--medium, q-is-layoutinflater-a-singleton-and-why--android--medium, q-overdraw-gpu-rendering--android--medium]
+related: [c-http-client, c-rest-api, q-okhttp-vs-retrofit--android--medium]
+sources: []
 created: 2025-10-15
-tags: [retrofit, networking, rest-api, difficulty/medium]
+updated: 2025-10-28
+tags: [android/networking-http, android/architecture-mvvm, android/coroutines, retrofit, networking, rest-api, difficulty/medium]
 ---
+# Вопрос (RU)
 
-# Что из себя представляет Retrofit?
+Что из себя представляет Retrofit и зачем он нужен в Android-разработке?
 
-**English**: What is Retrofit?
+# Question (EN)
 
-## Answer (EN)
-Retrofit — это типобезопасный HTTP-клиент, разработанный компанией Square для Android и Java. Этот инструмент предназначен для упрощения процесса отправки сетевых запросов к RESTful API и обработки ответов сервера.
+What is Retrofit and why is it needed in Android development?
 
-### Key Features
+## Ответ (RU)
 
-#### 1. Простота в использовании
+**Retrofit** — типобезопасный HTTP-клиент от Square, преобразующий REST API в Kotlin/Java интерфейсы. Упрощает сетевое взаимодействие через декларативный подход с аннотациями.
 
-Retrofit превращает HTTP API в Java/Kotlin интерфейс, что делает код более читаемым и легко поддерживаемым.
+### Ключевые возможности
+
+**1. Декларативные API интерфейсы**
 
 ```kotlin
 interface ApiService {
-    @GET("users/{id}")
+    @GET("users/{id}")  // ✅ Path parameter
     suspend fun getUser(@Path("id") userId: Int): User
 
-    @POST("users")
+    @POST("users")      // ✅ Body serialization
     suspend fun createUser(@Body user: User): User
 
-    @GET("users")
-    suspend fun getUsers(@Query("page") page: Int): List<User>
+    @GET("search")      // ✅ Query parameters
+    suspend fun search(@Query("q") query: String): List<Result>
 }
 ```
 
-#### 2. Data Conversion
-
-Автоматически обрабатывает данные запросов и ответов с помощью конвертеров (Gson, Moshi, Jackson и др.).
+**2. Автоматическая (де)сериализация**
 
 ```kotlin
-// Создание Retrofit instance с Gson конвертером
 val retrofit = Retrofit.Builder()
     .baseUrl("https://api.example.com/")
-    .addConverterFactory(GsonConverterFactory.create())
+    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO
     .build()
 
-val apiService = retrofit.create(ApiService::class.java)
-
-// Data class автоматически сериализуется/десериализуется
-data class User(
-    val id: Int,
-    val name: String,
-    val email: String
-)
+data class User(val id: Int, val name: String)  // ✅ Auto-mapped
 ```
 
-#### 3. Asynchronous and Synchronous Calls
-
-Поддерживаются как синхронные, так и асинхронные вызовы API.
+**3. Интеграция с корутинами**
 
 ```kotlin
-// Асинхронный вызов с корутинами (современный подход)
-lifecycleScope.launch {
+// ✅ Modern: suspend functions
+viewModelScope.launch {
     try {
         val user = apiService.getUser(123)
-        updateUI(user)
-    } catch (e: Exception) {
-        handleError(e)
+        _state.value = Success(user)
+    } catch (e: HttpException) {
+        _state.value = Error(e.code())  // 404, 500, etc.
     }
 }
 
-// Асинхронный вызов с callback (устаревший подход)
-interface ApiService {
-    @GET("users/{id}")
-    fun getUser(@Path("id") userId: Int): Call<User>
-}
-
-apiService.getUser(123).enqueue(object : Callback<User> {
-    override fun onResponse(call: Call<User>, response: Response<User>) {
-        if (response.isSuccessful) {
-            val user = response.body()
-            updateUI(user)
-        }
-    }
-
-    override fun onFailure(call: Call<User>, t: Throwable) {
-        handleError(t)
-    }
-})
+// ❌ Legacy: callback-based (avoid)
+apiService.getUser(123).enqueue(object : Callback<User> { ... })
 ```
 
-#### 4. Customizability
-
-Благодаря использованию OkHttp в качестве сетевого клиента, Retrofit предлагает расширенные возможности по настройке HTTP-клиентов.
+**4. Настройка через OkHttp**
 
 ```kotlin
-// Кастомная настройка OkHttp
-val okHttpClient = OkHttpClient.Builder()
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .readTimeout(30, TimeUnit.SECONDS)
-    .addInterceptor(HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    })
-    .addInterceptor { chain ->
-        val request = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer $token")
-            .build()
-        chain.proceed(request)
+val client = OkHttpClient.Builder()
+    .addInterceptor { chain ->  // ✅ Add auth headers
+        chain.proceed(
+            chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+        )
     }
+    .connectTimeout(30, TimeUnit.SECONDS)  // ✅ Timeouts
     .build()
 
 val retrofit = Retrofit.Builder()
-    .baseUrl("https://api.example.com/")
-    .client(okHttpClient)
-    .addConverterFactory(GsonConverterFactory.create())
+    .client(client)
     .build()
 ```
 
-### Complete Usage Example
+### Пример с Repository паттерном
 
 ```kotlin
-// 1. Определение API интерфейса
-interface GitHubService {
-    @GET("users/{username}")
-    suspend fun getUser(@Path("username") username: String): GitHubUser
-
+// API definition
+interface GitHubApi {
     @GET("users/{username}/repos")
-    suspend fun getRepos(
-        @Path("username") username: String,
-        @Query("sort") sort: String = "updated"
-    ): List<Repository>
+    suspend fun getRepos(@Path("username") name: String): List<Repo>
 }
 
-// 2. Создание Retrofit instance
-object RetrofitClient {
-    private const val BASE_URL = "https://api.github.com/"
-
-    val apiService: GitHubService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(GitHubService::class.java)
-    }
-}
-
-// 3. Использование в ViewModel
-class UserViewModel : ViewModel() {
-    private val _user = MutableLiveData<GitHubUser>()
-    val user: LiveData<GitHubUser> = _user
-
-    fun loadUser(username: String) {
-        viewModelScope.launch {
-            try {
-                val result = RetrofitClient.apiService.getUser(username)
-                _user.value = result
-            } catch (e: Exception) {
-                // Handle error
-            }
+// Repository layer
+class RepoRepository(private val api: GitHubApi) {
+    suspend fun fetchRepos(username: String): Result<List<Repo>> =
+        try {
+            Result.success(api.getRepos(username))
+        } catch (e: Exception) {
+            Result.failure(e)  // ✅ Handle errors at repository level
         }
-    }
 }
 
-// 4. Использование в Activity/Fragment
-class MainActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.user.observe(this) { user ->
-            textView.text = user.name
+// ViewModel
+class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
+    fun loadRepos() = viewModelScope.launch {
+        repo.fetchRepos("square").onSuccess { repos ->
+            _state.value = repos
         }
-
-        viewModel.loadUser("square")
     }
 }
 ```
 
-### Аннотации HTTP методов
+### HTTP методы и формы
 
 ```kotlin
 interface ApiService {
-    @GET("endpoint")          // GET запрос
-    @POST("endpoint")         // POST запрос
-    @PUT("endpoint")          // PUT запрос
-    @DELETE("endpoint")       // DELETE запрос
-    @PATCH("endpoint")        // PATCH запрос
-    @HEAD("endpoint")         // HEAD запрос
-    @OPTIONS("endpoint")      // OPTIONS запрос
+    @GET @POST @PUT @DELETE @PATCH  // Standard methods
 
-    @FormUrlEncoded          // Отправка форм
+    @FormUrlEncoded  // ✅ application/x-www-form-urlencoded
     @POST("login")
     suspend fun login(
-        @Field("username") username: String,
-        @Field("password") password: String
-    ): LoginResponse
+        @Field("username") user: String,
+        @Field("password") pass: String
+    ): Token
 
-    @Multipart               // Загрузка файлов
+    @Multipart  // ✅ multipart/form-data (file uploads)
     @POST("upload")
-    suspend fun uploadFile(
-        @Part("description") description: RequestBody,
-        @Part file: MultipartBody.Part
-    ): UploadResponse
+    suspend fun upload(@Part file: MultipartBody.Part): UploadResponse
 }
 ```
 
 ### Обработка ошибок
 
 ```kotlin
-suspend fun safeApiCall(): Result<User> {
-    return try {
-        val response = apiService.getUser(123)
-        Result.success(response)
+sealed class ApiResult<out T> {
+    data class Success<T>(val data: T) : ApiResult<T>()
+    data class Error(val code: Int, val message: String) : ApiResult<Nothing>()
+}
+
+suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
+    try {
+        ApiResult.Success(call())
+    } catch (e: HttpException) {  // ✅ HTTP errors (4xx, 5xx)
+        ApiResult.Error(e.code(), e.message())
+    } catch (e: IOException) {    // ✅ Network errors
+        ApiResult.Error(-1, "Network error")
+    }
+```
+
+**Итого**: Retrofit превращает HTTP API в идиоматичный Kotlin код, убирая boilerplate для networking логики.
+
+## Answer (EN)
+
+**Retrofit** is a type-safe HTTP client by Square that transforms REST APIs into Kotlin/Java interfaces. Simplifies networking via declarative annotation-based approach.
+
+### Key Capabilities
+
+**1. Declarative API Interfaces**
+
+```kotlin
+interface ApiService {
+    @GET("users/{id}")  // ✅ Path parameter
+    suspend fun getUser(@Path("id") userId: Int): User
+
+    @POST("users")      // ✅ Body serialization
+    suspend fun createUser(@Body user: User): User
+
+    @GET("search")      // ✅ Query parameters
+    suspend fun search(@Query("q") query: String): List<Result>
+}
+```
+
+**2. Automatic (De)Serialization**
+
+```kotlin
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://api.example.com/")
+    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO
+    .build()
+
+data class User(val id: Int, val name: String)  // ✅ Auto-mapped
+```
+
+**3. Coroutines Integration**
+
+```kotlin
+// ✅ Modern: suspend functions
+viewModelScope.launch {
+    try {
+        val user = apiService.getUser(123)
+        _state.value = Success(user)
     } catch (e: HttpException) {
-        // HTTP ошибка (4xx, 5xx)
-        Result.failure(e)
-    } catch (e: IOException) {
-        // Сетевая ошибка
-        Result.failure(e)
-    } catch (e: Exception) {
-        // Другие ошибки
-        Result.failure(e)
+        _state.value = Error(e.code())  // 404, 500, etc.
+    }
+}
+
+// ❌ Legacy: callback-based (avoid)
+apiService.getUser(123).enqueue(object : Callback<User> { ... })
+```
+
+**4. OkHttp Customization**
+
+```kotlin
+val client = OkHttpClient.Builder()
+    .addInterceptor { chain ->  // ✅ Add auth headers
+        chain.proceed(
+            chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+        )
+    }
+    .connectTimeout(30, TimeUnit.SECONDS)  // ✅ Timeouts
+    .build()
+
+val retrofit = Retrofit.Builder()
+    .client(client)
+    .build()
+```
+
+### Repository Pattern Example
+
+```kotlin
+// API definition
+interface GitHubApi {
+    @GET("users/{username}/repos")
+    suspend fun getRepos(@Path("username") name: String): List<Repo>
+}
+
+// Repository layer
+class RepoRepository(private val api: GitHubApi) {
+    suspend fun fetchRepos(username: String): Result<List<Repo>> =
+        try {
+            Result.success(api.getRepos(username))
+        } catch (e: Exception) {
+            Result.failure(e)  // ✅ Handle errors at repository level
+        }
+}
+
+// ViewModel
+class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
+    fun loadRepos() = viewModelScope.launch {
+        repo.fetchRepos("square").onSuccess { repos ->
+            _state.value = repos
+        }
     }
 }
 ```
 
-**English**: Retrofit is a type-safe HTTP client for Android and Java developed by Square. It converts HTTP APIs into Java/Kotlin interfaces, automatically handles request/response data conversion (Gson, Moshi), supports async/sync calls, and offers extensive customization through OkHttp (caching, timeouts, interceptors).
+### HTTP Methods and Forms
 
-## Ответ (RU)
+```kotlin
+interface ApiService {
+    @GET @POST @PUT @DELETE @PATCH  // Standard methods
 
-Это профессиональный перевод технического содержимого на русский язык.
+    @FormUrlEncoded  // ✅ application/x-www-form-urlencoded
+    @POST("login")
+    suspend fun login(
+        @Field("username") user: String,
+        @Field("password") pass: String
+    ): Token
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+    @Multipart  // ✅ multipart/form-data (file uploads)
+    @POST("upload")
+    suspend fun upload(@Part file: MultipartBody.Part): UploadResponse
+}
+```
 
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+### Error Handling
 
-Длина оригинального английского контента: 5991 символов.
+```kotlin
+sealed class ApiResult<out T> {
+    data class Success<T>(val data: T) : ApiResult<T>()
+    data class Error(val code: Int, val message: String) : ApiResult<Nothing>()
+}
 
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
+    try {
+        ApiResult.Success(call())
+    } catch (e: HttpException) {  // ✅ HTTP errors (4xx, 5xx)
+        ApiResult.Error(e.code(), e.message())
+    } catch (e: IOException) {    // ✅ Network errors
+        ApiResult.Error(-1, "Network error")
+    }
+```
+
+**Summary**: Retrofit transforms HTTP APIs into idiomatic Kotlin code, eliminating networking boilerplate.
+
+---
+
+## Follow-ups
+
+1. How does Retrofit handle response caching and what's the role of OkHttp's cache interceptor?
+2. What are the differences between Retrofit's `Call<T>`, `suspend` functions, and `Flow<T>` return types?
+3. How would you implement request retry logic with exponential backoff in Retrofit?
+4. What's the proper way to handle multipart uploads with progress tracking?
+5. When should you use custom `Converter.Factory` vs. built-in ones (Gson, Moshi)?
+
+## References
+
+- [[c-http-client]] - HTTP client fundamentals
+- [[c-rest-api]] - REST API design principles
+- [[c-serialization]] - JSON serialization patterns
+- https://square.github.io/retrofit/ - Official Retrofit documentation
+- https://square.github.io/okhttp/ - OkHttp documentation
 
 ## Related Questions
 
-- [[q-how-to-show-svg-string-as-vector-file--android--medium]]
-- [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
-- [[q-overdraw-gpu-rendering--android--medium]]
+### Prerequisites (Easier)
+- [[q-what-is-rest-api--networking--easy]]
+- [[q-kotlin-suspend-functions--kotlin--easy]]
+
+### Related (Same Level)
+- [[q-okhttp-vs-retrofit--android--medium]]
+- [[q-repository-pattern--architecture-patterns--medium]]
+- [[q-coroutine-exception-handling--kotlin--medium]]
+
+### Advanced (Harder)
+- [[q-custom-retrofit-call-adapter--android--hard]]
+- [[q-network-request-deduplication--android--hard]]

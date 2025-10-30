@@ -1,9 +1,9 @@
 ---
 id: 20251012-122787
-title: Baseline Profiles Android / Baseline Profiles Android
-aliases: [Baseline Profiles Android, Baseline Profiles, Базовые профили Android]
+title: Baseline Profiles Android / Базовые профили Android
+aliases: ["Baseline Profiles Android", "Базовые профили Android"]
 topic: android
-subtopics: [gradle, performance-startup]
+subtopics: [performance-startup, gradle, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,13 +11,14 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
+  - c-jit-aot-compilation
   - q-android-build-optimization--android--medium
-  - q-app-size-optimization--android--medium
   - q-app-startup-optimization--android--medium
+  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-29
 sources: []
-tags: [android/gradle, android/performance-startup, difficulty/medium]
+tags: [android/performance-startup, android/gradle, android/profiling, performance, aot, difficulty/medium]
 ---
 
 # Вопрос (RU)
@@ -30,165 +31,217 @@ tags: [android/gradle, android/performance-startup, difficulty/medium]
 
 ## Ответ (RU)
 
-### Что Такое Baseline Profiles
+### Концепция
 
-Baseline Profiles сообщают Android Runtime (ART), какие пути кода нужно предварительно скомпилировать (AOT) во время установки, сокращая время запуска и устраняя рывки во время критических пользовательских сценариев.
+Baseline Profiles — это метаданные компиляции, которые сообщают Android Runtime (ART), какие методы и классы критичны для запуска. ART использует эту информацию для предварительной (AOT) компиляции горячих путей при установке, избегая интерпретации и JIT-компиляции во время первых запусков.
 
-**Компиляция без профиля**:
-Запуск → Интерпретация → Профилирование → JIT компиляция → Быстрое выполнение
+**Типичный путь без профиля**:
+```
+Запуск → Интерпретация байткода → JIT-компиляция горячих методов → Нативный код
+  (медленно)                          (на 2-3 запуске)            (быстро)
+```
 
-**Компиляция с профилем**:
-Установка → AOT компиляция профилированного кода → Запуск → Сразу быстрое выполнение
-
-### Влияние На Производительность
-
-- Холодный запуск: на 20-40% быстрее
-- Тёплый запуск: на 15-30% быстрее
-- Первое взаимодействие: на 30-50% быстрее
-- Уменьшение рывков: на 40-60% меньше пропущенных кадров
+**С Baseline Profile**:
+```
+Установка → AOT-компиляция критичных методов → Запуск → Нативный код сразу
+             (dex2oat применяет профиль)       (быстро)
+```
 
 ### Реализация
 
-**Настройка плагина** (см. код в английской секции)
-
-**Генерация профиля**:
-Тестируйте критические пользовательские сценарии для создания профиля оптимизации.
-
-**Формат профиля**:
-```
-HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
-HSPLcom/example/app/viewmodel/HomeViewModel;-><init>()V
-Lcom/example/app/repository/ArticleRepository;->getArticles()Ljava/util/List;
-
-# Флаги: H=Hot, S=Startup, P=Post-startup, L=Class reference
-```
-
-### Лучшие Практики
-
-- Профилировать только критические пользовательские сценарии
-- Держать размер профиля меньше 200KB
-- Перегенерировать при major релизах
-- Тестировать на реальных устройствах, не эмуляторах
-- Проверять установку в продакшене
-- Комбинировать с другими оптимизациями запуска
-
-## Answer (EN)
-
-### What Are Baseline Profiles
-
-Baseline Profiles tell Android Runtime (ART) which code paths to pre-compile (AOT) at install time, reducing startup time and jank during critical user journeys.
-
-**Without Profile**:
-App start → Interpret bytecode → Profile → JIT compile → Fast execution
-
-**With Profile**:
-App install → AOT compile profiled code → App start → Fast execution immediately
-
-### Performance Impact
-
-- Cold startup: 20-40% faster
-- Warm startup: 15-30% faster
-- First interaction: 30-50% faster
-- Jank reduction: 40-60% fewer dropped frames
-
-### Implementation
-
-**Setup**:
+**1. Gradle Setup**:
 ```kotlin
-// ✅ Enable baseline profile plugin for AOT compilation
+// ✅ Минимальная конфигурация для включения поддержки профилей
 plugins {
     id("androidx.baselineprofile")
 }
 
 android {
-    buildTypes {
-        create("benchmark") {
-            initWith(getByName("release"))
-            matchingFallbacks += listOf("release")
-        }
+    defaultConfig {
+        // Профили работают с Android 7+, максимальный эффект на Android 9+
+        minSdk = 24
     }
 }
 ```
 
-**Profile Generation**:
+**2. Генерация профиля**:
 ```kotlin
-// ✅ Test critical user journeys to generate profile
+// ✅ Инструментированный тест генерирует профиль
 @RunWith(AndroidJUnit4::class)
 class BaselineProfileGenerator {
-    @get:Rule
-    val baselineProfileRule = BaselineProfileRule()
+    @get:Rule val rule = BaselineProfileRule()
 
     @Test
-    fun generate() = baselineProfileRule.collect(
-        packageName = "com.example.app"
-    ) {
-        pressHome()
-        startActivityAndWait()
-        device.findObject(By.text("Home")).click()
-        device.findObject(By.text("Profile")).click()
-    }
+    fun generate() = rule.collect(
+        packageName = "com.app",
+        profileBlock = {
+            pressHome()
+            startActivityAndWait()
+            // Критичный путь: открытие главного экрана
+            device.wait(Until.hasObject(By.text("Feed")), 5000)
+            device.findObject(By.text("Feed")).click()
+            device.waitForIdle()
+        }
+    )
 }
 ```
 
-**Profile Format**:
+**3. Формат профиля** (`.txt`):
 ```
-HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
-HSPLcom/example/app/viewmodel/HomeViewModel;-><init>()V
-Lcom/example/app/repository/ArticleRepository;->getArticles()Ljava/util/List;
+HSPLcom/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
+SPLcom/app/ui/FeedScreen;->Content(Landroidx/compose/runtime/Composer;I)V
+Lcom/app/data/FeedRepository;
 
-# Flags: H=Hot, S=Startup, P=Post-startup, L=Class reference
+# H=Hot (>90% выполнения), S=Startup, P=Post-startup, L=Class load
 ```
 
-**Verification**:
+**4. Верификация в продакшене**:
 ```kotlin
-// ✅ Check if profile was installed and compiled
-fun checkProfileInstallation(context: Context) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        val status = ProfileVerifier.getCompilationStatusAsync().get()
-        Log.d("Profile", "Compiled: ${status.isCompiledWithProfile}")
+// ✅ Проверка установки профиля на устройстве
+val status = ProfileVerifier.getCompilationStatusAsync().await()
+when {
+    status.profileInstallResultCode == RESULT_CODE_COMPILED_WITH_PROFILE ->
+        Log.i("Profile", "Профиль применён и скомпилирован")
+    status.profileInstallResultCode == RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION ->
+        Log.w("Profile", "Профиль в очереди на компиляцию")
+    else ->
+        Log.e("Profile", "Профиль не установлен: ${status.profileInstallResultCode}")
+}
+```
+
+### Производительность
+
+- **Холодный запуск**: 20-40% быстрее (зависит от покрытия критичных методов)
+- **Первая отрисовка UI**: 30-50% быстрее (Compose-приложения получают максимум)
+- **Стабильность**: до 60% меньше пропущенных кадров в первых сессиях
+
+### Лучшие Практики
+
+- Профилируйте только **критичные пути** (запуск, первая навигация, ключевые действия)
+- Держите размер профиля **<200KB** (большие профили замедляют установку)
+- **Регенерируйте** при изменении критичных путей (не каждый релиз)
+- **Тестируйте на реальных устройствах** (эмуляторы не показывают реальную производительность)
+- **Мониторьте установку** в продакшене через `ProfileVerifier`
+
+## Answer (EN)
+
+### Concept
+
+Baseline Profiles are compilation metadata that tell Android Runtime (ART) which methods and classes are critical for startup. ART uses this information to pre-compile (AOT) hot paths during installation, avoiding interpretation and JIT compilation during initial launches.
+
+**Typical path without profile**:
+```
+Launch → Interpret bytecode → JIT compile hot methods → Native code
+ (slow)                          (on 2nd-3rd run)        (fast)
+```
+
+**With Baseline Profile**:
+```
+Install → AOT compile critical methods → Launch → Native code immediately
+           (dex2oat applies profile)      (fast)
+```
+
+### Implementation
+
+**1. Gradle Setup**:
+```kotlin
+// ✅ Minimal configuration to enable profile support
+plugins {
+    id("androidx.baselineprofile")
+}
+
+android {
+    defaultConfig {
+        // Profiles work on Android 7+, max effect on Android 9+
+        minSdk = 24
     }
 }
 ```
+
+**2. Profile Generation**:
+```kotlin
+// ✅ Instrumented test generates profile
+@RunWith(AndroidJUnit4::class)
+class BaselineProfileGenerator {
+    @get:Rule val rule = BaselineProfileRule()
+
+    @Test
+    fun generate() = rule.collect(
+        packageName = "com.app",
+        profileBlock = {
+            pressHome()
+            startActivityAndWait()
+            // Critical path: opening main screen
+            device.wait(Until.hasObject(By.text("Feed")), 5000)
+            device.findObject(By.text("Feed")).click()
+            device.waitForIdle()
+        }
+    )
+}
+```
+
+**3. Profile Format** (`.txt`):
+```
+HSPLcom/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
+SPLcom/app/ui/FeedScreen;->Content(Landroidx/compose/runtime/Composer;I)V
+Lcom/app/data/FeedRepository;
+
+# H=Hot (>90% execution), S=Startup, P=Post-startup, L=Class load
+```
+
+**4. Production Verification**:
+```kotlin
+// ✅ Check profile installation on device
+val status = ProfileVerifier.getCompilationStatusAsync().await()
+when {
+    status.profileInstallResultCode == RESULT_CODE_COMPILED_WITH_PROFILE ->
+        Log.i("Profile", "Profile applied and compiled")
+    status.profileInstallResultCode == RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION ->
+        Log.w("Profile", "Profile queued for compilation")
+    else ->
+        Log.e("Profile", "Profile not installed: ${status.profileInstallResultCode}")
+}
+```
+
+### Performance
+
+- **Cold startup**: 20-40% faster (depends on critical method coverage)
+- **First UI render**: 30-50% faster (Compose apps benefit most)
+- **Stability**: up to 60% fewer dropped frames in early sessions
 
 ### Best Practices
 
-**Requirements**:
-- Android 9+ (API 28) for full benefits
-- Android 7+ (API 24) minimum support
-- Release build with R8/ProGuard enabled
-
-**Guidelines**:
-- Profile only critical user journeys
-- Keep profile size under 200KB
-- Regenerate with major releases
-- Test on real devices, not emulators
-- Verify installation in production
-- Combine with other startup optimizations
+- Profile only **critical paths** (startup, first navigation, key actions)
+- Keep profile size **<200KB** (large profiles slow installation)
+- **Regenerate** when critical paths change (not every release)
+- **Test on real devices** (emulators don't show real performance)
+- **Monitor installation** in production via `ProfileVerifier`
 
 ## Follow-ups
 
-- How do you measure the impact of baseline profiles in production?
-- What are the differences between baseline profiles and the startup library?
-- How do you handle profile updates when code changes significantly?
-- Can baseline profiles negatively impact app size or build time?
-- How do you profile multi-module applications?
+- How do you measure baseline profile effectiveness in production (compile status, startup metrics)?
+- When should you regenerate baseline profiles (major refactors, new critical flows)?
+- How do baseline profiles interact with R8/ProGuard obfuscation?
+- What's the tradeoff between profile size and APK/AAB size increase?
+- How do you handle baseline profiles in multi-module Gradle projects?
 
 ## References
 
-- [[c-jit-aot-compilation]]
-- https://developer.android.com/topic/performance/baselineprofiles
+- [[c-jit-aot-compilation]] — JIT vs AOT compilation fundamentals
+- [[c-android-runtime-art]] — Android Runtime architecture and dex2oat
+- https://developer.android.com/topic/performance/baselineprofiles — Official Android baseline profiles guide
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-app-startup-library--android--medium]]
-- [[q-android-build-optimization--android--medium]]
+- [[q-app-startup-optimization--android--medium]] — General startup optimization techniques
+- [[q-android-build-optimization--android--medium]] — Gradle build configuration for performance
 
 ### Related (Same Level)
-- [[q-app-startup-optimization--android--medium]]
-- [[q-jit-vs-aot-compilation--android--medium]]
-- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]] — Profilers and measurement tools
+- [[q-r8-proguard-optimization--android--medium]] — Code shrinking and optimization
+- [[q-app-startup-library--android--medium]] — Androidx Startup library for initialization
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
-- [[q-android-runtime-art--android--medium]]
+- [[q-android-runtime-art--android--hard]] — Deep dive into ART internals
+- [[q-dex-optimization-strategies--android--hard]] — Advanced DEX optimization techniques

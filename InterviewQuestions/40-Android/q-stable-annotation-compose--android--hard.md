@@ -1,111 +1,69 @@
 ---
 id: 20251012-122711109
 title: "Stable Annotation Compose / Аннотация Stable в Compose"
+aliases: ["Stable Annotation Compose", "Аннотация Stable в Compose"]
 topic: android
+subtopics: [ui-compose, performance]
+question_kind: android
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-multithreading-tools-android--android--medium, q-push-notification-navigation--android--medium, q-save-data-outside-fragment--android--medium]
+related: [q-compose-recomposition--android--medium, q-compose-stability-skippability--android--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
-tags: [android/jetpack-compose, android/performance, annotations, jetpack-compose, optimization, performance, recomposition, stability, stable-annotation, difficulty/hard]
+updated: 2025-10-28
+sources: []
+tags: [android/ui-compose, android/performance, jetpack-compose, stable-annotation, recomposition, difficulty/hard]
 ---
 
-# Что известно про stable?
+# Вопрос (RU)
 
-**English**: What is known about @Stable?
+Что известно про `@Stable` в Jetpack Compose?
 
-## Answer (EN)
-**`@Stable`** is an annotation in Compose that indicates an **object is stable** and its **properties don't change spontaneously**. This helps Compose **efficiently determine when UI needs to be redrawn**, reducing unnecessary recompositions.
+# Question (EN)
+
+What is known about `@Stable` in Jetpack Compose?
 
 ---
 
-## @Stable Annotation
+## Ответ (RU)
 
-### Definition
+**`@Stable`** — аннотация в Compose, которая сообщает компилятору, что объект **стабилен** и его свойства **не меняются спонтанно**. Это позволяет Compose **эффективно определять**, когда нужна перерисовка UI, сокращая ненужные рекомпозиции.
+
+### Контракт стабильности
+
+Тип **стабилен**, если гарантирует:
+
+1. **Консистентность equals()** — если `a.equals(b)` возвращает `true`, это будет всегда `true` для тех же экземпляров.
+2. **Нет спонтанных изменений** — свойства не мутируют неожиданно. Изменения происходят только через **явные API** (например, `copy()`).
+3. **Уведомления при мутациях** — если тип допускает изменения, он должен **уведомлять Compose** через observable механизмы (MutableState, Flow).
 
 ```kotlin
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
-@Retention(AnnotationRetention.BINARY)
-annotation class Stable
-```
-
-**Purpose:** Tell Compose compiler that a type is **stable** even if it can't automatically infer stability.
-
----
-
-## Stability Contract
-
-A type is **stable** if it guarantees:
-
-### 1. Result of equals() is Consistent
-
-```kotlin
+// ✅ Стабильный класс с консистентным equals()
 @Stable
-class User(private val name: String) {
-    override fun equals(other: Any?): Boolean {
-        return other is User && other.name == name
-    }
+data class User(val id: String, val name: String)
 
-    override fun hashCode(): Int = name.hashCode()
-}
-
-val user1 = User("Alice")
-val user2 = User("Alice")
-
-user1 == user2  // - Always true (consistent equals)
-```
-
-**Contract:** If `a.equals(b)` returns `true`, it will **always** return `true` for those same instances.
-
-### 2. Properties Don't Change Spontaneously
-
-```kotlin
+// ✅ Стабильный класс с observable состоянием
 @Stable
-class Configuration(
-    val timeout: Int,
-    val retryCount: Int
-) {
-    // Properties are val - can't change
+class Counter {
+    var count by mutableStateOf(0)  // Уведомляет Compose
+        private set
+
+    fun increment() { count++ }
 }
 
-val config = Configuration(30, 3)
-// config.timeout will ALWAYS be 30
-// config.retryCount will ALWAYS be 3
-```
-
-**Contract:** Properties **don't mutate** unexpectedly. Changes only happen through **explicit API calls** (like `copy()`).
-
-### 3. Notifications on Mutations
-
-If a stable type **does** allow mutations, it must **notify Compose**:
-
-```kotlin
-@Stable
-class MutableCounter {
-    private val _count = mutableStateOf(0)
-    val count: State<Int> = _count  // Notifies Compose on change
-
-    fun increment() {
-        _count.value++  // Compose is notified automatically
-    }
+// ❌ Не стабильный — мутабельное состояние без уведомлений
+class UnstableCounter {
+    var count: Int = 0  // Compose не узнает об изменениях
 }
 ```
 
-**Contract:** If state changes, Compose is **notified** via observable mechanisms (MutableState, Flow, etc.).
+### Когда использовать @Stable
 
----
-
-## When to Use @Stable
-
-### Case 1: Class Compose Can't Infer
+**Case 1**: Compose не может вывести стабильность автоматически (интерфейсы, внешние классы).
 
 ```kotlin
-// - Compose can't infer stability (interface)
-interface Repository {
-    val data: String
-}
-
-// - Annotate to help Compose
 @Stable
 interface Repository {
     val data: String
@@ -113,425 +71,248 @@ interface Repository {
 
 @Composable
 fun DataDisplay(repository: Repository) {
-    // Compose can now skip recomposition if repository hasn't changed
-    Text(repository.data)
+    Text(repository.data)  // Compose может пропустить рекомпозицию
 }
 ```
 
-### Case 2: External Classes
+**Case 2**: Обёртка для внешних классов третьих сторон.
 
 ```kotlin
-// - Third-party class, Compose can't infer
-class ThirdPartyData(val value: String)
-
-// - Wrap and annotate
 @Stable
 class StableThirdPartyData(private val data: ThirdPartyData) {
     val value: String get() = data.value
 
-    override fun equals(other: Any?): Boolean {
-        return other is StableThirdPartyData && other.value == value
-    }
-
-    override fun hashCode(): Int = value.hashCode()
+    override fun equals(other: Any?) =
+        other is StableThirdPartyData && other.value == value
+    override fun hashCode() = value.hashCode()
 }
 ```
 
-### Case 3: Complex Stable Behavior
+### @Stable vs @Immutable
 
-```kotlin
-@Stable
-class ComputedValue(
-    private val source: String
-) {
-    // Computed on-demand, but result is stable for same source
-    val hash: String by lazy {
-        source.hashCode().toString()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is ComputedValue && other.source == source
-    }
-
-    override fun hashCode(): Int = source.hashCode()
-}
-```
-
----
-
-## @Stable vs @Immutable
-
-### @Immutable
-
-**Stronger guarantee:** Properties **never change** after construction.
-
-```kotlin
-@Immutable
-data class User(
-    val id: String,
-    val name: String
-)
-
-// After construction, id and name NEVER change
-val user = User("1", "Alice")
-// user.id will ALWAYS be "1"
-// user.name will ALWAYS be "Alice"
-```
-
-### @Stable
-
-**Weaker guarantee:** Properties **might change**, but in a **controlled, observable** way.
-
-```kotlin
-@Stable
-class UserViewModel {
-    private val _user = MutableStateFlow(User("1", "Alice"))
-    val user: StateFlow<User> = _user.asStateFlow()
-
-    fun updateUser(newUser: User) {
-        _user.value = newUser  // - Change is observable
-    }
-}
-```
-
-### Comparison
-
-| Aspect | @Immutable | @Stable |
+| Аспект | @Immutable | @Stable |
 |--------|-----------|---------|
-| **Change after creation** | Never | Possibly (but observable) |
-| **equals() consistency** | Always | Always |
-| **Compose notification** | N/A (never changes) | Required (on change) |
-| **Use case** | Pure data classes | ViewModels, observable state |
+| Изменения после создания | Никогда | Возможны (но observable) |
+| equals() консистентна | Да | Да |
+| Уведомления Compose | N/A | Обязательны при изменении |
+| Типичное применение | Чистые data class | ViewModel, observable state |
 
----
-
-## Performance Impact
-
-### With @Stable
+### Влияние на производительность
 
 ```kotlin
 @Stable
-data class Product(
-    val id: String,
-    val name: String,
-    val price: Double
-)
+data class Product(val id: String, val name: String, val price: Double)
 
 @Composable
 fun ProductCard(product: Product) {
-    Column {
-        Text(product.name)
-        Text("$${product.price}")
-    }
+    Text(product.name)
+    Text("$${product.price}")
 }
 
-// Usage
 val product = Product("1", "Laptop", 999.99)
 
-// First call
-ProductCard(product)  // Composes
+ProductCard(product)  // Композиция
+ProductCard(product)  // ✅ Пропущена (тот же экземпляр)
+ProductCard(Product("1", "Laptop", 999.99))  // ✅ Пропущена (equals() true)
 
-// Second call with SAME instance
-ProductCard(product)  // - SKIPPED (product stable and unchanged)
-
-// Third call with EQUAL instance
-ProductCard(Product("1", "Laptop", 999.99))  // - SKIPPED (equals() returns true)
+// ❌ Без @Stable — рекомпозиция каждый раз, даже с тем же экземпляром
 ```
 
-### Without @Stable
+### Частые ошибки
 
 ```kotlin
-// - No @Stable annotation
-class UnstableProduct(
-    val id: String,
-    val name: String,
-    val price: Double
-)
-
-@Composable
-fun ProductCard(product: UnstableProduct) {
-    Column {
-        Text(product.name)
-        Text("$${product.price}")
-    }
-}
-
-val product = UnstableProduct("1", "Laptop", 999.99)
-
-ProductCard(product)  // Composes
-ProductCard(product)  // - RECOMPOSES (Compose can't trust stability)
-```
-
----
-
-## Real-World Examples
-
-### Example 1: ViewModel
-
-```kotlin
-@Stable
-class ProductViewModel : ViewModel() {
-    private val _products = MutableStateFlow<List<Product>>(emptyList())
-    val products: StateFlow<List<Product>> = _products.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    fun loadProducts() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _products.value = repository.getProducts()
-            _isLoading.value = false
-        }
-    }
-}
-
-@Composable
-fun ProductScreen(viewModel: ProductViewModel = viewModel()) {
-    val products by viewModel.products.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-
-    // Efficient recomposition: only when products/isLoading change
-    if (isLoading) {
-        CircularProgressIndicator()
-    } else {
-        ProductList(products)
-    }
-}
-```
-
-### Example 2: Custom State Holder
-
-```kotlin
-@Stable
-class SearchState(
-    initialQuery: String = ""
-) {
-    var query by mutableStateOf(initialQuery)
-        private set
-
-    var results by mutableStateOf<List<SearchResult>>(emptyList())
-        private set
-
-    fun updateQuery(newQuery: String) {
-        query = newQuery
-    }
-
-    fun updateResults(newResults: List<SearchResult>) {
-        results = newResults
-    }
-}
-
-@Composable
-fun SearchScreen() {
-    val searchState = remember { SearchState() }
-
-    Column {
-        SearchBar(
-            query = searchState.query,
-            onQueryChange = { searchState.updateQuery(it) }
-        )
-
-        SearchResults(results = searchState.results)
-    }
-}
-```
-
-### Example 3: Wrapper for External Library
-
-```kotlin
-// Third-party library class
-class ExternalConfig(val timeout: Int, val retries: Int)
-
-// - Wrap and annotate
-@Stable
-class AppConfig(
-    private val external: ExternalConfig
-) {
-    val timeout: Int get() = external.timeout
-    val retries: Int get() = external.retries
-
-    override fun equals(other: Any?): Boolean {
-        return other is AppConfig &&
-               other.timeout == timeout &&
-               other.retries == retries
-    }
-
-    override fun hashCode(): Int {
-        return 31 * timeout + retries
-    }
-}
-
-@Composable
-fun ConfigDisplay(config: AppConfig) {
-    // Compose can skip recomposition efficiently
-    Column {
-        Text("Timeout: ${config.timeout}")
-        Text("Retries: ${config.retries}")
-    }
-}
-```
-
----
-
-## Common Mistakes
-
-### Mistake 1: @Stable Without equals()
-
-```kotlin
-// - BAD: @Stable but no proper equals()
+// ❌ @Stable без правильного equals()
 @Stable
 class User(val id: String, val name: String)
-// Uses default equals() (referential equality)
+// Использует referential equality — Compose не пропустит рекомпозицию
 
-val user1 = User("1", "Alice")
-val user2 = User("1", "Alice")
-
-user1 == user2  // false (different instances)
-
-// Compose won't skip recomposition for equal users!
-```
-
-**Fix:**
-```kotlin
-// - GOOD: @Stable with proper equals()
+// ✅ Правильно — data class предоставляет structural equals()
 @Stable
 data class User(val id: String, val name: String)
-// data class provides structural equals()
-
-val user1 = User("1", "Alice")
-val user2 = User("1", "Alice")
-
-user1 == user2  // true (same values)
 ```
 
-### Mistake 2: @Stable with Mutable State
+### Проверка стабильности
+
+Включите метрики компилятора Compose в `build.gradle.kts`:
 
 ```kotlin
-// - BAD: @Stable but mutable without notification
-@Stable
-class Counter {
-    var count: Int = 0  // - Mutable but doesn't notify Compose!
-
-    fun increment() {
-        count++  // Compose doesn't know about this change!
-    }
+kotlinOptions {
+    freeCompilerArgs += listOf(
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
+    )
 }
 ```
 
-**Fix:**
-```kotlin
-// - GOOD: @Stable with observable mutable state
-@Stable
-class Counter {
-    var count by mutableStateOf(0)  // - Notifies Compose
-        private set
+Вывод покажет, какие классы считаются стабильными:
 
-    fun increment() {
-        count++  // Compose is notified automatically
-    }
-}
-```
-
----
-
-## Verifying Stability
-
-### Compose Compiler Metrics
-
-```gradle
-// build.gradle.kts
-android {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics",
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir}/compose_reports"
-        )
-    }
-}
-```
-
-**Check output:**
 ```
 stable class User {
   stable val id: String
   stable val name: String
 }
+```
 
-stable class ProductViewModel {
-  stable val products: StateFlow<List<Product>>
-  stable val isLoading: StateFlow<Boolean>
+---
+
+## Answer (EN)
+
+**`@Stable`** is an annotation in Compose that tells the compiler an object is **stable** and its properties **don't change spontaneously**. This allows Compose to **efficiently determine** when UI needs redrawing, reducing unnecessary recompositions.
+
+### Stability Contract
+
+A type is **stable** if it guarantees:
+
+1. **equals() Consistency** — if `a.equals(b)` returns `true`, it will **always** return `true` for those same instances.
+2. **No Spontaneous Changes** — properties don't mutate unexpectedly. Changes happen only through **explicit APIs** (e.g., `copy()`).
+3. **Notifications on Mutations** — if the type allows mutations, it must **notify Compose** via observable mechanisms (MutableState, Flow).
+
+```kotlin
+// ✅ Stable class with consistent equals()
+@Stable
+data class User(val id: String, val name: String)
+
+// ✅ Stable class with observable state
+@Stable
+class Counter {
+    var count by mutableStateOf(0)  // Notifies Compose
+        private set
+
+    fun increment() { count++ }
+}
+
+// ❌ Not stable — mutable state without notifications
+class UnstableCounter {
+    var count: Int = 0  // Compose doesn't know about changes
+}
+```
+
+### When to Use @Stable
+
+**Case 1**: Compose can't infer stability automatically (interfaces, external classes).
+
+```kotlin
+@Stable
+interface Repository {
+    val data: String
+}
+
+@Composable
+fun DataDisplay(repository: Repository) {
+    Text(repository.data)  // Compose can skip recomposition
+}
+```
+
+**Case 2**: Wrapping third-party external classes.
+
+```kotlin
+@Stable
+class StableThirdPartyData(private val data: ThirdPartyData) {
+    val value: String get() = data.value
+
+    override fun equals(other: Any?) =
+        other is StableThirdPartyData && other.value == value
+    override fun hashCode() = value.hashCode()
+}
+```
+
+### @Stable vs @Immutable
+
+| Aspect | @Immutable | @Stable |
+|--------|-----------|---------|
+| Change after creation | Never | Possibly (but observable) |
+| equals() consistency | Always | Always |
+| Compose notification | N/A | Required on change |
+| Typical use case | Pure data classes | ViewModels, observable state |
+
+### Performance Impact
+
+```kotlin
+@Stable
+data class Product(val id: String, val name: String, val price: Double)
+
+@Composable
+fun ProductCard(product: Product) {
+    Text(product.name)
+    Text("$${product.price}")
+}
+
+val product = Product("1", "Laptop", 999.99)
+
+ProductCard(product)  // Composes
+ProductCard(product)  // ✅ Skipped (same instance)
+ProductCard(Product("1", "Laptop", 999.99))  // ✅ Skipped (equals() true)
+
+// ❌ Without @Stable — recomposes every time, even with same instance
+```
+
+### Common Mistakes
+
+```kotlin
+// ❌ @Stable without proper equals()
+@Stable
+class User(val id: String, val name: String)
+// Uses referential equality — Compose won't skip recomposition
+
+// ✅ Correct — data class provides structural equals()
+@Stable
+data class User(val id: String, val name: String)
+```
+
+### Verifying Stability
+
+Enable Compose compiler metrics in `build.gradle.kts`:
+
+```kotlin
+kotlinOptions {
+    freeCompilerArgs += listOf(
+        "-P",
+        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
+    )
+}
+```
+
+Output shows which classes are considered stable:
+
+```
+stable class User {
+  stable val id: String
+  stable val name: String
 }
 ```
 
 ---
 
-## Summary
+## Follow-ups
 
-**`@Stable` annotation:**
-- Tells Compose a type is **stable** (predictable behavior)
-- Helps Compose **skip unnecessary recompositions**
-- Requires **consistent equals()** and **controlled mutations**
-
-**Use @Stable when:**
-- Compose can't infer stability automatically
-- Wrapping external classes
-- ViewModels with observable state
-- Complex stable behaviors
-
-**Stability contract:**
-1. **equals() is consistent** (same values → same result)
-2. **No spontaneous changes** (mutations are explicit)
-3. **Notifications on mutations** (via MutableState, Flow, etc.)
-
-**Performance benefit:**
-- Compose can **skip recomposition** when parameters haven't changed
-- Fewer UI updates = better performance
-
-**Comparison:**
-- **@Immutable** - Stronger (never changes)
-- **@Stable** - Weaker (might change, but observably)
-
-**Best practices:**
-1. Use `data class` when possible (automatic equals())
-2. Implement proper `equals()` and `hashCode()`
-3. Use observable state (MutableState, StateFlow)
-4. Verify with compiler metrics
+- What happens if you mark an unstable class as `@Stable` incorrectly?
+- How does `@Stable` differ from `@Immutable` in practical scenarios?
+- Can `@Stable` be applied to function types and lambdas?
+- How do compiler metrics help debug stability issues?
+- What are the performance implications of having many unstable types in a Compose hierarchy?
 
 ---
 
-## Ответ (RU)
-**`@Stable`** - это аннотация в Compose, которая указывает, что объект **стабилен** и его свойства **не изменяются спонтанно**. Это помогает Compose эффективно определять, когда нужно перерисовывать UI, уменьшая количество лишних перерисовок.
+## References
 
-**Контракт стабильности:**
-1. **equals() консистентна** - одинаковые значения всегда дают одинаковый результат
-2. **Нет спонтанных изменений** - свойства не меняются неожиданно
-3. **Уведомления при мутациях** - если состояние меняется, Compose уведомляется (через MutableState, Flow)
-
-**Когда использовать:**
-- Compose не может автоматически вывести стабильность
-- Оборачивание внешних классов
-- ViewModel с наблюдаемым состоянием
-
-**Преимущество:**
-- Compose может **пропустить рекомпозицию**, если параметры не изменились
-- Меньше перерисовок = лучшая производительность
-
-
+- [[c-compose-recomposition]] - Understanding recomposition in Compose
+- [[c-compose-state]] - State management in Compose
+- https://developer.android.com/develop/ui/compose/performance/stability
+- https://developer.android.com/develop/ui/compose/performance/stability/fix
 
 ---
 
 ## Related Questions
 
-### Hub
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction
+### Prerequisites (Medium)
+- [[q-compose-recomposition--android--medium]] - Understand how recomposition works
+- [[q-jetpack-compose-basics--android--medium]] - Compose fundamentals
 
 ### Related (Hard)
-- [[q-compose-stability-skippability--android--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-compose-slot-table-recomposition--android--hard]] - Slot table internals
-- [[q-compose-performance-optimization--android--hard]] - Performance optimization
-- [[q-compose-custom-layout--android--hard]] - Custom layouts
+- [[q-compose-stability-skippability--android--hard]] - Stability and skippability concepts
+- [[q-compose-performance-optimization--android--hard]] - Performance optimization strategies
+- [[q-compose-slot-table-recomposition--android--hard]] - Internal recomposition mechanisms
 
+### Advanced (Hard)
+- [[q-compose-custom-layout--android--hard]] - Custom layout performance
+- [[q-compose-derived-state--android--hard]] - Derived state optimization

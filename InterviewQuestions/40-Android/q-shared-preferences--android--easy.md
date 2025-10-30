@@ -1,243 +1,277 @@
 ---
 id: 20251017-150433
-title: "Shared Preferences"
+title: "SharedPreferences / Хранилище пар ключ-значение"
+aliases: ["SharedPreferences", "Хранилище пар ключ-значение", "Shared Preferences"]
+
+# Classification
 topic: android
+subtopics: [datastore, files-media]
+question_kind: theory
 difficulty: easy
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-room-relations-embedded--room--medium, q-how-is-navigation-implemented--android--medium, q-service-lifecycle-binding--background--hard]
+related: [q-room-relations-embedded--room--medium, q-how-is-navigation-implemented--android--medium]
+
+# Timestamps
 created: 2025-10-15
-tags: [data-storage, shared-preferences, difficulty/easy]
+updated: 2025-10-28
+
+# Tags (EN only; no leading #)
+tags: [android, android/datastore, android/files-media, data-storage, difficulty/easy]
 ---
 
-# Что такое SharedPreferences?
+# Вопрос (RU)
 
-**English**: What is SharedPreferences?
+> Что такое SharedPreferences и для чего используется?
 
-## Answer (EN)
-SharedPreferences представляет собой механизм для хранения и извлечения простых данных в форме пар ключ-значение. Это один из самых простых способов сохранения небольших объемов данных, таких как пользовательские настройки или состояние приложения между сессиями.
+# Question (EN)
 
-### Key features
+> What is SharedPreferences and what is it used for?
 
-#### 1. Ease of use
+---
+
+## Ответ (RU)
+
+SharedPreferences — это механизм Android для хранения пар ключ-значение. Данные сохраняются в XML-файле в приватном хранилище приложения.
+
+### Поддерживаемые типы данных
 
 ```kotlin
-// Get SharedPreferences
-val sharedPref = context.getSharedPreferences(
-    "MyPreferences",
-    Context.MODE_PRIVATE
-)
-
-// Save data
 sharedPref.edit {
-    putString("username", "Alice")
-    putInt("age", 30)
-    putBoolean("isLoggedIn", true)
+    putBoolean("is_logged_in", true)
+    putInt("user_id", 42)
+    putFloat("rating", 4.5f)
+    putLong("timestamp", System.currentTimeMillis())
+    putString("username", "alice")
+    putStringSet("tags", setOf("kotlin", "android"))
 }
-
-// Read data
-val username = sharedPref.getString("username", "defaultName")
-val age = sharedPref.getInt("age", 0)
-val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
 ```
 
-#### 2. Private data accessibility
-
-Data is only accessible within the app (when using `MODE_PRIVATE`).
+### Получение SharedPreferences
 
 ```kotlin
-// MODE_PRIVATE - data accessible only to your app
-val privatePrefs = context.getSharedPreferences("private", Context.MODE_PRIVATE)
+// ✅ Именованные preferences
+val prefs = context.getSharedPreferences(
+    "app_settings",
+    Context.MODE_PRIVATE  // Доступ только вашему приложению
+)
 
-// For Activity you can use getPreferences()
+// ✅ Activity-scoped preferences
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Automatically uses Activity name
-        val prefs = getPreferences(Context.MODE_PRIVATE)
+    private val prefs by lazy {
+        getPreferences(Context.MODE_PRIVATE)  // Имя = имя Activity
     }
 }
 ```
 
-#### 3. Application for storing settings
+### Запись данных: apply() vs commit()
+
+```kotlin
+// ✅ apply() — асинхронная, не блокирует UI
+prefs.edit {
+    putString("theme", "dark")
+    // apply() вызывается автоматически
+}
+
+// ✅ commit() — синхронная, возвращает boolean
+val success = prefs.edit()
+    .putString("api_key", "xyz123")
+    .commit()  // Блокирует поток до завершения
+
+if (!success) {
+    Log.e("Prefs", "Failed to save")
+}
+```
+
+**Правило**: Используйте `apply()` для UI-потока, `commit()` только если нужна гарантия успешной записи до продолжения.
+
+### Типичный use case: Settings Manager
 
 ```kotlin
 class SettingsManager(context: Context) {
-    private val prefs = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-    var theme: String
-        get() = prefs.getString("theme", "light") ?: "light"
-        set(value) = prefs.edit { putString("theme", value) }
+    var isDarkMode: Boolean
+        get() = prefs.getBoolean("dark_mode", false)
+        set(value) = prefs.edit { putBoolean("dark_mode", value) }
 
-    var notificationsEnabled: Boolean
-        get() = prefs.getBoolean("notifications_enabled", true)
-        set(value) = prefs.edit { putBoolean("notifications_enabled", value) }
-
-    var fontSize: Int
-        get() = prefs.getInt("font_size", 14)
-        set(value) = prefs.edit { putInt("font_size", value) }
+    var language: String
+        get() = prefs.getString("language", "en") ?: "en"
+        set(value) = prefs.edit { putString("language", value) }
 }
 
-// Usage
+// Использование
 val settings = SettingsManager(context)
-settings.theme = "dark"
-settings.notificationsEnabled = false
+settings.isDarkMode = true
 ```
 
-### Supported data types
+### Когда НЕ использовать SharedPreferences
+
+| Сценарий | Альтернатива |
+|----------|--------------|
+| Большие объемы данных (>1 MB) | Room, SQLite |
+| Структурированные данные | Room |
+| Чувствительные данные (токены, пароли) | EncryptedSharedPreferences |
+| Типизированные настройки | DataStore (Preferences) |
+
+### EncryptedSharedPreferences для чувствительных данных
 
 ```kotlin
-sharedPref.edit {
-    // Primitive types
-    putBoolean("bool_key", true)
-    putInt("int_key", 42)
-    putFloat("float_key", 3.14f)
-    putLong("long_key", 1234567890L)
-    putString("string_key", "Hello")
-
-    // Set<String>
-    putStringSet("set_key", setOf("item1", "item2", "item3"))
-}
-```
-
-### apply() vs commit()
-
-```kotlin
-// apply() - asynchronous, doesn't return result
-sharedPref.edit {
-    putString("key", "value")
-    apply()  // Executes in background
-}
-
-// commit() - synchronous, returns boolean
-val success = sharedPref.edit().apply {
-    putString("key", "value")
-}.commit()  // Blocks thread until complete
-
-if (success) {
-    println("Saved successfully")
-}
-```
-
-### Kotlin extensions (modern approach)
-
-```kotlin
-// Using Kotlin extension function
-sharedPref.edit {
-    putString("username", "Alice")
-    putInt("age", 30)
-    // apply() called automatically
-}
-
-// Delegation for convenient access
-class Settings(context: Context) {
-    private val prefs = context.getSharedPreferences("Settings", Context.MODE_PRIVATE)
-
-    var username: String by PreferenceDelegate(prefs, "username", "")
-    var isFirstLaunch: Boolean by PreferenceDelegate(prefs, "first_launch", true)
-}
-
-// Custom delegate
-class PreferenceDelegate<T>(
-    private val prefs: SharedPreferences,
-    private val key: String,
-    private val defaultValue: T
-) : ReadWriteProperty<Any?, T> {
-    @Suppress("UNCHECKED_CAST")
-    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
-        return when (defaultValue) {
-            is Boolean -> prefs.getBoolean(key, defaultValue) as T
-            is Int -> prefs.getInt(key, defaultValue) as T
-            is String -> prefs.getString(key, defaultValue) as T
-            else -> throw IllegalArgumentException("Unsupported type")
-        }
-    }
-
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-        prefs.edit {
-            when (value) {
-                is Boolean -> putBoolean(key, value)
-                is Int -> putInt(key, value)
-                is String -> putString(key, value)
-            }
-        }
-    }
-}
-```
-
-### Observing changes
-
-```kotlin
-val listener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
-    when (key) {
-        "theme" -> {
-            val newTheme = prefs.getString("theme", "light")
-            applyTheme(newTheme)
-        }
-        "notifications_enabled" -> {
-            val enabled = prefs.getBoolean("notifications_enabled", true)
-            updateNotifications(enabled)
-        }
-    }
-}
-
-// Register listener
-sharedPref.registerOnSharedPreferenceChangeListener(listener)
-
-// Don't forget to unregister
-override fun onDestroy() {
-    super.onDestroy()
-    sharedPref.unregisterOnSharedPreferenceChangeListener(listener)
-}
-```
-
-### When NOT to use SharedPreferences
-
-- Large amounts of data - use Room/SQLite
-- Complex data structures - use Room/DataStore
-- Sensitive data - use EncryptedSharedPreferences
-- Structured data - use Room database
-
-### Secure storage (EncryptedSharedPreferences)
-
-```kotlin
-// For sensitive data use encryption
 val masterKey = MasterKey.Builder(context)
     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
     .build()
 
-val encryptedPrefs = EncryptedSharedPreferences.create(
+val securePrefs = EncryptedSharedPreferences.create(
     context,
-    "secret_shared_prefs",
+    "secure_prefs",
     masterKey,
     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
 )
 
-// Use like regular SharedPreferences
-encryptedPrefs.edit {
-    putString("api_token", "secret_token_value")
+// ✅ Ключи и значения шифруются автоматически
+securePrefs.edit {
+    putString("auth_token", "secret_value")
 }
 ```
 
-**English**: SharedPreferences is a simple key-value storage mechanism for saving small amounts of primitive data (boolean, int, float, long, string, string set). Private to the app, used for user settings and app state. Use `edit{}` for writing, `apply()` for async save, `commit()` for sync. For sensitive data, use EncryptedSharedPreferences.
+## Answer (EN)
 
-## Ответ (RU)
+SharedPreferences is an Android mechanism for storing key-value pairs. Data is saved in an XML file in the app's private storage.
 
-Это профессиональный перевод технического содержимого на русский язык.
+### Supported data types
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+```kotlin
+sharedPref.edit {
+    putBoolean("is_logged_in", true)
+    putInt("user_id", 42)
+    putFloat("rating", 4.5f)
+    putLong("timestamp", System.currentTimeMillis())
+    putString("username", "alice")
+    putStringSet("tags", setOf("kotlin", "android"))
+}
+```
 
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+### Obtaining SharedPreferences
 
-Длина оригинального английского контента: 5997 символов.
+```kotlin
+// ✅ Named preferences
+val prefs = context.getSharedPreferences(
+    "app_settings",
+    Context.MODE_PRIVATE  // Only accessible to your app
+)
 
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+// ✅ Activity-scoped preferences
+class MainActivity : AppCompatActivity() {
+    private val prefs by lazy {
+        getPreferences(Context.MODE_PRIVATE)  // Name = Activity name
+    }
+}
+```
+
+### Writing data: apply() vs commit()
+
+```kotlin
+// ✅ apply() — asynchronous, doesn't block UI
+prefs.edit {
+    putString("theme", "dark")
+    // apply() called automatically
+}
+
+// ✅ commit() — synchronous, returns boolean
+val success = prefs.edit()
+    .putString("api_key", "xyz123")
+    .commit()  // Blocks thread until complete
+
+if (!success) {
+    Log.e("Prefs", "Failed to save")
+}
+```
+
+**Rule**: Use `apply()` for UI thread, `commit()` only when you need guaranteed write completion before proceeding.
+
+### Typical use case: Settings Manager
+
+```kotlin
+class SettingsManager(context: Context) {
+    private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+    var isDarkMode: Boolean
+        get() = prefs.getBoolean("dark_mode", false)
+        set(value) = prefs.edit { putBoolean("dark_mode", value) }
+
+    var language: String
+        get() = prefs.getString("language", "en") ?: "en"
+        set(value) = prefs.edit { putString("language", value) }
+}
+
+// Usage
+val settings = SettingsManager(context)
+settings.isDarkMode = true
+```
+
+### When NOT to use SharedPreferences
+
+| Scenario | Alternative |
+|----------|-------------|
+| Large data volumes (>1 MB) | Room, SQLite |
+| Structured data | Room |
+| Sensitive data (tokens, passwords) | EncryptedSharedPreferences |
+| Type-safe preferences | DataStore (Preferences) |
+
+### EncryptedSharedPreferences for sensitive data
+
+```kotlin
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .build()
+
+val securePrefs = EncryptedSharedPreferences.create(
+    context,
+    "secure_prefs",
+    masterKey,
+    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+)
+
+// ✅ Keys and values are encrypted automatically
+securePrefs.edit {
+    putString("auth_token", "secret_value")
+}
+```
+
+---
+
+## Follow-ups
+
+- What happens to SharedPreferences data on app uninstall?
+- How do you migrate from SharedPreferences to DataStore?
+- Can SharedPreferences cause ANR (Application Not Responding)?
+- What's the file size limit for SharedPreferences in practice?
+- How do you observe changes in SharedPreferences reactively (with Flow)?
+
+## References
+
+- [[c-android-storage-options]]
+- [[c-encryption-android]]
+- https://developer.android.com/training/data-storage/shared-preferences
+- https://developer.android.com/reference/android/content/SharedPreferences
 
 ## Related Questions
 
+### Prerequisites
+- [[q-context-in-android--android--easy]]
+
+### Related
 - [[q-room-relations-embedded--room--medium]]
-- [[q-how-is-navigation-implemented--android--medium]]
-- [[q-service-lifecycle-binding--android--hard]]
+- [[q-datastore-preferences--android--medium]]
+
+### Advanced
+- [[q-encrypted-shared-preferences-implementation--android--hard]]

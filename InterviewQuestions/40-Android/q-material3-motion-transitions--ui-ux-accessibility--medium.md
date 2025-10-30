@@ -1,278 +1,113 @@
 ---
-id: 20251012-12271135
+id: 20251028-000000
 title: "Material3 Motion Transitions / Движение и переходы Material3"
+aliases: ["Material3 Motion Transitions", "Движение и переходы Material3"]
 topic: ui-ux-accessibility
-difficulty: medium
-status: draft
-created: 2025-10-13
-tags: [design, material3, animation, transitions, motion, difficulty/medium]
-moc: moc-ui-ux-accessibility
-related: [q-jetpack-compose-basics--android--medium, q-navigation-methods-in-android--android--medium, q-robolectric-vs-instrumented--testing--medium]
 subtopics: [material-design, ui-animation]
+question_kind: theory
+difficulty: medium
+original_language: en
+language_tags: [en, ru]
+status: draft
+moc: moc-ui-ux-accessibility
+related: [q-jetpack-compose-basics--android--medium, q-navigation-methods-in-android--android--medium]
+created: 2025-10-13
+updated: 2025-10-28
+sources: []
+tags: [design, material3, animation, transitions, motion, difficulty/medium]
 ---
-
-# Material 3 Motion and Transitions
-
-# Question (EN)
-> What are the key motion principles in Material 3? Explain shared element transitions, predictive back gesture animations, and implementing smooth transitions between composables following Material Design guidelines.
-
 # Вопрос (RU)
+
 > Каковы ключевые принципы движения в Material 3? Объясните shared element transitions, анимации предиктивного жеста назад и реализацию плавных переходов между composables в соответствии с рекомендациями Material Design.
 
----
+# Question (EN)
 
-## Answer (EN)
-
-**Material 3 motion** creates meaningful, beautiful transitions that guide users through your app. Motion provides clarity, efficiency, and personality.
-
-### Material 3 Motion Principles
-
-**1. Informative** - Guides attention and communicates relationships
-**2. Focused** - Guides to a single focal point
-**3. Expressive** - Adds personality and polish
-**4. Practical** - Enhances usability without unnecessary flourish
+> What are the key motion principles in Material 3? Explain shared element transitions, predictive back gesture animations, and implementing smooth transitions between composables following Material Design guidelines.
 
 ---
 
-### Motion Durations
+## Ответ (RU)
 
-Material 3 defines standard durations for consistency:
+**Material 3 motion** создаёт осмысленные переходы, которые направляют пользователей. Движение обеспечивает ясность, эффективность и индивидуальность.
 
-| Duration | Use Case | Example |
-|----------|----------|---------|
-| **100ms** | Simple transitions | Icon state change |
-| **200ms** | Small component transitions | Checkbox, switch |
-| **300ms** | Standard transitions | Button, card |
-| **400ms** | Complex transitions | Screen transitions |
-| **500ms+** | Emphasized transitions | Large expansions |
+### Принципы движения Material 3
 
-**Implementation:**
+1. **Informative** - Направляет внимание и показывает связи между элементами
+2. **Focused** - Направляет к одной фокальной точке, избегая отвлечения
+3. **Expressive** - Добавляет индивидуальность и полированность
+4. **Practical** - Улучшает юзабилити без излишеств
+
+### Стандартные длительности
+
+Material 3 определяет стандартные длительности для согласованности:
+
+| Длительность | Случай использования | Пример |
+|--------------|----------------------|--------|
+| **100ms** | Простые переходы | Смена иконки |
+| **200ms** | Маленькие компоненты | Checkbox, switch |
+| **300ms** | Стандартные переходы | Button, card |
+| **400ms** | Сложные переходы | Переходы между экранами |
+| **500ms+** | Подчёркнутые переходы | Большие расширения |
+
+### Базовые переходы
+
+**Fade transition:**
 
 ```kotlin
-// Standard duration constants
-object MotionTokens {
-    const val DurationShort1 = 50
-    const val DurationShort2 = 100
-    const val DurationShort3 = 150
-    const val DurationShort4 = 200
-    const val DurationMedium1 = 250
-    const val DurationMedium2 = 300
-    const val DurationMedium3 = 350
-    const val DurationMedium4 = 400
-    const val DurationLong1 = 450
-    const val DurationLong2 = 500
-    const val DurationLong3 = 550
-    const val DurationLong4 = 600
-}
-
-// Usage
-animate()
-    .alpha(0f)
-    .setDuration(MotionTokens.DurationMedium2.toLong()) // 300ms
-    .start()
-```
-
----
-
-### Easing (Timing Functions)
-
-Material 3 uses specific easing curves:
-
-```kotlin
-object EasingTokens {
-    // Standard easing (most common)
-    val Standard = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f)
-
-    // Emphasized easing (important transitions)
-    val Emphasized = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f)
-    val EmphasizedDecelerate = CubicBezierEasing(0.05f, 0.7f, 0.1f, 1.0f)
-    val EmphasizedAccelerate = CubicBezierEasing(0.3f, 0.0f, 0.8f, 0.15f)
-
-    // Legacy (for compatibility)
-    val Legacy = FastOutSlowInEasing
-    val LegacyDecelerate = LinearOutSlowInEasing
-    val LegacyAccelerate = FastOutLinearInEasing
-}
-
-// Usage in Compose
-val alpha by animateFloatAsState(
-    targetValue = if (visible) 1f else 0f,
-    animationSpec = tween(
-        durationMillis = 300,
-        easing = EasingTokens.Standard
-    )
-)
-```
-
-**When to use:**
-- **Standard**: Most animations
-- **Emphasized**: Important content entering/leaving
-- **Emphasized Decelerate**: Content entering screen
-- **Emphasized Accelerate**: Content leaving screen
-
----
-
-### Basic Transitions
-
-**1. Fade transition:**
-
-```kotlin
+// ✅ Правильно: стандартные длительности и easing
 @Composable
 fun FadeTransition(visible: Boolean, content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible = visible,
-        enter = fadeIn(
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = EasingTokens.Standard
-            )
-        ),
-        exit = fadeOut(
-            animationSpec = tween(
-                durationMillis = 200,
-                easing = EasingTokens.Standard
-            )
-        )
-    ) {
-        content()
-    }
+        enter = fadeIn(tween(300, easing = LinearOutSlowInEasing)),
+        exit = fadeOut(tween(200))
+    ) { content() }
 }
 ```
 
-**2. Slide transition:**
+**Slide transition:**
 
 ```kotlin
+// ✅ Правильно: используем emphasized easing для входа
 @Composable
 fun SlideTransition(visible: Boolean, content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible = visible,
         enter = slideInVertically(
-            initialOffsetY = { it }, // Start from bottom
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = EasingTokens.EmphasizedDecelerate
-            )
+            initialOffsetY = { it },
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
         ),
         exit = slideOutVertically(
             targetOffsetY = { it },
-            animationSpec = tween(
-                durationMillis = 200,
-                easing = EasingTokens.EmphasizedAccelerate
-            )
+            animationSpec = tween(200)
         )
-    ) {
-        content()
-    }
+    ) { content() }
 }
 ```
-
-**3. Scale transition:**
-
-```kotlin
-@Composable
-fun ScaleTransition(visible: Boolean, content: @Composable () -> Unit) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = scaleIn(
-            initialScale = 0.8f,
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = EasingTokens.EmphasizedDecelerate
-            )
-        ) + fadeIn(),
-        exit = scaleOut(
-            targetScale = 0.8f,
-            animationSpec = tween(
-                durationMillis = 200,
-                easing = EasingTokens.EmphasizedAccelerate
-            )
-        ) + fadeOut()
-    ) {
-        content()
-    }
-}
-```
-
----
-
-### Container Transform
-
-Container transform creates smooth morphing animation between containers.
-
-```kotlin
-@Composable
-fun ContainerTransformExample() {
-    var expanded by remember { mutableStateOf(false) }
-
-    AnimatedContent(
-        targetState = expanded,
-        transitionSpec = {
-            fadeIn(
-                animationSpec = tween(
-                    durationMillis = 150,
-                    delayMillis = 150,
-                    easing = EasingTokens.Standard
-                )
-            ) togetherWith fadeOut(
-                animationSpec = tween(
-                    durationMillis = 150,
-                    easing = EasingTokens.Standard
-                )
-            ) using SizeTransform { initialSize, targetSize ->
-                tween(
-                    durationMillis = 300,
-                    easing = EasingTokens.Emphasized
-                )
-            }
-        }
-    ) { isExpanded ->
-        if (isExpanded) {
-            // Expanded state (full screen)
-            DetailScreen(onClose = { expanded = false })
-        } else {
-            // Collapsed state (card)
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .clickable { expanded = true }
-            ) {
-                Text("Tap to expand", modifier = Modifier.padding(16.dp))
-            }
-        }
-    }
-}
-```
-
----
 
 ### Shared Element Transitions
 
-**Shared elements** smoothly animate between screens, maintaining continuity.
+Shared elements плавно анимируются между экранами, обеспечивая непрерывность.
 
 ```kotlin
-// Requires Compose 1.6.0+
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedElementExample() {
     var showDetails by remember { mutableStateOf(false) }
 
     SharedTransitionLayout {
-        AnimatedContent(
-            targetState = showDetails,
-            label = "main content"
-        ) { isShowingDetails ->
+        AnimatedContent(targetState = showDetails) { isShowingDetails ->
             if (isShowingDetails) {
                 DetailScreen(
-                    onBackClick = { showDetails = false },
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@AnimatedContent
+                    onBack = { showDetails = false },
+                    sharedScope = this@SharedTransitionLayout,
+                    animatedScope = this@AnimatedContent
                 )
             } else {
                 ListScreen(
-                    onItemClick = { showDetails = true },
-                    sharedTransitionScope = this@SharedTransitionLayout,
-                    animatedVisibilityScope = this@AnimatedContent
+                    onClick = { showDetails = true },
+                    sharedScope = this@SharedTransitionLayout,
+                    animatedScope = this@AnimatedContent
                 )
             }
         }
@@ -282,163 +117,80 @@ fun SharedElementExample() {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ListScreen(
-    onItemClick: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    onClick: () -> Unit,
+    sharedScope: SharedTransitionScope,
+    animatedScope: AnimatedVisibilityScope
 ) {
-    with(sharedTransitionScope) {
+    with(sharedScope) {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
                 .sharedElement(
-                    state = rememberSharedContentState(key = "item-1"),
-                    animatedVisibilityScope = animatedVisibilityScope
+                    rememberSharedContentState("item-1"),
+                    animatedScope
                 )
-                .clickable(onClick = onItemClick)
+                .clickable(onClick = onClick)
         ) {
-            Row(modifier = Modifier.padding(16.dp)) {
+            Row(Modifier.padding(16.dp)) {
                 Image(
                     painter = painterResource(R.drawable.image),
                     contentDescription = null,
                     modifier = Modifier
                         .size(60.dp)
                         .sharedElement(
-                            state = rememberSharedContentState(key = "image-1"),
-                            animatedVisibilityScope = animatedVisibilityScope
+                            rememberSharedContentState("image-1"),
+                            animatedScope
                         )
                 )
-                Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     "Item Title",
-                    modifier = Modifier.sharedElement(
-                        state = rememberSharedContentState(key = "title-1"),
-                        animatedVisibilityScope = animatedVisibilityScope
+                    Modifier.sharedElement(
+                        rememberSharedContentState("title-1"),
+                        animatedScope
                     )
                 )
             }
         }
     }
 }
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-fun DetailScreen(
-    onBackClick: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedVisibilityScope: AnimatedVisibilityScope
-) {
-    with(sharedTransitionScope) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .sharedElement(
-                    state = rememberSharedContentState(key = "item-1"),
-                    animatedVisibilityScope = animatedVisibilityScope
-                )
-        ) {
-            Image(
-                painter = painterResource(R.drawable.image),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "image-1"),
-                        animatedVisibilityScope = animatedVisibilityScope
-                    )
-            )
-            Text(
-                "Detail Title",
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "title-1"),
-                        animatedVisibilityScope = animatedVisibilityScope
-                    )
-            )
-            Text(
-                "Detailed content here...",
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-    }
-}
 ```
 
----
+### Predictive Back Gesture
 
-### Predictive Back Gesture (Android 13+)
-
-**Predictive back** shows preview of previous screen during back gesture.
+Predictive back показывает превью предыдущего экрана во время жеста назад (Android 13+).
 
 ```kotlin
-@OptIn(ExperimentalMaterial3Api::class)
+// ✅ Правильно: обработка predictive back
 @Composable
 fun PredictiveBackExample() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    // Enable predictive back
     val backCallback = remember {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 scope.launch {
-                    if (drawerState.isOpen) {
-                        drawerState.close()
-                    } else {
-                        // Handle back navigation
-                    }
+                    if (drawerState.isOpen) drawerState.close()
                 }
             }
         }
     }
 
-    val backDispatcher = LocalOnBackPressedDispatcherOwner.current
+    LocalOnBackPressedDispatcherOwner.current
         ?.onBackPressedDispatcher
+        ?.let { dispatcher ->
+            DisposableEffect(backCallback) {
+                dispatcher.addCallback(backCallback)
+                onDispose { backCallback.remove() }
+            }
+        }
 
-    DisposableEffect(backCallback) {
-        backDispatcher?.addCallback(backCallback)
-        onDispose {
-            backCallback.remove()
-        }
-    }
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text("Drawer Content", modifier = Modifier.padding(16.dp))
-            }
-        }
-    ) {
-        Scaffold(
-            topAppBar = {
-                TopAppBar(
-                    title = { Text("Predictive Back") },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            scope.launch { drawerState.open() }
-                        }) {
-                            Icon(Icons.Filled.Menu, "Menu")
-                        }
-                    }
-                )
-            }
-        ) { padding ->
-            Box(modifier = Modifier.padding(padding)) {
-                Text("Main content")
-            }
-        }
+    ModalNavigationDrawer(drawerState = drawerState) {
+        // Content
     }
 }
 ```
 
----
-
-### Navigation Transitions
-
-**NavHost animations:**
+### Переходы навигации
 
 ```kotlin
 @Composable
@@ -451,35 +203,14 @@ fun NavigationWithTransitions() {
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it },
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = EasingTokens.EmphasizedDecelerate
-                )
-            ) + fadeIn(animationSpec = tween(300))
+                animationSpec = tween(300)
+            ) + fadeIn(tween(300))
         },
         exitTransition = {
             slideOutHorizontally(
-                targetOffsetX = { -it / 2 }, // Slight slide left
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = EasingTokens.Standard
-                )
-            ) + fadeOut(animationSpec = tween(300))
-        },
-        popEnterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { -it / 2 },
+                targetOffsetX = { -it / 2 },
                 animationSpec = tween(300)
-            ) + fadeIn(animationSpec = tween(300))
-        },
-        popExitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { it },
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = EasingTokens.EmphasizedAccelerate
-                )
-            ) + fadeOut(animationSpec = tween(300))
+            ) + fadeOut(tween(300))
         }
     ) {
         composable("home") { HomeScreen(navController) }
@@ -488,346 +219,275 @@ fun NavigationWithTransitions() {
 }
 ```
 
----
-
-### List Item Animations
-
-**Animate list additions/removals:**
+### Лучшие практики
 
 ```kotlin
-@Composable
-fun AnimatedList(items: List<String>) {
-    LazyColumn {
-        items(
-            items = items,
-            key = { it } // Important for correct animations
-        ) { item ->
-            AnimatedListItem(
-                item = item,
-                modifier = Modifier.animateItemPlacement(
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = EasingTokens.Emphasized
-                    )
-                )
-            )
-        }
-    }
-}
-
-@Composable
-fun AnimatedListItem(item: String, modifier: Modifier = Modifier) {
-    var visible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        visible = true
-    }
-
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(tween(300)) + expandVertically(tween(300)),
-        exit = fadeOut(tween(200)) + shrinkVertically(tween(200)),
-        modifier = modifier
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Text(
-                text = item,
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-    }
-}
-```
-
----
-
-### State-Based Animations
-
-**Animate based on state changes:**
-
-```kotlin
-@Composable
-fun ExpandableCard(title: String, content: String) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            )
-            .clickable { expanded = !expanded }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(title, style = MaterialTheme.typography.titleMedium)
-
-                Icon(
-                    imageVector = if (expanded) Icons.Filled.ExpandLess
-                                  else Icons.Filled.ExpandMore,
-                    contentDescription = if (expanded) "Collapse" else "Expand",
-                    modifier = Modifier.rotate(
-                        animateFloatAsState(
-                            targetValue = if (expanded) 180f else 0f,
-                            animationSpec = tween(300)
-                        ).value
-                    )
-                )
-            }
-
-            if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(content)
-            }
-        }
-    }
-}
-```
-
----
-
-### FAB Animation
-
-**Animated FAB with morphing:**
-
-```kotlin
-@Composable
-fun AnimatedFAB(
-    extended: Boolean,
-    onClick: () -> Unit
-) {
-    ExtendedFloatingActionButton(
-        onClick = onClick,
-        icon = {
-            Icon(Icons.Filled.Add, "Add")
-        },
-        text = {
-            AnimatedVisibility(
-                visible = extended,
-                enter = fadeIn(tween(200, delayMillis = 100)) +
-                        expandHorizontally(tween(300)),
-                exit = fadeOut(tween(100)) +
-                       shrinkHorizontally(tween(200))
-            ) {
-                Text("Create")
-            }
-        },
-        expanded = extended
-    )
-}
-
-// Usage with scroll state
-@Composable
-fun ScreenWithFAB() {
-    val listState = rememberLazyListState()
-    val expandedFab by remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex == 0
-        }
-    }
-
-    Scaffold(
-        floatingActionButton = {
-            AnimatedFAB(
-                extended = expandedFab,
-                onClick = { /* ... */ }
-            )
-        }
-    ) { padding ->
-        LazyColumn(state = listState, modifier = Modifier.padding(padding)) {
-            items(100) {
-                Text("Item $it", modifier = Modifier.padding(16.dp))
-            }
-        }
-    }
-}
-```
-
----
-
-### Best Practices
-
-**1. Use standard durations**
-```kotlin
-//  DO - Use Material durations
+// ✅ Правильно: стандартные длительности
 animationSpec = tween(durationMillis = 300)
 
-//  DON'T - Random durations
+// ❌ Неправильно: случайные длительности
 animationSpec = tween(durationMillis = 237)
-```
 
-**2. Apply appropriate easing**
-```kotlin
-//  DO - Emphasized for important transitions
-enter = slideInVertically(
-    animationSpec = tween(
-        durationMillis = 300,
-        easing = EasingTokens.EmphasizedDecelerate
-    )
-)
+// ✅ Правильно: ключи для списков
+items(items, key = { it.id }) { item -> /* ... */ }
 
-//  DON'T - Linear easing (feels mechanical)
-animationSpec = tween(easing = LinearEasing)
-```
+// ❌ Неправильно: без ключей
+items(items) { item -> /* ... */ }
 
-**3. Provide keys for list animations**
-```kotlin
-//  DO
-items(items, key = { it.id }) { item ->
-    // Content
-}
-
-//  DON'T
-items(items) { item -> // No key
-    // Content
-}
-```
-
-**4. Respect user preferences**
-```kotlin
+// ✅ Правильно: уважение предпочтений пользователя
 val scale = Settings.Global.getFloat(
     context.contentResolver,
     Settings.Global.ANIMATOR_DURATION_SCALE,
     1f
 )
-
-// Adjust duration based on user preference
 val duration = (300 * scale).toInt()
 ```
 
-**5. Avoid excessive motion**
-```kotlin
-//  DO - Subtle, meaningful
-fadeIn(tween(300))
-
-//  DON'T - Overly complex
-fadeIn() + slideIn() + scaleIn() + rotateIn() // Too much!
-```
-
 ---
 
-### Summary
+## Answer (EN)
 
-**Material 3 motion principles:**
-- Informative - Guides attention
-- Focused - Single focal point
-- Expressive - Adds personality
-- Practical - Enhances usability
+**Material 3 motion** creates meaningful transitions that guide users through your app. Motion provides clarity, efficiency, and personality.
 
-**Standard durations:**
-- 100ms - Simple transitions
-- 200ms - Small components
-- 300ms - Standard transitions
-- 400ms - Complex transitions
+### Material 3 Motion Principles
 
-**Key techniques:**
-- `AnimatedVisibility` - Enter/exit transitions
-- `AnimatedContent` - Content swapping
-- `SharedTransitionLayout` - Shared elements
-- `animateContentSize()` - Size changes
-- `animateItemPlacement()` - List reordering
+1. **Informative** - Guides attention and communicates relationships between elements
+2. **Focused** - Guides to a single focal point, avoiding distraction
+3. **Expressive** - Adds personality and polish to the experience
+4. **Practical** - Enhances usability without unnecessary flourish
 
-**Best practices:**
-- Use standard durations
-- Apply appropriate easing
-- Provide keys for lists
-- Respect user preferences
-- Avoid excessive motion
+### Standard Durations
 
----
+Material 3 defines standard durations for consistency:
 
-## Ответ (RU)
+| Duration | Use Case | Example |
+|----------|----------|---------|
+| **100ms** | Simple transitions | Icon state change |
+| **200ms** | Small component transitions | Checkbox, switch |
+| **300ms** | Standard transitions | Button, card |
+| **400ms** | Complex transitions | Screen transitions |
+| **500ms+** | Emphasized transitions | Large expansions |
 
-**Material 3 motion** создаёт осмысленные, красивые переходы, которые направляют пользователей через ваше приложение.
-
-### Принципы движения Material 3
-
-1. **Informative** - Направляет внимание
-2. **Focused** - Направляет к одной фокальной точке
-3. **Expressive** - Добавляет индивидуальность
-4. **Practical** - Улучшает юзабилити
-
-### Длительность анимаций
-
-| Длительность | Случай использования |
-|--------------|---------------------|
-| **100ms** | Простые переходы |
-| **200ms** | Маленькие компоненты |
-| **300ms** | Стандартные переходы |
-| **400ms** | Сложные переходы |
-| **500ms+** | Подчёркнутые переходы |
-
-### Основные переходы
+### Basic Transitions
 
 **Fade transition:**
+
 ```kotlin
-AnimatedVisibility(
-    visible = visible,
-    enter = fadeIn(tween(300)),
-    exit = fadeOut(tween(200))
-) {
-    content()
+// ✅ Correct: standard durations and easing
+@Composable
+fun FadeTransition(visible: Boolean, content: @Composable () -> Unit) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(tween(300, easing = LinearOutSlowInEasing)),
+        exit = fadeOut(tween(200))
+    ) { content() }
 }
 ```
 
 **Slide transition:**
+
 ```kotlin
-AnimatedVisibility(
-    visible = visible,
-    enter = slideInVertically(tween(300)),
-    exit = slideOutVertically(tween(200))
-) {
-    content()
+// ✅ Correct: emphasized easing for entering content
+@Composable
+fun SlideTransition(visible: Boolean, content: @Composable () -> Unit) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(
+            initialOffsetY = { it },
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { it },
+            animationSpec = tween(200)
+        )
+    ) { content() }
 }
 ```
 
 ### Shared Element Transitions
 
+Shared elements smoothly animate between screens, maintaining continuity.
+
 ```kotlin
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedElementExample() {
+    var showDetails by remember { mutableStateOf(false) }
+
     SharedTransitionLayout {
         AnimatedContent(targetState = showDetails) { isShowingDetails ->
             if (isShowingDetails) {
-                DetailScreen(/* ... */)
+                DetailScreen(
+                    onBack = { showDetails = false },
+                    sharedScope = this@SharedTransitionLayout,
+                    animatedScope = this@AnimatedContent
+                )
             } else {
-                ListScreen(/* ... */)
+                ListScreen(
+                    onClick = { showDetails = true },
+                    sharedScope = this@SharedTransitionLayout,
+                    animatedScope = this@AnimatedContent
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun ListScreen(
+    onClick: () -> Unit,
+    sharedScope: SharedTransitionScope,
+    animatedScope: AnimatedVisibilityScope
+) {
+    with(sharedScope) {
+        Card(
+            modifier = Modifier
+                .sharedElement(
+                    rememberSharedContentState("item-1"),
+                    animatedScope
+                )
+                .clickable(onClick = onClick)
+        ) {
+            Row(Modifier.padding(16.dp)) {
+                Image(
+                    painter = painterResource(R.drawable.image),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(60.dp)
+                        .sharedElement(
+                            rememberSharedContentState("image-1"),
+                            animatedScope
+                        )
+                )
+                Text(
+                    "Item Title",
+                    Modifier.sharedElement(
+                        rememberSharedContentState("title-1"),
+                        animatedScope
+                    )
+                )
             }
         }
     }
 }
 ```
 
-### Лучшие практики
+### Predictive Back Gesture
 
-1. Используйте стандартные длительности
-2. Применяйте appropriate easing
-3. Предоставляйте ключи для списков
-4. Уважайте пользовательские предпочтения
-5. Избегайте излишнего движения
+Predictive back shows preview of previous screen during back gesture (Android 13+).
 
-### Ключевые техники
+```kotlin
+// ✅ Correct: handling predictive back
+@Composable
+fun PredictiveBackExample() {
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-- `AnimatedVisibility` - Переходы входа/выхода
-- `AnimatedContent` - Замена содержимого
-- `SharedTransitionLayout` - Shared elements
-- `animateContentSize()` - Изменения размера
-- `animateItemPlacement()` - Переупорядочивание списков
+    val backCallback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                scope.launch {
+                    if (drawerState.isOpen) drawerState.close()
+                }
+            }
+        }
+    }
+
+    LocalOnBackPressedDispatcherOwner.current
+        ?.onBackPressedDispatcher
+        ?.let { dispatcher ->
+            DisposableEffect(backCallback) {
+                dispatcher.addCallback(backCallback)
+                onDispose { backCallback.remove() }
+            }
+        }
+
+    ModalNavigationDrawer(drawerState = drawerState) {
+        // Content
+    }
+}
+```
+
+### Navigation Transitions
+
+```kotlin
+@Composable
+fun NavigationWithTransitions() {
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = "home",
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300)
+            ) + fadeIn(tween(300))
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -it / 2 },
+                animationSpec = tween(300)
+            ) + fadeOut(tween(300))
+        }
+    ) {
+        composable("home") { HomeScreen(navController) }
+        composable("details") { DetailsScreen(navController) }
+    }
+}
+```
+
+### Best Practices
+
+```kotlin
+// ✅ Correct: standard durations
+animationSpec = tween(durationMillis = 300)
+
+// ❌ Wrong: random durations
+animationSpec = tween(durationMillis = 237)
+
+// ✅ Correct: provide keys for lists
+items(items, key = { it.id }) { item -> /* ... */ }
+
+// ❌ Wrong: no keys
+items(items) { item -> /* ... */ }
+
+// ✅ Correct: respect user preferences
+val scale = Settings.Global.getFloat(
+    context.contentResolver,
+    Settings.Global.ANIMATOR_DURATION_SCALE,
+    1f
+)
+val duration = (300 * scale).toInt()
+```
+
+---
+
+## Follow-ups
+
+- How do you handle animation interruptions when user navigates away mid-transition?
+- What's the impact of AnimationSpec choice (tween vs spring) on perceived app performance?
+- How do you test shared element transitions with different screen sizes and aspect ratios?
+- What accessibility considerations apply to motion and animation timing?
+- How do you debug complex animation chains involving multiple composables?
+
+## References
+
+- Material Design Motion Guidelines: https://m3.material.io/styles/motion/overview
+- Compose Animation Documentation: https://developer.android.com/jetpack/compose/animation
+- Android Developers - Animations: https://developer.android.com/develop/ui/views/animations
 
 ## Related Questions
 
-- [[q-jetpack-compose-basics--android--medium]]
-- [[q-navigation-methods-in-android--android--medium]]
-- [[q-robolectric-vs-instrumented--android--medium]]
+### Prerequisites (Easier)
+- [[q-jetpack-compose-basics--android--medium]] - Understanding Compose fundamentals for animations
+- Compose state management - State management drives animation triggers
+
+### Related (Same Level)
+- [[q-navigation-methods-in-android--android--medium]] - Navigation transitions integration
+- Compose lifecycle - Lifecycle-aware animations
+
+### Advanced (Harder)
+- Compose performance optimization - Optimizing animation performance
+- Custom Compose layouts - Custom layout animations

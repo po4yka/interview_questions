@@ -1,27 +1,19 @@
 ---
 id: 20251012-122753
-title: Accessibility Talkback / Доступность и TalkBack
+title: Accessibility TalkBack / Доступность и TalkBack
 aliases: [TalkBack Accessibility, Доступность TalkBack]
 topic: android
-subtopics:
-  - ui-accessibility
-  - ui-navigation
+subtopics: [ui-accessibility, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-accessibility
-  - q-accessibility-compose--android--medium
-  - q-accessibility-testing--android--medium
-  - q-custom-view-accessibility--android--medium
+related: [c-accessibility, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
 created: 2025-10-11
-updated: 2025-10-27
-tags: [android/ui-accessibility, android/ui-navigation, difficulty/medium]
+updated: 2025-10-29
+tags: [android/ui-accessibility, android/ui-navigation, accessibility, talkback, difficulty/medium]
 sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/accessibility
@@ -36,150 +28,86 @@ sources:
 
 ## Ответ (RU)
 
-[[c-accessibility|TalkBack]] - это встроенная программа чтения с экрана Android, которая помогает незрячим и слабовидящим пользователям взаимодействовать с приложениями через голосовую обратную связь.
+[[c-accessibility|TalkBack]] - встроенная программа чтения с экрана Android для незрячих и слабовидящих пользователей, обеспечивающая голосовую обратную связь.
 
-**Ключевые области:**
+### 1. Описания контента
 
-**1. Описания контента**
+Каждый значимый UI элемент должен иметь осмысленное описание, объясняющее назначение:
 
 ```kotlin
-// ✅ Осмысленные описания
+// ✅ Описывает назначение, а не внешний вид
 Image(
-    painter = painterResource(R.drawable.profile),
-    contentDescription = "Фото профиля" // ✅ Конкретное описание
+    painter = painterResource(R.drawable.profile_photo),
+    contentDescription = "Фото профиля пользователя"
 )
 
 Icon(
     imageVector = Icons.Default.Delete,
-    contentDescription = "Удалить элемент" // ✅ Действие
+    contentDescription = "Удалить элемент"
 )
 
-// ❌ Плохо - слишком общее
+// ❌ Слишком общее описание
 Image(
     painter = painterResource(R.drawable.icon),
-    contentDescription = "Картинка" // ❌ Не информативно
+    contentDescription = "Картинка"
 )
 ```
 
-**2. Порядок фокуса**
+**Декоративные элементы**: используйте `contentDescription = null` для иконок, которые дублируют текст рядом.
+
+### 2. Семантическое объединение
+
+Группируйте связанные элементы, чтобы TalkBack читал их как единое целое:
 
 ```kotlin
-// Compose - управление порядком навигации
-Column(
-    modifier = Modifier.semantics {
-        traversalIndex = 1f // ✅ Явный порядок
-    }
-) { /* Контент */ }
-
-// View-based
-view.accessibilityTraversalBefore = R.id.next_view // ✅ Контроль навигации
-```
-
-**3. Пользовательские действия**
-
-```kotlin
-Box(
-    modifier = Modifier.semantics {
-        customActions = listOf(
-            CustomAccessibilityAction("Добавить в избранное") { // ✅ Ясное действие
-                markAsFavorite()
-                true
-            }
-        )
-    }
-)
-```
-
-**4. Живые регионы**
-
-```kotlin
-var message by remember { mutableStateOf("") }
-
-Text(
-    text = message,
-    modifier = Modifier.semantics {
-        liveRegion = LiveRegionMode.Polite // ✅ Объявляет изменения
-    }
-)
-```
-
-**5. Семантическое объединение**
-
-```kotlin
-// ✅ Объединение связанных элементов
+// ✅ Объединяет иконку и текст в одно объявление
 Row(
     modifier = Modifier.semantics(mergeDescendants = true) {}
 ) {
     Icon(Icons.Default.Star, contentDescription = null)
     Text("Избранное")
-    // TalkBack читает: "Избранное, кнопка"
+    // TalkBack: "Избранное, кнопка"
 }
 
-// ✅ Скрытие декоративных элементов
+// ✅ Скрывает декоративные элементы
 Divider(
     modifier = Modifier.semantics {
-        invisibleToUser() // ✅ Не мешает навигации
+        invisibleToUser()
     }
 )
 ```
 
-**Лучшие практики:**
+### 3. Порядок фокуса
 
-- Описывайте **назначение**, а не внешний вид
-- Избегайте **избыточности** ("кнопка Отправить" → "Отправить")
-- **Тестируйте** на реальном устройстве
-- Группируйте **связанные** элементы
-- Обрабатывайте **крайние случаи**
-
-## Answer (EN)
-
-[[c-accessibility|TalkBack]] is Android's built-in screen reader helping blind and visually impaired users interact with apps through spoken feedback.
-
-**Key Areas:**
-
-**1. Content Descriptions**
+Контролируйте навигацию TalkBack для логической последовательности:
 
 ```kotlin
-// ✅ Meaningful descriptions
-Image(
-    painter = painterResource(R.drawable.profile),
-    contentDescription = "Profile picture" // ✅ Specific
-)
-
-Icon(
-    imageVector = Icons.Default.Delete,
-    contentDescription = "Delete item" // ✅ Clear action
-)
-
-// ❌ Bad - too generic
-Image(
-    painter = painterResource(R.drawable.icon),
-    contentDescription = "Image" // ❌ Not informative
-)
-```
-
-**2. Focus Order**
-
-```kotlin
-// Compose - control navigation order
+// Compose - явный порядок обхода
 Column(
     modifier = Modifier.semantics {
-        traversalIndex = 1f // ✅ Explicit order
+        traversalIndex = 1f
     }
-) { /* Content */ }
+) { /* Первый элемент */ }
 
 // View-based
-view.accessibilityTraversalBefore = R.id.next_view // ✅ Navigation control
+view.accessibilityTraversalBefore = R.id.next_view
+view.accessibilityTraversalAfter = R.id.previous_view
 ```
 
-**3. Custom Actions**
+### 4. Пользовательские действия
+
+Добавляйте кастомные действия для контекстных операций:
 
 ```kotlin
 Box(
     modifier = Modifier.semantics {
         customActions = listOf(
-            CustomAccessibilityAction("Mark as favorite") { // ✅ Clear action
+            CustomAccessibilityAction("Добавить в избранное") {
                 markAsFavorite()
+                true
+            },
+            CustomAccessibilityAction("Поделиться") {
+                shareItem()
                 true
             }
         )
@@ -187,58 +115,177 @@ Box(
 )
 ```
 
-**4. Live Regions**
+### 5. Живые регионы
+
+Уведомляйте пользователей об изменениях без фокуса:
 
 ```kotlin
-var message by remember { mutableStateOf("") }
+var statusMessage by remember { mutableStateOf("") }
 
 Text(
-    text = message,
+    text = statusMessage,
     modifier = Modifier.semantics {
-        liveRegion = LiveRegionMode.Polite // ✅ Announces changes
+        liveRegion = LiveRegionMode.Polite // Не прерывает текущее чтение
+    }
+)
+
+// Для срочных уведомлений
+Text(
+    text = errorMessage,
+    modifier = Modifier.semantics {
+        liveRegion = LiveRegionMode.Assertive // Прерывает чтение
     }
 )
 ```
 
-**5. Semantic Merging**
+**Практические советы**:
+
+- Описывайте **назначение**, а не внешний вид ("Отправить", а не "Синяя кнопка")
+- Избегайте **избыточности** (TalkBack автоматически добавляет "кнопка")
+- Тестируйте с **реальным TalkBack** на устройстве
+- Используйте **короткие и ясные** описания (3-5 слов)
+
+## Answer (EN)
+
+[[c-accessibility|TalkBack]] is Android's built-in screen reader for blind and visually impaired users, providing spoken feedback for app navigation.
+
+### 1. Content Descriptions
+
+Every meaningful UI element needs a descriptive label explaining its purpose:
 
 ```kotlin
-// ✅ Merge related elements
+// ✅ Describes purpose, not appearance
+Image(
+    painter = painterResource(R.drawable.profile_photo),
+    contentDescription = "User profile picture"
+)
+
+Icon(
+    imageVector = Icons.Default.Delete,
+    contentDescription = "Delete item"
+)
+
+// ❌ Too generic
+Image(
+    painter = painterResource(R.drawable.icon),
+    contentDescription = "Image"
+)
+```
+
+**Decorative elements**: use `contentDescription = null` for icons that duplicate nearby text.
+
+### 2. Semantic Merging
+
+Group related elements so TalkBack reads them as one unit:
+
+```kotlin
+// ✅ Merges icon and text into single announcement
 Row(
     modifier = Modifier.semantics(mergeDescendants = true) {}
 ) {
     Icon(Icons.Default.Star, contentDescription = null)
     Text("Favorite")
-    // TalkBack reads: "Favorite, button"
+    // TalkBack: "Favorite, button"
 }
 
-// ✅ Hide decorative elements
+// ✅ Hides decorative elements
 Divider(
     modifier = Modifier.semantics {
-        invisibleToUser() // ✅ No distraction
+        invisibleToUser()
     }
 )
 ```
 
-**Best Practices:**
+### 3. Focus Order
 
-- Describe **purpose**, not appearance
-- Avoid **redundancy** ("Submit button" → "Submit")
-- **Test** on real devices
-- Group **related** elements
-- Handle **edge cases**
+Control TalkBack navigation for logical flow:
+
+```kotlin
+// Compose - explicit traversal order
+Column(
+    modifier = Modifier.semantics {
+        traversalIndex = 1f
+    }
+) { /* First element */ }
+
+// View-based
+view.accessibilityTraversalBefore = R.id.next_view
+view.accessibilityTraversalAfter = R.id.previous_view
+```
+
+### 4. Custom Actions
+
+Add custom actions for contextual operations:
+
+```kotlin
+Box(
+    modifier = Modifier.semantics {
+        customActions = listOf(
+            CustomAccessibilityAction("Mark as favorite") {
+                markAsFavorite()
+                true
+            },
+            CustomAccessibilityAction("Share") {
+                shareItem()
+                true
+            }
+        )
+    }
+)
+```
+
+### 5. Live Regions
+
+Announce changes without requiring focus:
+
+```kotlin
+var statusMessage by remember { mutableStateOf("") }
+
+Text(
+    text = statusMessage,
+    modifier = Modifier.semantics {
+        liveRegion = LiveRegionMode.Polite // Doesn't interrupt current reading
+    }
+)
+
+// For urgent notifications
+Text(
+    text = errorMessage,
+    modifier = Modifier.semantics {
+        liveRegion = LiveRegionMode.Assertive // Interrupts reading
+    }
+)
+```
+
+**Practical Tips**:
+
+- Describe **purpose**, not appearance ("Submit", not "Blue button")
+- Avoid **redundancy** (TalkBack automatically adds "button")
+- Test with **real TalkBack** on device
+- Use **short and clear** descriptions (3-5 words)
 
 ---
 
 ## Follow-ups
 
-- What happens without content descriptions?
-- How to test TalkBack in automated tests?
-- How to handle complex UI (carousels, tabs)?
+- How do you test TalkBack support in automated tests?
+- What happens to nested interactive elements in Compose?
+- How to handle complex UI like carousels and tabs?
+- When should you use `mergeDescendants` vs separate announcements?
+- How to optimize TalkBack for dynamic content updates?
 
 ## References
 
 - [[c-accessibility]]
+- [[q-accessibility-compose--android--medium]]
+- [[q-accessibility-testing--android--medium]]
+- [[q-custom-view-accessibility--android--medium]]
+- https://developer.android.com/guide/topics/ui/accessibility/testing
+- https://support.google.com/accessibility/android/answer/6283677
+
+## Related Questions
+
+### Related (Same Level)
 - [[q-accessibility-compose--android--medium]]
 - [[q-accessibility-testing--android--medium]]
 - [[q-custom-view-accessibility--android--medium]]

@@ -11,8 +11,9 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-coroutine-builders-basics--kotlin--easy, q-viewmodel-pattern--android--easy]
+sources: []
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-10-29
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
 ---
 # Вопрос (RU)
@@ -30,36 +31,44 @@ tags: [android/coroutines, android/threads-sync, difficulty/easy]
 Android предоставляет несколько примитивов для асинхронной работы:
 
 **Современные (рекомендуемые):**
-- **[[c-coroutines|Корутины]]** — легковесная конкурентность с автоматическим управлением жизненным циклом
-- **Flow** — реактивные потоки данных (cold/hot)
-- **[[c-workmanager|WorkManager]]** — гарантированное выполнение фоновых задач
+- **[[c-coroutines|Корутины]]** — легковесная конкурентность с lifecycle-aware отменой
+- **Flow** — реактивные потоки данных (cold streams + hot StateFlow/SharedFlow)
+- **[[c-workmanager|WorkManager]]** — гарантированное выполнение задач, переживающих смерть процесса
 
 **Legacy (устаревшие):**
-- **Handler/Looper** — передача сообщений между потоками
-- **ExecutorService** — управление пулом потоков
-- **RxJava** — реактивное программирование
-- **AsyncTask** — DEPRECATED, не использовать
+- **Handler/Looper** — низкоуровневая передача сообщений между потоками
+- **ExecutorService** — Java thread pool без интеграции с Android lifecycle
+- **RxJava** — функциональное реактивное программирование (требует дисциплины управления подписками)
+- **AsyncTask** — DEPRECATED, утечки памяти при rotation
 
 ### 1. Kotlin Coroutines (основной выбор)
 
 ```kotlin
 class DataViewModel : ViewModel() {
-    // ✅ Базовое использование
+    // ✅ Базовое использование: viewModelScope автоматически отменяется при onCleared()
     fun loadData() {
         viewModelScope.launch {
             val data = withContext(Dispatchers.IO) {
-                repository.fetchData() // выполняется на IO потоке
+                repository.fetchData() // сеть/БД всегда на IO
             }
-            _uiState.value = UiState.Success(data)
+            _uiState.value = UiState.Success(data) // обновление UI на Main
         }
     }
 
-    // ✅ Параллельные операции
+    // ✅ Параллельные операции: async для конкурентного выполнения
     fun loadMultiple() {
         viewModelScope.launch {
-            val result1 = async { fetchFromApi1() }
-            val result2 = async { fetchFromApi2() }
-            _data.value = result1.await() + result2.await()
+            val result1 = async(Dispatchers.IO) { fetchFromApi1() }
+            val result2 = async(Dispatchers.IO) { fetchFromApi2() }
+            _data.value = result1.await() + result2.await() // ждём оба результата
+        }
+    }
+
+    // ❌ WRONG: blocking Main thread
+    fun loadDataWrong() {
+        viewModelScope.launch { // launch без withContext
+            val data = repository.fetchData() // блокирует Main!
+            _uiState.value = UiState.Success(data)
         }
     }
 }
@@ -68,17 +77,24 @@ class DataViewModel : ViewModel() {
 ### 2. Flow (реактивные потоки)
 
 ```kotlin
-// ✅ StateFlow для UI состояния
+// ✅ StateFlow: hot stream с последним значением + conflation
 private val _users = MutableStateFlow<List<User>>(emptyList())
 val users: StateFlow<List<User>> = _users.asStateFlow()
 
-// ✅ Обработка потока
+// ✅ Обработка потока с lifecycle-aware collection
 lifecycleScope.launch {
-    repository.getUsers()
-        .flowOn(Dispatchers.IO)
-        .collect { users ->
-            adapter.submitList(users)
-        }
+    repeatOnLifecycle(Lifecycle.State.STARTED) { // останавливается при STOPPED
+        repository.getUsers()
+            .flowOn(Dispatchers.IO) // upstream на IO
+            .collect { users ->
+                adapter.submitList(users) // downstream на Main
+            }
+    }
+}
+
+// ❌ WRONG: collect без repeatOnLifecycle
+lifecycleScope.launch {
+    repository.getUsers().collect { /* утечка при background */ }
 }
 ```
 
@@ -88,32 +104,39 @@ lifecycleScope.launch {
 class DataSyncWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
-    // ✅ Переживает перезапуск приложения
+    // ✅ Переживает смерть процесса, перезагрузку устройства
     override suspend fun doWork(): Result = try {
-        syncData()
-        Result.success()
+        withContext(Dispatchers.IO) {
+            syncData() // тяжёлая работа на IO
+        }
+        Result.success() // задача завершена, больше не будет перезапущена
     } catch (e: Exception) {
-        Result.retry()
+        if (runAttemptCount < 3) Result.retry() // exponential backoff
+        else Result.failure() // после 3 попыток отказываемся
     }
 }
+
+// Планирование работы
+val syncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(1, TimeUnit.HOURS)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED) // только при сети
+            .setRequiresBatteryNotLow(true)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+    "DataSync",
+    ExistingPeriodicWorkPolicy.KEEP, // не дублируем задачи
+    syncWork
+)
 ```
 
-**Сравнение:**
-
-| Примитив | Lifecycle | Отмена | Рекомендуется |
-|----------|-----------|--------|---------------|
-| Coroutines | ✅ Да | ✅ Да | ✅ Да |
-| Flow | ✅ Да | ✅ Да | ✅ Да |
-| WorkManager | ✅ Да | ✅ Да | ✅ Да |
-| Handler/Looper | ❌ Нет | ⚠️ Вручную | ⚠️ Редко |
-| ExecutorService | ❌ Нет | ⚠️ Вручную | ❌ Нет |
-| RxJava | ❌ Нет | ✅ Да | ❌ Нет |
-| AsyncTask | ❌ Нет | ❌ Нет | ❌ DEPRECATED |
-
-**Лучшие практики:**
-- Используйте [[c-coroutines|корутины]] для большинства асинхронных операций
-- Используйте Flow для реактивных потоков данных
-- Используйте [[c-workmanager|WorkManager]] для задач, которые должны выполниться гарантированно
+**Выбор примитива:**
+- **Корутины** — UI-связанные операции с коротким временем выполнения (API calls, DB queries)
+- **Flow** — непрерывные потоки данных (sensors, DB observations, WebSocket)
+- **WorkManager** — критичные задачи, которые должны выполниться даже после закрытия app (upload, sync)
 
 ---
 
@@ -122,36 +145,44 @@ class DataSyncWorker(context: Context, params: WorkerParameters)
 Android provides several async primitives:
 
 **Modern (recommended):**
-- **[[c-coroutines|Coroutines]]** — lightweight concurrency with automatic lifecycle management
-- **Flow** — reactive data streams (cold/hot)
-- **[[c-workmanager|WorkManager]]** — guaranteed background task execution
+- **[[c-coroutines|Coroutines]]** — lightweight concurrency with lifecycle-aware cancellation
+- **Flow** — reactive data streams (cold streams + hot StateFlow/SharedFlow)
+- **[[c-workmanager|WorkManager]]** — guaranteed task execution surviving process death
 
 **Legacy (outdated):**
-- **Handler/Looper** — message passing between threads
-- **ExecutorService** — thread pool management
-- **RxJava** — reactive programming
-- **AsyncTask** — DEPRECATED, don't use
+- **Handler/Looper** — low-level message passing between threads
+- **ExecutorService** — Java thread pool without Android lifecycle integration
+- **RxJava** — functional reactive programming (requires disciplined subscription management)
+- **AsyncTask** — DEPRECATED, memory leaks on rotation
 
 ### 1. Kotlin Coroutines (primary choice)
 
 ```kotlin
 class DataViewModel : ViewModel() {
-    // ✅ Basic usage
+    // ✅ Basic usage: viewModelScope auto-cancels on onCleared()
     fun loadData() {
         viewModelScope.launch {
             val data = withContext(Dispatchers.IO) {
-                repository.fetchData() // runs on IO thread
+                repository.fetchData() // network/DB always on IO
             }
-            _uiState.value = UiState.Success(data)
+            _uiState.value = UiState.Success(data) // UI update on Main
         }
     }
 
-    // ✅ Parallel operations
+    // ✅ Parallel operations: async for concurrent execution
     fun loadMultiple() {
         viewModelScope.launch {
-            val result1 = async { fetchFromApi1() }
-            val result2 = async { fetchFromApi2() }
-            _data.value = result1.await() + result2.await()
+            val result1 = async(Dispatchers.IO) { fetchFromApi1() }
+            val result2 = async(Dispatchers.IO) { fetchFromApi2() }
+            _data.value = result1.await() + result2.await() // wait for both
+        }
+    }
+
+    // ❌ WRONG: blocking Main thread
+    fun loadDataWrong() {
+        viewModelScope.launch { // launch without withContext
+            val data = repository.fetchData() // blocks Main!
+            _uiState.value = UiState.Success(data)
         }
     }
 }
@@ -160,17 +191,24 @@ class DataViewModel : ViewModel() {
 ### 2. Flow (reactive streams)
 
 ```kotlin
-// ✅ StateFlow for UI state
+// ✅ StateFlow: hot stream with latest value + conflation
 private val _users = MutableStateFlow<List<User>>(emptyList())
 val users: StateFlow<List<User>> = _users.asStateFlow()
 
-// ✅ Stream processing
+// ✅ Stream processing with lifecycle-aware collection
 lifecycleScope.launch {
-    repository.getUsers()
-        .flowOn(Dispatchers.IO)
-        .collect { users ->
-            adapter.submitList(users)
-        }
+    repeatOnLifecycle(Lifecycle.State.STARTED) { // stops on STOPPED
+        repository.getUsers()
+            .flowOn(Dispatchers.IO) // upstream on IO
+            .collect { users ->
+                adapter.submitList(users) // downstream on Main
+            }
+    }
+}
+
+// ❌ WRONG: collect without repeatOnLifecycle
+lifecycleScope.launch {
+    repository.getUsers().collect { /* leaks on background */ }
 }
 ```
 
@@ -180,32 +218,39 @@ lifecycleScope.launch {
 class DataSyncWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
-    // ✅ Survives app restarts
+    // ✅ Survives process death, device reboot
     override suspend fun doWork(): Result = try {
-        syncData()
-        Result.success()
+        withContext(Dispatchers.IO) {
+            syncData() // heavy work on IO
+        }
+        Result.success() // task complete, won't restart
     } catch (e: Exception) {
-        Result.retry()
+        if (runAttemptCount < 3) Result.retry() // exponential backoff
+        else Result.failure() // give up after 3 attempts
     }
 }
+
+// Scheduling work
+val syncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(1, TimeUnit.HOURS)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED) // only with network
+            .setRequiresBatteryNotLow(true)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+    "DataSync",
+    ExistingPeriodicWorkPolicy.KEEP, // don't duplicate tasks
+    syncWork
+)
 ```
 
-**Comparison:**
-
-| Primitive | Lifecycle | Cancellation | Recommended |
-|-----------|-----------|--------------|-------------|
-| Coroutines | ✅ Yes | ✅ Yes | ✅ Yes |
-| Flow | ✅ Yes | ✅ Yes | ✅ Yes |
-| WorkManager | ✅ Yes | ✅ Yes | ✅ Yes |
-| Handler/Looper | ❌ No | ⚠️ Manual | ⚠️ Rarely |
-| ExecutorService | ❌ No | ⚠️ Manual | ❌ No |
-| RxJava | ❌ No | ✅ Yes | ❌ No |
-| AsyncTask | ❌ No | ❌ No | ❌ DEPRECATED |
-
-**Best practices:**
-- Use [[c-coroutines|coroutines]] for most async operations
-- Use Flow for reactive data streams
-- Use [[c-workmanager|WorkManager]] for tasks that must complete reliably
+**Choosing the right primitive:**
+- **Coroutines** — UI-bound operations with short execution time (API calls, DB queries)
+- **Flow** — continuous data streams (sensors, DB observations, WebSocket)
+- **WorkManager** — critical tasks that must complete even after app closes (upload, sync)
 
 ---
 
@@ -216,13 +261,17 @@ class DataSyncWorker(context: Context, params: WorkerParameters)
 - When would you prefer `ExecutorService` over coroutines despite the recommendation?
 - How does WorkManager guarantee task execution across process death?
 - What are the memory implications of using Handler with long-lived Activity references?
+- Why is `AsyncTask` deprecated and what specific issues did it have with lifecycle management?
+- How do coroutine dispatchers map to Android's threading model (Main, IO, Default)?
 
 ## References
 
 - [[c-coroutines]] — Coroutines fundamentals
 - [[c-workmanager]] — WorkManager architecture
+- [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
 - [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
-- [Android Threading Guide](https://developer.android.com/guide/components/processes-and-threads)
+- [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
+- [Background Tasks Overview](https://developer.android.com/develop/background-work/background-tasks)
 
 ## Related Questions
 

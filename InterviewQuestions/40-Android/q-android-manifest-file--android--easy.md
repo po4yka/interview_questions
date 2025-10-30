@@ -12,36 +12,38 @@ status: draft
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-android-app-components--android--easy, q-intent-filters-android--android--medium]
 created: 2025-10-15
-updated: 2025-10-27
+updated: 2025-10-29
 tags: [android/activity, android/app-startup, android/permissions, difficulty/easy]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 ---
 # Вопрос (RU)
-> Что такое AndroidManifest.xml?
+> Что такое AndroidManifest.xml и зачем он нужен?
+
+# Question (EN)
+> What is AndroidManifest.xml and why is it needed?
 
 ## Ответ (RU)
 
-**AndroidManifest.xml** — центральный файл конфигурации, который объявляет компоненты приложения, разрешения и метаданные. Система Android читает этот файл перед запуском любого компонента для понимания структуры приложения.
+**AndroidManifest.xml** — главный конфигурационный файл Android-приложения, который объявляет структуру и требования приложения системе.
 
-**Ключевые обязанности:**
-- **Объявление компонентов**: регистрация Activities, Services, BroadcastReceivers, ContentProviders
-- **Управление разрешениями**: объявление требуемых и пользовательских разрешений
-- **Метаданные приложения**: имя, иконка, тема, версия
-- **Intent-фильтры**: определение способов запуска компонентов
+**Основные функции:**
+- **Регистрация компонентов** — Activities, Services, BroadcastReceivers, ContentProviders
+- **Управление разрешениями** — запрос системных и объявление пользовательских разрешений
+- **Метаданные приложения** — package name, минимальный SDK, иконка, тема
+- **Intent-фильтры** — как система и другие приложения могут взаимодействовать с компонентами
 
-**Базовая структура:**
+**Минимальная структура:**
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app">
 
-    <!-- Разрешения -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:label="@string/app_name">
 
+        <!-- ✅ Точка входа с правильным exported -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -54,62 +56,64 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 </manifest>
 ```
 
-**Объявление компонентов:**
+**Критические требования:**
 ```xml
-<!-- ✅ Экспортируемая Activity с фильтром -->
-<activity android:name=".MainActivity" android:exported="true">
+<!-- ✅ Для SDK 31+ обязателен exported -->
+<activity android:name=".ShareActivity" android:exported="true">
     <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
 
-<!-- ❌ Забыт exported для Activity с intent-filter -->
-<activity android:name=".ViewActivity">
+<!-- ❌ Приложение упадет при установке на API 31+ -->
+<activity android:name=".ShareActivity">
     <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
-```
 
-**Управление разрешениями:**
-```xml
-<!-- Запрос разрешений -->
-<uses-permission android:name="android.permission.CAMERA" />
-
-<!-- Объявление пользовательского разрешения -->
+<!-- ✅ Защита компонента подписью -->
 <permission
-    android:name="com.example.CUSTOM_PERMISSION"
+    android:name="com.example.INTERNAL_ACTION"
     android:protectionLevel="signature" />
 ```
 
----
+**Слияние манифестов:**
+```xml
+<!-- build.gradle управляет версией, но базовая структура в manifest -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradle placeholder -->
+    <uses-sdk android:minSdkVersion="${minSdkVersion}" />
 
-# Question (EN)
-> What is AndroidManifest.xml?
+    <!-- ✅ Переопределяется через Gradle flavors -->
+    <application android:label="${appName}">
+        <!-- Модули библиотек автоматически сливаются -->
+    </application>
+</manifest>
+```
 
 ## Answer (EN)
 
-**AndroidManifest.xml** is the central configuration file that declares app components, permissions, and metadata. The Android system reads this file before launching any component to understand the app's structure.
+**AndroidManifest.xml** is the main configuration file of an Android application that declares the app's structure and requirements to the system.
 
-**Core Responsibilities:**
-- **Component Declaration**: Registers Activities, Services, BroadcastReceivers, ContentProviders
-- **Permission Management**: Declares required and custom permissions
-- **App Metadata**: Defines app name, icon, theme, version
-- **Intent Filtering**: Specifies how components can be launched
+**Core Functions:**
+- **Component Registration** — Activities, Services, BroadcastReceivers, ContentProviders
+- **Permission Management** — requesting system permissions and declaring custom permissions
+- **App Metadata** — package name, minimum SDK, icon, theme
+- **Intent Filters** — how the system and other apps can interact with components
 
-**Basic Structure:**
+**Minimal Structure:**
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app">
 
-    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:label="@string/app_name">
 
+        <!-- ✅ Entry point with proper exported -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -122,54 +126,66 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 </manifest>
 ```
 
-**Component Declaration:**
+**Critical Requirements:**
 ```xml
-<!-- ✅ Exported Activity with intent filter -->
-<activity android:name=".MainActivity" android:exported="true">
+<!-- ✅ For SDK 31+ exported is mandatory -->
+<activity android:name=".ShareActivity" android:exported="true">
     <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
 
-<!-- ❌ Missing exported for Activity with intent filter -->
-<activity android:name=".ViewActivity">
+<!-- ❌ App will crash on install for API 31+ -->
+<activity android:name=".ShareActivity">
     <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.SEND" />
     </intent-filter>
 </activity>
+
+<!-- ✅ Protect component with signature -->
+<permission
+    android:name="com.example.INTERNAL_ACTION"
+    android:protectionLevel="signature" />
 ```
 
-**Permission Management:**
+**Manifest Merging:**
 ```xml
-<!-- Request permissions -->
-<uses-permission android:name="android.permission.CAMERA" />
+<!-- build.gradle controls version, but base structure in manifest -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradle placeholder -->
+    <uses-sdk android:minSdkVersion="${minSdkVersion}" />
 
-<!-- Declare custom permission -->
-<permission
-    android:name="com.example.CUSTOM_PERMISSION"
-    android:protectionLevel="signature" />
+    <!-- ✅ Overridden via Gradle flavors -->
+    <application android:label="${appName}">
+        <!-- Library module manifests auto-merge -->
+    </application>
+</manifest>
 ```
 
 ## Follow-ups
 
-- What happens if an Activity has an intent-filter but `exported` is false?
-- How does the manifest interact with Gradle build configuration?
-- What are the security implications of declaring custom permissions?
-- How to configure different manifest attributes for build variants?
+- What happens if multiple library modules declare the same component?
+- How does manifest merging resolve conflicts between main and library manifests?
+- What is the impact of `android:exported` on API levels below 31?
+- How to declare features required by the app (camera, GPS, NFC)?
+- What security risks exist with overly permissive intent-filters?
 
 ## References
 
+- [[c-android-components]] - Deep dive into Android components
+- [[c-permissions]] - Permission system architecture
 - https://developer.android.com/guide/topics/manifest/manifest-intro
-- [[c-permissions]]
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-app-components--android--easy]] - Understanding app components
+- [[q-android-app-components--android--easy]] - Understanding basic app components
 
 ### Related
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle details
-- [[q-intent-filters-android--android--medium]] - Intent filter configuration
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle and state
+- [[q-intent-filters-android--android--medium]] - Intent filter patterns
+- [[q-android-permissions-runtime--android--medium]] - Runtime permission model
 
 ### Advanced
+- [[q-android-gradle-manifest-merge--android--hard]] - Manifest merging strategies
 - [[q-android-security-practices-checklist--android--medium]] - Security best practices

@@ -1,9 +1,9 @@
 ---
 id: 20251012-400004
 title: "WindowInsets & Edge-to-Edge / WindowInsets и Edge-to-Edge"
-aliases: [WindowInsets & Edge-to-Edge, WindowInsets и Edge-to-Edge]
+aliases: ["WindowInsets & Edge-to-Edge", "WindowInsets и Edge-to-Edge"]
 topic: android
-subtopics: [ui-system-ui, windowinsets]
+subtopics: [ui-compose, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [c-windowinsets, q-compose-navigation-advanced--android--medium, q-compose-scaffold--android--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [android/ui-system-ui, android/windowinsets, windowinsets, edge-to-edge, system-ui, immersive, difficulty/medium]
-sources: [https://developer.android.com/develop/ui/views/layout/edge-to-edge]
+updated: 2025-10-29
+tags: [android/ui-compose, android/ui-views, windowinsets, edge-to-edge, system-ui, immersive, difficulty/medium]
+sources: ["https://developer.android.com/develop/ui/views/layout/edge-to-edge"]
 ---
 
 # Вопрос (RU)
@@ -27,119 +27,92 @@ sources: [https://developer.android.com/develop/ui/views/layout/edge-to-edge]
 
 ## Ответ (RU)
 
-**Теория WindowInsets:**
-WindowInsets предоставляют информацию о системных элементах UI (status bar, navigation bar, клавиатура, вырезы), позволяя приложению адаптировать контент и создавать иммерсивный edge-to-edge опыт.
+**Концепция:**
+WindowInsets предоставляют информацию о системных UI элементах (status bar, navigation bar, клавиатура, вырезы экрана), позволяя приложению адаптировать контент под любые конфигурации устройств и создавать иммерсивный edge-to-edge опыт.
 
-**Edge-to-Edge активация:**
-Позволяет приложению рисовать за системными барами для создания полноэкранного опыта.
+**Edge-to-Edge в Compose:**
 
 ```kotlin
-// Активация edge-to-edge
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Позволяет рисовать за системными барами
+        enableEdgeToEdge() // ✅ Позволяет рисовать за системными барами
         setContent { MainScreen() }
     }
 }
-```
 
-**WindowInsets в Compose:**
-Доступ к различным типам insets для адаптации UI под системные элементы.
-
-```kotlin
 @Composable
-fun WindowInsetsExample() {
-    val systemBars = WindowInsets.systemBars
-    val statusBarHeight = systemBars.asPaddingValues().calculateTopPadding()
-    val navigationBarHeight = systemBars.asPaddingValues().calculateBottomPadding()
-
-    Column(
+fun MainScreen() {
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars) // Автоматический padding
-    ) {
-        Text("Контент избегает системных баров")
+            .windowInsetsPadding(WindowInsets.systemBars) // ✅ Автоматический padding
+    ) { paddingValues ->
+        // ❌ НЕ используйте .padding(paddingValues) дважды
+        Content(paddingValues)
     }
 }
 ```
 
-**Типы WindowInsets:**
-Различные insets для разных системных элементов и безопасных областей.
+**Основные типы WindowInsets:**
 
 ```kotlin
-// Основные типы insets
-val systemBars = WindowInsets.systemBars // Status + Navigation
-val statusBars = WindowInsets.statusBars // Только status bar
-val navigationBars = WindowInsets.navigationBars // Только navigation bar
-val ime = WindowInsets.ime // Клавиатура
-val displayCutout = WindowInsets.displayCutout // Вырезы (notch)
-val safeDrawing = WindowInsets.safeDrawing // Безопасная область рисования
+// Системные элементы
+WindowInsets.systemBars       // Status + Navigation bars
+WindowInsets.statusBars        // Только status bar
+WindowInsets.navigationBars    // Только navigation bar
+
+// Динамические элементы
+WindowInsets.ime              // ✅ Клавиатура (Input Method Editor)
+WindowInsets.displayCutout    // Вырезы экрана (notch, camera hole)
+
+// Безопасные области
+WindowInsets.safeDrawing      // ✅ Комбинация всех системных insets
+WindowInsets.safeGestures     // Зоны системных жестов
 ```
 
 **Обработка клавиатуры:**
-Автоматическая адаптация UI при появлении клавиатуры.
 
 ```kotlin
 @Composable
-fun KeyboardHandlingExample() {
+fun ChatScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .imePadding() // Автоматически поднимает контент над клавиатурой
+            .imePadding() // ✅ Автоматически адаптируется под клавиатуру
     ) {
         LazyColumn(modifier = Modifier.weight(1f)) {
-            items(50) { Text("Item $it") }
+            items(messages) { MessageItem(it) }
         }
 
         TextField(
             value = text,
             onValueChange = { text = it },
+            // ❌ НЕ добавляйте .windowInsetsPadding(WindowInsets.ime) вручную
             modifier = Modifier.fillMaxWidth()
         )
     }
 }
 ```
 
-**Обработка вырезов:**
-Адаптация контента под вырезы экрана (notch, camera hole).
+**Immersive режим для медиа:**
 
 ```kotlin
 @Composable
-fun DisplayCutoutExample() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black) // Фон за вырезом
-    ) {
-        TopAppBar(
-            title = { Text("Title") },
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.displayCutout) // Избегает выреза
-                .windowInsetsPadding(WindowInsets.statusBars)
+fun VideoPlayer() {
+    val view = LocalView.current
+    val insetsController = remember {
+        WindowCompat.getInsetsController(
+            (view.context as Activity).window,
+            view
         )
     }
-}
-```
 
-**Immersive режим:**
-Скрытие системных баров для полноэкранного опыта.
-
-```kotlin
-@Composable
-fun ImmersiveContent() {
-    val view = LocalView.current
-    var isImmersive by remember { mutableStateOf(false) }
-
-    DisposableEffect(isImmersive) {
-        val window = (view.context as Activity).window
-        val insetsController = WindowCompat.getInsetsController(window, view)
-
-        if (isImmersive) {
-            insetsController.hide(WindowInsetsCompat.Type.systemBars())
-        } else {
-            insetsController.show(WindowInsetsCompat.Type.systemBars())
-        }
+    DisposableEffect(Unit) {
+        // ✅ Скрываем системные бары для полноэкранного видео
+        insetsController.hide(WindowInsetsCompat.Type.systemBars())
+        insetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
         onDispose {
             insetsController.show(WindowInsetsCompat.Type.systemBars())
@@ -150,119 +123,92 @@ fun ImmersiveContent() {
 
 ## Answer (EN)
 
-**WindowInsets Theory:**
-WindowInsets provide information about system UI elements (status bar, navigation bar, keyboard, cutouts), allowing apps to adapt content and create immersive edge-to-edge experiences.
+**Concept:**
+WindowInsets provide information about system UI elements (status bar, navigation bar, keyboard, screen cutouts), allowing apps to adapt content for any device configuration and create immersive edge-to-edge experiences.
 
-**Edge-to-Edge Activation:**
-Allows apps to draw behind system bars for full-screen experience.
+**Edge-to-Edge in Compose:**
 
 ```kotlin
-// Enable edge-to-edge
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Allows drawing behind system bars
+        enableEdgeToEdge() // ✅ Allows drawing behind system bars
         setContent { MainScreen() }
     }
 }
-```
 
-**WindowInsets in Compose:**
-Access to different inset types for adapting UI to system elements.
-
-```kotlin
 @Composable
-fun WindowInsetsExample() {
-    val systemBars = WindowInsets.systemBars
-    val statusBarHeight = systemBars.asPaddingValues().calculateTopPadding()
-    val navigationBarHeight = systemBars.asPaddingValues().calculateBottomPadding()
-
-    Column(
+fun MainScreen() {
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.systemBars) // Automatic padding
-    ) {
-        Text("Content avoids system bars")
+            .windowInsetsPadding(WindowInsets.systemBars) // ✅ Automatic padding
+    ) { paddingValues ->
+        // ❌ DON'T use .padding(paddingValues) twice
+        Content(paddingValues)
     }
 }
 ```
 
-**WindowInsets Types:**
-Different insets for various system elements and safe areas.
+**Main WindowInsets Types:**
 
 ```kotlin
-// Main inset types
-val systemBars = WindowInsets.systemBars // Status + Navigation
-val statusBars = WindowInsets.statusBars // Status bar only
-val navigationBars = WindowInsets.navigationBars // Navigation bar only
-val ime = WindowInsets.ime // Keyboard
-val displayCutout = WindowInsets.displayCutout // Cutouts (notch)
-val safeDrawing = WindowInsets.safeDrawing // Safe drawing area
+// System elements
+WindowInsets.systemBars       // Status + Navigation bars
+WindowInsets.statusBars        // Status bar only
+WindowInsets.navigationBars    // Navigation bar only
+
+// Dynamic elements
+WindowInsets.ime              // ✅ Keyboard (Input Method Editor)
+WindowInsets.displayCutout    // Screen cutouts (notch, camera hole)
+
+// Safe areas
+WindowInsets.safeDrawing      // ✅ Combination of all system insets
+WindowInsets.safeGestures     // System gesture zones
 ```
 
 **Keyboard Handling:**
-Automatic UI adaptation when keyboard appears.
 
 ```kotlin
 @Composable
-fun KeyboardHandlingExample() {
+fun ChatScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .imePadding() // Automatically lifts content above keyboard
+            .imePadding() // ✅ Automatically adapts to keyboard
     ) {
         LazyColumn(modifier = Modifier.weight(1f)) {
-            items(50) { Text("Item $it") }
+            items(messages) { MessageItem(it) }
         }
 
         TextField(
             value = text,
             onValueChange = { text = it },
+            // ❌ DON'T add .windowInsetsPadding(WindowInsets.ime) manually
             modifier = Modifier.fillMaxWidth()
         )
     }
 }
 ```
 
-**Cutout Handling:**
-Adapting content to screen cutouts (notch, camera hole).
+**Immersive Mode for Media:**
 
 ```kotlin
 @Composable
-fun DisplayCutoutExample() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black) // Background behind cutout
-    ) {
-        TopAppBar(
-            title = { Text("Title") },
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.displayCutout) // Avoids cutout
-                .windowInsetsPadding(WindowInsets.statusBars)
+fun VideoPlayer() {
+    val view = LocalView.current
+    val insetsController = remember {
+        WindowCompat.getInsetsController(
+            (view.context as Activity).window,
+            view
         )
     }
-}
-```
 
-**Immersive Mode:**
-Hiding system bars for full-screen experience.
-
-```kotlin
-@Composable
-fun ImmersiveContent() {
-    val view = LocalView.current
-    var isImmersive by remember { mutableStateOf(false) }
-
-    DisposableEffect(isImmersive) {
-        val window = (view.context as Activity).window
-        val insetsController = WindowCompat.getInsetsController(window, view)
-
-        if (isImmersive) {
-            insetsController.hide(WindowInsetsCompat.Type.systemBars())
-        } else {
-            insetsController.show(WindowInsetsCompat.Type.systemBars())
-        }
+    DisposableEffect(Unit) {
+        // ✅ Hide system bars for fullscreen video
+        insetsController.hide(WindowInsetsCompat.Type.systemBars())
+        insetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
         onDispose {
             insetsController.show(WindowInsetsCompat.Type.systemBars())
@@ -275,10 +221,19 @@ fun ImmersiveContent() {
 
 ## Follow-ups
 
-- How do you handle WindowInsets in landscape orientation?
-- What's the difference between windowInsetsPadding and padding?
-- How do you implement edge-to-edge with bottom sheets?
-- What are the performance implications of WindowInsets?
+- How do you handle WindowInsets in landscape orientation with different aspect ratios?
+- What's the difference between `windowInsetsPadding()` and `systemBarsPadding()`?
+- How do you implement edge-to-edge with BottomSheet and Modal dialogs?
+- What are the performance implications of WindowInsets recomposition?
+- How do you test edge-to-edge layouts across different device configurations?
+
+## References
+
+- [[c-windowinsets]] - WindowInsets concept note
+- [[c-compose-modifiers]] - Compose Modifier system
+- [[c-android-system-ui]] - Android System UI overview
+- [Edge-to-Edge Guide](https://developer.android.com/develop/ui/views/layout/edge-to-edge)
+- [WindowInsets API Reference](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/WindowInsets)
 
 ## Related Questions
 

@@ -1,225 +1,84 @@
 ---
 id: 20251012-12271174
 title: "Push Notification Navigation / Навигация из push уведомлений"
+aliases: [Push Notification Navigation, Навигация из push уведомлений, FCM Navigation, Navigation from Notifications]
 topic: android
+subtopics: [notifications, navigation, deeplinks]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-mvi-architecture--android--hard, q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-mutable-state-compose--android--medium]
+related: [q-compose-navigation-advanced--android--medium, q-activity-navigation-how-it-works--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+sources: []
 created: 2025-10-15
-tags: [notifications, fcm, navigation, deeplink, difficulty/medium]
+updated: 2025-10-28
+tags: [android/notifications, android/navigation, android/deeplinks, notifications, fcm, navigation, deeplink, difficulty/medium]
 ---
 
-# Как открыть Activity или Fragment из push уведомления?
+# Вопрос (RU)
 
-**English**: How to open a specific Activity or Fragment from a push notification?
+Как открыть конкретную Activity или Fragment из push-уведомления?
 
-## Answer (EN)
-Чтобы открыть нужную Activity или фрагмент из push-уведомления в Android, необходимо настроить обработку данных из уведомления и создать Intent с правильной навигацией.
+# Question (EN)
 
-### 1. Настройка Firebase Cloud Messaging (FCM)
+How to open a specific Activity or Fragment from a push notification?
 
-#### Добавление зависимостей
+---
 
-```gradle
-// app/build.gradle
-dependencies {
-    // Firebase BOM
-    implementation platform('com.google.firebase:firebase-bom:32.5.0')
+## Ответ (RU)
 
-    // FCM
-    implementation 'com.google.firebase:firebase-messaging-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+**Подход**: Настроить FCM service для создания PendingIntent с данными навигации, обработать intent в Activity через `onCreate()`/`onNewIntent()`
 
-    // Navigation (опционально)
-    implementation "androidx.navigation:navigation-fragment-ktx:2.7.5"
-}
+**Сложность**: Time O(1), Space O(1)
 
-// google-services.json должен быть в app/
-```
-
-#### AndroidManifest.xml
-
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Разрешения -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
-    <application>
-        <!-- FCM Service -->
-        <service
-            android:name=".services.MyFirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-        <!-- Default notification channel (Android 8.0+) -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/default_notification_channel_id" />
-
-        <!-- Activities -->
-        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".DetailActivity"
-            android:parentActivityName=".MainActivity"
-            android:launchMode="singleTop" />
-    </application>
-</manifest>
-```
-
-### 2. Firebase Messaging Service
+### 1. FCM Service с навигационными данными
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        // Отправить токен на сервер
-        sendTokenToServer(token)
-    }
-
     override fun onMessageReceived(message: RemoteMessage) {
-        super.onMessageReceived(message)
+        val screen = message.data["screen"] ?: "home"
+        val itemId = message.data["item_id"]?.toIntOrNull()
 
-        // Обработка данных
-        val data = message.data
-        val notificationType = data["type"] ?: "default"
-        val targetScreen = data["screen"] ?: "home"
-        val itemId = data["item_id"]?.toIntOrNull()
-
-        // Показать уведомление
         showNotification(
-            title = message.notification?.title ?: "New Message",
-            body = message.notification?.body ?: "",
-            type = notificationType,
-            screen = targetScreen,
+            title = message.notification?.title ?: "",
+            screen = screen,
             itemId = itemId
         )
     }
 
-    private fun showNotification(
-        title: String,
-        body: String,
-        type: String,
-        screen: String,
-        itemId: Int?
-    ) {
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        // Создать канал (для Android 8.0+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel(notificationManager)
+    private fun showNotification(title: String, screen: String, itemId: Int?) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(EXTRA_SCREEN, screen)
+            putExtra(EXTRA_ITEM_ID, itemId)
         }
 
-        // Создать PendingIntent для навигации
-        val pendingIntent = createPendingIntent(screen, itemId, type)
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            System.currentTimeMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
-        // Создать уведомление
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
-            .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
             .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(System.currentTimeMillis().toInt(), notification)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(notificationManager: NotificationManager) {
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            "Default Channel",
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            description = "Channel for app notifications"
-            enableLights(true)
-            enableVibration(true)
-        }
-        notificationManager.createNotificationChannel(channel)
-    }
-
-    private fun createPendingIntent(
-        screen: String,
-        itemId: Int?,
-        type: String
-    ): PendingIntent {
-        return when (screen) {
-            "detail" -> createDetailIntent(itemId)
-            "profile" -> createProfileIntent()
-            "chat" -> createChatIntent(itemId)
-            else -> createMainIntent()
-        }.let { intent ->
-            PendingIntent.getActivity(
-                this,
-                System.currentTimeMillis().toInt(),
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-        }
-    }
-
-    private fun createMainIntent(): Intent {
-        return Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
-    }
-
-    private fun createDetailIntent(itemId: Int?): Intent {
-        return Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(EXTRA_NAVIGATE_TO, "detail")
-            putExtra(EXTRA_ITEM_ID, itemId ?: 0)
-        }
-    }
-
-    private fun createProfileIntent(): Intent {
-        return Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(EXTRA_NAVIGATE_TO, "profile")
-        }
-    }
-
-    private fun createChatIntent(chatId: Int?): Intent {
-        return Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra(EXTRA_NAVIGATE_TO, "chat")
-            putExtra(EXTRA_CHAT_ID, chatId ?: 0)
-        }
-    }
-
-    private fun sendTokenToServer(token: String) {
-        // Отправить FCM токен на backend
-        // apiService.updateFcmToken(token)
-    }
-
-    companion object {
-        private const val CHANNEL_ID = "default_channel"
-        const val EXTRA_NAVIGATE_TO = "navigate_to"
-        const val EXTRA_ITEM_ID = "item_id"
-        const val EXTRA_CHAT_ID = "chat_id"
+        notificationManager.notify(0, notification)
     }
 }
 ```
 
-### 3. Обработка навигации в MainActivity
+✅ **Правильно**: Использование data payload для передачи параметров навигации
+✅ **Правильно**: FLAG_IMMUTABLE для PendingIntent (Android 12+)
+❌ **Неправильно**: Использование notification payload без data - ограниченные возможности кастомизации
 
-#### Approach 1: Single Activity + Navigation Component
+### 2. Обработка навигации в MainActivity
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -229,332 +88,277 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Setup Navigation
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
+        val navHost = supportFragmentManager
+            .findFragmentById(R.id.nav_host) as NavHostFragment
+        navController = navHost.navController
 
-        // Обработать intent из уведомления
         handleNotificationIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        // Обработать новое уведомление когда Activity уже открыта
         intent?.let { handleNotificationIntent(it) }
     }
 
     private fun handleNotificationIntent(intent: Intent) {
-        val navigateTo = intent.getStringExtra(MyFirebaseMessagingService.EXTRA_NAVIGATE_TO)
-        val itemId = intent.getIntExtra(MyFirebaseMessagingService.EXTRA_ITEM_ID, 0)
-        val chatId = intent.getIntExtra(MyFirebaseMessagingService.EXTRA_CHAT_ID, 0)
+        val screen = intent.getStringExtra(EXTRA_SCREEN) ?: return
+        val itemId = intent.getIntExtra(EXTRA_ITEM_ID, 0)
 
-        when (navigateTo) {
-            "detail" -> {
-                if (itemId > 0) {
-                    navigateToDetail(itemId)
-                }
-            }
-            "profile" -> navigateToProfile()
-            "chat" -> {
-                if (chatId > 0) {
-                    navigateToChat(chatId)
-                }
-            }
+        when (screen) {
+            "detail" -> navController.navigate(
+                R.id.detailFragment,
+                Bundle().apply { putInt("itemId", itemId) }
+            )
+            "profile" -> navController.navigate(R.id.profileFragment)
         }
-    }
-
-    private fun navigateToDetail(itemId: Int) {
-        // Используем Safe Args
-        val action = HomeFragmentDirections.actionHomeToDetail(itemId)
-        navController.navigate(action)
-    }
-
-    private fun navigateToProfile() {
-        navController.navigate(R.id.profileFragment)
-    }
-
-    private fun navigateToChat(chatId: Int) {
-        val bundle = Bundle().apply {
-            putInt("chat_id", chatId)
-        }
-        navController.navigate(R.id.chatFragment, bundle)
     }
 }
 ```
 
-#### Navigation Graph (nav_graph.xml)
+✅ **Правильно**: Обработка в `onNewIntent()` для launchMode="singleTop"
+✅ **Правильно**: Проверка extras перед навигацией
+❌ **Неправильно**: Навигация только в `onCreate()` - не работает если Activity уже открыта
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
-
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.HomeFragment">
-        <action
-            android:id="@+id/action_home_to_detail"
-            app:destination="@id/detailFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="com.example.DetailFragment">
-        <argument
-            android:name="itemId"
-            app:argType="integer" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.ProfileFragment" />
-
-    <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.example.ChatFragment">
-        <argument
-            android:name="chat_id"
-            app:argType="integer"
-            android:defaultValue="0" />
-    </fragment>
-</navigation>
-```
-
-#### Approach 2: Multiple Activities
+### 3. Deep Links для навигации
 
 ```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        handleNotificationIntent(intent)
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.let { handleNotificationIntent(it) }
-    }
-
-    private fun handleNotificationIntent(intent: Intent) {
-        val navigateTo = intent.getStringExtra(MyFirebaseMessagingService.EXTRA_NAVIGATE_TO)
-        val itemId = intent.getIntExtra(MyFirebaseMessagingService.EXTRA_ITEM_ID, 0)
-
-        when (navigateTo) {
-            "detail" -> {
-                // Открыть отдельную Activity
-                val detailIntent = Intent(this, DetailActivity::class.java).apply {
-                    putExtra("item_id", itemId)
-                }
-                startActivity(detailIntent)
-            }
-            "profile" -> {
-                val profileIntent = Intent(this, ProfileActivity::class.java)
-                startActivity(profileIntent)
-            }
-        }
-    }
-}
-```
-
-### 4. Deep Links для уведомлений
-
-```xml
-<!-- AndroidManifest.xml -->
+// AndroidManifest.xml
 <activity
     android:name=".MainActivity"
     android:launchMode="singleTop">
-    <!-- Deep link схема -->
     <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data
             android:scheme="myapp"
             android:host="notification" />
     </intent-filter>
-
-    <!-- App Links (для https) -->
-    <intent-filter android:autoVerify="true">
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-
-        <data
-            android:scheme="https"
-            android:host="example.com"
-            android:pathPrefix="/item" />
-    </intent-filter>
 </activity>
-```
 
-```kotlin
-// FCM Service с Deep Links
+// FCM Service
 private fun createDeepLinkIntent(itemId: Int): Intent {
-    // Deep link URI: myapp://notification/detail?id=123
-    val deepLinkUri = Uri.parse("myapp://notification/detail?id=$itemId")
-
-    return Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+    val uri = Uri.parse("myapp://notification/detail?id=$itemId")
+    return Intent(Intent.ACTION_VIEW, uri).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
         setPackage(packageName)
     }
 }
-
-// В MainActivity
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    // Обработать deep link
-    intent?.data?.let { uri ->
-        handleDeepLink(uri)
-    }
-}
-
-private fun handleDeepLink(uri: Uri) {
-    when (uri.pathSegments?.firstOrNull()) {
-        "detail" -> {
-            val itemId = uri.getQueryParameter("id")?.toIntOrNull() ?: 0
-            navigateToDetail(itemId)
-        }
-        "profile" -> navigateToProfile()
-    }
-}
 ```
 
-### 5. Обработка Back Stack
+✅ **Правильно**: Deep links упрощают навигацию и переиспользуются для web-to-app
+✅ **Правильно**: setPackage() предотвращает открытие в других приложениях
+❌ **Неправильно**: Отсутствие autoVerify для HTTPS deep links
+
+### 4. Back Stack для правильной навигации
 
 ```kotlin
-private fun createPendingIntentWithBackStack(itemId: Int): PendingIntent {
-    // Создать back stack для правильной навигации назад
+private fun createIntentWithBackStack(itemId: Int): PendingIntent {
     val stackBuilder = TaskStackBuilder.create(this).apply {
-        // Добавить главную Activity
-        addNextIntent(Intent(this@MyFirebaseMessagingService, MainActivity::class.java))
-
-        // Добавить целевую Activity
+        addNextIntent(Intent(this@MyFCMService, MainActivity::class.java))
         addNextIntent(
-            Intent(this@MyFirebaseMessagingService, DetailActivity::class.java).apply {
+            Intent(this@MyFCMService, DetailActivity::class.java).apply {
                 putExtra("item_id", itemId)
             }
         )
     }
 
     return stackBuilder.getPendingIntent(
-        System.currentTimeMillis().toInt(),
+        0,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 }
 ```
 
-### 6. Notification Payload Примеры
+✅ **Правильно**: TaskStackBuilder создает корректный back stack
+❌ **Неправильно**: Прямой переход на Detail без родительской Activity - кнопка Back закрывает приложение
 
-```json
-// Формат FCM сообщения (от сервера)
-{
-  "to": "FCM_TOKEN",
-  "notification": {
-    "title": "New Message",
-    "body": "You have a new message from Alice"
-  },
-  "data": {
-    "type": "message",
-    "screen": "chat",
-    "item_id": "123",
-    "chat_id": "456",
-    "action": "open_chat"
-  }
-}
+**Объяснение**:
+1. FCM Service получает сообщение и парсит data payload
+2. Создается Intent с extras (screen, itemId) или deep link URI
+3. PendingIntent передается в уведомление через setContentIntent()
+4. При клике MainActivity обрабатывает intent в onCreate()/onNewIntent()
+5. NavController выполняет переход на нужный экран с параметрами
 
-// Data-only payload (для кастомной обработки)
-{
-  "to": "FCM_TOKEN",
-  "data": {
-    "title": "Order Update",
-    "body": "Your order #12345 has been shipped",
-    "screen": "order_detail",
-    "order_id": "12345",
-    "image_url": "https://example.com/image.jpg"
-  }
+## Answer (EN)
+
+**Approach**: Configure FCM service to create PendingIntent with navigation data, handle intent in Activity via `onCreate()`/`onNewIntent()`
+
+**Complexity**: Time O(1), Space O(1)
+
+### 1. FCM Service with navigation data
+
+```kotlin
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        val screen = message.data["screen"] ?: "home"
+        val itemId = message.data["item_id"]?.toIntOrNull()
+
+        showNotification(
+            title = message.notification?.title ?: "",
+            screen = screen,
+            itemId = itemId
+        )
+    }
+
+    private fun showNotification(title: String, screen: String, itemId: Int?) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(EXTRA_SCREEN, screen)
+            putExtra(EXTRA_ITEM_ID, itemId)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            System.currentTimeMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(title)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        notificationManager.notify(0, notification)
+    }
 }
 ```
 
-### 7. Запрос разрешения на уведомления (Android 13+)
+✅ **Correct**: Using data payload to pass navigation parameters
+✅ **Correct**: FLAG_IMMUTABLE for PendingIntent (Android 12+)
+❌ **Incorrect**: Using notification payload without data - limited customization
+
+### 2. Handle navigation in MainActivity
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // Разрешение получено
-            subscribeToPushNotifications()
-        } else {
-            // Разрешение отклонено
-            showRationale()
-        }
-    }
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        // Проверить и запросить разрешение
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            when {
-                ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED -> {
-                    // Разрешение уже есть
-                    subscribeToPushNotifications()
-                }
-                else -> {
-                    // Запросить разрешение
-                    requestPermissionLauncher.launch(
-                        Manifest.permission.POST_NOTIFICATIONS
-                    )
-                }
-            }
-        }
+        val navHost = supportFragmentManager
+            .findFragmentById(R.id.nav_host) as NavHostFragment
+        navController = navHost.navController
+
+        handleNotificationIntent(intent)
     }
 
-    private fun subscribeToPushNotifications() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result
-                sendTokenToServer(token)
-            }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let { handleNotificationIntent(it) }
+    }
+
+    private fun handleNotificationIntent(intent: Intent) {
+        val screen = intent.getStringExtra(EXTRA_SCREEN) ?: return
+        val itemId = intent.getIntExtra(EXTRA_ITEM_ID, 0)
+
+        when (screen) {
+            "detail" -> navController.navigate(
+                R.id.detailFragment,
+                Bundle().apply { putInt("itemId", itemId) }
+            )
+            "profile" -> navController.navigate(R.id.profileFragment)
         }
     }
 }
 ```
 
-**English**: To open Activity/Fragment from push notification: 1) Setup FCM service with `onMessageReceived()`, 2) Create PendingIntent with navigation extras (`putExtra()`), 3) Handle intent in MainActivity `onCreate()` and `onNewIntent()`, 4) Use Navigation Component or direct Activity launch, 5) Support deep links (`myapp://notification/detail?id=123`), 6) Create proper back stack with `TaskStackBuilder`, 7) Request notification permission on Android 13+. Notification payload includes `data` field with screen/item_id for navigation.?
+✅ **Correct**: Handle in `onNewIntent()` for launchMode="singleTop"
+✅ **Correct**: Check extras before navigation
+❌ **Incorrect**: Navigation only in `onCreate()` - doesn't work if Activity already open
 
+### 3. Deep Links for navigation
 
-## Ответ (RU)
+```kotlin
+// AndroidManifest.xml
+<activity
+    android:name=".MainActivity"
+    android:launchMode="singleTop">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+            android:scheme="myapp"
+            android:host="notification" />
+    </intent-filter>
+</activity>
 
-Это профессиональный перевод технического содержимого на русский язык.
+// FCM Service
+private fun createDeepLinkIntent(itemId: Int): Intent {
+    val uri = Uri.parse("myapp://notification/detail?id=$itemId")
+    return Intent(Intent.ACTION_VIEW, uri).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        setPackage(packageName)
+    }
+}
+```
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+✅ **Correct**: Deep links simplify navigation and reusable for web-to-app
+✅ **Correct**: setPackage() prevents opening in other apps
+❌ **Incorrect**: Missing autoVerify for HTTPS deep links
 
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
+### 4. Back Stack for proper navigation
 
-Длина оригинального английского контента: 16237 символов.
+```kotlin
+private fun createIntentWithBackStack(itemId: Int): PendingIntent {
+    val stackBuilder = TaskStackBuilder.create(this).apply {
+        addNextIntent(Intent(this@MyFCMService, MainActivity::class.java))
+        addNextIntent(
+            Intent(this@MyFCMService, DetailActivity::class.java).apply {
+                putExtra("item_id", itemId)
+            }
+        )
+    }
 
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
+    return stackBuilder.getPendingIntent(
+        0,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+}
+```
 
+✅ **Correct**: TaskStackBuilder creates proper back stack
+❌ **Incorrect**: Direct jump to Detail without parent Activity - Back button closes app
+
+**Explanation**:
+1. FCM Service receives message and parses data payload
+2. Create Intent with extras (screen, itemId) or deep link URI
+3. PendingIntent passed to notification via setContentIntent()
+4. On click MainActivity handles intent in onCreate()/onNewIntent()
+5. NavController performs navigation to target screen with parameters
 
 ---
 
+## Follow-ups
+
+- How to handle notification when app is killed vs in background vs foreground?
+- What's the difference between notification payload and data-only payload?
+- How to pass complex objects (not just primitives) through notification intent?
+- How to ensure only one notification opens even with multiple taps?
+- How to test push notification navigation without backend?
+
+## References
+
+- [Android Notification Guide](https://developer.android.com/develop/ui/views/notifications)
+- [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging)
+- [Navigation Component Deep Links](https://developer.android.com/guide/navigation/navigation-deep-link)
+- [TaskStackBuilder Documentation](https://developer.android.com/reference/androidx/core/app/TaskStackBuilder)
+
 ## Related Questions
 
-### Related (Medium)
-- [[q-compose-navigation-advanced--android--medium]] - Navigation
-- [[q-compose-navigation-advanced--android--medium]] - Navigation
-- [[q-activity-navigation-how-it-works--android--medium]] - Navigation
-- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Navigation
-- [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation
+### Prerequisites (Easier)
+- [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]]
+
+### Related (Same Level)
+- [[q-compose-navigation-advanced--android--medium]]
+- [[q-activity-navigation-how-it-works--android--medium]]
+- [[q-what-navigation-methods-do-you-know--android--medium]]
+
+### Advanced (Harder)
+- [[q-mvi-architecture--android--hard]]

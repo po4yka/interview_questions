@@ -18,10 +18,8 @@ related:
   - q-accessibility-compose--android--medium
   - q-accessibility-testing--android--medium
 created: 2025-10-11
-updated: 2025-10-15
-sources:
-  - https://developer.android.com/guide/topics/ui/accessibility/text-and-content
-  - https://m3.material.io/styles/typography/overview
+updated: 2025-10-29
+sources: []
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 ---
 # Вопрос (RU)
@@ -34,274 +32,145 @@ tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 
 ## Ответ (RU)
 
-Масштабирование текста позволяет пользователям настраивать размер текста на уровне системы. Приложения должны поддерживать масштабирование до 200% (API 34+ до 320%) для соответствия требованиям доступности.
+Масштабирование текста позволяет пользователям настраивать размер текста на уровне системы. Приложения должны поддерживать масштабирование до 200% для соответствия требованиям доступности.
 
-**Ключевые концепции:**
+**Основные правила:**
 
-**1. Используйте масштабируемые единицы (SP)**
-
-Всегда используйте `sp` для размеров текста:
+**1. Используйте масштабируемые единицы (sp)**
 
 ```kotlin
-// XML
-<TextView
-    android:textSize="16sp" /> <!-- ✅ Масштабируется -->
-<TextView
-    android:textSize="16dp" /> <!-- ❌ НЕ масштабируется -->
+// ✅ Правильно - масштабируется
+Text(fontSize = 16.sp)
+<TextView android:textSize="16sp" />
 
-// Compose
-Text(fontSize = 16.sp) // ✅ Автоматически масштабируется
+// ❌ Неправильно - не масштабируется
+Text(fontSize = 16.dp)
+<TextView android:textSize="16dp" />
 ```
 
 **2. Используйте Material Type Scale**
 
-```kotlin
-// Compose
-Text(style = MaterialTheme.typography.headlineLarge)
-Text(style = MaterialTheme.typography.bodyMedium)
-
-// XML
-<TextView android:textAppearance="?attr/textAppearanceHeadlineLarge" />
-```
+Используйте предопределенные стили типографики вместо явных размеров: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, или `?attr/textAppearanceHeadlineLarge` в XML.
 
 **3. Избегайте фиксированных высот**
 
-Используйте `wrap_content` или гибкие ограничения:
-
 ```kotlin
-// ПЛОХО
-Column(modifier = Modifier.height(48.dp)) { // ❌ Обрежет текст
+// ❌ Обрежет текст при масштабировании
+Column(modifier = Modifier.height(48.dp)) {
     Text("Длинный текст")
 }
 
-// ХОРОШО
-Column(modifier = Modifier.wrapContentHeight()) { // ✅ Расширяется
+// ✅ Расширится автоматически
+Column(modifier = Modifier.wrapContentHeight()) {
     Text("Длинный текст")
 }
-
-// XML
-<TextView android:layout_height="wrap_content" /> <!-- ✅ Адаптивная -->
 ```
 
-**4. Тестируйте с разными масштабами**
+**4. Адаптивные макеты для больших масштабов**
+
+При экстремальных масштабах адаптируйте макет, проверяя `LocalDensity.current.fontScale` и переключаясь между вертикальной и горизонтальной ориентацией контента.
+
+**5. Тестирование масштабирования**
 
 ```kotlin
 @Preview(fontScale = 1.0f)
-@Preview(fontScale = 1.5f)
 @Preview(fontScale = 2.0f)
 @Composable
 fun TextScalingPreview() {
     MyScreen()
 }
-
-// Настройки > Дисплей > Размер шрифта
 ```
 
-**5. Поддерживайте минимальные области касания 48dp**
-
-```kotlin
-IconButton(
-    onClick = { },
-    modifier = Modifier.size(48.dp) // ✅ Минимальная область касания
-) {
-    Icon(Icons.Default.Favorite, "Избранное")
-}
-```
-
-**6. Адаптивные макеты для экстремальных масштабов**
-
-```kotlin
-@Composable
-fun AdaptiveLayout() {
-    val fontScale = LocalDensity.current.fontScale
-    if (fontScale > 1.5f) {
-        Column { /* вертикальный макет */ }
-    } else {
-        Row { /* горизонтальный макет */ }
-    }
-}
-```
-
-**Лучшие практики:**
-
-- Всегда используйте `sp` для текста (НИКОГДА `dp`)
-- Используйте Material typography
-- Тестируйте при 200% масштабе
-- Избегайте фиксированных размеров
-- Разрешайте перенос текста
-- Сохраняйте области касания 48dp
-- Тестируйте на реальных устройствах
-
-**Частые ошибки:**
-
-```kotlin
-// ❌ ПЛОХО: Фиксированная высота
-Box(modifier = Modifier.height(56.dp)) {
-    Text("Обрежется при 200%")
-}
-
-// ✅ ХОРОШО: Гибкая высота
-Box(modifier = Modifier.heightIn(min = 56.dp)) {
-    Text("Расширится при необходимости")
-}
-
-// ❌ ПЛОХО: Использование dp
-Text(fontSize = 16.dp)
-
-// ✅ ХОРОШО: Использование sp
-Text(fontSize = 16.sp)
-```
-
-**Чеклист тестирования:**
-
-1. Включите максимальный размер шрифта в Настройках
-2. Проверьте все экраны
-3. Убедитесь, что текст читаем (не обрезан)
-4. Проверьте интерактивные элементы
-5. Убедитесь, что макеты не ломаются
-6. Проверьте скроллинг
-7. Тестируйте в портретной и альбомной ориентации
+**Основные ошибки:**
+- Использование `dp` вместо `sp` для текста
+- Фиксированные высоты контейнеров
+- Игнорирование минимальных размеров области касания (48dp)
+- Отсутствие тестирования при экстремальных масштабах
 
 ## Answer (EN)
 
-Text scaling allows users to adjust text size system-wide. Apps must support scaling up to 200% (API 34+ up to 320%) to meet accessibility guidelines.
+Text scaling allows users to adjust text size system-wide. Apps must support scaling up to 200% to meet accessibility guidelines.
 
-**Key Concepts:**
+**Key Principles:**
 
-**1. Use Scalable Units (SP)**
-
-Always use `sp` for text sizes:
+**1. Use Scalable Units (sp)**
 
 ```kotlin
-// XML
-<TextView
-    android:textSize="16sp" /> <!-- ✅ Scales -->
-<TextView
-    android:textSize="16dp" /> <!-- ❌ Won't scale -->
+// ✅ Correct - scales with user settings
+Text(fontSize = 16.sp)
+<TextView android:textSize="16sp" />
 
-// Compose
-Text(fontSize = 16.sp) // ✅ Scales automatically
+// ❌ Wrong - won't scale
+Text(fontSize = 16.dp)
+<TextView android:textSize="16dp" />
 ```
 
 **2. Use Material Type Scale**
 
-```kotlin
-// Compose
-Text(style = MaterialTheme.typography.headlineLarge)
-Text(style = MaterialTheme.typography.bodyMedium)
-
-// XML
-<TextView android:textAppearance="?attr/textAppearanceHeadlineLarge" />
-```
+Use predefined typography styles instead of explicit sizes: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, or `?attr/textAppearanceHeadlineLarge` in XML.
 
 **3. Avoid Fixed Heights**
 
-Use `wrap_content` or flexible constraints:
-
 ```kotlin
-// BAD
-Column(modifier = Modifier.height(48.dp)) { // ❌ Clips text
+// ❌ Clips text when scaled
+Column(modifier = Modifier.height(48.dp)) {
     Text("Long text")
 }
 
-// GOOD
-Column(modifier = Modifier.wrapContentHeight()) { // ✅ Expands
+// ✅ Expands automatically
+Column(modifier = Modifier.wrapContentHeight()) {
     Text("Long text")
 }
-
-// XML
-<TextView android:layout_height="wrap_content" /> <!-- ✅ Adaptive -->
 ```
 
-**4. Test with Different Scales**
+**4. Adaptive Layouts for Large Scales**
+
+At extreme scales, adapt layout by checking `LocalDensity.current.fontScale` and switching between vertical and horizontal content orientation.
+
+**5. Testing Text Scaling**
 
 ```kotlin
 @Preview(fontScale = 1.0f)
-@Preview(fontScale = 1.5f)
 @Preview(fontScale = 2.0f)
 @Composable
 fun TextScalingPreview() {
     MyScreen()
 }
-
-// Settings > Display > Font size
 ```
-
-**5. Maintain Minimum Touch Targets (48dp)**
-
-```kotlin
-IconButton(
-    onClick = { },
-    modifier = Modifier.size(48.dp) // ✅ Minimum touch target
-) {
-    Icon(Icons.Default.Favorite, "Favorite")
-}
-```
-
-**6. Adaptive Layouts for Extreme Scales**
-
-```kotlin
-@Composable
-fun AdaptiveLayout() {
-    val fontScale = LocalDensity.current.fontScale
-    if (fontScale > 1.5f) {
-        Column { /* vertical layout */ }
-    } else {
-        Row { /* horizontal layout */ }
-    }
-}
-```
-
-**Best Practices:**
-
-- Always use `sp` for text (NEVER `dp`)
-- Use Material typography
-- Test at 200% scale
-- Avoid fixed dimensions
-- Allow text wrapping
-- Maintain 48dp touch targets
-- Test on real devices
 
 **Common Pitfalls:**
-
-```kotlin
-// ❌ BAD: Fixed height
-Box(modifier = Modifier.height(56.dp)) {
-    Text("Clips at 200%")
-}
-
-// ✅ GOOD: Flexible height
-Box(modifier = Modifier.heightIn(min = 56.dp)) {
-    Text("Expands as needed")
-}
-
-// ❌ BAD: Using dp
-Text(fontSize = 16.dp)
-
-// ✅ GOOD: Using sp
-Text(fontSize = 16.sp)
-```
-
-**Testing Checklist:**
-
-1. Enable largest font size in Settings
-2. Check all screens
-3. Verify text is readable (not clipped)
-4. Check interactive elements
-5. Ensure layouts don't break
-6. Verify scrolling works
-7. Test in portrait and landscape
+- Using `dp` instead of `sp` for text
+- Fixed container heights
+- Ignoring minimum touch target sizes (48dp)
+- Not testing at extreme scales
 
 ---
 
 ## Follow-ups
 
-- What's the difference between font scaling and display size scaling?
+- What is the difference between font scaling and display size scaling?
 - How do you handle text scaling in custom views?
 - What happens when text scaling exceeds 200%?
+- How do you maintain minimum touch targets when text scales?
+- How do you test text scaling in automated tests?
+
+## References
+
+- Android Accessibility: https://developer.android.com/guide/topics/ui/accessibility/text-and-content
+- Material Design Typography: https://m3.material.io/styles/typography/overview
+- WCAG Guidelines: https://www.w3.org/WAI/WCAG21/quickref/#resize-text
 
 ## Related Questions
 
+### Prerequisites
+- [[q-compose-text-basics--android--easy]] - Basic text rendering in Compose
+- [[q-material-theming--android--medium]] - Material Design theming
+
+### Related
 - [[q-accessibility-compose--android--medium]] - Accessibility in Compose
 - [[q-accessibility-testing--android--medium]] - Accessibility testing
+- [[q-responsive-layouts--android--medium]] - Responsive layout design
 
+### Advanced
+- [[q-custom-accessibility-services--android--hard]] - Custom accessibility services
+- [[q-advanced-a11y-patterns--android--hard]] - Advanced accessibility patterns

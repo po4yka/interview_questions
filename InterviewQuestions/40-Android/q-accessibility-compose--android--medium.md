@@ -1,11 +1,7 @@
 ---
 id: 20251012-122749
 title: Доступность в Compose / Accessibility in Compose
-aliases:
-  - Доступность в Compose
-  - Compose Accessibility
-  - Доступность Compose
-  - Accessibility Compose
+aliases: ["Accessibility in Compose", "Доступность в Compose"]
 topic: android
 subtopics: [ui-accessibility, ui-compose]
 question_kind: android
@@ -14,367 +10,220 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-accessibility
-  - c-jetpack-compose
-  - q-accessibility-talkback--android--medium
-  - q-accessibility-testing--android--medium
-  - q-custom-view-accessibility--android--medium
+related: [c-accessibility, c-jetpack-compose, q-accessibility-talkback--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
 created: 2025-10-11
-updated: 2025-10-27
+updated: 2025-10-29
 sources:
   - https://developer.android.com/jetpack/compose/accessibility
   - https://developer.android.com/guide/topics/ui/accessibility
-tags: [android/ui-accessibility, android/ui-compose, difficulty/medium]
+tags: [android/ui-accessibility, android/ui-compose, accessibility, compose, talkback, semantics, difficulty/medium]
 ---
 # Вопрос (RU)
-> Что такое Доступность в Compose?
+> Как обеспечить доступность в Jetpack Compose для людей с ограниченными возможностями?
 
 ---
 
 # Question (EN)
-> What is Accessibility in Compose?
+> How to ensure accessibility in Jetpack Compose for people with disabilities?
 
 ---
 
 ## Ответ (RU)
 
-**Доступность в Compose** гарантирует, что приложение доступно для людей с ограниченными возможностями через TalkBack, семантические свойства, описания контента, достаточный размер сенсорных элементов (минимум 48dp) и контраст цветов.
+**Доступность в Compose** обеспечивает использование приложения людьми с ограниченными возможностями через TalkBack, семантические свойства и минимальные размеры сенсорных целей (48dp).
 
-### Ключевые концепции
+### Ключевые техники
 
-**1. Content Descriptions** — описания для изображений и иконок:
+**1. Content Descriptions** — описания для изображений:
 
 ```kotlin
-// ✅ ПРАВИЛЬНО — описание для важного контента
+// ✅ Информативный контент
 Image(
-    painter = painterResource(R.drawable.profile_photo),
-    contentDescription = "User profile photo",
-    modifier = Modifier.size(64.dp)
+    painter = painterResource(R.drawable.profile),
+    contentDescription = "User profile photo"
 )
 
-// ✅ ПРАВИЛЬНО — null для декоративных элементов
+// ✅ Декоративные элементы
 Image(
-    painter = painterResource(R.drawable.background_pattern),
-    contentDescription = null, // Декоративное изображение
-    modifier = Modifier.fillMaxSize()
+    painter = painterResource(R.drawable.background),
+    contentDescription = null  // Декоративное
 )
 ```
 
-**2. Semantic Properties** — семантическая информация для элементов:
+**2. Semantic Properties** — семантика для кастомных элементов:
 
 ```kotlin
-@Composable
-fun CustomToggle(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .clickable { onCheckedChange(!checked) }
-            .semantics {
-                role = Role.Switch
-                toggleableState = ToggleableState(checked)
-                contentDescription = if (checked) {
-                    "Notifications enabled"
-                } else {
-                    "Notifications disabled"
-                }
-            }
-            .background(
-                color = if (checked) Color.Green else Color.Gray,
-                shape = CircleShape
-            )
-    )
-}
-```
-
-**3. Merge Descendants** — группировка семантической информации:
-
-```kotlin
-@Composable
-fun ProductCard(product: Product) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /* View product */ }
-            .semantics(mergeDescendants = true) {
-                contentDescription = buildString {
-                    append("${product.name}, $${product.price}")
-                    if (product.rating > 0) append(", ${product.rating} stars")
-                    append(if (product.inStock) ", In stock" else ", Out of stock")
-                }
-            }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(product.name)
-            Text("$${product.price}")
-            RatingBar(rating = product.rating)
-            Text(
-                text = if (product.inStock) "In stock" else "Out of stock",
-                color = if (product.inStock) Color.Green else Color.Red
-            )
-        }
-    }
-}
-```
-
-**4. Touch Target Sizes** — минимальный размер 48dp:
-
-```kotlin
-// ✅ ПРАВИЛЬНО — минимум 48dp для кликабельных элементов
-IconButton(
-    onClick = { /* ... */ },
-    modifier = Modifier.size(48.dp) // ✅ Минимальный размер
-) {
-    Icon(
-        imageVector = Icons.Default.Delete,
-        contentDescription = "Delete",
-        modifier = Modifier.size(24.dp) // Размер иконки
-    )
-}
-
-// ❌ НЕПРАВИЛЬНО — слишком маленький
-Icon(
-    imageVector = Icons.Default.Delete,
-    contentDescription = "Delete",
+Box(
     modifier = Modifier
-        .size(24.dp) // ❌ Только 24dp!
-        .clickable { /* ... */ }
+        .semantics {
+            role = Role.Switch  // ✅ Тип элемента
+            toggleableState = ToggleableState(checked)
+            contentDescription = "Notifications $state"
+        }
 )
 ```
 
-**5. Custom Accessibility Actions** — дополнительные действия:
+**3. Merge Descendants** — группировка семантики:
 
 ```kotlin
-@Composable
-fun EmailListItem(email: Email, onDelete: () -> Unit, onArchive: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /* Open email */ }
-            .semantics {
-                contentDescription = "Email from ${email.sender}: ${email.subject}"
-                customActions = listOf(
-                    CustomAccessibilityAction("Delete") { onDelete(); true },
-                    CustomAccessibilityAction("Archive") { onArchive(); true }
-                )
-            }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(email.sender, style = MaterialTheme.typography.titleMedium)
-            Text(email.subject, style = MaterialTheme.typography.bodyMedium)
-        }
+Card(
+    modifier = Modifier.semantics(mergeDescendants = true) {
+        contentDescription = "${product.name}, $${product.price}, ${product.stock}"
     }
-}
-```
-
-**6. Live Regions** — объявления динамических изменений:
-
-```kotlin
-@Composable
-fun LiveSearchResults(query: String, results: List<SearchResult>, isLoading: Boolean) {
+) {
     Column {
-        TextField(value = query, onValueChange = { }, label = { Text("Search") })
-
-        Text(
-            text = when {
-                isLoading -> "Searching..."
-                results.isEmpty() -> "No results found"
-                else -> "${results.size} results found"
-            },
-            modifier = Modifier.semantics {
-                liveRegion = LiveRegionMode.Polite // ✅ Объявление изменений
-            }
-        )
-
-        LazyColumn {
-            items(results) { result -> ResultItem(result) }
-        }
+        Text(product.name)
+        Text("$${product.price}")
+        Text(product.stock)
     }
 }
 ```
 
-### Best Practices
+**4. Touch Target Size** — минимум 48dp:
 
-1. ✅ Всегда указывайте contentDescription для информативных элементов
-2. ✅ Используйте null для декоративных элементов
-3. ✅ Группируйте семантику через mergeDescendants
-4. ✅ Минимальный размер сенсорных элементов — 48dp
-5. ✅ Тестируйте с включённым TalkBack
+```kotlin
+// ✅ Правильно
+IconButton(
+    onClick = { },
+    modifier = Modifier.size(48.dp)  // ✅ 48dp
+) {
+    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+}
+
+// ❌ Неправильно
+Icon(
+    modifier = Modifier.size(24.dp).clickable { }  // ❌ 24dp!
+)
+```
+
+**5. Custom Actions** — дополнительные действия:
+
+```kotlin
+Card(
+    modifier = Modifier.semantics {
+        customActions = listOf(
+            CustomAccessibilityAction("Delete") { onDelete(); true },
+            CustomAccessibilityAction("Archive") { onArchive(); true }
+        )
+    }
+)
+```
+
+### Ключевые принципы
+
+- **ContentDescription**: обязательно для информативных элементов, `null` для декоративных
+- **Touch targets**: минимум 48dp для всех интерактивных элементов
+- **MergeDescendants**: группировка сложных компонентов в единое семантическое описание
+- **Semantic properties**: `role`, `toggleableState`, `liveRegion` для кастомных элементов
+- **Тестирование**: всегда проверять с включенным TalkBack
 
 ---
 
 ## Answer (EN)
 
-**Accessibility in Compose** ensures your app is usable by people with disabilities through TalkBack support, semantic properties, content descriptions, minimum 48dp touch targets, and color contrast.
+**Accessibility in Compose** ensures app usability for people with disabilities through TalkBack support, semantic properties, and minimum touch target sizes (48dp).
 
-### Key Concepts
+### Key Techniques
 
-**1. Content Descriptions** — descriptions for images and icons:
+**1. Content Descriptions** — descriptions for images:
 
 ```kotlin
-// ✅ CORRECT — description for meaningful content
+// ✅ Meaningful content
 Image(
-    painter = painterResource(R.drawable.profile_photo),
-    contentDescription = "User profile photo",
-    modifier = Modifier.size(64.dp)
+    painter = painterResource(R.drawable.profile),
+    contentDescription = "User profile photo"
 )
 
-// ✅ CORRECT — null for decorative images
+// ✅ Decorative elements
 Image(
-    painter = painterResource(R.drawable.background_pattern),
-    contentDescription = null, // Decorative, no semantic meaning
-    modifier = Modifier.fillMaxSize()
+    painter = painterResource(R.drawable.background),
+    contentDescription = null  // Decorative only
 )
 ```
 
-**2. Semantic Properties** — semantic information for elements:
+**2. Semantic Properties** — semantics for custom elements:
 
 ```kotlin
-@Composable
-fun CustomToggle(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .clickable { onCheckedChange(!checked) }
-            .semantics {
-                role = Role.Switch
-                toggleableState = ToggleableState(checked)
-                contentDescription = if (checked) {
-                    "Notifications enabled"
-                } else {
-                    "Notifications disabled"
-                }
-            }
-            .background(
-                color = if (checked) Color.Green else Color.Gray,
-                shape = CircleShape
-            )
-    )
-}
+Box(
+    modifier = Modifier
+        .semantics {
+            role = Role.Switch  // ✅ Element type
+            toggleableState = ToggleableState(checked)
+            contentDescription = "Notifications $state"
+        }
+)
 ```
 
 **3. Merge Descendants** — group semantic information:
 
 ```kotlin
-@Composable
-fun ProductCard(product: Product) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /* View product */ }
-            .semantics(mergeDescendants = true) {
-                contentDescription = buildString {
-                    append("${product.name}, $${product.price}")
-                    if (product.rating > 0) append(", ${product.rating} stars")
-                    append(if (product.inStock) ", In stock" else ", Out of stock")
-                }
-            }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(product.name)
-            Text("$${product.price}")
-            RatingBar(rating = product.rating)
-            Text(
-                text = if (product.inStock) "In stock" else "Out of stock",
-                color = if (product.inStock) Color.Green else Color.Red
-            )
-        }
+Card(
+    modifier = Modifier.semantics(mergeDescendants = true) {
+        contentDescription = "${product.name}, $${product.price}, ${product.stock}"
+    }
+) {
+    Column {
+        Text(product.name)
+        Text("$${product.price}")
+        Text(product.stock)
     }
 }
 ```
 
-**4. Touch Target Sizes** — minimum 48dp:
+**4. Touch Target Size** — minimum 48dp:
 
 ```kotlin
-// ✅ CORRECT — minimum 48dp for interactive elements
+// ✅ Correct
 IconButton(
-    onClick = { /* ... */ },
-    modifier = Modifier.size(48.dp) // ✅ Minimum size
+    onClick = { },
+    modifier = Modifier.size(48.dp)  // ✅ 48dp
 ) {
-    Icon(
-        imageVector = Icons.Default.Delete,
-        contentDescription = "Delete",
-        modifier = Modifier.size(24.dp) // Icon size
-    )
+    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
 }
 
-// ❌ WRONG — too small
+// ❌ Wrong
 Icon(
-    imageVector = Icons.Default.Delete,
-    contentDescription = "Delete",
-    modifier = Modifier
-        .size(24.dp) // ❌ Only 24dp!
-        .clickable { /* ... */ }
+    modifier = Modifier.size(24.dp).clickable { }  // ❌ 24dp!
 )
 ```
 
-**5. Custom Accessibility Actions** — additional actions:
+**5. Custom Actions** — additional actions:
 
 ```kotlin
-@Composable
-fun EmailListItem(email: Email, onDelete: () -> Unit, onArchive: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /* Open email */ }
-            .semantics {
-                contentDescription = "Email from ${email.sender}: ${email.subject}"
-                customActions = listOf(
-                    CustomAccessibilityAction("Delete") { onDelete(); true },
-                    CustomAccessibilityAction("Archive") { onArchive(); true }
-                )
-            }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(email.sender, style = MaterialTheme.typography.titleMedium)
-            Text(email.subject, style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
-```
-
-**6. Live Regions** — announce dynamic content:
-
-```kotlin
-@Composable
-fun LiveSearchResults(query: String, results: List<SearchResult>, isLoading: Boolean) {
-    Column {
-        TextField(value = query, onValueChange = { }, label = { Text("Search") })
-
-        Text(
-            text = when {
-                isLoading -> "Searching..."
-                results.isEmpty() -> "No results found"
-                else -> "${results.size} results found"
-            },
-            modifier = Modifier.semantics {
-                liveRegion = LiveRegionMode.Polite // ✅ Announce changes
-            }
+Card(
+    modifier = Modifier.semantics {
+        customActions = listOf(
+            CustomAccessibilityAction("Delete") { onDelete(); true },
+            CustomAccessibilityAction("Archive") { onArchive(); true }
         )
-
-        LazyColumn {
-            items(results) { result -> ResultItem(result) }
-        }
     }
-}
+)
 ```
 
-### Best Practices
+### Key Principles
 
-1. ✅ Always provide contentDescription for meaningful elements
-2. ✅ Use null for decorative elements
-3. ✅ Group semantics with mergeDescendants
-4. ✅ Minimum touch target size is 48dp
-5. ✅ Test with TalkBack enabled
+- **ContentDescription**: required for meaningful elements, `null` for decorative
+- **Touch targets**: minimum 48dp for all interactive elements
+- **MergeDescendants**: group complex components into single semantic description
+- **Semantic properties**: `role`, `toggleableState`, `liveRegion` for custom elements
+- **Testing**: always verify with TalkBack enabled
 
 ---
 
 ## Follow-ups
 
 - Что происходит, если не указать contentDescription для изображений?
-- Как автоматизированно тестировать доступность?
-- В чём разница между mergeDescendants и clearAndSetSemantics?
-- Как обработать динамические обновления для screen readers?
+- В чём разница между `mergeDescendants` и `clearAndSetSemantics`?
+- Как использовать `LiveRegionMode.Polite` vs `LiveRegionMode.Assertive`?
+- Как тестировать accessibility с помощью Accessibility Scanner?
+- Какие semantic properties кроме `role` и `contentDescription` существуют?
+
+## References
+
+- [[c-accessibility]] — Основы accessibility
+- [[c-jetpack-compose]] — Jetpack Compose fundamentals
+- https://developer.android.com/jetpack/compose/accessibility
+- https://developer.android.com/guide/topics/ui/accessibility/testing
 
 ## Related Questions
 
@@ -388,5 +237,5 @@ fun LiveSearchResults(query: String, results: List<SearchResult>, isLoading: Boo
 - [[q-custom-view-accessibility--android--medium]] — Custom view accessibility
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--android--hard]] — Compose stability
-- [[q-stable-classes-compose--android--hard]] — @Stable annotation
+- [[q-compose-stability-skippability--android--hard]] — Compose stability and skippability
+- [[q-compose-modifier-order--android--hard]] — Modifier order importance

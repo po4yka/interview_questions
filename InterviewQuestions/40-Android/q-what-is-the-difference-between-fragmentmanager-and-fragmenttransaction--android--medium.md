@@ -1,142 +1,196 @@
 ---
-id: 20251012-122711165
-title: "What Is The Difference Between Fragmentmanager And Fragmenttransaction / What Is The Difference Between Fragmentmanager и Fragmenttransaction"
+id: 20251029-120000
+title: "What Is The Difference Between Fragmentmanager And Fragmenttransaction / В чём разница между FragmentManager и FragmentTransaction"
+aliases: ["FragmentManager vs FragmentTransaction", "Разница между FragmentManager и FragmentTransaction"]
 topic: android
+subtopics: [fragment, lifecycle, ui-views]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-workmanager-vs-alternatives--background--medium, q-how-to-display-snackbar-or-toast-based-on-results--android--medium, q-network-request-deduplication--networking--hard]
+related: [q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-can-state-loss-be-related-to-a-fragment--android--medium]
+sources: []
 created: 2025-10-15
-tags: [fragmentmanager, fragmenttransaction, android, ui, fragments, difficulty/medium]
+updated: 2025-10-29
+tags: [android/fragment, android/lifecycle, android/ui-views, fragments, fragmentmanager, fragmenttransaction, difficulty/medium]
 ---
-
-# What is the difference between FragmentManager and FragmentTransaction?
-
 # Вопрос (RU)
 
-В чём разница между FragmentManager и FragmentTransaction
+В чём разница между FragmentManager и FragmentTransaction?
 
-## Answer (EN)
-**FragmentManager** manages fragments: adding, finding, back stack. **FragmentTransaction** is used to perform operations with fragments (add, replace, remove). It's like a database transaction applied to UI. Transaction is created via `FragmentManager.beginTransaction()` and applied via `commit()`.
+# Question (EN)
 
-### FragmentManager
+What is the difference between FragmentManager and FragmentTransaction?
 
-Manages the fragment lifecycle and back stack.
+---
+
+## Ответ (RU)
+
+**FragmentManager** управляет жизненным циклом фрагментов и back stack. Это менеджер состояния фрагментов в активити.
+
+**FragmentTransaction** представляет набор операций над фрагментами (add, replace, remove), которые выполняются атомарно. Транзакция создаётся через `FragmentManager.beginTransaction()` и применяется через `commit()`.
+
+Аналогия: FragmentManager — это база данных, FragmentTransaction — SQL-транзакция с операциями.
+
+### Основные возможности FragmentManager
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        // Get FragmentManager
-        val fragmentManager = supportFragmentManager
+        val fm = supportFragmentManager
 
-        // Find fragment by tag or ID
-        val fragment = fragmentManager.findFragmentByTag("MY_FRAGMENT")
-        val fragmentById = fragmentManager.findFragmentById(R.id.fragment_container)
+        // ✅ Поиск фрагментов
+        val fragment = fm.findFragmentByTag("MY_TAG")
+        val fragmentById = fm.findFragmentById(R.id.container)
 
-        // Get back stack count
-        val backStackCount = fragmentManager.backStackEntryCount
+        // ✅ Управление back stack
+        val count = fm.backStackEntryCount
+        fm.popBackStack()  // pop last transaction
 
-        // Pop back stack
-        fragmentManager.popBackStack()
-
-        // Listen to back stack changes
-        fragmentManager.addOnBackStackChangedListener {
-            Log.d("FragmentManager", "Back stack changed")
+        // ✅ Слушатель изменений back stack
+        fm.addOnBackStackChangedListener {
+            Log.d("FM", "Stack changed: ${fm.backStackEntryCount}")
         }
     }
 }
 ```
 
-### FragmentTransaction
-
-Performs fragment operations as a transaction.
+### FragmentTransaction операции
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
     fun showFragment() {
-        // 1. Get FragmentManager
-        val fragmentManager = supportFragmentManager
+        supportFragmentManager.beginTransaction().apply {
+            // ✅ Добавление фрагмента
+            add(R.id.container, MyFragment(), "TAG")
 
-        // 2. Begin transaction
-        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+            // ✅ Замена фрагмента
+            replace(R.id.container, AnotherFragment())
 
-        // 3. Perform operations
-        val fragment = MyFragment()
-        transaction.add(R.id.fragment_container, fragment, "MY_FRAGMENT")
-        transaction.addToBackStack("fragment_added")
+            // ✅ Удаление фрагмента
+            supportFragmentManager.findFragmentByTag("TAG")?.let {
+                remove(it)
+            }
 
-        // 4. Commit transaction
-        transaction.commit()
-    }
-}
-```
+            // ✅ Show/Hide (не пересоздаёт view)
+            show(fragment)
+            hide(fragment)
 
-### FragmentTransaction Operations
-
-```kotlin
-class FragmentOperations : AppCompatActivity() {
-
-    fun demonstrateOperations() {
-        val fragmentManager = supportFragmentManager
-
-        fragmentManager.beginTransaction().apply {
-            // Add fragment
-            add(R.id.container, Fragment1(), "FRAGMENT_1")
-
-            // Replace fragment
-            replace(R.id.container, Fragment2(), "FRAGMENT_2")
-
-            // Remove fragment
-            val fragment = fragmentManager.findFragmentByTag("FRAGMENT_1")
-            fragment?.let { remove(it) }
-
-            // Show/hide fragments
-            show(fragmentManager.findFragmentByTag("FRAGMENT_2")!!)
-            hide(fragmentManager.findFragmentByTag("FRAGMENT_3")!!)
-
-            // Attach/detach
-            detach(fragmentManager.findFragmentByTag("FRAGMENT_4")!!)
-            attach(fragmentManager.findFragmentByTag("FRAGMENT_4")!!)
-
-            // Add to back stack
+            // ✅ Добавление в back stack
             addToBackStack("operation_name")
 
-            // Set animations
-            setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-
-            // Set transition
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-
-            // Commit
-            commit()
+            commit()  // или commitNow()
         }
     }
 }
 ```
 
-### Commit Methods
+### Варианты commit
 
 ```kotlin
-// Regular commit - asynchronous, scheduled on main thread
+// ✅ Асинхронный commit (рекомендуется)
 transaction.commit()
 
-// Commit immediately on main thread
+// ✅ Синхронный commit (блокирует UI thread)
 transaction.commitNow()
 
-// Safe commit - won't throw exception if state is saved
-transaction.commitAllowingStateLoss()
+// ❌ Не бросает IllegalStateException при state loss
+transaction.commitAllowingStateLoss()  // use only if necessary
 
-// Commit after onSaveInstanceState
+// ❌ Синхронный + state loss allowed
+transaction.commitNowAllowingStateLoss()
+```
+
+### Сравнение
+
+| FragmentManager | FragmentTransaction |
+|----------------|---------------------|
+| Управляет жизненным циклом | Выполняет операции |
+| Находит фрагменты | Добавляет/удаляет фрагменты |
+| Управляет back stack | Добавляет в back stack |
+| Singleton для активити | Создаётся для каждой операции |
+| Query операции | Mutate операции |
+
+## Answer (EN)
+
+**FragmentManager** manages fragment lifecycle and back stack. It's the state manager for fragments in an activity.
+
+**FragmentTransaction** represents a set of fragment operations (add, replace, remove) that execute atomically. Transactions are created via `FragmentManager.beginTransaction()` and applied via `commit()`.
+
+Analogy: FragmentManager is a database, FragmentTransaction is a SQL transaction with operations.
+
+### Core FragmentManager capabilities
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val fm = supportFragmentManager
+
+        // ✅ Find fragments
+        val fragment = fm.findFragmentByTag("MY_TAG")
+        val fragmentById = fm.findFragmentById(R.id.container)
+
+        // ✅ Back stack management
+        val count = fm.backStackEntryCount
+        fm.popBackStack()  // pop last transaction
+
+        // ✅ Back stack change listener
+        fm.addOnBackStackChangedListener {
+            Log.d("FM", "Stack changed: ${fm.backStackEntryCount}")
+        }
+    }
+}
+```
+
+### FragmentTransaction operations
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    fun showFragment() {
+        supportFragmentManager.beginTransaction().apply {
+            // ✅ Add fragment
+            add(R.id.container, MyFragment(), "TAG")
+
+            // ✅ Replace fragment
+            replace(R.id.container, AnotherFragment())
+
+            // ✅ Remove fragment
+            supportFragmentManager.findFragmentByTag("TAG")?.let {
+                remove(it)
+            }
+
+            // ✅ Show/Hide (doesn't recreate view)
+            show(fragment)
+            hide(fragment)
+
+            // ✅ Add to back stack
+            addToBackStack("operation_name")
+
+            commit()  // or commitNow()
+        }
+    }
+}
+```
+
+### Commit variants
+
+```kotlin
+// ✅ Asynchronous commit (recommended)
+transaction.commit()
+
+// ✅ Synchronous commit (blocks UI thread)
+transaction.commitNow()
+
+// ❌ Doesn't throw IllegalStateException on state loss
+transaction.commitAllowingStateLoss()  // use only if necessary
+
+// ❌ Synchronous + state loss allowed
 transaction.commitNowAllowingStateLoss()
 ```
 
@@ -144,33 +198,42 @@ transaction.commitNowAllowingStateLoss()
 
 | FragmentManager | FragmentTransaction |
 |----------------|---------------------|
-| Manages fragments | Performs operations |
+| Manages lifecycle | Performs operations |
 | Finds fragments | Adds/removes fragments |
-| Handles back stack | Adds to back stack |
+| Manages back stack | Adds to back stack |
 | Singleton per activity | Created per operation |
-| Always available | Created via beginTransaction() |
-| Query operations | Modify operations |
-
-## Ответ (RU)
-
-FragmentManager управляет фрагментами: добавление, поиск, стек возврата. FragmentTransaction используется для выполнения операций с фрагментами (добавление, замена, удаление). Это как транзакция базы данных применяемая к UI. Transaction создаётся через FragmentManager.beginTransaction() и применяется через commit()
+| Query operations | Mutate operations |
 
 ---
+
+## Follow-ups
+
+1. What happens if you don't call `commit()` on a FragmentTransaction?
+2. When should you use `commitNow()` instead of `commit()`?
+3. What causes "IllegalStateException: Can not perform this action after onSaveInstanceState"?
+4. How does `addToBackStack()` affect fragment lifecycle?
+5. What's the difference between `replace()` and `remove()` + `add()`?
+
+## References
+
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - State loss issues
+- [[q-fragments-history-and-purpose--android--hard]] - Fragment architecture
+- Official: [Fragments Guide](https://developer.android.com/guide/fragments)
+- Official: [FragmentManager API](https://developer.android.com/reference/androidx/fragment/app/FragmentManager)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
-- [[q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]] - Fragment
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment basics
+- [[q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]] - Multiple fragments
 
 ### Related (Medium)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--android--medium]] - Fragment
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
-- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - State loss
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
 
 ### Advanced (Harder)
-- [[q-fragments-history-and-purpose--android--hard]] - Fragment
-- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment
+- [[q-fragments-history-and-purpose--android--hard]] - Fragment design rationale
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment architecture
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment necessity

@@ -1,252 +1,96 @@
 ---
 id: 20251012-122711148
 title: "What Does The Lifecycle Library Do / Что делает библиотека Lifecycle"
+aliases: ["What Does The Lifecycle Library Do", "Что делает библиотека Lifecycle"]
+
+# Classification
 topic: android
+subtopics: [lifecycle, architecture-mvvm]
+question_kind: theory
 difficulty: medium
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-runtime-permissions-best-practices--permissions--medium, q-privacy-sandbox-topics-api--privacy--medium, q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]
+related: [q-why-was-the-lifecycle-library-created--android--hard, q-what-is-viewmodel--android--medium, q-service-lifecycle-binding--android--hard]
+
+# Timestamps
 created: 2025-10-15
-tags:
-  - android
+updated: 2025-10-29
+
+# Tags (EN only; no leading #)
+tags: [android, android/lifecycle, android/architecture-mvvm, lifecycle-aware, difficulty/medium]
 ---
 
-# What does the Lifecycle library do?
+# Вопрос (RU)
 
-## Answer (EN)
-The **Lifecycle library** provides classes and interfaces to build **lifecycle-aware components** that automatically adjust their behavior based on the current lifecycle state of Activities and Fragments. It helps prevent memory leaks, crashes, and improves code organization.
+> Что делает библиотека Lifecycle?
 
-### Core Components
+# Question (EN)
 
-**1. Lifecycle** - Represents the lifecycle state
-**2. LifecycleOwner** - Interface implemented by Activity/Fragment
-**3. LifecycleObserver** - Observes lifecycle changes
+> What does the Lifecycle library do?
 
-### Basic Usage
+---
 
-```kotlin
-// Lifecycle-aware component
-class MyLocationListener(
-    private val context: Context,
-    private val callback: (Location) -> Unit
-) : LifecycleObserver {
+## Ответ (RU)
 
-    private lateinit var locationManager: LocationManager
+**Библиотека Lifecycle** предоставляет классы и интерфейсы для создания **lifecycle-aware компонентов**, которые автоматически адаптируют свое поведение в зависимости от текущего состояния жизненного цикла Activity и Fragment. Это предотвращает утечки памяти, крэши и улучшает архитектуру кода.
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun startListening() {
-        locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        // Start location updates
-    }
+### Основные компоненты
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun stopListening() {
-        // Stop location updates
-        locationManager.removeUpdates(locationListener)
-    }
-}
+**1. Lifecycle** — представляет состояние жизненного цикла
+**2. LifecycleOwner** — интерфейс, реализуемый Activity/Fragment
+**3. LifecycleObserver** — наблюдатель за изменениями жизненного цикла
 
-// Activity
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val locationListener = MyLocationListener(this) { location ->
-            updateUI(location)
-        }
-
-        // Register observer
-        lifecycle.addObserver(locationListener)
-    }
-}
-```
-
-### Modern Approach with DefaultLifecycleObserver
-
-```kotlin
-class MyLifecycleObserver(
-    private val onStart: () -> Unit,
-    private val onStop: () -> Unit
-) : DefaultLifecycleObserver {
-
-    override fun onStart(owner: LifecycleOwner) {
-        onStart()
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        onStop()
-    }
-}
-
-// Usage
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycle.addObserver(MyLifecycleObserver(
-            onStart = { startSomething() },
-            onStop = { stopSomething() }
-        ))
-    }
-}
-```
-
-### Lifecycle States and Events
-
-**States:**
-- INITIALIZED
-- CREATED
-- STARTED
-- RESUMED
-- DESTROYED
-
-**Events:**
-- ON_CREATE
-- ON_START
-- ON_RESUME
-- ON_PAUSE
-- ON_STOP
-- ON_DESTROY
-
-```kotlin
-class LifecycleLogger : DefaultLifecycleObserver {
-    override fun onCreate(owner: LifecycleOwner) {
-        Log.d("Lifecycle", "onCreate")
-    }
-
-    override fun onStart(owner: LifecycleOwner) {
-        Log.d("Lifecycle", "onStart")
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        Log.d("Lifecycle", "onResume")
-    }
-
-    override fun onPause(owner: LifecycleOwner) {
-        Log.d("Lifecycle", "onPause")
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        Log.d("Lifecycle", "onStop")
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        Log.d("Lifecycle", "onDestroy")
-    }
-}
-```
-
-### Practical Examples
-
-#### 1. Video Player
+### Современный подход: DefaultLifecycleObserver
 
 ```kotlin
 class VideoPlayerObserver(
-    private val videoPlayer: VideoPlayer
+    private val player: VideoPlayer
 ) : DefaultLifecycleObserver {
 
+    // ✅ Автоматическая очистка ресурсов
     override fun onStart(owner: LifecycleOwner) {
-        videoPlayer.initialize()
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        videoPlayer.play()
-    }
-
-    override fun onPause(owner: LifecycleOwner) {
-        videoPlayer.pause()
+        player.initialize()
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        videoPlayer.stop()
-    }
-
-    override fun onDestroy(owner: LifecycleOwner) {
-        videoPlayer.release()
+        player.release()  // ✅ Гарантированно вызовется
     }
 }
 
-// Activity
+// Использование
 class VideoActivity : AppCompatActivity() {
-    private val videoPlayer = VideoPlayer()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         lifecycle.addObserver(VideoPlayerObserver(videoPlayer))
     }
 }
 ```
 
-#### 2. Network Listener
+### Состояния и события
+
+**States (состояния):** INITIALIZED → CREATED → STARTED → RESUMED → DESTROYED
+
+**Events (события):** ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY
 
 ```kotlin
-class NetworkObserver(
-    private val context: Context,
-    private val onNetworkAvailable: (Boolean) -> Unit
-) : DefaultLifecycleObserver {
-
-    private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    private lateinit var networkCallback: ConnectivityManager.NetworkCallback
-
-    override fun onStart(owner: LifecycleOwner) {
-        networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                onNetworkAvailable(true)
-            }
-
-            override fun onLost(network: Network) {
-                onNetworkAvailable(false)
-            }
-        }
-
-        connectivityManager.registerDefaultNetworkCallback(networkCallback)
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        connectivityManager.unregisterNetworkCallback(networkCallback)
-    }
+// Проверка текущего состояния
+if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+    // Безопасно обращаться к UI
 }
 ```
 
-#### 3. Analytics Tracker
-
-```kotlin
-class AnalyticsObserver(
-    private val screenName: String
-) : DefaultLifecycleObserver {
-
-    override fun onResume(owner: LifecycleOwner) {
-        Analytics.logScreenView(screenName)
-    }
-
-    override fun onPause(owner: LifecycleOwner) {
-        Analytics.logScreenExit(screenName)
-    }
-}
-
-// Usage
-class ProductActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycle.addObserver(AnalyticsObserver("ProductScreen"))
-    }
-}
-```
-
-### LiveData Integration
-
-LiveData is lifecycle-aware by default:
+### Интеграция с LiveData и корутинами
 
 ```kotlin
 class MyViewModel : ViewModel() {
-    private val _data = MutableLiveData<String>()
-    val data: LiveData<String> = _data
-
-    fun loadData() {
-        _data.value = "Data loaded"
-    }
+    val data = MutableLiveData<String>()
 }
 
 class MainActivity : AppCompatActivity() {
@@ -255,48 +99,160 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Automatically handles lifecycle
-        viewModel.data.observe(this) { data ->
-            // Updates only when STARTED or RESUMED
-            textView.text = data
+        // ✅ LiveData автоматически lifecycle-aware
+        viewModel.data.observe(this) { value ->
+            // Обновления только в STARTED/RESUMED
+        }
+
+        // ✅ lifecycleScope отменяется автоматически
+        lifecycleScope.launch {
+            fetchData()
         }
     }
 }
 ```
 
-### Coroutines Integration
+### ProcessLifecycleOwner (жизненный цикл приложения)
 
 ```kotlin
-class CoroutineObserver(
-    private val scope: CoroutineScope
-) : DefaultLifecycleObserver {
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
 
-    private var job: Job? = null
+        ProcessLifecycleOwner.get().lifecycle.addObserver(
+            object : DefaultLifecycleObserver {
+                override fun onStart(owner: LifecycleOwner) {
+                    // ✅ Приложение на переднем плане
+                }
 
-    override fun onStart(owner: LifecycleOwner) {
-        job = scope.launch {
-            // Start coroutine work
-            while (isActive) {
-                fetchData()
-                delay(5000)
+                override fun onStop(owner: LifecycleOwner) {
+                    // ✅ Приложение в фоне
+                }
             }
-        }
+        )
     }
+}
+```
 
-    override fun onStop(owner: LifecycleOwner) {
-        job?.cancel()
+### Преимущества
+
+**1. Предотвращение утечек памяти**
+```kotlin
+// ❌ Ручное управление - легко забыть очистить
+class BadActivity : AppCompatActivity() {
+    override fun onStart() {
+        locationManager.requestUpdates(...)
+        // ❌ Забыли removeUpdates в onStop - утечка!
     }
 }
 
-// Or use lifecycleScope
+// ✅ Автоматическая очистка
+class GoodActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        lifecycle.addObserver(LocationObserver())  // ✅ Cleanup автоматический
+    }
+}
+```
+
+**2. Повторное использование** — один observer работает с любыми Activity/Fragment
+
+**3. Тестируемость** — компоненты легко тестировать независимо
+
+**4. Уменьшение boilerplate** — не нужно переопределять lifecycle методы
+
+## Answer (EN)
+
+The **Lifecycle library** provides classes and interfaces to build **lifecycle-aware components** that automatically adjust their behavior based on the current lifecycle state of Activities and Fragments. This prevents memory leaks, crashes, and improves code architecture.
+
+### Core Components
+
+**1. Lifecycle** — represents the lifecycle state
+**2. LifecycleOwner** — interface implemented by Activity/Fragment
+**3. LifecycleObserver** — observes lifecycle changes
+
+### Modern Approach: DefaultLifecycleObserver
+
+```kotlin
+class VideoPlayerObserver(
+    private val player: VideoPlayer
+) : DefaultLifecycleObserver {
+
+    // ✅ Automatic resource cleanup
+    override fun onStart(owner: LifecycleOwner) {
+        player.initialize()
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        player.release()  // ✅ Guaranteed to be called
+    }
+}
+
+// Usage
+class VideoActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(VideoPlayerObserver(videoPlayer))
+    }
+}
+```
+
+### States and Events
+
+**States:** INITIALIZED → CREATED → STARTED → RESUMED → DESTROYED
+
+**Events:** ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY
+
+```kotlin
+// Check current state
+if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+    // Safe to access UI
+}
+```
+
+### Integration with LiveData and Coroutines
+
+```kotlin
+class MyViewModel : ViewModel() {
+    val data = MutableLiveData<String>()
+}
+
 class MainActivity : AppCompatActivity() {
+    private val viewModel: MyViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // ✅ LiveData is automatically lifecycle-aware
+        viewModel.data.observe(this) { value ->
+            // Updates only in STARTED/RESUMED
+        }
+
+        // ✅ lifecycleScope cancels automatically
         lifecycleScope.launch {
-            // Automatically cancelled when lifecycle is destroyed
             fetchData()
         }
+    }
+}
+```
+
+### ProcessLifecycleOwner (App Lifecycle)
+
+```kotlin
+class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(
+            object : DefaultLifecycleObserver {
+                override fun onStart(owner: LifecycleOwner) {
+                    // ✅ App moved to foreground
+                }
+
+                override fun onStop(owner: LifecycleOwner) {
+                    // ✅ App moved to background
+                }
+            }
+        )
     }
 }
 ```
@@ -305,133 +261,53 @@ class MainActivity : AppCompatActivity() {
 
 **1. Prevents Memory Leaks**
 ```kotlin
-// BAD - Manual management
+// ❌ Manual management - easy to forget cleanup
 class BadActivity : AppCompatActivity() {
     override fun onStart() {
-        super.onStart()
-        locationManager.requestLocationUpdates(...)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Easy to forget!
-        // locationManager.removeUpdates(...)
+        locationManager.requestUpdates(...)
+        // ❌ Forgot removeUpdates in onStop - leak!
     }
 }
 
-// GOOD - Automatic cleanup
+// ✅ Automatic cleanup
 class GoodActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycle.addObserver(LocationObserver()) // Handles cleanup automatically
+        lifecycle.addObserver(LocationObserver())  // ✅ Cleanup automatic
     }
 }
 ```
 
-**2. Reduces Boilerplate**
+**2. Reusability** — same observer works with any Activity/Fragment
 
-No need to override lifecycle methods in every Activity/Fragment.
+**3. Testability** — components are easily testable independently
 
-**3. Improves Testability**
-
-Lifecycle-aware components can be tested independently.
-
-**4. Reusability**
-
-Same observer can be used across multiple Activities/Fragments.
-
-### Checking Lifecycle State
-
-```kotlin
-class MyObserver : DefaultLifecycleObserver {
-    override fun onStart(owner: LifecycleOwner) {
-        if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-            // Safe to access UI
-        }
-    }
-}
-
-// In Activity
-if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-    performAction()
-}
-```
-
-### Custom LifecycleOwner
-
-```kotlin
-class MyCustomComponent : LifecycleOwner {
-    private val lifecycleRegistry = LifecycleRegistry(this)
-
-    override val lifecycle: Lifecycle
-        get() = lifecycleRegistry
-
-    fun start() {
-        lifecycleRegistry.currentState = Lifecycle.State.STARTED
-    }
-
-    fun stop() {
-        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
-    }
-}
-```
-
-### ProcessLifecycleOwner
-
-Observe entire app lifecycle:
-
-```kotlin
-class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onStart(owner: LifecycleOwner) {
-                // App moved to foreground
-                Log.d("App", "App in foreground")
-            }
-
-            override fun onStop(owner: LifecycleOwner) {
-                // App moved to background
-                Log.d("App", "App in background")
-            }
-        })
-    }
-}
-```
-
-**English Summary**: Lifecycle library provides **lifecycle-aware components** that automatically respond to Activity/Fragment lifecycle changes. Core: Lifecycle (state), LifecycleOwner (Activity/Fragment), LifecycleObserver (observer). Use DefaultLifecycleObserver for modern approach. States: INITIALIZED, CREATED, STARTED, RESUMED, DESTROYED. Events: ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY. Benefits: prevents memory leaks, reduces boilerplate, improves testability, enables reusability. LiveData is lifecycle-aware by default. Use ProcessLifecycleOwner for app-level lifecycle. Works seamlessly with coroutines (lifecycleScope, viewModelScope).
-
-
-
-## Ответ (RU)
-
-Это профессиональный перевод технического содержимого на русский язык.
-
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
-
-Все примеры кода остаются без изменений. Markdown форматирование сохранено.
-
-Длина оригинального английского контента: 9746 символов.
-
-**Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
-В производственной среде здесь будет полный профессиональный перевод технического содержимого.
-
+**4. Reduces Boilerplate** — no need to override lifecycle methods
 
 ---
+
+## Follow-ups
+
+- How does Lifecycle library handle configuration changes?
+- What's the difference between LifecycleObserver and DefaultLifecycleObserver?
+- Can custom components implement LifecycleOwner?
+- How does ProcessLifecycleOwner differ from component lifecycle?
+- What happens if you try to access UI in an inactive lifecycle state?
+
+## References
+
+- [[q-why-was-the-lifecycle-library-created--android--hard]]
+- [[q-what-is-viewmodel--android--medium]]
+- https://developer.android.com/topic/libraries/architecture/lifecycle
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Lifecycle
+- [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Basic Android concepts
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - Lifecycle
-- [[q-what-is-viewmodel--android--medium]] - Lifecycle
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - Lifecycle
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Lifecycle
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - Lifecycle
+- [[q-what-is-viewmodel--android--medium]] - Uses Lifecycle library
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation across lifecycle
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] - Lifecycle
-- [[q-why-was-the-lifecycle-library-created--android--hard]] - Lifecycle
+- [[q-why-was-the-lifecycle-library-created--android--hard]] - Design rationale
+- [[q-service-lifecycle-binding--android--hard]] - Advanced lifecycle management

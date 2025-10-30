@@ -1,35 +1,34 @@
 ---
 id: 20251012-12271122
-title: "Kmm Sqldelight / SQLDelight в KMM"
+title: "SQLDelight в KMM / SQLDelight in KMM"
+aliases: ["SQLDelight в KMM", "SQLDelight in KMM", "SQLDelight для мультиплатформы"]
 topic: android
+subtopics: [kmm, databases, multiplatform]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-annotation-processing-android--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-play-feature-delivery--android--medium]
+related: [q-annotation-processing-android--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium]
 created: 2025-10-15
-tags: [Database, difficulty/medium, KMM, Kotlin, SQLDelight]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:07:58 pm
+updated: 2025-10-28
+sources: []
+tags: [android/kmm, android/databases, Database, difficulty/medium, KMM, Kotlin, SQLDelight, multiplatform]
 ---
 
-# SQLDelight for Multiplatform Database
+# Вопрос (RU)
 
-# Question (EN)
-> 
-Explain how to use SQLDelight for cross-platform database management in KMM. How do you define schemas, handle migrations, implement transactions, and optimize queries for both Android and iOS?
+> Как использовать SQLDelight для кросс-платформенного управления БД в KMM? Как определять схемы, выполнять миграции, работать с транзакциями и оптимизировать запросы для Android и iOS?
 
-## Answer (EN)
-SQLDelight generates type-safe Kotlin APIs from SQL statements, providing compile-time verification and platform-specific drivers (SQLite on Android, SQLite.swift on iOS) while sharing database logic across platforms.
+## Ответ (RU)
 
-#### SQLDelight Setup
+SQLDelight генерирует type-safe Kotlin API из SQL-запросов, обеспечивая compile-time верификацию и использование platform-specific драйверов (SQLite на Android, SQLite.swift на iOS) при sharing общей database-логики.
 
-**1. Dependencies and Configuration**
+#### Настройка и Конфигурация
+
+**Gradle Configuration**:
 ```kotlin
-// build.gradle.kts (project level)
-plugins {
-    id("app.cash.sqldelight") version "2.0.1" apply false
-}
-
 // shared/build.gradle.kts
 plugins {
     kotlin("multiplatform")
@@ -39,236 +38,80 @@ plugins {
 sqldelight {
     databases {
         create("TaskDatabase") {
-            packageName.set("com.example.taskapp.db")
-
-            // Generate async extensions
+            packageName.set("com.example.db")
             generateAsync.set(true)
-
-            // Verify migrations
             verifyMigrations.set(true)
-
-            // Source folders
-            srcDirs.setFrom("src/commonMain/sqldelight")
         }
     }
 }
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation("app.cash.sqldelight:runtime:2.0.1")
-                implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
-            }
+        commonMain.dependencies {
+            implementation("app.cash.sqldelight:runtime:2.0+")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0+")
         }
-
-        val androidMain by getting {
-            dependencies {
-                implementation("app.cash.sqldelight:android-driver:2.0.1")
-            }
+        androidMain.dependencies {
+            // ✅ Platform-specific driver
+            implementation("app.cash.sqldelight:android-driver:2.0+")
         }
-
-        val iosMain by getting {
-            dependencies {
-                implementation("app.cash.sqldelight:native-driver:2.0.1")
-            }
+        iosMain.dependencies {
+            implementation("app.cash.sqldelight:native-driver:2.0+")
         }
     }
 }
 ```
 
-**2. Database Schema Definition**
+#### Определение Схемы
+
+**SQL Schema** (`Task.sq`):
 ```sql
--- shared/src/commonMain/sqldelight/com/example/taskapp/db/Task.sq
+-- shared/src/commonMain/sqldelight/com/example/db/Task.sq
 
 CREATE TABLE Task (
     id TEXT NOT NULL PRIMARY KEY,
     title TEXT NOT NULL,
-    description TEXT NOT NULL DEFAULT '',
     completed INTEGER AS Boolean NOT NULL DEFAULT 0,
     priority INTEGER NOT NULL DEFAULT 0,
-    dueDate INTEGER,  -- Unix timestamp in milliseconds
-    createdAt INTEGER NOT NULL,
-    updatedAt INTEGER NOT NULL,
-    categoryId TEXT,
+    dueDate INTEGER,
     userId TEXT NOT NULL,
-    FOREIGN KEY (categoryId) REFERENCES Category(id) ON DELETE SET NULL,
     FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
 );
 
 CREATE INDEX task_userId ON Task(userId);
-CREATE INDEX task_categoryId ON Task(categoryId);
-CREATE INDEX task_dueDate ON Task(dueDate);
-CREATE INDEX task_completed ON Task(completed);
+CREATE INDEX task_completed_priority ON Task(completed, priority)
+WHERE completed = 0;  -- ✅ Partial index для активных задач
 
--- Category table
-CREATE TABLE Category (
-    id TEXT NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    color TEXT NOT NULL,
-    icon TEXT,
-    createdAt INTEGER NOT NULL
-);
-
--- User table
-CREATE TABLE User (
-    id TEXT NOT NULL PRIMARY KEY,
-    email TEXT NOT NULL UNIQUE,
-    name TEXT NOT NULL,
-    avatarUrl TEXT,
-    createdAt INTEGER NOT NULL
-);
-
--- Queries
-
--- Get all tasks
+-- Named Queries
 selectAll:
 SELECT * FROM Task
 ORDER BY
     CASE WHEN completed = 0 THEN 0 ELSE 1 END,
     priority DESC,
-    dueDate ASC NULLS LAST,
-    createdAt DESC;
+    dueDate ASC NULLS LAST;
 
--- Get task by ID
-selectById:
-SELECT * FROM Task
-WHERE id = :id;
-
--- Get tasks by user
 selectByUserId:
 SELECT * FROM Task
 WHERE userId = :userId
-ORDER BY createdAt DESC;
+ORDER BY priority DESC;
 
--- Get tasks by category
-selectByCategory:
-SELECT * FROM Task
-WHERE categoryId = :categoryId
-ORDER BY createdAt DESC;
-
--- Get active tasks (not completed)
-selectActiveTasks:
-SELECT * FROM Task
-WHERE completed = 0 AND userId = :userId
-ORDER BY
-    priority DESC,
-    dueDate ASC NULLS LAST;
-
--- Get completed tasks
-selectCompletedTasks:
-SELECT * FROM Task
-WHERE completed = 1 AND userId = :userId
-ORDER BY updatedAt DESC;
-
--- Get overdue tasks
-selectOverdueTasks:
-SELECT * FROM Task
-WHERE completed = 0
-  AND dueDate IS NOT NULL
-  AND dueDate < :currentTime
-  AND userId = :userId
-ORDER BY dueDate ASC;
-
--- Get tasks due today
-selectTasksDueToday:
-SELECT * FROM Task
-WHERE completed = 0
-  AND dueDate >= :startOfDay
-  AND dueDate < :endOfDay
-  AND userId = :userId
-ORDER BY dueDate ASC;
-
--- Search tasks
-searchTasks:
-SELECT * FROM Task
-WHERE userId = :userId
-  AND (
-    title LIKE '%' || :query || '%'
-    OR description LIKE '%' || :query || '%'
-  )
-ORDER BY createdAt DESC;
-
--- Count tasks by status
-countByStatus:
-SELECT
-    COUNT(CASE WHEN completed = 0 THEN 1 END) AS activeCount,
-    COUNT(CASE WHEN completed = 1 THEN 1 END) AS completedCount
-FROM Task
-WHERE userId = :userId;
-
--- Insert task
 insertTask:
-INSERT INTO Task (
-    id, title, description, completed, priority,
-    dueDate, createdAt, updatedAt, categoryId, userId
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Task (id, title, completed, priority, dueDate, userId)
+VALUES (?, ?, ?, ?, ?, ?);
 
--- Update task
 updateTask:
-UPDATE Task
-SET
+UPDATE Task SET
     title = :title,
-    description = :description,
-    completed = :completed,
     priority = :priority,
-    dueDate = :dueDate,
-    updatedAt = :updatedAt,
-    categoryId = :categoryId
+    completed = :completed
 WHERE id = :id;
-
--- Toggle completion
-toggleCompletion:
-UPDATE Task
-SET
-    completed = NOT completed,
-    updatedAt = :updatedAt
-WHERE id = :id;
-
--- Delete task
-deleteTask:
-DELETE FROM Task
-WHERE id = :id;
-
--- Delete completed tasks
-deleteCompletedTasks:
-DELETE FROM Task
-WHERE completed = 1 AND userId = :userId;
-
--- Get task with category
-selectTaskWithCategory:
-SELECT
-    Task.*,
-    Category.name AS categoryName,
-    Category.color AS categoryColor,
-    Category.icon AS categoryIcon
-FROM Task
-LEFT JOIN Category ON Task.categoryId = Category.id
-WHERE Task.id = :taskId;
-
--- Get tasks grouped by category
-selectTasksGroupedByCategory:
-SELECT
-    Category.id AS categoryId,
-    Category.name AS categoryName,
-    Category.color AS categoryColor,
-    COUNT(Task.id) AS taskCount
-FROM Category
-LEFT JOIN Task ON Category.id = Task.categoryId AND Task.userId = :userId
-GROUP BY Category.id
-ORDER BY taskCount DESC, Category.name ASC;
 ```
 
-#### Database Driver Factory
+#### Platform-Specific Drivers
 
-**1. Platform-Specific Drivers**
+**Android Driver**:
 ```kotlin
-// commonMain - Driver factory interface
-expect class DatabaseDriverFactory {
-    fun createDriver(): SqlDriver
-}
-
-// androidMain - Android implementation
+// androidMain
 actual class DatabaseDriverFactory(private val context: Context) {
     actual fun createDriver(): SqlDriver {
         return AndroidSqliteDriver(
@@ -278,17 +121,19 @@ actual class DatabaseDriverFactory(private val context: Context) {
             callback = object : AndroidSqliteDriver.Callback(TaskDatabase.Schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     super.onOpen(db)
-                    // Enable foreign keys
-                    db.execSQL("PRAGMA foreign_keys=ON;")
-                    // Enable WAL mode for better concurrency
+                    // ✅ Enable WAL for better concurrency
                     db.execSQL("PRAGMA journal_mode=WAL;")
+                    db.execSQL("PRAGMA foreign_keys=ON;")
                 }
             }
         )
     }
 }
+```
 
-// iosMain - iOS implementation
+**iOS Driver**:
+```kotlin
+// iosMain
 actual class DatabaseDriverFactory {
     actual fun createDriver(): SqlDriver {
         return NativeSqliteDriver(
@@ -306,223 +151,247 @@ actual class DatabaseDriverFactory {
 }
 ```
 
-**2. Database Wrapper**
+#### Использование Type-Safe API
+
 ```kotlin
-// commonMain/database/TaskDatabaseWrapper.kt
-class TaskDatabaseWrapper(
-    driverFactory: DatabaseDriverFactory
-) {
-    private val driver = driverFactory.createDriver()
-    private val database = TaskDatabase(driver)
-
-    val taskQueries = database.taskQueries
-    val categoryQueries = database.categoryQueries
-    val userQueries = database.userQueries
-
-    // Close database
-    fun close() {
-        driver.close()
-    }
-}
-
-// Dependency injection
-val databaseModule = module {
-    single { DatabaseDriverFactory(androidContext()) }
-    single { TaskDatabaseWrapper(get()) }
-}
-```
-
-#### Type-Safe Queries
-
-**1. Generated API Usage**
-```kotlin
-// commonMain/repository/TaskRepository.kt
+// commonMain
 class TaskRepository(
-    private val database: TaskDatabaseWrapper,
+    driverFactory: DatabaseDriverFactory,
     private val dispatchers: CoroutineDispatchers
 ) {
+    private val database = TaskDatabase(driverFactory.createDriver())
     private val queries = database.taskQueries
 
-    // Get all tasks as Flow
-    fun observeAllTasks(): Flow<List<Task>> {
+    // ✅ Reactive Flow-based query
+    fun observeTasks(): Flow<List<Task>> {
         return queries.selectAll()
             .asFlow()
             .mapToList(dispatchers.io)
     }
 
-    // Get single task
     suspend fun getTaskById(id: String): Task? = withContext(dispatchers.io) {
         queries.selectById(id).executeAsOneOrNull()
     }
 
-    // Get tasks by user
-    fun observeTasksByUser(userId: String): Flow<List<Task>> {
-        return queries.selectByUserId(userId)
-            .asFlow()
-            .mapToList(dispatchers.io)
-    }
-
-    // Get active tasks
-    fun observeActiveTasks(userId: String): Flow<List<Task>> {
-        return queries.selectActiveTasks(userId)
-            .asFlow()
-            .mapToList(dispatchers.io)
-    }
-
-    // Get overdue tasks
-    suspend fun getOverdueTasks(userId: String): List<Task> =
-        withContext(dispatchers.io) {
-            val currentTime = Clock.System.now().toEpochMilliseconds()
-            queries.selectOverdueTasks(currentTime, userId).executeAsList()
-        }
-
-    // Search tasks
-    fun searchTasks(userId: String, query: String): Flow<List<Task>> {
-        return queries.searchTasks(userId, query)
-            .asFlow()
-            .mapToList(dispatchers.io)
-    }
-
-    // Insert task
     suspend fun insertTask(task: Task) = withContext(dispatchers.io) {
         queries.insertTask(
             id = task.id,
             title = task.title,
-            description = task.description,
             completed = task.completed,
             priority = task.priority.toLong(),
             dueDate = task.dueDate,
-            createdAt = task.createdAt,
-            updatedAt = task.updatedAt,
-            categoryId = task.categoryId,
             userId = task.userId
         )
     }
 
-    // Update task
-    suspend fun updateTask(task: Task) = withContext(dispatchers.io) {
-        queries.updateTask(
-            id = task.id,
-            title = task.title,
-            description = task.description,
-            completed = task.completed,
-            priority = task.priority.toLong(),
-            dueDate = task.dueDate,
-            updatedAt = Clock.System.now().toEpochMilliseconds(),
-            categoryId = task.categoryId
-        )
-    }
-
-    // Toggle completion
-    suspend fun toggleTaskCompletion(taskId: String) = withContext(dispatchers.io) {
-        queries.toggleCompletion(
-            id = taskId,
-            updatedAt = Clock.System.now().toEpochMilliseconds()
-        )
-    }
-
-    // Delete task
-    suspend fun deleteTask(taskId: String) = withContext(dispatchers.io) {
-        queries.deleteTask(taskId)
-    }
-
-    // Get task counts
-    suspend fun getTaskCounts(userId: String): TaskCounts =
-        withContext(dispatchers.io) {
-            queries.countByStatus(userId).executeAsOne().let {
-                TaskCounts(
-                    active = it.activeCount?.toInt() ?: 0,
-                    completed = it.completedCount?.toInt() ?: 0
-                )
-            }
+    // ✅ Transaction для bulk операций
+    suspend fun insertMultiple(tasks: List<Task>) = withContext(dispatchers.io) {
+        queries.transaction {
+            tasks.forEach { insertTask(it) }
         }
+    }
 }
-
-data class TaskCounts(
-    val active: Int,
-    val completed: Int
-)
 ```
 
-**2. Complex Queries with Joins**
-```kotlin
-// Get tasks with category information
-suspend fun getTasksWithCategory(userId: String): List<TaskWithCategory> =
-    withContext(dispatchers.io) {
-        // Custom query combining Task and Category
-        database.taskQueries.selectTaskWithCategory(userId)
-            .executeAsList()
-            .map { row ->
-                TaskWithCategory(
-                    task = Task(
-                        id = row.id,
-                        title = row.title,
-                        description = row.description,
-                        completed = row.completed,
-                        priority = row.priority.toInt(),
-                        dueDate = row.dueDate,
-                        createdAt = row.createdAt,
-                        updatedAt = row.updatedAt,
-                        categoryId = row.categoryId,
-                        userId = row.userId
-                    ),
-                    categoryName = row.categoryName,
-                    categoryColor = row.categoryColor,
-                    categoryIcon = row.categoryIcon
-                )
-            }
-        }
+#### Миграции
 
-data class TaskWithCategory(
-    val task: Task,
-    val categoryName: String?,
-    val categoryColor: String?,
-    val categoryIcon: String?
-)
-```
-
-#### Migrations
-
-**1. Version Migration**
-```kotlin
-// shared/src/commonMain/sqldelight/migrations/1.sqm
--- Migration from version 1 to 2
-
--- Add priority column
+**Migration Files** (`.sqm`):
+```sql
+-- migrations/1.sqm
 ALTER TABLE Task ADD COLUMN priority INTEGER NOT NULL DEFAULT 0;
-
--- Add index for priority
 CREATE INDEX task_priority ON Task(priority);
 
-// shared/src/commonMain/sqldelight/migrations/2.sqm
--- Migration from version 2 to 3
-
--- Add dueDate column
+-- migrations/2.sqm
 ALTER TABLE Task ADD COLUMN dueDate INTEGER;
-
--- Add index for dueDate
-CREATE INDEX task_dueDate ON Task(dueDate);
-
-// shared/src/commonMain/sqldelight/migrations/3.sqm
--- Migration from version 3 to 4
-
--- Add Category table
-CREATE TABLE Category (
-    id TEXT NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    color TEXT NOT NULL,
-    icon TEXT,
-    createdAt INTEGER NOT NULL
-);
-
--- Add categoryId to Task
-ALTER TABLE Task ADD COLUMN categoryId TEXT REFERENCES Category(id);
-
--- Add index
-CREATE INDEX task_categoryId ON Task(categoryId);
 ```
 
-**2. Manual Migration Handler**
+**Manual Migration Handler**:
+```kotlin
+// androidMain
+override fun onUpgrade(
+    db: SupportSQLiteDatabase,
+    oldVersion: Int,
+    newVersion: Int
+) {
+    when (oldVersion) {
+        1 -> db.execSQL("ALTER TABLE Task ADD COLUMN priority INTEGER DEFAULT 0")
+        2 -> db.execSQL("ALTER TABLE Task ADD COLUMN dueDate INTEGER")
+    }
+}
+```
+
+#### Оптимизация
+
+**Pagination**:
+```sql
+selectTasksPaginated:
+SELECT * FROM Task
+WHERE userId = :userId
+ORDER BY priority DESC
+LIMIT :limit OFFSET :offset;
+```
+
+**Batching**:
+```kotlin
+suspend fun insertBatch(tasks: List<Task>) = withContext(dispatchers.io) {
+    queries.transaction {
+        // ✅ Chunk по 500 для избежания SQL variable limit
+        tasks.chunked(500).forEach { batch ->
+            batch.forEach { queries.insertTask(...) }
+        }
+    }
+}
+```
+
+**Custom Type Adapters**:
+```kotlin
+object TaskPriorityAdapter : ColumnAdapter<TaskPriority, Long> {
+    override fun decode(databaseValue: Long): TaskPriority {
+        return TaskPriority.values()[databaseValue.toInt()]
+    }
+
+    override fun encode(value: TaskPriority): Long {
+        return value.ordinal.toLong()
+    }
+}
+
+val database = TaskDatabase(
+    driver = driver,
+    TaskAdapter = Task.Adapter(priorityAdapter = TaskPriorityAdapter)
+)
+```
+
+#### Testing
+
+```kotlin
+class TaskRepositoryTest {
+    private lateinit var repository: TaskRepository
+
+    @BeforeTest
+    fun setup() {
+        // ✅ In-memory database для unit-тестов
+        val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        TaskDatabase.Schema.create(driver)
+        repository = TaskRepository(
+            object : DatabaseDriverFactory {
+                override fun createDriver() = driver
+            },
+            TestDispatchers
+        )
+    }
+
+    @Test
+    fun insertAndRetrieveTask() = runTest {
+        val task = Task(id = "1", title = "Test", ...)
+        repository.insertTask(task)
+        val retrieved = repository.getTaskById("1")
+        assertEquals(task, retrieved)
+    }
+}
+```
+
+#### Best Practices
+
+1. **Schema Design**: используйте foreign keys, indexes для frequently queried columns, partial indexes для filtered queries
+2. **Transactions**: группируйте related operations, держите transactions короткими, handle errors properly
+3. **Performance**: включайте WAL mode на Android, используйте batching для bulk operations, pagination для больших datasets
+4. **Migrations**: тестируйте thoroughly, используйте `verifyMigrations` в development, документируйте schema changes
+
+---
+
+# Question (EN)
+
+> How to use SQLDelight for cross-platform database management in KMM? How to define schemas, handle migrations, work with transactions, and optimize queries for Android and iOS?
+
+## Answer (EN)
+
+SQLDelight generates type-safe Kotlin APIs from SQL statements, providing compile-time verification and platform-specific drivers (SQLite on Android, SQLite.swift on iOS) while sharing database logic across platforms.
+
+#### Setup and Configuration
+
+**Gradle Configuration**:
+```kotlin
+// shared/build.gradle.kts
+plugins {
+    kotlin("multiplatform")
+    id("app.cash.sqldelight")
+}
+
+sqldelight {
+    databases {
+        create("TaskDatabase") {
+            packageName.set("com.example.db")
+            generateAsync.set(true)
+            verifyMigrations.set(true)
+        }
+    }
+}
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation("app.cash.sqldelight:runtime:2.0+")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0+")
+        }
+        androidMain.dependencies {
+            // ✅ Platform-specific driver
+            implementation("app.cash.sqldelight:android-driver:2.0+")
+        }
+        iosMain.dependencies {
+            implementation("app.cash.sqldelight:native-driver:2.0+")
+        }
+    }
+}
+```
+
+#### Schema Definition
+
+**SQL Schema** (`Task.sq`):
+```sql
+-- shared/src/commonMain/sqldelight/com/example/db/Task.sq
+
+CREATE TABLE Task (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    completed INTEGER AS Boolean NOT NULL DEFAULT 0,
+    priority INTEGER NOT NULL DEFAULT 0,
+    dueDate INTEGER,
+    userId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
+);
+
+CREATE INDEX task_userId ON Task(userId);
+CREATE INDEX task_completed_priority ON Task(completed, priority)
+WHERE completed = 0;  -- ✅ Partial index for active tasks
+
+-- Named Queries
+selectAll:
+SELECT * FROM Task
+ORDER BY
+    CASE WHEN completed = 0 THEN 0 ELSE 1 END,
+    priority DESC,
+    dueDate ASC NULLS LAST;
+
+selectByUserId:
+SELECT * FROM Task
+WHERE userId = :userId
+ORDER BY priority DESC;
+
+insertTask:
+INSERT INTO Task (id, title, completed, priority, dueDate, userId)
+VALUES (?, ?, ?, ?, ?, ?);
+
+updateTask:
+UPDATE Task SET
+    title = :title,
+    priority = :priority,
+    completed = :completed
+WHERE id = :id;
+```
+
+#### Platform-Specific Drivers
+
+**Android Driver**:
 ```kotlin
 // androidMain
 actual class DatabaseDriverFactory(private val context: Context) {
@@ -534,26 +403,9 @@ actual class DatabaseDriverFactory(private val context: Context) {
             callback = object : AndroidSqliteDriver.Callback(TaskDatabase.Schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     super.onOpen(db)
-                    db.execSQL("PRAGMA foreign_keys=ON;")
+                    // ✅ Enable WAL for better concurrency
                     db.execSQL("PRAGMA journal_mode=WAL;")
-                }
-
-                override fun onUpgrade(
-                    db: SupportSQLiteDatabase,
-                    oldVersion: Int,
-                    newVersion: Int
-                ) {
-                    // Custom migration logic if needed
-                    when (oldVersion) {
-                        1 -> {
-                            // Migrate from v1 to v2
-                            db.execSQL("ALTER TABLE Task ADD COLUMN priority INTEGER NOT NULL DEFAULT 0")
-                        }
-                        2 -> {
-                            // Migrate from v2 to v3
-                            db.execSQL("ALTER TABLE Task ADD COLUMN dueDate INTEGER")
-                        }
-                    }
+                    db.execSQL("PRAGMA foreign_keys=ON;")
                 }
             }
         )
@@ -561,195 +413,120 @@ actual class DatabaseDriverFactory(private val context: Context) {
 }
 ```
 
-#### Transactions
-
-**1. Basic Transactions**
+**iOS Driver**:
 ```kotlin
-class TaskRepository(
-    private val database: TaskDatabaseWrapper,
-    private val dispatchers: CoroutineDispatchers
-) {
-    suspend fun insertMultipleTasks(tasks: List<Task>) =
-        withContext(dispatchers.io) {
-            database.taskQueries.transaction {
-                tasks.forEach { task ->
-                    database.taskQueries.insertTask(
-                        id = task.id,
-                        title = task.title,
-                        description = task.description,
-                        completed = task.completed,
-                        priority = task.priority.toLong(),
-                        dueDate = task.dueDate,
-                        createdAt = task.createdAt,
-                        updatedAt = task.updatedAt,
-                        categoryId = task.categoryId,
-                        userId = task.userId
+// iosMain
+actual class DatabaseDriverFactory {
+    actual fun createDriver(): SqlDriver {
+        return NativeSqliteDriver(
+            schema = TaskDatabase.Schema,
+            name = "task.db",
+            onConfiguration = { config ->
+                config.copy(
+                    extendedConfig = DatabaseConfiguration.Extended(
+                        foreignKeyConstraints = true
                     )
-                }
-            }
-        }
-
-    // Transaction with rollback
-    suspend fun moveTaskToCategory(
-        taskId: String,
-        newCategoryId: String
-    ): Result<Unit> = withContext(dispatchers.io) {
-        try {
-            database.taskQueries.transaction {
-                // Verify category exists
-                val category = database.categoryQueries
-                    .selectById(newCategoryId)
-                    .executeAsOneOrNull()
-                    ?: throw IllegalArgumentException("Category not found")
-
-                // Update task
-                database.taskQueries.updateTask(
-                    id = taskId,
-                    categoryId = newCategoryId,
-                    updatedAt = Clock.System.now().toEpochMilliseconds()
                 )
             }
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-}
-```
-
-**2. Nested Transactions**
-```kotlin
-suspend fun syncTasksFromServer(
-    serverTasks: List<TaskDto>,
-    userId: String
-) = withContext(dispatchers.io) {
-    database.taskQueries.transaction {
-        // Delete all local tasks for user
-        database.taskQueries.deleteByUserId(userId)
-
-        // Insert tasks from server
-        serverTasks.forEach { dto ->
-            database.taskQueries.insertTask(
-                id = dto.id,
-                title = dto.title,
-                description = dto.description,
-                completed = dto.completed,
-                priority = dto.priority.toLong(),
-                dueDate = dto.dueDate,
-                createdAt = dto.createdAt,
-                updatedAt = dto.updatedAt,
-                categoryId = dto.categoryId,
-                userId = userId
-            )
-        }
-
-        // Update sync timestamp
-        database.userQueries.updateLastSyncTime(
-            userId = userId,
-            lastSyncTime = Clock.System.now().toEpochMilliseconds()
         )
     }
 }
 ```
 
-#### Query Optimization
+#### Type-Safe API Usage
 
-**1. Pagination**
 ```kotlin
-// Task.sq
+// commonMain
+class TaskRepository(
+    driverFactory: DatabaseDriverFactory,
+    private val dispatchers: CoroutineDispatchers
+) {
+    private val database = TaskDatabase(driverFactory.createDriver())
+    private val queries = database.taskQueries
+
+    // ✅ Reactive Flow-based query
+    fun observeTasks(): Flow<List<Task>> {
+        return queries.selectAll()
+            .asFlow()
+            .mapToList(dispatchers.io)
+    }
+
+    suspend fun getTaskById(id: String): Task? = withContext(dispatchers.io) {
+        queries.selectById(id).executeAsOneOrNull()
+    }
+
+    suspend fun insertTask(task: Task) = withContext(dispatchers.io) {
+        queries.insertTask(
+            id = task.id,
+            title = task.title,
+            completed = task.completed,
+            priority = task.priority.toLong(),
+            dueDate = task.dueDate,
+            userId = task.userId
+        )
+    }
+
+    // ✅ Transaction for bulk operations
+    suspend fun insertMultiple(tasks: List<Task>) = withContext(dispatchers.io) {
+        queries.transaction {
+            tasks.forEach { insertTask(it) }
+        }
+    }
+}
+```
+
+#### Migrations
+
+**Migration Files** (`.sqm`):
+```sql
+-- migrations/1.sqm
+ALTER TABLE Task ADD COLUMN priority INTEGER NOT NULL DEFAULT 0;
+CREATE INDEX task_priority ON Task(priority);
+
+-- migrations/2.sqm
+ALTER TABLE Task ADD COLUMN dueDate INTEGER;
+```
+
+**Manual Migration Handler**:
+```kotlin
+// androidMain
+override fun onUpgrade(
+    db: SupportSQLiteDatabase,
+    oldVersion: Int,
+    newVersion: Int
+) {
+    when (oldVersion) {
+        1 -> db.execSQL("ALTER TABLE Task ADD COLUMN priority INTEGER DEFAULT 0")
+        2 -> db.execSQL("ALTER TABLE Task ADD COLUMN dueDate INTEGER")
+    }
+}
+```
+
+#### Optimization
+
+**Pagination**:
+```sql
 selectTasksPaginated:
 SELECT * FROM Task
 WHERE userId = :userId
-ORDER BY createdAt DESC
+ORDER BY priority DESC
 LIMIT :limit OFFSET :offset;
-
-// Repository
-class TaskRepository(
-    private val database: TaskDatabaseWrapper,
-    private val dispatchers: CoroutineDispatchers
-) {
-    suspend fun getTasksPaginated(
-        userId: String,
-        page: Int,
-        pageSize: Int = 20
-    ): List<Task> = withContext(dispatchers.io) {
-        val offset = page * pageSize
-        database.taskQueries.selectTasksPaginated(
-            userId = userId,
-            limit = pageSize.toLong(),
-            offset = offset.toLong()
-        ).executeAsList()
-    }
-
-    // Flow-based pagination
-    fun observeTasksPaginated(
-        userId: String,
-        limit: Int = 20
-    ): Flow<List<Task>> {
-        return database.taskQueries.selectTasksPaginated(
-            userId = userId,
-            limit = limit.toLong(),
-            offset = 0
-        )
-        .asFlow()
-        .mapToList(dispatchers.io)
-    }
-}
 ```
 
-**2. Batching**
+**Batching**:
 ```kotlin
-suspend fun insertTasksBatch(tasks: List<Task>) = withContext(dispatchers.io) {
-    database.taskQueries.transaction {
-        // Batch inserts in chunks to avoid SQL variable limit
+suspend fun insertBatch(tasks: List<Task>) = withContext(dispatchers.io) {
+    queries.transaction {
+        // ✅ Chunk by 500 to avoid SQL variable limit
         tasks.chunked(500).forEach { batch ->
-            batch.forEach { task ->
-                database.taskQueries.insertTask(
-                    id = task.id,
-                    title = task.title,
-                    description = task.description,
-                    completed = task.completed,
-                    priority = task.priority.toLong(),
-                    dueDate = task.dueDate,
-                    createdAt = task.createdAt,
-                    updatedAt = task.updatedAt,
-                    categoryId = task.categoryId,
-                    userId = task.userId
-                )
-            }
+            batch.forEach { queries.insertTask(...) }
         }
     }
 }
 ```
 
-**3. Indexing Strategy**
-```sql
--- Composite index for common query pattern
-CREATE INDEX task_user_status_date ON Task(userId, completed, dueDate);
-
--- Partial index for active tasks only
-CREATE INDEX task_active ON Task(userId, priority, dueDate)
-WHERE completed = 0;
-
--- Index for full-text search (if using FTS)
-CREATE VIRTUAL TABLE TaskFts USING fts5(
-    title,
-    description,
-    content=Task,
-    content_rowid=rowid
-);
-```
-
-#### Custom Type Adapters
-
-**1. Enum Adapter**
+**Custom Type Adapters**:
 ```kotlin
-// Domain model
-enum class TaskPriority {
-    LOW, MEDIUM, HIGH, URGENT
-}
-
-// Adapter
 object TaskPriorityAdapter : ColumnAdapter<TaskPriority, Long> {
     override fun decode(databaseValue: Long): TaskPriority {
         return TaskPriority.values()[databaseValue.toInt()]
@@ -760,263 +537,76 @@ object TaskPriorityAdapter : ColumnAdapter<TaskPriority, Long> {
     }
 }
 
-// Register adapter
 val database = TaskDatabase(
     driver = driver,
-    TaskAdapter = Task.Adapter(
-        priorityAdapter = TaskPriorityAdapter
-    )
+    TaskAdapter = Task.Adapter(priorityAdapter = TaskPriorityAdapter)
 )
-```
-
-**2. DateTime Adapter**
-```kotlin
-// Using kotlinx-datetime
-object InstantAdapter : ColumnAdapter<Instant, Long> {
-    override fun decode(databaseValue: Long): Instant {
-        return Instant.fromEpochMilliseconds(databaseValue)
-    }
-
-    override fun encode(value: Instant): Long {
-        return value.toEpochMilliseconds()
-    }
-}
-
-// Using LocalDate
-object LocalDateAdapter : ColumnAdapter<LocalDate, String> {
-    override fun decode(databaseValue: String): LocalDate {
-        return LocalDate.parse(databaseValue)
-    }
-
-    override fun encode(value: LocalDate): String {
-        return value.toString()
-    }
-}
 ```
 
 #### Testing
 
-**1. In-Memory Database for Tests**
 ```kotlin
-// commonTest
 class TaskRepositoryTest {
-    private lateinit var database: TaskDatabaseWrapper
     private lateinit var repository: TaskRepository
 
     @BeforeTest
     fun setup() {
-        // Create in-memory database
+        // ✅ In-memory database for unit tests
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         TaskDatabase.Schema.create(driver)
-
-        database = TaskDatabaseWrapper(
+        repository = TaskRepository(
             object : DatabaseDriverFactory {
                 override fun createDriver() = driver
-            }
+            },
+            TestDispatchers
         )
-
-        repository = TaskRepository(
-            database = database,
-            dispatchers = TestDispatchers
-        )
-    }
-
-    @AfterTest
-    fun tearDown() {
-        database.close()
     }
 
     @Test
-    fun `insertTask and getTaskById returns correct task`() = runTest {
-        val task = Task(
-            id = "1",
-            title = "Test Task",
-            description = "Description",
-            completed = false,
-            priority = 1,
-            dueDate = null,
-            createdAt = 1000L,
-            updatedAt = 1000L,
-            categoryId = null,
-            userId = "user1"
-        )
-
+    fun insertAndRetrieveTask() = runTest {
+        val task = Task(id = "1", title = "Test", ...)
         repository.insertTask(task)
         val retrieved = repository.getTaskById("1")
-
         assertEquals(task, retrieved)
-    }
-
-    @Test
-    fun `observeActiveTasks returns only incomplete tasks`() = runTest {
-        val tasks = listOf(
-            Task(id = "1", completed = false, userId = "user1", ...),
-            Task(id = "2", completed = true, userId = "user1", ...),
-            Task(id = "3", completed = false, userId = "user1", ...)
-        )
-
-        tasks.forEach { repository.insertTask(it) }
-
-        val activeTasks = repository.observeActiveTasks("user1").first()
-
-        assertEquals(2, activeTasks.size)
-        assertTrue(activeTasks.all { !it.completed })
     }
 }
 ```
 
 #### Best Practices
 
-1. **Schema Design**:
-   - Use foreign keys for data integrity
-   - Create indexes for frequently queried columns
-   - Use composite indexes for multi-column queries
-   - Consider partial indexes for filtered queries
-
-2. **Queries**:
-   - Name queries descriptively
-   - Use parameters to prevent SQL injection
-   - Leverage SQLDelight's type safety
-   - Use Flow for reactive updates
-
-3. **Transactions**:
-   - Group related operations in transactions
-   - Keep transactions short
-   - Handle errors and rollbacks
-   - Use nested transactions carefully
-
-4. **Performance**:
-   - Enable WAL mode on Android
-   - Use batching for bulk operations
-   - Implement pagination for large datasets
-   - Profile queries with EXPLAIN QUERY PLAN
-
-5. **Migrations**:
-   - Test migrations thoroughly
-   - Use verifyMigrations in development
-   - Keep migrations backward compatible
-   - Document schema changes
-
-### Summary
-
-SQLDelight provides type-safe multiplatform database management:
-- **Type Safety**: Compile-time SQL verification
-- **Platform Drivers**: SQLite (Android), SQLite.swift (iOS)
-- **Reactive**: Flow-based queries
-- **Migrations**: Automatic schema versioning
-- **Transactions**: ACID-compliant operations
-- **Performance**: Optimized with indexes and batching
-
-Key considerations: proper schema design, migration strategy, transaction management, query optimization, and comprehensive testing.
+1. **Schema Design**: use foreign keys, indexes for frequently queried columns, partial indexes for filtered queries
+2. **Transactions**: group related operations, keep transactions short, handle errors properly
+3. **Performance**: enable WAL mode on Android, use batching for bulk operations, pagination for large datasets
+4. **Migrations**: test thoroughly, use `verifyMigrations` in development, document schema changes
 
 ---
 
-# Вопрос (RU)
-> 
-Объясните как использовать SQLDelight для кросс-платформенного управления базой данных в KMM. Как определять схемы, обрабатывать миграции, реализовывать транзакции и оптимизировать запросы для Android и iOS?
+## Follow-ups
 
-## Ответ (RU)
-SQLDelight генерирует type-safe Kotlin APIs из SQL statements, обеспечивая compile-time верификацию и platform-specific драйверы (SQLite на Android, SQLite.swift на iOS) при sharing database логики.
+- How to implement full-text search with SQLDelight FTS5 virtual tables?
+- What are the trade-offs between SQLDelight and Room for KMM projects?
+- How to handle schema conflicts during multi-way sync in SQLDelight?
+- How to profile and optimize complex JOIN queries in SQLDelight?
+- How to implement database encryption in KMM using SQLCipher?
 
-#### Ключевые Возможности
+## References
 
-**Type Safety**:
-- Compile-time SQL verification
-- Generated Kotlin APIs
-- Type-safe parameters
-- Null safety
-
-**Platform Drivers**:
-- Android: AndroidSqliteDriver (SQLite)
-- iOS: NativeSqliteDriver (SQLite.swift)
-- Автоматический выбор
-
-**Reactive Queries**:
-- Flow-based observables
-- Automatic updates
-- Lifecycle-aware
-
-#### Schema Definition
-
-**SQL файлы**:
-- `.sq` файлы в commonMain
-- CREATE TABLE statements
-- Named queries
-- Indexes и constraints
-
-**Queries**:
-- Named queries (selectAll, insertTask)
-- Параметризованные запросы
-- JOINs и aggregations
-- Full-text search
-
-#### Migrations
-
-**Версионирование**:
-- `.sqm` migration файлы
-- Automatic schema updates
-- verifyMigrations для тестирования
-- Manual migrations для complex cases
-
-**Best Practices**:
-- Тестировать все миграции
-- Backward compatibility
-- Документировать изменения
-
-#### Transactions
-
-**ACID Operations**:
-- transaction {} block
-- Automatic rollback on error
-- Nested transactions support
-- Batch operations
-
-**Use Cases**:
-- Bulk inserts
-- Multi-table updates
-- Data synchronization
-- Integrity constraints
-
-#### Оптимизация
-
-**Indexes**:
-- Single-column indexes
-- Composite indexes
-- Partial indexes
-- Full-text search indexes
-
-**Pagination**:
-- LIMIT/OFFSET queries
-- Flow-based pagination
-- Cursor-based pagination
-
-**Batching**:
-- Chunked inserts (500-1000 items)
-- Transaction batching
-- Reduced I/O operations
-
-#### Testing
-
-**In-Memory Database**:
-- JdbcSqliteDriver.IN_MEMORY
-- Fast unit tests
-- Isolated test cases
-- No cleanup needed
-
-### Резюме
-
-SQLDelight обеспечивает type-safe multiplatform database:
-- **Type Safety**: Compile-time проверки
-- **Platform Drivers**: Native SQLite
-- **Reactive**: Flow queries
-- **Migrations**: Automatic versioning
-- **Transactions**: ACID guarantees
-- **Performance**: Indexes, batching, WAL mode
-
-Ключевые моменты: schema design, migration strategy, transaction management, query optimization, testing.
+- SQLDelight official documentation
+- KMM architecture best practices
+- SQLite optimization guide
+- Platform-specific database drivers comparison
 
 ## Related Questions
 
-- [[q-annotation-processing-android--android--medium]]
-- [[q-play-feature-delivery--android--medium]]
-- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]]
+### Prerequisites
+- [[q-kmm-architecture--android--easy]] - Understanding KMM project structure and expect/actual mechanism
+- [[q-sqlite-basics--databases--easy]] - SQL fundamentals and SQLite-specific features
+
+### Related
+- [[q-annotation-processing-android--android--medium]] - Code generation comparison with SQLDelight
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle configuration for multiplatform projects
+- [[q-room-migration--android--medium]] - Alternative database solution comparison
+
+### Advanced
+- [[q-kmm-testing-strategies--android--hard]] - Testing multiplatform database code
+- [[q-database-encryption--android--hard]] - Securing SQLDelight databases with SQLCipher

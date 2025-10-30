@@ -1,25 +1,19 @@
 ---
 id: 20251012-122761
 title: Android Architectural Patterns / Архитектурные паттерны Android
-aliases: [Android Architectural Patterns, Архитектурные паттерны Android]
+aliases: ["Android Architectural Patterns", "Архитектурные паттерны Android"]
 topic: android
-subtopics:
-  - architecture-clean
+subtopics: [architecture-mvvm, architecture-mvi, architecture-clean]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - c-mvvm
-  - c-clean-architecture
-  - c-dependency-injection
+related: [c-mvvm, c-clean-architecture, c-dependency-injection]
 created: 2025-10-15
-updated: 2025-01-27
-tags: [android/architecture-clean, difficulty/medium]
+updated: 2025-10-29
+tags: [android/architecture-mvvm, android/architecture-mvi, android/architecture-clean, difficulty/medium]
 sources: []
 ---
 # Вопрос (RU)
@@ -27,251 +21,171 @@ sources: []
 
 ## Ответ (RU)
 
-Android использует несколько архитектурных паттернов: **MVP** (Model-View-Presenter), **MVVM** (Model-View-ViewModel), **MVI** (Model-View-Intent) и **Clean Architecture**. Современный стандарт — MVVM с Architecture Components.
+Android поддерживает несколько архитектурных паттернов: **MVP**, **MVVM**, **MVI** и **Clean Architecture**. Современный стандарт — MVVM с Architecture Components.
 
 ### MVP (Model-View-Presenter)
-- **Компоненты**: Model (данные), View (пассивный UI), Presenter (бизнес-логика)
-- **Преимущества**: Четкое разделение, тестируемость
-- **Недостатки**: Много boilerplate, нет lifecycle awareness
+**Структура**: Model (данные) → Presenter (логика) → View (пассивный UI).
+
+**Проблема**: Presenter держит ссылку на View, что создает риск утечек памяти и требует ручного управления lifecycle.
 
 ```kotlin
-// ❌ Presenter держит ссылку на View - риск утечки памяти
+// ❌ Presenter держит ссылку на View
 class UserPresenter(private val view: UserContract.View) {
     fun loadUser(id: Int) {
         view.showLoading() // View может быть уничтожена
-        repository.getUser(id) { user -> view.showUser(user) }
+        repository.getUser(id) { view.showUser(it) }
     }
 }
 ```
 
 ### MVVM (Model-View-ViewModel)
-- **Компоненты**: Model (данные), View (UI), ViewModel (логика с observable data)
-- **Преимущества**: Lifecycle-aware, автообновление UI, официальная поддержка
-- **Применение**: Стандарт для большинства приложений
+**Структура**: View наблюдает за ViewModel через LiveData/StateFlow. ViewModel переживает configuration changes и автоматически очищается.
 
 ```kotlin
-// ✅ ViewModel переживает configuration changes, автоматически очищается
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+// ✅ ViewModel lifecycle-aware, автоматическая отмена корутин
+class UserViewModel(private val repo: UserRepository) : ViewModel() {
+    private val _state = MutableStateFlow<UiState>(Loading)
+    val state = _state.asStateFlow()
 
-    fun loadUser(id: Int) {
-        viewModelScope.launch { // ✅ Автоматическая отмена при onCleared()
-            _uiState.value = try {
-                UiState.Success(repository.getUser(id))
-            } catch (e: Exception) {
-                UiState.Error(e.message ?: "Unknown")
-            }
-        }
+    fun load(id: Int) = viewModelScope.launch {
+        _state.value = try { Success(repo.getUser(id)) }
+                       catch (e: Exception) { Error(e.message) }
     }
 }
 ```
 
 ### MVI (Model-View-Intent)
-- **Компоненты**: State (единственный источник истины), Intent (действия пользователя)
-- **Преимущества**: Предсказуемое состояние, unidirectional flow, простая отладка
-- **Применение**: Сложные UI с множеством состояний
+**Структура**: Unidirectional data flow с immutable state. Все изменения происходят через Intent.
 
 ```kotlin
-// ✅ Immutable state, все изменения через Intent
-sealed class UserIntent {
-    data class LoadUser(val id: Int) : UserIntent()
-}
-
-data class UserState(
-    val isLoading: Boolean = false,
-    val user: User? = null,
-    val error: String? = null
-)
+// ✅ Единая точка входа, предсказуемое состояние
+sealed class UserIntent { data class Load(val id: Int) : UserIntent() }
+data class UserState(val loading: Boolean, val user: User?, val error: String?)
 
 class UserViewModel : ViewModel() {
-    private val _state = MutableStateFlow(UserState())
-    val state: StateFlow<UserState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(UserState(false, null, null))
+    val state = _state.asStateFlow()
 
-    fun handleIntent(intent: UserIntent) { // ✅ Единая точка входа
-        when (intent) {
-            is UserIntent.LoadUser -> loadUser(intent.id)
-        }
+    fun handle(intent: UserIntent) = when (intent) {
+        is UserIntent.Load -> loadUser(intent.id)
     }
 }
 ```
 
 ### Clean Architecture
-- **Слои**: Domain (use cases, entities), Data (repositories, sources), Presentation (UI, ViewModels)
-- **Преимущества**: Независимость от фреймворка, высокая тестируемость
-- **Применение**: Enterprise приложения
+**Структура**: Domain (use cases) → Data (repositories) → Presentation (ViewModels).
 
 ```kotlin
-// ✅ UseCase инкапсулирует бизнес-логику, независим от Android
-class GetUserUseCase(private val repository: UserRepository) {
-    suspend operator fun invoke(id: Int): Result<User> {
-        return repository.getUser(id)
-    }
-}
-
-// ✅ ViewModel зависит от интерфейса, легко тестировать
-class UserViewModel(private val getUserUseCase: GetUserUseCase) : ViewModel() {
-    fun loadUser(id: Int) = viewModelScope.launch {
-        getUserUseCase(id).fold(
-            onSuccess = { /* update state */ },
-            onFailure = { /* handle error */ }
-        )
-    }
+// ✅ UseCase независим от фреймворка
+class GetUserUseCase(private val repo: UserRepository) {
+    suspend operator fun invoke(id: Int) = repo.getUser(id)
 }
 ```
 
-**Сравнение паттернов:**
-
-| Паттерн | Тестируемость | Boilerplate | Lifecycle-Aware | Применение |
-|---------|-------------|-------------|-----------------|----------|
-| **MVP** | Высокая | Высокий | Нет | Legacy приложения |
-| **MVVM** | Высокая | Средний | Да | Большинство приложений |
-| **MVI** | Очень высокая | Средний | Да | Сложные UI |
-| **Clean Architecture** | Очень высокая | Высокий | Да (с MVVM) | Enterprise приложения |
-
-**Рекомендации:**
-- Стандарт: MVVM + Repository Pattern + Hilt
-- Сложные приложения: Clean Architecture + MVVM/MVI
+**Выбор паттерна:**
+- **MVVM**: стандарт для большинства приложений
+- **MVI**: сложные UI с множеством состояний
+- **Clean Architecture**: многомодульные enterprise-приложения
 
 # Question (EN)
 > What are the main architectural patterns used in Android development, and how do they differ?
 
 ## Answer (EN)
 
-Android uses several architectural patterns: **MVP** (Model-View-Presenter), **MVVM** (Model-View-ViewModel), **MVI** (Model-View-Intent), and **Clean Architecture**. The modern standard is MVVM with Architecture Components.
+Android supports several architectural patterns: **MVP**, **MVVM**, **MVI**, and **Clean Architecture**. The modern standard is MVVM with Architecture Components.
 
 ### MVP (Model-View-Presenter)
-- **Components**: Model (data), View (passive UI), Presenter (business logic)
-- **Advantages**: Clear separation, testability
-- **Disadvantages**: Boilerplate code, no lifecycle awareness
+**Structure**: Model (data) → Presenter (logic) → View (passive UI).
+
+**Problem**: Presenter holds a reference to View, creating memory leak risks and requiring manual lifecycle management.
 
 ```kotlin
-// ❌ Presenter holds View reference - memory leak risk
+// ❌ Presenter holds View reference
 class UserPresenter(private val view: UserContract.View) {
     fun loadUser(id: Int) {
         view.showLoading() // View may be destroyed
-        repository.getUser(id) { user -> view.showUser(user) }
+        repository.getUser(id) { view.showUser(it) }
     }
 }
 ```
 
 ### MVVM (Model-View-ViewModel)
-- **Components**: Model (data), View (UI), ViewModel (logic with observable data)
-- **Advantages**: Lifecycle-aware, automatic UI updates, official support
-- **Use case**: Standard for most applications
+**Structure**: View observes ViewModel via LiveData/StateFlow. ViewModel survives configuration changes and is automatically cleared.
 
 ```kotlin
-// ✅ ViewModel survives configuration changes, automatically cleared
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+// ✅ ViewModel is lifecycle-aware, auto-cancels coroutines
+class UserViewModel(private val repo: UserRepository) : ViewModel() {
+    private val _state = MutableStateFlow<UiState>(Loading)
+    val state = _state.asStateFlow()
 
-    fun loadUser(id: Int) {
-        viewModelScope.launch { // ✅ Auto-cancelled in onCleared()
-            _uiState.value = try {
-                UiState.Success(repository.getUser(id))
-            } catch (e: Exception) {
-                UiState.Error(e.message ?: "Unknown")
-            }
-        }
+    fun load(id: Int) = viewModelScope.launch {
+        _state.value = try { Success(repo.getUser(id)) }
+                       catch (e: Exception) { Error(e.message) }
     }
 }
 ```
 
 ### MVI (Model-View-Intent)
-- **Components**: State (single source of truth), Intent (user actions)
-- **Advantages**: Predictable state, unidirectional flow, easy debugging
-- **Use case**: Complex UIs with multiple states
+**Structure**: Unidirectional data flow with immutable state. All changes happen through Intents.
 
 ```kotlin
-// ✅ Immutable state, all changes through Intent
-sealed class UserIntent {
-    data class LoadUser(val id: Int) : UserIntent()
-}
-
-data class UserState(
-    val isLoading: Boolean = false,
-    val user: User? = null,
-    val error: String? = null
-)
+// ✅ Single entry point, predictable state
+sealed class UserIntent { data class Load(val id: Int) : UserIntent() }
+data class UserState(val loading: Boolean, val user: User?, val error: String?)
 
 class UserViewModel : ViewModel() {
-    private val _state = MutableStateFlow(UserState())
-    val state: StateFlow<UserState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(UserState(false, null, null))
+    val state = _state.asStateFlow()
 
-    fun handleIntent(intent: UserIntent) { // ✅ Single entry point
-        when (intent) {
-            is UserIntent.LoadUser -> loadUser(intent.id)
-        }
+    fun handle(intent: UserIntent) = when (intent) {
+        is UserIntent.Load -> loadUser(intent.id)
     }
 }
 ```
 
 ### Clean Architecture
-- **Layers**: Domain (use cases, entities), Data (repositories, sources), Presentation (UI, ViewModels)
-- **Advantages**: Framework independence, high testability
-- **Use case**: Enterprise applications
+**Structure**: Domain (use cases) → Data (repositories) → Presentation (ViewModels).
 
 ```kotlin
-// ✅ UseCase encapsulates business logic, framework-independent
-class GetUserUseCase(private val repository: UserRepository) {
-    suspend operator fun invoke(id: Int): Result<User> {
-        return repository.getUser(id)
-    }
-}
-
-// ✅ ViewModel depends on interface, easy to test
-class UserViewModel(private val getUserUseCase: GetUserUseCase) : ViewModel() {
-    fun loadUser(id: Int) = viewModelScope.launch {
-        getUserUseCase(id).fold(
-            onSuccess = { /* update state */ },
-            onFailure = { /* handle error */ }
-        )
-    }
+// ✅ UseCase is framework-independent
+class GetUserUseCase(private val repo: UserRepository) {
+    suspend operator fun invoke(id: Int) = repo.getUser(id)
 }
 ```
 
-**Pattern Comparison:**
-
-| Pattern | Testability | Boilerplate | Lifecycle-Aware | Use Case |
-|---------|-------------|-------------|-----------------|----------|
-| **MVP** | High | High | No | Legacy apps |
-| **MVVM** | High | Medium | Yes | Most applications |
-| **MVI** | Very High | Medium | Yes | Complex UIs |
-| **Clean Architecture** | Very High | High | Yes (with MVVM) | Enterprise apps |
-
-**Recommendations:**
-- Standard: MVVM + Repository Pattern + Hilt
-- Complex apps: Clean Architecture + MVVM/MVI
+**Pattern selection:**
+- **MVVM**: standard for most applications
+- **MVI**: complex UIs with multiple states
+- **Clean Architecture**: multi-module enterprise applications
 
 ## Follow-ups
 
 - When would you choose MVI over MVVM for state management?
 - How does Clean Architecture enforce dependency inversion in Android?
-- What are the trade-offs between testability and boilerplate in each pattern?
 - How do you handle shared state across multiple ViewModels in MVVM?
-- What role does the Repository pattern play in Clean Architecture?
+- What are the testing implications of each architectural pattern?
+- How does Repository pattern integrate with Clean Architecture layers?
 
 ## References
 
-- [[c-mvvm]] - MVVM architecture pattern
-- [[c-clean-architecture]] - Clean Architecture principles
-- [[c-dependency-injection]] - Dependency injection pattern
-- Android Architecture Guide: https://developer.android.com/topic/architecture
+- [[c-mvvm]]
+- [[c-clean-architecture]]
+- [[c-dependency-injection]]
+- https://developer.android.com/topic/architecture
 
 ## Related Questions
 
 ### Prerequisites
-- ViewModel lifecycle and scope
-- Dependency injection fundamentals
-- Observer pattern and reactive streams
+- [[q-viewmodel-lifecycle--android--easy]]
+- [[q-dependency-injection-basics--android--easy]]
+- [[q-observer-pattern--architecture-patterns--easy]]
 
 ### Related
-- MVVM implementation details
-- Clean Architecture layer organization
-- State management strategies
+- [[q-repository-pattern--android--medium]]
+- [[q-state-management-compose--android--medium]]
+- [[q-unidirectional-data-flow--android--medium]]
 
 ### Advanced
-- MVI architecture implementation
-- Multi-module Clean Architecture
-- Testing strategies for each pattern
+- [[q-multi-module-architecture--android--hard]]
+- [[q-testing-clean-architecture--android--hard]]
+- [[q-shared-state-viewmodels--android--hard]]

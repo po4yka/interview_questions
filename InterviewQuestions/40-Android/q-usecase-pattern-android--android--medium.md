@@ -1,184 +1,46 @@
 ---
-id: 20251012-122711122
+id: 20251012-122711
 title: "UseCase Pattern in Android / Паттерн UseCase в Android"
-aliases: []
+aliases: ["UseCase Pattern in Android", "Паттерн UseCase в Android"]
 
 # Classification
 topic: android
-subtopics: [architecture-clean]
+subtopics: [architecture-clean, architecture-mvvm, di-hilt]
 question_kind: theory
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/architecture, android/usecase, android/clean-architecture, android/domain-layer, difficulty/medium]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
-source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
+language_tags: [en, ru]
+sources: []
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-baseline-profiles-optimization--performance--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium, q-android-runtime-internals--android--hard]
+related: [q-repository-pattern--android--medium, q-clean-architecture-android--android--hard]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-10-28
 
-tags: [android/architecture-clean, en, ru, difficulty/medium]
+tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, difficulty/medium]
 ---
-
-# Question (EN)
-> What is the UseCase pattern in Android? When and how to implement it?
 # Вопрос (RU)
 > Что такое паттерн UseCase в Android? Когда и как его реализовать?
 
+# Question (EN)
+> What is the UseCase pattern in Android? When and how to implement it?
+
 ---
-
-## Answer (EN)
-
-**UseCase** (or Interactor) encapsulates a single business operation, making business logic reusable and testable.
-
-### Basic Implementation
-
-```kotlin
-class GetUserUseCase(
-    private val repository: UserRepository
-) {
-    suspend operator fun invoke(userId: String): Result<User> {
-        return repository.getUser(userId)
-    }
-}
-
-// Usage in ViewModel
-class UserViewModel(
-    private val getUserUseCase: GetUserUseCase
-) : ViewModel() {
-
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            getUserUseCase(userId)
-                .onSuccess { user ->
-                    _uiState.value = UiState.Success(user)
-                }
-                .onFailure { error ->
-                    _uiState.value = UiState.Error(error.message)
-                }
-        }
-    }
-}
-```
-
-### UseCase with Parameters
-
-```kotlin
-data class LoginParams(
-    val email: String,
-    val password: String
-)
-
-class LoginUseCase(
-    private val authRepository: AuthRepository,
-    private val userRepository: UserRepository,
-    private val analytics: Analytics
-) {
-    suspend operator fun invoke(params: LoginParams): Result<User> {
-        return try {
-            // 1. Validate
-            if (!isValidEmail(params.email)) {
-                return Result.failure(InvalidEmailException())
-            }
-
-            // 2. Authenticate
-            val token = authRepository.login(params.email, params.password)
-
-            // 3. Fetch user data
-            val user = userRepository.getCurrentUser(token)
-
-            // 4. Log event
-            analytics.logEvent("user_logged_in", mapOf("userId" to user.id))
-
-            Result.success(user)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    private fun isValidEmail(email: String): Boolean {
-        return email.contains("@")
-    }
-}
-```
-
-### UseCase with Flow
-
-```kotlin
-class ObserveUserUseCase(
-    private val repository: UserRepository
-) {
-    operator fun invoke(userId: String): Flow<User> {
-        return repository.observeUser(userId)
-    }
-}
-
-// Usage
-class ProfileViewModel(
-    observeUserUseCase: ObserveUserUseCase
-) : ViewModel() {
-
-    val user: StateFlow<User?> = observeUserUseCase("user123")
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = null
-        )
-}
-```
-
-### When to Use UseCases
-
-**- Use when:**
-- Complex business logic
-- Multiple repositories involved
-- Logic reused across ViewModels
-- Need clear separation of concerns
-
-**- Don't use when:**
-- Simple repository calls
-- One-to-one mapping to repository
-- Adds unnecessary layer
-
-```kotlin
-// - BAD - Unnecessary UseCase
-class GetProductsUseCase(private val repo: ProductRepository) {
-    suspend operator fun invoke() = repo.getProducts()
-}
-// Better: Call repository directly from ViewModel
-
-// - GOOD - Complex logic
-class PurchaseProductUseCase(
-    private val productRepo: ProductRepository,
-    private val paymentRepo: PaymentRepository,
-    private val analyticsRepo: AnalyticsRepository
-) {
-    suspend operator fun invoke(productId: String): Result<Purchase> {
-        // Multiple steps, multiple repositories
-        val product = productRepo.getProduct(productId)
-        val payment = paymentRepo.processPayment(product.price)
-        analyticsRepo.logPurchase(productId)
-        return Result.success(Purchase(product, payment))
-    }
-}
-```
-
-**English Summary**: UseCase encapsulates single business operation. Benefits: reusable logic, testability, separation of concerns. Implement with `operator fun invoke()`. Use for: complex logic, multiple repositories. Don't use for simple repository calls. Can return Flow for reactive data.
 
 ## Ответ (RU)
 
-**UseCase** (или Interactor) инкапсулирует одну бизнес-операцию, делая бизнес-логику переиспользуемой и тестируемой.
+**UseCase** (или Interactor) — компонент domain-слоя, инкапсулирующий одну бизнес-операцию. Делает логику переиспользуемой, тестируемой и изолирует ViewModel от деталей repository.
 
 ### Базовая реализация
 
 ```kotlin
+// ✅ Простой UseCase для одного репозитория
 class GetUserUseCase(
     private val repository: UserRepository
 ) {
@@ -194,45 +56,177 @@ class UserViewModel(
     fun loadUser(userId: String) {
         viewModelScope.launch {
             getUserUseCase(userId)
-                .onSuccess { user ->
-                    _uiState.value = UiState.Success(user)
-                }
+                .onSuccess { user -> _uiState.value = UiState.Success(user) }
+                .onFailure { error -> _uiState.value = UiState.Error(error.message) }
         }
     }
 }
 ```
 
-### Когда использовать UseCases
+### Когда использовать
 
-**- Использовать когда:**
-- Сложная бизнес-логика
-- Задействовано несколько repositories
-- Логика переиспользуется между ViewModels
-- Нужно четкое разделение обязанностей
+**✅ Использовать:**
+- Сложная бизнес-логика (валидация, трансформации, вычисления)
+- Задействовано несколько repositories/data sources
+- Логика переиспользуется между несколькими ViewModels
+- Нужна изоляция и тестируемость бизнес-правил
 
-**- Не использовать когда:**
-- Простые вызовы repository
-- Один к одному с repository
-- Добавляет ненужный слой
+**❌ НЕ использовать:**
+- Простой вызов одного метода repository без логики
+- Соотношение 1:1 с repository методом
+- Добавляет ненужный слой абстракции
 
-**Краткое содержание**: UseCase инкапсулирует одну бизнес-операцию. Преимущества: переиспользуемая логика, тестируемость, разделение обязанностей. Реализация с `operator fun invoke()`. Использовать для: сложной логики, нескольких repositories. Не использовать для простых вызовов repository.
+```kotlin
+// ❌ BAD - Бесполезный UseCase без бизнес-логики
+class GetProductsUseCase(private val repo: ProductRepository) {
+    suspend operator fun invoke() = repo.getProducts() // Просто проксирует
+}
+// Лучше: вызвать repository напрямую из ViewModel
+
+// ✅ GOOD - UseCase с реальной бизнес-логикой
+class PurchaseProductUseCase(
+    private val productRepo: ProductRepository,
+    private val paymentRepo: PaymentRepository,
+    private val analytics: Analytics
+) {
+    suspend operator fun invoke(productId: String): Result<Purchase> {
+        val product = productRepo.getProduct(productId)
+        val payment = paymentRepo.processPayment(product.price)
+        analytics.logPurchase(productId, product.price)
+        return Result.success(Purchase(product, payment))
+    }
+}
+```
+
+### UseCase с реактивными данными
+
+```kotlin
+// ✅ UseCase возвращающий Flow для реактивных обновлений
+class ObserveCartItemsUseCase(
+    private val cartRepo: CartRepository
+) {
+    operator fun invoke(): Flow<List<CartItem>> {
+        return cartRepo.observeCart()
+            .map { items -> items.filter { it.isAvailable } } // Фильтрация
+    }
+}
+
+// Использование
+val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+```
+
+**Краткое содержание**: UseCase инкапсулирует бизнес-операцию domain-слоя. Использовать для: сложной логики, нескольких data sources, переиспользования. НЕ использовать для простых вызовов repository. Реализация: `operator fun invoke()`, может возвращать Flow для реактивности.
+
+## Answer (EN)
+
+**UseCase** (or Interactor) is a domain layer component that encapsulates a single business operation. Makes logic reusable, testable, and isolates ViewModel from repository details.
+
+### Basic Implementation
+
+```kotlin
+// ✅ Simple UseCase for single repository
+class GetUserUseCase(
+    private val repository: UserRepository
+) {
+    suspend operator fun invoke(userId: String): Result<User> {
+        return repository.getUser(userId)
+    }
+}
+
+// Usage in ViewModel
+class UserViewModel(
+    private val getUserUseCase: GetUserUseCase
+) : ViewModel() {
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            getUserUseCase(userId)
+                .onSuccess { user -> _uiState.value = UiState.Success(user) }
+                .onFailure { error -> _uiState.value = UiState.Error(error.message) }
+        }
+    }
+}
+```
+
+### When to Use
+
+**✅ Use when:**
+- Complex business logic (validation, transformations, calculations)
+- Multiple repositories/data sources involved
+- Logic reused across multiple ViewModels
+- Need isolation and testability of business rules
+
+**❌ Don't use when:**
+- Simple single repository method call without logic
+- One-to-one mapping to repository method
+- Adds unnecessary abstraction layer
+
+```kotlin
+// ❌ BAD - Useless UseCase without business logic
+class GetProductsUseCase(private val repo: ProductRepository) {
+    suspend operator fun invoke() = repo.getProducts() // Just proxies
+}
+// Better: call repository directly from ViewModel
+
+// ✅ GOOD - UseCase with real business logic
+class PurchaseProductUseCase(
+    private val productRepo: ProductRepository,
+    private val paymentRepo: PaymentRepository,
+    private val analytics: Analytics
+) {
+    suspend operator fun invoke(productId: String): Result<Purchase> {
+        val product = productRepo.getProduct(productId)
+        val payment = paymentRepo.processPayment(product.price)
+        analytics.logPurchase(productId, product.price)
+        return Result.success(Purchase(product, payment))
+    }
+}
+```
+
+### UseCase with Reactive Data
+
+```kotlin
+// ✅ UseCase returning Flow for reactive updates
+class ObserveCartItemsUseCase(
+    private val cartRepo: CartRepository
+) {
+    operator fun invoke(): Flow<List<CartItem>> {
+        return cartRepo.observeCart()
+            .map { items -> items.filter { it.isAvailable } } // Filtering
+    }
+}
+
+// Usage
+val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+```
+
+**Summary**: UseCase encapsulates domain layer business operation. Use for: complex logic, multiple data sources, reusability. Don't use for simple repository calls. Implementation: `operator fun invoke()`, can return Flow for reactivity.
 
 ---
 
+## Follow-ups
+
+1. How to test UseCases in isolation from repositories?
+2. Should UseCases handle threading or rely on repositories?
+3. How to handle multiple parameters in UseCases (data class vs varargs)?
+4. When to use `suspend fun invoke()` vs `fun invoke(): Flow<T>`?
+5. How do UseCases fit in multi-module architecture?
+
 ## References
+
 - [Domain layer - Android](https://developer.android.com/topic/architecture/domain-layer)
+- [Guide to app architecture - Android](https://developer.android.com/topic/architecture)
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-repository-pattern--android--medium]] - Architecture
-- [[q-repository-multiple-sources--android--medium]] - Architecture
+### Prerequisites (Easier)
+- [[q-repository-pattern--android--medium]] - Repository pattern basics
+
+### Related (Same Level)
+- [[q-viewmodel-livedata--android--medium]] - ViewModel basics
+- [[q-what-is-dependency-injection--android--medium]] - DI fundamentals
 
 ### Advanced (Harder)
-- [[q-clean-architecture-android--android--hard]] - Architecture
-- [[q-data-sync-unstable-network--android--hard]] - Networking
-- [[q-multi-module-best-practices--android--hard]] - Architecture
-
-### Hub
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
-
+- [[q-clean-architecture-android--android--hard]] - Full Clean Architecture
+- [[q-multi-module-best-practices--android--hard]] - Multi-module organization

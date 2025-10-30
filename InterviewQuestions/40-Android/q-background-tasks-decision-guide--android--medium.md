@@ -1,7 +1,7 @@
 ---
 id: 20251012-122786
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
-aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам, Android Background Work]
+aliases: ["Background Tasks Decision Guide", "Руководство по фоновым задачам"]
 topic: android
 subtopics: [background-execution, coroutines, service]
 question_kind: android
@@ -10,14 +10,10 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-async-operations-android--android--medium
-  - q-foreground-service-types--background--medium
-  - q-what-is-workmanager--android--medium
-  - c-coroutines
+related: [q-what-is-workmanager--android--medium, q-foreground-service-types--android--medium, q-async-operations-android--android--medium, c-coroutines]
 sources: []
 created: 2025-10-05
-updated: 2025-10-28
+updated: 2025-10-29
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
 ---
 
@@ -33,157 +29,221 @@ tags: [android/background-execution, android/coroutines, android/service, diffic
 
 ## Ответ (RU)
 
-**Подход**: Выбор зависит от трех факторов: нужно ли продолжать работу в фоне, можно ли отложить выполнение, насколько критична задача
+**Подход**: Выбор определяется тремя критериями: необходимость продолжения в фоне, возможность отложенного выполнения, критичность задачи.
 
-**Типы фоновых задач**:
+**Категории фоновых задач**:
 
-**Асинхронная работа** - операции во время работы приложения
-- Останавливается при сворачивании
-- Для UI-расчетов, API-запросов
-- Инструменты: Kotlin coroutines, Java threads
+1. **Асинхронная работа** (coroutines/threads)
+   - Выполнение только при активном приложении
+   - Автоматическая отмена при уничтожении lifecycle scope
+   - Применение: загрузка данных, вычисления для UI
 
-**Отложенные задачи** - выживают после закрытия приложения
-- Учитывают системные ограничения
-- Для периодической синхронизации, загрузки контента
-- Инструменты: WorkManager, JobScheduler
+2. **Отложенные задачи** (WorkManager)
+   - Гарантированное выполнение после закрытия приложения
+   - Соблюдение системных ограничений (сеть, батарея, Doze Mode)
+   - Применение: синхронизация, загрузка контента, очистка кэша
 
-**Foreground сервисы** - немедленное выполнение с уведомлением
-- Строгие ограничения Android 14+
-- Для воспроизведения медиа, отслеживания местоположения
-- Типы: обычный, shortService (< 3 минут)
+3. **Foreground Services**
+   - Немедленное выполнение с обязательным уведомлением
+   - Строгие ограничения типов
+   - Применение: воспроизведение медиа, навигация, отслеживание тренировки
 
-**Дерево решений для пользовательских задач**:
-
-1. Нужно продолжать в фоне? НЕТ → асинхронная работа
-2. Можно отложить? ДА → WorkManager
-3. Короткая и критичная? ДА → foreground service (shortService)
-4. Есть специализированный API? ДА → использовать (geofence, media session)
-5. Иначе → foreground service
+**Дерево решений**:
+```
+Нужно продолжать в фоне? → НЕТ → Coroutines
+                        ↓ ДА
+Можно отложить? → ДА → WorkManager
+                ↓ НЕТ
+Есть специализированный API? → ДА → MediaSession / Location API
+                              ↓ НЕТ
+Короткая задача (<3 мин)? → ДА → ShortService
+                          ↓ НЕТ
+                          → Regular Foreground Service
+```
 
 **Код**:
 
 ```kotlin
-// ✅ Асинхронная работа - coroutines
-lifecycleScope.launch {
-    val data = withContext(Dispatchers.IO) { fetchData() }
-    updateUI(data)
+// ✅ Coroutines: lifecycle-aware асинхронность
+viewModelScope.launch {
+    // ✅ Автоматическая отмена при уничтожении ViewModel
+    val result = withContext(Dispatchers.IO) {
+        repository.fetchData()
+    }
+    _uiState.value = result
 }
 
-// ✅ Отложенные задачи - WorkManager
-val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED)
-    .build()
+// ❌ Неправильно: GlobalScope живет вечно
+GlobalScope.launch { /* ❌ утечка памяти */ }
 
-val work = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-    .setConstraints(constraints)
+// ✅ WorkManager: отложенная задача с ограничениями
+val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED) // только Wi-Fi
+            .setRequiresBatteryNotLow(true)
+            .build()
+    )
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10, TimeUnit.SECONDS)
     .build()
+WorkManager.getInstance(context).enqueue(syncWork)
 
-// ✅ Foreground service - shortService
-class QuickService : Service() {
+// ✅ ShortService: критичная задача <3 мин
+class FileTransferService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, createNotification())
-        doWork()
-        stopSelf()
+        ServiceCompat.startForeground(
+            this, NOTIFICATION_ID,
+            createNotification(),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE
+        )
+        lifecycleScope.launch {
+            transferFiles()
+            stopSelf()
+        }
         return START_NOT_STICKY
+    }
+}
+
+// ❌ Неправильно: обычный сервис для длительной работы
+class BadService : Service() {
+    override fun onStartCommand(...): Int {
+        // ❌ будет убит системой без foreground статуса
+        doLongRunningWork()
+        return START_STICKY
     }
 }
 ```
 
-**Объяснение**:
-- **Coroutines**: для работы во время активности приложения, автоматическая отмена при уничтожении scope
-- **WorkManager**: гарантирует выполнение даже после перезагрузки, соблюдает battery optimization
-- **ShortService**: для критичных задач до 3 минут (файловый менеджер, быстрая синхронизация)
+**Ключевые моменты**:
+- **Coroutines**: используйте `viewModelScope` / `lifecycleScope` для автоматической отмены
+- **WorkManager**: гарантирует выполнение даже после перезагрузки устройства
+- **ShortService**: требует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` и завершение <3 мин
+- **Избегайте**: обычных Service без foreground режима для любых задач >1 сек
 
 ---
 
 ## Answer (EN)
 
-**Approach**: Choice depends on three factors: must continue in background, can be deferred, criticality level
+**Approach**: Selection is driven by three criteria: background continuation requirement, deferability, and task criticality.
 
-**Background Task Types**:
+**Background Task Categories**:
 
-**Asynchronous work** - operations while app is foreground
-- Stops when app backgrounded
-- For UI calculations, API calls
-- Tools: Kotlin coroutines, Java threads
+1. **Asynchronous work** (coroutines/threads)
+   - Execution only while app is active
+   - Automatic cancellation on lifecycle scope destruction
+   - Use cases: data loading, UI computations
 
-**Task scheduling** - survives app termination
-- Respects system constraints
-- For periodic sync, content uploads
-- Tools: WorkManager, JobScheduler
+2. **Deferred tasks** (WorkManager)
+   - Guaranteed execution after app termination
+   - Respects system constraints (network, battery, Doze Mode)
+   - Use cases: synchronization, content downloads, cache cleanup
 
-**Foreground services** - immediate execution with notification
-- Strict restrictions on Android 14+
-- For media playback, location tracking
-- Types: regular, shortService (< 3 minutes)
+3. **Foreground Services**
+   - Immediate execution with mandatory notification
+   - Strict type restrictions
+   - Use cases: media playback, navigation, workout tracking
 
-**Decision tree for user-initiated tasks**:
-
-1. Continue in background? NO → asynchronous work
-2. Can be deferred? YES → WorkManager
-3. Short and critical? YES → foreground service (shortService)
-4. Specialized API available? YES → use it (geofence, media session)
-5. Otherwise → foreground service
+**Decision tree**:
+```
+Need background continuation? → NO → Coroutines
+                             ↓ YES
+Can be deferred? → YES → WorkManager
+                 ↓ NO
+Specialized API available? → YES → MediaSession / Location API
+                            ↓ NO
+Short task (<3 min)? → YES → ShortService
+                     ↓ NO
+                     → Regular Foreground Service
+```
 
 **Code**:
 
 ```kotlin
-// ✅ Asynchronous work - coroutines
-lifecycleScope.launch {
-    val data = withContext(Dispatchers.IO) { fetchData() }
-    updateUI(data)
+// ✅ Coroutines: lifecycle-aware asynchronicity
+viewModelScope.launch {
+    // ✅ Automatic cancellation on ViewModel destruction
+    val result = withContext(Dispatchers.IO) {
+        repository.fetchData()
+    }
+    _uiState.value = result
 }
 
-// ✅ Task scheduling - WorkManager
-val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED)
-    .build()
+// ❌ Wrong: GlobalScope lives forever
+GlobalScope.launch { /* ❌ memory leak */ }
 
-val work = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-    .setConstraints(constraints)
+// ✅ WorkManager: deferred task with constraints
+val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED) // Wi-Fi only
+            .setRequiresBatteryNotLow(true)
+            .build()
+    )
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 10, TimeUnit.SECONDS)
     .build()
+WorkManager.getInstance(context).enqueue(syncWork)
 
-// ✅ Foreground service - shortService
-class QuickService : Service() {
+// ✅ ShortService: critical task <3 min
+class FileTransferService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, createNotification())
-        doWork()
-        stopSelf()
+        ServiceCompat.startForeground(
+            this, NOTIFICATION_ID,
+            createNotification(),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE
+        )
+        lifecycleScope.launch {
+            transferFiles()
+            stopSelf()
+        }
         return START_NOT_STICKY
+    }
+}
+
+// ❌ Wrong: regular service for long-running work
+class BadService : Service() {
+    override fun onStartCommand(...): Int {
+        // ❌ will be killed by system without foreground status
+        doLongRunningWork()
+        return START_STICKY
     }
 }
 ```
 
-**Explanation**:
-- **Coroutines**: for work during app activity, automatic cancellation when scope destroyed
-- **WorkManager**: guarantees execution even after reboot, respects battery optimization
-- **ShortService**: for critical tasks up to 3 minutes (file manager, quick sync)
+**Key points**:
+- **Coroutines**: use `viewModelScope` / `lifecycleScope` for automatic cancellation
+- **WorkManager**: guarantees execution even after device reboot
+- **ShortService**: requires `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` type and completion <3 min
+- **Avoid**: regular Services without foreground mode for any tasks >1 sec
 
 ---
 
 ## Follow-ups
 
-- What are foreground service type restrictions on Android 14+?
-- How does WorkManager handle retries and backoff?
-- When to use JobScheduler instead of WorkManager?
-- How to migrate from deprecated background APIs?
+- How does Doze Mode affect WorkManager and foreground services differently?
+- What happens to ShortService if execution exceeds 3 minutes?
+- When should you use `ExactAlarmPermission` vs WorkManager for time-sensitive tasks?
+- How to implement graceful degradation when foreground service permission is denied?
+- What are the implications of using `START_STICKY` vs `START_NOT_STICKY` in services?
 
 ## References
 
 - [[c-coroutines]]
-- [[c-workmanager]]
 - https://developer.android.com/develop/background-work/background-tasks
+- https://developer.android.com/develop/background-work/services/foreground-services
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-async-operations-android--android--medium]]
 - [[q-android-service-types--android--easy]]
 - [[q-android-services-purpose--android--easy]]
+- [[q-what-are-services-for--android--easy]]
 
 ### Related (Same Level)
 - [[q-what-is-workmanager--android--medium]]
-- [[q-foreground-service-types--background--medium]]
+- [[q-foreground-service-types--android--medium]]
+- [[q-async-operations-android--android--medium]]
+- [[q-workmanager-execution-guarantee--android--medium]]
 
 ### Advanced (Harder)
-- [[q-android-runtime-internals--android--hard]]
+- [[q-service-lifecycle-binding--android--hard]]
+- [[q-workmanager-chaining--android--hard]]

@@ -3,7 +3,7 @@ id: 20251012-122767
 title: Android Modularization / Модуляризация Android
 aliases: ["Android Modularization", "Модуляризация Android"]
 topic: android
-subtopics: [architecture-clean, build-variants, gradle]
+subtopics: [architecture-modularization, gradle, dependency-management]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [q-android-architectural-patterns--android--medium, q-android-build-optimization--android--medium, q-gradle-build-system--android--medium]
 created: 2025-10-15
-updated: 2025-10-27
-tags: [android/architecture-clean, android/build-variants, android/gradle, difficulty/medium]
+updated: 2025-10-29
+tags: [android/architecture-modularization, android/gradle, android/dependency-management, difficulty/medium]
 sources: []
 ---
 # Вопрос (RU)
@@ -178,9 +178,13 @@ class NewsViewModel {
 - What strategies prevent circular dependencies in modularized projects?
 - When should you use dynamic feature modules vs static modules?
 - How does modularization affect build time and app performance?
+- How do you enforce module boundaries and prevent unauthorized access between modules?
 
 ## References
 
+- [[c-dependency-injection]] — DI patterns in modular apps
+- [[c-gradle-build-system]] — Gradle fundamentals
+- [[c-clean-architecture]] — Architectural principles
 - https://developer.android.com/topic/modularization
 - https://developer.android.com/guide/playcore/feature-delivery
 

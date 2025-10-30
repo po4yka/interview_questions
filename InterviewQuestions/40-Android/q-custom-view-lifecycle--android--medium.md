@@ -3,29 +3,19 @@ id: 20251021-180000
 title: Custom View Lifecycle / Жизненный цикл Custom View
 aliases: [Custom View Lifecycle, Жизненный цикл Custom View]
 topic: android
-subtopics:
-  - lifecycle
-  - ui-views
+subtopics: [lifecycle, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-activity-lifecycle-methods--android--medium
-  - q-performance-optimization-android--android--medium
+related: [q-activity-lifecycle-methods--android--medium, q-performance-optimization-android--android--medium]
 created: 2025-10-21
-updated: 2025-10-21
+updated: 2025-10-29
 tags: [android/lifecycle, android/ui-views, difficulty/medium]
-source: https://developer.android.com/guide/topics/ui/custom-components
-source_note: Official custom components guide
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:22 pm
+sources: []
 ---
-
 # Вопрос (RU)
 > Жизненный цикл Custom View?
 
@@ -36,281 +26,217 @@ date modified: Saturday, October 25th 2025, 4:52:22 pm
 
 ## Ответ (RU)
 
-(Требуется перевод из английской секции)
-
-## Answer (EN)
-
-### View Lifecycle Theory
-
-**View Lifecycle** consists of several key phases, each with a specific purpose and timing. Understanding the lifecycle is critical for building efficient custom UI components.
-
-See [[c-lifecycle]], [[c-custom-views]], and [[c-memory-management]] for in-depth understanding.
-
-**Key principles**:
-- **Phases execute sequentially** on first View creation
-- **Some phases can repeat** on changes (measure, layout, draw)
-- **Each phase has its responsibility** and limitations
-- **Performance optimization** requires proper understanding of phases
-
-### Main Lifecycle Phases
+**View Lifecycle** критичен для эффективных custom view. Основные фазы:
 
 ```
-Constructor (once)
-    ↓
-onAttachedToWindow (once)
-    ↓
-onMeasure → onLayout → onDraw (can repeat)
-    ↓           ↓         ↓
-    └───────────┴─────────┘
-                ↓
-        onDetachedFromWindow (once)
+Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onDetachedFromWindow
 ```
 
-### 1. Construction Phase
+### 1. Constructor - Инициализация
 
-**Theory**: Constructor is called when View is created from XML or programmatically. This is the only time View receives Context and AttributeSet. All resources should be initialized here.
-
-**Key principles**:
-- **Single call** - constructor called only once
-- **Resource initialization** - Paint objects, attributes, settings
-- **No size access** - width/height not yet known
-- **No animations** - View not yet attached to Window
+Инициализация Paint, атрибутов. View еще не в Window, размеры неизвестны.
 
 ```kotlin
 class CustomProgressBar @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
 
-    private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
-        color = Color.BLUE
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLUE // ✅ Инициализация в конструкторе
     }
 
-    private var progress = 0f
-
     init {
-        // Read XML attributes
-        context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.CustomProgressBar,
-            defStyleAttr,
-            0
-        ).apply {
-            try {
-                progress = getFloat(R.styleable.CustomProgressBar_progress, 0f)
-                progressPaint.color = getColor(
-                    R.styleable.CustomProgressBar_progressColor,
-                    Color.BLUE
-                )
-            } finally {
-                recycle()
+        setWillNotDraw(false) // ✅ Включить отрисовку
+
+        attrs?.let {
+            context.obtainStyledAttributes(it, R.styleable.CustomProgressBar).apply {
+                paint.color = getColor(R.styleable.CustomProgressBar_color, Color.BLUE)
+                recycle() // ✅ Освободить ресурсы
             }
         }
-
-        setWillNotDraw(false) // Important for views that draw
     }
 }
 ```
 
-### 2. Attachment Phase
+### 2. onAttachedToWindow - Подключение к окну
 
-**Theory**: onAttachedToWindow() is called when View is added to hierarchy and receives Window. This is the place to start animations, register listeners, and initialize resources requiring Window.
-
-**Key principles**:
-- **Window access** - View now has access to Window
-- **Start animations** - safe to begin animations
-- **Register listeners** - subscribe to system events
-- **Initialize resources** - create objects requiring Context
+Запуск анимаций, регистрация listeners. View готова к работе.
 
 ```kotlin
 override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-
-    // Start animations
-    startProgressAnimation()
-
-    // Register listeners
-    registerSystemListeners()
-
-    // Initialize resources
-    initializeResources()
+    startAnimation() // ✅ Безопасно запускать анимации
+    registerListener()
 }
 
-private fun startProgressAnimation() {
-    // Animation is safe here
-}
-
-private fun registerSystemListeners() {
-    // Subscribe to system events
-}
-
-private fun initializeResources() {
-    // Create resources requiring Window
-}
-```
-
-### 3. Measurement Phase
-
-**Theory**: onMeasure() determines View dimensions based on content and parent constraints. Called when View needs to determine its size. Can be called multiple times.
-
-**Key principles**:
-- **Determine dimensions** - View must calculate desired size
-- **Respect constraints** - dimensions must match MeasureSpec
-- **Call setMeasuredDimension()** - mandatory call at the end
-- **Can repeat** - on layout changes
-
-```kotlin
-override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-    val desiredWidth = 200 // Desired width
-    val desiredHeight = 100 // Desired height
-
-    val width = resolveSize(desiredWidth, widthMeasureSpec)
-    val height = resolveSize(desiredHeight, heightMeasureSpec)
-
-    setMeasuredDimension(width, height)
-}
-
-private fun resolveSize(desiredSize: Int, measureSpec: Int): Int {
-    val specMode = MeasureSpec.getMode(measureSpec)
-    val specSize = MeasureSpec.getSize(measureSpec)
-
-    return when (specMode) {
-        MeasureSpec.EXACTLY -> specSize
-        MeasureSpec.AT_MOST -> min(desiredSize, specSize)
-        MeasureSpec.UNSPECIFIED -> desiredSize
-        else -> desiredSize
-    }
-}
-```
-
-### 4. Layout Phase
-
-**Theory**: onLayout() is called after measurement to place View at given coordinates. Determines final position and size of View. Called when layout changes.
-
-**Key principles**:
-- **Place View** - determine final position
-- **Sizes known** - width/height now available
-- **Coordinates set** - left, top, right, bottom established
-- **Can repeat** - on layout changes
-
-```kotlin
-override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-    super.onLayout(changed, left, top, right, bottom)
-
-    if (changed) {
-        // Layout changed - update internal components
-        updateInternalLayout()
-
-        // Recalculate cached values
-        recalculateCachedValues()
-    }
-}
-
-private fun updateInternalLayout() {
-    // Update internal components based on new dimensions
-}
-
-private fun recalculateCachedValues() {
-    // Recalculate cached values
-}
-```
-
-### 5. Drawing Phase
-
-**Theory**: onDraw() is called to draw View on Canvas. This is where actual content drawing happens. Can be called very frequently.
-
-**Key principles**:
-- **Actual drawing** - draw content on Canvas
-- **Frequent calls** - can be called on every invalidate()
-- **Optimization critical** - avoid object creation
-- **Use caching** - precompute values
-
-```kotlin
-override fun onDraw(canvas: Canvas) {
-    super.onDraw(canvas)
-
-    // Draw background
-    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), backgroundPaint)
-
-    // Draw progress
-    val progressWidth = width * (progress / 100f)
-    canvas.drawRect(0f, 0f, progressWidth, height.toFloat(), progressPaint)
-
-    // Draw text
-    if (showPercentage) {
-        val text = "${progress.toInt()}%"
-        canvas.drawText(text, width / 2f, height / 2f, textPaint)
-    }
-}
-```
-
-### 6. Detachment Phase
-
-**Theory**: onDetachedFromWindow() is called when View is removed from hierarchy. This is the place to clean up resources, cancel animations, and unsubscribe.
-
-**Key principles**:
-- **Clean up resources** - release all resources
-- **Cancel animations** - stop all animations
-- **Unsubscribe** - cancel listeners and callbacks
-- **Prevent memory leaks** - critical for performance
-
-```kotlin
 override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-
-    // Cancel animations
-    cancelAnimations()
-
-    // Unsubscribe
-    unregisterSystemListeners()
-
-    // Clean up resources
-    cleanupResources()
-}
-
-private fun cancelAnimations() {
-    // Cancel all animations
-}
-
-private fun unregisterSystemListeners() {
-    // Cancel system event subscriptions
-}
-
-private fun cleanupResources() {
-    // Clean up resources
+    stopAnimation() // ✅ Обязательная очистка
+    unregisterListener()
 }
 ```
 
-### Best Practices
+### 3. onMeasure - Определение размеров
 
-1. **Initialize resources in constructor** - Paint objects, attributes
-2. **Start animations in onAttachedToWindow()** - safe for Window
-3. **Optimize onDraw()** - avoid object creation
-4. **Clean up resources in onDetachedFromWindow()** - prevent memory leaks
-5. **Use caching** - precompute values
-6. **Handle changes properly** - check changed parameters
-7. **Test on weak devices** - verify performance
+Вызывается многократно. ОБЯЗАТЕЛЬНО вызвать `setMeasuredDimension()`.
 
-### Pitfalls
+```kotlin
+override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+    val width = resolveSize(200, widthSpec)  // ✅ Учесть MeasureSpec
+    val height = resolveSize(100, heightSpec)
+    setMeasuredDimension(width, height) // ✅ Обязательно
+}
+```
 
-- **Don't create objects in onDraw()** - affects performance
-- **Don't forget setMeasuredDimension()** - mandatory call in onMeasure()
-- **Clean up resources properly** - prevent memory leaks
-- **Don't start animations in constructor** - View not yet attached
-- **Check changed parameters** - avoid unnecessary calculations
+### 4. onDraw - Отрисовка
+
+Вызывается часто — критично для производительности.
+
+```kotlin
+// ❌ ПЛОХО - создание объектов
+override fun onDraw(canvas: Canvas) {
+    val paint = Paint() // Выделение памяти на каждый frame!
+    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+}
+
+// ✅ ХОРОШО - использование pre-allocated объектов
+private val paint = Paint()
+
+override fun onDraw(canvas: Canvas) {
+    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+}
+```
+
+### Ключевые правила
+
+1. **Constructor**: инициализация Paint, атрибутов
+2. **onAttachedToWindow**: запуск анимаций
+3. **onMeasure**: вызвать `setMeasuredDimension()`
+4. **onDraw**: НЕ создавать объекты
+5. **onDetachedFromWindow**: остановить анимации, освободить ресурсы
+
+## Answer (EN)
+
+**View Lifecycle** is critical for efficient custom views. Main phases:
+
+```
+Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onDetachedFromWindow
+```
+
+### 1. Constructor - Initialization
+
+Initialize Paint, attributes. View not yet in Window, dimensions unknown.
+
+```kotlin
+class CustomProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : View(context, attrs) {
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLUE // ✅ Initialize in constructor
+    }
+
+    init {
+        setWillNotDraw(false) // ✅ Enable drawing
+
+        attrs?.let {
+            context.obtainStyledAttributes(it, R.styleable.CustomProgressBar).apply {
+                paint.color = getColor(R.styleable.CustomProgressBar_color, Color.BLUE)
+                recycle() // ✅ Release resources
+            }
+        }
+    }
+}
+```
+
+### 2. onAttachedToWindow - Attach to window
+
+Start animations, register listeners. View is ready.
+
+```kotlin
+override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    startAnimation() // ✅ Safe to start animations
+    registerListener()
+}
+
+override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    stopAnimation() // ✅ Mandatory cleanup
+    unregisterListener()
+}
+```
+
+### 3. onMeasure - Determine dimensions
+
+Called multiple times. MUST call `setMeasuredDimension()`.
+
+```kotlin
+override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+    val width = resolveSize(200, widthSpec)  // ✅ Respect MeasureSpec
+    val height = resolveSize(100, heightSpec)
+    setMeasuredDimension(width, height) // ✅ Required
+}
+```
+
+### 4. onDraw - Drawing
+
+Called frequently — performance critical.
+
+```kotlin
+// ❌ BAD - object creation
+override fun onDraw(canvas: Canvas) {
+    val paint = Paint() // Memory allocation every frame!
+    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+}
+
+// ✅ GOOD - use pre-allocated objects
+private val paint = Paint()
+
+override fun onDraw(canvas: Canvas) {
+    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
+}
+```
+
+### Key rules
+
+1. **Constructor**: initialize Paint, attributes
+2. **onAttachedToWindow**: start animations
+3. **onMeasure**: call `setMeasuredDimension()`
+4. **onDraw**: NO object creation
+5. **onDetachedFromWindow**: stop animations, release resources
 
 ---
 
 ## Follow-ups
 
-- How to handle configuration changes in custom views?
-- What are the performance implications of each lifecycle phase?
-- How to implement custom measurement logic?
-- When to use onSizeChanged vs onLayout?
+- How to save and restore custom view state during configuration changes?
+- What happens if you forget to call `setMeasuredDimension()` in onMeasure?
+- Why is object allocation in onDraw() problematic for performance?
+- When should you override onLayout vs onSizeChanged?
+- How to debug custom view rendering issues using Layout Inspector?
 
 ## References
 
-- [Custom Components Guide](https://developer.android.com/guide/topics/ui/custom-components)
-- [View Lifecycle Documentation](https://developer.android.com/reference/android/view/View)
+- [[c-lifecycle]]
+- [[c-custom-views]]
+- [[c-memory-management]]
+- https://developer.android.com/guide/topics/ui/custom-components
+- https://developer.android.com/reference/android/view/View
+
+## Related Questions
+
+### Prerequisites (Easier)
+- [[q-activity-lifecycle-methods--android--medium]]
+- [[q-view-basics--android--easy]]
+
+### Related (Same Level)
+- [[q-custom-view-state-saving--android--medium]]
+- [[q-performance-optimization-android--android--medium]]
+- [[q-canvas-drawing--android--medium]]
+
+### Advanced (Harder)
+- [[q-custom-viewgroup-layout--android--hard]]
+- [[q-custom-view-animations--android--hard]]

@@ -4,7 +4,7 @@ title: Storing unique data in relational tables / Хранение уникал�
 aliases: []
 
 # Classification
-topic: backend
+topic: databases
 subtopics: [databases, design]
 question_kind: theory
 difficulty: medium
@@ -16,18 +16,25 @@ source_note: easy_kotlin Telegram channel
 
 # Workflow & relations
 status: draft
-moc: moc-backend
-related: [q-sql-join-algorithms-complexity--backend--hard, q-database-migration-purpose--backend--medium, q-virtual-tables-disadvantages--backend--medium]
-  - c-database-design
-  - c-relational-databases
+moc: moc-system-design
+related: [
+  q-sql-join-algorithms-complexity--backend--hard,
+  q-database-migration-purpose--backend--medium,
+  q-virtual-tables-disadvantages--backend--medium,
+  c-database-design,
+  c-relational-databases
+]
 
 # Timestamps
 created: 2025-10-03
 updated: 2025-10-03
 
 # Tags
-tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, easy_kotlin, lang/ru, backend]
+tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
+date created: Friday, October 3rd 2025, 4:45:41 pm
+date modified: Wednesday, October 29th 2025, 2:56:25 pm
 ---
+
 # Question (EN)
 > How to store unique information for each element in a relational table
 # Вопрос (RU)

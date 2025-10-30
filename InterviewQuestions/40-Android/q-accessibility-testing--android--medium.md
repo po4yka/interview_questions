@@ -1,26 +1,19 @@
 ---
 id: 20251012-122754
 title: Accessibility Testing / Тестирование доступности
-aliases: [Accessibility Testing, Тестирование доступности]
+aliases: ["Accessibility Testing", "Тестирование доступности"]
 topic: android
-subtopics:
-  - testing-ui
-  - ui-accessibility
+subtopics: [testing-ui, ui-accessibility]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-accessibility-compose--android--medium
-  - q-accessibility-talkback--android--medium
-  - q-cicd-automated-testing--android--medium
+related: [q-accessibility-compose--android--medium, q-accessibility-talkback--android--medium, q-cicd-automated-testing--android--medium]
 created: 2025-10-11
-updated: 2025-01-27
-tags: [android/testing-ui, android/ui-accessibility, difficulty/medium]
+updated: 2025-10-29
+tags: [android/testing-ui, android/ui-accessibility, testing, a11y, difficulty/medium]
 sources: []
 ---
 # Вопрос (RU)
@@ -33,62 +26,50 @@ sources: []
 
 ## Ответ (RU)
 
-Тестирование доступности гарантирует, что приложение доступно людям с ограниченными возможностями. Android предоставляет инструменты для ручного и автоматизированного тестирования.
+Тестирование доступности гарантирует работу приложения для людей с ограниченными возможностями. Android предоставляет инструменты для ручного и автоматизированного тестирования.
 
-**Основные подходы:**
+**Ручное тестирование с TalkBack:**
+- Все интерактивные элементы доступны через свайп
+- ContentDescription осмысленный (не "Image", а "User profile photo")
+- Проверка custom actions и live regions
 
-**1. Ручное тестирование с TalkBack**
+**Accessibility Scanner:**
+- Touch target минимум 48dp
+- Контраст цветов минимум 4.5:1 для текста
+- Читаемость шрифтов
 
-Проверьте навигацию с включённым программой чтения экрана:
-- Все интерактивные элементы должны быть доступны через свайп
-- ContentDescription должен быть осмысленным (не "Image", а "User profile photo")
-- Проверьте custom actions и live regions
-
-**2. Accessibility Scanner**
-
-Приложение от Google для автоматической проверки:
-- Минимальный размер touch target: 48dp
-- Контраст цветов (минимум 4.5:1 для текста)
-- Читаемость текста
-
-**3. Автоматизированное тестирование через Espresso**
+**Автоматизированное тестирование Espresso:**
 
 ```kotlin
 @Test
 fun testAccessibility() {
-    // ✅ Включить проверки доступности для всех UI-действий
+    // ✅ Включить проверки для всех UI-действий
     AccessibilityChecks.enable()
 
-    onView(withId(R.id.submit_button))
-        .perform(click())
-
-    // Тест упадёт, если найдены проблемы доступности
+    onView(withId(R.id.submit)).perform(click())
+    // Тест упадёт при проблемах доступности
 }
 
 @Test
 fun testContentDescription() {
-    onView(withId(R.id.profile_image))
-        .check { view, _ ->
-            // ✅ Проверить наличие осмысленного описания
-            assertThat(view.contentDescription).isNotEmpty()
-            // ❌ Избегать общих описаний типа "Image"
-            assertThat(view.contentDescription).isNotEqualTo("Image")
-        }
+    onView(withId(R.id.profile_image)).check { view, _ ->
+        // ✅ Проверить осмысленное описание
+        assertThat(view.contentDescription).isNotEmpty()
+        // ❌ Избегать общих описаний
+        assertThat(view.contentDescription).isNotEqualTo("Image")
+    }
 }
 ```
 
-**4. Тестирование Compose через семантику**
+**Тестирование Compose через семантику:**
 
 ```kotlin
 @Test
 fun testSemanticProperties() {
     composeTestRule.setContent {
-        Button(onClick = { }) {
-            Text("Отправить")
-        }
+        Button(onClick = { }) { Text("Отправить") }
     }
 
-    // ✅ Проверить семантические свойства
     composeTestRule
         .onNodeWithText("Отправить")
         .assertHasClickAction()
@@ -102,7 +83,6 @@ fun testStateDescription() {
             checked = isChecked,
             onCheckedChange = { },
             modifier = Modifier.semantics {
-                // ✅ Описать состояние для screen reader
                 stateDescription = if (isChecked) "Выбрано" else "Не выбрано"
             }
         )
@@ -114,20 +94,16 @@ fun testStateDescription() {
 }
 ```
 
-**Типичные ошибки доступности:**
+**Типичные ошибки:**
 
 ```kotlin
 // ❌ Отсутствует contentDescription
-Image(
-    painter = painterResource(R.drawable.icon),
-    contentDescription = null
-)
+Image(painterResource(R.drawable.icon), contentDescription = null)
 
 // ❌ Touch target меньше 48dp
-IconButton(
-    modifier = Modifier.size(24.dp),
-    onClick = { }
-) { Icon(Icons.Default.Close, "Close") }
+IconButton(modifier = Modifier.size(24.dp), onClick = { }) {
+    Icon(Icons.Default.Close, "Close")
+}
 
 // ❌ Недостаточный контраст
 Text(
@@ -138,70 +114,57 @@ Text(
 ```
 
 **Лучшие практики:**
-
-- Тестируйте на реальных устройствах (эмуляторы не всегда точны для TalkBack)
-- Интегрируйте проверки доступности в CI/CD pipeline
-- Тестируйте при разных настройках: масштаб шрифта, размер дисплея, высокая контрастность
-- Используйте semantic testing вместо проверки implementation details
+- Тестируйте на реальных устройствах (эмуляторы неточны для TalkBack)
+- Интегрируйте проверки в CI/CD
+- Проверяйте разные настройки: масштаб шрифта, высокую контрастность
+- Используйте semantic testing вместо implementation details
 
 ## Answer (EN)
 
 Accessibility testing ensures apps are usable by people with disabilities. Android provides tools for manual and automated testing.
 
-**Core Approaches:**
-
-**1. Manual Testing with TalkBack**
-
-Verify navigation with screen reader enabled:
-- All interactive elements must be reachable via swipe
-- ContentDescription should be meaningful (not "Image", but "User profile photo")
+**Manual Testing with TalkBack:**
+- All interactive elements reachable via swipe
+- ContentDescription meaningful (not "Image", but "User profile photo")
 - Test custom actions and live regions
 
-**2. Accessibility Scanner**
+**Accessibility Scanner:**
+- Touch target minimum 48dp
+- Color contrast minimum 4.5:1 for text
+- Font readability
 
-Google's app for automated checks:
-- Minimum touch target size: 48dp
-- Color contrast (minimum 4.5:1 for text)
-- Text readability
-
-**3. Automated Testing via Espresso**
+**Automated Testing via Espresso:**
 
 ```kotlin
 @Test
 fun testAccessibility() {
-    // ✅ Enable accessibility checks for all UI actions
+    // ✅ Enable checks for all UI actions
     AccessibilityChecks.enable()
 
-    onView(withId(R.id.submit_button))
-        .perform(click())
-
+    onView(withId(R.id.submit)).perform(click())
     // Test fails if accessibility issues found
 }
 
 @Test
 fun testContentDescription() {
-    onView(withId(R.id.profile_image))
-        .check { view, _ ->
-            // ✅ Verify meaningful description exists
-            assertThat(view.contentDescription).isNotEmpty()
-            // ❌ Avoid generic descriptions like "Image"
-            assertThat(view.contentDescription).isNotEqualTo("Image")
-        }
+    onView(withId(R.id.profile_image)).check { view, _ ->
+        // ✅ Verify meaningful description
+        assertThat(view.contentDescription).isNotEmpty()
+        // ❌ Avoid generic descriptions
+        assertThat(view.contentDescription).isNotEqualTo("Image")
+    }
 }
 ```
 
-**4. Compose Testing via Semantics**
+**Compose Testing via Semantics:**
 
 ```kotlin
 @Test
 fun testSemanticProperties() {
     composeTestRule.setContent {
-        Button(onClick = { }) {
-            Text("Submit")
-        }
+        Button(onClick = { }) { Text("Submit") }
     }
 
-    // ✅ Verify semantic properties
     composeTestRule
         .onNodeWithText("Submit")
         .assertHasClickAction()
@@ -215,7 +178,6 @@ fun testStateDescription() {
             checked = isChecked,
             onCheckedChange = { },
             modifier = Modifier.semantics {
-                // ✅ Describe state for screen reader
                 stateDescription = if (isChecked) "Selected" else "Not selected"
             }
         )
@@ -227,20 +189,16 @@ fun testStateDescription() {
 }
 ```
 
-**Common Accessibility Issues:**
+**Common Issues:**
 
 ```kotlin
 // ❌ Missing contentDescription
-Image(
-    painter = painterResource(R.drawable.icon),
-    contentDescription = null
-)
+Image(painterResource(R.drawable.icon), contentDescription = null)
 
 // ❌ Touch target smaller than 48dp
-IconButton(
-    modifier = Modifier.size(24.dp),
-    onClick = { }
-) { Icon(Icons.Default.Close, "Close") }
+IconButton(modifier = Modifier.size(24.dp), onClick = { }) {
+    Icon(Icons.Default.Close, "Close")
+}
 
 // ❌ Insufficient contrast
 Text(
@@ -251,39 +209,40 @@ Text(
 ```
 
 **Best Practices:**
-
-- Test on real devices (emulators aren't always accurate for TalkBack)
-- Integrate accessibility checks into CI/CD pipeline
-- Test with different settings: font scale, display size, high contrast
-- Use semantic testing instead of checking implementation details
+- Test on real devices (emulators inaccurate for TalkBack)
+- Integrate checks into CI/CD
+- Test different settings: font scale, high contrast
+- Use semantic testing instead of implementation details
 
 ---
 
 ## Follow-ups
 
-- How does `AccessibilityChecks.enable()` affect test execution time and CI pipeline performance?
-- What semantic properties are required for custom Compose components to work with TalkBack?
-- How do you test accessibility for dynamic content that updates via StateFlow or LiveData?
-- What's the strategy for testing accessibility in multi-module projects with shared UI components?
-- How to prioritize accessibility test coverage when test suite execution time is constrained?
+- How does AccessibilityChecks.enable() impact test execution time in CI pipelines?
+- What semantic properties must custom Compose components expose for TalkBack compatibility?
+- How do you test accessibility for dynamic content updating via StateFlow?
+- What strategies handle accessibility testing across multi-module projects?
+- How do you balance accessibility test coverage with test suite execution constraints?
 
 ## References
 
-- [Android Accessibility Testing Guide](https://developer.android.com/guide/topics/ui/accessibility/testing)
-- [Espresso Accessibility Checks](https://developer.android.com/training/testing/espresso/accessibility-checking)
-- [Compose Semantics Testing](https://developer.android.com/jetpack/compose/testing)
+- [[c-accessibility]] - Accessibility fundamentals
+- [[c-compose-semantics]] - Compose semantics system
+- [[c-espresso-testing]] - Espresso testing framework
+- https://developer.android.com/guide/topics/ui/accessibility/testing
+- https://developer.android.com/training/testing/espresso/accessibility-checking
 
 ## Related Questions
 
-### Prerequisites
-- [[q-testing-compose-ui--android--medium]] - Compose UI testing fundamentals
+### Prerequisites (Easier)
+- [[q-testing-compose-ui--android--medium]] - Compose UI testing basics
 
-### Related (Medium)
-- [[q-accessibility-compose--android--medium]] - Implementing accessibility in Compose
+### Related (Same Level)
+- [[q-accessibility-compose--android--medium]] - Accessibility implementation
 - [[q-accessibility-talkback--android--medium]] - TalkBack integration
-- [[q-cicd-automated-testing--android--medium]] - CI/CD testing strategies
 - [[q-compose-testing--android--medium]] - Compose testing patterns
 
 ### Advanced (Harder)
-- [[q-testing-coroutines-flow--android--hard]] - Testing async state updates for accessibility
+- [[q-testing-coroutines-flow--android--hard]] - Testing async state updates
+- [[q-cicd-automated-testing--android--hard]] - Advanced CI/CD strategies
 

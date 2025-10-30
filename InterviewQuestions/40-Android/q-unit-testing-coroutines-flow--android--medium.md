@@ -1,770 +1,430 @@
 ---
-id: 20251012-122711121
-title: "Unit Testing Coroutines Flow"
+id: 20251012-122711
+title: "Unit Testing Coroutines and Flow / Юнит-тестирование корутин и Flow"
+aliases: ["Unit Testing Coroutines Flow", "Юнит-тестирование корутин и Flow"]
 topic: android
+subtopics: [testing-unit, coroutines, flow]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-service-types-android--android--easy, q-what-do-you-know-about-modifiers--programming-languages--medium, q-how-to-create-animations-in-android--android--medium]
 created: 2025-10-15
-tags: [testing, coroutines, flow, unit-testing, turbine, mockk, difficulty/medium]
+updated: 2025-10-28
+sources: []
+tags: [android/testing-unit, android/coroutines, android/flow, testing, unit-testing, turbine, mockk, difficulty/medium]
 ---
-
-# Unit Testing with Coroutines and Flow
-
 # Вопрос (RU)
->
+
+> Как писать юнит-тесты для Kotlin Coroutines и Flow? Какие есть best practices и распространённые ошибки?
+
+# Question (EN)
+
+> How do you write unit tests for Kotlin Coroutines and Flow? What are the best practices and common pitfalls?
 
 ---
 
-## Answer (EN)
-# Question (EN)
-How do you write unit tests for Kotlin Coroutines and Flow? What are the best practices and common pitfalls?
+## Ответ (RU)
 
-## Answer (EN)
-Testing coroutines and Flow requires special consideration for asynchronous operations, test dispatchers, and timing control. Proper testing ensures code reliability and maintainability.
+Тестирование корутин и Flow требует специального подхода: тестовые диспетчеры, управление виртуальным временем, правильная обработка асинхронности.
 
-#### 1. **Setup and Dependencies**
+### Ключевые инструменты
 
-```kotlin
-// build.gradle.kts
-dependencies {
-    // Testing dependencies
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("app.cash.turbine:turbine:1.0.0")
-    testImplementation("io.mockk:mockk:1.13.8")
-    testImplementation("com.google.truth:truth:1.1.5")
+**1. TestDispatchers**
+- `StandardTestDispatcher` — требует явного `advanceTimeBy()`/`runCurrent()`
+- `UnconfinedTestDispatcher` — выполняет корутины немедленно
+- `runTest { }` — корутинный scope с виртуальным временем
 
-    // For Android-specific tests
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test:runner:1.5.2")
-}
-```
+**2. Turbine**
+- Удобный API для тестирования Flow
+- `awaitItem()`, `awaitComplete()`, `awaitError()`
+- Автоматическая отмена коллекции
 
-#### 2. **Testing Suspend Functions**
+**3. MockK**
+- `coEvery { }` для suspend функций
+- `coVerify { }` для проверки вызовов
+
+### Основные паттерны
+
+**Тестирование suspend функций**
 
 ```kotlin
-// ViewModel with suspend function
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-
+// ViewModel
+class UserViewModel(private val repo: UserRepository) : ViewModel() {
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user.asStateFlow()
 
-    suspend fun loadUser(userId: String) {
-        val user = repository.getUser(userId)
-        _user.value = user
+    suspend fun loadUser(id: String) {
+        _user.value = repo.getUser(id)  // ✅ Simple state update
     }
 }
 
 // Test
-class UserViewModelTest {
+@get:Rule
+val mainDispatcherRule = MainDispatcherRule()
 
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
+@Test
+fun `loadUser updates state`() = runTest {
+    coEvery { repo.getUser("1") } returns User("1", "John")
 
-    private lateinit var repository: UserRepository
-    private lateinit var viewModel: UserViewModel
+    viewModel.loadUser("1")
 
-    @Before
-    fun setup() {
-        repository = mockk()
-        viewModel = UserViewModel(repository)
-    }
+    assertEquals(User("1", "John"), viewModel.user.value)  // ✅ Direct assertion
+}
+```
 
-    @Test
-    fun `loadUser updates user state`() = runTest {
-        // Given
-        val expectedUser = User("1", "John Doe")
-        coEvery { repository.getUser("1") } returns expectedUser
+**Тестирование Flow с Turbine**
 
-        // When
-        viewModel.loadUser("1")
-
-        // Then
-        assertEquals(expectedUser, viewModel.user.value)
-    }
-
-    @Test
-    fun `loadUser handles error`() = runTest {
-        // Given
-        coEvery { repository.getUser("1") } throws NetworkException()
-
-        // When & Then
-        assertThrows<NetworkException> {
-            viewModel.loadUser("1")
-        }
+```kotlin
+// Repository
+fun observeArticles(): Flow<List<Article>> = flow {
+    while (currentCoroutineContext().isActive) {
+        emit(api.getArticles())
+        delay(5000)
     }
 }
 
-// MainDispatcherRule for testing
-class MainDispatcherRule(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-) : TestWatcher() {
+// Test
+@Test
+fun `observeArticles emits periodically`() = runTest {
+    val articles1 = listOf(Article("1", "First"))
+    val articles2 = listOf(Article("2", "Second"))
 
-    override fun starting(description: Description) {
-        Dispatchers.setMain(testDispatcher)
+    coEvery { api.getArticles() } returnsMany listOf(articles1, articles2)
+
+    repo.observeArticles().test {
+        assertEquals(articles1, awaitItem())  // ✅ First emission
+
+        testScheduler.advanceTimeBy(5000)
+        assertEquals(articles2, awaitItem())  // ✅ After delay
+
+        cancelAndIgnoreRemainingEvents()
     }
+}
+```
 
+**Тестирование StateFlow с debounce**
+
+```kotlin
+// ViewModel
+class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
+    private val _query = MutableStateFlow("")
+    val results = _query
+        .debounce(300)
+        .filter { it.length >= 2 }  // ✅ Skip short queries
+        .flatMapLatest { repo.search(it) }
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    fun onQueryChanged(q: String) { _query.value = q }
+}
+
+// Test
+@Test
+fun `debounce prevents excessive calls`() = runTest {
+    coEvery { repo.search(any()) } returns flowOf(emptyList())
+
+    viewModel.onQueryChanged("t")   // ❌ Too short
+    testScheduler.advanceTimeBy(100)
+
+    viewModel.onQueryChanged("test")  // ✅ Valid
+    testScheduler.advanceTimeBy(400)  // ✅ Past debounce
+
+    coVerify(exactly = 1) { repo.search("test") }  // ✅ Only final query
+    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out
+}
+```
+
+### MainDispatcherRule
+
+```kotlin
+// Test rule для замены Dispatchers.Main
+class MainDispatcherRule(
+    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
+) : TestWatcher() {
+    override fun starting(description: Description) {
+        Dispatchers.setMain(dispatcher)
+    }
     override fun finished(description: Description) {
         Dispatchers.resetMain()
     }
 }
 ```
 
-#### 3. **Testing Flow**
+### Best Practices
 
-**3.1 Basic Flow Testing**
+**✅ Правильно:**
+- Используйте `runTest { }` вместо `runBlocking`
+- Инжектируйте `CoroutineDispatcher` для тестируемости
+- Управляйте виртуальным временем через `testScheduler`
+- Используйте Turbine для Flow тестов
+- Проверяйте error cases и cancellation
 
-```kotlin
-// Repository with Flow
-class ArticleRepository(private val apiService: ApiService) {
+**❌ Избегайте:**
+- `Thread.sleep()` — ломает виртуальное время
+- Забывать `advanceTimeBy()` для delay
+- Не закрывать infinite Flow (используйте `take()` или Turbine)
+- Не тестировать cancellation
+- Использовать реальные Dispatchers
 
-    fun getArticlesFlow(): Flow<List<Article>> = flow {
-        val articles = apiService.getArticles()
-        emit(articles)
-    }
-
-    fun observeArticles(): Flow<List<Article>> = flow {
-        while (currentCoroutineContext().isActive) {
-            val articles = apiService.getArticles()
-            emit(articles)
-            delay(5000)
-        }
-    }
-}
-
-// Test with collect
-class ArticleRepositoryTest {
-
-    private lateinit var apiService: ApiService
-    private lateinit var repository: ArticleRepository
-
-    @Before
-    fun setup() {
-        apiService = mockk()
-        repository = ArticleRepository(apiService)
-    }
-
-    @Test
-    fun `getArticlesFlow emits articles`() = runTest {
-        // Given
-        val expectedArticles = listOf(
-            Article("1", "Title 1"),
-            Article("2", "Title 2")
-        )
-        coEvery { apiService.getArticles() } returns expectedArticles
-
-        // When
-        val result = repository.getArticlesFlow().first()
-
-        // Then
-        assertEquals(expectedArticles, result)
-    }
-
-    @Test
-    fun `getArticlesFlow emits multiple values`() = runTest {
-        // Given
-        val articles1 = listOf(Article("1", "First"))
-        val articles2 = listOf(Article("2", "Second"))
-
-        coEvery { apiService.getArticles() } returnsMany listOf(articles1, articles2)
-
-        // When
-        val results = repository.observeArticles()
-            .take(2)
-            .toList()
-
-        // Then
-        assertEquals(2, results.size)
-        assertEquals(articles1, results[0])
-        assertEquals(articles2, results[1])
-    }
-}
-```
-
-**3.2 Testing with Turbine**
+### Распространённые ошибки
 
 ```kotlin
-// Turbine provides cleaner Flow testing API
-class ArticleRepositoryTurbineTest {
-
-    @Test
-    fun `getArticlesFlow emits articles`() = runTest {
-        // Given
-        val expectedArticles = listOf(Article("1", "Title"))
-        coEvery { apiService.getArticles() } returns expectedArticles
-
-        // When & Then
-        repository.getArticlesFlow().test {
-            val item = awaitItem()
-            assertEquals(expectedArticles, item)
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `observeArticles emits multiple values with delay`() = runTest {
-        // Given
-        val articles1 = listOf(Article("1", "First"))
-        val articles2 = listOf(Article("2", "Second"))
-
-        coEvery { apiService.getArticles() } returnsMany listOf(articles1, articles2)
-
-        // When & Then
-        repository.observeArticles().test {
-            assertEquals(articles1, awaitItem())
-
-            // Advance time by 5 seconds
-            testScheduler.advanceTimeBy(5000)
-
-            assertEquals(articles2, awaitItem())
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `flow handles errors`() = runTest {
-        // Given
-        coEvery { apiService.getArticles() } throws NetworkException()
-
-        // When & Then
-        repository.getArticlesFlow().test {
-            val error = awaitError()
-            assertTrue(error is NetworkException)
-        }
-    }
-}
-```
-
-#### 4. **Testing StateFlow and SharedFlow**
-
-```kotlin
-// ViewModel with StateFlow
-class SearchViewModel(
-    private val repository: SearchRepository
-) : ViewModel() {
-
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
-
-    private val _searchResults = MutableStateFlow<List<Result>>(emptyList())
-    val searchResults: StateFlow<List<Result>> = _searchResults.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            searchQuery
-                .debounce(300)
-                .distinctUntilChanged()
-                .filter { it.length >= 2 }
-                .flatMapLatest { query ->
-                    repository.search(query)
-                }
-                .collect { results ->
-                    _searchResults.value = results
-                }
-        }
-    }
-
-    fun onSearchQueryChanged(query: String) {
-        _searchQuery.value = query
-    }
-}
-
-// Test
-class SearchViewModelTest {
-
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    private lateinit var repository: SearchRepository
-    private lateinit var viewModel: SearchViewModel
-
-    @Before
-    fun setup() {
-        repository = mockk()
-        viewModel = SearchViewModel(repository)
-    }
-
-    @Test
-    fun `search query updates trigger repository search`() = runTest {
-        // Given
-        val expectedResults = listOf(Result("1", "Test"))
-        coEvery { repository.search("test") } returns flowOf(expectedResults)
-
-        // When
-        viewModel.searchResults.test {
-            // Initial empty state
-            assertEquals(emptyList<Result>(), awaitItem())
-
-            // Update search query
-            viewModel.onSearchQueryChanged("test")
-
-            // Advance time past debounce
-            testScheduler.advanceTimeBy(400)
-
-            // Then
-            assertEquals(expectedResults, awaitItem())
-        }
-    }
-
-    @Test
-    fun `debounce prevents excessive API calls`() = runTest {
-        // Given
-        coEvery { repository.search(any()) } returns flowOf(emptyList())
-
-        // When
-        viewModel.onSearchQueryChanged("t")
-        testScheduler.advanceTimeBy(100)
-
-        viewModel.onSearchQueryChanged("te")
-        testScheduler.advanceTimeBy(100)
-
-        viewModel.onSearchQueryChanged("tes")
-        testScheduler.advanceTimeBy(100)
-
-        viewModel.onSearchQueryChanged("test")
-        testScheduler.advanceTimeBy(400)
-
-        // Then - only one call after debounce
-        coVerify(exactly = 1) { repository.search("test") }
-    }
-
-    @Test
-    fun `short queries are filtered out`() = runTest {
-        // When
-        viewModel.onSearchQueryChanged("a") // Too short
-        testScheduler.advanceTimeBy(400)
-
-        // Then
-        coVerify(exactly = 0) { repository.search(any()) }
-    }
-}
-```
-
-#### 5. **Testing with Different Dispatchers**
-
-```kotlin
-// Code using specific dispatchers
-class DataProcessor(
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
-) {
-    suspend fun processData(data: List<Int>): ProcessedData {
-        // IO operation
-        val loadedData = withContext(ioDispatcher) {
-            loadFromDatabase(data)
-        }
-
-        // CPU-intensive operation
-        return withContext(defaultDispatcher) {
-            compute(loadedData)
-        }
-    }
-}
-
-// Test with TestDispatchers
-class DataProcessorTest {
-
-    private val testDispatcher = StandardTestDispatcher()
-
-    @Before
-    fun setup() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `processData uses correct dispatchers`() = runTest(testDispatcher) {
-        // Given
-        val processor = DataProcessor(
-            ioDispatcher = testDispatcher,
-            defaultDispatcher = testDispatcher
-        )
-
-        // When
-        val result = processor.processData(listOf(1, 2, 3))
-
-        // Then
-        assertNotNull(result)
-        // All operations ran on testDispatcher
-    }
-
-    @Test
-    fun `UnconfinedTestDispatcher executes immediately`() = runTest(UnconfinedTestDispatcher()) {
-        // Executes coroutines eagerly
-        // Good for testing without time control
-        var executed = false
-
-        launch {
-            executed = true
-        }
-
-        // Executes immediately, no need to advance time
-        assertTrue(executed)
-    }
-
-    @Test
-    fun `StandardTestDispatcher requires advancing time`() = runTest(StandardTestDispatcher()) {
-        // Requires manual time control
-        var executed = false
-
-        launch {
-            delay(1000)
-            executed = false
-        }
-
-        // Not executed yet
-        assertFalse(executed)
-
-        // Advance time
-        testScheduler.advanceTimeBy(1000)
-        testScheduler.runCurrent()
-
-        // Now executed
-        assertTrue(executed)
-    }
-}
-```
-
-#### 6. **Testing Timeout and Cancellation**
-
-```kotlin
-// Function with timeout
-class TimeoutExample {
-    suspend fun fetchWithTimeout(url: String): String {
-        return withTimeout(5000) {
-            apiService.fetch(url)
-        }
-    }
-
-    suspend fun cancellableOperation(): Result {
-        return withContext(Dispatchers.IO) {
-            repeat(100) { iteration ->
-                ensureActive() // Check for cancellation
-                processItem(iteration)
-            }
-            Result.Success
-        }
-    }
-}
-
-// Test
-class TimeoutExampleTest {
-
-    @Test
-    fun `fetchWithTimeout completes within timeout`() = runTest {
-        // Given
-        coEvery { apiService.fetch(any()) } coAnswers {
-            delay(2000)
-            "Success"
-        }
-
-        // When
-        val result = timeoutExample.fetchWithTimeout("url")
-
-        // Advance time
-        testScheduler.advanceTimeBy(2000)
-
-        // Then
-        assertEquals("Success", result)
-    }
-
-    @Test
-    fun `fetchWithTimeout throws on timeout`() = runTest {
-        // Given
-        coEvery { apiService.fetch(any()) } coAnswers {
-            delay(10000) // Longer than timeout
-            "Success"
-        }
-
-        // When & Then
-        assertThrows<TimeoutCancellationException> {
-            timeoutExample.fetchWithTimeout("url")
-            testScheduler.advanceTimeBy(6000)
-        }
-    }
-
-    @Test
-    fun `cancellableOperation respects cancellation`() = runTest {
-        // Given
-        val job = launch {
-            timeoutExample.cancellableOperation()
-        }
-
-        // When
-        testScheduler.advanceTimeBy(100)
-        job.cancel()
-
-        // Then
-        assertTrue(job.isCancelled)
-    }
-}
-```
-
-#### 7. **Testing Cold vs Hot Flows**
-
-```kotlin
-// Cold Flow - emits from start for each collector
-fun coldFlow(): Flow<Int> = flow {
-    println("Cold flow started")
-    repeat(3) {
-        delay(100)
-        emit(it)
-    }
-}
-
-// Hot Flow - shared between collectors
-class HotFlowExample {
-    private val _events = MutableSharedFlow<Event>()
-    val events: SharedFlow<Event> = _events.asSharedFlow()
-
-    fun emitEvent(event: Event) {
-        viewModelScope.launch {
-            _events.emit(event)
-        }
-    }
-}
-
-// Tests
-class FlowTypeTest {
-
-    @Test
-    fun `cold flow starts from beginning for each collector`() = runTest {
-        val flow = coldFlow()
-
-        // First collector
-        flow.take(2).test {
-            assertEquals(0, awaitItem())
-            assertEquals(1, awaitItem())
-            awaitComplete()
-        }
-
-        // Second collector - starts from beginning
-        flow.take(2).test {
-            assertEquals(0, awaitItem()) // Starts at 0, not 2
-            assertEquals(1, awaitItem())
-            awaitComplete()
-        }
-    }
-
-    @Test
-    fun `hot flow shares emissions between collectors`() = runTest {
-        val hotFlowExample = HotFlowExample()
-
-        // Start collecting
-        val job = launch {
-            hotFlowExample.events.test {
-                assertEquals(Event.Click, awaitItem())
-                assertEquals(Event.Scroll, awaitItem())
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-        // Emit events
-        hotFlowExample.emitEvent(Event.Click)
-        hotFlowExample.emitEvent(Event.Scroll)
-
-        job.join()
-    }
-
-    @Test
-    fun `hot flow with replay buffer`() = runTest {
-        val flow = MutableSharedFlow<Int>(replay = 2)
-
-        // Emit before collecting
-        flow.emit(1)
-        flow.emit(2)
-        flow.emit(3)
-
-        // New collector receives last 2 values
-        flow.test {
-            assertEquals(2, awaitItem()) // Replay buffer
-            assertEquals(3, awaitItem()) // Replay buffer
-            expectNoEvents()
-        }
-    }
-}
-```
-
-#### 8. **Best Practices**
-
-```kotlin
-// - Use TestDispatchers
-@get:Rule
-val mainDispatcherRule = MainDispatcherRule()
-
-// - Use runTest for coroutine tests
-@Test
-fun test() = runTest {
-    // Test code
-}
-
-// - Use Turbine for Flow testing
-flow.test {
-    assertEquals(expected, awaitItem())
-    awaitComplete()
-}
-
-// - Inject dispatchers for testability
-class MyViewModel(
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) {
-    fun loadData() = viewModelScope.launch(dispatcher) {
-        // ...
-    }
-}
-
-// - Test error cases
-@Test
-fun `handles error gracefully`() = runTest {
-    coEvery { repository.getData() } throws NetworkException()
-
-    flow.test {
-        awaitError()
-    }
-}
-
-// - Verify timing with virtual time
-@Test
-fun `debounce timing`() = runTest {
-    viewModel.onInput("test")
-    testScheduler.advanceTimeBy(100) // Not enough
-    coVerify(exactly = 0) { repository.search(any()) }
-
-    testScheduler.advanceTimeBy(300) // Total 400ms
-    coVerify(exactly = 1) { repository.search("test") }
-}
-
-// - Don't use Thread.sleep in tests
-@Test
-fun badTest() = runTest {
-    Thread.sleep(1000) // - Wrong!
-    testScheduler.advanceTimeBy(1000) // - Correct
-}
-
-// - Don't forget to advance time
-@Test
-fun badTest2() = runTest {
-    launch {
-        delay(1000)
-        doSomething()
-    }
-    // - Test finishes before coroutine executes
-    // - Need: testScheduler.advanceUntilIdle()
-}
-```
-
-### Common Pitfalls
-
-**1. Not using TestDispatchers:**
-```kotlin
-// - Uses real Dispatchers.Main
+// ❌ WRONG: Реальный Main dispatcher
 @Test
 fun test() = runBlocking { ... }
 
-// - Uses TestDispatcher
+// ✅ CORRECT: TestDispatcher
 @Test
 fun test() = runTest { ... }
-```
 
-**2. Not advancing virtual time:**
-```kotlin
+// ❌ WRONG: Тест завершается до выполнения корутины
 @Test
 fun test() = runTest {
     launch { delay(1000); doWork() }
-    // - Assertion fails, delay not advanced
-    verify { doWork() }
-
-    // - Advance time first
-    testScheduler.advanceTimeBy(1000)
-    verify { doWork() }
+    verify { doWork() }  // ❌ Ещё не выполнилось
 }
-```
 
-**3. Not cleaning up collectors:**
-```kotlin
+// ✅ CORRECT: Продвигаем время
 @Test
 fun test() = runTest {
-    flow.collect { ... } // - Hangs if flow never completes
+    launch { delay(1000); doWork() }
+    testScheduler.advanceUntilIdle()  // ✅ Выполняем все задачи
+    verify { doWork() }
+}
 
-    flow.take(1).test { ... } // - Completes after 1 item
+// ❌ WRONG: Infinite Flow висит
+@Test
+fun test() = runTest {
+    flow.collect { ... }  // ❌ Никогда не завершится
+}
+
+// ✅ CORRECT: Ограничиваем коллекцию
+@Test
+fun test() = runTest {
+    flow.take(3).test { ... }  // ✅ Завершится после 3 элементов
 }
 ```
 
 ---
 
+## Answer (EN)
 
+Testing coroutines and Flow requires specialized tools: test dispatchers, virtual time control, and proper async handling.
 
-## Ответ (RU)
+### Key Tools
 
-Тестирование Coroutines и Flow требует специального подхода для асинхронных операций, тестовых диспетчеров и управления временем. Правильное тестирование обеспечивает надежность и поддерживаемость кода.
+**1. TestDispatchers**
+- `StandardTestDispatcher` — requires explicit `advanceTimeBy()`/`runCurrent()`
+- `UnconfinedTestDispatcher` — executes coroutines immediately
+- `runTest { }` — coroutine scope with virtual time
 
-#### Ключевые концепции:
+**2. Turbine**
+- Convenient API for Flow testing
+- `awaitItem()`, `awaitComplete()`, `awaitError()`
+- Automatic collection cancellation
 
-**1. TestDispatchers:**
-- `StandardTestDispatcher` - требует ручного управления временем
-- `UnconfinedTestDispatcher` - выполняет корутины немедленно
-- Используйте `runTest` вместо `runBlocking`
+**3. MockK**
+- `coEvery { }` for suspend functions
+- `coVerify { }` for call verification
 
-**2. Тестирование suspend функций:**
+### Core Patterns
+
+**Testing suspend functions**
+
 ```kotlin
+// ViewModel
+class UserViewModel(private val repo: UserRepository) : ViewModel() {
+    private val _user = MutableStateFlow<User?>(null)
+    val user: StateFlow<User?> = _user.asStateFlow()
+
+    suspend fun loadUser(id: String) {
+        _user.value = repo.getUser(id)  // ✅ Simple state update
+    }
+}
+
+// Test
+@get:Rule
+val mainDispatcherRule = MainDispatcherRule()
+
 @Test
-fun test() = runTest {
-    val result = repository.getData()
-    assertEquals(expected, result)
+fun `loadUser updates state`() = runTest {
+    coEvery { repo.getUser("1") } returns User("1", "John")
+
+    viewModel.loadUser("1")
+
+    assertEquals(User("1", "John"), viewModel.user.value)  // ✅ Direct assertion
 }
 ```
 
-**3. Тестирование Flow:**
-- Используйте Turbine для удобного API
-- `awaitItem()` - ожидать следующее значение
-- `awaitComplete()` - ожидать завершения
-- `awaitError()` - ожидать ошибку
+**Testing Flow with Turbine**
 
-**4. Управление временем:**
 ```kotlin
-testScheduler.advanceTimeBy(1000) // Продвинуть на 1 секунду
-testScheduler.advanceUntilIdle()  // До завершения всех задач
+// Repository
+fun observeArticles(): Flow<List<Article>> = flow {
+    while (currentCoroutineContext().isActive) {
+        emit(api.getArticles())
+        delay(5000)
+    }
+}
+
+// Test
+@Test
+fun `observeArticles emits periodically`() = runTest {
+    val articles1 = listOf(Article("1", "First"))
+    val articles2 = listOf(Article("2", "Second"))
+
+    coEvery { api.getArticles() } returnsMany listOf(articles1, articles2)
+
+    repo.observeArticles().test {
+        assertEquals(articles1, awaitItem())  // ✅ First emission
+
+        testScheduler.advanceTimeBy(5000)
+        assertEquals(articles2, awaitItem())  // ✅ After delay
+
+        cancelAndIgnoreRemainingEvents()
+    }
+}
 ```
 
-**5. Тестирование StateFlow/SharedFlow:**
-- StateFlow всегда имеет начальное значение
-- SharedFlow может иметь replay buffer
-- Используйте Turbine для удобства
+**Testing StateFlow with debounce**
 
-**Лучшие практики:**
-- Используйте TestDispatchers
-- Инжектируйте dispatchers для тестируемости
-- Управляйте виртуальным временем
-- Тестируйте error cases
-- Используйте Turbine для Flow
-- Очищайте collectors
+```kotlin
+// ViewModel
+class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
+    private val _query = MutableStateFlow("")
+    val results = _query
+        .debounce(300)
+        .filter { it.length >= 2 }  // ✅ Skip short queries
+        .flatMapLatest { repo.search(it) }
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-**Частые ошибки:**
-- Не использовать TestDispatchers
-- Не продвигать виртуальное время
-- Использовать Thread.sleep
-- Не закрывать collectors
-- Забывать про начальное значение StateFlow
+    fun onQueryChanged(q: String) { _query.value = q }
+}
+
+// Test
+@Test
+fun `debounce prevents excessive calls`() = runTest {
+    coEvery { repo.search(any()) } returns flowOf(emptyList())
+
+    viewModel.onQueryChanged("t")   // ❌ Too short
+    testScheduler.advanceTimeBy(100)
+
+    viewModel.onQueryChanged("test")  // ✅ Valid
+    testScheduler.advanceTimeBy(400)  // ✅ Past debounce
+
+    coVerify(exactly = 1) { repo.search("test") }  // ✅ Only final query
+    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out
+}
+```
+
+### MainDispatcherRule
+
+```kotlin
+// Test rule to replace Dispatchers.Main
+class MainDispatcherRule(
+    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
+) : TestWatcher() {
+    override fun starting(description: Description) {
+        Dispatchers.setMain(dispatcher)
+    }
+    override fun finished(description: Description) {
+        Dispatchers.resetMain()
+    }
+}
+```
+
+### Best Practices
+
+**✅ Do:**
+- Use `runTest { }` instead of `runBlocking`
+- Inject `CoroutineDispatcher` for testability
+- Control virtual time via `testScheduler`
+- Use Turbine for Flow tests
+- Test error cases and cancellation
+
+**❌ Avoid:**
+- `Thread.sleep()` — breaks virtual time
+- Forgetting `advanceTimeBy()` for delays
+- Not closing infinite Flows (use `take()` or Turbine)
+- Not testing cancellation
+- Using real Dispatchers
+
+### Common Pitfalls
+
+```kotlin
+// ❌ WRONG: Real Main dispatcher
+@Test
+fun test() = runBlocking { ... }
+
+// ✅ CORRECT: TestDispatcher
+@Test
+fun test() = runTest { ... }
+
+// ❌ WRONG: Test finishes before coroutine executes
+@Test
+fun test() = runTest {
+    launch { delay(1000); doWork() }
+    verify { doWork() }  // ❌ Not executed yet
+}
+
+// ✅ CORRECT: Advance time
+@Test
+fun test() = runTest {
+    launch { delay(1000); doWork() }
+    testScheduler.advanceUntilIdle()  // ✅ Execute all tasks
+    verify { doWork() }
+}
+
+// ❌ WRONG: Infinite Flow hangs
+@Test
+fun test() = runTest {
+    flow.collect { ... }  // ❌ Never completes
+}
+
+// ✅ CORRECT: Limit collection
+@Test
+fun test() = runTest {
+    flow.take(3).test { ... }  // ✅ Completes after 3 items
+}
+```
+
+---
+
+## Follow-ups
+
+1. How do you test `SharedFlow` with replay buffer behavior?
+2. What's the difference between `StandardTestDispatcher` and `UnconfinedTestDispatcher` in practice?
+3. How to test coroutine cancellation and `ensureActive()` calls?
+4. How do you test `Flow` operators like `combine()`, `zip()`, and `merge()`?
+5. How to test timeout behavior with `withTimeout()`?
+
+---
+
+## References
+
+- [[c-coroutines]] — Kotlin coroutines fundamentals
+- [[c-flow]] — Flow basics and operators
+- [[c-testing-strategies]] — General testing approaches
+- [Kotlin Coroutines Test Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
+- [Turbine Documentation](https://github.com/cashapp/turbine)
+- [Testing Coroutines on Android](https://developer.android.com/kotlin/coroutines/test)
 
 ---
 
 ## Related Questions
 
-### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - Testing
-- [[q-testing-compose-ui--android--medium]] - Testing
-- [[q-compose-testing--android--medium]] - Testing
-- [[q-robolectric-vs-instrumented--android--medium]] - Testing
-- [[q-screenshot-snapshot-testing--android--medium]] - Testing
+### Prerequisites (Easier)
+- [[q-what-is-coroutine--kotlin--easy]] — Coroutine basics
+- [[q-what-is-flow--kotlin--easy]] — Flow fundamentals
+- [[q-unit-testing-basics--android--easy]] — Unit testing intro
+
+### Related (Same Level)
+- [[q-testing-viewmodels--android--medium]] — ViewModel testing patterns
+- [[q-testing-compose-ui--android--medium]] — Compose UI testing
+- [[q-coroutine-dispatchers--kotlin--medium]] — Dispatcher types and usage
 
 ### Advanced (Harder)
-- [[q-testing-coroutines-flow--android--hard]] - Testing
+- [[q-testing-race-conditions--android--hard]] — Concurrency edge cases
+- [[q-structured-concurrency-testing--kotlin--hard]] — Complex coroutine hierarchies

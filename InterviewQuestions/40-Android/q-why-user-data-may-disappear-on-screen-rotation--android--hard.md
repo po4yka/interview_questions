@@ -1,652 +1,72 @@
 ---
 id: 20251012-1227111101
 title: "Why User Data May Disappear On Screen Rotation / Почему данные пользователя могут пропасть при повороте экрана"
+aliases: ["Why User Data May Disappear On Screen Rotation", "Почему данные пользователя могут пропасть при повороте экрана"]
 topic: android
+subtopics: [lifecycle, activity, architecture-mvvm]
+question_kind: android
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-16kb-dex-page-size--android--medium, q-keep-service-running-background--android--medium]
+related: [c-lifecycle, c-viewmodel, c-mvvm, q-compose-side-effects-advanced--jetpack-compose--hard]
 created: 2025-10-15
+updated: 2025-10-29
+sources: []
 tags:
-  - android
+  - android/lifecycle
+  - android/activity
+  - android/architecture-mvvm
+  - configuration-change
+  - state-preservation
+  - difficulty/hard
 ---
 
-# Why user data may disappear on screen rotation?
+# Вопрос (RU)
 
-**Russian**: Почему пользовательские данные могут исчезнуть при повороте экрана?
+Почему пользовательские данные могут исчезнуть при повороте экрана?
 
-## Answer (EN)
-User data disappears on screen rotation because **Android destroys and recreates the Activity** during configuration changes. If the state isn't properly saved and restored, all transient data (variables, user input, UI state) is lost.
+# Question (EN)
 
-### Why Activity is Recreated
-
-When the screen rotates, Android treats it as a **configuration change**. The system:
-
-1. **Destroys** the current Activity (calls `onDestroy()`)
-2. **Recreates** a new Activity instance (calls `onCreate()`)
-3. **Loads** the appropriate layout for the new orientation (portrait/landscape)
-
-**This means:**
-- All non-static variables are reset
-- UI state (EditText content, scroll position, etc.) can be lost
-- Network requests, downloads, or async operations may be interrupted
-
----
-
-## Common Causes of Data Loss
-
-### 1. Transient Data Not Saved
-
-**Problem:**
-
-```kotlin
-class LoginActivity : AppCompatActivity() {
-    private var username: String = ""
-    private var password: String = ""
-    private var isLoggingIn: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        loginButton.setOnClickListener {
-            username = usernameField.text.toString()
-            password = passwordField.text.toString()
-            isLoggingIn = true
-            performLogin() // Async operation
-        }
-    }
-
-    // - On rotation, username, password, and isLoggingIn are LOST!
-}
-```
-
-**Result:** After rotation:
-- `username` and `password` become empty strings
-- `isLoggingIn` resets to `false`
-- Login progress is lost
-
----
-
-### 2. EditText Content Lost (No ID)
-
-**Problem:**
-
-```xml
-<!-- - BAD: EditText without android:id -->
-<EditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Enter name" />
-```
-
-**Solution:**
-
-```xml
-<!-- - GOOD: EditText with android:id -->
-<EditText
-    android:id="@+id/nameField"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Enter name" />
-```
-
-**Why?**
-- Views with `android:id` automatically save/restore their state
-- EditText, CheckBox, RadioButton, etc. handle state preservation internally
-- **Without ID:** Android doesn't know which view to restore
-
----
-
-### 3. Not Using ViewModel
-
-**Problem:**
-
-```kotlin
-class UserListActivity : AppCompatActivity() {
-    private var users: List<User> = emptyList()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_list)
-
-        // Load data
-        lifecycleScope.launch {
-            users = repository.getUsers() // Expensive network call
-            displayUsers(users)
-        }
-    }
-
-    // - On rotation, users list is lost
-    // Network call is made AGAIN unnecessarily
-}
-```
-
-**Solution with ViewModel:**
-
-```kotlin
-class UserListViewModel : ViewModel() {
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
-
-    init {
-        loadUsers()
-    }
-
-    private fun loadUsers() {
-        viewModelScope.launch {
-            _users.value = repository.getUsers()
-        }
-    }
-}
-
-class UserListActivity : AppCompatActivity() {
-    private val viewModel: UserListViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_list)
-
-        // - Data survives rotation
-        // Network call happens ONCE
-        viewModel.users.observe(this) { users ->
-            displayUsers(users)
-        }
-    }
-}
-```
-
----
-
-### 4. Not Implementing onSaveInstanceState()
-
-**Problem:**
-
-```kotlin
-class GameActivity : AppCompatActivity() {
-    private var score: Int = 0
-    private var level: Int = 1
-    private var playerName: String = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game)
-
-        // Initialize game state
-        scoreText.text = "Score: $score"
-    }
-
-    // - No onSaveInstanceState() implementation
-    // All game state lost on rotation!
-}
-```
-
-**Solution:**
-
-```kotlin
-class GameActivity : AppCompatActivity() {
-    private var score: Int = 0
-    private var level: Int = 1
-    private var playerName: String = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game)
-
-        // Restore state
-        if (savedInstanceState != null) {
-            score = savedInstanceState.getInt("SCORE", 0)
-            level = savedInstanceState.getInt("LEVEL", 1)
-            playerName = savedInstanceState.getString("PLAYER_NAME", "")
-        }
-
-        scoreText.text = "Score: $score"
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // - Save state before destruction
-        outState.putInt("SCORE", score)
-        outState.putInt("LEVEL", level)
-        outState.putString("PLAYER_NAME", playerName)
-    }
-}
-```
-
----
-
-### 5. Async Operations Not Handled
-
-**Problem:**
-
-```kotlin
-class DownloadActivity : AppCompatActivity() {
-    private var downloadJob: Job? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_download)
-
-        downloadButton.setOnClickListener {
-            downloadJob = lifecycleScope.launch {
-                downloadFile() // Long-running operation
-            }
-        }
-    }
-
-    // - On rotation:
-    // - downloadJob reference is lost
-    // - Download continues but UI can't update
-    // - No way to track download progress
-}
-```
-
-**Solution with ViewModel:**
-
-```kotlin
-class DownloadViewModel : ViewModel() {
-    private val _downloadProgress = MutableLiveData<Int>()
-    val downloadProgress: LiveData<Int> = _downloadProgress
-
-    private var downloadJob: Job? = null
-
-    fun startDownload() {
-        if (downloadJob?.isActive == true) return // Already downloading
-
-        downloadJob = viewModelScope.launch {
-            for (progress in 0..100 step 10) {
-                delay(500)
-                _downloadProgress.value = progress
-            }
-        }
-    }
-
-    fun cancelDownload() {
-        downloadJob?.cancel()
-    }
-}
-
-class DownloadActivity : AppCompatActivity() {
-    private val viewModel: DownloadViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_download)
-
-        // - Download survives rotation
-        viewModel.downloadProgress.observe(this) { progress ->
-            progressBar.progress = progress
-            progressText.text = "$progress%"
-        }
-
-        downloadButton.setOnClickListener {
-            viewModel.startDownload()
-        }
-    }
-}
-```
-
----
-
-### 6. Fragment Data Loss
-
-**Problem:**
-
-```kotlin
-class UserFragment : Fragment() {
-    private var userId: Int = -1
-    private var userData: User? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        userId = arguments?.getInt("USER_ID") ?: -1
-        loadUserData(userId)
-    }
-
-    private fun loadUserData(id: Int) {
-        lifecycleScope.launch {
-            userData = repository.getUser(id)
-            displayUser(userData)
-        }
-    }
-
-    // - userData lost on configuration change
-}
-```
-
-**Solution:**
-
-```kotlin
-class UserFragment : Fragment() {
-    private val viewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val userId = arguments?.getInt("USER_ID") ?: -1
-        viewModel.loadUser(userId)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // - Data survives rotation
-        viewModel.user.observe(viewLifecycleOwner) { user ->
-            displayUser(user)
-        }
-    }
-}
-```
-
----
-
-## Complete Example: Data Loss vs. Proper Handling
-
-### - Bad Example (Data Lost)
-
-```kotlin
-class BadActivity : AppCompatActivity() {
-    private var counter = 0
-    private var userName = ""
-    private var selectedItems = mutableListOf<Int>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bad)
-
-        incrementButton.setOnClickListener {
-            counter++
-            counterText.text = "Count: $counter"
-        }
-
-        saveButton.setOnClickListener {
-            userName = nameField.text.toString()
-            Toast.makeText(this, "Saved: $userName", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    // No onSaveInstanceState() implementation
-    // All data lost on rotation!
-}
-```
-
-**After rotation:**
-- `counter` resets to `0`
-- `userName` becomes empty string
-- `selectedItems` list is empty
-- User has to re-enter everything
-
----
-
-### - Good Example (Data Preserved)
-
-```kotlin
-class GoodViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-
-    var counter: Int
-        get() = savedStateHandle.get<Int>("counter") ?: 0
-        set(value) = savedStateHandle.set("counter", value)
-
-    var userName: String
-        get() = savedStateHandle.get<String>("userName") ?: ""
-        set(value) = savedStateHandle.set("userName", value)
-
-    private val _selectedItems = MutableLiveData<List<Int>>(emptyList())
-    val selectedItems: LiveData<List<Int>> = _selectedItems
-
-    fun incrementCounter() {
-        counter++
-    }
-
-    fun saveUserName(name: String) {
-        userName = name
-    }
-
-    fun toggleItem(itemId: Int) {
-        val current = _selectedItems.value ?: emptyList()
-        _selectedItems.value = if (itemId in current) {
-            current - itemId
-        } else {
-            current + itemId
-        }
-    }
-}
-
-class GoodActivity : AppCompatActivity() {
-    private val viewModel: GoodViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_good)
-
-        // Initialize UI with saved state
-        counterText.text = "Count: ${viewModel.counter}"
-        nameField.setText(viewModel.userName)
-
-        // Observe data
-        viewModel.selectedItems.observe(this) { items ->
-            displaySelectedItems(items)
-        }
-
-        incrementButton.setOnClickListener {
-            viewModel.incrementCounter()
-            counterText.text = "Count: ${viewModel.counter}"
-        }
-
-        saveButton.setOnClickListener {
-            val name = nameField.text.toString()
-            viewModel.saveUserName(name)
-            Toast.makeText(this, "Saved: $name", Toast.LENGTH_SHORT).show()
-        }
-    }
-}
-```
-
-**After rotation:**
-- - `counter` value preserved
-- - `userName` preserved
-- - `selectedItems` list intact
-- - User experience seamless
-
----
-
-## Solutions Summary
-
-### 1. Use ViewModel for UI-related data
-
-```kotlin
-class MyViewModel : ViewModel() {
-    val data = MutableLiveData<String>()
-    // Survives rotation automatically
-}
-```
-
-### 2. Use SavedStateHandle for critical state
-
-```kotlin
-class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    var importantData: String
-        get() = savedStateHandle["data"] ?: ""
-        set(value) = savedStateHandle.set("data", value)
-    // Survives rotation AND process death
-}
-```
-
-### 3. Add android:id to Views
-
-```xml
-<EditText
-    android:id="@+id/inputField"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
-<!-- View state saved automatically -->
-```
-
-### 4. Implement onSaveInstanceState()
-
-```kotlin
-override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putInt("score", score)
-}
-```
-
-### 5. Use Persistent Storage
-
-```kotlin
-// For data that should survive app restart
-val prefs = getSharedPreferences("app_data", Context.MODE_PRIVATE)
-prefs.edit {
-    putString("user_id", userId)
-    apply()
-}
-```
-
----
-
-## Configuration Changes Lifecycle
-
-```
-User rotates screen
-    ↓
-onPause()
-    ↓
-onSaveInstanceState(outState)  ← SAVE DATA HERE!
-    ↓
-onStop()
-    ↓
-onDestroy()  ← Activity DESTROYED
-    ↓
-onCreate(savedInstanceState)  ← NEW Activity created
-    ↓
-onStart()
-    ↓
-onRestoreInstanceState(savedInstanceState)  ← RESTORE DATA HERE
-    ↓
-onResume()
-```
-
----
-
-## Testing Data Persistence
-
-### Enable "Don't keep activities" in Developer Options
-
-```
-Settings → Developer Options → Don't keep activities (ON)
-```
-
-This simulates process death and helps test data persistence.
-
-### Test Rotation
-
-```kotlin
-@Test
-fun testRotation() {
-    val scenario = ActivityScenario.launch(MainActivity::class.java)
-
-    // Enter data
-    onView(withId(R.id.nameField)).perform(typeText("John"))
-
-    // Rotate
-    scenario.onActivity { activity ->
-        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-    }
-
-    // Verify data preserved
-    onView(withId(R.id.nameField)).check(matches(withText("John")))
-}
-```
-
----
-
-## Best Practices
-
-1. - **Use ViewModel** for all UI-related data
-2. - **Add SavedStateHandle** for critical state that must survive process death
-3. - **Add android:id** to all Views that hold user input
-4. - **Use persistent storage** (DataStore, Room) for data that should survive app restart
-5. - **Test with rotation** during development
-6. - **Enable "Don't keep activities"** during testing
-7. - **Don't rely on** Activity/Fragment instance variables for important state
-8. - **Don't make** unnecessary network calls after rotation
-
----
-
-## Common Mistakes
-
-| Mistake | Consequence | Solution |
-|---------|-------------|----------|
-| No ViewModel | Data reloaded on every rotation | Use ViewModel |
-| No SavedStateHandle | Data lost on process death | Add SavedStateHandle |
-| Views without ID | View state not restored | Add android:id |
-| No onSaveInstanceState() | Transient data lost | Implement lifecycle callback |
-| Async work in Activity | Operations interrupted/lost | Move to ViewModel |
-
----
-
-## Summary
-
-User data disappears on screen rotation because:
-
-1. **Activity is destroyed and recreated**
-2. **All instance variables are reset** to their initial values
-3. **Async operations are interrupted** or references are lost
-4. **Views without ID don't restore** their state
-
-**Solutions:**
-- Use **ViewModel** (survives rotation)
-- Use **SavedStateHandle** (survives process death)
-- Add **android:id** to Views (auto-save/restore)
-- Implement **onSaveInstanceState()** (for transient data)
-- Use **persistent storage** (DataStore, Room) for long-term data
-
-**Modern Best Practice:**
-```kotlin
-class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    var uiState: UiState
-        get() = savedStateHandle["state"] ?: UiState.default()
-        set(value) = savedStateHandle.set("state", value)
-}
-```
-
-This ensures data survives both configuration changes and process death.
+Why does user data disappear on screen rotation?
 
 ---
 
 ## Ответ (RU)
-Пользовательские данные исчезают при повороте экрана, потому что **Android уничтожает и пересоздаёт Activity** при изменении конфигурации. Если состояние не сохранено должным образом, все временные данные (переменные, пользовательский ввод, UI состояние) теряются.
+
+При повороте экрана Android **уничтожает и пересоздаёт Activity** как часть обработки изменения конфигурации. Если состояние не сохранено должным образом, все временные данные теряются.
 
 ### Почему Activity пересоздаётся
 
-При повороте экрана Android:
-1. **Уничтожает** текущую Activity (`onDestroy()`)
-2. **Создаёт** новый экземпляр Activity (`onCreate()`)
-3. **Загружает** соответствующий layout для новой ориентации
+Поворот экрана = изменение конфигурации. Android:
+1. Вызывает `onDestroy()` для текущей Activity
+2. Создаёт новый экземпляр Activity через `onCreate()`
+3. Загружает layout для новой ориентации
 
-**Это означает:**
-- Все нестатические переменные сбрасываются
+**Последствия:**
+- Все переменные экземпляра сбрасываются
 - UI состояние может быть потеряно
-- Асинхронные операции могут быть прерваны
+- Асинхронные операции прерываются
 
 ### Основные причины потери данных
 
-**1. Данные не сохранены**
+**1. Переменные не сохранены**
 ```kotlin
-// - Данные теряются при повороте
-private var username: String = ""
-private var score: Int = 0
+class LoginActivity : AppCompatActivity() {
+    private var username = "" // ❌ Потеряется при повороте
+    private var isLoggingIn = false // ❌ Сбросится в false
+}
 ```
 
 **2. EditText без android:id**
 ```xml
-<!-- - Состояние не сохраняется -->
+<!-- ❌ Состояние не сохраняется -->
 <EditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 
-<!-- - Состояние сохраняется автоматически -->
+<!-- ✅ Автоматическое сохранение -->
 <EditText
     android:id="@+id/nameField"
     android:layout_width="match_parent"
@@ -655,61 +75,306 @@ private var score: Int = 0
 
 **3. Не используется ViewModel**
 ```kotlin
-// - БЕЗ ViewModel - данные теряются
+// ❌ Данные теряются
 class BadActivity : AppCompatActivity() {
     private var users: List<User> = emptyList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            users = repository.getUsers() // Повторный запрос при каждом повороте
+        }
+    }
 }
 
-// - С ViewModel - данные сохраняются
+// ✅ Данные сохраняются
 class GoodActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.users.observe(this) { users -> // Запрос один раз
+            displayUsers(users)
+        }
+    }
+}
+```
+
+**4. onSaveInstanceState() не реализован**
+```kotlin
+class GameActivity : AppCompatActivity() {
+    private var score = 0
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("SCORE", score) // ✅ Сохраняем
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        score = savedInstanceState?.getInt("SCORE") ?: 0 // ✅ Восстанавливаем
+    }
 }
 ```
 
 ### Решения
 
-**1. Используйте ViewModel**
+**1. ViewModel для UI данных**
 ```kotlin
 class MyViewModel : ViewModel() {
     val data = MutableLiveData<String>()
-    // Переживает поворот автоматически
+    // ✅ Переживает поворот автоматически
 }
 ```
 
-**2. Используйте SavedStateHandle**
+**2. SavedStateHandle для критического состояния**
 ```kotlin
-class MyViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    var data: String
-        get() = savedStateHandle["data"] ?: ""
-        set(value) = savedStateHandle.set("data", value)
-    // Переживает поворот И смерть процесса
+class MyViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var counter: Int
+        get() = savedStateHandle["counter"] ?: 0
+        set(value) = savedStateHandle.set("counter", value)
+    // ✅ Переживает поворот И смерть процесса
 }
 ```
 
-**3. Добавьте android:id к View**
+**3. android:id для Views**
 ```xml
-<EditText android:id="@+id/field" />
+<EditText android:id="@+id/inputField" />
+<!-- ✅ Автоматическое сохранение/восстановление -->
 ```
 
-**4. Реализуйте onSaveInstanceState()**
-```kotlin
-override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putInt("score", score)
-}
+### Жизненный цикл при изменении конфигурации
+
+```
+Поворот экрана
+    ↓
+onPause()
+    ↓
+onSaveInstanceState() ← СОХРАНИТЬ ДАННЫЕ
+    ↓
+onStop()
+    ↓
+onDestroy() ← Activity УНИЧТОЖЕНА
+    ↓
+onCreate(savedInstanceState) ← НОВАЯ Activity
+    ↓
+onRestoreInstanceState() ← ВОССТАНОВИТЬ ДАННЫЕ
+    ↓
+onResume()
 ```
 
 ### Лучшие практики
 
-1. - Используйте **ViewModel** для UI данных
-2. - Добавьте **SavedStateHandle** для критического состояния
-3. - Добавляйте **android:id** ко всем View с пользовательским вводом
-4. - Используйте **постоянное хранилище** (DataStore, Room) для долгосрочных данных
-5. - Тестируйте с поворотом экрана
-6. - Не полагайтесь на переменные экземпляра Activity/Fragment
+1. ✅ Используйте **ViewModel** для всех UI данных
+2. ✅ Добавляйте **SavedStateHandle** для критического состояния
+3. ✅ Добавляйте **android:id** ко всем Views с пользовательским вводом
+4. ✅ Используйте **DataStore/Room** для долгосрочного хранения
+5. ✅ Тестируйте с включенным "Don't keep activities"
+6. ❌ Не полагайтесь на переменные экземпляра Activity
+7. ❌ Не делайте повторные сетевые запросы после поворота
+
+### Современное решение
+
+```kotlin
+class MyViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var uiState: UiState
+        get() = savedStateHandle["state"] ?: UiState.default()
+        set(value) = savedStateHandle.set("state", value)
+}
+```
+
+Это обеспечивает сохранение данных при изменении конфигурации **и** при смерти процесса.
+
+---
+
+## Answer (EN)
+
+On screen rotation, Android **destroys and recreates the Activity** as part of configuration change handling. If state isn't properly saved, all transient data is lost.
+
+### Why Activity is Recreated
+
+Screen rotation = configuration change. Android:
+1. Calls `onDestroy()` on current Activity
+2. Creates new Activity instance via `onCreate()`
+3. Loads appropriate layout for new orientation
+
+**Consequences:**
+- All instance variables reset
+- UI state may be lost
+- Async operations interrupted
+
+### Common Causes of Data Loss
+
+**1. Instance Variables Not Saved**
+```kotlin
+class LoginActivity : AppCompatActivity() {
+    private var username = "" // ❌ Lost on rotation
+    private var isLoggingIn = false // ❌ Resets to false
+}
+```
+
+**2. EditText Without android:id**
+```xml
+<!-- ❌ State not preserved -->
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+<!-- ✅ Automatic preservation -->
+<EditText
+    android:id="@+id/nameField"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+```
+
+**3. Not Using ViewModel**
+```kotlin
+// ❌ Data lost
+class BadActivity : AppCompatActivity() {
+    private var users: List<User> = emptyList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            users = repository.getUsers() // Re-fetched every rotation
+        }
+    }
+}
+
+// ✅ Data preserved
+class GoodActivity : AppCompatActivity() {
+    private val viewModel: UserViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.users.observe(this) { users -> // Fetched once
+            displayUsers(users)
+        }
+    }
+}
+```
+
+**4. onSaveInstanceState() Not Implemented**
+```kotlin
+class GameActivity : AppCompatActivity() {
+    private var score = 0
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("SCORE", score) // ✅ Save
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        score = savedInstanceState?.getInt("SCORE") ?: 0 // ✅ Restore
+    }
+}
+```
+
+### Solutions
+
+**1. ViewModel for UI Data**
+```kotlin
+class MyViewModel : ViewModel() {
+    val data = MutableLiveData<String>()
+    // ✅ Survives rotation automatically
+}
+```
+
+**2. SavedStateHandle for Critical State**
+```kotlin
+class MyViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var counter: Int
+        get() = savedStateHandle["counter"] ?: 0
+        set(value) = savedStateHandle.set("counter", value)
+    // ✅ Survives rotation AND process death
+}
+```
+
+**3. android:id for Views**
+```xml
+<EditText android:id="@+id/inputField" />
+<!-- ✅ Automatic save/restore -->
+```
+
+### Configuration Change Lifecycle
+
+```
+Screen rotation
+    ↓
+onPause()
+    ↓
+onSaveInstanceState() ← SAVE DATA
+    ↓
+onStop()
+    ↓
+onDestroy() ← Activity DESTROYED
+    ↓
+onCreate(savedInstanceState) ← NEW Activity
+    ↓
+onRestoreInstanceState() ← RESTORE DATA
+    ↓
+onResume()
+```
+
+### Best Practices
+
+1. ✅ Use **ViewModel** for all UI-related data
+2. ✅ Add **SavedStateHandle** for critical state
+3. ✅ Add **android:id** to all Views with user input
+4. ✅ Use **DataStore/Room** for long-term storage
+5. ✅ Test with "Don't keep activities" enabled
+6. ❌ Don't rely on Activity instance variables
+7. ❌ Don't make redundant network calls after rotation
+
+### Modern Solution
+
+```kotlin
+class MyViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    var uiState: UiState
+        get() = savedStateHandle["state"] ?: UiState.default()
+        set(value) = savedStateHandle.set("state", value)
+}
+```
+
+This ensures data survives both configuration changes **and** process death.
+
+---
+
+## Follow-ups
+
+1. What's the difference between `onSaveInstanceState()` and ViewModel for state preservation?
+2. How does SavedStateHandle differ from regular ViewModel properties?
+3. When should you use `android:configChanges` to prevent Activity recreation?
+4. How can you test configuration changes without physically rotating the device?
+5. What happens to ongoing coroutines/Jobs when Activity is destroyed on rotation?
+
+## References
+
+- [[c-lifecycle]] - Android lifecycle fundamentals
+- [[c-viewmodel]] - ViewModel architecture component
+- [[c-mvvm]] - MVVM pattern implementation
+- https://developer.android.com/guide/components/activities/activity-lifecycle
+- https://developer.android.com/topic/libraries/architecture/viewmodel-savedstate
 
 ## Related Questions
 
-- [[q-compose-side-effects-advanced--android--hard]]
-- [[q-16kb-dex-page-size--android--medium]]
-- [[q-keep-service-running-background--android--medium]]
+### Prerequisites
+- [[q-activity-lifecycle--android--medium]] - Activity lifecycle basics
+- [[q-viewmodel-basics--android--easy]] - Introduction to ViewModel
+
+### Related
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Side effects in Compose
+- [[q-savedstatehandle-vs-viewmodel--android--medium]] - State preservation strategies
+
+### Advanced
+- [[q-process-death-handling--android--hard]] - Handling process death scenarios
+- [[q-configuration-changes-custom-handling--android--hard]] - Custom configuration change handling

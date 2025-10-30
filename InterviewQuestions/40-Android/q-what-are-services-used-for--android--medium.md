@@ -1,301 +1,116 @@
 ---
 id: 20251012-122711140
 title: "What Are Services Used For / Для чего используются Service"
+aliases: ["What Are Services Used For", "Для чего используются Service"]
+
+# Classification
 topic: android
+subtopics: [service, background-execution]
+question_kind: android
 difficulty: medium
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
 related: [q-mvvm-pattern--android--medium, q-memory-leaks-definition--android--easy, q-what-does-the-lifecycle-library-do--android--medium]
+
+# Timestamps
 created: 2025-10-15
-tags: [android/services, android/background-processing, services, background-work, foreground-service, difficulty/medium]
+updated: 2025-10-28
+
+# Tags (EN only; no leading #)
+tags: [android/service, android/background-execution, background-work, foreground-service, difficulty/medium]
 ---
 
-# What are services used for?
+# Вопрос (RU)
 
-**Russian**: Для чего используются сервисы?
+Для чего используются сервисы в Android?
 
-**English**: What are services used for?
+# Question (EN)
 
-## Answer (EN)
-**Services** are Android components used for **long-running operations in the background** without a user interface. Main use cases:
-
-1. **Music playback** - play music while app is in background
-2. **File downloads** - download large files
-3. **Network synchronization** - sync data with server
-4. **Location tracking** - continuous location updates
-5. **Push notifications** - handle FCM messages
-
-**Types of Services:**
-- **Foreground Service** - visible to user (notification required)
-- **Background Service** - invisible, deprecated on Android 8.0+
-- **Bound Service** - provides client-server interface
-
-**Modern alternatives**: WorkManager (recommended for most background work), JobScheduler, AlarmManager.
+What are services used for in Android?
 
 ---
 
-## What is a Service?
+## Ответ (RU)
 
-A Service is an application component that can perform long-running operations in the background. It does not provide a user interface.
+**Service** — это компонент Android для длительных фоновых операций без пользовательского интерфейса.
+
+### Основные типы и применение
+
+**1. Foreground Service** — основной тип для современных версий Android
+- **Требование**: обязательное уведомление для пользователя
+- **Применение**: музыкальные плееры, навигация, фитнес-трекинг, загрузка файлов
+
+**2. Background Service** — устарел и ограничен с Android 8.0+
+- **Проблема**: мог разряжать батарею, система ограничивает выполнение
+- **Замена**: используйте WorkManager для отложенных фоновых задач
+
+**3. Bound Service** — клиент-серверный интерфейс
+- **Применение**: коммуникация между Activity/Fragment и сервисом, IPC
+
+### Пример Foreground Service
 
 ```kotlin
 class MusicPlayerService : Service() {
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Long-running operation
-        playMusic()
-        return START_STICKY
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        stopMusic()
-    }
-}
-```
-
----
-
-## Types of Services
-
-### 1. Foreground Service
-
-**Purpose**: Long-running operations that user is actively aware of.
-
-**Required**: Must display a notification to the user.
-
-**Use cases:**
-- Music playback
-- Navigation
-- File uploads
-- Fitness tracking
-
-```kotlin
-class MusicPlayerService : Service() {
-
     override fun onCreate() {
         super.onCreate()
+        // ✅ Обязательно: запуск с уведомлением
         startForeground(NOTIFICATION_ID, createNotification())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_PLAY -> playMusic()
-            ACTION_PAUSE -> pauseMusic()
             ACTION_STOP -> {
                 stopMusic()
-                stopSelf()
+                stopSelf() // ✅ Всегда останавливайте сервис явно
             }
         }
-        return START_STICKY
-    }
-
-    private fun createNotification(): Notification {
-        val channelId = "music_playback_channel"
-
-        // Create notification channel (Android 8.0+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Music Playback",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
-        }
-
-        // Build notification
-        return NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Now Playing")
-            .setContentText("Song Title - Artist")
-            .setSmallIcon(R.drawable.ic_music)
-            .setContentIntent(createPendingIntent())
-            .addAction(R.drawable.ic_pause, "Pause", createPauseIntent())
-            .addAction(R.drawable.ic_stop, "Stop", createStopIntent())
-            .build()
-    }
-
-    private fun createPendingIntent(): PendingIntent {
-        val intent = Intent(this, MainActivity::class.java)
-        return PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
+        return START_STICKY // Перезапустить если система убила
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
-
-    companion object {
-        const val NOTIFICATION_ID = 1
-        const val ACTION_PLAY = "ACTION_PLAY"
-        const val ACTION_PAUSE = "ACTION_PAUSE"
-        const val ACTION_STOP = "ACTION_STOP"
-    }
 }
 ```
 
-**Manifest declaration:**
+**Manifest**:
 ```xml
 <service
     android:name=".MusicPlayerService"
-    android:exported="false"
     android:foregroundServiceType="mediaPlayback" />
 
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 ```
 
-**Start foreground service:**
-```kotlin
-class MainActivity : AppCompatActivity() {
-    fun startMusicService() {
-        val intent = Intent(this, MusicPlayerService::class.java).apply {
-            action = MusicPlayerService.ACTION_PLAY
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
-        }
-    }
-
-    fun stopMusicService() {
-        val intent = Intent(this, MusicPlayerService::class.java).apply {
-            action = MusicPlayerService.ACTION_STOP
-        }
-        startService(intent)
-    }
-}
-```
-
----
-
-### 2. Background Service (Deprecated)
-
-**Warning**: Background services are restricted on Android 8.0 (API 26)+.
-
-**Purpose**: Operations that don't require user awareness.
-
-**Problem**: Could drain battery, so Android restricts them.
-
-**Old approach (pre-Android 8.0):**
-```kotlin
-class DownloadService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Download file in background
-        downloadFile(intent?.getStringExtra("url"))
-        return START_NOT_STICKY
-    }
-
-    private fun downloadFile(url: String?) {
-        // Perform download
-        // This is RESTRICTED on Android 8.0+!
-    }
-
-    override fun onBind(intent: Intent?): IBinder? = null
-}
-```
-
-**Modern replacement**: Use **WorkManager** instead:
-```kotlin
-class DownloadWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        val url = inputData.getString("url") ?: return Result.failure()
-
-        return try {
-            downloadFile(url)
-            Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
-    }
-
-    private suspend fun downloadFile(url: String) {
-        // Download implementation
-    }
-}
-
-// Schedule download
-val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
-    .setInputData(workDataOf("url" to "https://example.com/file.pdf"))
-    .build()
-
-WorkManager.getInstance(context).enqueue(workRequest)
-```
-
----
-
-### 3. Bound Service
-
-**Purpose**: Provides client-server interface for communication.
-
-**Lifecycle**: Lives as long as clients are bound to it.
-
-**Use cases:**
-- Provide API to activity/fragment
-- Inter-process communication (IPC)
-- Background data processing with UI updates
+### Пример Bound Service
 
 ```kotlin
 class LocationService : Service() {
-
     private val binder = LocationBinder()
-    private val locationListeners = mutableSetOf<LocationListener>()
 
     inner class LocationBinder : Binder() {
         fun getService(): LocationService = this@LocationService
     }
 
-    override fun onBind(intent: Intent?): IBinder {
-        return binder
-    }
-
-    fun registerListener(listener: LocationListener) {
-        locationListeners.add(listener)
-        startLocationUpdates()
-    }
-
-    fun unregisterListener(listener: LocationListener) {
-        locationListeners.remove(listener)
-        if (locationListeners.isEmpty()) {
-            stopLocationUpdates()
-        }
-    }
-
-    private fun startLocationUpdates() {
-        // Start getting location updates
-        // Notify all listeners when location changes
-    }
-
-    private fun stopLocationUpdates() {
-        // Stop location updates
-    }
+    override fun onBind(intent: Intent): IBinder = binder
 
     fun getCurrentLocation(): Location? {
-        // Return current location
+        // Возвращаем текущую позицию
         return null
-    }
-
-    interface LocationListener {
-        fun onLocationChanged(location: Location)
     }
 }
 ```
 
-**Bind to service from Activity:**
+**Использование в Activity**:
 ```kotlin
 class MainActivity : AppCompatActivity() {
-
     private var locationService: LocationService? = null
     private var isBound = false
 
@@ -304,27 +119,15 @@ class MainActivity : AppCompatActivity() {
             val binder = service as LocationService.LocationBinder
             locationService = binder.getService()
             isBound = true
-
-            // Register listener
-            locationService?.registerListener(locationListener)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            locationService = null
             isBound = false
-        }
-    }
-
-    private val locationListener = object : LocationService.LocationListener {
-        override fun onLocationChanged(location: Location) {
-            // Update UI with new location
-            updateLocationUI(location)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        // Bind to service
         Intent(this, LocationService::class.java).also { intent ->
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
@@ -333,67 +136,35 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         if (isBound) {
-            locationService?.unregisterListener(locationListener)
             unbindService(connection)
             isBound = false
         }
     }
-
-    private fun updateLocationUI(location: Location) {
-        textView.text = "Lat: ${location.latitude}, Lon: ${location.longitude}"
-    }
 }
 ```
 
----
+### Жизненный цикл
 
-## Common Use Cases
-
-### 1. Music Playback
-
-```kotlin
-class MusicPlayerService : Service() {
-    private var mediaPlayer: MediaPlayer? = null
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, createNotification())
-
-        mediaPlayer = MediaPlayer.create(this, R.raw.song)
-        mediaPlayer?.start()
-
-        return START_STICKY
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
-
-    override fun onBind(intent: Intent?): IBinder? = null
-}
+**Started Service**:
+```
+startService() → onCreate() → onStartCommand() → stopSelf() → onDestroy()
 ```
 
----
-
-### 2. File Download (Use WorkManager Instead)
-
-**Old way (Service):**
-```kotlin
-class DownloadService : IntentService("DownloadService") {
-    override fun onHandleIntent(intent: Intent?) {
-        val url = intent?.getStringExtra("url")
-        downloadFile(url)
-    }
-
-    private fun downloadFile(url: String?) {
-        // Download implementation
-    }
-}
+**Bound Service**:
+```
+bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 ```
 
-**Modern way (WorkManager):**
+### Современные альтернативы
+
+| Задача | Рекомендация |
+|--------|--------------|
+| Фоновая работа с гарантией выполнения | **WorkManager** |
+| Длительные операции (музыка, навигация) | **Foreground Service** |
+| Запланированные задачи | **AlarmManager** |
+| Коммуникация между компонентами | **Bound Service** |
+
+**Пример замены на WorkManager**:
 ```kotlin
 class DownloadWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
@@ -401,319 +172,90 @@ class DownloadWorker(context: Context, params: WorkerParameters)
     override suspend fun doWork(): Result {
         val url = inputData.getString("url") ?: return Result.failure()
 
-        setForeground(createForegroundInfo())
-
         return try {
             downloadFile(url)
-            Result.success()
+            Result.success() // ✅ Гарантированное выполнение
         } catch (e: Exception) {
-            Result.retry()
+            Result.retry() // ✅ Автоматический retry
         }
     }
-
-    private fun createForegroundInfo(): ForegroundInfo {
-        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-            .setContentTitle("Downloading")
-            .setSmallIcon(R.drawable.ic_download)
-            .setProgress(100, 0, false)
-            .build()
-
-        return ForegroundInfo(NOTIFICATION_ID, notification)
-    }
-
-    private suspend fun downloadFile(url: String) {
-        // Download implementation
-    }
-
-    companion object {
-        const val NOTIFICATION_ID = 2
-        const val CHANNEL_ID = "download_channel"
-    }
 }
-```
 
----
-
-### 3. Push Notification Handling
-
-```kotlin
-class FCMService : FirebaseMessagingService() {
-
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
-
-        remoteMessage.notification?.let {
-            showNotification(it.title, it.body)
-        }
-
-        remoteMessage.data.isNotEmpty().let {
-            handleDataPayload(remoteMessage.data)
-        }
-    }
-
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        // Send token to server
-        sendTokenToServer(token)
-    }
-
-    private fun showNotification(title: String?, body: String?) {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setAutoCancel(true)
-            .build()
-
-        NotificationManagerCompat.from(this)
-            .notify(NOTIFICATION_ID, notification)
-    }
-
-    private fun handleDataPayload(data: Map<String, String>) {
-        // Process data payload
-    }
-
-    private fun sendTokenToServer(token: String) {
-        // Send to backend
-    }
-
-    companion object {
-        const val NOTIFICATION_ID = 3
-        const val CHANNEL_ID = "fcm_channel"
-    }
-}
-```
-
-**Manifest:**
-```xml
-<service
-    android:name=".FCMService"
-    android:exported="false">
-    <intent-filter>
-        <action android:name="com.google.firebase.MESSAGING_EVENT" />
-    </intent-filter>
-</service>
-```
-
----
-
-## Service Lifecycle
-
-### Started Service Lifecycle
-
-```
-startService()
-    ↓
-onCreate()
-    ↓
-onStartCommand()
-    ↓
-[Service running]
-    ↓
-stopService() or stopSelf()
-    ↓
-onDestroy()
-```
-
-### Bound Service Lifecycle
-
-```
-bindService()
-    ↓
-onCreate()
-    ↓
-onBind()
-    ↓
-[Service running, clients connected]
-    ↓
-unbindService() (last client)
-    ↓
-onUnbind()
-    ↓
-onDestroy()
-```
-
----
-
-## Service vs WorkManager vs JobScheduler
-
-| Feature | Service | WorkManager | JobScheduler |
-|---------|---------|-------------|--------------|
-| **API Level** | All | 14+ | 21+ |
-| **Background limits** | Restricted (8.0+) | Handles restrictions | Handles restrictions |
-| **Guaranteed execution** | No (can be killed) | Yes | Yes |
-| **Requires foreground** | Yes (8.0+) | No | No |
-| **Easy to use** | Medium | Easy | Complex |
-| **Constraints** | None | Built-in | Built-in |
-| **Chaining** | No | Yes | Limited |
-| **Backoff policy** | No | Yes | Yes |
-
-**Recommendation**:
-- **Foreground Service**: Long-running tasks user is aware of (music, navigation)
-- **WorkManager**: Most background tasks (uploads, sync, cleanup)
-- **Bound Service**: Communication between components
-
----
-
-## Best Practices
-
-### 1. Always Stop Services
-
-```kotlin
-override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    thread {
-        doWork()
-        stopSelf(startId) // Stop when work is done
-    }
-    return START_NOT_STICKY
-}
-```
-
-### 2. Use Foreground Service for Long Operations
-
-```kotlin
-override fun onCreate() {
-    super.onCreate()
-    startForeground(NOTIFICATION_ID, createNotification())
-}
-```
-
-### 3. Handle Service Restart Correctly
-
-```kotlin
-override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    // START_STICKY: restart service if killed
-    // START_NOT_STICKY: don't restart if killed
-    // START_REDELIVER_INTENT: restart with last intent
-    return START_STICKY
-}
-```
-
-### 4. Cleanup Resources
-
-```kotlin
-override fun onDestroy() {
-    super.onDestroy()
-    mediaPlayer?.release()
-    locationManager?.removeUpdates(locationListener)
-    executorService?.shutdown()
-}
-```
-
----
-
-## Modern Alternatives to Services
-
-### 1. WorkManager (Recommended)
-
-**Use for:**
-- Deferrable background work
-- Guaranteed execution
-- Constraints (network, battery, storage)
-
-```kotlin
-val workRequest = OneTimeWorkRequestBuilder<UploadWorker>()
+// Запуск с ограничениями
+val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
     .setConstraints(
         Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
     )
     .build()
-
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-### 2. Foreground Service (When Required)
+### Best Practices
 
-**Use for:**
-- User-visible operations
-- Music playback
-- Navigation
-- Active downloads
-
-### 3. AlarmManager + BroadcastReceiver
-
-**Use for:**
-- Scheduled tasks at specific times
-- Wake up device
-
-```kotlin
-val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-val intent = Intent(this, AlarmReceiver::class.java)
-val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-alarmManager.setExact(
-    AlarmManager.RTC_WAKEUP,
-    System.currentTimeMillis() + 60000,
-    pendingIntent
-)
-```
+1. **Всегда останавливайте сервис**: вызывайте `stopSelf()` когда работа завершена
+2. **Используйте Foreground Service для длительных операций**: с обязательным уведомлением
+3. **Очищайте ресурсы в onDestroy()**: освобождайте MediaPlayer, LocationManager и т.д.
+4. **Предпочитайте WorkManager**: для большинства фоновых задач вместо Background Service
+5. **Сервисы работают в главном потоке**: используйте корутины или потоки для тяжелой работы
 
 ---
 
-## Summary
+## Answer (EN)
 
-**Services are used for:**
+**Service** is an Android component for long-running background operations without a user interface.
 
-1. **Foreground Service** - long-running operations user is aware of
-   - Music playback
-   - Navigation
-   - File uploads
-   - Fitness tracking
+### Main Types and Use Cases
 
-2. **Background Service** - deprecated, use WorkManager instead
+**1. Foreground Service** — primary type for modern Android versions
+- **Requirement**: must display a notification to the user
+- **Use cases**: music players, navigation, fitness tracking, file uploads
 
-3. **Bound Service** - client-server communication
-   - Provide API to activities
-   - IPC (Inter-Process Communication)
+**2. Background Service** — deprecated and restricted since Android 8.0+
+- **Problem**: could drain battery, system restricts background execution
+- **Replacement**: use WorkManager for deferrable background tasks
 
-**Modern approach:**
-- **WorkManager** for most background tasks
-- **Foreground Service** only when user must be aware
-- **Bound Service** for component communication
-- **AlarmManager** for scheduled tasks
+**3. Bound Service** — provides client-server interface
+- **Use cases**: communication between Activity/Fragment and service, IPC
 
-**Key points:**
-- Services run in main thread (use coroutines/threads for heavy work)
-- Foreground services require notification (Android 8.0+)
-- Always stop services when done
-- Prefer WorkManager for deferrable background work
+### Foreground Service Example
 
----
-
-## Ответ (RU)
-**Сервисы** используются для **длительных операций в фоне** без пользовательского интерфейса. Основные случаи использования:
-
-1. **Воспроизведение музыки** - играть музыку в фоне
-2. **Загрузка файлов** - скачивать большие файлы
-3. **Синхронизация с сервером** - синхронизировать данные
-4. **Отслеживание местоположения** - непрерывные обновления локации
-5. **Push-уведомления** - обработка FCM сообщений
-
-### Типы сервисов:
-
-**1. Foreground Service** (основной тип):
 ```kotlin
 class MusicPlayerService : Service() {
     override fun onCreate() {
         super.onCreate()
+        // ✅ Required: start with notification
         startForeground(NOTIFICATION_ID, createNotification())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        playMusic()
-        return START_STICKY
+        when (intent?.action) {
+            ACTION_PLAY -> playMusic()
+            ACTION_STOP -> {
+                stopMusic()
+                stopSelf() // ✅ Always stop service explicitly
+            }
+        }
+        return START_STICKY // Restart if system kills it
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
-**2. Background Service** (устарел):
-- Ограничен на Android 8.0+
-- Используйте WorkManager вместо него
+**Manifest**:
+```xml
+<service
+    android:name=".MusicPlayerService"
+    android:foregroundServiceType="mediaPlayback" />
 
-**3. Bound Service** (клиент-серверный интерфейс):
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+```
+
+### Bound Service Example
+
 ```kotlin
 class LocationService : Service() {
     private val binder = LocationBinder()
@@ -722,92 +264,136 @@ class LocationService : Service() {
         fun getService(): LocationService = this@LocationService
     }
 
-    override fun onBind(intent: Intent?): IBinder = binder
-}
-```
+    override fun onBind(intent: Intent): IBinder = binder
 
-### Примеры использования:
-
-**Музыкальный плеер:**
-```kotlin
-// Start service
-val intent = Intent(this, MusicPlayerService::class.java)
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    startForegroundService(intent)
-} else {
-    startService(intent)
-}
-```
-
-**Push-уведомления (FCM):**
-```kotlin
-class FCMService : FirebaseMessagingService() {
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        showNotification(remoteMessage.notification?.title)
+    fun getCurrentLocation(): Location? {
+        // Return current location
+        return null
     }
 }
 ```
 
-### Современные альтернативы:
+**Usage in Activity**:
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private var locationService: LocationService? = null
+    private var isBound = false
 
-| Задача | Решение |
-|--------|---------|
-| Фоновая работа | **WorkManager** (рекомендуется) |
-| Длительные операции (музыка, навигация) | **Foreground Service** |
-| Запланированные задачи | **AlarmManager** |
-| Коммуникация между компонентами | **Bound Service** |
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as LocationService.LocationBinder
+            locationService = binder.getService()
+            isBound = true
+        }
 
-**Пример с WorkManager** (рекомендуется вместо Background Service):
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isBound = false
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Intent(this, LocationService::class.java).also { intent ->
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isBound) {
+            unbindService(connection)
+            isBound = false
+        }
+    }
+}
+```
+
+### Lifecycle
+
+**Started Service**:
+```
+startService() → onCreate() → onStartCommand() → stopSelf() → onDestroy()
+```
+
+**Bound Service**:
+```
+bindService() → onCreate() → onBind() → unbindService() → onDestroy()
+```
+
+### Modern Alternatives
+
+| Task | Recommendation |
+|------|----------------|
+| Background work with guaranteed execution | **WorkManager** |
+| Long-running operations (music, navigation) | **Foreground Service** |
+| Scheduled tasks | **AlarmManager** |
+| Component communication | **Bound Service** |
+
+**WorkManager replacement example**:
 ```kotlin
 class DownloadWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        downloadFile()
-        return Result.success()
+        val url = inputData.getString("url") ?: return Result.failure()
+
+        return try {
+            downloadFile(url)
+            Result.success() // ✅ Guaranteed execution
+        } catch (e: Exception) {
+            Result.retry() // ✅ Automatic retry
+        }
     }
 }
 
-// Запуск
-val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>().build()
+// Schedule with constraints
+val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-### Жизненный цикл:
+### Best Practices
 
-**Started Service:**
-```
-startService() → onCreate() → onStartCommand() → [Running] → stopSelf() → onDestroy()
-```
-
-**Bound Service:**
-```
-bindService() → onCreate() → onBind() → [Running] → unbindService() → onDestroy()
-```
-
-### Best Practices:
-
-1. Всегда останавливайте сервис: `stopSelf()`
-2. Используйте Foreground Service для длительных операций
-3. Очищайте ресурсы в `onDestroy()`
-4. Предпочитайте WorkManager для фоновой работы
-
-**Резюме**: Сервисы нужны для длительных фоновых операций. Foreground Service для операций, о которых пользователь должен знать (музыка, навигация). Для большинства фоновых задач используйте WorkManager.
+1. **Always stop the service**: call `stopSelf()` when work is complete
+2. **Use Foreground Service for long operations**: with mandatory notification
+3. **Cleanup resources in onDestroy()**: release MediaPlayer, LocationManager, etc.
+4. **Prefer WorkManager**: for most background tasks instead of Background Service
+5. **Services run on main thread**: use coroutines or threads for heavy work
 
 ---
+
+## Follow-ups
+
+- What happens if you don't call `startForeground()` within 5 seconds for a Foreground Service?
+- How does `START_STICKY` vs `START_NOT_STICKY` affect service restart behavior?
+- When should you use a Bound Service versus SharedViewModel with LiveData/Flow?
+- What are the restrictions on background services introduced in Android 8.0, 12.0?
+- How can you implement a hybrid service that is both started and bound?
+
+## References
+
+- [[c-android-components]] - Android components overview
+- [[c-workmanager]] - WorkManager for background tasks
+- [[c-lifecycle]] - Android lifecycle concepts
+- https://developer.android.com/develop/background-work/services
+- https://developer.android.com/develop/background-work/background-tasks
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-are-services-for--android--easy]] - Service
-- [[q-android-services-purpose--android--easy]] - Service
+- [[q-what-are-android-components--android--easy]] - Android component basics
+- [[q-activity-lifecycle--android--easy]] - Component lifecycle fundamentals
 
-### Related (Medium)
-- [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--android--medium]] - Service
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
-- [[q-keep-service-running-background--android--medium]] - Service
+### Related (Same Level)
+- [[q-foreground-service-types--android--medium]] - Foreground service types
+- [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior
+- [[q-workmanager-vs-service--android--medium]] - WorkManager comparison
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] - Service
+- [[q-service-lifecycle-binding--android--hard]] - Complex service lifecycle scenarios
+- [[q-aidl-ipc--android--hard]] - Inter-process communication with AIDL

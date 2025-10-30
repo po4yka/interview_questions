@@ -1,774 +1,552 @@
 ---
-id: 20251012-12271155
+id: 20251012-122711
 title: "Offline First Architecture / Архитектура Offline First"
+aliases: ["Offline First Architecture", "Архитектура Offline First"]
 topic: android
+subtopics: [architecture-clean, room, cache-offline]
+question_kind: android
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [architecture, offline-first, networking, sync, room, workmanager, difficulty/hard]
+updated: 2025-10-28
+tags: [android, android/architecture-clean, android/room, android/cache-offline, architecture, offline-first, sync, workmanager, difficulty/hard]
 moc: moc-android
-related: [q-how-to-create-dynamic-screens-at-runtime--android--hard, q-workmanager-chaining--background--hard, q-navigation-methods-in-android--android--medium]
+related: [q-clean-architecture-android--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard]
+sources: []
 ---
-
-# How to Implement Offline-First Architecture in Android
-
 # Вопрос (RU)
->
 
----
+Как спроектировать и реализовать offline-first архитектуру в Android? Какие ключевые компоненты, паттерны и практики необходимо использовать?
 
-## Answer (EN)
 # Question (EN)
+
 How do you design and implement an offline-first architecture in Android? What are the key components, patterns, and best practices?
 
-## Answer (EN)
-Offline-first architecture ensures apps work seamlessly without network connectivity, syncing data when connection is available. This approach improves user experience, reduces data usage, and provides resilience to network failures.
+---
 
-#### 1. **Architecture Overview**
+## Ответ (RU)
 
+Offline-first архитектура обеспечивает работу приложения без сети, синхронизируя данные при восстановлении подключения.
+
+### Архитектура
+
+```text
+UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → WorkManager (Sync)
 ```
 
-                   Presentation Layer
-              (ViewModel + UI State)
+**Принципы:**
+- Локальная БД — единственный источник истины
+- UI читает только из локальной БД через Flow
+- Операции CUD пишут локально, затем синхронизируются
+- WorkManager — надежная фоновая синхронизация
 
+### Ключевые компоненты
 
-
-                 Repository Layer
-        (Single Source of Truth Pattern)
-
-
-
-  Local Storage          Remote API
-  (Room DB)              (Retrofit)
-
-
-
-
-
-          Sync Manager
-          (WorkManager)
-
-```
-
-#### 2. **Core Components Implementation**
-
-**2.1 Local Database as Single Source of Truth**
+**1. Room Entity с метаданными синхронизации:**
 
 ```kotlin
-@Database(
-    entities = [Article::class, User::class, SyncMetadata::class],
-    version = 1
-)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun articleDao(): ArticleDao
-    abstract fun userDao(): UserDao
-    abstract fun syncMetadataDao(): SyncMetadataDao
-}
-
 @Entity(tableName = "articles")
 data class Article(
     @PrimaryKey val id: String,
     val title: String,
     val content: String,
-    val authorId: String,
-    val createdAt: Long,
     val updatedAt: Long,
-
-    // Offline-first specific fields
-    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false,
-    @ColumnInfo(name = "is_deleted") val isDeleted: Boolean = false,
-    @ColumnInfo(name = "pending_action") val pendingAction: PendingAction? = null
+    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false, // ✅
+    @ColumnInfo(name = "pending_action") val pendingAction: PendingAction? = null // ✅
 )
 
-enum class PendingAction {
-    CREATE, UPDATE, DELETE
-}
-
-@Entity(tableName = "sync_metadata")
-data class SyncMetadata(
-    @PrimaryKey val entityType: String,
-    val lastSyncTimestamp: Long,
-    val syncStatus: SyncStatus
-)
-
-enum class SyncStatus {
-    IDLE, SYNCING, FAILED
-}
+enum class PendingAction { CREATE, UPDATE, DELETE }
 ```
 
-**2.2 Repository with Offline-First Pattern**
+**2. Repository с offline-first паттерном:**
 
 ```kotlin
 class ArticleRepository(
-    private val articleDao: ArticleDao,
-    private val apiService: ApiService,
-    private val syncMetadataDao: SyncMetadataDao,
-    private val networkMonitor: NetworkMonitor
+    private val dao: ArticleDao,
+    private val api: ApiService
 ) {
-    // Expose local data as Flow (single source of truth)
-    fun getArticlesFlow(): Flow<List<Article>> = articleDao.getArticlesFlow()
-        .map { articles -> articles.filter { !it.isDeleted } }
+    // ✅ Single source of truth
+    fun getArticlesFlow(): Flow<List<Article>> = dao.getArticlesFlow()
 
-    fun getArticleById(id: String): Flow<Article?> = articleDao.getArticleByIdFlow(id)
-
-    // Create/Update/Delete - always write to local first
+    // ✅ Write local first
     suspend fun createArticle(article: Article): Result<Article> {
-        return try {
-            // 1. Save to local database immediately
-            val localArticle = article.copy(
-                id = UUID.randomUUID().toString(),
-                isSynced = false,
-                pendingAction = PendingAction.CREATE
-            )
-            articleDao.insert(localArticle)
+        val local = article.copy(
+            id = UUID.randomUUID().toString(),
+            isSynced = false,
+            pendingAction = PendingAction.CREATE
+        )
+        dao.insert(local)
 
-            // 2. Try to sync if online
-            if (networkMonitor.isOnline()) {
-                syncCreateArticle(localArticle)
-            } else {
-                // Will sync later via WorkManager
-                scheduleSyncWork()
-            }
+        if (networkMonitor.isOnline()) syncCreate(local)
+        else scheduleSyncWork()
 
-            Result.success(localArticle)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun updateArticle(article: Article): Result<Article> {
-        return try {
-            val updatedArticle = article.copy(
-                updatedAt = System.currentTimeMillis(),
-                isSynced = false,
-                pendingAction = PendingAction.UPDATE
-            )
-            articleDao.update(updatedArticle)
-
-            if (networkMonitor.isOnline()) {
-                syncUpdateArticle(updatedArticle)
-            } else {
-                scheduleSyncWork()
-            }
-
-            Result.success(updatedArticle)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun deleteArticle(id: String): Result<Unit> {
-        return try {
-            // Soft delete
-            articleDao.markAsDeleted(id, PendingAction.DELETE)
-
-            if (networkMonitor.isOnline()) {
-                syncDeleteArticle(id)
-            } else {
-                scheduleSyncWork()
-            }
-
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    // Sync methods
-    private suspend fun syncCreateArticle(article: Article) {
-        try {
-            val response = apiService.createArticle(article.toDto())
-            if (response.isSuccessful) {
-                response.body()?.let { serverArticle ->
-                    articleDao.update(
-                        article.copy(
-                            id = serverArticle.id,
-                            isSynced = true,
-                            pendingAction = null
-                        )
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("Sync", "Failed to sync create", e)
-            scheduleSyncWork()
-        }
-    }
-
-    private suspend fun syncUpdateArticle(article: Article) {
-        try {
-            val response = apiService.updateArticle(article.id, article.toDto())
-            if (response.isSuccessful) {
-                articleDao.update(article.copy(isSynced = true, pendingAction = null))
-            }
-        } catch (e: Exception) {
-            Log.e("Sync", "Failed to sync update", e)
-            scheduleSyncWork()
-        }
-    }
-
-    private suspend fun syncDeleteArticle(id: String) {
-        try {
-            val response = apiService.deleteArticle(id)
-            if (response.isSuccessful) {
-                articleDao.deleteById(id)
-            }
-        } catch (e: Exception) {
-            Log.e("Sync", "Failed to sync delete", e)
-            scheduleSyncWork()
-        }
-    }
-
-    // Fetch from server and update local
-    suspend fun refreshArticles(): Result<Unit> {
-        return try {
-            val lastSync = syncMetadataDao.getLastSyncTimestamp("articles") ?: 0
-            val response = apiService.getArticles(since = lastSync)
-
-            if (response.isSuccessful) {
-                response.body()?.let { articles ->
-                    articleDao.insertAll(
-                        articles.map { it.toEntity().copy(isSynced = true) }
-                    )
-                    syncMetadataDao.updateSyncTimestamp(
-                        "articles",
-                        System.currentTimeMillis()
-                    )
-                }
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception("Failed to refresh: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    private fun scheduleSyncWork() {
-        // Implemented in section 3
+        return Result.success(local)
     }
 }
 ```
 
-**2.3 Network Monitoring**
+**3. NetworkMonitor:**
 
 ```kotlin
-class NetworkMonitor(private val context: Context) {
-    private val connectivityManager = context.getSystemService<ConnectivityManager>()
-
-    fun isOnline(): Boolean {
-        val network = connectivityManager?.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-    }
-
+class NetworkMonitor(context: Context) {
     fun observeNetworkStatus(): Flow<NetworkStatus> = callbackFlow {
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 trySend(NetworkStatus.Available)
             }
-
             override fun onLost(network: Network) {
                 trySend(NetworkStatus.Lost)
             }
-
-            override fun onCapabilitiesChanged(
-                network: Network,
-                capabilities: NetworkCapabilities
-            ) {
-                val hasInternet = capabilities.hasCapability(
-                    NetworkCapabilities.NET_CAPABILITY_INTERNET
-                )
-                trySend(if (hasInternet) NetworkStatus.Available else NetworkStatus.Lost)
-            }
         }
-
-        val request = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .build()
-
         connectivityManager?.registerNetworkCallback(request, callback)
-
-        awaitClose {
-            connectivityManager?.unregisterNetworkCallback(callback)
-        }
+        awaitClose { connectivityManager?.unregisterNetworkCallback(callback) }
     }
-}
-
-sealed class NetworkStatus {
-    object Available : NetworkStatus()
-    object Lost : NetworkStatus()
 }
 ```
 
-#### 3. **Sync Manager with WorkManager**
+**4. WorkManager для синхронизации:**
 
 ```kotlin
-class SyncWorker(
-    context: Context,
-    params: WorkerParameters,
-    private val articleRepository: ArticleRepository,
-    private val userRepository: UserRepository
-) : CoroutineWorker(context, params) {
-
+class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         return try {
-            // Sync pending local changes to server
-            syncPendingChanges()
-
-            // Fetch latest data from server
-            articleRepository.refreshArticles()
-            userRepository.refreshUsers()
-
+            syncPendingChanges() // ✅ отправляем локальные изменения
+            repository.refreshArticles() // ✅ получаем обновления
             Result.success()
         } catch (e: Exception) {
-            if (runAttemptCount < 3) {
-                Result.retry()
-            } else {
-                Result.failure()
-            }
-        }
-    }
-
-    private suspend fun syncPendingChanges() {
-        // Get all pending articles
-        val pendingArticles = articleRepository.getPendingArticles()
-
-        pendingArticles.forEach { article ->
-            when (article.pendingAction) {
-                PendingAction.CREATE -> articleRepository.syncCreateArticle(article)
-                PendingAction.UPDATE -> articleRepository.syncUpdateArticle(article)
-                PendingAction.DELETE -> articleRepository.syncDeleteArticle(article.id)
-                null -> { /* Already synced */ }
-            }
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
 }
 
-object SyncScheduler {
-    private const val SYNC_WORK_NAME = "sync_work"
-
-    fun schedulePeriodicSync(context: Context) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-
-        val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(
-            repeatInterval = 15,
-            repeatIntervalTimeUnit = TimeUnit.MINUTES
-        )
-            .setConstraints(constraints)
-            .setBackoffCriteria(
-                BackoffPolicy.EXPONENTIAL,
-                WorkRequest.MIN_BACKOFF_MILLIS,
-                TimeUnit.MILLISECONDS
-            )
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            SYNC_WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
-            syncRequest
-        )
-    }
-
-    fun scheduleImmediateSync(context: Context) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
-            .setConstraints(constraints)
-            .build()
-
-        WorkManager.getInstance(context).enqueue(syncRequest)
-    }
+// ✅ Периодическая синхронизация каждые 15 минут
+fun scheduleSync(context: Context) {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .setRequiresBatteryNotLow(true)
+        .build()
+    val request = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
+        .setConstraints(constraints)
+        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL,
+            WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+        .build()
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        "sync_work", ExistingPeriodicWorkPolicy.KEEP, request
+    )
 }
 ```
 
-#### 4. **Conflict Resolution**
+**5. Разрешение конфликтов:**
 
 ```kotlin
-data class ArticleWithVersion(
-    val article: Article,
-    val version: Int
-)
-
 class ConflictResolver {
-    suspend fun resolveArticleConflict(
-        local: Article,
-        remote: Article
-    ): Article {
-        return when {
-            // Server wins if both modified at same time
-            local.updatedAt == remote.updatedAt -> remote
-
-            // Most recent wins
-            local.updatedAt > remote.updatedAt -> local
-            else -> remote
-        }
+    // ✅ Last-Write-Wins: побеждает последнее изменение
+    fun resolveConflict(local: Article, remote: Article): Article {
+        return if (local.updatedAt > remote.updatedAt) local else remote
     }
 
-    // Three-way merge for complex objects
-    suspend fun mergeArticle(
-        base: Article?,
-        local: Article,
-        remote: Article
-    ): Article {
-        if (base == null) {
-            // No common ancestor, use timestamp
-            return if (local.updatedAt > remote.updatedAt) local else remote
-        }
+    // ✅ Three-way merge: слияние на основе общего предка
+    fun mergeArticle(base: Article?, local: Article, remote: Article): Article {
+        if (base == null) return resolveConflict(local, remote)
 
         return Article(
             id = remote.id,
             title = mergeField(base.title, local.title, remote.title),
             content = mergeField(base.content, local.content, remote.content),
-            authorId = remote.authorId,
-            createdAt = remote.createdAt,
             updatedAt = maxOf(local.updatedAt, remote.updatedAt),
-            isSynced = true,
-            isDeleted = local.isDeleted || remote.isDeleted,
-            pendingAction = null
+            isSynced = true
         )
     }
 
     private fun mergeField(base: String, local: String, remote: String): String {
         return when {
             local == remote -> local
-            local == base -> remote
-            remote == base -> local
-            else -> remote // Default to server value
+            local == base -> remote  // ✅ изменился remote
+            remote == base -> local  // ✅ изменился local
+            else -> remote           // ❌ конфликт: server wins
         }
     }
 }
 ```
 
-#### 5. **Caching Strategy**
-
-```kotlin
-class CachingStrategy(
-    private val database: AppDatabase,
-    private val apiService: ApiService
-) {
-    // Cache-First: Return cached data immediately, refresh in background
-    fun getArticlesCacheFirst(): Flow<List<Article>> = flow {
-        // Emit cached data first
-        emit(database.articleDao().getArticles())
-
-        // Refresh from network
-        try {
-            val response = apiService.getArticles()
-            if (response.isSuccessful) {
-                response.body()?.let { articles ->
-                    database.articleDao().insertAll(articles.map { it.toEntity() })
-                    emit(database.articleDao().getArticles())
-                }
-            }
-        } catch (e: Exception) {
-            // Continue with cached data
-        }
-    }
-
-    // Network-First with fallback to cache
-    suspend fun getArticleNetworkFirst(id: String): Article? {
-        return try {
-            val response = apiService.getArticle(id)
-            if (response.isSuccessful) {
-                response.body()?.let { article ->
-                    val entity = article.toEntity()
-                    database.articleDao().insert(entity)
-                    entity
-                }
-            } else {
-                database.articleDao().getArticleById(id)
-            }
-        } catch (e: Exception) {
-            database.articleDao().getArticleById(id)
-        }
-    }
-
-    // Stale-While-Revalidate
-    fun getArticlesStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
-        val lastSync = database.syncMetadataDao().getLastSyncTimestamp("articles") ?: 0
-        val articles = database.articleDao().getArticles()
-
-        // Emit cached data
-        emit(articles)
-
-        // Refresh if stale
-        if (System.currentTimeMillis() - lastSync > maxAge) {
-            try {
-                val response = apiService.getArticles()
-                if (response.isSuccessful) {
-                    response.body()?.let { newArticles ->
-                        database.articleDao().insertAll(newArticles.map { it.toEntity() })
-                        database.syncMetadataDao().updateSyncTimestamp(
-                            "articles",
-                            System.currentTimeMillis()
-                        )
-                        emit(database.articleDao().getArticles())
-                    }
-                }
-            } catch (e: Exception) {
-                // Keep using cached data
-            }
-        }
-    }
-}
-```
-
-#### 6. **ViewModel Integration**
-
-```kotlin
-@HiltViewModel
-class ArticlesViewModel @Inject constructor(
-    private val articleRepository: ArticleRepository,
-    private val networkMonitor: NetworkMonitor
-) : ViewModel() {
-
-    val networkStatus = networkMonitor.observeNetworkStatus()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = NetworkStatus.Lost
-        )
-
-    val articles = articleRepository.getArticlesFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-
-    val syncStatus = articleRepository.getSyncStatus()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = SyncStatus.IDLE
-        )
-
-    fun createArticle(title: String, content: String) {
-        viewModelScope.launch {
-            val article = Article(
-                id = "",
-                title = title,
-                content = content,
-                authorId = getCurrentUserId(),
-                createdAt = System.currentTimeMillis(),
-                updatedAt = System.currentTimeMillis()
-            )
-            articleRepository.createArticle(article)
-        }
-    }
-
-    fun refreshArticles() {
-        viewModelScope.launch {
-            articleRepository.refreshArticles()
-        }
-    }
-}
-```
-
-#### 7. **UI Implementation**
+**6. UI с индикацией статуса:**
 
 ```kotlin
 @Composable
 fun ArticlesScreen(viewModel: ArticlesViewModel = hiltViewModel()) {
     val articles by viewModel.articles.collectAsState()
     val networkStatus by viewModel.networkStatus.collectAsState()
-    val syncStatus by viewModel.syncStatus.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Articles") },
                 actions = {
-                    // Show network status
-                    NetworkStatusIndicator(networkStatus)
-
-                    // Show sync status
-                    if (syncStatus == SyncStatus.SYNCING) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp
-                        )
-                    }
+                    Icon(
+                        imageVector = when (networkStatus) {
+                            NetworkStatus.Available -> Icons.Default.CloudDone // ✅
+                            NetworkStatus.Lost -> Icons.Default.CloudOff // ❌
+                        },
+                        tint = when (networkStatus) {
+                            NetworkStatus.Available -> Color.Green
+                            NetworkStatus.Lost -> Color.Gray
+                        }
+                    )
                 }
             )
         }
     ) { padding ->
-        LazyColumn(modifier = Modifier.padding(padding)) {
+        LazyColumn(Modifier.padding(padding)) {
             items(articles) { article ->
-                ArticleItem(
-                    article = article,
-                    showSyncStatus = !article.isSynced
-                )
+                ArticleItem(article, showSyncIndicator = !article.isSynced)
             }
         }
     }
 }
+```
 
-@Composable
-fun NetworkStatusIndicator(status: NetworkStatus) {
-    Icon(
-        imageVector = when (status) {
-            is NetworkStatus.Available -> Icons.Default.CloudDone
-            is NetworkStatus.Lost -> Icons.Default.CloudOff
-        },
-        contentDescription = "Network status",
-        tint = when (status) {
-            is NetworkStatus.Available -> Color.Green
-            is NetworkStatus.Lost -> Color.Gray
+### Стратегии кэширования
+
+**Cache-First** (кэш сначала, затем обновление):
+```kotlin
+fun getCacheFirst(): Flow<List<Article>> = flow {
+    emit(dao.getArticles()) // ✅ отдаём кэш мгновенно
+    try {
+        val response = api.getArticles()
+        if (response.isSuccessful) {
+            response.body()?.let {
+                dao.insertAll(it.map { it.toEntity() })
+                emit(dao.getArticles()) // ✅ отдаём обновлённые данные
+            }
         }
+    } catch (e: Exception) { /* ✅ продолжаем с кэшем */ }
+}
+```
+
+**Stale-While-Revalidate** (устаревшие данные + обновление):
+```kotlin
+fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
+    emit(dao.getArticles()) // ✅ отдаём кэш сразу
+
+    val lastSync = syncMetadataDao.getLastSyncTimestamp("articles") ?: 0
+    if (System.currentTimeMillis() - lastSync > maxAge) {
+        try {
+            val response = api.getArticles()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    dao.insertAll(it.map { it.toEntity() })
+                    syncMetadataDao.updateSyncTimestamp("articles",
+                        System.currentTimeMillis())
+                    emit(dao.getArticles()) // ✅ отдаём свежие данные
+                }
+            }
+        } catch (e: Exception) { /* ✅ оставляем кэш */ }
+    }
+}
+```
+
+### Лучшие практики
+
+**Архитектура:**
+- Локальная БД как единственный источник истины (Single Source of Truth)
+- Repository pattern для изоляции источников данных
+- Reactive UI через Kotlin Flow
+- Explicit network state handling
+
+**Синхронизация:**
+- WorkManager с exponential backoff (BackoffPolicy.EXPONENTIAL)
+- Отслеживание pending-операций (CREATE, UPDATE, DELETE)
+- Конфликт-резолюшн: Last-Write-Wins или Three-Way Merge
+- Incremental sync: передача только изменений (lastSyncTimestamp)
+
+**Производительность:**
+- Пагинация через Paging 3 для больших наборов
+- Batch-операции для минимизации транзакций БД
+- Background threads для I/O (IO dispatcher)
+
+**UX:**
+- Четкая индикация статуса синхронизации
+- Offline-маркеры для несинхронизированных элементов
+- Graceful error handling с retry-механизмом
+
+---
+
+## Answer (EN)
+
+Offline-first architecture ensures apps work without network, syncing data when connection is restored.
+
+### Architecture
+
+```text
+UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → WorkManager (Sync)
+```
+
+**Principles:**
+- Local DB is single source of truth
+- UI reads only from local DB via Flow
+- CUD operations write locally first, then sync
+- WorkManager ensures reliable background sync
+
+### Key components
+
+**1. Room Entity with sync metadata:**
+
+```kotlin
+@Entity(tableName = "articles")
+data class Article(
+    @PrimaryKey val id: String,
+    val title: String,
+    val content: String,
+    val updatedAt: Long,
+    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false, // ✅
+    @ColumnInfo(name = "pending_action") val pendingAction: PendingAction? = null // ✅
+)
+
+enum class PendingAction { CREATE, UPDATE, DELETE }
+```
+
+**2. Repository with offline-first pattern:**
+
+```kotlin
+class ArticleRepository(
+    private val dao: ArticleDao,
+    private val api: ApiService
+) {
+    // ✅ Single source of truth
+    fun getArticlesFlow(): Flow<List<Article>> = dao.getArticlesFlow()
+
+    // ✅ Write local first
+    suspend fun createArticle(article: Article): Result<Article> {
+        val local = article.copy(
+            id = UUID.randomUUID().toString(),
+            isSynced = false,
+            pendingAction = PendingAction.CREATE
+        )
+        dao.insert(local)
+
+        if (networkMonitor.isOnline()) syncCreate(local)
+        else scheduleSyncWork()
+
+        return Result.success(local)
+    }
+}
+```
+
+**3. NetworkMonitor:**
+
+```kotlin
+class NetworkMonitor(context: Context) {
+    fun observeNetworkStatus(): Flow<NetworkStatus> = callbackFlow {
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                trySend(NetworkStatus.Available)
+            }
+            override fun onLost(network: Network) {
+                trySend(NetworkStatus.Lost)
+            }
+        }
+        connectivityManager?.registerNetworkCallback(request, callback)
+        awaitClose { connectivityManager?.unregisterNetworkCallback(callback) }
+    }
+}
+```
+
+**4. WorkManager for sync:**
+
+```kotlin
+class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        return try {
+            syncPendingChanges() // ✅ push local changes
+            repository.refreshArticles() // ✅ fetch updates
+            Result.success()
+        } catch (e: Exception) {
+            if (runAttemptCount < 3) Result.retry() else Result.failure()
+        }
+    }
+}
+
+// ✅ Schedule periodic sync every 15 minutes
+fun scheduleSync(context: Context) {
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .setRequiresBatteryNotLow(true)
+        .build()
+    val request = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
+        .setConstraints(constraints)
+        .setBackoffCriteria(BackoffPolicy.EXPONENTIAL,
+            WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+        .build()
+    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        "sync_work", ExistingPeriodicWorkPolicy.KEEP, request
     )
 }
 ```
 
-### Best Practices
+**5. Conflict resolution:**
+
+```kotlin
+class ConflictResolver {
+    // ✅ Last-Write-Wins: most recent wins
+    fun resolveConflict(local: Article, remote: Article): Article {
+        return if (local.updatedAt > remote.updatedAt) local else remote
+    }
+
+    // ✅ Three-way merge: merge based on common ancestor
+    fun mergeArticle(base: Article?, local: Article, remote: Article): Article {
+        if (base == null) return resolveConflict(local, remote)
+
+        return Article(
+            id = remote.id,
+            title = mergeField(base.title, local.title, remote.title),
+            content = mergeField(base.content, local.content, remote.content),
+            updatedAt = maxOf(local.updatedAt, remote.updatedAt),
+            isSynced = true
+        )
+    }
+
+    private fun mergeField(base: String, local: String, remote: String): String {
+        return when {
+            local == remote -> local
+            local == base -> remote  // ✅ remote changed
+            remote == base -> local  // ✅ local changed
+            else -> remote           // ❌ conflict: server wins
+        }
+    }
+}
+```
+
+**6. UI with status indication:**
+
+```kotlin
+@Composable
+fun ArticlesScreen(viewModel: ArticlesViewModel = hiltViewModel()) {
+    val articles by viewModel.articles.collectAsState()
+    val networkStatus by viewModel.networkStatus.collectAsState()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Articles") },
+                actions = {
+                    Icon(
+                        imageVector = when (networkStatus) {
+                            NetworkStatus.Available -> Icons.Default.CloudDone // ✅
+                            NetworkStatus.Lost -> Icons.Default.CloudOff // ❌
+                        },
+                        tint = when (networkStatus) {
+                            NetworkStatus.Available -> Color.Green
+                            NetworkStatus.Lost -> Color.Gray
+                        }
+                    )
+                }
+            )
+        }
+    ) { padding ->
+        LazyColumn(Modifier.padding(padding)) {
+            items(articles) { article ->
+                ArticleItem(article, showSyncIndicator = !article.isSynced)
+            }
+        }
+    }
+}
+```
+
+### Caching strategies
+
+**Cache-First** (cache first, then update):
+```kotlin
+fun getCacheFirst(): Flow<List<Article>> = flow {
+    emit(dao.getArticles()) // ✅ emit cache immediately
+    try {
+        val response = api.getArticles()
+        if (response.isSuccessful) {
+            response.body()?.let {
+                dao.insertAll(it.map { it.toEntity() })
+                emit(dao.getArticles()) // ✅ emit updated
+            }
+        }
+    } catch (e: Exception) { /* ✅ continue with cache */ }
+}
+```
+
+**Stale-While-Revalidate** (stale data + background refresh):
+```kotlin
+fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
+    emit(dao.getArticles()) // ✅ emit cache immediately
+
+    val lastSync = syncMetadataDao.getLastSyncTimestamp("articles") ?: 0
+    if (System.currentTimeMillis() - lastSync > maxAge) {
+        try {
+            val response = api.getArticles()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    dao.insertAll(it.map { it.toEntity() })
+                    syncMetadataDao.updateSyncTimestamp("articles",
+                        System.currentTimeMillis())
+                    emit(dao.getArticles()) // ✅ emit fresh
+                }
+            }
+        } catch (e: Exception) { /* ✅ keep cache */ }
+    }
+}
+```
+
+### Best practices
 
 **Architecture:**
-- [ ] Use local database as single source of truth
-- [ ] Implement repository pattern
-- [ ] Use Flow for reactive data
-- [ ] Handle network state changes
-- [ ] Implement proper error handling
+- Local DB as single source of truth
+- Repository pattern to isolate data sources
+- Reactive UI via Kotlin Flow
+- Explicit network state handling
 
-**Data Synchronization:**
-- [ ] Use WorkManager for reliable sync
-- [ ] Implement exponential backoff
-- [ ] Handle conflicts gracefully
-- [ ] Track sync status
-- [ ] Queue offline operations
+**Synchronization:**
+- WorkManager with exponential backoff (BackoffPolicy.EXPONENTIAL)
+- Track pending operations (CREATE, UPDATE, DELETE)
+- Conflict resolution: Last-Write-Wins or Three-Way Merge
+- Incremental sync: only changes since lastSyncTimestamp
 
 **Performance:**
-- [ ] Implement pagination
-- [ ] Use incremental sync
-- [ ] Cache strategically
-- [ ] Minimize database operations
-- [ ] Use background threads
-
-**User Experience:**
-- [ ] Show sync status
-- [ ] Display network connectivity
-- [ ] Provide offline indicators
-- [ ] Handle errors gracefully
-- [ ] Implement pull-to-refresh
-
----
-
-
-
-## Ответ (RU)
-
-Offline-first архитектура обеспечивает бесперебойную работу приложений без сетевого подключения, синхронизируя данные при доступности соединения. Этот подход улучшает пользовательский опыт, снижает использование данных и обеспечивает устойчивость к сбоям сети.
-
-#### Обзор архитектуры:
-
-```
-Presentation Layer (ViewModel + UI State)
-           ↓
-Repository Layer (Single Source of Truth)
-      ↙          ↘
-Local Storage    Remote API
-(Room DB)        (Retrofit)
-      ↘          ↙
-    Sync Manager
-    (WorkManager)
-```
-
-#### Ключевые компоненты:
-
-**1. Локальная база данных как единственный источник истины**
-- Все операции CRUD сначала выполняются локально
-- UI всегда читает данные из локальной БД через Flow
-- Данные синхронизируются с сервером в фоне
-- Сохранение метаданных синхронизации (`isSynced`, `pendingAction`)
-
-**2. Репозиторий с offline-first паттерном**
-- Немедленная запись в локальную БД для мгновенного отклика
-- Попытка синхронизации с сервером при наличии сети
-- Отложенная синхронизация через WorkManager при отсутствии связи
-- Операции: создание, обновление, удаление работают offline
-
-**3. Мониторинг сети**
-- Отслеживание статуса подключения через ConnectivityManager
-- Автоматическая синхронизация при восстановлении связи
-- Reactive обновления через Flow
-- Обработка различных типов сетей (Wi-Fi, мобильная)
-
-**4. Менеджер синхронизации (WorkManager)**
-- Периодическая синхронизация (каждые 15 минут)
-- Retry-логика с экспоненциальной задержкой
-- Синхронизация только при наличии сети и достаточном заряде
-- Обработка pending-операций (CREATE, UPDATE, DELETE)
-
-**5. Разрешение конфликтов**
-- **Last-Write-Wins**: побеждает последнее изменение по timestamp
-- **Three-Way Merge**: слияние на основе общего предка
-- **Field-Level Merging**: разрешение конфликтов на уровне полей
-- Версионирование данных для отслеживания изменений
-
-**6. Стратегии кэширования**
-- **Cache-First**: немедленный возврат из кэша, затем обновление из сети
-- **Network-First**: попытка загрузки из сети, fallback к кэшу
-- **Stale-While-Revalidate**: возврат кэша + фоновое обновление
-
-**7. Интеграция с ViewModel**
-```kotlin
-val articles = repository.getArticlesFlow()
-    .stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
-```
-
-**8. UI Implementation**
-- Отображение статуса соединения в TopAppBar
-- Индикатор синхронизации
-- Отметка несинхронизированных элементов
-- Обработка ошибок с возможностью повтора
-
-### Лучшие практики:
-
-**Архитектура:**
-- Локальная БД - единственный источник истины (Single Source of Truth)
-- Паттерн репозитория для абстракции источников данных
-- Reactive data с Kotlin Flow для автоматических обновлений UI
-- Обработка различных состояний сети
-
-**Синхронизация:**
-- WorkManager для надежной фоновой синхронизации
-- Экспоненциальная задержка повторов (BackoffPolicy.EXPONENTIAL)
-- Обработка конфликтов с понятной стратегией
-- Отслеживание статуса синхронизации для каждой сущности
-
-**Производительность:**
-- Пагинация для больших наборов данных (Paging 3)
-- Инкрементальная синхронизация (передача только изменений)
-- Стратегическое кэширование с учетом TTL
-- Минимизация операций с БД (batch-операции)
-- Использование фоновых потоков для I/O
+- Pagination via Paging 3 for large datasets
+- Batch operations to minimize DB transactions
+- Background threads for I/O (IO dispatcher)
 
 **UX:**
-- Четкое отображение статуса синхронизации
-- Индикация сетевого подключения (Connected/Offline)
-- Offline-индикаторы для несинхронизированных данных
-- Graceful обработка ошибок с понятными сообщениями
-- Pull-to-refresh для ручного обновления
-
+- Clear sync status indication
+- Offline markers for unsynced items
+- Graceful error handling with retry mechanism
 
 ---
+
+## Follow-ups
+
+- How to handle partial sync failures (some items succeed, others fail)?
+- What strategy for large binary data (images, files) in offline-first?
+- How to implement optimistic UI updates with rollback on sync failure?
+- Trade-offs between Last-Write-Wins and Operational Transform?
+- How to handle schema migrations when local DB is out of sync with server?
+
+## References
+
+- Repository pattern as single source of truth
+- WorkManager official documentation
+- Room database best practices
+- [[moc-android]]
 
 ## Related Questions
 
-### Hub
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
+### Prerequisites
+- Room database fundamentals - local database operations
+- WorkManager basics - background task scheduling
+- Kotlin Flow - reactive data streams
 
-### Related (Hard)
-- [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-kmm-architecture--android--hard]] - KMM architecture patterns
+### Related
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture in Android
+- [[q-how-to-create-dynamic-screens-at-runtime--android--hard]] - Dynamic UI patterns
 
+### Advanced
+- Distributed sync with CRDTs (Conflict-free Replicated Data Types)
+- Event sourcing for offline-first apps
+- Multi-device sync with cloud-based conflict resolution

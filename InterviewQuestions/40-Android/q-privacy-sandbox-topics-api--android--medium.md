@@ -1,46 +1,56 @@
 ---
 id: 20251012-12271172
-title: "Privacy Sandbox Topics Api"
+title: "Privacy Sandbox Topics API / Privacy Sandbox Topics API"
+aliases: ["Privacy Sandbox Topics API", "Topics API", "Privacy Sandbox Topics API"]
 topic: android
+subtopics: [privacy-sandbox, advertising, privacy]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-touch-event-handling-custom-views--custom-views--medium, q-hilt-entry-points--di--medium]
+related: [q-gdpr-compliance-android--android--medium, q-app-permissions-runtime--android--medium, q-data-storage-security--android--medium]
+sources: []
 created: 2025-10-15
-tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium]
+updated: 2025-10-28
+tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium, android/privacy-sandbox, android/advertising]
 ---
 
-# Privacy Sandbox: Topics API and Privacy-Preserving Advertising
+# Вопрос (RU)
 
----
+Что такое Topics API в Privacy Sandbox для Android? Как он обеспечивает рекламу на основе интересов с сохранением приватности?
 
-## Answer (EN)
 # Question (EN)
-What is the Privacy Sandbox Topics API in Android? How does it provide privacy-preserving interest-based advertising? How do you implement Topics API in your app and what are the privacy considerations?
 
-## Answer (EN)
-Privacy Sandbox for Android is Google's initiative to improve user privacy while supporting advertising-based business models. The Topics API enables interest-based advertising without cross-app tracking by inferring topics of interest from app usage.
+What is the Privacy Sandbox Topics API in Android? How does it provide privacy-preserving interest-based advertising?
 
-#### 1. Topics API Overview
+---
 
-**How Topics API Works:**
+## Ответ (RU)
+
+Topics API — это механизм Privacy Sandbox, который обеспечивает рекламу на основе интересов без кросс-приложенского отслеживания. Темы интересов вычисляются на устройстве на основе использования приложений за последние 3 недели и хранятся локально.
+
+### Ключевые принципы
+
+**Как работает:**
+- Система определяет 3-5 тем из таксономии (~350 категорий: Спорт, Путешествия, Технологии)
+- Темы обновляются еженедельно на основе использования приложений
+- Каждый вызов API возвращает одну тему за эпоху (неделю)
+- В 5% случаев возвращается случайная тема (plausible deniability)
+- Темы доступны только приложениям, которые их "наблюдали"
+
+**Privacy гарантии:**
+- Вычисления только на устройстве
+- Нет persistent идентификаторов
+- Нет передачи истории просмотров
+- Пользовательский контроль и прозрачность
+
+### Базовая реализация
+
 ```kotlin
-/**
- * Topics API provides interest-based topics without tracking individual users
- *
- * Key Concepts:
- * - Topics are derived from app usage over 3-week periods
- * - Taxonomy of ~350 topics (Sports, Travel, etc.)
- * - Topics are stored on-device
- * - Random topic (5% of the time) for plausible deniability
- * - Only recent topics (last 3 weeks) are available
- * - Topics are shared only with apps that observed the topic
- */
-
 import android.adservices.topics.TopicsManager
 import android.adservices.topics.GetTopicsRequest
-import android.adservices.topics.GetTopicsResponse
-import android.adservices.topics.Topic
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -48,783 +58,313 @@ import androidx.annotation.RequiresApi
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class TopicsApiManager(private val context: Context) {
 
-    private val topicsManager: TopicsManager? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    private val topicsManager: TopicsManager? =
         context.getSystemService(TopicsManager::class.java)
-    } else {
-        null
-    }
 
-    /**
-     * Get topics of interest for the user
-     * Topics are computed on-device based on app usage
-     */
-    suspend fun getTopics(): Result<List<Topic>> {
-        if (topicsManager == null) {
-            return Result.failure(UnsupportedOperationException("Topics API not available"))
+    // ✅ Корректно: проверка доступности API перед использованием
+    suspend fun getTopics(): Result<List<Int>> {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return Result.failure(UnsupportedOperationException("Topics API requires Android 13+"))
         }
 
         return try {
             val request = GetTopicsRequest.Builder()
-                .setAdsSdkName("com.example.ads.sdk")
-                .setShouldRecordObservation(true) // Record this call for future topic calculation
+                .setAdsSdkName("com.example.ads")
+                .setShouldRecordObservation(true)  // ✅ Записываем observation
                 .build()
 
-            val response = suspendCancellableCoroutine<GetTopicsResponse> { continuation ->
-                val executor = Executors.newSingleThreadExecutor()
-
-                topicsManager.getTopics(
-                    request,
-                    executor,
-                    OutcomeReceiver.create(
-                        { response -> continuation.resume(response) },
-                        { error -> continuation.resumeWithException(error) }
-                    )
-                )
-
-                continuation.invokeOnCancellation {
-                    executor.shutdown()
-                }
+            val response = topicsManager?.getTopics(request, Executors.newSingleThreadExecutor()) { result ->
+                result.onSuccess { it.topics }
+                result.onFailure { e -> throw e }
             }
 
-            Result.success(response.topics)
+            Result.success(response?.topics?.map { it.topicId } ?: emptyList())
         } catch (e: Exception) {
             Result.failure(e)
         }
-    }
-
-    /**
-     * Get topics without recording observation
-     * Useful for analytics/debugging
-     */
-    suspend fun getTopicsWithoutRecording(): Result<List<Topic>> {
-        if (topicsManager == null) {
-            return Result.failure(UnsupportedOperationException("Topics API not available"))
-        }
-
-        return try {
-            val request = GetTopicsRequest.Builder()
-                .setAdsSdkName("com.example.ads.sdk")
-                .setShouldRecordObservation(false)
-                .build()
-
-            val response = suspendCancellableCoroutine<GetTopicsResponse> { continuation ->
-                val executor = Executors.newSingleThreadExecutor()
-
-                topicsManager.getTopics(
-                    request,
-                    executor,
-                    OutcomeReceiver.create(
-                        { response -> continuation.resume(response) },
-                        { error -> continuation.resumeWithException(error) }
-                    )
-                )
-
-                continuation.invokeOnCancellation {
-                    executor.shutdown()
-                }
-            }
-
-            Result.success(response.topics)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    /**
-     * Parse topic information
-     */
-    fun parseTopicInfo(topic: Topic): TopicInfo {
-        return TopicInfo(
-            id = topic.topicId,
-            taxonomyVersion = topic.taxonomyVersion,
-            modelVersion = topic.modelVersion,
-            displayName = getTopicDisplayName(topic.topicId)
-        )
-    }
-
-    /**
-     * Map topic ID to human-readable name
-     * (Simplified - actual taxonomy has ~350 topics)
-     */
-    private fun getTopicDisplayName(topicId: Int): String {
-        return when (topicId) {
-            1 -> "Arts & Entertainment"
-            2 -> "Autos & Vehicles"
-            3 -> "Beauty & Fitness"
-            4 -> "Books & Literature"
-            5 -> "Business & Industrial"
-            6 -> "Computers & Electronics"
-            7 -> "Finance"
-            8 -> "Food & Drink"
-            9 -> "Games"
-            10 -> "Health"
-            11 -> "Hobbies & Leisure"
-            12 -> "Home & Garden"
-            13 -> "Internet & Telecom"
-            14 -> "Jobs & Education"
-            15 -> "Law & Government"
-            16 -> "News"
-            17 -> "Online Communities"
-            18 -> "People & Society"
-            19 -> "Pets & Animals"
-            20 -> "Real Estate"
-            21 -> "Reference"
-            22 -> "Science"
-            23 -> "Shopping"
-            24 -> "Sports"
-            25 -> "Travel"
-            else -> "Unknown Topic"
-        }
-    }
-
-    /**
-     * Check if Topics API is available
-     */
-    fun isTopicsApiAvailable(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-               topicsManager != null
     }
 }
-
-data class TopicInfo(
-    val id: Int,
-    val taxonomyVersion: Long,
-    val modelVersion: Long,
-    val displayName: String
-)
 ```
 
-#### 2. Privacy-Preserving Ad Targeting
+### Использование для таргетинга рекламы
 
-**Using Topics for Ad Selection:**
 ```kotlin
 class PrivacyPreservingAdManager(
-    private val context: Context,
     private val topicsManager: TopicsApiManager
 ) {
 
-    /**
-     * Request ads based on topics without tracking
-     */
-    suspend fun requestAds(adFormat: AdFormat): Result<List<Ad>> {
-        // Get topics
+    suspend fun requestAds(): Result<List<Ad>> {
         val topicsResult = topicsManager.getTopics()
 
-        if (topicsResult.isFailure) {
-            // Fall back to contextual ads (based on current content)
-            return requestContextualAds(adFormat)
-        }
-
-        val topics = topicsResult.getOrThrow()
-        val topicIds = topics.map { it.topicId }
-
-        // Request ads from ad server using topics
-        return requestAdsFromServer(topicIds, adFormat)
-    }
-
-    private suspend fun requestAdsFromServer(
-        topicIds: List<Int>,
-        adFormat: AdFormat
-    ): Result<List<Ad>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Send topics to ad server (without user identifiers)
-                val request = AdRequest(
-                    topics = topicIds,
-                    format = adFormat,
-                    contextualSignals = getContextualSignals()
-                )
-
-                val response = adServerClient.requestAds(request)
-                Result.success(response.ads)
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
+        return if (topicsResult.isSuccess) {
+            // ✅ Используем темы для таргетинга без user ID
+            requestAdsWithTopics(topicsResult.getOrThrow())
+        } else {
+            // ✅ Fallback на контекстную рекламу
+            requestContextualAds()
         }
     }
 
-    private suspend fun requestContextualAds(adFormat: AdFormat): Result<List<Ad>> {
-        // Fallback: contextual ads based on current app content
-        return withContext(Dispatchers.IO) {
-            try {
-                val request = AdRequest(
-                    topics = emptyList(),
-                    format = adFormat,
-                    contextualSignals = getContextualSignals()
-                )
+    private suspend fun requestAdsWithTopics(topics: List<Int>): Result<List<Ad>> {
+        // ❌ НИКОГДА: не комбинируем с идентификаторами пользователя
+        // val userId = getUserId()  // FORBIDDEN
 
-                val response = adServerClient.requestAds(request)
-                Result.success(response.ads)
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
-        }
-    }
-
-    /**
-     * Get contextual signals from current content
-     * (content-based targeting without tracking)
-     */
-    private fun getContextualSignals(): ContextualSignals {
-        return ContextualSignals(
-            contentCategory = getCurrentContentCategory(),
-            language = Locale.getDefault().language,
-            deviceType = if (isTablet()) "tablet" else "phone"
+        // ✅ Отправляем только темы на сервер
+        return adServerClient.requestAds(
+            AdRequest(
+                topics = topics,
+                contextualSignals = getContextualSignals()
+            )
         )
     }
-
-    private fun getCurrentContentCategory(): String {
-        // Determine category of current content being viewed
-        return "sports" // Placeholder
-    }
-
-    private fun isTablet(): Boolean {
-        return (context.resources.configuration.screenLayout
-                and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
-    }
-
-    /**
-     * Record ad impression (for frequency capping, without tracking)
-     */
-    fun recordImpression(adId: String) {
-        // Record impression locally for frequency capping
-        // No user identifiers sent to server
-        val prefs = context.getSharedPreferences("ad_impressions", Context.MODE_PRIVATE)
-        val count = prefs.getInt(adId, 0)
-        prefs.edit().putInt(adId, count + 1).apply()
-    }
-
-    /**
-     * Check if ad should be shown (frequency capping)
-     */
-    fun shouldShowAd(adId: String, maxImpressions: Int): Boolean {
-        val prefs = context.getSharedPreferences("ad_impressions", Context.MODE_PRIVATE)
-        val count = prefs.getInt(adId, 0)
-        return count < maxImpressions
-    }
-
-    private val adServerClient = AdServerClient()
 }
-
-data class AdRequest(
-    val topics: List<Int>,
-    val format: AdFormat,
-    val contextualSignals: ContextualSignals
-)
-
-data class ContextualSignals(
-    val contentCategory: String,
-    val language: String,
-    val deviceType: String
-)
-
-data class Ad(
-    val id: String,
-    val title: String,
-    val description: String,
-    val imageUrl: String,
-    val targetUrl: String
-)
-
-enum class AdFormat {
-    BANNER,
-    INTERSTITIAL,
-    REWARDED,
-    NATIVE
-}
-
-class AdServerClient {
-    suspend fun requestAds(request: AdRequest): AdResponse {
-        // Call ad server API
-        return AdResponse(emptyList())
-    }
-}
-
-data class AdResponse(val ads: List<Ad>)
 ```
 
-#### 3. User Consent and Privacy Controls
+### Пользовательский контроль
 
-**Privacy Controls Implementation:**
 ```kotlin
 class PrivacySandboxControls(private val context: Context) {
 
     private val prefs = context.getSharedPreferences("privacy_sandbox", Context.MODE_PRIVATE)
 
-    /**
-     * Check if user has consented to Topics API
-     */
-    fun hasTopicsConsent(): Boolean {
-        return prefs.getBoolean("topics_consent", false)
-    }
-
-    /**
-     * Request user consent for Topics API
-     */
+    // ✅ Явный запрос согласия с понятным объяснением
     suspend fun requestTopicsConsent(activity: Activity): Boolean {
-        return withContext(Dispatchers.Main) {
-            suspendCancellableCoroutine { continuation ->
-                showConsentDialog(
-                    activity = activity,
-                    title = "Personalized Ads",
-                    message = """
-                        We use Privacy Sandbox Topics API to show you relevant ads without tracking you across apps.
-
-                        How it works:
-                        • Your device determines topics of interest based on apps you use
-                        • Topics are stored on your device only
-                        • No personal information or browsing history leaves your device
-                        • You can change this anytime in Settings
-                    """.trimIndent(),
-                    onAccept = {
-                        prefs.edit().putBoolean("topics_consent", true).apply()
-                        continuation.resume(true)
-                    },
-                    onDecline = {
-                        prefs.edit().putBoolean("topics_consent", false).apply()
-                        continuation.resume(false)
-                    }
-                )
-            }
-        }
+        return showConsentDialog(
+            activity,
+            title = "Персонализированная реклама",
+            message = """
+                Приложение использует Topics API для показа релевантной рекламы:
+                • Темы определяются на вашем устройстве
+                • Данные не покидают устройство
+                • Вы можете отключить в любой момент
+            """.trimIndent()
+        )
     }
 
-    private fun showConsentDialog(
-        activity: Activity,
-        title: String,
-        message: String,
-        onAccept: () -> Unit,
-        onDecline: () -> Unit
-    ) {
-        AlertDialog.Builder(activity)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Accept") { _, _ -> onAccept() }
-            .setNegativeButton("Decline") { _, _ -> onDecline() }
-            .setCancelable(false)
-            .show()
-    }
+    fun hasTopicsConsent(): Boolean =
+        prefs.getBoolean("topics_consent", false)
 
-    /**
-     * Show privacy settings screen
-     */
-    fun showPrivacySettings(activity: Activity) {
-        val intent = Intent(activity, PrivacySandboxSettingsActivity::class.java)
-        activity.startActivity(intent)
-    }
-
-    /**
-     * Opt out of Topics API
-     */
     fun optOutOfTopics() {
         prefs.edit().putBoolean("topics_consent", false).apply()
     }
-
-    /**
-     * Clear all privacy sandbox data
-     */
-    fun clearAllData() {
-        prefs.edit().clear().apply()
-
-        // Clear ad impressions
-        context.getSharedPreferences("ad_impressions", Context.MODE_PRIVATE)
-            .edit().clear().apply()
-    }
-
-    /**
-     * Export user's privacy sandbox data (GDPR compliance)
-     */
-    fun exportUserData(): PrivacySandboxData {
-        return PrivacySandboxData(
-            topicsConsentGiven = hasTopicsConsent(),
-            consentTimestamp = prefs.getLong("consent_timestamp", 0),
-            settings = PrivacySandboxSettings(
-                topicsEnabled = hasTopicsConsent()
-            )
-        )
-    }
 }
-
-data class PrivacySandboxData(
-    val topicsConsentGiven: Boolean,
-    val consentTimestamp: Long,
-    val settings: PrivacySandboxSettings
-)
-
-data class PrivacySandboxSettings(
-    val topicsEnabled: Boolean
-)
-```
-
-**Privacy Settings UI (Compose):**
-```kotlin
-@Composable
-fun PrivacySandboxSettingsScreen(
-    viewModel: PrivacySandboxViewModel = viewModel()
-) {
-    val settings by viewModel.settings.collectAsState()
-
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Privacy Sandbox Settings") })
-        }
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
-        ) {
-            item {
-                Text(
-                    "Privacy Sandbox for Android",
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    "Privacy Sandbox helps protect your privacy while allowing apps to show you relevant content and ads.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-                SettingItem(
-                    title = "Topics API",
-                    description = "Allow apps to show you ads based on topics of interest without tracking you",
-                    enabled = settings.topicsEnabled,
-                    onToggle = { viewModel.toggleTopics() }
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            "How Topics Work",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            "• Topics are determined on your device based on your app usage\n" +
-                            "• Only recent topics (last 3 weeks) are used\n" +
-                            "• Topics are stored on your device\n" +
-                            "• No personal information leaves your device",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-                OutlinedButton(
-                    onClick = { viewModel.clearAllData() },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(Icons.Default.Delete, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Clear All Privacy Sandbox Data")
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                TextButton(
-                    onClick = { viewModel.exportData() },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Icon(Icons.Default.Download, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Export My Data")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingItem(
-    title: String,
-    description: String,
-    enabled: Boolean,
-    onToggle: (Boolean) -> Unit
-) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    title,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Switch(
-                checked = enabled,
-                onCheckedChange = onToggle
-            )
-        }
-    }
-}
-
-class PrivacySandboxViewModel : ViewModel() {
-    private val _settings = MutableStateFlow(PrivacySandboxSettings(topicsEnabled = false))
-    val settings: StateFlow<PrivacySandboxSettings> = _settings.asStateFlow()
-
-    fun toggleTopics() {
-        _settings.value = _settings.value.copy(
-            topicsEnabled = !_settings.value.topicsEnabled
-        )
-    }
-
-    fun clearAllData() {
-        // Clear all Privacy Sandbox data
-    }
-
-    fun exportData() {
-        // Export user data
-    }
-}
-```
-
-#### 4. Testing and Debugging
-
-**Topics API Testing:**
-```kotlin
-class TopicsApiDebugger(
-    private val context: Context,
-    private val topicsManager: TopicsApiManager
-) {
-
-    /**
-     * Get current topics with detailed information
-     */
-    suspend fun debugGetTopics(): TopicsDebugInfo {
-        val topics = topicsManager.getTopics().getOrNull() ?: emptyList()
-
-        return TopicsDebugInfo(
-            availableTopics = topics.map { topic ->
-                TopicDebugDetail(
-                    id = topic.topicId,
-                    name = getTopicName(topic.topicId),
-                    taxonomyVersion = topic.taxonomyVersion,
-                    modelVersion = topic.modelVersion
-                )
-            },
-            apiAvailable = topicsManager.isTopicsApiAvailable(),
-            consentGiven = hasConsent(),
-            timestamp = System.currentTimeMillis()
-        )
-    }
-
-    /**
-     * Simulate topic calculation (for testing)
-     */
-    fun simulateTopics(packageNames: List<String>): List<Int> {
-        // Simulate topic assignment based on app categories
-        // In reality, this happens on-device by the system
-        return packageNames.mapNotNull { packageName ->
-            getAppCategory(packageName)
-        }.distinct()
-    }
-
-    private fun getAppCategory(packageName: String): Int? {
-        // Map app to topic category
-        return when {
-            packageName.contains("sport") -> 24 // Sports
-            packageName.contains("news") -> 16 // News
-            packageName.contains("game") -> 9 // Games
-            packageName.contains("shopping") -> 23 // Shopping
-            else -> null
-        }
-    }
-
-    private fun getTopicName(topicId: Int): String {
-        // Get human-readable topic name
-        return "Topic $topicId"
-    }
-
-    private fun hasConsent(): Boolean {
-        val prefs = context.getSharedPreferences("privacy_sandbox", Context.MODE_PRIVATE)
-        return prefs.getBoolean("topics_consent", false)
-    }
-
-    /**
-     * Log Topics API calls for debugging
-     */
-    fun logTopicsApiCall(topics: List<Topic>) {
-        Log.d("TopicsAPI", "Retrieved ${topics.size} topics:")
-        topics.forEach { topic ->
-            Log.d("TopicsAPI", "  - Topic ${topic.topicId} (v${topic.taxonomyVersion})")
-        }
-    }
-}
-
-data class TopicsDebugInfo(
-    val availableTopics: List<TopicDebugDetail>,
-    val apiAvailable: Boolean,
-    val consentGiven: Boolean,
-    val timestamp: Long
-)
-
-data class TopicDebugDetail(
-    val id: Int,
-    val name: String,
-    val taxonomyVersion: Long,
-    val modelVersion: Long
-)
 ```
 
 ### Best Practices
 
-1. **User Consent:**
-   - Request explicit consent before using Topics API
-   - Provide clear explanation of how it works
-   - Allow users to opt-out anytime
-   - Respect user preferences
-
-2. **Privacy-First Design:**
-   - Never combine Topics with user identifiers
-   - Use contextual signals as fallback
-   - Implement frequency capping locally
-   - Minimize data collection
-
-3. **Transparency:**
-   - Provide privacy settings in app
-   - Explain data usage clearly
-   - Allow data export (GDPR)
-   - Document privacy practices
-
-4. **Testing:**
-   - Test with Topics API disabled
-   - Verify fallback to contextual ads
-   - Test consent flow
-   - Monitor API availability
-
-5. **Compliance:**
-   - Follow GDPR/CCPA requirements
-   - Implement data deletion
-   - Provide privacy policy
-   - Regular privacy audits
-
-### Common Pitfalls
-
-1. **Not checking API availability** → Crashes on older Android versions
-   - Always check Build.VERSION_CODES.TIRAMISU
-
-2. **Combining Topics with user IDs** → Privacy violation
-   - Never send Topics with personal identifiers
-
-3. **No fallback mechanism** → No ads when Topics unavailable
-   - Implement contextual advertising fallback
-
-4. **Unclear consent flow** → User confusion
-   - Provide clear, simple explanations
-
-5. **Not respecting opt-out** → Privacy violation and user distrust
-   - Always honor user preferences
-
-6. **Excessive API calls** → Performance issues
-   - Cache topics locally with appropriate TTL
-
-### Summary
-
-Privacy Sandbox Topics API enables interest-based advertising without cross-app tracking. Topics are computed on-device, stored locally, and shared only with apps that observed them. Proper implementation requires user consent, clear privacy controls, contextual fallbacks, and strict adherence to privacy principles. This approach balances user privacy with advertising needs in a transparent, user-controlled manner.
-
----
-
-
-
-## Ответ (RU)
-# Вопрос (RU)
-Что такое Topics API Privacy Sandbox в Android? Как он обеспечивает privacy-preserving рекламу на основе интересов? Как реализовать Topics API в приложении и какие есть соображения приватности?
-
-## Ответ (RU)
-Privacy Sandbox для Android — это инициатива Google по улучшению приватности пользователей при поддержке рекламных бизнес-моделей. Topics API обеспечивает рекламу на основе интересов без cross-app отслеживания, определяя темы интересов на основе использования приложений.
-
-#### Как работает Topics API
-
-**Ключевые концепции:**
-- Темы выводятся из использования приложений за 3-недельные периоды
-- Таксономия из ~350 тем (Спорт, Путешествия и т.д.)
-- Темы хранятся на устройстве
-- Случайная тема (5% времени) для правдоподобного отрицания
-- Доступны только recent темы (последние 3 недели)
-- Темы делятся только с приложениями, которые наблюдали тему
-
-**Privacy гарантии:**
-- Обработка на устройстве
-- Нет кросс-app tracking
-- Нет persistent identifiers
-- Пользовательский контроль
-- Прозрачность
-
-#### Реализация
-
-**Основные шаги:**
-1. Проверить доступность API (Android 13+)
-2. Запросить согласие пользователя
-3. Вызвать getTopics()
-4. Использовать темы для выбора рекламы
-5. Записать observation (для будущих вычислений)
-
-**Fallback стратегия:**
-- Contextual advertising (на основе контента)
-- Generic ads без targeting
-- Первая сторона данных (в пределах приложения)
-
-### Лучшие практики
-
-1. **Согласие:** Явный запрос, четкое объяснение, opt-out
-2. **Privacy-first:** Никогда не комбинировать с user ID
-3. **Прозрачность:** Настройки приватности, объяснение использования
-4. **Тестирование:** API отключен, fallback, consent flow
-5. **Compliance:** GDPR/CCPA, удаление данных, privacy policy
+1. **Проверка доступности**: всегда проверяйте Android 13+ перед вызовом
+2. **Fallback механизм**: используйте контекстную рекламу, если Topics недоступен
+3. **Запись observation**: устанавливайте `setShouldRecordObservation(true)` для корректной работы
+4. **Изоляция от идентификаторов**: никогда не комбинируйте Topics с user ID или advertising ID
+5. **Прозрачность**: объясняйте пользователям механизм работы
+6. **Уважение выбора**: немедленно прекращайте использование при opt-out
 
 ### Распространённые ошибки
 
-1. Не проверять доступность API → краши
-2. Комбинировать Topics с user ID → нарушение приватности
-3. Нет fallback механизма → нет рекламы
-4. Неясный consent flow → confusion
-5. Не уважать opt-out → нарушение доверия
-6. Избыточные API вызовы → проблемы производительности
+```kotlin
+// ❌ Не проверяется доступность API
+val topics = topicsManager.getTopics()  // Crash на Android < 13
 
-### Резюме
+// ❌ Комбинируется с user ID
+requestAds(userId = "123", topics = topics)  // Нарушение privacy
 
-Privacy Sandbox Topics API обеспечивает рекламу на основе интересов без cross-app отслеживания. Темы вычисляются на устройстве, хранятся локально и делятся только с приложениями, которые их наблюдали. Правильная реализация требует согласия пользователя, четких privacy контролов, contextual fallback и строгого соблюдения принципов приватности.
+// ❌ Нет fallback механизма
+if (topics.isEmpty()) return emptyList()  // Нет рекламы
+
+// ✅ Корректная реализация
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    val topics = topicsManager.getTopics().getOrNull()
+    if (topics != null) {
+        requestAdsWithTopics(topics)
+    } else {
+        requestContextualAds()  // Fallback
+    }
+}
+```
 
 ---
 
+## Answer (EN)
+
+Topics API is a Privacy Sandbox mechanism that enables interest-based advertising without cross-app tracking. Interest topics are computed on-device based on app usage over the last 3 weeks and stored locally.
+
+### Core Principles
+
+**How it works:**
+- System determines 3-5 topics from taxonomy (~350 categories: Sports, Travel, Technology)
+- Topics update weekly based on app usage
+- Each API call returns one topic per epoch (week)
+- 5% of the time returns random topic (plausible deniability)
+- Topics only available to apps that "observed" them
+
+**Privacy guarantees:**
+- On-device computation only
+- No persistent identifiers
+- No browsing history transmission
+- User control and transparency
+
+### Basic Implementation
+
+```kotlin
+import android.adservices.topics.TopicsManager
+import android.adservices.topics.GetTopicsRequest
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+class TopicsApiManager(private val context: Context) {
+
+    private val topicsManager: TopicsManager? =
+        context.getSystemService(TopicsManager::class.java)
+
+    // ✅ Correct: check API availability before use
+    suspend fun getTopics(): Result<List<Int>> {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return Result.failure(UnsupportedOperationException("Topics API requires Android 13+"))
+        }
+
+        return try {
+            val request = GetTopicsRequest.Builder()
+                .setAdsSdkName("com.example.ads")
+                .setShouldRecordObservation(true)  // ✅ Record observation
+                .build()
+
+            val response = topicsManager?.getTopics(request, Executors.newSingleThreadExecutor()) { result ->
+                result.onSuccess { it.topics }
+                result.onFailure { e -> throw e }
+            }
+
+            Result.success(response?.topics?.map { it.topicId } ?: emptyList())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+}
+```
+
+### Using for Ad Targeting
+
+```kotlin
+class PrivacyPreservingAdManager(
+    private val topicsManager: TopicsApiManager
+) {
+
+    suspend fun requestAds(): Result<List<Ad>> {
+        val topicsResult = topicsManager.getTopics()
+
+        return if (topicsResult.isSuccess) {
+            // ✅ Use topics for targeting without user ID
+            requestAdsWithTopics(topicsResult.getOrThrow())
+        } else {
+            // ✅ Fallback to contextual ads
+            requestContextualAds()
+        }
+    }
+
+    private suspend fun requestAdsWithTopics(topics: List<Int>): Result<List<Ad>> {
+        // ❌ NEVER: don't combine with user identifiers
+        // val userId = getUserId()  // FORBIDDEN
+
+        // ✅ Send only topics to server
+        return adServerClient.requestAds(
+            AdRequest(
+                topics = topics,
+                contextualSignals = getContextualSignals()
+            )
+        )
+    }
+}
+```
+
+### User Control
+
+```kotlin
+class PrivacySandboxControls(private val context: Context) {
+
+    private val prefs = context.getSharedPreferences("privacy_sandbox", Context.MODE_PRIVATE)
+
+    // ✅ Explicit consent request with clear explanation
+    suspend fun requestTopicsConsent(activity: Activity): Boolean {
+        return showConsentDialog(
+            activity,
+            title = "Personalized Ads",
+            message = """
+                App uses Topics API to show relevant ads:
+                • Topics determined on your device
+                • Data doesn't leave your device
+                • You can disable anytime
+            """.trimIndent()
+        )
+    }
+
+    fun hasTopicsConsent(): Boolean =
+        prefs.getBoolean("topics_consent", false)
+
+    fun optOutOfTopics() {
+        prefs.edit().putBoolean("topics_consent", false).apply()
+    }
+}
+```
+
+### Best Practices
+
+1. **Availability check**: always verify Android 13+ before calling
+2. **Fallback mechanism**: use contextual ads if Topics unavailable
+3. **Record observation**: set `setShouldRecordObservation(true)` for correct operation
+4. **Isolation from identifiers**: never combine Topics with user ID or advertising ID
+5. **Transparency**: explain the mechanism to users
+6. **Respect choice**: immediately stop using on opt-out
+
+### Common Mistakes
+
+```kotlin
+// ❌ API availability not checked
+val topics = topicsManager.getTopics()  // Crash on Android < 13
+
+// ❌ Combined with user ID
+requestAds(userId = "123", topics = topics)  // Privacy violation
+
+// ❌ No fallback mechanism
+if (topics.isEmpty()) return emptyList()  // No ads shown
+
+// ✅ Correct implementation
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    val topics = topicsManager.getTopics().getOrNull()
+    if (topics != null) {
+        requestAdsWithTopics(topics)
+    } else {
+        requestContextualAds()  // Fallback
+    }
+}
+```
+
+---
+
+## Follow-ups
+
+- How does Topics API differ from FLEDGE (Protected Audience API)?
+- What happens when user clears app data?
+- How to test Topics API in development?
+- What are the taxonomy version update implications?
+- How to handle users who disable Topics API across all apps?
+
+## References
+
+- [[c-privacy-by-design]] - Privacy design patterns
+- [[c-gdpr-compliance]] - GDPR requirements
+- Android Privacy Sandbox documentation: https://developer.android.com/design-for-safety/privacy-sandbox/topics
+
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-graphql-vs-rest--networking--easy]] - Networking
+### Prerequisites
+- [[q-app-permissions-runtime--android--medium]] - Runtime permissions
+- [[q-gdpr-compliance-android--android--medium]] - GDPR compliance basics
 
-### Related (Medium)
-- [[q-http-protocols-comparison--android--medium]] - Networking
-- [[q-api-file-upload-server--android--medium]] - Networking
-- [[q-splash-screen-api-android12--android--medium]] - Networking
-- [[q-api-rate-limiting-throttling--android--medium]] - Networking
-- [[q-kmm-ktor-networking--android--medium]] - Networking
+### Related
+- [[q-data-storage-security--android--medium]] - Secure data storage
+- [[q-advertising-id-best-practices--android--medium]] - Advertising ID handling
 
-### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Networking
+### Advanced
+- [[q-fledge-protected-audience-api--android--hard]] - FLEDGE API
+- [[q-attribution-reporting-api--android--hard]] - Attribution API

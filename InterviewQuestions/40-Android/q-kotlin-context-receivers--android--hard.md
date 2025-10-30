@@ -1,24 +1,21 @@
 ---
 id: 20251012-400009
 title: "Kotlin Context Receivers / Kotlin Context Receivers"
-aliases: ["Kotlin Context Receivers"]
+aliases: ["Kotlin Context Receivers", "Kotlin Context Receivers"]
 topic: android
-subtopics: [advanced-features, kotlin]
+subtopics: [coroutines, di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-context-receivers, q-kotlin-basics--kotlin--easy, q-kotlin-dsl-builders--android--hard]
+related: [q-kotlin-dsl-builders--android--hard, q-coroutines-basics--kotlin--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [android/advanced-features, android/kotlin, api-design, context-receivers, difficulty/hard, dsl, experimental]
+updated: 2025-10-28
+tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
 sources: [https://kotlinlang.org/docs/whatsnew15.html#context-receivers]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:07:48 pm
 ---
-
 # Вопрос (RU)
 > Что такое context receivers в Kotlin и когда их использовать в Android?
 
@@ -29,42 +26,18 @@ date modified: Saturday, October 25th 2025, 4:07:48 pm
 
 ## Ответ (RU)
 
-**Теория Context Receivers:**
-Context receivers - экспериментальная возможность Kotlin, позволяющая объявлять контекстные зависимости для функций. Предоставляют более чистую альтернативу extension функциям с receivers, обеспечивая более выразительные DSL и паттерны dependency injection.
+**Концепция:**
+Context receivers — экспериментальная возможность Kotlin, позволяющая объявлять контекстные зависимости для функций. Ключевое преимущество — поддержка множественных контекстов (в отличие от extension-функций).
 
 **Основные концепции:**
-- Множественные контексты возможны (в отличие от extension функций)
-- Экспериментальная возможность - требует compiler flag `-Xcontext-receivers`
-- Лучше подходят для DSL и cross-cutting concerns
+- Множественные контексты (extension-функции ограничены одним receiver)
+- Требует compiler flag `-Xcontext-receivers`
+- Идеальны для DSL и cross-cutting concerns (логирование, навигация, DI)
 - Упрощают dependency injection без фреймворков
 
 **Базовый синтаксис:**
 ```kotlin
-// Включение в build.gradle
-compilerOptions {
-    freeCompilerArgs.add("-Xcontext-receivers")
-}
-
-// Традиционная extension функция
-fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-// С context receiver
-context(Context)
-fun showToast(message: String) {
-    Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
-}
-
-// Использование (одинаково для обоих)
-fun Activity.someMethod() {
-    showToast("Hello")
-}
-```
-
-**Множественные контексты:**
-```kotlin
-// Множественные контексты
+// ✅ Множественные контексты
 context(Context, CoroutineScope)
 fun launchAndShowToast(message: String) {
     launch {
@@ -73,197 +46,71 @@ fun launchAndShowToast(message: String) {
     }
 }
 
-// С тремя контекстами
-context(Context, LifecycleOwner, CoroutineScope)
-fun observeAndShowData() {
-    launch {
-        // Можем использовать Context
-        val resources = this@Context.resources
-
-        // Можем использовать LifecycleOwner
-        lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onResume(owner: LifecycleOwner) {
-                // Обработка resume
-            }
-        })
-
-        // Можем использовать CoroutineScope
-        delay(1000)
-    }
+// ❌ Extension-функция — только один receiver
+fun CoroutineScope.showToastInContext(ctx: Context, message: String) {
+    launch { /* Громоздко, передаём Context явно */ }
 }
 ```
 
-**Логирование с Context Receivers:**
+**Dependency Injection паттерн:**
+```kotlin
+interface DatabaseProvider { val database: AppDatabase }
+interface NetworkProvider { val apiService: ApiService }
+interface LoggerProvider { val logger: Logger }
+
+// ✅ Repository получает зависимости через context
+context(DatabaseProvider, NetworkProvider, LoggerProvider)
+class UserRepository {
+    suspend fun getUser(userId: String): User {
+        logger.log("Getting user: $userId")
+
+        database.userDao().getUser(userId)?.let { return it }
+
+        val user = apiService.getUser(userId)
+        database.userDao().insert(user)
+        return user
+    }
+}
+
+// Использование
+class AppDependencies : DatabaseProvider, NetworkProvider, LoggerProvider {
+    override val database = Room.databaseBuilder(/*...*/).build()
+    override val apiService = Retrofit.Builder().build().create(/*...*/)
+    override val logger = AndroidLogger()
+}
+
+class MyViewModel(private val deps: AppDependencies) : ViewModel() {
+    private val userRepository = with(deps) { UserRepository() }
+}
+```
+
+**Логирование как cross-cutting concern:**
 ```kotlin
 interface Logger {
     fun log(message: String)
     fun error(message: String, throwable: Throwable? = null)
 }
 
-// Функции, требующие логирования
-context(Logger)
-fun processData(data: String) {
-    log("Processing data: $data")
-
-    try {
-        // Обработка
-        log("Data processed successfully")
-    } catch (e: Exception) {
-        error("Failed to process data", e)
-    }
-}
-
 context(Logger)
 suspend fun fetchUser(userId: String): User {
-    log("Fetching user: $userId")
+    log("Fetching user: $userId") // ✅ Не передаём logger явно
 
     return try {
         val user = apiService.getUser(userId)
         log("User fetched: ${user.name}")
         user
     } catch (e: Exception) {
-        error("Failed to fetch user", e)
+        error("Failed to fetch user", e) // ✅ Доступно из контекста
         throw e
-    }
-}
-
-// Использование
-class UserRepository(private val logger: Logger) {
-    suspend fun loadUser(userId: String): User {
-        with(logger) {
-            return fetchUser(userId)
-        }
-    }
-}
-```
-
-**Dependency Injection паттерн:**
-```kotlin
-interface DatabaseProvider {
-    val database: AppDatabase
-}
-
-interface NetworkProvider {
-    val apiService: ApiService
-}
-
-interface LoggerProvider {
-    val logger: Logger
-}
-
-// Repository с context receivers
-context(DatabaseProvider, NetworkProvider, LoggerProvider)
-class UserRepository {
-    suspend fun getUser(userId: String): User {
-        logger.log("Getting user: $userId")
-
-        // Сначала проверяем локальную БД
-        database.userDao().getUser(userId)?.let {
-            logger.log("User found in database")
-            return it
-        }
-
-        // Загружаем из сети
-        logger.log("Fetching from network")
-        val user = apiService.getUser(userId)
-
-        // Сохраняем в БД
-        database.userDao().insert(user)
-
-        return user
-    }
-}
-
-// Провайдеры на уровне приложения
-class AppDependencies : DatabaseProvider, NetworkProvider, LoggerProvider {
-    override val database: AppDatabase by lazy {
-        Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
-    }
-
-    override val apiService: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://api.example.com")
-            .build()
-            .create(ApiService::class.java)
-    }
-
-    override val logger: Logger = AndroidLogger()
-}
-
-// Использование
-class MyViewModel(private val deps: AppDependencies) : ViewModel() {
-    private val userRepository = with(deps) {
-        UserRepository()
-    }
-}
-```
-
-**DSL Builders:**
-```kotlin
-interface HtmlContext {
-    fun tag(name: String, content: HtmlContext.() -> Unit)
-    fun text(content: String)
-}
-
-context(HtmlContext)
-fun head(content: HtmlContext.() -> Unit) {
-    tag("head", content)
-}
-
-context(HtmlContext)
-fun body(content: HtmlContext.() -> Unit) {
-    tag("body", content)
-}
-
-context(HtmlContext)
-fun title(text: String) {
-    tag("title") {
-        text(text)
-    }
-}
-
-context(HtmlContext)
-fun h1(text: String) {
-    tag("h1") {
-        text(text)
-    }
-}
-
-// Использование
-val htmlContent = html {
-    head {
-        title("My Page")
-    }
-    body {
-        h1("Welcome")
-        p("This is a paragraph")
     }
 }
 ```
 
 **Android-специфичные use cases:**
 ```kotlin
-// Доступ к ресурсам
-interface ResourceContext {
-    val context: Context
-    val resources: Resources
-}
-
-context(ResourceContext)
-fun getString(@StringRes resId: Int): String {
-    return resources.getString(resId)
-}
-
-context(ResourceContext)
-fun getColor(@ColorRes resId: Int): Int {
-    return resources.getColor(resId, null)
-}
-
-// Навигация
+// ✅ Навигация без передачи NavController
 interface NavigationContext {
     fun navigate(destination: String)
-    fun navigateBack()
-    fun navigateUp()
 }
 
 context(NavigationContext)
@@ -271,25 +118,15 @@ fun navigateToProfile(userId: String) {
     navigate("profile/$userId")
 }
 
-context(NavigationContext)
-fun navigateToSettings() {
-    navigate("settings")
-}
-
-// Разрешения
+// ✅ Разрешения
 interface PermissionContext {
     fun hasPermission(permission: String): Boolean
     fun requestPermission(permission: String)
 }
 
-context(PermissionContext)
-fun checkCameraPermission(): Boolean {
-    return hasPermission(Manifest.permission.CAMERA)
-}
-
 context(PermissionContext, Context)
 fun openCamera() {
-    if (checkCameraPermission()) {
+    if (hasPermission(Manifest.permission.CAMERA)) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         this@Context.startActivity(intent)
     } else {
@@ -300,42 +137,18 @@ fun openCamera() {
 
 ## Answer (EN)
 
-**Context Receivers Theory:**
-Context receivers are an experimental Kotlin feature that allows declaring context dependencies for functions. They provide a cleaner alternative to extension functions with receivers, enabling more expressive DSLs and dependency injection patterns.
+**Concept:**
+Context receivers are an experimental Kotlin feature that allows declaring context dependencies for functions. Key advantage — support for multiple contexts (unlike extension functions).
 
 **Main concepts:**
-- Multiple contexts possible (unlike extension functions)
-- Experimental feature - requires compiler flag `-Xcontext-receivers`
-- Better suited for DSLs and cross-cutting concerns
+- Multiple contexts (extension functions limited to one receiver)
+- Requires compiler flag `-Xcontext-receivers`
+- Ideal for DSLs and cross-cutting concerns (logging, navigation, DI)
 - Simplify dependency injection without frameworks
 
 **Basic syntax:**
 ```kotlin
-// Enable in build.gradle
-compilerOptions {
-    freeCompilerArgs.add("-Xcontext-receivers")
-}
-
-// Traditional extension function
-fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-// With context receiver
-context(Context)
-fun showToast(message: String) {
-    Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
-}
-
-// Usage (same for both)
-fun Activity.someMethod() {
-    showToast("Hello")
-}
-```
-
-**Multiple contexts:**
-```kotlin
-// Multiple contexts
+// ✅ Multiple contexts
 context(Context, CoroutineScope)
 fun launchAndShowToast(message: String) {
     launch {
@@ -344,197 +157,71 @@ fun launchAndShowToast(message: String) {
     }
 }
 
-// With three contexts
-context(Context, LifecycleOwner, CoroutineScope)
-fun observeAndShowData() {
-    launch {
-        // Can use Context
-        val resources = this@Context.resources
-
-        // Can use LifecycleOwner
-        lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onResume(owner: LifecycleOwner) {
-                // Handle resume
-            }
-        })
-
-        // Can use CoroutineScope
-        delay(1000)
-    }
+// ❌ Extension function — only one receiver
+fun CoroutineScope.showToastInContext(ctx: Context, message: String) {
+    launch { /* Verbose, pass Context explicitly */ }
 }
 ```
 
-**Logging with Context Receivers:**
+**Dependency Injection pattern:**
+```kotlin
+interface DatabaseProvider { val database: AppDatabase }
+interface NetworkProvider { val apiService: ApiService }
+interface LoggerProvider { val logger: Logger }
+
+// ✅ Repository receives dependencies via context
+context(DatabaseProvider, NetworkProvider, LoggerProvider)
+class UserRepository {
+    suspend fun getUser(userId: String): User {
+        logger.log("Getting user: $userId")
+
+        database.userDao().getUser(userId)?.let { return it }
+
+        val user = apiService.getUser(userId)
+        database.userDao().insert(user)
+        return user
+    }
+}
+
+// Usage
+class AppDependencies : DatabaseProvider, NetworkProvider, LoggerProvider {
+    override val database = Room.databaseBuilder(/*...*/).build()
+    override val apiService = Retrofit.Builder().build().create(/*...*/)
+    override val logger = AndroidLogger()
+}
+
+class MyViewModel(private val deps: AppDependencies) : ViewModel() {
+    private val userRepository = with(deps) { UserRepository() }
+}
+```
+
+**Logging as cross-cutting concern:**
 ```kotlin
 interface Logger {
     fun log(message: String)
     fun error(message: String, throwable: Throwable? = null)
 }
 
-// Functions that require logging
-context(Logger)
-fun processData(data: String) {
-    log("Processing data: $data")
-
-    try {
-        // Process
-        log("Data processed successfully")
-    } catch (e: Exception) {
-        error("Failed to process data", e)
-    }
-}
-
 context(Logger)
 suspend fun fetchUser(userId: String): User {
-    log("Fetching user: $userId")
+    log("Fetching user: $userId") // ✅ Don't pass logger explicitly
 
     return try {
         val user = apiService.getUser(userId)
         log("User fetched: ${user.name}")
         user
     } catch (e: Exception) {
-        error("Failed to fetch user", e)
+        error("Failed to fetch user", e) // ✅ Available from context
         throw e
-    }
-}
-
-// Usage
-class UserRepository(private val logger: Logger) {
-    suspend fun loadUser(userId: String): User {
-        with(logger) {
-            return fetchUser(userId)
-        }
-    }
-}
-```
-
-**Dependency Injection pattern:**
-```kotlin
-interface DatabaseProvider {
-    val database: AppDatabase
-}
-
-interface NetworkProvider {
-    val apiService: ApiService
-}
-
-interface LoggerProvider {
-    val logger: Logger
-}
-
-// Repository with context receivers
-context(DatabaseProvider, NetworkProvider, LoggerProvider)
-class UserRepository {
-    suspend fun getUser(userId: String): User {
-        logger.log("Getting user: $userId")
-
-        // Try local database first
-        database.userDao().getUser(userId)?.let {
-            logger.log("User found in database")
-            return it
-        }
-
-        // Fetch from network
-        logger.log("Fetching from network")
-        val user = apiService.getUser(userId)
-
-        // Save to database
-        database.userDao().insert(user)
-
-        return user
-    }
-}
-
-// Application-level providers
-class AppDependencies : DatabaseProvider, NetworkProvider, LoggerProvider {
-    override val database: AppDatabase by lazy {
-        Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
-    }
-
-    override val apiService: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://api.example.com")
-            .build()
-            .create(ApiService::class.java)
-    }
-
-    override val logger: Logger = AndroidLogger()
-}
-
-// Usage
-class MyViewModel(private val deps: AppDependencies) : ViewModel() {
-    private val userRepository = with(deps) {
-        UserRepository()
-    }
-}
-```
-
-**DSL Builders:**
-```kotlin
-interface HtmlContext {
-    fun tag(name: String, content: HtmlContext.() -> Unit)
-    fun text(content: String)
-}
-
-context(HtmlContext)
-fun head(content: HtmlContext.() -> Unit) {
-    tag("head", content)
-}
-
-context(HtmlContext)
-fun body(content: HtmlContext.() -> Unit) {
-    tag("body", content)
-}
-
-context(HtmlContext)
-fun title(text: String) {
-    tag("title") {
-        text(text)
-    }
-}
-
-context(HtmlContext)
-fun h1(text: String) {
-    tag("h1") {
-        text(text)
-    }
-}
-
-// Usage
-val htmlContent = html {
-    head {
-        title("My Page")
-    }
-    body {
-        h1("Welcome")
-        p("This is a paragraph")
     }
 }
 ```
 
 **Android-specific use cases:**
 ```kotlin
-// Resource access
-interface ResourceContext {
-    val context: Context
-    val resources: Resources
-}
-
-context(ResourceContext)
-fun getString(@StringRes resId: Int): String {
-    return resources.getString(resId)
-}
-
-context(ResourceContext)
-fun getColor(@ColorRes resId: Int): Int {
-    return resources.getColor(resId, null)
-}
-
-// Navigation
+// ✅ Navigation without passing NavController
 interface NavigationContext {
     fun navigate(destination: String)
-    fun navigateBack()
-    fun navigateUp()
 }
 
 context(NavigationContext)
@@ -542,25 +229,15 @@ fun navigateToProfile(userId: String) {
     navigate("profile/$userId")
 }
 
-context(NavigationContext)
-fun navigateToSettings() {
-    navigate("settings")
-}
-
-// Permissions
+// ✅ Permissions
 interface PermissionContext {
     fun hasPermission(permission: String): Boolean
     fun requestPermission(permission: String)
 }
 
-context(PermissionContext)
-fun checkCameraPermission(): Boolean {
-    return hasPermission(Manifest.permission.CAMERA)
-}
-
 context(PermissionContext, Context)
 fun openCamera() {
-    if (checkCameraPermission()) {
+    if (hasPermission(Manifest.permission.CAMERA)) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         this@Context.startActivity(intent)
     } else {
@@ -573,21 +250,30 @@ fun openCamera() {
 
 ## Follow-ups
 
-- How do context receivers affect binary compatibility?
-- What's the performance impact of context receivers?
-- How do you test code with context receivers?
+- How do context receivers affect binary compatibility when library evolves?
+- What's the performance impact compared to explicit parameter passing?
+- How do you test code with context receivers effectively?
+- When should you prefer extension functions over context receivers?
+- How do context receivers interact with inline functions and reification?
+
+## References
+
+- [[c-dependency-injection]] - Dependency injection patterns
+- [[c-kotlin-dsl]] - DSL builders in Kotlin
+- [Kotlin Context Receivers (KEEP)](https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md)
+- [Kotlin 1.6.20 Release Notes](https://kotlinlang.org/docs/whatsnew1620.html)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-kotlin-basics--kotlin--easy]] - Kotlin basics
-- [[q-android-app-components--android--easy]] - App components
+- [[q-kotlin-extension-functions--kotlin--medium]] - Extension functions basics
+- [[q-dependency-injection-basics--android--medium]] - DI fundamentals
 
 ### Related (Same Level)
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders
-- [[q-kotlin-extension-functions--kotlin--medium]] - Extension functions
-- [[q-kotlin-lambda-receivers--kotlin--medium]] - Lambda receivers
+- [[q-hilt-dependency-injection--android--hard]] - Hilt DI framework
+- [[q-kotlin-scope-functions--kotlin--medium]] - Scope functions (with, apply, etc.)
 
 ### Advanced (Harder)
-- [[q-kotlin-multiplatform--kotlin--hard]] - Multiplatform
-- [[q-kotlin-coroutines-advanced--kotlin--hard]] - Advanced coroutines
+- [[q-kotlin-compiler-plugins--kotlin--hard]] - Compiler plugins
+- [[q-advanced-coroutines-patterns--android--hard]] - Advanced coroutines patterns

@@ -1,492 +1,266 @@
 ---
 id: 20251012-12271130
 title: "Looper Empty Queue Behavior / Поведение Looper при пустой очереди"
+aliases:
+  - Looper Empty Queue
+  - Looper Blocking Behavior
+  - Поведение Looper при пустой очереди
+  - Блокировка Looper
 topic: android
+subtopics:
+  - threading
+  - concurrency
+  - looper
+question_kind: theory
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [android/concurrency, blocking, concurrency, looper, message-queue, threading, difficulty/medium]
 moc: moc-android
-related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-main-thread-android--android--medium, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
+related:
+  - q-main-thread-android--android--medium
+  - q-handler-looper-messagequeue-relationship--android--medium
+  - q-handlerthread-vs-thread--android--medium
+sources: []
+created: 2025-10-13
+updated: 2025-10-28
+tags:
+  - android/threading
+  - android/concurrency
+  - android/looper
+  - looper
+  - message-queue
+  - blocking
+  - difficulty/medium
 ---
 
-# Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
+# Вопрос (RU)
 
-**English**: What happens when a thread processes an empty message queue with Looper.loop()?
+> Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
 
-## Answer (EN)
-When `Looper.loop()` processes an **empty message queue**, the thread:
+# Question (EN)
 
-1. **Blocks** (enters waiting state)
-2. **Does NOT terminate** or exit
-3. **Waits** until a new message arrives
-4. **Consumes minimal resources** (not busy-waiting)
-
-This is the **normal behavior** for Looper threads - they stay alive to process future messages asynchronously.
-
----
-
-## How Looper.loop() Handles Empty Queue
-
-### Internal Mechanism
-
-```java
-// Simplified Looper.loop() implementation
-public static void loop() {
-    final Looper me = myLooper();
-    final MessageQueue queue = me.mQueue;
-
-    for (;;) {
-        Message msg = queue.next(); // ← BLOCKS here if queue is empty!
-
-        if (msg == null) {
-            return; // Only happens when quit() is called
-        }
-
-        msg.target.dispatchMessage(msg);
-        msg.recycleUnchecked();
-    }
-}
-```
-
-**Key point:** `MessageQueue.next()` **blocks** until a message is available.
-
----
-
-### MessageQueue.next() Blocking
-
-```java
-// Simplified MessageQueue.next() implementation
-Message next() {
-    for (;;) {
-        // If queue is empty, wait for new message
-        nativePollOnce(ptr, nextPollTimeoutMillis); // ← BLOCKS here
-
-        synchronized (this) {
-            Message msg = mMessages;
-            if (msg != null) {
-                return msg; // Message available
-            } else {
-                // No message, continue waiting
-                nextPollTimeoutMillis = -1; // Wait indefinitely
-            }
-        }
-    }
-}
-```
-
-**Blocking mechanism:**
-- Uses **native epoll** (Linux) for efficient waiting
-- Thread goes to **sleep state** (not consuming CPU)
-- Wakes up when:
-  - New message is added
-  - Delayed message becomes ready
-  - `quit()` is called
-
----
-
-## Complete Example: Empty Queue Behavior
-
-```kotlin
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import java.util.concurrent.CountDownLatch
-
-class LooperThread : Thread("LooperThread") {
-
-    lateinit var handler: Handler
-        private set
-
-    private val latch = CountDownLatch(1)
-
-    override fun run() {
-        println("[${Thread.currentThread().name}] Starting...")
-
-        // Prepare Looper
-        Looper.prepare()
-
-        // Create Handler
-        handler = object : Handler(Looper.myLooper()!!) {
-            override fun handleMessage(msg: Message) {
-                println("[${Thread.currentThread().name}] Received message: ${msg.what}")
-                Thread.sleep(1000)
-                println("[${Thread.currentThread().name}] Processed message: ${msg.what}")
-            }
-        }
-
-        latch.countDown()
-
-        println("[${Thread.currentThread().name}] Entering Looper.loop() - queue is EMPTY")
-
-        // Start message loop (blocks here with empty queue)
-        Looper.loop()
-
-        println("[${Thread.currentThread().name}] Looper stopped")
-    }
-
-    fun waitUntilReady() = latch.await()
-
-    fun quit() {
-        handler.looper.quitSafely()
-    }
-}
-
-fun main() {
-    val looperThread = LooperThread()
-
-    println("[Main] Starting LooperThread...")
-    looperThread.start()
-    looperThread.waitUntilReady()
-
-    println("[Main] LooperThread is now waiting with EMPTY queue")
-    println("[Main] Thread state: ${looperThread.state}") // WAITING or TIMED_WAITING
-
-    Thread.sleep(2000)
-
-    println("[Main] Sending message 1...")
-    looperThread.handler.sendEmptyMessage(1)
-
-    Thread.sleep(1500)
-
-    println("[Main] Sending message 2...")
-    looperThread.handler.sendEmptyMessage(2)
-
-    Thread.sleep(1500)
-
-    println("[Main] Quitting Looper...")
-    looperThread.quit()
-
-    looperThread.join()
-    println("[Main] LooperThread terminated")
-}
-```
-
-**Output:**
-```
-[Main] Starting LooperThread...
-[LooperThread] Starting...
-[LooperThread] Entering Looper.loop() - queue is EMPTY
-[Main] LooperThread is now waiting with EMPTY queue
-[Main] Thread state: RUNNABLE  ← Blocked in native code
-[Main] Sending message 1...
-[LooperThread] Received message: 1
-[LooperThread] Processed message: 1
-[Main] Sending message 2...
-[LooperThread] Received message: 2
-[LooperThread] Processed message: 2
-[Main] Quitting Looper...
-[LooperThread] Looper stopped
-[Main] LooperThread terminated
-```
-
----
-
-## Thread States During Looper.loop()
-
-### When Queue is Empty
-
-```kotlin
-// Thread is BLOCKED in native code (epoll_wait)
-// CPU usage: ~0%
-// Memory: Minimal (thread stack + Looper/MessageQueue objects)
-```
-
-**Check thread state:**
-```kotlin
-val looperThread = LooperThread()
-looperThread.start()
-Thread.sleep(100)
-
-println("Thread state: ${looperThread.state}")
-// Output: RUNNABLE (but actually blocked in native epoll_wait)
-```
-
-**Why RUNNABLE and not WAITING?**
-- Thread is blocked in **native code** (epoll_wait), not Java wait()
-- JVM thread state shows RUNNABLE for native blocking
-
----
-
-## Message Processing Flow
-
-### 1. Queue is Empty
-
-```
-
- Looper.loop()           
-   ↓                     
- MessageQueue.next()     
-   ↓                     
- nativePollOnce()         ← Thread BLOCKS here
-   (waiting...)              (epoll_wait in native code)
-
-```
-
-### 2. Message Arrives
-
-```
-
- Handler.sendMessage()    ← From any thread
-   ↓                     
- MessageQueue.enqueue()  
-   ↓                     
- nativeWake()             ← Wakes up Looper thread
-
-
-
- nativePollOnce() WAKES  
-   ↓                     
- MessageQueue.next()     
-   returns Message       
-   ↓                     
- Handler.dispatchMessage  ← Process message
-
-```
-
----
-
-## Performance and Resource Usage
-
-### Efficient Waiting
-
-**Looper uses native epoll (Linux):**
-- **No busy-waiting** (not checking queue in a loop)
-- **No CPU consumption** when idle
-- **Instant wake-up** when message arrives
-
-```kotlin
-// - BAD: Busy-waiting (wastes CPU)
-while (true) {
-    if (queue.hasMessages()) {
-        processMessage(queue.next())
-    }
-    // Continuously checks → 100% CPU usage!
-}
-
-// - GOOD: Looper's approach (efficient)
-while (true) {
-    val msg = queue.next() // Blocks in epoll_wait (0% CPU when idle)
-    if (msg == null) break
-    processMessage(msg)
-}
-```
-
----
-
-## When Does Looper.loop() Exit?
-
-### Only When quit() is Called
-
-```kotlin
-val looperThread = HandlerThread("Worker")
-looperThread.start()
-
-// Looper is running (waiting for messages)
-
-looperThread.quitSafely() // Signal to quit
-
-// After processing pending messages, Looper.loop() exits
-// Thread terminates
-```
-
-### quit() vs quitSafely()
-
-```kotlin
-// Option 1: quit() - Discard all pending messages
-looper.quit()
-// - MessageQueue.next() returns null immediately
-// - Pending messages are discarded
-// - Looper.loop() exits
-
-// Option 2: quitSafely() - Process pending messages first
-looper.quitSafely()
-// - Processes all messages with timestamp <= now
-// - Discards delayed messages
-// - Then exits
-```
-
----
-
-## HandlerThread Example
-
-**HandlerThread** manages Looper lifecycle automatically:
-
-```kotlin
-import android.os.HandlerThread
-import android.os.Handler
-
-class BackgroundWorker {
-
-    private val handlerThread = HandlerThread("BackgroundWorker")
-    private lateinit var handler: Handler
-
-    fun start() {
-        handlerThread.start() // Calls Looper.prepare() and Looper.loop()
-
-        handler = Handler(handlerThread.looper) { message ->
-            println("Processing: ${message.what}")
-            // Looper thread is BLOCKED when no messages
-            true
-        }
-    }
-
-    fun sendTask(taskId: Int) {
-        handler.sendEmptyMessage(taskId)
-    }
-
-    fun stop() {
-        handlerThread.quitSafely() // Stops Looper gracefully
-    }
-}
-
-// Usage
-val worker = BackgroundWorker()
-worker.start()
-
-println("Worker thread is IDLE (blocked with empty queue)")
-Thread.sleep(2000)
-
-worker.sendTask(1) // Wakes up thread
-worker.sendTask(2)
-
-Thread.sleep(2000)
-worker.stop()
-```
-
----
-
-## Common Use Cases
-
-### 1. UI Thread (Main Thread)
-
-```kotlin
-// Main thread Looper runs forever
-Looper.getMainLooper().thread.state
-// → RUNNABLE (blocked in epoll_wait when no UI events)
-
-// CPU usage: 0% when idle
-// Wakes up when: touch events, messages, vsync signals
-```
-
-### 2. Background Worker Thread
-
-```kotlin
-class DatabaseWorker {
-    private val dbThread = HandlerThread("DatabaseThread")
-    private lateinit var dbHandler: Handler
-
-    init {
-        dbThread.start()
-        dbHandler = Handler(dbThread.looper)
-    }
-
-    fun query(sql: String, callback: (Result) -> Unit) {
-        dbHandler.post {
-            val result = database.rawQuery(sql)
-            mainHandler.post { callback(result) }
-        }
-    }
-
-    fun close() {
-        dbThread.quitSafely()
-    }
-}
-```
-
-### 3. Service with Message Queue
-
-```kotlin
-class MyService : Service() {
-
-    private val serviceThread = HandlerThread("ServiceThread")
-    private lateinit var serviceHandler: Handler
-
-    override fun onCreate() {
-        super.onCreate()
-        serviceThread.start()
-        serviceHandler = Handler(serviceThread.looper)
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        serviceHandler.post {
-            // Process in background
-            processTask()
-        }
-        return START_STICKY
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        serviceThread.quitSafely()
-    }
-}
-```
-
----
-
-## Summary
-
-**What happens when Looper.loop() processes empty queue:**
-
-1. Thread **blocks** in `MessageQueue.next()`
-2. Uses **native epoll_wait** (efficient, no CPU consumption)
-3. Thread state: **RUNNABLE** (but blocked in native code)
-4. **Does NOT exit** - waits for messages indefinitely
-5. **Wakes up** when:
-   - New message arrives
-   - Delayed message becomes ready
-   - `quit()` or `quitSafely()` is called
-
-**Key characteristics:**
-- - **Efficient**: 0% CPU when idle
-- - **Responsive**: Instant wake-up on new message
-- - **Persistent**: Thread stays alive for future work
-- - **Safe**: Managed by Android framework
-
-**Stopping Looper:**
-```kotlin
-looper.quit()        // Immediate quit, discard pending
-looper.quitSafely()  // Graceful quit, process pending
-```
+> What happens when a thread processes an empty message queue with Looper.loop()?
 
 ---
 
 ## Ответ (RU)
-Когда поток разбирает **пустую очередь сообщений** с помощью `Looper.loop()`, он:
 
-1. **Блокируется** (переходит в состояние ожидания)
-2. **НЕ завершает работу**
-3. **Ждет** появления нового сообщения
-4. **Не потребляет ресурсы** (не выполняет busy-waiting)
+Когда `Looper.loop()` обрабатывает **пустую очередь**, поток:
 
-Это **нормальное поведение** для Looper - поток остается активным для асинхронной обработки будущих сообщений.
+1. **Блокируется** в `MessageQueue.next()` (не завершает работу)
+2. **Переходит в состояние ожидания** через native epoll_wait
+3. **Не потребляет CPU** (0% при отсутствии сообщений)
+4. **Пробуждается** при добавлении нового сообщения или вызове `quit()`
 
-**Механизм:**
+Это **штатное поведение** — поток остается живым для обработки будущих сообщений.
+
+### Механизм блокировки
 
 ```java
+// Упрощенная реализация Looper.loop()
 public static void loop() {
+    final MessageQueue queue = myLooper().mQueue;
+
     for (;;) {
-        Message msg = queue.next(); // ← БЛОКИРУЕТСЯ здесь при пустой очереди
-        if (msg == null) return;
+        Message msg = queue.next(); // ✅ БЛОКИРУЕТСЯ здесь при пустой очереди
+
+        if (msg == null) return; // Только при quit()
+
         msg.target.dispatchMessage(msg);
     }
 }
 ```
 
-**Блокировка:**
-- Использует **native epoll** (Linux) для эффективного ожидания
-- Поток переходит в **состояние сна** (не потребляет CPU)
-- Пробуждается при добавлении нового сообщения или вызове `quit()`
+```java
+// MessageQueue.next() блокирует поток
+Message next() {
+    for (;;) {
+        nativePollOnce(ptr, timeout); // ✅ Блокируется в native epoll_wait
 
-**Остановка Looper:**
-```kotlin
-looper.quit()        // Немедленный выход, отбросить pending
-looper.quitSafely()  // Обработать pending, затем выйти
+        synchronized (this) {
+            Message msg = mMessages;
+            if (msg != null) return msg;
+
+            timeout = -1; // Ждать бесконечно
+        }
+    }
+}
 ```
+
+**Native механизм:**
+- Использует **epoll_wait** (Linux) вместо busy-waiting
+- Поток в состоянии **RUNNABLE** (блокировка в native коде, не Java wait())
+- Мгновенное пробуждение через **nativeWake()** при добавлении сообщения
+
+### Пример: Поток с пустой очередью
+
+```kotlin
+class LooperThread : Thread("Worker") {
+    lateinit var handler: Handler
+    private val latch = CountDownLatch(1)
+
+    override fun run() {
+        Looper.prepare()
+        handler = Handler(Looper.myLooper()!!)
+        latch.countDown()
+
+        println("Entering loop with EMPTY queue...")
+        Looper.loop() // ✅ Блокируется здесь
+        println("Loop exited")
+    }
+
+    fun waitReady() = latch.await()
+}
+
+// Использование
+val thread = LooperThread().apply { start() }
+thread.waitReady()
+
+println("Thread state: ${thread.state}") // RUNNABLE (в native блокировке)
+
+// Пробуждение потока
+thread.handler.post { println("Message processed") }
+
+// Остановка
+thread.handler.looper.quitSafely()
+```
+
+### Остановка Looper
+
+```kotlin
+// ❌ quit() - немедленный выход, отбросить все сообщения
+looper.quit()
+
+// ✅ quitSafely() - обработать pending, затем выйти
+looper.quitSafely()
+```
+
+**Только `quit()` или `quitSafely()` завершают `Looper.loop()`** — пустая очередь НЕ завершает поток.
+
+---
+
+## Answer (EN)
+
+When `Looper.loop()` processes an **empty queue**, the thread:
+
+1. **Blocks** in `MessageQueue.next()` (does NOT terminate)
+2. **Enters waiting state** via native epoll_wait
+3. **Consumes no CPU** (0% when idle)
+4. **Wakes up** when a new message arrives or `quit()` is called
+
+This is **normal behavior** — the thread stays alive to process future messages asynchronously.
+
+### Blocking Mechanism
+
+```java
+// Simplified Looper.loop() implementation
+public static void loop() {
+    final MessageQueue queue = myLooper().mQueue;
+
+    for (;;) {
+        Message msg = queue.next(); // ✅ BLOCKS here if queue is empty
+
+        if (msg == null) return; // Only when quit() is called
+
+        msg.target.dispatchMessage(msg);
+    }
+}
+```
+
+```java
+// MessageQueue.next() blocks the thread
+Message next() {
+    for (;;) {
+        nativePollOnce(ptr, timeout); // ✅ Blocks in native epoll_wait
+
+        synchronized (this) {
+            Message msg = mMessages;
+            if (msg != null) return msg;
+
+            timeout = -1; // Wait indefinitely
+        }
+    }
+}
+```
+
+**Native mechanism:**
+- Uses **epoll_wait** (Linux) instead of busy-waiting
+- Thread state: **RUNNABLE** (blocked in native code, not Java wait())
+- Instant wake-up via **nativeWake()** when message is added
+
+### Example: Thread with Empty Queue
+
+```kotlin
+class LooperThread : Thread("Worker") {
+    lateinit var handler: Handler
+    private val latch = CountDownLatch(1)
+
+    override fun run() {
+        Looper.prepare()
+        handler = Handler(Looper.myLooper()!!)
+        latch.countDown()
+
+        println("Entering loop with EMPTY queue...")
+        Looper.loop() // ✅ Blocks here
+        println("Loop exited")
+    }
+
+    fun waitReady() = latch.await()
+}
+
+// Usage
+val thread = LooperThread().apply { start() }
+thread.waitReady()
+
+println("Thread state: ${thread.state}") // RUNNABLE (in native blocking)
+
+// Wake up thread
+thread.handler.post { println("Message processed") }
+
+// Stop
+thread.handler.looper.quitSafely()
+```
+
+### Stopping Looper
+
+```kotlin
+// ❌ quit() - immediate exit, discard all messages
+looper.quit()
+
+// ✅ quitSafely() - process pending messages, then exit
+looper.quitSafely()
+```
+
+**Only `quit()` or `quitSafely()` exits `Looper.loop()`** — an empty queue does NOT terminate the thread.
+
+---
+
+## Follow-ups
+
+- What's the difference between `quit()` and `quitSafely()`?
+- Why does the thread state show RUNNABLE when it's blocked?
+- How does `nativePollOnce()` wake up when a message arrives?
+- What happens if you call `Looper.loop()` twice on the same thread?
+- How does HandlerThread manage Looper lifecycle?
+
+## References
+
+- [Android Source: Looper.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/Looper.java)
+- [Android Source: MessageQueue.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/MessageQueue.java)
+- [Linux epoll documentation](https://man7.org/linux/man-pages/man7/epoll.7.html)
 
 ## Related Questions
 
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]]
+### Prerequisites (Easier)
 - [[q-main-thread-android--android--medium]]
-- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--android--medium]]
+- [[q-handler-basics--android--easy]]
+
+### Related (Same Level)
+- [[q-handler-looper-messagequeue-relationship--android--medium]]
+- [[q-handlerthread-vs-thread--android--medium]]
+- [[q-message-scheduling-looper--android--medium]]
+
+### Advanced (Harder)
+- [[q-looper-thread-safety--android--hard]]
+- [[q-custom-message-queue--android--hard]]

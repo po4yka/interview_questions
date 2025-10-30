@@ -1,78 +1,82 @@
 ---
-id: 20251012-122711181
+id: 20251012-122711
 title: "Where Does The Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
+aliases: ["Where Does The Repeated Call Of Composable Function Come From", "Откуда берется повторный вызов Composable функции", "Recomposition in Compose", "Рекомпозиция в Compose"]
 topic: android
+subtopics: [ui-compose, ui-state]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium, q-android-performance-measurement-tools--android--medium]
+related: [c-jetpack-compose, q-how-does-jetpackcompose-work--android--medium, q-compose-stability-skippability--android--hard]
 created: 2025-10-15
-tags: [recomposition, android, ui, jetpack-compose, difficulty/medium]
+updated: 2025-10-29
+sources: []
+tags: [android/ui-compose, android/ui-state, recomposition, jetpack-compose, compose, difficulty/medium]
 ---
-
-# Where does the repeated call of composable function come from?
-
 # Вопрос (RU)
 
-Откуда происходит повторный вызов composable функции
+> Откуда происходит повторный вызов composable функции в Jetpack Compose?
 
-## Answer (EN)
-The repeated call comes from the **recomposition** mechanism. Compose automatically calls the function again if the state associated with this function has changed.
+# Question (EN)
 
-### How Recomposition Works
+> Where does the repeated call of composable function come from in Jetpack Compose?
+
+---
+
+## Ответ (RU)
+
+Повторный вызов composable функции происходит из механизма **рекомпозиции (recomposition)**. Compose автоматически отслеживает чтение состояния внутри composable и помечает функцию как "невалидную" при изменении этого состояния, что запускает её повторное выполнение.
+
+### Механизм рекомпозиции
 
 ```kotlin
 @Composable
 fun Counter() {
-    // State change triggers recomposition
+    // ✅ State read triggers subscription
     var count by remember { mutableStateOf(0) }
 
     Column {
-        // This composable is called again when count changes
+        // When count changes: Compose re-executes Counter()
         Text("Count: $count")
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
+        Button(onClick = { count++ }) { Text("Increment") }
     }
 }
-
-// When count changes from 0 to 1:
-// 1. Compose detects state change
-// 2. Marks Counter() as invalid
-// 3. Re-executes Counter()
-// 4. Only Text showing count is redrawn
 ```
 
-### Recomposition Trigger Sources
+**Процесс**:
+1. Compose отслеживает чтение `count` внутри `Text()`
+2. При изменении `count` (клик кнопки) функция помечается невалидной
+3. Compose планирует рекомпозицию на следующий фрейм
+4. Функция `Counter()` выполняется снова, обновляя только изменённые части UI
 
-1. **State Changes (mutableStateOf)**
-2. **Flow/LiveData updates (collectAsState)**
-3. **Parent recomposition**
-4. **Configuration changes**
+### Источники рекомпозиции
 
 ```kotlin
 @Composable
-fun RecompositionSources(viewModel: MyViewModel) {
-    // 1. State change
+fun TriggerSources(viewModel: MyViewModel) {
+    // ✅ 1. Local state
     var text by remember { mutableStateOf("") }
 
-    // 2. Flow/StateFlow
+    // ✅ 2. StateFlow/Flow
     val uiState by viewModel.uiState.collectAsState()
 
-    // 3. LiveData
+    // ✅ 3. LiveData (requires observeAsState)
     val data by viewModel.liveData.observeAsState()
 
-    // Any change triggers recomposition
+    // Any read triggers subscription to that state
     Column {
         Text(text)
         Text(uiState.message)
-        Text(data?.toString() ?: "")
     }
 }
 ```
 
-### Recomposition Scope
+### Область рекомпозиции (Scope)
+
+Compose минимизирует рекомпозицию — перевыполняются только те composable, которые читают изменённое состояние:
 
 ```kotlin
 @Composable
@@ -80,61 +84,148 @@ fun ScopedRecomposition() {
     var count by remember { mutableStateOf(0) }
 
     Column {
-        // Only this Text recomposes when count changes
+        // ✅ Recomposes when count changes
         Text("Count: $count")
 
-        // This never recomposes (no state dependency)
+        // ✅ Never recomposes (no state dependency)
         Text("Static text")
 
-        Button(onClick = { count++ }) {
-            // This recomposes only if we use count inside
-            Text("Clicked") // Static - no recomposition
-        }
+        Button(onClick = { count++ }) { Text("Click") }
     }
 }
 ```
 
-### Preventing Unnecessary Recomposition
+### Оптимизация: derivedStateOf
 
 ```kotlin
 @Composable
-fun OptimizedRecomposition() {
+fun OptimizedExample() {
     var count by remember { mutableStateOf(0) }
 
-    // Use derivedStateOf to limit recomposition
-    val isEven by remember {
-        derivedStateOf { count % 2 == 0 }
-    }
+    // ✅ Recomposes only when parity changes (not on every count)
+    val isEven by remember { derivedStateOf { count % 2 == 0 } }
 
     Column {
-        Text("Count: $count") // Recomposes on every change
-
-        // Only recomposes when isEven changes (every 2 counts)
-        Text("Is even: $isEven")
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
+        Text("Count: $count")        // Recomposes every time
+        Text("Is even: $isEven")     // Recomposes every 2nd time
     }
 }
 ```
 
-## Ответ (RU)
+## Answer (EN)
 
-Повторный вызов происходит из механизма recomposition. Compose автоматически вызывает функцию снова, если состояние связанное с этой функцией изменилось
+The repeated call of a composable function comes from the **recomposition** mechanism. Compose automatically tracks state reads inside composables and marks the function as "invalid" when that state changes, triggering its re-execution.
+
+### Recomposition Mechanism
+
+```kotlin
+@Composable
+fun Counter() {
+    // ✅ State read triggers subscription
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        // When count changes: Compose re-executes Counter()
+        Text("Count: $count")
+        Button(onClick = { count++ }) { Text("Increment") }
+    }
+}
+```
+
+**Process**:
+1. Compose tracks the read of `count` inside `Text()`
+2. When `count` changes (button click), the function is marked invalid
+3. Compose schedules recomposition for the next frame
+4. `Counter()` executes again, updating only changed UI parts
+
+### Recomposition Trigger Sources
+
+```kotlin
+@Composable
+fun TriggerSources(viewModel: MyViewModel) {
+    // ✅ 1. Local state
+    var text by remember { mutableStateOf("") }
+
+    // ✅ 2. StateFlow/Flow
+    val uiState by viewModel.uiState.collectAsState()
+
+    // ✅ 3. LiveData (requires observeAsState)
+    val data by viewModel.liveData.observeAsState()
+
+    // Any read triggers subscription to that state
+    Column {
+        Text(text)
+        Text(uiState.message)
+    }
+}
+```
+
+### Recomposition Scope
+
+Compose minimizes recomposition — only composables that read the changed state are re-executed:
+
+```kotlin
+@Composable
+fun ScopedRecomposition() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        // ✅ Recomposes when count changes
+        Text("Count: $count")
+
+        // ✅ Never recomposes (no state dependency)
+        Text("Static text")
+
+        Button(onClick = { count++ }) { Text("Click") }
+    }
+}
+```
+
+### Optimization: derivedStateOf
+
+```kotlin
+@Composable
+fun OptimizedExample() {
+    var count by remember { mutableStateOf(0) }
+
+    // ✅ Recomposes only when parity changes (not on every count)
+    val isEven by remember { derivedStateOf { count % 2 == 0 } }
+
+    Column {
+        Text("Count: $count")        // Recomposes every time
+        Text("Is even: $isEven")     // Recomposes every 2nd time
+    }
+}
+```
 
 ---
 
+## Follow-ups
+
+- How does Compose determine which composables to recompose (smart recomposition)?
+- What is the difference between `remember` and `rememberSaveable`?
+- How does `derivedStateOf` reduce recomposition frequency?
+- What are stable vs unstable types in the context of Compose skipping?
+- How can you debug unnecessary recompositions in your app?
+
+## References
+
+- [[c-jetpack-compose]] - Core concepts of declarative UI
+- [Compose Lifecycle Documentation](https://developer.android.com/jetpack/compose/lifecycle)
+- [State and Recomposition](https://developer.android.com/jetpack/compose/state)
+- [Performance Best Practices](https://developer.android.com/jetpack/compose/performance)
+
 ## Related Questions
 
-### Related (Medium)
-- [[q-how-does-jetpackcompose-work--android--medium]] - Compose
-- [[q-compose-modifier-order-performance--android--medium]] - Compose
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose
-- [[q-compositionlocal-advanced--android--medium]] - Compose
-- [[q-accessibility-compose--android--medium]] - Compose
+### Prerequisites (Easier)
+- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose fundamentals
+
+### Related (Same Level)
+- [[q-how-does-jetpackcompose-work--android--medium]] - Compose architecture
+- [[q-compose-modifier-order-performance--android--medium]] - Modifier system
+- [[q-compositionlocal-advanced--android--medium]] - State propagation
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--android--hard]] - Compose
-- [[q-compose-custom-layout--android--hard]] - Compose
-- [[q-compose-performance-optimization--android--hard]] - Compose
+- [[q-compose-stability-skippability--android--hard]] - Skipping optimization
+- [[q-compose-performance-optimization--android--hard]] - Advanced optimization
+- [[q-compose-custom-layout--android--hard]] - Custom layout

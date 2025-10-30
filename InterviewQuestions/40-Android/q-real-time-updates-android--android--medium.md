@@ -1,44 +1,37 @@
 ---
 id: 20251012-12271177
 title: "Real Time Updates Android / Обновления в реальном времени Android"
+aliases: ["Real Time Updates Android", "Обновления в реальном времени Android"]
 topic: android
+subtopics: [networking, websockets, firebase]
+question_kind: android
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-alternative-distribution--distribution--medium, q-mlkit-face-detection--ml--medium, q-what-navigation-methods-exist-in-kotlin--programming-languages--medium]
+related: [c-websockets, c-firebase-realtime, c-server-sent-events, q-networking-in-android--android--medium]
 created: 2025-10-15
-tags: [networking, websockets, sse, firebase, fcm, real-time, difficulty/medium]
+updated: 2025-10-28
+sources: []
+tags: [android, networking, websockets, sse, firebase, fcm, real-time, difficulty/medium, android/networking]
 ---
-
-# How to Implement Real-Time Updates in Android
 
 # Вопрос (RU)
->
+
+Как реализовать обновления в реальном времени в Android-приложении? Какие технологии доступны и каковы best practices?
+
+# Question (EN)
+
+How do you implement real-time updates in Android applications? What are the available technologies and best practices?
 
 ---
 
-## Answer (EN)
-# Question (EN)
-How do you implement real-time updates in Android applications? What are the available technologies and best practices?
+## Ответ (RU)
 
-## Answer (EN)
-Real-time updates enable instant data synchronization between server and client, essential for chat apps, collaborative tools, live feeds, and notifications. There are several approaches with different trade-offs.
+Real-time обновления обеспечивают мгновенную синхронизацию данных между сервером и клиентом. Основные технологии:
 
-#### 1. **WebSockets**
-
-WebSockets provide full-duplex communication over a single TCP connection.
-
-**Setup with OkHttp:**
-
-```kotlin
-// build.gradle.kts
-dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-}
-```
-
-**Implementation:**
+### 1. WebSockets — полнодуплексная связь
 
 ```kotlin
 class WebSocketManager(
@@ -46,653 +39,451 @@ class WebSocketManager(
     private val url: String
 ) {
     private var webSocket: WebSocket? = null
-    private val _messages = MutableSharedFlow<Message>(replay = 0)
-    val messages: SharedFlow<Message> = _messages.asSharedFlow()
+    private val _messages = MutableSharedFlow<Message>()
+    val messages = _messages.asSharedFlow()
 
-    private val _connectionState = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
-    val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
+    private val _state = MutableStateFlow(State.DISCONNECTED)
+    val state = _state.asStateFlow()
 
     private val listener = object : WebSocketListener() {
-        override fun onOpen(webSocket: WebSocket, response: Response) {
-            _connectionState.value = ConnectionState.Connected
-            Log.d("WebSocket", "Connection opened")
+        override fun onOpen(ws: WebSocket, response: Response) {
+            _state.value = State.CONNECTED
         }
 
-        override fun onMessage(webSocket: WebSocket, text: String) {
-            try {
+        override fun onMessage(ws: WebSocket, text: String) {
+            // ✅ Parse and emit message asynchronously
+            scope.launch {
                 val message = Json.decodeFromString<Message>(text)
-                CoroutineScope(Dispatchers.IO).launch {
-                    _messages.emit(message)
-                }
-            } catch (e: Exception) {
-                Log.e("WebSocket", "Failed to parse message", e)
+                _messages.emit(message)
             }
         }
 
-        override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-            _connectionState.value = ConnectionState.Disconnecting
-            Log.d("WebSocket", "Connection closing: $code $reason")
-        }
-
-        override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-            _connectionState.value = ConnectionState.Disconnected
-            Log.d("WebSocket", "Connection closed: $code $reason")
-        }
-
-        override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-            _connectionState.value = ConnectionState.Error(t.message ?: "Unknown error")
-            Log.e("WebSocket", "Connection failed", t)
-
-            // Auto-reconnect with exponential backoff
-            scheduleReconnect()
+        override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
+            _state.value = State.ERROR
+            scheduleReconnect() // ✅ Auto-reconnect with backoff
         }
     }
 
     fun connect() {
-        if (webSocket != null) {
-            disconnect()
-        }
-
         val request = Request.Builder()
             .url(url)
-            .addHeader("Authorization", "Bearer ${getAuthToken()}")
             .build()
-
         webSocket = client.newWebSocket(request, listener)
-        _connectionState.value = ConnectionState.Connecting
     }
 
+    // ❌ Don't forget to disconnect when app goes to background
     fun disconnect() {
-        webSocket?.close(1000, "User disconnected")
-        webSocket = null
-    }
-
-    fun sendMessage(message: Message) {
-        val json = Json.encodeToString(message)
-        webSocket?.send(json)
-    }
-
-    private var reconnectAttempts = 0
-    private val maxReconnectAttempts = 5
-    private val reconnectDelayMs = 1000L
-
-    private fun scheduleReconnect() {
-        if (reconnectAttempts >= maxReconnectAttempts) {
-            _connectionState.value = ConnectionState.Error("Max reconnect attempts reached")
-            return
-        }
-
-        val delay = reconnectDelayMs * (1 shl reconnectAttempts) // Exponential backoff
-        reconnectAttempts++
-
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(delay)
-            connect()
-        }
-    }
-
-    fun resetReconnectAttempts() {
-        reconnectAttempts = 0
+        webSocket?.close(1000, "Client disconnect")
     }
 }
-
-sealed class ConnectionState {
-    object Disconnected : ConnectionState()
-    object Connecting : ConnectionState()
-    object Connected : ConnectionState()
-    object Disconnecting : ConnectionState()
-    data class Error(val message: String) : ConnectionState()
-}
-
-@Serializable
-data class Message(
-    val id: String,
-    val type: String,
-    val content: String,
-    val timestamp: Long,
-    val userId: String
-)
 ```
 
-**Usage in Repository:**
+**Плюсы**: низкая задержка, двусторонний обмен
+**Минусы**: расход батареи, управление соединением
+
+### 2. Server-Sent Events (SSE) — односторонние обновления
 
 ```kotlin
-class ChatRepository(
-    private val webSocketManager: WebSocketManager,
-    private val messageDao: MessageDao
-) {
-    init {
-        // Collect messages and save to local database
-        CoroutineScope(Dispatchers.IO).launch {
-            webSocketManager.messages.collect { message ->
-                messageDao.insert(message.toEntity())
-            }
+fun connectSSE(url: String): Flow<ServerEvent> = flow {
+    val request = Request.Builder()
+        .url(url)
+        .addHeader("Accept", "text/event-stream")
+        .build()
+
+    val response = client.newCall(request).execute()
+    val source = response.body?.source()
+
+    while (!source.exhausted()) {
+        val line = source.readUtf8Line()
+        if (line.startsWith("data:")) {
+            val data = line.substring(5).trim()
+            emit(Json.decodeFromString(data))
         }
-    }
-
-    fun getMessagesFlow(): Flow<List<Message>> = messageDao.getAllMessagesFlow()
-
-    val connectionState = webSocketManager.connectionState
-
-    fun connect() = webSocketManager.connect()
-
-    fun disconnect() = webSocketManager.disconnect()
-
-    fun sendMessage(content: String) {
-        val message = Message(
-            id = UUID.randomUUID().toString(),
-            type = "chat",
-            content = content,
-            timestamp = System.currentTimeMillis(),
-            userId = getCurrentUserId()
-        )
-
-        // Save locally first (offline-first)
-        CoroutineScope(Dispatchers.IO).launch {
-            messageDao.insert(message.toEntity())
-        }
-
-        // Send via WebSocket
-        webSocketManager.sendMessage(message)
     }
 }
 ```
 
-#### 2. **Server-Sent Events (SSE)**
+**Плюсы**: простота, авто-переподключение
+**Минусы**: только от сервера к клиенту
 
-SSE provides one-way real-time updates from server to client.
+### 3. Firebase Realtime Database
 
 ```kotlin
-class SSEClient(
-    private val url: String,
-    private val client: OkHttpClient
-) {
-    private val _events = MutableSharedFlow<ServerEvent>()
-    val events: SharedFlow<ServerEvent> = _events.asSharedFlow()
-
-    private var isConnected = false
-
-    fun connect() {
-        if (isConnected) return
-
-        val request = Request.Builder()
-            .url(url)
-            .addHeader("Accept", "text/event-stream")
-            .addHeader("Authorization", "Bearer ${getAuthToken()}")
-            .build()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = client.newCall(request).execute()
-                if (!response.isSuccessful) {
-                    throw IOException("Unexpected code $response")
-                }
-
-                isConnected = true
-                val source = response.body?.source() ?: throw IOException("Response body is null")
-
-                while (isConnected && !source.exhausted()) {
-                    val line = source.readUtf8Line() ?: break
-
-                    when {
-                        line.startsWith("data:") -> {
-                            val data = line.substring(5).trim()
-                            val event = parseServerEvent(data)
-                            _events.emit(event)
-                        }
-                        line.startsWith("event:") -> {
-                            // Handle custom event types
-                        }
-                        line.startsWith("id:") -> {
-                            // Handle event ID for resuming
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("SSE", "Connection failed", e)
-                isConnected = false
-                // Reconnect logic
-                delay(5000)
-                connect()
+fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
+    val listener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val messages = snapshot.children.mapNotNull {
+                it.getValue(Message::class.java)
             }
+            trySend(messages)
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            close(error.toException())
         }
     }
 
-    fun disconnect() {
-        isConnected = false
-    }
+    database.getReference("messages/$chatId")
+        .addValueEventListener(listener)
 
-    private fun parseServerEvent(data: String): ServerEvent {
-        return Json.decodeFromString(data)
-    }
-}
-
-@Serializable
-data class ServerEvent(
-    val type: String,
-    val data: JsonElement,
-    val timestamp: Long
-)
-```
-
-#### 3. **Firebase Realtime Database**
-
-```kotlin
-class FirebaseRealtimeRepository(
-    private val database: FirebaseDatabase
-) {
-    private val messagesRef = database.getReference("messages")
-
-    // Listen to real-time updates
-    fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
-        val listener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val messages = snapshot.children.mapNotNull {
-                    it.getValue(Message::class.java)
-                }
-                trySend(messages)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
-        }
-
-        messagesRef.child(chatId).addValueEventListener(listener)
-
-        awaitClose {
-            messagesRef.child(chatId).removeEventListener(listener)
-        }
-    }
-
-    // Listen to child added events
-    fun observeNewMessages(chatId: String): Flow<Message> = callbackFlow {
-        val listener = object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                snapshot.getValue(Message::class.java)?.let { trySend(it) }
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
-        }
-
-        messagesRef.child(chatId).addChildEventListener(listener)
-
-        awaitClose {
-            messagesRef.child(chatId).removeEventListener(listener)
-        }
-    }
-
-    // Send message
-    suspend fun sendMessage(chatId: String, message: Message) {
-        messagesRef.child(chatId).push().setValue(message).await()
-    }
-
-    // Update message
-    suspend fun updateMessage(chatId: String, messageId: String, updates: Map<String, Any>) {
-        messagesRef.child(chatId).child(messageId).updateChildren(updates).await()
+    awaitClose {
+        database.getReference("messages/$chatId")
+            .removeEventListener(listener)
     }
 }
 ```
 
-#### 4. **Firebase Cloud Messaging (FCM) for Push Notifications**
+**Плюсы**: быстрое развертывание, масштабируемость
+**Минусы**: vendor lock-in, стоимость
+
+### 4. Firebase Cloud Messaging (FCM) — push-уведомления
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d("FCM", "From: ${remoteMessage.from}")
-
-        // Handle data payload
-        remoteMessage.data.isNotEmpty().let {
-            Log.d("FCM", "Message data payload: ${remoteMessage.data}")
-            handleDataMessage(remoteMessage.data)
-        }
-
-        // Handle notification payload
-        remoteMessage.notification?.let {
-            Log.d("FCM", "Message Notification Body: ${it.body}")
-            showNotification(it.title, it.body)
-        }
-    }
-
-    override fun onNewToken(token: String) {
-        Log.d("FCM", "New token: $token")
-        // Send token to server
-        sendTokenToServer(token)
-    }
-
-    private fun handleDataMessage(data: Map<String, String>) {
-        when (data["type"]) {
-            "new_message" -> {
-                val messageId = data["message_id"]
-                val chatId = data["chat_id"]
-                // Fetch and update local database
-                fetchAndStoreMessage(messageId, chatId)
-            }
-            "update" -> {
-                val entityType = data["entity_type"]
-                val entityId = data["entity_id"]
-                // Trigger sync for specific entity
-                syncEntity(entityType, entityId)
+    override fun onMessageReceived(message: RemoteMessage) {
+        // ✅ Handle data payload for silent updates
+        message.data.let { data ->
+            when (data["type"]) {
+                "new_message" -> fetchAndStore(data["id"])
+                "update" -> syncEntity(data["entity_id"])
             }
         }
-    }
 
-    private fun showNotification(title: String?, body: String?) {
-        val notificationManager = getSystemService<NotificationManager>()
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setAutoCancel(true)
-            .build()
-
-        notificationManager?.notify(Random.nextInt(), notification)
+        // ✅ Show notification if user is not in app
+        if (!isAppInForeground()) {
+            showNotification(message.notification)
+        }
     }
 }
 ```
 
-#### 5. **Polling (Fallback Strategy)**
+**Плюсы**: надежная доставка, кроссплатформенность
+**Минусы**: требует Google Services
+
+### 5. Polling / Long Polling — fallback стратегия
 
 ```kotlin
-class PollingManager(
-    private val apiService: ApiService,
-    private val scope: CoroutineScope
-) {
-    private var pollingJob: Job? = null
-    private val pollingIntervalMs = 5000L
+fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
+    scope.launch {
+        var lastTimestamp = 0L
 
-    fun startPolling(chatId: String, onUpdate: (List<Message>) -> Unit) {
-        stopPolling()
-
-        pollingJob = scope.launch {
-            var lastTimestamp = 0L
-
-            while (isActive) {
-                try {
-                    val response = apiService.getMessages(chatId, since = lastTimestamp)
-                    if (response.isSuccessful) {
-                        response.body()?.let { messages ->
-                            if (messages.isNotEmpty()) {
-                                onUpdate(messages)
-                                lastTimestamp = messages.maxOf { it.timestamp }
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    Log.e("Polling", "Failed to fetch updates", e)
-                }
-
-                delay(pollingIntervalMs)
+        while (isActive) {
+            // ✅ Request only new messages since last timestamp
+            val messages = api.getMessages(since = lastTimestamp)
+            if (messages.isNotEmpty()) {
+                onUpdate(messages)
+                lastTimestamp = messages.maxOf { it.timestamp }
             }
+            delay(interval)
         }
-    }
-
-    fun stopPolling() {
-        pollingJob?.cancel()
-        pollingJob = null
     }
 }
 ```
 
-#### 6. **Long Polling**
+**Плюсы**: простота реализации
+**Минусы**: высокая нагрузка на сервер, задержки
 
-```kotlin
-class LongPollingManager(
-    private val apiService: ApiService,
-    private val scope: CoroutineScope
-) {
-    private var pollingJob: Job? = null
-
-    fun startLongPolling(chatId: String, onUpdate: (List<Message>) -> Unit) {
-        stopLongPolling()
-
-        pollingJob = scope.launch {
-            var lastMessageId: String? = null
-
-            while (isActive) {
-                try {
-                    // Server holds request open until new data arrives or timeout
-                    val response = apiService.longPollMessages(
-                        chatId = chatId,
-                        lastMessageId = lastMessageId,
-                        timeout = 30000 // 30 seconds
-                    )
-
-                    if (response.isSuccessful) {
-                        response.body()?.let { messages ->
-                            if (messages.isNotEmpty()) {
-                                onUpdate(messages)
-                                lastMessageId = messages.last().id
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    Log.e("LongPolling", "Failed to fetch updates", e)
-                    delay(1000) // Brief delay before reconnecting
-                }
-            }
-        }
-    }
-
-    fun stopLongPolling() {
-        pollingJob?.cancel()
-        pollingJob = null
-    }
-}
-```
-
-#### 7. **Combining Strategies with Lifecycle Awareness**
+### Lifecycle-aware подключение
 
 ```kotlin
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val chatRepository: ChatRepository,
-    private val networkMonitor: NetworkMonitor
+    private val webSocketManager: WebSocketManager,
+    networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
-    private val webSocketManager = chatRepository.webSocketManager
-
-    val messages = chatRepository.getMessagesFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-
-    val connectionState = chatRepository.connectionState
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ConnectionState.Disconnected
-        )
-
     init {
-        // Monitor network state and connect/disconnect accordingly
+        // ✅ Connect/disconnect based on network availability
         viewModelScope.launch {
-            networkMonitor.observeNetworkStatus().collect { status ->
-                when (status) {
-                    is NetworkStatus.Available -> {
-                        chatRepository.connect()
-                    }
-                    is NetworkStatus.Lost -> {
-                        chatRepository.disconnect()
-                    }
-                }
+            networkMonitor.isOnline.collect { online ->
+                if (online) webSocketManager.connect()
+                else webSocketManager.disconnect()
             }
         }
-    }
-
-    fun sendMessage(content: String) {
-        chatRepository.sendMessage(content)
     }
 
     override fun onCleared() {
         super.onCleared()
-        chatRepository.disconnect()
+        webSocketManager.disconnect() // ✅ Clean up on ViewModel destruction
     }
 }
+```
 
-@Composable
-fun ChatScreen(viewModel: ChatViewModel = hiltViewModel()) {
-    val messages by viewModel.messages.collectAsState()
-    val connectionState by viewModel.connectionState.collectAsState()
+### Сравнение технологий
 
-    DisposableEffect(Unit) {
-        // Component becomes active
-        onDispose {
-            // Component is being disposed
+| Технология | Когда использовать | Ключевая особенность |
+|------------|-------------------|---------------------|
+| WebSockets | Чаты, игры, коллаборация | Двусторонний обмен, низкая задержка |
+| SSE | Live-ленты, уведомления | Односторонний, авто-переподключение |
+| Firebase Realtime | MVP, быстрый старт | Готовое решение, масштабируемость |
+| FCM | Push-уведомления | Надежная доставка |
+| Polling | Fallback | Простота |
+
+### Best Practices
+
+**Управление соединением:**
+- Авто-переподключение с exponential backoff
+- Отключение в фоне для экономии батареи
+- Мониторинг сети (ConnectivityManager, NetworkCallback)
+
+**Производительность:**
+- Пакетная обработка обновлений
+- Локальное кэширование (Room)
+- Сжатие сообщений (Gzip)
+- Пагинация истории
+
+**Безопасность:**
+- Защищенное соединение (wss://, https://)
+- Аутентификация через токены
+- Валидация входящих данных
+
+**UX:**
+- Отображение статуса соединения
+- Optimistic updates для мгновенного отклика
+- Graceful degradation в offline
+
+## Answer (EN)
+
+Real-time updates enable instant data synchronization between server and client. Main technologies:
+
+### 1. WebSockets — Full-Duplex Communication
+
+```kotlin
+class WebSocketManager(
+    private val client: OkHttpClient,
+    private val url: String
+) {
+    private var webSocket: WebSocket? = null
+    private val _messages = MutableSharedFlow<Message>()
+    val messages = _messages.asSharedFlow()
+
+    private val _state = MutableStateFlow(State.DISCONNECTED)
+    val state = _state.asStateFlow()
+
+    private val listener = object : WebSocketListener() {
+        override fun onOpen(ws: WebSocket, response: Response) {
+            _state.value = State.CONNECTED
+        }
+
+        override fun onMessage(ws: WebSocket, text: String) {
+            // ✅ Parse and emit message asynchronously
+            scope.launch {
+                val message = Json.decodeFromString<Message>(text)
+                _messages.emit(message)
+            }
+        }
+
+        override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
+            _state.value = State.ERROR
+            scheduleReconnect() // ✅ Auto-reconnect with backoff
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Chat") },
-                actions = {
-                    ConnectionIndicator(connectionState)
-                }
-            )
-        }
-    ) { padding ->
-        Column(modifier = Modifier.padding(padding)) {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                reverseLayout = true
-            ) {
-                items(messages) { message ->
-                    MessageItem(message)
-                }
-            }
+    fun connect() {
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        webSocket = client.newWebSocket(request, listener)
+    }
 
-            MessageInput(
-                onSendMessage = { content ->
-                    viewModel.sendMessage(content)
-                },
-                enabled = connectionState is ConnectionState.Connected
-            )
+    // ❌ Don't forget to disconnect when app goes to background
+    fun disconnect() {
+        webSocket?.close(1000, "Client disconnect")
+    }
+}
+```
+
+**Pros**: Low latency, bidirectional
+**Cons**: Battery drain, connection management
+
+### 2. Server-Sent Events (SSE) — One-Way Updates
+
+```kotlin
+fun connectSSE(url: String): Flow<ServerEvent> = flow {
+    val request = Request.Builder()
+        .url(url)
+        .addHeader("Accept", "text/event-stream")
+        .build()
+
+    val response = client.newCall(request).execute()
+    val source = response.body?.source()
+
+    while (!source.exhausted()) {
+        val line = source.readUtf8Line()
+        if (line.startsWith("data:")) {
+            val data = line.substring(5).trim()
+            emit(Json.decodeFromString(data))
         }
+    }
+}
+```
+
+**Pros**: Simple, auto-reconnect
+**Cons**: Server-to-client only
+
+### 3. Firebase Realtime Database
+
+```kotlin
+fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
+    val listener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val messages = snapshot.children.mapNotNull {
+                it.getValue(Message::class.java)
+            }
+            trySend(messages)
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            close(error.toException())
+        }
+    }
+
+    database.getReference("messages/$chatId")
+        .addValueEventListener(listener)
+
+    awaitClose {
+        database.getReference("messages/$chatId")
+            .removeEventListener(listener)
+    }
+}
+```
+
+**Pros**: Fast deployment, scalability
+**Cons**: Vendor lock-in, cost
+
+### 4. Firebase Cloud Messaging (FCM) — Push Notifications
+
+```kotlin
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+    override fun onMessageReceived(message: RemoteMessage) {
+        // ✅ Handle data payload for silent updates
+        message.data.let { data ->
+            when (data["type"]) {
+                "new_message" -> fetchAndStore(data["id"])
+                "update" -> syncEntity(data["entity_id"])
+            }
+        }
+
+        // ✅ Show notification if user is not in app
+        if (!isAppInForeground()) {
+            showNotification(message.notification)
+        }
+    }
+}
+```
+
+**Pros**: Reliable delivery, cross-platform
+**Cons**: Requires Google Services
+
+### 5. Polling / Long Polling — Fallback Strategy
+
+```kotlin
+fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
+    scope.launch {
+        var lastTimestamp = 0L
+
+        while (isActive) {
+            // ✅ Request only new messages since last timestamp
+            val messages = api.getMessages(since = lastTimestamp)
+            if (messages.isNotEmpty()) {
+                onUpdate(messages)
+                lastTimestamp = messages.maxOf { it.timestamp }
+            }
+            delay(interval)
+        }
+    }
+}
+```
+
+**Pros**: Easy to implement
+**Cons**: High server load, delayed updates
+
+### Lifecycle-Aware Connection
+
+```kotlin
+@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val webSocketManager: WebSocketManager,
+    networkMonitor: NetworkMonitor
+) : ViewModel() {
+
+    init {
+        // ✅ Connect/disconnect based on network availability
+        viewModelScope.launch {
+            networkMonitor.isOnline.collect { online ->
+                if (online) webSocketManager.connect()
+                else webSocketManager.disconnect()
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        webSocketManager.disconnect() // ✅ Clean up on ViewModel destruction
     }
 }
 ```
 
 ### Technology Comparison
 
-| Technology | Use Case | Pros | Cons |
-|------------|----------|------|------|
-| WebSockets | Chat, gaming, real-time collaboration | Full-duplex, low latency | Connection management, battery drain |
-| SSE | Live feeds, notifications | Simple, auto-reconnect | One-way, limited browser support |
-| Firebase | MVP, rapid development | Easy setup, scalable | Vendor lock-in, costs |
-| FCM | Push notifications | Reliable, cross-platform | Requires Google services |
-| Polling | Simple updates | Easy to implement | High server load, delayed updates |
-| Long Polling | Medium-frequency updates | Better than polling | Still resource-intensive |
+| Technology | Use Case | Key Feature |
+|------------|----------|-------------|
+| WebSockets | Chat, gaming, collaboration | Bidirectional, low latency |
+| SSE | Live feeds, notifications | One-way, auto-reconnect |
+| Firebase Realtime | MVP, rapid development | Ready solution, scalable |
+| FCM | Push notifications | Reliable delivery |
+| Polling | Fallback | Simplicity |
 
 ### Best Practices
 
 **Connection Management:**
-- [ ] Implement auto-reconnect with exponential backoff
-- [ ] Handle lifecycle events (pause/resume)
-- [ ] Disconnect when app is in background
-- [ ] Monitor network connectivity
+- Auto-reconnect with exponential backoff
+- Disconnect when in background to save battery
+- Network monitoring (ConnectivityManager, NetworkCallback)
 
 **Performance:**
-- [ ] Batch updates when possible
-- [ ] Implement local caching
-- [ ] Use compression for messages
-- [ ] Limit message history in memory
-- [ ] Implement pagination
+- Batch updates
+- Local caching (Room)
+- Message compression (Gzip)
+- Pagination for message history
 
 **Security:**
-- [ ] Use secure WebSocket (wss://)
-- [ ] Implement authentication
-- [ ] Validate all incoming messages
-- [ ] Encrypt sensitive data
-- [ ] Implement rate limiting
+- Secure connections (wss://, https://)
+- Token-based authentication
+- Validate incoming data
 
-**User Experience:**
-- [ ] Show connection status
-- [ ] Handle offline gracefully
-- [ ] Implement optimistic updates
-- [ ] Show message delivery status
-- [ ] Provide retry mechanisms
+**UX:**
+- Show connection status
+- Optimistic updates for instant feedback
+- Graceful degradation in offline mode
 
 ---
 
+## Follow-ups
 
+- How to handle message ordering and deduplication in real-time systems?
+- What are the trade-offs between WebSockets and FCM for chat applications?
+- How to implement offline-first architecture with real-time sync?
+- What strategies exist for reducing battery consumption in always-connected apps?
+- How to handle reconnection storms when many clients reconnect simultaneously?
 
-## Ответ (RU)
+## References
 
-Обновления в реальном времени обеспечивают мгновенную синхронизацию данных между сервером и клиентом, что критически важно для чатов, инструментов совместной работы, live-лент и уведомлений. Существует несколько подходов с различными компромиссами.
-
-#### Технологии:
-
-**1. WebSockets**
-- Полнодуплексная связь через одно TCP-соединение
-- Низкая задержка
-- Подходит для чатов, игр, совместной работы
-- Требует управления соединением и расходует батарею
-
-**2. Server-Sent Events (SSE)**
-- Односторонние обновления от сервера к клиенту
-- Простая реализация
-- Автоматическое переподключение
-- Подходит для live-лент, уведомлений
-
-**3. Firebase Realtime Database**
-- Быстрое развертывание и разработка MVP
-- Автоматическая синхронизация
-- Масштабируемость из коробки
-- Привязка к вендору и стоимость
-
-**4. Firebase Cloud Messaging (FCM)**
-- Push-уведомления
-- Надежная доставка
-- Кроссплатформенность
-- Требует Google Services
-
-**5. Polling/Long Polling**
-- Простая реализация в качестве fallback
-- Long Polling держит соединение открытым до получения данных
-- Высокая нагрузка на сервер
-- Задержки в обновлениях
-
-#### Лучшие практики:
-
-**Управление соединением:**
-- Автопереподключение с экспоненциальной задержкой
-- Обработка lifecycle-событий (pause/resume)
-- Отключение в фоне для экономии батареи
-- Мониторинг сетевого подключения
-
-**Производительность:**
-- Пакетная обработка обновлений
-- Локальное кэширование данных
-- Сжатие сообщений
-- Ограничение истории сообщений в памяти
-- Пагинация
-
-**Безопасность:**
-- Защищенное соединение WebSocket (wss://)
-- Реализация аутентификации
-- Валидация всех входящих сообщений
-- Шифрование чувствительных данных
-- Rate limiting
-
-**UX:**
-- Отображение статуса соединения
-- Обработка offline-режима
-- Optimistic updates для мгновенного отклика
-- Отображение статуса доставки сообщений
-- Механизмы повторной отправки
+- [[c-websockets]]
+- [[c-firebase-realtime]]
+- [[c-server-sent-events]]
+- [[c-offline-first-architecture]]
 
 ## Related Questions
 
-- [[q-alternative-distribution--android--medium]]
-- q-mlkit-face-detection--ml--medium
-- [[q-what-navigation-methods-exist-in-kotlin--android--medium]]
+### Prerequisites
+- [[q-networking-in-android--android--medium]]
+- [[q-coroutines-and-flow--kotlin--medium]]
+
+### Related
+- [[q-workmanager-background-tasks--android--medium]]
+- [[q-retrofit-implementation--android--medium]]
+
+### Advanced
+- [[q-distributed-systems-consistency--system-design--hard]]
+- [[q-websocket-scalability--system-design--hard]]

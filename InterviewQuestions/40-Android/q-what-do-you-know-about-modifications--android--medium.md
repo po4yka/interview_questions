@@ -1,578 +1,294 @@
 ---
 id: 20251012-122711145
-title: "What Do You Know About Modifications / Что вы знаете о модификациях"
+title: "Compose Modifiers / Модификаторы в Compose"
+aliases: ["Compose Modifiers", "Модификаторы в Compose", "Jetpack Compose Modifiers"]
+
+# Classification
 topic: android
+subtopics: [ui-compose, ui-state]
+question_kind: android
 difficulty: medium
+
+# Language & provenance
+original_language: en
+language_tags: [en, ru]
+sources: []
+
+# Workflow & relations
 status: draft
 moc: moc-android
 related: [q-where-is-composition-created-for-calling-composable-function--android--medium, q-api-file-upload-server--android--medium, q-reduce-app-size--android--medium]
-created: 2025-10-15
-tags: [UI elements, Jetpack Compose, android, ui, jetpack-compose, modifiers, difficulty/medium]
----
 
-# What do you know about modifications?
+# Timestamps
+created: 2025-10-15
+updated: 2025-10-28
+
+# Tags (EN only; no leading #)
+tags: [android/ui-compose, android/ui-state, compose, jetpack-compose, modifiers, difficulty/medium]
+---
 
 # Вопрос (RU)
 
-Что знаешь о модификациях
+> Что вы знаете о модификаторах (Modifiers) в Jetpack Compose?
 
-## Answer (EN)
-In Android development, "modifications" typically refers to **Modifiers** in Jetpack Compose - a powerful system for customizing the appearance and behavior of UI elements. Modifiers are one of the core concepts in Compose.
+# Question (EN)
 
-### 1. What are Compose Modifiers?
+> What do you know about Modifiers in Jetpack Compose?
 
-Modifiers allow you to decorate or augment composables. They let you:
-- Change size, layout, appearance
-- Add behavior (click, scroll, drag)
-- Add padding, margins, backgrounds
-- Apply transformations and animations
+---
 
-### Basic Modifier Usage
+## Ответ (RU)
 
-```kotlin
-@Composable
-fun ModifierBasics() {
-    Text(
-        text = "Hello World",
-        modifier = Modifier
-            .size(200.dp, 100.dp)
-            .background(Color.Blue)
-            .padding(16.dp)
-    )
-}
-```
+**Modifiers (Модификаторы)** в Jetpack Compose — это система декорирования и изменения поведения UI-компонентов. Они применяются через цепочку вызовов и позволяют декларативно настраивать внешний вид, размеры, отступы, поведение и эффекты.
 
-### 2. Modifier Order Matters
+### Основные категории
 
-The order of modifiers affects the final result.
+1. **Layout (размеры, отступы, выравнивание)**
+   - `size()`, `fillMaxWidth()`, `padding()`, `aspectRatio()`, `weight()`
 
-```kotlin
-@Composable
-fun ModifierOrderExample() {
-    Column {
-        // Padding then background - background includes padding
-        Text(
-            text = "Padding First",
-            modifier = Modifier
-                .padding(16.dp)          // Apply padding first
-                .background(Color.Blue)   // Then background
-        )
+2. **Behavior (клики, скроллинг, жесты)**
+   - `clickable()`, `verticalScroll()`, `horizontalScroll()`, `draggable()`
 
-        Spacer(modifier = Modifier.height(16.dp))
+3. **Appearance (фон, границы, формы)**
+   - `background()`, `border()`, `clip()`, `shadow()`
 
-        // Background then padding - background doesn't include padding
-        Text(
-            text = "Background First",
-            modifier = Modifier
-                .background(Color.Blue)   // Apply background first
-                .padding(16.dp)          // Then padding
-        )
-    }
-}
-```
+4. **Transformations (трансформации)**
+   - `rotate()`, `scale()`, `alpha()`, `offset()`, `graphicsLayer()`
 
-### 3. Common Modifier Categories
+5. **Animation (анимации)**
+   - `animateContentSize()`, использование с `animateFloatAsState()`
 
-#### Size Modifiers
+### Порядок имеет значение
+
+Последовательность вызовов модификаторов влияет на финальный результат.
 
 ```kotlin
-@Composable
-fun SizeModifiers() {
-    Column {
-        // Fixed size
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(Color.Red)
-        )
-
-        // Width and height separately
-        Box(
-            modifier = Modifier
-                .width(200.dp)
-                .height(50.dp)
-                .background(Color.Green)
-        )
-
-        // Fill available space
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(Color.Blue)
-        )
-
-        // Fill parent size
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Yellow)
-        )
-
-        // Aspect ratio
-        Box(
-            modifier = Modifier
-                .width(200.dp)
-                .aspectRatio(16f / 9f)
-                .background(Color.Cyan)
-        )
-    }
-}
-```
-
-#### Padding and Margins
-
-```kotlin
-@Composable
-fun PaddingModifiers() {
-    Column {
-        // All sides padding
-        Text(
-            text = "All sides padding",
-            modifier = Modifier
-                .padding(16.dp)
-                .background(Color.LightGray)
-        )
-
-        // Individual sides
-        Text(
-            text = "Custom padding",
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    top = 8.dp,
-                    end = 16.dp,
-                    bottom = 8.dp
-                )
-                .background(Color.LightGray)
-        )
-
-        // Horizontal and vertical
-        Text(
-            text = "H and V padding",
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .background(Color.LightGray)
-        )
-    }
-}
-```
-
-#### Background and Border
-
-```kotlin
-@Composable
-fun BackgroundAndBorderModifiers() {
-    Column(modifier = Modifier.padding(16.dp)) {
-        // Solid background
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(Color.Red)
-        )
-
-        // Background with shape
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(Color.Blue, RoundedCornerShape(16.dp))
-        )
-
-        // Border
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
-        )
-
-        // Border and background
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(Color.Yellow, CircleShape)
-                .border(3.dp, Color.Red, CircleShape)
-        )
-    }
-}
-```
-
-#### Click and Interaction Modifiers
-
-```kotlin
-@Composable
-fun InteractionModifiers() {
-    var count by remember { mutableStateOf(0) }
-
-    Column {
-        // Clickable
-        Text(
-            text = "Click me: $count",
-            modifier = Modifier
-                .clickable { count++ }
-                .padding(16.dp)
-                .background(Color.LightGray)
-        )
-
-        // Clickable with ripple
-        Text(
-            text = "Ripple click",
-            modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple()
-                ) { count++ }
-                .padding(16.dp)
-        )
-
-        // Combinedclickable (long press)
-        Text(
-            text = "Long press me",
-            modifier = Modifier
-                .combinedClickable(
-                    onClick = { count++ },
-                    onLongClick = { count += 10 }
-                )
-                .padding(16.dp)
-                .background(Color.Blue)
-        )
-    }
-}
-```
-
-#### Scroll Modifiers
-
-```kotlin
-@Composable
-fun ScrollModifiers() {
-    Column {
-        // Vertical scroll
-        Column(
-            modifier = Modifier
-                .height(200.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            repeat(20) {
-                Text("Item $it", modifier = Modifier.padding(8.dp))
-            }
-        }
-
-        // Horizontal scroll
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-        ) {
-            repeat(20) {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .padding(8.dp)
-                        .background(Color.Blue)
-                )
-            }
-        }
-    }
-}
-```
-
-### 4. Custom Modifiers
-
-```kotlin
-// Extension function for custom modifier
-fun Modifier.customBorder() = this.then(
-    Modifier
-        .border(2.dp, Color.Red, RoundedCornerShape(8.dp))
-        .padding(8.dp)
+// ❌ Фон не покрывает padding
+Text(
+    "Wrong order",
+    modifier = Modifier
+        .padding(16.dp)      // сначала padding
+        .background(Color.Blue) // потом фон
 )
 
-// Reusable modifier with parameters
-fun Modifier.dashedBorder(
-    color: Color = Color.Black,
-    width: Dp = 1.dp,
-    radius: Dp = 0.dp
-) = this.then(
-    drawBehind {
-        val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-        drawRoundRect(
-            color = color,
-            style = Stroke(width = width.toPx(), pathEffect = pathEffect),
-            cornerRadius = CornerRadius(radius.toPx())
-        )
-    }
+// ✅ Фон покрывает padding
+Text(
+    "Correct order",
+    modifier = Modifier
+        .background(Color.Blue) // сначала фон
+        .padding(16.dp)      // потом padding
+)
+```
+
+### Примеры использования
+
+**Size & Layout:**
+
+```kotlin
+Box(
+    modifier = Modifier
+        .fillMaxWidth()      // занять всю ширину
+        .height(200.dp)      // фиксированная высота
+        .padding(16.dp)      // отступы
 )
 
-// Usage
-@Composable
-fun CustomModifierExample() {
-    Column {
-        Text(
-            text = "Custom border",
-            modifier = Modifier.customBorder()
-        )
-
-        Text(
-            text = "Dashed border",
-            modifier = Modifier
-                .dashedBorder(Color.Blue, 2.dp, 8.dp)
-                .padding(16.dp)
-        )
-    }
+Row {
+    Text("1/3", Modifier.weight(1f)) // ✅ занять 1/3 доступного места
+    Text("2/3", Modifier.weight(2f)) // ✅ занять 2/3 доступного места
 }
 ```
 
-### 5. Modifier Chaining and Composition
+**Clickable & Interactions:**
 
 ```kotlin
-@Composable
-fun ModifierChaining() {
-    // Create reusable modifier chains
-    val cardModifier = Modifier
-        .fillMaxWidth()
+var count by remember { mutableStateOf(0) }
+
+Text(
+    "Click: $count",
+    modifier = Modifier
+        .clickable { count++ }  // ✅ обработка кликов
         .padding(16.dp)
-        .shadow(4.dp, RoundedCornerShape(8.dp))
-        .background(Color.White, RoundedCornerShape(8.dp))
-        .padding(16.dp)
-
-    Column {
-        // Use the modifier chain
-        Text(
-            text = "Card 1",
-            modifier = cardModifier
-        )
-
-        Text(
-            text = "Card 2",
-            modifier = cardModifier
-        )
-
-        // Extend the modifier chain
-        Text(
-            text = "Clickable Card",
-            modifier = cardModifier.clickable { /* action */ }
-        )
-    }
-}
+)
 ```
 
-### 6. Layout Modifiers
+**Custom Modifiers:**
 
 ```kotlin
-@Composable
-fun LayoutModifiers() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Align in parent
-        Text(
-            text = "Top Start",
-            modifier = Modifier.align(Alignment.TopStart)
-        )
+// Создание переиспользуемого модификатора
+fun Modifier.card() = this
+    .fillMaxWidth()
+    .shadow(4.dp, RoundedCornerShape(8.dp))
+    .background(Color.White, RoundedCornerShape(8.dp))
+    .padding(16.dp)
 
-        Text(
-            text = "Center",
-            modifier = Modifier.align(Alignment.Center)
-        )
-
-        Text(
-            text = "Bottom End",
-            modifier = Modifier.align(Alignment.BottomEnd)
-        )
-    }
-
-    Row(modifier = Modifier.fillMaxWidth()) {
-        // Weight modifier for distribution
-        Text(
-            text = "1/3",
-            modifier = Modifier
-                .weight(1f)
-                .background(Color.Red)
-        )
-
-        Text(
-            text = "2/3",
-            modifier = Modifier
-                .weight(2f)
-                .background(Color.Blue)
-        )
-    }
-}
+// Использование
+Text("Card content", modifier = Modifier.card())
 ```
 
-### 7. Animation Modifiers
+**Conditional Modifiers:**
 
 ```kotlin
-@Composable
-fun AnimationModifiers() {
-    var expanded by remember { mutableStateOf(false) }
+var isSelected by remember { mutableStateOf(false) }
 
-    Column {
-        // Animated size
-        Box(
-            modifier = Modifier
-                .animateContentSize()
-                .height(if (expanded) 200.dp else 100.dp)
-                .fillMaxWidth()
-                .background(Color.Blue)
-                .clickable { expanded = !expanded }
+Text(
+    "Toggle",
+    modifier = Modifier
+        .then(  // ✅ условное применение модификатора
+            if (isSelected)
+                Modifier.background(Color.Blue)
+            else
+                Modifier.border(1.dp, Color.Gray)
         )
-
-        // Animated visibility with modifier
-        AnimatedVisibility(visible = expanded) {
-            Text(
-                text = "I'm visible!",
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-
-        // Scale animation
-        val scale by animateFloatAsState(if (expanded) 1.5f else 1f)
-        Text(
-            text = "Scale me",
-            modifier = Modifier
-                .scale(scale)
-                .clickable { expanded = !expanded }
-        )
-    }
-}
-```
-
-### 8. Transformation Modifiers
-
-```kotlin
-@Composable
-fun TransformationModifiers() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Rotate
-        Text(
-            text = "Rotated",
-            modifier = Modifier.rotate(45f)
-        )
-
-        // Scale
-        Text(
-            text = "Scaled",
-            modifier = Modifier.scale(1.5f)
-        )
-
-        // Alpha (transparency)
-        Text(
-            text = "Transparent",
-            modifier = Modifier.alpha(0.5f)
-        )
-
-        // Offset
-        Text(
-            text = "Offset",
-            modifier = Modifier.offset(x = 50.dp, y = 20.dp)
-        )
-
-        // GraphicsLayer for combined transformations
-        Text(
-            text = "Complex transform",
-            modifier = Modifier.graphicsLayer {
-                rotationZ = 30f
-                scaleX = 1.2f
-                scaleY = 1.2f
-                alpha = 0.8f
-            }
-        )
-    }
-}
-```
-
-### 9. Conditional Modifiers
-
-```kotlin
-@Composable
-fun ConditionalModifiers() {
-    var isSelected by remember { mutableStateOf(false) }
-
-    // Conditional modifier using then
-    Text(
-        text = "Toggle me",
-        modifier = Modifier
-            .padding(16.dp)
-            .then(
-                if (isSelected) {
-                    Modifier.background(Color.Blue, RoundedCornerShape(8.dp))
-                } else {
-                    Modifier.border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
-                }
-            )
-            .padding(16.dp)
-            .clickable { isSelected = !isSelected }
-    )
-
-    // Extension function for conditional modifier
-    fun Modifier.selectedModifier(isSelected: Boolean): Modifier = this.then(
-        if (isSelected) {
-            Modifier
-                .background(Color.Blue)
-                .padding(8.dp)
-        } else {
-            Modifier.padding(0.dp)
-        }
-    )
-
-    // Usage
-    Text(
-        text = "Conditional",
-        modifier = Modifier.selectedModifier(isSelected)
-    )
-}
+)
 ```
 
 ### Best Practices
 
-1. **Order matters** - Apply modifiers in logical order
-2. **Reuse modifiers** - Create modifier chains for consistency
-3. **Use extension functions** - Create custom modifiers
-4. **Avoid unnecessary modifiers** - Only apply what's needed
-5. **Prefer composed modifiers** - Use `Modifier.composed` for stateful modifiers
+1. **Порядок важен** — применяйте модификаторы в логическом порядке (layout → appearance → behavior)
+2. **Переиспользование** — создавайте именованные цепочки для консистентности
+3. **Extension функции** — оборачивайте сложные комбинации в переиспользуемые модификаторы
+4. **Stateful modifiers** — используйте `Modifier.composed {}` для модификаторов с состоянием
+
+## Answer (EN)
+
+**Modifiers** in Jetpack Compose are a declarative system for decorating and modifying UI component behavior. They apply through method chaining and allow configuring appearance, size, padding, behavior, and effects.
+
+### Core Categories
+
+1. **Layout (size, padding, alignment)**
+   - `size()`, `fillMaxWidth()`, `padding()`, `aspectRatio()`, `weight()`
+
+2. **Behavior (clicks, scrolling, gestures)**
+   - `clickable()`, `verticalScroll()`, `horizontalScroll()`, `draggable()`
+
+3. **Appearance (background, borders, shapes)**
+   - `background()`, `border()`, `clip()`, `shadow()`
+
+4. **Transformations**
+   - `rotate()`, `scale()`, `alpha()`, `offset()`, `graphicsLayer()`
+
+5. **Animation**
+   - `animateContentSize()`, use with `animateFloatAsState()`
+
+### Order Matters
+
+The sequence of modifier calls affects the final result.
 
 ```kotlin
-// Stateful modifier example
-fun Modifier.shimmer(): Modifier = composed {
-    val transition = rememberInfiniteTransition()
-    val translateAnim by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            tween(durationMillis = 1200, easing = FastOutSlowInEasing),
-            RepeatMode.Restart
-        )
-    )
+// ❌ Background doesn't cover padding
+Text(
+    "Wrong order",
+    modifier = Modifier
+        .padding(16.dp)      // padding first
+        .background(Color.Blue) // then background
+)
 
-    this.background(
-        brush = Brush.linearGradient(
-            colors = listOf(
-                Color.LightGray.copy(alpha = 0.9f),
-                Color.LightGray.copy(alpha = 0.2f),
-                Color.LightGray.copy(alpha = 0.9f)
-            ),
-            start = Offset(translateAnim - 1000f, translateAnim - 1000f),
-            end = Offset(translateAnim, translateAnim)
-        )
-    )
+// ✅ Background covers padding
+Text(
+    "Correct order",
+    modifier = Modifier
+        .background(Color.Blue) // background first
+        .padding(16.dp)      // then padding
+)
+```
+
+### Usage Examples
+
+**Size & Layout:**
+
+```kotlin
+Box(
+    modifier = Modifier
+        .fillMaxWidth()      // fill available width
+        .height(200.dp)      // fixed height
+        .padding(16.dp)      // padding
+)
+
+Row {
+    Text("1/3", Modifier.weight(1f)) // ✅ take 1/3 of available space
+    Text("2/3", Modifier.weight(2f)) // ✅ take 2/3 of available space
 }
 ```
 
-### Summary
+**Clickable & Interactions:**
 
-Modifiers in Jetpack Compose are essential for:
-- **Styling** - colors, shapes, borders
-- **Layout** - size, padding, alignment
-- **Behavior** - clicks, scrolling, dragging
-- **Effects** - animations, transformations
-- **Customization** - create reusable UI patterns
+```kotlin
+var count by remember { mutableStateOf(0) }
 
-## Ответ (RU)
+Text(
+    "Click: $count",
+    modifier = Modifier
+        .clickable { count++ }  // ✅ handle clicks
+        .padding(16.dp)
+)
+```
 
-Модификации могут означать разные вещи в зависимости от контекста. В Android-разработке чаще всего речь идёт о следующих типах модификаций: 1. Модификация данных (изменение состояния) Это изменение переменных, объектов и структур данных во время работы приложения. 2. Модификация UI (Compose Modifiers) В Jetpack Compose модификации используются для изменения внешнего вида и поведения UI-элементов. 3. Модификация кода (рефакторинг, оптимизация) В программировании модификация кода означает его улучшение без изменения основной логики. 4. Модификация системы (кастомные прошивки, рут-изменения) Это изменения в самой операционной системе Android.
+**Custom Modifiers:**
+
+```kotlin
+// Create reusable modifier
+fun Modifier.card() = this
+    .fillMaxWidth()
+    .shadow(4.dp, RoundedCornerShape(8.dp))
+    .background(Color.White, RoundedCornerShape(8.dp))
+    .padding(16.dp)
+
+// Usage
+Text("Card content", modifier = Modifier.card())
+```
+
+**Conditional Modifiers:**
+
+```kotlin
+var isSelected by remember { mutableStateOf(false) }
+
+Text(
+    "Toggle",
+    modifier = Modifier
+        .then(  // ✅ conditional modifier application
+            if (isSelected)
+                Modifier.background(Color.Blue)
+            else
+                Modifier.border(1.dp, Color.Gray)
+        )
+)
+```
+
+### Best Practices
+
+1. **Order matters** — apply modifiers in logical order (layout → appearance → behavior)
+2. **Reusability** — create named chains for consistency
+3. **Extension functions** — wrap complex combinations into reusable modifiers
+4. **Stateful modifiers** — use `Modifier.composed {}` for modifiers with state
+
+---
+
+## Follow-ups
+
+- How does Modifier chaining impact performance and recomposition?
+- When should you use `Modifier.composed {}` vs regular extension functions?
+- How do modifiers propagate through the composition tree?
+- What's the difference between `clickable()` and `pointerInput()` modifiers?
+- How can you create custom layout modifiers using `layout()` or `drawBehind()`?
+
+## References
+
+- Official Compose Modifiers documentation: https://developer.android.com/jetpack/compose/modifiers
+- Official Modifier list reference: https://developer.android.com/jetpack/compose/modifiers-list
+- Custom modifiers guide: https://developer.android.com/jetpack/compose/custom-modifiers
 
 ## Related Questions
 
-- [[q-where-is-composition-created-for-calling-composable-function--android--medium]]
-- [[q-api-file-upload-server--android--medium]]
-- [[q-reduce-app-size--android--medium]]
+### Prerequisites (Easier)
+- Basic Compose concepts and composable functions
+- Understanding of declarative UI principles
+
+### Related (Same Level)
+- [[q-where-is-composition-created-for-calling-composable-function--android--medium]] - Composition creation
+- State management and recomposition in Compose
+- Compose layout system and measurement
+
+### Advanced (Harder)
+- Custom layout modifiers with `layout()` and `LayoutModifier`
+- Performance optimization with modifier reuse
+- Advanced gesture handling with `pointerInput()`

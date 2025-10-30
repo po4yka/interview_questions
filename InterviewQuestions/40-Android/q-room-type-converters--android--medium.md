@@ -1,529 +1,358 @@
 ---
-id: 20251012-12271192
-title: "Room Type Converters"
+id: 20251012-122711
+title: Room Type Converters / TypeConverters в Room
+aliases: [Room Type Converters, TypeConverters в Room, Room конвертеры типов]
+
+# Classification
 topic: android
+subtopics: [room, serialization]
+question_kind: android
 difficulty: medium
+
+# Language
+original_language: en
+language_tags: [en, ru]
+
+# Workflow
 status: draft
+
+# Links
 moc: moc-android
-related: [q-migration-to-compose--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-context-types-android--android--medium]
+related: [c-room, q-room-library-definition--android--easy, q-room-vs-sqlite--android--medium]
+sources: []
+
+# Timestamps
 created: 2025-10-15
-tags: [room, typeconverter, database, custom-types, difficulty/medium]
+updated: 2025-10-28
+
+# Tags
+tags: [android/room, android/serialization, room, database, typeconverter, difficulty/medium]
+---
+# Вопрос (RU)
+
+Что вы знаете о TypeConverters в Room?
+
+# Question (EN)
+
+What do you know about Converters in Room?
+
 ---
 
-# Room TypeConverters / TypeConverters в Room
-
-**English**: What do you know about Converters in Room?
-
-## Answer (EN)
-**Room TypeConverters** are methods that tell Room how to convert **custom types to and from known types** that Room can persist in the database. They enable you to store custom data types in a single database column.
-
-Room doesn't know how to persist custom types by default, so you need to provide type converters using the `@TypeConverter` annotation.
-
-**Basic Example - Converting Date:**
-
-Suppose you need to persist instances of `Date` in your Room database. Room doesn't know how to persist `Date` objects, so you need to define type converters:
-
-```kotlin
-class Converters {
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
-    }
-}
-```
-
-This example defines two type converter methods:
-- One that converts a `Date` object to a `Long` object
-- One that performs the inverse conversion from `Long` to `Date`
-
-Because Room knows how to persist `Long` objects, it can use these converters to persist `Date` objects.
-
-**Registering TypeConverters:**
-
-Next, you add the `@TypeConverters` annotation to the `AppDatabase` class so that Room knows about the converter class:
-
-```kotlin
-@Database(entities = [User::class], version = 1)
-@TypeConverters(Converters::class)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-}
-```
-
-**Using Custom Types in Entities and DAOs:**
-
-With these type converters defined, you can use your custom type in your entities and DAOs just as you would use primitive types:
-
-```kotlin
-@Entity
-data class User(
-    @PrimaryKey val id: Int,
-    val name: String,
-    val birthday: Date?  // Custom type now supported!
-)
-
-@Dao
-interface UserDao {
-    @Query("SELECT * FROM user WHERE birthday = :targetDate")
-    fun findUsersBornOnDate(targetDate: Date): List<User>
-}
-```
-
-**Scoping TypeConverters:**
-
-You can scope type converters to different levels:
-
-**1. Database level (entire app):**
-
-```kotlin
-@Database(entities = [User::class, Event::class], version = 1)
-@TypeConverters(Converters::class)  // Available to all entities and DAOs
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-    abstract fun eventDao(): EventDao
-}
-```
-
-**2. Entity level:**
-
-```kotlin
-@Entity
-@TypeConverters(Converters::class)  // Only for this entity
-data class Event(
-    @PrimaryKey val id: Int,
-    val title: String,
-    val date: Date
-)
-```
-
-**3. DAO level:**
-
-```kotlin
-@Dao
-@TypeConverters(Converters::class)  // Only for this DAO
-interface EventDao {
-    @Query("SELECT * FROM event WHERE date > :fromDate")
-    fun getEventsAfter(fromDate: Date): List<Event>
-}
-```
-
-**4. Property level:**
-
-```kotlin
-@Entity
-data class User(
-    @PrimaryKey val id: Int,
-    val name: String,
-    @TypeConverters(Converters::class)  // Only for this field
-    val birthday: Date?
-)
-```
-
-**Common TypeConverter Examples:**
-
-**1. List/Array Converters:**
-
-```kotlin
-class Converters {
-    @TypeConverter
-    fun fromStringList(value: List<String>?): String? {
-        return value?.joinToString(",")
-    }
-
-    @TypeConverter
-    fun toStringList(value: String?): List<String>? {
-        return value?.split(",")?.map { it.trim() }
-    }
-}
-
-// Usage
-@Entity
-data class User(
-    @PrimaryKey val id: Int,
-    val tags: List<String>  // Stored as comma-separated string
-)
-```
-
-**2. JSON Object Converters (using Gson):**
-
-```kotlin
-class Converters {
-    private val gson = Gson()
-
-    @TypeConverter
-    fun fromAddress(address: Address?): String? {
-        return gson.toJson(address)
-    }
-
-    @TypeConverter
-    fun toAddress(json: String?): Address? {
-        return json?.let { gson.fromJson(it, Address::class.java) }
-    }
-}
-
-// Usage
-@Entity
-data class User(
-    @PrimaryKey val id: Int,
-    val name: String,
-    val address: Address  // Stored as JSON string
-)
-
-data class Address(
-    val street: String,
-    val city: String,
-    val zipCode: String
-)
-```
-
-**3. Enum Converters:**
-
-```kotlin
-enum class UserStatus {
-    ACTIVE, INACTIVE, SUSPENDED
-}
-
-class Converters {
-    @TypeConverter
-    fun fromUserStatus(status: UserStatus?): String? {
-        return status?.name
-    }
-
-    @TypeConverter
-    fun toUserStatus(value: String?): UserStatus? {
-        return value?.let { UserStatus.valueOf(it) }
-    }
-}
-```
-
-**4. UUID Converters:**
-
-```kotlin
-class Converters {
-    @TypeConverter
-    fun fromUUID(uuid: UUID?): String? {
-        return uuid?.toString()
-    }
-
-    @TypeConverter
-    fun toUUID(value: String?): UUID? {
-        return value?.let { UUID.fromString(it) }
-    }
-}
-```
-
-**Controlling TypeConverter Initialization:**
-
-Ordinarily, Room handles instantiation of type converters. However, sometimes you might need to pass additional dependencies to your type converter classes. In that case, annotate your converter class with `@ProvidedTypeConverter`:
-
-```kotlin
-@ProvidedTypeConverter
-class ExampleConverter(private val gson: Gson) {
-    @TypeConverter
-    fun fromAddress(address: Address?): String? {
-        return gson.toJson(address)
-    }
-
-    @TypeConverter
-    fun toAddress(json: String?): Address? {
-        return json?.let { gson.fromJson(it, Address::class.java) }
-    }
-}
-```
-
-Then, use the `RoomDatabase.Builder.addTypeConverter()` method to pass an instance of your converter class to the `RoomDatabase` builder:
-
-```kotlin
-val gson = Gson()
-val converter = ExampleConverter(gson)
-
-val db = Room.databaseBuilder(context, AppDatabase::class.java, "app-db")
-    .addTypeConverter(converter)
-    .build()
-```
-
-**Complete Real-World Example:**
-
-```kotlin
-// Converters.kt
-class Converters {
-    private val gson = Gson()
-
-    // Date converters
-    @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
-    }
-
-    // List<String> converters
-    @TypeConverter
-    fun fromStringList(list: List<String>?): String? {
-        return gson.toJson(list)
-    }
-
-    @TypeConverter
-    fun toStringList(json: String?): List<String>? {
-        val type = object : TypeToken<List<String>>() {}.type
-        return gson.fromJson(json, type)
-    }
-
-    // Enum converters
-    @TypeConverter
-    fun fromUserStatus(status: UserStatus?): String? {
-        return status?.name
-    }
-
-    @TypeConverter
-    fun toUserStatus(value: String?): UserStatus? {
-        return value?.let { UserStatus.valueOf(it) }
-    }
-}
-
-// Entity using converters
-@Entity(tableName = "users")
-data class User(
-    @PrimaryKey val id: Int,
-    val name: String,
-    val birthday: Date,
-    val tags: List<String>,
-    val status: UserStatus,
-    val createdAt: Date = Date()
-)
-
-// Database
-@Database(entities = [User::class], version = 1)
-@TypeConverters(Converters::class)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
-}
-```
-
-**Why Room Doesn't Allow Object References:**
-
-Room deliberately doesn't support object references to avoid:
-- **Performance issues**: Lazy loading on the UI thread (usually 16ms to draw a frame)
-- **Memory consumption**: Fetching more data than needed
-- **Complexity**: Difficult to maintain as UI changes
-
-Instead, Room encourages:
-- Using POJOs with explicit JOINs
-- Defining clear data relationships
-- Loading only what's needed
-
-**Best Practices:**
-
-1. **Keep converters simple** — avoid heavy computations
-2. **Use appropriate scope** — apply converters at the right level
-3. **Handle nullability** — consider nullable types
-4. **Be consistent** — use the same conversion approach throughout
-5. **Consider serialization library** — use Gson, Moshi, or kotlinx.serialization for complex objects
-6. **Test your converters** — ensure bidirectional conversion works correctly
-
-**Common Use Cases:**
-
-- - Date/Time types (Date, LocalDateTime, Instant)
-- - Enums
-- - UUIDs
-- - Lists and Sets
-- - Custom objects (via JSON)
-- - BigDecimal for currency
-- - Custom value classes
-
-**Summary:**
-
-- **TypeConverters**: Methods to convert custom types to/from database-compatible types
-- **Annotation**: `@TypeConverter` on conversion methods, `@TypeConverters` to register
-- **Scope**: Database, Entity, DAO, or property level
-- **Use cases**: Date, Enum, List, JSON objects, UUID
-- **Custom initialization**: Use `@ProvidedTypeConverter` with dependencies
-- **Performance**: Keep conversions lightweight
-
-**Source**: [Referencing complex data using Room](https://developer.android.com/training/data-storage/room/referencing-data)
-
 ## Ответ (RU)
-**Room TypeConverters** — это методы, которые сообщают Room, как преобразовывать **пользовательские типы в известные типы** и обратно, чтобы Room мог сохранять их в базе данных. Они позволяют хранить пользовательские типы данных в одном столбце базы данных.
 
-Room не знает, как сохранять пользовательские типы по умолчанию, поэтому необходимо предоставить конвертеры типов с помощью аннотации `@TypeConverter`.
+**Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы, которые Room умеет сохранять в SQLite. Они позволяют работать с Date, Enum, List и сложными объектами как с обычными полями Entity.
 
-**Базовый пример - конвертация Date:**
+### Основной принцип
+
+Room знает только примитивы (Int, Long, String, Boolean, etc). Для кастомных типов нужны конвертеры.
+
+**Простой пример:**
 
 ```kotlin
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
+    fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }  // ✅ Long → Date
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
-    }
+    fun toTimestamp(date: Date?): Long? = date?.time  // ✅ Date → Long
 }
-```
 
-Этот пример определяет два метода конвертера:
-- Один преобразует объект `Date` в объект `Long`
-- Другой выполняет обратное преобразование из `Long` в `Date`
-
-**Регистрация TypeConverters:**
-
-Добавьте аннотацию `@TypeConverters` к классу `AppDatabase`:
-
-```kotlin
 @Database(entities = [User::class], version = 1)
-@TypeConverters(Converters::class)
+@TypeConverters(Converters::class)  // ✅ Регистрация конвертеров
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }
 ```
 
-**Использование пользовательских типов:**
+### Области видимости
+
+Конвертеры можно применять на 4 уровнях:
 
 ```kotlin
+// 1. Уровень БД — доступны всем Entity и DAO
+@Database(entities = [User::class], version = 1)
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase()
+
+// 2. Уровень Entity — только для этой сущности
+@Entity
+@TypeConverters(Converters::class)
+data class Event(val date: Date)
+
+// 3. Уровень DAO — только для методов DAO
+@Dao
+@TypeConverters(Converters::class)
+interface EventDao
+
+// 4. Уровень поля — самая узкая область
 @Entity
 data class User(
-    @PrimaryKey val id: Int,
-    val name: String,
-    val birthday: Date?  // Пользовательский тип теперь поддерживается!
+    @TypeConverters(Converters::class) val birthday: Date?  // ❌ Избыточно, если есть на уровне БД
 )
-
-@Dao
-interface UserDao {
-    @Query("SELECT * FROM user WHERE birthday = :targetDate")
-    fun findUsersBornOnDate(targetDate: Date): List<User>
-}
 ```
 
-**Области видимости TypeConverters:**
+### Распространённые примеры
 
-Конвертеры типов можно применять на разных уровнях:
-1. **Уровень базы данных** — доступны для всех сущностей и DAO
-2. **Уровень сущности** — только для конкретной сущности
-3. **Уровень DAO** — только для конкретного DAO
-4. **Уровень свойства** — только для конкретного поля
-
-**Распространённые примеры TypeConverter:**
-
-**1. Конвертеры для List:**
+**Enum:**
 
 ```kotlin
+enum class Status { ACTIVE, INACTIVE }
+
 class Converters {
     @TypeConverter
-    fun fromStringList(value: List<String>?): String? {
-        return value?.joinToString(",")
-    }
+    fun fromStatus(value: Status?): String? = value?.name  // ✅ ACTIVE → "ACTIVE"
 
     @TypeConverter
-    fun toStringList(value: String?): List<String>? {
-        return value?.split(",")?.map { it.trim() }
-    }
+    fun toStatus(value: String?): Status? =
+        value?.let { Status.valueOf(it) }  // ✅ "ACTIVE" → ACTIVE
 }
 ```
 
-**2. Конвертеры JSON объектов (с Gson):**
+**List через JSON:**
 
 ```kotlin
 class Converters {
     private val gson = Gson()
 
     @TypeConverter
-    fun fromAddress(address: Address?): String? {
-        return gson.toJson(address)
-    }
+    fun fromList(list: List<String>?): String? =
+        gson.toJson(list)  // ✅ ["a","b"] → "[\"a\",\"b\"]"
 
     @TypeConverter
-    fun toAddress(json: String?): Address? {
-        return json?.let { gson.fromJson(it, Address::class.java) }
+    fun toList(json: String?): List<String>? {
+        val type = object : TypeToken<List<String>>() {}.type
+        return gson.fromJson(json, type)  // ✅ "[\"a\",\"b\"]" → ["a","b"]
     }
 }
 ```
 
-**3. Конвертеры для Enum:**
+### ProvidedTypeConverter — инъекция зависимостей
+
+Когда конвертеру нужны зависимости (например, Gson):
 
 ```kotlin
-enum class UserStatus { ACTIVE, INACTIVE, SUSPENDED }
-
-class Converters {
+@ProvidedTypeConverter  // ✅ Указывает, что экземпляр создаётся вручную
+class JsonConverter(private val gson: Gson) {
     @TypeConverter
-    fun fromUserStatus(status: UserStatus?): String? = status?.name
-
-    @TypeConverter
-    fun toUserStatus(value: String?): UserStatus? =
-        value?.let { UserStatus.valueOf(it) }
-}
-```
-
-**Контроль инициализации TypeConverter:**
-
-Для передачи зависимостей в конвертеры используйте `@ProvidedTypeConverter`:
-
-```kotlin
-@ProvidedTypeConverter
-class ExampleConverter(private val gson: Gson) {
-    @TypeConverter
-    fun fromAddress(address: Address?): String? {
-        return gson.toJson(address)
-    }
+    fun toJson(obj: Address?): String? = gson.toJson(obj)
 
     @TypeConverter
-    fun toAddress(json: String?): Address? {
-        return json?.let { gson.fromJson(it, Address::class.java) }
-    }
+    fun fromJson(json: String?): Address? =
+        json?.let { gson.fromJson(it, Address::class.java) }
 }
 
 // Регистрация
-val db = Room.databaseBuilder(context, AppDatabase::class.java, "app-db")
-    .addTypeConverter(ExampleConverter(Gson()))
+val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
+    .addTypeConverter(JsonConverter(Gson()))  // ✅ Передача готового экземпляра
     .build()
 ```
 
-**Лучшие практики:**
+### Ограничения и best practices
 
-1. Держите конвертеры простыми — избегайте тяжёлых вычислений
-2. Используйте подходящую область видимости
-3. Обрабатывайте nullable типы
-4. Будьте последовательны в подходе к конвертации
-5. Рассмотрите библиотеки сериализации для сложных объектов
-6. Тестируйте конвертеры на корректность двунаправленного преобразования
+1. **Избегайте тяжёлых операций** — конвертеры вызываются на каждой операции чтения/записи
+2. **Не для связей** — Room запрещает хранить ссылки на другие Entity (используйте Foreign Keys + @Relation)
+3. **Обрабатывайте null** — используйте nullable типы (`Long?`, `Date?`)
+4. **Тестируйте двусторонность** — `toX(fromX(value)) == value`
 
-**Распространённые случаи использования:**
+**Почему Room не поддерживает Object References:**
 
-- Date/Time типы (Date, LocalDateTime, Instant)
-- Enum'ы
-- UUID
-- Списки и множества
-- Пользовательские объекты (через JSON)
-- BigDecimal для валюты
-- Пользовательские value классы
+```kotlin
+// ❌ ЗАПРЕЩЕНО — Room не сохранит вложенный объект
+@Entity
+data class Post(
+    @PrimaryKey val id: Int,
+    val author: User  // ❌ Компилятор выдаст ошибку
+)
 
-**Резюме:**
+// ✅ ПРАВИЛЬНО — связь через Foreign Key
+@Entity
+data class Post(
+    @PrimaryKey val id: Int,
+    val authorId: Int  // ✅ Ссылка через ID
+)
 
-TypeConverters — это методы для преобразования пользовательских типов в типы, совместимые с базой данных, и обратно. Используйте аннотацию @TypeConverter для методов преобразования и @TypeConverters для регистрации. Можно применять на уровне базы данных, сущности, DAO или свойства. Распространённые случаи: Date, Enum, List, JSON объекты, UUID.
+data class PostWithAuthor(
+    @Embedded val post: Post,
+    @Relation(parentColumn = "authorId", entityColumn = "id")
+    val author: User  // ✅ Автоматическая загрузка через JOIN
+)
+```
+
+Причины запрета:
+- Избежание ленивой загрузки на UI-потоке
+- Контроль потребления памяти
+- Явное определение связей
 
 ---
+
+## Answer (EN)
+
+**Room TypeConverters** are a mechanism for converting custom data types to primitive types that Room can persist in SQLite. They enable working with Date, Enum, List, and complex objects as regular Entity fields.
+
+### Core Principle
+
+Room only understands primitives (Int, Long, String, Boolean, etc). Custom types require converters.
+
+**Basic Example:**
+
+```kotlin
+class Converters {
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }  // ✅ Long → Date
+
+    @TypeConverter
+    fun toTimestamp(date: Date?): Long? = date?.time  // ✅ Date → Long
+}
+
+@Database(entities = [User::class], version = 1)
+@TypeConverters(Converters::class)  // ✅ Register converters
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+```
+
+### Scoping Levels
+
+Converters can be applied at 4 levels:
+
+```kotlin
+// 1. Database level — available to all Entities and DAOs
+@Database(entities = [User::class], version = 1)
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase()
+
+// 2. Entity level — only for this entity
+@Entity
+@TypeConverters(Converters::class)
+data class Event(val date: Date)
+
+// 3. DAO level — only for DAO methods
+@Dao
+@TypeConverters(Converters::class)
+interface EventDao
+
+// 4. Field level — narrowest scope
+@Entity
+data class User(
+    @TypeConverters(Converters::class) val birthday: Date?  // ❌ Redundant if set at DB level
+)
+```
+
+### Common Examples
+
+**Enum:**
+
+```kotlin
+enum class Status { ACTIVE, INACTIVE }
+
+class Converters {
+    @TypeConverter
+    fun fromStatus(value: Status?): String? = value?.name  // ✅ ACTIVE → "ACTIVE"
+
+    @TypeConverter
+    fun toStatus(value: String?): Status? =
+        value?.let { Status.valueOf(it) }  // ✅ "ACTIVE" → ACTIVE
+}
+```
+
+**List via JSON:**
+
+```kotlin
+class Converters {
+    private val gson = Gson()
+
+    @TypeConverter
+    fun fromList(list: List<String>?): String? =
+        gson.toJson(list)  // ✅ ["a","b"] → "[\"a\",\"b\"]"
+
+    @TypeConverter
+    fun toList(json: String?): List<String>? {
+        val type = object : TypeToken<List<String>>() {}.type
+        return gson.fromJson(json, type)  // ✅ "[\"a\",\"b\"]" → ["a","b"]
+    }
+}
+```
+
+### ProvidedTypeConverter — Dependency Injection
+
+When converters need dependencies (e.g., Gson):
+
+```kotlin
+@ProvidedTypeConverter  // ✅ Indicates manual instantiation
+class JsonConverter(private val gson: Gson) {
+    @TypeConverter
+    fun toJson(obj: Address?): String? = gson.toJson(obj)
+
+    @TypeConverter
+    fun fromJson(json: String?): Address? =
+        json?.let { gson.fromJson(it, Address::class.java) }
+}
+
+// Registration
+val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
+    .addTypeConverter(JsonConverter(Gson()))  // ✅ Pass instance
+    .build()
+```
+
+### Constraints and Best Practices
+
+1. **Avoid heavy operations** — converters run on every read/write
+2. **Not for relationships** — Room forbids storing Entity references (use Foreign Keys + @Relation)
+3. **Handle nullability** — use nullable types (`Long?`, `Date?`)
+4. **Test bidirectionality** — `toX(fromX(value)) == value`
+
+**Why Room Disallows Object References:**
+
+```kotlin
+// ❌ FORBIDDEN — Room won't save nested object
+@Entity
+data class Post(
+    @PrimaryKey val id: Int,
+    val author: User  // ❌ Compiler error
+)
+
+// ✅ CORRECT — relationship via Foreign Key
+@Entity
+data class Post(
+    @PrimaryKey val id: Int,
+    val authorId: Int  // ✅ Reference via ID
+)
+
+data class PostWithAuthor(
+    @Embedded val post: Post,
+    @Relation(parentColumn = "authorId", entityColumn = "id")
+    val author: User  // ✅ Automatic JOIN loading
+)
+```
+
+Reasons:
+- Avoid lazy loading on UI thread
+- Control memory consumption
+- Explicit relationship definition
+
+---
+
+## Follow-ups
+
+1. How do you convert complex nested objects (e.g., `List<Address>`)?
+2. What happens if TypeConverter throws an exception during read?
+3. Can you use Kotlin serialization instead of Gson for converters?
+4. How to migrate database when changing TypeConverter implementation?
+5. What's the performance impact of JSON serialization in converters?
+
+## References
+
+- [[c-room]] - Room persistence library
+- [Room Referencing Complex Data](https://developer.android.com/training/data-storage/room/referencing-data) - Official docs
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage
-- [[q-room-library-definition--android--easy]] - Storage
+- [[q-room-library-definition--android--easy]] - What is Room?
 
 ### Related (Medium)
-- [[q-room-code-generation-timing--android--medium]] - Storage
-- [[q-room-transactions-dao--room--medium]] - Storage
-- [[q-room-paging3-integration--room--medium]] - Storage
-- [[q-room-type-converters-advanced--room--medium]] - Storage
-- [[q-room-vs-sqlite--android--medium]] - Storage
+- [[q-room-vs-sqlite--android--medium]] - Room vs raw SQLite
+- [[q-room-code-generation-timing--android--medium]] - Room annotation processing
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--room--hard]] - Storage
+- [[q-room-database-migrations--room--medium]] - Database schema migrations

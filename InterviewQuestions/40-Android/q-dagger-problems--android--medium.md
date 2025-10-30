@@ -1,30 +1,24 @@
 ---
 id: 20251020-200000
 title: Dagger Problems / Проблемы Dagger
-aliases: [Dagger Problems, Проблемы Dagger]
+aliases: ["Dagger Problems", "Проблемы Dagger"]
 topic: android
-subtopics:
-  - di-hilt
-  - gradle
+subtopics: [di-hilt, gradle, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
+  - c-dependency-injection
   - q-dagger-build-time-optimization--android--medium
   - q-dagger-field-injection--android--medium
   - q-dagger-framework-overview--android--hard
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/di-hilt, android/gradle, challenges, dagger, difficulty/medium, hilt, problems]
-source: https://dagger.dev/faq.html
-source_note: Dagger FAQ and troubleshooting
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:52:17 pm
+updated: 2025-10-29
+tags: [android/di-hilt, android/gradle, android/testing-unit, dagger, hilt, challenges, difficulty/medium]
+sources: []
 ---
 
 # Вопрос (RU)
@@ -33,226 +27,339 @@ date modified: Saturday, October 25th 2025, 4:52:17 pm
 # Question (EN)
 > What problems does Dagger have?
 
+---
+
 ## Ответ (RU)
 
-Dagger - мощный фреймворк для внедрения зависимостей, но он имеет несколько вызовов и ограничений, с которыми разработчики сталкиваются в реальных проектах.
+Dagger — мощный фреймворк для внедрения зависимостей, но он имеет ряд недостатков, с которыми разработчики сталкиваются в реальных проектах.
 
-### Теория: Основные Проблемы Dagger
+### Основные Проблемы
 
-**Ключевые проблемы:**
-- **Сложность изучения** - крутая кривая обучения с множеством концепций
-- **Время компиляции** - значительное увеличение времени сборки
-- **Отладка** - сложность диагностики проблем во время выполнения
-- **Производительность** - накладные расходы на генерацию кода
-- **Ограничения** - ограниченная гибкость в некоторых сценариях
+**1. Крутая Кривая Обучения**
 
-### 1. Крутая Кривая Обучения
+Dagger требует понимания множества взаимосвязанных концепций:
+- Components, Subcomponents и их иерархии
+- Modules и различие между @Provides и @Binds
+- Scopes и время жизни зависимостей
+- Qualifiers для разрешения конфликтов типов
+- Multibindings для коллекций зависимостей
 
-**Проблема:** Dagger имеет сложную архитектуру с множеством концепций для понимания.
+```kotlin
+// ✅ Правильное использование Qualifier
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class IoDispatcher
 
-**Концепции для изучения:**
-- @Component, @Subcomponent
-- @Module, @Provides, @Binds
-- @Scope, @Singleton, custom scopes
-- @Qualifier, @Named
-- Component dependencies vs Subcomponents
-- Multibindings (@IntoSet, @IntoMap)
+@Module
+object DispatcherModule {
+    @Provides
+    @IoDispatcher
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+}
 
-**Последствия:**
-- Неправильные паттерны использования
-- Копирование кода без понимания
-- Сложность отладки проблем
+// ❌ Без Qualifier — конфликт типов
+@Provides
+fun provideDispatcher1(): CoroutineDispatcher = Dispatchers.IO
 
-### 2. Длительное Время Компиляции
+@Provides
+fun provideDispatcher2(): CoroutineDispatcher = Dispatchers.Default
+```
 
-**Проблема:** Dagger генерирует код во время компиляции, что значительно увеличивает время сборки.
+**2. Длительное Время Компиляции**
 
-**Причины замедления:**
-- Annotation processing на каждом изменении
-- Генерация большого количества кода
-- Анализ графа зависимостей
-- Создание компонентов и провайдеров
+Генерация кода на этапе компиляции существенно замедляет сборку:
+
+```kotlin
+// Каждое изменение в графе зависимостей требует полной регенерации
+@Component(modules = [
+    NetworkModule::class,
+    DatabaseModule::class,
+    RepositoryModule::class,
+    ViewModelModule::class  // Изменение здесь → полная пересборка
+])
+interface AppComponent
+```
 
 **Влияние:**
-- Увеличение времени разработки
-- Замедление CI/CD пайплайнов
-- Ухудшение developer experience
+- Инкрементальная компиляция менее эффективна
+- CI/CD пайплайны работают дольше
+- Feedback loop разработчика замедляется
 
-### 3. Сложность Отладки
+**3. Сложность Отладки**
 
-**Проблема:** Ошибки Dagger часто возникают во время выполнения, а не компиляции.
+Ошибки часто проявляются неочевидно:
 
-**Типичные проблемы:**
-- NullPointerException при инъекции
-- Циклические зависимости
-- Неправильные скоупы
-- Отсутствующие провайдеры
+```kotlin
+// ❌ Циклическая зависимость обнаруживается только в рантайме
+class UserRepository @Inject constructor(
+    private val api: UserApi
+)
 
-**Сложности отладки:**
-- Генерированный код сложно читать
-- Ошибки не всегда указывают на реальную причину
-- Стек-трейсы содержат сгенерированные методы
+class UserApi @Inject constructor(
+    private val repository: UserRepository  // Cycle!
+)
 
-### 4. Ограничения Гибкости
+// ❌ Отсутствующий провайдер — неясная ошибка компиляции
+@Inject constructor(
+    private val config: AppConfig  // Где @Provides?
+)
+```
 
-**Проблема:** Dagger имеет ограничения в некоторых сценариях использования.
+Генерированный код Dagger сложен для чтения, что усложняет диагностику проблем.
 
-**Основные ограничения:**
-- Статическая типизация зависимостей
-- Ограниченная поддержка условной инъекции
-- Сложность работы с legacy plugins
-- Ограниченная поддержка динамических зависимостей
+**4. Ограниченная Гибкость**
 
-### 5. Производительность И Память
+Статическая природа Dagger накладывает ограничения:
 
-**Проблема:** Dagger может влиять на производительность приложения.
+```kotlin
+// ❌ Условная инъекция требует дополнительной работы
+@Module
+object ConfigModule {
+    @Provides
+    fun provideAnalytics(
+        isDebug: Boolean  // Параметр недоступен на этапе компиляции
+    ): Analytics = if (isDebug) DebugAnalytics() else ProdAnalytics()
+}
 
-**Накладные расходы:**
+// ✅ Приходится использовать @Binds с @IntoSet/Map
+@Module
+interface AnalyticsModule {
+    @Binds
+    @IntoMap
+    @StringKey("debug")
+    fun bindDebug(impl: DebugAnalytics): Analytics
+
+    @Binds
+    @IntoMap
+    @StringKey("prod")
+    fun bindProd(impl: ProdAnalytics): Analytics
+}
+```
+
+**5. Накладные Расходы На Производительность**
+
+Влияние на runtime и размер APK:
+
 - Генерированный код увеличивает размер APK
-- Reflection используется в некоторых случаях
-- Создание объектов может быть медленным
-- Память для хранения графа зависимостей
+- Factory классы создаются для каждой зависимости
+- Reflection используется в некоторых случаях (assisted injection)
 
-### 6. Проблемы С Тестированием
+**6. Сложность Тестирования**
 
-**Проблема:** Dagger может усложнить тестирование.
+Подмена зависимостей требует дополнительной настройки:
 
-**Сложности:**
-- Мокирование зависимостей требует дополнительной настройки
-- Тестовые компоненты могут быть сложными в создании
-- Интеграционные тесты с Dagger могут быть медленными
+```kotlin
+// ❌ Тестовый компонент дублирует production структуру
+@Component(modules = [
+    TestNetworkModule::class,      // Нужны отдельные модули
+    TestDatabaseModule::class,
+    TestRepositoryModule::class
+])
+interface TestAppComponent : AppComponent
 
-### Решения И Альтернативы
+// ✅ Hilt упрощает это с @TestInstallIn
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [NetworkModule::class]
+)
+@Module
+object TestNetworkModule {
+    @Provides
+    fun provideApi(): Api = FakeApi()
+}
+```
 
-**Hilt как решение:**
-- Упрощает использование Dagger
-- Автоматизирует создание компонентов
-- Улучшает developer experience
+### Решения
+
+**Hilt как эволюция:**
+- Стандартизированные компоненты и скоупы
+- Автоматическая интеграция с Android классами
+- Упрощённое тестирование
 
 **Альтернативы:**
-- Koin - легковесная альтернатива
-- Manual DI - простое [[c-dependency-injection]]
-- Service Locator pattern
-
-См. также: [[c-dependency-injection]], [[c-software-design-patterns]]
+- [[c-dependency-injection|Manual DI]] — полный контроль без магии
+- Koin — легковесная runtime DI библиотека
+- Service Locator — простой паттерн для небольших проектов
 
 ## Answer (EN)
 
-Dagger is a powerful dependency injection framework, but it has several challenges and limitations that developers face in real-world projects.
+Dagger is a powerful dependency injection framework, but it has several drawbacks that developers encounter in real-world projects.
 
-### Theory: Main Dagger Problems
+### Main Problems
 
-**Key Issues:**
-- **Learning Complexity** - steep learning curve with many concepts
-- **Compilation Time** - significant build time increase
-- **Debugging** - complexity in runtime problem diagnosis
-- **Performance** - overhead from code generation
-- **Limitations** - limited flexibility in some scenarios
+**1. Steep Learning Curve**
 
-### 1. Steep Learning Curve
+Dagger requires understanding many interconnected concepts:
+- Components, Subcomponents and their hierarchies
+- Modules and the difference between @Provides and @Binds
+- Scopes and dependency lifecycles
+- Qualifiers for resolving type conflicts
+- Multibindings for dependency collections
 
-**Problem:** Dagger has a complex architecture with many concepts to understand.
+```kotlin
+// ✅ Correct Qualifier usage
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class IoDispatcher
 
-**Concepts to learn:**
-- @Component, @Subcomponent
-- @Module, @Provides, @Binds
-- @Scope, @Singleton, custom scopes
-- @Qualifier, @Named
-- Component dependencies vs Subcomponents
-- Multibindings (@IntoSet, @IntoMap)
+@Module
+object DispatcherModule {
+    @Provides
+    @IoDispatcher
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+}
 
-**Consequences:**
-- Incorrect usage patterns
-- Copy-paste programming without understanding
-- Difficulty debugging issues
+// ❌ Without Qualifier — type conflict
+@Provides
+fun provideDispatcher1(): CoroutineDispatcher = Dispatchers.IO
 
-### 2. Long Compilation Times
+@Provides
+fun provideDispatcher2(): CoroutineDispatcher = Dispatchers.Default
+```
 
-**Problem:** Dagger generates code at compile time, which significantly increases build times.
+**2. Long Compilation Times**
 
-**Causes of slowdown:**
-- Annotation processing on every change
-- Generation of large amounts of code
-- Dependency graph analysis
-- Component and provider creation
+Code generation at compile-time significantly slows down builds:
+
+```kotlin
+// Every change in dependency graph requires full regeneration
+@Component(modules = [
+    NetworkModule::class,
+    DatabaseModule::class,
+    RepositoryModule::class,
+    ViewModelModule::class  // Change here → full rebuild
+])
+interface AppComponent
+```
 
 **Impact:**
-- Increased development time
-- Slower CI/CD pipelines
-- Worse developer experience
+- Incremental compilation is less effective
+- CI/CD pipelines take longer
+- Developer feedback loop slows down
 
-### 3. Debugging Complexity
+**3. Debugging Complexity**
 
-**Problem:** Dagger errors often occur at runtime, not compile time.
+Errors often manifest in non-obvious ways:
 
-**Typical issues:**
-- NullPointerException during injection
-- Circular dependencies
-- Wrong scopes
-- Missing providers
+```kotlin
+// ❌ Circular dependency detected only at runtime
+class UserRepository @Inject constructor(
+    private val api: UserApi
+)
 
-**Debugging challenges:**
-- Generated code is hard to read
-- Errors don't always point to real cause
-- Stack traces contain generated methods
+class UserApi @Inject constructor(
+    private val repository: UserRepository  // Cycle!
+)
 
-### 4. Flexibility Limitations
+// ❌ Missing provider — unclear compilation error
+@Inject constructor(
+    private val config: AppConfig  // Where is @Provides?
+)
+```
 
-**Problem:** Dagger has limitations in some usage scenarios.
+Generated Dagger code is difficult to read, complicating problem diagnosis.
 
-**Main limitations:**
-- Static typing of dependencies
-- Limited support for conditional injection
-- Complexity with legacy plugins
-- Limited support for dynamic dependencies
+**4. Limited Flexibility**
 
-### 5. Performance and Memory
+Dagger's static nature imposes constraints:
 
-**Problem:** Dagger can affect application performance.
+```kotlin
+// ❌ Conditional injection requires extra work
+@Module
+object ConfigModule {
+    @Provides
+    fun provideAnalytics(
+        isDebug: Boolean  // Parameter unavailable at compile-time
+    ): Analytics = if (isDebug) DebugAnalytics() else ProdAnalytics()
+}
 
-**Overhead:**
+// ✅ Must use @Binds with @IntoSet/Map
+@Module
+interface AnalyticsModule {
+    @Binds
+    @IntoMap
+    @StringKey("debug")
+    fun bindDebug(impl: DebugAnalytics): Analytics
+
+    @Binds
+    @IntoMap
+    @StringKey("prod")
+    fun bindProd(impl: ProdAnalytics): Analytics
+}
+```
+
+**5. Performance Overhead**
+
+Impact on runtime and APK size:
+
 - Generated code increases APK size
-- Reflection is used in some cases
-- Object creation can be slow
-- Memory for storing dependency graph
+- Factory classes created for each dependency
+- Reflection used in some cases (assisted injection)
 
-### 6. Testing Problems
+**6. Testing Complexity**
 
-**Problem:** Dagger can complicate testing.
+Replacing dependencies requires additional setup:
 
-**Challenges:**
-- Mocking dependencies requires additional setup
-- Test components can be complex to create
-- Integration tests with Dagger can be slow
+```kotlin
+// ❌ Test component duplicates production structure
+@Component(modules = [
+    TestNetworkModule::class,      // Need separate modules
+    TestDatabaseModule::class,
+    TestRepositoryModule::class
+])
+interface TestAppComponent : AppComponent
 
-### Solutions and Alternatives
+// ✅ Hilt simplifies this with @TestInstallIn
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [NetworkModule::class]
+)
+@Module
+object TestNetworkModule {
+    @Provides
+    fun provideApi(): Api = FakeApi()
+}
+```
 
-**Hilt as solution:**
-- Simplifies Dagger usage
-- Automates component creation
-- Improves developer experience
+### Solutions
+
+**Hilt as evolution:**
+- Standardized components and scopes
+- Automatic integration with Android classes
+- Simplified testing
 
 **Alternatives:**
-- Koin - lightweight alternative
-- Manual DI - simple [[c-dependency-injection]]
-- Service Locator pattern
+- [[c-dependency-injection|Manual DI]] — full control without magic
+- Koin — lightweight runtime DI library
+- Service Locator — simple pattern for small projects
 
-See also: [[c-dependency-injection]], [[c-software-design-patterns]]
+---
 
 ## Follow-ups
 
-- How does Hilt address Dagger's main problems?
-- What are the trade-offs between Dagger and Koin?
-- How can you optimize Dagger build times?
+- How does Hilt address the main Dagger problems?
+- What are the trade-offs between compile-time and runtime DI?
+- When should you choose manual DI over Dagger?
+- How to optimize Dagger build times in large projects?
+- What testing strategies work best with Dagger components?
+
+## References
+
+- [[c-dependency-injection]]
+- [[c-software-design-patterns]]
+- Official Dagger documentation: https://dagger.dev/
+- Hilt documentation: https://dagger.dev/hilt/
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-dagger-inject-annotation--android--easy]]
+- [[q-dagger-inject-annotation--android--easy]] — Basic @Inject usage
+- Understanding dependency injection patterns
 
 ### Related (Same Level)
-- [[q-dagger-field-injection--android--medium]]
+- [[q-dagger-field-injection--android--medium]] — Injection strategies
+- [[q-dagger-build-time-optimization--android--medium]] — Build performance
 
 ### Advanced (Harder)
-- [[q-dagger-framework-overview--android--hard]]
-- [[q-dagger-build-time-optimization--android--medium]]
+- [[q-dagger-framework-overview--android--hard]] — Complete framework architecture
+- Component vs Subcomponent design decisions

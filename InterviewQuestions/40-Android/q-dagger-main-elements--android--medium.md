@@ -1,29 +1,20 @@
 ---
 id: 20251020-200000
 title: Dagger Main Elements / Основные элементы Dagger
-aliases: [Dagger Main Elements, Основные элементы Dagger]
+aliases: ["Dagger Main Elements", "Основные элементы Dagger"]
 topic: android
-subtopics:
-  - di-hilt
+subtopics: [di-hilt]
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags:
-  - en
-  - ru
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-dagger-field-injection--android--medium
-  - q-dagger-framework-overview--android--hard
-  - q-dagger-inject-annotation--android--easy
+related: [q-dagger-field-injection--android--medium, q-dagger-framework-overview--android--hard, q-dagger-inject-annotation--android--easy]
 created: 2025-10-20
-updated: 2025-10-20
-tags: [android/di-hilt, difficulty/medium]
-source: https://dagger.dev/api/latest/dagger/Component.html
-source_note: Dagger Component API documentation
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:52:17 pm
+updated: 2025-10-29
+tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium]
+sources: []
 ---
 
 # Вопрос (RU)
@@ -34,319 +25,280 @@ date modified: Saturday, October 25th 2025, 4:52:17 pm
 
 ## Ответ (RU)
 
-Dagger построен вокруг нескольких ключевых элементов, которые работают вместе для обеспечения внедрения зависимостей. Основные компоненты образуют архитектуру DI системы.
+Dagger построен вокруг четырех ключевых элементов, образующих граф зависимостей:
 
-### Теория: Архитектура Dagger
+### 1. @Component — связующий интерфейс
 
-**Основные элементы:**
-- **Component** - связывает модули и цели инъекции
-- **Module** - предоставляет зависимости через провайдеры
-- **@Inject** - маркирует места для внедрения зависимостей
-- **@Provides** - создает зависимости в модулях
-
-**Принципы работы:**
-- Компиляционная генерация кода
-- Статическая типизация зависимостей
-- Автоматическое разрешение графа зависимостей
-- Проверка на этапе компиляции
-
-### 1. Component (@Component)
-
-**Component** - интерфейс, связывающий модули и цели инъекции:
+Интерфейс, объединяющий модули и цели инъекции. Генерирует код для построения графа зависимостей:
 
 ```kotlin
-@Component(modules = [NetworkModule::class, DatabaseModule::class])
+@Component(modules = [NetworkModule::class])
 interface AppComponent {
-    // Методы предоставления - экспорт зависимостей
-    fun provideRepository(): UserRepository
-
-    // Методы инъекции - внедрение в цели
-    fun inject(activity: MainActivity)
-    fun inject(fragment: ProfileFragment)
+    fun repository(): UserRepository // ✅ Provision method
+    fun inject(activity: MainActivity) // ✅ Injection method
 }
+
+// Сгенерированный Dagger код
+val component = DaggerAppComponent.create()
 ```
 
-**Использование:**
-```kotlin
-class MyApplication : Application() {
-    val appComponent = DaggerAppComponent.builder().build()
-}
-```
+**Ключевые особенности:**
+- Компилируется в реализацию с префиксом `Dagger`
+- Проверяет корректность графа на этапе компиляции
+- Поддерживает иерархию (subcomponents) и скоупы
 
-### 2. Module (@Module)
+### 2. @Module — поставщик зависимостей
 
-**Module** - класс, предоставляющий зависимости:
+Класс с `@Provides` методами для создания зависимостей:
 
 ```kotlin
 @Module
 object NetworkModule {
     @Provides
-    @Singleton
-    fun provideApiService(): ApiService {
-        return Retrofit.Builder()
+    @Singleton // ✅ Scope annotation
+    fun provideApiService(): ApiService =
+        Retrofit.Builder()
             .baseUrl("https://api.example.com/")
             .build()
-            .create(ApiService::class.java)
-    }
+            .create()
 }
 ```
 
-**Особенности модулей:**
-- Содержат `@Provides` методы
-- Могут быть `object` или `class`
-- Поддерживают зависимости между провайдерами
+**Особенности:**
+- Используется для внешних библиотек (Retrofit, Room)
+- Может быть `object` (stateless) или `class` (stateful)
+- Методы могут зависеть друг от друга
 
-### 3. @Inject Annotation
+### 3. @Inject — маркер внедрения
 
-**@Inject** маркирует места для инъекции:
+Указывает места для инъекции зависимостей:
 
 ```kotlin
-// Constructor injection
+// ✅ Constructor injection (preferred)
 class UserRepository @Inject constructor(
-    private val apiService: ApiService,
+    private val api: ApiService,
     private val database: UserDatabase
 )
 
-// Field injection
+// ❌ Field injection (only when constructor unavailable)
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
-}
-```
+    @Inject lateinit var repository: UserRepository
 
-### 4. @Provides Methods
-
-**@Provides** создает зависимости в модулях:
-
-```kotlin
-@Module
-object DatabaseModule {
-    @Provides
-    @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
-            .build()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (application as App).component.inject(this)
     }
 }
 ```
 
-### Взаимодействие Элементов
+**Предпочтения:**
+- Constructor injection — тестируемо, immutable, no null
+- Field injection — только для Android framework классов
 
-**Поток работы:**
-1. Dagger анализирует `@Component` и связанные модули
-2. Строит граф зависимостей на основе `@Inject` и `@Provides`
-3. Генерирует код для создания и внедрения зависимостей
-4. Проверяет корректность на этапе компиляции
+### 4. @Provides vs @Binds
 
-**Пример полной интеграции:**
+`@Provides` для конкретных реализаций, `@Binds` для интерфейсов:
+
 ```kotlin
-// Module
+@Module
+abstract class RepositoryModule {
+    @Binds // ✅ Lightweight, no body
+    abstract fun bindRepository(impl: UserRepositoryImpl): UserRepository
+}
+
+@Module
+object DatabaseModule {
+    @Provides // ❌ Requires logic
+    fun provideDatabase(context: Context): AppDatabase =
+        Room.databaseBuilder(context, AppDatabase::class.java, "db").build()
+}
+```
+
+### Полная интеграция
+
+```kotlin
+// 1. Определить модуль
 @Module
 object AppModule {
     @Provides
-    @Singleton
-    fun provideUserRepository(api: ApiService): UserRepository {
-        return UserRepositoryImpl(api)
-    }
+    fun provideRepo(api: ApiService) = UserRepositoryImpl(api)
 }
 
-// Component
+// 2. Создать компонент
 @Component(modules = [AppModule::class])
 interface AppComponent {
     fun inject(activity: MainActivity)
 }
 
-// Usage
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (application as MyApp).appComponent.inject(this)
-    }
+// 3. Инициализировать в Application
+class App : Application() {
+    val component = DaggerAppComponent.create()
 }
 ```
 
-### Hilt Упрощение
-
-Hilt автоматизирует создание компонентов:
+**Hilt упрощает процесс:**
 
 ```kotlin
 @HiltAndroidApp
-class MyApplication : Application()
+class App : Application()
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 }
 ```
 
 ## Answer (EN)
 
-[[c-dagger]] is built around several key elements that work together to provide [[c-dependency-injection]]. The main components form the DI system architecture.
+Dagger is built around four core elements forming the dependency graph:
 
-### Theory: Dagger Architecture
+### 1. @Component — Binding Interface
 
-**Core Elements:**
-- **Component** - connects modules and injection targets
-- **Module** - provides dependencies through providers
-- **@Inject** - marks places for dependency injection
-- **@Provides** - creates dependencies in modules
-
-**Working Principles:**
-- Compile-time code generation
-- Static typing of dependencies
-- Automatic dependency graph resolution
-- Compile-time validation
-
-### 1. Component (@Component)
-
-**Component** - interface connecting modules and injection targets:
+Interface connecting modules and injection targets. Generates code for dependency graph:
 
 ```kotlin
-@Component(modules = [NetworkModule::class, DatabaseModule::class])
+@Component(modules = [NetworkModule::class])
 interface AppComponent {
-    // Provision methods - export dependencies
-    fun provideRepository(): UserRepository
-
-    // Injection methods - inject into targets
-    fun inject(activity: MainActivity)
-    fun inject(fragment: ProfileFragment)
+    fun repository(): UserRepository // ✅ Provision method
+    fun inject(activity: MainActivity) // ✅ Injection method
 }
+
+// Dagger-generated code
+val component = DaggerAppComponent.create()
 ```
 
-**Usage:**
-```kotlin
-class MyApplication : Application() {
-    val appComponent = DaggerAppComponent.builder().build()
-}
-```
+**Key features:**
+- Compiles into implementation with `Dagger` prefix
+- Validates graph correctness at compile time
+- Supports hierarchy (subcomponents) and scopes
 
-### 2. Module (@Module)
+### 2. @Module — Dependency Provider
 
-**Module** - class providing dependencies:
+Class with `@Provides` methods for creating dependencies:
 
 ```kotlin
 @Module
 object NetworkModule {
     @Provides
-    @Singleton
-    fun provideApiService(): ApiService {
-        return Retrofit.Builder()
+    @Singleton // ✅ Scope annotation
+    fun provideApiService(): ApiService =
+        Retrofit.Builder()
             .baseUrl("https://api.example.com/")
             .build()
-            .create(ApiService::class.java)
-    }
+            .create()
 }
 ```
 
-**Module features:**
-- Contains `@Provides` methods
-- Can be `object` or `class`
-- Supports dependencies between providers
+**Features:**
+- Used for external libraries (Retrofit, Room)
+- Can be `object` (stateless) or `class` (stateful)
+- Methods can depend on each other
 
-### 3. @Inject Annotation
+### 3. @Inject — Injection Marker
 
-**@Inject** marks places for injection:
+Marks places for dependency injection:
 
 ```kotlin
-// Constructor injection
+// ✅ Constructor injection (preferred)
 class UserRepository @Inject constructor(
-    private val apiService: ApiService,
+    private val api: ApiService,
     private val database: UserDatabase
 )
 
-// Field injection
+// ❌ Field injection (only when constructor unavailable)
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
-}
-```
+    @Inject lateinit var repository: UserRepository
 
-### 4. @Provides Methods
-
-**@Provides** creates dependencies in modules:
-
-```kotlin
-@Module
-object DatabaseModule {
-    @Provides
-    @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
-            .build()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (application as App).component.inject(this)
     }
 }
 ```
 
-### Element Interaction
+**Preferences:**
+- Constructor injection — testable, immutable, no null
+- Field injection — only for Android framework classes
 
-**Workflow:**
-1. Dagger analyzes `@Component` and related modules
-2. Builds dependency graph based on `@Inject` and `@Provides`
-3. Generates code for creating and injecting dependencies
-4. Validates correctness at compile time
+### 4. @Provides vs @Binds
 
-**Complete integration example:**
+`@Provides` for concrete implementations, `@Binds` for interfaces:
+
 ```kotlin
-// Module
+@Module
+abstract class RepositoryModule {
+    @Binds // ✅ Lightweight, no body
+    abstract fun bindRepository(impl: UserRepositoryImpl): UserRepository
+}
+
+@Module
+object DatabaseModule {
+    @Provides // ❌ Requires logic
+    fun provideDatabase(context: Context): AppDatabase =
+        Room.databaseBuilder(context, AppDatabase::class.java, "db").build()
+}
+```
+
+### Complete Integration
+
+```kotlin
+// 1. Define module
 @Module
 object AppModule {
     @Provides
-    @Singleton
-    fun provideUserRepository(api: ApiService): UserRepository {
-        return UserRepositoryImpl(api)
-    }
+    fun provideRepo(api: ApiService) = UserRepositoryImpl(api)
 }
 
-// Component
+// 2. Create component
 @Component(modules = [AppModule::class])
 interface AppComponent {
     fun inject(activity: MainActivity)
 }
 
-// Usage
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (application as MyApp).appComponent.inject(this)
-    }
+// 3. Initialize in Application
+class App : Application() {
+    val component = DaggerAppComponent.create()
 }
 ```
 
-### Hilt Simplification
-
-[[c-hilt]] automates component creation:
+**Hilt simplifies the process:**
 
 ```kotlin
 @HiltAndroidApp
-class MyApplication : Application()
+class App : Application()
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var repository: UserRepository
+    @Inject lateinit var repository: UserRepository
 }
 ```
 
 ## Follow-ups
 
-- How do Dagger components resolve circular dependencies?
-- What's the difference between @Provides and @Binds methods?
-- How does Hilt automatically create components?
+- How does Dagger handle circular dependencies?
+- What's the difference between component scopes (@Singleton, @ActivityScoped)?
+- When should you use @Binds instead of @Provides?
+- How does Dagger2 differ from Dagger-Hilt?
+- What are subcomponents and when to use them?
+
+## References
+
+- [[c-dependency-injection]]
+- [[c-dagger]]
+- [[c-hilt]]
+- Official documentation: https://dagger.dev/dev-guide/
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-dagger-inject-annotation--android--easy]]
+- [[q-dagger-inject-annotation--android--easy]] — Understanding @Inject annotation
 
 ### Related (Same Level)
-- [[q-dagger-field-injection--android--medium]]
+- [[q-dagger-field-injection--android--medium]] — Field vs constructor injection
+- How to setup Dagger modules and components
+- Understanding Dagger scopes and lifecycles
 
 ### Advanced (Harder)
-- [[q-dagger-framework-overview--android--hard]]
+- [[q-dagger-framework-overview--android--hard]] — Complete Dagger architecture
+- Implementing custom scopes and subcomponents
+- Dagger multibinding and optional dependencies

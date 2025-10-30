@@ -1,371 +1,139 @@
 ---
-id: 20251012-1227111106
-title: "Workmanager Execution Guarantee / Гарантия выполнения WorkManager"
+id: 20251029-120000
+title: "WorkManager Execution Guarantee / Гарантия выполнения WorkManager"
+aliases: ["WorkManager Execution Guarantee", "Гарантия выполнения WorkManager"]
 topic: android
+subtopics: [background-execution, service]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gradle-build-system--android--medium, q-what-does-viewgroup-inherit-from--android--easy, q-compose-modifier-order-performance--jetpack-compose--medium]
+related: [c-workmanager, q-background-tasks-decision-guide--android--medium, q-background-vs-foreground-service--android--medium, q-service-restrictions-why--android--medium]
 created: 2025-10-15
-tags: [workmanager, background-tasks, reliability, difficulty/medium]
+updated: 2025-10-29
+sources: []
+tags: [android/background-execution, android/service, workmanager, background-tasks, reliability, difficulty/medium]
 ---
+# Вопрос (RU)
 
-# How does WorkManager guarantee task execution?
+Как WorkManager гарантирует выполнение задач?
 
-**Russian**: Как WorkManager гарантирует выполнение задач?
+# Question (EN)
 
-## Answer (EN)
-WorkManager guarantees task execution through a combination of persistent storage, system constraints monitoring, and integration with various Android background execution mechanisms. It ensures that work will execute even if the app exits or the device restarts.
+How does WorkManager guarantee task execution?
 
-### Core Guarantees
+## Ответ (RU)
 
-WorkManager provides several key guarantees:
+WorkManager гарантирует выполнение задач через три ключевых механизма: персистентное хранилище SQLite, мониторинг системных ограничений и адаптивную интеграцию с API планировщика (JobScheduler на API 23+, AlarmManager на более старых версиях).
 
-1. **Task persistence** - Work requests survive app and device restarts
-2. **Constraint-based execution** - Respects system constraints (network, battery, storage)
-3. **Automatic retry** - Failed tasks are retried with configurable backoff policy
-4. **Ordering** - Work chains maintain execution order
-5. **Threading** - Work always executes off the main thread
+### Ключевые гарантии
 
-### How WorkManager Guarantees Execution
+1. **Персистентность** — все запросы работы сохраняются в SQLite и переживают перезапуски приложения/устройства
+2. **Constraint-based выполнение** — работа запускается только при выполнении всех условий (сеть, батарея, хранилище)
+3. **Автоматический retry** — неудачные задачи повторяются с экспоненциальным backoff
+4. **Упорядоченность** — цепочки работ соблюдают последовательность выполнения
+5. **Фоновый поток** — работа всегда выполняется вне UI-потока
 
-#### 1. Persistent Storage
+### Механизмы гарантии
 
-WorkManager stores all work requests in a SQLite database, ensuring they survive across:
-- App restarts
-- Device reboots
-- Process death
+#### 1. Персистентное хранилище
 
 ```kotlin
-// Work is saved to database immediately
 val workRequest = OneTimeWorkRequestBuilder<UploadWorker>()
     .setInputData(workDataOf("file_path" to "/path/to/file"))
     .build()
 
 WorkManager.getInstance(context).enqueue(workRequest)
-// Even if app crashes here, work is persisted
+// ✅ Даже если приложение упадет, работа сохранена в БД
 ```
 
-**Database structure:**
-- Work requests
-- Worker parameters
-- Constraints
-- Retry count
-- Output data
+Внутри SQLite хранятся: параметры Worker, constraints, счетчик retry, output data.
 
-#### 2. System Integration
+#### 2. Системная интеграция
 
-WorkManager uses the best available background execution mechanism for each Android version:
+WorkManager автоматически выбирает оптимальный исполнитель:
+- **API 23+**: JobScheduler
+- **API 14-22**: AlarmManager + BroadcastReceiver
 
-| Android Version | Mechanism |
-|-----------------|-----------|
-| API 23+ | JobScheduler |
-| API 14-22 | AlarmManager + BroadcastReceiver |
-| All versions | Custom AlarmManager + WorkManager Service |
-
-```kotlin
-// WorkManager automatically chooses the right executor
-class BackupWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        // This will execute reliably on any Android version
-        return try {
-            performBackup()
-            Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
-    }
-}
-```
-
-#### 3. Constraint-Based Execution
-
-Work only executes when all constraints are met. WorkManager monitors system state and automatically starts work when conditions are satisfied.
+#### 3. Constraint-based выполнение
 
 ```kotlin
 val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED)
-    .setRequiresBatteryNotLow(true)
-    .setRequiresStorageNotLow(true)
-    .setRequiresCharging(false)
-    .setRequiresDeviceIdle(false)
+    .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Только с сетью
+    .setRequiresBatteryNotLow(true)                // ✅ Батарея не низкая
     .build()
 
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .setConstraints(constraints)
     .build()
-
-WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-**What happens:**
-1. Work is enqueued and saved to database
-2. WorkManager monitors system state
-3. When ALL constraints are met → work executes
-4. If constraints change during execution → work can be stopped
-5. Work will restart when constraints are met again
+WorkManager мониторит системное состояние и запускает работу только при выполнении всех constraints.
 
-#### 4. Automatic Retry with Backoff
-
-Failed work is automatically retried with exponential backoff:
+#### 4. Автоматический retry с backoff
 
 ```kotlin
-class RetryableWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params) {
-
+class RetryableWorker : CoroutineWorker() {
     override suspend fun doWork(): Result {
         return try {
-            val result = uploadData()
-            Result.success(workDataOf("upload_id" to result.id))
+            uploadData()
+            Result.success()
         } catch (e: IOException) {
-            // Network error - retry
-            if (runAttemptCount < 5) {
-                Result.retry()  // Will retry with backoff
-            } else {
-                Result.failure()
-            }
+            // ✅ Временная ошибка — повтор
+            if (runAttemptCount < 5) Result.retry() else Result.failure()
         } catch (e: Exception) {
-            // Non-recoverable error
+            // ❌ Фатальная ошибка — провал
             Result.failure()
         }
     }
 }
 
-// Configure backoff policy
 val workRequest = OneTimeWorkRequestBuilder<RetryableWorker>()
     .setBackoffCriteria(
         BackoffPolicy.EXPONENTIAL,
-        OneTimeWorkRequest.MIN_BACKOFF_MILLIS,  // 10 seconds
-        TimeUnit.MILLISECONDS
+        Duration.ofSeconds(10)
     )
     .build()
 ```
 
-**Backoff calculation:**
-```
-EXPONENTIAL: delay = min(10s * 2^(attempts - 1), 5 hours)
-LINEAR: delay = min(10s * attempts, 5 hours)
+**Exponential backoff**: 10s → 20s → 40s → 80s (max 5 часов)
 
-Attempt 1: 10s
-Attempt 2: 20s
-Attempt 3: 40s
-Attempt 4: 80s
-...
-```
-
-#### 5. Work States and Lifecycle
-
-WorkManager tracks work through various states to ensure execution:
-
-```
-                ENQUEUED
-                    ↓
-                RUNNING
-                    ↓
-        
-        ↓           ↓           ↓
-    SUCCEEDED    FAILED     CANCELLED
-
-For periodic work:
-
-    ENQUEUED → RUNNING → ENQUEUED (repeats)
-```
-
-**State transitions:**
+#### 5. Уникальность работы
 
 ```kotlin
-// Observe work state
-WorkManager.getInstance(context)
-    .getWorkInfoByIdLiveData(workRequest.id)
-    .observe(lifecycleOwner) { workInfo ->
-        when (workInfo.state) {
-            WorkInfo.State.ENQUEUED -> {
-                // Waiting for constraints or scheduling
-                Log.d("Work", "Work is queued")
-            }
-            WorkInfo.State.RUNNING -> {
-                // Currently executing
-                Log.d("Work", "Work is running")
-            }
-            WorkInfo.State.SUCCEEDED -> {
-                // Completed successfully
-                val result = workInfo.outputData.getString("result")
-                Log.d("Work", "Work succeeded: $result")
-            }
-            WorkInfo.State.FAILED -> {
-                // Failed permanently (no more retries)
-                Log.d("Work", "Work failed")
-            }
-            WorkInfo.State.BLOCKED -> {
-                // Waiting for prerequisite work
-                Log.d("Work", "Work is blocked")
-            }
-            WorkInfo.State.CANCELLED -> {
-                // Cancelled by user or system
-                Log.d("Work", "Work was cancelled")
-            }
-        }
-    }
+// ✅ KEEP — игнорировать новый запрос, если работа уже есть
+WorkManager.getInstance(context).enqueueUniqueWork(
+    "sync_work",
+    ExistingWorkPolicy.KEEP,
+    workRequest
+)
+
+// ✅ REPLACE — отменить старую, запустить новую
+WorkManager.getInstance(context).enqueueUniqueWork(
+    "sync_work",
+    ExistingWorkPolicy.REPLACE,
+    workRequest
+)
 ```
 
-#### 6. Work Chaining Guarantees
+### Обработка перезагрузки
 
-WorkManager ensures ordered execution in work chains:
+WorkManager автоматически регистрирует BOOT_COMPLETED receiver, который восстанавливает все незавершенные работы из БД после перезагрузки.
+
+### Expedited Work (API 31+)
+
+Для срочных задач WorkManager может запуститься как Foreground Service:
 
 ```kotlin
-val workA = OneTimeWorkRequestBuilder<WorkerA>().build()
-val workB = OneTimeWorkRequestBuilder<WorkerB>().build()
-val workC = OneTimeWorkRequestBuilder<WorkerC>().build()
-
-WorkManager.getInstance(context)
-    .beginWith(workA)  // Executes first
-    .then(workB)       // Executes after A succeeds
-    .then(workC)       // Executes after B succeeds
-    .enqueue()
-
-// workB only starts if workA succeeds
-// workC only starts if workB succeeds
-// If any fails, chain stops
-```
-
-**Parallel execution:**
-
-```kotlin
-val work1 = OneTimeWorkRequestBuilder<Worker1>().build()
-val work2 = OneTimeWorkRequestBuilder<Worker2>().build()
-val work3 = OneTimeWorkRequestBuilder<Worker3>().build()
-val finalWork = OneTimeWorkRequestBuilder<FinalWorker>().build()
-
-WorkManager.getInstance(context)
-    .beginWith(listOf(work1, work2, work3))  // Execute in parallel
-    .then(finalWork)  // Execute after all complete
-    .enqueue()
-```
-
-### Device Reboot Handling
-
-WorkManager automatically restarts work after device reboot:
-
-**Manifest configuration:**
-
-```xml
-<!-- WorkManager adds this automatically -->
-<receiver
-    android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
-    android:enabled="true"
-    android:exported="false">
-    <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-    </intent-filter>
-</receiver>
-```
-
-**Behavior after reboot:**
-
-```kotlin
-// 1. Schedule work
-val workRequest = OneTimeWorkRequestBuilder<BackupWorker>()
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-    )
-    .build()
-
-WorkManager.getInstance(context).enqueue(workRequest)
-
-// 2. Device reboots
-
-// 3. After reboot:
-//    - WorkManager automatically restarts
-//    - Reads persisted work from database
-//    - Re-schedules work with JobScheduler/AlarmManager
-//    - Work executes when constraints are met
-```
-
-### Periodic Work Guarantees
-
-Periodic work is guaranteed to execute at specified intervals:
-
-```kotlin
-val periodicWork = PeriodicWorkRequestBuilder<SyncWorker>(
-    15, TimeUnit.MINUTES  // Minimum interval: 15 minutes
-).setConstraints(
-    Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
-).build()
-
-WorkManager.getInstance(context).enqueue(periodicWork)
-```
-
-**Guarantees:**
-- Executes approximately every 15 minutes (not exact)
-- Survives app restarts and device reboots
-- Respects system Doze mode and battery optimization
-- Flex interval allows for optimization:
-
-```kotlin
-// Execute once every 2 hours, with 30 min flex at the end
-val periodicWork = PeriodicWorkRequestBuilder<SyncWorker>(
-    repeatInterval = 2, repeatIntervalTimeUnit = TimeUnit.HOURS,
-    flexTimeInterval = 30, flexTimeIntervalUnit = TimeUnit.MINUTES
-).build()
-
-// Can execute anytime in the last 30 minutes of each 2-hour window
-```
-
-### Doze Mode and App Standby
-
-WorkManager respects Android battery optimization:
-
-```kotlin
-class DozeFriendlyWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params) {
-
-    override suspend fun doWork(): Result {
-        // This work respects Doze mode
-        // Will execute during maintenance windows
-
-        return try {
-            syncData()
-            Result.success()
-        } catch (e: Exception) {
-            Result.retry()
-        }
-    }
-}
-
-// Urgent work that can run in Doze
-val urgentWork = OneTimeWorkRequestBuilder<UrgentWorker>()
-    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-    .build()
-```
-
-### Expedited Work (Foreground Service Integration)
-
-For urgent work that needs immediate execution:
-
-```kotlin
-class ExpeditedWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params) {
-
+class ExpeditedWorker : CoroutineWorker() {
     override suspend fun getForegroundInfo(): ForegroundInfo {
-        return ForegroundInfo(
-            NOTIFICATION_ID,
-            createNotification()
-        )
+        return ForegroundInfo(NOTIFICATION_ID, createNotification())
     }
 
     override suspend fun doWork(): Result {
-        // Runs as foreground service
-        // Not subject to background execution limits
-
-        setForeground(getForegroundInfo())
-
+        setForeground(getForegroundInfo()) // ✅ Foreground Service
         return try {
             processUrgentData()
             Result.success()
@@ -375,184 +143,38 @@ class ExpeditedWorker(context: Context, params: WorkerParameters)
     }
 }
 
-// Request expedited execution
 val expeditedRequest = OneTimeWorkRequestBuilder<ExpeditedWorker>()
     .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
     .build()
-
-WorkManager.getInstance(context).enqueue(expeditedRequest)
 ```
 
-### Work Uniqueness Guarantees
+### Резюме
 
-Prevent duplicate work execution:
+WorkManager обеспечивает надежность через:
+- Немедленное сохранение в SQLite при enqueue
+- Автоматический выбор JobScheduler/AlarmManager в зависимости от API
+- Строгое соблюдение constraints
+- Экспоненциальный backoff для retry
+- Восстановление после перезагрузки через BOOT_COMPLETED
+- Интеграцию с Foreground Service для срочных задач
 
-```kotlin
-// REPLACE - Cancel existing work and enqueue new
-WorkManager.getInstance(context).enqueueUniqueWork(
-    "sync_work",
-    ExistingWorkPolicy.REPLACE,
-    workRequest
-)
+**Ограничения**: периодические работы не гарантируют точное время выполнения (минимум 15 минут), Doze Mode может отложить выполнение до maintenance window.
 
-// KEEP - Keep existing work, ignore new request
-WorkManager.getInstance(context).enqueueUniqueWork(
-    "sync_work",
-    ExistingWorkPolicy.KEEP,
-    workRequest
-)
+## Answer (EN)
 
-// APPEND - Add to existing chain
-WorkManager.getInstance(context).enqueueUniqueWork(
-    "sync_work",
-    ExistingWorkPolicy.APPEND,
-    workRequest
-)
+WorkManager guarantees task execution through three core mechanisms: persistent SQLite storage, system constraint monitoring, and adaptive integration with scheduling APIs (JobScheduler on API 23+, AlarmManager on older versions).
 
-// APPEND_OR_REPLACE - Append if running, replace if finished
-WorkManager.getInstance(context).enqueueUniqueWork(
-    "sync_work",
-    ExistingWorkPolicy.APPEND_OR_REPLACE,
-    workRequest
-)
-```
+### Key Guarantees
 
-### Complete Example with All Guarantees
+1. **Persistence** — all work requests are saved to SQLite and survive app/device restarts
+2. **Constraint-based execution** — work runs only when all conditions are met (network, battery, storage)
+3. **Automatic retry** — failed tasks are retried with exponential backoff
+4. **Ordering** — work chains maintain execution sequence
+5. **Background thread** — work always executes off the UI thread
 
-```kotlin
-class ReliableUploadWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
+### Guarantee Mechanisms
 
-    override suspend fun doWork(): Result {
-        val filePath = inputData.getString(KEY_FILE_PATH)
-            ?: return Result.failure()
-
-        return try {
-            // Update progress
-            setProgress(workDataOf("progress" to 0))
-
-            // Perform upload
-            val uploadId = uploadFile(filePath) { progress ->
-                // Update progress
-                setProgress(workDataOf("progress" to progress))
-            }
-
-            // Success
-            Result.success(workDataOf("upload_id" to uploadId))
-
-        } catch (e: IOException) {
-            // Transient error - retry
-            if (runAttemptCount < MAX_RETRIES) {
-                Result.retry()
-            } else {
-                Result.failure(workDataOf("error" to "Max retries exceeded"))
-            }
-        } catch (e: Exception) {
-            // Permanent error
-            Result.failure(workDataOf("error" to e.message))
-        }
-    }
-
-    companion object {
-        const val KEY_FILE_PATH = "file_path"
-        const val MAX_RETRIES = 3
-    }
-}
-
-// Schedule with all guarantees
-fun scheduleUpload(context: Context, filePath: String) {
-    val workRequest = OneTimeWorkRequestBuilder<ReliableUploadWorker>()
-        // Input data
-        .setInputData(workDataOf("file_path" to filePath))
-
-        // Constraints
-        .setConstraints(
-            Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiresBatteryNotLow(true)
-                .build()
-        )
-
-        // Retry policy
-        .setBackoffCriteria(
-            BackoffPolicy.EXPONENTIAL,
-            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-            TimeUnit.MILLISECONDS
-        )
-
-        .build()
-
-    // Enqueue with uniqueness
-    WorkManager.getInstance(context).enqueueUniqueWork(
-        "upload_$filePath",
-        ExistingWorkPolicy.KEEP,  // Don't duplicate uploads
-        workRequest
-    )
-
-    // Observe progress
-    WorkManager.getInstance(context)
-        .getWorkInfoByIdLiveData(workRequest.id)
-        .observe(lifecycleOwner) { workInfo ->
-            when {
-                workInfo.state == WorkInfo.State.RUNNING -> {
-                    val progress = workInfo.progress.getInt("progress", 0)
-                    updateUI("Uploading: $progress%")
-                }
-                workInfo.state == WorkInfo.State.SUCCEEDED -> {
-                    val uploadId = workInfo.outputData.getString("upload_id")
-                    updateUI("Upload complete: $uploadId")
-                }
-                workInfo.state == WorkInfo.State.FAILED -> {
-                    val error = workInfo.outputData.getString("error")
-                    updateUI("Upload failed: $error")
-                }
-            }
-        }
-}
-```
-
-### Summary of Guarantees
-
-| Guarantee | How It Works |
-|-----------|--------------|
-| **Persistence** | Stored in SQLite database |
-| **Survives reboot** | BOOT_COMPLETED receiver restarts work |
-| **Constraint enforcement** | System monitors state, executes when constraints met |
-| **Automatic retry** | Configurable backoff policy |
-| **Ordered execution** | Work chains maintain dependencies |
-| **Off main thread** | Always executes on background thread |
-| **Uniqueness** | ExistingWorkPolicy prevents duplicates |
-| **Doze-aware** | Respects battery optimization |
-| **Version compatibility** | Uses best mechanism for each Android version |
-
-**Key points:**
-- Work is persisted immediately upon enqueueing
-- Execution is guaranteed even across app/device restarts
-- Constraints are strictly enforced
-- Failed work is automatically retried
-- System chooses optimal execution mechanism
-- Work chains maintain execution order
-- Periodic work runs reliably at intervals
-- Integration with foreground services for urgent work
-
-## Ответ (RU)
-WorkManager гарантирует выполнение задач через комбинацию постоянного хранилища, мониторинга системных ограничений и интеграции с различными механизмами фонового выполнения Android.
-
-### Основные гарантии
-
-1. **Персистентность задач** - задачи переживают перезапуск приложения и устройства
-2. **Выполнение по ограничениям** - соблюдает системные ограничения (сеть, батарея, хранилище)
-3. **Автоматический повтор** - неудачные задачи повторяются с настраиваемой политикой backoff
-4. **Упорядоченность** - цепочки работ сохраняют порядок выполнения
-5. **Потоки** - работа всегда выполняется вне главного потока
-
-### Как WorkManager гарантирует выполнение
-
-#### 1. Постоянное хранилище
-
-WorkManager сохраняет все запросы работы в базе данных SQLite:
+#### 1. Persistent Storage
 
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<UploadWorker>()
@@ -560,23 +182,23 @@ val workRequest = OneTimeWorkRequestBuilder<UploadWorker>()
     .build()
 
 WorkManager.getInstance(context).enqueue(workRequest)
-// Даже если приложение упадет, работа сохранена
+// ✅ Even if app crashes, work is persisted to DB
 ```
 
-#### 2. Интеграция с системой
+SQLite stores: Worker parameters, constraints, retry count, output data.
 
-WorkManager использует лучший доступный механизм для каждой версии Android:
-- API 23+: JobScheduler
-- API 14-22: AlarmManager + BroadcastReceiver
+#### 2. System Integration
 
-#### 3. Выполнение по ограничениям
+WorkManager automatically selects the optimal executor:
+- **API 23+**: JobScheduler
+- **API 14-22**: AlarmManager + BroadcastReceiver
 
-Работа выполняется только когда все ограничения выполнены:
+#### 3. Constraint-based Execution
 
 ```kotlin
 val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED)
-    .setRequiresBatteryNotLow(true)
+    .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Only with network
+    .setRequiresBatteryNotLow(true)                // ✅ Battery not low
     .build()
 
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
@@ -584,7 +206,9 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
     .build()
 ```
 
-#### 4. Автоматический повтор с backoff
+WorkManager monitors system state and starts work only when all constraints are satisfied.
+
+#### 4. Automatic Retry with Backoff
 
 ```kotlin
 class RetryableWorker : CoroutineWorker() {
@@ -593,35 +217,115 @@ class RetryableWorker : CoroutineWorker() {
             uploadData()
             Result.success()
         } catch (e: IOException) {
-            if (runAttemptCount < 5) {
-                Result.retry()  // Повтор с backoff
-            } else {
-                Result.failure()
-            }
+            // ✅ Transient error — retry
+            if (runAttemptCount < 5) Result.retry() else Result.failure()
+        } catch (e: Exception) {
+            // ❌ Fatal error — fail
+            Result.failure()
         }
     }
 }
+
+val workRequest = OneTimeWorkRequestBuilder<RetryableWorker>()
+    .setBackoffCriteria(
+        BackoffPolicy.EXPONENTIAL,
+        Duration.ofSeconds(10)
+    )
+    .build()
 ```
 
-#### 5. Обработка перезагрузки
+**Exponential backoff**: 10s → 20s → 40s → 80s (max 5 hours)
 
-WorkManager автоматически перезапускает работу после перезагрузки устройства через BOOT_COMPLETED receiver.
-
-#### 6. Цепочки работ
+#### 5. Work Uniqueness
 
 ```kotlin
-WorkManager.getInstance(context)
-    .beginWith(workA)
-    .then(workB)
-    .then(workC)
-    .enqueue()
-// workB выполнится только после успеха workA
+// ✅ KEEP — ignore new request if work already exists
+WorkManager.getInstance(context).enqueueUniqueWork(
+    "sync_work",
+    ExistingWorkPolicy.KEEP,
+    workRequest
+)
+
+// ✅ REPLACE — cancel old, start new
+WorkManager.getInstance(context).enqueueUniqueWork(
+    "sync_work",
+    ExistingWorkPolicy.REPLACE,
+    workRequest
+)
 ```
 
-**Резюме:** WorkManager гарантирует выполнение через персистентное хранилище в SQLite, мониторинг системных ограничений, автоматический повтор с backoff, интеграцию с JobScheduler/AlarmManager, и обработку перезагрузок устройства.
+### Device Reboot Handling
+
+WorkManager automatically registers a BOOT_COMPLETED receiver that restores all unfinished work from the database after reboot.
+
+### Expedited Work (API 31+)
+
+For urgent tasks, WorkManager can run as a Foreground Service:
+
+```kotlin
+class ExpeditedWorker : CoroutineWorker() {
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        return ForegroundInfo(NOTIFICATION_ID, createNotification())
+    }
+
+    override suspend fun doWork(): Result {
+        setForeground(getForegroundInfo()) // ✅ Foreground Service
+        return try {
+            processUrgentData()
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
+}
+
+val expeditedRequest = OneTimeWorkRequestBuilder<ExpeditedWorker>()
+    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+    .build()
+```
+
+### Summary
+
+WorkManager ensures reliability through:
+- Immediate SQLite persistence on enqueue
+- Automatic JobScheduler/AlarmManager selection based on API level
+- Strict constraint enforcement
+- Exponential backoff for retry
+- Recovery after reboot via BOOT_COMPLETED
+- Foreground Service integration for urgent tasks
+
+**Limitations**: periodic work doesn't guarantee exact timing (15-minute minimum), Doze Mode may defer execution to maintenance windows.
+
+## Follow-ups
+
+1. What happens to WorkManager tasks during Doze Mode?
+2. How do you observe WorkManager progress in a ViewModel?
+3. When should you use expedited work vs. foreground service directly?
+4. How does WorkManager handle work chain failures (e.g., if workA fails)?
+5. What are the trade-offs between ExistingWorkPolicy.KEEP vs. REPLACE?
+
+## References
+
+- [[c-workmanager]]
+- [[q-background-tasks-decision-guide--android--medium]]
+- [[q-background-vs-foreground-service--android--medium]]
+- https://developer.android.com/topic/libraries/architecture/workmanager
+- https://developer.android.com/topic/libraries/architecture/workmanager/advanced
 
 ## Related Questions
 
-- [[q-gradle-build-system--android--medium]]
-- [[q-what-does-viewgroup-inherit-from--android--easy]]
-- [[q-compose-modifier-order-performance--android--medium]]
+### Prerequisites
+
+- [[q-android-services-purpose--android--easy]]
+- [[q-background-tasks-decision-guide--android--medium]]
+
+### Related
+
+- [[q-background-vs-foreground-service--android--medium]]
+- [[q-service-restrictions-why--android--medium]]
+- [[q-foreground-service-types--android--medium]]
+
+### Advanced
+
+- [[q-service-lifecycle-binding--android--hard]]
+- [[q-keep-service-running-background--android--medium]]
