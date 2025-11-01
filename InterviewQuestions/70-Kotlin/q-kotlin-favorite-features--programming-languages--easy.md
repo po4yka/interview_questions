@@ -1,20 +1,26 @@
 ---
 id: 20251012-12271111129
 title: "Kotlin Favorite Features / Любимые возможности Kotlin"
-topic: computer-science
+aliases: [Kotlin Favorite Features, Любимые возможности Kotlin]
+topic: programming-languages
+subtopics: [extensions, null-safety, coroutines]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-flow-operators-map-filter--kotlin--medium, q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - coroutines
   - extensions
   - features
-  - kotlin
   - null-safety
   - overview
-  - programming-languages
+  - difficulty/easy
 ---
 # Расскажи про три любимых фичи в Kotlin
 

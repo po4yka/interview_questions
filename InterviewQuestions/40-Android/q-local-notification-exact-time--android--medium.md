@@ -6,7 +6,7 @@ aliases: []
 # Classification
 topic: android
 subtopics: [notifications, background-execution]
-question_kind: explanation
+question_kind: theory
 difficulty: medium
 
 # Language & provenance
@@ -22,7 +22,7 @@ related: [q-fragments-history-and-purpose--android--hard, q-recomposition-choreo
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-10-31
 
 tags: [android/notifications, android/background-execution, en, ru, difficulty/medium]
 date created: Saturday, October 18th 2025, 1:27:59 pm

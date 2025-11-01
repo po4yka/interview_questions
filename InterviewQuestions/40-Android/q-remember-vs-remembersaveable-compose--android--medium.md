@@ -1,13 +1,19 @@
 ---
 id: 20251012-12271181
-title: "Remember Vs Remembersaveable Compose"
+title: "Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose"
+aliases: [Remember vs RememberSaveable in Compose, Remember vs RememberSaveable в Compose]
 topic: android
+subtopics: [ui-compose, ui-state]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-handler-looper-main-thread--android--medium, q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium, q-accessibility-testing--accessibility--medium]
 created: 2025-10-15
-tags: [jetpack-compose, state-management, configuration-changes, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-compose, android/ui-state, difficulty/medium]
 ---
 
 # Remember vs RememberSaveable в Compose

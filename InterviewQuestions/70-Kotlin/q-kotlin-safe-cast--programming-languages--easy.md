@@ -1,20 +1,26 @@
 ---
 id: 20251012-12271111151
 title: "Kotlin Safe Cast / Безопасное приведение типов в Kotlin"
-topic: computer-science
+aliases: [Kotlin Safe Cast, Безопасное приведение типов в Kotlin]
+topic: programming-languages
+subtopics: [type-system, null-safety]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-arraylist-linkedlist-vector-difference--programming-languages--medium, q-variance-type-projections--kotlin--hard, q-class-initialization-order--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - as?
   - casting
-  - kotlin
-  - programming-languages
   - safe-cast
   - type-conversion
   - type-safety
+  - difficulty/easy
 ---
 # Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения?
 

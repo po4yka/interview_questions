@@ -1,14 +1,19 @@
 ---
 id: 20251012-122711171
-title: "What Layout Allows Overlapping Objects / Какой layout позволяет перекрывать объекты"
+title: "Layout Overlapping Objects / Макет для перекрывающихся объектов"
+aliases: [Overlapping Layout, Макет для перекрывания]
 topic: android
-difficulty: medium
+subtopics: [ui-views]
+question_kind: theory
+difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-room-database-migrations--room--medium, q-server-sent-events-sse--networking--medium, q-retrofit-call-adapter-advanced--networking--medium]
+related: [c-layouts, c-view-positioning, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
-tags:
-  - android
+updated: 2025-10-31
+tags: [android/ui-views, layouts, view-positioning, ui, framelayout, difficulty/easy]
 ---
 
 # What is the layout called where objects can overlap each other?

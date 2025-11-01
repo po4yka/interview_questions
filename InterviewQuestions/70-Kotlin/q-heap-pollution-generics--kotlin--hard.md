@@ -1,18 +1,21 @@
 ---
 id: 20251016-123535
 title: "Heap Pollution Generics / Загрязнение кучи дженериками"
+aliases: [Heap, Pollution, Generics]
 topic: kotlin
+subtopics: [flow, sealed-classes, inline-functions]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-data-class-requirements--programming-languages--medium, q-suspend-functions-basics--kotlin--easy, q-kotlin-class-initializers--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - java
-  - generics
-  - type-safety
-  - runtime-errors
+  - 
+  - difficulty/hard
 ---
 # Heap Pollution (Загрязнение кучи)
 

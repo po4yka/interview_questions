@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711135
-title: "What Are Fragments And Why Are They More Convenient To Use Instead Of Multiple Activities / What Are Fragments и Why Are They More Convenient To Use Instead Of Multiple Activities"
+title: "Fragments and Multiple Activities / Фрагменты и несколько Activity"
+aliases: [Fragments and Activities, Фрагменты и Activities]
 topic: android
+subtopics: [fragment, activity, ui-navigation]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-background-vs-foreground-service--android--medium, q-fragments-and-activity-relationship--android--hard, q-mvp-pattern--android--medium]
+related: [c-fragments, c-activity-fragments-relationship, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
-tags: [android, android/fragments, fragments, ui, difficulty/hard]
+updated: 2025-10-31
+tags: [android/fragment, android/activity, android/ui-navigation, fragments, ui-navigation, difficulty/hard]
 ---
 
 # Что такое фрагменты и почему их удобнее использовать вместо множества activity?

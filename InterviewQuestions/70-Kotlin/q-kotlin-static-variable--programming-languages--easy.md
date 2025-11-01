@@ -1,19 +1,25 @@
 ---
 id: 20251016-163945
 title: "Kotlin Static Variable / Статические переменные в Kotlin"
-topic: computer-science
+aliases: [Kotlin Static Variable, Статические переменные в Kotlin]
+topic: programming-languages
+subtopics: [type-system, initialization]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-structured-concurrency-patterns--kotlin--hard, q-enum-class-advanced--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - companion-object
   - const
   - jvmstatic
-  - kotlin
-  - programming-languages
   - static
+  - difficulty/easy
 ---
 # Как сделать статическую переменную?
 

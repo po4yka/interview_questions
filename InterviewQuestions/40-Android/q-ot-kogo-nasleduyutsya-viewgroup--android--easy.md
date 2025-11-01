@@ -3,7 +3,7 @@ id: 20251016-163816
 title: "Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup"
 aliases: [ViewGroup Inheritance, Наследование ViewGroup, View Hierarchy, Иерархия View]
 topic: android
-subtopics: [ui-views, architecture]
+subtopics: [ui-views]
 question_kind: theory
 difficulty: easy
 original_language: ru
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-canvas-optimization--graphics--medium, q-what-does-itemdecoration-do--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android, android/ui-views, android/architecture, difficulty/easy]
+tags: [android, android/ui-views, difficulty/easy]
 date created: Tuesday, October 28th 2025, 9:50:23 pm
 date modified: Thursday, October 30th 2025, 3:15:36 pm
 ---

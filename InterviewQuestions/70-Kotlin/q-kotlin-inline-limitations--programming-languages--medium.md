@@ -1,20 +1,26 @@
 ---
 id: 20251016-163311
 title: "Kotlin Inline Limitations / Ограничения inline в Kotlin"
-topic: computer-science
+aliases: [Kotlin Inline Limitations, Ограничения inline в Kotlin]
+topic: programming-languages
+subtopics: [inline-functions, performance]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-access-modifiers--programming-languages--medium, q-object-companion-object--programming-languages--hard, q-context-receivers--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - inline
-  - kotlin
   - lambdas
   - optimization
   - performance
-  - programming-languages
   - recursion
+  - difficulty/medium
 ---
 # Бывают ли случаи, когда нельзя использовать inline?
 

@@ -1,16 +1,23 @@
 ---
 id: 20251017-150318
 title: "Property Delegates / Делегаты свойств"
+aliases: [Property Delegates, Delegates, Property, Делегаты свойств]
 topic: kotlin
+subtopics: [delegates]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-coroutine-memory-leak-detection--kotlin--hard, q-dispatchers-unconfined--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - delegates
   - properties
+  - difficulty/medium
 ---
 # В чем особенность делегатов свойств
 

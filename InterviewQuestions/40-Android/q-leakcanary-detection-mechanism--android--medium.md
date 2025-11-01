@@ -3,15 +3,15 @@ id: 20251012-12271126
 title: "LeakCanary Detection Mechanism / Механизм обнаружения LeakCanary"
 aliases: ["LeakCanary Detection Mechanism", "Механизм обнаружения LeakCanary", "How LeakCanary Detects Memory Leaks", "Как LeakCanary обнаруживает утечки памяти"]
 topic: android
-subtopics: [performance-memory, profiling, debugging]
+subtopics: [performance-memory, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-30
-tags: [android/performance-memory, android/profiling, android/debugging, memory-leaks, leakcanary, weakreference, difficulty/medium]
+updated: 2025-10-31
+tags: [android/performance-memory, android/profiling, memory-leaks, leakcanary, weakreference, difficulty/medium]
 moc: moc-android
 related: [q-recyclerview-itemdecoration-advanced--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-koin-scope-management--dependency-injection--medium]
 sources: []

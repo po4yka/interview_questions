@@ -1,16 +1,19 @@
 ---
-id: 20251012-1227111148
-title: "Inheritance Composition Aggregation / Наследование композиция и агрегация"
-topic: architecture-patterns
+id: 20251012-122748
+title: "Inheritance Composition Aggregation / Наследование, композиция и агрегация"
+aliases: [Inheritance Composition Aggregation, Наследование, композиция и агрегация]
+topic: oop
+subtopics: [inheritance, composition, aggregation, relationships]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-oop
+related: [c-inheritance, c-composition, c-aggregation, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-13
-tags: [aggregation, composition, design-patterns, has-a, inheritance, is-a, oop, relationships]
-moc: moc-architecture-patterns
-related: [q-adapter-pattern--design-patterns--medium, q-hot-vs-cold-flows--programming-languages--medium, q-state-pattern--design-patterns--medium]
-subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
-date created: Saturday, October 4th 2025, 7:03:09 pm
-date modified: Sunday, October 26th 2025, 11:57:55 am
+updated: 2025-10-31
+tags: [oop, inheritance, composition, aggregation, relationships, design-patterns, difficulty/medium]
 ---
 
 # В Чём Различия Наследования, Композиции, Агрегации?

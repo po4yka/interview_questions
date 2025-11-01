@@ -1,15 +1,19 @@
 ---
-id: 20251012-1227111115
+id: 20251012-122711
 title: "Chain Of Responsibility / Цепочка обязанностей"
-topic: computer-science
+aliases: [Chain Of Responsibility, Цепочка обязанностей]
+topic: design-patterns
+subtopics: [behavioral-patterns, chain-of-responsibility, object-interaction]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
-related: [q-equals-hashcode-purpose--programming-languages--hard, q-java-all-classes-inherit-from-object--programming-languages--easy, q-java-object-comparison--programming-languages--easy]
+moc: moc-design-patterns
+related: [c-design-patterns, q-observer-pattern--design-patterns--medium, q-command-pattern--design-patterns--medium, q-strategy-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [behavioral-patterns, chain-of-responsibility, chain-pattern, design-patterns, gof-patterns]
-date created: Monday, October 6th 2025, 7:25:39 am
-date modified: Saturday, October 25th 2025, 8:32:54 pm
+updated: 2025-10-31
+tags: [behavioral-patterns, chain-of-responsibility, chain-pattern, design-patterns, gof-patterns, difficulty/medium]
 ---
 
 # Chain of Responsibility Pattern

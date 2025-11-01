@@ -1,18 +1,25 @@
 ---
 id: 20251016-163852
 title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
+aliases: [Type Aliases, Inline Classes, Inline Functions, Type Aliases и inline]
 topic: kotlin
+subtopics: [type-system, inline-functions, performance]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-data-class-requirements--programming-languages--medium, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - type-aliases
   - inline-classes
   - type-safety
   - performance
+  - difficulty/medium
 ---
 # Type Aliases vs Inline Classes vs Wrapper Classes
 

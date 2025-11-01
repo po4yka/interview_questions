@@ -1,16 +1,21 @@
 ---
 id: 20251016-161612
 title: "Kotlin Combine Collections / Объединение коллекций Kotlin"
+aliases: []
 topic: programming-languages
+subtopics: [operators, class-features, java-interop]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags:
-  - collections
-  - kotlin
-  - programming-languages
 moc: moc-programming-languages
 related: [q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-vs-java-class-creation--programming-languages--medium, q-channels-vs-flow--kotlin--medium]
+created: 2025-10-13
+updated: 2025-10-31
+tags:
+  - 
+  - difficulty/easy
 ---
 # Какая функция Kotlin используется для объединения двух коллекций?
 

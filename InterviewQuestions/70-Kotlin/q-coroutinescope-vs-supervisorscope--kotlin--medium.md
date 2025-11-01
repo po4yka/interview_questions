@@ -1,18 +1,25 @@
 ---
 id: 20251012-154347
 title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervisorscope"
+aliases: [CoroutineScope vs SupervisorScope, CoroutineScope против SupervisorScope]
 topic: kotlin
+subtopics: [coroutines, scope]
+question_kind: theory
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-channel-pipelines--kotlin--hard, q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
   - scope
   - error-handling
   - structured-concurrency
+  - difficulty/medium
 ---
 # coroutineScope vs supervisorScope: обработка ошибок
 

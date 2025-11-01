@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711174
-title: "What Problems Can There Be With List Items / Какие могут быть проблемы с элементами списка"
+title: "List Items Problems / Проблемы с элементами списка"
+aliases: [List Items Problems, Проблемы с элементами списка]
 topic: android
+subtopics: [ui-views, performance-memory]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [android/recyclerview, android/views, diffutil, listview, memory-management, multithreading, performance-optimization, recyclerview, ui, views, difficulty/easy]
 moc: moc-android
-related: [q-cicd-pipeline-android--android--medium, q-usecase-pattern-android--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+related: [c-recyclerview, c-performance, q-what-is-known-about-recyclerview--android--easy, q-what-is-diffutil-for--android--medium]
+created: 2025-10-13
+updated: 2025-10-31
+tags: [android/ui-views, android/performance-memory, recyclerview, listview, performance, memory, difficulty/easy]
 ---
 
 # Какие могут быть проблемы с элементами списка?

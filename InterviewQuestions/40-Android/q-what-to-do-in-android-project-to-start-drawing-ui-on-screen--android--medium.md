@@ -1,16 +1,19 @@
 ---
 id: 20251012-122711175
-title: "What To Do In Android Project To Start Drawing Ui On Screen / Что делать в Android проекте чтобы начать рисовать UI на экране"
+title: "Android UI Drawing Setup / Подготовка UI к рисованию"
+aliases: [Android UI Setup, Подготовка UI]
 topic: android
+subtopics: [activity, ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard, q-mvp-pattern--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+related: [c-activity-lifecycle, c-layouts, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
-tags:
-  - android
-date created: Sunday, October 12th 2025, 12:27:51 pm
-date modified: Thursday, October 30th 2025, 3:18:12 pm
+updated: 2025-10-31
+tags: [android/activity, android/ui-views, ui, activity, layout, setup, difficulty/medium]
 ---
 
 # What needs to be done in Android project to start drawing UI on screen?

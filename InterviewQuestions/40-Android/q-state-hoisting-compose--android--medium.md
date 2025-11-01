@@ -1,13 +1,19 @@
 ---
 id: 20251017-144953
-title: "State Hoisting Compose / Поднятие состояния в Compose"
+title: "State Hoisting in Compose / Поднятие состояния в Compose"
+aliases: [State Hoisting in Compose, Поднятие состояния в Compose]
 topic: android
+subtopics: [ui-compose, ui-state]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-separate-ui-business-logic--android--easy, q-what-is-hilt--android--medium]
 created: 2025-10-15
-tags: [jetpack-compose, state-management, architecture, best-practices, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-compose, android/ui-state, difficulty/medium]
 ---
 
 # State Hoisting в Jetpack Compose

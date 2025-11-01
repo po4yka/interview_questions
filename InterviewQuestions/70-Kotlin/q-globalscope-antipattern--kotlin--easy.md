@@ -1,30 +1,21 @@
 ---
 id: 20251012-12271111107
-title: GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope
+title: "GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope"
+aliases: [Globalscope, Antipattern]
 topic: kotlin
+subtopics: []
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: []
 status: draft
 moc: moc-kotlin
 related: [q-object-companion-object--kotlin--medium, q-test-dispatcher-types--kotlin--medium, q-kotlin-unit-singleton--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - coroutines
-  - globalscope
-  - anti-pattern
-  - lifecycle
-  - memory-leaks
+  - 
   - difficulty/easy
-language_tags:
-  - en
-  - ru
-original_language: en
-source: Kotlin Coroutines Interview Questions PDF
-subtopics:
-  - coroutines
-  - globalscope
-  - lifecycle
-  - memory-leaks
 ---
 # Question (EN)
 > Why should you avoid using GlobalScope in Android applications?

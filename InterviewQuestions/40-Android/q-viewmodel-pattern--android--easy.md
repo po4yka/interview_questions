@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711129
-title: "Viewmodel Pattern / Viewmodel Паттерн"
+title: "ViewModel Pattern / Паттерн ViewModel"
+aliases: [ViewModel Pattern, Паттерн ViewModel]
 topic: android
+subtopics: [architecture-mvvm, lifecycle]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-navigation-methods-exist-in-kotlin--programming-languages--medium, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-how-to-create-list-like-recyclerview-in-compose--android--medium]
+related: [c-mvvm-pattern, c-architecture-patterns, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
-tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, lifecycle, mvvm, platform/android, viewmodel, difficulty/easy]
+updated: 2025-10-31
+tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, viewmodel, mvvm, difficulty/easy]
 ---
 
 # Какой архитектурный паттерн реализуется благодаря ViewModel?

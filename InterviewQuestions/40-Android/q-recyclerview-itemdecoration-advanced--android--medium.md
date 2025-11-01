@@ -5,7 +5,7 @@ aliases:
   - "RecyclerView ItemDecoration Advanced"
   - "Продвинутый ItemDecoration для RecyclerView"
 topic: android
-subtopics: [ui-recyclerview, custom-drawing]
+subtopics: [ui-views, ui-graphics]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,8 +14,8 @@ status: draft
 moc: moc-android
 related: [c-itemdecoration, q-recyclerview-basics--android--easy, q-custom-drawing--android--medium]
 created: 2025-10-13
-updated: 2025-01-25
-tags: [android/ui-recyclerview, android/custom-drawing, itemdecoration, custom-drawing, ui, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, android/ui-graphics, itemdecoration, custom-drawing, ui, difficulty/medium]
 sources: [https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration]
 ---
 

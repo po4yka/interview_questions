@@ -1,13 +1,19 @@
 ---
 id: 20251012-12271197
-title: "Screenshot Snapshot Testing / Screenshot Snapshot Тестирование"
+title: "Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование"
+aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]
 topic: android
+subtopics: [testing-ui]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-kmm-production-readiness--multiplatform--hard, q-hilt-entry-points--di--medium, q-privacy-sandbox-topics-api--privacy--medium]
 created: 2025-10-15
-tags: [screenshot-testing, paparazzi, shot, ui-testing, visual-regression, difficulty/medium]
+updated: 2025-10-31
+tags: [android/testing-ui, difficulty/medium]
 ---
 
 # Screenshot and Snapshot Testing

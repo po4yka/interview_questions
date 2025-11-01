@@ -1,15 +1,19 @@
 ---
 id: 20251012-122711136
-title: "What Are Fragments For If There Is Activity / Зачем нужны Fragment если есть Activity"
+title: "Fragments vs Activity / Фрагменты vs Activity"
+aliases: [Fragments vs Activity, Фрагменты vs Activity]
 topic: android
+subtopics: [fragment, activity, ui-navigation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-websocket-implementation--networking--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-workmanager-execution-guarantee--android--medium]
+related: [c-fragments, c-activity-lifecycle, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]
 created: 2025-10-15
-tags: [activity, android, ui, difficulty/medium]
-date created: Sunday, October 12th 2025, 12:27:50 pm
-date modified: Thursday, October 30th 2025, 4:53:43 pm
+updated: 2025-10-31
+tags: [android/fragment, android/activity, android/ui-navigation, fragments, activity, difficulty/medium]
 ---
 
 # What are fragments for if there is Activity?

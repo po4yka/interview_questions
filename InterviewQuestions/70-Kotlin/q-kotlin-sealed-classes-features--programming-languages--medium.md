@@ -1,16 +1,22 @@
 ---
 id: 20251012-12271111153
-title: "Kotlin Sealed Classes Features"
-topic: computer-science
+title: "Kotlin Sealed Classes Features / Особенности sealed классов в Kotlin"
+aliases: [Kotlin Sealed Classes Features, Особенности sealed классов в Kotlin]
+topic: programming-languages
+subtopics: [sealed-classes, type-system]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-retrofit-coroutines-best-practices--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
   - programming-languages
   - sealed-classes
+  - difficulty/medium
 ---
 # В чем особенность sealed классов
 

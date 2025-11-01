@@ -1,13 +1,19 @@
 ---
 id: 20251012-12271142
-title: "Mockk Advanced Features / Продвинутые возможности MockK"
+title: "MockK Advanced Features / Продвинутые возможности MockK"
+aliases: [MockK Advanced Features, Продвинутые возможности MockK]
 topic: android
+subtopics: [testing-unit]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-mvp-pattern--android--medium, q-why-use-diffutil--android--medium, q-compositionlocal-compose--android--hard]
 created: 2025-10-15
-tags: [mockk, mocking, kotlin, unit-testing, coroutines, difficulty/medium]
+updated: 2025-10-31
+tags: [android/testing-unit, difficulty/medium]
 date created: Sunday, October 12th 2025, 12:27:49 pm
 date modified: Thursday, October 30th 2025, 3:13:53 pm
 ---

@@ -3,7 +3,7 @@ id: 20251012-1227184
 title: "How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink / Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"
 aliases: ["How To Handle The Situation Where Activity Can Open Multiple Times Due To Deeplink", "Как обработать ситуацию когда Activity может открыться несколько раз из-за deeplink"]
 topic: android
-subtopics: [ui-navigation, activity, deeplinks]
+subtopics: [ui-navigation, activity, intents-deeplinks]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android, android/ui-navigation, android/activity, android/deeplinks, difficulty/medium]
+updated: 2025-10-31
+tags: [android, android/ui-navigation, android/activity, android/intents-deeplinks, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:49:20 am
 date modified: Thursday, October 30th 2025, 12:48:37 pm
 ---

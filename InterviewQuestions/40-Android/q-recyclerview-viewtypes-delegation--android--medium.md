@@ -5,7 +5,7 @@ aliases:
   - "RecyclerView ViewTypes Delegation"
   - "Делегирование ViewTypes в RecyclerView"
 topic: android
-subtopics: [ui-recyclerview, view-types]
+subtopics: [ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,8 +14,8 @@ status: draft
 moc: moc-android
 related: [c-recyclerview-viewtypes, q-recyclerview-basics--android--easy, q-adapter-patterns--android--medium]
 created: 2025-10-13
-updated: 2025-01-25
-tags: [android/ui-recyclerview, android/view-types, adapter, view-types, design-patterns, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, adapter, view-types, design-patterns, difficulty/medium]
 sources: [https://developer.android.com/guide/topics/ui/layout/recyclerview]
 ---
 

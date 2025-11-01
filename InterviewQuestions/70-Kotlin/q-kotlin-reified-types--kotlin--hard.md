@@ -1,18 +1,25 @@
 ---
 id: 20251012-12271111150
 title: "Kotlin Reified Types / Reified типы в Kotlin"
+aliases: [Kotlin Reified Types, Reified типы в Kotlin]
 topic: kotlin
+subtopics: [generics, type-system]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-jit-compilation-definition--programming-languages--medium, q-extensions-in-java--programming-languages--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - reified
   - generics
   - type-parameters
   - inline
+  - difficulty/hard
 ---
 # Reified Type Parameters
 

@@ -1,16 +1,25 @@
 ---
 id: 20251012-154383
-title: "Object Companion Object"
+title: "Object Companion Object / Object и Companion Object"
+aliases: [Object, Companion Object, Singleton, Object Keyword, Companion]
 topic: kotlin
+subtopics: [classes, singleton]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-java-type-differences--programming-languages--medium, q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
-  - object-oriented
+  - object-keyword
+  - companion-object
   - singleton
+  - classes
+  - difficulty/medium
 ---
 # Что такое object / companion object?
 

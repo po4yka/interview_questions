@@ -1,18 +1,24 @@
 ---
 id: 20251012-154375
 title: "Kotlin Let Function / Функция let в Kotlin"
-topic: kotlin
+aliases: [Kotlin Let Function, Функция let в Kotlin]
+topic: programming-languages
+subtopics: [scope-functions, null-safety]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-conversion-functions--programming-languages--medium, q-kotlin-type-system--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
+  - programming-languages
   - let
   - null-safety
-  - programming-languages
   - scope-functions
+  - difficulty/easy
 ---
 # Для чего нужен let?
 

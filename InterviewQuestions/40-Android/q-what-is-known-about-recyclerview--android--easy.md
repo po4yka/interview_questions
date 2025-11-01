@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711161
-title: "What Is Known About Recyclerview / Что известно о RecyclerView"
+title: "RecyclerView / Компонент RecyclerView"
+aliases: [RecyclerView, Компонент RecyclerView]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-v-chyom-izmeryaetsya-proizvoditelnost-layout--programming-languages--medium, q-compose-performance-optimization--android--hard, q-workmanager-data-passing--android--medium]
+related: [c-recyclerview, c-list-adapter, q-what-is-diffutil-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
-tags: [android, android/layouts, android/recyclerview, android/views, layoutmanager, layouts, recyclerview, ui, viewholder, views, difficulty/easy]
+updated: 2025-10-31
+tags: [android/ui-views, recyclerview, layoutmanager, viewholder, ui, performance, difficulty/easy]
 ---
 
 # Что известно про RecyclerView?

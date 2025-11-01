@@ -1,18 +1,25 @@
 ---
 id: 20251012-12271111126
-title: "Kotlin Extension Functions Advanced"
+title: "Kotlin Extension Functions Advanced / Продвинутые Extension Functions в Kotlin"
+aliases: [Kotlin Extension Functions Advanced, Продвинутые Extension Functions в Kotlin]
 topic: kotlin
+subtopics: [extensions, generics, dsl]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-crossinline-keyword--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - extensions
   - receivers
   - generics
   - dsl
+  - difficulty/hard
 ---
 # Advanced Extension Functions
 

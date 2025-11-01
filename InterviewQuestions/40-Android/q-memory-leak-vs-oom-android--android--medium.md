@@ -3,7 +3,7 @@ id: 20251012-12271136
 title: "Memory Leak vs OOM / Утечка памяти vs OOM"
 aliases: ["Memory Leak vs OOM", "Утечка памяти vs OOM"]
 topic: android
-subtopics: [performance-memory, debugging, profiling]
+subtopics: [performance-memory, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-what-is-the-main-application-execution-thread--android--easy, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-coroutine-memory-leak-detection--kotlin--hard]
 sources: []
 created: 2025-10-13
-updated: 2025-10-28
-tags: [android, android/performance-memory, android/debugging, android/profiling, memory-leak, oom, leakcanary, difficulty/medium]
+updated: 2025-10-31
+tags: [android, android/performance-memory, android/profiling, memory-leak, oom, leakcanary, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:35:38 pm
 date modified: Thursday, October 30th 2025, 3:13:10 pm
 ---

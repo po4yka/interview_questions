@@ -3,7 +3,7 @@ id: 20251012-12271177
 title: "Real Time Updates Android / Обновления в реальном времени Android"
 aliases: ["Real Time Updates Android", "Обновления в реальном времени Android"]
 topic: android
-subtopics: [networking, websockets, firebase]
+subtopics: [networking-http, websockets]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [c-websockets, c-firebase-realtime, c-server-sent-events, q-networking-in-android--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android, networking, websockets, sse, firebase, fcm, real-time, difficulty/medium, android/networking]
+tags: [android, networking, websockets, sse, firebase, fcm, real-time, difficulty/medium, android/networking-http, android/websockets]
 ---
 
 # Вопрос (RU)

@@ -1,18 +1,21 @@
 ---
 id: 20251012-12271111122
 title: "Kotlin Delegation / Делегирование в Kotlin"
+aliases: []
 topic: programming-languages
+subtopics: [functions, type-system, class-features]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags:
-  - by-keyword
-  - delegates
-  - delegation
-  - kotlin
-  - programming-languages
 moc: moc-programming-languages
 related: [q-testing-coroutines-runtest--kotlin--medium, q-circuit-breaker-coroutines--kotlin--hard, q-coroutine-timeout-withtimeout--kotlin--medium]
+created: 2025-10-13
+updated: 2025-10-31
+tags:
+  - 
+  - difficulty/easy
 ---
 # Что известно о делегировании?
 

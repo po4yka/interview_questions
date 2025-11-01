@@ -1,13 +1,19 @@
 ---
 id: 20251017-150715
-title: "Recyclerview Explained / Объяснение RecyclerView"
+title: "RecyclerView Explained / Объяснение RecyclerView"
+aliases: [RecyclerView Explained, Объяснение RecyclerView]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-kmm-dependency-injection--multiplatform--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-what-does-itemdecoration-do--android--medium]
 created: 2025-10-15
-tags: [recyclerview, ui-components, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, difficulty/medium]
 ---
 
 # Что известно про RecyclerView?

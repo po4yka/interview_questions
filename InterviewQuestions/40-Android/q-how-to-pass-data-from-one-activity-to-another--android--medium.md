@@ -3,7 +3,7 @@ id: 20251012-1227188
 title: "How To Pass Data From One Activity To Another / Как передать данные из одной Activity в другую"
 aliases: [Pass Data Between Activities, Передача данных между Activity, Intent Extras, Parcelable Android]
 topic: android
-subtopics: [activity, intent, navigation]
+subtopics: [activity, intents-deeplinks, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [q-android-components-besides-activity--android--easy, q-activity-lifecycle-methods--android--medium, q-how-is-navigation-implemented--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android, android/activity, android/intent, android/navigation, activity, intent, navigation, difficulty/medium]
+updated: 2025-10-31
+tags: [android, android/activity, android/intents-deeplinks, android/ui-navigation, activity, intent, navigation, difficulty/medium]
 sources: []
 date created: Tuesday, October 28th 2025, 9:48:44 am
 date modified: Thursday, October 30th 2025, 12:49:12 pm

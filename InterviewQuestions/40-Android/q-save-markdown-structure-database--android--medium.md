@@ -1,13 +1,19 @@
 ---
 id: 20251012-12271196
-title: "Save Markdown Structure Database / Сохранение структуры Markdown в базе данных"
+title: "Save Markdown Structure To Database / Сохранение структуры Markdown в базе данных"
+aliases: [Save Markdown Structure To Database, Сохранение структуры Markdown в базе данных]
 topic: android
+subtopics: [room]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-database-encryption-android--android--medium, q-mvi-handle-one-time-events--android--hard, q-fragments-vs-activity--android--medium]
 created: 2025-10-15
-tags: [android/data-storage, data-storage, database, markdown, room, serialization, storage, difficulty/medium]
+updated: 2025-10-31
+tags: [android/room, difficulty/medium]
 ---
 
 # Как бы ты сохранил структуру Markdown в базу данных/на диск?

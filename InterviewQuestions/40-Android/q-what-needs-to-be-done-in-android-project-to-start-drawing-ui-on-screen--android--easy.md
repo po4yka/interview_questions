@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711173
-title: "What Needs To Be Done In Android Project To Start Drawing Ui On Screen / Что нужно сделать в Android проекте чтобы начать рисовать UI на экране"
+title: "UI Setup in Android Project / Настройка UI в проекте Android"
+aliases: [UI Setup, Настройка UI]
 topic: android
-difficulty: medium
+subtopics: [activity, ui-views]
+question_kind: theory
+difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [XML layout, AndroidManifest.xml, android, ui, activity, lifecycle, difficulty/medium]
 moc: moc-android
-related: [q-android-security-practices-checklist--android--medium, q-app-startup-library--android--medium, q-view-composition-strategy-compose--android--medium]
+related: [c-activity-lifecycle, c-layouts, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+created: 2025-10-13
+updated: 2025-10-31
+tags: [android/activity, android/ui-views, ui, activity, layout, manifest, difficulty/easy]
 ---
 
 # What needs to be done in Android project to start drawing UI on screen?

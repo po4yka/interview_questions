@@ -1,13 +1,19 @@
 ---
 id: 20251017-114255
-title: "How Animations Work In Recyclerview / Как работают анимации в RecyclerView"
+title: "How Animations Work In RecyclerView / Как работают анимации в RecyclerView"
+aliases: [How Animations Work In RecyclerView, Как работают анимации в RecyclerView]
 topic: android
+subtopics: [ui-animation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-broadcastreceiver-contentprovider--android--easy, q-save-data-outside-fragment--android--medium, q-spannable-text-styling--android--medium]
 created: 2025-10-15
-tags: [android/animations, android/recyclerview, android/ui, animations, difficulty/medium, recyclerview, ui]
+updated: 2025-10-31
+tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Saturday, October 25th 2025, 4:40:18 pm
 ---

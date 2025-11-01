@@ -1,12 +1,18 @@
 ---
 id: 20251012-154388
-title: "Sequences Vs Collections Performance"
+title: "Sequences Vs Collections Performance / Sequences vs Collections Performance"
+aliases: [Sequences, Collections Performance, Lazy Evaluation, Performance Comparison]
 topic: kotlin
+subtopics: [collections, performance]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-callsuper-annotation--kotlin--medium, q-kotlin-native--kotlin--hard, q-kotlin-constructor-types--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - sequences
@@ -14,6 +20,7 @@ tags:
   - performance
   - lazy-evaluation
   - optimization
+  - difficulty/medium
 ---
 # Sequences vs Collections Performance
 

@@ -1,12 +1,18 @@
 ---
 id: 20251012-1227111199
-title: Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин
+title: "Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин"
+aliases: [Coroutine Cancellation, Механизмы отмены корутин]
 topic: kotlin
+subtopics: [coroutines, cancellation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-structured-concurrency-kotlin--kotlin--medium, q-data-sealed-usage--programming-languages--medium, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -15,9 +21,6 @@ tags:
   - isactive
   - cancellationexception
   - difficulty/medium
-language_tags:
-  - en
-  - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
 subtopics:

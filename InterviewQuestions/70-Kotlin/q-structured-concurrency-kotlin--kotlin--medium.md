@@ -1,12 +1,18 @@
 ---
 id: 20251012-12271111161
-title: Structured Concurrency in Kotlin Coroutines
+title: "Structured Concurrency in Kotlin Coroutines / Структурированная параллельность"
+aliases: [Structured Concurrency, Coroutine Scope, Lifecycle, Структурированная параллельность]
 topic: kotlin
+subtopics: [coroutines, structured-concurrency]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-debugging-coroutines-techniques--kotlin--medium, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-default-inheritance-type--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -15,9 +21,6 @@ tags:
   - lifecycle
   - memory-leaks
   - difficulty/medium
-language_tags:
-  - en
-  - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
 subtopics:

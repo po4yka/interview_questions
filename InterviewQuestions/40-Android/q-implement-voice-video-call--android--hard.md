@@ -6,7 +6,7 @@ aliases: [Voice Video Call Android, WebRTC Android, Голосовой виде�
 # Classification
 topic: android
 subtopics: [media, networking-http, websockets]
-question_kind: implementation
+question_kind: coding
 difficulty: hard
 
 # Language & provenance
@@ -21,7 +21,7 @@ related: [c-webrtc, c-websockets, q-http-protocols-comparison--android--medium, 
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-28
+updated: 2025-10-31
 
 tags: [android/media, android/networking-http, android/websockets, difficulty/hard]
 date created: Tuesday, October 28th 2025, 9:11:50 pm

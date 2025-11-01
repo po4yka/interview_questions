@@ -1,15 +1,19 @@
 ---
-id: 20251012-1227111134
-title: "Facade Pattern / Facade Паттерн"
-topic: computer-science
+id: 20251012-122734
+title: "Facade Pattern / Паттерн фасад"
+aliases: [Facade Pattern, Паттерн фасад]
+topic: design-patterns
+subtopics: [structural-patterns, facade, simplification]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
-related: [q-builder-pattern--design-patterns--medium, q-observer-pattern--design-patterns--medium, q-prototype-pattern--design-patterns--medium]
+moc: moc-design-patterns
+related: [c-design-patterns, q-adapter-pattern--design-patterns--medium, q-decorator-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [design-patterns, facade, gof-patterns, structural-patterns]
-date created: Monday, October 6th 2025, 7:22:08 am
-date modified: Sunday, October 26th 2025, 11:57:41 am
+updated: 2025-10-31
+tags: [design-patterns, gof-patterns, structural-patterns, facade, difficulty/medium]
 ---
 
 # Facade Pattern

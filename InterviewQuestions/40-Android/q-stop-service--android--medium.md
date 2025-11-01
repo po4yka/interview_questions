@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711112
-title: "Stop Service / Остановка Service"
+title: "How To Stop Service / Остановка Service"
+aliases: [How To Stop Service, Остановка Service]
 topic: android
+subtopics: [service]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-async-operations-android--android--medium, q-derived-state-snapshot-system--jetpack-compose--hard, q-how-to-fix-a-bad-element-layout--android--easy]
 created: 2025-10-15
-tags: [android/services, bound-service, service-lifecycle, services, started-service, difficulty/medium]
+updated: 2025-10-31
+tags: [android/service, difficulty/medium]
 ---
 
 # Как остановить сервис?

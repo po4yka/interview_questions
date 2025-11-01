@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227174
 title: "How To Create Animations In Android / Как создавать анимации в Android"
+aliases: [How To Create Animations In Android, Как создавать анимации в Android]
 topic: android
+subtopics: [ui-animation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-app-start-types-android--android--medium, q-data-sync-unstable-network--android--hard, q-stable-classes-compose--android--hard]
 created: 2025-10-15
-tags: [android, android/animations, android/ui, animations, difficulty/medium, MotionLayout, Property Animations, ui, View Animations]
+updated: 2025-10-31
+tags: [android/ui-animation, animations, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:39:55 pm
 ---

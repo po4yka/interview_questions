@@ -1,14 +1,19 @@
 ---
 id: 20251012-122711134
-title: "What Are Activity Lifecycle Methods And How Do They Work / What Are Activity Lifecycle Methods и How Do They Work"
+title: "Activity Lifecycle Methods / Методы жизненного цикла Activity"
+aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
 topic: android
+subtopics: [activity, lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-hilt--android--medium, q-accessibility-text-scaling--accessibility--medium, q-test-doubles-dependency-injection--testing--medium]
+related: [c-activity-lifecycle, c-fragment-lifecycle, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard]
 created: 2025-10-15
-tags:
-  - android
+updated: 2025-10-31
+tags: [android/activity, android/lifecycle, lifecycle, onCreate, onStart, onResume, difficulty/medium]
 ---
 
 # What are Activity lifecycle methods and how do they work?

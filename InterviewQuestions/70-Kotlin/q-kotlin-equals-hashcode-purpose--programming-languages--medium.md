@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111125
 title: "Kotlin Equals Hashcode Purpose / Назначение equals и hashCode в Kotlin"
-topic: computer-science
+aliases: [Kotlin Equals Hashcode Purpose, Назначение equals и hashCode в Kotlin]
+topic: programming-languages
+subtopics: [type-system, collections, null-safety]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-semaphore-rate-limiting--kotlin--medium, q-launch-vs-async--kotlin--easy, q-backpressure-in-kotlin-flow--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - collections
   - equals
   - hashcode
-  - kotlin
   - object-comparison
-  - programming-languages
+  - difficulty/medium
 ---
 # Зачем нужны методы equals и hashcode?
 

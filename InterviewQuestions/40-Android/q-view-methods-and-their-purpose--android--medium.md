@@ -1,13 +1,19 @@
 ---
 id: 20251016-162730
-title: "View Methods And Their Purpose"
+title: "View Methods And Their Purpose / Методы View и их назначение"
+aliases: [View Methods, Методы View]
 topic: android
+subtopics: [ui-views, lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-implement-voice-video-call--android--hard, q-what-is-viewmodel--android--medium, q-compose-modifier-order-performance--jetpack-compose--medium]
+related: [c-views, c-view-lifecycle, q-what-methods-redraw-views--android--medium, q-viewgroup-vs-view-differences--android--easy]
 created: 2025-10-15
-tags: [android/ui, android/view, ui, ui components, view, view lifecycle, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, android/lifecycle, view, lifecycle, drawing, rendering, difficulty/medium]
 ---
 
 # Какие методы есть у view и что каждый из них делает?

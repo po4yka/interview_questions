@@ -1,18 +1,24 @@
 ---
 id: 20251012-12271111152
 title: "Kotlin Sam Conversions / SAM конверсии в Kotlin"
-topic: computer-science
+aliases: [Kotlin Sam Conversions, SAM конверсии в Kotlin]
+topic: programming-languages
+subtopics: [type-system, functional-programming]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-extensions-overview--programming-languages--medium, q-infix-functions--kotlin--medium, q-kotlin-override-keyword--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
+  - programming-languages
   - lambda
   - lambda-functions
-  - programming-languages
   - sam
+  - difficulty/medium
 ---
 # Как работают SAM (Single Abstract Method)?
 

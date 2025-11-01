@@ -1,17 +1,23 @@
 ---
 id: 20251012-12271111127
 title: "Kotlin Extensions / Расширения Kotlin"
-topic: computer-science
+aliases: [Kotlin Extensions, Расширения Kotlin]
+topic: programming-languages
+subtopics: [extensions, type-system]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-class-initializers--programming-languages--medium, q-flow-basics--kotlin--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - extension-functions
   - extensions
-  - kotlin
-  - programming-languages
+  - difficulty/easy
 ---
 # Что такое Extensions?
 

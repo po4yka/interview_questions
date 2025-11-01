@@ -1,13 +1,19 @@
 ---
 id: 20251012-12271107
-title: "Integration Testing Strategies / Integration Тестирование Strategies"
-topic: testing
+title: "Integration Testing Strategies / Стратегии интеграционного тестирования"
+aliases: [Integration Testing Strategies, Стратегии интеграционного тестирования]
+topic: android
+subtopics: [testing-instrumented]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-android-manifest-file--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium, q-react-native-comparison--multiplatform--medium]
 created: 2025-10-15
-tags: [architecture, difficulty/medium, integration-testing, strategy]
+updated: 2025-10-31
+tags: [android/testing-instrumented, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:11:03 pm
 ---

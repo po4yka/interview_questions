@@ -1,12 +1,18 @@
 ---
 id: 20251012-154392
 title: "Variance Type Projections / Вариантность и проекции типов"
+aliases: [Variance, Type Projections, Covariance, Contravariance, Variance типов]
 topic: kotlin
+subtopics: [generics, type-system]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-constructor-keyword--programming-languages--easy, q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - generics
@@ -14,6 +20,8 @@ tags:
   - type-system
   - projections
   - covariance
+  - contravariance
+  - difficulty/hard
 ---
 # Variance and Type Projections in Kotlin
 

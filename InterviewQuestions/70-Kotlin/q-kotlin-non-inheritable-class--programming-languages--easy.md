@@ -1,21 +1,27 @@
 ---
 id: 20251012-12271111142
 title: "Kotlin Non Inheritable Class / Не наследуемый класс в Kotlin"
-topic: computer-science
+aliases: [Kotlin Non Inheritable Class, Не наследуемый класс в Kotlin]
+topic: programming-languages
+subtopics: [type-system, inheritance]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-generics--kotlin--hard, q-common-coroutine-mistakes--kotlin--medium, q-kotlin-coroutines-overview--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - class-design
   - classes
   - final
   - inheritance
   - keywords
-  - kotlin
   - open
-  - programming-languages
+  - difficulty/easy
 ---
 # Как в Kotlin определить класс, который не может быть унаследован?
 

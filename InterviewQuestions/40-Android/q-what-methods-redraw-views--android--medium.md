@@ -1,13 +1,19 @@
 ---
 id: 20251016-163003
-title: "What Methods Redraw Views / Какие методы перерисовывают View"
+title: "View Redraw Methods / Методы перерисовки View"
+aliases: [View Redraw Methods, Методы перерисовки View]
 topic: android
+subtopics: [ui-views, lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-ui-testing-advanced--testing--hard, q-compose-canvas-graphics--jetpack-compose--hard, q-what-navigation-methods-do-you-know--android--medium]
+related: [c-view-rendering, c-view-lifecycle, q-view-methods-and-their-purpose--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
-tags: [android/views, custom-views, view-rendering, invalidate, requestLayout, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, android/lifecycle, view-rendering, invalidate, requestLayout, drawing, difficulty/medium]
 ---
 
 # What methods are used to redraw Views?

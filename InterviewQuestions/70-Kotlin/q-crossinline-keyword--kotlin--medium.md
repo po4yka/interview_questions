@@ -1,17 +1,24 @@
 ---
 id: 20251012-154348
 title: "Crossinline Keyword / Ключевое слово crossinline"
+aliases: [Crossinline Keyword, Crossinline ключевое слово]
 topic: kotlin
+subtopics: [inline-functions]
+question_kind: theory
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-sealed-vs-abstract-classes--programming-languages--medium, q-star-projection-vs-any-generics--kotlin--hard, q-data-sealed-classes-definition--programming-languages--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - inline-functions
   - lambda
   - non-local-returns
+  - difficulty/medium
 ---
 # Зачем нужен crossinline?
 

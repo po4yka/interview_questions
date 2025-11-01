@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711132
-title: "Webp Image Format Android / Формат изображений WebP в Android"
+title: "WebP Image Format Android / Формат изображений WebP в Android"
+aliases: [WebP Image Format, Формат WebP]
 topic: android
+subtopics: [performance-memory, files-media]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-are-services-for--android--easy, q-view-fundamentals--android--easy, q-sparsearray-optimization--android--medium]
+related: [c-image-formats, c-performance, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
-tags: [webp, optimization, images, performance, difficulty/easy]
+updated: 2025-10-31
+tags: [android/performance-memory, android/files-media, webp, optimization, images, difficulty/easy]
 ---
 
 # WebP - самый экономичный формат изображений

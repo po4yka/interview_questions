@@ -1,15 +1,19 @@
 ---
 id: 20251012-122711178
-title: "What Unifies Android Components / Что объединяет компоненты Android"
+title: "Unified Android Components / Объединение компонентов Android"
+aliases: [Unified Components, Объединение компонентов]
 topic: android
+subtopics: [activity, service, fragment]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-navigation-is-implemented-in-android--android--medium, q-architecture-components-libraries--android--easy, q-recyclerview-async-list-differ--recyclerview--medium]
+related: [c-android-components, c-context, c-intent, q-what-each-android-component-represents--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
-tags: [android-components, android/android-components, android/context, android/manifest, components, context, intent, manifest, difficulty/easy]
-date created: Sunday, October 12th 2025, 12:27:49 pm
-date modified: Thursday, October 30th 2025, 3:18:10 pm
+updated: 2025-10-31
+tags: [android/activity, android/service, android/fragment, components, context, intent, difficulty/easy]
 ---
 
 # What unifies Android components?

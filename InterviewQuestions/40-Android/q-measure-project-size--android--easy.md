@@ -3,7 +3,7 @@ id: 20251016-162851
 title: "Measure Project Size / Измерение размера проекта"
 aliases: ["Measure Project Size", "Измерение размера проекта"]
 topic: android
-subtopics: [project-structure]
+subtopics: [gradle, architecture-modularization]
 question_kind: theory
 difficulty: easy
 original_language: ru
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-how-navigation-is-implemented-in-android--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/project-structure, project-metrics, codebase-analysis, difficulty/easy]
+tags: [android/gradle, android/architecture-modularization, project-metrics, codebase-analysis, difficulty/easy]
 date created: Tuesday, October 28th 2025, 9:35:54 pm
 date modified: Thursday, October 30th 2025, 3:13:08 pm
 ---

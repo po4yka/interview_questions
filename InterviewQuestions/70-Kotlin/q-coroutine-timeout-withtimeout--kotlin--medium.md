@@ -1,15 +1,20 @@
 ---
 id: "20251012-150006"
-title: "How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull"
+title: "How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull / Таймауты в корутинах"
+aliases: [Coroutine Timeouts, Таймауты в корутинах]
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
+question_kind: theory
 status: draft
 created: "2025-10-12"
+updated: "2025-10-31"
 tags: ["kotlin", "coroutines", "timeout", "cancellation", "error-handling", "difficulty/medium"]
 description: "Comprehensive guide to timeout handling in Kotlin coroutines, covering withTimeout, withTimeoutOrNull, TimeoutCancellationException, and practical patterns"
 moc: moc-kotlin
 related: [q-nested-vs-inner-class--kotlin--medium, q-class-initialization-order--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
-subtopics: ["coroutines", "timeout", "cancellation", "error-handling"]
+subtopics: [coroutines, timeout]
 ---
 # How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull
 

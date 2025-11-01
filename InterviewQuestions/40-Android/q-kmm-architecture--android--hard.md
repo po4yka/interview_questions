@@ -3,7 +3,7 @@ id: 20251012-12271118
 title: "KMM Architecture / Архитектура KMM"
 aliases: ["KMM Architecture", "Архитектура KMM", "Kotlin Multiplatform Mobile"]
 topic: android
-subtopics: [architecture-patterns, kmm, multiplatform]
+subtopics: [kmp, architecture-clean, di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-clean-architecture-android--android--hard, q-mvi-architecture--android--hard, q-offline-first-architecture--android--hard]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android, android/architecture-patterns, kmm, kotlin, multiplatform, difficulty/hard]
+tags: [android, android/kmp, android/architecture-clean, android/di-hilt, kmm, kotlin, multiplatform, difficulty/hard]
 date created: Tuesday, October 28th 2025, 9:23:29 pm
 date modified: Thursday, October 30th 2025, 3:11:36 pm
 ---

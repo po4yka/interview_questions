@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227173
-title: "How To Connect Broadcastreceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений"
+title: "How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений"
+aliases: [How To Connect BroadcastReceiver So It Can Receive Messages, Как подключить BroadcastReceiver для получения сообщений]
 topic: android
+subtopics: [service]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-memory-leak-vs-oom-android--android--medium, q-state-hoisting-compose--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
 created: 2025-10-15
-tags: [android]
+updated: 2025-10-31
+tags: [android/service, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:39:57 pm
 ---

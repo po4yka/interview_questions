@@ -1,21 +1,27 @@
 ---
 id: 20251016-172627
 title: "Kotlin Override Keyword / Ключевое слово override в Kotlin"
-topic: computer-science
+aliases: [Kotlin Override Keyword, Ключевое слово override в Kotlin]
+topic: programming-languages
+subtopics: [type-system, inheritance]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-contracts-smart-casts--kotlin--hard, q-equality-operators-kotlin--kotlin--easy, q-coroutine-job-lifecycle--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - abstract
   - inheritance
   - keywords
-  - kotlin
   - open
   - override
   - polymorphism
-  - programming-languages
+  - difficulty/easy
 ---
 # Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?
 

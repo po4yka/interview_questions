@@ -3,7 +3,7 @@ id: 20251012-12271104
 title: "In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях может понадобиться commitAllowingStateLoss"
 aliases: [commitAllowingStateLoss, commitAllowingStateLoss vs commit, Fragment state loss, commitAllowingStateLoss в Android]
 topic: android
-subtopics: [fragments, lifecycle]
+subtopics: [fragment, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-fragments-and-activity-relationship--android--hard, q-how-can-data-be-saved-beyond-the-fragment-scope--android--medium, q-why-diffutil-needed--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/fragments, android/lifecycle, fragments, lifecycle, difficulty/hard]
+tags: [android/fragment, android/lifecycle, fragments, lifecycle, difficulty/hard]
 date created: Tuesday, October 28th 2025, 9:11:11 pm
 date modified: Thursday, October 30th 2025, 3:10:27 pm
 ---

@@ -1,12 +1,18 @@
 ---
 id: 20251017-150235
 title: "Atomic Vs Synchronized / Atomic против Synchronized"
+aliases: [Atomic vs Synchronized, Atomic против Synchronized]
 topic: kotlin
+subtopics: [concurrency, thread-safety]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-unit-singleton--programming-languages--easy, q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-basics--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - java
@@ -14,6 +20,7 @@ tags:
   - thread-safety
   - atomic
   - synchronized
+  - difficulty/medium
 ---
 # Atomic vs Synchronized: когда использовать
 

@@ -1,11 +1,17 @@
 ---
 id: 20251012-122711111
-title: "Stack Heap Memory Multiple Threads / Stack и Heap память для нескольких потоков"
+title: "Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких потоков"
+aliases: [Stack vs Heap Memory In Multithreading, Stack и Heap память для нескольких потоков]
 topic: android
+subtopics: [threads-sync, performance-memory]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-tags: [android/memory-management, heap, memory-management, multithreading, stack, threading, difficulty/medium]
+updated: 2025-10-31
+tags: [android/threads-sync, android/performance-memory, difficulty/medium]
 moc: moc-android
 related: [q-accessibility-testing--accessibility--medium, q-compose-modifier-system--android--medium, q-background-tasks-decision-guide--android--medium]
 ---

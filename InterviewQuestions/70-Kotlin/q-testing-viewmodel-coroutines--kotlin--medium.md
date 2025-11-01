@@ -11,7 +11,7 @@ subtopics:
   - coroutines
   - unit-testing
   - stateflow
-question_kind: implementation
+question_kind: coding
 difficulty: medium
 
 # Language & provenance
@@ -27,7 +27,7 @@ related: [q-testing-viewmodels-coroutines--kotlin--medium, q-lifecycle-scopes-vi
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 
 tags: [kotlin, testing, viewmodel, coroutines, unit-testing, stateflow, turbine, difficulty/medium]
 ---

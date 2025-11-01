@@ -1,14 +1,19 @@
 ---
 id: 20251012-1227111181
-title: "Solid Principles / Принципы SOLID"
-topic: architecture-patterns
+title: "SOLID Principles / Принципы SOLID"
+aliases: [SOLID Principles, Принципы SOLID]
+topic: software-design
+subtopics: [design-principles, oop, code-quality]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [architecture, design-principles, dip, isp, lsp, ocp, oop, software-design, solid, srp]
-moc: moc-architecture-patterns
+moc: moc-software-design
 related: [q-database-fundamentals--computer-science--hard, q-oop-principles-deep-dive--computer-science--medium, q-where-to-call-suspend-functions--programming-languages--medium]
-subtopics: ["architecture", "best-practices", "design-principles"]
+created: 2025-10-13
+updated: 2025-10-31
+tags: [architecture, design-principles, dip, isp, lsp, ocp, oop, software-design, solid, srp, difficulty/medium]
 date created: Saturday, October 4th 2025, 6:57:44 pm
 date modified: Sunday, October 26th 2025, 1:39:49 pm
 ---

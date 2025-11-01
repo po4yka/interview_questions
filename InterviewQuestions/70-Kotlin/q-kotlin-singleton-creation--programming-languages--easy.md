@@ -1,14 +1,23 @@
 ---
 id: 20251012-154376
 title: "Kotlin Singleton Creation / Создание синглтона в Kotlin"
-topic: kotlin
+aliases: [Kotlin Singleton Creation, Создание синглтона в Kotlin]
+topic: programming-languages
+subtopics: [type-system, initialization]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-coroutine-job-lifecycle--kotlin--medium, q-suspend-functions-basics--kotlin--easy, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - programming-languages
+  - singleton
+  - design-patterns
+  - difficulty/easy
 ---
 # How to create a singleton in Kotlin?
 

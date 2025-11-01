@@ -1,15 +1,19 @@
 ---
 id: 20251016-123804
 title: "What makes Flow a cold stream?"
+aliases: [Flow, Cold, Flow, Fundamentals]
 topic: kotlin
+subtopics: ["coroutines", "flow", "cold-streams", "basics"]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "coroutines", "difficulty/medium"]
-description: "Comprehensive guide to What makes Flow a cold stream? in Kotlin coroutines"
 moc: moc-kotlin
 related: [q-kotlin-lambda-expressions--kotlin--medium, q-sequences-vs-collections-performance--kotlin--medium, q-kotlin-init-block--kotlin--easy]
-subtopics: ["coroutines", "flow", "cold-streams", "basics"]
+created: 2025-10-12
+updated: 2025-10-31
+tags: ["kotlin", "coroutines", "difficulty/medium"]
 ---
 # What makes Flow a cold stream?
 

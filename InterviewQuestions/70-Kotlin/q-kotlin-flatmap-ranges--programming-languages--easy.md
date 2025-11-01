@@ -1,18 +1,24 @@
 ---
 id: 20251012-12271111131
 title: "Kotlin Flatmap Ranges / flatMap и диапазоны в Kotlin"
-topic: computer-science
+aliases: [Kotlin Flatmap Ranges, flatMap и диапазоны в Kotlin]
+topic: programming-languages
+subtopics: [collections, functional-programming]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-inline-function-limitations--kotlin--medium, q-interface-properties--programming-languages--medium, q-retry-exponential-backoff-flow--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - collections
   - flatMap
-  - kotlin
-  - programming-languages
   - ranges
+  - difficulty/easy
 ---
 # Какой результат выполнения выражения val result = (1..3).flatMap { listOf(it, it * 2) }?
 

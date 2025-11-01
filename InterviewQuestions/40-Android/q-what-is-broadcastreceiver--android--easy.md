@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711157
-title: "What Is Broadcastreceiver / Что такое BroadcastReceiver"
+title: "BroadcastReceiver / Компонент BroadcastReceiver"
+aliases: [BroadcastReceiver, Компонент BroadcastReceiver]
 topic: android
+subtopics: [service]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-rxjava-pagination-recyclerview--android--medium, q-strictmode-debugging--android--medium, q-custom-view-lifecycle--custom-views--medium]
+related: [c-broadcast-receiver, c-intent, q-what-each-android-component-represents--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
-tags: [android-components, broadcast-receiver, system-events, intent, difficulty/easy]
+updated: 2025-10-31
+tags: [android/service, broadcast-receiver, system-events, intent, components, difficulty/easy]
 ---
 
 # Question (EN)

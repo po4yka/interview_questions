@@ -1,20 +1,19 @@
 ---
 id: 20251017-144930
 title: Tasks and Back Stack / Задачи и стек возврата
+aliases: [Tasks and Back Stack, Задачи и стек возврата]
 topic: android
+subtopics: [activity, ui-navigation, lifecycle]
+question_kind: theory
 difficulty: medium
-status: draft
-created: 2025-10-15
-tags: [tasks, back-stack, navigation, activity, launch-mode, difficulty/medium, android/ui-navigation, android/lifecycle]
-language_tags: [tasks, back-stack, navigation, activity, launch-mode, difficulty/medium, android/ui-navigation, android/lifecycle]
-moc: moc-android
-related: [q-recyclerview-itemdecoration-advanced--android--medium, q-database-encryption-android--android--medium, q-what-to-put-in-state-for-initial-list--android--easy]
 original_language: en
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
-subtopics:
-  - activity
-  - ui-navigation
-  - lifecycle
+language_tags: [en, ru]
+status: draft
+moc: moc-android
+related: [c-activity-lifecycle, c-navigation, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]
+created: 2025-10-15
+updated: 2025-10-31
+tags: [android/activity, android/ui-navigation, android/lifecycle, tasks, back-stack, launch-mode, difficulty/medium]
 ---
 
 # Tasks and Back Stack / Задачи и стек возврата

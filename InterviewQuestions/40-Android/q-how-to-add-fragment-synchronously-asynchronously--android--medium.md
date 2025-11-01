@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227167
-title: "How To Add Fragment Synchronously Asynchronously / Как добавить Fragment синхронно и асинхронно"
+title: "How To Add Fragment Synchronously/Asynchronously / Как добавить Fragment синхронно и асинхронно"
+aliases: [How To Add Fragment Synchronously Asynchronously, Как добавить Fragment синхронно и асинхронно]
 topic: android
+subtopics: [fragment]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-how-does-jetpackcompose-work--android--medium, q-play-app-signing--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 created: 2025-10-15
-tags: [difficulty/medium, fragment, fragment-transaction]
+updated: 2025-10-31
+tags: [android/fragment, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:40:04 pm
 ---

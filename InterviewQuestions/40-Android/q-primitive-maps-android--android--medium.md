@@ -3,7 +3,7 @@ id: 20251016-123513
 title: "Primitive Maps Android / Примитивные Map в Android"
 aliases: ["Primitive Maps Android", "Примитивные Map в Android", "SparseArray", "SparseIntArray"]
 topic: android
-subtopics: [performance, collections, memory-optimization]
+subtopics: [performance-memory]
 question_kind: theory
 difficulty: medium
 original_language: ru
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-where-is-composition-created--android--medium, q-reduce-apk-size-techniques--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/performance, android/collections, performance, collections, memory-optimization, difficulty/medium]
+updated: 2025-10-31
+tags: [android/performance-memory, performance, collections, memory-optimization, difficulty/medium]
 ---
 
 # Вопрос (RU)

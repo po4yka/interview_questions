@@ -1,19 +1,21 @@
 ---
 id: 20251012-154370
 title: "Kotlin Contracts Smart Casts / Контракты и smart casts в Kotlin"
+aliases: [Kotlin, Contracts, Smart, Casts]
 topic: kotlin
+subtopics: [flow, type-system, coroutines]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-delegation-by-restriction--programming-languages--medium, q-coroutine-cancellation-cooperation--kotlin--medium, q-flow-operators-deep-dive--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - contracts
-  - smart-casts
-  - type-system
-  - advanced
-  - compiler
+  - 
+  - difficulty/hard
 ---
 # Kotlin Contracts and Smart Casts
 

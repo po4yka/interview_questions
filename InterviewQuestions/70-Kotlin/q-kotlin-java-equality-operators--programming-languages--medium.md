@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111138
 title: "Kotlin Java Equality Operators / Операторы равенства Kotlin и Java"
-topic: computer-science
+aliases: [Kotlin Java Equality Operators, Операторы равенства Kotlin и Java]
+topic: programming-languages
+subtopics: [type-system, operators]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-partition-function--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy, q-kotlin-non-inheritable-class--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - comparison
   - equality
   - java
-  - kotlin
   - operators
-  - programming-languages
+  - difficulty/medium
 ---
 # Чем отличаются двойное равно в Java и Kotlin?
 

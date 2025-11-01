@@ -3,7 +3,7 @@ id: 20251012-122711190
 title: "Why Abandon MVP / Почему отказаться от MVP"
 aliases: [Why Abandon MVP, Почему отказаться от MVP, MVP problems, Проблемы MVP]
 topic: android
-subtopics: [architecture-mvp, architecture-mvvm, architecture-mvi]
+subtopics: [architecture-mvvm]
 question_kind: theory
 difficulty: easy
 original_language: ru
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [c-mvvm-pattern, q-mvvm-vs-mvp-differences--android--medium, q-why-separate-ui-and-business-logic--android--easy, q-android-architectural-patterns--android--medium, q-mvp-pattern--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
-tags: [android/architecture-mvp, android/architecture-mvvm, android/architecture-mvi, architecture-patterns, difficulty/easy]
+updated: 2025-10-31
+tags: [android/architecture-mvvm, architecture-patterns, mvp, mvvm, mvi, difficulty/easy]
 sources: [Android Architecture Guide, Android Developers Blog]
 ---
 

@@ -6,7 +6,7 @@ aliases: []
 # Classification
 topic: android
 subtopics: [cache-offline, files-media, performance-memory]
-question_kind: explanation
+question_kind: theory
 difficulty: medium
 
 # Language & provenance
@@ -22,7 +22,7 @@ related: [bitmap-handling, caching, glide, memory-optimization]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-10-31
 
 tags: [android/cache-offline, android/files-media, android/performance-memory, difficulty/medium, en, ru]
 date created: Saturday, October 25th 2025, 1:26:31 pm

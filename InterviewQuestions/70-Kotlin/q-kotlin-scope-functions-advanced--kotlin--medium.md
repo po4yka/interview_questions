@@ -1,12 +1,18 @@
 ---
 id: 20251016-162536
-title: "Kotlin Scope Functions Advanced"
+title: "Kotlin Scope Functions Advanced / Продвинутые Scope Functions в Kotlin"
+aliases: [Kotlin Scope Functions Advanced, Продвинутые Scope Functions в Kotlin]
 topic: kotlin
+subtopics: [scope-functions, functional-programming]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-flow-performance--kotlin--hard, q-kotlin-null-safety--programming-languages--medium, q-kotlin-sam-conversions--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - scope-functions
@@ -15,6 +21,7 @@ tags:
   - apply
   - with
   - also
+  - difficulty/medium
 ---
 # Advanced Scope Functions Usage
 

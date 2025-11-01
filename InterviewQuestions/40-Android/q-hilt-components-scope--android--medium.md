@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227150
 title: "Hilt Components Scope / Компоненты и скоупы Hilt"
+aliases: [Hilt Components Scope, Компоненты и скоупы Hilt]
 topic: android
+subtopics: [di-hilt]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-android-security-best-practices--android--medium, q-cicd-pipeline-setup--devops--medium, q-room-library-definition--android--easy]
 created: 2025-10-15
-tags: [android/dependency-injection, components, dagger, dependency-injection, difficulty/medium, hilt, scope]
+updated: 2025-10-31
+tags: [android/di-hilt, dependency-injection, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:43:45 pm
 ---

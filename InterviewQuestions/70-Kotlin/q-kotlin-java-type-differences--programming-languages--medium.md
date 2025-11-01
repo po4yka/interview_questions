@@ -1,22 +1,27 @@
 ---
 id: 20251017-104927
 title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"
-topic: computer-science
+aliases: [Kotlin Java Type Differences, Различия типов Kotlin и Java]
+topic: programming-languages
+subtopics: [type-system, null-safety]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-static-variable--programming-languages--easy, q-executor-service-java--java--medium, q-kotlin-constructor-types--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - collections
   - comparison
   - java
-  - kotlin
   - null-safety
-  - programming-languages
   - type-inference
   - type-system
-  - types
+  - difficulty/medium
 ---
 # Чем типы в Kotlin отличаются от типов в Java
 

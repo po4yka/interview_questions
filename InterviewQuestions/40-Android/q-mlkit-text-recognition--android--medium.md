@@ -3,7 +3,7 @@ id: 20251012-12271141
 title: "ML Kit Text Recognition / Распознавание текста ML Kit"
 aliases: ["ML Kit Text Recognition", "Распознавание текста ML Kit", "OCR Android", "MLKit OCR"]
 topic: android
-subtopics: [camera, device-features]
+subtopics: [camera, media]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-camerax-integration--android--medium, q-background-execution--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
-tags: [android/camera, android/device-features, mlkit, ocr, text-recognition, image-processing, difficulty/medium]
+updated: 2025-10-31
+tags: [android/camera, android/media, mlkit, ocr, text-recognition, image-processing, difficulty/medium]
 ---
 
 # Вопрос (RU)

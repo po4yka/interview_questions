@@ -1,20 +1,26 @@
 ---
 id: 20251012-12271111143
-title: "Kotlin Null Safety"
-topic: computer-science
+title: "Kotlin Null Safety / Null Safety в Kotlin"
+aliases: [Kotlin Null Safety, Null Safety в Kotlin]
+topic: programming-languages
+subtopics: [null-safety, type-system]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - elvis
-  - kotlin
   - null-safety
   - nullable
   - operators
-  - programming-languages
   - safe-call
+  - difficulty/medium
 ---
 # Что такое null safety и как это пишется?
 

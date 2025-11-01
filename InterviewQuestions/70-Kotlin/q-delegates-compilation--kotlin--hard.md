@@ -1,18 +1,25 @@
 ---
 id: 20251012-154356
 title: "Delegates Compilation / Компиляция делегатов"
+aliases: [Delegates Compilation, Компиляция делегатов]
 topic: kotlin
+subtopics: [delegation]
+question_kind: theory
 difficulty: hard
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-flow-backpressure--kotlin--hard, q-rxjava-to-coroutines-migration--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - delegates
   - compilation
   - bytecode
   - advanced
+  - difficulty/hard
 ---
 # Как делегаты работают на уровне компиляции?
 

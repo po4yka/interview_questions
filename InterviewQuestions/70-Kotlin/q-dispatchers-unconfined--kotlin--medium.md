@@ -1,15 +1,20 @@
 ---
 id: "20251012-150009"
-title: "What is Dispatchers.Unconfined and when to use it?"
+title: "What is Dispatchers.Unconfined and when to use it? / Dispatchers.Unconfined применение"
+aliases: [Dispatchers Unconfined, Dispatchers.Unconfined применение]
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
+question_kind: theory
 status: draft
 created: "2025-10-12"
-tags: ["kotlin", "coroutines", "difficulty/medium"]
+updated: "2025-10-31"
+tags: ["kotlin", "coroutines", "difficulty/medium", "dispatchers", "unconfined"]
 description: "Comprehensive guide to What is Dispatchers.Unconfined and when to use it? in Kotlin coroutines"
 moc: moc-kotlin
 related: [q-partition-function--kotlin--easy, q-kotlin-override-keyword--programming-languages--easy, q-parallel-network-calls-coroutines--kotlin--medium]
-subtopics: ["coroutines", "dispatchers", "unconfined"]
+subtopics: [coroutines, dispatchers]
 ---
 # What is Dispatchers.Unconfined and when to use it?
 

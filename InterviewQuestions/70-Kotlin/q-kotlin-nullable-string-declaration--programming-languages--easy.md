@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111144
 title: "Kotlin Nullable String Declaration / Объявление nullable String в Kotlin"
-topic: computer-science
+aliases: [Kotlin Nullable String Declaration, Объявление nullable String в Kotlin]
+topic: programming-languages
+subtopics: [null-safety, type-system]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-operator-overloading--kotlin--medium, q-launch-vs-async--kotlin--easy, q-coroutine-job-lifecycle--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
+  - programming-languages
   - null-safety
   - nullable
-  - programming-languages
   - string
   - syntax
+  - difficulty/easy
 ---
 # Как правильно объявить переменную типа nullable String в Kotlin?
 

@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111139
 title: "Kotlin Lateinit / lateinit в Kotlin"
-topic: computer-science
+aliases: [Kotlin Lateinit, lateinit в Kotlin]
+topic: programming-languages
+subtopics: [type-system, null-safety]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-map-flatmap--kotlin--medium, q-job-vs-supervisorjob--programming-languages--medium, q-kotlin-advantages-for-android--kotlin--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - dependency-injection
   - initialization
-  - kotlin
   - lateinit
-  - programming-languages
   - properties
+  - difficulty/medium
 ---
 # Что известно о lateinit?
 

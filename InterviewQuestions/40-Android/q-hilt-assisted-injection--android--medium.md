@@ -3,7 +3,7 @@ id: 20251012-1227149
 title: "Hilt Assisted Injection / Hilt Assisted Injection"
 aliases: ["Hilt Assisted Injection"]
 topic: android
-subtopics: [architecture, dependency-injection]
+subtopics: [di-hilt, architecture-mvvm]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [c-assisted-injection, q-dagger-basics--android--medium, q-hilt-entry-points--android--medium]
 created: 2025-10-11
-updated: 2025-01-25
-tags: [android/architecture, android/dependency-injection, assisted-inject, dagger, dependency-injection, difficulty/medium, hilt]
+updated: 2025-10-31
+tags: [android/di-hilt, android/architecture-mvvm, assisted-inject, dagger, dependency-injection, difficulty/medium, hilt]
 sources: [https://dagger.dev/hilt/assisted-injection.html]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:47:00 pm

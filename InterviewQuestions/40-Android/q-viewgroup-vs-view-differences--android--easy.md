@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711128
-title: "Viewgroup Vs View Differences"
+title: "ViewGroup vs View Differences / Различия ViewGroup и View"
+aliases: [ViewGroup vs View, Различия ViewGroup и View]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-derived-state-snapshot-system--jetpack-compose--hard, q-rxjava-pagination-recyclerview--android--medium]
+related: [c-views, c-view-hierarchy, q-what-does-viewgroup-inherit-from--android--easy, q-viewmodel-pattern--android--easy]
 created: 2025-10-15
-tags: [viewgroup, view, ui, view-hierarchy, difficulty/easy]
+updated: 2025-10-31
+tags: [android/ui-views, viewgroup, view, ui, view-hierarchy, difficulty/easy]
 ---
 
 # What's ViewGroup? How are they different from Views?

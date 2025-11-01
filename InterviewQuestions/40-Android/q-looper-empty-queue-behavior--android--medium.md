@@ -8,9 +8,8 @@ aliases:
   - Блокировка Looper
 topic: android
 subtopics:
-  - threading
-  - concurrency
-  - looper
+  - threads-sync
+  - coroutines
 question_kind: theory
 difficulty: medium
 original_language: ru
@@ -23,11 +22,10 @@ related:
   - q-handlerthread-vs-thread--android--medium
 sources: []
 created: 2025-10-13
-updated: 2025-10-28
+updated: 2025-10-31
 tags:
-  - android/threading
-  - android/concurrency
-  - android/looper
+  - android/threads-sync
+  - android/coroutines
   - looper
   - message-queue
   - blocking

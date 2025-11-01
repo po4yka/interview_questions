@@ -1,20 +1,26 @@
 ---
 id: 20251012-12271111134
 title: "Kotlin Inline Functions / Kotlin Inline Функции"
-topic: computer-science
+aliases: [Kotlin Inline Functions, Kotlin Inline Функции]
+topic: programming-languages
+subtopics: [inline-functions, performance, functional-programming]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-when-vs-switch--programming-languages--easy, q-data-sealed-classes-definition--programming-languages--hard, q-kotlin-dsl-creation--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - higher-order-functions
   - inline
   - inline-functions
-  - kotlin
   - lambda-expressions
   - performance
-  - programming-languages
+  - difficulty/medium
 ---
 # Что такое inline функции?
 

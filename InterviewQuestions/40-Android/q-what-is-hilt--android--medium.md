@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711159
-title: "What Is Hilt / Что такое Hilt"
+title: "Hilt / Фреймворк Hilt"
+aliases: [Hilt, Фреймворк Hilt]
 topic: android
+subtopics: [di-hilt, architecture-mvvm]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy, q-what-can-be-done-through-composer--android--medium, q-data-sync-unstable-network--android--hard]
+related: [c-dependency-injection, c-hilt, q-what-is-known-about-recyclerview--android--easy, q-test-doubles-dependency-injection--testing--medium]
 created: 2025-10-15
-tags: [android/architecture-clean, android/di-hilt, architecture-clean, dependency-injection, di-hilt, hilt, platform/android, difficulty/medium]
+updated: 2025-10-31
+tags: [android/di-hilt, android/architecture-mvvm, dependency-injection, hilt, di, difficulty/medium]
 ---
 
 # What is Hilt?

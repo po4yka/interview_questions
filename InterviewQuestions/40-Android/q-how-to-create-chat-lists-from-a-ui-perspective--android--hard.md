@@ -1,20 +1,19 @@
 ---
 id: 20251012-1227175
-title: How To Create Chat Lists From A Ui Perspective / Как создать списки чатов с точки зрения UI
+title: "How To Create Chat Lists From A UI Perspective / Как создать списки чатов с точки зрения UI"
+aliases: [How To Create Chat Lists From A UI Perspective, Как создать списки чатов с точки зрения UI]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-network-error-handling-strategies--networking--medium
-  - q-what-are-px-dp-sp--android--easy
-  - q-what-is-known-about-recyclerview--android--easy
+related: [q-network-error-handling-strategies--networking--medium, q-what-are-px-dp-sp--android--easy, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
-tags:
-  - android/recyclerview
-  - difficulty/hard
-  - recyclerview
-  - ui
+updated: 2025-10-31
+tags: [android/ui-views, difficulty/hard, recyclerview]
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Thursday, October 30th 2025, 12:48:28 pm
 ---

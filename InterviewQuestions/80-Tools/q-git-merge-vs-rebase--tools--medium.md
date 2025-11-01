@@ -1,30 +1,26 @@
 ---
 id: 20251012-12271111162
-title: "Git Merge vs Rebase"
+title: "Git Merge vs Rebase / Git Merge vs Rebase"
+aliases: [Git Merge, Git Rebase, Version Control, Merge vs Rebase]
 topic: tools
+subtopics: [git, version-control]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-tools
 related: [q-git-squash-commits--tools--medium, q-git-pull-vs-fetch--tools--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - git
-  - merge
-  - rebase
-  - version-control
-  - workflow
   - tools
-  - difficulty/medium
-language_tags:
-  - en
-  - ru
-original_language: ru
-subtopics:
   - git
   - merge
   - rebase
   - version-control
   - workflow
+  - difficulty/medium
 ---
 # Question (EN)
 > What is the difference between git merge and git rebase?

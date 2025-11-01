@@ -6,7 +6,7 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics: [coroutines, async, await, parallel, networking]
-question_kind: pattern
+question_kind: coding
 difficulty: medium
 
 # Language & provenance
@@ -22,7 +22,7 @@ related: [coroutines, async-await, structured-concurrency, networking]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-10-31
 
 tags: [kotlin, coroutines, async, parallel, networking, performance, difficulty/medium]
 ---

@@ -3,7 +3,7 @@ id: 20251012-122711109
 title: "Stable Annotation Compose / Аннотация Stable в Compose"
 aliases: ["Stable Annotation Compose", "Аннотация Stable в Compose"]
 topic: android
-subtopics: [ui-compose, performance]
+subtopics: [ui-compose, performance-rendering]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-compose-recomposition--android--medium, q-compose-stability-skippability--android--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/ui-compose, android/performance, jetpack-compose, stable-annotation, recomposition, difficulty/hard]
+tags: [android/ui-compose, android/performance-rendering, jetpack-compose, stable-annotation, recomposition, difficulty/hard]
 ---
 
 # Вопрос (RU)

@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711156
-title: "What Is Activity And What Is It Used For / What Is Activity и What Is It Used For"
+title: "Activity / Компонент Activity"
+aliases: [Activity, Компонент Activity]
 topic: android
+subtopics: [activity, lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-looper-thread-connection--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
+related: [c-activity-lifecycle, c-android-components, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
-tags: [activity, lifecycle, ui, difficulty/medium]
+updated: 2025-10-31
+tags: [android/activity, android/lifecycle, activity, ui, components, difficulty/medium]
 ---
 
 # What is Activity and what is it used for?

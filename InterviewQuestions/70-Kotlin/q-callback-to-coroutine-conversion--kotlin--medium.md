@@ -6,7 +6,7 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics: [coroutines, callbacks, suspendcoroutine, migration, async]
-question_kind: pattern
+question_kind: coding
 difficulty: medium
 
 # Language & provenance
@@ -22,7 +22,7 @@ related: [coroutines, suspend-functions, continuation, callback-hell]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-10-31
 
 tags: [kotlin, coroutines, callbacks, suspendcoroutine, async, migration, difficulty/medium]
 ---

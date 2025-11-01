@@ -1,18 +1,25 @@
 ---
 id: 20251017-150544
 title: "Sam Conversions / SAM конверсии"
+aliases: [SAM Conversion, Single Abstract Method, Functional Interfaces, SAM конверсии]
 topic: kotlin
+subtopics: [lambdas, java-interop]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-flow-exception-handling--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-object-companion-object--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - sam
   - lambda
   - functional-interface
   - java-interop
+  - difficulty/medium
 ---
 # SAM (Single Abstract Method) конверсии
 

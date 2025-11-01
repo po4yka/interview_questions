@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227111186
 title: "Template Method Pattern / Template Method Паттерн"
-topic: computer-science
+aliases: [Template Method Pattern, Template Method Паттерн]
+topic: design-patterns
+subtopics: [behavioral-patterns, algorithm-structure, inheritance]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
+moc: moc-design-patterns
 related: [q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-inheritance-vs-composition--oop--medium, q-nothing-class-purpose--programming-languages--medium]
 created: 2025-10-15
-tags: [behavioral-patterns, design-patterns, gof-patterns, hook-method, template-method]
+updated: 2025-10-31
+tags: [behavioral-patterns, design-patterns, gof-patterns, hook-method, template-method, difficulty/medium]
 date created: Monday, October 6th 2025, 7:26:38 am
 date modified: Sunday, October 26th 2025, 1:39:54 pm
 ---

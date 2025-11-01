@@ -3,7 +3,7 @@ id: 20251012-12271172
 title: "Privacy Sandbox Topics API / Privacy Sandbox Topics API"
 aliases: ["Privacy Sandbox Topics API", "Topics API", "Privacy Sandbox Topics API"]
 topic: android
-subtopics: [privacy-sandbox, advertising, privacy]
+subtopics: [privacy-sdks]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-gdpr-compliance-android--android--medium, q-app-permissions-runtime--android--medium, q-data-storage-security--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium, android/privacy-sandbox, android/advertising]
+updated: 2025-10-31
+tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium, android/privacy-sdks]
 ---
 
 # Вопрос (RU)

@@ -1,21 +1,27 @@
 ---
 id: 20251016-123551
 title: "Kotlin Run Operator / Оператор run в Kotlin"
-topic: computer-science
+aliases: [Kotlin Run Operator, Оператор run в Kotlin]
+topic: programming-languages
+subtopics: [scope-functions, functional-programming]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-sealed-when-exhaustive--kotlin--medium, q-compose-side-effects-coroutines--kotlin--medium, q-kotlin-reified-types--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - also
   - apply
-  - kotlin
   - let
-  - programming-languages
   - run
   - scope-functions
   - with
+  - difficulty/easy
 ---
 # Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
 

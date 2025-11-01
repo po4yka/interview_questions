@@ -3,7 +3,7 @@ id: 20251012-1227191
 title: "How To Pass Parameters To Fragment / Как передать параметры во Fragment"
 aliases: ["How To Pass Parameters To Fragment", "Как передать параметры во Fragment", "Fragment arguments", "Fragment Bundle"]
 topic: android
-subtopics: [fragment, bundle]
+subtopics: [fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-fragment-basics--android--easy, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-10-31
 sources: []
-tags: [android, android/fragment, android/bundle, fragment, bundle, arguments, difficulty/medium]
+tags: [android, android/fragment, android/lifecycle, fragment, bundle, arguments, difficulty/medium]
 date created: Thursday, October 30th 2025, 12:56:08 pm
 date modified: Thursday, October 30th 2025, 2:17:20 pm
 ---

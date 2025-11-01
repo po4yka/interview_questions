@@ -6,7 +6,7 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics: [flow, operators, debounce, distinctuntilchanged, search]
-question_kind: pattern
+question_kind: coding
 difficulty: medium
 
 # Language & provenance
@@ -22,7 +22,7 @@ related: [flow-operators, debounce, search-optimization, performance]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-10-31
 
 tags: [kotlin, flow, search, debounce, operators, performance, difficulty/medium]
 ---

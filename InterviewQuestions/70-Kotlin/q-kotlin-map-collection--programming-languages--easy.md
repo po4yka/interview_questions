@@ -1,16 +1,22 @@
 ---
 id: 20251012-12271111140
 title: "Kotlin Map Collection / Map коллекция в Kotlin"
+aliases: [Kotlin Map Collection, Map коллекция в Kotlin]
 topic: programming-languages
+subtopics: [collections, type-system]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
+updated: 2025-10-31
 tags:
-  - collections
-  - kotlin
-  - map
   - programming-languages
-moc: moc-programming-languages
+  - collections
+  - map
+  - difficulty/easy
+moc: moc-kotlin
 related: [q-kotlin-property-delegates--programming-languages--medium, q-visibility-modifiers-kotlin--kotlin--medium, q-list-set-map-differences--programming-languages--easy]
 ---
 # Расскажи про коллекцию Map

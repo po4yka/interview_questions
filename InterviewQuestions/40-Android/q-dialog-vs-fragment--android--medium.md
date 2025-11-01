@@ -3,7 +3,7 @@ id: 20251012-12271116
 title: "Dialog vs Fragment / Диалог против Фрагмента"
 aliases: ["Dialog vs Fragment", "Диалог против Фрагмента"]
 topic: android
-subtopics: [lifecycle, ui-components]
+subtopics: [lifecycle, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [c-dialog, c-fragment, q-fragment-lifecycle--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/lifecycle, android/ui-components, dialog, difficulty/medium, fragment, lifecycle]
+updated: 2025-10-31
+tags: [android/lifecycle, android/ui-views, dialog, difficulty/medium, fragment, lifecycle]
 sources: [https://developer.android.com/guide/fragments, https://developer.android.com/develop/ui/views/components/dialogs]
 date created: Tuesday, October 28th 2025, 9:22:38 am
 date modified: Thursday, October 30th 2025, 12:47:41 pm

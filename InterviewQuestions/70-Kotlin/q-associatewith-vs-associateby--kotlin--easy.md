@@ -1,17 +1,24 @@
 ---
 id: 20251017-150134
 title: "Associatewith Vs Associateby / associateWith против associateBy"
+aliases: [associateWith vs associateBy, associateWith против associateBy]
 topic: kotlin
+subtopics: [collections]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-inline-function-limitations--kotlin--medium, q-kotlin-reflection--programming-languages--medium, q-kotlin-constructor-types--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - collections
   - map
   - transformation
+  - difficulty/easy
 ---
 # associateWith() vs associateBy(): создание Map из коллекций
 

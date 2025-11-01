@@ -1,14 +1,19 @@
 ---
 id: 20251012-122711153
-title: "What Happens To The Old Activity When The System Starts A New One / Что происходит со старой Activity при запуске новой"
+title: "Activity Lifecycle on New Activity / Жизненный цикл при запуске новой Activity"
+aliases: [Activity Lifecycle on New Activity]
 topic: android
+subtopics: [activity, lifecycle]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-surfaceview-rendering--android--medium, q-what-is-diffutil-for--android--medium, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium]
+related: [c-activity-lifecycle, c-task-backstack, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
-tags:
-  - android
+updated: 2025-10-31
+tags: [android/activity, android/lifecycle, lifecycle, memory, difficulty/hard]
 ---
 
 # What happens to the old Activity when the system starts a new one?

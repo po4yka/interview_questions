@@ -1,14 +1,19 @@
 ---
 id: 20251012-122711152
-title: "What Events Are Activity Methods Tied To / С какими событиями связаны методы Activity"
+title: "Activity Methods and Events / Методы Activity и события"
+aliases: [Activity Methods Events, Методы Activity]
 topic: android
+subtopics: [activity, lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-animate-adding-removing-items-in-recyclerview--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-how-does-the-main-thread-work--android--medium]
+related: [c-activity-lifecycle, c-event-handling, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
-tags:
-  - android
+updated: 2025-10-31
+tags: [android/activity, android/lifecycle, lifecycle, events, difficulty/medium]
 ---
 
 # What events are Activity methods tied to?

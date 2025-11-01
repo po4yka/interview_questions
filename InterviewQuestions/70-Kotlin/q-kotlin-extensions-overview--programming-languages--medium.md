@@ -1,18 +1,24 @@
 ---
 id: 20251012-12271111128
 title: "Kotlin Extensions Overview / Обзор расширений Kotlin"
-topic: computer-science
+aliases: [Kotlin Extensions Overview, Обзор расширений Kotlin]
+topic: programming-languages
+subtopics: [extensions, type-system]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium, q-channel-pipelines--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - extension-functions
   - extension-properties
   - extensions
-  - kotlin
-  - programming-languages
+  - difficulty/medium
 ---
 # Что известно про extension ?
 

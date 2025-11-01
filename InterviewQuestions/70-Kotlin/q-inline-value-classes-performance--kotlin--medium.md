@@ -1,19 +1,21 @@
 ---
 id: 20251012-154365
 title: "Inline Value Classes Performance"
+aliases: [Inline, Value, Classes, Performance]
 topic: kotlin
+subtopics: [object-comparison, null-safety, delegation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-kotlin-default-access-modifier--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - inline-classes
-  - value-classes
-  - performance
-  - optimization
-  - zero-cost-abstractions
+  - 
+  - difficulty/medium
 ---
 # Inline Value Classes and Performance
 

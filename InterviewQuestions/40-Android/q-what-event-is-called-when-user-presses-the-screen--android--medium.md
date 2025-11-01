@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711151
-title: "What Event Is Called When User Presses The Screen / Какое событие вызывается когда пользователь нажимает на экран"
+title: "Touch Events / События касания"
+aliases: [Touch Events, События касания]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-cicd-pipeline-android--android--medium, q-kotlin-context-receivers--kotlin--hard, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related: [c-event-handling, c-touch-input, q-view-methods-and-their-purpose--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
-tags: [event handling, android, ui, touch-events, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, event-handling, touch-events, ui, interaction, difficulty/medium]
 ---
 
 # What event is called when user presses the screen?

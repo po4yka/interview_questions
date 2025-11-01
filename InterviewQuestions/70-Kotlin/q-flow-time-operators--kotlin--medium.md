@@ -11,7 +11,7 @@ subtopics:
   - sample
   - throttle
   - time-operators
-question_kind: comparison
+question_kind: theory
 difficulty: medium
 
 # Language & provenance
@@ -27,7 +27,7 @@ related: [q-flow-basics--kotlin--easy, q-instant-search-flow-operators--kotlin--
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 
 tags: [kotlin, flow, debounce, sample, throttle, time-operators, coroutines, difficulty/medium]
 ---

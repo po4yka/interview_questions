@@ -1,14 +1,19 @@
 ---
 id: 20251012-122711130
-title: "Viewmodel Vs Onsavedinstancestate / Viewmodel против Onsavedinstancestate"
+title: "ViewModel vs OnSavedInstanceState / ViewModel vs OnSavedInstanceState"
+aliases: [ViewModel vs OnSavedInstanceState]
 topic: android
+subtopics: [lifecycle, architecture-mvvm]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-notification-channels-android--android--medium, q-how-vsync-and-recomposition-events-are-related--android--hard, q-play-app-signing--android--medium]
+related: [c-viewmodel, c-activity-lifecycle, q-viewmodel-pattern--android--easy, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]
 created: 2025-10-15
-tags:
-  - android
+updated: 2025-10-31
+tags: [android/lifecycle, android/architecture-mvvm, viewmodel, state-management, difficulty/medium]
 ---
 
 # ViewModel vs OnSavedInstanceState

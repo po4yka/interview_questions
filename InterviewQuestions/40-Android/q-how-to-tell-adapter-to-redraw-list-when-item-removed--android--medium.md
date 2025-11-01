@@ -3,7 +3,7 @@ id: 20251017-105057
 title: "How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру перерисовать список когда элемент удален"
 aliases: ["How To Tell Adapter To Redraw List", "Как сказать адаптеру перерисовать список"]
 topic: android
-subtopics: [ui-recyclerview, ui-adapter, ui-animation]
+subtopics: [ui-views, ui-animation]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-recyclerview-sethasfixedsize--android--easy, q-how-to-create-list-like-recyclerview-in-compose--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/ui-recyclerview, android/ui-adapter, android/ui-animation, adapter, recyclerview, diffutil, difficulty/medium]
+tags: [android/ui-views, android/ui-animation, adapter, recyclerview, diffutil, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:11:31 pm
 date modified: Thursday, October 30th 2025, 3:09:39 pm
 ---

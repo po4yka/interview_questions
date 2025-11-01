@@ -5,7 +5,7 @@ aliases:
   - "LazyGrid & LazyStaggeredGrid"
   - "LazyGrid и LazyStaggeredGrid"
 topic: android
-subtopics: [ui-compose, lazy-layout]
+subtopics: [ui-compose, performance-rendering]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,8 +14,8 @@ status: draft
 moc: moc-android
 related: [c-lazy-grid, q-compose-lazy-layout-optimization--jetpack-compose--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [android/ui-compose, android/lazy-layout, jetpack-compose, lazy-layout, grid, performance, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-compose, android/performance-rendering, jetpack-compose, lazy-layout, grid, performance, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/lists]
 date created: Sunday, October 12th 2025, 10:43:54 pm
 date modified: Thursday, October 30th 2025, 3:12:12 pm

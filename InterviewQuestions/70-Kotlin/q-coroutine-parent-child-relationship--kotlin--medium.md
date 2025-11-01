@@ -1,15 +1,20 @@
 ---
 id: "20251012-150008"
-title: "Parent-child relationships in structured concurrency"
+title: "Parent-child relationships in structured concurrency / Отношения родитель-дитя"
+aliases: [Parent-Child Relationships, Отношения родитель-дитя]
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
+question_kind: theory
 status: draft
 created: "2025-10-12"
-tags: ["kotlin", "coroutines", "difficulty/medium"]
+updated: "2025-10-31"
+tags: ["kotlin", "coroutines", "difficulty/medium", "structured-concurrency", "job", "hierarchy"]
 description: "Comprehensive guide to Parent-child relationships in structured concurrency in Kotlin coroutines"
 moc: moc-kotlin
 related: [q-retry-operators-flow--kotlin--medium, q-coroutine-performance-optimization--kotlin--hard, q-kotlin-collections--kotlin--easy]
-subtopics: ["coroutines", "structured-concurrency", "job", "hierarchy"]
+subtopics: [coroutines, structured-concurrency]
 ---
 # Parent-child relationships in structured concurrency
 

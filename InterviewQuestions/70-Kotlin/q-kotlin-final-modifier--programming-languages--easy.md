@@ -1,21 +1,27 @@
 ---
 id: 20251012-12271111130
 title: "Kotlin Final Modifier / Модификатор final в Kotlin"
-topic: computer-science
+aliases: [Kotlin Final Modifier, Модификатор final в Kotlin]
+topic: programming-languages
+subtopics: [type-system, inheritance]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-infix-functions--kotlin--medium, q-list-set-map-differences--programming-languages--easy, q-flowon-operator-context-switching--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - class-modifiers
   - classes
   - final
   - inheritance
-  - kotlin
   - open
-  - programming-languages
   - syntax
+  - difficulty/easy
 ---
 # Какой модификатор в Kotlin делает класс нерасширяемым?
 

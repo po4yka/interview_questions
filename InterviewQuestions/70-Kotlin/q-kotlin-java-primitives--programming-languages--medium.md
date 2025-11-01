@@ -1,19 +1,25 @@
 ---
 id: 20251017-105059
 title: "Kotlin Java Primitives / Примитивы Kotlin и Java"
-topic: computer-science
+aliases: [Kotlin Java Primitives, Примитивы Kotlin и Java]
+topic: programming-languages
+subtopics: [type-system, null-safety]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-init-block-features--programming-languages--easy, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - java
-  - kotlin
-  - primitives
   - programming-languages
+  - java
+  - primitives
   - types
   - wrappers
+  - difficulty/medium
 ---
 # Какие примитивы есть в Kotlin, а какие в Java?
 

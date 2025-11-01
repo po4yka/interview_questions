@@ -1,14 +1,19 @@
 ---
 id: 20251012-1227111180
 title: "Softcode Vs Hardcode / Softcode против Hardcode"
-topic: architecture-patterns
+aliases: [Softcode Vs Hardcode, Softcode против Hardcode]
+topic: software-design
+subtopics: [configuration-management, best-practices, maintainability]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [best-practices, configuration, flexibility, hardcoding, maintainability, softcoding, software-design]
-moc: moc-architecture-patterns
+moc: moc-software-design
 related: [q-extensions-concept--programming-languages--easy, q-flyweight-pattern--design-patterns--hard, q-proxy-pattern--design-patterns--medium]
-subtopics: ["architecture", "best-practices", "design-principles"]
+created: 2025-10-13
+updated: 2025-10-31
+tags: [best-practices, configuration, flexibility, hardcoding, maintainability, softcoding, software-design, difficulty/medium]
 date created: Saturday, October 4th 2025, 6:59:00 pm
 date modified: Sunday, October 26th 2025, 1:39:48 pm
 ---

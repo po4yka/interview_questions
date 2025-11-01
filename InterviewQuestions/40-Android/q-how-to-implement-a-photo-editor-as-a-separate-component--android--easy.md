@@ -3,7 +3,7 @@ id: 20251012-1227185
 title: "How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент"
 aliases: [Photo Editor Component, Separate Photo Editor, Фоторедактор как компонент, Отдельный компонент редактора]
 topic: android
-subtopics: [fragments, ui-views, bitmap]
+subtopics: [fragment, ui-views, ui-graphics]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-compose-custom-layout--jetpack-compose--hard, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-workmanager-vs-alternatives--background--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android, android/fragments, android/ui-views, android/bitmap, fragments, views, bitmap, canvas, imageview, difficulty/easy]
+tags: [android, android/fragment, android/ui-views, android/ui-graphics, fragments, views, bitmap, canvas, imageview, difficulty/easy]
 date created: Tuesday, October 28th 2025, 9:48:51 am
 date modified: Thursday, October 30th 2025, 12:49:10 pm
 ---

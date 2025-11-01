@@ -1,18 +1,25 @@
 ---
 id: 20251012-154358
-title: "Desugaring Android Java"
+title: "Desugaring Android Java / Desugaring в Android"
+aliases: [Desugaring Android, Desugaring Android Java]
 topic: kotlin
+subtopics: [compilation]
+question_kind: theory
 difficulty: medium
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-double-bang-operator--programming-languages--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-kotlin-any-unit-nothing--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - java
   - android
   - compilation
   - backward-compatibility
+  - difficulty/medium
 ---
 # Desugaring в Android
 

@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711149
-title: "What Does Viewgroup Inherit From / От чего наследуется ViewGroup"
+title: "ViewGroup Inheritance / Наследование ViewGroup"
+aliases: [ViewGroup Inheritance, Наследование ViewGroup]
 topic: android
-difficulty: medium
+subtopics: [ui-views]
+question_kind: theory
+difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-application-priority-is-determined-by-the-system--android--hard, q-what-is-activity-and-what-is-it-used-for--android--medium, q-compose-custom-animations--jetpack-compose--medium]
+related: [c-views, c-view-hierarchy, q-viewgroup-vs-view-differences--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
-tags: [inheritance, android, ui, views, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, viewgroup, inheritance, ui, views, difficulty/easy]
 ---
 
 # What does ViewGroup inherit from?

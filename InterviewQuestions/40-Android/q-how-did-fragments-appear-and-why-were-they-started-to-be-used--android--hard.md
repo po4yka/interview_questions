@@ -3,7 +3,7 @@ id: 20251012-1227156
 title: "How Did Fragments Appear And Why Were They Started To Be Used / Как Появились Фрагменты И Для Чего Их Начали Использовать"
 aliases: [Fragments History, Fragment Origins, История фрагментов, Происхождение фрагментов]
 topic: android
-subtopics: [fragments, architecture-patterns, lifecycle]
+subtopics: [fragment, lifecycle]
 question_kind: theory
 difficulty: hard
 original_language: ru
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [c-fragments, q-what-are-fragments-for-if-there-is-activity--android--medium, q-fragments-lifecycle--android--hard]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/fragments, android/architecture-patterns, android/lifecycle, ui, difficulty/hard]
+tags: [android/fragment, android/lifecycle, ui, difficulty/hard]
 date created: Tuesday, October 28th 2025, 9:34:06 am
 date modified: Thursday, October 30th 2025, 12:48:12 pm
 ---

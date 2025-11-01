@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111149
 title: "Kotlin Reflection / Рефлексия в Kotlin"
-topic: computer-science
+aliases: [Kotlin Reflection, Рефлексия в Kotlin]
+topic: programming-languages
+subtopics: [type-system, metaprogramming]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-object-companion-object--kotlin--medium, q-data-sealed-difference--programming-languages--medium, q-kotlin-serialization--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
+  - programming-languages
   - kotlin-reflect
   - metaprogramming
-  - programming-languages
   - reflection
   - runtime
+  - difficulty/medium
 ---
 # Что такое рефлексия?
 

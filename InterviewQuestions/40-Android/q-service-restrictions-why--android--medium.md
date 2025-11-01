@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711100
-title: "Service Restrictions Why / Почему ограничения для Service"
+title: "Service Restrictions / Ограничения Service"
+aliases: [Service Restrictions, Ограничения Service]
 topic: android
+subtopics: [service]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-canvas-drawing-optimization--custom-views--hard, q-what-is-data-binding--android--easy, q-workmanager-chaining--background--hard]
 created: 2025-10-15
-tags: [android/background-processing, background-processing, battery-optimization, doze-mode, services, workmanager, difficulty/medium]
+updated: 2025-10-31
+tags: [android/service, difficulty/medium]
 ---
 
 # Why are there restrictions on starting services?

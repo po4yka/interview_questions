@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111145
 title: "Kotlin Object Companion Object / Object и Companion Object в Kotlin"
-topic: computer-science
+aliases: [Kotlin Object Companion Object, Object и Companion Object в Kotlin]
+topic: programming-languages
+subtopics: [type-system, initialization]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-fold-reduce--kotlin--medium, q-data-class-detailed--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - companion-object
-  - kotlin
-  - object
   - programming-languages
+  - companion-object
+  - object
   - singleton
   - static-members
+  - difficulty/easy
 ---
 # Что такое object / companion object?
 

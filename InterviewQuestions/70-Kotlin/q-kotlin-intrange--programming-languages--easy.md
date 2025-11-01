@@ -1,18 +1,24 @@
 ---
 id: 20251012-12271111136
 title: "Kotlin Intrange / IntRange в Kotlin"
-topic: computer-science
+aliases: [Kotlin Intrange, IntRange в Kotlin]
+topic: programming-languages
+subtopics: [collections, type-system]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-constructors--kotlin--easy, q-coroutine-context-elements--kotlin--hard, q-kotlin-class-initializers--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - intrange
   - iteration
-  - kotlin
-  - programming-languages
   - ranges
+  - difficulty/easy
 ---
 # Что такое IntRange?
 

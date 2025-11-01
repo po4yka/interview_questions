@@ -1,17 +1,21 @@
 ---
 id: 20251017-150407
 title: "Inline Function Limitations / Ограничения inline функций"
+aliases: [Inline, Function, Limitations]
 topic: kotlin
+subtopics: [flow, coroutines, delegation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-testing-stateflow-sharedflow--kotlin--medium, q-coroutine-context-elements--kotlin--hard, q-lambdas-java-kotlin-syntax--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - inline-functions
-  - performance
-  - limitations
+  - 
+  - difficulty/medium
 ---
 # Когда нельзя использовать inline функции?
 

@@ -1,12 +1,18 @@
 ---
 id: 20251012-154379
 title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"
+aliases: [ViewModelScope, LifecycleScope, Lifecycle Scopes, Скоупы жизненного цикла]
 topic: kotlin
+subtopics: [coroutines, lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-constants--programming-languages--easy, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -14,6 +20,7 @@ tags:
   - viewmodelscope
   - lifecyclescope
   - android
+  - difficulty/medium
 ---
 # viewModelScope vs lifecycleScope
 

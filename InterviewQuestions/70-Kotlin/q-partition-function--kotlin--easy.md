@@ -1,17 +1,25 @@
 ---
 id: 20251017-150747
 title: "Partition Function / Функция partition"
+aliases: [Partition, Collection Partition, Filtering, Partition Function]
 topic: kotlin
+subtopics: [collections]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-lazy-initialization--programming-languages--easy, q-coroutine-job-lifecycle--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - collections
   - filtering
+  - partition
   - pair
+  - difficulty/easy
 ---
 # partition(): разделение коллекции на две части
 

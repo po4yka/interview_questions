@@ -1,21 +1,21 @@
 ---
 id: 20251012-12271111114
 title: "Kotlin Collections Overview / Обзор коллекций Kotlin"
+aliases: []
 topic: programming-languages
+subtopics: [functions, class-features, java-interop]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags:
-  - collections
-  - immutable
-  - kotlin
-  - list
-  - map
-  - mutable
-  - programming-languages
-  - set
 moc: moc-programming-languages
 related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-nothing-instances--programming-languages--easy, q-lambdas-java-kotlin-syntax--programming-languages--medium]
+created: 2025-10-13
+updated: 2025-10-31
+tags:
+  - 
+  - difficulty/easy
 ---
 # Какие коллекции знаешь?
 

@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711150
-title: "What Each Android Component Represents / Что представляет каждый компонент Android"
+title: "Android Components / Компоненты Android"
+aliases: [Android Components, Компоненты Android]
 topic: android
+subtopics: [activity, service, fragment]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-rss-feed-aggregator--android--medium, q-android-build-optimization--android--medium, q-how-does-activity-lifecycle-work--android--medium]
+related: [c-android-components, c-broadcast-receiver, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-is-broadcastreceiver--android--easy]
 created: 2025-10-15
-tags: [android, android-components, android/android-components, broadcast-receiver, components, content-provider, fragment, intent, service, view, difficulty/easy]
+updated: 2025-10-31
+tags: [android/activity, android/service, android/fragment, components, broadcast-receiver, intent, difficulty/easy]
 ---
 
 # Что из себя представляет каждый компонент Android-приложения?

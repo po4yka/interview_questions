@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227111187
 title: "Visitor Pattern / Visitor Паттерн"
-topic: computer-science
+aliases: [Visitor Pattern, Visitor Паттерн]
+topic: design-patterns
+subtopics: [behavioral-patterns, double-dispatch, polymorphism]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
+moc: moc-design-patterns
 related: [q-decorator-pattern--design-patterns--medium, q-primitive-vs-reference-types--programming-languages--easy, q-suspend-function-suspension-mechanism--programming-languages--hard]
 created: 2025-10-15
-tags: [behavioral-patterns, design-patterns, double-dispatch, gof-patterns, visitor]
+updated: 2025-10-31
+tags: [behavioral-patterns, design-patterns, double-dispatch, gof-patterns, visitor, difficulty/hard]
 date created: Monday, October 6th 2025, 7:30:41 am
 date modified: Sunday, October 26th 2025, 1:39:55 pm
 ---

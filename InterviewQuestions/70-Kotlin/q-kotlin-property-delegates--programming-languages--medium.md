@@ -1,17 +1,23 @@
 ---
 id: 20251012-12271111147
 title: "Kotlin Property Delegates / Делегаты свойств Kotlin"
-topic: computer-science
+aliases: [Kotlin Property Delegates, Делегаты свойств Kotlin]
+topic: programming-languages
+subtopics: [delegation, type-system]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-map-flatmap--kotlin--medium, q-coroutine-scope-basics--kotlin--easy, q-kotlin-channels--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - delegates
-  - kotlin
   - programming-languages
+  - delegates
   - property-delegates
+  - difficulty/medium
 ---
 # В чем особенность делегатов свойств
 

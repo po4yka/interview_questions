@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227111172
 title: "Proxy Pattern / Proxy Паттерн"
-topic: computer-science
+aliases: [Proxy Pattern, Proxy Паттерн]
+topic: design-patterns
+subtopics: [structural-patterns, access-control, lazy-loading]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
+moc: moc-design-patterns
 related: [q-builder-pattern--design-patterns--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [design-patterns, gof-patterns, proxy, structural-patterns, surrogate]
+updated: 2025-10-31
+tags: [design-patterns, gof-patterns, proxy, structural-patterns, surrogate, difficulty/medium]
 date created: Monday, October 6th 2025, 7:24:42 am
 date modified: Sunday, October 26th 2025, 1:37:17 pm
 ---

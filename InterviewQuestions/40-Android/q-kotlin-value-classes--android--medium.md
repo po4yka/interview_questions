@@ -5,7 +5,7 @@ aliases:
   - "Kotlin Value Classes (Inline Classes)"
   - "Value классы в Kotlin"
 topic: android
-subtopics: [kotlin, type-safety]
+subtopics: [performance-memory, coroutines]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,8 +14,8 @@ status: draft
 moc: moc-android
 related: [c-value-classes, q-kotlin-basics--kotlin--easy, q-kotlin-data-classes--kotlin--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [android/kotlin, android/type-safety, value-classes, inline-classes, performance, type-safety, difficulty/medium]
+updated: 2025-10-31
+tags: [android/performance-memory, android/coroutines, value-classes, inline-classes, performance, type-safety, difficulty/medium]
 sources: [https://kotlinlang.org/docs/inline-classes.html]
 date created: Saturday, October 18th 2025, 2:15:55 pm
 date modified: Thursday, October 30th 2025, 3:11:56 pm

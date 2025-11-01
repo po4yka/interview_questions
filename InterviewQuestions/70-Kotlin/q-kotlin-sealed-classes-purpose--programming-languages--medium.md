@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111154
-title: "Kotlin Sealed Classes Purpose"
-topic: computer-science
+title: "Kotlin Sealed Classes Purpose / Назначение sealed классов в Kotlin"
+aliases: [Kotlin Sealed Classes Purpose, Назначение sealed классов в Kotlin]
+topic: programming-languages
+subtopics: [sealed-classes, type-system]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-null-checks-methods--programming-languages--easy, q-expect-actual-kotlin--kotlin--medium, q-kotlin-reified-types--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - oop
   - programming-languages
+  - oop
   - sealed-classes
   - type-hierarchy
   - when-expressions
+  - difficulty/medium
 ---
 # Что такое sealed классы и зачем они нужны?
 

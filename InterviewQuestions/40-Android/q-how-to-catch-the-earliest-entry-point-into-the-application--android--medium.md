@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227170
 title: "How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение"
+aliases: [How To Catch The Earliest Entry Point Into The Application, Как поймать самую раннюю точку входа в приложение]
 topic: android
+subtopics: [lifecycle]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-jetpack-compose-lazy-column--android--easy, q-privacy-sandbox-sdk-runtime--privacy--hard, q-retrofit-modify-all-requests--android--hard]
 created: 2025-10-15
-tags: [android]
+updated: 2025-10-31
+tags: [android/lifecycle, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:40:01 pm
 ---

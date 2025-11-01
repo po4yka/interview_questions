@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227177
-title: "How To Create List Like Recyclerview In Compose / Как создать список как RecyclerView в Compose"
+title: "How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView в Compose"
+aliases: [How To Create List Like RecyclerView In Compose, Как создать список как RecyclerView в Compose]
 topic: android
+subtopics: [ui-compose]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-testing--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
 created: 2025-10-15
-tags: [difficulty/medium, jetpack-compose, lazycolumn, lazyrow, recyclerview]
+updated: 2025-10-31
+tags: [android/ui-compose, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:39:52 pm
 ---

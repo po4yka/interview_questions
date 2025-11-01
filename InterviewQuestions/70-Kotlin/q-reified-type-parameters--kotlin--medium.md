@@ -1,18 +1,25 @@
 ---
 id: 20251017-150501
 title: "Reified Type Parameters / Reified параметры типов"
+aliases: [Reified, Type Parameters, Generics, Reified Type Parameters]
 topic: kotlin
+subtopics: [generics, type-system, inline-functions]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-compose-side-effects-coroutines--kotlin--medium, q-inline-functions--kotlin--medium, q-suspending-vs-blocking--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - generics
   - reified
   - inline-functions
   - type-system
+  - difficulty/medium
 ---
 # Зачем нужен reified в Kotlin?
 

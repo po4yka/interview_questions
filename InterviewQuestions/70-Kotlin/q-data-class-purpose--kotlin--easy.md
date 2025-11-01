@@ -1,16 +1,23 @@
 ---
 id: 20251012-154349
 title: "Data Class Purpose / Назначение data class"
+aliases: [Data Class Purpose, Назначение data class]
 topic: kotlin
+subtopics: [data-classes]
+question_kind: theory
 difficulty: easy
+original_language: ru
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-prohibit-object-creation--programming-languages--easy, q-structured-concurrency-kotlin--kotlin--medium, q-kotlin-lateinit--programming-languages--medium, q-data-class-detailed--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - data-classes
   - code-generation
+  - difficulty/easy
 ---
 # Для чего нужен data class?
 

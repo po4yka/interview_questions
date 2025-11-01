@@ -1,12 +1,18 @@
 ---
 id: 20251012-12271111103
-title: Debouncing Search with Coroutines / Отложенный Поиск с Корутинами
+title: "Debouncing Search with Coroutines / Отложенный Поиск с Корутинами"
+aliases: [Debouncing Search, Отложенный поиск]
 topic: kotlin
+subtopics: [coroutines, flow]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-advanced-coroutine-patterns--kotlin--hard, q-flowon-operator-context-switching--kotlin--hard, q-inline-value-classes-performance--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -16,8 +22,6 @@ tags:
   - cancellation
   - android
   - difficulty/medium
-language_tags:
-  - en
   - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF

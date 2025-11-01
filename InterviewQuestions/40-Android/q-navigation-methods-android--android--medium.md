@@ -3,16 +3,16 @@ id: 20251012-12271149
 title: "Navigation Methods Android / Методы навигации Android"
 aliases: ["Navigation Methods Android", "Методы навигации Android"]
 topic: android
-subtopics: [navigation, ui-compose, architecture]
+subtopics: [ui-navigation, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android, android/navigation, android/ui-compose, android/architecture, architecture, compose, navigation, difficulty/medium]
+tags: [android, android/ui-navigation, android/ui-compose, architecture, compose, navigation, difficulty/medium]
 moc: moc-android
 related: [q-how-to-draw-ui-without-xml--android--easy, q-app-startup-optimization--performance--medium]
 date created: Tuesday, October 28th 2025, 9:51:01 pm

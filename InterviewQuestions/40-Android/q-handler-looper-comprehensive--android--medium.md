@@ -1,13 +1,19 @@
 ---
 id: 20251017-144926
 title: "Handler Looper Comprehensive / Handler и Looper подробно"
+aliases: [Handler Looper Comprehensive, Handler и Looper подробно]
 topic: android
+subtopics: [threads-sync]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-cicd-multi-module--devops--medium, q-glide-image-loading-internals--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-15
-tags: [concurrency, difficulty/medium, handler, looper, message-queue, threading]
+updated: 2025-10-31
+tags: [android/threads-sync, concurrency, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Saturday, October 25th 2025, 4:47:01 pm
 ---

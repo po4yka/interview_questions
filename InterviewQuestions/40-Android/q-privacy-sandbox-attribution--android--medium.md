@@ -3,7 +3,7 @@ id: 20251012-12271169
 title: "Privacy Sandbox Attribution / Attribution Reporting API в Privacy Sandbox"
 aliases: ["Privacy Sandbox Attribution", "Attribution Reporting API", "Attribution Reporting API в Privacy Sandbox"]
 topic: android
-subtopics: [privacy-sandbox, attribution, advertising]
+subtopics: [privacy-sdks]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [c-privacy-sandbox, q-privacy-sandbox-topics--android--medium, q-privacy-sandbox-fledge--android--hard]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/privacy-sandbox, android/attribution, privacy-sandbox, attribution-reporting, privacy, advertising, difficulty/medium]
+updated: 2025-10-31
+tags: [android/privacy-sdks, privacy-sandbox, attribution-reporting, privacy, advertising, difficulty/medium]
 ---
 
 # Вопрос (RU)

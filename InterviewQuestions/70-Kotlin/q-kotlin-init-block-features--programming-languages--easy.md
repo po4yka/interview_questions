@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111133
 title: "Kotlin Init Block Features / Возможности блока init в Kotlin"
-topic: computer-science
+aliases: [Kotlin Init Block Features, Возможности блока init в Kotlin]
+topic: programming-languages
+subtopics: [type-system, initialization]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-noncancellable-context-cleanup--kotlin--medium, q-room-coroutines-flow--kotlin--medium, q-kotlin-favorite-features--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - constructors
   - init
   - initialization
-  - kotlin
   - oop
-  - programming-languages
+  - difficulty/easy
 ---
 # Есть какие-то особенности использования init block?
 

@@ -1,17 +1,23 @@
 ---
 id: 20251012-12271111146
 title: "Kotlin Partition Function / Функция partition в Kotlin"
-topic: computer-science
+aliases: [Kotlin Partition Function, Функция partition в Kotlin]
+topic: programming-languages
+subtopics: [collections, functional-programming]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-any-inheritance--programming-languages--easy, q-fan-in-fan-out-channels--kotlin--hard, q-continuation-cps-internals--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - collections
   - functions
-  - kotlin
-  - programming-languages
+  - difficulty/easy
 ---
 # Что делает функция коллекций partition()?
 

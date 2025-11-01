@@ -3,7 +3,7 @@ id: 20251017-144928
 title: "MVP Pattern / MVP Паттерн"
 aliases: ["MVP Pattern", "MVP Паттерн", "Model-View-Presenter"]
 topic: android
-subtopics: [architecture-mvvm, architecture-patterns, testing]
+subtopics: [architecture-mvvm, testing-unit]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-android-architectural-patterns--android--medium, c-mvvm-pattern, c-architecture-patterns]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/architecture-mvvm, android/architecture-patterns, android/testing, architecture-patterns, mvp, model-view-presenter, difficulty/medium]
+tags: [android/architecture-mvvm, android/testing-unit, architecture-patterns, mvp, model-view-presenter, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:50:53 pm
 date modified: Thursday, October 30th 2025, 3:14:31 pm
 ---

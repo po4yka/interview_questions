@@ -1,15 +1,20 @@
 ---
 id: "20251012-150007"
-title: "What are CoroutineContext elements and how do they combine?"
+title: "What are CoroutineContext elements and how do they combine? / Элементы CoroutineContext"
+aliases: [CoroutineContext Elements, Элементы CoroutineContext]
 topic: kotlin
+subtopics: [coroutines, context]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en]
 status: draft
 created: "2025-10-12"
-tags: ["kotlin", "coroutines", "difficulty/medium"]
+updated: "2025-10-31"
+tags: ["kotlin", "coroutines", "difficulty/hard", "context", "job", "dispatcher"]
 description: "Comprehensive guide to What are CoroutineContext elements and how do they combine? in Kotlin coroutines"
 moc: moc-kotlin
 related: [q-room-coroutines-flow--kotlin--medium, q-kotlin-when-expression--programming-languages--easy, q-coroutine-context-explained--kotlin--medium]
-subtopics: ["coroutines", "context", "job", "dispatcher", "name"]
 ---
 # What are CoroutineContext elements and how do they combine?
 

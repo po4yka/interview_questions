@@ -3,7 +3,7 @@ id: 20251012-12271171
 title: "Privacy Sandbox SDK Runtime / Privacy Sandbox SDK Runtime"
 aliases: [Privacy Sandbox, SDK Runtime, Privacy Sandbox SDK Runtime, Изоляция SDK]
 topic: android
-subtopics: [privacy-sandbox, sdk-runtime, security]
+subtopics: [privacy-sdks, permissions]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-service-thread--android--medium, q-process-isolation--android--medium, q-binder-ipc--android--hard]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/privacy-sandbox, android/sdk-runtime, android/security, privacy, sandboxing, difficulty/hard]
+updated: 2025-10-31
+tags: [android/privacy-sdks, android/permissions, privacy, sandboxing, difficulty/hard]
 ---
 
 # Вопрос (RU)

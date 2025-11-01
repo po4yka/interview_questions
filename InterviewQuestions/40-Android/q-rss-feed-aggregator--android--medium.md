@@ -1,13 +1,19 @@
 ---
 id: 20251017-144838
-title: "Rss Feed Aggregator / Агрегатор RSS лент"
+title: "RSS Feed Aggregator / Агрегатор RSS лент"
+aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
 topic: android
+subtopics: [networking-http, room]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-how-to-choose-layout-for-fragment--android--easy, q-webp-image-format-android--android--easy, q-databases-android--android--easy]
 created: 2025-10-15
-tags: [rss, xml-parsing, workmanager, room, difficulty/medium]
+updated: 2025-10-31
+tags: [android/networking-http, android/room, difficulty/medium]
 ---
 
 # Реализация RSS-агрегатора на Android

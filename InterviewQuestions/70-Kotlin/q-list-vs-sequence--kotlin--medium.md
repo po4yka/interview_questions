@@ -1,18 +1,25 @@
 ---
 id: 20251012-154381
 title: "List Vs Sequence / List против Sequence"
+aliases: [List, Sequence, Lazy Evaluation, Eager Evaluation, List vs Sequence]
 topic: kotlin
+subtopics: [collections, performance]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-lambdas-java-kotlin-syntax--programming-languages--medium, q-stateflow-purpose--programming-languages--medium, q-sealed-class-sealed-interface--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - collections
   - sequence
   - performance
   - lazy-evaluation
+  - difficulty/medium
 ---
 # List vs Sequence: жадные и ленивые коллекции
 

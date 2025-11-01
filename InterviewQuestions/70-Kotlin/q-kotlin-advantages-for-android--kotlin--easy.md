@@ -1,16 +1,21 @@
 ---
 id: 20251012-154369
 title: "Kotlin Advantages For Android / Преимущества Kotlin для Android"
+aliases: [Kotlin, Advantages, For, Android]
 topic: kotlin
+subtopics: [flow, extensions, null-safety]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-interface-properties--programming-languages--medium, q-kotlin-inline-functions--kotlin--medium, q-delegates-compilation--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - android
-  - language-features
+  - 
+  - difficulty/easy
 ---
 # В чем преимущество Kotlin для разработки под Android
 

@@ -1,18 +1,20 @@
 ---
 id: 20251012-122711113
-title: "Strictmode Debugging / Отладка StrictMode"
+title: "StrictMode Debugging / Отладка StrictMode"
+aliases: [StrictMode Debugging, Отладка StrictMode]
 topic: android
+subtopics: [performance-rendering]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-real-time-updates-android--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-migration-to-compose--android--medium]
 created: 2025-10-15
-tags: [strictmode, performance, debugging, main-thread, difficulty/medium, android/performance-rendering, android/debugging]
+updated: 2025-10-31
+tags: [android/performance-rendering, difficulty/medium]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
-subtopics:
-  - profiling
-  - performance-rendering
-  - debugging
 ---
 
 # StrictMode in Android / StrictMode в Android

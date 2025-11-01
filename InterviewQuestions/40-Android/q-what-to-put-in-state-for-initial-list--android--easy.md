@@ -1,15 +1,19 @@
 ---
 id: 20251012-122711177
-title: "What To Put In State For Initial List / Что положить в State для начального списка"
+title: "State for Initial List / Состояние для начального списка"
+aliases: [State for Initial List, Состояние для начального списка]
 topic: android
+subtopics: [ui-state, architecture-mvvm]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [android/state-management, android/ui, data-loading, state, state-management, ui, difficulty/easy]
 moc: moc-android
-related: [q-mvi-architecture--android--hard, q-intent-filters-android--android--medium, q-unit-testing-coroutines-flow--android--medium]
-date created: Saturday, October 18th 2025, 1:29:53 pm
-date modified: Thursday, October 30th 2025, 3:18:12 pm
+related: [c-state-management, c-data-loading, q-what-is-known-about-recyclerview--android--easy, q-viewmodel-pattern--android--easy]
+created: 2025-10-13
+updated: 2025-10-31
+tags: [android/ui-state, android/architecture-mvvm, state-management, data-loading, ui, difficulty/easy]
 ---
 
 # What to put in state for initial list?

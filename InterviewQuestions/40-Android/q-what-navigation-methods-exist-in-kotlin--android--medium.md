@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711172
-title: "What Navigation Methods Exist In Kotlin / Какие методы навигации существуют в Kotlin"
+title: "Navigation Methods Android / Методы навигации Android"
+aliases: [Navigation Methods, Методы навигации]
 topic: android
+subtopics: [ui-navigation, activity]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-app-startup-library--android--medium, q-how-application-priority-is-determined-by-the-system--android--hard, q-how-to-change-number-of-columns-in-recyclerview-based-on-orientation--programming-languages--easy]
+related: [c-navigation, c-intent, q-what-is-activity-and-what-is-it-used-for--android--medium, q-tasks-back-stack--android--medium]
 created: 2025-10-15
-tags: [languages, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-navigation, android/activity, navigation, intent, startActivity, difficulty/medium]
 ---
 
 # Question (EN)

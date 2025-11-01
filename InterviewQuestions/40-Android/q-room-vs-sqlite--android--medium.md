@@ -1,13 +1,19 @@
 ---
 id: 20251016-163856
-title: "Room Vs Sqlite / Room против Sqlite"
+title: "Room vs SQLite / Room против SQLite"
+aliases: [Room vs SQLite, Room против SQLite]
 topic: android
+subtopics: [room]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-room-transactions-dao--room--medium, q-android-runtime-art--android--medium, q-compose-navigation-advanced--jetpack-compose--medium]
 created: 2025-10-15
-tags: [android/data-storage, comparison, database, orm, room, sqlite, difficulty/medium]
+updated: 2025-10-31
+tags: [android/room, difficulty/medium]
 ---
 
 # В чем разница между Room & SQLite?

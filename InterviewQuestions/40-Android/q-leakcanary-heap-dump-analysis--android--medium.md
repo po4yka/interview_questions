@@ -3,15 +3,15 @@ id: 20251012-12271127
 title: "LeakCanary Heap Dump Analysis / Анализ дампа памяти в LeakCanary"
 aliases: ["LeakCanary Heap Dump Analysis", "Анализ дампа памяти в LeakCanary"]
 topic: android
-subtopics: [performance-memory, profiling, debugging]
+subtopics: [performance-memory, profiling]
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-30
-tags: [android/performance-memory, android/profiling, android/debugging, leakcanary, heap-dump, memory-analysis, shark, difficulty/medium]
+updated: 2025-10-31
+tags: [android/performance-memory, android/profiling, leakcanary, heap-dump, memory-analysis, shark, difficulty/medium]
 moc: moc-android
 related: [q-main-thread-android--android--medium, q-canvas-optimization--graphics--medium]
 sources: []

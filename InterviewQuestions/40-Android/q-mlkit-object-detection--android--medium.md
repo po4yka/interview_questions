@@ -3,7 +3,7 @@ id: 20251012-12271140
 title: "ML Kit Object Detection / Распознавание объектов ML Kit"
 aliases: [ML Kit Object Detection, Распознавание объектов ML Kit, ML Kit Image Labeling, ML Kit Barcode Scanning]
 topic: android
-subtopics: [camera, machine-learning, media]
+subtopics: [camera, media]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,8 +12,8 @@ status: draft
 moc: moc-android
 related: [q-compose-performance-optimization--android--hard, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
-tags: [android/camera, android/machine-learning, android/media, ml-kit, object-detection, barcode-scanning, difficulty/medium]
+updated: 2025-10-31
+tags: [android/camera, android/media, ml-kit, object-detection, barcode-scanning, difficulty/medium]
 ---
 
 # Вопрос (RU)

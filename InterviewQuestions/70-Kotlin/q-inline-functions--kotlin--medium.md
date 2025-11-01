@@ -1,16 +1,21 @@
 ---
 id: 20251012-154364
 title: "Inline Functions"
+aliases: [Inline, Functions]
 topic: kotlin
+subtopics: [coroutines, sealed-classes, inline-functions]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-sealed-when-exhaustive--kotlin--medium, q-coroutine-timeout-withtimeout--kotlin--medium, q-channels-basics-types--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - inline-functions
-  - performance
+  - 
+  - difficulty/medium
 ---
 # Что такое inline функции?
 

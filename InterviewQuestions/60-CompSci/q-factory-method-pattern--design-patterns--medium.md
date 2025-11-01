@@ -1,15 +1,19 @@
 ---
-id: 20251012-1227111135
-title: "Factory Method Pattern / Factory Method Паттерн"
-topic: computer-science
+id: 20251012-122735
+title: "Factory Method Pattern / Паттерн фабричный метод"
+aliases: [Factory Method Pattern, Паттерн фабричный метод]
+topic: design-patterns
+subtopics: [creational-patterns, factory-method, object-creation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
-related: [q-how-suspend-function-detects-suspension--programming-languages--hard, q-reference-types-criteria--programming-languages--medium, q-strategy-pattern--design-patterns--medium]
+moc: moc-design-patterns
+related: [c-design-patterns, q-abstract-factory-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [creational-patterns, design-patterns, factory, factory-method, gof-patterns]
-date created: Monday, October 6th 2025, 7:14:43 am
-date modified: Sunday, October 26th 2025, 11:57:42 am
+updated: 2025-10-31
+tags: [design-patterns, gof-patterns, creational-patterns, factory, factory-method, difficulty/medium]
 ---
 
 # Factory Method Pattern

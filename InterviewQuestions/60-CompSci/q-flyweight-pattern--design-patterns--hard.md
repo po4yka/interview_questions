@@ -1,15 +1,19 @@
 ---
-id: 20251012-1227111139
-title: "Flyweight Pattern / Flyweight Паттерн"
-topic: computer-science
+id: 20251012-122739
+title: "Flyweight Pattern / Паттерн легкий вес"
+aliases: [Flyweight Pattern, Паттерн легкий вес]
+topic: design-patterns
+subtopics: [structural-patterns, flyweight, memory-optimization]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
-related: [q-decorator-pattern--design-patterns--medium, q-how-to-create-suspend-function--programming-languages--medium, q-when-coroutine-cannot-be-cancelled--programming-languages--medium]
+moc: moc-design-patterns
+related: [c-design-patterns, q-adapter-pattern--design-patterns--medium, q-composite-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [design-patterns, flyweight, gof-patterns, memory-optimization, structural-patterns]
-date created: Monday, October 6th 2025, 7:28:15 am
-date modified: Sunday, October 26th 2025, 11:57:48 am
+updated: 2025-10-31
+tags: [design-patterns, gof-patterns, structural-patterns, flyweight, memory-optimization, difficulty/hard]
 ---
 
 # Flyweight Pattern

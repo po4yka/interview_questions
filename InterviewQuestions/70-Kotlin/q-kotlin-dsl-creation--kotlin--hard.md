@@ -1,19 +1,21 @@
 ---
 id: 20251012-154372
 title: "Kotlin Dsl Creation / Создание DSL в Kotlin"
+aliases: [Kotlin, Dsl, Creation]
 topic: kotlin
+subtopics: [extensions, coroutines, delegation]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-equality-operator--programming-languages--easy, q-kotlin-conversion-functions--programming-languages--medium, q-array-vs-list-kotlin--kotlin--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - dsl
-  - type-safety
-  - scope-functions
-  - dsl-marker
-  - builders
+  - 
+  - difficulty/hard
 ---
 # Creating Type-Safe DSLs in Kotlin
 

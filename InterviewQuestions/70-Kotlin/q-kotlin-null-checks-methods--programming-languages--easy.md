@@ -1,20 +1,26 @@
 ---
 id: 20251016-164233
 title: "Kotlin Null Checks Methods / Методы проверки на null в Kotlin"
-topic: computer-science
+aliases: [Kotlin Null Checks Methods, Методы проверки на null в Kotlin]
+topic: programming-languages
+subtopics: [null-safety, operators]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotlin--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - elvis
-  - kotlin
   - null-checks
   - null-safety
   - operators
-  - programming-languages
   - safe-call
+  - difficulty/easy
 ---
 # Каким образом осуществлять проверки на null?
 

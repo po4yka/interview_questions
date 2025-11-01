@@ -1,18 +1,25 @@
 ---
 id: 20251012-12271111155
 title: "Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin"
+aliases: [Kotlin Sealed When Exhaustive, sealed и exhaustive when в Kotlin]
 topic: kotlin
+subtopics: [sealed-classes, pattern-matching]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-java-kotlin-abstract-classes-difference--programming-languages--medium, q-sequences-detailed--kotlin--medium, q-flow-combining-zip-combine--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - sealed-classes
   - when-expression
   - state-machine
   - result
+  - difficulty/medium
 ---
 # Sealed Classes and Exhaustive When
 

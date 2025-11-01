@@ -1,20 +1,26 @@
 ---
 id: 20251012-154374
 title: "Kotlin Java Abstract Differences / Различия abstract в Kotlin и Java"
-topic: kotlin
+aliases: [Kotlin Java Abstract Differences, Различия abstract в Kotlin и Java]
+topic: programming-languages
+subtopics: [type-system, inheritance]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-structured-concurrency-patterns--kotlin--hard, q-prohibit-object-creation--programming-languages--easy, q-by-keyword-function-call--programming-languages--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - abstract
   - inheritance
   - java
-  - kotlin
   - oop
   - open
-  - programming-languages
+  - difficulty/medium
 ---
 # Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?
 

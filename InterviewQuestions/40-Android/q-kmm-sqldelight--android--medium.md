@@ -3,7 +3,7 @@ id: 20251012-12271122
 title: "SQLDelight в KMM / SQLDelight in KMM"
 aliases: ["SQLDelight в KMM", "SQLDelight in KMM", "SQLDelight для мультиплатформы"]
 topic: android
-subtopics: [kmm, databases, multiplatform]
+subtopics: [kmp, sqldelight, room]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-annotation-processing-android--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/kmm, android/databases, Database, difficulty/medium, KMM, Kotlin, SQLDelight, multiplatform]
+tags: [android/kmp, android/sqldelight, android/room, Database, difficulty/medium, KMM, Kotlin, SQLDelight, multiplatform]
 date created: Tuesday, October 28th 2025, 9:23:21 pm
 date modified: Thursday, October 30th 2025, 3:11:49 pm
 ---

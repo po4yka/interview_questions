@@ -1,13 +1,19 @@
 ---
 id: 20251012-12271198
-title: "Separate Ui Business Logic / Разделение UI и бизнес-логики"
+title: "Separate UI and Business Logic / Разделение UI и бизнес-логики"
+aliases: [Separate UI and Business Logic, Разделение UI и бизнес-логики]
 topic: android
+subtopics: [architecture-mvvm]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-proguard-r8--android--medium, q-how-to-draw-ui-without-xml--android--easy, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
 created: 2025-10-15
-tags: [android/architecture-clean, architecture, architecture-clean, clean-architecture, platform/android, separation-of-concerns, difficulty/easy]
+updated: 2025-10-31
+tags: [android/architecture-mvvm, difficulty/easy]
 ---
 
 # Зачем нужно разделять отображение и бизнес-логику?

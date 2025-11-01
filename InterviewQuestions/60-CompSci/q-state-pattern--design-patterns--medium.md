@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227111182
 title: "State Pattern / State Паттерн"
-topic: computer-science
+aliases: [State Pattern, State Паттерн]
+topic: design-patterns
+subtopics: [behavioral-patterns, state-machine, polymorphism]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
+moc: moc-design-patterns
 related: [q-bridge-pattern--design-patterns--hard, q-hot-vs-cold-flows--programming-languages--medium, q-sharedflow-vs-stateflow--programming-languages--easy]
 created: 2025-10-15
-tags: [behavioral-patterns, design-patterns, gof-patterns, state, state-machine]
+updated: 2025-10-31
+tags: [behavioral-patterns, design-patterns, gof-patterns, state, state-machine, difficulty/medium]
 date created: Monday, October 6th 2025, 7:23:49 am
 date modified: Sunday, October 26th 2025, 1:39:49 pm
 ---

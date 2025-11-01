@@ -3,7 +3,7 @@ id: 20251012-12271123
 title: "KMM Testing / Тестирование в KMM"
 aliases: [KMM Testing, Kotlin Multiplatform Testing, Тестирование KMM, Тестирование Kotlin Multiplatform]
 topic: android
-subtopics: [kmm, testing-unit, coroutines]
+subtopics: [kmp, testing-unit, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,8 +13,8 @@ moc: moc-android
 related: [q-testing-viewmodels-turbine--android--medium, q-testing-coroutines-flow--android--hard, q-compose-testing--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/kmm, android/testing-unit, android/coroutines, kotlin, multiplatform, testing, difficulty/medium]
+updated: 2025-10-31
+tags: [android/kmp, android/testing-unit, android/coroutines, kotlin, multiplatform, testing, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:24:32 pm
 date modified: Thursday, October 30th 2025, 3:11:50 pm
 ---

@@ -1,16 +1,24 @@
 ---
 id: 20251012-154360
 title: "Equals Hashcode Purpose / Назначение equals и hashCode"
+aliases: [Equals, Hashcode, Object Comparison]
 topic: kotlin
+subtopics: [object-comparison, equality, collections]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-sealed-classes-purpose--programming-languages--medium, q-kotlin-when-expression--programming-languages--easy, q-kotlin-map-flatmap--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - object-comparison
   - hashmap
+  - equality
+  - difficulty/medium
 ---
 # Зачем нужны методы equals и hashcode?
 

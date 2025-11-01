@@ -1,12 +1,18 @@
 ---
 id: 20251015-095858
-title: "Context Receivers"
+title: "Context Receivers / Context Receivers"
+aliases: [Context Receivers, Context Receivers]
 topic: kotlin
+subtopics: [type-system, advanced-features]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en]
 status: draft
 moc: moc-kotlin
 related: [q-infix-functions--kotlin--medium, q-kotlin-conversion-functions--programming-languages--medium, q-coroutine-exception-handling--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - context-receivers
@@ -14,6 +20,7 @@ tags:
   - advanced
   - receivers
   - scope-functions
+  - difficulty/hard
 ---
 # Context Receivers in Kotlin
 

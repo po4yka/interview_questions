@@ -3,7 +3,7 @@ id: 20251012-1227187
 title: "How To Organize Work With Text And Images In A Delegate / Как Организовать Работу С Текстом И Картинками В Делегате"
 aliases: [Adapter Delegates, RecyclerView Delegates, Делегаты адаптера]
 topic: android
-subtopics: [recyclerview, ui-patterns, adapters]
+subtopics: [ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [q-which-layout-for-large-list--android--easy, q-room-code-generation-timing--android--medium, c-recyclerview]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android/recyclerview, android/ui-patterns, android/adapters, delegates, difficulty/easy]
+tags: [android/ui-views, delegates, recyclerview, adapter, difficulty/easy]
 date created: Tuesday, October 28th 2025, 9:48:46 am
 date modified: Thursday, October 30th 2025, 12:49:11 pm
 ---

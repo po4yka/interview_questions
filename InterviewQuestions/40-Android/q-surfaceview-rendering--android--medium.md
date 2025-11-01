@@ -1,13 +1,19 @@
 ---
 id: 20251012-122711114
-title: "Surfaceview Rendering / Рендеринг SurfaceView"
+title: "SurfaceView Rendering / Рендеринг SurfaceView"
+aliases: [SurfaceView Rendering, Рендеринг SurfaceView]
 topic: android
+subtopics: [ui-views, performance-rendering]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-remember-vs-remembersaveable-compose--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium, q-activity-navigation-how-it-works--android--medium]
+related: [c-views, c-threading, q-what-methods-redraw-views--android--medium, q-viewgroup-vs-view-differences--android--easy]
 created: 2025-10-15
-tags: [surfaceview, rendering, views, performance, threading, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, android/performance-rendering, surfaceview, rendering, difficulty/medium]
 ---
 
 # What is SurfaceView? / Что такое SurfaceView?

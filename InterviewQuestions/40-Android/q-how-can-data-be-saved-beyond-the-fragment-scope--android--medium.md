@@ -3,7 +3,7 @@ id: 20251016-162905
 title: "How Can Data Be Saved Beyond The Fragment Scope / Как можно сохранить данные за пределами скоупа Fragment"
 aliases: [Fragment Data Persistence, Сохранение данных Fragment, Fragment Scope, ViewModel Scope]
 topic: android
-subtopics: [lifecycle, architecture-mvvm, data-storage]
+subtopics: [lifecycle, architecture-mvvm, datastore]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -12,9 +12,9 @@ status: draft
 moc: moc-android
 related: [c-viewmodel, c-repository-pattern, q-fragment-vs-activity-lifecycle--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-31
 sources: []
-tags: [android, android/lifecycle, android/architecture-mvvm, android/data-storage, fragment, viewmodel, state-management, difficulty/medium]
+tags: [android, android/lifecycle, android/architecture-mvvm, android/datastore, fragment, viewmodel, state-management, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:34:22 am
 date modified: Thursday, October 30th 2025, 12:48:09 pm
 ---

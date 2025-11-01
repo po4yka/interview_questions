@@ -1,17 +1,23 @@
 ---
 id: 20251012-154373
 title: "Kotlin Immutable Collections / Неизменяемые коллекции Kotlin"
-topic: kotlin
+aliases: [Kotlin Immutable Collections, Неизменяемые коллекции Kotlin]
+topic: programming-languages
+subtopics: [collections, type-system]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-val-vs-var--kotlin--easy, q-kotlin-coroutines-overview--programming-languages--medium, q-serialization-basics--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - collections
   - immutability
-  - kotlin
-  - programming-languages
+  - difficulty/easy
 ---
 # Какой механизм позволяет создавать иммутабельные коллекции в Kotlin?
 

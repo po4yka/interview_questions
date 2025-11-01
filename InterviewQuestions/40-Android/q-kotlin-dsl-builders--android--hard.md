@@ -5,7 +5,7 @@ aliases:
   - "Kotlin DSL Builders"
   - "Kotlin DSL строители"
 topic: android
-subtopics: [kotlin, api-design]
+subtopics: [ui-compose, coroutines]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -14,8 +14,8 @@ status: draft
 moc: moc-android
 related: [c-dsl-builders, q-kotlin-basics--kotlin--easy, q-kotlin-lambda-receivers--kotlin--medium]
 created: 2025-10-12
-updated: 2025-01-25
-tags: [android/kotlin, android/api-design, dsl, builders, api-design, lambdas, difficulty/hard]
+updated: 2025-10-31
+tags: [android/ui-compose, android/coroutines, dsl, builders, api-design, lambdas, difficulty/hard]
 sources: [https://kotlinlang.org/docs/type-safe-builders.html]
 date created: Monday, October 13th 2025, 7:24:51 am
 date modified: Thursday, October 30th 2025, 3:11:55 pm

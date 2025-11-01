@@ -1,13 +1,19 @@
 ---
 id: 20251012-1227111163
 title: "Mediator Pattern / Mediator Паттерн"
-topic: computer-science
+aliases: [Mediator Pattern, Mediator Паттерн]
+topic: design-patterns
+subtopics: [behavioral-patterns, coupling-reduction, architecture]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
+moc: moc-design-patterns
 related: [q-composite-pattern--design-patterns--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-state-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [behavioral-patterns, coupling, design-patterns, gof-patterns, mediator]
+updated: 2025-10-31
+tags: [behavioral-patterns, coupling, design-patterns, gof-patterns, mediator, difficulty/medium]
 date created: Monday, October 6th 2025, 7:29:48 am
 date modified: Sunday, October 26th 2025, 12:08:08 pm
 ---

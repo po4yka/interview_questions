@@ -1,19 +1,25 @@
 ---
 id: 20251012-12271111132
 title: "Kotlin Generic Function Syntax / Синтаксис обобщенных функций Kotlin"
-topic: computer-science
+aliases: [Kotlin Generic Function Syntax, Синтаксис обобщенных функций Kotlin]
+topic: programming-languages
+subtopics: [generics, type-system]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-sealed-vs-abstract-classes--programming-languages--medium, q-kotlin-sealed-classes-features--programming-languages--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
+  - programming-languages
   - functions
   - generics
-  - kotlin
-  - programming-languages
   - syntax
   - type-parameters
+  - difficulty/easy
 ---
 # Какой синтаксис используется для объявления обобщенной функции в Kotlin?
 

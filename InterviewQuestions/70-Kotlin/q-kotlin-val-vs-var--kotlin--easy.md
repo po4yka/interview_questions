@@ -11,7 +11,7 @@ subtopics:
   - immutability
   - mutability
   - read-only
-question_kind: comparison
+question_kind: theory
 difficulty: easy
 
 # Language & provenance
@@ -27,7 +27,7 @@ related: [q-kotlin-properties--kotlin--easy, q-kotlin-const--kotlin--easy, q-kot
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 
 tags: [kotlin, val, var, immutability, mutability, read-only, constants, difficulty/easy]
 ---

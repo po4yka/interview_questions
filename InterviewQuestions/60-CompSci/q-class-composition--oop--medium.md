@@ -1,16 +1,19 @@
 ---
-id: 20251012-1227111116
+id: 20251012-122712
 title: "Class Composition / Композиция классов"
-topic: architecture-patterns
+aliases: [Class Composition, Композиция классов]
+topic: oop
+subtopics: [composition, inheritance, encapsulation, relationships]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-oop
+related: [c-inheritance, c-composition, q-inheritance-vs-composition--oop--medium, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
-tags: [code-reuse, composition, design-patterns, encapsulation, has-a, oop, relationships]
-moc: moc-architecture-patterns
-related: [q-adapter-pattern--design-patterns--medium, q-reference-types-criteria--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
-subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
-date created: Saturday, October 4th 2025, 7:04:16 pm
-date modified: Saturday, October 25th 2025, 8:32:54 pm
+updated: 2025-10-31
+tags: [oop, composition, inheritance, encapsulation, relationships, code-reuse, difficulty/medium]
 ---
 
 # Что Известно О Композиции Классов?
