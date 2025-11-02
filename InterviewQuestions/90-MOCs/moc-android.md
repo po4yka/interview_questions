@@ -301,15 +301,18 @@ SORT difficulty ASC, file.name ASC
 - [[q-android-security-best-practices--android--medium]] - Android security overview
 - [[q-android-security-practices-checklist--android--medium]] - Security practices checklist
 - [[q-app-security-best-practices--android--medium]] - App security best practices
+- [[q-data-safety-play-console--android--hard]] - Play Data Safety workflow
 
 #### Data Protection
 - [[q-android-keystore-system--security--medium]] - Android Keystore system
 - [[q-data-encryption-at-rest--android--medium]] - Data encryption at rest
 - [[q-database-encryption-android--android--medium]] - Database encryption
 - [[q-encrypted-file-storage--android--medium]] - Encrypted file storage
+- [[q-sensitive-data-lifecycle--android--hard]] - Sensitive data lifecycle controls
 
 #### Network Security
 - [[q-certificate-pinning--security--medium]] - Certificate pinning
+- [[q-network-security-hardening--android--hard]] - Hardened TLS, mTLS, and pinning strategy
 
 #### Code Protection
 - [[q-proguard-r8-rules--security--medium]] - ProGuard/R8 obfuscation

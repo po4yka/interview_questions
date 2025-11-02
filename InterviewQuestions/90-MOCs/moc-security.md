@@ -51,6 +51,7 @@ LIMIT 100
 - [[q-android-security-best-practices--android--medium]] - Android security overview
 - [[q-android-security-practices-checklist--android--medium]] - Security practices checklist
 - [[q-app-security-best-practices--android--medium]] - App security best practices
+- [[q-data-safety-play-console--android--hard]] - Play Data Safety end-to-end workflow
 
 **All Android Security Questions:**
 ```dataview
@@ -85,6 +86,7 @@ SORT difficulty ASC, file.name ASC
 #### HTTPS & TLS
 - [[q-cleartext-traffic-android--android--easy]] - Cleartext traffic and HTTPS enforcement
 - [[q-certificate-pinning--security--medium]] - Certificate pinning implementation
+- [[q-network-security-hardening--android--hard]] - Hardened TLS, pinning, and mTLS strategy
 
 **All Network Security Questions:**
 ```dataview
@@ -129,6 +131,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-privacy-sandbox-sdk-runtime--privacy--hard]] - Privacy Sandbox SDK Runtime
 - [[q-play-app-signing--android--medium]] - Play App Signing
 - [[q-fileprovider-secure-sharing--android--medium]] - FileProvider secure file sharing
+- [[q-sensitive-data-lifecycle--android--hard]] - Managing sensitive data lifecycle
 
 **All Privacy Questions:**
 ```dataview

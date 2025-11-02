@@ -83,35 +83,30 @@ sources: []
 
 The vault now covers recent additions (CameraX, Media3, Wear Compose, Billing, Auto/TV, MDM), yet several senior-level gaps remain. These are the next priorities for concept + Q&A coverage.
 
-### 1. Security & compliance hardening
-- **Android Data Safety & Safety Labels**: end-to-end workflow, automation, linking with internal privacy policies.
-- **Network defenses**: certificate pinning, network security config, key attestation, mTLS.
-- **Sensitive data lifecycle**: encrypted storage, secure caching, Safety Center integrations.
-
-### 2. Advanced communication surfaces
+### 1. Advanced communication surfaces
 - **Conversation notifications & Bubbles**: APIs across Android 11–14, UX caveats, background limits.
 - **CallStyle/Foreground service compliance**: emergency affordances, mic/camera indicators, privacy chips.
 - **ShareSheet collaboration**: `ChooserTarget`, dynamic shortcuts, predictive back support.
 
-### 3. Maps & geospatial experiences
+### 2. Maps & geospatial experiences
 - **Compose for Maps / Maps SDK v4**: managing camera state, clustering, theming.
 - **Geospatial anchors & AR navigation**: combining Maps + ARCore Geospatial.
 - **Offline/hybrid navigation**: map syncing, storage budgeting, runtime permissions.
 
-### 4. Release engineering & quality operations
+### 3. Release engineering & quality operations
 - **Play Console automation**: Play Vitals dashboards, ANR debugging, rollback workflows, pre-launch report triage.
 - **App Bundles advanced**: Play Asset Delivery (install/fast-follow/on-demand), feature modularization.
 - **Continuous delivery**: internal app sharing, staged rollouts, automated compliance checks.
 
-### 5. Accessibility & inclusion at scale
+### 4. Accessibility & inclusion at scale
 - **Switch Access / universal access**: semantics, focus management, testing strategies.
 - **Text-to-speech & multimodal UX**: live captions, audio descriptions, spoken feedback integration.
 - **Globalization**: RTL layouts, localized formatting, font fallback for complex scripts.
 
 ### Next steps
-1. Prioritize Security and Communication surfaces for the next round of notes (concept + Q&A each).
-2. Add taxonomy tags (`android/security-hardening`, `android/bubbles`, `android/maps-compose`, `android/release`) to track new work.
-3. Extend `moc-android` with Security, Communication Surfaces, and Release Engineering sections.
+1. Prioritize Communication surfaces for the next round of notes (concept + Q&A each).
+2. Add taxonomy tags (`android/bubbles`, `android/maps-compose`, `android/release`) to track new work.
+3. Extend `moc-android` with Communication Surfaces and Release Engineering sections.
 4. Build a Dataview tracker monitoring draft → reviewed → ready for these focus areas.
 
 ---
