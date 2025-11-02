@@ -3,27 +3,20 @@ id: android-376
 title: "Which Event Is Triggered When User Presses Screen / Какое событие срабатывает когда пользователь нажимает на экран"
 aliases: ["Touch Events in Android", "События касания в Android"]
 topic: android
-subtopics: [ui-views, ui-compose]
+subtopics: [ui-compose, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-16kb-dex-page-size--android--medium, q-primitive-maps-android--android--medium, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]
+related: [q-16kb-dex-page-size--android--medium, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-primitive-maps-android--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags:
-  - android
-  - android/ui-views
-  - android/ui-compose
-  - touch-events
-  - motion-event
-  - gesture-detection
-  - difficulty/medium
+tags: [android, android/ui-compose, android/ui-views, difficulty/medium, gesture-detection, motion-event, touch-events]
 date created: Wednesday, October 29th 2025, 12:16:10 pm
-date modified: Thursday, October 30th 2025, 3:18:01 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +27,7 @@ date modified: Thursday, October 30th 2025, 3:18:01 pm
 
 При нажатии пользователя на экран вызывается событие **ACTION_DOWN**. Это часть системы сенсорных событий, управляемой через `MotionEvent`. Обработка касаний — фундаментальная часть [[c-custom-views]] и взаимодействия с пользователем в Android.
 
-### Основные действия MotionEvent
+### Основные Действия MotionEvent
 
 | Действие | Константа | Описание |
 |----------|-----------|----------|
@@ -45,7 +38,7 @@ date modified: Thursday, October 30th 2025, 3:18:01 pm
 | **ACTION_POINTER_DOWN** | 5 | Дополнительный указатель касается экрана |
 | **ACTION_POINTER_UP** | 6 | Не основной указатель покидает экран |
 
-### Базовая обработка касаний в View
+### Базовая Обработка Касаний В View
 
 ```kotlin
 class CustomView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -71,7 +64,7 @@ class CustomView(context: Context, attrs: AttributeSet? = null) : View(context, 
 }
 ```
 
-### Пример: Рисование по касанию
+### Пример: Рисование По Касанию
 
 ```kotlin
 class DrawingView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -109,7 +102,7 @@ class DrawingView(context: Context, attrs: AttributeSet? = null) : View(context,
 }
 ```
 
-### Обработка мультикасаний
+### Обработка Мультикасаний
 
 ```kotlin
 override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -143,7 +136,7 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 }
 ```
 
-### Обработка касаний в Jetpack Compose
+### Обработка Касаний В Jetpack Compose
 
 ```kotlin
 @Composable
@@ -196,7 +189,7 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 }
 ```
 
-### GestureDetector для сложных жестов
+### GestureDetector Для Сложных Жестов
 
 ```kotlin
 val gestureDetector = GestureDetector(context,
@@ -234,7 +227,7 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 }
 ```
 
-### Распространение событий (Touch Event Propagation)
+### Распространение Событий (Touch Event Propagation)
 
 ```kotlin
 class ParentView(context: Context) : ViewGroup(context) {
@@ -264,7 +257,7 @@ class ParentView(context: Context) : ViewGroup(context) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Возвращайте `true`** из `onTouchEvent()` для получения последующих событий (`MOVE`, `UP`)
 2. **Используйте `actionMasked`** вместо `action` для корректной обработки мультикасаний

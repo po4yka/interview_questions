@@ -1,20 +1,22 @@
 ---
 id: android-072
 title: Compose Core Components / Основные компоненты Compose
-aliases: [Compose Components, Jetpack Compose Architecture, Основные компоненты Compose, Архитектура Jetpack Compose]
+aliases: [Compose Components, Jetpack Compose Architecture, Архитектура Jetpack Compose, Основные компоненты Compose]
 topic: android
-subtopics: [ui-compose, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, c-compose-recomposition, c-mvvm-pattern, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard]
+related: [c-compose-recomposition, c-compose-state, c-mvvm-pattern, q-compose-modifier-order-performance--android--medium, q-compose-stability-skippability--android--hard]
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/ui-compose, android/architecture-mvvm, jetpack-compose, declarative-ui, difficulty/medium]
+tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, jetpack-compose]
 sources: [https://developer.android.com/jetpack/compose/architecture]
+date created: Saturday, November 1st 2025, 1:01:25 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -599,8 +601,6 @@ Compose Runtime
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-compose--android--easy]] - Compose basics
-- [[q-compose-vs-views--android--easy]] - Compose vs traditional Views
 
 ### Related (Medium)
 - [[q-compose-modifier-order-performance--android--medium]] - Modifier order optimization

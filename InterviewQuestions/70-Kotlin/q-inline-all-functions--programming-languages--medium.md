@@ -3,7 +3,7 @@ id: lang-069
 title: "Inline All Functions / Inline функции"
 aliases: [Inline All Functions, Inline функции]
 topic: programming-languages
-subtopics: [kotlin, compiler-optimization, performance]
+subtopics: [compiler-optimization, kotlin, performance]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-compiler-optimization, c-kotlin-features, c-performance]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, compiler-optimization, inline, inline-functions, performance, difficulty/medium]
+tags: [compiler-optimization, difficulty/medium, inline, inline-functions, kotlin, performance, programming-languages]
+date created: Friday, October 31st 2025, 6:31:48 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Можно Ли На Уровне Компилятора Сделать Все Функции Inline?
@@ -38,6 +40,6 @@ No, not all functions can be made inline at compiler level: 1. Compiler makes de
 
 ## Related Questions
 
-- [[q-bridge-pattern--design-patterns--hard]]
+-
 - [[q-runtime-generic-access--programming-languages--hard]]
 - [[q-java-access-modifiers--programming-languages--medium]]

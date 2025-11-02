@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: easy
 
@@ -24,8 +24,11 @@ related: [q-coroutine-exception-handling--kotlin--medium, q-delegates-compilatio
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
+date created: Saturday, October 18th 2025, 12:37:51 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140028
 
@@ -169,7 +172,7 @@ val data = retry(3) { fetchData() }
 
 Suspend-функции являются основой корутин в Kotlin. Это специальные функции, которые могут быть приостановлены и возобновлены без блокировки потока, обеспечивая эффективное асинхронное программирование.
 
-### Базовый синтаксис
+### Базовый Синтаксис
 
 Suspend-функция объявляется с модификатором `suspend`:
 
@@ -180,7 +183,7 @@ suspend fun fetchData(): String {
 }
 ```
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 1. **Могут вызываться только из корутин или других suspend-функций**:
 ```kotlin
@@ -223,7 +226,7 @@ fun example(continuation: Continuation<String>): Any {
 }
 ```
 
-### Распространенные suspend-функции
+### Распространенные Suspend-функции
 
 **Из стандартной библиотеки**:
 - `delay(ms)` - Приостанавливает на указанное время
@@ -237,7 +240,7 @@ suspend fun fetchFromApi(): ApiResponse {
 }
 ```
 
-### Практические примеры
+### Практические Примеры
 
 **Пример 1: Последовательное выполнение**:
 ```kotlin
@@ -270,7 +273,7 @@ suspend fun safeLoadData(): Result<String> {
 }
 ```
 
-### Важные правила
+### Важные Правила
 
 1. **Suspend-функции не создают корутины** - они должны вызываться из существующей
 2. **Они сохраняют структурированную конкурентность** - отмена распространяется корректно
@@ -321,7 +324,7 @@ val data = retry(3) { fetchData() }
 - [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-- [[q-coroutine-cancellation--kotlin--medium]] - Cancellation basics
+-  - Cancellation basics
 
 ### Advanced (Harder)
 - [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines

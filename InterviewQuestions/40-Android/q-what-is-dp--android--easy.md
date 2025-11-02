@@ -1,9 +1,9 @@
 ---
 id: android-259
 title: "What Is Dp / Что такое dp"
-aliases: [Dp, Density-independent Pixels, Плотность-независимые пиксели]
+aliases: [Density-independent Pixels, Dp, Плотность-независимые пиксели]
 topic: android
-subtopics: [ui-compose, ui-views, ui-theming]
+subtopics: [ui-compose, ui-theming, ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -14,14 +14,11 @@ related: [q-what-are-px-dp-sp--android--easy, q-what-are-the-most-important-comp
 created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/training/multiscreen/screendensities]
-tags:
-  - android/ui-compose
-  - android/ui-views
-  - android/ui-theming
-  - density
-  - material-design
-  - difficulty/easy
+tags: [android/ui-compose, android/ui-theming, android/ui-views, density, difficulty/easy, material-design]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое dp (density-independent pixel, плотность-независимый пиксель)?
@@ -38,7 +35,7 @@ tags:
 
 **dp** (density-independent pixels, плотность-независимые пиксели) — единица измерения в Android для создания адаптивных интерфейсов, которые выглядят одинаково на устройствах с разной плотностью экрана.
 
-### Зачем нужен dp
+### Зачем Нужен Dp
 
 **Проблема**: При использовании пикселей (px) элементы UI имеют разный физический размер на разных устройствах.
 
@@ -65,7 +62,7 @@ pixels = dp × (device dpi / 160)
 | xxhdpi    | ~480dpi | 3.0         | drawable-xxhdpi  |
 | xxxhdpi   | ~640dpi | 4.0         | drawable-xxxhdpi |
 
-### Использование в XML
+### Использование В XML
 
 ```xml
 <Button
@@ -75,7 +72,7 @@ pixels = dp × (device dpi / 160)
     android:text="Submit" />
 ```
 
-### Использование в Compose
+### Использование В Compose
 
 ```kotlin
 @Composable
@@ -98,7 +95,7 @@ fun DpExample() {
 }
 ```
 
-### Конвертация dp ↔ px
+### Конвертация Dp ↔ Px
 
 **View System**:
 ```kotlin
@@ -120,7 +117,7 @@ fun DpConversion() {
 }
 ```
 
-### Стандартные значения Material Design
+### Стандартные Значения Material Design
 
 ```kotlin
 // Отступы
@@ -135,7 +132,7 @@ fun DpConversion() {
 24.dp  // Стандартная иконка
 ```
 
-### dp vs px vs sp
+### Dp Vs Px Vs Sp
 
 | Случай использования | Единица | Пример              |
 |---------------------|---------|---------------------|
@@ -151,7 +148,7 @@ fun DpConversion() {
 3. **Используйте sp** для размера текста (не dp!)
 4. **Кратность 4dp или 8dp** для согласованности
 
-### Частые ошибки
+### Частые Ошибки
 
 ```kotlin
 // ❌ ПЛОХО: Использование px
@@ -170,7 +167,7 @@ textView.layoutParams.width = widthPx
 
 **dp** (density-independent pixels) is an Android measurement unit for creating adaptive interfaces that look consistent across devices with different screen densities.
 
-### Why dp Exists
+### Why Dp Exists
 
 **Problem**: Using pixels (px) results in different physical sizes on different devices.
 
@@ -230,7 +227,7 @@ fun DpExample() {
 }
 ```
 
-### Converting dp ↔ px
+### Converting Dp ↔ Px
 
 **View System**:
 ```kotlin
@@ -267,7 +264,7 @@ fun DpConversion() {
 24.dp  // Standard icon
 ```
 
-### dp vs px vs sp
+### Dp Vs Px Vs Sp
 
 | Use Case         | Unit   | Example             |
 |-----------------|--------|---------------------|

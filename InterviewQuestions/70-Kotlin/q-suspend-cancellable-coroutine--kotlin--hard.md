@@ -5,24 +5,17 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - suspend
-  - callbacks
-  - cancellation
-  - integration
+tags: [callbacks, cancellation, coroutines, difficulty/hard, integration, kotlin, suspend]
 moc: moc-kotlin
-related: [q-job-state-machine-transitions--kotlin--medium, q-anonymous-class-in-inline-function--programming-languages--medium, q-debounce-throttle-flow--kotlin--medium]
-  - q-continuation-cps-internals--kotlin--hard
-  - q-channelflow-callbackflow-flow--kotlin--medium
-  - q-coroutine-exception-handler--kotlin--medium
+related: [q-anonymous-class-in-inline-function--programming-languages--medium, q-channelflow-callbackflow-flow--kotlin--medium, q-continuation-cps-internals--kotlin--hard, q-coroutine-exception-handler--kotlin--medium, q-debounce-throttle-flow--kotlin--medium, q-job-state-machine-transitions--kotlin--medium]
 subtopics:
-  - coroutines
-  - suspend
   - callbacks
-  - integration
   - cancellation
+  - coroutines
+  - integration
+  - suspend
+date created: Saturday, November 1st 2025, 12:10:13 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Question (EN)
@@ -39,7 +32,7 @@ Many Android and Java libraries use callback-based APIs (Retrofit callbacks, Fir
 
 
 
-### suspendCoroutine vs suspendCancellableCoroutine
+### suspendCoroutine Vs suspendCancellableCoroutine
 
 **suspendCoroutine:** Basic suspension, no cancellation support
 
@@ -726,7 +719,7 @@ suspend fun correct5() = suspendCancellableCoroutine<String> { cont ->
 
 [Полный русский перевод опущен для краткости, но следует той же структуре что и английская версия]
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **suspendCancellableCoroutine критичен** - Для production преобразования callback
 2. **invokeOnCancellation обязателен** - Всегда очищайте ресурсы

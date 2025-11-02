@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, scopes, supervisor, error-handling, structured-concurrency]
+subtopics: [coroutines, error-handling, scopes, structured-concurrency, supervisor]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-vs-supervis
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, coroutines, scopes, supervisor, error-handling, difficulty/medium]
+tags: [coroutines, difficulty/medium, error-handling, kotlin, scopes, supervisor]
+date created: Thursday, October 16th 2025, 4:28:10 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > Compare supervisorScope and coroutineScope. When should you use each? Demonstrate how they handle independent failures differently.
 
@@ -722,7 +725,7 @@ suspend fun loadDashboard(): Dashboard = supervisorScope {
 
 ### Паттерны Обработки Ошибок
 
-#### Паттерн 1: Явная Обработка Ошибок в supervisorScope
+#### Паттерн 1: Явная Обработка Ошибок В supervisorScope
 
 ```kotlin
 suspend fun processItemsIndependently(items: List<Item>) = supervisorScope {

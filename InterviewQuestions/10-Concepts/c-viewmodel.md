@@ -1,10 +1,10 @@
 ---
 id: "20251025-120300"
 title: "ViewModel / ViewModel"
-aliases: ["ViewModel", "Android ViewModel", "AAC ViewModel", "ViewModel компонент"]
+aliases: ["AAC ViewModel", "Android ViewModel", "ViewModel компонент", "ViewModel"]
 summary: "Lifecycle-aware component that stores and manages UI-related data, surviving configuration changes like screen rotations"
 topic: "android"
-subtopics: ["viewmodel", "lifecycle", "architecture-components"]
+subtopics: ["architecture-components", "lifecycle", "viewmodel"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "viewmodel", "lifecycle", "architecture-components", "jetpack", "mvvm", "difficulty/medium"]
+tags: ["android", "architecture-components", "concept", "difficulty/medium", "jetpack", "lifecycle", "mvvm", "viewmodel"]
+date created: Saturday, October 25th 2025, 11:10:38 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # ViewModel / ViewModel
@@ -24,7 +26,7 @@ tags: ["concept", "android", "viewmodel", "lifecycle", "architecture-components"
 
 ViewModel is an Android Architecture Component designed to store and manage UI-related data in a lifecycle-conscious way. ViewModels survive configuration changes such as screen rotations, allowing data to persist across Activity or Fragment recreation. They provide a clear separation between UI logic and business logic, making code more testable and maintainable. ViewModels should never hold references to Views, Activities, or Fragments to prevent memory leaks.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 ViewModel - это компонент Android Architecture Component, предназначенный для хранения и управления данными, связанными с UI, с учетом жизненного цикла. ViewModel переживает изменения конфигурации, такие как поворот экрана, позволяя данным сохраняться при пересоздании Activity или Fragment. Они обеспечивают четкое разделение между UI-логикой и бизнес-логикой, делая код более тестируемым и поддерживаемым. ViewModel никогда не должны содержать ссылки на View, Activity или Fragment, чтобы предотвратить утечки памяти.
 
@@ -38,7 +40,7 @@ ViewModel - это компонент Android Architecture Component, предн
 - Enables separation of concerns in MVVM architecture
 - Can be shared between multiple Fragments within the same Activity
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - Переживает изменения конфигурации (поворот экрана, смена языка и т.д.)
 - Привязан к жизненному циклу Activity или Fragment
@@ -326,7 +328,7 @@ Activity/Fragment Finally Destroyed
 
 ## Common Patterns
 
-### Event Wrapper Pattern (for one-time events)
+### Event Wrapper Pattern (for One-time events)
 
 ```kotlin
 class Event<out T>(private val content: T) {
@@ -361,7 +363,7 @@ viewModel.navigateToDetails.observe(viewLifecycleOwner) { event ->
 }
 ```
 
-### Channel Pattern (for one-time events with Flow)
+### Channel Pattern (for One-time Events with Flow)
 
 ```kotlin
 class UserViewModel : ViewModel() {

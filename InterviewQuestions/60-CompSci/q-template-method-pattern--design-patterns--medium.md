@@ -3,19 +3,19 @@ id: design-patterns-001
 title: "Template Method Pattern / Template Method Паттерн"
 aliases: [Template Method Pattern, Template Method Паттерн]
 topic: design-patterns
-subtopics: [behavioral-patterns, algorithm-structure, inheritance]
+subtopics: [algorithm-structure, behavioral-patterns, inheritance]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-design-patterns
-related: [q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium, q-inheritance-vs-composition--oop--medium, q-nothing-class-purpose--programming-languages--medium]
+related: [q-design-patterns-types--design-patterns--medium, q-factory-method-pattern--design-patterns--medium, q-state-pattern--design-patterns--medium, q-strategy-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [behavioral-patterns, design-patterns, gof-patterns, hook-method, template-method, difficulty/medium]
+tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, hook-method, template-method]
 date created: Monday, October 6th 2025, 7:26:38 am
-date modified: Sunday, October 26th 2025, 1:39:54 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Template Method Pattern
@@ -493,14 +493,8 @@ abstract class AuthenticationFlow {
 
 ### Behavioral Patterns
 - [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
-- [[q-command-pattern--design-patterns--medium]] - Command pattern
-- [[q-iterator-pattern--design-patterns--medium]] - Iterator pattern
 - [[q-state-pattern--design-patterns--medium]] - State pattern
 
 ### Creational Patterns
 - [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-
-### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
 

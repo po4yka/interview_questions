@@ -1,7 +1,7 @@
 ---
 id: android-210
 title: "WorkManager Data Passing / Передача данных WorkManager"
-aliases: [WorkManager Data Passing, Передача данных WorkManager, WorkManager Input Output, WorkManager workDataOf]
+aliases: [WorkManager Data Passing, WorkManager Input Output, WorkManager workDataOf, Передача данных WorkManager]
 topic: android
 subtopics: [background-execution, coroutines]
 question_kind: android
@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-workmanager, c-coroutines, c-serialization, q-workmanager-execution-guarantee--android--medium]
+related: [c-coroutines, c-serialization, c-workmanager, q-workmanager-execution-guarantee--android--medium]
 created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration]
-tags: [android/background-execution, android/coroutines, background-processing, data-passing, workmanager, difficulty/medium]
+tags: [android/background-execution, android/coroutines, background-processing, data-passing, difficulty/medium, workmanager]
 date created: Monday, October 27th 2025, 7:02:51 pm
-date modified: Thursday, October 30th 2025, 3:16:48 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:16:48 pm
 
 WorkManager использует класс **Data** для передачи данных между Activity и Worker. Связано с [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
-### Передача данных В Worker (Input)
+### Передача Данных В Worker (Input)
 
 ```kotlin
 // ✅ Создаем входные данные
@@ -49,7 +49,7 @@ val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-### Получение данных в Worker
+### Получение Данных В Worker
 
 ```kotlin
 class MyWorker(context: Context, params: WorkerParameters)
@@ -69,7 +69,7 @@ class MyWorker(context: Context, params: WorkerParameters)
 }
 ```
 
-### Получение данных ИЗ Worker (Output)
+### Получение Данных ИЗ Worker (Output)
 
 ```kotlin
 WorkManager.getInstance(context)
@@ -94,7 +94,7 @@ WorkManager.getInstance(context)
     }
 ```
 
-### Поддерживаемые типы данных
+### Поддерживаемые Типы Данных
 
 ```kotlin
 val data = workDataOf(
@@ -111,7 +111,7 @@ val data = workDataOf(
 // ✅ Используйте JSON для сложных объектов
 ```
 
-### Передача сложных объектов через JSON
+### Передача Сложных Объектов Через JSON
 
 ```kotlin
 @Serializable
@@ -137,7 +137,7 @@ override suspend fun doWork(): Result {
 }
 ```
 
-### Ограничения по размеру данных
+### Ограничения По Размеру Данных
 
 **Максимум ~10KB** (10,240 байт) — иначе `IllegalStateException`
 
@@ -177,7 +177,7 @@ override suspend fun doWork(): Result {
 
 WorkManager uses **Data** class for passing data between Activity and Worker. Related to [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
-### Passing data TO Worker
+### Passing Data TO Worker
 
 ```kotlin
 // ✅ Create input data
@@ -194,7 +194,7 @@ val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-### Receiving data in Worker
+### Receiving Data in Worker
 
 ```kotlin
 class MyWorker(context: Context, params: WorkerParameters)
@@ -211,7 +211,7 @@ class MyWorker(context: Context, params: WorkerParameters)
 }
 ```
 
-### Receiving data FROM Worker
+### Receiving Data FROM Worker
 
 ```kotlin
 WorkManager.getInstance(context)
@@ -231,7 +231,7 @@ WorkManager.getInstance(context)
     }
 ```
 
-### Supported data types
+### Supported Data Types
 
 ```kotlin
 val data = workDataOf(
@@ -248,7 +248,7 @@ val data = workDataOf(
 // ✅ Use JSON for complex objects
 ```
 
-### Passing complex objects via JSON
+### Passing Complex Objects via JSON
 
 ```kotlin
 @Serializable
@@ -267,7 +267,7 @@ override suspend fun doWork(): Result {
 }
 ```
 
-### Data size limitations
+### Data Size Limitations
 
 **Maximum ~10KB** (10,240 bytes) — otherwise `IllegalStateException`
 

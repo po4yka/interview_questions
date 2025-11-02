@@ -3,20 +3,22 @@ id: android-209
 title: "Unified Android Components / Объединение компонентов Android"
 aliases: [Unified Components, Объединение компонентов]
 topic: android
-subtopics: [activity, service, fragment]
+subtopics: [activity, fragment, service]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-components, c-context, c-intent, q-what-each-android-component-represents--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related: [c-android-components, c-context, c-intent, c-lifecycle]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/service, android/fragment, components, context, intent, difficulty/easy]
+tags: [android/activity, android/fragment, android/service, components, context, difficulty/easy, intent]
+date created: Saturday, November 1st 2025, 1:26:06 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What unifies Android components?
+# What Unifies Android Components?
 
 **Russian**: Что объединяет основные компоненты Android-приложения?
 
@@ -133,25 +135,25 @@ contentResolver.query(
 
 ```
 
-        AndroidManifest.xml              
-  (All components declared here)         
+        AndroidManifest.xml
+  (All components declared here)
 
-                    
-        
-                              
-          
-    Activity   Service  Receiver 
-          
-                             
+
+
+
+
+    Activity   Service  Receiver
+
+
             All inherit/receive Context
-                             
-        
-                   
-        
-           Context & Intent   
-          (Unified access &   
-           communication)     
-        
+
+
+
+
+           Context & Intent
+          (Unified access &
+           communication)
+
 ```
 
 **Main Components Included:**

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, coroutinescope, coroutinecontext, structured-concurrency]
+subtopics: [coroutinecontext, coroutines, coroutinescope, structured-concurrency]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-coroutines-introduction--kotlin--medium, q-coroutine-context-explained--kotlin--medium]
+related: [q-coroutine-context-explained--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, coroutines, coroutinescope, coroutinecontext, structured-concurrency, difficulty/medium]
+tags: [coroutinecontext, coroutines, coroutinescope, difficulty/medium, kotlin, structured-concurrency]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > What is CoroutineScope and how is it different from CoroutineContext?
 # Вопрос (RU)
@@ -102,17 +105,17 @@ public interface CoroutineScope {
 
 ```
 
-        CoroutineScope                
-    
-      CoroutineContext              
-         
-       Job       Dispatcher    
-         
-         
-       Name       Handler      
-         
-    
-  + launch(), async(), cancel()       
+        CoroutineScope
+
+      CoroutineContext
+
+       Job       Dispatcher
+
+
+       Name       Handler
+
+
+  + launch(), async(), cancel()
 
 ```
 
@@ -133,7 +136,7 @@ scope.launch {
 }
 ```
 
-#### Using predefined scopes
+#### Using Predefined Scopes
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -147,7 +150,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-#### Accessing context from scope
+#### Accessing Context from Scope
 
 ```kotlin
 val scope = CoroutineScope(Job() + Dispatchers.IO)
@@ -198,7 +201,7 @@ public interface CoroutineContext
 
 `CoroutineContext` — это по сути `Map`, которая хранит набор объектов `Element` с уникальными ключами `Key`.
 
-#### Типичные элементы CoroutineContext
+#### Типичные Элементы CoroutineContext
 
 - **Job** - Отменяемый дескриптор корутины с жизненным циклом
 - **CoroutineDispatcher** - Диспетчер для выполнения корутины
@@ -215,14 +218,14 @@ public interface CoroutineScope {
 }
 ```
 
-#### Что предоставляет CoroutineScope
+#### Что Предоставляет CoroutineScope
 
 1. **Абстракцию для управления контекстами и задачами** - Помогает организовывать и контролировать корутины
 2. **Отслеживает дочерние области** - При `launch` внутри области автоматически создаются дочерние области
 3. **Утилитарные функции** - Предоставляет `launch`, `async`, `cancel` и т.д.
 4. **Обеспечивает структурированный параллелизм** - Гарантирует правильную иерархию и отмену
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Аспект | CoroutineContext | CoroutineScope |
 |--------|------------------|----------------|
@@ -231,7 +234,7 @@ public interface CoroutineScope {
 | **Содержит** | Job, Dispatcher, Name, Handler | CoroutineContext + утилитарные функции |
 | **Прямое использование** | Редко (в основном внутреннее) | Часто (viewModelScope, lifecycleScope) |
 
-### Почему два концепта?
+### Почему Два Концепта?
 
 **CoroutineContext** — это **данные** - он хранит элементы конфигурации.
 

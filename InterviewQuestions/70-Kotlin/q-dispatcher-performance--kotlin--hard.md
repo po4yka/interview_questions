@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140022
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-singleton-creation--programming-languages--easy, q-serialization-basics--programming-languages--medium, q-crossinline-keyword--kotlin--medium]
+related: [q-crossinline-keyword--kotlin--medium, q-kotlin-singleton-creation--programming-languages--easy, q-serialization-basics--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140022
 
@@ -131,7 +134,7 @@ withContext(Dispatchers.Main) {
 }
 ```
 
-### Паттерны производительности
+### Паттерны Производительности
 
 **1. Ограниченный параллелизм**
 ```kotlin

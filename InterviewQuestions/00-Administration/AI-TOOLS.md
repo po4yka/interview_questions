@@ -1,3 +1,8 @@
+---
+date created: Sunday, October 19th 2025, 11:19:02 am
+date modified: Saturday, November 1st 2025, 5:43:39 pm
+---
+
 # AI Tools & Agent Documentation
 
 Quick guide to using different AI tools with this vault.

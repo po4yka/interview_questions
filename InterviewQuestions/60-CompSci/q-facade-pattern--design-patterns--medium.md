@@ -3,17 +3,19 @@ id: design-patterns-007
 title: "Facade Pattern / Паттерн фасад"
 aliases: [Facade Pattern, Паттерн фасад]
 topic: design-patterns
-subtopics: [structural-patterns, facade, simplification]
+subtopics: [facade, simplification, structural-patterns]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-design-patterns
-related: [c-design-patterns, q-adapter-pattern--design-patterns--medium, q-decorator-pattern--design-patterns--medium]
+related: [c-design-patterns]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [design-patterns, gof-patterns, structural-patterns, facade, difficulty/medium]
+tags: [design-patterns, difficulty/medium, facade, gof-patterns, structural-patterns]
+date created: Saturday, November 1st 2025, 1:02:32 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Facade Pattern
@@ -423,14 +425,8 @@ class SystemFacade {
 - [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
 
 ### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
-- [[q-decorator-pattern--design-patterns--medium]] - Decorator pattern
-- [[q-proxy-pattern--design-patterns--medium]] - Proxy pattern
-- [[q-composite-pattern--design-patterns--medium]] - Composite pattern
 
 ### Creational Patterns
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
 
 ### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
 

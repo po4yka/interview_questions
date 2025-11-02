@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [architecture, difficulty/medium, distributed-systems, scalability, system-design]
 sources: [https://en.wikipedia.org/wiki/Scalability]
 date created: Sunday, October 12th 2025, 8:22:20 pm
-date modified: Saturday, October 25th 2025, 8:18:31 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

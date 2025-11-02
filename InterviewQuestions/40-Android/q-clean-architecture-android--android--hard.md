@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-dependency-injection, q-android-architectural-patterns--android--medium, q-android-modularization--android--medium]
+related: [c-clean-architecture, c-dependency-injection]
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/architecture-clean, android/architecture-modularization, android/di-hilt, difficulty/hard]
 date created: Thursday, October 30th 2025, 11:18:04 am
-date modified: Thursday, October 30th 2025, 12:43:37 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:43:37 pm
 
 ## Ответ (RU)
 
-### Ключевые принципы
+### Ключевые Принципы
 
 **Правило зависимостей**: код зависит от внутренних слоев (UI → domain ← data). Domain определяет интерфейсы (порты), data реализует адаптеры.
 
@@ -37,7 +37,7 @@ date modified: Thursday, October 30th 2025, 12:43:37 pm
 
 **Тестируемость**: бизнес-логика полностью независима от платформы.
 
-### Структура слоев
+### Структура Слоев
 
 **Domain (core-domain)**
 - Entities: модели бизнес-логики
@@ -57,7 +57,7 @@ date modified: Thursday, October 30th 2025, 12:43:37 pm
 - Mappers: Domain → UI models
 - Зависит только от domain (use cases)
 
-### Минимальная структура модулей
+### Минимальная Структура Модулей
 
 ```
 core-domain/     # entities, use cases, repository ports
@@ -66,7 +66,7 @@ app/             # DI setup, navigation
 feature-user/    # UserScreen, UserViewModel
 ```
 
-### Use Case паттерн
+### Use Case Паттерн
 
 ```kotlin
 // ✅ core-domain: порт репозитория
@@ -81,7 +81,7 @@ class GetUserUseCase(private val repo: UserRepository) {
 }
 ```
 
-### Repository реализация
+### Repository Реализация
 
 ```kotlin
 // ✅ core-data: адаптер репозитория
@@ -97,7 +97,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### ViewModel интеграция
+### ViewModel Интеграция
 
 ```kotlin
 // ✅ feature-user: ViewModel зависит от use cases
@@ -130,7 +130,7 @@ abstract class DataModule {
 }
 ```
 
-### Граница маппинга
+### Граница Маппинга
 
 ```kotlin
 // ❌ Не передавать DTO/Entity в domain
@@ -298,4 +298,3 @@ fun User.toUiModel() = UserUiModel(name, email)
 - [[q-android-modularization--android--medium]]
 
 ### Advanced (Harder)
-- [[q-dependency-injection-hilt--android--hard]]

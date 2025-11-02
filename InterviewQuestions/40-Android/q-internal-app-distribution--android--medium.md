@@ -1,7 +1,7 @@
 ---
 id: android-402
 title: "Internal App Distribution / Внутреннее распространение приложения"
-aliases: [Internal App Distribution, Внутреннее распространение приложения, Beta Testing Distribution, Firebase App Distribution, Google Play Internal Testing]
+aliases: [Beta Testing Distribution, Firebase App Distribution, Google Play Internal Testing, Internal App Distribution, Внутреннее распространение приложения]
 topic: android
 subtopics: [ci-cd, gradle, play-console]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-gradle, c-ci-cd-pipelines, q-android-app-bundles--android--easy, q-gradle-plugin-variants--android--medium]
-sources: [https://firebase.google.com/docs/app-distribution, https://developer.android.com/distribute/best-practices/develop/in-app-review]
+related: [c-ci-cd-pipelines, c-gradle, q-android-app-bundles--android--easy]
+sources: [https://developer.android.com/distribute/best-practices/develop/in-app-review, https://firebase.google.com/docs/app-distribution]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ci-cd, android/gradle, android/play-console, beta-testing, firebase, difficulty/medium]
+tags: [android/ci-cd, android/gradle, android/play-console, beta-testing, difficulty/medium, firebase]
+date created: Saturday, November 1st 2025, 1:32:33 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -714,9 +716,6 @@ Key components of internal distribution:
 - [[q-gradle-basics--android--easy]] - Gradle build system fundamentals
 
 ### Related (Same Level)
-- [[q-gradle-plugin-variants--android--medium]] - Build variants and product flavors
-- [[q-ci-cd-android--android--medium]] - CI/CD pipeline setup
-- [[q-signing-configuration--android--medium]] - App signing for distribution
 
 ### Advanced (Harder)
 - [[q-feature-flags-remote-config--android--hard]] - Dynamic feature rollout

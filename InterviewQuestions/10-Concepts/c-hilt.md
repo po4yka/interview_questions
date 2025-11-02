@@ -1,10 +1,10 @@
 ---
 id: "20251023-120200"
 title: "Hilt / Hilt DI"
-aliases: ["Hilt", "Hilt DI", "Dependency Injection with Hilt"]
+aliases: ["Dependency Injection with Hilt", "Hilt DI", "Hilt"]
 summary: "Google's officially recommended dependency injection library for Android built on top of Dagger"
 topic: "android"
-subtopics: ["dependency-injection", "hilt", "architecture"]
+subtopics: ["architecture", "dependency-injection", "hilt"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "android", "dependency-injection", "hilt", "architecture", "difficulty/medium"]
+tags: ["android", "architecture", "concept", "dependency-injection", "difficulty/medium", "hilt"]
+date created: Thursday, October 23rd 2025, 1:45:31 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Hilt / Hilt DI
@@ -24,7 +26,7 @@ tags: ["concept", "android", "dependency-injection", "hilt", "architecture", "di
 
 Hilt is Google's officially recommended dependency injection library for Android, built on top of Dagger. It reduces the boilerplate code required for Dagger by providing standard Android components with predefined scopes and automatic injection points. Hilt simplifies DI setup with annotations like @HiltAndroidApp, @AndroidEntryPoint, and @Inject, making dependency injection more accessible for Android developers.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Hilt — официально рекомендуемая Google библиотека внедрения зависимостей для Android, построенная поверх Dagger. Она уменьшает количество шаблонного кода, необходимого для Dagger, предоставляя стандартные Android-компоненты с предопределенными областями видимости и автоматическими точками инъекции. Hilt упрощает настройку DI с помощью аннотаций, таких как @HiltAndroidApp, @AndroidEntryPoint и @Inject.
 
@@ -36,7 +38,7 @@ Hilt — официально рекомендуемая Google библиоте
 - **Predefined scopes**: @Singleton, @ActivityScoped, @ViewModelScoped, etc.
 - **ViewModel integration**: Built-in support for injecting ViewModels
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Построен на Dagger**: Использует генерацию кода Dagger во время компиляции для производительности
 - **Меньше шаблонного кода**: Предопределенные компоненты и области видимости для Android
@@ -255,7 +257,7 @@ class ApiClient @Inject constructor(
 - **Limited customization**: Less flexible than pure Dagger
 - **Android-only**: Not suitable for multiplatform projects
 
-## Hilt vs Dagger vs Koin
+## Hilt Vs Dagger Vs Koin
 
 | Feature | Hilt | Dagger | Koin |
 |---------|------|--------|------|

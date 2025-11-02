@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-composite-pattern--design-patterns--medium, q-facade-pattern--design-patterns--medium, q-visitor-pattern--design-patterns--hard]
+related: []
 created: 2025-10-15
 updated: 2025-01-25
 tags: [behavioral-patterns, collection-traversal, design-patterns, difficulty/medium, iterator, kotlin]
 sources: [https://refactoring.guru/design-patterns/iterator]
 date created: Monday, October 6th 2025, 7:33:52 am
-date modified: Sunday, October 26th 2025, 12:07:59 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

@@ -3,7 +3,7 @@ id: android-333
 title: Compose Slot Table & Recomposition / Slot Table и рекомпозиция Compose
 aliases: ["Compose Slot Table and Recomposition", "Slot Table и рекомпозиция"]
 topic: android
-subtopics: [ui-compose, performance-rendering]
+subtopics: [performance-rendering, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-compose, android/performance-rendering, difficulty/hard]
+tags: [android/performance-rendering, android/ui-compose, difficulty/hard]
 sources: []
 date created: Thursday, October 30th 2025, 11:51:40 am
-date modified: Thursday, October 30th 2025, 12:43:53 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ How do Slot Table and recomposition work in Jetpack Compose? Explain the interna
 
 ## Ответ (RU)
 
-### Основная идея
+### Основная Идея
 Slot Table — компактная линейная структура данных (gap buffer), хранящая UI-дерево композиции и оптимизирующая рекомпозицию через инвалидацию групп.
 
 **Архитектура**:
@@ -37,7 +37,7 @@ Slot Table — компактная линейная структура данн
 - **Slots (слоты)** — хранилище для `remember`, state-объектов, ссылок на узлы (LayoutNode)
 - **Anchors (якоря)** — позиционная идентичность для сохранения состояния при структурных изменениях
 
-### Механизм рекомпозиции
+### Механизм Рекомпозиции
 
 **Фаза инвалидации**:
 1. Запись state → snapshot mutation → invalidation scope добавляется в очередь
@@ -61,7 +61,7 @@ fun Counter(count: Int) {  // Group start
 
 **Оптимизация: skippability** — компилятор генерирует `if ($changed == 0) skip`, если параметры стабильны и не изменились.
 
-### Критичные паттерны
+### Критичные Паттерны
 
 **Стабильные ключи для сохранения идентичности**:
 ```kotlin
@@ -189,8 +189,6 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 ## Related Questions
 
 ### Prerequisites
-- [[q-compose-state-management--android--medium]] — Understanding state before optimization
-- [[q-compose-remember-vs-remember-saveable--android--medium]] — remember mechanism basics
 
 ### Related
 - [[q-compose-compiler-plugin--android--hard]] — How compiler generates slot table code
@@ -198,5 +196,3 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 - [[q-compose-performance-optimization--android--hard]] — Broader optimization strategies
 
 ### Advanced
-- [[q-compose-snapshot-system--android--hard]] — Snapshot isolation mechanics
-- [[q-compose-custom-layout-modifiers--android--hard]] — Low-level composition control

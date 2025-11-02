@@ -1,10 +1,10 @@
 ---
 id: "20251025-120400"
 title: "Memory Leaks / Утечки памяти"
-aliases: ["Memory Leaks", "Memory Leak", "Android Memory Leaks", "Утечки памяти", "Утечка памяти"]
+aliases: ["Android Memory Leaks", "Memory Leak", "Memory Leaks", "Утечка памяти", "Утечки памяти"]
 summary: "Situations where objects remain in memory longer than necessary due to unintended references, preventing garbage collection and causing performance issues"
 topic: "android"
-subtopics: ["memory-leaks", "performance", "memory-management"]
+subtopics: ["memory-leaks", "memory-management", "performance"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,16 +15,18 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "memory-leaks", "performance", "memory-management", "debugging", "profiling", "difficulty/medium"]
+tags: ["android", "concept", "debugging", "difficulty/medium", "memory-leaks", "memory-management", "performance", "profiling"]
+date created: Saturday, October 25th 2025, 11:11:38 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
-# Memory Leaks / Утечки памяти
+# Memory Leaks / Утечки Памяти
 
 ## Summary (EN)
 
 A memory leak occurs when an object that is no longer needed remains in memory because it is still being referenced, preventing the garbage collector from reclaiming that memory. In Android, memory leaks commonly happen when long-lived objects hold references to short-lived objects like Activities, Fragments, or Views. This leads to increased memory consumption, performance degradation, and potentially OutOfMemoryError crashes. Understanding common leak patterns and detection techniques is essential for building stable Android applications.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Утечка памяти происходит, когда объект, который больше не нужен, остается в памяти, потому что на него все еще есть ссылки, что не позволяет сборщику мусора освободить эту память. В Android утечки памяти обычно происходят, когда долгоживущие объекты содержат ссылки на короткоживущие объекты, такие как Activity, Fragment или View. Это приводит к увеличению потребления памяти, снижению производительности и потенциально к сбоям OutOfMemoryError. Понимание распространенных паттернов утечек и методов обнаружения необходимо для создания стабильных Android приложений.
 
@@ -38,7 +40,7 @@ A memory leak occurs when an object that is no longer needed remains in memory b
 - Always unregister listeners, callbacks, and observers in lifecycle methods
 - Handlers and AsyncTasks can cause leaks if not handled properly
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - Утечки памяти не позволяют сборщику мусора освобождать неиспользуемую память
 - Частые причины: статические ссылки, внутренние классы, слушатели, handlers, потоки

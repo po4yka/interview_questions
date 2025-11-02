@@ -5,6 +5,8 @@ kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/testing]
+date created: Saturday, October 18th 2025, 2:46:59 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Testing — Map of Content
@@ -383,7 +385,7 @@ fun tearDown() {
 - Don't test third-party libraries
 - Focus on your business logic
 
-### Mock vs Fake
+### Mock Vs Fake
 
 **Use Fakes for Complex Dependencies**
 - Stateful components (repositories, databases)

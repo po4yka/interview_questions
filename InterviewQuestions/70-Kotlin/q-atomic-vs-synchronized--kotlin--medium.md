@@ -10,26 +10,22 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-unit-singleton--programming-languages--easy, q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-basics--kotlin--medium]
+related: [q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-basics--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - java
-  - concurrency
-  - thread-safety
-  - atomic
-  - synchronized
-  - difficulty/medium
+tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, thread-safety]
+date created: Saturday, November 1st 2025, 1:26:33 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
-# Atomic vs Synchronized: когда использовать
+
+# Atomic Vs Synchronized: Когда Использовать
 
 **English**: When to use atomic variables vs synchronized?
 
 ## Answer (EN)
 **Atomic** переменные (`AtomicInteger`, `AtomicReference`) и **synchronized** блоки — два способа обеспечить потокобезопасность. Используются в разных ситуациях в зависимости от сложности операций.
 
-### Atomic Variables - for simple operations
+### Atomic Variables - for Simple Operations
 
 Используйте для **одиночных** операций с **одной** переменной. Lock-free, высокая производительность.
 
@@ -78,7 +74,7 @@ repeat(1000) {
 - - Read-modify-write operation for ONE variable
 - - Compare-and-swap logic
 
-### Synchronized - for complex operations
+### Synchronized - for Complex Operations
 
 Используйте для **множественных** операций или работы с **несколькими** переменными.
 
@@ -122,7 +118,7 @@ class BankAccount {
 - - Need mutual exclusion
 - - Working with collections
 
-### Usage examples
+### Usage Examples
 
 #### Example 1: Counter (Atomic is better)
 
@@ -187,7 +183,7 @@ class Cache<K, V>(private val ttlMs: Long) {
 }
 ```
 
-#### Example 3: State flag (Atomic is simpler)
+#### Example 3: State Flag (Atomic is simpler)
 
 ```kotlin
 // - Atomic - для простого флага
@@ -212,7 +208,7 @@ class ConnectionManager {
 }
 ```
 
-#### Example 4: Transfer between accounts (Synchronized required)
+#### Example 4: Transfer between Accounts (Synchronized required)
 
 ```kotlin
 // - Synchronized - работа с несколькими объектами
@@ -239,7 +235,7 @@ class Bank {
 // - Atomic НЕ ПОМОЖЕТ - нужна координация между аккаунтами
 ```
 
-### Performance comparison
+### Performance Comparison
 
 ```kotlin
 // Benchmark (примерные результаты)
@@ -271,7 +267,7 @@ class BenchmarkCounter {
 
 **Result**: Atomic ~2x faster than synchronized for simple operations.
 
-### Atomic variable types
+### Atomic Variable Types
 
 ```kotlin
 // Примитивы
@@ -304,7 +300,7 @@ class Counter {
 }
 ```
 
-### Compare-and-Swap (CAS) pattern
+### Compare-and-Swap (CAS) Pattern
 
 The foundation of atomic operations - CAS loop.
 
@@ -334,7 +330,7 @@ class CASExample {
 }
 ```
 
-### When NOT to use either
+### When NOT to Use either
 
 For Android - use high-level abstractions:
 
@@ -449,7 +445,7 @@ class DataRepository {
 }
 ```
 
-### Comparison table
+### Comparison Table
 
 | Aspect | Atomic | Synchronized |
 |--------|--------|--------------|
@@ -467,7 +463,7 @@ class DataRepository {
 
 Используйте **Atomic** переменные (`AtomicInteger`, `AtomicReference`) для одиночных операций с одной переменной (счетчики, флаги) - lock-free, примерно в 2 раза быстрее. Используйте **synchronized** для сложных операций или работы с несколькими переменными (кеши, коллекции, множественные шаги) - обеспечивает взаимное исключение.
 
-### Когда использовать Atomic
+### Когда Использовать Atomic
 
 - Простой счетчик
 - Флаг (boolean)
@@ -475,7 +471,7 @@ class DataRepository {
 - Read-modify-write операция для ОДНОЙ переменной
 - Compare-and-swap логика
 
-### Когда использовать Synchronized
+### Когда Использовать Synchronized
 
 - Работа с несколькими переменными
 - Сложная логика (if-else, циклы)
@@ -487,6 +483,5 @@ Atomic использует CAS (Compare-And-Swap) цикл. Для Android пр
 
 ## Related Questions
 
-- [[q-kotlin-unit-singleton--programming-languages--easy]]
 - [[q-continuation-cps-internals--kotlin--hard]]
 - [[q-kotlin-flow-basics--kotlin--medium]]

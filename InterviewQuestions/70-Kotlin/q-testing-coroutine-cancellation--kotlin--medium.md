@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, testing, cancellation]
+subtopics: [cancellation, coroutines, testing]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Coroutine Cancellation Testing Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-coroutines-runtest--kotlin--medium, q-coroutine-cancellation-cooperation--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
+related: [q-coroutine-cancellation-cooperation--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, testing, cancellation, difficulty/medium]
+tags: [cancellation, coroutines, difficulty/medium, kotlin, testing]
+date created: Sunday, October 12th 2025, 1:24:38 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > How to test coroutine cancellation scenarios? Cover testing cooperative cancellation, timeout, ensureActive, CancellationException, and resource cleanup with NonCancellable.
 
@@ -904,7 +907,7 @@ fun test() = runTest {
 
 Тестирование отмены критически важно для обеспечения правильной очистки ресурсов и ответа на запросы отмены.
 
-### Базовое тестирование отмены
+### Базовое Тестирование Отмены
 
 ```kotlin
 @Test
@@ -923,7 +926,7 @@ fun `корутина может быть отменена`() = runTest {
 }
 ```
 
-### Тестирование кооперативной отмены
+### Тестирование Кооперативной Отмены
 
 ```kotlin
 @Test
@@ -946,7 +949,7 @@ fun `ensureActive выбрасывает исключение при отмен�
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте ensureActive** для CPU-интенсивной работы
 2. **Пробрасывайте CancellationException** после очистки

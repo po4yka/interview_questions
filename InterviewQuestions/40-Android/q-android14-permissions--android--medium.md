@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/permissions, android/privacy-sdks, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:36:03 am
-date modified: Thursday, October 30th 2025, 12:43:04 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:43:04 pm
 
 Android 13+ (API 33+) кардинально изменил систему разрешений, заменив широкие разрешения на хранилище гранулярными медиа-разрешениями и добавив обязательное разрешение на уведомления.
 
-### 1. Photo Picker — доступ без разрешений
+### 1. Photo Picker — Доступ Без Разрешений
 
 Photo Picker позволяет выбирать медиа без запроса разрешений:
 
@@ -50,7 +50,7 @@ class PhotoPickerManager(private val activity: AppCompatActivity) {
 }
 ```
 
-### 2. Гранулярные медиа-разрешения (API 33+)
+### 2. Гранулярные Медиа-разрешения (API 33+)
 
 Вместо `READ_EXTERNAL_STORAGE` используются раздельные разрешения:
 
@@ -67,7 +67,7 @@ fun getMediaPermissions(needsImages: Boolean, needsVideo: Boolean): Array<String
 }
 ```
 
-### 3. Разрешение на уведомления (API 33+)
+### 3. Разрешение На Уведомления (API 33+)
 
 С Android 13 требуется явное разрешение `POST_NOTIFICATIONS`:
 
@@ -83,7 +83,7 @@ fun checkNotificationPermission(context: Context): Boolean {
 }
 ```
 
-### 4. Частичный доступ к медиа (API 34+)
+### 4. Частичный Доступ К Медиа (API 34+)
 
 Пользователь может предоставить доступ только к выбранным фото/видео:
 
@@ -99,7 +99,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
 }
 ```
 
-### 5. Конфигурация манифеста
+### 5. Конфигурация Манифеста
 
 ```xml
 <!-- Уведомления (API 33+) -->
@@ -118,7 +118,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
     android:maxSdkVersion="32" />
 ```
 
-### Стратегия миграции
+### Стратегия Миграции
 
 1. **Приоритет Photo Picker** для выбора медиа
 2. **Запрос разрешений в контексте** использования

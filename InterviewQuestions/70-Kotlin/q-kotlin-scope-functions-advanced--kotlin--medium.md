@@ -3,7 +3,7 @@ id: kotlin-167
 title: "Kotlin Scope Functions Advanced / Продвинутые Scope Functions в Kotlin"
 aliases: [Kotlin Scope Functions Advanced, Продвинутые Scope Functions в Kotlin]
 topic: kotlin
-subtopics: [scope-functions, functional-programming]
+subtopics: [functional-programming, scope-functions]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,16 +13,11 @@ moc: moc-kotlin
 related: [q-flow-performance--kotlin--hard, q-kotlin-null-safety--programming-languages--medium, q-kotlin-sam-conversions--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - scope-functions
-  - let
-  - run
-  - apply
-  - with
-  - also
-  - difficulty/medium
+tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
+date created: Friday, October 31st 2025, 6:32:39 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Advanced Scope Functions Usage
 
 **English**: Compare let, run, with, apply, also. When should you use each? Explain return values and context objects.
@@ -43,7 +38,7 @@ Kotlin's scope functions (let, run, with, apply, also) execute code blocks withi
 | **apply** | this (receiver) | Context object | Object configuration |
 | **also** | it (argument) | Context object | Additional effects, logging |
 
-### let - Transform and Null Safety
+### Let - Transform and Null Safety
 
 ```kotlin
 // Null safety
@@ -74,7 +69,7 @@ fun process() {
 }
 ```
 
-### run - Initialize and Compute
+### Run - Initialize and Compute
 
 ```kotlin
 // Object init + computation
@@ -108,7 +103,7 @@ run {
 }
 ```
 
-### with - Group Operations
+### With - Group Operations
 
 ```kotlin
 // Group calls without extension
@@ -131,7 +126,7 @@ with(canvas) {
 }
 ```
 
-### apply - Object Configuration
+### Apply - Object Configuration
 
 ```kotlin
 // Builder pattern
@@ -160,7 +155,7 @@ textView.apply {
 }
 ```
 
-### also - Side Effects
+### Also - Side Effects
 
 ```kotlin
 // Logging
@@ -288,7 +283,7 @@ user?.email?.let { email ->
 
 Scope-функции Kotlin (let, run, with, apply, also) выполняют блоки кода в контексте объекта. Выбор правильной функции зависит от способа доступа к контексту и требуемого возвращаемого значения.
 
-### Быстрая справка
+### Быстрая Справка
 
 | Функция | Контекст | Возвращает | Случай использования |
 |----------|---------|---------|----------|
@@ -298,7 +293,7 @@ Scope-функции Kotlin (let, run, with, apply, also) выполняют б�
 | **apply** | this (receiver) | Объект контекста | Конфигурация объекта |
 | **also** | it (аргумент) | Объект контекста | Дополнительные эффекты, логирование |
 
-### let - Трансформация и Null Safety
+### Let - Трансформация И Null Safety
 
 ```kotlin
 // Null safety
@@ -329,7 +324,7 @@ fun process() {
 }
 ```
 
-### run - Инициализация и Вычисление
+### Run - Инициализация И Вычисление
 
 ```kotlin
 // Инициализация объекта + вычисление
@@ -363,7 +358,7 @@ run {
 }
 ```
 
-### with - Группировка Операций
+### With - Группировка Операций
 
 ```kotlin
 // Группировка вызовов без extension
@@ -386,7 +381,7 @@ with(canvas) {
 }
 ```
 
-### apply - Конфигурация Объекта
+### Apply - Конфигурация Объекта
 
 ```kotlin
 // Паттерн Builder
@@ -415,7 +410,7 @@ textView.apply {
 }
 ```
 
-### also - Побочные Эффекты
+### Also - Побочные Эффекты
 
 ```kotlin
 // Логирование

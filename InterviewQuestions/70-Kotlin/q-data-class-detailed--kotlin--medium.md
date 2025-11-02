@@ -10,13 +10,16 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-10-31"
-tags: ["kotlin", "classes", "data-class", "kotlin-features", "difficulty/medium"]
+tags: ["classes", "data-class", "difficulty/medium", "kotlin-features", "kotlin"]
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
 moc: moc-kotlin
-related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-collections-overview--programming-languages--easy, q-serialization-basics--programming-languages--medium]
+related: []
 subtopics: [data-classes]
+date created: Saturday, November 1st 2025, 1:29:10 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Data classes in Kotlin: features, limitations, and best practices
+
+# Data Classes in Kotlin: Features, Limitations, and Best Practices
 
 ## English
 
@@ -209,7 +212,7 @@ class Outer {
 }
 ```
 
-#### Properties in Primary Constructor vs Body
+#### Properties in Primary Constructor Vs Body
 
 ```kotlin
 data class Example(
@@ -384,7 +387,7 @@ object Loading : Result<Nothing>()
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 Data классы - одна из самых мощных функций Kotlin для представления данных. Они автоматически генерируют полезные методы и поддерживают деструктуризацию, но также имеют ограничения. Какие методы генерируются, когда следует использовать data классы и каковы их ограничения?
 
@@ -392,7 +395,7 @@ Data классы - одна из самых мощных функций Kotlin 
 
 **Data класс** в Kotlin - это класс, основная цель которого - хранить данные. Компилятор автоматически генерирует функции `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`.
 
-#### Базовый data класс
+#### Базовый Data Класс
 
 ```kotlin
 // Простой data класс
@@ -421,7 +424,7 @@ fun basicUsage() {
 }
 ```
 
-#### Генерируемые функции
+#### Генерируемые Функции
 
 ```kotlin
 data class Person(val name: String, val age: Int)
@@ -454,7 +457,7 @@ fun demonstrateGeneratedFunctions() {
 }
 ```
 
-#### Функция copy
+#### Функция Copy
 
 ```kotlin
 data class Product(
@@ -497,7 +500,7 @@ fun copyingExamples() {
 }
 ```
 
-#### Деструктурирующие объявления
+#### Деструктурирующие Объявления
 
 ```kotlin
 data class Coordinate(val x: Double, val y: Double, val z: Double)
@@ -535,7 +538,7 @@ fun destructuringExamples() {
 }
 ```
 
-#### Требования к data классам
+#### Требования К Data Классам
 
 ```kotlin
 // ✓ Валидные data классы
@@ -573,7 +576,7 @@ class Outer {
 }
 ```
 
-#### Свойства в primary constructor vs теле класса
+#### Свойства В Primary Constructor Vs Теле Класса
 
 ```kotlin
 data class Example(
@@ -600,7 +603,7 @@ fun demonstratePropertyDifference() {
 }
 ```
 
-#### Ограничения и обходные пути
+#### Ограничения И Обходные Пути
 
 ```kotlin
 // Ограничение 1: Нельзя наследоваться от data классов
@@ -638,7 +641,7 @@ data class AccountCustom(val id: String, val balance: Double) {
 }
 ```
 
-#### Лучшие практики
+#### Лучшие Практики
 
 ```kotlin
 // 1. Используйте val для неизменяемости
@@ -691,7 +694,7 @@ class UserService {
 }
 ```
 
-#### Типичные случаи использования
+#### Типичные Случаи Использования
 
 ```kotlin
 // 1. API ответы
@@ -744,7 +747,7 @@ data class Failure(val error: Throwable) : Result<Nothing>()
 object Loading : Result<Nothing>()
 ```
 
-### Краткое резюме
+### Краткое Резюме
 
 **Data классы** автоматически генерируют:
 - `equals()` - структурное сравнение
@@ -793,4 +796,3 @@ object Loading : Result<Nothing>()
 - [[q-sealed-class-sealed-interface--kotlin--medium]]
 - [[q-value-classes-inline-classes--kotlin--medium]]
 - [[q-class-initialization-order--kotlin--medium]]
-- [[q-kotlin-immutability--kotlin--medium]]

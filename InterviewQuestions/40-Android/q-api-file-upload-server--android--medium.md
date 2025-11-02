@@ -5,7 +5,7 @@ aliases: ["API File Upload Server", "Загрузка файлов на серв
 
 # Classification
 topic: android
-subtopics: [networking-http, files-media, background-execution]
+subtopics: [background-execution, files-media, networking-http]
 question_kind: android
 difficulty: medium
 
@@ -17,15 +17,15 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-retrofit, c-okhttp, c-multipart-form-data, c-workmanager]
+related: [c-multipart-form-data, c-okhttp, c-retrofit, c-workmanager]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-30
 
-tags: [android/networking-http, android/files-media, android/background-execution, retrofit, okhttp, workmanager, difficulty/medium]
+tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
 date created: Thursday, October 30th 2025, 11:43:56 am
-date modified: Thursday, October 30th 2025, 12:43:08 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +42,7 @@ date modified: Thursday, October 30th 2025, 12:43:08 pm
 
 Загрузка файлов использует HTTP multipart/form-data через [[c-retrofit|Retrofit]] с [[c-okhttp|OkHttp]]. Критические аспекты: отслеживание прогресса, фоновая загрузка через [[c-workmanager|WorkManager]], обработка сетевых ошибок и сжатие изображений.
 
-### 1. Базовая загрузка через Retrofit
+### 1. Базовая Загрузка Через Retrofit
 
 ```kotlin
 interface FileUploadApi {
@@ -70,7 +70,7 @@ suspend fun uploadFile(file: File): Result<UploadResponse> = runCatching {
 - `asRequestBody()` создает тело запроса с MIME типом
 - `Result<T>` для безопасной обработки ошибок
 
-### 2. Отслеживание прогресса
+### 2. Отслеживание Прогресса
 
 ```kotlin
 // ✅ Обёртка RequestBody для отслеживания записи байтов
@@ -102,7 +102,7 @@ val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
 }
 ```
 
-### 3. Фоновая загрузка через WorkManager
+### 3. Фоновая Загрузка Через WorkManager
 
 ```kotlin
 class FileUploadWorker(
@@ -149,7 +149,7 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 - Работает только при наличии сети
 - Встроенный механизм прогресса
 
-### 4. Сжатие изображений
+### 4. Сжатие Изображений
 
 ```kotlin
 // ✅ Уменьшаем размер для экономии трафика
@@ -169,7 +169,7 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
 }
 ```
 
-### 5. Полный пример ViewModel
+### 5. Полный Пример ViewModel
 
 ```kotlin
 class FileUploadViewModel @Inject constructor(
@@ -217,7 +217,7 @@ sealed class UploadState {
 
 File upload uses HTTP multipart/form-data via [[c-retrofit|Retrofit]] with [[c-okhttp|OkHttp]]. Critical aspects: progress tracking, background upload via [[c-workmanager|WorkManager]], network error handling, and image compression.
 
-### 1. Basic upload via Retrofit
+### 1. Basic Upload via Retrofit
 
 ```kotlin
 interface FileUploadApi {
@@ -245,7 +245,7 @@ suspend fun uploadFile(file: File): Result<UploadResponse> = runCatching {
 - `asRequestBody()` creates request body with MIME type
 - `Result<T>` for safe error handling
 
-### 2. Progress tracking
+### 2. Progress Tracking
 
 ```kotlin
 // ✅ RequestBody wrapper to track byte writes
@@ -277,7 +277,7 @@ val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
 }
 ```
 
-### 3. Background upload via WorkManager
+### 3. Background Upload via WorkManager
 
 ```kotlin
 class FileUploadWorker(
@@ -324,7 +324,7 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 - Works only with network connection
 - Built-in progress mechanism
 
-### 4. Image compression
+### 4. Image Compression
 
 ```kotlin
 // ✅ Reduce size to save bandwidth
@@ -344,7 +344,7 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
 }
 ```
 
-### 5. Complete ViewModel example
+### 5. Complete ViewModel Example
 
 ```kotlin
 class FileUploadViewModel @Inject constructor(

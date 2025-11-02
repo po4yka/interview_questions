@@ -3,7 +3,7 @@ id: android-279
 title: "Room Transactions Dao / Транзакции DAO в Room"
 aliases: ["Room Transactions Dao", "Транзакции DAO в Room"]
 topic: android
-subtopics: [room, coroutines]
+subtopics: [coroutines, room]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,8 +14,11 @@ related: [c-room, q-room-library-definition--android--easy]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/room, android/coroutines, database, transactions, dao, difficulty/medium]
+tags: [android/coroutines, android/room, dao, database, difficulty/medium, transactions]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
+
 # Вопрос (RU)
 
 Как обеспечить атомарность операций с несколькими таблицами в Room? Покажите использование @Transaction для критических операций.
@@ -30,7 +33,7 @@ How do you ensure atomicity for multi-table operations in Room? Show @Transactio
 
 **Транзакции Room** гарантируют атомарность операций с базой данных через аннотацию `@Transaction` и метод `withTransaction`. Это критично для поддержания целостности связанных данных.
 
-### Зачем нужны транзакции?
+### Зачем Нужны Транзакции?
 
 Без транзакций при сбое в середине серии операций возникают:
 - **Несогласованность**: частично завершённые операции
@@ -63,7 +66,7 @@ interface UserDao {
 }
 ```
 
-### Ручные транзакции через withTransaction
+### Ручные Транзакции Через withTransaction
 
 Для сложной логики, не выражаемой в одном методе DAO:
 
@@ -95,7 +98,7 @@ class UserRepository(
 }
 ```
 
-### Пример: перевод денег
+### Пример: Перевод Денег
 
 ```kotlin
 @Dao
@@ -135,7 +138,7 @@ interface AccountDao {
 }
 ```
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 ```kotlin
 // ❌ Плохо: множество отдельных транзакций
@@ -160,7 +163,7 @@ suspend fun insertUsersGood(users: List<User>) {
 3. **Всегда обрабатывать исключения** - проверять откат
 4. **Тестировать сценарии отката** - проверять согласованность данных
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Забыли @Transaction - неатомарная операция
@@ -352,8 +355,8 @@ suspend fun transferMoney(from: String, to: String, amount: BigDecimal) {
 
 ### Related
 - [[q-room-code-generation-timing--android--medium]] - Room annotation processing
-- [[q-room-paging3-integration--room--medium]] - Room with Paging
+- [[q-room-paging3-integration--android--medium]] - Room with Paging
 - [[q-room-type-converters--android--medium]] - Custom type handling
 
 ### Advanced
-- [[q-room-fts-full-text-search--room--hard]] - Full-text search in Room
+- [[q-room-fts-full-text-search--android--hard]] - Full-text search in Room

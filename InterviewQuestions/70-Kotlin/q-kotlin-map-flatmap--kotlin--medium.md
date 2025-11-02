@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [collections, map, flatmap, higher-order-functions, transformations]
+subtopics: [collections, flatmap, higher-order-functions, map, transformations]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-internal-modifier--programming-languages--medium, q-destructuring-declarations--kotlin--medium]
+related: [q-destructuring-declarations--kotlin--medium, q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-internal-modifier--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, collections, map, flatmap, higher-order-functions, difficulty/medium]
+tags: [collections, difficulty/medium, flatmap, higher-order-functions, kotlin, map]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What is the difference between map() and flatMap() in Kotlin?
 # Вопрос (RU)
@@ -106,7 +109,7 @@ fun main() {
 
 ### When to Use Each
 
-#### Use map() when:
+#### Use map() When:
 - You want to transform each element but keep the same structure
 - Each element transforms to exactly one result
 - You don't need to flatten nested collections
@@ -121,7 +124,7 @@ val emails = users.map { "$it@example.com" }
 // [alice@example.com, bob@example.com, charlie@example.com]
 ```
 
-#### Use flatMap() when:
+#### Use flatMap() When:
 - Your transform returns a collection for each element
 - You want to flatten nested collections into a single list
 - You need to "expand" elements (one element becomes multiple)
@@ -189,11 +192,11 @@ println(list.flatMap { it.toList() })
 // Вывод: [1, 2, 3, 4, 5]
 ```
 
-### Ключевое различие: Выравнивание вложенных коллекций
+### Ключевое Различие: Выравнивание Вложенных Коллекций
 
 Основное различие становится ясным при работе с вложенными коллекциями. `flatMap()` объединяет вложенные коллекции в один плоский список, в то время как `map()` сохраняет вложенную структуру.
 
-#### Подробный пример
+#### Подробный Пример
 
 Рассмотрим этот пример с командами и игроками:
 
@@ -238,9 +241,9 @@ fun main() {
  [Player(name=Team2 first player), Player(name=Team2 second player)]]
 ```
 
-### Когда использовать каждую функцию
+### Когда Использовать Каждую Функцию
 
-#### Используйте map() когда:
+#### Используйте map() Когда:
 - Вы хотите преобразовать каждый элемент, но сохранить ту же структуру
 - Каждый элемент преобразуется ровно в один результат
 - Вам не нужно выравнивать вложенные коллекции
@@ -255,7 +258,7 @@ val emails = users.map { "$it@example.com" }
 // [alice@example.com, bob@example.com, charlie@example.com]
 ```
 
-#### Используйте flatMap() когда:
+#### Используйте flatMap() Когда:
 - Ваше преобразование возвращает коллекцию для каждого элемента
 - Вы хотите выровнять вложенные коллекции в один список
 - Вам нужно "расширить" элементы (один элемент становится несколькими)
@@ -281,7 +284,7 @@ val allTags = posts.flatMap { it.tags }
 // [kotlin, android, java, kotlin]
 ```
 
-### Визуальное сравнение
+### Визуальное Сравнение
 
 ```kotlin
 val data = listOf(listOf(1, 2), listOf(3, 4))
@@ -295,7 +298,7 @@ data.flatMap { it }
 // Результат: [1, 2, 3, 4] - выровнен в один список
 ```
 
-### Соображения производительности
+### Соображения Производительности
 
 `flatMap()` имеет немного больше накладных расходов, чем `map()`, потому что ему нужно выравнивать результаты. Используйте его только тогда, когда вам действительно нужно поведение выравнивания.
 

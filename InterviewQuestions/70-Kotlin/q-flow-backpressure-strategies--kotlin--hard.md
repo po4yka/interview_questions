@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, backpressure, buffer, performance, operators]
+subtopics: [backpressure, buffer, flow, operators, performance]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-backpressure-in-kotlin-flow--programming-languages--medium]
+related: [q-kotlin-flow-basics--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, flow, backpressure, buffer, performance, difficulty/hard]
+tags: [backpressure, buffer, difficulty/hard, flow, kotlin, performance]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > Implement backpressure handling in Flow. Compare buffer, conflate, and collectLatest strategies with performance benchmarks.
 
@@ -66,7 +69,7 @@ public fun <T> Flow<T>.buffer(
 ): Flow<T>
 ```
 
-#### Basic buffer Usage
+#### Basic Buffer Usage
 
 ```kotlin
 fun demonstrateBuffer() = runBlocking {
@@ -338,12 +341,12 @@ suspend fun benchmark(
 /*
 Typical Results:
 
- Strategy         Duration  Throughput   Items Lost  
+ Strategy         Duration  Throughput   Items Lost
 
- No Strategy      11000ms   91 items/s   0           
- Buffer(64)       10100ms   99 items/s   0           
- Conflate         1100ms    909 items/s  ~900        
- CollectLatest    1010ms    990 items/s  ~999        
+ No Strategy      11000ms   91 items/s   0
+ Buffer(64)       10100ms   99 items/s   0
+ Conflate         1100ms    909 items/s  ~900
+ CollectLatest    1010ms    990 items/s  ~999
 
 */
 ```
@@ -386,7 +389,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-#### Example 2: Sensor Data with conflate
+#### Example 2: Sensor Data with Conflate
 
 ```kotlin
 class TemperatureSensor {
@@ -410,7 +413,7 @@ class TemperatureSensor {
 }
 ```
 
-#### Example 3: File Processing with buffer
+#### Example 3: File Processing with Buffer
 
 ```kotlin
 suspend fun processLargeFile(file: File): ProcessingResult {
@@ -564,7 +567,7 @@ highFrequencyData()
 
 Противодавление возникает когда producer испускает значения быстрее чем consumer может их обработать. Flow предоставляет несколько стратегий для обработки этого.
 
-### Стратегия 1: buffer() - Буферизованная обработка
+### Стратегия 1: buffer() - Буферизованная Обработка
 
 ```kotlin
 // Без буфера - последовательно
@@ -594,7 +597,7 @@ flow {
 // Всего: ~900мс (на 25% быстрее!)
 ```
 
-### Стратегия 2: conflate() - Только последнее
+### Стратегия 2: conflate() - Только Последнее
 
 ```kotlin
 flow {
@@ -611,7 +614,7 @@ flow {
 // Вывод: 0, 4, 8 (промежуточные пропущены!)
 ```
 
-### Стратегия 3: collectLatest() - Отмена предыдущей коллекции
+### Стратегия 3: collectLatest() - Отмена Предыдущей Коллекции
 
 ```kotlin
 flow {
@@ -628,7 +631,7 @@ flow {
 // Только последнее значение завершается!
 ```
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Стратегия | Конкурентность | Потерянные значения | Применение | Производительность |
 |-----------|----------------|---------------------|------------|-------------------|
@@ -637,9 +640,9 @@ flow {
 | **conflate()** | Да | Промежуточные | Важно только последнее | Очень быстро |
 | **collectLatest()** | Да | Все кроме последнего | Отменить устаревшую работу | Быстрейшее |
 
-### Реальные примеры
+### Реальные Примеры
 
-#### Поиск с collectLatest
+#### Поиск С collectLatest
 
 ```kotlin
 class SearchViewModel : ViewModel() {
@@ -653,7 +656,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-#### Данные датчика с conflate
+#### Данные Датчика С Conflate
 
 ```kotlin
 fun temperatureUpdates(): Flow<Temperature> = flow {
@@ -665,7 +668,7 @@ fun temperatureUpdates(): Flow<Temperature> = flow {
 .conflate() // UI нужна только последняя температура
 ```
 
-#### Обработка файла с buffer
+#### Обработка Файла С Buffer
 
 ```kotlin
 suspend fun processLargeFile(file: File) {
@@ -677,7 +680,7 @@ suspend fun processLargeFile(file: File) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбирайте стратегию на основе требований**:
    ```kotlin
@@ -703,7 +706,7 @@ suspend fun processLargeFile(file: File) {
    .buffer(100)
    ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Использование conflate когда нужны все значения**:
    ```kotlin
@@ -740,7 +743,7 @@ suspend fun processLargeFile(file: File) {
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
 
 ### Prerequisites (Easier)
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
+-  - Flow
 - [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 

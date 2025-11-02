@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-dagger-framework-overview--android--hard]
+related: [q-dagger-framework-overview--android--hard, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/camera, android/performance-rendering, android/ui-graphics, kotlin, machine-learning, face-detection, difficulty/medium]
+tags: [android/camera, android/performance-rendering, android/ui-graphics, difficulty/medium, face-detection, kotlin, machine-learning]
 date created: Monday, October 27th 2025, 5:12:57 pm
-date modified: Thursday, October 30th 2025, 3:13:30 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-backpressure--kotlin--hard, q-viewmodel-coroutines-lifecycle--kotlin--medium, q-coroutine-job-lifecycle--kotlin--medium]
+related: [q-coroutine-job-lifecycle--kotlin--medium, q-flow-backpressure--kotlin--hard, q-viewmodel-coroutines-lifecycle--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, extensions, functions, language-features, difficulty/medium]
+tags: [difficulty/medium, extensions, functions, kotlin, language-features]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What do you know about extensions in Kotlin?
 # Вопрос (RU)
@@ -39,7 +42,7 @@ Kotlin provides the ability to extend a class or an interface with new functiona
 
 For example, you can write new functions for a class or an interface from a third-party library that you can't modify. Such functions can be called in the usual way, as if they were methods of the original class. This mechanism is called an **extension function**. There are also **extension properties** that let you define new properties for existing classes.
 
-### Extension functions
+### Extension Functions
 
 To declare an extension function, prefix its name with a *receiver type*, which refers to the type being extended. The following adds a `swap` function to `MutableList<Int>`:
 
@@ -70,7 +73,7 @@ fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
 
 You need to declare the generic type parameter before the function name to make it available in the receiver type expression.
 
-### Extension properties
+### Extension Properties
 
 Kotlin supports extension properties much like it supports functions:
 
@@ -86,7 +89,7 @@ Example:
 val House.number = 1 // error: initializers are not allowed for extension properties
 ```
 
-### Nullable receiver
+### Nullable Receiver
 
 Note that extensions can be defined with a nullable receiver type. These extensions can be called on an object variable even if its value is `null`, and they can check for `this == null` inside the body.
 
@@ -101,7 +104,7 @@ fun Any?.toString(): String {
 }
 ```
 
-### Extensions are resolved statically
+### Extensions Are Resolved Statically
 
 Extensions do not actually modify the classes they extend. By defining an extension, you are not inserting new members into a class, only making new functions callable with the dot-notation on variables of this type.
 
@@ -149,7 +152,7 @@ fun Example.printFunctionType(i: Int) { println("Extension function #$i") }
 Example().printFunctionType(1)
 ```
 
-### Note on visibility
+### Note on Visibility
 
 Extensions utilize the same visibility modifiers as regular functions declared in the same scope would. For example:
 - An extension declared at the top level of a file has access to the other `private` top-level declarations in the same file;
@@ -208,7 +211,7 @@ val <T> List<T>.lastIndex: Int
 val House.number = 1 // ошибка: инициализаторы не разрешены для свойств-расширений
 ```
 
-### Nullable receiver
+### Nullable Receiver
 
 Обратите внимание, что расширения могут быть определены с nullable типом-получателем. Такие расширения могут вызываться на переменной объекта, даже если её значение `null`, и они могут проверять `this == null` внутри тела.
 
@@ -223,7 +226,7 @@ fun Any?.toString(): String {
 }
 ```
 
-### Расширения разрешаются статически
+### Расширения Разрешаются Статически
 
 Расширения фактически не модифицируют классы, которые они расширяют. Определяя расширение, вы не вставляете новые члены в класс, а только делаете новые функции вызываемыми с точечной нотацией для переменных этого типа.
 
@@ -271,7 +274,7 @@ fun Example.printFunctionType(i: Int) { println("Extension function #$i") }
 Example().printFunctionType(1)
 ```
 
-### Примечание о видимости
+### Примечание О Видимости
 
 Расширения используют те же модификаторы видимости, что и обычные функции, объявленные в той же области видимости. Например:
 - Расширение, объявленное на верхнем уровне файла, имеет доступ к другим `private` объявлениям верхнего уровня в том же файле;
@@ -292,4 +295,4 @@ Example().printFunctionType(1)
 - [[q-kotlin-operator-overloading--kotlin--medium]] - Operators
 
 ### Advanced (Harder)
-- [[q-kotlin-extension-functions-advanced--kotlin--hard]] - kotlin extension functions advanced 
+- [[q-kotlin-extension-functions-advanced--kotlin--hard]] - kotlin extension functions advanced

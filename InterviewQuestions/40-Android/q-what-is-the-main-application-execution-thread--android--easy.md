@@ -5,7 +5,7 @@ aliases: ["Main Thread", "UI Thread", "Главный поток", "Поток U
 
 # Classification
 topic: android
-subtopics: [threads-sync, lifecycle, performance-rendering]
+subtopics: [lifecycle, performance-rendering, threads-sync]
 question_kind: theory
 difficulty: easy
 
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-anr-application-not-responding--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+related: [c-main-thread, c-threading]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-29
 
 # Tags (EN only; no leading #)
-tags: [android/threads-sync, android/lifecycle, android/performance-rendering, difficulty/easy]
+tags: [android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/easy]
+date created: Saturday, November 1st 2025, 1:26:04 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +43,7 @@ tags: [android/threads-sync, android/lifecycle, android/performance-rendering, d
 
 **Main Thread** (или **UI Thread**) — единственный поток в Android-приложении, в котором выполняются все операции с пользовательским интерфейсом и обратные вызовы жизненного цикла компонентов.
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 1. **Единственный поток UI** — создаётся при старте приложения и живёт весь жизненный цикл
 2. **Все UI-операции** — только Main Thread может обращаться к View (иначе `CalledFromWrongThreadException`)
@@ -70,7 +72,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Переключение на главный поток
+### Переключение На Главный Поток
 
 ```kotlin
 // Вариант 1: runOnUiThread
@@ -90,7 +92,7 @@ lifecycleScope.launch {
 }
 ```
 
-### Проверка текущего потока
+### Проверка Текущего Потока
 
 ```kotlin
 fun isMainThread(): Boolean =

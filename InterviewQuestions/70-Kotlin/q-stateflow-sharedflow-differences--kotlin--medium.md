@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [stateflow, sharedflow, flow, hot-flows, coroutines]
+subtopics: [coroutines, flow, hot-flows, sharedflow, stateflow]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
+related: [q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, stateflow, sharedflow, flow, hot-flows, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/medium, flow, hot-flows, kotlin, sharedflow, stateflow]
+date created: Saturday, October 18th 2025, 3:12:22 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What are StateFlow and SharedFlow in Kotlin? What are the differences between them?
 # Вопрос (RU)
@@ -78,7 +81,7 @@ sealed class LatestNewsUiState {
 }
 ```
 
-#### StateFlow vs LiveData
+#### StateFlow Vs LiveData
 
 Both are observable data holder classes with similar patterns:
 
@@ -158,7 +161,7 @@ class NewsRepository(
 }
 ```
 
-### StateFlow vs SharedFlow Comparison
+### StateFlow Vs SharedFlow Comparison
 
 | Feature | StateFlow | SharedFlow |
 |---------|-----------|------------|
@@ -223,7 +226,7 @@ sharedFlow.resetReplayCache()
 
 `StateFlow` — это наблюдаемый поток-держатель состояния, который испускает текущее состояние и новые обновления состояния своим подписчикам. Текущее значение состояния также доступно через свойство `value`.
 
-#### Ключевые характеристики
+#### Ключевые Характеристики
 
 1. **Всегда имеет значение** - Требует начальное состояние при создании
 2. **Держатель состояния** - Всегда представляет текущее состояние
@@ -231,7 +234,7 @@ sharedFlow.resetReplayCache()
 4. **Горячий поток** - Активен и в памяти даже без подписчиков
 5. **Потокобезопасный** - Можно безопасно обновлять из любого потока
 
-#### Пример использования
+#### Пример Использования
 
 ```kotlin
 class LatestNewsViewModel(
@@ -260,7 +263,7 @@ sealed class LatestNewsUiState {
 }
 ```
 
-#### StateFlow vs LiveData
+#### StateFlow Vs LiveData
 
 | Функция | StateFlow | LiveData |
 |---------|-----------|----------|
@@ -275,7 +278,7 @@ sealed class LatestNewsUiState {
 
 `SharedFlow` — это горячий поток, который испускает значения всем подписчикам. Это высоко настраиваемое обобщение StateFlow.
 
-#### Опции конфигурации
+#### Опции Конфигурации
 
 ```kotlin
 private val _tickFlow = MutableSharedFlow<Unit>(
@@ -290,7 +293,7 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 - `DROP_LATEST` - Отбрасывает последнее значение при переполнении
 - `DROP_OLDEST` - Отбрасывает самое старое значение при переполнении
 
-### Сравнение StateFlow vs SharedFlow
+### Сравнение StateFlow Vs SharedFlow
 
 | Функция | StateFlow | SharedFlow |
 |---------|-----------|------------|
@@ -300,7 +303,7 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 | **Объединение** | Да (всегда) | Настраиваемое |
 | **Повтор** | 1 (всегда) | Настраиваемый (0...∞) |
 
-### Когда что использовать
+### Когда Что Использовать
 
 **Используйте StateFlow когда**:
 - Нужно представить текущее состояние (например, UI состояние, состояние загрузки)

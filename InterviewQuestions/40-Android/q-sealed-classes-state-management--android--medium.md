@@ -13,9 +13,12 @@ moc: moc-android
 related: [q-mvi-architecture--android--hard, q-state-hoisting-compose--android--medium, q-stateflow-flow-sharedflow-livedata--android--medium]
 created: 2025-10-12
 updated: 2025-01-27
-tags: [android/architecture-mvi, android/ui-state, sealed-classes, state-management, mvi, difficulty/medium]
+tags: [android/architecture-mvi, android/ui-state, difficulty/medium, mvi, sealed-classes, state-management]
 sources: [https://kotlinlang.org/docs/sealed-classes.html]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 > Как использовать sealed классы для управления состоянием в Android приложениях?
 
@@ -27,7 +30,7 @@ sources: [https://kotlinlang.org/docs/sealed-classes.html]
 ## Ответ (RU)
 
 **Концепция:**
-Sealed классы ([[c-sealed-classes]]) представляют ограниченную иерархию типов, где все подклассы известны на этапе компиляции. В Android они используются для моделирования UI состояний, результатов API и событий в паттерне [[c-mvi-pattern]].
+Sealed классы ([[c-sealed-classes]]) представляют ограниченную иерархию типов, где все подклассы известны на этапе компиляции. В Android они используются для моделирования UI состояний, результатов API и событий в паттерне [[c-mvvm-pattern]].
 
 **Преимущества:**
 - Исчерпывающие when выражения — компилятор проверяет все варианты
@@ -97,7 +100,7 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // Нет данных!
 ## Answer (EN)
 
 **Concept:**
-Sealed classes ([[c-sealed-classes]]) represent restricted type hierarchies where all subclasses are known at compile time. In Android, they're used to model UI states, API results, and events in the [[c-mvi-pattern]] pattern.
+Sealed classes ([[c-sealed-classes]]) represent restricted type hierarchies where all subclasses are known at compile time. In Android, they're used to model UI states, API results, and events in the [[c-mvvm-pattern]] pattern.
 
 **Advantages:**
 - Exhaustive when expressions — compiler checks all variants
@@ -176,7 +179,7 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 ## References
 
 - [[c-sealed-classes]] - Sealed classes concept
-- [[c-mvi-pattern]] - MVI architecture pattern
+- [[c-mvvm-pattern]] - MVI architecture pattern
 - [[c-state-flow]] - StateFlow for state management
 - https://kotlinlang.org/docs/sealed-classes.html
 

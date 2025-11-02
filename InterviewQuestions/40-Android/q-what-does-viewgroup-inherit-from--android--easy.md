@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-views, c-view-hierarchy, q-viewgroup-vs-view-differences--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
+related: [c-view-hierarchy, c-views, q-viewgroup-vs-view-differences--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, viewgroup, inheritance, ui, views, difficulty/easy]
+tags: [android/ui-views, difficulty/easy, inheritance, ui, viewgroup, views]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What does ViewGroup inherit from?
+# What Does ViewGroup Inherit From?
 
 # Вопрос (RU)
 

@@ -1,11 +1,7 @@
 ---
 id: android-444
 title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в Compose избежать состояния гонки
-aliases:
-  - Does State Made In Compose Help Avoid Race Condition
-  - Помогает ли State в Compose избежать состояния гонки
-  - Compose State Thread Safety
-  - Thread Safety в Compose State
+aliases: [Compose State Thread Safety, Does State Made In Compose Help Avoid Race Condition, Thread Safety в Compose State, Помогает ли State в Compose избежать состояния гонки]
 topic: android
 subtopics:
   - ui-compose
@@ -19,23 +15,14 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - q-compose-state-management--android--medium
   - q-derived-state-snapshot-system--android--hard
-  - q-android-performance-optimization--android--medium
 sources:
   - https://developer.android.com/jetpack/compose/state
 created: 2025-10-20
 updated: 2025-10-28
-tags:
-  - android/ui-compose
-  - android/ui-state
-  - compose
-  - concurrency
-  - difficulty/medium
-  - state
-  - thread-safety
+tags: [android/ui-compose, android/ui-state, compose, concurrency, difficulty/medium, state, thread-safety]
 date created: Tuesday, October 28th 2025, 9:22:03 am
-date modified: Thursday, October 30th 2025, 12:47:42 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -287,8 +274,6 @@ class MyViewModel : ViewModel() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-state-management--android--medium]]
 
 ### Advanced (Harder)
 - [[q-derived-state-snapshot-system--android--hard]]
-- [[q-android-performance-optimization--android--medium]]

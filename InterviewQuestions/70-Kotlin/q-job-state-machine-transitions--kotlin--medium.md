@@ -1,7 +1,7 @@
 ---
 id: kotlin-105
 title: "Job state machine and state transitions / Job машина состояний и переходы"
-aliases: [Job, State, Machine, Transitions]
+aliases: [Job, Machine, State, Transitions]
 topic: kotlin
 subtopics: []
 question_kind: theory
@@ -10,15 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-list-set-map-differences--programming-languages--easy, q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium]
+related: [q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium, q-list-set-map-differences--programming-languages--easy]
 created: 2025-10-12
 updated: 2025-10-12
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Saturday, November 1st 2025, 1:07:23 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
-# Job state machine and state transitions / Job машина состояний и переходы
+# Job State Machine and State Transitions / Job Машина Состояний И Переходы
 
 ## English
 
@@ -53,48 +53,48 @@ A `Job` can be in one of the following states:
 ### State Transition Diagram (Text-Based)
 
 ```
-                      
+
                            New      (LAZY only)
-                        (initial)  
-                      
+                        (initial)
+
                               start()
-                             
-                      
-            Active    
-                      (executing)            
-                                
-                                              
-                             body done        
-                                              
-                                
-                      Completing             
-                     (wait kids)             
-                                
-                                              
-                             all children     
-                             complete         
-                                              
-                                
-                       Completed             
-                       (success)             
-                                
-                                               
-           cancel()                            
-                                               
-                                  
-                                               
-                                
-                Cancelling                   
-               (finally,    
+
+
+            Active
+                      (executing)
+
+
+                             body done
+
+
+                      Completing
+                     (wait kids)
+
+
+                             all children
+                             complete
+
+
+                       Completed
+                       (success)
+
+
+           cancel()
+
+
+
+
+                Cancelling
+               (finally,
                 wait kids)   children done
-               
-                      
+
+
                        finally done
-                      
-               
-                 Cancelled  
-                (terminal)  
-               
+
+
+                 Cancelled
+                (terminal)
+
 ```
 
 ### State 1: New (CoroutineStart.LAZY only)
@@ -1206,7 +1206,7 @@ Kotlin корутины `Job` — это конечный автомат с 6 р
 
 Этот вопрос исследует полный конечный автомат, допустимые переходы, поведение свойств в каждом состоянии, правила распространения от родителя к потомкам, и как `join()` и `cancel()` взаимодействуют с различными состояниями.
 
-### 6 состояний Job
+### 6 Состояний Job
 
 `Job` может находиться в одном из следующих состояний:
 
@@ -1217,7 +1217,7 @@ Kotlin корутины `Job` — это конечный автомат с 6 р
 5. **Cancelling** (отмена в процессе, выполнение блоков finally)
 6. **Cancelled** (терминальное отменённое состояние)
 
-### Поведение свойств состояния
+### Поведение Свойств Состояния
 
 | Состояние | isActive | isCompleted | isCancelled |
 |-----------|----------|-------------|-------------|
@@ -1228,51 +1228,51 @@ Kotlin корутины `Job` — это конечный автомат с 6 р
 | **Cancelling** | false | false | true |
 | **Cancelled** | false | true | true |
 
-### Диаграмма переходов состояний (текстовая)
+### Диаграмма Переходов Состояний (текстовая)
 
 ```
-                      
+
                            New      (только LAZY)
-                       (начальное) 
-                      
+                       (начальное)
+
                               start()
-                             
-                      
-            Active    
-                     (выполнение)            
-                                
-                                              
-                             тело завершено   
-                                              
-                                
-                      Completing             
-                     (ожид. детей)           
-                                
-                                              
-                             все дети         
-                             завершены        
-                                              
-                                
-                       Completed             
-                        (успех)              
-                                
-                                               
-           cancel()                            
-                                               
-                                  
-                                               
-                                
-                Cancelling                   
-               (finally,    
+
+
+            Active
+                     (выполнение)
+
+
+                             тело завершено
+
+
+                      Completing
+                     (ожид. детей)
+
+
+                             все дети
+                             завершены
+
+
+                       Completed
+                        (успех)
+
+
+           cancel()
+
+
+
+
+                Cancelling
+               (finally,
                 ожид. детей) дети завершены
-               
-                      
+
+
                        finally выполнен
-                      
-               
-                 Cancelled  
+
+
+                 Cancelled
                (терминальное)
-               
+
 ```
 
 ### Состояние 1: New (только CoroutineStart.LAZY)
@@ -1400,7 +1400,7 @@ fun demonstrateCompletingState() = runBlocking {
 
 **Переходы:** Нет (терминальное состояние)
 
-### Состояние 5: Cancelling (выполнение блоков finally)
+### Состояние 5: Cancelling (выполнение Блоков finally)
 
 Состояние **Cancelling** возникает, когда отмена в процессе. Корутина выполняет блоки `finally` и ждёт отмены потомков.
 
@@ -1459,7 +1459,7 @@ fun demonstrateCancellingState() = runBlocking {
 }
 ```
 
-### Состояние 6: Cancelled (терминальное отменённое состояние)
+### Состояние 6: Cancelled (терминальное Отменённое состояние)
 
 Состояние **Cancelled** — терминальное состояние, указывающее на завершённую отмену. Все блоки finally выполнены, все потомки отменены.
 
@@ -1472,7 +1472,7 @@ fun demonstrateCancellingState() = runBlocking {
 
 **Переходы:** Нет (терминальное состояние)
 
-### Правила распространения состояний родитель-потомок
+### Правила Распространения Состояний Родитель-потомок
 
 Распространение состояний корутин следует принципам структурной параллельности:
 
@@ -1489,7 +1489,7 @@ fun demonstrateCancellingState() = runBlocking {
    - Родитель переходит в состояние Completing после завершения тела
    - Переходит в Completed только когда все потомки завершены
 
-### Поведение join() в каждом состоянии
+### Поведение join() В Каждом Состоянии
 
 Функция `join()` приостанавливается до тех пор, пока job не достигнет терминального состояния (Completed или Cancelled).
 
@@ -1502,7 +1502,7 @@ fun demonstrateCancellingState() = runBlocking {
 | **Cancelling** | Приостанавливается до завершения отмены |
 | **Cancelled** | Возвращается немедленно |
 
-### Поведение cancel() в каждом состоянии
+### Поведение cancel() В Каждом Состоянии
 
 Функция `cancel()` запрашивает отмену job.
 
@@ -1515,7 +1515,7 @@ fun demonstrateCancellingState() = runBlocking {
 | **Cancelling** | Без эффекта (уже отменяется) |
 | **Cancelled** | Без эффекта (идемпотентна) |
 
-### Лучшие практики проверки состояния
+### Лучшие Практики Проверки Состояния
 
 1. **Проверяйте `isActive` перед приостановкой**
 2. **Используйте `ensureActive()` для лучшей отмены**
@@ -1524,14 +1524,14 @@ fun demonstrateCancellingState() = runBlocking {
 5. **Не полагайтесь на состояние в конкурентных сценариях**
 6. **Ждите завершения отмены с `join()`**
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. **Забывание, что `isCompleted=true` для отменённых jobs**
 2. **Неожидание завершения отмены**
 3. **Предположение, что `isActive=false` означает завершение**
 4. **Запуск завершённых jobs**
 
-### Соображения производительности
+### Соображения Производительности
 
 1. **Проверки состояния имеют O(1)** - дёшево вызывать часто
 2. **`invokeOnCompletion` имеет накладные расходы** - используйте экономно
@@ -1559,7 +1559,4 @@ fun demonstrateCancellingState() = runBlocking {
 
 ## Related Questions
 
-- [[q-coroutine-cancellation-exception-handling--kotlin--hard|Coroutine cancellation and exception handling]]
 - [[q-structured-concurrency-violations--kotlin--hard|Structured concurrency violations]]
-- [[q-coroutine-lifecycle-management--kotlin--medium|Coroutine lifecycle management]]
-- [[q-supervisorjob-coroutinescope-differences--kotlin--medium|SupervisorJob vs CoroutineScope differences]]

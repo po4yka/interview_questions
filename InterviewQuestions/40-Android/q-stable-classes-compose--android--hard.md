@@ -3,18 +3,20 @@ id: android-263
 title: "Stable Classes Compose / Stable Классы Compose"
 aliases: ["Stable Classes Compose", "Stable Классы Compose"]
 topic: android
-subtopics: [ui-compose, performance-rendering]
+subtopics: [performance-rendering, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-stability-skippability--android--hard, q-stable-annotation-compose--android--hard, q-compose-performance-optimization--android--hard]
+related: []
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-compose, android/performance-rendering, immutability, jetpack-compose, recomposition, stability, difficulty/hard]
+tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immutability, jetpack-compose, recomposition, stability]
+date created: Saturday, November 1st 2025, 1:24:29 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +36,7 @@ Which classes are automatically inferred as stable in Jetpack Compose?
 - **Все свойства имеют stable типы** (String, Int, Float и т.д.)
 - **Не содержат изменяемых коллекций** (MutableList, MutableMap)
 
-### Что такое Stability?
+### Что Такое Stability?
 
 **Stability** определяет, может ли Compose **пропустить рекомпозицию**, если параметры Composable не изменились.
 
@@ -111,7 +113,7 @@ class Settings(private val _darkMode: Boolean) {
 }
 ```
 
-### Влияние на Производительность
+### Влияние На Производительность
 
 ```kotlin
 // Stable параметр
@@ -315,5 +317,5 @@ unstable class UserProfile {
 
 ### Advanced
 - [[q-compose-slot-table-recomposition--android--hard]] - Slot table internals
-- [[q-compose-compiler-reports--android--hard]] - Analyzing compiler reports
+- [[q-compose-compiler-plugin--android--hard]] - Analyzing compiler reports
 

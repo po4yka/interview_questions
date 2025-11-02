@@ -3,17 +3,19 @@ id: android-341
 title: "Navigation Methods Android / Методы навигации Android"
 aliases: [Navigation Methods, Методы навигации]
 topic: android
-subtopics: [ui-navigation, activity]
+subtopics: [activity, ui-navigation]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-navigation, c-intent, q-what-is-activity-and-what-is-it-used-for--android--medium, q-tasks-back-stack--android--medium]
+related: [c-intent, c-navigation, q-tasks-back-stack--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-navigation, android/activity, navigation, intent, startActivity, difficulty/medium]
+tags: [android/activity, android/ui-navigation, difficulty/medium, intent, navigation, startActivity]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Question (EN)

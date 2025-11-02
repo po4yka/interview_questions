@@ -1,7 +1,7 @@
 ---
 id: android-298
 title: "Compose Modifiers / Модификаторы в Compose"
-aliases: ["Compose Modifiers", "Модификаторы в Compose", "Jetpack Compose Modifiers"]
+aliases: ["Compose Modifiers", "Jetpack Compose Modifiers", "Модификаторы в Compose"]
 
 # Classification
 topic: android
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-where-is-composition-created-for-calling-composable-function--android--medium, q-api-file-upload-server--android--medium, q-reduce-app-size--android--medium]
+related: [q-api-file-upload-server--android--medium, q-reduce-app-size--android--medium, q-where-is-composition-created-for-calling-composable-function--android--medium]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android/ui-compose, android/ui-state, compose, jetpack-compose, modifiers, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, jetpack-compose, modifiers]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +43,7 @@ tags: [android/ui-compose, android/ui-state, compose, jetpack-compose, modifiers
 
 **Modifiers (Модификаторы)** в Jetpack Compose — это система декорирования и изменения поведения UI-компонентов. Они применяются через цепочку вызовов и позволяют декларативно настраивать внешний вид, размеры, отступы, поведение и эффекты.
 
-### Основные категории
+### Основные Категории
 
 1. **Layout (размеры, отступы, выравнивание)**
    - `size()`, `fillMaxWidth()`, `padding()`, `aspectRatio()`, `weight()`
@@ -58,7 +60,7 @@ tags: [android/ui-compose, android/ui-state, compose, jetpack-compose, modifiers
 5. **Animation (анимации)**
    - `animateContentSize()`, использование с `animateFloatAsState()`
 
-### Порядок имеет значение
+### Порядок Имеет Значение
 
 Последовательность вызовов модификаторов влияет на финальный результат.
 
@@ -80,7 +82,7 @@ Text(
 )
 ```
 
-### Примеры использования
+### Примеры Использования
 
 **Size & Layout:**
 

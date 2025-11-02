@@ -1,10 +1,10 @@
 ---
 id: "20251025-140100"
 title: "Jetpack Compose / Jetpack Compose"
-aliases: ["Jetpack Compose", "Compose", "Declarative UI", "Jetpack Compose UI", "Декларативный UI", "Композ"]
+aliases: ["Compose", "Declarative UI", "Jetpack Compose UI", "Jetpack Compose", "Декларативный UI", "Композ"]
 summary: "Modern declarative UI toolkit for building native Android interfaces"
 topic: "android"
-subtopics: ["jetpack-compose", "ui", "declarative-ui"]
+subtopics: ["declarative-ui", "jetpack-compose", "ui"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "jetpack-compose", "ui", "declarative-ui", "composables", "recomposition", "difficulty/medium"]
+tags: ["android", "composables", "concept", "declarative-ui", "difficulty/medium", "jetpack-compose", "recomposition", "ui"]
+date created: Saturday, October 25th 2025, 11:04:55 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Jetpack Compose / Jetpack Compose
@@ -24,7 +26,7 @@ tags: ["concept", "android", "jetpack-compose", "ui", "declarative-ui", "composa
 
 Jetpack Compose is Android's modern, declarative UI toolkit that simplifies and accelerates UI development. Unlike the traditional View-based system, Compose allows developers to describe what the UI should look like based on the current state, and the framework handles UI updates automatically. It uses Kotlin language features, composable functions, and a reactive programming model to create dynamic, responsive interfaces with less boilerplate code.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Jetpack Compose - это современный декларативный UI-инструментарий Android, который упрощает и ускоряет разработку пользовательского интерфейса. В отличие от традиционной системы на основе View, Compose позволяет разработчикам описывать, как должен выглядеть UI на основе текущего состояния, а фреймворк автоматически обрабатывает обновления UI. Использует возможности языка Kotlin, компонуемые функции и реактивную модель программирования для создания динамичных, отзывчивых интерфейсов с меньшим количеством шаблонного кода.
 
@@ -41,7 +43,7 @@ Jetpack Compose - это современный декларативный UI-и
 - **Performance**: Optimized for minimal recompositions, skip optimizations
 - **Tooling**: Live preview, layout inspector, semantic tree debugging
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Декларативная парадигма**: Описание UI как функции состояния, а не императивных обновлений
 - **Компонуемые функции**: UI компоненты - это функции Kotlin с аннотацией `@Composable`

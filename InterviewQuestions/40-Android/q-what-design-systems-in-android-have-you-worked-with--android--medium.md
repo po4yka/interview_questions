@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-material-design, c-design-tokens, q-how-to-implement-dark-theme--android--medium]
+related: [c-design-systems, c-material-3, c-material-design]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-theming, android/ui-widgets, material-design, design-system, ui, difficulty/medium]
+tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium, material-design, ui]
+date created: Saturday, November 1st 2025, 1:25:38 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > С какими дизайн-системами в Android вы работали?
@@ -73,7 +76,7 @@ tags: [android/ui-theming, android/ui-widgets, material-design, design-system, u
 </com.google.android.material.card.MaterialCardView>
 ```
 
-### Кастомные дизайн-системы
+### Кастомные Дизайн-системы
 
 Многие компании создают собственные системы на базе Material Design, используя **design tokens** для централизации стилей.
 
@@ -105,7 +108,7 @@ object DesignTokens {
 - Поддержка темной темы и accessibility
 - Сокращение дублирования кода
 
-### Fluent Design (Microsoft) и HIG (Apple)
+### Fluent Design (Microsoft) И HIG (Apple)
 
 **Fluent** и **HIG** — системы для Windows/iOS, редко используются напрямую в Android, но их принципы полезны для кросс-платформенных приложений.
 

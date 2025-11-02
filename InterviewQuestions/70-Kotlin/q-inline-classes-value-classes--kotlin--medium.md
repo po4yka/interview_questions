@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [inline-class, value-class, performance, optimization]
+subtopics: [inline-class, optimization, performance, value-class]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-type-aliases--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
+related: [q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-type-aliases--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, inline-class, value-class, performance, optimization, difficulty/medium]
+tags: [difficulty/medium, inline-class, kotlin, optimization, performance, value-class]
+date created: Saturday, November 1st 2025, 12:43:05 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What are inline classes (value classes) in Kotlin?
 # Вопрос (RU)
@@ -103,7 +106,7 @@ value class Invalid(val value: String) {
 }
 ```
 
-### Value Classes vs Type Aliases
+### Value Classes Vs Type Aliases
 
 | Feature | Value Class | Type Alias |
 |---------|-------------|------------|
@@ -211,11 +214,11 @@ fun hashPassword(password: String): String {
 
 Встроенные классы (теперь называются **value классы**) — это специальный вид классов, которые оборачивают другой тип без добавления overhead во время выполнения через дополнительные выделения памяти в куче.
 
-### Проблема которую решают
+### Проблема Которую Решают
 
 Иногда бизнес-логика требует обертывания типа, но это вводит overhead из-за выделений в куче, особенно для примитивов.
 
-### Решение: Value классы
+### Решение: Value Классы
 
 ```kotlin
 // Value класс - НЕТ выделения в куче во время выполнения!
@@ -234,7 +237,7 @@ val id = UserId("12345")  // Нет дополнительного выделе�
 - **Не может расширять другие классы** (должен быть final)
 - **Может реализовывать интерфейсы**
 
-### Value классы vs псевдонимы типов
+### Value Классы Vs Псевдонимы Типов
 
 | Функция | Value класс | Псевдоним типа |
 |---------|-------------|----------------|
@@ -260,8 +263,8 @@ Value классы имеют **нулевой runtime overhead** в больш�
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
 ### Related (Medium)
 - [[q-kotlin-inline-functions--kotlin--medium]] - Inline Functions
-- [[q-anonymous-class-in-inline-function--programming-languages--medium]] - Inline
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-anonymous-class-in-inline-function--kotlin--medium]] - Inline
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 - [[q-app-startup-optimization--android--medium]] - Performance
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

@@ -5,16 +5,15 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-13
-tags:
-  - kotlin
-  - sealed-classes
-  - type-safety
+tags: [difficulty/medium, kotlin, sealed-classes, type-safety]
 moc: moc-kotlin
-related: [q-heap-pollution-generics--kotlin--hard, q-kotlin-safe-cast--programming-languages--easy, q-channelflow-callbackflow-flow--kotlin--medium]
-  - q-sealed-class-sealed-interface--kotlin--medium.md
-subtopics: [sealed-classes, enums, when-expression]
+related: [q-channelflow-callbackflow-flow--kotlin--medium, q-heap-pollution-generics--kotlin--hard, q-kotlin-safe-cast--programming-languages--easy, q-sealed-class-sealed-interface--kotlin--medium]
+subtopics: [enums, sealed-classes, when-expression]
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# What is special about sealed classes in Kotlin?
+
+# What is Special about Sealed Classes in Kotlin?
 
 # Вопрос (RU)
 > В чем особенность sealed классов
@@ -162,7 +161,7 @@ viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
 }
 ```
 
-### Sealed class vs Enum
+### Sealed Class Vs Enum
 
 | Aspect | Enum | Sealed Class |
 |---|---|---|
@@ -185,7 +184,7 @@ sealed class Status {
 }
 ```
 
-### Sealed interface (Kotlin 1.5+)
+### Sealed Interface (Kotlin 1.5+)
 
 ```kotlin
 sealed interface Action {
@@ -203,7 +202,7 @@ class MyAction : Action, AnotherInterface {
 ## Ответ (RU)
 Особенность запечатанных (sealed) классов заключается в ограничении иерархии наследования: все их подклассы должны быть объявлены в том же файле, что и сам запечатанный класс.
 
-### Основная идея
+### Основная Идея
 
 Sealed классы идеальны для создания ограниченных иерархий классов, где требуется строго контролировать набор возможных подтипов, особенно при моделировании состояний или результатов операций.
 
@@ -216,7 +215,7 @@ sealed class UiState {
 }
 ```
 
-### Преимущества при использовании с when
+### Преимущества При Использовании С when
 
 Компилятор знает все возможные подтипы, поэтому не требуется `else` ветка.
 
@@ -244,9 +243,9 @@ sealed class UiState {
 // Компилятор покажет ошибку во всех when без обработки Empty!
 ```
 
-### Примеры использования
+### Примеры Использования
 
-#### 1. Моделирование результата операции
+#### 1. Моделирование Результата Операции
 
 ```kotlin
 sealed class Result<out T> {
@@ -282,7 +281,7 @@ result.observe(this) { result ->
 }
 ```
 
-### Sealed class vs Enum
+### Sealed Class Vs Enum
 
 | Аспект | Enum | Sealed Class |
 |--------|------|--------------|
@@ -305,7 +304,7 @@ sealed class Status {
 }
 ```
 
-### Sealed interface (Kotlin 1.5+)
+### Sealed Interface (Kotlin 1.5+)
 
 ```kotlin
 sealed interface Action {

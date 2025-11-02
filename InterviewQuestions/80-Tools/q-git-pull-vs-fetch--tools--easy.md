@@ -17,17 +17,18 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-tools
-related: [q-git-merge-vs-rebase--tools--medium, q-git-squash-commits--tools--medium]
-  - c-git
-  - c-version-control
+related: [c-git, c-version-control, q-git-merge-vs-rebase--tools--medium, q-git-squash-commits--tools--medium]
 
 # Timestamps
 created: 2025-10-03
 updated: 2025-10-03
 
 # Tags
-tags: [git, fetch, pull, version-control, remote, difficulty/easy, easy_kotlin, lang/ru, tools]
+tags: [difficulty/easy, easy_kotlin, fetch, git, lang/ru, pull, remote, tools, version-control]
+date created: Saturday, November 1st 2025, 12:09:51 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
+
 # Question (EN)
 > Difference between git pull and git fetch
 # Вопрос (RU)

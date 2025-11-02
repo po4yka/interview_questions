@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, coroutinecontext, dispatchers, job]
+subtopics: [coroutinecontext, coroutines, dispatchers, job]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-coroutine-cancellation--kotlin--medium, q-flow-backpressure--kotlin--hard, q-kotlin-sam-conversions--programming-languages--medium]
+related: [q-flow-backpressure--kotlin--hard, q-kotlin-sam-conversions--programming-languages--medium, q-testing-coroutine-cancellation--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, coroutines, coroutinecontext, dispatchers, job, difficulty/hard]
+tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
+date created: Sunday, October 12th 2025, 2:24:09 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > What is CoroutineContext in Kotlin? How does it work and what are its key elements?
 # Вопрос (RU)
@@ -202,7 +205,7 @@ launch(parentContext) {
 
 **CoroutineContext** — это индексированный набор элементов, которые определяют поведение и окружение корутины. Это персистентная структура данных похожая на map.
 
-### Основные элементы
+### Основные Элементы
 
 **1. Job - Жизненный цикл и отмена**
 **2. CoroutineDispatcher - Выполнение на потоках**
@@ -217,7 +220,7 @@ launch(context) {
 }
 ```
 
-### Композиция контекста
+### Композиция Контекста
 
 **Контексты комбинируются с оператором `+`:**
 
@@ -233,7 +236,7 @@ val replaced = context1 + Dispatchers.IO
 // Результат: Dispatchers.IO + Job (Main заменен на IO)
 ```
 
-### Доступ к элементам контекста
+### Доступ К Элементам Контекста
 
 ```kotlin
 launch(Dispatchers.Main + CoroutineName("UI")) {
@@ -247,7 +250,7 @@ launch(Dispatchers.Main + CoroutineName("UI")) {
 }
 ```
 
-### Наследование контекста
+### Наследование Контекста
 
 **Дочерние корутины наследуют родительский контекст:**
 
@@ -270,7 +273,7 @@ launch(parentContext) {
 }
 ```
 
-### Ключевые элементы объяснены
+### Ключевые Элементы Объяснены
 
 **1. Job - Управление жизненным циклом**
 
@@ -302,7 +305,7 @@ launch(Dispatchers.Main) {
 }
 ```
 
-### Правила распространения контекста
+### Правила Распространения Контекста
 
 **1. Ребенок наследует родительский контекст**
 **2. Ребенок может переопределить специфичные элементы**

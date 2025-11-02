@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-140000
 title: Structured Concurrency / Структурированная конкурентность
-aliases: [Structured Concurrency, Coroutine Scoping, Структурированная конкурентность]
+aliases: [Coroutine Scoping, Structured Concurrency, Структурированная конкурентность]
 kind: concept
 summary: Kotlin Coroutines paradigm ensuring proper scope and cleanup
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, kotlin, coroutines, concurrency, structured-concurrency]
+tags: [concept, concurrency, coroutines, kotlin, structured-concurrency]
+date created: Thursday, October 30th 2025, 12:29:19 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -30,7 +32,7 @@ Key principles:
 - **Распространение отмены**: При отмене родителя все дочерние корутины отменяются автоматически
 - **Нет утечек корутин**: Область гарантирует, что все корутины завершатся или будут отменены при завершении области
 
-## Core Concept / Основная концепция
+## Core Concept / Основная Концепция
 
 **EN**: In structured concurrency, every coroutine must belong to a scope. When you launch a coroutine using `launch` or `async`, it becomes a child of the scope. The scope tracks all its children and:
 - Waits for all children to complete before completing itself
@@ -56,7 +58,7 @@ Key principles:
 - **Обработка ошибок**: Исключения распространяются вверх по иерархии для централизованной обработки
 - **Тестирование**: Легко тестировать, контролируя жизненный цикл области
 
-## Best Practices / Лучшие практики
+## Best Practices / Лучшие Практики
 
 **EN**:
 - Use `viewModelScope` in Android ViewModels for automatic cleanup on ViewModel clear
@@ -72,7 +74,7 @@ Key principles:
 - Используйте `supervisorScope`, когда отказ дочерних корутин не должен отменять соседние
 - Всегда явно отменяйте области, когда они больше не нужны
 
-## Code Example / Пример кода
+## Code Example / Пример Кода
 
 ```kotlin
 class UserRepository {

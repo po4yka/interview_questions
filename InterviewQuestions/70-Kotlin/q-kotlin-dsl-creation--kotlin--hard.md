@@ -1,22 +1,23 @@
 ---
 id: kotlin-192
 title: "Kotlin Dsl Creation / Создание DSL в Kotlin"
-aliases: [Kotlin, Dsl, Creation]
+aliases: [Creation, Dsl, Kotlin]
 topic: kotlin
-subtopics: [extensions, coroutines, delegation]
+subtopics: [coroutines, delegation, extensions]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-equality-operator--programming-languages--easy, q-kotlin-conversion-functions--programming-languages--medium, q-array-vs-list-kotlin--kotlin--easy]
+related: [q-array-vs-list-kotlin--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/hard
+tags: [difficulty/hard]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Creating Type-Safe DSLs in Kotlin
 
 # Question (EN)
@@ -90,7 +91,7 @@ fun buildPage() = HtmlBuilder().html {
 
 ---
 
-### @DslMarker for Scope Control
+### @DslMarker For Scope Control
 
 Prevents implicit receiver scope leakage:
 
@@ -302,15 +303,15 @@ fun Container.add(component: Any)
 
 **DSL (Domain-Specific Language)** в Kotlin использует возможности языка, такие как лямбды с получателями, extension функции и перегрузку операторов для создания выразительных, типобезопасных API.
 
-### Базовая структура DSL
+### Базовая Структура DSL
 
 Использует лямбды с получателями: `block: HtmlTag.() -> Unit`.
 
-### @DslMarker для контроля области
+### @DslMarker Для Контроля Области
 
 Предотвращает утечку области видимости неявных получателей.
 
-### Полный типобезопасный UI DSL
+### Полный Типобезопасный UI DSL
 
 Включает Container, Component, и функции построения как `button`, `text`, `column`.
 
@@ -318,7 +319,7 @@ fun Container.add(component: Any)
 
 Использует infix функции для SQL операторов: `"age" gt 18`.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте @DslMarker
 2. Extension лямбды с получателями
@@ -328,6 +329,6 @@ DSL в Kotlin обеспечивают выразительные, типобе�
 
 ## Related Questions
 
-- [[q-kotlin-equality-operator--programming-languages--easy]]
-- [[q-kotlin-conversion-functions--programming-languages--medium]]
+-
+-
 - [[q-array-vs-list-kotlin--kotlin--easy]]

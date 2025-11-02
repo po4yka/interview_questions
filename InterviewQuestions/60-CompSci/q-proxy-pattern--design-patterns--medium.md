@@ -3,19 +3,19 @@ id: design-patterns-005
 title: "Proxy Pattern / Proxy Паттерн"
 aliases: [Proxy Pattern, Proxy Паттерн]
 topic: design-patterns
-subtopics: [structural-patterns, access-control, lazy-loading]
+subtopics: [access-control, lazy-loading, structural-patterns]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-design-patterns
-related: [q-builder-pattern--design-patterns--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-observer-pattern--design-patterns--medium]
+related: [q-adapter-pattern--design-patterns--medium, q-composite-pattern--design-patterns--medium, q-decorator-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [design-patterns, gof-patterns, proxy, structural-patterns, surrogate, difficulty/medium]
+tags: [design-patterns, difficulty/medium, gof-patterns, proxy, structural-patterns, surrogate]
 date created: Monday, October 6th 2025, 7:24:42 am
-date modified: Sunday, October 26th 2025, 1:37:17 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Proxy Pattern

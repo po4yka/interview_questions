@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-activity-lifecycle, c-event-handling, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/lifecycle, lifecycle, events, difficulty/medium]
+tags: [android/activity, android/lifecycle, difficulty/medium, events, lifecycle]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What events are Activity methods tied to?
+# What Events Are Activity Methods Tied To?
 
 # Вопрос (RU)
 
@@ -29,7 +31,7 @@ Activity lifecycle methods are tied to specific system events that occur during 
 
 ```
 
-         Activity Lifecycle Events            
+         Activity Lifecycle Events
 
 
 onCreate()  Activity is created
@@ -626,7 +628,7 @@ override fun onStop() {
 ## Ответ (RU)
 Методы жизненного цикла Activity привязаны к конкретным системным событиям, которые происходят в течение жизни Activity. Эти методы позволяют разработчикам реагировать на изменения состояния и правильно управлять ресурсами.
 
-### Основные события и методы
+### Основные События И Методы
 
 **onCreate()** - Создание активности
 - Вызывается при первом запуске
@@ -662,7 +664,7 @@ override fun onStop() {
 - Возврат из остановленного состояния
 - Обновление данных
 
-### Типичные сценарии
+### Типичные Сценарии
 
 **Открытие приложения:**
 onCreate() → onStart() → onResume()

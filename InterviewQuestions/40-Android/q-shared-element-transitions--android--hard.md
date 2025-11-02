@@ -1,9 +1,9 @@
 ---
 id: android-420
 title: "Shared Element Transitions / Переходы с общими элементами"
-aliases: [Shared Element Transitions, Переходы с общими элементами, Hero Animations, Анимация героя]
+aliases: [Hero Animations, Shared Element Transitions, Анимация героя, Переходы с общими элементами]
 topic: android
-subtopics: [ui-compose, ui-animation, ui-navigation]
+subtopics: [ui-animation, ui-compose, ui-navigation]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -14,8 +14,11 @@ related: [c-jetpack-compose, q-how-does-fragment-lifecycle-differ-from-activity-
 created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/jetpack/compose/animation/overview]
-tags: [android/ui-compose, android/ui-animation, android/ui-navigation, compose, animations, navigation, transitions, shared-elements, hero-animations, difficulty/hard]
+tags: [android/ui-animation, android/ui-compose, android/ui-navigation, animations, compose, difficulty/hard, hero-animations, navigation, shared-elements, transitions]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 > Как реализовать переходы с общими элементами между composables? Объясните API SharedTransitionLayout.
@@ -57,7 +60,7 @@ fun SharedTransitionScope.ListItem(item: Item) {
 }
 ```
 
-### Интеграция с Navigation Compose
+### Интеграция С Navigation Compose
 
 ```kotlin
 // ✅ Использование с Navigation
@@ -87,7 +90,7 @@ fun AppNavigation() {
 }
 ```
 
-### Настройка анимации
+### Настройка Анимации
 
 ```kotlin
 // ✅ Кастомизация spring-параметров
@@ -112,7 +115,7 @@ Modifier.sharedBounds(
 )
 ```
 
-### Множественные элементы
+### Множественные Элементы
 
 ```kotlin
 // ✅ Несколько shared elements одновременно
@@ -169,7 +172,7 @@ Box(
 )
 ```
 
-### Критические моменты
+### Критические Моменты
 
 **Производительность:**
 - Используйте `skipToLookaheadSize()` для сложных layouts

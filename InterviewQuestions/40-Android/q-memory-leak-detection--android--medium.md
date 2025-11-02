@@ -1,11 +1,11 @@
 ---
 id: android-045
 title: "Memory Leak Detection and Fixing / Обнаружение и исправление утечек памяти"
-aliases: [Memory Leak Detection, Обнаружение утечек памяти, LeakCanary, Memory Profiler]
+aliases: [LeakCanary, Memory Leak Detection, Memory Profiler, Обнаружение утечек памяти]
 
 # Classification
 topic: android
-subtopics: [performance-memory, profiling, lifecycle]
+subtopics: [lifecycle, performance-memory, profiling]
 question_kind: android
 difficulty: medium
 
@@ -17,15 +17,15 @@ sources: [Memory management best practices]
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-app-startup-optimization--android--medium, q-jank-detection-frame-metrics--android--medium, q-baseline-profiles-optimization--android--medium]
+related: [q-app-startup-optimization--android--medium, q-baseline-profiles-optimization--android--medium, q-jank-detection-frame-metrics--android--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-10-28
 
-tags: [android/performance-memory, android/profiling, android/lifecycle, difficulty/medium]
+tags: [android/lifecycle, android/performance-memory, android/profiling, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:37:26 pm
-date modified: Thursday, October 30th 2025, 3:13:09 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -53,7 +53,7 @@ date modified: Thursday, October 30th 2025, 3:13:09 pm
 - **Memory Profiler** — мониторинг в реальном времени
 - **MAT** — анализ дампов кучи
 
-### LeakCanary — интеграция
+### LeakCanary — Интеграция
 
 **app/build.gradle.kts:**
 ```kotlin
@@ -98,9 +98,9 @@ class MyRepository {
 }
 ```
 
-### Типичные утечки
+### Типичные Утечки
 
-#### 1. Activity — статические ссылки
+#### 1. Activity — Статические Ссылки
 
 **❌ Утечка:**
 ```kotlin
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Activity — внутренние классы
+#### 2. Activity — Внутренние Классы
 
 **❌ Утечка:**
 ```kotlin
@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Activity — слушатели
+#### 3. Activity — Слушатели
 
 **❌ Утечка:**
 ```kotlin
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 4. Fragment — ссылки на View
+#### 4. Fragment — Ссылки На View
 
 **❌ Утечка:**
 ```kotlin
@@ -356,7 +356,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-#### 8. Bitmap — кэши
+#### 8. Bitmap — Кэши
 
 **❌ Утечка:**
 ```kotlin
@@ -415,7 +415,7 @@ fun dumpHeap() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **LeakCanary в debug** — отлавливайте до продакшна
 2. **Lifecycle-компоненты** — LiveData, ViewModel, lifecycleScope

@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-activity-navigation-how-it-works--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-how-navigation-is-implemented-in-android--android--medium]
+related: [q-activity-navigation-how-it-works--android--medium, q-how-navigation-is-implemented-in-android--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/ui-navigation, navigation, difficulty/medium]
+tags: [android, android/ui-navigation, difficulty/medium, navigation]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
+
 # Вопрос (RU)
 
 > Какие способы навигации вы знаете в Android?
@@ -122,7 +125,7 @@ URL-based навигация из внешних источников.
 **Применение**: маркетинг, push-уведомления, web-to-app переходы.
 **Критично**: правильная обработка в `onCreate` и `onNewIntent`.
 
-### Архитектурные паттерны навигации
+### Архитектурные Паттерны Навигации
 
 | Паттерн | Случай использования | Компоненты |
 |---------|---------------------|------------|

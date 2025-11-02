@@ -7,7 +7,9 @@ summary: Type-safe HTTP client for Android and Java by Square
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, networking, retrofit, http, rest-api]
+tags: [android, concept, http, networking, rest-api, retrofit]
+date created: Thursday, October 30th 2025, 12:29:23 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -24,7 +26,7 @@ Retrofit - это типобезопасная HTTP-клиентская биб�
 
 ---
 
-## Core Concept / Основная концепция
+## Core Concept / Основная Концепция
 
 ### Declarative API Definition (EN)
 
@@ -50,7 +52,7 @@ interface GitHubService {
 **Request Annotations**: `@GET`, `@POST`, `@PUT`, `@DELETE`, `@PATCH`, `@HEAD`, `@OPTIONS`
 **Parameter Annotations**: `@Path`, `@Query`, `@Body`, `@Header`, `@Field`, `@Part`
 
-### Декларативное определение API (RU)
+### Декларативное Определение API (RU)
 
 Retrofit использует аннотации для описания HTTP-запросов (см. код выше).
 
@@ -59,7 +61,7 @@ Retrofit использует аннотации для описания HTTP-з
 
 ---
 
-## Key Features / Ключевые возможности
+## Key Features / Ключевые Возможности
 
 ### Automatic Conversion (EN)
 
@@ -76,7 +78,7 @@ val service = retrofit.create(GitHubService::class.java)
 
 **Popular Converters**: Gson, Moshi, kotlinx.serialization, Jackson, Protobuf
 
-### Автоматическое преобразование (RU)
+### Автоматическое Преобразование (RU)
 
 Retrofit автоматически конвертирует ответы с помощью подключаемых конвертеров (см. код выше).
 
@@ -129,7 +131,7 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
-### Интеграция с OkHttp (RU)
+### Интеграция С OkHttp (RU)
 
 Retrofit использует OkHttp для сетевых операций. Настройка через интерцепторы (см. код выше).
 
@@ -156,13 +158,13 @@ viewModelScope.launch {
 }
 ```
 
-### Поддержка корутин (RU)
+### Поддержка Корутин (RU)
 
 Встроенная поддержка `suspend` функций (Retrofit 2.6+), см. код выше.
 
 ---
 
-## Best Practices / Лучшие практики
+## Best Practices / Лучшие Практики
 
 ### Error Handling (EN)
 
@@ -183,7 +185,7 @@ suspend fun fetchUser(): Result<User> {
 }
 ```
 
-### Обработка ошибок (RU)
+### Обработка Ошибок (RU)
 
 Используйте обёртку `Response<T>` для детальной обработки ошибок (см. код выше).
 

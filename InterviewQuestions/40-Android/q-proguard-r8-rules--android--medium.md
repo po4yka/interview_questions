@@ -3,19 +3,22 @@ id: android-153
 title: "ProGuard/R8 Rules / Правила ProGuard и R8"
 aliases: ["ProGuard/R8 Rules", "Правила ProGuard и R8"]
 topic: android
-subtopics: [obfuscation, build-variants, static-analysis]
+subtopics: [build-variants, obfuscation, static-analysis]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-security-practices-checklist--android--medium, q-encrypted-file-storage--android--medium, q-database-encryption-android--android--medium]
+related: [q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium, q-encrypted-file-storage--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/obfuscation, android/build-variants, android/static-analysis, proguard, r8, security, difficulty/medium]
+tags: [android/build-variants, android/obfuscation, android/static-analysis, difficulty/medium, proguard, r8, security]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
+
 # Вопрос (RU)
 
 Напишите комплексный набор правил ProGuard/R8 для Android библиотеки. Обработайте рефлексию, сериализацию, нативные методы и публичный API. Оптимизируйте для production, сохраняя функциональность.
@@ -30,7 +33,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 
 **R8** — современная замена ProGuard для Android. Выполняет уменьшение кода, оптимизацию и обфускацию с лучшей производительностью при полной совместимости с ProGuard.
 
-### Основные возможности
+### Основные Возможности
 
 **Что делает R8:**
 - **Shrinking**: удаление неиспользуемых классов, методов, полей
@@ -38,7 +41,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 - **Obfuscation**: переименование классов/методов в короткие имена (a, b, c)
 - **Resource shrinking**: удаление неиспользуемых ресурсов (с build config)
 
-### Базовая конфигурация
+### Базовая Конфигурация
 
 ```proguard
 # proguard-rules.pro
@@ -61,7 +64,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 -dontwarn org.jetbrains.annotations.**
 ```
 
-### Поддержка рефлексии
+### Поддержка Рефлексии
 
 ```proguard
 # Классы, используемые через рефлексию
@@ -98,7 +101,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 }
 ```
 
-### Native методы (JNI)
+### Native Методы (JNI)
 
 ```proguard
 # ✅ Сохранить native методы
@@ -119,7 +122,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 }
 ```
 
-### Публичный API библиотеки
+### Публичный API Библиотеки
 
 ```proguard
 # Сохранить все public API классы и методы
@@ -137,7 +140,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 }
 ```
 
-### Android компоненты
+### Android Компоненты
 
 ```proguard
 # Activities, Services, BroadcastReceivers
@@ -159,7 +162,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 }
 ```
 
-### Kotlin специфика
+### Kotlin Специфика
 
 ```proguard
 # Kotlin metadata
@@ -179,7 +182,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 }
 ```
 
-### Сторонние библиотеки
+### Сторонние Библиотеки
 
 ```proguard
 # Retrofit
@@ -197,7 +200,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 ```
 
-### Consumer правила для библиотек
+### Consumer Правила Для Библиотек
 
 ```proguard
 # consumer-rules.pro
@@ -220,7 +223,7 @@ Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection,
 }
 ```
 
-### Gradle конфигурация
+### Gradle Конфигурация
 
 ```kotlin
 android {
@@ -242,7 +245,7 @@ android {
 }
 ```
 
-### Тестирование обфусцированных сборок
+### Тестирование Обфусцированных Сборок
 
 ```kotlin
 class ProguardRulesTest {
@@ -275,7 +278,7 @@ class ProguardRulesTest {
 }
 ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 ```proguard
 # ❌ НЕПРАВИЛЬНО: Слишком широкое правило
@@ -308,7 +311,7 @@ class ProguardRulesTest {
 5. **Сохраняйте mapping файлы** для каждой версии
 6. **Загружайте mapping в Firebase Crashlytics** или Play Console
 
-### Типичные результаты
+### Типичные Результаты
 
 - **Размер APK**: уменьшение на 30-50%
 - **Количество методов**: уменьшение на 10-30%

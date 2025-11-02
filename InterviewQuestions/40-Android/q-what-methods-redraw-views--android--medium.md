@@ -3,20 +3,22 @@ id: android-214
 title: "View Redraw Methods / Методы перерисовки View"
 aliases: [View Redraw Methods, Методы перерисовки View]
 topic: android
-subtopics: [ui-views, lifecycle]
+subtopics: [lifecycle, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-view-rendering, c-view-lifecycle, q-view-methods-and-their-purpose--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related: [c-view-lifecycle, c-view-rendering, q-view-methods-and-their-purpose--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, android/lifecycle, view-rendering, invalidate, requestLayout, drawing, difficulty/medium]
+tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, invalidate, requestLayout, view-rendering]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What methods are used to redraw Views?
+# What Methods Are Used to Redraw Views?
 
 ## Answer (EN)
 Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
@@ -46,7 +48,7 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-#### When to use invalidate():
+#### When to Use invalidate():
 - Color changes
 - Text updates
 - Drawing state changes
@@ -109,7 +111,7 @@ class ExpandableView @JvmOverloads constructor(
 }
 ```
 
-#### When to use requestLayout():
+#### When to Use requestLayout():
 - Size changes
 - Margin/padding changes
 - LayoutParams changes
@@ -167,7 +169,7 @@ class LoadingView : View {
 }
 ```
 
-#### Comparison: invalidate() vs postInvalidate()
+#### Comparison: invalidate() Vs postInvalidate()
 
 ```kotlin
 class ComparisonExample : View {
@@ -343,7 +345,7 @@ fun safeInvalidate() {
 
 ---
 
-# Что известно про методы, которые перерисовывают View?
+# Что Известно Про Методы, Которые Перерисовывают View?
 
 ## Ответ (RU)
 
@@ -374,7 +376,7 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-#### Когда использовать invalidate():
+#### Когда Использовать invalidate():
 - Изменения цвета
 - Обновления текста
 - Изменения состояния рисования
@@ -437,7 +439,7 @@ class ExpandableView @JvmOverloads constructor(
 }
 ```
 
-#### Когда использовать requestLayout():
+#### Когда Использовать requestLayout():
 - Изменения размера
 - Изменения margin/padding
 - Изменения LayoutParams
@@ -495,7 +497,7 @@ class LoadingView : View {
 }
 ```
 
-#### Сравнение: invalidate() vs postInvalidate()
+#### Сравнение: invalidate() Vs postInvalidate()
 
 ```kotlin
 class ComparisonExample : View {

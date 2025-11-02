@@ -3,7 +3,7 @@ id: lang-063
 title: "How To Create Suspend Function / Как создать suspend функцию"
 aliases: [How To Create Suspend Function, Как создать suspend функцию]
 topic: programming-languages
-subtopics: [coroutines, kotlin, functions]
+subtopics: [coroutines, functions, kotlin]
 question_kind: coding
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-coroutines, c-kotlin-features, q-how-suspend-function-detects-suspension--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, coroutines, functions, difficulty/medium]
+tags: [coroutines, difficulty/medium, functions, kotlin, programming-languages]
+date created: Friday, October 31st 2025, 6:31:28 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # How to Create a Suspend Function?
@@ -432,5 +434,5 @@ suspend fun longRunningTask() {
 ## Related Questions
 
 - [[q-java-access-modifiers--programming-languages--medium]]
-- [[q-mvp-pattern--architecture-patterns--medium]]
+-
 - [[q-iterator-order-guarantee--programming-languages--medium]]

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-requirements--programming-languages--medium, q-channel-buffer-strategies-comparison--kotlin--hard, q-statein-sharein-flow--kotlin--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
 tags:

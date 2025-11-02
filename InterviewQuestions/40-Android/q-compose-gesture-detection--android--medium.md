@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, c-compose-modifiers, q-compose-side-effects--android--medium, q-compose-recomposition--android--hard]
+related: [c-compose-modifiers, c-compose-state]
 sources: []
 created: 2025-10-11
 updated: 2025-10-30
-tags: [android/ui-compose, android/ui-state, compose, gestures, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gestures]
 date created: Thursday, October 30th 2025, 11:23:08 am
-date modified: Thursday, October 30th 2025, 12:43:43 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,14 +29,14 @@ date modified: Thursday, October 30th 2025, 12:43:43 pm
 
 ## Ответ (RU)
 
-### Уровни обработки жестов
+### Уровни Обработки Жестов
 
 Compose предоставляет два уровня API:
 
 1. **High-level модификаторы** — встроенные жесты с семантикой и доступностью
 2. **pointerInput** — низкоуровневый suspend-блок для кастомной логики
 
-### Базовые модификаторы
+### Базовые Модификаторы
 
 ```kotlin
 // ✅ clickable: ripple, семантика, фокус из коробки
@@ -63,7 +63,7 @@ Column(Modifier.scrollable(scrollState, Orientation.Vertical)) {
 }
 ```
 
-### pointerInput и detectTapGestures
+### pointerInput И detectTapGestures
 
 Для сложных сценариев (long press, double tap):
 
@@ -81,7 +81,7 @@ Box(
 
 **Важно**: ключ `Unit` сохраняет корутину; если передать зависимость, pointerInput пересоздаётся.
 
-### Drag с многомерным движением
+### Drag С Многомерным Движением
 
 ```kotlin
 var offset by remember { mutableStateOf(Offset.Zero) }
@@ -97,7 +97,7 @@ Box(
 )
 ```
 
-### Nested scroll для координации
+### Nested Scroll Для Координации
 
 Когда родитель и дочерний элемент оба scrollable, используйте `NestedScrollConnection`:
 
@@ -237,12 +237,8 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-modifiers-order--android--easy]]
-- [[q-compose-state-hoisting--android--easy]]
 
 ### Related (Same Level)
-- [[q-compose-side-effects--android--medium]]
-- [[q-compose-recomposition--android--hard]]
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]]

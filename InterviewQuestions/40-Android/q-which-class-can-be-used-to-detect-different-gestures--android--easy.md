@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-which-class-to-catch-gestures--android--easy, q-fragments-vs-activity--android--medium]
+related: [q-fragments-vs-activity--android--medium, q-which-class-to-catch-gestures--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/ui-views, android/ui-widgets, gestures, difficulty/easy]
+tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
 date created: Monday, October 27th 2025, 6:43:03 pm
-date modified: Thursday, October 30th 2025, 3:18:05 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ Which class can be used to detect different gestures?
 
 Для обработки жестов в Android используйте класс **GestureDetector**. Он отслеживает стандартные жесты: tap, double tap, long press, fling, scroll.
 
-### Базовое использование
+### Базовое Использование
 
 ```kotlin
 class GestureActivity : AppCompatActivity() {
@@ -80,7 +80,7 @@ class GestureActivity : AppCompatActivity() {
 }
 ```
 
-### Определение направления свайпа
+### Определение Направления Свайпа
 
 ```kotlin
 class SwipeGestureListener : GestureDetector.SimpleOnGestureListener() {
@@ -116,7 +116,7 @@ class SwipeGestureListener : GestureDetector.SimpleOnGestureListener() {
 }
 ```
 
-### ScaleGestureDetector для pinch-zoom
+### ScaleGestureDetector Для Pinch-zoom
 
 ```kotlin
 class ZoomableView(context: Context) : View(context) {

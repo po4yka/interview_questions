@@ -3,7 +3,7 @@ id: android-124
 title: "How Application Priority Is Determined By The System / Как система определяет приоритет приложения"
 aliases: ["How Application Priority Is Determined", "Как система определяет приоритет приложения"]
 topic: android
-subtopics: [lifecycle, processes, performance-memory]
+subtopics: [lifecycle, performance-memory, processes]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -14,9 +14,9 @@ related: [q-anr-application-not-responding--android--medium, q-what-unites-the-m
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, difficulty/hard, android/lifecycle, android/processes, android/performance-memory, lifecycle, processes, performance-memory]
+tags: [android, android/lifecycle, android/performance-memory, android/processes, difficulty/hard, lifecycle, performance-memory, processes]
 date created: Monday, October 27th 2025, 3:35:47 pm
-date modified: Thursday, October 30th 2025, 12:48:08 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

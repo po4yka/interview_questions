@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-presenter-notify-view--android--medium, q-leakcanary-detection-mechanism--android--medium]
+related: [q-leakcanary-detection-mechanism--android--medium, q-presenter-notify-view--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [error-handling, strategy, architecture, ux, difficulty/medium]
+tags: [architecture, difficulty/medium, error-handling, strategy, ux]
 date created: Monday, October 27th 2025, 4:02:02 pm
-date modified: Thursday, October 30th 2025, 3:15:00 pm
+date modified: Saturday, November 1st 2025, 5:44:10 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:15:00 pm
 
 **Комплексная обработка ошибок** критична для хорошего UX. Пользователи должны понимать проблему и знать, что делать. Стратегия включает классификацию ошибок, интеллектуальные повторы и понятные сообщения.
 
-### Классификация ошибок
+### Классификация Ошибок
 
 Sealed class hierarchy для типизации ошибок:
 
@@ -69,7 +69,7 @@ val NetworkError.isRetryable: Boolean
     }
 ```
 
-### Маппинг исключений
+### Маппинг Исключений
 
 Конвертация исключений и HTTP кодов:
 
@@ -111,7 +111,7 @@ class NetworkErrorMapper {
 }
 ```
 
-### Стратегия повторов
+### Стратегия Повторов
 
 Exponential backoff с jitter:
 
@@ -161,7 +161,7 @@ class RetryStrategy(
 }
 ```
 
-### Repository с обработкой
+### Repository С Обработкой
 
 Централизованная обработка в data layer:
 
@@ -197,7 +197,7 @@ class UserRepository(
 }
 ```
 
-### UI с обработкой ошибок
+### UI С Обработкой Ошибок
 
 ViewModel и Compose UI:
 

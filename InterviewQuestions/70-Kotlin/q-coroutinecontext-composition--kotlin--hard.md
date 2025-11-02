@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, context, advanced, composition, custom-context]
+subtopics: [advanced, composition, context, coroutines, custom-context]
 question_kind: theory
 difficulty: hard
 
@@ -24,8 +24,11 @@ related: [q-coroutine-context-detailed--kotlin--hard, q-kotlin-coroutines-introd
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, coroutines, context, advanced, composition, difficulty/hard]
+tags: [advanced, composition, context, coroutines, difficulty/hard, kotlin]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Explain how CoroutineContext elements combine and inherit. Create a custom CoroutineContext element for request ID tracking across async operations.
 
@@ -633,7 +636,7 @@ interface CoroutineContext {
 }
 ```
 
-### Встроенные элементы контекста
+### Встроенные Элементы Контекста
 
 ```kotlin
 // 1. Job - контролирует жизненный цикл
@@ -654,9 +657,9 @@ val handler = CoroutineExceptionHandler { _, exception ->
 val context = job + dispatcher + name + handler
 ```
 
-### Правила композиции контекста
+### Правила Композиции Контекста
 
-#### 1. Комбинирование с `+`
+#### 1. Комбинирование С `+`
 
 При комбинировании контекстов элементы с одинаковым ключом заменяют предыдущие:
 
@@ -669,7 +672,7 @@ val combined = context1 + context2
 // "Second" заменил "First", Default заменил IO
 ```
 
-#### 2. Наследование контекста
+#### 2. Наследование Контекста
 
 Дочерние корутины наследуют контекст родителя, но могут переопределять конкретные элементы:
 
@@ -684,11 +687,11 @@ fun main() = runBlocking(CoroutineName("Parent") + Dispatchers.Default) {
 }
 ```
 
-### Создание пользовательских элементов CoroutineContext
+### Создание Пользовательских Элементов CoroutineContext
 
 Создадим пользовательский элемент для отслеживания ID запроса - распространенное требование в микросервисах.
 
-#### Элемент контекста Request ID
+#### Элемент Контекста Request ID
 
 ```kotlin
 /**
@@ -716,7 +719,7 @@ fun CoroutineScope.launchWithRequestId(
 ): Job = launch(context + RequestId(requestId), block = block)
 ```
 
-#### Пример использования
+#### Пример Использования
 
 ```kotlin
 suspend fun processRequest(userId: Int) {
@@ -764,7 +767,7 @@ fun main() = runBlocking {
 */
 ```
 
-### Продвинутый пример: Мультитенантный контекст
+### Продвинутый Пример: Мультитенантный Контекст
 
 ```kotlin
 /**
@@ -825,7 +828,7 @@ fun main() = runBlocking {
 }
 ```
 
-### Контекст распределенной трассировки
+### Контекст Распределенной Трассировки
 
 ```kotlin
 data class TraceContext(
@@ -852,7 +855,7 @@ fun traceLog(message: String) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Делайте элементы контекста неизменяемыми**:
    ```kotlin
@@ -879,7 +882,7 @@ fun traceLog(message: String) {
    val CoroutineContext.id: String?
    ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Изменение разделяемого изменяемого контекста**:
    ```kotlin

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [collections, list, set, map, data-structures]
+subtopics: [collections, data-structures, list, map, set]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-generic-function-syntax--programming-languages--easy, q-coroutine-profiling--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
+related: [q-coroutine-profiling--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, collections, list, set, map, data-structures, difficulty/easy]
+tags: [collections, data-structures, difficulty/easy, kotlin, list, map, set]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What do you know about Collections in Kotlin?
 # Вопрос (RU)
@@ -67,7 +70,7 @@ Below is a diagram of the Kotlin collection interfaces:
 
 - **Map (или словарь)** — это набор пар ключ-значение. Ключи уникальны, и каждый из них соответствует ровно одному значению. Значения могут дублироваться. Maps полезны для хранения логических связей между объектами.
 
-### Типы коллекций
+### Типы Коллекций
 
 Стандартная библиотека Kotlin предоставляет реализации для базовых типов коллекций: множеств, списков и карт (map). Пара интерфейсов представляет каждый тип коллекции:
 

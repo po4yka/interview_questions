@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - scope-functions
+  - apply
   - let
   - run
+  - scope-functions
   - with
-  - apply
 question_kind: theory
 difficulty: medium
 
@@ -23,14 +23,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-coroutines-runtest--kotlin--medium, q-data-sealed-classes-definition--programming-languages--hard, q-kotlin-crossinline--programming-languages--hard]
+related: [q-data-sealed-classes-definition--programming-languages--hard, q-kotlin-crossinline--programming-languages--hard, q-testing-coroutines-runtest--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, scope-functions, let, run, with, apply, also, difficulty/medium]
+tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What are scope functions in Kotlin?
 # Вопрос (RU)
@@ -64,7 +67,7 @@ Because the scope functions are all quite similar in nature, it's important to u
 - The way to refer to the context object
 - The return value
 
-#### Context object: this or it
+#### Context Object: This or it
 
 Inside the lambda of a scope function, the context object is available by a short reference instead of its actual name. Each scope function uses one of two ways to access the context object: as a lambda receiver (`this`) or as a lambda argument (`it`)
 
@@ -88,7 +91,7 @@ fun main() {
 
 **it**. In turn, `let` and `also` have the context object as a lambda argument. If the argument name is not specified, the object is accessed by the implicit default name it. `it` is shorter than `this` and expressions with `it` are usually easier for reading. However, when calling the object functions or properties you don't have the object available implicitly like this. Hence, having the context object as `it` is better when the object is mostly used as an argument in function calls. `it` is also better if you use multiple variables in the code block.
 
-#### Return value
+#### Return Value
 
 The scope functions differ by the result they return:
 - `apply` and `also` return the context object.
@@ -145,7 +148,7 @@ with(numbers) {
 
 ### Functions
 
-#### let
+#### Let
 
 **The context object** is available as an argument (`it`). **The return value** is the lambda result.
 
@@ -190,7 +193,7 @@ val modifiedFirstItem = numbers.first().let { firstItem ->
 println("First item after modifications: '$modifiedFirstItem'")
 ```
 
-#### with
+#### With
 
 A non-extension function: **the context object** is passed as an argument, but inside the lambda, it's available as a receiver (`this`). **The return value** is the lambda result.
 
@@ -215,7 +218,7 @@ val firstAndLast = with(numbers) {
 println(firstAndLast)
 ```
 
-#### run
+#### Run
 
 **The context object** is available as a receiver (this). **The return value** is the lambda result.
 
@@ -254,7 +257,7 @@ for (match in hexNumberRegex.findAll("+1234 -FFFF not-a-number")) {
 }
 ```
 
-#### apply
+#### Apply
 
 **The context object** is available as a receiver (`this`). **The return value** is the object itself.
 
@@ -270,7 +273,7 @@ println(adam)
 
 Having the receiver as the return value, you can easily include `apply` into call chains for more complex processing.
 
-#### also
+#### Also
 
 **The context object** is available as an argument (it). **The return value** is the object itself.
 
@@ -285,7 +288,7 @@ numbers
     .add("four")
 ```
 
-### Function selection
+### Function Selection
 
 Here is a short guide for choosing scope functions depending on the intended purpose:
 
@@ -323,7 +326,7 @@ Person("Alice", 20, "Amsterdam").let {
 - Способ обращения к контекстному объекту
 - Возвращаемое значение
 
-#### Контекстный объект: this или it
+#### Контекстный Объект: This Или it
 
 Внутри лямбды функции области видимости контекстный объект доступен по короткой ссылке вместо его фактического имени. Каждая функция области видимости использует один из двух способов доступа к контекстному объекту: как получатель лямбды (`this`) или как аргумент лямбды (`it`)
 
@@ -347,7 +350,7 @@ fun main() {
 
 **it**. В свою очередь, `let` и `also` имеют контекстный объект в качестве аргумента лямбды. Если имя аргумента не указано, к объекту осуществляется доступ по неявному имени по умолчанию it. `it` короче, чем `this`, и выражения с `it` обычно легче читать. Однако при вызове функций или свойств объекта у вас нет объекта, доступного неявно, как this. Следовательно, наличие контекстного объекта в качестве `it` лучше, когда объект в основном используется в качестве аргумента в вызовах функций. `it` также лучше, если вы используете несколько переменных в блоке кода.
 
-#### Возвращаемое значение
+#### Возвращаемое Значение
 
 Функции области видимости различаются результатом, который они возвращают:
 - `apply` и `also` возвращают контекстный объект.
@@ -404,7 +407,7 @@ with(numbers) {
 
 ### Функции
 
-#### let
+#### Let
 
 **Контекстный объект** доступен как аргумент (`it`). **Возвращаемое значение** — результат лямбды.
 
@@ -449,7 +452,7 @@ val modifiedFirstItem = numbers.first().let { firstItem ->
 println("First item after modifications: '$modifiedFirstItem'")
 ```
 
-#### with
+#### With
 
 Функция-не-расширение: **контекстный объект** передается в качестве аргумента, но внутри лямбды он доступен как получатель (`this`). **Возвращаемое значение** — результат лямбды.
 
@@ -474,7 +477,7 @@ val firstAndLast = with(numbers) {
 println(firstAndLast)
 ```
 
-#### run
+#### Run
 
 **Контекстный объект** доступен как получатель (this). **Возвращаемое значение** — результат лямбды.
 
@@ -513,7 +516,7 @@ for (match in hexNumberRegex.findAll("+1234 -FFFF not-a-number")) {
 }
 ```
 
-#### apply
+#### Apply
 
 **Контекстный объект** доступен как получатель (`this`). **Возвращаемое значение** — сам объект.
 
@@ -529,7 +532,7 @@ println(adam)
 
 Имея получателя в качестве возвращаемого значения, вы можете легко включить `apply` в цепочки вызовов для более сложной обработки.
 
-#### also
+#### Also
 
 **Контекстный объект** доступен как аргумент (it). **Возвращаемое значение** — сам объект.
 
@@ -544,7 +547,7 @@ numbers
     .add("four")
 ```
 
-### Выбор функции
+### Выбор Функции
 
 Вот краткое руководство по выбору функций области видимости в зависимости от предполагаемой цели:
 

@@ -1,10 +1,10 @@
 ---
 id: "20251023-120400"
 title: "Dagger / Dagger DI"
-aliases: ["Dagger", "Dagger 2", "Dependency Injection Framework", "Dagger DI"]
+aliases: ["Dagger 2", "Dagger DI", "Dagger", "Dependency Injection Framework"]
 summary: "Compile-time dependency injection framework for Java and Android using code generation"
 topic: "android"
-subtopics: ["dependency-injection", "dagger", "architecture"]
+subtopics: ["architecture", "dagger", "dependency-injection"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "dependency-injection", "dagger", "architecture", "android", "difficulty/medium"]
+tags: ["android", "architecture", "concept", "dagger", "dependency-injection", "difficulty/medium"]
+date created: Thursday, October 23rd 2025, 1:45:31 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Dagger / Dagger DI
@@ -24,7 +26,7 @@ tags: ["concept", "dependency-injection", "dagger", "architecture", "android", "
 
 Dagger is a fully compile-time dependency injection framework for Java and Android that uses annotation processing to generate code for dependency injection. Unlike runtime DI frameworks, Dagger validates dependencies at compile-time and generates efficient code without using reflection, resulting in excellent runtime performance. While Dagger has a steep learning curve due to its concepts (Components, Modules, Scopes), it provides type-safe and performant dependency injection.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Dagger — это полностью компилируемый фреймворк внедрения зависимостей для Java и Android, который использует обработку аннотаций для генерации кода инъекции зависимостей. В отличие от runtime DI-фреймворков, Dagger проверяет зависимости во время компиляции и генерирует эффективный код без использования рефлексии, что обеспечивает отличную производительность. Хотя Dagger имеет крутую кривую обучения из-за своих концепций (Components, Modules, Scopes), он обеспечивает типобезопасное и производительное внедрение зависимостей.
 
@@ -37,7 +39,7 @@ Dagger — это полностью компилируемый фреймвор
 - **Scopes**: Control lifetime of dependencies (@Singleton, custom scopes)
 - **Subcomponents**: Hierarchical component structure for nested scopes
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Время компиляции**: Генерирует код во время компиляции, нет накладных расходов во время выполнения
 - **Типобезопасность**: Проверка графа зависимостей во время компиляции
@@ -116,7 +118,7 @@ class UserRepository @Inject constructor(
 }
 ```
 
-### 4. @Binds for Interfaces
+### 4. @Binds For Interfaces
 
 More efficient way to bind interface implementations (compared to @Provides).
 
@@ -342,7 +344,7 @@ abstract class FragmentModule {
 - **Complexity**: Overengineering for simple projects
 - **Android specifics**: Requires custom setup for Android components (Hilt solves this)
 
-## Dagger vs Hilt vs Koin
+## Dagger Vs Hilt Vs Koin
 
 | Feature | Dagger | Hilt | Koin |
 |---------|--------|------|------|

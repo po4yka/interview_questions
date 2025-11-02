@@ -3,7 +3,7 @@ id: lang-043
 title: "Sealed Vs Enum Classes / Sealed против Enum Классов"
 aliases: [Sealed Vs Enum Classes, Sealed против Enum Классов]
 topic: programming-languages
-subtopics: [class-hierarchy, sealed-classes, enum, oop]
+subtopics: [class-hierarchy, enum, oop, sealed-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-primitive-vs-reference-types--programming-languages--easy, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [comparison, enum, kotlin, oop, programming-languages, sealed-class, difficulty/medium]
+tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, sealed-class]
 date created: Friday, October 3rd 2025, 6:48:06 pm
-date modified: Sunday, October 26th 2025, 1:37:24 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Каковы Отличия Sealed И Enum Классов В Kotlin?

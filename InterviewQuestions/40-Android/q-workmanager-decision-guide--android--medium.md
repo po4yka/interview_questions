@@ -14,9 +14,9 @@ related: [q-api-rate-limiting-throttling--android--medium, q-compose-modifier-sy
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/background-execution, android/coroutines, android/performance-battery, workmanager, background-work, service, difficulty/medium]
+tags: [android/background-execution, android/coroutines, android/performance-battery, background-work, difficulty/medium, service, workmanager]
 date created: Wednesday, October 29th 2025, 1:00:47 pm
-date modified: Thursday, October 30th 2025, 3:16:47 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ When should you use WorkManager vs Coroutines vs Service for background work in 
 
 **WorkManager**, **Coroutines** и **Service** решают разные задачи фоновой работы в Android.
 
-### Критерии выбора
+### Критерии Выбора
 
 | Критерий | WorkManager | Coroutines | Foreground Service |
 |----------|-------------|------------|---------------------|
@@ -146,9 +146,9 @@ class MusicPlayerService : Service() {
 }
 ```
 
-### Примеры сравнения
+### Примеры Сравнения
 
-#### Загрузка файла
+#### Загрузка Файла
 
 ```kotlin
 // ❌ НЕПРАВИЛЬНО - Coroutines (отменится при закрытии приложения)
@@ -173,7 +173,7 @@ fun uploadFile(file: File) {
 }
 ```
 
-#### Периодическая синхронизация
+#### Периодическая Синхронизация
 
 ```kotlin
 // ❌ НЕПРАВИЛЬНО - Coroutines (убьется при закрытии приложения)
@@ -205,7 +205,7 @@ fun schedulePeriodicSync() {
 }
 ```
 
-### Комбинирование подходов
+### Комбинирование Подходов
 
 ```kotlin
 class DataSyncManager(

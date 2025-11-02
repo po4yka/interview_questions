@@ -3,21 +3,22 @@ id: cs-001
 title: "Java Kotlin Abstract Classes Difference"
 aliases: []
 topic: computer-science
-subtopics: [access-modifiers, type-system, class-features]
+subtopics: [access-modifiers, class-features, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-when-vs-switch--programming-languages--easy, q-inline-function-limitations--kotlin--medium, q-zip-parallelism-guarantee--programming-languages--medium]
+related: [q-inline-function-limitations--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Какое главное отличие между Java и Kotlin касательно абстрактных классов, методов?
+
+# Какое Главное Отличие Между Java И Kotlin Касательно Абстрактных Классов, Методов?
 
 # Question (EN)
 > What are the main differences between Java and Kotlin regarding abstract classes and methods?
@@ -550,6 +551,6 @@ Java и Kotlin оба поддерживают концепции абстрак
 
 ## Related Questions
 
-- [[q-kotlin-when-vs-switch--programming-languages--easy]]
+-
 - [[q-inline-function-limitations--kotlin--medium]]
-- [[q-zip-parallelism-guarantee--programming-languages--medium]]
+-

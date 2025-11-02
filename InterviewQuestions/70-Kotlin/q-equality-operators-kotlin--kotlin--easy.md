@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [equality, operators, comparison]
+subtopics: [comparison, equality, operators]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-test-dispatcher-types--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy, q-kotlin-favorite-features--programming-languages--easy]
+related: [q-kotlin-favorite-features--programming-languages--easy, q-kotlin-object-companion-object--programming-languages--easy, q-test-dispatcher-types--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, equality, operators, comparison, difficulty/easy]
+tags: [comparison, difficulty/easy, equality, kotlin, operators]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What is the difference between == and === in Kotlin?
 # Вопрос (RU)

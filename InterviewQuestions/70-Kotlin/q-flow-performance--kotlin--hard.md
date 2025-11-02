@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: hard
 
@@ -24,8 +24,11 @@ related: [q-flow-backpressure--kotlin--hard, q-kotlin-enum-classes--kotlin--easy
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140023
 
@@ -101,7 +104,7 @@ measureTimeMillis {
 
 Оптимизация производительности Flow фокусируется на эффективной обработке данных, правильной буферизации и избежании ненужных операций.
 
-### Ключевые техники производительности
+### Ключевые Техники Производительности
 
 **1. Буферизация**
 ```kotlin

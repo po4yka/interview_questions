@@ -3,7 +3,7 @@ id: android-252
 title: "KMM vs Flutter Comparison / Сравнение KMM и Flutter"
 aliases: ["KMM vs Flutter", "Kotlin Multiplatform Mobile vs Flutter", "Сравнение KMM и Flutter"]
 topic: android
-subtopics: [kmp, architecture-clean]
+subtopics: [architecture-clean, kmp]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: []
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/kmp, android/architecture-clean, cross-platform, multiplatform, difficulty/medium]
+tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, multiplatform]
 date created: Tuesday, October 28th 2025, 7:40:08 am
-date modified: Thursday, October 30th 2025, 12:47:52 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

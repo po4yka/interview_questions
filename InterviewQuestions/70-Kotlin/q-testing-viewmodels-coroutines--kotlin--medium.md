@@ -1,7 +1,7 @@
 ---
 id: kotlin-199
 title: "Testing Viewmodels Coroutines / Тестирование Viewmodels Coroutines"
-aliases: [ViewModel Testing, Testing Coroutines, Unit Testing, Тестирование ViewModel]
+aliases: [Testing Coroutines, Unit Testing, ViewModel Testing, Тестирование ViewModel]
 topic: kotlin
 subtopics: [coroutines, testing]
 question_kind: theory
@@ -10,18 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-coroutines-overview--programming-languages--medium, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
+related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - testing
-  - coroutines
-  - viewmodel
-  - unit-testing
-  - android
-  - difficulty/medium
+tags: [android, coroutines, difficulty/medium, kotlin, testing, unit-testing, viewmodel]
+date created: Friday, October 31st 2025, 6:32:04 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Testing ViewModels with Coroutines
 
 **English**: How do you properly test ViewModels that use coroutines? What are the common patterns and pitfalls?
@@ -29,7 +25,7 @@ tags:
 ## Answer (EN)
 Testing **ViewModels** with coroutines requires special setup to control coroutine execution and time in test environment.
 
-### Main problem
+### Main Problem
 
 ```kotlin
 // ViewModel
@@ -128,7 +124,7 @@ class UserViewModelTest {
 - - Works with `viewModelScope` (which uses Main)
 - - Automatic cleanup in `@After`
 
-### StandardTestDispatcher vs UnconfinedTestDispatcher
+### StandardTestDispatcher Vs UnconfinedTestDispatcher
 
 ```kotlin
 // StandardTestDispatcher - requires explicit time advancement
@@ -268,7 +264,7 @@ fun `timer increments every second`() = runTest {
 - `advanceUntilIdle()` - выполняет все pending корутины
 - `runCurrent()` - выполняет только текущие scheduled задачи
 
-### Тестирование обработки ошибок
+### Тестирование Обработки Ошибок
 
 ```kotlin
 class UserViewModel(
@@ -348,7 +344,7 @@ class FakeUserRepository : UserRepository {
 }
 ```
 
-### Тестирование параллельных операций
+### Тестирование Параллельных Операций
 
 ```kotlin
 class DashboardViewModel(
@@ -394,7 +390,7 @@ fun `loadDashboard loads all data in parallel`() = runTest {
 }
 ```
 
-### Тестирование cancellation
+### Тестирование Cancellation
 
 ```kotlin
 class SearchViewModel(
@@ -673,20 +669,20 @@ testImplementation "app.cash.turbine:turbine:1.0.0" // Для тестирова
 
 Тестирование **ViewModels с корутинами** требует специальной настройки для контроля выполнения корутин и времени в тестовом окружении.
 
-### Ключевые инструменты
+### Ключевые Инструменты
 
 1. **runTest** - предоставляет TestScope, автоматически ждет завершения корутин, пропускает delay() мгновенно
 2. **MainDispatcherRule** - заменяет Dispatchers.Main на TestDispatcher для viewModelScope
 3. **TestDispatcher** - StandardTestDispatcher (требует advanceUntilIdle) vs UnconfinedTestDispatcher (выполняется сразу)
 
-### Контроль виртуального времени
+### Контроль Виртуального Времени
 
 - `advanceTimeBy(millis)` - продвигает время на N миллисекунд
 - `advanceUntilIdle()` - выполняет все ожидающие корутины
 - `runCurrent()` - выполняет только текущие запланированные задачи
 - `currentTime` - получает виртуальное время
 
-### Паттерны тестирования
+### Паттерны Тестирования
 
 - Используйте Fake repositories с контролируемыми результатами
 - Тестируйте Flow через `test {}` (turbine) или `take().toList()`
@@ -695,7 +691,7 @@ testImplementation "app.cash.turbine:turbine:1.0.0" // Для тестирова
 - Тестируйте отмену через множественные быстрые вызовы
 - Тестируйте debouncing через advanceTimeBy()
 
-### Частые ошибки
+### Частые Ошибки
 
 - Забыли runTest (тест завершается до корутины)
 - Не настроили Main dispatcher (краш)
@@ -713,6 +709,6 @@ testImplementation "app.cash.turbine:turbine:1.0.0" // Для тестирова
 
 ## Related Questions
 
-- [[q-kotlin-coroutines-overview--programming-languages--medium]]
+-
 - [[q-flowon-operator-context-switching--kotlin--hard]]
 - [[q-kotlin-reflection--programming-languages--medium]]

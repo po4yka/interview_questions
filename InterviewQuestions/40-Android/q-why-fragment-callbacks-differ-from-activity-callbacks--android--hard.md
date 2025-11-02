@@ -1,19 +1,21 @@
 ---
 id: android-428
 title: "Почему колбэки Fragment отличаются от колбэков Activity / Why Fragment Callbacks Differ From Activity Callbacks"
-aliases: [Fragment Callbacks, Колбэки Fragment, Fragment Lifecycle Differences]
+aliases: [Fragment Callbacks, Fragment Lifecycle Differences, Колбэки Fragment]
 topic: android
-subtopics: [fragment, lifecycle, activity]
+subtopics: [activity, fragment, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [c-fragments, c-lifecycle, q-fragment-vs-activity-lifecycle--android--medium, q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/fragment, android/lifecycle, android/activity, fragments, lifecycle, difficulty/hard]
+tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle]
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ Why do Fragment callbacks differ from Activity callbacks?
 
 Fragment имеет более сложный lifecycle, чем Activity, из-за **фундаментального архитектурного различия**: Fragment живет внутри Activity и его жизненный цикл зависит от хоста.
 
-### Ключевые различия
+### Ключевые Различия
 
 **Activity**: автономный компонент с простым жизненным циклом
 ```
@@ -44,7 +46,7 @@ View lifecycle:     onCreateView → ... → onDestroyView
 Host lifecycle:     onAttach → ... → onDetach
 ```
 
-### Дополнительные колбэки Fragment
+### Дополнительные Колбэки Fragment
 
 ```kotlin
 // Присоединение к хосту
@@ -61,7 +63,7 @@ onCreate()                         // Fragment создан
 onDestroy()                        // Fragment уничтожен
 ```
 
-### Почему нужны дополнительные колбэки?
+### Почему Нужны Дополнительные Колбэки?
 
 **1. View может быть уничтожена без уничтожения Fragment**
 
@@ -124,7 +126,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
 ```
 
-### Сравнение полного lifecycle
+### Сравнение Полного Lifecycle
 
 **Activity**:
 ```kotlin
@@ -185,7 +187,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Архитектурные причины
+### Архитектурные Причины
 
 Fragment был создан для **модульности UI** и должен:
 1. Существовать в разных Activity (переиспользование)

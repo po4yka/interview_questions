@@ -10,15 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-actor-pattern--kotlin--hard, q-abstract-class-vs-interface--kotlin--medium, q-ranges--kotlin--easy]
+related: [q-abstract-class-vs-interface--kotlin--medium, q-actor-pattern--kotlin--hard, q-ranges--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-classes
-  - difficulty/medium
+tags: [data-classes, difficulty/medium, programming-languages]
+date created: Friday, October 31st 2025, 6:33:00 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What are the requirements when creating a data class?
+
+# What Are the Requirements when Creating a Data Class?
 
 # Question (EN)
 > What are the requirements when creating a data class in Kotlin?

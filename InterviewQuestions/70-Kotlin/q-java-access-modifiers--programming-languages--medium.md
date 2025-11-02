@@ -3,17 +3,19 @@ id: lang-013
 title: "Java Access Modifiers / Модификаторы доступа Java"
 aliases: [Java Access Modifiers, Модификаторы доступа Java]
 topic: programming-languages
-subtopics: [java, encapsulation, oop]
+subtopics: [encapsulation, java, oop]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-oop-concepts, c-java-features, q-interface-vs-abstract-class--programming-languages--medium]
+related: [c-java-features, c-oop-concepts, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [programming-languages, java, encapsulation, access-modifiers, oop, difficulty/medium]
+tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programming-languages]
+date created: Friday, October 31st 2025, 6:32:07 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Как Лучше Всего Использовать Модификаторы Доступа В Java?

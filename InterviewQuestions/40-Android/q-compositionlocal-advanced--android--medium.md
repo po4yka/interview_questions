@@ -1,9 +1,9 @@
 ---
 id: android-467
 title: CompositionLocal Advanced / CompositionLocal — продвинутый уровень
-aliases: ["CompositionLocal Advanced", "CompositionLocal — продвинутый уровень"]
+aliases: ["CompositionLocal — продвинутый уровень", "CompositionLocal Advanced"]
 topic: android
-subtopics: [ui-compose, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -14,9 +14,9 @@ related: [q-compose-performance-optimization--android--hard, q-compose-remember-
 sources: []
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/ui-compose, android/architecture-mvvm, difficulty/medium]
+tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:56:35 am
-date modified: Thursday, October 30th 2025, 12:44:35 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +42,7 @@ date modified: Thursday, October 30th 2025, 12:44:35 pm
 - Для часто меняющихся локальных данных
 - Как скрытый глобальный стейт
 
-### staticCompositionLocalOf vs compositionLocalOf
+### staticCompositionLocalOf Vs compositionLocalOf
 
 **`compositionLocalOf` (динамический):**
 - Отслеживает чтение `.current` — перекомпозируются только читатели
@@ -82,7 +82,7 @@ fun App(env: AppEnv, content: @Composable () -> Unit) {
 }
 ```
 
-### Производительность и границы инвалидации
+### Производительность И Границы Инвалидации
 
 **Динамический Local:**
 - Инвалидирует только реальных читателей `.current`
@@ -116,7 +116,7 @@ fun FeedScreen(scrollY: Int) {
 }
 ```
 
-### Безопасные дефолты
+### Безопасные Дефолты
 
 ```kotlin
 // ❌ Валидный дефолт скрывает отсутствие провайдера
@@ -128,7 +128,7 @@ val LocalLogger = staticCompositionLocalOf<Logger> {
 }
 ```
 
-### Неизменяемость и стабильность
+### Неизменяемость И Стабильность
 
 ```kotlin
 // ❌ Мутация невидима для Compose
@@ -141,7 +141,7 @@ val theme = LocalTheme.current.copy(primaryColor = Color.Red)
 CompositionLocalProvider(LocalTheme provides theme) { ... }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // ❌ Чтение Local вне композиции
@@ -180,7 +180,7 @@ Passes contextual data (theme, locale, DI objects) through composition tree with
 - For frequently changing local data
 - As hidden global state
 
-### staticCompositionLocalOf vs compositionLocalOf
+### staticCompositionLocalOf Vs compositionLocalOf
 
 **`compositionLocalOf` (dynamic):**
 - Tracks `.current` reads — only readers recompose

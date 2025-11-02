@@ -3,7 +3,7 @@ id: android-406
 title: Alternative Distribution / Альтернативное распространение
 aliases: ["Alternative Distribution", "Альтернативное распространение"]
 topic: android
-subtopics: [app-bundle, play-console, billing]
+subtopics: [app-bundle, billing, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,15 +11,15 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
+  - c-app-bundle
   - q-android-app-bundles--android--easy
   - q-app-store-optimization--android--medium
-  - c-app-bundle
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/app-bundle, android/play-console, android/billing, difficulty/medium]
+tags: [android/app-bundle, android/billing, android/play-console, difficulty/medium]
 date created: Wednesday, October 29th 2025, 4:19:48 pm
-date modified: Thursday, October 30th 2025, 11:12:56 am
+date modified: Saturday, November 1st 2025, 3:59:51 pm
 ---
 
 # Вопрос (RU)

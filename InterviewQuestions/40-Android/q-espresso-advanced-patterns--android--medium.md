@@ -1,7 +1,7 @@
 ---
 id: android-448
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
-aliases: [Espresso Advanced Patterns, Продвинутые паттерны Espresso, IdlingResource, Custom Matchers, Custom ViewActions]
+aliases: [Custom Matchers, Custom ViewActions, Espresso Advanced Patterns, IdlingResource, Продвинутые паттерны Espresso]
 topic: android
 subtopics: [testing-instrumented, testing-ui]
 question_kind: android
@@ -16,7 +16,7 @@ created: 2025-10-20
 updated: 2025-10-28
 tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
 date created: Tuesday, October 28th 2025, 9:22:14 am
-date modified: Thursday, October 30th 2025, 12:47:45 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:47:45 pm
 
 ## Ответ (RU)
 
-### Ключевые концепции
+### Ключевые Концепции
 
 **IdlingResource** - синхронизация с async операциями. Espresso ждет пока все ресурсы idle перед выполнением действий.
 
@@ -39,7 +39,7 @@ date modified: Thursday, October 30th 2025, 12:47:45 pm
 
 **RecyclerViewActions** - специальные действия для списков. Скроллинг, клики по позиции, custom assertions.
 
-### Примеры кода
+### Примеры Кода
 
 **1. IdlingResource для network запросов**
 
@@ -314,8 +314,6 @@ onView(withId(R.id.recycler))
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-testing-basics--android--easy]]
-- [[q-espresso-basics--android--easy]]
 
 ### Related (Same Level)
 - [[q-android-testing-strategies--android--medium]]
@@ -323,5 +321,5 @@ onView(withId(R.id.recycler))
 - [[q-android-testing-tools--testing--medium]]
 
 ### Advanced (Harder)
-- [[q-compose-testing-advanced--android--hard]]
+- [[q-compose-ui-testing-advanced--android--hard]]
 - [[q-test-automation-architecture--testing--hard]]

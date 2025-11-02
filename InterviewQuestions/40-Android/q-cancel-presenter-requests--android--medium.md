@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-coroutines, q-activity-lifecycle-methods--android--medium, q-async-operations-android--android--medium]
+related: [c-coroutines, c-lifecycle]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/architecture-clean, android/coroutines, android/lifecycle, mvp, presenter-pattern, difficulty/medium]
+tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium, mvp, presenter-pattern]
 date created: Thursday, October 30th 2025, 11:11:14 am
-date modified: Thursday, October 30th 2025, 12:43:31 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,10 +29,10 @@ date modified: Thursday, October 30th 2025, 12:43:31 pm
 
 ## Ответ (RU)
 
-### Ключевая проблема
+### Ключевая Проблема
 Presenter не должен обновлять уничтоженную или detached View — это вызывает утечки памяти и крэши. Решение: привязать отмену запросов к lifecycle событиям View.
 
-### Подход с Coroutines (рекомендуется)
+### Подход С Coroutines (рекомендуется)
 
 ```kotlin
 class UserPresenter(private val repo: UserRepository) {
@@ -64,7 +64,7 @@ class UserPresenter(private val repo: UserRepository) {
 
 **Почему `Main.immediate`:** избегает race condition, когда событие уже неактуально к моменту диспатча.
 
-### Подход с RxJava
+### Подход С RxJava
 
 ```kotlin
 class UserPresenter(private val repo: UserRepository) {
@@ -191,7 +191,7 @@ fun detach() {
 
 - [[c-coroutines]] - Kotlin coroutines fundamentals
 - [[c-lifecycle]] - Android component lifecycle
-- [[c-mvp-pattern]] - Model-View-Presenter architecture
+- [[c-mvvm-pattern]] - Model-View-Presenter architecture
 - https://developer.android.com/kotlin/coroutines/coroutines-best-practices
 - https://developer.android.com/topic/architecture/ui-layer
 
@@ -204,10 +204,10 @@ fun detach() {
 
 ### Related
 - [[q-async-operations-android--android--medium]] - General async handling strategies
-- [[q-viewmodel-lifecycle-scope--android--medium]] - Alternative approach with ViewModel
-- [[q-memory-leaks-android--android--medium]] - Detecting and preventing memory leaks
+ - Alternative approach with ViewModel
+ - Detecting and preventing memory leaks
 
 ### Advanced
-- [[q-lifecycle-aware-components--android--hard]] - Building lifecycle-aware observers
-- [[q-structured-concurrency-android--android--hard]] - Advanced coroutine cancellation patterns
+ - Building lifecycle-aware observers
+ - Advanced coroutine cancellation patterns
 - Testing cancellation behavior in instrumented tests

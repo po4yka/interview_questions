@@ -3,7 +3,7 @@ id: lang-077
 title: "Extension Properties / Расширяющие свойства"
 aliases: [Extension Properties, Расширяющие свойства]
 topic: programming-languages
-subtopics: [kotlin, extensions, properties]
+subtopics: [extensions, kotlin, properties]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-extensions, c-properties, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, extensions, properties, difficulty/medium]
+tags: [difficulty/medium, extensions, kotlin, programming-languages, properties]
+date created: Friday, October 31st 2025, 6:29:51 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Свойства Какого Вида Можно Добавить Как Расширение

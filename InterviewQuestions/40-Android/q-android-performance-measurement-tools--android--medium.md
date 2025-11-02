@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-profiling, c-performance-optimization, q-android-app-lag-analysis--android--medium, q-android-baseline-profiles--android--hard]
+related: [c-android-profiling, c-performance-optimization, q-android-app-lag-analysis--android--medium]
 sources: []
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/performance-memory, android/profiling, android/testing-benchmark, performance, optimization, difficulty/medium]
+tags: [android/performance-memory, android/profiling, android/testing-benchmark, difficulty/medium, optimization, performance]
 date created: Thursday, October 30th 2025, 11:26:56 am
-date modified: Thursday, October 30th 2025, 12:42:53 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:42:53 pm
 
 **Инструменты измерения производительности** позволяют обнаруживать узкие места через количественный анализ. Принцип: устанавливай базовые метрики, измеряй изменения систематически, выбирай инструмент под конкретную задачу.
 
-### Основные категории инструментов
+### Основные Категории Инструментов
 
 **1. Profiling в реальном времени**
 - **Android Profiler** (Android Studio): CPU, память, сеть, энергопотребление в режиме реального времени
@@ -91,7 +91,7 @@ if (BuildConfig.DEBUG) {
 
 Анализирует низкоуровневые события: планирование CPU, frames, binder calls, memory allocations. Запускается через System Tracing в Android Studio или CLI.
 
-### Выбор инструмента
+### Выбор Инструмента
 
 | Проблема                  | Инструмент                      |
 |---------------------------|---------------------------------|
@@ -101,7 +101,7 @@ if (BuildConfig.DEBUG) {
 | Регрессии производительности | Microbenchmark в CI/CD       |
 | Медленный старт           | Macrobenchmark + Baseline Profiles |
 
-### Паттерны корректных измерений
+### Паттерны Корректных Измерений
 
 ```kotlin
 // ✅ JIT warmup перед измерением
@@ -242,8 +242,8 @@ val trimmedMean = times.sorted()
 
 ### Related
 - [[q-android-build-optimization--android--medium]] - Build and compile-time performance
-- [[q-android-memory-leaks--android--medium]] - Memory leak detection techniques
-- [[q-android-render-optimization--android--hard]] - Rendering performance optimization
+ - Memory leak detection techniques
+ - Rendering performance optimization
 
 ### Advanced
 - [[q-android-baseline-profiles--android--hard]] - Profile-guided optimization for startup

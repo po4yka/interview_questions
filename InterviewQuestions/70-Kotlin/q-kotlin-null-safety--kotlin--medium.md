@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [null-safety, nullability, types, safe-calls]
+subtopics: [null-safety, nullability, safe-calls, types]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-class-initializers--programming-languages--medium, q-flow-exception-handling--kotlin--medium]
+related: [q-flow-exception-handling--kotlin--medium, q-kotlin-class-initializers--programming-languages--medium, q-kotlin-non-inheritable-class--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, null-safety, nullability, types, safe-calls, difficulty/medium]
+tags: [difficulty/medium, kotlin, null-safety, nullability, safe-calls, types]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > Describe nullability and null safety in Kotlin
 # Вопрос (RU)
@@ -37,7 +40,7 @@ tags: [kotlin, null-safety, nullability, types, safe-calls, difficulty/medium]
 
 *Nullability* is the ability of a variable to hold a `null` value. When a variable contains `null`, an attempt to dereference the variable leads to a `NullPointerException`. There are many ways to write code in order to minimize the probability of receiving null pointer exceptions.
 
-### Support for nullable types
+### Support for Nullable Types
 
 The most important difference between Kotlin's and Java's type systems is Kotlin's explicit support for nullable types. It is a way to indicate which variables can possibly hold a `null` value. If a variable can be `null`, it's not safe to call a method on the variable because this can cause a `NullPointerException`. Kotlin prohibits such calls at compile time and thereby prevents lots of possible exceptions. At runtime, objects of nullable types and objects of non-nullable types are treated the same: A nullable type isn't a wrapper for a non-nullable type. All checks are performed at compile time. That means there's almost no runtime overhead for working with nullable types in Kotlin.
 
@@ -88,7 +91,7 @@ You can write the same shorter – use the safe-call operator `?.` (If-not-null 
 fun stringLength(a: String?): Int = a?.length ?: 0
 ```
 
-### Default values instead of null
+### Default Values instead of Null
 
 Checking for `null` is often used in combination with setting the default value in case the null check is successful.
 
@@ -109,7 +112,7 @@ To express the same in Kotlin, use the Elvis operator (If-not-null-else shorthan
 val order = findOrder() ?: Order(Customer("Antonio"))
 ```
 
-### Functions returning a value or null
+### Functions Returning a Value or Null
 
 In Java, you need to be careful when working with list elements. You should always check whether an element exists at an index before you attempt to use the element:
 
@@ -138,7 +141,7 @@ println(numbers.firstOrNull())
 println(numbers.getOrNull(5)) // null
 ```
 
-### Casting types safely
+### Casting Types Safely
 
 When you need to safely cast a type, in Java you would use the `instanceof` operator and then check how well it worked:
 
@@ -195,7 +198,7 @@ newString?.let { c = it }.also { println("Logging the value: $it") }
 
 *Nullability* — это способность переменной содержать значение `null`. Когда переменная содержит `null`, попытка разыменовать переменную приводит к `NullPointerException`. Существует много способов написания кода для минимизации вероятности получения исключений нулевого указателя.
 
-### Поддержка nullable типов
+### Поддержка Nullable Типов
 
 Наиболее важное отличие между системами типов Kotlin и Java — это явная поддержка nullable типов в Kotlin. Это способ указать, какие переменные могут содержать значение `null`. Если переменная может быть `null`, небезопасно вызывать метод на переменной, потому что это может вызвать `NullPointerException`. Kotlin запрещает такие вызовы во время компиляции и тем самым предотвращает множество возможных исключений. Во время выполнения объекты nullable типов и объекты non-nullable типов обрабатываются одинаково: nullable тип не является оберткой для non-nullable типа. Все проверки выполняются во время компиляции. Это означает, что почти нет накладных расходов во время выполнения при работе с nullable типами в Kotlin.
 
@@ -246,7 +249,7 @@ fun stringLength(a: String?): Int = if (a != null) a.length else 0
 fun stringLength(a: String?): Int = a?.length ?: 0
 ```
 
-### Значения по умолчанию вместо null
+### Значения По Умолчанию Вместо Null
 
 Проверка на `null` часто используется в сочетании с установкой значения по умолчанию в случае успешной проверки на null.
 
@@ -267,7 +270,7 @@ if (order == null) {
 val order = findOrder() ?: Order(Customer("Antonio"))
 ```
 
-### Функции, возвращающие значение или null
+### Функции, Возвращающие Значение Или Null
 
 В Java вам нужно быть осторожным при работе с элементами списка. Вы всегда должны проверять, существует ли элемент по индексу, прежде чем пытаться использовать элемент:
 
@@ -296,7 +299,7 @@ println(numbers.firstOrNull())
 println(numbers.getOrNull(5)) // null
 ```
 
-### Безопасное приведение типов
+### Безопасное Приведение Типов
 
 Когда вам нужно безопасно привести тип, в Java вы бы использовали оператор `instanceof` и затем проверили, насколько хорошо это сработало:
 

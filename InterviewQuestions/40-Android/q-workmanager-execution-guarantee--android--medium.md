@@ -14,9 +14,9 @@ related: [c-workmanager, q-background-tasks-decision-guide--android--medium, q-b
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/background-execution, android/service, workmanager, background-tasks, reliability, difficulty/medium]
+tags: [android/background-execution, android/service, background-tasks, difficulty/medium, reliability, workmanager]
 date created: Wednesday, October 29th 2025, 1:03:11 pm
-date modified: Thursday, October 30th 2025, 11:51:07 am
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ How does WorkManager guarantee task execution?
 
 WorkManager гарантирует выполнение задач через три ключевых механизма: персистентное хранилище SQLite, мониторинг системных ограничений и адаптивную интеграцию с API планировщика (JobScheduler на API 23+, AlarmManager на более старых версиях).
 
-### Ключевые гарантии
+### Ключевые Гарантии
 
 1. **Персистентность** — все запросы работы сохраняются в SQLite и переживают перезапуски приложения/устройства
 2. **Constraint-based выполнение** — работа запускается только при выполнении всех условий (сеть, батарея, хранилище)
@@ -39,9 +39,9 @@ WorkManager гарантирует выполнение задач через т
 4. **Упорядоченность** — цепочки работ соблюдают последовательность выполнения
 5. **Фоновый поток** — работа всегда выполняется вне UI-потока
 
-### Механизмы гарантии
+### Механизмы Гарантии
 
-#### 1. Персистентное хранилище
+#### 1. Персистентное Хранилище
 
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<UploadWorker>()
@@ -54,13 +54,13 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 Внутри SQLite хранятся: параметры Worker, constraints, счетчик retry, output data.
 
-#### 2. Системная интеграция
+#### 2. Системная Интеграция
 
 WorkManager автоматически выбирает оптимальный исполнитель:
 - **API 23+**: JobScheduler
 - **API 14-22**: AlarmManager + BroadcastReceiver
 
-#### 3. Constraint-based выполнение
+#### 3. Constraint-based Выполнение
 
 ```kotlin
 val constraints = Constraints.Builder()
@@ -75,7 +75,7 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 
 WorkManager мониторит системное состояние и запускает работу только при выполнении всех constraints.
 
-#### 4. Автоматический retry с backoff
+#### 4. Автоматический Retry С Backoff
 
 ```kotlin
 class RetryableWorker : CoroutineWorker() {
@@ -103,7 +103,7 @@ val workRequest = OneTimeWorkRequestBuilder<RetryableWorker>()
 
 **Exponential backoff**: 10s → 20s → 40s → 80s (max 5 часов)
 
-#### 5. Уникальность работы
+#### 5. Уникальность Работы
 
 ```kotlin
 // ✅ KEEP — игнорировать новый запрос, если работа уже есть
@@ -121,7 +121,7 @@ WorkManager.getInstance(context).enqueueUniqueWork(
 )
 ```
 
-### Обработка перезагрузки
+### Обработка Перезагрузки
 
 WorkManager автоматически регистрирует BOOT_COMPLETED receiver, который восстанавливает все незавершенные работы из БД после перезагрузки.
 

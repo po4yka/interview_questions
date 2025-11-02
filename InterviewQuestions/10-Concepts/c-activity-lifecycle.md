@@ -7,7 +7,9 @@ summary: Android Activity lifecycle states and transitions
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, activity, lifecycle, android-components]
+tags: [activity, android, android-components, concept, lifecycle]
+date created: Thursday, October 30th 2025, 12:29:30 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -71,7 +73,7 @@ The Activity Lifecycle defines the states an Android Activity goes through from 
 
 ---
 
-## Состояния жизненного цикла и методы (RU)
+## Состояния Жизненного Цикла И Методы (RU)
 
 ### 1. Состояние Created
 **`onCreate(savedInstanceState: Bundle?)`**
@@ -152,7 +154,7 @@ Always save UI state in `onSaveInstanceState()`.
 - **Use Lifecycle-aware components** (ViewModel, LiveData, Lifecycle observers)
 - **Avoid memory leaks**: do not reference Activity in long-lived objects
 
-### Лучшие практики (RU)
+### Лучшие Практики (RU)
 - **onCreate()**: Инициализация ViewModel, ViewBinding, настройка структуры UI
 - **onStart()**: Запуск observers, регистрация receivers нужных пока видна
 - **onResume()**: Возобновление сенсоров, камеры, активных обновлений

@@ -1,11 +1,7 @@
 ---
 id: android-245
 title: "How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно"
-aliases:
-  - Display Two Identical Fragments
-  - Два одинаковых фрагмента
-  - Multiple Fragment Instances
-  - Несколько экземпляров Fragment
+aliases: [Display Two Identical Fragments, Multiple Fragment Instances, Два одинаковых фрагмента, Несколько экземпляров Fragment]
 topic: android
 subtopics: [fragment, lifecycle, ui-views]
 question_kind: android
@@ -20,7 +16,7 @@ updated: 2025-10-28
 sources: []
 tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/easy, fragments, ui]
 date created: Tuesday, October 28th 2025, 9:49:43 am
-date modified: Thursday, October 30th 2025, 12:48:35 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:48:35 pm
 
 Добавьте два экземпляра одного класса Fragment в разные контейнеры макета Activity. Каждый экземпляр работает независимо с собственным состоянием.
 
-### Основной подход
+### Основной Подход
 
 **1. Макет Activity с двумя контейнерами**
 
@@ -113,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые принципы
+### Ключевые Принципы
 
 ✅ **Используйте уникальные теги** - для идентификации экземпляров
 ✅ **Проверяйте savedInstanceState** - чтобы не создавать дубликаты при пересоздании Activity

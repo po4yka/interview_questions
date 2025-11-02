@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-database-encryption-android--android--medium, q-android-security-practices-checklist--android--medium]
+related: [q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, permissions, security, ux, android/permissions, difficulty/medium]
+tags: [android, android/permissions, difficulty/medium, permissions, security, ux]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
+
 # Вопрос (RU)
 
 > Реализуйте обработку runtime-разрешений с правильным UX: показывайте обоснование запроса, корректно обрабатывайте постоянный отказ и используйте API ActivityResultContracts.
@@ -30,14 +33,14 @@ tags: [android, permissions, security, ux, android/permissions, difficulty/mediu
 
 **Runtime разрешения** были введены в Android 6.0 (API 23) для предоставления пользователям контроля над конфиденциальными данными. Правильная обработка требует продуманного UX-потока с использованием современного API ActivityResultContracts.
 
-### Состояния разрешений
+### Состояния Разрешений
 
 1. **Не запрошено**: разрешение никогда не запрашивалось
 2. **Предоставлено**: пользователь одобрил
 3. **Отклонено**: пользователь отказал (можно запросить снова)
 4. **Навсегда отклонено**: пользователь отметил "Больше не спрашивать"
 
-### Реализация с ActivityResultContracts
+### Реализация С ActivityResultContracts
 
 ```kotlin
 class PermissionManager(private val activity: AppCompatActivity) {
@@ -96,7 +99,7 @@ class PermissionManager(private val activity: AppCompatActivity) {
 }
 ```
 
-### Множественные разрешения
+### Множественные Разрешения
 
 ```kotlin
 // ✅ Запрос группы связанных разрешений
@@ -128,7 +131,7 @@ fun startLocationTracking() {
 }
 ```
 
-### Jetpack Compose интеграция
+### Jetpack Compose Интеграция
 
 ```kotlin
 @OptIn(ExperimentalPermissionsApi::class)
@@ -168,7 +171,7 @@ fun CameraPermissionScreen() {
 4. **Запрашивайте минимум** — только необходимые разрешения
 5. **Тестируйте все состояния** — granted, denied, permanently denied
 
-### Типичные ошибки
+### Типичные Ошибки
 
 **❌ Запрос при старте приложения:**
 ```kotlin

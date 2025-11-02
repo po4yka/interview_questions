@@ -10,16 +10,15 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-prohibit-object-creation--programming-languages--easy, q-structured-concurrency-kotlin--kotlin--medium, q-kotlin-lateinit--programming-languages--medium, q-data-class-detailed--kotlin--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - data-classes
-  - code-generation
-  - difficulty/easy
+tags: [code-generation, data-classes, difficulty/easy, kotlin]
+date created: Saturday, November 1st 2025, 1:29:19 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Для чего нужен data class?
+
+# Для Чего Нужен Data Class?
 
 # Question (EN)
 > What is a data class in Kotlin and what is it used for?
@@ -58,7 +57,7 @@ Data classes reduce boilerplate code, simplify model creation, improve readabili
 data class User(val name: String, val age: Int)
 ```
 
-### Особенности и преимущества
+### Особенности И Преимущества
 
 **Автоматическая генерация функций:**
 - `equals()` - сравнение объектов по содержимому
@@ -85,6 +84,5 @@ println("$name is $age years old")
 
 ## Related Questions
 
-- [[q-prohibit-object-creation--programming-languages--easy]]
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
 - [[q-kotlin-lateinit--programming-languages--medium]]

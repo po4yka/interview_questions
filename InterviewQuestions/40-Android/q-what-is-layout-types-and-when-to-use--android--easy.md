@@ -7,15 +7,18 @@ subtopics: [ui-views]
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-views, q-play-feature-delivery--android--medium, q-annotation-processing--android--medium]
+related: [c-views, q-annotation-processing--android--medium, q-play-feature-delivery--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/ui-views, layouts, ui, xml, difficulty/easy]
+tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое layout, какие их виды бывают и когда их использовать?
@@ -30,7 +33,7 @@ tags: [android, android/ui-views, layouts, ui, xml, difficulty/easy]
 
 **Layout** — это способ определения пользовательского интерфейса приложения. Описывает как элементы интерфейса (виджеты) располагаются и позиционируются на экране. Макеты задаются через XML файлы или программно в коде.
 
-### Основные типы Layout
+### Основные Типы Layout
 
 #### 1. LinearLayout
 
@@ -174,7 +177,7 @@ NOTE: Для новых проектов рекомендуется ConstraintLa
 - Галереи изображений
 - Сетки кнопок
 
-### Рекомендации по выбору
+### Рекомендации По Выбору
 
 | Layout Type      | Производительность | Гибкость | Сложность | Лучше для        |
 | ---------------- | ------------------ | -------- | --------- | ---------------- |

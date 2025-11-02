@@ -1,7 +1,7 @@
 ---
 id: kotlin-166
 title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"
-aliases: [Object Keyword, Object Declaration, Singleton, Object в Kotlin]
+aliases: [Object Declaration, Object Keyword, Object в Kotlin, Singleton]
 topic: kotlin
 subtopics: [classes, singleton]
 question_kind: theory
@@ -10,17 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-backpressure--kotlin--hard, q-kotlin-intrange--programming-languages--easy, q-collection-implementations--programming-languages--easy]
+related: [q-flow-backpressure--kotlin--hard, q-kotlin-intrange--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - object-keyword
-  - singleton
-  - classes
-  - difficulty/medium
+tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
+date created: Friday, October 31st 2025, 6:29:56 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Tell about the Object keyword in Kotlin
+
+# Tell about the Object Keyword in Kotlin
 
 # Question (EN)
 > Tell about the `object` keyword in Kotlin. What are its use cases and characteristics?
@@ -391,7 +389,7 @@ fun main() {
 - Могут реализовывать интерфейсы и наследоваться от классов
 - Могут иметь свойства, методы и init блоки
 
-### Примеры кода
+### Примеры Кода
 
 **1. Object Declaration (Singleton):**
 
@@ -685,7 +683,7 @@ val logger = createLogger()
 logger.log("Приложение запущено")
 ```
 
-### Основные применения
+### Основные Применения
 
 **1. Singleton паттерн:**
 - Единственный экземпляр на всё приложение
@@ -707,7 +705,7 @@ logger.log("Приложение запущено")
 - Пространства имён
 - Константы
 
-### Краткий ответ
+### Краткий Ответ
 
 `object` в Kotlin используется для:
 - **Singleton**: Создание единственного потокобезопасного экземпляра с ленивой инициализацией
@@ -721,4 +719,4 @@ logger.log("Приложение запущено")
 
 - [[q-flow-backpressure--kotlin--hard]]
 - [[q-kotlin-intrange--programming-languages--easy]]
-- [[q-collection-implementations--programming-languages--easy]]
+-

@@ -1,7 +1,7 @@
 ---
 id: android-240
 title: "How To Draw UI Without XML / Как рисовать UI без XML"
-aliases: [Drawing UI without XML, Programmatic UI, Jetpack Compose UI, Рисование UI без XML, Программный UI]
+aliases: [Drawing UI without XML, Jetpack Compose UI, Programmatic UI, Программный UI, Рисование UI без XML]
 topic: android
 subtopics: [ui-compose, ui-views]
 question_kind: theory
@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-start-drawing-ui-in-android--android--easy, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-testing-compose-ui--android--medium]
+related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-how-to-start-drawing-ui-in-android--android--easy, q-testing-compose-ui--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/ui-compose, android/ui-views, ui, jetpack-compose, programmatic-views, difficulty/medium]
+tags: [android, android/ui-compose, android/ui-views, difficulty/medium, jetpack-compose, programmatic-views, ui]
 date created: Tuesday, October 28th 2025, 9:49:29 am
-date modified: Thursday, October 30th 2025, 12:48:36 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

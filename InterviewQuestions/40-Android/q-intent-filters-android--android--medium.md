@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-intent--android--easy, q-what-are-intents-for--android--medium]
+related: [q-what-are-intents-for--android--medium, q-what-is-intent--android--easy]
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/activity, android/intents-deeplinks, intent-filter, deep-linking, difficulty/medium]
+tags: [android/activity, android/intents-deeplinks, deep-linking, difficulty/medium, intent-filter]
 sources: []
 date created: Monday, October 27th 2025, 6:45:50 pm
-date modified: Thursday, October 30th 2025, 3:10:45 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:10:45 pm
 
 **Intent Filter** — это выражение в манифесте приложения, определяющее типы интентов, которые компонент готов принимать. Фильтры позволяют объявлять возможности компонентов и обеспечивают разрешение неявных намерений.
 
-### Основные компоненты
+### Основные Компоненты
 
 Фильтр состоит из трёх элементов:
 
@@ -63,7 +63,7 @@ date modified: Thursday, October 30th 2025, 3:10:45 pm
       android:pathPrefix="/products" />
 ```
 
-### Примеры использования
+### Примеры Использования
 
 **Launcher активность**:
 ```xml
@@ -98,7 +98,7 @@ date modified: Thursday, October 30th 2025, 3:10:45 pm
 </intent-filter>
 ```
 
-### Ключевые правила
+### Ключевые Правила
 
 1. **CATEGORY_DEFAULT обязателен** для активностей, принимающих неявные интенты
 2. **android:exported** должен быть указан явно (обязательно с API 31+)

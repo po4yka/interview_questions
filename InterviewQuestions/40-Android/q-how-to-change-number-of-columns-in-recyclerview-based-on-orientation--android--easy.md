@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-recyclerview-sethasfixedsize--android--easy, q-looper-empty-queue-behavior--android--medium]
+related: [q-looper-empty-queue-behavior--android--medium, q-recyclerview-sethasfixedsize--android--easy]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/ui-views, android/ui-widgets, recyclerview, grid-layout, difficulty/easy]
+tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, grid-layout, recyclerview]
 date created: Monday, October 27th 2025, 3:57:01 pm
-date modified: Thursday, October 30th 2025, 12:48:22 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How do you change the number of columns in RecyclerView based on device orientat
 
 Используй **GridLayoutManager** с динамическим spanCount в зависимости от ориентации. Оптимальный подход — через ресурсы `dimens.xml`, который автоматически адаптируется при rotation.
 
-### Рекомендуемый подход: dimens.xml
+### Рекомендуемый Подход: dimens.xml
 
 ```xml
 <!-- res/values/dimens.xml (Portrait) -->
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 - Поддержка планшетов через `res/values-sw600dp/`
 - Проще в тестировании и поддержке
 
-### Альтернатива: programmatic
+### Альтернатива: Programmatic
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Адаптивный подход: по ширине
+### Адаптивный Подход: По Ширине
 
 ```kotlin
 class AdaptiveGridLayoutManager(
@@ -128,7 +128,7 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 Use **GridLayoutManager** with dynamic spanCount based on orientation. The optimal approach is through `dimens.xml` resources, which automatically adapts on rotation.
 
-### Recommended: dimens.xml approach
+### Recommended: dimens.xml Approach
 
 ```xml
 <!-- res/values/dimens.xml (Portrait) -->
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 - Tablet support via `res/values-sw600dp/`
 - Easier to test and maintain
 
-### Alternative: programmatic
+### Alternative: Programmatic
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Adaptive approach: by width
+### Adaptive Approach: by Width
 
 ```kotlin
 class AdaptiveGridLayoutManager(

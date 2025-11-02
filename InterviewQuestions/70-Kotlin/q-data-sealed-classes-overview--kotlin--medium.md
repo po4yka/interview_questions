@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-job-state-machine-transitions--kotlin--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium, q-kotlin-vs-java-class-creation--programming-languages--medium]
+related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-state-machine-transitions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-classes
-  - sealed-classes
-  - difficulty/medium
+tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
+date created: Friday, October 31st 2025, 6:33:15 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What is known about data classes and sealed classes?
+
+# What is Known about Data Classes and Sealed Classes?
 
 # Question (EN)
 > What is known about data classes and sealed classes in Kotlin? What are their characteristics and use cases?
@@ -292,7 +291,7 @@ fun main() {
 
 ## Ответ (RU)
 
-### Data классы
+### Data Классы
 
 **Data классы** предназначены для хранения данных и автоматически генерируют несколько полезных методов:
 - `equals()` - для сравнения по содержимому
@@ -333,7 +332,7 @@ val (id, name, email, age) = user1
 println("$name is $age years old")
 ```
 
-### Sealed классы
+### Sealed Классы
 
 **Sealed классы** ограничивают создание подклассов тем же файлом (или модулем в Kotlin 1.5+) и используются для создания типобезопасных иерархий:
 - Все возможные подклассы известны на этапе компиляции
@@ -407,7 +406,7 @@ fun handleResult(result: NetworkResult<List<Product>>) {
 }
 ```
 
-### Комбинирование data и sealed классов
+### Комбинирование Data И Sealed Классов
 
 **Очень распространённый паттерн - sealed класс с data подклассами:**
 ```kotlin
@@ -431,7 +430,7 @@ when (result1) {
 }
 ```
 
-### Android MVVM пример
+### Android MVVM Пример
 
 **Типичное использование в Android с ViewModel:**
 ```kotlin
@@ -481,7 +480,7 @@ when (val state = viewModel.getState()) {
 }
 ```
 
-### Ключевые различия
+### Ключевые Различия
 
 | Характеристика | Data класс | Sealed класс |
 |----------------|-----------|--------------|
@@ -492,7 +491,7 @@ when (val state = viewModel.getState()) {
 | **Применение** | Модели, DTOs | Состояния, результаты, события |
 | **When exhaustive** | Нет | Да |
 
-### Краткий ответ
+### Краткий Ответ
 
 **Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Используются для моделей данных, DTOs, API responses.
 
@@ -504,4 +503,4 @@ when (val state = viewModel.getState()) {
 
 - [[q-job-state-machine-transitions--kotlin--medium]]
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]
-- [[q-kotlin-vs-java-class-creation--programming-languages--medium]]
+-

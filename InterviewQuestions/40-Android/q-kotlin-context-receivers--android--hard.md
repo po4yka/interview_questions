@@ -1,7 +1,7 @@
 ---
 id: android-063
 title: "Kotlin Context Receivers / Kotlin Context Receivers"
-aliases: ["Kotlin Context Receivers", "Kotlin Context Receivers"]
+aliases: ["Kotlin Context Receivers"]
 topic: android
 subtopics: [coroutines, di-hilt]
 question_kind: android
@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-kotlin-dsl-builders--android--hard, q-coroutines-basics--kotlin--medium]
+related: [q-kotlin-dsl-builders--android--hard]
 created: 2025-10-12
 updated: 2025-10-28
 tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
 sources: [https://kotlinlang.org/docs/whatsnew15.html#context-receivers]
 date created: Tuesday, October 28th 2025, 9:23:51 pm
-date modified: Thursday, October 30th 2025, 3:11:54 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -268,15 +268,8 @@ fun openCamera() {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-kotlin-extension-functions--kotlin--medium]] - Extension functions basics
-- [[q-dependency-injection-basics--android--medium]] - DI fundamentals
-
 ### Related (Same Level)
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders
-- [[q-hilt-dependency-injection--android--hard]] - Hilt DI framework
-- [[q-kotlin-scope-functions--kotlin--medium]] - Scope functions (with, apply, etc.)
 
 ### Advanced (Harder)
-- [[q-kotlin-compiler-plugins--kotlin--hard]] - Compiler plugins
-- [[q-advanced-coroutines-patterns--android--hard]] - Advanced coroutines patterns
+- Advanced content to be added

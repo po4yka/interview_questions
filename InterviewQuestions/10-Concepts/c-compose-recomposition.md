@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-140000
 title: Compose Recomposition / Рекомпозиция в Compose
-aliases: [Recomposition, Compose Recomposition, Рекомпозиция, Перерисовка Compose]
+aliases: [Compose Recomposition, Recomposition, Перерисовка Compose, Рекомпозиция]
 kind: concept
 summary: Recomposition process in Jetpack Compose - how UI updates in response to state changes
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, jetpack-compose, recomposition, performance, ui]
+tags: [android, concept, jetpack-compose, performance, recomposition, ui]
+date created: Thursday, October 30th 2025, 12:29:34 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -32,7 +34,7 @@ tags: [concept, android, jetpack-compose, recomposition, performance, ui]
 
 ---
 
-## Core Concept / Основная концепция
+## Core Concept / Основная Концепция
 
 ### Recomposition Triggers (EN)
 
@@ -46,7 +48,7 @@ Recomposition occurs when:
 - Compose uses positional memoization to track which composables read which state
 - Siblings and unrelated subtrees remain unchanged
 
-### Триггеры рекомпозиции (RU)
+### Триггеры Рекомпозиции (RU)
 
 Рекомпозиция происходит когда:
 1. **Изменяется состояние, прочитанное при композиции**: `state.value`, `derivedStateOf`, `remember`
@@ -60,7 +62,7 @@ Recomposition occurs when:
 
 ---
 
-## Smart Recomposition / Умная рекомпозиция
+## Smart Recomposition / Умная Рекомпозиция
 
 ### Skip Optimization (EN)
 
@@ -118,7 +120,7 @@ fun ItemOptimized(onClick: () -> Unit) {
 
 ---
 
-## Performance Best Practices / Лучшие практики производительности
+## Performance Best Practices / Лучшие Практики Производительности
 
 ### 1. Use derivedStateOf for Computed Values (EN)
 
@@ -142,7 +144,7 @@ fun ListOptimized(items: List<Item>, scrollPosition: State<Int>) {
 }
 ```
 
-### 1. Использование derivedStateOf для вычисляемых значений (RU)
+### 1. Использование derivedStateOf Для Вычисляемых Значений (RU)
 
 Избегайте запуска рекомпозиции для промежуточных вычислений:
 
@@ -181,7 +183,7 @@ class UserViewModel(private val _user: MutableState<User>) {
 }
 ```
 
-### 2. Пометка пользовательских классов как Stable (RU)
+### 2. Пометка Пользовательских Классов Как Stable (RU)
 
 ```kotlin
 // НЕ стабильно: Изменяемый var
@@ -217,7 +219,7 @@ fun ProfileOptimized(user: State<User>) {
 }
 ```
 
-### 3. Избегание ненужного чтения состояния при композиции (RU)
+### 3. Избегание Ненужного Чтения Состояния При Композиции (RU)
 
 ```kotlin
 // ПЛОХО: Читает состояние при каждой композиции

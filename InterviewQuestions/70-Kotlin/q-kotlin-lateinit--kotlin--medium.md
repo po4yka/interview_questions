@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [properties, lateinit, initialization, null-safety]
+subtopics: [initialization, lateinit, null-safety, properties]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-partition-function--kotlin--easy, q-kotlin-sam-conversions--programming-languages--medium, q-channel-flow-comparison--kotlin--medium]
+related: [q-channel-flow-comparison--kotlin--medium, q-kotlin-sam-conversions--programming-languages--medium, q-partition-function--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, lateinit, properties, initialization, null-safety, difficulty/medium]
+tags: [difficulty/medium, initialization, kotlin, lateinit, null-safety, properties]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What do you know about `lateinit` in Kotlin?
 # Вопрос (RU)
@@ -53,19 +56,19 @@ public class MyTest {
 }
 ```
 
-### Key features of `lateinit` modifier
+### Key Features of `lateinit` Modifier
 
 - **Avoid Null Checks**: `lateinit` allows you to avoid cumbersome null checks when working with nullable types. The `lateinit` keyword tells the compiler that you will ensure the property is initialized before usage;
 - **No Initial Value Required**: When using `lateinit`, you don't need to provide an initial value when the property is declared. This is particularly useful for properties that are not immediately initialized, such as UI components in Android;
 - **Easily Set Up Late Initialized Properties**: The `lateinit` modifier simplifies initializing properties in setup methods, unit tests, or other methods where the property can be assigned values dynamically.
 
-### Key restrictions
+### Key Restrictions
 
 - Can only be used with mutable properties (variables declared with the `var` keyword), cause read-only properties (declared with the `val` keyword) represent immutable values that must be initialized at the time of declaration;
 - Can be used only for non-primitive types (`Int`, `Double`, `Float` etc not allowed);
 - Cannot be used with nullable types, as it is designed to avoid dealing with `null` values;
 
-### Checking whether a lateinit var is initialized
+### Checking whether a Lateinit Var is Initialized
 
 To check whether a `lateinit var` has already been initialized, use `.isInitialized` on the reference to that property:
 
@@ -106,19 +109,19 @@ public class MyTest {
 }
 ```
 
-### Ключевые особенности модификатора `lateinit`
+### Ключевые Особенности Модификатора `lateinit`
 
 - **Избегание проверок на null**: `lateinit` позволяет избежать громоздких проверок на null при работе с nullable типами. Ключевое слово `lateinit` сообщает компилятору, что вы обеспечите инициализацию свойства перед использованием;
 - **Начальное значение не требуется**: При использовании `lateinit` вам не нужно предоставлять начальное значение при объявлении свойства. Это особенно полезно для свойств, которые не инициализируются сразу, таких как UI компоненты в Android;
 - **Легкая настройка поздно инициализируемых свойств**: Модификатор `lateinit` упрощает инициализацию свойств в методах настройки, юнит-тестах или других методах, где свойству можно динамически присвоить значения.
 
-### Ключевые ограничения
+### Ключевые Ограничения
 
 - Может использоваться только с изменяемыми свойствами (переменными, объявленными с ключевым словом `var`), поскольку свойства только для чтения (объявленные с ключевым словом `val`) представляют неизменяемые значения, которые должны быть инициализированы во время объявления;
 - Может использоваться только для непримитивных типов (`Int`, `Double`, `Float` и т.д. не разрешены);
 - Не может использоваться с nullable типами, так как предназначен для избежания работы со значениями `null`;
 
-### Проверка инициализации lateinit var
+### Проверка Инициализации Lateinit Var
 
 Чтобы проверить, был ли уже инициализирован `lateinit var`, используйте `.isInitialized` на ссылке на это свойство:
 
@@ -130,7 +133,7 @@ if (foo::bar.isInitialized) {
 
 Эта проверка доступна только для свойств, которые лексически доступны при объявлении в том же типе, в одном из внешних типов или на верхнем уровне в том же файле.
 
-### Использование Lateinit в Kotlin
+### Использование Lateinit В Kotlin
 
 - **Внедрение зависимостей**. Во многих фреймворках внедрения зависимостей компоненты или сервисы могут быть недоступны во время создания объекта. Используя `lateinit`, вы можете объявить свойства для этих зависимостей и инициализировать их, когда они станут доступны;
 - **UI компоненты**. `lateinit` обычно используется для UI компонентов, таких как `TextView`, `Button` или `EditText`, поскольку они часто должны быть инициализированы в методе `onCreate` после раздувания макета;

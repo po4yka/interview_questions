@@ -1,33 +1,28 @@
 ---
 id: android-377
 title: Как работает навигация Activity / How Activity Navigation Works
-aliases:
-  - Activity Navigation
-  - Навигация Activity
-  - Activity Back Stack
-  - Стек активностей
+aliases: [Activity Back Stack, Activity Navigation, Навигация Activity, Стек активностей]
 topic: android
-subtopics: [activity, ui-navigation, lifecycle]
+subtopics: [activity, lifecycle, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-activity-lifecycle-methods--android--medium
-  - q-intent-filters-android--android--medium
-  - q-what-is-intent--android--easy
   - c-activity-lifecycle
   - c-intent-system
+  - q-activity-lifecycle-methods--android--medium
+  - q-what-is-intent--android--easy
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/activity, android/ui-navigation, android/lifecycle, intent, back-stack, difficulty/medium]
+tags: [android/activity, android/lifecycle, android/ui-navigation, back-stack, difficulty/medium, intent]
 sources:
   - https://developer.android.com/guide/components/activities/tasks-and-back-stack
   - https://developer.android.com/guide/navigation
 date created: Wednesday, October 29th 2025, 4:18:18 pm
-date modified: Thursday, October 30th 2025, 11:12:51 am
+date modified: Saturday, November 1st 2025, 3:59:50 pm
 ---
 
 # Вопрос (RU)
@@ -48,7 +43,7 @@ date modified: Thursday, October 30th 2025, 11:12:51 am
 
 **Ключевые компоненты:**
 
-### 1. Intent — Механизм запуска Activity
+### 1. Intent — Механизм Запуска Activity
 
 ```kotlin
 // ✅ Explicit Intent — указываем конкретный класс
@@ -61,7 +56,7 @@ val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
 startActivity(intent)
 ```
 
-### 2. Back Stack — LIFO стек Activity
+### 2. Back Stack — LIFO Стек Activity
 
 ```text
 Навигация: HomeActivity → ListActivity → DetailActivity
@@ -84,7 +79,7 @@ Back Stack:
 DetailActivity уничтожена (onDestroy)
 ```
 
-### 3. Управление стеком через Intent Flags
+### 3. Управление Стеком Через Intent Flags
 
 ```kotlin
 // ✅ Очистить все Activity выше целевой
@@ -100,7 +95,7 @@ intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 // Используется для logout: очищает весь стек и открывает LoginActivity
 ```
 
-### 4. Жизненный цикл при навигации
+### 4. Жизненный Цикл При Навигации
 
 ```text
 A → B (открытие новой Activity):
@@ -112,7 +107,7 @@ B → A (кнопка Back):
   A: onRestart() → onStart() → onResume()
 ```
 
-### 5. Возврат результата из Activity
+### 5. Возврат Результата Из Activity
 
 ```kotlin
 // ✅ Activity B возвращает результат в A
@@ -274,8 +269,5 @@ findNavController().navigate(R.id.action_home_to_detail, bundle)
 
 ### Related (Same Level)
 - [[q-intent-filters-android--android--medium]] — Intent filters для implicit навигации
-- [[q-fragment-navigation--android--medium]] — навигация между фрагментами
 
 ### Advanced (Harder)
-- [[q-deep-linking-android--android--hard]] — deep links и navigation graphs
-- [[q-single-activity-architecture--android--hard]] — single-activity архитектура с Navigation Component

@@ -1,9 +1,9 @@
 ---
 id: android-416
 title: "SQLDelight в KMM / SQLDelight in KMM"
-aliases: ["SQLDelight в KMM", "SQLDelight in KMM", "SQLDelight для мультиплатформы"]
+aliases: ["SQLDelight in KMM", "SQLDelight в KMM", "SQLDelight для мультиплатформы"]
 topic: android
-subtopics: [kmp, sqldelight, room]
+subtopics: [kmp, room, sqldelight]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-annotation-processing-android--android--medium, q-gradle-kotlin-dsl-
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/kmp, android/sqldelight, android/room, Database, difficulty/medium, KMM, Kotlin, SQLDelight, multiplatform]
+tags: [android/kmp, android/room, android/sqldelight, Database, difficulty/medium, KMM, Kotlin, multiplatform, SQLDelight]
 date created: Tuesday, October 28th 2025, 9:23:21 pm
-date modified: Thursday, October 30th 2025, 3:11:49 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -27,7 +27,7 @@ date modified: Thursday, October 30th 2025, 3:11:49 pm
 
 SQLDelight генерирует type-safe Kotlin API из SQL-запросов, обеспечивая compile-time верификацию и использование platform-specific драйверов (SQLite на Android, SQLite.swift на iOS) при sharing общей database-логики.
 
-#### Настройка и Конфигурация
+#### Настройка И Конфигурация
 
 **Gradle Configuration**:
 ```kotlin
@@ -600,15 +600,6 @@ class TaskRepositoryTest {
 
 ## Related Questions
 
-### Prerequisites
-- [[q-kmm-architecture--android--easy]] - Understanding KMM project structure and expect/actual mechanism
-- [[q-sqlite-basics--databases--easy]] - SQL fundamentals and SQLite-specific features
-
 ### Related
 - [[q-annotation-processing-android--android--medium]] - Code generation comparison with SQLDelight
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Gradle configuration for multiplatform projects
-- [[q-room-migration--android--medium]] - Alternative database solution comparison
-
-### Advanced
-- [[q-kmm-testing-strategies--android--hard]] - Testing multiplatform database code
-- [[q-database-encryption--android--hard]] - Securing SQLDelight databases with SQLCipher

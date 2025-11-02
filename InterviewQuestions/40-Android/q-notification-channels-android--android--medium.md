@@ -1,9 +1,7 @@
 ---
 id: android-013
 title: "Notification Channels / Каналы уведомлений"
-aliases:
-  - "Notification Channels"
-  - "Каналы уведомлений"
+aliases: ["Notification Channels", "Каналы уведомлений"]
 topic: android
 subtopics: [notifications, ui-widgets]
 question_kind: android
@@ -15,10 +13,10 @@ moc: moc-android
 related: [q-android-app-components--android--easy]
 created: 2025-10-05
 updated: 2025-01-25
-tags: [android/notifications, android/ui-widgets, notifications, notification-channels, android8, importance, difficulty/medium]
+tags: [android/notifications, android/ui-widgets, android8, difficulty/medium, importance, notification-channels, notifications]
 sources: [https://developer.android.com/guide/topics/ui/notifiers/notifications]
 date created: Monday, October 27th 2025, 6:48:56 pm
-date modified: Thursday, October 30th 2025, 3:15:09 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

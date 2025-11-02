@@ -1,15 +1,11 @@
 ---
 id: android-106
 title: "Looper Empty Queue Behavior / Поведение Looper при пустой очереди"
-aliases:
-  - Looper Empty Queue
-  - Looper Blocking Behavior
-  - Поведение Looper при пустой очереди
-  - Блокировка Looper
+aliases: [Looper Blocking Behavior, Looper Empty Queue, Блокировка Looper, Поведение Looper при пустой очереди]
 topic: android
 subtopics:
-  - threads-sync
   - coroutines
+  - threads-sync
 question_kind: theory
 difficulty: medium
 original_language: ru
@@ -17,21 +13,15 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-main-thread-android--android--medium
   - q-handler-looper-messagequeue-relationship--android--medium
   - q-handlerthread-vs-thread--android--medium
+  - q-message-scheduling-looper--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-10-31
-tags:
-  - android/threads-sync
-  - android/coroutines
-  - looper
-  - message-queue
-  - blocking
-  - difficulty/medium
+tags: [android/coroutines, android/threads-sync, blocking, difficulty/medium, looper, message-queue]
 date created: Tuesday, October 28th 2025, 9:35:15 pm
-date modified: Thursday, October 30th 2025, 3:12:39 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -55,7 +45,7 @@ date modified: Thursday, October 30th 2025, 3:12:39 pm
 
 Это **штатное поведение** — поток остается живым для обработки будущих сообщений.
 
-### Механизм блокировки
+### Механизм Блокировки
 
 ```java
 // Упрощенная реализация Looper.loop()
@@ -93,7 +83,7 @@ Message next() {
 - Поток в состоянии **RUNNABLE** (блокировка в native коде, не Java wait())
 - Мгновенное пробуждение через **nativeWake()** при добавлении сообщения
 
-### Пример: Поток с пустой очередью
+### Пример: Поток С Пустой Очередью
 
 ```kotlin
 class LooperThread : Thread("Worker") {
@@ -253,8 +243,7 @@ looper.quitSafely()
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-main-thread-android--android--medium]]
-- [[q-handler-basics--android--easy]]
+- Related content to be added
 
 ### Related (Same Level)
 - [[q-handler-looper-messagequeue-relationship--android--medium]]
@@ -262,5 +251,4 @@ looper.quitSafely()
 - [[q-message-scheduling-looper--android--medium]]
 
 ### Advanced (Harder)
-- [[q-looper-thread-safety--android--hard]]
-- [[q-custom-message-queue--android--hard]]
+- Related content to be added

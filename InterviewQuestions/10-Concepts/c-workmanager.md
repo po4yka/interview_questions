@@ -1,10 +1,10 @@
 ---
 id: "20251025-140300"
 title: "WorkManager / WorkManager"
-aliases: ["WorkManager", "Background Work", "Deferrable Work", "Android WorkManager", "Фоновая работа", "Отложенная работа"]
+aliases: ["Android WorkManager", "Background Work", "Deferrable Work", "WorkManager", "Отложенная работа", "Фоновая работа"]
 summary: "Android Jetpack library for deferrable, guaranteed background work"
 topic: "android"
-subtopics: ["workmanager", "background-tasks", "jetpack"]
+subtopics: ["background-tasks", "jetpack", "workmanager"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "workmanager", "background-tasks", "jetpack", "coroutines", "threading", "difficulty/medium"]
+tags: ["android", "background-tasks", "concept", "coroutines", "difficulty/medium", "jetpack", "threading", "workmanager"]
+date created: Saturday, October 25th 2025, 11:07:27 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # WorkManager / WorkManager
@@ -24,7 +26,7 @@ tags: ["concept", "android", "workmanager", "background-tasks", "jetpack", "coro
 
 WorkManager is an Android Jetpack library designed for scheduling deferrable, guaranteed background work that needs to run even if the app exits or the device restarts. It intelligently chooses the best way to execute work based on device API level (JobScheduler, AlarmManager, or BroadcastReceiver) and respects system constraints like battery optimization, Doze mode, and App Standby. WorkManager is ideal for tasks like uploading logs, syncing data, backing up content, or processing images when constraints are met.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 WorkManager - это библиотека Android Jetpack для планирования отложенной, гарантированной фоновой работы, которая должна выполняться, даже если приложение закрыто или устройство перезагружено. Интеллектуально выбирает лучший способ выполнения работы в зависимости от уровня API устройства (JobScheduler, AlarmManager или BroadcastReceiver) и учитывает системные ограничения, такие как оптимизация батареи, режим Doze и App Standby. WorkManager идеально подходит для задач, таких как загрузка логов, синхронизация данных, резервное копирование контента или обработка изображений при соблюдении ограничений.
 
@@ -41,7 +43,7 @@ WorkManager - это библиотека Android Jetpack для планиро�
 - **Exponential Backoff**: Automatic retry with configurable backoff policy
 - **Thread-safe**: Safe to schedule from any thread
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Гарантированное выполнение**: Работа будет выполнена, даже если приложение закрыто или устройство перезагружено
 - **На основе ограничений**: Выполнение только при соблюдении условий (сеть, батарея, хранилище)

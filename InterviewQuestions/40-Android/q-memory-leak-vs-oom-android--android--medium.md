@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-the-main-application-execution-thread--android--easy, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-coroutine-memory-leak-detection--kotlin--hard]
+related: [q-coroutine-memory-leak-detection--kotlin--hard, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
 sources: []
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android, android/performance-memory, android/profiling, memory-leak, oom, leakcanary, difficulty/medium]
+tags: [android, android/performance-memory, android/profiling, difficulty/medium, leakcanary, memory-leak, oom]
 date created: Tuesday, October 28th 2025, 9:35:38 pm
-date modified: Thursday, October 30th 2025, 3:13:10 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:13:10 pm
 
 **Утечки памяти** и **OutOfMemoryError** — разные проблемы. Утечки постепенно расходуют память, что может привести к OOM-краху.
 
-### 1. Утечка памяти
+### 1. Утечка Памяти
 
 **Определение**: Объекты больше не нужны, но остаются referenced — GC не может их собрать.
 
@@ -149,7 +149,7 @@ fun processLargeDataset(): Sequence<Result> = sequence {
 }
 ```
 
-### 3. Инструменты обнаружения
+### 3. Инструменты Обнаружения
 
 **LeakCanary** (автоматическое обнаружение утечек):
 

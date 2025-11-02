@@ -5,7 +5,7 @@ aliases: ["Why Use Fragments When We Have Activities", "Зачем исполь�
 
 # Classification
 topic: android
-subtopics: [fragment, activity, architecture-modularization]
+subtopics: [activity, architecture-modularization, fragment]
 question_kind: theory
 difficulty: medium
 
@@ -17,16 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-fragments, c-activity-lifecycle, q-fragment-vs-activity-lifecycle--android--medium]
+related: [c-activity-lifecycle, c-fragment-lifecycle, c-fragments]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-29
 
 # Tags (EN only; no leading #)
-tags: [android/fragment, android/activity, android/architecture-modularization, fragments, activity, difficulty/medium]
+tags: [activity, android/activity, android/architecture-modularization, android/fragment, difficulty/medium, fragments]
 date created: Wednesday, October 29th 2025, 1:02:04 pm
-date modified: Thursday, October 30th 2025, 3:16:50 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +43,7 @@ date modified: Thursday, October 30th 2025, 3:16:50 pm
 
 Фрагменты обеспечивают **модульную композицию UI** внутри одного Activity. Ключевые преимущества: переиспользуемые компоненты, адаптивные макеты для планшетов/телефонов, эффективное управление памятью и упрощённая внутриэкранная навигация.
 
-### Основные причины
+### Основные Причины
 
 **1. Переиспользование компонентов**
 
@@ -130,7 +130,7 @@ class DetailFragment : Fragment() {
 }
 ```
 
-### Когда использовать
+### Когда Использовать
 
 | Используйте Fragments | Используйте Activities |
 |----------------------|------------------------|
@@ -262,7 +262,7 @@ class DetailFragment : Fragment() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-fragment--android--easy]] - Fragment basics
+- [[q-what-is-intent--android--easy]] - Fragment basics
 - [[q-activity-lifecycle--android--easy]] - Activity lifecycle fundamentals
 
 ### Related (Same Level)

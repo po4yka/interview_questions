@@ -1,7 +1,7 @@
 ---
 id: android-362
 title: "ML Kit Object Detection / Распознавание объектов ML Kit"
-aliases: [ML Kit Object Detection, Распознавание объектов ML Kit, ML Kit Image Labeling, ML Kit Barcode Scanning]
+aliases: [ML Kit Barcode Scanning, ML Kit Image Labeling, ML Kit Object Detection, Распознавание объектов ML Kit]
 topic: android
 subtopics: [camera, media]
 question_kind: android
@@ -13,7 +13,9 @@ moc: moc-android
 related: [q-compose-performance-optimization--android--hard, q-when-can-the-system-restart-a-service--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/camera, android/media, ml-kit, object-detection, barcode-scanning, difficulty/medium]
+tags: [android/camera, android/media, barcode-scanning, difficulty/medium, ml-kit, object-detection]
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [android/camera, android/media, ml-kit, object-detection, barcode-scanning
 
 ML Kit предоставляет предобученные модели для визуального распознавания без необходимости ML-экспертизы.
 
-### Маркировка изображений
+### Маркировка Изображений
 
 **On-Device vs Cloud:**
 - **On-Device**: ~400 меток, офлайн, 100-300мс задержка, приватность
@@ -77,7 +79,7 @@ suspend fun labelImageHybrid(
 }
 ```
 
-### Обнаружение объектов
+### Обнаружение Объектов
 
 **Режимы:**
 - **STREAM_MODE**: Видео/камера в реальном времени
@@ -136,7 +138,7 @@ class ObjectTracker {
 }
 ```
 
-### Сканирование штрих-кодов
+### Сканирование Штрих-кодов
 
 **Поддерживаемые форматы:**
 - 1D: EAN-13, EAN-8, UPC, Code-128, Code-39
@@ -173,7 +175,7 @@ class BarcodeScanningManager {
 }
 ```
 
-### Интеграция камеры в реальном времени
+### Интеграция Камеры В Реальном Времени
 
 ✅ **CameraX + ML Kit:**
 ```kotlin
@@ -283,7 +285,7 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **Выбор модели:**
 - ✅ On-device для реального времени, офлайн, приватности

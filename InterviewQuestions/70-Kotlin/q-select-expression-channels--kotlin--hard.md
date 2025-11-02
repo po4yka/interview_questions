@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, channels, select, multiplexing, advanced]
+subtopics: [advanced, channels, coroutines, multiplexing, select]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines select Expression Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
+related: [q-advanced-coroutine-patterns--kotlin--hard, q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, channels, select, multiplexing, advanced, difficulty/hard]
+tags: [advanced, channels, coroutines, difficulty/hard, kotlin, multiplexing, select]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What is the select expression for channels? Explain how to multiplex multiple channels, handle timeout with onTimeout, implement priority selection, and advanced patterns like fan-in/fan-out.
 
@@ -38,7 +41,7 @@ tags: [kotlin, coroutines, channels, select, multiplexing, advanced, difficulty/
 
 The `select` expression allows you to wait on multiple suspending operations simultaneously and process whichever completes first. It's especially powerful with channels for implementing complex concurrency patterns.
 
-### Basic select with Channels
+### Basic Select with Channels
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -100,7 +103,7 @@ suspend fun multipleSelects() {
 }
 ```
 
-### select Operations
+### Select Operations
 
 ```kotlin
 class SelectOperations {
@@ -613,7 +616,7 @@ class DataAggregator {
 }
 ```
 
-### Testing select Expressions
+### Testing Select Expressions
 
 ```kotlin
 class SelectTests {
@@ -683,7 +686,7 @@ class SelectTests {
 
 Выражение `select` позволяет ожидать несколько приостанавливаемых операций одновременно и обрабатывать ту, которая завершится первой.
 
-### Основные операции select
+### Основные Операции Select
 
 ```kotlin
 // Выбор между каналами

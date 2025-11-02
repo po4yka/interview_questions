@@ -1,9 +1,9 @@
 ---
 id: android-399
 title: App Store Optimization / Оптимизация App Store
-aliases: ["App Store Optimization", "Оптимизация App Store", "ASO"]
+aliases: ["App Store Optimization", "ASO", "Оптимизация App Store"]
 topic: android
-subtopics: [play-console, ab-testing, analytics]
+subtopics: [ab-testing, analytics, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,15 +11,13 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-alternative-distribution--android--medium
   - q-android-app-bundles--android--easy
-  - q-in-app-review--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/play-console, android/ab-testing, android/analytics, difficulty/medium]
+tags: [android/ab-testing, android/analytics, android/play-console, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:43:32 am
-date modified: Thursday, October 30th 2025, 12:43:19 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +34,7 @@ date modified: Thursday, October 30th 2025, 12:43:19 pm
 
 **App Store Optimization (ASO)** — процесс улучшения видимости приложения в магазине и конверсии установок через оптимизацию метаданных, визуальных ресурсов и постоянное тестирование.
 
-### Ключевые компоненты
+### Ключевые Компоненты
 
 **1. Метаданные**
 
@@ -233,7 +231,7 @@ data class ASOMetrics(
 ## References
 
 - [[q-android-app-bundles--android--easy]] - App Bundle optimization for smaller downloads
-- [[q-in-app-review--android--medium]] - In-app review API for rating optimization
+ - In-app review API for rating optimization
 - [[q-alternative-distribution--android--medium]] - Alternative distribution channels
 - [Play Console Help - Store Listing](https://support.google.com/googleplay/android-developer/answer/9844778)
 - [Play Console - Store Listing Experiments](https://support.google.com/googleplay/android-developer/answer/6227309)
@@ -244,12 +242,12 @@ data class ASOMetrics(
 
 ### Prerequisites (Easier)
 - [[q-android-app-bundles--android--easy]] - Understanding App Bundle format and benefits
-- [[q-play-console-basics--android--easy]] - Play Console dashboard and metrics
+ - Play Console dashboard and metrics
 
 ### Related (Same Level)
-- [[q-in-app-review--android--medium]] - In-App Review API implementation
+ - In-App Review API implementation
 - [[q-alternative-distribution--android--medium]] - Distribution beyond Play Store
-- [[q-firebase-analytics--android--medium]] - Analytics integration for conversion tracking
+ - Analytics integration for conversion tracking
 
 ### Advanced (Harder)
 - Multi-market localization strategy and cultural adaptation

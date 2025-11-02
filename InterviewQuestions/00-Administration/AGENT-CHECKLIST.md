@@ -1,3 +1,8 @@
+---
+date created: Sunday, October 19th 2025, 11:19:01 am
+date modified: Saturday, November 1st 2025, 5:43:39 pm
+---
+
 # Quick Agent Checklist
 
 **Purpose**: Fast reference checklist for creating and validating vault notes.
@@ -352,7 +357,7 @@ subtopics: [ui-compose, lifecycle]
 tags: [android/ui-compose, android/lifecycle, compose, difficulty/medium]
 ```
 
-### FORBIDDEN: Setting status to reviewed/ready
+### FORBIDDEN: Setting Status to reviewed/ready
 
 ```yaml
 # WRONG - Agents must never set these

@@ -13,7 +13,9 @@ moc: moc-android
 related: [c-gpu-rendering, c-performance, q-surfaceview-rendering--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/performance-rendering, vulkan, renderscript, gpu, graphics, compute, difficulty/hard]
+tags: [android/performance-rendering, compute, difficulty/hard, gpu, graphics, renderscript, vulkan]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Vulkan and RenderScript Alternatives for GPU Computing
@@ -1042,7 +1044,7 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 - Android NDK с GPU библиотеками
 - Vendor-specific APIs (Mali, Adreno)
 
-#### Основные концепции Vulkan
+#### Основные Концепции Vulkan
 
 **Vulkan Pipeline:**
 1. Instance → Physical Device → Logical Device
@@ -1070,7 +1072,7 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 - Менее эффективно чем Vulkan
 - Меньше контроля
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбор API:** Проверяйте возможности устройства
 2. **Миграция RenderScript:** Постепенный переход с fallback
@@ -1078,7 +1080,7 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 4. **Память:** Правильно освобождайте GPU ресурсы
 5. **Шейдеры:** Минимизируйте ветвления, оптимизируйте доступ к памяти
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. Не проверять возможности устройства → краши
 2. Проблемы синхронизации → гонки данных

@@ -1,7 +1,7 @@
 ---
 id: android-375
 title: "How To Pass Parameters To Fragment / Как передать параметры во Fragment"
-aliases: ["How To Pass Parameters To Fragment", "Как передать параметры во Fragment", "Fragment arguments", "Fragment Bundle"]
+aliases: ["Fragment arguments", "Fragment Bundle", "How To Pass Parameters To Fragment", "Как передать параметры во Fragment"]
 topic: android
 subtopics: [fragment, lifecycle]
 question_kind: android
@@ -14,9 +14,9 @@ related: [q-fragment-basics--android--easy, q-how-does-fragment-lifecycle-differ
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android, android/fragment, android/lifecycle, fragment, bundle, arguments, difficulty/medium]
+tags: [android, android/fragment, android/lifecycle, arguments, bundle, difficulty/medium, fragment]
 date created: Thursday, October 30th 2025, 12:56:08 pm
-date modified: Thursday, October 30th 2025, 2:17:20 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How to pass parameters to a Fragment?
 
 Рекомендуемый и безопасный способ передачи параметров во Fragment в Android — использование **Bundle** через свойство `arguments` фрагмента. Этот подход поддерживается системой Android и сохраняет данные при изменении конфигурации.
 
-### Основные подходы
+### Основные Подходы
 
 **1. Базовый подход — Bundle с фабричным методом**
 
@@ -122,7 +122,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда используйте Bundle и arguments** — не передавайте данные через конструктор или сеттеры
 2. **Создавайте фабричные методы** (newInstance) в companion object
@@ -131,7 +131,7 @@ class ProfileFragment : Fragment() {
 5. **Используйте константы** для ключей аргументов
 6. **Предпочитайте Parcelable** вместо Serializable (лучше производительность)
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 ```kotlin
 // ❌ НЕПРАВИЛЬНО — конструктор (данные теряются при повороте экрана)

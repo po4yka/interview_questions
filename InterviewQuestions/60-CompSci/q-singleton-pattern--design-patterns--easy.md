@@ -3,19 +3,19 @@ id: design-patterns-006
 title: "Singleton Pattern / Singleton Паттерн"
 aliases: [Singleton Pattern, Singleton Паттерн]
 topic: design-patterns
-subtopics: [creational-patterns, instantiation, global-access]
+subtopics: [creational-patterns, global-access, instantiation]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-design-patterns
-related: [q-error-handling-in-coroutines--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy, q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]
+related: [q-abstract-factory-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [creational-patterns, design-patterns, gof-patterns, singleton, difficulty/easy]
+tags: [creational-patterns, design-patterns, difficulty/easy, gof-patterns, singleton]
 date created: Monday, October 6th 2025, 7:18:19 am
-date modified: Sunday, October 26th 2025, 1:39:47 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Singleton Pattern

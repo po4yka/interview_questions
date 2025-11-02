@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-encryption, c-permissions, q-runtime-permissions--android--medium, q-android-manifest-file--android--easy]
+related: [c-encryption, c-permissions]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/keystore-crypto, android/network-security-config, android/permissions, security, encryption, difficulty/medium]
+tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, encryption, security]
 sources: []
 date created: Thursday, October 30th 2025, 11:36:07 am
-date modified: Thursday, October 30th 2025, 12:42:59 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -268,10 +268,10 @@ webView.addJavascriptInterface(object {
 - [[q-android-app-components--android--easy]] - App components basics
 
 ### Related (Same Level)
-- [[q-runtime-permissions--android--medium]] - Runtime permissions
+ - Runtime permissions
 - [[q-android-lint-tool--android--medium]] - Code analysis tools
 - [[q-biometric-authentication--android--medium]] - Biometric authentication
 
 ### Advanced (Harder)
-- [[q-android-root-detection--android--hard]] - Root detection techniques
-- [[q-android-ssl-pinning-bypass--android--hard]] - SSL pinning bypass prevention
+ - Root detection techniques
+ - SSL pinning bypass prevention

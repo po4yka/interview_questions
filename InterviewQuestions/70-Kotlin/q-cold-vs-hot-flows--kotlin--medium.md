@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, hot-flows, cold-flows, shareIn, stateIn]
+subtopics: [cold-flows, flow, hot-flows, shareIn, stateIn]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-stateflow-sharedflow-differences--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related: [q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, flow, hot-flows, cold-flows, shareIn, stateIn, difficulty/medium]
+tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Explain cold vs hot flows. How do shareIn and stateIn convert cold to hot? Configure replay and started parameters properly.
 
@@ -109,7 +112,7 @@ Flow completed
 
 **Each collector triggers independent execution** - the flow builder code runs twice.
 
-#### Real-world cold flow examples
+#### Real-world Cold Flow Examples
 
 ```kotlin
 // Database query - each collector executes query
@@ -445,7 +448,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-### Comparison Table: Cold vs Hot Flows
+### Comparison Table: Cold Vs Hot Flows
 
 | Aspect | Cold Flow | Hot Flow |
 |--------|-----------|----------|
@@ -572,18 +575,18 @@ val users2 = repository.users // No extra call
 
 Понимание холодных и горячих потоков фундаментально для построения эффективных реактивных приложений с Kotlin Flow.
 
-### Холодные потоки
+### Холодные Потоки
 
 **Холодные потоки** активируются при сборе. Каждый коллектор независимо запускает код билдера потока.
 
-#### Ключевые характеристики
+#### Ключевые Характеристики
 
 1. **Ленивые** - Начинают выполнение только при сборе
 2. **Unicast** - Каждый коллектор получает свой независимый поток
 3. **Нет общего состояния** - Множественные коллекторы не делят данные
 4. **Свежие данные** - Каждый коллектор запускает новое выполнение
 
-#### Пример: Поведение холодного потока
+#### Пример: Поведение Холодного Потока
 
 ```kotlin
 fun createColdFlow(): Flow<Int> = flow {
@@ -602,7 +605,7 @@ coldFlow.collect { println("Коллектор 2: $it") }
 // Код билдера выполняется дважды!
 ```
 
-#### Реальные примеры холодных потоков
+#### Реальные Примеры Холодных Потоков
 
 ```kotlin
 // Запрос к БД - каждый коллектор выполняет запрос
@@ -618,18 +621,18 @@ fun fetchArticles(): Flow<List<Article>> = flow {
 }
 ```
 
-### Горячие потоки
+### Горячие Потоки
 
 **Горячие потоки** всегда активны и испускают значения независимо от наличия коллекторов.
 
-#### Ключевые характеристики
+#### Ключевые Характеристики
 
 1. **Активные** - Работают даже без коллекторов
 2. **Multicast** - Все коллекторы получают одинаковые испускания
 3. **Общее состояние** - Единое выполнение для всех
 4. **Могут пропустить значения** - Коллекторы получают только значения после подписки
 
-### Конвертация холодного в горячий: shareIn()
+### Конвертация Холодного В Горячий: shareIn()
 
 Оператор `shareIn` конвертирует холодный поток в горячий SharedFlow.
 
@@ -641,7 +644,7 @@ fun <T> Flow<T>.shareIn(
 ): SharedFlow<T>
 ```
 
-#### Объяснение параметров
+#### Объяснение Параметров
 
 **1. scope** - CoroutineScope, контролирующий время жизни
 
@@ -715,7 +718,7 @@ SharingStarted.WhileSubscribed(
 - `0` - Остановить сразу
 - `5000` - 5 секунд (хорошо для поворота экрана)
 
-### Конвертация холодного в горячий: stateIn()
+### Конвертация Холодного В Горячий: stateIn()
 
 Оператор `stateIn` конвертирует холодный поток в горячий StateFlow.
 
@@ -761,7 +764,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Аспект | Холодный поток | Горячий поток |
 |--------|----------------|---------------|
@@ -771,7 +774,7 @@ class SearchViewModel : ViewModel() {
 | **Использование ресурсов** | Множественные выполнения | Единое выполнение |
 | **Пропуск значений** | Нет | Да |
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте холодные потоки для**:
    - Одноразовых операций
@@ -793,7 +796,7 @@ class SearchViewModel : ViewModel() {
    .stateIn(scope, SharingStarted.WhileSubscribed(5000), initialValue)
    ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Не использование горячих потоков для дорогих операций**:
    ```kotlin

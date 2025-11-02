@@ -3,21 +3,22 @@ id: kotlin-203
 title: "Interface Properties / Свойства интерфейсов"
 aliases: []
 topic: kotlin
-subtopics: [access-modifiers, type-system, null-safety]
+subtopics: [access-modifiers, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-statein-sharein-flow--kotlin--medium, q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium]
+related: [q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# How to operate with properties in interface?
+
+# How to Operate with Properties in Interface?
 
 # Question (EN)
 > How to operate with properties in interfaces in Kotlin?

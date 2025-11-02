@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, coroutines, statein, sharein, hot-flow]
+subtopics: [coroutines, flow, hot-flow, sharein, statein]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-retry-exponential-backoff-flow--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-kotlin-type-aliases-inline--kotlin--medium]
+related: [q-kotlin-type-aliases-inline--kotlin--medium, q-parallel-network-calls-coroutines--kotlin--medium, q-retry-exponential-backoff-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, flow, coroutines, statein, sharein, hot-flow, difficulty/medium]
+tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharein, statein]
+date created: Tuesday, October 14th 2025, 8:56:38 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What are stateIn and shareIn operators in Kotlin Flow? When to use each?
 # Вопрос (RU)
@@ -37,7 +40,7 @@ tags: [kotlin, flow, coroutines, statein, sharein, hot-flow, difficulty/medium]
 
 **`stateIn` and `shareIn`** are operators that convert **cold Flow** into **hot Flow** (StateFlow/SharedFlow), allowing multiple collectors to share the same upstream flow.
 
-### Cold Flow vs Hot Flow
+### Cold Flow Vs Hot Flow
 
 **Cold Flow**: Each collector triggers independent execution
 
@@ -141,7 +144,7 @@ class EventViewModel : ViewModel() {
 2. **`started`**: When to start/stop
 3. **`replay`**: Number of values to replay to new collectors
 
-### Comparison: stateIn vs shareIn
+### Comparison: stateIn Vs shareIn
 
 | Feature | stateIn (StateFlow) | shareIn (SharedFlow) |
 |---------|-------------------|---------------------|
@@ -455,7 +458,7 @@ class ViewModel : ViewModel() {
 
 **`stateIn` и `shareIn`** — операторы, которые конвертируют **холодный Flow** в **горячий Flow** (StateFlow/SharedFlow), позволяя нескольким коллекторам делить один upstream flow.
 
-### Cold Flow vs Hot Flow
+### Cold Flow Vs Hot Flow
 
 **Cold Flow**: Каждый коллектор запускает независимое выполнение
 
@@ -485,7 +488,7 @@ hotFlow.collect { println("Collector 1: $it") }
 hotFlow.collect { println("Collector 2: $it") }  // "Hot flow started" печатается только раз
 ```
 
-### stateIn - Конвертация в StateFlow
+### stateIn - Конвертация В StateFlow
 
 **`stateIn`** создаёт **StateFlow**, который всегда имеет текущее значение и воспроизводит последнее значение новым коллекторам.
 
@@ -510,7 +513,7 @@ class UserViewModel : ViewModel() {
 2. **`started`**: Когда запускать/останавливать upstream flow
 3. **`initialValue`**: Начальное значение до первой эмиссии
 
-### shareIn - Конвертация в SharedFlow
+### shareIn - Конвертация В SharedFlow
 
 **`shareIn`** создаёт **SharedFlow**, который может воспроизводить несколько значений и не требует начального значения.
 
@@ -528,7 +531,7 @@ class EventViewModel : ViewModel() {
 }
 ```
 
-### Сравнение: stateIn vs shareIn
+### Сравнение: stateIn Vs shareIn
 
 | Функция | stateIn (StateFlow) | shareIn (SharedFlow) |
 |---------|-------------------|---------------------|
@@ -538,7 +541,7 @@ class EventViewModel : ViewModel() {
 | **Конфляция** | Конфлирует значения | Может буферизовать или отбрасывать |
 | **Применение** | Текущее состояние/данные | События, множественные значения |
 
-### Когда использовать stateIn
+### Когда Использовать stateIn
 
 **1. Представление текущего состояния**
 
@@ -575,7 +578,7 @@ class UserRepository {
 }
 ```
 
-### Когда использовать shareIn
+### Когда Использовать shareIn
 
 **1. Одноразовые события**
 
@@ -614,7 +617,7 @@ class ChatViewModel : ViewModel() {
 
 **3. Lazily** - Запускается при первом подписчике, никогда не останавливается
 
-### Пример: Экран поиска
+### Пример: Экран Поиска
 
 ```kotlin
 class SearchViewModel : ViewModel() {

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140027
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-context-elements--kotlin--hard, q-lazy-initialization--programming-languages--easy, q-kotlin-multiplatform-overview--kotlin--hard]
+related: [q-coroutine-context-elements--kotlin--hard, q-kotlin-multiplatform-overview--kotlin--hard, q-lazy-initialization--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140027
 
@@ -39,7 +42,7 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 `launch` and `async` are both coroutine builders but differ in how they return results.
 
-### launch
+### Launch
 Fire-and-forget style, returns Job:
 ```kotlin
 val job = launch {
@@ -49,7 +52,7 @@ val job = launch {
 job.join()  // Wait for completion
 ```
 
-### async
+### Async
 Returns Deferred with result:
 ```kotlin
 val deferred = async {
@@ -94,7 +97,7 @@ combine(r1.await(), r2.await())
 
 `launch` и `async` оба являются coroutine builders но различаются способом возврата результатов.
 
-### launch
+### Launch
 Стиль запустить-и-забыть, возвращает Job:
 ```kotlin
 val job = launch {
@@ -104,7 +107,7 @@ val job = launch {
 job.join()  // Ждать завершения
 ```
 
-### async
+### Async
 Возвращает Deferred с результатом:
 ```kotlin
 val deferred = async {
@@ -115,7 +118,7 @@ val result = deferred.await()  // Получить результат
 println(result)  // "Result"
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 | Функция | launch | async |
 |---------|--------|-------|
 | Возвращает | Job | Deferred<T> |
@@ -123,7 +126,7 @@ println(result)  // "Result"
 | Использование | Побочные эффекты | Вычислить значение |
 | Исключение | Выброшено сразу | При await() |
 
-### Выбор между ними
+### Выбор Между Ними
 ```kotlin
 // Используйте launch для побочных эффектов
 launch {

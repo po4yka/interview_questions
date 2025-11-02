@@ -1,7 +1,7 @@
 ---
 id: android-287
 title: "SharedPreferences / Хранилище пар ключ-значение"
-aliases: ["SharedPreferences", "Хранилище пар ключ-значение", "Shared Preferences"]
+aliases: ["Shared Preferences", "SharedPreferences", "Хранилище пар ключ-значение"]
 
 # Classification
 topic: android
@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-room-relations-embedded--room--medium, q-how-is-navigation-implemented--android--medium]
+related: [q-context-in-android--android--easy, q-datastore-preferences--android--medium, q-encrypted-shared-preferences-implementation--android--hard]
 
 # Timestamps
 created: 2025-10-15
@@ -25,6 +25,8 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [android, android/datastore, android/files-media, data-storage, difficulty/easy]
+date created: Saturday, November 1st 2025, 1:05:10 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +43,7 @@ tags: [android, android/datastore, android/files-media, data-storage, difficulty
 
 SharedPreferences — это механизм Android для хранения пар ключ-значение. Данные сохраняются в XML-файле в приватном хранилище приложения.
 
-### Поддерживаемые типы данных
+### Поддерживаемые Типы Данных
 
 ```kotlin
 sharedPref.edit {
@@ -71,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Запись данных: apply() vs commit()
+### Запись Данных: apply() Vs commit()
 
 ```kotlin
 // ✅ apply() — асинхронная, не блокирует UI
@@ -92,7 +94,7 @@ if (!success) {
 
 **Правило**: Используйте `apply()` для UI-потока, `commit()` только если нужна гарантия успешной записи до продолжения.
 
-### Типичный use case: Settings Manager
+### Типичный Use Case: Settings Manager
 
 ```kotlin
 class SettingsManager(context: Context) {
@@ -112,7 +114,7 @@ val settings = SettingsManager(context)
 settings.isDarkMode = true
 ```
 
-### Когда НЕ использовать SharedPreferences
+### Когда НЕ Использовать SharedPreferences
 
 | Сценарий | Альтернатива |
 |----------|--------------|
@@ -121,7 +123,7 @@ settings.isDarkMode = true
 | Чувствительные данные (токены, пароли) | EncryptedSharedPreferences |
 | Типизированные настройки | DataStore (Preferences) |
 
-### EncryptedSharedPreferences для чувствительных данных
+### EncryptedSharedPreferences Для Чувствительных Данных
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
@@ -146,7 +148,7 @@ securePrefs.edit {
 
 SharedPreferences is an Android mechanism for storing key-value pairs. Data is saved in an XML file in the app's private storage.
 
-### Supported data types
+### Supported Data Types
 
 ```kotlin
 sharedPref.edit {
@@ -176,7 +178,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Writing data: apply() vs commit()
+### Writing Data: apply() Vs commit()
 
 ```kotlin
 // ✅ apply() — asynchronous, doesn't block UI
@@ -197,7 +199,7 @@ if (!success) {
 
 **Rule**: Use `apply()` for UI thread, `commit()` only when you need guaranteed write completion before proceeding.
 
-### Typical use case: Settings Manager
+### Typical Use Case: Settings Manager
 
 ```kotlin
 class SettingsManager(context: Context) {
@@ -217,7 +219,7 @@ val settings = SettingsManager(context)
 settings.isDarkMode = true
 ```
 
-### When NOT to use SharedPreferences
+### When NOT to Use SharedPreferences
 
 | Scenario | Alternative |
 |----------|-------------|
@@ -226,7 +228,7 @@ settings.isDarkMode = true
 | Sensitive data (tokens, passwords) | EncryptedSharedPreferences |
 | Type-safe preferences | DataStore (Preferences) |
 
-### EncryptedSharedPreferences for sensitive data
+### EncryptedSharedPreferences for Sensitive Data
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
@@ -270,8 +272,8 @@ securePrefs.edit {
 - [[q-context-in-android--android--easy]]
 
 ### Related
-- [[q-room-relations-embedded--room--medium]]
-- [[q-datastore-preferences--android--medium]]
+- [[q-room-relations-embedded--android--medium]]
+- [[q-datastore-preferences-proto--android--medium]]
 
 ### Advanced
 - [[q-encrypted-shared-preferences-implementation--android--hard]]

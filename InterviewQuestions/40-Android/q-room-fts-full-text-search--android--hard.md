@@ -3,18 +3,20 @@ id: android-427
 title: "Room Full-Text Search (FTS) / Полнотекстовый поиск FTS в Room"
 aliases: ["Room Full-Text Search", "Полнотекстовый поиск FTS в Room"]
 topic: android
-subtopics: [room, performance-rendering]
+subtopics: [performance-rendering, room]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-room-transactions-dao--room--medium, q-room-paging3-integration--room--medium, c-room-database, c-sqlite-indexes]
+related: [c-room-database, q-room-basics-dao-entity--android--easy, q-room-relationships-embedded--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/room, android/performance-rendering, database, fts, search, performance, difficulty/hard]
+tags: [android/performance-rendering, android/room, database, difficulty/hard, fts, performance, search]
+date created: Saturday, November 1st 2025, 1:04:42 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ Implement full-text search in Room using FTS4/FTS5. Optimize search performance 
 
 **Полнотекстовый поиск (FTS)** в Room обеспечивает эффективный текстовый поиск через расширения FTS SQLite. FTS в 10-100 раз быстрее LIKE запросов на больших данных и поддерживает ранжирование, префиксный поиск и булевы операторы.
 
-### Когда использовать FTS
+### Когда Использовать FTS
 
 | Сценарий | LIKE | FTS5 |
 |----------|------|------|
@@ -47,7 +49,7 @@ Implement full-text search in Room using FTS4/FTS5. Optimize search performance 
 - Функции highlight() и snippet()
 - Булевы операторы (AND, OR, NOT)
 
-### Базовая реализация FTS5
+### Базовая Реализация FTS5
 
 ```kotlin
 // ✅ Основная сущность
@@ -70,7 +72,7 @@ data class ArticleFts(
 )
 ```
 
-### Синхронизация через триггеры
+### Синхронизация Через Триггеры
 
 ```kotlin
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
@@ -108,7 +110,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-### Поиск с ранжированием BM25
+### Поиск С Ранжированием BM25
 
 ```kotlin
 data class ArticleSearchResult(
@@ -148,7 +150,7 @@ interface ArticleDao {
 }
 ```
 
-### Подсветка результатов
+### Подсветка Результатов
 
 ```kotlin
 data class ArticleWithHighlight(
@@ -173,7 +175,7 @@ interface ArticleDao {
 }
 ```
 
-### Repository с debouncing
+### Repository С Debouncing
 
 ```kotlin
 class ArticleRepository(private val dao: ArticleDao) {
@@ -232,7 +234,7 @@ data class ArticleFtsSimple(...)
 9. ⚠️ **@Transaction** - FTS sync должен быть атомарным
 10. ❌ **Не дублируйте данные** - всегда используйте contentEntity
 
-### Частые ошибки
+### Частые Ошибки
 
 ```kotlin
 // ❌ WRONG - Ручная синхронизация (подвержена ошибкам)
@@ -541,11 +543,11 @@ data class ArticleFts(
 
 ### Prerequisites (Easier)
 - [[q-room-basics-dao-entity--android--easy]] - Room fundamentals
-- [[q-room-relationships-embedded--android--medium]] - Room relationships
+- [[q-room-relations-embedded--android--medium]] - Room relationships
 
 ### Related (Same Level)
-- [[q-room-transactions-dao--room--medium]] - Transaction handling
-- [[q-room-paging3-integration--room--medium]] - Pagination integration
+- [[q-room-transactions-dao--android--medium]] - Transaction handling
+- [[q-room-paging3-integration--android--medium]] - Pagination integration
 - [[q-sqlite-query-optimization--android--hard]] - Query optimization
 
 ### Advanced (Harder)

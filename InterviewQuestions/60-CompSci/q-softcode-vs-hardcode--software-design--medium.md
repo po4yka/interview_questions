@@ -3,7 +3,7 @@ id: software-design-001
 title: "Softcode Vs Hardcode / Softcode против Hardcode"
 aliases: [Softcode Vs Hardcode, Softcode против Hardcode]
 topic: software-design
-subtopics: [configuration-management, best-practices, maintainability]
+subtopics: [best-practices, configuration-management, maintainability]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-software-design
 related: [q-extensions-concept--programming-languages--easy, q-flyweight-pattern--design-patterns--hard, q-proxy-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [best-practices, configuration, flexibility, hardcoding, maintainability, softcoding, software-design, difficulty/medium]
+tags: [best-practices, configuration, difficulty/medium, flexibility, hardcoding, maintainability, softcoding, software-design]
 date created: Saturday, October 4th 2025, 6:59:00 pm
-date modified: Sunday, October 26th 2025, 1:39:48 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Такое Софткод?

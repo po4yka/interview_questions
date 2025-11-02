@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
+  - concurrency
   - coroutines
   - dispatchers
-  - threading
-  - concurrency
   - main
+  - threading
 question_kind: theory
 difficulty: medium
 
@@ -23,14 +23,17 @@ source_note: Comprehensive guide to Kotlin Coroutine Dispatchers
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium, q-coroutine-context-explained--kotlin--medium]
+related: [q-coroutine-context-explained--kotlin--medium, q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, dispatchers, threading, main, io, default, unconfined, difficulty/medium]
+tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, threading, unconfined]
+date created: Thursday, October 16th 2025, 4:31:25 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > What are coroutine dispatchers in Kotlin? Explain Main, IO, Default, and Unconfined dispatchers and when to use each.
 
@@ -560,7 +563,7 @@ fun main() = runBlocking {
 - Когда поток не имеет значения
 - Обычно **не рекомендуется** для production
 
-### Переключение Диспетчеров с withContext
+### Переключение Диспетчеров С withContext
 
 ```kotlin
 class UserViewModel : ViewModel() {

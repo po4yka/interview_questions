@@ -1,7 +1,7 @@
 ---
 id: android-316
 title: "Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что в нем происходит"
-aliases: [ViewModel Purpose, Назначение ViewModel, ViewModel Responsibilities, Обязанности ViewModel]
+aliases: [ViewModel Purpose, ViewModel Responsibilities, Назначение ViewModel, Обязанности ViewModel]
 
 # Classification
 topic: android
@@ -18,14 +18,16 @@ status: draft
 
 # Links
 moc: moc-android
-related: [q-mvvm-pattern--android--medium, q-how-to-save-activity-state--android--medium, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium]
+related: [q-how-to-save-activity-state--android--medium, q-mvvm-pattern--android--medium, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-30
 
 # Tags
-tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, viewmodel, mvvm, jetpack, difficulty/medium]
+tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, difficulty/medium, jetpack, mvvm, viewmodel]
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -42,9 +44,9 @@ tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, viewmodel
 
 **ViewModel** - это Android Architecture Component, который хранит UI-состояние и бизнес-логику отдельно от Activity/Fragment, переживая изменения конфигурации (поворот экрана).
 
-### Зачем нужен ViewModel
+### Зачем Нужен ViewModel
 
-#### 1. Переживание изменений конфигурации
+#### 1. Переживание Изменений Конфигурации
 
 ```kotlin
 // ❌ БЕЗ ViewModel - данные теряются при повороте
@@ -83,7 +85,7 @@ class CounterViewModel : ViewModel() {
 }
 ```
 
-#### 2. Разделение ответственности (Separation of Concerns)
+#### 2. Разделение Ответственности (Separation of Concerns)
 
 ```kotlin
 // ❌ БЕЗ ViewModel - бизнес-логика смешана с UI
@@ -134,7 +136,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-#### 3. Автоматическое управление жизненным циклом
+#### 3. Автоматическое Управление Жизненным Циклом
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -154,7 +156,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Что происходит в ViewModel
+### Что Происходит В ViewModel
 
 #### 1. Управление UI-состоянием
 
@@ -183,7 +185,7 @@ sealed interface UiState {
 }
 ```
 
-#### 2. Бизнес-логика и валидация
+#### 2. Бизнес-логика И Валидация
 
 ```kotlin
 class LoginViewModel : ViewModel() {
@@ -213,7 +215,7 @@ class LoginViewModel : ViewModel() {
 }
 ```
 
-#### 3. Работа с репозиториями и данными
+#### 3. Работа С Репозиториями И Данными
 
 ```kotlin
 class PostsViewModel(private val repository: PostRepository) : ViewModel() {
@@ -238,7 +240,7 @@ class PostsViewModel(private val repository: PostRepository) : ViewModel() {
 }
 ```
 
-#### 4. Совместное использование между Fragment
+#### 4. Совместное Использование Между Fragment
 
 ```kotlin
 // Shared ViewModel с областью видимости Activity
@@ -273,7 +275,7 @@ class DetailFragment : Fragment() {
 }
 ```
 
-### Жизненный цикл ViewModel
+### Жизненный Цикл ViewModel
 
 ```
 Activity/Fragment создан

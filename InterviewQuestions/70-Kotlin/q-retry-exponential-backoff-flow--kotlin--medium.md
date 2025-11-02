@@ -1,36 +1,24 @@
 ---
 id: kotlin-191
 title: "Retry and exponential backoff patterns in Flow / Retry и exponential backoff паттерны в Flow"
-aliases: [Retry, Exponential Backoff, Error Handling, Resilience, Retry паттерны]
+aliases: [Error Handling, Exponential Backoff, Resilience, Retry, Retry паттерны]
 topic: kotlin
-subtopics: [coroutines, flow, patterns, error-handling]
+subtopics: [coroutines, error-handling, flow, patterns]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-fan-in-fan-out-channels--kotlin--hard, q-actor-pattern--kotlin--hard, q-coroutine-dispatchers--kotlin--medium]
+related: [q-actor-pattern--kotlin--hard, q-coroutine-dispatchers--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - flow
-  - retry
-  - exponential-backoff
-  - error-handling
-  - resilience
-  - circuit-breaker
-  - production
-  - difficulty/medium
-  - coroutines
-  - flow
-  - retry
-  - error-handling
-  - resilience
+tags: [circuit-breaker, coroutines, difficulty/medium, error-handling, exponential-backoff, flow, kotlin, production, resilience, retry]
+date created: Friday, October 31st 2025, 6:30:29 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Retry and exponential backoff patterns in Flow
+
+# Retry and Exponential Backoff Patterns in Flow
 
 ## English
 
@@ -929,7 +917,7 @@ RetryConfig(multiplier = 10.0) // Can lead to hours of waiting
 
 **Retry** паттерны критически важны для создания устойчивых приложений, которые могут восстанавливаться после временных сбоев. **Exponential backoff** — это стратегия, при которой задержки повторных попыток увеличиваются экспоненциально, чтобы избежать перегрузки падающих сервисов.
 
-#### 1. Базовый Retry с оператором retry()
+#### 1. Базовый Retry С Оператором retry()
 
 **Оператор retry():**
 - Повторяет Flow при возникновении исключения
@@ -981,7 +969,7 @@ suspend fun retryWithPredicateExample() {
 }
 ```
 
-#### 2. Продвинутый Retry с retryWhen()
+#### 2. Продвинутый Retry С retryWhen()
 
 **Оператор retryWhen():**
 - Больше контроля над retry логикой
@@ -1117,7 +1105,7 @@ suspend fun retryWithConfigExample() {
 }
 ```
 
-#### 4. Jitter для времени Retry
+#### 4. Jitter Для Времени Retry
 
 **Зачем jitter?**
 - Предотвращает проблему **thundering herd**
@@ -1164,7 +1152,7 @@ fun <T> Flow<T>.retryWithJitter(
 }
 ```
 
-#### 5. Production пример: Сетевые запросы
+#### 5. Production Пример: Сетевые Запросы
 
 **Устойчивый API клиент:**
 
@@ -1260,7 +1248,7 @@ suspend fun fetchUserWithRetry() {
 }
 ```
 
-#### 6. Production пример: Операции с БД
+#### 6. Production Пример: Операции С БД
 
 **Устойчивые операции с базой данных с retry:**
 
@@ -1316,7 +1304,7 @@ class DatabaseRepository(private val database: AppDatabase) {
 }
 ```
 
-#### 7. Комбинирование Retry с Timeout
+#### 7. Комбинирование Retry С Timeout
 
 **Паттерн Timeout + retry:**
 
@@ -1456,7 +1444,7 @@ suspend fun fetchWithCircuitBreaker() {
 }
 ```
 
-#### 9. Retry для разных типов исключений
+#### 9. Retry Для Разных Типов Исключений
 
 **Разные стратегии для разных ошибок:**
 
@@ -1521,7 +1509,7 @@ suspend fun fetchWithCustomStrategies() {
 }
 ```
 
-#### 10. Мониторинг и логирование попыток Retry
+#### 10. Мониторинг И Логирование Попыток Retry
 
 **Production мониторинг:**
 
@@ -1610,7 +1598,7 @@ private fun calculateBackoff(config: RetryConfig, attempt: Long): Long {
 }
 ```
 
-#### 11. Тестирование логики Retry
+#### 11. Тестирование Логики Retry
 
 **Unit тесты с виртуальным временем:**
 
@@ -1726,7 +1714,7 @@ class RetryTest {
 }
 ```
 
-#### 12. Резюме лучших практик
+#### 12. Резюме Лучших Практик
 
 **Что делать:**
 
@@ -1774,13 +1762,13 @@ RetryConfig(multiplier = 10.0) // Может привести к ожидани�
 // Отсутствует .catch { }
 ```
 
-### Связанные вопросы
+### Связанные Вопросы
 - [[q-flow-operators--kotlin--medium]] - Операторы Flow
 - [[q-flow-exception-handling--kotlin--medium]] - Обработка исключений в Flow
 - [[q-circuit-breaker-coroutines--kotlin--hard]] - Паттерн Circuit breaker
 - [[q-structured-concurrency--kotlin--hard]] - Структурированная конкурентность
 
-### Дополнительные вопросы
+### Дополнительные Вопросы
 1. Как exponential backoff с jitter предотвращает проблему thundering herd? Приведите математическое объяснение.
 2. В чем разница между retry() на уровне Flow и retry логикой в репозитории? Когда выбирать каждый подход?
 3. Как реализовать retry политику, которая делает backoff на основе заголовков ответа сервера (например, Retry-After)?

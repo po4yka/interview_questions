@@ -10,20 +10,15 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lambda-expressions--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-abstract-class-vs-interface--kotlin--medium]
+related: [q-abstract-class-vs-interface--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-kotlin-lambda-expressions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - comparison
-  - concurrency
-  - coroutines
-  - java
-  - kotlin
-  - programming-languages
-  - threads
-  - difficulty/medium
+tags: [comparison, concurrency, coroutines, difficulty/medium, java, kotlin, programming-languages, threads]
+date created: Friday, October 31st 2025, 6:32:12 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# В чем концептуальное отличие корутинов от потоков в Java
+
+# В Чем Концептуальное Отличие Корутинов От Потоков В Java
 
 # Question (EN)
 > What is the conceptual difference between coroutines and Java threads?

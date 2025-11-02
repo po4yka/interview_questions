@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-coroutines, c-workmanager, q-strictmode-debugging--android--medium]
+related: [c-coroutines, c-lifecycle, c-workmanager]
 created: 2025-10-05
 updated: 2025-10-30
 sources: []
-tags: [android/performance-rendering, android/profiling, android/strictmode-anr, performance, debugging, difficulty/medium]
+tags: [android/performance-rendering, android/profiling, android/strictmode-anr, debugging, difficulty/medium, performance]
 date created: Thursday, October 30th 2025, 11:43:26 am
-date modified: Thursday, October 30th 2025, 12:43:08 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -222,4 +222,4 @@ if (BuildConfig.DEBUG) {
 
 ### Advanced (Harder)
 - [[q-service-lifecycle-binding--android--hard]] - Advanced service patterns
-- [[q-profiling-systrace--android--hard]] - Deep performance profiling
+ - Deep performance profiling

@@ -10,12 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-class-composition--oop--medium, q-data-class-special-features--programming-languages--easy, q-launch-vs-async-error-handling--programming-languages--medium]
+related: [q-class-composition--oop--medium, q-launch-vs-async-error-handling--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, flow, coroutines, kotlin, sharedflow, stateflow, difficulty/easy]
+tags: [coroutines, difficulty/easy, flow, kotlin, programming-languages, sharedflow, stateflow]
 date created: Saturday, October 4th 2025, 10:40:14 am
-date modified: Sunday, October 26th 2025, 1:39:47 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # SharedFlow Vs StateFlow Differences
@@ -372,4 +372,4 @@ SharedFlow — это горячий поток, который передаёт
 
 - [[q-launch-vs-async-error-handling--programming-languages--medium]]
 - [[q-class-composition--oop--medium]]
-- [[q-data-class-special-features--programming-languages--easy]]
+-

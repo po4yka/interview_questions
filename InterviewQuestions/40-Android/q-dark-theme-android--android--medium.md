@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-theming-basics--android--medium, q-android-ui-optimization--android--medium, q-material-design-theming--android--medium]
+related: [c-android-theming]
 created: 2025-10-20
 updated: 2025-10-27
 tags: [android/ui-theming, dark-theme, daynight, difficulty/medium, material-design, theming]
 sources: [https://developer.android.com/guide/topics/ui/look-and-feel/darktheme]
 date created: Monday, October 27th 2025, 10:26:54 pm
-date modified: Thursday, October 30th 2025, 12:47:33 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -193,11 +193,8 @@ class MainActivity : AppCompatActivity() {
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-theming-basics--android--medium]] - Understanding Android theming fundamentals
 
 ### Related
-- [[q-android-ui-optimization--android--medium]] - UI performance optimization techniques
-- [[q-material-design-theming--android--medium]] - Material Design theming patterns
 
 ### Advanced
 - Dynamic theming with Material You (API 31+)

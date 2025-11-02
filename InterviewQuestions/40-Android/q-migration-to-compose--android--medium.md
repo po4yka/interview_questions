@@ -3,20 +3,20 @@ id: android-262
 title: "Migration To Compose / Миграция на Compose"
 aliases: ["Migration To Compose", "Миграция на Compose"]
 topic: android
-subtopics: [ui-compose, architecture-mvvm, testing-unit]
+subtopics: [architecture-mvvm, testing-unit, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-does-viewgroup-inherit-from--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-recyclerview-explained--android--medium, c-jetpack-compose, c-mvvm]
+related: [c-jetpack-compose, c-mvvm, q-recyclerview-explained--android--medium, q-what-does-viewgroup-inherit-from--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/ui-compose, android/architecture-mvvm, android/testing-unit, jetpack-compose, migration, xml-to-compose, difficulty/medium]
+tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, difficulty/medium, jetpack-compose, migration, xml-to-compose]
 date created: Tuesday, October 28th 2025, 9:36:25 pm
-date modified: Thursday, October 30th 2025, 3:13:23 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:13:23 pm
 
 Используйте **гибридный подход** с постепенной миграцией снизу вверх. Начинайте с конечных UI-компонентов, сохраняя оба стека (XML и Compose) во время перехода.
 
-### Ключевые этапы
+### Ключевые Этапы
 
 **Этап 1: Подготовка инфраструктуры**
 - Добавьте зависимости Compose через BOM
@@ -95,7 +95,7 @@ app/
 **Этап 6: Design System**
 Создавайте Compose-версии UI-компонентов параллельно с XML. В переходный период поддерживайте оба варианта.
 
-### Общие паттерны миграции
+### Общие Паттерны Миграции
 
 - `RecyclerView` → `LazyColumn` / `LazyRow`
 - `ViewPager2` → `HorizontalPager`
@@ -103,7 +103,7 @@ app/
 - `LiveData.observe()` → `collectAsState()`
 - `findViewById()` → State hoisting
 
-### Риски и решения
+### Риски И Решения
 
 **Риск 1: Снижение производительности**
 
@@ -129,7 +129,7 @@ fun HeavyList(items: List<Item>) {
 **Риск 3: Сложные кастомные View**
 Используйте Canvas API в Compose для полного контроля над отрисовкой.
 
-### План миграции (50+ экранов)
+### План Миграции (50+ экранов)
 
 - **Фаза 1 (1-2 месяца):** Инфраструктура и обучение
 - **Фаза 2 (2-3 месяца):** Новые фичи только на Compose

@@ -4,7 +4,7 @@ title: "Algorithms / Алгоритмы"
 aliases: []
 summary: ""
 topic: "algorithms"
-subtopics: ["complexity", "sorting", "searching"]
+subtopics: ["complexity", "searching", "sorting"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-algorithms"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "algorithms", "complexity", "sorting", "searching", "big-o", "difficulty/medium"]
+tags: ["algorithms", "big-o", "complexity", "concept", "difficulty/medium", "searching", "sorting"]
+date created: Sunday, October 12th 2025, 2:38:09 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

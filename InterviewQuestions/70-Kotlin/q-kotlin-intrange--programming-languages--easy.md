@@ -1,7 +1,7 @@
 ---
 id: lang-060
 title: "Kotlin Intrange / IntRange в Kotlin"
-aliases: [Kotlin Intrange, IntRange в Kotlin]
+aliases: [IntRange в Kotlin, Kotlin Intrange]
 topic: programming-languages
 subtopics: [collections, type-system]
 question_kind: theory
@@ -10,17 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-constructors--kotlin--easy, q-coroutine-context-elements--kotlin--hard, q-kotlin-class-initializers--programming-languages--medium]
+related: [q-coroutine-context-elements--kotlin--hard, q-kotlin-constructors--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - intrange
-  - iteration
-  - ranges
-  - difficulty/easy
+tags: [difficulty/easy, intrange, iteration, programming-languages, ranges]
+date created: Friday, October 31st 2025, 6:29:59 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Что такое IntRange?
+
+# Что Такое IntRange?
 
 # Question (EN)
 > What is IntRange?
@@ -161,7 +159,7 @@ println(range.last)   // 10
 println(range.step)   // 1
 ```
 
-### Распространённые операции
+### Распространённые Операции
 
 ```kotlin
 val range = 1..10
@@ -182,4 +180,4 @@ val evens = range.filter { it % 2 == 0 }  // [2, 4, 6, 8, 10]
 
 - [[q-kotlin-constructors--kotlin--easy]]
 - [[q-coroutine-context-elements--kotlin--hard]]
-- [[q-kotlin-class-initializers--programming-languages--medium]]
+-

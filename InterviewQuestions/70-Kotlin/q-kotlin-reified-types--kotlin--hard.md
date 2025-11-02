@@ -10,17 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-jit-compilation-definition--programming-languages--medium, q-extensions-in-java--programming-languages--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium]
+related: [q-coroutinescope-vs-supervisorscope--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - reified
-  - generics
-  - type-parameters
-  - inline
-  - difficulty/hard
+tags: [difficulty/hard, generics, inline, kotlin, reified, type-parameters]
+date created: Friday, October 31st 2025, 6:32:17 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Reified Type Parameters
 
 **English**: Explain reified type parameters. Implement type-safe builders and factories using reified. What are the limitations?
@@ -45,7 +42,7 @@ tags:
 
 **Reified параметры типа** в Kotlin, используемые с `inline` функциями, сохраняют информацию о generic типе во время выполнения, которая обычно теряется из-за стирания типов в Java. Это позволяет выполнять проверки типов во время выполнения (`is T`), приведения типов (`as T`) и получать доступ к `T::class.java` для generic типа `T`.
 
-### Проблема: Стирание типов (Type Erasure)
+### Проблема: Стирание Типов (Type Erasure)
 
 ```kotlin
 // Не работает - тип стирается во время выполнения
@@ -72,7 +69,7 @@ isInstance<String>("hello")  // true
 isInstance<Int>("hello")     // false
 ```
 
-### Безопасный для типов парсинг JSON
+### Безопасный Для Типов Парсинг JSON
 
 ```kotlin
 inline fun <reified T> String.parseJson(): T {
@@ -148,6 +145,6 @@ inline fun <reified T> process() {
 
 ## Related Questions
 
-- [[q-jit-compilation-definition--programming-languages--medium]]
-- [[q-extensions-in-java--programming-languages--medium]]
+-
+-
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]

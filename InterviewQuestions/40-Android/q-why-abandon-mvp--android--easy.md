@@ -1,7 +1,7 @@
 ---
 id: android-379
 title: "Why Abandon MVP / Почему отказаться от MVP"
-aliases: [Why Abandon MVP, Почему отказаться от MVP, MVP problems, Проблемы MVP]
+aliases: [MVP problems, Why Abandon MVP, Почему отказаться от MVP, Проблемы MVP]
 topic: android
 subtopics: [architecture-mvvm]
 question_kind: theory
@@ -10,11 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-mvvm-pattern, q-mvvm-vs-mvp-differences--android--medium, q-why-separate-ui-and-business-logic--android--easy, q-android-architectural-patterns--android--medium, q-mvp-pattern--android--medium]
+related: [c-mvvm-pattern, q-android-architectural-patterns--android--medium, q-mvp-pattern--android--medium, q-mvvm-vs-mvp-differences--android--medium, q-why-separate-ui-and-business-logic--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/architecture-mvvm, architecture-patterns, mvp, mvvm, mvi, difficulty/easy]
+tags: [android/architecture-mvvm, architecture-patterns, difficulty/easy, mvi, mvp, mvvm]
 sources: [Android Architecture Guide, Android Developers Blog]
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ Why do many developers abandon MVP?
 
 Android разработчики отказываются от MVP по нескольким ключевым причинам:
 
-### 1. Слишком много шаблонного кода
+### 1. Слишком Много Шаблонного Кода
 
 MVP требует создавать интерфейсы для каждого экрана:
 
@@ -50,7 +52,7 @@ interface UserPresenter {
 }
 ```
 
-### 2. Ручное управление жизненным циклом
+### 2. Ручное Управление Жизненным Циклом
 
 Presenter не знает о жизненном цикле Activity/Fragment:
 
@@ -62,7 +64,7 @@ override fun onDestroy() {
 }
 ```
 
-### 3. Плохая поддержка реактивности
+### 3. Плохая Поддержка Реактивности
 
 MVP создавался до появления LiveData, Flow и Coroutines:
 
@@ -76,7 +78,7 @@ class UserPresenter(private val view: UserView) {
 }
 ```
 
-### 4. Современные альтернативы лучше
+### 4. Современные Альтернативы Лучше
 
 **MVVM с ViewModel:**
 - ✅ Автоматический lifecycle (переживает rotation)

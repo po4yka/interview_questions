@@ -1,10 +1,10 @@
 ---
 id: "20251025-110312"
 title: "Memory Management / Управление Памятью"
-aliases: ["Memory Management", "Управление Памятью", "Garbage Collection", "Heap", "Stack", "GC"]
+aliases: ["Garbage Collection", "GC", "Heap", "Memory Management", "Stack", "Управление Памятью"]
 summary: "How applications allocate, use, and free memory resources"
 topic: "performance"
-subtopics: ["memory", "jvm", "garbage-collection"]
+subtopics: ["garbage-collection", "jvm", "memory"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-performance"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "memory", "performance", "jvm", "garbage-collection", "difficulty/medium"]
+tags: ["concept", "difficulty/medium", "garbage-collection", "jvm", "memory", "performance"]
+date created: Saturday, October 25th 2025, 11:05:40 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Memory Management / Управление Памятью
@@ -24,7 +26,7 @@ tags: ["concept", "memory", "performance", "jvm", "garbage-collection", "difficu
 
 Memory management is the process of controlling and coordinating how an application uses computer memory. In Android and JVM-based systems, memory is divided into stack and heap regions, with automatic garbage collection handling most memory deallocation. Understanding memory management is crucial for preventing memory leaks, optimizing performance, and avoiding OutOfMemory errors.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Управление памятью - это процесс контроля и координации использования компьютерной памяти приложением. В Android и JVM-системах память разделена на стек и кучу, при этом автоматическая сборка мусора обрабатывает большую часть освобождения памяти. Понимание управления памятью критически важно для предотвращения утечек памяти, оптимизации производительности и избежания ошибок OutOfMemory.
 
@@ -38,7 +40,7 @@ Memory management is the process of controlling and coordinating how an applicat
 - **Memory Profiling**: Tools to identify and fix memory issues
 - **Android specifics**: Activity lifecycle affects memory management
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Стек**: Быстрая автоматическая память для локальных переменных и вызовов методов
 - **Куча**: Более медленная управляемая память для объектов и динамического выделения

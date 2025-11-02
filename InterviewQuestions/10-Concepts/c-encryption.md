@@ -1,10 +1,10 @@
 ---
 id: "20251023-120300"
 title: "Encryption / Шифрование"
-aliases: ["Encryption", "Cryptography", "Шифрование", "Криптография"]
+aliases: ["Cryptography", "Encryption", "Криптография", "Шифрование"]
 summary: "Process of encoding data to prevent unauthorized access using cryptographic algorithms"
 topic: "security"
-subtopics: ["encryption", "cryptography", "android"]
+subtopics: ["android", "cryptography", "encryption"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-security"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "security", "encryption", "cryptography", "android", "difficulty/medium"]
+tags: ["android", "concept", "cryptography", "difficulty/medium", "encryption", "security"]
+date created: Thursday, October 23rd 2025, 1:45:31 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Encryption / Шифрование
@@ -24,7 +26,7 @@ tags: ["concept", "security", "encryption", "cryptography", "android", "difficul
 
 Encryption is the process of converting plaintext data into ciphertext using cryptographic algorithms to prevent unauthorized access. In Android development, encryption is essential for protecting sensitive data both at rest (stored on device) and in transit (transmitted over network). Android provides the Keystore System for secure key management and APIs for implementing symmetric (AES) and asymmetric (RSA) encryption.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Шифрование — это процесс преобразования открытого текста в зашифрованный текст с использованием криптографических алгоритмов для предотвращения несанкционированного доступа. В разработке Android шифрование необходимо для защиты конфиденциальных данных как в хранилище (на устройстве), так и при передаче (по сети). Android предоставляет систему Keystore для безопасного управления ключами и API для реализации симметричного (AES) и асимметричного (RSA) шифрования.
 
@@ -37,7 +39,7 @@ Encryption is the process of converting plaintext data into ciphertext using cry
 - **Data in transit**: Encrypt network communications (TLS/SSL)
 - **Key management**: Secure generation, storage, and rotation of encryption keys
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Симметричное шифрование**: Один ключ для шифрования и расшифровки (AES, ChaCha20)
 - **Асимметричное шифрование**: Публичный ключ для шифрования, приватный для расшифровки (RSA, ECC)

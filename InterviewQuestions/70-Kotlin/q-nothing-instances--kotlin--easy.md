@@ -1,7 +1,7 @@
 ---
 id: kotlin-178
 title: "Nothing Instances / Экземпляры Nothing"
-aliases: [Nothing, Nothing Type, Bottom Type, Nothing тип]
+aliases: [Bottom Type, Nothing, Nothing Type, Nothing тип]
 topic: kotlin
 subtopics: [type-system]
 question_kind: theory
@@ -10,17 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-circuit-breaker-coroutines--kotlin--hard, q-stateflow-sharedflow-android--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
+related: [q-circuit-breaker-coroutines--kotlin--hard, q-request-coalescing-deduplication--kotlin--hard, q-stateflow-sharedflow-android--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - type-system
-  - nothing
-  - bottom-type
-  - difficulty/easy
+tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
+date created: Friday, October 31st 2025, 6:29:31 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# How many instance types does Nothing have?
+
+# How Many Instance Types Does Nothing Have?
 
 # Question (EN)
 > How many instances does the Nothing type have in Kotlin?
@@ -283,7 +281,7 @@ fun main() {
 - Выражения, которые никогда не производят значение
 - Как параметр типа для пустых коллекций
 
-### Примеры кода
+### Примеры Кода
 
 **Функции, возвращающие Nothing:**
 
@@ -433,7 +431,7 @@ class UserRepositoryImpl : UserRepository {
 }
 ```
 
-### Краткий ответ
+### Краткий Ответ
 
 Nothing имеет **ноль экземпляров**. Это необитаемый тип (bottom type), который:
 - Не может быть проинстанцирован

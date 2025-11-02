@@ -3,18 +3,20 @@ id: kotlin-236
 title: "Visibility Modifiers in Kotlin / Модификаторы видимости в Kotlin"
 aliases: ["Visibility Modifiers", "Модификаторы видимости"]
 topic: kotlin
-subtopics: [visibility-modifiers, access-modifiers, encapsulation]
+subtopics: [access-modifiers, encapsulation, visibility-modifiers]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-access-modifiers--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+related: [q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
 created: "2025-10-12"
 updated: 2025-01-25
-tags: [kotlin, visibility-modifiers, access-modifiers, encapsulation, kotlin-features, difficulty/medium]
+tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, kotlin-features, visibility-modifiers]
 sources: [https://kotlinlang.org/docs/visibility-modifiers.html]
+date created: Saturday, November 1st 2025, 12:42:10 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Вопрос (RU)
@@ -331,7 +333,6 @@ fun test() {
 
 ## References
 
-- [[c-oop-fundamentals]]
 - https://kotlinlang.org/docs/visibility-modifiers.html
 
 ## Related Questions
@@ -340,7 +341,7 @@ fun test() {
 - [[q-kotlin-enum-classes--kotlin--easy]] - Basic classes
 
 ### Related (Medium)
-- [[q-kotlin-access-modifiers--kotlin--medium]] - Access modifiers
+-  - Access modifiers
 - [[q-inheritance-open-final--kotlin--medium]] - Inheritance
 - [[q-inner-nested-classes--kotlin--medium]] - Nested classes
 

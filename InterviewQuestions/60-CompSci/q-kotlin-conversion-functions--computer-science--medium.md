@@ -3,21 +3,22 @@ id: cs-007
 title: "Kotlin Conversion Functions / Kotlin Conversion Функции"
 aliases: []
 topic: computer-science
-subtopics: [type-system, class-features, null-safety]
+subtopics: [class-features, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-kotlin-property-delegates--programming-languages--medium, q-coroutine-dispatchers--kotlin--medium]
+related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-coroutine-dispatchers--kotlin--medium, q-kotlin-property-delegates--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Как в Kotlin называется функция, которая вызывается на объекте для преобразования его в другой тип?
+
+# Как В Kotlin Называется Функция, Которая Вызывается На Объекте Для Преобразования Его В Другой Тип?
 
 # Question (EN)
 > What is the function called in Kotlin that is invoked on an object to convert it to another type?

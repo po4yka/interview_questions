@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-okhttp-interceptors, c-networking, q-retrofit-error-handling--android--medium, q-android-caching-strategies--android--medium]
+related: [c-networking, c-okhttp-interceptors]
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/networking-http, android/performance-startup, okhttp, retrofit, networking, performance, difficulty/medium]
+tags: [android/networking-http, android/performance-startup, difficulty/medium, networking, okhttp, performance, retrofit]
 date created: Thursday, October 30th 2025, 11:43:21 am
-date modified: Thursday, October 30th 2025, 12:43:09 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -278,12 +278,12 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-okhttp-basics--android--easy]]
-- [[q-coroutines-flow-basics--kotlin--easy]]
+
+
 
 ### Related (Same Level)
 - [[q-retrofit-error-handling--android--medium]]
-- [[q-android-caching-strategies--android--medium]]
+- [[q-android-testing-strategies--android--medium]]
 - [[q-workmanager-constraints--android--medium]]
 
 ### Advanced (Harder)

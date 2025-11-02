@@ -1,19 +1,21 @@
 ---
 id: android-326
 title: "MVI Architecture / Архитектура MVI"
-aliases: [MVI, Model-View-Intent, Архитектура MVI, MVI паттерн]
+aliases: [Model-View-Intent, MVI, MVI паттерн, Архитектура MVI]
 topic: android
-subtopics: [architecture-mvi, ui-state, coroutines]
+subtopics: [architecture-mvi, coroutines, ui-state]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-unidirectional-data-flow, c-immutability, q-clean-architecture-android--android--hard, q-compose-state--android--medium]
+related: [c-immutability, c-unidirectional-data-flow]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/architecture-mvi, android/ui-state, android/coroutines, architecture, unidirectional-data-flow, state-management, difficulty/hard]
+tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
+date created: Saturday, November 1st 2025, 1:25:24 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -40,7 +42,7 @@ Intent → Processor → Model → View → Intent
 3. **View** - отрисовывает UI на основе Model
 4. **Processor** - обрабатывает Intent → создает новый Model
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 // Model - единое иммутабельное состояние
@@ -110,7 +112,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 }
 ```
 
-### MVI vs MVVM
+### MVI Vs MVVM
 
 | Аспект | MVVM | MVI |
 |--------|------|-----|
@@ -124,7 +126,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 **MVVM**: `viewModel.loadUser()`, `viewModel.retry()`, `viewModel.clearError()`
 **MVI**: `viewModel.processIntent(UserIntent.LoadUser(id))`
 
-### Side Effects - одноразовые события
+### Side Effects - Одноразовые События
 
 ✅ **Правильно**: State для UI, Channel для событий
 
@@ -199,7 +201,7 @@ data class LoginState(
 )
 ```
 
-### Reducer Pattern - чистые функции
+### Reducer Pattern - Чистые Функции
 
 ```kotlin
 // Reducer - pure function: (State, Intent) -> State
@@ -245,7 +247,7 @@ fun `reducer is pure function`() {
 }
 ```
 
-### Вложенные состояния для сложных экранов
+### Вложенные Состояния Для Сложных Экранов
 
 ```kotlin
 // Complex State - декомпозиция на подсостояния
@@ -277,7 +279,7 @@ sealed class ProductListIntent {
 }
 ```
 
-### Middleware для cross-cutting concerns
+### Middleware Для Cross-cutting Concerns
 
 ```kotlin
 // Middleware обрабатывает side effects
@@ -434,7 +436,7 @@ class UserViewModel(
 }
 ```
 
-### MVI vs MVVM
+### MVI Vs MVVM
 
 | Aspect | MVVM | MVI |
 |--------|------|-----|
@@ -621,14 +623,10 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
 ## Related Questions
 
 ### Prerequisites (Medium)
-- [[q-compose-state--android--medium]] - State management in Compose
-- [[q-stateflow-sharedflow--kotlin--medium]] - StateFlow vs SharedFlow
+- Related content to be added
 
 ### Related (Hard)
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
-- [[q-mvi-handle-one-time-events--android--hard]] - MVI one-time event handling
-- [[q-offline-first-architecture--android--hard]] - Offline-first architecture
+- Related content to be added
 
 ### Advanced (Hard)
-- [[q-kmm-architecture--android--hard]] - KMM architecture patterns
-- [[q-app-startup-optimization--performance--medium]] - App startup optimization
+- Related content to be added

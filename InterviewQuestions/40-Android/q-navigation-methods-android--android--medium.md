@@ -3,7 +3,7 @@ id: android-114
 title: "Navigation Methods Android / Методы навигации Android"
 aliases: ["Navigation Methods Android", "Методы навигации Android"]
 topic: android
-subtopics: [ui-navigation, ui-compose]
+subtopics: [ui-compose, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -12,11 +12,11 @@ status: draft
 created: 2025-10-13
 updated: 2025-10-31
 sources: []
-tags: [android, android/ui-navigation, android/ui-compose, architecture, compose, navigation, difficulty/medium]
+tags: [android, android/ui-compose, android/ui-navigation, architecture, compose, difficulty/medium, navigation]
 moc: moc-android
-related: [q-how-to-draw-ui-without-xml--android--easy, q-app-startup-optimization--performance--medium]
+related: []
 date created: Tuesday, October 28th 2025, 9:51:01 pm
-date modified: Thursday, October 30th 2025, 3:14:42 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -207,7 +207,7 @@ fun AppNavigation() {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Метод | Применение | Сложность | Статус |
 |-------|-----------|-----------|--------|
@@ -441,14 +441,10 @@ fun AppNavigation() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-how-to-draw-ui-without-xml--android--easy]] - Compose basics
-- [[q-activity-lifecycle--android--easy]] - Activity fundamentals
+- Related content to be added
 
 ### Related (Same Level)
-- [[q-compose-navigation-advanced--android--medium]] - Advanced Compose navigation
-- [[q-activity-navigation-how-it-works--android--medium]] - Activity navigation deep dive
-- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep link handling
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-multi-module-navigation--android--hard]] - Navigation in multi-module architecture
-- [[q-custom-navigation-transitions--android--hard]] - Custom transition animations
+- Related content to be added

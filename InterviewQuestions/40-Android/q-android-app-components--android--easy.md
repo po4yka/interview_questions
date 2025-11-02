@@ -3,20 +3,20 @@ id: android-393
 title: Android App Components / Компоненты Android приложения
 aliases: ["Android App Components", "Компоненты Android приложения"]
 topic: android
-subtopics: [activity, service, broadcast-receiver]
+subtopics: [activity, broadcast-receiver, service]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-service-types-android--android--easy, c-service, c-broadcast-receiver, c-content-provider]
+related: [c-broadcast-receiver, c-content-provider, c-service, q-activity-lifecycle-methods--android--medium, q-service-types-android--android--easy]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/activity, android/service, android/broadcast-receiver, difficulty/easy]
+tags: [android/activity, android/broadcast-receiver, android/service, difficulty/easy]
 date created: Wednesday, October 29th 2025, 4:47:59 pm
-date modified: Thursday, October 30th 2025, 11:13:00 am
+date modified: Saturday, November 1st 2025, 5:39:27 pm
 ---
 
 # Вопрос (RU)
@@ -97,7 +97,7 @@ class ContactsProvider : ContentProvider() {
 }
 ```
 
-### Взаимодействие компонентов
+### Взаимодействие Компонентов
 
 - **Intent**: явные (конкретный класс) или неявные (action/category)
 - **Intent Filter**: объявляет возможности компонента для неявных Intent

@@ -10,12 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-recyclerview-viewtypes-delegation--recyclerview--medium, q-what-is-broadcastreceiver--android--easy, q-what-is-known-about-recyclerview--android--easy]
+related: [q-recyclerview-viewtypes-delegation--android--medium, q-what-is-broadcastreceiver--android--easy, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-views, difficulty/medium, widgets]
 date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:40:20 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Android Home Screen Widgets / Виджеты Главного Экрана Android

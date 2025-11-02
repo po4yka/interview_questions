@@ -3,20 +3,20 @@ id: android-217
 title: "Why Was The Lifecycle Library Created / Зачем создали библиотеку Lifecycle"
 aliases: ["Why Was The Lifecycle Library Created", "Зачем создали библиотеку Lifecycle"]
 topic: android
-subtopics: [lifecycle, architecture-mvvm, performance-memory]
+subtopics: [architecture-mvvm, lifecycle, performance-memory]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-viewmodel--android--medium, q-service-lifecycle-binding--android--hard]
+related: [q-service-lifecycle-binding--android--hard, q-what-is-viewmodel--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/lifecycle, android/architecture-mvvm, android/performance-memory, architecture-components, memory-leaks, difficulty/hard]
+tags: [android/architecture-mvvm, android/lifecycle, android/performance-memory, architecture-components, difficulty/hard, memory-leaks]
 date created: Wednesday, October 29th 2025, 1:02:47 pm
-date modified: Thursday, October 30th 2025, 3:16:50 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +37,7 @@ Why was the Lifecycle library created?
 4. **Сильная связанность** — Activity управляла всеми зависимыми компонентами
 5. **Сложность тестирования** — требовался настоящий Activity для тестов
 
-### Проблемы до Lifecycle
+### Проблемы До Lifecycle
 
 **Утечка памяти:**
 ```kotlin
@@ -73,7 +73,7 @@ override fun onStop() { myObserver?.onStop() }
 override fun onDestroy() { myObserver?.onDestroy() }
 ```
 
-### Решение с Lifecycle
+### Решение С Lifecycle
 
 **Автоматическое управление:**
 ```kotlin
@@ -119,7 +119,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Реальный пример: WebSocket чат
+### Реальный Пример: WebSocket Чат
 
 **До Lifecycle:**
 ```kotlin
@@ -166,7 +166,7 @@ class ChatActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые компоненты
+### Ключевые Компоненты
 
 **LifecycleOwner** — Activity/Fragment реализуют этот интерфейс:
 ```kotlin

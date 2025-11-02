@@ -3,20 +3,20 @@ id: android-051
 title: App Size Optimization / Оптимизация размера приложения
 aliases: ["App Size Optimization", "Оптимизация размера приложения"]
 topic: android
-subtopics: [gradle, performance-memory, app-bundle]
+subtopics: [app-bundle, gradle, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-bundles--android--easy, q-android-build-optimization--android--medium, q-proguard-r8-configuration--android--medium]
+related: [q-android-app-bundles--android--easy]
 sources: []
 created: 2025-10-11
 updated: 2025-10-30
-tags: [android/gradle, android/performance-memory, android/app-bundle, difficulty/medium]
+tags: [android/app-bundle, android/gradle, android/performance-memory, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:43:23 am
-date modified: Thursday, October 30th 2025, 12:43:12 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:43:12 pm
 
 **Оптимизация размера** критична для конверсии: каждые 6 МБ снижают установки на ~1%. Основные векторы атаки — код, ресурсы, нативные библиотеки.
 
-### Сжатие кода (R8)
+### Сжатие Кода (R8)
 
 R8 удаляет неиспользуемый код (shrinking), сокращает имена (obfuscation), оптимизирует байткод.
 
@@ -55,7 +55,7 @@ android {
 
 **Результат**: 30-50% уменьшение кода в типичном проекте с зависимостями.
 
-### Оптимизация ресурсов
+### Оптимизация Ресурсов
 
 **Фильтрация конфигураций**:
 ```kotlin
@@ -88,7 +88,7 @@ android {
 
 **Результат**: экономия 40-60% размера установки против универсального APK.
 
-### Управление зависимостями
+### Управление Зависимостями
 
 ```kotlin
 // ❌ Избегайте: весь Google Play Services (~10 МБ)
@@ -100,7 +100,7 @@ implementation("com.google.android.gms:play-services-maps")
 
 **Аудит**: используйте `./gradlew app:dependencies` для анализа транзитивных зависимостей.
 
-### Нативные библиотеки
+### Нативные Библиотеки
 
 ```kotlin
 android {
@@ -221,13 +221,13 @@ android {
 
 ### Prerequisites
 - [[q-android-app-bundles--android--easy]] - Understanding AAB format and benefits
-- [[q-gradle-build-basics--android--easy]] - Gradle configuration fundamentals
+ - Gradle configuration fundamentals
 
 ### Related
 - [[q-android-build-optimization--android--medium]] - Build performance optimization
-- [[q-proguard-r8-configuration--android--medium]] - Advanced R8/ProGuard rules
+ - Advanced R8/ProGuard rules
 - [[q-android-performance-measurement-tools--android--medium]] - Profiling and analysis tools
 
 ### Advanced
-- [[q-dynamic-feature-modules--android--hard]] - On-demand feature delivery
-- [[q-android-security-obfuscation--android--hard]] - Code protection strategies
+ - On-demand feature delivery
+ - Code protection strategies

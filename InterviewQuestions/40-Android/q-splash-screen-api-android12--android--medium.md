@@ -1,21 +1,24 @@
 ---
 id: android-185
 title: "Splash Screen API (Android 12+) / API Splash Screen (Android 12+)"
-aliases: ["Splash Screen API", "API Splash Screen"]
+aliases: ["API Splash Screen", "Splash Screen API"]
 topic: android
-subtopics: [ui-views, app-startup, ui-animation]
+subtopics: [app-startup, ui-animation, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-parsing-optimization-android--android--medium, q-paging-library-3--android--medium, q-multiple-manifests-multimodule--android--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/ui-views, android/app-startup, android/ui-animation, splash-screen, android12, difficulty/medium]
+tags: [android/app-startup, android/ui-animation, android/ui-views, android12, difficulty/medium, splash-screen]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
+date created: Saturday, November 1st 2025, 1:24:29 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 Что вы знаете об API Splash Screen в Android 12+?
@@ -28,19 +31,19 @@ What do you know about the Splash Screen API in Android 12+?
 
 **Splash Screen** — первый экран, отображаемый при запуске приложения. С Android 12 система автоматически применяет системный splash screen при холодном и тёплом старте.
 
-### Когда отображается
+### Когда Отображается
 
 - **Холодный старт**: процесс приложения не запущен
 - **Тёплый старт**: процесс запущен, но Activity не создана
 - **Не отображается** при горячем старте (Activity уже в памяти)
 
-### Ключевые изменения в Android 12
+### Ключевые Изменения В Android 12
 
 Система автоматически создаёт splash screen из:
 - Иконки запуска приложения
 - `windowBackground` темы (если однотонный)
 
-### Рекомендуемый подход: Compat Library
+### Рекомендуемый Подход: Compat Library
 
 Используйте **androidx.core:core-splashscreen** для единообразия на всех версиях Android.
 
@@ -73,7 +76,7 @@ class MainActivity : Activity() {
     android:theme="@style/Theme.App.Starting">  <!-- ✅ Используем splash тему -->
 ```
 
-### Миграция существующих splash screen Activity
+### Миграция Существующих Splash Screen Activity
 
 **Вариант 1: Routing Activity** — используйте `setKeepOnScreenCondition`:
 
@@ -191,7 +194,7 @@ class RoutingActivity : Activity() {
 
 ### Related (Same Level)
 - [[q-app-startup-library--android--medium]] - App initialization
-- [[q-cold-start-optimization--android--medium]] - Launch performance
+- [[q-app-startup-optimization--android--medium]] - Launch performance
 - [[q-theme-styling-android--android--medium]] - Theming system
 
 ### Advanced (Harder)

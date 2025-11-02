@@ -24,7 +24,10 @@ created: 2025-10-06
 updated: 2025-01-27
 
 tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
+date created: Saturday, November 1st 2025, 12:46:58 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
+
 # Вопрос (RU)
 > Какие лучшие практики для мульти-модульной архитектуры в Android? Когда и зачем её использовать?
 
@@ -37,7 +40,7 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 
 [[c-modularization|Мульти-модульная архитектура]] разделяет приложение на независимые модули для масштабируемости, быстрой сборки и параллельной разработки.
 
-### Типы модулей
+### Типы Модулей
 
 **1. app** - Главный модуль приложения, связывает feature модули
 **2. feature** - Изолированные функции (auth, profile, settings)
@@ -60,7 +63,7 @@ app/
      └── products/
 ```
 
-### Правила зависимостей
+### Правила Зависимостей
 
 **Критическое правило**: Feature модули НЕ зависят друг от друга
 
@@ -73,7 +76,7 @@ app/
 // :feature:profile -> :core:ui, :data:user
 ```
 
-**Коммуникация через [[c-dependency-inversion|инверсию зависимостей]]**:
+**Коммуникация через [[c-dependency-injection|инверсию зависимостей]]**:
 
 ```kotlin
 // core/navigation
@@ -98,7 +101,7 @@ class AppNavigator : Navigator {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Convention plugins** для стандартизации [[c-gradle|Gradle]] конфигурации:
 
@@ -145,7 +148,7 @@ dependencies {
 }
 ```
 
-### Когда использовать
+### Когда Использовать
 
 **Используйте для:**
 - Команды 5+ разработчиков
@@ -158,7 +161,7 @@ dependencies {
 - Прототипы и MVP
 - Единственный разработчик
 
-### Типичные ошибки
+### Типичные Ошибки
 
 **1. Циклические зависимости**:
 ```kotlin
@@ -216,7 +219,7 @@ app/
 // :feature:profile -> :core:ui, :data:user
 ```
 
-**Communication via [[c-dependency-inversion|dependency inversion]]**:
+**Communication via [[c-dependency-injection|dependency inversion]]**:
 
 ```kotlin
 // core/navigation
@@ -332,7 +335,7 @@ dependencies {
 ## References
 
 - [[c-modularization]] - Modularization concepts
-- [[c-dependency-inversion]] - Dependency inversion principle
+- [[c-dependency-injection]] - Dependency inversion principle
 - [[c-repository-pattern]] - Repository pattern
 - [[c-gradle]] - Gradle build system
 - [Guide to Android app modularization](https://developer.android.com/topic/modularization)

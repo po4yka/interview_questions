@@ -14,9 +14,9 @@ related: [q-handler-looper-main-thread--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/coroutines, android/threads-sync, handler, looper, message-queue, difficulty/medium]
+tags: [android/coroutines, android/threads-sync, difficulty/medium, handler, looper, message-queue]
 date created: Tuesday, October 28th 2025, 9:36:03 pm
-date modified: Thursday, October 30th 2025, 3:12:45 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +36,7 @@ date modified: Thursday, October 30th 2025, 3:12:45 pm
 1. **`Looper.prepare()`** — создает Looper для текущего потока
 2. **`Looper.loop()`** — запускает бесконечный цикл обработки сообщений
 
-### Механизм связывания
+### Механизм Связывания
 
 **Looper.prepare()** сохраняет Looper в `ThreadLocal<Looper>`:
 
@@ -62,7 +62,7 @@ class LooperThread : Thread() {
 - `Looper.loop()` блокирует поток для обработки сообщений
 - Handler получает доступ к Looper через `ThreadLocal`
 
-### Жизненный цикл
+### Жизненный Цикл
 
 ```kotlin
 // ✅ HandlerThread — готовая реализация
@@ -80,7 +80,7 @@ handler.sendEmptyMessage(1)
 handlerThread.quitSafely()  // Обработает pending сообщения
 ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 ```kotlin
 // ❌ Повторный вызов prepare()

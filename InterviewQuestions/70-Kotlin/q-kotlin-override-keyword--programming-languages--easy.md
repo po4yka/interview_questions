@@ -3,27 +3,22 @@ id: lang-095
 title: "Kotlin Override Keyword / Ключевое слово override в Kotlin"
 aliases: [Kotlin Override Keyword, Ключевое слово override в Kotlin]
 topic: programming-languages
-subtopics: [type-system, inheritance]
+subtopics: [inheritance, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-contracts-smart-casts--kotlin--hard, q-equality-operators-kotlin--kotlin--easy, q-coroutine-job-lifecycle--kotlin--medium]
+related: [q-coroutine-job-lifecycle--kotlin--medium, q-equality-operators-kotlin--kotlin--easy, q-kotlin-contracts-smart-casts--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - abstract
-  - inheritance
-  - keywords
-  - open
-  - override
-  - polymorphism
-  - difficulty/easy
+tags: [abstract, difficulty/easy, inheritance, keywords, open, override, polymorphism, programming-languages]
+date created: Friday, October 31st 2025, 6:30:57 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?
+
+# Какое Ключевое Слово Используется Для Определения Метода, Который Должен Быть Переопределен В Подклассе?
 
 # Question (EN)
 > Which keyword is used to define a method that must be overridden in a subclass?

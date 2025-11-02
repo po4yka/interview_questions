@@ -3,20 +3,20 @@ id: android-154
 title: Android Architectural Patterns / Архитектурные паттерны Android
 aliases: ["Android Architectural Patterns", "Архитектурные паттерны Android"]
 topic: android
-subtopics: [architecture-mvvm, architecture-mvi, architecture-clean]
+subtopics: [architecture-clean, architecture-mvi, architecture-mvvm]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-mvvm, c-clean-architecture, c-dependency-injection]
+related: [c-mvvm]
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/architecture-mvvm, android/architecture-mvi, android/architecture-clean, difficulty/medium]
+tags: [android/architecture-clean, android/architecture-mvi, android/architecture-mvvm, difficulty/medium]
 sources: []
 date created: Wednesday, October 29th 2025, 4:47:28 pm
-date modified: Thursday, October 30th 2025, 11:13:04 am
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -189,6 +189,6 @@ class GetUserUseCase(private val repo: UserRepository) {
 - [[q-unidirectional-data-flow--android--medium]]
 
 ### Advanced
-- [[q-multi-module-architecture--android--hard]]
+- [[q-kmm-architecture--android--hard]]
 - [[q-testing-clean-architecture--android--hard]]
 - [[q-shared-state-viewmodels--android--hard]]

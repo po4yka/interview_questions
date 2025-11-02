@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-sealed-classes, q-data-class-special-features--programming-languages--easy, q-sealed-classes--kotlin--medium]
+related: [c-sealed-classes]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [data-class, difficulty/medium, kotlin, programming-languages, sealed-classes]
 sources: [https://kotlinlang.org/docs/sealed-classes.html]
 date created: Friday, October 3rd 2025, 4:39:28 pm
-date modified: Sunday, October 26th 2025, 11:31:03 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

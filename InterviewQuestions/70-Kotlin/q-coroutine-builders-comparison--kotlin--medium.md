@@ -10,13 +10,16 @@ updated: "2025-10-31"
 question_kind: theory
 original_language: en
 language_tags: [en, ru]
-subtopics: [coroutines, builders]
-tags: ["kotlin", "coroutines", "builders", "launch", "async", "runblocking", "difficulty/medium"]
+subtopics: [builders, coroutines]
+tags: ["async", "builders", "coroutines", "difficulty/medium", "kotlin", "launch", "runblocking"]
 description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
 moc: moc-kotlin
-related: [q-dispatcher-performance--kotlin--hard, q-kotlin-inline-functions--kotlin--medium, q-kotlin-extension-functions-advanced--kotlin--hard]
+related: [q-dispatcher-performance--kotlin--hard, q-kotlin-extension-functions-advanced--kotlin--hard, q-kotlin-inline-functions--kotlin--medium]
+date created: Friday, October 31st 2025, 6:30:42 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# Comparison of all coroutine builders: launch, async, runBlocking, withContext, coroutineScope, supervisorScope
+
+# Comparison of All Coroutine Builders: Launch, Async, runBlocking, withContext, coroutineScope, supervisorScope
 
 ## English
 
@@ -39,7 +42,7 @@ Let's comprehensively compare all coroutine builders across multiple dimensions.
 | `coroutineScope` | `T` | Yes | No | Throws exception | Creating child scope, structured concurrency |
 | `supervisorScope` | `T` | Yes | No | Throws if scope fails | Independent child operations |
 
-#### launch - Fire and Forget
+#### Launch - Fire and Forget
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -95,7 +98,7 @@ suspend fun downloadFile3() { delay(500) }
 suspend fun doPeriodicWork() { println("Working...") }
 ```
 
-#### async - Concurrent Computations
+#### Async - Concurrent Computations
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -805,7 +808,7 @@ suspend fun loadPartial() = supervisorScope {
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 Kotlin предоставляет несколько строителей корутин (launch, async, runBlocking, withContext, coroutineScope, supervisorScope), каждый с различными характеристиками и случаями использования. Понимание различий в типах возврата, блокирующем поведении, обработке исключений и соответствующих сценариях использования критически важно для написания эффективного кода корутин.
 
@@ -813,7 +816,7 @@ Kotlin предоставляет несколько строителей кор
 
 Давайте проведём всестороннее сравнение всех строителей корутин по нескольким измерениям.
 
-#### Краткая справочная таблица
+#### Краткая Справочная Таблица
 
 | Строитель | Возвращает | Приостанавливающий | Блокирующий | Обработка исключений | Случай использования |
 |-----------|------------|-------------------|-------------|---------------------|---------------------|
@@ -824,7 +827,7 @@ Kotlin предоставляет несколько строителей кор
 | `coroutineScope` | `T` | Да | Нет | Выбрасывает исключение | Создание дочерней области, структурная параллельность |
 | `supervisorScope` | `T` | Да | Нет | Выбрасывает если scope падает | Независимые дочерние операции |
 
-### Матрица принятия решений
+### Матрица Принятия Решений
 
 ```kotlin
 // Используйте launch когда:
@@ -869,7 +872,7 @@ suspend fun loadPartial() = supervisorScope {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбирайте правильный строитель для задачи** - каждый строитель оптимизирован для конкретных сценариев
 2. **Избегайте runBlocking в продакшн коде** - он блокирует потоки и может привести к проблемам производительности

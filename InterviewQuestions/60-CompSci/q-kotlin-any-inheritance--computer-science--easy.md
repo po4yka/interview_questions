@@ -3,21 +3,22 @@ id: cs-015
 title: "Kotlin Any Inheritance / Наследование от Any в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [access-modifiers, type-system, null-safety]
+subtopics: [access-modifiers, null-safety, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-default-access-modifier--programming-languages--easy, q-channel-buffering-strategies--kotlin--hard, q-partition-function--kotlin--easy]
+related: [q-kotlin-default-access-modifier--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Saturday, November 1st 2025, 1:26:00 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Все классы Kotlin наследуются от Any
+
+# Все Классы Kotlin Наследуются От Any
 
 # Question (EN)
 > All Kotlin classes inherit from Any

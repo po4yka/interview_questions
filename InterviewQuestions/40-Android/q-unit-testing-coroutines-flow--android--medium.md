@@ -3,19 +3,22 @@ id: android-425
 title: "Unit Testing Coroutines and Flow / Юнит-тестирование корутин и Flow"
 aliases: ["Unit Testing Coroutines Flow", "Юнит-тестирование корутин и Flow"]
 topic: android
-subtopics: [testing-unit, coroutines, flow]
+subtopics: [coroutines, flow, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-service-types-android--android--easy, q-what-do-you-know-about-modifiers--programming-languages--medium, q-how-to-create-animations-in-android--android--medium]
+related: [c-coroutines, c-flow, c-mockk, c-testing]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/testing-unit, android/coroutines, android/flow, testing, unit-testing, turbine, mockk, difficulty/medium]
+tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, mockk, testing, turbine, unit-testing]
+date created: Saturday, November 1st 2025, 1:24:35 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Как писать юнит-тесты для Kotlin Coroutines и Flow? Какие есть best practices и распространённые ошибки?
@@ -30,7 +33,7 @@ tags: [android/testing-unit, android/coroutines, android/flow, testing, unit-tes
 
 Тестирование корутин и Flow требует специального подхода: тестовые диспетчеры, управление виртуальным временем, правильная обработка асинхронности.
 
-### Ключевые инструменты
+### Ключевые Инструменты
 
 **1. TestDispatchers**
 - `StandardTestDispatcher` — требует явного `advanceTimeBy()`/`runCurrent()`
@@ -46,7 +49,7 @@ tags: [android/testing-unit, android/coroutines, android/flow, testing, unit-tes
 - `coEvery { }` для suspend функций
 - `coVerify { }` для проверки вызовов
 
-### Основные паттерны
+### Основные Паттерны
 
 **Тестирование suspend функций**
 
@@ -168,7 +171,7 @@ class MainDispatcherRule(
 - Не тестировать cancellation
 - Использовать реальные Dispatchers
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ WRONG: Реальный Main dispatcher
@@ -427,4 +430,4 @@ fun test() = runTest {
 
 ### Advanced (Harder)
 - [[q-testing-race-conditions--android--hard]] — Concurrency edge cases
-- [[q-structured-concurrency-testing--kotlin--hard]] — Complex coroutine hierarchies
+- [[q-structured-concurrency--kotlin--hard]] — Complex coroutine hierarchies

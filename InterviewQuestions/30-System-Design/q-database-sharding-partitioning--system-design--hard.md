@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [database, difficulty/hard, partitioning, scalability, sharding, system-design]
 sources: [https://en.wikipedia.org/wiki/Shard_(database_architecture)]
 date created: Sunday, October 12th 2025, 8:44:15 pm
-date modified: Saturday, October 25th 2025, 8:03:01 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

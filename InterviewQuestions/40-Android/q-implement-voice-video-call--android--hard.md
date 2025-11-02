@@ -25,7 +25,7 @@ updated: 2025-10-31
 
 tags: [android/media, android/networking-http, android/websockets, difficulty/hard]
 date created: Tuesday, October 28th 2025, 9:11:50 pm
-date modified: Thursday, October 30th 2025, 3:10:25 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -57,7 +57,7 @@ Media P2P (WebRTC) ←──────────→ Audio/Video Stream
 STUN/TURN Server (NAT traversal)
 ```
 
-### Основная реализация
+### Основная Реализация
 
 **Менеджер WebRTC**:
 ```kotlin
@@ -249,7 +249,7 @@ fun VideoCallScreen(viewModel: CallViewModel) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Серверная инфраструктура**:
 - STUN серверы для определения публичного IP
@@ -280,7 +280,7 @@ override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
 }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 **❌ Не настроен TURN сервер**:
 - Звонки не работают за NAT/файрволом

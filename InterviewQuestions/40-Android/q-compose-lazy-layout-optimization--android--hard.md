@@ -1,9 +1,9 @@
 ---
 id: android-381
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
-aliases: [Compose Lazy Layout Optimization, Оптимизация Lazy‑layout в Compose, LazyColumn optimization, LazyRow optimization, Оптимизация LazyColumn]
+aliases: [Compose Lazy Layout Optimization, LazyColumn optimization, LazyRow optimization, Оптимизация Lazy‑layout в Compose, Оптимизация LazyColumn]
 topic: android
-subtopics: [ui-compose, performance-memory]
+subtopics: [performance-memory, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -18,9 +18,9 @@ related:
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/ui-compose, android/performance-memory, difficulty/hard]
+tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 date created: Thursday, October 30th 2025, 11:23:14 am
-date modified: Thursday, October 30th 2025, 12:43:44 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:43:44 pm
 
 ## Ответ (RU)
 
-### Критичные оптимизации
+### Критичные Оптимизации
 
 **1. Стабильные ключи**
 Без ключей Compose пересоздаёт все элементы при изменении списка. Используйте `key = { item.id }` для правильного отслеживания элементов.
@@ -47,7 +47,7 @@ date modified: Thursday, October 30th 2025, 12:43:44 pm
 **4. Кеширование вычислений**
 Используйте `remember(key)` для дорогостоящих операций (форматирование, парсинг, расчёты).
 
-### Паттерны оптимизации
+### Паттерны Оптимизации
 
 **✅ Стабильные ключи и обновляемые callback'ы:**
 ```kotlin
@@ -121,7 +121,7 @@ fun PriceTag(price: BigDecimal) {
 }
 ```
 
-### Дополнительные оптимизации
+### Дополнительные Оптимизации
 
 **Переиспользование объектов:**
 - Создавайте `Brush`, `Shape`, `Painter` вне item scope через `remember`
@@ -262,7 +262,6 @@ fun PriceTag(price: BigDecimal) {
 
 ### Prerequisites (Easier)
 - [[q-compose-performance-optimization--android--hard]]
-- [[q-compose-recomposition-basics--android--medium]]
 
 ### Related (Same Level)
 - [[q-compose-compiler-plugin--android--hard]]

@@ -14,8 +14,11 @@ related: []
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-views, recyclerview, itemdecoration, difficulty/medium]
+tags: [android/ui-views, difficulty/medium, itemdecoration, recyclerview]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что позволяет делать ItemDecoration в RecyclerView?
@@ -30,7 +33,7 @@ tags: [android/ui-views, recyclerview, itemdecoration, difficulty/medium]
 
 **ItemDecoration** — механизм для добавления визуальных декораций к элементам RecyclerView (разделители, отступы, рамки, заголовки) без изменения самих элементов или адаптера.
 
-### Основные методы
+### Основные Методы
 
 ```kotlin
 abstract class RecyclerView.ItemDecoration {
@@ -55,7 +58,7 @@ abstract class RecyclerView.ItemDecoration {
 - `onDraw` — рисует под элементами (фон, разделители снизу)
 - `onDrawOver` — рисует над элементами (overlay, sticky headers)
 
-### Примеры реализации
+### Примеры Реализации
 
 **1. Простой разделитель (встроенный)**
 
@@ -180,7 +183,7 @@ class SectionHeaderDecoration(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Кешируйте Paint/Drawable** — создавайте их в конструкторе, не в onDraw
 2. **Переиспользуйте декорации** — создайте один экземпляр для всех RecyclerView
@@ -188,7 +191,7 @@ class SectionHeaderDecoration(
 4. **Не меняйте ViewHolder** — ItemDecoration изолирована от адаптера
 5. **Множественные декорации** — можно комбинировать (порядок важен: первая рисуется снизу)
 
-### Удаление декораций
+### Удаление Декораций
 
 ```kotlin
 recyclerView.removeItemDecoration(decoration)     // Удалить конкретную

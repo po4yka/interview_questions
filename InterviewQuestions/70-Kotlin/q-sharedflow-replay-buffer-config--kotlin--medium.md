@@ -1,7 +1,7 @@
 ---
 id: kotlin-080
 title: "SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера"
-aliases: [SharedFlow, Replay Buffer, Hot Flow, SharedFlow Configuration]
+aliases: [Hot Flow, Replay Buffer, SharedFlow, SharedFlow Configuration]
 topic: kotlin
 subtopics: [coroutines, flow]
 question_kind: theory
@@ -13,20 +13,13 @@ moc: moc-kotlin
 related: [q-channels-vs-flow--kotlin--medium, q-data-class-purpose--kotlin--easy, q-kotlin-any-class-methods--programming-languages--medium]
 created: 2025-10-12
 updated: 2025-10-31
-tags:
-  - kotlin
-  - sharedflow
-  - coroutines
-  - flow
-  - replay
-  - buffer
-  - backpressure
-  - hot-flow
-  - configuration
-  - difficulty/medium
+tags: [backpressure, buffer, configuration, coroutines, difficulty/medium, flow, hot-flow, kotlin, replay, sharedflow]
 contributors: []
+date created: Friday, October 31st 2025, 6:30:54 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера
+
+# SharedFlow Replay Cache and Buffer Configuration / SharedFlow Replay Cache И Конфигурация Буфера
 
 ## English Version
 
@@ -60,7 +53,7 @@ public fun <T> MutableSharedFlow(
 2. **extraBufferCapacity**: Additional buffer beyond replay
 3. **onBufferOverflow**: What happens when buffer is full
 
-#### The replay Parameter
+#### The Replay Parameter
 
 The `replay` parameter specifies how many **most recent values** are cached and replayed to new collectors:
 
@@ -696,7 +689,7 @@ suspend fun benchmarkOverflow() = coroutineScope {
 }
 ```
 
-#### When to Use replay vs StateFlow
+#### When to Use Replay Vs StateFlow
 
 **Use StateFlow when:**
 - Representing **state** (not events)
@@ -881,7 +874,7 @@ Choose configuration based on use case:
 
 ---
 
-## Russian Version / Русская версия
+## Russian Version / Русская Версия
 
 ### Вопрос
 Как настроить replay cache и buffer в SharedFlow? Объясните параметры `replay`, `extraBufferCapacity` и `onBufferOverflow`, их взаимодействие и реальные сценарии использования с учётом производительности.
@@ -898,7 +891,7 @@ Choose configuration based on use case:
 - **Настраиваемый**: Replay, buffer и поведение при переполнении
 - **Разделение состояния**: Может использоваться для событий или состояния
 
-#### Параметры конструктора MutableSharedFlow
+#### Параметры Конструктора MutableSharedFlow
 
 ```kotlin
 public fun <T> MutableSharedFlow(
@@ -914,7 +907,7 @@ public fun <T> MutableSharedFlow(
 2. **extraBufferCapacity**: Дополнительный буфер помимо replay
 3. **onBufferOverflow**: Что происходит когда буфер заполнен
 
-#### Параметр replay
+#### Параметр Replay
 
 Параметр `replay` указывает сколько **последних значений** кешируются и воспроизводятся для новых коллекторов:
 
@@ -1112,7 +1105,7 @@ fun demonstrateDropLatest() = runBlocking {
 | DROP_OLDEST | Удалить старейшее | Важно последнее состояние | Нет |
 | DROP_LATEST | Игнорировать новое | Важны первые события | Нет |
 
-#### Примеры из реального мира
+#### Примеры Из Реального Мира
 
 **Пример 1: Шина событий (без replay)**
 
@@ -1207,7 +1200,7 @@ class NotificationManager {
 }
 ```
 
-#### Последствия для производительности
+#### Последствия Для Производительности
 
 **Использование памяти:**
 
@@ -1225,7 +1218,7 @@ val lowMemory = MutableSharedFlow<LargeObject>(
 )
 ```
 
-#### Когда использовать replay vs StateFlow
+#### Когда Использовать Replay Vs StateFlow
 
 **Использовать StateFlow когда:**
 - Представляете **состояние** (не события)

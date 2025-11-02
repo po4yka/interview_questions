@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-single-activity-approach--android--medium, q-compose-semantics--android--medium]
+related: [q-compose-semantics--android--medium, q-single-activity-approach--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-compose, android/ui-theming, design, material3, dynamic-color, difficulty/medium]
+tags: [android/ui-compose, android/ui-theming, design, difficulty/medium, dynamic-color, material3]
 date created: Monday, October 27th 2025, 5:03:21 pm
-date modified: Thursday, October 30th 2025, 3:12:58 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:12:58 pm
 
 **Динамический цвет** — ключевая особенность Material 3, позволяющая приложениям адаптировать цветовую схему на основе обоев пользователя, создавая персонализированный опыт.
 
-### Принцип работы
+### Принцип Работы
 
 **Извлечение цвета (Android 12+)**
 - Система анализирует обои и извлекает доминирующие цвета
@@ -39,7 +39,7 @@ date modified: Thursday, October 30th 2025, 3:12:58 pm
 - Создаёт светлую и тёмную схемы
 - Предоставляет через `dynamicLightColorScheme()` / `dynamicDarkColorScheme()`
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 @Composable
@@ -68,7 +68,7 @@ fun AppTheme(
 }
 ```
 
-### Цветовые роли
+### Цветовые Роли
 
 Material 3 определяет 25+ семантических ролей:
 
@@ -112,7 +112,7 @@ Button(colors = ButtonDefaults.buttonColors(
 )) { Text("Плохо") }
 ```
 
-### Пользовательские темы
+### Пользовательские Темы
 
 **Создание собственной схемы:**
 
@@ -130,7 +130,7 @@ val CustomLightScheme = lightColorScheme(
 )
 ```
 
-### Управление темой пользователем
+### Управление Темой Пользователем
 
 ```kotlin
 // Хранение настроек
@@ -163,7 +163,7 @@ fun ThemeSettings(preferences: ThemePreferences) {
 }
 ```
 
-### Светлая/тёмная тема
+### Светлая/тёмная Тема
 
 **Автоопределение:**
 
@@ -206,7 +206,7 @@ fun App(themeMode: ThemeMode) {
 }
 ```
 
-### Тональная elevation
+### Тональная Elevation
 
 Material 3 использует цветовую tint вместо теней:
 
@@ -233,7 +233,7 @@ Card(
 | 4 | 8dp | Navigation drawer |
 | 5 | 12dp | Modal bottom sheet |
 
-### Inverse цвета
+### Inverse Цвета
 
 Для высококонтрастных оверлеев (Snackbar):
 
@@ -245,7 +245,7 @@ Snackbar(
 ) { Text("Сообщение отправлено") }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда предоставляйте fallback** для Android < 12
 2. **Используйте семантические роли** (`MaterialTheme.colorScheme.*`), не хардкод

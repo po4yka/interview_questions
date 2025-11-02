@@ -1,7 +1,7 @@
 ---
 id: kotlin-216
 title: "List Vs Sequence / List против Sequence"
-aliases: [List, Sequence, Lazy Evaluation, Eager Evaluation, List vs Sequence]
+aliases: [Eager Evaluation, Lazy Evaluation, List, List vs Sequence, Sequence]
 topic: kotlin
 subtopics: [collections, performance]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-lambdas-java-kotlin-syntax--programming-languages--medium, q-stateflow-purpose--programming-languages--medium, q-sealed-class-sealed-interface--kotlin--medium]
+related: [q-sealed-class-sealed-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - collections
-  - sequence
-  - performance
-  - lazy-evaluation
-  - difficulty/medium
+tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, sequence]
+date created: Friday, October 31st 2025, 6:29:31 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# List vs Sequence: жадные и ленивые коллекции
+
+# List Vs Sequence: Жадные И Ленивые Коллекции
 
 # Question (EN)
 > What is the difference between List and Sequence in Kotlin?
@@ -84,7 +81,7 @@ Sequence is ~30-40x faster for large data with early stops. Terminal operations 
 
 **List** — жадная (eager) коллекция, где операции выполняются **немедленно** над **всеми** элементами сразу. **Sequence** — ленивая (lazy) коллекция, где операции выполняются **по требованию** для каждого элемента через цепочку. List создает промежуточные коллекции, Sequence обрабатывает элементы один за другим.
 
-### List — жадная обработка (Eager)
+### List — Жадная Обработка (Eager)
 
 Каждая операция создает **новую коллекцию**, обрабатывая **все** элементы.
 
@@ -108,7 +105,7 @@ println(result)  // [12, 14]
 
 **Итого:** 25 элементов обработано (10 + 10 + 5), 3 промежуточных коллекции созданы.
 
-### Sequence — ленивая обработка (Lazy)
+### Sequence — Ленивая Обработка (Lazy)
 
 Обрабатывает **каждый элемент** через **всю цепочку** операций сразу, не создавая промежуточных коллекций.
 
@@ -137,7 +134,7 @@ println(result)  // [12, 14]
 
 **Итого:** 7 элементов обработано, 0 промежуточных коллекций.
 
-### Детальное сравнение
+### Детальное Сравнение
 
 ```kotlin
 println("=== LIST (EAGER) ===")
@@ -202,7 +199,7 @@ val seqResult = (1..5).asSequence()
 // После toList: [6, 8, 10]
 ```
 
-### Performance сравнение
+### Performance Сравнение
 
 ```kotlin
 fun benchmarkList() {
@@ -242,7 +239,7 @@ fun benchmarkSequence() {
 
 **Результат**: Sequence в ~30-40 раз быстрее для больших коллекций с ранней остановкой.
 
-### Когда использовать List
+### Когда Использовать List
 
 **- Используйте List когда:**
 
@@ -255,7 +252,7 @@ val users = listOf(user1, user2, user3)
 // Производительность идентична, List проще
 ```
 
-2. **Нужны промежуточные результаты**
+1. **Нужны промежуточные результаты**
 
 ```kotlin
 val doubled = numbers.map { it * 2 }
@@ -265,7 +262,7 @@ val filtered = doubled.filter { it > 10 }
 println("Filtered: $filtered")  // Можно напечатать
 ```
 
-3. **Операции требуют размера коллекции**
+1. **Операции требуют размера коллекции**
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
@@ -278,13 +275,13 @@ val seq = numbers.asSequence()
 // seq[2] - НЕТ прямого доступа
 ```
 
-4. **Нет цепочки операций**
+1. **Нет цепочки операций**
 
 ```kotlin
 val result = numbers.map { it * 2 }  // Одна операция - List OK
 ```
 
-### Когда использовать Sequence
+### Когда Использовать Sequence
 
 **- Используйте Sequence когда:**
 
@@ -299,7 +296,7 @@ val largeData = (1..1_000_000).asSequence()
 // Sequence обработает только ~10-20 элементов вместо миллиона
 ```
 
-2. **Цепочки операций** (3+ операции)
+1. **Цепочки операций** (3+ операции)
 
 ```kotlin
 val result = users.asSequence()
@@ -311,7 +308,7 @@ val result = users.asSequence()
     .toList()
 ```
 
-3. **Ранняя остановка** (first, take, any, etc.)
+1. **Ранняя остановка** (first, take, any, etc.)
 
 ```kotlin
 // - List - обработает ВСЕ миллион элементов
@@ -325,7 +322,7 @@ val firstEven = (1..1_000_000).asSequence()
     .first { it > 1000 }
 ```
 
-4. **Бесконечные последовательности**
+1. **Бесконечные последовательности**
 
 ```kotlin
 val fibonacci = generateSequence(1 to 1) { (a, b) -> b to (a + b) }
@@ -338,7 +335,7 @@ println(fibonacci)  // [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
 // С List это невозможно (бесконечный цикл)
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Аспект | List | Sequence |
 |--------|------|----------|
@@ -353,7 +350,7 @@ println(fibonacci)  // [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
 | **size, lastIndex** | - Да | - Нет |
 | **Бесконечные данные** | - Невозможно | - Да |
 
-### Терминальные и промежуточные операции
+### Терминальные И Промежуточные Операции
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5).asSequence()
@@ -375,9 +372,9 @@ seq3.forEach { println(it) }      // Выполнение!
 **Промежуточные**: `map`, `filter`, `flatMap`, `distinct`, `sorted`, `drop`, `take`
 **Терминальные**: `toList`, `toSet`, `first`, `last`, `sum`, `count`, `forEach`, `any`, `all`
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: Обработка файла
+#### Пример 1: Обработка Файла
 
 ```kotlin
 // - List - загрузит весь файл в память
@@ -399,7 +396,7 @@ fun processFileGood(file: File): List<String> {
 }
 ```
 
-#### Пример 2: API pagination
+#### Пример 2: API Pagination
 
 ```kotlin
 class UserRepository {
@@ -434,7 +431,7 @@ val activeUsers = repository.getAllUsersGood()
     .toList()
 ```
 
-#### Пример 3: Поиск в большой коллекции
+#### Пример 3: Поиск В Большой Коллекции
 
 ```kotlin
 data class Product(val id: Int, val name: String, val price: Double)
@@ -456,7 +453,7 @@ val expensiveProductSeq = products.asSequence()
     .first()
 ```
 
-### Конвертация между List и Sequence
+### Конвертация Между List И Sequence
 
 ```kotlin
 val list = listOf(1, 2, 3, 4, 5)
@@ -474,7 +471,7 @@ val set = sequence.toSet()
 val map = sequence.associateWith { it * 2 }
 ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 **- Ошибка 1: Конвертация Sequence → List в середине**
 
@@ -562,6 +559,6 @@ val names = users.map { it.name }
 
 ## Related Questions
 
-- [[q-lambdas-java-kotlin-syntax--programming-languages--medium]]
-- [[q-stateflow-purpose--programming-languages--medium]]
+-
+-
 - [[q-sealed-class-sealed-interface--kotlin--medium]]

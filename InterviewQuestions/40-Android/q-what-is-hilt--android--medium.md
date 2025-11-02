@@ -3,17 +3,19 @@ id: android-199
 title: "Hilt / Фреймворк Hilt"
 aliases: [Hilt, Фреймворк Hilt]
 topic: android
-subtopics: [di-hilt, architecture-mvvm]
+subtopics: [architecture-mvvm, di-hilt]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-hilt, q-what-is-known-about-recyclerview--android--easy, q-test-doubles-dependency-injection--testing--medium]
+related: [c-dependency-injection, c-hilt, q-test-doubles-dependency-injection--testing--medium, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/di-hilt, android/architecture-mvvm, dependency-injection, hilt, di, difficulty/medium]
+tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, difficulty/medium, hilt]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # What is Hilt?
@@ -325,7 +327,7 @@ class MyWorker(
 }
 ```
 
-### 3. Assisted Injection (for runtime parameters)
+### 3. Assisted Injection (for Runtime parameters)
 
 ```kotlin
 class UserDetailViewModel @AssistedInject constructor(
@@ -580,7 +582,7 @@ object DatabaseModule {
 ## Ответ (RU)
 **Hilt** — это фреймворк для внедрения зависимостей (Dependency Injection, DI), разработанный командой Google специально для платформы Android. Он основан на популярном DI фреймворке Dagger и предназначен для упрощения процесса внедрения зависимостей в Android-приложениях.
 
-### Основные возможности
+### Основные Возможности
 
 1. **Упрощенная настройка** - меньше boilerplate кода чем в Dagger
 2. **Предопределенные компоненты** - привязанные к Android lifecycle
@@ -589,7 +591,7 @@ object DatabaseModule {
 5. **Улучшенная тестируемость** - легкая замена зависимостей в тестах
 6. **Compile-time безопасность** - ошибки обнаруживаются при компиляции
 
-### Ключевые аннотации
+### Ключевые Аннотации
 
 - `@HiltAndroidApp` - класс Application
 - `@AndroidEntryPoint` - Activity, Fragment, View, Service
@@ -599,7 +601,7 @@ object DatabaseModule {
 - `@Provides` - метод предоставления
 - `@Binds` - привязка интерфейса к реализации
 
-### Когда использовать Hilt
+### Когда Использовать Hilt
 
 - Создание новых Android приложений
 - Нужна lifecycle-aware DI

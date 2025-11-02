@@ -5,7 +5,7 @@ aliases: ["Macrobenchmark for App Startup", "Macrobenchmark для запуск�
 
 # Classification
 topic: android
-subtopics: [testing-benchmark, profiling]
+subtopics: [profiling, testing-benchmark]
 question_kind: android
 difficulty: medium
 
@@ -17,15 +17,15 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-baseline-profiles-android--android--medium, q-android-performance-measurement-tools--android--medium, q-performance-optimization-android--android--medium]
+related: [q-android-performance-measurement-tools--android--medium, q-baseline-profiles-android--android--medium, q-performance-optimization-android--android--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-01-27
 
-tags: [android/testing-benchmark, android/profiling, macrobenchmark, performance, startup, perfetto, difficulty/medium]
+tags: [android/profiling, android/testing-benchmark, difficulty/medium, macrobenchmark, perfetto, performance, startup]
 date created: Monday, October 27th 2025, 5:12:49 pm
-date modified: Thursday, October 30th 2025, 3:12:48 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -52,7 +52,7 @@ date modified: Thursday, October 30th 2025, 3:12:48 pm
 - Тестирование режимов компиляции (None, Partial, Full)
 - Интеграция [[q-baseline-profiles-android--android--medium|Baseline Profiles]]
 
-### Настройка модуля
+### Настройка Модуля
 
 **settings.gradle.kts:**
 ```kotlin
@@ -103,7 +103,7 @@ android {
 }
 ```
 
-### Реализация бенчмарков
+### Реализация Бенчмарков
 
 **StartupBenchmark.kt:**
 ```kotlin
@@ -155,7 +155,7 @@ class StartupBenchmark {
 }
 ```
 
-### Инструментация кода
+### Инструментация Кода
 
 **MainActivity.kt:**
 ```kotlin
@@ -191,7 +191,7 @@ class BadApplication : Application() {
 }
 ```
 
-### Анализ Perfetto трассировок
+### Анализ Perfetto Трассировок
 
 **Расположение файлов:**
 ```text
@@ -232,7 +232,7 @@ WHERE name LIKE '%Init%'
 ORDER BY dur DESC LIMIT 10;
 ```
 
-### Оптимизация на основе результатов
+### Оптимизация На Основе Результатов
 
 **До оптимизации:**
 ```text
@@ -292,7 +292,7 @@ setContent {
     path: macrobenchmark/build/outputs/
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Запускать на реальных устройствах** - эмуляторы дают неточные результаты
 2. **10+ итераций** - минимум для статистической значимости

@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-coroutine-context, q-concurrency-fundamentals--computer-science--hard, q-kotlin-coroutines-advanced--kotlin--hard]
+related: [c-coroutine-context]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [context, coroutinecontext, coroutines, difficulty/medium, kotlin, programming-languages]
 sources: [https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html]
 date created: Friday, October 3rd 2025, 4:58:01 pm
-date modified: Sunday, October 26th 2025, 10:47:34 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -329,9 +329,6 @@ suspend fun example() {
 - Basic Kotlin coroutines concepts
 - Threading fundamentals
 
-### Related (Same Level)
-- [[q-kotlin-coroutines-advanced--kotlin--hard]] - Advanced coroutines
-- [[q-concurrency-fundamentals--computer-science--hard]] - Concurrency basics
 
 ### Advanced (Harder)
 - Custom CoroutineContext elements

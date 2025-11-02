@@ -3,18 +3,20 @@ id: cs-005
 title: "When Inheritance Useful / Когда полезно наследование"
 aliases: ["Inheritance Use Cases", "Когда использовать наследование"]
 topic: cs
-subtopics: [oop, inheritance, composition, polymorphism]
+subtopics: [composition, inheritance, oop, polymorphism]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-inheritance-vs-composition--oop--medium, q-oop-principles-deep-dive--computer-science--medium, q-interface-vs-abstract-class--programming-languages--medium]
+related: [q-inheritance-vs-composition--oop--medium, q-interface-vs-abstract-class--programming-languages--medium, q-java-all-classes-inherit-from-object--programming-languages--easy]
 created: 2025-10-13
 updated: 2025-01-25
-tags: [oop, inheritance, composition, polymorphism, is-a, has-a, difficulty/medium]
+tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]
 sources: [https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)]
+date created: Saturday, November 1st 2025, 1:26:02 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -329,12 +331,10 @@ class Player(private var attackStrategy: AttackStrategy) {
 
 ### Prerequisites (Easier)
 - [[q-java-all-classes-inherit-from-object--programming-languages--easy]] - Inheritance basics
-- [[q-oop-principles-deep-dive--computer-science--medium]] - OOP principles
 
 ### Related (Same Level)
 - [[q-inheritance-vs-composition--oop--medium]] - Inheritance vs Composition
 - [[q-interface-vs-abstract-class--programming-languages--medium]] - Interfaces
-- [[q-oop-principles-deep-dive--computer-science--medium]] - OOP principles
 
 ### Advanced (Harder)
 - Design patterns (Strategy, Template Method)

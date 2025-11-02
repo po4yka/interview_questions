@@ -10,15 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-retrofit-coroutines-best-practices--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium]
+related: [q-kotlin-lambda-expressions--kotlin--medium, q-retrofit-coroutines-best-practices--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - sealed-classes
-  - difficulty/medium
+tags: [difficulty/medium, programming-languages, sealed-classes]
+date created: Friday, October 31st 2025, 6:32:39 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# В чем особенность sealed классов
+
+# В Чем Особенность Sealed Классов
 
 # Question (EN)
 > What are the features of sealed classes?

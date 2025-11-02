@@ -5,7 +5,7 @@ aliases: ["What Are Services For", "Для чего нужны Service"]
 
 # Classification
 topic: android
-subtopics: [service, background-execution]
+subtopics: [background-execution, service]
 question_kind: android
 difficulty: easy
 
@@ -24,8 +24,11 @@ created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android/service, android/background-execution, background-execution, service, difficulty/easy]
+tags: [android/background-execution, android/service, background-execution, difficulty/easy, service]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Для чего нужны сервисы (Services)?
@@ -40,7 +43,7 @@ tags: [android/service, android/background-execution, background-execution, serv
 
 **Service** — компонент Android для выполнения длительных фоновых операций без UI.
 
-### Основные сценарии использования
+### Основные Сценарии Использования
 
 **1. Воспроизведение музыки**
 
@@ -78,14 +81,14 @@ class DownloadService : Service() {
 }
 ```
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 - Работает в фоне без UI
 - Выполняет длительные операции
 - Может работать после закрытия Activity
 - Ресурсоёмкий — влияет на батарею
 
-### Современная альтернатива
+### Современная Альтернатива
 
 ```kotlin
 // ✅ Предпочитайте WorkManager для большинства фоновых задач

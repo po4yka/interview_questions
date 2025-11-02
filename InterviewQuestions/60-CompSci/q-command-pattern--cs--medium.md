@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-command-pattern, q-observer-pattern--design-patterns--medium, q-strategy-pattern--design-patterns--medium]
+related: [c-command-pattern]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [behavioral-patterns, command, design-patterns, difficulty/medium, gof-patterns]
 sources: [https://en.wikipedia.org/wiki/Command_pattern]
 date created: Monday, October 6th 2025, 7:22:55 am
-date modified: Sunday, October 26th 2025, 10:35:06 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -494,12 +494,4 @@ fun main() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-clean-code-principles--software-engineering--medium]] - Clean code principles
 - Basic OOP concepts
-
-### Related (Same Level)
-- [[q-observer-pattern--design-patterns--medium]] - Observer pattern
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
-
-### Advanced (Harder)
-- [[q-design-patterns-types--design-patterns--medium]] - Design patterns overview

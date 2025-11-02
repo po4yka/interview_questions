@@ -10,17 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium, q-channel-pipelines--kotlin--hard]
+related: [q-channel-pipelines--kotlin--hard, q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - extension-functions
-  - extension-properties
-  - extensions
-  - difficulty/medium
+tags: [difficulty/medium, extension-functions, extension-properties, extensions, programming-languages]
+date created: Friday, October 31st 2025, 6:29:14 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Что известно про extension ?
+
+# Что Известно Про Extension ?
 
 # Question (EN)
 > What do you know about extensions?

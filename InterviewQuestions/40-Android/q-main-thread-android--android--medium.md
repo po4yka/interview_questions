@@ -1,9 +1,9 @@
 ---
 id: android-132
 title: "Main Thread Android / Главный поток Android"
-aliases: ["Main Thread Android", "Главный поток Android", "UI Thread", "Поток UI"]
+aliases: ["Main Thread Android", "UI Thread", "Главный поток Android", "Поток UI"]
 topic: android
-subtopics: [threads-sync, lifecycle]
+subtopics: [lifecycle, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-room-code-generation-timing--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/threads-sync, android/lifecycle, threading, ui-thread, difficulty/medium]
+tags: [android/lifecycle, android/threads-sync, difficulty/medium, threading, ui-thread]
 date created: Monday, October 27th 2025, 3:41:42 pm
-date modified: Thursday, October 30th 2025, 3:12:55 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:12:55 pm
 
 Главный поток (Main Thread), также известный как UI Thread, отвечает за обработку пользовательского интерфейса и событий в Android.
 
-### Основные характеристики
+### Основные Характеристики
 
 #### 1. Обработка UI
 
@@ -66,7 +66,7 @@ thread {
 }
 ```
 
-#### 3. ANR при блокировке
+#### 3. ANR При Блокировке
 
 Блокировка главного потока более 5 секунд вызывает ANR (Application Not Responding):
 
@@ -88,7 +88,7 @@ button.setOnClickListener {
 }
 ```
 
-### Запрещённые операции
+### Запрещённые Операции
 
 **Нельзя выполнять в main thread**:
 
@@ -97,7 +97,7 @@ button.setOnClickListener {
 - Тяжёлые вычисления
 - Чтение/запись больших файлов
 
-### Современные подходы
+### Современные Подходы
 
 ```kotlin
 // ✅ Coroutines с LifecycleScope

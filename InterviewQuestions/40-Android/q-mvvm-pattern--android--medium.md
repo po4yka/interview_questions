@@ -1,9 +1,9 @@
 ---
 id: android-125
 title: "MVVM Pattern / Паттерн MVVM"
-aliases: ["MVVM Pattern", "Паттерн MVVM", "Model-View-ViewModel"]
+aliases: ["Model-View-ViewModel", "MVVM Pattern", "Паттерн MVVM"]
 topic: android
-subtopics: [architecture-mvvm, lifecycle, coroutines]
+subtopics: [architecture-mvvm, coroutines, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [c-viewmodel, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/architecture-mvvm, android/lifecycle, android/coroutines, architecture-patterns, mvvm, viewmodel, difficulty/medium]
+tags: [android/architecture-mvvm, android/coroutines, android/lifecycle, architecture-patterns, difficulty/medium, mvvm, viewmodel]
 date created: Monday, October 27th 2025, 3:37:22 pm
-date modified: Thursday, October 30th 2025, 3:14:32 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -80,7 +80,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 }
 ```
 
-### Преимущества vs недостатки
+### Преимущества Vs Недостатки
 
 | Плюсы | Минусы |
 |-------|--------|
@@ -89,7 +89,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 | Нет утечек памяти (ViewModel не держит View) | Сложность дизайна для больших экранов |
 | Separation of concerns | Debugging data binding может быть труден |
 
-### Сравнение с другими паттернами
+### Сравнение С Другими Паттернами
 
 **vs MVP**: MVVM использует data binding (автоматическое обновление UI), MVP — ручные вызовы через интерфейсы. ViewModel переживает configuration changes, Presenter — нет.
 
@@ -161,7 +161,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 }
 ```
 
-### Pros vs Cons
+### Pros Vs Cons
 
 | Pros | Cons |
 |------|------|
@@ -170,7 +170,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 | No memory leaks (ViewModel doesn't hold View) | Complex design for large screens |
 | Separation of concerns | Data binding debugging can be difficult |
 
-### Comparison with other patterns
+### Comparison with other Patterns
 
 **vs MVP**: MVVM uses data binding (automatic UI updates), MVP uses manual calls via interfaces. ViewModel survives configuration changes, Presenter doesn't.
 

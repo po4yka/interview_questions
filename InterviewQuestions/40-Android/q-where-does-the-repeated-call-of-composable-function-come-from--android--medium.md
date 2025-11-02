@@ -1,7 +1,7 @@
 ---
 id: android-422
 title: "Where Does The Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
-aliases: ["Where Does The Repeated Call Of Composable Function Come From", "Откуда берется повторный вызов Composable функции", "Recomposition in Compose", "Рекомпозиция в Compose"]
+aliases: ["Recomposition in Compose", "Where Does The Repeated Call Of Composable Function Come From", "Откуда берется повторный вызов Composable функции", "Рекомпозиция в Compose"]
 topic: android
 subtopics: [ui-compose, ui-state]
 question_kind: android
@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-how-does-jetpackcompose-work--android--medium, q-compose-stability-skippability--android--hard]
+related: [c-jetpack-compose, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/ui-compose, android/ui-state, recomposition, jetpack-compose, compose, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, jetpack-compose, recomposition]
 date created: Wednesday, October 29th 2025, 12:15:30 pm
-date modified: Thursday, October 30th 2025, 3:18:07 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:18:07 pm
 
 Повторный вызов composable функции происходит из механизма **рекомпозиции (recomposition)**. Compose автоматически отслеживает чтение состояния внутри composable и помечает функцию как "невалидную" при изменении этого состояния, что запускает её повторное выполнение.
 
-### Механизм рекомпозиции
+### Механизм Рекомпозиции
 
 ```kotlin
 @Composable
@@ -55,7 +55,7 @@ fun Counter() {
 3. Compose планирует рекомпозицию на следующий фрейм
 4. Функция `Counter()` выполняется снова, обновляя только изменённые части UI
 
-### Источники рекомпозиции
+### Источники Рекомпозиции
 
 ```kotlin
 @Composable
@@ -77,7 +77,7 @@ fun TriggerSources(viewModel: MyViewModel) {
 }
 ```
 
-### Область рекомпозиции (Scope)
+### Область Рекомпозиции (Scope)
 
 Compose минимизирует рекомпозицию — перевыполняются только те composable, которые читают изменённое состояние:
 

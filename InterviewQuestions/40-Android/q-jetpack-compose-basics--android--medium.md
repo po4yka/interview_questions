@@ -26,7 +26,7 @@ updated: 2025-10-12
 
 tags: [android/ui-compose, android/ui-state, android/ui-views, difficulty/medium, en, ru]
 date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:10:58 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Question (EN)

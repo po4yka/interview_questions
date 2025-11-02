@@ -1,7 +1,7 @@
 ---
 id: android-095
 title: "LeakCanary Detection Mechanism / Механизм обнаружения LeakCanary"
-aliases: ["LeakCanary Detection Mechanism", "Механизм обнаружения LeakCanary", "How LeakCanary Detects Memory Leaks", "Как LeakCanary обнаруживает утечки памяти"]
+aliases: ["How LeakCanary Detects Memory Leaks", "LeakCanary Detection Mechanism", "Как LeakCanary обнаруживает утечки памяти", "Механизм обнаружения LeakCanary"]
 topic: android
 subtopics: [performance-memory, profiling]
 question_kind: android
@@ -11,10 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/performance-memory, android/profiling, memory-leaks, leakcanary, weakreference, difficulty/medium]
+tags: [android/performance-memory, android/profiling, difficulty/medium, leakcanary, memory-leaks, weakreference]
 moc: moc-android
-related: [q-recyclerview-itemdecoration-advanced--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-koin-scope-management--dependency-injection--medium]
+related: []
 sources: []
+date created: Saturday, November 1st 2025, 1:24:41 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -245,13 +247,10 @@ class MyViewModel : ViewModel() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-primitive-vs-reference-types--programming-languages--easy]] - Memory Management
-- [[q-reference-types-criteria--programming-languages--medium]] - Memory Management
+- Related content to be added
 
 ### Related (Same Level)
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Android Performance
-- [[q-koin-scope-management--dependency-injection--medium]] - Lifecycle Management
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Coroutine Memory Management
-- [[q-kotlin-native--kotlin--hard]] - Native Memory Management
+- Related content to be added

@@ -3,7 +3,7 @@ id: lang-056
 title: "How Suspend Function Detects Suspension / Как suspend функция определяет приостановку"
 aliases: [How Suspend Function Detects Suspension, Как suspend функция определяет приостановку]
 topic: programming-languages
-subtopics: [coroutines, kotlin, concurrency]
+subtopics: [concurrency, coroutines, kotlin]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-coroutines, c-kotlin-features, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, coroutines, suspension, concurrency, difficulty/hard]
+tags: [concurrency, coroutines, difficulty/hard, kotlin, programming-languages, suspension]
+date created: Friday, October 31st 2025, 6:31:27 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # How Suspend Function Detects Suspension?

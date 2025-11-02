@@ -3,26 +3,22 @@ id: lang-079
 title: "Kotlin Favorite Features / Любимые возможности Kotlin"
 aliases: [Kotlin Favorite Features, Любимые возможности Kotlin]
 topic: programming-languages
-subtopics: [extensions, null-safety, coroutines]
+subtopics: [coroutines, extensions, null-safety]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-operators-map-filter--kotlin--medium, q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard]
+related: [q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - coroutines
-  - extensions
-  - features
-  - null-safety
-  - overview
-  - difficulty/easy
+tags: [coroutines, difficulty/easy, extensions, features, null-safety, overview, programming-languages]
+date created: Friday, October 31st 2025, 6:29:33 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Расскажи про три любимых фичи в Kotlin
+
+# Расскажи Про Три Любимых Фичи В Kotlin
 
 # Question (EN)
 > Tell me about three favorite Kotlin features

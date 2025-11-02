@@ -3,7 +3,7 @@ id: android-177
 title: "If Activity Starts After A Service Can You Connect To This Service / Можно ли подключиться к Service если Activity запустилась после него"
 aliases: ["If Activity Starts After A Service Can You Connect To This Service", "Можно ли подключиться к Service если Activity запустилась после него"]
 topic: android
-subtopics: [service, lifecycle, intents-deeplinks]
+subtopics: [intents-deeplinks, lifecycle, service]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-android-components-besides-activity--android--easy, q-design-whatsapp-app--android--hard, q-service-component--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/service, android/lifecycle, android/intents-deeplinks, binding, difficulty/medium, ipc, service]
+tags: [android/intents-deeplinks, android/lifecycle, android/service, binding, difficulty/medium, ipc, service]
 sources: []
 date created: Monday, October 27th 2025, 6:42:14 pm
-date modified: Thursday, October 30th 2025, 3:10:24 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:10:24 pm
 
 Да, Activity может привязаться к уже запущенному Service через механизм binding независимо от порядка их запуска. Привязка обеспечивает прямое взаимодействие через IBinder интерфейс.
 
-### Пример привязки
+### Пример Привязки
 
 ```kotlin
 class MyService : Service() {
@@ -81,7 +81,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-### Ключевые моменты
+### Ключевые Моменты
 
 - **onBind()** возвращает IBinder для коммуникации
 - **ServiceConnection** получает уведомления о состоянии привязки

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [collections, functional-programming, fold, reduce]
+subtopics: [collections, fold, functional-programming, reduce]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-java-abstract-differences--programming-languages--medium, q-flow-operators--kotlin--medium, q-kotlin-map-collection--programming-languages--easy]
+related: [q-flow-operators--kotlin--medium, q-kotlin-java-abstract-differences--programming-languages--medium, q-kotlin-map-collection--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, collections, functional-programming, fold, reduce, difficulty/medium]
+tags: [collections, difficulty/medium, fold, functional-programming, kotlin, reduce]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What is the difference between fold and reduce in Kotlin?
 # Вопрос (RU)

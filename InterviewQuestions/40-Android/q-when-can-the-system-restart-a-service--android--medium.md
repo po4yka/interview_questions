@@ -3,25 +3,20 @@ id: android-144
 title: "When Can The System Restart A Service / Когда система может перезапустить Service"
 aliases: ["When Can The System Restart A Service", "Когда система может перезапустить Service"]
 topic: android
-subtopics: [service, lifecycle, background-execution]
+subtopics: [background-execution, lifecycle, service]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-service, c-lifecycle, q-android-service-types--android--easy]
+related: [c-lifecycle, c-service, q-android-service-types--android--easy]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags:
-  - android
-  - android/service
-  - android/lifecycle
-  - android/background-execution
-  - difficulty/medium
+tags: [android, android/background-execution, android/lifecycle, android/service, difficulty/medium]
 date created: Monday, October 27th 2025, 3:47:51 pm
-date modified: Thursday, October 30th 2025, 3:18:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:18:09 pm
 
 Система Android может автоматически перезапустить сервис после его уничтожения в зависимости от возвращаемого значения `onStartCommand()` и типа сервиса.
 
-### Режимы перезапуска
+### Режимы Перезапуска
 
 **START_STICKY** — система перезапустит сервис, но Intent будет null:
 
@@ -90,13 +85,13 @@ class MusicService : Service() {
 }
 ```
 
-### Условия перезапуска
+### Условия Перезапуска
 
 - Снижается нагрузка на память
 - Сервис имеет высокий приоритет (foreground)
 - Есть ожидающие Intent (для START_NOT_STICKY)
 
-### Обработка null Intent
+### Обработка Null Intent
 
 ```kotlin
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -110,7 +105,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Сравнение режимов
+### Сравнение Режимов
 
 | Режим | Перезапуск | Intent | Применение |
 |-------|------------|--------|------------|

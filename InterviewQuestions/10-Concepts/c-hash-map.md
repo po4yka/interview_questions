@@ -1,10 +1,10 @@
 ---
 id: "20251018-140001"
 title: "Hash Map / Хеш-таблица"
-aliases: ["Hash Map", "HashMap", "Hash Table", "Хеш-таблица", "Хеш-карта", "Associative Array", "Dictionary"]
+aliases: ["Associative Array", "Dictionary", "Hash Map", "Hash Table", "HashMap", "Хеш-карта", "Хеш-таблица"]
 summary: "Data structure providing O(1) average-case lookup, insert, and delete operations using hash functions"
 topic: "data-structures"
-subtopics: ["hash-map", "algorithms", "collections"]
+subtopics: ["algorithms", "collections", "hash-map"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,14 +15,16 @@ moc: "moc-algorithms"
 related: []
 created: "2025-10-18"
 updated: "2025-10-18"
-tags: ["concept", "data-structures", "hash-map", "algorithms", "collections", "difficulty/medium"]
+tags: ["algorithms", "collections", "concept", "data-structures", "difficulty/medium", "hash-map"]
+date created: Saturday, October 18th 2025, 3:06:58 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
 
 A **hash map** (also called hash table, dictionary, or associative array) is a data structure that stores key-value pairs and provides extremely fast lookup, insertion, and deletion operations. It uses a hash function to compute an index into an array of buckets, from which the desired value can be found. Hash maps offer O(1) average-case time complexity for basic operations, making them one of the most widely used data structures in programming.
 
-# Краткое описание (RU)
+# Краткое Описание (RU)
 
 **Хеш-таблица** (также называется hash map, словарь или ассоциативный массив) - это структура данных, которая хранит пары ключ-значение и обеспечивает очень быструю операцию поиска, вставки и удаления. Она использует хеш-функцию для вычисления индекса в массиве корзин (buckets), из которого можно найти нужное значение. Хеш-таблицы обеспечивают среднюю временную сложность O(1) для базовых операций, что делает их одной из наиболее используемых структур данных в программировании.
 
@@ -257,7 +259,7 @@ fun groupAnagrams(words: List<String>): List<List<String>> {
 - **Worst-Case Performance**: Can degrade to O(n) with poor hash function or many collisions
 - **Not Cache-Friendly**: Chaining involves pointer chasing
 
-### Hash Map vs Other Data Structures
+### Hash Map Vs Other Data Structures
 
 | Structure | Lookup | Insert | Delete | Ordered | Use Case |
 |-----------|--------|--------|--------|---------|----------|
@@ -392,9 +394,9 @@ map[Person("Alice", 30)] = "Engineer"
 
 ---
 
-## Краткие примеры кода (RU)
+## Краткие Примеры Кода (RU)
 
-### Базовое использование
+### Базовое Использование
 ```kotlin
 // Создание и работа с HashMap
 val phoneBook = hashMapOf<String, String>()
@@ -412,7 +414,7 @@ if ("Чарли" in phoneBook) {
 }
 ```
 
-### Подсчет частоты элементов
+### Подсчет Частоты Элементов
 ```kotlin
 fun подсчетЧастоты(слова: List<String>): Map<String, Int> {
     val частота = mutableMapOf<String, Int>()
@@ -426,7 +428,7 @@ val текст = listOf("кот", "пёс", "кот", "птица", "пёс", "�
 println(подсчетЧастоты(текст)) // {кот=3, пёс=2, птица=1}
 ```
 
-### Группировка данных
+### Группировка Данных
 ```kotlin
 data class Студент(val имя: String, val факультет: String)
 

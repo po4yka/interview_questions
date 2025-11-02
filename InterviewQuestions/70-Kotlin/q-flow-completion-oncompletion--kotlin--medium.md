@@ -1,7 +1,7 @@
 ---
 id: kotlin-148
 title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
-aliases: [Flow, Completion, Oncompletion]
+aliases: [Completion, Flow, Oncompletion]
 topic: kotlin
 subtopics: []
 question_kind: theory
@@ -10,14 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-extension-functions--kotlin--medium, q-access-modifiers--programming-languages--medium, q-kotlin-type-system--kotlin--medium]
+related: [q-access-modifiers--programming-languages--medium, q-kotlin-extension-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Saturday, October 18th 2025, 2:42:48 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Flow completion with onCompletion operator
+
+# Flow Completion with onCompletion Operator
 
 ## English
 
@@ -152,7 +153,7 @@ suspend fun demonstrateCompletionCases(type: CompletionType) {
 // demonstrateCompletionCases(CompletionType.CANCELLATION)
 ```
 
-#### 3. onCompletion vs finally
+#### 3. onCompletion Vs Finally
 
 **Comparison:**
 
@@ -276,14 +277,14 @@ suspend fun flowLifecycle() {
 
    onStart    → Initialization
 
-       
-       
+
+
 
   emissions   → onEach → collect
-   (loop)    
+   (loop)
 
-       
-       
+
+
 
 onCompletion  → Cleanup
 
@@ -887,7 +888,7 @@ class StateMachine {
 
 Оператор **onCompletion** вызывается когда Flow завершается, либо успешно, либо с исключением, либо из-за отмены. Это Flow эквивалент блока `finally`, но с большим контролем и лучшей интеграцией с операторами Flow.
 
-#### 1. Базовое использование onCompletion
+#### 1. Базовое Использование onCompletion
 
 **Простое уведомление о завершении:**
 
@@ -947,7 +948,7 @@ suspend fun completionWithCauseExample() {
 // Поймано исключение: Произошла ошибка
 ```
 
-#### 2. Сценарии завершения
+#### 2. Сценарии Завершения
 
 **Три случая завершения:**
 
@@ -1006,7 +1007,7 @@ suspend fun demonstrateCompletionCases(type: CompletionType) {
 }
 ```
 
-#### 3. onCompletion vs finally
+#### 3. onCompletion Vs Finally
 
 **Сравнение:**
 
@@ -1084,7 +1085,7 @@ suspend fun placementMatters() {
 // 3. onCompletion после catch: cause = null
 ```
 
-#### 4. Жизненный цикл Flow с onStart и onCompletion
+#### 4. Жизненный Цикл Flow С onStart И onCompletion
 
 **Полный жизненный цикл Flow:**
 
@@ -1124,7 +1125,7 @@ suspend fun flowLifecycle() {
 // ← onCompletion: Flow завершен (cause: null)
 ```
 
-#### 5. Production пример: Очистка ресурсов
+#### 5. Production Пример: Очистка Ресурсов
 
 **Очистка подключения к базе данных:**
 
@@ -1220,7 +1221,7 @@ class NetworkStream(private val webSocket: WebSocket) {
 }
 ```
 
-#### 6. Production пример: Логирование и аналитика
+#### 6. Production Пример: Логирование И Аналитика
 
 **Логирование выполнения flow:**
 
@@ -1320,7 +1321,7 @@ suspend fun monitoredDataFetch() {
 }
 ```
 
-#### 7. Production пример: Обновления состояния UI
+#### 7. Production Пример: Обновления Состояния UI
 
 **Управление состоянием загрузки:**
 
@@ -1405,7 +1406,7 @@ sealed class DownloadState {
 }
 ```
 
-#### 8. Комбинирование onCompletion с обработкой ошибок
+#### 8. Комбинирование onCompletion С Обработкой Ошибок
 
 **Полный паттерн обработки ошибок:**
 
@@ -1475,7 +1476,7 @@ suspend fun declarativeErrorHandling() {
 }
 ```
 
-#### 9. onCompletion не может выпускать значения
+#### 9. onCompletion Не Может Выпускать Значения
 
 **Важное ограничение:**
 
@@ -1621,7 +1622,7 @@ class OnCompletionTest {
 }
 ```
 
-#### 11. Общие паттерны и лучшие практики
+#### 11. Общие Паттерны И Лучшие Практики
 
 **Паттерн: Управление ресурсами:**
 
@@ -1679,13 +1680,13 @@ class StateMachine {
 | Комбинировать с catch для обработки ошибок | Использовать как замену catch |
 | Использовать для аналитики/логирования | Использовать для трансформации данных |
 
-### Связанные вопросы
+### Связанные Вопросы
 - [[q-flow-operators--kotlin--medium]] - Операторы Flow
 - [[q-flow-exception-handling--kotlin--medium]] - Обработка исключений в Flow
 - [[q-flow-basics--kotlin--easy]] - Основы Flow
 - [[q-structured-concurrency--kotlin--hard]] - Структурированная конкурентность
 
-### Дополнительные вопросы
+### Дополнительные Вопросы
 1. В чем разница между onCompletion до и после оператора catch в цепочке Flow?
 2. Почему onCompletion не может emit значения? Чем это отличается от catch?
 3. Как реализовать Flow оператор, который гарантирует cleanup даже если collector бросает исключение?

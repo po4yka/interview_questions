@@ -3,20 +3,20 @@ id: android-400
 title: "KMM Testing / Тестирование в KMM"
 aliases: [KMM Testing, Kotlin Multiplatform Testing, Тестирование KMM, Тестирование Kotlin Multiplatform]
 topic: android
-subtopics: [kmp, testing-unit, coroutines]
+subtopics: [coroutines, kmp, testing-unit]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-testing-viewmodels-turbine--android--medium, q-testing-coroutines-flow--android--hard, q-compose-testing--android--medium]
+related: [q-compose-testing--android--medium, q-testing-coroutines-flow--android--hard, q-testing-viewmodels-turbine--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/kmp, android/testing-unit, android/coroutines, kotlin, multiplatform, testing, difficulty/medium]
+tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium, kotlin, multiplatform, testing]
 date created: Tuesday, October 28th 2025, 9:24:32 pm
-date modified: Thursday, October 30th 2025, 3:11:50 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -66,7 +66,7 @@ shared/src/
   iosTest/kotlin/            # iOS-специфичные
 ```
 
-### Unit-тестирование в commonTest
+### Unit-тестирование В commonTest
 
 **Тест репозитория:**
 
@@ -453,10 +453,6 @@ class AndroidPreferencesTest {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-unit-testing-basics--android--easy]] - Unit testing fundamentals
-- [[q-mockk-basics--android--easy]] - MockK basics
-
 ### Related (Medium)
 - [[q-testing-viewmodels-turbine--android--medium]] - ViewModel testing with Turbine
 - [[q-compose-testing--android--medium]] - Compose UI testing
@@ -464,4 +460,3 @@ class AndroidPreferencesTest {
 
 ### Advanced (Harder)
 - [[q-testing-coroutines-flow--android--hard]] - Advanced coroutine testing
-- [[q-kmm-architecture--android--hard]] - KMM architecture patterns

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [enums, types, classes]
+subtopics: [classes, enums, types]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lateinit--kotlin--medium, q-kotlin-default-inheritance-type--programming-languages--easy, q-request-coalescing-deduplication--kotlin--hard]
+related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-kotlin-lateinit--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, enum, types, classes, difficulty/easy]
+tags: [classes, difficulty/easy, enum, kotlin, types]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What is an Enum in Kotlin?
 # Вопрос (RU)

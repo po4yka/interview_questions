@@ -1,9 +1,9 @@
 ---
 id: kotlin-179
 title: "Sam Conversions / SAM конверсии"
-aliases: [SAM Conversion, Single Abstract Method, Functional Interfaces, SAM конверсии]
+aliases: [Functional Interfaces, SAM Conversion, SAM конверсии, Single Abstract Method]
 topic: kotlin
-subtopics: [lambdas, java-interop]
+subtopics: [java-interop, lambdas]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,22 +13,19 @@ moc: moc-kotlin
 related: [q-flow-exception-handling--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-object-companion-object--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - sam
-  - lambda
-  - functional-interface
-  - java-interop
-  - difficulty/medium
+tags: [difficulty/medium, functional-interface, java-interop, kotlin, lambda, sam]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# SAM (Single Abstract Method) конверсии
+
+# SAM (Single Abstract Method) Конверсии
 
 **English**: SAM (Single Abstract Method) conversions in Kotlin
 
 ## Answer (EN)
 **SAM conversions** allow using **lambda functions** instead of class/interface objects with **one abstract method**. This makes code more concise and readable when working with Java API or functional interfaces. Instead of creating an anonymous class, you can pass a lambda.
 
-### What is a SAM interface
+### What is a SAM Interface
 
 **SAM** (Single Abstract Method) interface is an interface with **one** abstract method.
 
@@ -44,7 +41,7 @@ fun interface OnClickListener {
 }
 ```
 
-### SAM conversion in action
+### SAM Conversion in Action
 
 #### Before SAM (old approach)
 
@@ -57,7 +54,7 @@ button.setOnClickListener(object : View.OnClickListener {
 })
 ```
 
-#### With SAM conversion
+#### With SAM Conversion
 
 ```kotlin
 // Lambda - concise and readable
@@ -71,7 +68,7 @@ button.setOnClickListener {
 }
 ```
 
-### Java SAM interfaces
+### Java SAM Interfaces
 
 Kotlin automatically applies SAM conversions to **Java** interfaces:
 
@@ -119,7 +116,7 @@ val sorted = numbers.sortedWith { a, b -> a.compareTo(b) }
 val sorted = numbers.sortedWith(Comparator { a, b -> a - b })
 ```
 
-### Kotlin SAM interfaces (fun interface)
+### Kotlin SAM Interfaces (fun interface)
 
 Since Kotlin 1.4, SAM support for Kotlin interfaces via `fun interface`:
 
@@ -148,7 +145,7 @@ val result3 = processString("test", object : StringTransformer {
 })
 ```
 
-### Practical examples
+### Practical Examples
 
 #### Example 1: Android OnClickListener
 
@@ -209,7 +206,7 @@ val adapter = UserAdapter(users) { user ->
 }
 ```
 
-#### Пример 3: Кастомный SAM интерфейс
+#### Пример 3: Кастомный SAM Интерфейс
 
 ```kotlin
 // Валидатор данных
@@ -241,7 +238,7 @@ val emailValidator = Validator<User> { it.email.contains("@") }
 val validUsers = repo.findUsers(emailValidator)
 ```
 
-#### Пример 4: Обработчики событий
+#### Пример 4: Обработчики Событий
 
 ```kotlin
 fun interface EventHandler<T> {
@@ -281,7 +278,7 @@ eventBus.publish("user.login", UserLoggedIn(123, System.currentTimeMillis()))
 eventBus.publish("message.received", MessageReceived("Alice", "Hello!"))
 ```
 
-### SAM constructor
+### SAM Constructor
 
 Can explicitly create SAM via constructor:
 
@@ -370,7 +367,7 @@ val t = Transformer { it.uppercase() }  // OK
 val runnable = Runnable { println("Running") }  // OK
 ```
 
-### Сравнение с высшими функциями
+### Сравнение С Высшими Функциями
 
 ```kotlin
 // Подход 1: SAM интерфейс
@@ -445,7 +442,7 @@ processItems(list) { it.uppercase() }
 
 **SAM (Single Abstract Method)** конверсии позволяют использовать **лямбда-функции** вместо объектов анонимных классов для интерфейсов с **одним абстрактным методом**.
 
-### Как работает
+### Как Работает
 
 Вместо создания анонимного класса можно передать лямбду:
 
@@ -459,11 +456,11 @@ button.setOnClickListener(object : View.OnClickListener {
 button.setOnClickListener { v -> }
 ```
 
-### Для Java интерфейсов
+### Для Java Интерфейсов
 
 Работает автоматически для Java интерфейсов (Runnable, Comparator, OnClickListener)
 
-### Для Kotlin интерфейсов
+### Для Kotlin Интерфейсов
 
 Требует модификатор `fun interface`:
 
@@ -476,7 +473,7 @@ fun interface StringTransformer {
 val result = processString("hello") { it.uppercase() }
 ```
 
-### Когда использовать
+### Когда Использовать
 
 - **SAM**: для Java interop и типобезопасности
 - **Function types** `(T) -> R`: для чистого Kotlin кода

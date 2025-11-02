@@ -1,19 +1,21 @@
 ---
 id: android-235
 title: "Why Are Fragments Needed If There Is Activity / Зачем нужны Fragment если есть Activity"
-aliases: [Fragments vs Activity, Fragment Architecture, Зачем Fragment, Фрагменты против Activity]
+aliases: [Fragment Architecture, Fragments vs Activity, Зачем Fragment, Фрагменты против Activity]
 topic: android
-subtopics: [fragment, architecture-modularization, lifecycle]
+subtopics: [architecture-modularization, fragment, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-where-is-composition-created--android--medium, q-build-optimization-gradle--gradle--medium, q-hilt-assisted-injection--di--medium]
+related: [q-build-optimization-gradle--gradle--medium, q-hilt-assisted-injection--di--medium, q-where-is-composition-created--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android, android/fragment, android/architecture-modularization, android/lifecycle, fragment, architecture, ui, difficulty/hard]
+tags: [android, android/architecture-modularization, android/fragment, android/lifecycle, architecture, difficulty/hard, fragment, ui]
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [android, android/fragment, android/architecture-modularization, android/l
 
 Фрагменты — это модульные компоненты UI внутри Activity с собственным жизненным циклом, которые можно добавлять/удалять во время выполнения.
 
-### Ключевые преимущества
+### Ключевые Преимущества
 
 **1. Модульность и переиспользование**
 
@@ -123,7 +125,7 @@ Navigation Component для изолированных navigation graphs:
     app:navGraph="@navigation/feature_graph" />
 ```
 
-### Архитектурные паттерны
+### Архитектурные Паттерны
 
 **Single Activity Architecture**
 
@@ -146,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 // Решение: Jetpack Compose устраняет эти проблемы
 ```
 
-### Современная альтернатива
+### Современная Альтернатива
 
 Jetpack Compose предлагает compositional navigation без фрагментов:
 

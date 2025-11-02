@@ -1,7 +1,7 @@
 ---
 id: android-392
 title: "Как сказать адаптеру перерисовать список если элемент был удален / How To Tell Adapter To Redraw List If Element Was Deleted"
-aliases: ["Как сказать адаптеру перерисовать список", "How to tell adapter to redraw list", "RecyclerView adapter update", "Обновление адаптера RecyclerView"]
+aliases: ["How to tell adapter to redraw list", "RecyclerView adapter update", "Как сказать адаптеру перерисовать список", "Обновление адаптера RecyclerView"]
 topic: android
 subtopics: [ui-views]
 question_kind: android
@@ -14,9 +14,9 @@ related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android, android/ui-views, recyclerview, adapter, difficulty/medium]
+tags: [adapter, android, android/ui-views, difficulty/medium, recyclerview]
 date created: Tuesday, October 28th 2025, 9:11:36 pm
-date modified: Thursday, October 30th 2025, 3:09:50 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:09:50 pm
 
 При удалении элемента необходимо обновить источник данных и уведомить адаптер специфичным методом для эффективной перерисовки.
 
-### Три основных подхода
+### Три Основных Подхода
 
 **1. ListAdapter (рекомендуется)**
 
@@ -87,7 +87,7 @@ fun removeItemBad(position: Int) {
 }
 ```
 
-### Swipe to Delete с отменой
+### Swipe to Delete С Отменой
 
 ```kotlin
 val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
@@ -113,7 +113,7 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
 itemTouchHelper.attachToRecyclerView(recyclerView)
 ```
 
-### Важные особенности
+### Важные Особенности
 
 **Всегда используйте adapterPosition**
 
@@ -159,7 +159,7 @@ fun ItemList() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **ListAdapter** - выбор по умолчанию для нового кода
 2. **Стабильные ключи** - используйте `key = { it.id }` для правильных анимаций
@@ -332,7 +332,7 @@ fun ItemList() {
 
 ### Related (Same Level)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
-- [[q-recyclerview-itemdecoration-advanced--recyclerview--medium]] - RecyclerView customization
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - RecyclerView customization
 - [[q-testing-compose-ui--android--medium]] - Testing UI components
 
 ### Advanced (Harder)

@@ -1,7 +1,7 @@
 ---
 id: android-398
 title: "ML Kit Text Recognition / Распознавание текста ML Kit"
-aliases: ["ML Kit Text Recognition", "Распознавание текста ML Kit", "OCR Android", "MLKit OCR"]
+aliases: ["ML Kit Text Recognition", "MLKit OCR", "OCR Android", "Распознавание текста ML Kit"]
 topic: android
 subtopics: [camera, media]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-camerax-integration--android--medium, q-background-execution--android--medium]
+related: [q-camerax-integration--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/camera, android/media, mlkit, ocr, text-recognition, image-processing, difficulty/medium]
+tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit, ocr, text-recognition]
+date created: Saturday, November 1st 2025, 1:25:05 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android/camera, android/media, mlkit, ocr, text-recognition, image-proces
 
 ML Kit предоставляет on-device OCR для Latin (встроенный), Chinese, Japanese, Korean, Devanagari (требуют загрузки моделей ~10-30 MB).
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 // app/build.gradle.kts
@@ -496,15 +498,10 @@ class ModelDownloadManager(private val context: Context) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-camerax-basics--android--easy]] - Basic CameraX setup
-- [[q-bitmap-manipulation--android--easy]] - Bitmap operations
+- Related content to be added
 
 ### Related (Same Level)
 - [[q-camerax-integration--android--medium]] - Advanced CameraX patterns
-- [[q-background-execution--android--medium]] - Background processing strategies
-- [[q-viewmodel-lifecycle--android--medium]] - ViewModel resource management
 
 ### Advanced (Harder)
-- [[q-custom-ml-model--android--hard]] - Custom TensorFlow Lite models
-- [[q-image-processing-pipeline--android--hard]] - Complex preprocessing pipelines
-- [[q-real-time-video-processing--android--hard]] - Real-time video ML processing
+- Related content to be added

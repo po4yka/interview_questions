@@ -1,22 +1,22 @@
 ---
 id: android-246
 title: "Main Causes UI Lag / Основные причины тормозов UI"
-aliases: [Main Causes UI Lag, Основные причины тормозов UI, UI Performance, UI Lag]
+aliases: [Main Causes UI Lag, UI Lag, UI Performance, Основные причины тормозов UI]
 topic: android
-subtopics: [performance-rendering, performance-memory, threads-sync]
+subtopics: [performance-memory, performance-rendering, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-reduce-apk-size-techniques--android--medium, q-mvvm-pattern--android--medium, q-compose-performance-optimization--android--hard]
+related: [q-compose-performance-optimization--android--hard, q-mvvm-pattern--android--medium, q-reduce-apk-size-techniques--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/performance-rendering, android/performance-memory, android/threads-sync, performance, ui, threading, difficulty/medium]
+tags: [android/performance-memory, android/performance-rendering, android/threads-sync, difficulty/medium, performance, threading, ui]
 date created: Tuesday, October 28th 2025, 9:36:21 pm
-date modified: Thursday, October 30th 2025, 3:12:56 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:12:56 pm
 
 Основные причины торможения пользовательского интерфейса (UI lag/jank) в Android:
 
-### 1. Тяжелые операции в главном потоке
+### 1. Тяжелые Операции В Главном Потоке
 
 **Проблема:** Долгие операции блокируют отрисовку UI.
 
@@ -59,7 +59,7 @@ suspend fun loadData() {
 
 **Современные подходы:** [[c-coroutines|Kotlin Coroutines]] (рекомендовано), WorkManager, Flow.
 
-### 2. Неоптимизированные макеты (layouts)
+### 2. Неоптимизированные Макеты (layouts)
 
 **Проблема:** Сложная иерархия вызывает медленный рендеринг.
 
@@ -89,7 +89,7 @@ suspend fun loadData() {
 
 **Best practices:** ConstraintLayout для сложных UI, ViewStub для условно отображаемых view, merge тег для устранения лишних ViewGroup.
 
-### 3. Неоптимизированная работа с изображениями
+### 3. Неоптимизированная Работа С Изображениями
 
 **Проблема:** Загрузка больших изображений вызывает проблемы с памятью.
 
@@ -117,7 +117,7 @@ imageView.load(imageUrl) {
 
 **Возможности библиотек:** автоматический ресайз, memory/disk кеширование, async загрузка, lifecycle awareness.
 
-### 4. Частые обновления UI
+### 4. Частые Обновления UI
 
 **Проблема:** Слишком много обновлений UI вызывают избыточный рендеринг.
 
@@ -139,7 +139,7 @@ val diffResult = DiffUtil.calculateDiff(
 diffResult.dispatchUpdatesTo(adapter)
 ```
 
-### 5. Неоптимизированные анимации
+### 5. Неоптимизированные Анимации
 
 **Проблема:** Тяжелые анимации роняют FPS (< 60fps).
 
@@ -166,7 +166,7 @@ AnimatedVisibility(visible = isVisible) {
 }
 ```
 
-### Дополнительные причины
+### Дополнительные Причины
 
 **6. Проблемы с памятью:** Низкая память вызывает GC паузы. Решение: исправить memory leaks (LeakCanary), уменьшить аллокации объектов.
 

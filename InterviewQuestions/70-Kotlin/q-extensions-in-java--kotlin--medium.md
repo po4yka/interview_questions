@@ -3,21 +3,22 @@ id: kotlin-187
 title: "Extensions In Java / Расширения в Java"
 aliases: []
 topic: kotlin
-subtopics: [access-modifiers, type-system, null-safety]
+subtopics: [access-modifiers, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-property-delegates--programming-languages--medium, q-kotlin-delegation-detailed--kotlin--medium, q-flow-testing-advanced--kotlin--hard]
+related: [q-flow-testing-advanced--kotlin--hard, q-kotlin-delegation-detailed--kotlin--medium, q-kotlin-property-delegates--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# How are Extensions applied in Java?
+
+# How Are Extensions Applied in Java?
 
 # Question (EN)
 > How are Extensions applied in Java? Does Java support extension functions like Kotlin?
@@ -349,7 +350,7 @@ public class Main {
 **Как работают extension-функции Kotlin:**
 При компиляции extension-функции Kotlin превращаются в статические методы в Java bytecode. Объект-получатель становится первым параметром.
 
-### Примеры кода
+### Примеры Кода
 
 **Kotlin extension-функция:**
 

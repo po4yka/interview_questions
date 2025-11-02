@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-views, c-view-hierarchy, q-what-does-viewgroup-inherit-from--android--easy, q-viewmodel-pattern--android--easy]
+related: [c-view-hierarchy, c-views, q-viewmodel-pattern--android--easy, q-what-does-viewgroup-inherit-from--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, viewgroup, view, ui, view-hierarchy, difficulty/easy]
+tags: [android/ui-views, difficulty/easy, ui, view, view-hierarchy, viewgroup]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What's ViewGroup? How are they different from Views?
+# What's ViewGroup? How Are They Different from Views?
 
 **Russian**: Что такое ViewGroup? Чем они отличаются от View?
 
@@ -70,7 +72,7 @@ Common UI components that extend View:
 - **CheckBox** - checkbox control
 - **RadioButton** - radio button control
 
-### View vs ViewGroup: Key Differences
+### View Vs ViewGroup: Key Differences
 
 #### View
 - **Definition**: Basic building blocks of User Interface (UI) elements in Android
@@ -214,17 +216,17 @@ class CustomContainer @JvmOverloads constructor(
 
 ## Ответ (Russian)
 
-### Что такое ViewGroup?
+### Что Такое ViewGroup?
 
 **ViewGroup** — это специальный view, который может **содержать другие views** (называемые дочерними элементами). ViewGroup является базовым классом для layouts и контейнеров views. Этот класс также определяет класс `ViewGroup.LayoutParams`, который служит базовым классом для параметров layouts.
 
 ViewGroups — это **невидимые контейнеры**, в которые могут быть помещены другие Views. Класс `ViewGroup` расширяет класс `View`.
 
-### Что такое View?
+### Что Такое View?
 
 **View** представляет базовый строительный блок для компонентов пользовательского интерфейса. View занимает прямоугольную область на экране и отвечает за отрисовку и обработку событий.
 
-### Ключевые отличия
+### Ключевые Отличия
 
 **View (Представление)**:
 - Базовые строительные блоки элементов пользовательского интерфейса

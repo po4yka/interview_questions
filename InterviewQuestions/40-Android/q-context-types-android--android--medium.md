@@ -3,7 +3,7 @@ id: android-482
 title: Context Types in Android / Типы Context в Android
 aliases: ["Context Types in Android", "Типы Context в Android"]
 topic: android
-subtopics: [lifecycle, activity, app-startup]
+subtopics: [activity, app-startup, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -16,10 +16,10 @@ related:
   - q-usecase-pattern-android--android--medium
 created: 2025-10-21
 updated: 2025-10-30
-tags: [android/lifecycle, android/activity, android/app-startup, difficulty/medium]
+tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
 sources: ["https://developer.android.com/reference/android/content/Context"]
 date created: Thursday, October 30th 2025, 11:56:11 am
-date modified: Thursday, October 30th 2025, 12:44:38 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +34,7 @@ date modified: Thursday, October 30th 2025, 12:44:38 pm
 
 Context — абстрактный класс, предоставляющий доступ к ресурсам приложения, системным сервисам и операциям уровня приложения. Каждый тип имеет свой lifecycle и область применения.
 
-### Основные типы
+### Основные Типы
 
 **Application Context**
 - Привязан к lifecycle всего приложения
@@ -53,7 +53,7 @@ Context — абстрактный класс, предоставляющий д
 - Получение: `this` внутри Service
 - Используется для: фоновых операций, запуска других сервисов
 
-### Иерархия классов
+### Иерархия Классов
 
 ```kotlin
 Context (abstract)
@@ -64,7 +64,7 @@ Context (abstract)
               └── Activity
 ```
 
-### Таблица использования
+### Таблица Использования
 
 | Операция | Application | Activity | Service |
 |----------|-------------|----------|---------|
@@ -74,7 +74,7 @@ Context (abstract)
 | Singleton | Да | Нет | Нет |
 | БД/сеть | Да | Избегать | Да |
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 ```kotlin
 // ❌ Memory leak: Activity в статическом поле
@@ -100,7 +100,7 @@ AlertDialog.Builder(applicationContext) // crash
 AlertDialog.Builder(this@MyActivity)
 ```
 
-### Правила выбора
+### Правила Выбора
 
 1. **Application Context** — для долгоживущих объектов (Repository, WorkManager, singleton)
 2. **Activity Context** — строго для UI-компонентов с коротким lifecycle

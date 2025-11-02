@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-class-initialization-order--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-data-class-detailed--kotlin--medium]
+related: [q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: "2025-10-12"
 updated: 2025-01-25
-tags: [kotlin, classes, nested-classes, inner-classes, kotlin-features, difficulty/medium]
+tags: [classes, difficulty/medium, inner-classes, kotlin, kotlin-features, nested-classes]
 sources: [https://kotlinlang.org/docs/nested-classes.html]
+date created: Sunday, October 12th 2025, 1:58:08 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Вопрос (RU)

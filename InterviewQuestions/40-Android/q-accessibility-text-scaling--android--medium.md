@@ -15,14 +15,13 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - q-accessibility-compose--android--medium
   - q-accessibility-testing--android--medium
 created: 2025-10-11
 updated: 2025-10-29
 sources: []
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 date created: Wednesday, October 29th 2025, 4:20:10 pm
-date modified: Thursday, October 30th 2025, 11:12:49 am
+date modified: Saturday, November 1st 2025, 3:59:48 pm
 ---
 
 # Вопрос (RU)
@@ -166,14 +165,9 @@ fun TextScalingPreview() {
 ## Related Questions
 
 ### Prerequisites
-- [[q-compose-text-basics--android--easy]] - Basic text rendering in Compose
-- [[q-material-theming--android--medium]] - Material Design theming
 
 ### Related
 - [[q-accessibility-compose--android--medium]] - Accessibility in Compose
 - [[q-accessibility-testing--android--medium]] - Accessibility testing
-- [[q-responsive-layouts--android--medium]] - Responsive layout design
 
 ### Advanced
-- [[q-custom-accessibility-services--android--hard]] - Custom accessibility services
-- [[q-advanced-a11y-patterns--android--hard]] - Advanced accessibility patterns

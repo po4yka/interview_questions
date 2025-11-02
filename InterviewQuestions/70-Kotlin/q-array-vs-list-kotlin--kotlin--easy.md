@@ -1,20 +1,27 @@
 ---
 id: kotlin-137
-title: "Array Vs List Kotlin"
+title: Array Vs List Kotlin
 topic: kotlin
 difficulty: easy
 status: draft
 created: 2025-10-13
-tags:
-  - kotlin
+tags: [collections, data-structures, difficulty/easy, kotlin]
+moc: moc-kotlin
+related:
+  - q-catch-operator-flow--kotlin--medium
+  - q-equals-hashcode-purpose--kotlin--medium
+  - q-list-vs-sequence--kotlin--medium
+  - q-visibility-modifiers-kotlin--kotlin--medium
+subtopics:
+  - array
   - collections
   - data-structures
-moc: moc-kotlin
-related: [q-equals-hashcode-purpose--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium, q-catch-operator-flow--kotlin--medium]
-  - q-list-vs-sequence--kotlin--medium.md
-subtopics: [collections, data-structures, array, list]
+  - list
+date created: Saturday, November 1st 2025, 12:09:57 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
-# What is the difference between array and list in Kotlin?
+
+# What is the Difference between Array and List in Kotlin?
 
 # Вопрос (RU)
 > Чем array отличается от list
@@ -123,7 +130,7 @@ shoppingList.remove("Milk")
 ## Ответ (RU)
 Массивы и списки представляют собой структуры данных для хранения наборов элементов.
 
-### Основные различия
+### Основные Различия
 
 #### 1. Размер
 
@@ -193,7 +200,7 @@ val list = MutableList(1000000) { 0 }
 list.add(42)  // Может потребовать перевыделения памяти
 ```
 
-#### 5. Примеры использования
+#### 5. Примеры Использования
 
 ```kotlin
 // Array - фиксированный размер
@@ -205,7 +212,7 @@ shoppingList.add("Яйца")
 shoppingList.remove("Молоко")
 ```
 
-### Когда использовать
+### Когда Использовать
 
 **Array**:
 - Известный фиксированный размер

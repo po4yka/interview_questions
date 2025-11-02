@@ -10,12 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-mvp-pattern--android--medium, q-why-use-diffutil--android--medium, q-compositionlocal-compose--android--hard]
+related: [q-compositionlocal-compose--android--hard, q-mvp-pattern--android--medium, q-why-use-diffutil--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/testing-unit, difficulty/medium]
 date created: Sunday, October 12th 2025, 12:27:49 pm
-date modified: Thursday, October 30th 2025, 3:13:53 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # MockK Advanced Features
@@ -34,7 +34,7 @@ date modified: Thursday, October 30th 2025, 3:13:53 pm
 
 ---
 
-### Basic MockK vs Mockito
+### Basic MockK Vs Mockito
 
 **Mockito (Java-style):**
 
@@ -564,7 +564,7 @@ fun testConstructorMock() {
 
 ---
 
-### MockK vs Mockito Comparison
+### MockK Vs Mockito Comparison
 
 | Feature | MockK | Mockito |
 |---------|-------|---------|
@@ -636,7 +636,7 @@ fun tearDown() {
 
 **Relaxed mocks** автоматически возвращают значения по умолчанию для незамокканных вызовов, устраняя исключения.
 
-### Spy - Частичное моккирование
+### Spy - Частичное Моккирование
 
 **Spies** используют реальную реализацию, но позволяют выборочно моккировать методы.
 
@@ -644,11 +644,11 @@ fun tearDown() {
 
 Аннотации упрощают настройку тестов: `@MockK`, `@RelaxedMockK`, `@SpyK`, `@InjectMockKs`.
 
-### Моккирование корутин
+### Моккирование Корутин
 
 MockK имеет встроенную поддержку suspend функций с `coEvery` и `coVerify`.
 
-### Продвинутые функции
+### Продвинутые Функции
 
 1. Ответы с лямбдами
 2. Захват слотов
@@ -657,11 +657,11 @@ MockK имеет встроенную поддержку suspend функций 
 5. Моккирование статических методов
 6. Моккирование конструкторов
 
-### MockK vs Mockito
+### MockK Vs Mockito
 
 MockK лучше для Kotlin благодаря нативному синтаксису, поддержке suspend функций, extension функций и моккирования final классов без дополнительной конфигурации.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте relaxed mocks разумно
 2. Предпочитайте mockk вместо spy когда возможно

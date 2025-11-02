@@ -3,25 +3,22 @@ id: lang-087
 title: "Kotlin Equals Hashcode Purpose / Назначение equals и hashCode в Kotlin"
 aliases: [Kotlin Equals Hashcode Purpose, Назначение equals и hashCode в Kotlin]
 topic: programming-languages
-subtopics: [type-system, collections, null-safety]
+subtopics: [collections, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-semaphore-rate-limiting--kotlin--medium, q-launch-vs-async--kotlin--easy, q-backpressure-in-kotlin-flow--programming-languages--medium]
+related: [q-launch-vs-async--kotlin--easy, q-semaphore-rate-limiting--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - collections
-  - equals
-  - hashcode
-  - object-comparison
-  - difficulty/medium
+tags: [collections, difficulty/medium, equals, hashcode, object-comparison, programming-languages]
+date created: Friday, October 31st 2025, 6:28:52 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Зачем нужны методы equals и hashcode?
+
+# Зачем Нужны Методы Equals И Hashcode?
 
 # Question (EN)
 > Why do we need equals and hashCode methods?
@@ -157,4 +154,4 @@ class Book(val isbn: String, val title: String) {
 
 - [[q-semaphore-rate-limiting--kotlin--medium]]
 - [[q-launch-vs-async--kotlin--easy]]
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]]
+-

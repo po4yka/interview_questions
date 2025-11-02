@@ -19,7 +19,7 @@ updated: 2025-10-29
 sources: []
 tags: [android/cache-offline, android/networking-http, android/room, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:13:55 am
-date modified: Thursday, October 30th 2025, 12:43:29 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +32,7 @@ date modified: Thursday, October 30th 2025, 12:43:29 pm
 
 ## Ответ (RU)
 
-### Многоуровневая архитектура
+### Многоуровневая Архитектура
 
 **Память → Диск → Сеть**: стандартная трехуровневая иерархия в Android.
 

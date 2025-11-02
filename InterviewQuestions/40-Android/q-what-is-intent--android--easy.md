@@ -1,7 +1,7 @@
 ---
 id: android-405
 title: "Intent в Android / What Is Intent"
-aliases: [Intent, Android Intent, Явный Intent, Неявный Intent]
+aliases: [Android Intent, Intent, Неявный Intent, Явный Intent]
 topic: android
 subtopics: [intents-deeplinks]
 question_kind: theory
@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-intent-filters-android--android--medium, q-what-are-services-for--android--easy, q-android-components-besides-activity--android--easy]
+related: [q-android-components-besides-activity--android--easy, q-intent-filters-android--android--medium, q-what-are-services-for--android--easy]
 created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/guide/components/intents-filters]
-tags: [android/intents-deeplinks, explicit-intent, implicit-intent, difficulty/easy]
+tags: [android/intents-deeplinks, difficulty/easy, explicit-intent, implicit-intent]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое Intent?

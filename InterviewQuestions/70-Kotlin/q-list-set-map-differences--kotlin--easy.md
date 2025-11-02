@@ -1,7 +1,7 @@
 ---
 id: kotlin-175
 title: "List Set Map Differences / Различия List Set и Map"
-aliases: [Collections, List vs Set vs Map, Collection Types, Коллекции]
+aliases: [Collection Types, Collections, List vs Set vs Map, Коллекции]
 topic: kotlin
 subtopics: [collections]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-object-companion-object--programming-languages--easy, q-dispatchers-unconfined--kotlin--medium, q-coroutines-vs-threads--programming-languages--medium]
+related: [q-dispatchers-unconfined--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - collections
-  - list
-  - set
-  - map
-  - difficulty/easy
+tags: [collections, difficulty/easy, kotlin, list, map, set]
+date created: Friday, October 31st 2025, 6:29:30 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# рассказать отличия и в каких случаях их использовать list set map
+
+# Рассказать Отличия И В Каких Случаях Их Использовать List Set Map
 
 # Question (EN)
 > Explain the differences between List, Set, and Map. When should you use each?
@@ -54,7 +51,7 @@ val ages = mapOf("Alice" to 25, "Bob" to 30) // key-value pairs
 
 В Kotlin есть три основных типа коллекций с различными характеристиками:
 
-### List — упорядоченный список
+### List — Упорядоченный Список
 
 **Характеристики:**
 - Элементы упорядочены (имеют индекс)
@@ -75,7 +72,7 @@ println(tasks[0])      // "Write code"
 println(tasks.size)    // 4 (дубликаты сохраняются)
 ```
 
-### Set — множество уникальных элементов
+### Set — Множество Уникальных Элементов
 
 **Характеристики:**
 - Элементы уникальны (дубликаты автоматически удаляются)
@@ -100,7 +97,7 @@ val list = listOf(1, 2, 2, 3, 3, 3)
 val unique = list.toSet()  // [1, 2, 3]
 ```
 
-### Map — коллекция пар "ключ-значение"
+### Map — Коллекция Пар "ключ-значение"
 
 **Характеристики:**
 - Каждый ключ уникален
@@ -131,7 +128,7 @@ val frequency = words.groupingBy { it }.eachCount()
 // {cat=3, dog=2, bird=1}
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Характеристика | List | Set | Map |
 |----------------|------|-----|-----|
@@ -141,7 +138,7 @@ val frequency = words.groupingBy { it }.eachCount()
 | Проверка наличия | O(n) | O(1) HashSet | O(1) HashMap |
 | Главное применение | Упорядоченные данные | Уникальность | Ассоциации ключ-значение |
 
-### Примеры использования
+### Примеры Использования
 
 ```kotlin
 // List - задачи в порядке выполнения
@@ -161,7 +158,7 @@ val config = mapOf(
 println(config["timeout"])  // "30"
 ```
 
-### Mutable vs Immutable
+### Mutable Vs Immutable
 
 ```kotlin
 // Immutable (read-only)
@@ -180,7 +177,7 @@ val mutableMap = mutableMapOf(1 to "one")     // MutableMap<Int, String>
 mutableMap[2] = "two"
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
 ```kotlin
 // 1. List - история действий пользователя
@@ -203,7 +200,7 @@ val userId = "user123"
 val data = cache[userId] ?: fetchData(userId).also { cache[userId] = it }
 ```
 
-### Когда что использовать - краткая памятка
+### Когда Что Использовать - Краткая Памятка
 
 **Используйте List, если:**
 - Важен порядок элементов
@@ -226,4 +223,4 @@ val data = cache[userId] ?: fetchData(userId).also { cache[userId] = it }
 
 - [[q-kotlin-object-companion-object--programming-languages--easy]]
 - [[q-dispatchers-unconfined--kotlin--medium]]
-- [[q-coroutines-vs-threads--programming-languages--medium]]
+-

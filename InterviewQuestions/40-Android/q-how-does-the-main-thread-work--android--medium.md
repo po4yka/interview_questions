@@ -3,7 +3,7 @@ id: android-334
 title: "How Does The Main Thread Work / Как работает главный поток"
 aliases: ["How Does The Main Thread Work", "Как работает главный поток"]
 topic: android
-subtopics: [threads-sync, performance-rendering, lifecycle]
+subtopics: [lifecycle, performance-rendering, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-how-does-jetpack-compose-work--android--medium, q-what-is-known-abou
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/threads-sync, android/performance-rendering, android/lifecycle, difficulty/medium]
+tags: [android, android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:35:37 am
-date modified: Thursday, October 30th 2025, 12:48:17 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:48:17 pm
 
 Главный поток (UI thread) — это центральный поток Android-приложения, который обрабатывает отрисовку интерфейса, пользовательский ввод и системные callback'и. Работает на основе паттерна **Looper + Message Queue**.
 
-### Основные обязанности
+### Основные Обязанности
 
 1. **Отрисовка UI**: measure, layout, draw view-иерархии
 2. **Обработка ввода**: touch events, gestures, клавиатура
@@ -64,7 +64,7 @@ fun main() {
 }
 ```
 
-### Правила использования
+### Правила Использования
 
 **Разрешено** (быстрые операции <16ms):
 - Обновление UI: `setText()`, `setVisibility()`
@@ -94,7 +94,7 @@ class BadActivity : AppCompatActivity() {
 - BroadcastReceiver: >10 секунд
 - Service (foreground): >20 секунд
 
-### Правильные паттерны
+### Правильные Паттерны
 
 **Coroutines** (рекомендуется):
 

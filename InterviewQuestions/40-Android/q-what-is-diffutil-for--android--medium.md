@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-recyclerview, c-list-adapter, q-what-is-known-about-recyclerview--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
+related: [c-list-adapter, c-recyclerview, q-what-is-known-about-recyclerview--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, diffutil, recyclerview, performance, optimization, difficulty/medium]
+tags: [android/ui-views, difficulty/medium, diffutil, optimization, performance, recyclerview]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What is DiffUtil for?
+# What is DiffUtil For?
 
 # Вопрос (RU)
 
@@ -481,14 +483,14 @@ class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 
 **DiffUtil** — это утилитарный класс в Android, который вычисляет разницу между двумя списками и выдает список операций обновления для преобразования первого списка во второй. Он в основном используется с RecyclerView для эффективного обновления только измененных элементов вместо обновления всего списка.
 
-### Зачем нужен DiffUtil?
+### Зачем Нужен DiffUtil?
 
 1. **Производительность** - Обновляет только измененные элементы, а не весь список
 2. **Анимации** - Автоматически запускает соответствующие анимации элементов
 3. **Эффективность** - Использует алгоритм разницы Eugene W. Myers
 4. **Меньше шаблонного кода** - Уменьшает ручной код обновления адаптера
 
-### Базовое использование
+### Базовое Использование
 
 **ListAdapter** — современный подход с встроенной поддержкой DiffUtil:
 
@@ -530,7 +532,7 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(UserDiffCa
 adapter.submitList(newUserList)  // DiffUtil автоматически вычисляет изменения!
 ```
 
-### AsyncListDiffer для больших списков
+### AsyncListDiffer Для Больших Списков
 
 Для производительности с большими списками используйте AsyncListDiffer, который вычисляет diff в фоновом потоке:
 
@@ -566,7 +568,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 }
 ```
 
-### Частичные обновления с Payloads
+### Частичные Обновления С Payloads
 
 Для еще лучшей производительности используйте payloads для обновления только измененных полей:
 
@@ -632,7 +634,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()
 }
 ```
 
-### Сравнение: Без DiffUtil vs С DiffUtil
+### Сравнение: Без DiffUtil Vs С DiffUtil
 
 **Без DiffUtil (Плохой подход):**
 ```kotlin
@@ -656,7 +658,7 @@ class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. ✅ **Используйте ListAdapter** для простых случаев
 2. ✅ **Используйте AsyncListDiffer** для больших списков (>100 элементов)
@@ -665,7 +667,7 @@ class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 5. ✅ **Запускайте в фоновом потоке** для тяжелых вычислений
 6. ❌ **Не используйте notifyDataSetChanged()** когда можете использовать DiffUtil
 
-### Базовая реализация DiffUtil
+### Базовая Реализация DiffUtil
 
 Классический подход с использованием `DiffUtil.Callback`:
 
@@ -726,7 +728,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 }
 ```
 
-### DiffUtil со сложными объектами
+### DiffUtil Со Сложными Объектами
 
 Пример работы с вложенными объектами и частичными обновлениями:
 
@@ -839,7 +841,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 }
 ```
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 Для больших списков важно запускать вычисления DiffUtil в фоновом потоке:
 
@@ -889,7 +891,7 @@ class LargeListAdapter : RecyclerView.Adapter<LargeListAdapter.ViewHolder>() {
 }
 ```
 
-### Использование в Fragment/Activity
+### Использование В Fragment/Activity
 
 Пример интеграции ListAdapter в реальном приложении:
 

@@ -3,20 +3,20 @@ id: android-223
 title: "Measure Project Size / Измерение размера проекта"
 aliases: ["Measure Project Size", "Измерение размера проекта"]
 topic: android
-subtopics: [gradle, architecture-modularization]
+subtopics: [architecture-modularization, gradle]
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-how-navigation-is-implemented-in-android--android--medium]
+related: [q-how-navigation-is-implemented-in-android--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/gradle, android/architecture-modularization, project-metrics, codebase-analysis, difficulty/easy]
+tags: [android/architecture-modularization, android/gradle, codebase-analysis, difficulty/easy, project-metrics]
 date created: Tuesday, October 28th 2025, 9:35:54 pm
-date modified: Thursday, October 30th 2025, 3:13:08 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +39,7 @@ date modified: Thursday, October 30th 2025, 3:13:08 pm
 
 **Типичный крупный проект:** ~100,000 строк кода, 5-10 модулей, APK 20-40 MB.
 
-### 1. Строки кода (LOC)
+### 1. Строки Кода (LOC)
 
 **Измерение через командную строку:**
 
@@ -65,7 +65,7 @@ find . \( -name "*.kt" -o -name "*.java" \) | xargs wc -l
 | Большой | 50,000-200,000 | Корпоративное приложение, 5-10 модулей |
 | Очень большой | > 200,000 | Сложная платформа, 10+ модулей |
 
-### 2. Количество модулей
+### 2. Количество Модулей
 
 **Измерение:**
 
@@ -131,7 +131,7 @@ ls -lh app/build/outputs/apk/release/app-release.apk
 | С медиа | 30-100 MB | Социальные сети, фото |
 | Большое | 100-500 MB | Игры, видео-стриминг |
 
-### 4. Дополнительные метрики
+### 4. Дополнительные Метрики
 
 **Количество методов:**
 
@@ -155,14 +155,14 @@ ls -lh app/build/outputs/apk/release/app-release.apk
 Время сборки:     2м 15с (инкрементальная)
 ```
 
-### Инструменты измерения
+### Инструменты Измерения
 
 1. **Android Studio** — APK Analyzer, плагин Statistics
 2. **SonarQube** — `./gradlew sonarqube` для качества кода
 3. **Detekt** — статический анализ Kotlin
 4. **Dexcount** — подсчет методов
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Мониторинг роста** — отслеживать метрики в commits
 2. **Установка лимитов** — Gradle fail на превышении 50 MB APK

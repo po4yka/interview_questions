@@ -1,28 +1,24 @@
 ---
 id: kotlin-162
 title: "Launch Vs Async Vs Runblocking / Launch против Async против Runblocking"
-aliases: [Launch, Async, RunBlocking, Coroutine Builders, Запуск корутин]
+aliases: [Async, Coroutine Builders, Launch, RunBlocking, Запуск корутин]
 topic: kotlin
-subtopics: [coroutines, concurrency, coroutine-builders]
+subtopics: [concurrency, coroutine-builders, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-executor-service-java--java--medium, q-coroutine-memory-leak-detection--kotlin--hard, q-list-vs-sequence--kotlin--medium]
+related: [q-coroutine-memory-leak-detection--kotlin--hard, q-executor-service-java--kotlin--medium, q-list-vs-sequence--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - launch
-  - async
-  - runblocking
-  - concurrency
-  - difficulty/medium
+tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblocking]
+date created: Saturday, November 1st 2025, 12:42:09 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Launch vs Async vs RunBlocking
+
+# Launch Vs Async Vs RunBlocking
 
 # Question (EN)
 > What's the difference between `launch`, `async`, and `runBlocking` coroutine builders?
@@ -78,7 +74,7 @@ runBlocking {
 | **async** | `Deferred<T>` | - Нет | - Да через `await()` | Параллельные вычисления с результатом |
 | **runBlocking** | `T` | - **ДА** | - Да напрямую | Тесты, main функция, блокирующий bridge |
 
-### launch - Fire and Forget
+### Launch - Fire and Forget
 
 ```kotlin
 fun loadUserInBackground() {
@@ -98,7 +94,7 @@ fun loadUserInBackground() {
 - Исключения пробрасываются в parent scope
 - Use case: фоновая работа, обновление UI, side effects
 
-#### Примеры использования launch
+#### Примеры Использования Launch
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -140,7 +136,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-#### Job management с launch
+#### Job Management С Launch
 
 ```kotlin
 class DownloadManager {
@@ -180,7 +176,7 @@ class DownloadManager {
 }
 ```
 
-### async - Параллельные вычисления с результатом
+### Async - Параллельные Вычисления С Результатом
 
 ```kotlin
 suspend fun loadDashboard(): DashboardData = coroutineScope {
@@ -205,7 +201,7 @@ suspend fun loadDashboard(): DashboardData = coroutineScope {
 - Исключения выбрасываются при вызове `await()`
 - Use case: параллельные вычисления, где нужен результат
 
-#### Примеры использования async
+#### Примеры Использования Async
 
 ```kotlin
 // 1. Параллельная загрузка нескольких ресурсов
@@ -245,7 +241,7 @@ suspend fun loadFromMultipleSources(): Data = coroutineScope {
 }
 ```
 
-#### async с обработкой ошибок
+#### Async С Обработкой Ошибок
 
 ```kotlin
 suspend fun loadWithFallback(): UserData = coroutineScope {
@@ -270,7 +266,7 @@ suspend fun loadWithFallback(): UserData = coroutineScope {
 }
 ```
 
-### runBlocking - Блокирующий мост
+### runBlocking - Блокирующий Мост
 
 ```kotlin
 fun main() = runBlocking { // Блокирует main поток
@@ -286,7 +282,7 @@ fun main() = runBlocking { // Блокирует main поток
 - Для тестов и main функции
 - Use case: мост между синхронным и асинхронным кодом
 
-#### Когда использовать runBlocking
+#### Когда Использовать runBlocking
 
 ```kotlin
 // - 1. Main функция
@@ -322,7 +318,7 @@ class BadViewModel : ViewModel() {
 }
 ```
 
-### Сравнение на реальном примере
+### Сравнение На Реальном Примере
 
 ```kotlin
 class DataLoader(
@@ -385,7 +381,7 @@ class ViewModel {
 }
 ```
 
-### launch vs async - когда что использовать
+### Launch Vs Async - Когда Что Использовать
 
 ```kotlin
 // - НЕПРАВИЛЬНО - async без await()
@@ -442,7 +438,7 @@ suspend fun computeResults() = coroutineScope {
 }
 ```
 
-### Exception handling
+### Exception Handling
 
 ```kotlin
 // launch - исключения пробрасываются в scope
@@ -477,7 +473,7 @@ try {
 }
 ```
 
-### supervisorScope - независимые дочерние корутины
+### supervisorScope - Независимые Дочерние Корутины
 
 ```kotlin
 // coroutineScope - одна ошибка отменяет все
@@ -507,9 +503,9 @@ suspend fun loadDataResilient() = supervisorScope {
 }
 ```
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
-#### 1. Timeout для async
+#### 1. Timeout Для Async
 
 ```kotlin
 suspend fun loadWithTimeout(): Data? = coroutineScope {
@@ -526,7 +522,7 @@ suspend fun loadWithTimeout(): Data? = coroutineScope {
 }
 ```
 
-#### 2. Retry для launch
+#### 2. Retry Для Launch
 
 ```kotlin
 fun loadUserWithRetry(id: Int) {
@@ -545,7 +541,7 @@ fun loadUserWithRetry(id: Int) {
 }
 ```
 
-#### 3. Cancellable async работа
+#### 3. Cancellable Async Работа
 
 ```kotlin
 class ImageProcessor {
@@ -576,7 +572,7 @@ class ImageProcessor {
 }
 ```
 
-### Performance comparison
+### Performance Comparison
 
 ```kotlin
 // Последовательное выполнение - медленно
@@ -614,7 +610,7 @@ fun loadWithLaunch() {
 
 ### Best Practices
 
-#### 1. Используйте launch для side effects
+#### 1. Используйте Launch Для Side Effects
 
 ```kotlin
 // - ПРАВИЛЬНО
@@ -624,7 +620,7 @@ viewModelScope.launch {
 }
 ```
 
-#### 2. Используйте async для параллельных вычислений
+#### 2. Используйте Async Для Параллельных Вычислений
 
 ```kotlin
 // - ПРАВИЛЬНО
@@ -637,7 +633,7 @@ suspend fun calculateComplexResult() = coroutineScope {
 }
 ```
 
-#### 3. НЕ используйте runBlocking в production
+#### 3. НЕ Используйте runBlocking В Production
 
 ```kotlin
 // - НЕПРАВИЛЬНО
@@ -659,7 +655,7 @@ fun loadUser(id: Int) {
 }
 ```
 
-#### 4. Всегда await() результаты async
+#### 4. Всегда await() Результаты Async
 
 ```kotlin
 // - НЕПРАВИЛЬНО - async без await
@@ -678,7 +674,7 @@ scope.launch {
 }
 ```
 
-#### 5. Обрабатывайте cancellation
+#### 5. Обрабатывайте Cancellation
 
 ```kotlin
 viewModelScope.launch {
@@ -739,6 +735,6 @@ class DataLoaderTest {
 
 ## Related Questions
 
-- [[q-executor-service-java--java--medium]]
+- [[q-executor-service-java--kotlin--medium]]
 - [[q-coroutine-memory-leak-detection--kotlin--hard]]
 - [[q-list-vs-sequence--kotlin--medium]]

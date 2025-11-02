@@ -3,7 +3,7 @@ id: android-102
 title: "Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment и Activity"
 aliases: ["Fragment Lifecycle Connection", "Связь жизненных циклов Fragment и Activity"]
 topic: android
-subtopics: [lifecycle, fragment, activity]
+subtopics: [activity, fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,12 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android, android/lifecycle, android/fragment, android/activity, difficulty/medium]
+tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
 moc: moc-android
-related: [q-android-runtime-art--android--medium, q-compose-side-effects-advanced--jetpack-compose--hard, q-view-composition-strategy-compose--android--medium]
+related: [q-android-runtime-art--android--medium, q-view-composition-strategy-compose--android--medium]
 sources: []
 date created: Tuesday, October 28th 2025, 9:34:34 am
-date modified: Thursday, October 30th 2025, 12:48:11 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How is Fragment lifecycle connected with Activity?
 
 Жизненный цикл Fragment **тесно связан** с жизненным циклом Activity. Fragment никогда не может превысить состояние жизненного цикла Activity, но имеет **дополнительные колбэки** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
 
-### Ключевые правила зависимости
+### Ключевые Правила Зависимости
 
 **1. Fragment не превышает состояние Activity:**
 ```kotlin
@@ -55,7 +55,7 @@ Fragment.onStop() → Activity.onStop()
 Fragment.onDestroy() → Activity.onDestroy()
 ```
 
-### Диаграмма полного цикла
+### Диаграмма Полного Цикла
 
 ```
 Activity              Fragment
@@ -81,7 +81,7 @@ onStop()
 onDestroy()
 ```
 
-### Раздельный жизненный цикл View
+### Раздельный Жизненный Цикл View
 
 Fragment имеет **два владельца жизненного цикла**:
 
@@ -109,7 +109,7 @@ Fragment:     onCreate ————————————————→ onDes
 View:              onCreateView ——→ onDestroyView
 ```
 
-### BackStack поведение
+### BackStack Поведение
 
 **При replace с addToBackStack():**
 ```kotlin
@@ -126,7 +126,7 @@ supportFragmentManager.beginTransaction()
 // onCreateView() → onViewCreated() → onStart() → onResume()
 ```
 
-### Управление ресурсами View
+### Управление Ресурсами View
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -149,7 +149,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте viewLifecycleOwner для UI:**
 ```kotlin
@@ -179,7 +179,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 Fragment lifecycle is **tightly coupled** with Activity lifecycle. Fragment can never exceed the Activity's lifecycle state but has **additional callbacks** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
 
-### Key dependency rules
+### Key Dependency Rules
 
 **1. Fragment never exceeds Activity state:**
 ```kotlin
@@ -201,7 +201,7 @@ Fragment.onStop() → Activity.onStop()
 Fragment.onDestroy() → Activity.onDestroy()
 ```
 
-### Complete lifecycle diagram
+### Complete Lifecycle Diagram
 
 ```
 Activity              Fragment
@@ -227,7 +227,7 @@ onStop()
 onDestroy()
 ```
 
-### Separate View lifecycle
+### Separate View Lifecycle
 
 Fragment has **two lifecycle owners**:
 
@@ -255,7 +255,7 @@ Fragment:     onCreate ————————————————→ onDes
 View:              onCreateView ——→ onDestroyView
 ```
 
-### BackStack behavior
+### BackStack Behavior
 
 **On replace with addToBackStack():**
 ```kotlin
@@ -272,7 +272,7 @@ supportFragmentManager.beginTransaction()
 // onCreateView() → onViewCreated() → onStart() → onResume()
 ```
 
-### View resource management
+### View Resource Management
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -295,7 +295,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### Best practices
+### Best Practices
 
 **1. Use viewLifecycleOwner for UI:**
 ```kotlin
@@ -347,6 +347,5 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 - [[q-view-composition-strategy-compose--android--medium]] — Modern UI lifecycle
 
 ### Advanced (Harder)
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] — Lifecycle in Compose
 - Fragment BackStack state management — complex navigation scenarios
 - Fragment shared element transitions — coordinating lifecycle with animations

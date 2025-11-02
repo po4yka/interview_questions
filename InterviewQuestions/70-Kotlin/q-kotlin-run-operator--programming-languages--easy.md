@@ -3,27 +3,22 @@ id: lang-017
 title: "Kotlin Run Operator / Оператор run в Kotlin"
 aliases: [Kotlin Run Operator, Оператор run в Kotlin]
 topic: programming-languages
-subtopics: [scope-functions, functional-programming]
+subtopics: [functional-programming, scope-functions]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-sealed-when-exhaustive--kotlin--medium, q-compose-side-effects-coroutines--kotlin--medium, q-kotlin-reified-types--kotlin--hard]
+related: [q-compose-side-effects-coroutines--kotlin--medium, q-kotlin-reified-types--kotlin--hard, q-kotlin-sealed-when-exhaustive--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - also
-  - apply
-  - let
-  - run
-  - scope-functions
-  - with
-  - difficulty/easy
+tags: [also, apply, difficulty/easy, let, programming-languages, run, scope-functions, with]
+date created: Friday, October 31st 2025, 6:32:17 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
+
+# Какой Оператор В Kotlin Исполняет Блок Кода И Возвращает Его Значение?
 
 # Question (EN)
 > Which operator in Kotlin executes a block of code and returns its value?
@@ -77,7 +72,7 @@ val formatted = run {
 
 **vs let, apply, also:**
 - `run`: Has `this`, returns lambda result
-- `let`: Has `it`, returns lambda result  
+- `let`: Has `it`, returns lambda result
 - `apply`: Has `this`, returns receiver
 - `also`: Has `it`, returns receiver
 
@@ -89,7 +84,7 @@ val formatted = run {
 
 Функция `run` - это scope function которая выполняет блок кода и возвращает результат. Полезна для выполнения нескольких операций над объектом.
 
-### Базовое использование
+### Базовое Использование
 ```kotlin
 val result = "Hello".run {
     println(length)  // Доступ к свойствам через 'this'
@@ -98,7 +93,7 @@ val result = "Hello".run {
 println(result)  // "HELLO"
 ```
 
-### Распространенные паттерны
+### Распространенные Паттерны
 
 **1. Конфигурация объекта**
 ```kotlin
@@ -135,7 +130,7 @@ val formatted = run {
 ---
 ---
 
-## Варианты использования Run
+## Варианты Использования Run
 
 ### 1. Object.run (Extension-функция)
 
@@ -159,7 +154,7 @@ println(user.age)  // 26 (изменен)
 - Возвращает: Результат лямбды
 - Применение: Трансформация объекта с возвратом результата
 
-### 2. run (Автономная функция)
+### 2. Run (Автономная функция)
 
 ```kotlin
 val result = run {
@@ -179,7 +174,7 @@ println(result)  // 60
 
 ---
 
-## Сравнение с другими Scope-функциями
+## Сравнение С Другими Scope-функциями
 
 | Функция | Ссылка на объект | Возвращаемое значение | Применение |
 |---------|------------------|----------------------|------------|
@@ -191,9 +186,9 @@ println(result)  // 60
 
 ---
 
-## Примеры использования Run
+## Примеры Использования Run
 
-### 1. Вычисление и возврат результата
+### 1. Вычисление И Возврат Результата
 
 ```kotlin
 val result = user.run {
@@ -203,7 +198,7 @@ val result = user.run {
 }
 ```
 
-### 2. Null-безопасность с run
+### 2. Null-безопасность С Run
 
 ```kotlin
 val length = str?.run {
@@ -213,7 +208,7 @@ val length = str?.run {
 } ?: 0  // Значение по умолчанию, если str null
 ```
 
-### 3. Инициализация и конфигурация
+### 3. Инициализация И Конфигурация
 
 ```kotlin
 val db = Database().run {
@@ -223,7 +218,7 @@ val db = Database().run {
 }
 ```
 
-### 4. Сложные вычисления
+### 4. Сложные Вычисления
 
 ```kotlin
 val price = product.run {
@@ -236,9 +231,9 @@ val price = product.run {
 
 ---
 
-## Run vs другие Scope-функции
+## Run Vs Другие Scope-функции
 
-### run vs let
+### Run Vs Let
 
 ```kotlin
 // run - использует 'this'
@@ -262,7 +257,7 @@ val result2 = user.let {
 - Null-безопасность с `?.let`
 - Нужно явное имя параметра
 
-### run vs apply
+### Run Vs Apply
 
 ```kotlin
 // run - возвращает результат лямбды
@@ -285,7 +280,7 @@ val builder = StringBuilder().apply {
 **Используйте `apply` когда:**
 - Нужно вернуть сконфигурированный объект
 
-### run vs with
+### Run Vs with
 
 ```kotlin
 // run - extension-функция
@@ -309,9 +304,9 @@ val result2 = with(user) {
 
 ---
 
-## Практические примеры
+## Практические Примеры
 
-### Пример 1: Запрос к базе данных
+### Пример 1: Запрос К Базе Данных
 
 ```kotlin
 val users = database.run {
@@ -345,7 +340,7 @@ val userInfo = user?.run {
 } ?: "User not found"
 ```
 
-### Пример 4: Множественные трансформации
+### Пример 4: Множественные Трансформации
 
 ```kotlin
 val processed = data
@@ -360,7 +355,7 @@ val processed = data
     }
 ```
 
-### Пример 5: Управление ресурсами
+### Пример 5: Управление Ресурсами
 
 ```kotlin
 val content = File("data.txt").run {
@@ -375,9 +370,9 @@ val content = File("data.txt").run {
 
 ---
 
-## Распространенные паттерны
+## Распространенные Паттерны
 
-### Паттерн 1: Ограниченные вычисления
+### Паттерн 1: Ограниченные Вычисления
 
 ```kotlin
 val result = run {
@@ -388,7 +383,7 @@ val result = run {
 }
 ```
 
-### Паттерн 2: Условные операции
+### Паттерн 2: Условные Операции
 
 ```kotlin
 val value = obj.run {
@@ -414,7 +409,7 @@ val request = HttpRequest().run {
 
 ---
 
-## Когда использовать run
+## Когда Использовать Run
 
 - **Используйте `run` когда:**
 - Нужно выполнить блок и вернуть результат

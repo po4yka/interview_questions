@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, coroutines, reactive, streams, cold-flow]
+subtopics: [cold-flow, coroutines, flow, reactive, streams]
 question_kind: theory
 difficulty: easy
 
@@ -18,13 +18,15 @@ source_note: Introduction to Kotlin Flow
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-hot-cold-flows--kotlin--medium, q-sharedflow-stateflow--kotlin--medium, q-flow-exception-handling--kotlin--medium]
+related: [q-flow-exception-handling--kotlin--medium, q-hot-cold-flows--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, flow, coroutines, reactive, streams, cold-flow, difficulty/easy]
+tags: [cold-flow, coroutines, difficulty/easy, flow, kotlin, reactive, streams]
+date created: Sunday, October 12th 2025, 2:53:50 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Question (EN)
@@ -79,7 +81,7 @@ fun main() = runBlocking {
 3. **Cold**: Doesn't start until collected
 4. **Suspending**: Can use suspend functions
 
-### Cold vs Hot Streams
+### Cold Vs Hot Streams
 
 #### Cold Streams (Flow)
 
@@ -268,7 +270,7 @@ class SearchViewModel : ViewModel() {
 
 ### When to Use Flow
 
-####  Use Flow for:
+#### Use Flow For:
 
 ```kotlin
 // 1. Streaming data
@@ -292,7 +294,7 @@ fun loadWithRetry(): Flow<Data> = flow {
 }.retry(3) { it is IOException }
 ```
 
-####  Don't use Flow for:
+#### Don't Use Flow For:
 
 ```kotlin
 // Single value - use suspend function instead
@@ -354,7 +356,7 @@ suspend fun getUser(): User  //  Better
 
 **Flow** — библиотека асинхронных потоков Kotlin, представляющая холодный асинхронный поток данных. Он излучает множество значений последовательно во времени и построен поверх корутин.
 
-### Что такое Flow?
+### Что Такое Flow?
 
 ```kotlin
 // Простой пример Flow
@@ -383,9 +385,9 @@ fun main() = runBlocking {
 3. **Холодный**: Не запускается пока не собран
 4. **Suspending**: Может использовать suspend функции
 
-### Холодные vs Горячие потоки
+### Холодные Vs Горячие Потоки
 
-#### Холодные потоки (Flow)
+#### Холодные Потоки (Flow)
 
 ```kotlin
 val coldFlow = flow {
@@ -427,9 +429,9 @@ val flow3 = (1..5).asFlow()
 val flow4 = listOf(1, 2, 3).asFlow()
 ```
 
-### Базовые операторы
+### Базовые Операторы
 
-#### Терминальные операторы (Запускают сборку)
+#### Терминальные Операторы (Запускают сборку)
 
 ```kotlin
 // collect - обработать каждое значение
@@ -449,7 +451,7 @@ val sum = flow.reduce { acc, value ->
 }
 ```
 
-#### Промежуточные операторы (Трансформируют Flow)
+#### Промежуточные Операторы (Трансформируют Flow)
 
 ```kotlin
 // map - трансформировать значения
@@ -468,7 +470,7 @@ flow { emit(1); emit(2) }
     .collect { println(it) }  // 1, 2, 3, 4, 5
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
 #### Паттерн Repository
 
@@ -489,9 +491,9 @@ class UserRepository(private val api: ApiService) {
 }
 ```
 
-### Когда использовать Flow
+### Когда Использовать Flow
 
-####  Использовать Flow для:
+#### Использовать Flow Для:
 
 ```kotlin
 // 1. Потоковые данные
@@ -506,7 +508,7 @@ fun countDown(from: Int): Flow<Int> = flow {
 }
 ```
 
-####  Не использовать Flow для:
+#### Не Использовать Flow Для:
 
 ```kotlin
 // Одно значение - использовать suspend функцию

@@ -3,21 +3,22 @@ id: lang-005
 title: "Kotlin Delegation / Делегирование в Kotlin"
 aliases: []
 topic: programming-languages
-subtopics: [functions, type-system, class-features]
+subtopics: [class-features, functions, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-testing-coroutines-runtest--kotlin--medium, q-circuit-breaker-coroutines--kotlin--hard, q-coroutine-timeout-withtimeout--kotlin--medium]
+related: [q-circuit-breaker-coroutines--kotlin--hard, q-coroutine-timeout-withtimeout--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Saturday, November 1st 2025, 12:42:09 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Что известно о делегировании?
+
+# Что Известно О Делегировании?
 
 # Question (EN)
 > What do you know about delegation?
@@ -43,12 +44,12 @@ Delegation allows transferring implementation of certain functions or properties
 ## Related Questions
 
 ### Android Implementation
-- [[q-recyclerview-viewtypes-delegation--recyclerview--medium]] - Design Patterns
+- [[q-recyclerview-viewtypes-delegation--android--medium]] - Design Patterns
 
 ### Kotlin Language Features
 - [[q-delegation-by-keyword--kotlin--medium]] - Design Patterns
 - [[q-kotlin-singleton-creation--programming-languages--easy]] - Design Patterns
-- [[q-singleton-object-keyword--programming-languages--easy]] - Design Patterns
+-  - Design Patterns
 - [[q-deferred-async-patterns--kotlin--medium]] - Design Patterns
 - [[q-object-singleton-companion--kotlin--medium]] - Design Patterns
 - [[q-kotlin-delegation-detailed--kotlin--medium]] - Design Patterns

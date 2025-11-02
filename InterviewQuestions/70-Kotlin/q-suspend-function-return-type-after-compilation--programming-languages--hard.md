@@ -3,7 +3,7 @@ id: lang-023
 title: "Suspend Function Return Type After Compilation / Тип возвращаемого значения suspend функции после компиляции"
 aliases: [Suspend Function Return Type After Compilation, Тип возвращаемого значения suspend функции после компиляции]
 topic: programming-languages
-subtopics: [coroutines, compilation, type-system]
+subtopics: [compilation, coroutines, type-system]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-how-to-create-suspend-function--programming-languages--medium, q-java-all-classes-inherit-from-object--programming-languages--easy, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, compilation, kotlin, difficulty/hard]
+tags: [compilation, coroutines, difficulty/hard, kotlin, programming-languages]
 date created: Saturday, October 4th 2025, 10:41:50 am
-date modified: Sunday, October 26th 2025, 1:39:51 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Suspend Function Return Type After Compilation
@@ -316,12 +316,12 @@ when (internalResult) {
 // 4. Suspension point tracking
 
 suspend fun original(x: Int): String
-//  Transformed to 
+//  Transformed to
 fun original(x: Int, $completion: Continuation<String>): Any?
 
 // Generic pattern:
 suspend fun <T> func(): T
-//  Becomes 
+//  Becomes
 fun <T> func($completion: Continuation<T>): Any?
 ```
 

@@ -3,7 +3,7 @@ id: lang-057
 title: "Error Handling In Coroutines / Обработка ошибок в корутинах"
 aliases: [Error Handling In Coroutines, Обработка ошибок в корутинах]
 topic: programming-languages
-subtopics: [coroutines, error-handling, concurrency]
+subtopics: [concurrency, coroutines, error-handling]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-coroutines, c-error-handling, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, error-handling, exception-handling, kotlin, difficulty/medium]
+tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin, programming-languages]
+date created: Friday, October 31st 2025, 6:29:51 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Error Handling Methods in Coroutines
@@ -204,6 +206,6 @@ class ErrorHandlingBestPractices {
 
 ## Related Questions
 
-- [[q-data-sealed-classes-why--programming-languages--medium]]
+-
 - [[q-hashmap-how-it-works--programming-languages--medium]]
-- [[q-where-to-call-suspend-functions--programming-languages--medium]]
+-

@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-workmanager-return-result--android--medium, q-how-to-break-text-by-screen-width--android--easy, q-android-components-besides-activity--android--easy]
+related: [q-android-components-besides-activity--android--easy, q-how-to-break-text-by-screen-width--android--easy, q-workmanager-return-result--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/datastore, data-storage, key-value, persistence, sharedpreferences, difficulty/easy]
+tags: [android/datastore, data-storage, difficulty/easy, key-value, persistence, sharedpreferences]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое SharedPreferences?

@@ -1,11 +1,7 @@
 ---
 id: android-041
 title: Compose Compiler Plugin / Плагин компилятора Compose
-aliases:
-  - Compose Compiler Plugin
-  - Плагин компилятора Compose
-  - Compose Compiler
-  - Компилятор Compose
+aliases: [Compose Compiler, Compose Compiler Plugin, Компилятор Compose, Плагин компилятора Compose]
 topic: android
 subtopics:
   - performance-memory
@@ -19,23 +15,15 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - c-compose-state
   - c-compose-recomposition
-  - q-compose-state--android--medium
+  - c-compose-state
   - q-android-performance-measurement-tools--android--medium
-  - q-compose-performance-benchmarking--android--hard
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags:
-  - android/performance-memory
-  - android/ui-compose
-  - compose
-  - compiler
-  - performance
-  - difficulty/hard
+tags: [android/performance-memory, android/ui-compose, compiler, compose, difficulty/hard, performance]
 date created: Thursday, October 30th 2025, 11:17:58 am
-date modified: Thursday, October 30th 2025, 12:43:40 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -48,7 +36,7 @@ date modified: Thursday, October 30th 2025, 12:43:40 pm
 
 ## Ответ (RU)
 
-### Трансформация @Composable функций
+### Трансформация @Composable Функций
 
 Компилятор преобразует `@Composable` функции в машины состояний:
 - Вставляет параметр `Composer` для управления slot table
@@ -56,7 +44,7 @@ date modified: Thursday, October 30th 2025, 12:43:40 pm
 - Анализирует стабильность параметров через data flow analysis
 - Помечает функции как restartable/skippable для оптимизации
 
-### Механизм стабильности
+### Механизм Стабильности
 
 **Стабильные типы** → функция пропускается при одинаковых параметрах:
 - Примитивы (Int, String, Boolean)
@@ -68,7 +56,7 @@ date modified: Thursday, October 30th 2025, 12:43:40 pm
 - Классы без явных маркеров стабильности
 - Типы с var полями
 
-### Примеры оптимизации
+### Примеры Оптимизации
 
 ✅ **Стабильная модель**:
 ```kotlin
@@ -101,7 +89,7 @@ fun ItemList(items: List<Item>) { // List вместо MutableList
 }
 ```
 
-### Диагностика компилятора
+### Диагностика Компилятора
 
 Включите отчеты для анализа решений компилятора:
 
@@ -117,7 +105,7 @@ compose.compiler.reportDestination=build/compose-reports
 - Причины нестабильности типов
 - Количество групп и сложность композиций
 
-### Рекомендации по оптимизации
+### Рекомендации По Оптимизации
 
 1. **Используйте @Immutable/@Stable** для доменных моделей
 2. **Передавайте ID вместо объектов** для снижения нагрузки
@@ -225,7 +213,6 @@ Reports show:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-state--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
 
 ### Related (Same Level)
@@ -233,5 +220,4 @@ Reports show:
 - [[q-compose-canvas-graphics--android--hard]]
 
 ### Advanced (Harder)
-- [[q-compose-performance-benchmarking--android--hard]]
 - [[q-android-runtime-art--android--medium]]

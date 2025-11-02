@@ -15,7 +15,7 @@ created: 2025-10-03
 updated: 2025-01-25
 tags: [algorithms, data-structures, difficulty/easy, fundamentals, overview]
 date created: Friday, October 3rd 2025, 4:43:25 pm
-date modified: Saturday, October 25th 2025, 5:17:36 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

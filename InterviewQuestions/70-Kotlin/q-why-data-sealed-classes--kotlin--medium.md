@@ -1,7 +1,7 @@
 ---
 id: kotlin-226
 title: "Why Data Sealed Classes / Зачем нужны Data и Sealed классы"
-aliases: [Data Classes, Sealed Classes, Class Design, Классы в Kotlin]
+aliases: [Class Design, Data Classes, Sealed Classes, Классы в Kotlin]
 topic: kotlin
 subtopics: [classes, data-classes, sealed-classes]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-visibility-modifiers--kotlin--easy, q-fan-in-fan-out--kotlin--hard, q-kotlin-crossinline--programming-languages--hard]
+related: [q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - data-classes
-  - sealed-classes
-  - classes
-  - design
-  - difficulty/medium
+tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
+date created: Saturday, November 1st 2025, 1:01:37 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Why are Data Class and Sealed Classes needed?
+
+# Why Are Data Class and Sealed Classes Needed?
 
 **English**: Why are Data Class and Sealed Classes needed in Kotlin?
 
@@ -76,7 +73,7 @@ fun handle(result: Result) = when (result) {
 
 Data классы и sealed классы служат разным целям в системе типов Kotlin.
 
-### Data классы
+### Data Классы
 Автоматически генерируют полезные методы:
 ```kotlin
 data class User(val name: String, val age: Int)
@@ -92,7 +89,7 @@ val older = user.copy(age = 26)
 - Работа с неизменяемыми данными
 - Нужна деструктуризация
 
-### Sealed классы
+### Sealed Классы
 Ограничивают наследование известными подтипами:
 ```kotlin
 sealed class Result {
@@ -122,5 +119,4 @@ fun handle(result: Result) = when (result) {
 
 - [[q-kotlin-visibility-modifiers--kotlin--easy]]
 - [[q-fan-in-fan-out--kotlin--hard]]
-- [[q-kotlin-crossinline--programming-languages--hard]]
 

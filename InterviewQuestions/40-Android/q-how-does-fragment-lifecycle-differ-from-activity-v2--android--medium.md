@@ -3,7 +3,7 @@ id: android-339
 title: "How Does Fragment Lifecycle Differ From Activity V2 / Чем жизненный цикл Fragment отличается от Activity v2"
 aliases: ["How Does Fragment Lifecycle Differ From Activity V2", "Чем жизненный цикл Fragment отличается от Activity v2"]
 topic: android
-subtopics: [lifecycle, fragment, activity]
+subtopics: [activity, fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-android-project-parts--android--easy, q-how-to-add-custom-attributes
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android, android/lifecycle, android/fragment, android/activity, difficulty/medium]
+tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:35:33 am
-date modified: Thursday, October 30th 2025, 12:48:15 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,14 +33,14 @@ How does Fragment lifecycle differ from Activity lifecycle?
 
 Жизненный цикл Fragment сложнее, чем у Activity, потому что **Fragment имеет дополнительные состояния, связанные с View и прикреплением к Activity**. У Fragment 11 коллбэков против 7 у Activity.
 
-### Ключевые отличия
+### Ключевые Отличия
 
 1. **Fragment зависит от Activity** — не может существовать самостоятельно
 2. **Отдельный жизненный цикл View** — есть коллбэки для создания/уничтожения View
 3. **Прикрепление/открепление** — Fragment может прикрепляться/открепляться от Activity
 4. **Back stack** — Fragment может оставаться в памяти с уничтоженной View
 
-### Сравнение коллбэков
+### Сравнение Коллбэков
 
 ```text
 Activity                   Fragment
@@ -58,7 +58,7 @@ onDestroy()               → onDestroy()
                           → onDetach()
 ```
 
-### Основной жизненный цикл Fragment
+### Основной Жизненный Цикл Fragment
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -106,7 +106,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### View Binding с правильной очисткой
+### View Binding С Правильной Очисткой
 
 ```kotlin
 class SafeFragment : Fragment() {
@@ -136,7 +136,7 @@ class SafeFragment : Fragment() {
 }
 ```
 
-### ViewLifecycleOwner для наблюдений
+### ViewLifecycleOwner Для Наблюдений
 
 ```kotlin
 class ModernFragment : Fragment() {
@@ -168,7 +168,7 @@ class ModernFragment : Fragment() {
 // (View пересоздана!)
 ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 ```kotlin
 // ❌ НЕПРАВИЛЬНО: доступ к View в onCreate

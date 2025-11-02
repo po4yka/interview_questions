@@ -1,20 +1,22 @@
 ---
 id: android-211
 title: "Performance Monitoring Jank Compose / Мониторинг производительности и джанка в Compose"
-aliases: [Performance Monitoring Jank Compose, Мониторинг производительности и джанка в Compose, Jank Detection, Compose Performance]
+aliases: [Compose Performance, Jank Detection, Performance Monitoring Jank Compose, Мониторинг производительности и джанка в Compose]
 topic: android
-subtopics: [ui-compose, performance-rendering, profiling]
+subtopics: [performance-rendering, profiling, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-performance-optimization, q-compose-performance-optimization--android--hard, q-compose-lazy-layout-optimization--android--hard]
+related: [c-jetpack-compose, c-performance-optimization, q-compose-lazy-layout-optimization--android--hard, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-compose, android/performance-rendering, android/profiling, performance, jank, recomposition, optimization, difficulty/medium]
+tags: [android/performance-rendering, android/profiling, android/ui-compose, difficulty/medium, jank, optimization, performance, recomposition]
 sources: [https://developer.android.com/jetpack/compose/performance, https://developer.android.com/topic/performance/vitals/render]
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,14 +33,14 @@ sources: [https://developer.android.com/jetpack/compose/performance, https://dev
 
 **Jank** - "замирания" UI когда frame rate падает ниже 60fps (>16.67ms per frame). Главные причины в Compose: избыточные recompositions, медленные вычисления, неоптимизированные списки, блокировка UI thread.
 
-### Инструменты обнаружения
+### Инструменты Обнаружения
 
 **1. Layout Inspector** - визуализация recompositions (красные границы, count, timing)
 **2. Composition Tracing** - профилирование частоты recomposition в Android Studio Profiler
 **3. Macrobenchmark** - измерение frame timing, jank count, P50/P90/P95/P99 метрики
 **4. FrameMetrics API** - runtime мониторинг jank в production
 
-### Ключевые техники оптимизации
+### Ключевые Техники Оптимизации
 
 **remember** - кэширование дорогих вычислений:
 
@@ -107,7 +109,7 @@ LazyColumn {
 }
 ```
 
-### Macrobenchmark - измерение performance
+### Macrobenchmark - Измерение Performance
 
 ```kotlin
 @Test
@@ -126,7 +128,7 @@ fun scrollBenchmark() = benchmarkRule.measureRepeated(
 
 **Метрики**: P50 (median), P90/P95/P99 percentiles, Jank = frame >16.67ms.
 
-### Production мониторинг
+### Production Мониторинг
 
 **FrameMetrics API** для runtime jank detection:
 
@@ -153,7 +155,7 @@ fun generateBaselineProfile() = rule.collect(
 }
 ```
 
-### Частые ошибки
+### Частые Ошибки
 
 ```kotlin
 // ❌ 1. Lambda создает новый объект каждый recompose

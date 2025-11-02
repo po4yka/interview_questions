@@ -10,14 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-final-modifier--programming-languages--easy, q-sam-conversions--kotlin--medium, q-job-vs-supervisorjob--kotlin--medium]
+related: [q-job-vs-supervisorjob--kotlin--medium, q-kotlin-final-modifier--programming-languages--easy, q-sam-conversions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# В чем отличие между job и supervisor job
+
+# В Чем Отличие Между Job И Supervisor Job
 
 **English**: What is the difference between Job and SupervisorJob?
 

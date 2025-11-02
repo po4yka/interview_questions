@@ -16,7 +16,7 @@ updated: 2025-01-27
 sources: []
 tags: [android/fragment, android/ui-views, difficulty/easy]
 date created: Monday, October 27th 2025, 3:47:26 pm
-date modified: Thursday, October 30th 2025, 12:48:23 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

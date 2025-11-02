@@ -3,7 +3,7 @@ id: android-139
 title: "Save Data Outside Fragment / Сохранение данных вне Fragment"
 aliases: ["Save Data Outside Fragment", "Сохранение данных вне Fragment"]
 topic: android
-subtopics: [room, architecture-mvvm, lifecycle]
+subtopics: [architecture-mvvm, lifecycle, room]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,8 +14,11 @@ related: [c-viewmodel, q-what-is-layout-types-and-when-to-use--android--easy]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/room, android/architecture-mvvm, android/lifecycle, data-persistence, fragments, datastore, sharedpreferences, viewmodel, difficulty/medium]
+tags: [android/architecture-mvvm, android/lifecycle, android/room, data-persistence, datastore, difficulty/medium, fragments, sharedpreferences, viewmodel]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 > Каким образом можно сохранить данные за пределами фрагмента?
@@ -30,7 +33,7 @@ tags: [android/room, android/architecture-mvvm, android/lifecycle, data-persiste
 
 Для сохранения данных за пределами фрагмента используется несколько подходов в зависимости от требований персистентности и объема данных.
 
-### Основные подходы
+### Основные Подходы
 
 **1. SharedPreferences**
 Для простых настроек (key-value пары). Переживает пересоздание фрагмента и процесса.
@@ -109,7 +112,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
 }
 ```
 
-### Сравнение методов
+### Сравнение Методов
 
 | Метод              | Персистентность | Переживает ротацию | Переживает смерть процесса | Use Case           |
 | ------------------ | --------------- | ------------------ | -------------------------- | ------------------ |
@@ -119,7 +122,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
 | ViewModel          | Временная       | Да                 | Нет                        | UI состояние       |
 | SavedStateHandle   | Ограниченная    | Да                 | Да                         | UI состояние (малое) |
 
-### Рекомендуемая архитектура
+### Рекомендуемая Архитектура
 
 ```kotlin
 // ✅ Слоистая архитектура для управления данными

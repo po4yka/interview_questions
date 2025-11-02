@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, operators, async, transformation, flatmap]
+subtopics: [async, flatmap, flow, operators, transformation]
 question_kind: theory
 difficulty: hard
 
@@ -24,8 +24,11 @@ related: [q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differenc
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, flow, operators, async, transformation, difficulty/hard]
+tags: [async, difficulty/hard, flow, kotlin, operators, transformation]
+date created: Friday, October 17th 2025, 11:26:31 am
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > Implement custom Flow operators. Explain flatMapConcat vs flatMapMerge vs flatMapLatest with practical examples and performance characteristics.
 
@@ -261,7 +264,7 @@ class SearchViewModel : ViewModel() {
 
 ### Creating Custom Flow Operators
 
-#### Example 1: Custom retry with exponential backoff
+#### Example 1: Custom Retry with Exponential Backoff
 
 ```kotlin
 fun <T> Flow<T>.retryWithExponentialBackoff(
@@ -301,7 +304,7 @@ suspend fun fetchDataWithRetry(): Flow<String> = flow {
     )
 ```
 
-#### Example 2: Custom window operator
+#### Example 2: Custom Window Operator
 
 ```kotlin
 fun <T> Flow<T>.window(
@@ -352,7 +355,7 @@ Moving average: 7.0
 */
 ```
 
-#### Example 3: Custom rate limiting operator
+#### Example 3: Custom Rate Limiting Operator
 
 ```kotlin
 fun <T> Flow<T>.rateLimit(
@@ -511,7 +514,7 @@ suspend fun benchmarkFlatMapVariants() {
 
 Операторы Flow — это функции, которые трансформируют потоки различными способами. Понимание различий между вариантами flatMap критически важно для построения эффективных асинхронных конвейеров данных.
 
-### Обзор вариантов FlatMap
+### Обзор Вариантов FlatMap
 
 Три оператора flatMap различаются по обработке конкурентного выполнения и порядка:
 
@@ -521,7 +524,7 @@ suspend fun benchmarkFlatMapVariants() {
 | **flatMapMerge** | Конкурентно (настраивается) | Не сохраняется | Независимые потоки | Параллельная обработка |
 | **flatMapLatest** | Только последний | Не сохраняется | Отменяет предыдущие | Поиск, только последние данные |
 
-### 1. flatMapConcat - Последовательная обработка
+### 1. flatMapConcat - Последовательная Обработка
 
 **Поведение**: Обрабатывает по одному внутреннему потоку за раз, ожидая завершения каждого перед началом следующего.
 
@@ -552,7 +555,7 @@ getUserIds()
 - Последовательная загрузка страниц
 - Обработка транзакций
 
-### 2. flatMapMerge - Конкурентная обработка
+### 2. flatMapMerge - Конкурентная Обработка
 
 **Поведение**: Обрабатывает несколько внутренних потоков одновременно с настраиваемым лимитом конкурентности.
 
@@ -620,7 +623,7 @@ suspend fun uploadImage(data: ByteArray): String {
 - I/O операции
 - Нужна максимальная пропускная способность
 
-### 3. flatMapLatest - Только последнее значение
+### 3. flatMapLatest - Только Последнее Значение
 
 **Поведение**: Отменяет предыдущий внутренний поток при поступлении нового значения, обрабатывает только последнее.
 
@@ -702,9 +705,9 @@ class SearchViewModel : ViewModel() {
 - Важно только последнее значение
 - Отмена устаревших запросов
 
-### Создание пользовательских операторов Flow
+### Создание Пользовательских Операторов Flow
 
-#### Пример 1: Повтор с экспоненциальной задержкой
+#### Пример 1: Повтор С Экспоненциальной Задержкой
 
 ```kotlin
 fun <T> Flow<T>.retryWithExponentialBackoff(
@@ -729,7 +732,7 @@ fun <T> Flow<T>.retryWithExponentialBackoff(
 }
 ```
 
-#### Пример 2: Оператор окна
+#### Пример 2: Оператор Окна
 
 ```kotlin
 fun <T> Flow<T>.window(
@@ -760,7 +763,7 @@ flowOf(1, 2, 3, 4, 5, 6, 7, 8)
     .collect { avg -> println("Скользящее среднее: $avg") }
 ```
 
-#### Пример 3: Ограничение частоты
+#### Пример 3: Ограничение Частоты
 
 ```kotlin
 fun <T> Flow<T>.rateLimit(
@@ -794,7 +797,7 @@ fun <T> Flow<T>.rateLimit(
 }
 ```
 
-### Сравнение производительности
+### Сравнение Производительности
 
 ```kotlin
 // Бенчмарк различных вариантов flatMap
@@ -825,7 +828,7 @@ suspend fun benchmarkFlatMapVariants() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбирайте правильный оператор**:
    - Нужен порядок? → `flatMapConcat`
@@ -859,7 +862,7 @@ suspend fun benchmarkFlatMapVariants() {
    - `flatMapLatest` наиболее эффективен по памяти (только один активный)
    - `flatMapConcat` умеренное использование памяти
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Использование flatMapConcat вместо flatMapMerge**:
    ```kotlin

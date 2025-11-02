@@ -1,7 +1,7 @@
 ---
 id: android-015
 title: Android App Bundle (AAB) / Android App Bundle (AAB)
-aliases: ["Android App Bundle", "AAB", "Android App Bundles", "Формат AAB", "Андроид App Bundle"]
+aliases: ["AAB", "Android App Bundle", "Android App Bundles", "Андроид App Bundle", "Формат AAB"]
 topic: android
 subtopics: [app-bundle, gradle]
 question_kind: android
@@ -16,7 +16,7 @@ updated: 2025-10-29
 sources: ["https://developer.android.com/guide/app-bundle"]
 tags: [android/app-bundle, android/gradle, difficulty/easy]
 date created: Wednesday, October 29th 2025, 4:18:34 pm
-date modified: Thursday, October 30th 2025, 11:12:59 am
+date modified: Saturday, November 1st 2025, 3:59:52 pm
 ---
 
 # Вопрос (RU)

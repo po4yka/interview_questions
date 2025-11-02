@@ -19,7 +19,7 @@ updated: 2025-10-30
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources: [https://dagger.dev/]
 date created: Thursday, October 30th 2025, 12:02:39 pm
-date modified: Thursday, October 30th 2025, 12:47:30 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -32,14 +32,14 @@ date modified: Thursday, October 30th 2025, 12:47:30 pm
 
 **Dagger** - compile-time DI фреймворк, автоматизирующий создание и управление зависимостями в Android-приложениях.
 
-### Основные преимущества
+### Основные Преимущества
 
 - **Слабая связанность** - объекты получают зависимости извне
 - **Тестируемость** - простая замена реальных зависимостей на моки
 - **Compile-time проверка** - ошибки графа обнаруживаются до сборки
 - **Управление lifecycle** - автоматическое создание/переиспользование через scopes
 
-### Проблема без DI
+### Проблема Без DI
 
 ```kotlin
 class UserRepository {
@@ -51,7 +51,7 @@ class UserRepository {
 
 **Проблемы:** тесная связанность, дублирование логики создания, невозможность тестирования.
 
-### Решение с Dagger
+### Решение С Dagger
 
 ```kotlin
 class UserRepository @Inject constructor(
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Hilt - упрощение для Android
+### Hilt - Упрощение Для Android
 
 **Hilt** автоматизирует настройку Dagger для Android lifecycle:
 

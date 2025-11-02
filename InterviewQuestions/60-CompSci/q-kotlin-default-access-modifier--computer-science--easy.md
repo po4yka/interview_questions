@@ -3,21 +3,22 @@ id: cs-002
 title: "Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [access-modifiers, type-system, class-features]
+subtopics: [access-modifiers, class-features, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-dispatcher-performance--kotlin--hard, q-kotlin-generics--kotlin--hard, q-debounce-search-coroutines--kotlin--medium]
+related: [q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance--kotlin--hard, q-kotlin-generics--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Saturday, October 18th 2025, 9:34:45 am
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Какой модификатор доступа по умолчанию используется в Kotlin?
+
+# Какой Модификатор Доступа По Умолчанию Используется В Kotlin?
 
 # Question (EN)
 > What is the default access modifier in Kotlin?

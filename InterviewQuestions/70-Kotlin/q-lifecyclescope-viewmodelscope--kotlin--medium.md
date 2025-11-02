@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, android, lifecycle, scopes, viewmodel]
+subtopics: [android, coroutines, lifecycle, scopes, viewmodel]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Android Lifecycle Scopes Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-viewmodel-coroutines-lifecycle--kotlin--medium, q-android-coroutine-scopes--kotlin--medium, q-lifecycle-aware-coroutines--kotlin--hard]
+related: [q-android-coroutine-scopes--kotlin--medium, q-lifecycle-aware-coroutines--kotlin--hard, q-viewmodel-coroutines-lifecycle--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, android, lifecycle, lifecyclescope, viewmodelscope, difficulty/medium]
+tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What's the difference between lifecycleScope and viewModelScope? When to use each, how they handle lifecycle events, and best practices for Android coroutine scopes.
 
@@ -44,16 +47,16 @@ tags: [kotlin, coroutines, android, lifecycle, lifecyclescope, viewmodelscope, d
 /**
  * lifecycleScope vs viewModelScope
  *
- * 
- *  Feature             lifecycleScope       viewModelScope      
- * 
- *  Available in        Activity, Fragment   ViewModel           
- *  Cancelled when      onDestroy()          onCleared()         
- *  Survives rotation   NO                   YES                 
- *  Use for             UI operations        Business logic      
- *  Lifecycle states    Aware of all states  Only cleared state  
- *  Tied to             View lifecycle       ViewModel lifecycle 
- * 
+ *
+ *  Feature             lifecycleScope       viewModelScope
+ *
+ *  Available in        Activity, Fragment   ViewModel
+ *  Cancelled when      onDestroy()          onCleared()
+ *  Survives rotation   NO                   YES
+ *  Use for             UI operations        Business logic
+ *  Lifecycle states    Aware of all states  Only cleared state
+ *  Tied to             View lifecycle       ViewModel lifecycle
+ *
  */
 
 // lifecycleScope Example
@@ -470,12 +473,12 @@ class ProductFragment : Fragment() {
 
 `lifecycleScope` и `viewModelScope` - это CoroutineScope с поддержкой жизненного цикла Android.
 
-### Ключевые различия
+### Ключевые Различия
 
 - **lifecycleScope**: Привязан к Activity/Fragment, отменяется при onDestroy(), НЕ переживает поворот экрана
 - **viewModelScope**: Привязан к ViewModel, отменяется при onCleared(), ПЕРЕЖИВАЕТ поворот экрана
 
-### Когда использовать
+### Когда Использовать
 
 **lifecycleScope**:
 - UI операции (анимации, обновления)
@@ -487,7 +490,7 @@ class ProductFragment : Fragment() {
 - Загрузка данных
 - Работа с репозиториями
 
-### Лучшая практика
+### Лучшая Практика
 
 ```kotlin
 // Fragment: UI с lifecycleScope + repeatOnLifecycle

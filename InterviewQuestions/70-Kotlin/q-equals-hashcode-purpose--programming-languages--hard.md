@@ -3,7 +3,7 @@ id: lang-083
 title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 aliases: [Equals Hashcode Purpose, Назначение equals и hashCode]
 topic: programming-languages
-subtopics: [object-methods, collections, equality]
+subtopics: [collections, equality, object-methods]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-java-equals-default-behavior--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, object-methods, equality, collections, contracts, difficulty/hard]
+tags: [collections, contracts, difficulty/hard, equality, object-methods, programming-languages]
+date created: Friday, October 31st 2025, 6:29:51 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Why Are Equals and Hashcode Methods Needed?
@@ -140,4 +142,4 @@ fun main() {
 
 - [[q-detect-unused-object--programming-languages--easy]]
 - [[q-java-object-comparison--programming-languages--easy]]
-- [[q-memento-pattern--design-patterns--medium]]
+-

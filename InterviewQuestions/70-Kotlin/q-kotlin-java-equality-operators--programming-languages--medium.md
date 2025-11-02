@@ -3,25 +3,22 @@ id: lang-085
 title: "Kotlin Java Equality Operators / Операторы равенства Kotlin и Java"
 aliases: [Kotlin Java Equality Operators, Операторы равенства Kotlin и Java]
 topic: programming-languages
-subtopics: [type-system, operators]
+subtopics: [operators, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-partition-function--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy, q-kotlin-non-inheritable-class--programming-languages--easy]
+related: [q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy, q-kotlin-partition-function--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - comparison
-  - equality
-  - java
-  - operators
-  - difficulty/medium
+tags: [comparison, difficulty/medium, equality, java, operators, programming-languages]
+date created: Friday, October 31st 2025, 6:30:29 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Чем отличаются двойное равно в Java и Kotlin?
+
+# Чем Отличаются Двойное Равно В Java И Kotlin?
 
 # Question (EN)
 > What is the difference between double equals in Java and Kotlin?
@@ -112,7 +109,7 @@ a == "text"  // false (null-safe, doesn't throw NPE)
 
 Kotlin имеет два оператора равенства: `==` для структурного равенства и `===` для ссылочного равенства, отличаясь от поведения Java.
 
-### Структурное равенство (`==`)
+### Структурное Равенство (`==`)
 Сравнивает значения (вызывает `equals()`):
 ```kotlin
 val a = "Hello"
@@ -125,7 +122,7 @@ val p2 = Person("Alice")
 println(p1 == p2)  // true (data классы авто-реализуют equals)
 ```
 
-### Ссылочное равенство (`===`)
+### Ссылочное Равенство (`===`)
 Сравнивает ссылки (тот же объект):
 ```kotlin
 val a = "Hello"
@@ -140,7 +137,7 @@ val p3 = p1
 println(p1 === p3)  // true (та же ссылка)
 ```
 
-### Сравнение с Java
+### Сравнение С Java
 
 | Операция | Kotlin | Java |
 |----------|--------|------|
@@ -163,7 +160,7 @@ s1.equals(s2)  // true
 s1 == s2       // false
 ```
 
-### Null безопасность
+### Null Безопасность
 ```kotlin
 val a: String? = null
 val b: String? = null
@@ -174,7 +171,7 @@ a === b  // true (оба null ссылка)
 a == "text"  // false (null-safe, не выбрасывает NPE)
 ```
 
-### Лучшие практики
+### Лучшие Практики
 - Используйте `==` для сравнения значений
 - Используйте `===` только когда нужно равенство ссылок
 - Для коллекций `==` сравнивает содержимое

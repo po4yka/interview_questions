@@ -3,19 +3,19 @@ id: lang-025
 title: "Sealed Classes Limitations / Ограничения Sealed Классов"
 aliases: [Sealed Classes Limitations, Ограничения Sealed Классов]
 topic: programming-languages
-subtopics: [class-hierarchy, sealed-classes, oop]
+subtopics: [class-hierarchy, oop, sealed-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-clean-code-principles--software-engineering--medium, q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
+related: [q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [class-hierarchy, kotlin, programming-languages, sealed-classes, difficulty/medium]
+tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed-classes]
 date created: Friday, October 3rd 2025, 4:39:28 pm
-date modified: Sunday, October 26th 2025, 1:37:23 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Какие Есть Ограничения У Sealed Классов?
@@ -42,4 +42,4 @@ Sealed class limitations: all subtypes must be defined in the same file, sealed 
 
 - [[q-what-is-flow--programming-languages--medium]]
 - [[q-what-is-job-object--programming-languages--medium]]
-- [[q-clean-code-principles--software-engineering--medium]]
+-

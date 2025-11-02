@@ -6,8 +6,8 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - flow
   - debounce
+  - flow
   - sample
   - throttle
   - time-operators
@@ -23,14 +23,17 @@ source_note: Guide to time-based Flow operators
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-basics--kotlin--easy, q-instant-search-flow-operators--kotlin--medium, q-flow-operators-deep-dive--kotlin--hard]
+related: [q-flow-basics--kotlin--easy, q-flow-operators-deep-dive--kotlin--hard, q-instant-search-flow-operators--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-31
 
-tags: [kotlin, flow, debounce, sample, throttle, time-operators, coroutines, difficulty/medium]
+tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, time-operators]
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What are debounce, sample, and throttle operators in Kotlin Flow? What are the differences and use cases?
 
@@ -412,7 +415,7 @@ input
 
 Временные операторы в Kotlin Flow контролируют частоту эмиссий на основе временных интервалов. Три основных оператора—**debounce**, **sample** и **throttleFirst**—служат разным целям для обработки быстрых эмиссий.
 
-### Быстрое сравнение
+### Быстрое Сравнение
 
 | Оператор | Назначение | Когда излучает | Случай использования |
 |----------|---------|------------|----------|
@@ -420,7 +423,7 @@ input
 | **sample** | Периодическая выборка | В фиксированные интервалы | Real-time данные, сенсоры |
 | **throttleFirst** | Ограничение частоты | Первое в временном окне | Клики кнопки, быстрые события |
 
-### Debounce: Ждать тишины
+### Debounce: Ждать Тишины
 
 **debounce** ждёт паузу в эмиссиях перед излучением последнего значения:
 
@@ -469,7 +472,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-### Sample: Периодическая выборка
+### Sample: Периодическая Выборка
 
 **sample** излучает самое недавнее значение через фиксированные временные интервалы:
 
@@ -486,7 +489,7 @@ locationUpdates
 //          (каждые 1000мс, берём последнее значение)
 ```
 
-### ThrottleFirst: Ограничение частоты
+### ThrottleFirst: Ограничение Частоты
 
 **throttleFirst** излучает первое значение, затем игнорирует последующие значения в течение временного окна:
 
@@ -503,9 +506,9 @@ buttonClicks
 //          (взять первое, игнорировать 1000мс)
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
-#### 1. Мгновенный поиск
+#### 1. Мгновенный Поиск
 
 ```kotlin
 class SearchActivity : AppCompatActivity() {
@@ -526,7 +529,7 @@ class SearchActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Отслеживание местоположения
+#### 2. Отслеживание Местоположения
 
 ```kotlin
 class MapViewModel : ViewModel() {
@@ -541,7 +544,7 @@ class MapViewModel : ViewModel() {
 }
 ```
 
-#### 3. Защита от двойных кликов
+#### 3. Защита От Двойных Кликов
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -568,7 +571,7 @@ class FormViewModel : ViewModel() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 ```kotlin

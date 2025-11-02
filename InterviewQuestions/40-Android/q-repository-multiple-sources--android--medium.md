@@ -11,20 +11,22 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/architecture, android/repository, android/data-layer, android/caching, difficulty/medium]
+language_tags: [android/architecture, android/caching, android/data-layer, android/repository, difficulty/medium, en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-kmm-ktor-networking--multiplatform--medium, q-dagger-field-injection--android--medium]
+related: [q-dagger-field-injection--android--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-kmm-ktor-networking--multiplatform--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android/architecture-clean, android/cache-offline, en, ru, difficulty/medium]
+tags: [android/architecture-clean, android/cache-offline, difficulty/medium, en, ru]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Question (EN)
@@ -216,7 +218,7 @@ class ProfileRepository(
 
 **Repository** абстрагирует источники данных, предоставляя единый источник истины и обрабатывая кэширование/синхронизацию.
 
-### Паттерн единого источника истины
+### Паттерн Единого Источника Истины
 
 ```kotlin
 class ProductRepository(
@@ -261,7 +263,7 @@ class UserRepository(
 }
 ```
 
-### Network-First с fallback
+### Network-First С Fallback
 
 ```kotlin
 class NewsRepository(

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, testing, stateflow, sharedflow, viewmodel]
+subtopics: [coroutines, sharedflow, stateflow, testing, viewmodel]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Flow Testing Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-stateflow-sharedflow-differences--kotlin--medium]
+related: [q-stateflow-sharedflow-differences--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, testing, stateflow, sharedflow, viewmodel, difficulty/medium]
+tags: [coroutines, difficulty/medium, kotlin, sharedflow, stateflow, testing, viewmodel]
+date created: Sunday, October 12th 2025, 1:20:44 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > How to test StateFlow and SharedFlow in ViewModels? Cover collection strategies, turbine library, TestScope, assertions, and edge cases like replay cache and conflation.
 
@@ -1135,7 +1138,7 @@ fun `начальное состояние равно 0`() {
 }
 ```
 
-### Использование библиотеки Turbine
+### Использование Библиотеки Turbine
 
 Turbine делает тестирование Flow намного чище и читабельнее.
 
@@ -1155,7 +1158,7 @@ fun `поиск обновляет результаты - с turbine`() = runTes
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте turbine** для более чистых тестов
 2. **Тестируйте текущее значение StateFlow** напрямую

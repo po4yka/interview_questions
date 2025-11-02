@@ -11,12 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-01-27
-tags: [android/performance-memory, android/profiling, leakcanary, memory-leaks, debugging-tools, difficulty/easy]
+tags: [android/performance-memory, android/profiling, debugging-tools, difficulty/easy, leakcanary, memory-leaks]
 moc: moc-android
-related: [c-memory-management, q-test-doubles-dependency-injection--testing--medium, q-how-vsync-and-recomposition-events-are-related--android--hard]
+related: [c-memory-management]
 sources: []
 date created: Monday, October 27th 2025, 3:57:39 pm
-date modified: Thursday, October 30th 2025, 3:12:27 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -182,12 +182,10 @@ class MyViewModel : ViewModel() {
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-lifecycle-basics--android--easy]] — Understanding component lifecycle
-- [[q-garbage-collection-basics--android--easy]] — GC fundamentals
+- Related content to be added
 
 ### Related
-- [[q-memory-profiler-usage--android--medium]] — Manual memory analysis tools
-- [[q-common-memory-leaks--android--medium]] — Typical leak patterns
+- Related content to be added
 
 ### Advanced
-- [[q-heap-dump-analysis--android--hard]] — Deep heap dump investigation
+- Related content to be added

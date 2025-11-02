@@ -3,7 +3,7 @@ id: android-169
 title: "KMM vs React Native / KMM против React Native"
 aliases: ["KMM vs React Native", "KMM против React Native", "React Native Comparison", "React Native Сравнение"]
 topic: android
-subtopics: [kmp, architecture-mvvm]
+subtopics: [architecture-mvvm, kmp]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,8 +14,11 @@ related: [q-how-does-jetpackcompose-work--android--medium, q-play-app-signing--a
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [kotlin, reactnative, multiplatform, javascript, kmp, android/kmp, android/architecture-mvvm, difficulty/medium]
+tags: [android/architecture-mvvm, android/kmp, difficulty/medium, javascript, kmp, kotlin, multiplatform, reactnative]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
+
 # Вопрос (RU)
 >
 Сравните Kotlin Multiplatform Mobile с React Native. Каковы архитектурные различия, bridge overhead и зрелость экосистемы? Чем отличается JavaScript vs Kotlin/Native подход?
@@ -26,7 +29,7 @@ Compare Kotlin Multiplatform Mobile with React Native. What are the architectura
 
 ## Ответ (RU)
 
-### Архитектурные различия
+### Архитектурные Различия
 
 **React Native**: JavaScript-слой → JS Bridge → Native модули → Platform SDK
 - UI в JSX, логика в JavaScript

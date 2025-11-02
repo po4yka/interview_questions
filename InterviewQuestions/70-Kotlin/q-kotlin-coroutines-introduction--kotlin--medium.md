@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, concurrency, async, structured-concurrency]
+subtopics: [async, concurrency, coroutines, structured-concurrency]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flatmap-ranges--programming-languages--easy, q-coroutines-vs-threads--programming-languages--medium, q-kotlin-any-inheritance--programming-languages--easy]
+related: [q-coroutines-vs-threads--programming-languages--medium, q-kotlin-any-inheritance--programming-languages--easy, q-kotlin-flatmap-ranges--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, coroutines, async, concurrency, structured-concurrency, difficulty/medium]
+tags: [async, concurrency, coroutines, difficulty/medium, kotlin, structured-concurrency]
+date created: Sunday, October 12th 2025, 8:44:42 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What are coroutines in Kotlin?
 # Вопрос (RU)
@@ -93,7 +96,7 @@ This code will launch a long-running operation without blocking the main thread.
 - The programming model and APIs remain the same. We can continue to use loops, exception handling, etc. and there's no need to learn a complete set of new APIs
 - It is platform independent. Whether we targeting JVM, JavaScript or any other platform, the code we write is the same. Under the covers the compiler takes care of adapting it to each platform.
 
-### Structured concurrency
+### Structured Concurrency
 
 There is still something to be desired for practical usage of coroutines. When we use `GlobalScope.launch`, we create a top-level coroutine. Even though it is light-weight, it still consumes some memory resources while it runs. If we forget to keep a reference to the newly launched coroutine, it still runs. What if the code in the coroutine hangs (for example, we erroneously delay for too long), what if we launched too many coroutines and ran out of memory? Having to manually keep references to all the launched coroutines and join them is error-prone.
 
@@ -159,7 +162,7 @@ suspend fun preparePost(): Token {
 - Модель программирования и API остаются прежними. Мы можем продолжать использовать циклы, обработку исключений и т.д., и нет необходимости изучать полный набор новых API
 - Это независимо от платформы. Нацелены ли мы на JVM, JavaScript или любую другую платформу, код, который мы пишем, одинаков. Под капотом компилятор заботится об адаптации его к каждой платформе.
 
-### Структурированный параллелизм
+### Структурированный Параллелизм
 
 Все еще есть что желать для практического использования корутин. Когда мы используем `GlobalScope.launch`, мы создаем корутину верхнего уровня. Хотя она легковесна, она все еще потребляет некоторые ресурсы памяти пока работает. Если мы забудем сохранить ссылку на вновь запущенную корутину, она все еще выполняется. Что если код в корутине зависнет (например, мы ошибочно задержались слишком долго), что если мы запустили слишком много корутин и исчерпали память? Необходимость вручную хранить ссылки на все запущенные корутины и присоединять их подвержена ошибкам.
 
@@ -198,7 +201,7 @@ suspend fun preparePost(): Token {
 - [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
-- [[q-coroutine-cancellation--kotlin--medium]] - Cancellation basics
+-  - Cancellation basics
 - [[q-coroutine-exception-handling--kotlin--medium]] - Exception handling
 - [[q-structured-concurrency-kotlin--kotlin--medium]] - Structured concurrency
 - [[q-lifecyclescope-viewmodelscope--kotlin--medium]] - Android lifecycle scopes

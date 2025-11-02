@@ -3,18 +3,20 @@ id: android-233
 title: "View Lifecycle in Android / Жизненный цикл View в Android"
 aliases: ["View Lifecycle", "Жизненный цикл View"]
 topic: android
-subtopics: [ui-views, lifecycle]
+subtopics: [lifecycle, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-custom-layout--android--hard, q-viewmodel-vs-onsavedinstancestate--android--medium]
+related: [c-activity-lifecycle, c-fragment-lifecycle, c-view-lifecycle]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/ui-views, android/lifecycle, view, custom-view, difficulty/medium]
+tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, view]
+date created: Saturday, November 1st 2025, 1:25:39 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android/ui-views, android/lifecycle, view, custom-view, difficulty/medium
 
 Жизненный цикл View описывает последовательность методов от создания до уничтожения представления. Понимание этого цикла критично для управления ресурсами, обработки configuration changes и оптимизации производительности.
 
-### Основные этапы
+### Основные Этапы
 
 **Constructor → onAttachedToWindow() → onMeasure() → onLayout() → onDraw() → onDetachedFromWindow()**
 
@@ -59,7 +61,7 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-### 2. onAttachedToWindow() — Запуск ресурсов
+### 2. onAttachedToWindow() — Запуск Ресурсов
 
 Вызывается когда View прикрепляется к окну. Здесь запускаем анимации, регистрируем слушатели.
 
@@ -73,7 +75,7 @@ override fun onAttachedToWindow() {
 }
 ```
 
-### 3. onMeasure() — Измерение размера
+### 3. onMeasure() — Измерение Размера
 
 Определяет размер View. Обязательно вызвать `setMeasuredDimension()`.
 
@@ -136,7 +138,7 @@ override fun onDraw(canvas: Canvas) {
 // }
 ```
 
-### 6. onDetachedFromWindow() — Освобождение ресурсов
+### 6. onDetachedFromWindow() — Освобождение Ресурсов
 
 Вызывается при отсоединении от окна. Останавливаем анимации, отписываемся от слушателей.
 
@@ -152,7 +154,7 @@ override fun onDetachedFromWindow() {
 // ❌ Неправильно: не отписываться от слушателей → memory leak
 ```
 
-### Методы обновления
+### Методы Обновления
 
 **requestLayout()** — для изменения размера/позиции:
 ```kotlin
@@ -170,7 +172,7 @@ fun updateColor() {
 }
 ```
 
-### Сохранение состояния
+### Сохранение Состояния
 
 ```kotlin
 override fun onSaveInstanceState(): Parcelable {
@@ -191,7 +193,7 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 }
 ```
 
-### Основные принципы
+### Основные Принципы
 
 1. **Инициализация в constructor** — Paint-объекты, значения по умолчанию
 2. **Запуск ресурсов в onAttachedToWindow()** — анимации, слушатели

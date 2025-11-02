@@ -1,19 +1,21 @@
 ---
 id: android-258
 title: "Play Store Publishing / Публикация в Play Store"
-aliases: [Play Store Publishing, Публикация в Play Store, Google Play Publishing, App Bundle, Staged Rollout]
+aliases: [App Bundle, Google Play Publishing, Play Store Publishing, Staged Rollout, Публикация в Play Store]
 topic: android
-subtopics: [play-console, app-bundle, ci-cd, ab-testing]
+subtopics: [ab-testing, app-bundle, ci-cd, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-signing, c-ci-cd, q-android-app-bundles--android--easy, q-app-store-optimization--android--medium]
+related: [c-app-signing, c-ci-cd, q-in-app-updates--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/play-console, android/app-bundle, android/ci-cd, android/ab-testing, distribution, release-management, difficulty/medium]
+tags: [android/ab-testing, android/app-bundle, android/ci-cd, android/play-console, difficulty/medium, distribution, release-management]
+date created: Saturday, November 1st 2025, 1:03:34 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -112,7 +114,7 @@ class FeatureManager(context: Context) {
 }
 ```
 
-### 3. Управление версиями
+### 3. Управление Версиями
 
 **✅ Semantic Versioning**:
 ```kotlin
@@ -133,7 +135,7 @@ android {
 }
 ```
 
-### 4. Треки релизов
+### 4. Треки Релизов
 
 | Трек | Тестеров | Review | Использование |
 |------|----------|--------|---------------|
@@ -163,7 +165,7 @@ lane :increase_rollout do |options|
 end
 ```
 
-### 5. Staged Rollout стратегия
+### 5. Staged Rollout Стратегия
 
 **✅ Рекомендуемый план**:
 ```
@@ -185,7 +187,7 @@ end
 - Critical bug reports
 - Negative reviews spike >20%
 
-### 6. A/B Testing с Firebase
+### 6. A/B Testing С Firebase
 
 ```kotlin
 @Singleton
@@ -558,5 +560,5 @@ jobs:
 - [[q-gradle-build-variants--android--medium]] - Build configuration management
 
 ### Advanced (Hard)
-- [[q-multi-module-architecture--android--hard]] - Complex modularization with dynamic features
+- [[q-kmm-architecture--android--hard]] - Complex modularization with dynamic features
 - [[q-enterprise-app-distribution--android--hard]] - Enterprise deployment strategies

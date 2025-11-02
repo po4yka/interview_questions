@@ -3,20 +3,20 @@ id: android-374
 title: "How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру перерисовать список когда элемент удален"
 aliases: ["How To Tell Adapter To Redraw List", "Как сказать адаптеру перерисовать список"]
 topic: android
-subtopics: [ui-views, ui-animation]
+subtopics: [ui-animation, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-recyclerview-sethasfixedsize--android--easy, q-how-to-create-list-like-recyclerview-in-compose--android--medium]
+related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-recyclerview-sethasfixedsize--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/ui-views, android/ui-animation, adapter, recyclerview, diffutil, difficulty/medium]
+tags: [adapter, android/ui-animation, android/ui-views, difficulty/medium, diffutil, recyclerview]
 date created: Tuesday, October 28th 2025, 9:11:31 pm
-date modified: Thursday, October 30th 2025, 3:09:39 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:09:39 pm
 
 Когда элемент удаляется из списка, необходимо: (1) удалить его из источника данных, (2) уведомить адаптер о конкретном изменении через специализированные notify методы.
 
-### Основные подходы
+### Основные Подходы
 
 ```kotlin
 class MyAdapter(private val items: MutableList<Item>) :
@@ -60,7 +60,7 @@ class MyAdapter(private val items: MutableList<Item>) :
 }
 ```
 
-### DiffUtil с ListAdapter (рекомендуется)
+### DiffUtil С ListAdapter (рекомендуется)
 
 ```kotlin
 class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
@@ -81,7 +81,7 @@ class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
 }
 ```
 
-### Notify методы
+### Notify Методы
 
 ```kotlin
 // Удалить один элемент
@@ -100,7 +100,7 @@ notifyItemChanged(position)
 notifyItemMoved(fromPosition, toPosition)
 ```
 
-### ItemTouchHelper для свайпа
+### ItemTouchHelper Для Свайпа
 
 ```kotlin
 val swipeHandler = object : ItemTouchHelper.SimpleCallback(
@@ -117,7 +117,7 @@ val swipeHandler = object : ItemTouchHelper.SimpleCallback(
 ItemTouchHelper(swipeHandler).attachToRecyclerView(recyclerView)
 ```
 
-### Undo функциональность
+### Undo Функциональность
 
 ```kotlin
 class UndoAdapter(private val items: MutableList<Item>) :
@@ -148,7 +148,7 @@ Snackbar.make(view, "Удалено", Snackbar.LENGTH_LONG)
     .show()
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте ListAdapter** с DiffUtil для автоматического вычисления изменений
 2. **Избегайте notifyDataSetChanged()** — нет анимаций, плохая производительность

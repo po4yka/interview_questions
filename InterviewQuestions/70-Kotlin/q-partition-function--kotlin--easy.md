@@ -1,7 +1,7 @@
 ---
 id: kotlin-208
 title: "Partition Function / Функция partition"
-aliases: [Partition, Collection Partition, Filtering, Partition Function]
+aliases: [Collection Partition, Filtering, Partition, Partition Function]
 topic: kotlin
 subtopics: [collections]
 question_kind: theory
@@ -10,25 +10,22 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-lazy-initialization--programming-languages--easy, q-coroutine-job-lifecycle--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
+related: [q-coroutine-job-lifecycle--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - collections
-  - filtering
-  - partition
-  - pair
-  - difficulty/easy
+tags: [collections, difficulty/easy, filtering, kotlin, pair, partition]
+date created: Friday, October 31st 2025, 6:29:56 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# partition(): разделение коллекции на две части
+
+# partition(): Разделение Коллекции На Две Части
 
 **English**: partition() function in Kotlin collections
 
 ## Answer (EN)
 `partition()` splits collection into **two lists**: first contains elements matching condition (`true`), second - non-matching (`false`). Returns `Pair<List, List>`. Convenient for filtering without losing "invalid" elements.
 
-### Basic usage
+### Basic Usage
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -47,7 +44,7 @@ val odd = numbers.filter { it % 2 != 0 }
 // But partition traverses collection only once!
 ```
 
-### Return type
+### Return Type
 
 ```kotlin
 val result: Pair<List<Int>, List<Int>> = numbers.partition { it > 5 }
@@ -59,7 +56,7 @@ val nonMatching = result.second  // [1, 2, 3, 4, 5]
 val (matching, nonMatching) = numbers.partition { it > 5 }
 ```
 
-### Comparison with filter
+### Comparison with Filter
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6)
@@ -74,9 +71,9 @@ val (positive, negative) = numbers.partition { it > 3 }
 // negative = [1, 2, 3]
 ```
 
-### Practical examples
+### Practical Examples
 
-#### Example 1: Data validation
+#### Example 1: Data Validation
 
 ```kotlin
 data class User(val name: String, val email: String, val age: Int) {
@@ -109,7 +106,7 @@ valid.forEach { saveToDatabase(it) }
 invalid.forEach { logValidationError(it) }
 ```
 
-#### Example 2: Processing API results
+#### Example 2: Processing API Results
 
 ```kotlin
 sealed class ApiResult<out T> {
@@ -141,7 +138,7 @@ println("Errors: $errorMessages")
 // Errors: [Network timeout, 404 Not Found]
 ```
 
-#### Пример 3: Сортировка файлов
+#### Пример 3: Сортировка Файлов
 
 ```kotlin
 val files = listOf(
@@ -165,7 +162,7 @@ println("Other files: ${others.map { it.name }}")
 // Other files: [document.pdf, data.json, config.xml, archive.zip]
 ```
 
-#### Пример 4: Разделение задач по приоритету
+#### Пример 4: Разделение Задач По Приоритету
 
 ```kotlin
 data class Task(val title: String, val priority: Int) {
@@ -197,7 +194,7 @@ regular.forEach { println("  - ${it.title} (priority ${it.priority})") }
 //   - Add tests (priority 6)
 ```
 
-#### Пример 5: Обработка платежей
+#### Пример 5: Обработка Платежей
 
 ```kotlin
 data class Payment(val id: Int, val amount: Double, val status: String)
@@ -226,7 +223,7 @@ println("Pending: $$totalPending")      // Pending: $500.0
 println("Failed: $$totalFailed")        // Failed: $250.0
 ```
 
-### Работа с пустыми коллекциями
+### Работа С Пустыми Коллекциями
 
 ```kotlin
 val empty = emptyList<Int>()
@@ -237,7 +234,7 @@ println(nonMatching)  // []
 // Обе части пустые
 ```
 
-### Вложенное использование
+### Вложенное Использование
 
 ```kotlin
 data class Student(val name: String, val grade: Int, val isPassing: Boolean)
@@ -282,7 +279,7 @@ println("partition: $time2 ms")  // ~40-50 ms
 // partition в ~2 раза быстрее!
 ```
 
-### С другими коллекциями
+### С Другими Коллекциями
 
 ```kotlin
 // Set
@@ -296,7 +293,7 @@ val (even, odd) = sequence.partition { it % 2 == 0 }
 // partition материализует Sequence в List
 ```
 
-### Типичные use cases
+### Типичные Use Cases
 
 **1. Разделение на категории**
 
@@ -368,7 +365,7 @@ val byPriority = items.groupBy {
 
 `partition()` разделяет коллекцию на **два списка** на основе предиката: первый содержит подходящие элементы (`true`), второй - неподходящие (`false`). Возвращает `Pair<List, List>`.
 
-### Основное использование
+### Основное Использование
 
 ```kotlin
 val (matching, nonMatching) = list.partition { condition }
@@ -380,20 +377,20 @@ val (matching, nonMatching) = list.partition { condition }
 - Сохраняет обе группы элементов
 - Работает с List, Set, Sequence (материализуется в List)
 
-### Когда использовать
+### Когда Использовать
 
 - Валидация (валидные/невалидные данные)
 - Результаты (успех/ошибка)
 - Категоризация (срочно/обычно)
 - A/B тестирование (группа A / группа B)
 
-### Когда НЕ использовать
+### Когда НЕ Использовать
 
 - Если нужна только одна группа → используйте `filter`
 - Если нужно >2 групп → используйте `groupBy`
 
 ## Related Questions
 
-- [[q-lazy-initialization--programming-languages--easy]]
+-
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
 - [[q-testing-viewmodel-coroutines--kotlin--medium]]

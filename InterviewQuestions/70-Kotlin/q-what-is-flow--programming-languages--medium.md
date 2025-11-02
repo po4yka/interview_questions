@@ -10,12 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-flow-flatmap-operator--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy, q-where-to-call-suspend-functions--programming-languages--medium]
+related: [q-flow-flatmap-operator--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, kotlin, flow, difficulty/medium]
+tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages]
 date created: Saturday, October 4th 2025, 10:49:37 am
-date modified: Sunday, October 26th 2025, 1:39:58 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # What is Flow in Kotlin?
@@ -518,4 +518,3 @@ class FlowBestPractices {
 
 - [[q-priorityqueue-vs-deque--programming-languages--easy]]
 - [[q-flow-flatmap-operator--programming-languages--easy]]
-- [[q-where-to-call-suspend-functions--programming-languages--medium]]

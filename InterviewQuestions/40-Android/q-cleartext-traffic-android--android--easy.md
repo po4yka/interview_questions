@@ -1,22 +1,22 @@
 ---
 id: android-033
 title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
-aliases: [Cleartext traffic, Незашифрованный трафик, Network Security Config]
+aliases: [Cleartext traffic, Network Security Config, Незашифрованный трафик]
 topic: android
-subtopics: [networking-http, network-security-config, permissions]
+subtopics: [network-security-config, networking-http, permissions]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-encryption, c-https-tls, q-android-keystore-system--security--medium, q-android-security-practices-checklist--android--medium, q-certificate-pinning--security--medium]
+related: [c-encryption, c-https-tls]
 created: 2025-10-06
 updated: 2025-10-29
-tags: [android/networking-http, android/network-security-config, android/permissions, security, difficulty/easy]
+tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]
 sources: [https://developer.android.com/training/articles/security-config]
 date created: Thursday, October 30th 2025, 11:17:59 am
-date modified: Thursday, October 30th 2025, 12:43:39 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +36,7 @@ date modified: Thursday, October 30th 2025, 12:43:39 pm
 - **API 23-27**: разрешён по умолчанию
 - **API <23**: всегда разрешён (устаревшие версии)
 
-### Контроль через Network Security Config
+### Контроль Через Network Security Config
 
 **Для локальной разработки** (минимальные разрешения):
 ```xml
@@ -66,7 +66,7 @@ date modified: Thursday, October 30th 2025, 12:43:39 pm
 <application android:usesCleartextTraffic="true" />
 ```
 
-### Типичная ошибка
+### Типичная Ошибка
 
 При попытке HTTP-запроса на API 28+:
 ```
@@ -74,7 +74,7 @@ java.net.UnknownServiceException:
 CLEARTEXT communication not permitted by network security policy
 ```
 
-### Production стратегия
+### Production Стратегия
 
 1. **HTTPS везде** — используйте TLS для всех соединений
 2. **Certificate pinning** — для критичных API (банковские, платёжные)
@@ -162,7 +162,6 @@ CLEARTEXT communication not permitted by network security policy
 
 ### Related (Same Level)
 - [[q-android-security-practices-checklist--android--medium]] — Security best practices
-- [[q-android-permissions--android--easy]] — Permission system
 - Network debugging with Charles/Proxyman
 
 ### Advanced (Harder)

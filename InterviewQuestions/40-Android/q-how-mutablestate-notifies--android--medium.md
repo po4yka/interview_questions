@@ -3,7 +3,7 @@ id: android-108
 title: "How MutableState Notifies / Как MutableState уведомляет"
 aliases: [MutableState notifications, MutableState уведомления, Snapshot system]
 topic: android
-subtopics: [ui-compose, ui-state, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-compose, ui-state]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,12 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android/ui-compose, android/ui-state, android/architecture-mvvm, difficulty/medium, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state-management]
+tags: [android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, mutablestate, observer-pattern, recomposition, snapshot-system, state-management]
 moc: moc-android
 related: [c-compose-state, c-recomposition, q-recomposition-choreographer--android--hard]
 sources: []
 date created: Tuesday, October 28th 2025, 9:34:15 am
-date modified: Thursday, October 30th 2025, 12:48:18 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:48:18 pm
 
 **MutableState** использует **Observer pattern** с **Snapshot system** для автоматического уведомления подписчиков об изменениях.
 
-### Механизм работы
+### Механизм Работы
 
 **1. Подписка (Read Phase)**
 Composable автоматически подписывается при **чтении** state:
@@ -77,7 +77,7 @@ Snapshot { count = 1 }
 - **Потокобезопасность** - несколько потоков могут безопасно читать
 - **Откат** - можно отменить изменения
 
-### Гранулярная рекомпозиция
+### Гранулярная Рекомпозиция
 
 Только Composable, которые **читают** изменённое состояние, перерисовываются:
 
@@ -103,7 +103,7 @@ fun Screen() {
 - Только `Text("Age: $age")` перерисовывается
 - `Text("Name: $name")` **НЕ** перерисовывается
 
-### Упрощённая реализация
+### Упрощённая Реализация
 
 ```kotlin
 class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
@@ -127,7 +127,7 @@ class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
 }
 ```
 
-### Интеграция с ViewModel
+### Интеграция С ViewModel
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -155,7 +155,7 @@ fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
 5. `MutableState` уведомляет подписчиков
 6. `Text` перерисовывается
 
-### Жизненный цикл подписок
+### Жизненный Цикл Подписок
 
 ```kotlin
 @Composable
@@ -353,11 +353,8 @@ Compose automatically manages subscriptions:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-state-basics--android--easy]]
-- [[q-remember-mutablestateof--android--easy]]
 
 ### Related (Same Level)
-- [[q-compose-state--android--medium]]
 - [[q-derivedstateof-optimization--android--medium]]
 
 ### Advanced (Harder)

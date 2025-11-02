@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-room, q-room-transactions-dao--room--medium, q-room-type-converters-advanced--room--medium]
+related: [c-room, q-room-transactions-dao--android--medium, q-room-type-converters-advanced--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/room, android/testing-instrumented, database, migrations, persistence, difficulty/medium]
+tags: [android/room, android/testing-instrumented, database, difficulty/medium, migrations, persistence]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
+
 # Вопрос (RU)
 
 Реализуйте сложные миграции базы данных Room с версии 1 до 3. Обработайте деструктивные и недеструктивные миграции с тестированием.
@@ -28,7 +31,7 @@ Implement complex Room database migrations from version 1 to 3. Handle destructi
 
 **Миграции Room** — SQL-скрипты для обновления схемы БД с сохранением пользовательских данных. Критично для production приложений для предотвращения потери данных и крашей. См. [[c-room|Room Database]] для основ работы с Room.
 
-### Основные принципы
+### Основные Принципы
 
 При изменении схемы:
 1. Увеличиваем версию БД
@@ -36,7 +39,7 @@ Implement complex Room database migrations from version 1 to 3. Handle destructi
 3. Тестируем миграции
 4. Обрабатываем fallback-стратегии
 
-### Пример эволюции схемы
+### Пример Эволюции Схемы
 
 ```kotlin
 // v1: Начальная схема
@@ -51,9 +54,9 @@ data class User(
 // v3: Разделяем name → firstName + lastName
 ```
 
-### Реализация миграций
+### Реализация Миграций
 
-#### Миграция 1→2: Добавление колонок
+#### Миграция 1→2: Добавление Колонок
 
 ```kotlin
 val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -69,7 +72,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 }
 ```
 
-#### Миграция 2→3: Сложное изменение (пересоздание таблицы)
+#### Миграция 2→3: Сложное Изменение (пересоздание таблицы)
 
 SQLite не поддерживает ALTER COLUMN — нужно пересоздать таблицу:
 
@@ -104,7 +107,7 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
 }
 ```
 
-### Настройка БД с миграциями
+### Настройка БД С Миграциями
 
 ```kotlin
 @Database(
@@ -126,7 +129,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-### Тестирование миграций
+### Тестирование Миграций
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -177,7 +180,7 @@ class MigrationTest {
 }
 ```
 
-### Деструктивные миграции
+### Деструктивные Миграции
 
 ```kotlin
 // ❌ Удаляет все данные при изменении версии — ТОЛЬКО для debug
@@ -400,11 +403,11 @@ Room.databaseBuilder(context, AppDatabase::class.java, "db")
 - [[q-sharedpreferences-commit-vs-apply--android--easy|SharedPreferences vs Room]]
 
 ### Related (Medium)
-- [[q-room-transactions-dao--room--medium|Room Transactions]]
-- [[q-room-type-converters-advanced--room--medium|Room Type Converters]]
-- [[q-room-paging3-integration--room--medium|Room Paging3 Integration]]
+- [[q-room-transactions-dao--android--medium|Room Transactions]]
+- [[q-room-type-converters-advanced--android--medium|Room Type Converters]]
+- [[q-room-paging3-integration--android--medium|Room Paging3 Integration]]
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--room--hard|Room Full-Text Search]]
+- [[q-room-fts-full-text-search--android--hard|Room Full-Text Search]]
 - Database schema versioning across multi-module projects
 - Zero-downtime migrations for large databases

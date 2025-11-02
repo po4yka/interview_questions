@@ -3,20 +3,20 @@ id: android-172
 title: "How To Display SVG String As A Vector File / Как отобразить SVG строку как векторный файл"
 aliases: ["Display SVG String", "Отображение SVG строки"]
 topic: android
-subtopics: [ui-compose, ui-views, ui-graphics]
+subtopics: [ui-compose, ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-custom-views, c-viewmodel]
+related: [c-custom-views, c-jetpack-compose, c-viewmodel]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/ui-compose, android/ui-views, android/ui-graphics, difficulty/medium, ui]
+tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, ui]
 date created: Monday, October 27th 2025, 6:42:32 pm
-date modified: Thursday, October 30th 2025, 12:48:34 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How to display an SVG string as a vector image in Android?
 
 Android не имеет встроенной поддержки SVG, поэтому требуются сторонние библиотеки. Основные подходы:
 
-### 1. AndroidSVG (Рекомендуется для простых случаев)
+### 1. AndroidSVG (Рекомендуется Для Простых случаев)
 
 Легковесная библиотека для прямой работы с SVG-строками:
 
@@ -66,7 +66,7 @@ private fun displaySvgWithSize(
 }
 ```
 
-### 2. Coil с SVG декодером (Современный подход)
+### 2. Coil С SVG Декодером (Современный подход)
 
 Интеграция с популярной библиотекой загрузки изображений:
 
@@ -143,7 +143,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Подход | Преимущества | Недостатки | Использовать когда |
 |--------|--------------|------------|-------------------|
@@ -152,7 +152,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 | Custom Drawable | Полный контроль | Больше кода | Специфичные требования к рендерингу |
 | Compose | Декларативность | Требует Compose | Compose UI |
 
-### Важные моменты
+### Важные Моменты
 
 **Память**:
 - Преобразование в Bitmap для больших SVG может вызвать OutOfMemoryError
@@ -174,7 +174,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 
 Android has no built-in SVG support, requiring third-party libraries. Main approaches:
 
-### 1. AndroidSVG (Recommended for simple cases)
+### 1. AndroidSVG (Recommended for Simple cases)
 
 Lightweight library for direct SVG string handling:
 
@@ -207,7 +207,7 @@ private fun displaySvgWithSize(
 }
 ```
 
-### 2. Coil with SVG decoder (Modern approach)
+### 2. Coil with SVG Decoder (Modern approach)
 
 Integration with popular image loading library:
 
@@ -284,7 +284,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 }
 ```
 
-### Approach comparison
+### Approach Comparison
 
 | Approach | Advantages | Disadvantages | Use when |
 |----------|-----------|---------------|----------|
@@ -293,7 +293,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 | Custom Drawable | Full control | More code | Specific rendering requirements |
 | Compose | Declarative | Requires Compose | Compose UI |
 
-### Key considerations
+### Key Considerations
 
 **Memory**:
 - Converting large SVGs to Bitmap can cause OutOfMemoryError

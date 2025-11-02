@@ -13,10 +13,10 @@ moc: moc-android
 related: [c-encryption]
 created: 2025-10-20
 updated: 2025-10-27
-tags: [android/files-media, android/keystore-crypto, encryption, difficulty/medium]
+tags: [android/files-media, android/keystore-crypto, difficulty/medium, encryption]
 sources: ["https://developer.android.com/guide/topics/security/encryption"]
 date created: Monday, October 27th 2025, 10:28:06 pm
-date modified: Thursday, October 30th 2025, 12:47:32 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -67,7 +67,7 @@ class SecurePrefsManager(context: Context) {
 
 **Важно:** EncryptedSharedPreferences шифрует как ключи, так и значения. Для критичных данных используйте `commit()` вместо `apply()` для синхронной записи.
 
-### 2. SQLCipher для Room
+### 2. SQLCipher Для Room
 
 ```kotlin
 @Database(entities = [User::class], version = 1)

@@ -3,7 +3,7 @@ id: android-244
 title: "Чем Жизненный Цикл Fragment Отличается От Activity / Fragment vs Activity Lifecycle"
 aliases: ["Fragment vs Activity Lifecycle", "Чем отличается жизненный цикл Fragment от Activity"]
 topic: android
-subtopics: [lifecycle, fragment, activity]
+subtopics: [activity, fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -14,9 +14,9 @@ related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-is-layouti
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/lifecycle, android/fragment, android/activity, difficulty/medium, fragments, lifecycle]
+tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium, fragments, lifecycle]
 date created: Tuesday, October 28th 2025, 7:38:27 am
-date modified: Thursday, October 30th 2025, 12:47:55 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How does the Fragment lifecycle differ from the Activity lifecycle?
 
 Fragment имеет более детализированный жизненный цикл по сравнению с Activity, включая дополнительные состояния для привязки к Activity и управления View.
 
-### Ключевые отличия
+### Ключевые Отличия
 
 **1. Дополнительные состояния привязки**
 
@@ -112,7 +112,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Аспект | Activity | Fragment |
 |--------|----------|----------|

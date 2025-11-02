@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-unit-testing, q-compose-semantics--android--medium, q-compose-performance-optimization--android--hard]
+related: [c-jetpack-compose, c-unit-testing, q-compose-performance-optimization--android--hard, q-compose-semantics--android--medium]
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/testing-unit, android/ui-compose, compose, testing, semantics, difficulty/medium]
+tags: [android/testing-unit, android/ui-compose, compose, difficulty/medium, semantics, testing]
 sources: [https://developer.android.com/jetpack/compose/testing]
 date created: Thursday, October 30th 2025, 11:56:28 am
-date modified: Thursday, October 30th 2025, 12:43:57 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:43:57 pm
 
 **Compose Testing** использует семантическое дерево вместо View-иерархии. Тесты выполняются синхронно — фреймворк автоматически ожидает завершения recomposition.
 
-### Ключевые концепции
+### Ключевые Концепции
 
 **ComposeTestRule** — центральная точка взаимодействия с Compose runtime:
 
@@ -53,7 +53,7 @@ class LoginScreenTest {
 
 **Семантическое дерево** — структура из узлов с метаданными (text, role, actions). Элементы без семантики (например, декоративные Image) невидимы для тестов.
 
-### Стратегии поиска элементов
+### Стратегии Поиска Элементов
 
 **testTag** (предпочтительно — устойчив к рефакторингу):
 ```kotlin
@@ -73,7 +73,7 @@ Icon(contentDescription = "Закрыть")
 composeTestRule.onNodeWithContentDescription("Закрыть").performClick()
 ```
 
-### Взаимодействия и проверки
+### Взаимодействия И Проверки
 
 ```kotlin
 // Ввод текста
@@ -104,7 +104,7 @@ fun stateChange_triggersRecomposition() {
 }
 ```
 
-### Асинхронные операции
+### Асинхронные Операции
 
 ```kotlin
 @Test
@@ -240,7 +240,6 @@ fun asyncData_appearsAfterLoad() {
 
 ### Prerequisites
 - [[c-jetpack-compose]] - Understanding Compose basics required
-- [[q-compose-state-management--android--easy]] - State management fundamentals
 
 ### Related
 - [[q-compose-semantics--android--medium]] - Detailed semantic tree explanation

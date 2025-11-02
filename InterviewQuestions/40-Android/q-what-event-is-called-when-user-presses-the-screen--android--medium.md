@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-event-handling, c-touch-input, q-view-methods-and-their-purpose--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, event-handling, touch-events, ui, interaction, difficulty/medium]
+tags: [android/ui-views, difficulty/medium, event-handling, interaction, touch-events, ui]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What event is called when user presses the screen?
+# What Event is Called when User Presses the Screen?
 
 # Вопрос (RU)
 

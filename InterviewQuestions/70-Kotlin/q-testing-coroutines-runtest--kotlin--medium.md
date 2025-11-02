@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, testing, runtest, test-dispatcher]
+subtopics: [coroutines, runtest, test-dispatcher, testing]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Testing Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-stateflow-sharedflow--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-testing-coroutine-cancellation--kotlin--medium]
+related: [q-testing-coroutine-cancellation--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, testing, runtest, test-dispatcher, difficulty/medium]
+tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
+date created: Sunday, October 12th 2025, 1:18:39 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > How to test coroutines with runTest and TestDispatcher? Explain virtual time, StandardTestDispatcher vs UnconfinedTestDispatcher, and practical testing patterns for ViewModels.
 
@@ -275,7 +278,7 @@ fun `UnconfinedTestDispatcher comparison`() = runTest {
 - Faster test execution
 - Less control over timing
 
-### Comparison: Standard vs Unconfined
+### Comparison: Standard Vs Unconfined
 
 ```kotlin
 @Test
@@ -979,7 +982,7 @@ dependencies {
 
 Тестирование корутин требует специальной инфраструктуры для контроля времени выполнения, обработки задержек без реального ожидания и обеспечения детерминированных результатов. Библиотека `kotlinx-coroutines-test` предоставляет мощные инструменты для этого.
 
-### Проблема: Почему обычные тесты не работают
+### Проблема: Почему Обычные Тесты Не Работают
 
 ```kotlin
 // Продакшн код
@@ -1021,7 +1024,7 @@ fun `load user - неправильный подход`() {
 3. Нет контроля над порядком выполнения
 4. Нестабильные тесты из-за проблем с таймингом
 
-### Решение: runTest и виртуальное время
+### Решение: runTest И Виртуальное Время
 
 ```kotlin
 //  ПРАВИЛЬНО: Использование runTest
@@ -1113,7 +1116,7 @@ fun `UnconfinedTestDispatcher - немедленное выполнение`() =
 - Быстрее выполнение тестов
 - Меньше контроля над таймингом
 
-### Функции контроля виртуального времени
+### Функции Контроля Виртуального Времени
 
 #### advanceUntilIdle()
 
@@ -1198,7 +1201,7 @@ class UserViewModelTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда используйте runTest** для тестов с корутинами
 2. **Используйте MainDispatcherRule** для тестирования ViewModel

@@ -1,7 +1,7 @@
 ---
 id: android-397
 title: "How Did Fragments Appear And Why Were They Started To Be Used / Как Появились Фрагменты И Для Чего Их Начали Использовать"
-aliases: [Fragments History, Fragment Origins, История фрагментов, Происхождение фрагментов]
+aliases: [Fragment Origins, Fragments History, История фрагментов, Происхождение фрагментов]
 topic: android
 subtopics: [fragment, lifecycle]
 question_kind: theory
@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, q-what-are-fragments-for-if-there-is-activity--android--medium, q-fragments-lifecycle--android--hard]
+related: [c-fragments, q-what-are-fragments-for-if-there-is-activity--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/fragment, android/lifecycle, ui, difficulty/hard]
+tags: [android/fragment, android/lifecycle, difficulty/hard, ui]
 date created: Tuesday, October 28th 2025, 9:34:06 am
-date modified: Thursday, October 30th 2025, 12:48:12 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:48:12 pm
 
 **Историческая справка**: Фрагменты появились в Android 3.0 (Honeycomb, 2011) для поддержки планшетов и адаптивных UI. До этого все экраны реализовывались через Activity, что создавало проблемы масштабирования.
 
-### Основные причины появления
+### Основные Причины Появления
 
 **1. Адаптивный UI для разных экранов**
 Возможность использовать один компонент в разных конфигурациях: два фрагмента side-by-side на планшетах, один за другим на телефонах.
@@ -111,7 +111,7 @@ fun showDetail(itemId: String) {
 }
 ```
 
-### Современное состояние
+### Современное Состояние
 
 - AndroidX Fragment library с улучшенными API
 - Navigation Component для навигации
@@ -228,10 +228,8 @@ fun showDetail(itemId: String) {
 
 ### Prerequisites (Easier)
 - [[q-what-are-fragments-for-if-there-is-activity--android--medium]]
-- [[q-activity-vs-fragment--android--medium]]
 
 ### Related (Same Level)
-- [[q-fragments-lifecycle--android--hard]]
 - [[q-fragment-communication--android--hard]]
 - [[q-fragment-transaction-backstack--android--hard]]
 

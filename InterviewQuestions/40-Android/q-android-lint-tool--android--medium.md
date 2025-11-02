@@ -3,20 +3,20 @@ id: android-121
 title: Android Lint Tool / Инструмент Android Lint
 aliases: ["Android Lint Tool", "Инструмент Android Lint"]
 topic: android
-subtopics: [gradle, static-analysis, build-variants]
+subtopics: [build-variants, gradle, static-analysis]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gradle-build-system--android--medium, q-android-testing-strategies--android--medium, q-proguard-r8--android--medium]
+related: [q-android-testing-strategies--android--medium, q-gradle-build-system--android--medium, q-proguard-r8--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/gradle, android/static-analysis, android/build-variants, static-analysis, code-quality, difficulty/medium]
+tags: [android/build-variants, android/gradle, android/static-analysis, code-quality, difficulty/medium, static-analysis]
 sources: [https://developer.android.com/studio/write/lint]
 date created: Thursday, October 30th 2025, 11:26:40 am
-date modified: Thursday, October 30th 2025, 12:42:49 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

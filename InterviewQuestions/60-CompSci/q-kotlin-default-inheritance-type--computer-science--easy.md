@@ -3,21 +3,22 @@ id: cs-016
 title: "Kotlin Default Inheritance Type / Тип наследования по умолчанию в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [functions, type-system, class-features]
+subtopics: [class-features, functions, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-context-explained--kotlin--medium, q-repeatonlifecycle-android--kotlin--medium, q-java-kotlin-abstract-classes-difference--programming-languages--medium]
+related: [q-java-kotlin-abstract-classes-difference--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Saturday, November 1st 2025, 1:26:21 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Какой тип наследования по умолчанию используется для классов в Kotlin?
+
+# Какой Тип Наследования По Умолчанию Используется Для Классов В Kotlin?
 
 # Question (EN)
 > What is the default inheritance type for classes in Kotlin?

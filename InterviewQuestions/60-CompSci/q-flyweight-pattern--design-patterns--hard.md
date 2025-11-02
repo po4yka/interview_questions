@@ -3,17 +3,19 @@ id: design-patterns-012
 title: "Flyweight Pattern / Паттерн легкий вес"
 aliases: [Flyweight Pattern, Паттерн легкий вес]
 topic: design-patterns
-subtopics: [structural-patterns, flyweight, memory-optimization]
+subtopics: [flyweight, memory-optimization, structural-patterns]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-design-patterns
-related: [c-design-patterns, q-adapter-pattern--design-patterns--medium, q-composite-pattern--design-patterns--medium]
+related: [c-design-patterns]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [design-patterns, gof-patterns, structural-patterns, flyweight, memory-optimization, difficulty/hard]
+tags: [design-patterns, difficulty/hard, flyweight, gof-patterns, memory-optimization, structural-patterns]
+date created: Saturday, November 1st 2025, 1:03:03 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Flyweight Pattern
@@ -427,7 +429,4 @@ object FontCache {
 - [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
 
 ### Advanced Patterns
-- [[q-bridge-pattern--design-patterns--hard]] - Bridge pattern
-- [[q-interpreter-pattern--design-patterns--hard]] - Interpreter pattern
-- [[q-visitor-pattern--design-patterns--hard]] - Visitor pattern
 

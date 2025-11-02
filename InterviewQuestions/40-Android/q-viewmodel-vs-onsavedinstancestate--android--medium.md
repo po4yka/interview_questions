@@ -3,20 +3,22 @@ id: android-389
 title: "ViewModel vs OnSavedInstanceState / ViewModel vs OnSavedInstanceState"
 aliases: [ViewModel vs OnSavedInstanceState]
 topic: android
-subtopics: [lifecycle, architecture-mvvm]
+subtopics: [architecture-mvvm, lifecycle]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-viewmodel, c-activity-lifecycle, q-viewmodel-pattern--android--easy, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]
+related: [c-activity-lifecycle, c-viewmodel, q-viewmodel-pattern--android--easy, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/lifecycle, android/architecture-mvvm, viewmodel, state-management, difficulty/medium]
+tags: [android/architecture-mvvm, android/lifecycle, difficulty/medium, state-management, viewmodel]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# ViewModel vs OnSavedInstanceState
+# ViewModel Vs OnSavedInstanceState
 
 ## Answer (EN)
 ViewModel and onSaveInstanceState are both mechanisms for preserving data across Activity/Fragment lifecycle events, but they serve different purposes and have different survival guarantees.

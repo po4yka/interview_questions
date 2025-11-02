@@ -1,20 +1,22 @@
 ---
 id: android-101
 title: "Parcelable Implementation / Реализация Parcelable"
-aliases: [Parcelable, Parcelable Implementation, Реализация Parcelable, Android Parcelable]
+aliases: [Android Parcelable, Parcelable, Parcelable Implementation, Реализация Parcelable]
 topic: android
-subtopics: [serialization, intents-deeplinks, performance-memory]
+subtopics: [intents-deeplinks, performance-memory, serialization]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-activity, c-service, q-bundle-data-types--android--medium, q-what-are-intents-for--android--medium, q-how-to-pass-parameters-to-fragment--android--easy]
+related: [c-activity, c-service, q-bundle-data-types--android--medium, q-how-to-pass-parameters-to-fragment--android--easy, q-what-are-intents-for--android--medium]
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/serialization, android/intents-deeplinks, android/performance-memory, parcelable, ipc, bundle, difficulty/medium]
+tags: [android/intents-deeplinks, android/performance-memory, android/serialization, bundle, difficulty/medium, ipc, parcelable]
 sources: [https://developer.android.com/reference/android/os/Parcelable, https://kotlinlang.org/docs/compiler-plugins.html#parcelable-implementations-generator]
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,14 +33,14 @@ sources: [https://developer.android.com/reference/android/os/Parcelable, https:/
 
 **Parcelable** — это Android интерфейс для эффективной сериализации объектов при передаче между компонентами приложения (Activity, Fragment, Service). Оптимизирован для IPC (межпроцессного взаимодействия) и значительно быстрее Java Serializable благодаря отсутствию рефлексии.
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 - **Производительность**: Быстрее Serializable в 10+ раз, записывает данные напрямую в Parcel без рефлексии
 - **Типобезопасность**: Проверка типов на этапе компиляции
 - **IPC-оптимизация**: Использует Binder для передачи через границы процессов
 - **Ограничение размера**: Транзакции через Intent ограничены ~1MB (TransactionTooLargeException)
 
-### Современная реализация с @Parcelize
+### Современная Реализация С @Parcelize
 
 ✅ **Рекомендуемый подход** — автоматическая генерация кода:
 
@@ -65,7 +67,7 @@ data class UserProfile(
 ) : Parcelable
 ```
 
-### Передача данных между компонентами
+### Передача Данных Между Компонентами
 
 ```kotlin
 // Отправка
@@ -82,7 +84,7 @@ val user = if (Build.VERSION.SDK_INT >= 33) {
 }
 ```
 
-### Кастомная сериализация с TypeParceler
+### Кастомная Сериализация С TypeParceler
 
 Для типов, не поддерживающих Parcelable (Date, UUID, custom types):
 
@@ -100,7 +102,7 @@ object DateParceler : Parceler<Date> {
 }
 ```
 
-### Сравнение с Serializable
+### Сравнение С Serializable
 
 | Характеристика | Parcelable | Serializable |
 |---|---|---|
@@ -109,7 +111,7 @@ object DateParceler : Parceler<Date> {
 | Android-оптимизация | Да (Binder IPC) | Нет |
 | Overhead | Низкий | Высокий (GC pressure) |
 
-### Ограничения и best practices
+### Ограничения И Best Practices
 
 ❌ **Избегать**:
 - Передача больших объектов через Intent (используйте ViewModel/Repository)
@@ -122,7 +124,7 @@ object DateParceler : Parceler<Date> {
 - Для больших данных использовать ContentProvider или файлы
 - Использовать type-safe методы получения на API 33+
 
-### Когда использовать
+### Когда Использовать
 
 - Передача данных через Intent между Activity/Fragment
 - Аргументы Fragment (`setArguments(Bundle)`)

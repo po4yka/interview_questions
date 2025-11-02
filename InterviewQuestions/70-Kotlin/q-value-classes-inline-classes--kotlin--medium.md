@@ -3,7 +3,7 @@ id: kotlin-235
 title: "Value Classes (Inline Classes) in Kotlin / Value классы в Kotlin"
 aliases: ["Value Classes", "Встраиваемые классы"]
 topic: kotlin
-subtopics: [value-classes, inline-classes, performance]
+subtopics: [inline-classes, performance, value-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,8 +13,10 @@ moc: moc-kotlin
 related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-object-singleton-companion--kotlin--medium]
 created: "2025-10-12"
 updated: 2025-01-25
-tags: [kotlin, value-classes, inline-classes, performance, kotlin-features, difficulty/medium]
+tags: [difficulty/medium, inline-classes, kotlin, kotlin-features, performance, value-classes]
 sources: [https://kotlinlang.org/docs/inline-classes.html]
+date created: Saturday, November 1st 2025, 12:42:10 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Вопрос (RU)
@@ -271,7 +273,6 @@ fun nullableId(id: Id?): Id? {
 
 ## References
 
-- [[c-oop-fundamentals]]
 - https://kotlinlang.org/docs/inline-classes.html
 
 ## Related Questions

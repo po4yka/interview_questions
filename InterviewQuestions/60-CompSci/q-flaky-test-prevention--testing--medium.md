@@ -3,20 +3,20 @@ id: test-001
 title: "Flaky Test Prevention / Предотвращение нестабильных тестов"
 aliases: ["Flaky Test Prevention", "Предотвращение нестабильных тестов"]
 topic: testing
-subtopics: [best-practices, test-stability, test-isolation]
+subtopics: [best-practices, test-isolation, test-stability]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-testing-viewmodels-turbine--android--medium, q-testing-compose-ui--android--medium, q-robolectric-vs-instrumented--android--medium]
+related: [q-robolectric-vs-instrumented--android--medium, q-testing-compose-ui--android--medium, q-testing-viewmodels-turbine--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [testing, best-practices, difficulty/medium, flaky-tests, stability]
+tags: [best-practices, difficulty/medium, flaky-tests, stability, testing]
 date created: Monday, October 27th 2025, 3:58:21 pm
-date modified: Thursday, October 30th 2025, 12:47:51 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)
@@ -149,7 +149,7 @@ class ProperCleanupTest {
 }
 ```
 
-### Обнаружение и Мониторинг
+### Обнаружение И Мониторинг
 
 **Запуск тестов многократно:**
 

@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, c-compose-recomposition, c-immutability]
+related: [c-compose-recomposition, c-immutability, q-compose-performance-optimization--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources: []
 date created: Thursday, October 30th 2025, 11:51:52 am
-date modified: Thursday, October 30th 2025, 12:43:54 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:43:54 pm
 
 **Пропускаемость (skippability)** — механизм оптимизации, позволяющий компилятору пропустить рекомпозицию функции, если её параметры не изменились.
 
-### Условия пропускаемости
+### Условия Пропускаемости
 
 Composable-функция пропускаема, если:
 
@@ -57,7 +57,7 @@ fun UserProfile(user: User) { // Всегда перекомпонуется
 }
 ```
 
-### Критерии стабильности
+### Критерии Стабильности
 
 Тип **стабилен**, если Compose-компилятор гарантирует:
 
@@ -121,7 +121,7 @@ fun BuggyDisplay(user: LyingUser) {
 }
 ```
 
-### Отладка стабильности
+### Отладка Стабильности
 
 Включите Compose Compiler Metrics:
 
@@ -150,7 +150,7 @@ restartable scheme("[...]") fun UserProfile(
 )
 ```
 
-### Практические решения
+### Практические Решения
 
 **Проблема: ViewModel нестабилен**
 
@@ -192,7 +192,7 @@ fun UserList(users: ImmutableList<User>) { // Пропускаема
 }
 ```
 
-### Влияние на производительность
+### Влияние На Производительность
 
 **Без пропуска:**
 - 10 000 composable на экране
@@ -405,13 +405,8 @@ fun UserList(users: ImmutableList<User>) { // Skippable
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-state--android--medium]] — Understanding Compose state management fundamentals
-- [[q-compose-recomposition--android--medium]] — How recomposition works in Compose
 
 ### Related (Same Level)
 - [[q-compose-performance-optimization--android--hard]] — Advanced Compose performance techniques
-- [[q-remember-derivedstateof--android--medium]] — State derivation and memoization patterns
 
 ### Advanced (Harder)
-- [[q-compose-compiler-internals--android--hard]] — Compose Compiler IR transformations and code generation
-- [[q-strong-skipping-mode--android--hard]] — Strong Skipping Mode implementation details

@@ -3,7 +3,7 @@ id: kotlin-079
 title: "Adaptive Layouts in Compose / Адаптивные layouts в Compose"
 aliases: [Adaptive Layouts Compose, Адаптивные layouts Compose]
 topic: kotlin
-subtopics: [jetpack-compose, adaptive-layouts]
+subtopics: [adaptive-layouts, jetpack-compose]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -11,10 +11,13 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 updated: 2025-10-15
-tags: [jetpack-compose, adaptive-layouts, responsive-design, window-size-classes, kotlin/jetpack-compose, kotlin/adaptive-layouts, difficulty/hard]
+tags: [adaptive-layouts, difficulty/hard, jetpack-compose, kotlin/adaptive-layouts, kotlin/jetpack-compose, responsive-design, window-size-classes]
 moc: moc-kotlin
-related: [q-compose-navigation-advanced--kotlin--medium, q-compose-custom-layout--kotlin--hard, q-material3-components--kotlin--medium]
+related: [q-compose-custom-layout--kotlin--hard, q-compose-navigation-advanced--kotlin--medium, q-material3-components--kotlin--medium]
+date created: Sunday, October 19th 2025, 1:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
+
 # Question (EN)
 > How do you build adaptive layouts in Compose? What are window size classes? How do you handle phones, tablets, and foldables?
 

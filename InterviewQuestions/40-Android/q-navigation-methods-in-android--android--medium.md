@@ -3,20 +3,20 @@ id: android-345
 title: "Navigation Methods In Android / Методы навигации в Android"
 aliases: ["Navigation Methods In Android", "Методы навигации в Android"]
 topic: android
-subtopics: [ui-navigation, intents-deeplinks, architecture-modularization]
+subtopics: [architecture-modularization, intents-deeplinks, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard, q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium, q-presenter-notify-view--android--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-navigation, android/intents-deeplinks, android/architecture-modularization, navigation, ui, difficulty/medium]
+tags: [android/architecture-modularization, android/intents-deeplinks, android/ui-navigation, difficulty/medium, navigation, ui]
 date created: Tuesday, October 28th 2025, 9:52:09 pm
-date modified: Thursday, October 30th 2025, 3:14:49 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:14:49 pm
 
 Android предоставляет несколько методов навигации, каждый со своими преимуществами и сценариями использования:
 
-### 1. Навигация между Activity через Intent
+### 1. Навигация Между Activity Через Intent
 
 Традиционный способ перехода между экранами на уровне Activity. Intent может быть явным (explicit) или неявным (implicit).
 
@@ -61,7 +61,7 @@ launcher.launch(Intent(this, DetailActivity::class.java))
 
 **Когда использовать**: межмодульная навигация, глубокая интеграция с системой, запуск внешних Activity.
 
-### 2. Навигация на основе Fragment с FragmentManager
+### 2. Навигация На Основе Fragment С FragmentManager
 
 Управление фрагментами внутри одной Activity. Позволяет создавать модульные UI-компоненты и управлять back stack.
 
@@ -88,7 +88,7 @@ if (!isFinishing && !isDestroyed) {
 
 **Когда использовать**: single-activity архитектура, управление сложным UI внутри одного экрана, master-detail layouts.
 
-### 3. Navigation Component из Jetpack
+### 3. Navigation Component Из Jetpack
 
 Декларативная система навигации с визуальным редактором, поддержкой SafeArgs и автоматическим управлением back stack.
 
@@ -123,7 +123,7 @@ findNavController().currentBackStackEntry
 
 **Когда использовать**: сложные навигационные графы, типобезопасная передача аргументов, автоматическая обработка Deep Links, единая архитектура навигации.
 
-### 4. Bottom/Tab Navigation с BottomNavigationView или TabLayout
+### 4. Bottom/Tab Navigation С BottomNavigationView Или TabLayout
 
 Навигация между главными разделами приложения через bottom bar или tabs.
 
@@ -151,7 +151,7 @@ binding.bottomNav.setupWithNavController(navController)
 
 **Когда использовать**: главные разделы приложения (3-5 основных экранов), постоянная навигация между равнозначными разделами.
 
-### 5. Deep Links и App Links
+### 5. Deep Links И App Links
 
 Навигация по URL-схемам для внешних и внутренних переходов.
 
@@ -190,7 +190,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 **Когда использовать**: внешние переходы из уведомлений, email, web-страниц, динамические ссылки, универсальные ссылки.
 
-### 6. Навигация в Jetpack Compose с NavHost и NavController
+### 6. Навигация В Jetpack Compose С NavHost И NavController
 
 Compose-native навигация для полностью декларативных UI.
 
@@ -504,17 +504,10 @@ binding.drawerLayout.addDrawerListener(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-intent-in-android--android--easy]] - Understanding Intent basics
-- [[q-activity-lifecycle-methods--android--easy]] - Activity lifecycle fundamentals
-- [[q-what-is-fragment--android--easy]] - Fragment basics
+- Related content to be added
 
 ### Related (Same Level)
-- [[q-what-is-the-difference-between-fragmentmanager-and-fragmenttransaction--android--medium]] - Fragment management
-- [[q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard]] - Fragment transaction safety
-- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep link handling
-- [[q-compose-navigation-advanced--android--medium]] - Compose navigation patterns
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-navigation-component-architecture--android--hard]] - Advanced navigation architecture
-- [[q-multi-module-navigation--android--hard]] - Navigation in modular apps
-- [[q-safe-args-type-safety--android--hard]] - Type-safe navigation implementation
+- Related content to be added

@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-sealed-class-sealed-interface--kotlin--medium, q-inheritance-open-final--kotlin--medium]
+related: [q-lateinit-initialization--kotlin--medium]
 created: "2025-10-12"
 updated: 2025-01-25
-tags: [kotlin, classes, initialization, kotlin-features, difficulty/medium]
+tags: [classes, difficulty/medium, initialization, kotlin, kotlin-features]
 sources: [https://kotlinlang.org/docs/inheritance.html]
+date created: Saturday, November 1st 2025, 1:27:33 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Вопрос (RU)
@@ -243,12 +245,8 @@ class Heavy {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-data-class-variables--programming-languages--medium]] - Data class basics
 
 ### Related (Medium)
-- [[q-data-class-detailed--kotlin--medium]] - Data classes in detail
-- [[q-sealed-class-sealed-interface--kotlin--medium]] - Sealed classes
-- [[q-inheritance-open-final--kotlin--medium]] - Inheritance concepts
 
 ### Advanced (Harder)
 - [[q-lateinit-initialization--kotlin--medium]] - Lateinit properties

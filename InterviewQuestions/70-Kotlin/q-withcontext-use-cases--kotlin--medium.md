@@ -1,7 +1,7 @@
 ---
 id: kotlin-099
 title: "When to use withContext in Kotlin coroutines? / Когда использовать withContext"
-aliases: [WithContext, Context Switching, Dispatchers, WithContext Use Cases]
+aliases: [Context Switching, Dispatchers, WithContext, WithContext Use Cases]
 topic: kotlin
 subtopics: [coroutines, dispatchers]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-race-conditions-coroutines--kotlin--hard, q-launch-vs-async-vs-runblocking--kotlin--medium, q-kotlin-non-inheritable-class--programming-languages--easy]
+related: [q-launch-vs-async-vs-runblocking--kotlin--medium]
 created: 2025-10-12
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - withcontext
-  - dispatchers
-  - context-switching
-  - difficulty/medium
+tags: [context-switching, coroutines, difficulty/medium, dispatchers, kotlin, withcontext]
+date created: Saturday, November 1st 2025, 1:30:05 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# When to use withContext in Kotlin coroutines?
+
+# When to Use withContext in Kotlin Coroutines?
 
 ## English
 
@@ -55,7 +52,7 @@ fun basicWithContextExample() = runBlocking {
 }
 ```
 
-#### withContext vs launch
+#### withContext Vs Launch
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -108,7 +105,7 @@ suspend fun logAnalytics() = delay(100)
 suspend fun syncToServer() = delay(100)
 ```
 
-#### withContext vs async
+#### withContext Vs Async
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -725,7 +722,7 @@ class WithContextTest {
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 Функция `withContext` является одним из наиболее часто используемых строителей корутин, но понимание того, когда и почему использовать её вместо альтернатив, таких как `launch` или `async`, может быть запутанным. Каковы конкретные случаи использования `withContext`, и как она сравнивается с другими строителями корутин с точки зрения производительности и поведения?
 
@@ -733,7 +730,7 @@ class WithContextTest {
 
 `withContext` - это **приостанавливающая функция**, которая переключает контекст корутины, выполняет блок кода и возвращает результат. Она в основном используется для переключения диспетчеров для выполнения определённых операций на соответствующих потоках.
 
-#### Базовое использование withContext
+#### Базовое Использование withContext
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -755,7 +752,7 @@ fun basicWithContextExample() = runBlocking {
 }
 ```
 
-#### withContext vs launch
+#### withContext Vs Launch
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -790,7 +787,7 @@ fun compareWithLaunch() = runBlocking {
 }
 ```
 
-#### withContext vs async
+#### withContext Vs Async
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -831,7 +828,7 @@ fun compareWithAsync() = runBlocking {
 }
 ```
 
-#### Случаи использования переключения диспетчера
+#### Случаи Использования Переключения Диспетчера
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -880,7 +877,7 @@ class UserRepository {
 }
 ```
 
-#### Соображения производительности
+#### Соображения Производительности
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -937,7 +934,7 @@ fun performanceComparisons() = runBlocking {
 }
 ```
 
-#### Практические паттерны
+#### Практические Паттерны
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1032,7 +1029,7 @@ suspend fun <T> useResource(
 }
 ```
 
-#### Распространённые ошибки
+#### Распространённые Ошибки
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1099,7 +1096,7 @@ fun commonMistakes() = runBlocking {
 }
 ```
 
-#### Продвинутые паттерны withContext
+#### Продвинутые Паттерны withContext
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1176,7 +1173,7 @@ suspend fun <T> withOptimalDispatcher(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте withContext для последовательных операций, требующих переключения диспетчера**
    ```kotlin
@@ -1231,7 +1228,7 @@ suspend fun <T> withOptimalDispatcher(
    }
    ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. **Использование withContext для операций "запустил и забыл"** - используйте launch вместо этого
 2. **Ненужная вложенность вызовов withContext** - объедините переключения диспетчера
@@ -1261,8 +1258,6 @@ suspend fun <T> withOptimalDispatcher(
 ## Related Questions
 
 - [[q-coroutine-builders-comparison--kotlin--medium]]
-- [[q-coroutine-dispatchers--kotlin--medium]]
-- [[q-dispatchers-unconfined--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]
-- [[q-coroutine-performance--kotlin--hard]]
 - [[q-async-await--kotlin--medium]]
+- [[q-launch-vs-async-vs-runblocking--kotlin--medium]]

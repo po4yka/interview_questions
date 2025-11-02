@@ -1,7 +1,7 @@
 ---
 id: kotlin-159
 title: "Object Companion Object / Object и Companion Object Advanced"
-aliases: [Object, Companion Object, Advanced, Advanced Object Patterns]
+aliases: [Advanced, Advanced Object Patterns, Companion Object, Object]
 topic: kotlin
 subtopics: [classes, singleton]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-object-companion-object--programming-languages--easy, q-equals-hashcode-purpose--kotlin--medium, q-kotlin-crossinline--programming-languages--hard]
+related: [q-equals-hashcode-purpose--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - object-keyword
-  - companion-object
-  - singleton
-  - classes
-  - difficulty/hard
+tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singleton]
+date created: Friday, October 31st 2025, 6:29:56 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What is object / companion object?
+
+# What is Object / Companion Object?
 
 # Question (EN)
 > What is `object` / `companion object` in Kotlin? Explain their characteristics, differences, and advanced use cases.
@@ -240,7 +237,7 @@ fun main() {
 
 `object` и `companion object` используются для реализации различных паттернов и функциональностей в Kotlin:
 
-### object declaration (объявление object)
+### Object Declaration (объявление object)
 
 **Характеристики:**
 - Используется для создания единственного экземпляра класса (паттерн Singleton)
@@ -301,7 +298,7 @@ Logger.log("Приложение запущено")
 Logger.onClick()
 ```
 
-### companion object (объект-компаньон)
+### Companion Object (объект-компаньон)
 
 **Характеристики:**
 - Объявляется внутри класса
@@ -427,7 +424,7 @@ val person = Person.createDefault()
 println(person.name)  // Имя по умолчанию
 ```
 
-### Ключевые различия
+### Ключевые Различия
 
 | Характеристика | object | companion object |
 |----------------|--------|------------------|
@@ -440,7 +437,7 @@ println(person.name)  // Имя по умолчанию
 | **Инициализация** | Ленивая | При загрузке класса |
 | **Extension** | Нет | Да (можно расширять) |
 
-### Когда использовать
+### Когда Использовать
 
 **Используйте object когда:**
 - Нужен единственный экземпляр (Singleton)
@@ -454,7 +451,7 @@ println(person.name)  // Имя по умолчанию
 - Нужны "статические" члены, связанные с классом
 - Реализуете паттерн Factory
 
-### Продвинутые примеры
+### Продвинутые Примеры
 
 **Singleton с инициализацией:**
 ```kotlin
@@ -506,7 +503,7 @@ val page = HtmlBuilder.html {
 }
 ```
 
-### Краткий ответ
+### Краткий Ответ
 
 **object**: Создаёт потокобезопасный singleton с ленивой инициализацией. Используется для одиночных экземпляров, утилит, глобальных менеджеров. Может наследоваться и реализовывать интерфейсы.
 
@@ -516,4 +513,4 @@ val page = HtmlBuilder.html {
 
 - [[q-kotlin-object-companion-object--programming-languages--easy]]
 - [[q-equals-hashcode-purpose--kotlin--medium]]
-- [[q-kotlin-crossinline--programming-languages--hard]]
+-

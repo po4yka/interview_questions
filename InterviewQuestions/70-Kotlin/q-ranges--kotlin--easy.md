@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [ranges, rangeto, downto, step, iteration]
+subtopics: [downto, iteration, ranges, rangeto, step]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-retry-exponential-backoff-flow--kotlin--medium, q-kotlin-let-function--programming-languages--easy, q-kotlin-flatmap-ranges--programming-languages--easy]
+related: [q-kotlin-flatmap-ranges--programming-languages--easy, q-kotlin-let-function--programming-languages--easy, q-retry-exponential-backoff-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, ranges, rangeto, downto, step, iteration, difficulty/easy]
+tags: [difficulty/easy, downto, iteration, kotlin, ranges, rangeto, step]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What are ranges in Kotlin and how do you use them?
 # Вопрос (RU)
@@ -127,7 +130,7 @@ All support iteration in for loops.
 
 Диапазон — это коллекция конечных значений, определенная конечными точками. Состоит из начала, конца и шага. Начало и конец включительны, шаг по умолчанию 1.
 
-### Базовое использование
+### Базовое Использование
 
 ```kotlin
 if (i in 1..4) {  // эквивалентно 1 <= i && i <= 4
@@ -141,19 +144,19 @@ if (i in 1..4) {  // эквивалентно 1 <= i && i <= 4
 for (i in 1..4) print(i)  // Печатает: 1234
 ```
 
-### Обратная итерация с downTo
+### Обратная Итерация С downTo
 
 ```kotlin
 for (i in 4 downTo 1) print(i)  // Печатает: 4321
 ```
 
-### Пользовательский шаг
+### Пользовательский Шаг
 
 ```kotlin
 for (i in 1..8 step 2) print(i)  // Печатает: 1357
 ```
 
-### Исключение конца с until
+### Исключение Конца С until
 
 ```kotlin
 for (i in 1 until 10) {  // i в [1, 10), 10 исключено
@@ -161,7 +164,7 @@ for (i in 1 until 10) {  // i в [1, 10), 10 исключено
 }
 ```
 
-### Три способа создания диапазонов
+### Три Способа Создания Диапазонов
 
 1. **Оператор `..`**
 2. **Функция `rangeTo()`**

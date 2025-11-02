@@ -1,10 +1,10 @@
 ---
 id: "20251025-143000"
 title: "Android App Bundle / Android App Bundle"
-aliases: ["App Bundle", "AAB", "Android App Bundle", "Формат App Bundle"]
+aliases: ["AAB", "Android App Bundle", "App Bundle", "Формат App Bundle"]
 summary: "Publishing format for Android apps that enables Google Play to generate optimized APKs for each device configuration"
 topic: "android"
-subtopics: ["app-bundle", "publishing", "gradle"]
+subtopics: ["app-bundle", "gradle", "publishing"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "app-bundle", "publishing", "gradle", "build", "difficulty/medium"]
+tags: ["android", "app-bundle", "build", "concept", "difficulty/medium", "gradle", "publishing"]
+date created: Saturday, October 25th 2025, 12:50:10 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Android App Bundle / Android App Bundle
@@ -24,7 +26,7 @@ tags: ["concept", "android", "app-bundle", "publishing", "gradle", "build", "dif
 
 Android App Bundle (AAB) is the official publishing format for Android apps, replacing the traditional APK format. It's a publishing format that includes all your app's compiled code and resources, but defers APK generation and signing to Google Play. This allows Google Play to generate optimized APKs tailored to each user's device configuration, reducing download size by up to 50%. App Bundles support Dynamic Feature Modules, allowing apps to deliver features on-demand, and enable Play Asset Delivery for large game assets.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Android App Bundle (AAB) - официальный формат публикации приложений Android, заменяющий традиционный формат APK. Это формат публикации, который включает весь скомпилированный код и ресурсы приложения, но делегирует генерацию и подписание APK Google Play. Это позволяет Google Play генерировать оптимизированные APK для конфигурации устройства каждого пользователя, уменьшая размер загрузки до 50%. App Bundle поддерживает динамические функциональные модули, позволяя приложениям доставлять функции по требованию, и включает Play Asset Delivery для больших игровых ресурсов.
 
@@ -39,7 +41,7 @@ Android App Bundle (AAB) - официальный формат публикац�
 - Can be tested locally using bundletool before publishing
 - Supports app signing by Google Play (recommended) or manual signing
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - Официальный формат публикации, обязательный для новых приложений в Google Play с августа 2021
 - Уменьшает размер загрузки, исключая неиспользуемые ресурсы (плотность, ABI, язык)
@@ -104,7 +106,7 @@ android {
 
 ## Testing App Bundle Locally
 
-### Using bundletool
+### Using Bundletool
 
 ```bash
 # Download bundletool
@@ -244,7 +246,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## App Bundle vs APK
+## App Bundle Vs APK
 
 | Aspect | App Bundle (AAB) | APK |
 |--------|-----------------|-----|

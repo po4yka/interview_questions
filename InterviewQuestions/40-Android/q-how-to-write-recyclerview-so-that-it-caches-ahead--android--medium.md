@@ -1,13 +1,9 @@
 ---
 id: android-267
 title: "How To Write RecyclerView So That It Caches Ahead / Как написать RecyclerView чтобы он кешировал вперед"
-aliases:
-  - RecyclerView caching
-  - RecyclerView prefetching
-  - Кеширование RecyclerView
-  - Предзагрузка RecyclerView
+aliases: [RecyclerView caching, RecyclerView prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
 topic: android
-subtopics: [ui-views, performance-rendering, performance-memory]
+subtopics: [performance-memory, performance-rendering, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -15,21 +11,15 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-recyclerview-sethasfixedsize--android--easy
   - q-how-animations-work-in-recyclerview--android--medium
   - q-recyclerview-async-list-differ--android--medium
+  - q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags:
-  - android
-  - android/ui-views
-  - android/performance-rendering
-  - android/performance-memory
-  - recyclerview
-  - caching
-  - prefetching
-  - difficulty/medium
+tags: [android, android/performance-memory, android/performance-rendering, android/ui-views, caching, difficulty/medium, prefetching, recyclerview]
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -48,7 +38,7 @@ How to write RecyclerView so that it caches ahead?
 
 RecyclerView предоставляет несколько механизмов для кэширования элементов наперёд, улучшая производительность скроллинга.
 
-### 1. Кэширование View через setItemViewCacheSize()
+### 1. Кэширование View Через setItemViewCacheSize()
 
 Кэш хранит недавно скрытые View без повторного биндинга данных.
 
@@ -61,7 +51,7 @@ val itemsPerScreen = 10
 recyclerView.setItemViewCacheSize(itemsPerScreen * 2)
 ```
 
-### 2. Предзагрузка через LinearLayoutManager
+### 2. Предзагрузка Через LinearLayoutManager
 
 ```kotlin
 val layoutManager = LinearLayoutManager(context).apply {
@@ -71,7 +61,7 @@ val layoutManager = LinearLayoutManager(context).apply {
 recyclerView.layoutManager = layoutManager
 ```
 
-### 3. Загрузка данных через OnScrollListener
+### 3. Загрузка Данных Через OnScrollListener
 
 ```kotlin
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -89,7 +79,7 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 })
 ```
 
-### 4. Кастомный LayoutManager для продвинутой предзагрузки
+### 4. Кастомный LayoutManager Для Продвинутой Предзагрузки
 
 ```kotlin
 class PrefetchLayoutManager(
@@ -117,7 +107,7 @@ class PrefetchLayoutManager(
 }
 ```
 
-### 5. Предзагрузка изображений (Glide/Coil)
+### 5. Предзагрузка Изображений (Glide/Coil)
 
 ```kotlin
 // ✅ Хорошо: предзагружаем следующие изображения
@@ -131,7 +121,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### 6. SharedPool для вложенных RecyclerView
+### 6. SharedPool Для Вложенных RecyclerView
 
 ```kotlin
 private val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -146,7 +136,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### Полная оптимизация
+### Полная Оптимизация
 
 ```kotlin
 fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {

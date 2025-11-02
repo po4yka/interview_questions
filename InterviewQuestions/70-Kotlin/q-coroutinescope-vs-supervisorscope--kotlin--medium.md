@@ -13,15 +13,12 @@ moc: moc-kotlin
 related: [q-channel-pipelines--kotlin--hard, q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - scope
-  - error-handling
-  - structured-concurrency
-  - difficulty/medium
+tags: [coroutines, difficulty/medium, error-handling, kotlin, scope, structured-concurrency]
+date created: Friday, October 31st 2025, 6:32:26 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# coroutineScope vs supervisorScope: обработка ошибок
+
+# coroutineScope Vs supervisorScope: Обработка Ошибок
 
 # Question (EN)
 > What is the difference between coroutineScope and supervisorScope in Kotlin coroutines?
@@ -45,7 +42,7 @@ tags:
 
 `coroutineScope` и `supervisorScope` — это функции-билдеры для создания вложенных корутинных scope. Главное различие — **обработка ошибок**: в `coroutineScope` падение одной дочерней корутины отменяет все остальные, в `supervisorScope` остальные продолжают работать.
 
-### coroutineScope — fail-fast стратегия
+### coroutineScope — Fail-fast Стратегия
 
 Если **любая** дочерняя корутина бросает исключение, **все** остальные отменяются.
 
@@ -78,7 +75,7 @@ try {
 3. Исключение **пробрасывается** наверх
 4. Вся функция `fetchUserData()` завершается с ошибкой
 
-### supervisorScope — fail-tolerant стратегия
+### supervisorScope — Fail-tolerant Стратегия
 
 Если одна дочерняя корутина падает, **остальные продолжают** работу.
 
@@ -107,7 +104,7 @@ println("Success (partial): $data")  // Получим данные, даже е
 3. `settings.await()` **бросит** исключение (нужен try-catch)
 4. Функция **продолжает** работу с частичными данными
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Аспект | coroutineScope | supervisorScope |
 |--------|----------------|-----------------|
@@ -116,9 +113,9 @@ println("Success (partial): $data")  // Получим данные, даже е
 | **Use case** | Все или ничего (all-or-nothing) | Частичный успех допустим |
 | **Примеры** | Транзакции, критичные операции | Загрузка виджетов, метрики |
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: Загрузка экрана профиля (coroutineScope)
+#### Пример 1: Загрузка Экрана Профиля (coroutineScope)
 
 **Требование**: Если какая-то критичная часть упала, показываем ошибку.
 
@@ -164,7 +161,7 @@ sealed class ProfileUiState {
 }
 ```
 
-#### Пример 2: Дашборд с виджетами (supervisorScope)
+#### Пример 2: Дашборд С Виджетами (supervisorScope)
 
 **Требование**: Если один виджет упал, показываем остальные.
 
@@ -225,7 +222,7 @@ class DashboardViewModel @Inject constructor(
 }
 ```
 
-#### Пример 3: Загрузка с fallback (supervisorScope + async)
+#### Пример 3: Загрузка С Fallback (supervisorScope + async)
 
 ```kotlin
 suspend fun loadUserWithFallback(userId: Int): User = supervisorScope {
@@ -250,7 +247,7 @@ suspend fun loadUserWithFallback(userId: Int): User = supervisorScope {
 }
 ```
 
-### Вложенные scope
+### Вложенные Scope
 
 ```kotlin
 suspend fun complexOperation() = coroutineScope {
@@ -289,7 +286,7 @@ fun <T> Deferred<T>.getOrNull(): T? = try {
 }
 ```
 
-### SupervisorJob vs supervisorScope
+### SupervisorJob Vs supervisorScope
 
 Похожие, но разные концепции:
 
@@ -314,7 +311,7 @@ suspend fun correct() = supervisorScope {
 }
 ```
 
-### withContext vs coroutineScope/supervisorScope
+### withContext Vs coroutineScope/supervisorScope
 
 ```kotlin
 // withContext - для смены контекста (Dispatcher, например)
@@ -337,7 +334,7 @@ suspend fun loadIndependent() = supervisorScope {
 }
 ```
 
-### Обработка ошибок
+### Обработка Ошибок
 
 ```kotlin
 // coroutineScope: один try-catch на всю операцию

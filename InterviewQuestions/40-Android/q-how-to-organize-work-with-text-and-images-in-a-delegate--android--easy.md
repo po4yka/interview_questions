@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-which-layout-for-large-list--android--easy, q-room-code-generation-timing--android--medium, c-recyclerview]
+related: [c-recyclerview, q-room-code-generation-timing--android--medium, q-which-layout-for-large-list--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/ui-views, delegates, recyclerview, adapter, difficulty/easy]
+tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
 date created: Tuesday, October 28th 2025, 9:48:46 am
-date modified: Thursday, October 30th 2025, 12:49:11 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +36,7 @@ date modified: Thursday, October 30th 2025, 12:49:11 pm
 **Подход**: Создать sealed class для типов данных, отдельные ViewHolder'ы и делегаты для каждого типа
 **Преимущества**: Разделение ответственности, переиспользование, масштабируемость
 
-### Базовая реализация
+### Базовая Реализация
 
 **Модели данных**:
 

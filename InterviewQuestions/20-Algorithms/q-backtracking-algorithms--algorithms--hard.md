@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-backtracking-algorithm, q-dynamic-programming-fundamentals--algorithms--hard, q-graph-algorithms-bfs-dfs--algorithms--hard]
+related: [c-backtracking-algorithm]
 created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, backtracking, combinations, difficulty/hard, n-queens, permutations, recursion, sudoku]
 sources: [https://en.wikipedia.org/wiki/Backtracking]
 date created: Sunday, October 12th 2025, 10:35:02 pm
-date modified: Saturday, October 25th 2025, 5:10:49 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -591,12 +591,9 @@ fun subsets(nums: IntArray): List<List<Int>> {
 
 ### Prerequisites (Easier)
 - [[q-data-structures-overview--algorithms--easy]] - Data structures
-- [[q-recursion-basics--algorithms--easy]] - Recursion basics
 
 ### Related (Same Level)
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP concepts
 - [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Graph algorithms
 
 ### Advanced (Harder)
-- [[q-advanced-backtracking--algorithms--hard]] - Advanced backtracking
-- [[q-constraint-satisfaction--algorithms--hard]] - CSP problems

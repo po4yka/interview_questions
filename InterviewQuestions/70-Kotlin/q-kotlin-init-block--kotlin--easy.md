@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [init-block, constructors, initialization, class-initialization]
+subtopics: [class-initialization, constructors, init-block, initialization]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flowon-operator-context-switching--kotlin--hard, q-repeatonlifecycle-android--kotlin--medium, q-statein-sharein-flow--kotlin--medium, q-kotlin-constructors--kotlin--easy]
+related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-constructors--kotlin--easy, q-repeatonlifecycle-android--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, init-block, constructors, initialization, difficulty/easy]
+tags: [constructors, difficulty/easy, init-block, initialization, kotlin]
+date created: Saturday, October 18th 2025, 3:12:23 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What is an init block in Kotlin?
 # Вопрос (RU)
@@ -183,14 +186,14 @@ class Configuration(val env: String) {
 
 Класс в Kotlin может иметь **первичный конструктор** и один или несколько **вторичных конструкторов**. Первичный конструктор не может содержать никакого кода. Код инициализации можно поместить в **блоки инициализации**, которые обозначаются ключевым словом `init`.
 
-### Ключевые моменты
+### Ключевые Моменты
 
 1. **Код в блоках инициализации фактически становится частью первичного конструктора** - Блок init выполняется как часть инициализации объекта
 2. **Делегирование к первичному конструктору происходит как первый оператор** - Даже во вторичных конструкторах блоки init выполняются первыми
 3. **Блоки инициализации выполняются в том порядке, в котором они появляются** - Вы можете иметь несколько блоков init
 4. **Блоки init выполняются, даже если нет первичного конструктора** - Делегирование происходит неявно
 
-### Базовый пример
+### Базовый Пример
 
 ```kotlin
 class Person(val name: String, val age: Int) {
@@ -204,7 +207,7 @@ val person = Person("Alice", 25)
 // Вывод: Person created: Alice, age 25
 ```
 
-### Несколько блоков Init
+### Несколько Блоков Init
 
 ```kotlin
 class User(val username: String) {
@@ -231,7 +234,7 @@ class User(val username: String) {
 // 3. Второй блок init
 ```
 
-### Блок Init со вторичным конструктором
+### Блок Init Со Вторичным Конструктором
 
 ```kotlin
 class Rectangle(val width: Int, val height: Int) {
@@ -254,7 +257,7 @@ val square = Rectangle(5)
 // Secondary constructor - creating square
 ```
 
-### Общие случаи использования
+### Общие Случаи Использования
 
 #### 1. Валидация
 
@@ -268,7 +271,7 @@ class Email(val address: String) {
 }
 ```
 
-#### 2. Вычисляемые свойства
+#### 2. Вычисляемые Свойства
 
 ```kotlin
 class Circle(val radius: Double) {
@@ -282,7 +285,7 @@ class Circle(val radius: Double) {
 }
 ```
 
-#### 3. Логирование и отладка
+#### 3. Логирование И Отладка
 
 ```kotlin
 class DatabaseConnection(val url: String) {
@@ -293,7 +296,7 @@ class DatabaseConnection(val url: String) {
 }
 ```
 
-#### 4. Сложная логика инициализации
+#### 4. Сложная Логика Инициализации
 
 ```kotlin
 class Configuration(val env: String) {

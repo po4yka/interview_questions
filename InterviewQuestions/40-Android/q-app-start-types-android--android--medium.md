@@ -3,7 +3,7 @@ id: android-336
 title: App Start Types Android / Типы запуска приложения Android
 aliases: ["App Start Types Android", "Типы запуска приложения Android"]
 topic: android
-subtopics: [performance-startup, lifecycle]
+subtopics: [lifecycle, performance-startup]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,15 +13,12 @@ moc: moc-android
 related:
   - c-lifecycle
   - c-viewmodel
-  - q-android-app-lag-analysis--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-build-optimization--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/performance-startup, android/lifecycle, performance, startup, difficulty/medium]
+tags: [android/lifecycle, android/performance-startup, difficulty/medium, performance, startup]
 date created: Thursday, October 30th 2025, 11:43:33 am
-date modified: Thursday, October 30th 2025, 12:43:11 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +28,7 @@ date modified: Thursday, October 30th 2025, 12:43:11 pm
 
 **Три типа запуска** различаются по состоянию процесса: холодный (процесс не существует), теплый (процесс жив, Activity пересоздается), горячий (Activity возобновляется). Каждый требует специфичной оптимизации с измеримыми метриками.
 
-### Метрики запуска
+### Метрики Запуска
 
 - **TTID (Time To Initial Display)**: первый кадр UI
 - **TTFD (Time To Full Display)**: полная интерактивность; сигнализируем через `reportFullyDrawn()`
@@ -47,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Холодный старт (Cold Start)
+### Холодный Старт (Cold Start)
 
 **Цель**: минимизировать критический путь (запуск процесса → первый кадр).
 
@@ -72,7 +69,7 @@ class App : Application() {
 
 **Baseline profiles**: предкомпилируйте горячие пути для устранения JIT-прогрева.
 
-### Теплый старт (Warm Start)
+### Теплый Старт (Warm Start)
 
 **Цель**: быстрое восстановление UI/состояния.
 
@@ -93,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Горячий старт (Hot Start)
+### Горячий Старт (Hot Start)
 
 **Цель**: пустой `onResume`, группировка обновлений.
 
@@ -111,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Бюджеты и гарантии
+### Бюджеты И Гарантии
 
 - **Целевые бюджеты**: Холодный < 500ms, Теплый < 300ms, Горячий < 100ms
 - **Запреты**: нет disk/network на главном потоке при старте
@@ -234,7 +231,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - Fundamental Android components understanding
-- [[q-android-lifecycle-callbacks--android--easy]] - Activity lifecycle basics
+ - Activity lifecycle basics
 
 ### Related (Same Level)
 - [[q-android-performance-measurement-tools--android--medium]] - Profiling and benchmarking tools
@@ -242,5 +239,5 @@ class MainActivity : AppCompatActivity() {
 - [[q-android-build-optimization--android--medium]] - Build-time performance optimization
 
 ### Advanced (Harder)
-- [[q-android-memory-management--android--hard]] - Process lifecycle and memory optimization
-- [[q-android-anr-debugging--android--hard]] - Main thread blocking and ANR prevention
+ - Process lifecycle and memory optimization
+ - Main thread blocking and ANR prevention

@@ -22,6 +22,8 @@ related:
   - q-database-encryption-android--android--medium
   - q-encrypted-file-storage--android--medium
 sources: [https://developer.android.com/training/articles/keystore]
+date created: Sunday, October 12th 2025, 12:27:50 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)

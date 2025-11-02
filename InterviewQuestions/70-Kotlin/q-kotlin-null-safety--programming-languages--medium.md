@@ -10,19 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
+related: [q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-testing-viewmodels-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - elvis
-  - null-safety
-  - nullable
-  - operators
-  - safe-call
-  - difficulty/medium
+tags: [difficulty/medium, elvis, null-safety, nullable, operators, programming-languages, safe-call]
+date created: Friday, October 31st 2025, 6:30:57 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Что такое null safety и как это пишется?
+
+# Что Такое Null Safety И Как Это Пишется?
 
 # Question (EN)
 > What is null safety and how is it written?

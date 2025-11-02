@@ -15,15 +15,15 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - q-offline-first-architecture--android--hard
-  - c-workmanager
   - c-coroutines
+  - c-workmanager
+  - q-offline-first-architecture--android--hard
 created: 2025-10-20
 updated: 2025-01-27
 tags: [android/architecture-clean, android/networking-http, data-sync, difficulty/hard, networking, offline-first, workmanager]
 sources: [https://developer.android.com/guide/background/processing-data/sync]
 date created: Monday, October 27th 2025, 3:32:30 pm
-date modified: Thursday, October 30th 2025, 12:47:34 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +36,7 @@ date modified: Thursday, October 30th 2025, 12:47:34 pm
 
 Синхронизация данных при нестабильной сети требует offline-first архитектуры, механизмов повторных попыток и стратегий разрешения конфликтов.
 
-### Ключевые принципы
+### Ключевые Принципы
 
 **Offline-First архитектура:**
 - Локальная база данных как единственный источник истины

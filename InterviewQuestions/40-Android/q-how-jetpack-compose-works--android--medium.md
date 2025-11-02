@@ -3,20 +3,20 @@ id: android-260
 title: "How Jetpack Compose Works / Как работает Jetpack Compose"
 aliases: ["How Jetpack Compose Works", "Как работает Jetpack Compose"]
 topic: android
-subtopics: [ui-compose, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-state--android--medium, q-jetpack-compose-basics--android--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android, android/ui-compose, android/architecture-mvvm, jetpack-compose, difficulty/medium]
+tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium, jetpack-compose]
 date created: Tuesday, October 28th 2025, 9:35:10 am
-date modified: Thursday, October 30th 2025, 12:48:17 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -497,13 +497,10 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-jetpack-compose-basics--android--easy]] - Introduction to Compose fundamentals
-- [[q-what-is-viewmodel--android--easy]] - ViewModel basics for state management
 
 ### Related (Same Level)
-- [[q-compose-state--android--medium]] - State management in Compose
 - [[q-compose-side-effects--android--medium]] - LaunchedEffect, DisposableEffect, SideEffect
-- [[q-compose-performance--android--medium]] - Performance optimization techniques
+- [[q-compose-semantics--android--medium]] - Performance optimization techniques
 
 ### Advanced (Harder)
 - [[q-compose-stability-skippability--android--hard]] - Stability annotations and recomposition optimization

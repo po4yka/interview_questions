@@ -3,7 +3,7 @@ id: android-191
 title: Compose Multiplatform / Compose Multiplatform
 aliases: [Compose Multiplatform, KMP Compose, Мультиплатформенный Compose]
 topic: android
-subtopics: [kmp, compose-multiplatform, ui-compose]
+subtopics: [compose-multiplatform, kmp, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -13,14 +13,14 @@ moc: moc-android
 related:
   - c-jetpack-compose
   - q-compose-compiler-plugin--android--hard
-  - q-kmm-architecture--android--hard
   - q-compose-custom-layout--android--hard
+  - q-kmm-architecture--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/kmp, android/compose-multiplatform, android/ui-compose, compose, kmp, multiplatform, difficulty/hard]
+tags: [android/compose-multiplatform, android/kmp, android/ui-compose, compose, difficulty/hard, kmp, multiplatform]
 date created: Thursday, October 30th 2025, 11:23:12 am
-date modified: Thursday, October 30th 2025, 12:43:46 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -63,7 +63,7 @@ kotlin {
 }
 ```
 
-### Expect/Actual для платформенных API
+### Expect/Actual Для Платформенных API
 
 ```kotlin
 // ✅ commonMain
@@ -165,7 +165,7 @@ kotlin {
 }
 ```
 
-### Expect/Actual for Platform APIs
+### Expect/Actual For Platform APIs
 
 ```kotlin
 // ✅ commonMain

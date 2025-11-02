@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-value-classes-inline-classes--kotlin--medium, q-coroutine-parent-child-relationship--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium]
+related: [q-coroutine-parent-child-relationship--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium, q-value-classes-inline-classes--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-classes
-  - sealed-classes
-  - difficulty/medium
+tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
+date created: Friday, October 31st 2025, 6:33:20 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What is the difference between data classes and sealed classes?
+
+# What is the Difference between Data Classes and Sealed Classes?
 
 # Question (EN)
 > What is the difference between data classes and sealed classes in Kotlin?

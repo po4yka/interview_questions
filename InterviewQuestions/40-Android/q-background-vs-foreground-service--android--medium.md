@@ -3,20 +3,20 @@ id: android-195
 title: Background vs Foreground Service / Фоновый vs активный сервис
 aliases: ["Background vs Foreground Service", "Фоновый vs активный сервис"]
 topic: android
-subtopics: [service, background-execution]
+subtopics: [background-execution, service]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-service, c-workmanager, q-android-service-types--android--easy, q-background-tasks-decision-guide--android--medium]
+related: [c-service, c-workmanager, q-android-service-types--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/service, android/background-execution, difficulty/medium]
+tags: [android/background-execution, android/service, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:30 am
-date modified: Thursday, October 30th 2025, 12:43:22 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:43:22 pm
 
 ## Ответ (RU)
 
-### Ключевые различия
+### Ключевые Различия
 
 | Характеристика | Background Service | Foreground Service |
 |----------------|-------------------|-------------------|
@@ -88,7 +88,7 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-### Ограничения платформы
+### Ограничения Платформы
 
 **API 26+** (Android 8.0)
 - `startService()` → `IllegalStateException` для фоновых приложений
@@ -108,7 +108,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 3. Service (Background Service) - может быть убит при нехватке памяти
 4. Cached - убивается первым
 
-### Выбор подхода
+### Выбор Подхода
 
 **Foreground Service:**
 - Операция видна пользователю (музыка, навигация, отслеживание тренировки)
@@ -246,10 +246,10 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Related (Same Level)
 - [[q-background-tasks-decision-guide--android--medium]] - Choosing background execution approach
-- [[q-workmanager-basics--android--medium]] - WorkManager fundamentals
-- [[q-notification-channels--android--medium]] - Notification requirements
+ - WorkManager fundamentals
+ - Notification requirements
 
 ### Advanced (Harder)
 - [[q-workmanager-advanced--android--hard]] - Advanced WorkManager patterns
-- [[q-service-lifecycle-edge-cases--android--hard]] - Service lifecycle edge cases
+- [[q-service-lifecycle-binding--android--hard]] - Service lifecycle edge cases
 - [[q-background-restrictions-strategies--android--hard]] - Handling background restrictions

@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-performance-optimization-android--android--medium, q-android-performance-measurement-tools--android--medium, q-what-is-layout-performance-measured-in--android--medium]
+related: [q-android-performance-measurement-tools--android--medium, q-performance-optimization-android--android--medium, q-what-is-layout-performance-measured-in--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/performance-rendering, android/profiling, android/ui-graphics, performance, gpu, rendering, overdraw, difficulty/medium]
+tags: [android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, gpu, overdraw, performance, rendering]
 sources: []
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

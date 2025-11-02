@@ -3,7 +3,7 @@ id: android-068
 title: Biometric Authentication / Биометрическая аутентификация
 aliases: ["Biometric Authentication", "Биометрическая аутентификация"]
 topic: android
-subtopics: [permissions, keystore-crypto]
+subtopics: [keystore-crypto, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,15 +11,13 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-android-keystore-system--security--medium
-  - q-android-security-best-practices--android--medium
-  - q-app-security-best-practices--android--medium
+  - c-biometric-authentication
 sources: []
 created: 2025-10-12
 updated: 2025-10-30
-tags: [android/permissions, android/keystore-crypto, biometric, authentication, difficulty/medium]
+tags: [android/keystore-crypto, android/permissions, authentication, biometric, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:48 am
-date modified: Thursday, October 30th 2025, 12:43:25 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -91,7 +89,7 @@ when (manager.canAuthenticate(BIOMETRIC_STRONG)) {
 }
 ```
 
-### 3. Интеграция с Keystore
+### 3. Интеграция С Keystore
 
 **Для критичных операций** (шифрование токенов, паролей):
 
@@ -275,12 +273,12 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 
 ### Prerequisites (Easier)
 - [[q-android-security-best-practices--android--medium]] — Security fundamentals
-- [[q-runtime-permissions-android--android--medium]] — Runtime permissions system
+ — Runtime permissions system
 
 ### Related (Same Level)
 - [[q-android-keystore-system--security--medium]] — Keystore API and key generation
 - [[q-app-security-best-practices--android--medium]] — App-level security patterns
 
 ### Advanced (Harder)
-- [[q-secure-storage-encryption--android--hard]] — Advanced encryption patterns
+ — Advanced encryption patterns
 - [[q-android-runtime-internals--android--hard]] — Platform security architecture

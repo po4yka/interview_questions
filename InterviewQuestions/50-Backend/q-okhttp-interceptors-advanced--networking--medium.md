@@ -3,7 +3,7 @@ id: net-004
 title: "OkHttp Interceptors Advanced / Продвинутые перехватчики OkHttp"
 aliases: ["OkHttp Interceptors Advanced", "Продвинутые перехватчики OkHttp"]
 topic: networking
-subtopics: [http-clients, authentication, caching]
+subtopics: [authentication, caching, http-clients]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: []
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [networking, okhttp, interceptors, authentication, caching, retry, difficulty/medium]
+tags: [authentication, caching, difficulty/medium, interceptors, networking, okhttp, retry]
 date created: Monday, October 27th 2025, 5:14:04 pm
-date modified: Thursday, October 30th 2025, 3:15:26 pm
+date modified: Saturday, November 1st 2025, 5:44:13 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:15:26 pm
 
 **Интерцепторы OkHttp** - механизмы для перехвата, модификации и обработки HTTP-запросов/ответов без загрязнения бизнес-логики.
 
-### Типы интерцепторов
+### Типы Интерцепторов
 
 **Application Interceptors**:
 - Выполняются первыми, ближе к коду приложения
@@ -45,7 +45,7 @@ date modified: Thursday, October 30th 2025, 3:15:26 pm
 - Видят реальный запрос с добавленными заголовками
 - Не могут прервать без сетевого вызова
 
-### Порядок выполнения
+### Порядок Выполнения
 
 ```text
 Application Code
@@ -237,7 +237,7 @@ class OkHttpClientFactory(
 4. **Избегайте циклов**: Отдельный auth client без auth interceptor
 5. **Редактируйте чувствительные данные**: Не логируйте токены в production
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Auth loop: auth interceptor вызывает защищённый endpoint

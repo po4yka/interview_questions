@@ -3,20 +3,22 @@ id: android-346
 title: "SurfaceView Rendering / Рендеринг SurfaceView"
 aliases: [SurfaceView Rendering, Рендеринг SurfaceView]
 topic: android
-subtopics: [ui-views, performance-rendering]
+subtopics: [performance-rendering, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-views, c-threading, q-what-methods-redraw-views--android--medium, q-viewgroup-vs-view-differences--android--easy]
+related: [c-threading, c-views, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, android/performance-rendering, surfaceview, rendering, difficulty/medium]
+tags: [android/performance-rendering, android/ui-views, difficulty/medium, rendering, surfaceview]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# What is SurfaceView? / Что такое SurfaceView?
+# What is SurfaceView? / Что Такое SurfaceView?
 
 **English**: What is SurfaceView?
 

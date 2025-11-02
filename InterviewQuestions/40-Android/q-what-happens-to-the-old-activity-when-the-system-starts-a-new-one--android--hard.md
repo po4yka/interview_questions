@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-activity-lifecycle, c-task-backstack, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/lifecycle, lifecycle, memory, difficulty/hard]
+tags: [android/activity, android/lifecycle, difficulty/hard, lifecycle, memory]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What happens to the old Activity when the system starts a new one?
+# What Happens to the Old Activity when the System Starts a New One?
 
 ## Answer (EN)
 When the system starts a new Activity in Android, the fate of the old Activity depends on multiple factors including Intent flags, task configuration, and device memory state.

@@ -6,7 +6,9 @@ kind: concept
 summary: Fundamental Android component representing a single screen with UI
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, activity, android-components, ui]
+tags: [activity, android, android-components, concept, ui]
+date created: Thursday, October 30th 2025, 12:30:17 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -32,7 +34,7 @@ Activity provides:
 - **Configuration Handling**: Responds to device changes (rotation, locale, dark mode)
 - **System Integration**: Handles permissions, results, window insets, system UI
 
-## Основная концепция (RU)
+## Основная Концепция (RU)
 
 Activity обеспечивает:
 - **Точка входа**: Система запускает приложение через Activity посредством Intent
@@ -61,7 +63,7 @@ Destroyed
 - **Stopped**: Not visible, `onStop()` called
 - **Destroyed**: Removed from memory, `onDestroy()` called
 
-## Состояния жизненного цикла (RU)
+## Состояния Жизненного Цикла (RU)
 
 **Ключевые состояния**:
 - **Created**: Экземпляр создан, вызван `onCreate()`
@@ -140,7 +142,7 @@ class MainActivity : AppCompatActivity() {
 - Better for modular features, different apps
 - Required for launcher entries, widgets, shortcuts
 
-## Современная архитектура (RU)
+## Современная Архитектура (RU)
 
 **Single Activity + Fragments/Navigation**:
 - Одна Activity хостит множество Fragments

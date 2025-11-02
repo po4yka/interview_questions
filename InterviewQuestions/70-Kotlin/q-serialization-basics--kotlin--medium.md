@@ -1,7 +1,7 @@
 ---
 id: kotlin-150
 title: "Serialization Basics / Основы сериализации"
-aliases: [Serialization, Data Serialization, JSON Serialization, Сериализация]
+aliases: [Data Serialization, JSON Serialization, Serialization, Сериализация]
 topic: kotlin
 subtopics: [serialization]
 question_kind: theory
@@ -10,17 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-delegation--programming-languages--easy, q-suspend-cancellable-coroutine--kotlin--hard, q-kotlin-extension-functions--kotlin--medium]
+related: [q-kotlin-delegation--programming-languages--easy, q-kotlin-extension-functions--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - serialization
-  - json
-  - data-formats
-  - difficulty/medium
+tags: [data-formats, difficulty/medium, json, kotlin, serialization]
+date created: Friday, October 31st 2025, 6:30:54 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What is serialization?
+
+# What is Serialization?
 
 **English**: What is serialization in Kotlin and programming in general?
 
@@ -109,7 +107,7 @@ dependencies {
 }
 ```
 
-### Базовое использование
+### Базовое Использование
 ```kotlin
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
@@ -130,7 +128,7 @@ val json = Json.encodeToString(user)
 val user2 = Json.decodeFromString<User>(json)
 ```
 
-### Кастомные сериализаторы
+### Кастомные Сериализаторы
 ```kotlin
 @Serializable
 data class Date(

@@ -3,25 +3,22 @@ id: lang-022
 title: "Kotlin Reflection / Рефлексия в Kotlin"
 aliases: [Kotlin Reflection, Рефлексия в Kotlin]
 topic: programming-languages
-subtopics: [type-system, metaprogramming]
+subtopics: [metaprogramming, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-object-companion-object--kotlin--medium, q-data-sealed-difference--programming-languages--medium, q-kotlin-serialization--programming-languages--easy]
+related: [q-kotlin-serialization--programming-languages--easy, q-object-companion-object--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - kotlin-reflect
-  - metaprogramming
-  - reflection
-  - runtime
-  - difficulty/medium
+tags: [difficulty/medium, kotlin-reflect, metaprogramming, programming-languages, reflection, runtime]
+date created: Friday, October 31st 2025, 6:32:17 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Что такое рефлексия?
+
+# Что Такое Рефлексия?
 
 # Question (EN)
 > What is reflection?
@@ -562,5 +559,5 @@ val name = nameProp?.get(person)
 ## Related Questions
 
 - [[q-object-companion-object--kotlin--medium]]
-- [[q-data-sealed-difference--programming-languages--medium]]
+-
 - [[q-kotlin-serialization--programming-languages--easy]]

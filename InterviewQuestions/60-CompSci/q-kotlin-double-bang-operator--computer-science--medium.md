@@ -3,21 +3,22 @@ id: cs-013
 title: "Kotlin Double Bang Operator / Оператор !! в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [access-modifiers, type-system, null-safety]
+subtopics: [access-modifiers, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-value-classes-performance--kotlin--medium, q-kotlin-null-checks-methods--programming-languages--easy, q-dispatchers-main-immediate--kotlin--medium]
+related: [q-dispatchers-main-immediate--kotlin--medium, q-inline-value-classes-performance--kotlin--medium, q-kotlin-null-checks-methods--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
-# Что известно о double bang (!!)?
+
+# Что Известно О Double Bang (!!)?
 
 # Question (EN)
 > What do you know about double bang (!!)?
@@ -126,7 +127,7 @@ val value: String? = getSomeValue()
 val nonNull: String = value!!  // Выбрасывает NPE если null
 ```
 
-### Когда используется
+### Когда Используется
 
 **1. Уверенность разработчика**
 ```kotlin
@@ -158,7 +159,7 @@ class MyClass {
 }
 ```
 
-### Почему не рекомендуется
+### Почему Не Рекомендуется
 
 **1. Разрушает Null безопасность**
 ```kotlin
@@ -195,7 +196,7 @@ val checked = checkNotNull(config) {
 }
 ```
 
-### Когда приемлемо
+### Когда Приемлемо
 - Тесты (где NPE приемлем)
 - Невозможные null сценарии
 - Лучше чем `lateinit` в некоторых случаях

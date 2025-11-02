@@ -3,24 +3,21 @@ id: kotlin-149
 title: "Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin"
 aliases: [Kotlin Sealed When Exhaustive, sealed и exhaustive when в Kotlin]
 topic: kotlin
-subtopics: [sealed-classes, pattern-matching]
+subtopics: [pattern-matching, sealed-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-java-kotlin-abstract-classes-difference--programming-languages--medium, q-sequences-detailed--kotlin--medium, q-flow-combining-zip-combine--kotlin--medium]
+related: [q-flow-combining-zip-combine--kotlin--medium, q-sequences-detailed--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - sealed-classes
-  - when-expression
-  - state-machine
-  - result
-  - difficulty/medium
+tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-expression]
+date created: Friday, October 31st 2025, 6:32:40 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Sealed Classes and Exhaustive When
 
 **English**: Leverage sealed classes for exhaustive when expressions. Implement state machines and result types with sealed hierarchies.
@@ -218,7 +215,7 @@ fun showValidationError(result: ValidationResult) = when (result) {
 
 Sealed классы ограничивают наследование фиксированным набором подклассов, обеспечивая exhaustive when выражения.
 
-### Основные паттерны
+### Основные Паттерны
 
 1. **Result типы**: Success, Error, Loading
 2. **UI State machines**: различные состояния экрана
@@ -228,7 +225,7 @@ Sealed классы ограничивают наследование фикси
 
 [Полные примеры приведены в английском разделе]
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте sealed interfaces** для чистых контрактов
 2. **Вложенные sealed иерархии** для сложных состояний
@@ -239,6 +236,6 @@ Sealed классы ограничивают наследование фикси
 
 ## Related Questions
 
-- [[q-java-kotlin-abstract-classes-difference--programming-languages--medium]]
+-
 - [[q-sequences-detailed--kotlin--medium]]
 - [[q-flow-combining-zip-combine--kotlin--medium]]

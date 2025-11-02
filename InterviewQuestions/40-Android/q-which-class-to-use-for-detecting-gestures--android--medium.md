@@ -5,7 +5,7 @@ aliases: ["Which Class To Use For Detecting Gestures", "Какой класс и
 
 # Classification
 topic: android
-subtopics: [ui-views, ui-state]
+subtopics: [ui-state, ui-views]
 question_kind: android
 difficulty: medium
 
@@ -17,16 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-how-to-write-recyclerview-cache-ahead--android--medium, q-dagger-field-injection--android--medium, q-what-are-services-for--android--easy]
+related: [q-dagger-field-injection--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-what-are-services-for--android--easy]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-29
 
 # Tags (EN only; no leading #)
-tags: [android/ui-views, android/ui-state, gestures, touch-events, difficulty/medium]
+tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events]
 date created: Wednesday, October 29th 2025, 12:15:08 pm
-date modified: Thursday, October 30th 2025, 3:18:03 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +43,7 @@ date modified: Thursday, October 30th 2025, 3:18:03 pm
 
 Для обнаружения жестов в Android используется класс **GestureDetector**. Он распознаёт стандартные жесты: одиночные и двойные касания, длительные нажатия, прокрутку и свайпы (fling).
 
-### Базовое использование
+### Базовое Использование
 
 ```kotlin
 class CustomView(context: Context) : View(context) {
@@ -82,7 +82,7 @@ class CustomView(context: Context) : View(context) {
 }
 ```
 
-### Обнаружение направления свайпа
+### Обнаружение Направления Свайпа
 
 ```kotlin
 override fun onFling(
@@ -113,7 +113,7 @@ override fun onFling(
 }
 ```
 
-### ScaleGestureDetector для жестов масштабирования
+### ScaleGestureDetector Для Жестов Масштабирования
 
 ```kotlin
 class ZoomableView(context: Context) : View(context) {
@@ -165,7 +165,7 @@ fun GestureExample() {
 }
 ```
 
-### Основные методы SimpleOnGestureListener
+### Основные Методы SimpleOnGestureListener
 
 | Метод | Описание |
 |-------|----------|

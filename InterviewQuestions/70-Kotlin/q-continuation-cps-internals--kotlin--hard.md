@@ -5,25 +5,17 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - continuation
-  - cps
-  - internals
-  - state-machine
-  - advanced
+tags: [advanced, continuation, coroutines, cps, difficulty/hard, internals, kotlin, state-machine]
 moc: moc-kotlin
-related: [q-kotlin-scope-functions-advanced--kotlin--medium, q-kotlin-data-sealed-classes-combined--programming-languages--medium, q-kotlin-enum-classes--kotlin--easy]
-  - q-suspend-cancellable-coroutine--kotlin--hard
-  - q-debugging-coroutines-techniques--kotlin--medium
-  - q-common-coroutine-mistakes--kotlin--medium
+related: [q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-kotlin-data-sealed-classes-combined--programming-languages--medium, q-kotlin-enum-classes--kotlin--easy, q-kotlin-scope-functions-advanced--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 subtopics:
-  - coroutines
   - continuation
+  - coroutines
   - cps
   - internals
   - state-machine
+date created: Saturday, November 1st 2025, 12:10:31 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Question (EN)
@@ -307,7 +299,7 @@ suspend fun cancellableDelay(timeMillis: Long) = suspendCancellableCoroutine<Uni
 }
 ```
 
-### Continuation.resume and resumeWith
+### Continuation.resume And resumeWith
 
 ```kotlin
 // Resume with success
@@ -443,7 +435,7 @@ class DispatchedContinuation<T>(
 5. Dispatcher schedules resume on appropriate thread
 6. State machine continues from next label
 
-### Why suspend Functions Can't Be Called from Regular Functions
+### Why Suspend Functions Can't Be Called from Regular Functions
 
 **The problem:**
 
@@ -699,7 +691,7 @@ Complete
 
 
 
-### Что такое Continuation?
+### Что Такое Continuation?
 
 **Continuation** представляет "остаток вычисления" - что должно произойти после возобновления точки приостановки.
 
@@ -736,7 +728,7 @@ fun getUserName(userId: String, continuation: Continuation<String>): Any? {
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **Continuation = "остаток вычисления"** - Что происходит после приостановки
 2. **CPS трансформация** - Компилятор добавляет параметр Continuation

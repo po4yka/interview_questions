@@ -6,9 +6,9 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - coroutines
   - channels
   - concurrency
+  - coroutines
   - fan-in
   - fan-out
 question_kind: theory
@@ -29,8 +29,11 @@ related: [q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, fan-in, fan-out, channels, parallel-processing, load-balancing, difficulty/hard]
+tags: [channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, load-balancing, parallel-processing]
+date created: Sunday, October 12th 2025, 3:13:16 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What are Fan-in and Fan-out patterns in Kotlin coroutines? Explain how to distribute work to multiple workers and aggregate results from multiple sources.
 
@@ -605,7 +608,7 @@ fun CoroutineScope.fanIn(
 }
 ```
 
-### Комбинированный Fan-out и Fan-in
+### Комбинированный Fan-out И Fan-in
 
 ```kotlin
 class ImageProcessingPipeline(
@@ -626,7 +629,7 @@ class ImageProcessingPipeline(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 

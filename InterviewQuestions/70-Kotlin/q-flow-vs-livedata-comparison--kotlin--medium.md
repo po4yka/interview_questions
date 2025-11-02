@@ -1,7 +1,7 @@
 ---
 id: kotlin-144
 title: "Flow vs LiveData Comparison / Сравнение Flow и LiveData"
-aliases: [Flow, Vs, Livedata, Comparison]
+aliases: [Comparison, Flow, Livedata, Vs]
 topic: kotlin
 subtopics: []
 question_kind: theory
@@ -10,13 +10,14 @@ original_language: en
 language_tags: []
 status: draft
 moc: moc-kotlin
-related: [q-testing-flow-operators--kotlin--hard, q-retry-operators-flow--kotlin--medium, q-executor-service-java--java--medium]
+related: [q-executor-service-java--java--medium, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Friday, October 17th 2025, 11:22:05 am
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What are the differences between Kotlin Flow and LiveData? When should you use each?
 # Вопрос (RU)
@@ -43,7 +44,7 @@ tags:
 | **Multicast** | Yes | StateFlow/SharedFlow yes, Flow no |
 | **Testing** | Requires InstantTaskExecutorRule | Easy with TestDispatcher |
 
-### Hot vs Cold Streams
+### Hot Vs Cold Streams
 
 **LiveData (Hot Stream)**:
 ```kotlin
@@ -495,7 +496,7 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 | **Multicast** | Да | StateFlow/SharedFlow да, Flow нет |
 | **Тестирование** | Требует InstantTaskExecutorRule | Легко с TestDispatcher |
 
-### Горячие vs Холодные Потоки
+### Горячие Vs Холодные Потоки
 
 **LiveData (Горячий Поток)**:
 ```kotlin
@@ -611,7 +612,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Операторы и трансформации
+### Операторы И Трансформации
 
 **LiveData - Ограниченные операторы**:
 ```kotlin
@@ -654,7 +655,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Модель потоков
+### Модель Потоков
 
 **LiveData - Main поток по умолчанию**:
 ```kotlin
@@ -702,7 +703,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Комбинирование нескольких потоков
+### Комбинирование Нескольких Потоков
 
 **LiveData - MediatorLiveData**:
 ```kotlin
@@ -828,7 +829,7 @@ class UserViewModelTest {
 }
 ```
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 **Используйте LiveData когда**:
 - Простое управление UI состоянием
@@ -846,7 +847,7 @@ class UserViewModelTest {
 - Продвинутые use cases (debouncing, retry логика и т.д.)
 - Мультиплатформенные проекты (KMM)
 
-### Паттерн миграции: LiveData → Flow
+### Паттерн Миграции: LiveData → Flow
 
 **До (LiveData)**:
 ```kotlin

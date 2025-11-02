@@ -28,7 +28,7 @@ updated: 2025-10-31
 
 tags: [android/performance-rendering, android/profiling, difficulty/medium, en, ru]
 date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:10:59 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Question (EN)
@@ -494,13 +494,13 @@ chrome trace.html
 **Example Analysis:**
 ```
 Frame 145: 28ms (JANK - missed deadline)
- Input: 0.2ms 
- Animation: 0.5ms 
+ Input: 0.2ms
+ Animation: 0.5ms
  Measure/Layout: 14.3ms  (TOO SLOW)
    RecyclerView.onMeasure: 12.8ms
       Adapter.onBindViewHolder: 11.2ms (BOTTLENECK)
  Draw: 8.1ms  (SLOW)
- Sync: 4.9ms 
+ Sync: 4.9ms
 
 Action: Optimize onBindViewHolder - move work off main thread
 ```

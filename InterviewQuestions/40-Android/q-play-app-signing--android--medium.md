@@ -1,20 +1,22 @@
 ---
 id: android-302
 title: "Play App Signing / Подписание приложений Play"
-aliases: ["Play App Signing", "Подписание приложений Play", "App Signing Key", "Upload Key"]
+aliases: ["App Signing Key", "Play App Signing", "Upload Key", "Подписание приложений Play"]
 topic: android
-subtopics: [app-bundle, play-console, keystore-crypto, gradle]
+subtopics: [app-bundle, gradle, keystore-crypto, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-bundle, c-android-keystore, c-gradle, q-android-app-bundles--android--easy, q-gradle-build-system--android--medium, q-android-security-best-practices--android--medium]
+related: [c-android-keystore, c-app-bundle, c-gradle, q-android-app-bundles--android--easy, q-android-security-best-practices--android--medium, q-gradle-build-system--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/app-bundle, android/play-console, android/keystore-crypto, android/gradle, play-app-signing, security, signing, difficulty/medium]
+tags: [android/app-bundle, android/gradle, android/keystore-crypto, android/play-console, difficulty/medium, play-app-signing, security, signing]
 sources: [https://developer.android.com/studio/publish/app-signing#app-signing-google-play, https://support.google.com/googleplay/android-developer/answer/9842756]
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ sources: [https://developer.android.com/studio/publish/app-signing#app-signing-g
 
 **Play App Signing** — это сервис Google, который управляет ключом подписи приложения и использует его для подписи APK, распространяемых пользователям. Ключ хранится в защищённой инфраструктуре Google, что повышает безопасность и упрощает управление ключами.
 
-### Система двух ключей
+### Система Двух Ключей
 
 Play App Signing использует **app signing key** (ключ подписи) и **upload key** (ключ загрузки):
 
@@ -58,7 +60,7 @@ Play App Signing использует **app signing key** (ключ подпис
                             Распространение пользователям
 ```
 
-### Настройка для новых приложений
+### Настройка Для Новых Приложений
 
 **Рекомендуемый способ: Google генерирует app signing key**
 
@@ -116,7 +118,7 @@ keytool -export -rfc -keystore existing.jks \
 - Возможность миграции на более сильный криптографический ключ
 - Не влияет на обновления существующих пользователей
 
-### Интеграция с сервисами
+### Интеграция С Сервисами
 
 **Google APIs / Firebase:**
 ```bash

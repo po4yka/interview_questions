@@ -1,7 +1,7 @@
 ---
 id: android-321
 title: "Primitive Maps Android / Примитивные Map в Android"
-aliases: ["Primitive Maps Android", "Примитивные Map в Android", "SparseArray", "SparseIntArray"]
+aliases: ["Primitive Maps Android", "SparseArray", "SparseIntArray", "Примитивные Map в Android"]
 topic: android
 subtopics: [performance-memory]
 question_kind: theory
@@ -10,11 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-where-is-composition-created--android--medium, q-reduce-apk-size-techniques--android--medium]
+related: [q-android-memory-optimization--android--medium, q-boxing-unboxing--kotlin--easy, q-collections-basics--kotlin--easy, q-hashmap-vs-sparsearray--android--medium, q-kotlin-boxing-unboxing--kotlin--easy, q-recyclerview-optimization--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/performance-memory, performance, collections, memory-optimization, difficulty/medium]
+tags: [android/performance-memory, collections, difficulty/medium, memory-optimization, performance]
+date created: Saturday, November 1st 2025, 1:03:50 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ What specialized Map collections for primitive types does Android SDK provide? W
 
 Android предоставляет оптимизированные коллекции для примитивных типов, которые избегают автоупаковки (boxing) и значительно эффективнее стандартных HashMap для небольших коллекций (< 1000 элементов).
 
-### Основные типы
+### Основные Типы
 
 **1. SparseArray\<E\> — Int → Object**
 
@@ -104,7 +106,7 @@ timestampCache.put(timestamp, Event("Click"))
 - Оптимизирован для последовательных ключей
 - Не thread-safe
 
-### Практическое применение
+### Практическое Применение
 
 **RecyclerView адаптер:**
 ```kotlin
@@ -154,7 +156,7 @@ class StateManager {
 }
 ```
 
-### Правила использования
+### Правила Использования
 
 **Используйте SparseArray когда:**
 - Коллекция < 1000 элементов
@@ -168,7 +170,7 @@ class StateManager {
 - Критична скорость поиска O(1)
 - Нужен многопоточный доступ (ConcurrentHashMap)
 
-### Миграция с HashMap
+### Миграция С HashMap
 
 ```kotlin
 // ❌ До: HashMap с boxing
@@ -367,7 +369,7 @@ cache.indexOfKey(id) >= 0
 ### Related
 - [[q-reduce-apk-size-techniques--android--medium]] - Memory optimization techniques
 - [[q-where-is-composition-created--android--medium]] - State management in Compose
-- [[q-recyclerview-optimization--android--medium]] - RecyclerView performance patterns
+- [[q-recyclerview-explained--android--medium]] - RecyclerView performance patterns
 
 ### Advanced
 - [[q-memory-profiling-android--android--hard]] - Profiling memory usage with Android Studio

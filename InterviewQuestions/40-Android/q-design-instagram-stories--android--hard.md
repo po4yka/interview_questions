@@ -12,24 +12,13 @@ sources: [https://developer.android.com/guide/topics/media]
 status: draft
 moc: moc-android
 related:
-    - q-data-sync-unstable-network--android--hard
-    - q-database-optimization-android--android--medium
+  - q-data-sync-unstable-network--android--hard
+  - q-database-optimization-android--android--medium
 created: 2025-10-20
 updated: 2025-01-27
-tags:
-    [
-        android/architecture-clean,
-        android/media,
-        android/service,
-        cdn,
-        difficulty/hard,
-        media,
-        stories,
-        platform/android,
-        lang/kotlin,
-    ]
+tags: []
 date created: Monday, October 27th 2025, 3:37:27 pm
-date modified: Wednesday, October 29th 2025, 5:07:33 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -69,7 +58,7 @@ Instagram Stories — система для создания, загрузки, 
 -   Хранилище: S3/GCS + CDN; метаданные в БД
 -   Realtime: WebSocket/Pub-Sub для счетчиков просмотров
 
-### Ключевые потоки
+### Ключевые Потоки
 
 **Создание и загрузка:**
 

@@ -1,7 +1,7 @@
 ---
 id: kotlin-158
 title: "Stateflow Purpose / Назначение StateFlow"
-aliases: [StateFlow, State Management, Reactive State, StateFlow Flow]
+aliases: [Reactive State, State Management, StateFlow, StateFlow Flow]
 topic: kotlin
 subtopics: [coroutines, flow, state-management]
 question_kind: theory
@@ -10,19 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-sealed-vs-abstract-classes--programming-languages--medium, q-kotlin-property-delegates--programming-languages--medium, q-kotlin-constants--programming-languages--easy]
+related: [q-kotlin-property-delegates--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - stateflow
-  - reactive
-  - flow
-  - state-management
-  - difficulty/medium
+tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management, stateflow]
+date created: Friday, October 31st 2025, 6:31:34 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Для чего нужен StateFlow?
+
+# Для Чего Нужен StateFlow?
 
 **English**: What is StateFlow used for?
 
@@ -48,6 +44,6 @@ StateFlow – это специальный тип потока данных, и
 
 ## Related Questions
 
-- [[q-sealed-vs-abstract-classes--programming-languages--medium]]
+-
 - [[q-kotlin-property-delegates--programming-languages--medium]]
-- [[q-kotlin-constants--programming-languages--easy]]
+-

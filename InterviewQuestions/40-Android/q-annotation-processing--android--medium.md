@@ -3,20 +3,20 @@ id: android-067
 title: Annotation Processing in Android / Обработка аннотаций в Android
 aliases: ["Annotation Processing in Android", "Обработка аннотаций в Android"]
 topic: android
-subtopics: [gradle, build-variants]
+subtopics: [build-variants, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-room, c-hilt, q-android-build-optimization--android--medium, q-android-modularization--android--medium]
+related: [c-hilt, c-room]
 sources: []
 created: 2025-10-12
 updated: 2025-10-30
-tags: [android/gradle, android/build-variants, annotation-processing, kapt, ksp, code-generation, difficulty/medium]
+tags: [android/build-variants, android/gradle, annotation-processing, code-generation, difficulty/medium, kapt, ksp]
 date created: Thursday, October 30th 2025, 11:36:02 am
-date modified: Thursday, October 30th 2025, 12:43:06 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:43:06 pm
 
 **Обработка аннотаций** — это механизм генерации кода на этапе компиляции, где процессоры анализируют аннотации в исходном коде и автоматически создают вспомогательные классы. Используется библиотеками Room, Hilt, Moshi для генерации boilerplate-кода.
 
-### Принцип работы
+### Принцип Работы
 
 ```text
 Исходный код с аннотациями
@@ -45,7 +45,7 @@ date modified: Thursday, October 30th 2025, 12:43:06 pm
 Компиляция всего кода вместе
 ```
 
-### kapt vs KSP
+### Kapt Vs KSP
 
 **kapt (Kotlin Annotation Processing Tool)**
 - Мост между Java-процессорами и Kotlin-кодом
@@ -58,7 +58,7 @@ date modified: Thursday, October 30th 2025, 12:43:06 pm
 - Полная инкрементальная компиляция
 - Рекомендуется для всех новых проектов
 
-### Настройка в build.gradle.kts
+### Настройка В build.gradle.kts
 
 **❌ Старый подход с kapt:**
 ```kotlin
@@ -84,7 +84,7 @@ dependencies {
 }
 ```
 
-### Пример: Room генерирует DAO
+### Пример: Room Генерирует DAO
 
 ```kotlin
 @Entity(tableName = "users")
@@ -104,7 +104,7 @@ interface UserDao {
 // - User_Table (схема таблицы)
 ```
 
-### Пример: Hilt генерирует DI компоненты
+### Пример: Hilt Генерирует DI Компоненты
 
 ```kotlin
 @HiltAndroidApp
@@ -121,7 +121,7 @@ class UserViewModel @Inject constructor(
 // ✅ Hilt генерирует весь граф зависимостей автоматически
 ```
 
-### Сравнение производительности
+### Сравнение Производительности
 
 | Аспект | kapt | KSP |
 |--------|------|-----|
@@ -137,7 +137,7 @@ kapt:  ~45 секунд
 KSP:   ~23 секунды (↓48%)
 ```
 
-### Оптимизация сборки
+### Оптимизация Сборки
 
 **Миграция на KSP:**
 - Заменить `kotlin-kapt` на `com.google.devtools.ksp` в plugins
@@ -170,7 +170,7 @@ Processors generate new classes
 All code compiled together
 ```
 
-### kapt vs KSP
+### Kapt Vs KSP
 
 **kapt (Kotlin Annotation Processing Tool)**
 - Bridge between Java processors and Kotlin code
@@ -209,7 +209,7 @@ dependencies {
 }
 ```
 
-### Example: Room generates DAO
+### Example: Room Generates DAO
 
 ```kotlin
 @Entity(tableName = "users")
@@ -229,7 +229,7 @@ interface UserDao {
 // - User_Table (table schema)
 ```
 
-### Example: Hilt generates DI components
+### Example: Hilt Generates DI Components
 
 ```kotlin
 @HiltAndroidApp
@@ -309,6 +309,6 @@ ksp {
 - [[q-room-library-definition--android--easy]] - Room ORM basics and usage
 
 ### Advanced (Harder)
-- [[q-custom-annotation-processor--android--hard]] - Writing custom KSP processors
-- [[q-gradle-build-lifecycle--android--hard]] - Gradle build phases and hooks
-- [[q-build-performance-analysis--android--hard]] - Advanced build performance profiling
+ - Writing custom KSP processors
+ - Gradle build phases and hooks
+ - Advanced build performance profiling

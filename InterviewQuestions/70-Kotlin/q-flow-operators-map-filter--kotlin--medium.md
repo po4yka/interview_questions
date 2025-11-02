@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, operators, map, filter]
+subtopics: [coroutines, filter, flow, map, operators]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140018
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-flow-operators--kotlin--hard, q-flow-operators--kotlin--medium, q-coroutinescope-vs-coroutinecontext--kotlin--medium]
+related: [q-coroutinescope-vs-coroutinecontext--kotlin--medium, q-flow-operators--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/medium, kotlin]
+date created: Saturday, October 18th 2025, 12:37:18 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > How to use Flow operators map, filter, transform? Explain operator chaining and practical patterns.
 
@@ -178,7 +181,7 @@ flow.onEach { updateDatabase(it) }
 
 Операторы Flow `map`, `filter` и `transform` являются фундаментальными инструментами для обработки потоков данных в Kotlin coroutines. Они позволяют трансформировать, фильтровать и манипулировать значениями, испускаемыми Flow, декларативным способом.
 
-### Базовые операторы
+### Базовые Операторы
 
 **map** - Трансформирует каждое испущенное значение:
 ```kotlin
@@ -213,7 +216,7 @@ flow {
 // Выводит: Start: A, End: A, Start: B, End: B
 ```
 
-### Цепочки операторов
+### Цепочки Операторов
 
 Операторы можно объединять в цепочки для создания сложных конвейеров обработки данных:
 
@@ -231,7 +234,7 @@ flow {
 // Выводит: Result: 4, Result: 16
 ```
 
-### Практические паттерны
+### Практические Паттерны
 
 **Паттерн 1: Конвейер трансформации данных**
 ```kotlin
@@ -279,14 +282,14 @@ dataFlow
     .collect { println(it) }
 ```
 
-### Соображения производительности
+### Соображения Производительности
 
 - Операторы **выполняются последовательно** для каждого испускаемого значения
 - **Промежуточные коллекции не создаются** (в отличие от операторов sequence)
 - Операторы сохраняют семантику **backpressure** и **отмены**
 - Цепочки операторов не создают накладных расходов на производительность
 
-### Типичные ошибки
+### Типичные Ошибки
 
 1. **Suspend-операции в map**: Используйте `mapNotNull` или `transform`:
 ```kotlin

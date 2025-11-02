@@ -16,7 +16,7 @@ updated: 2025-10-30
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 12:02:15 pm
-date modified: Thursday, October 30th 2025, 12:47:28 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:47:28 pm
 
 Dagger строится на четырех ключевых элементах:
 
-### 1. @Component — граф зависимостей
+### 1. @Component — Граф Зависимостей
 
 Интерфейс, генерирующий код для связывания модулей с точками инъекции:
 
@@ -46,7 +46,7 @@ val component = DaggerAppComponent.create() // Dagger-generated
 - Валидация графа на этапе компиляции
 - Управление жизненным циклом зависимостей
 
-### 2. @Module — источник зависимостей
+### 2. @Module — Источник Зависимостей
 
 Класс с методами `@Provides` для создания объектов:
 
@@ -62,7 +62,7 @@ object NetworkModule {
 
 Используется для внешних библиотек, интерфейсов, сложной логики создания.
 
-### 3. @Inject — точки внедрения
+### 3. @Inject — Точки Внедрения
 
 ```kotlin
 // ✅ Constructor injection (preferred)
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
 
 **Правило:** constructor > field injection.
 
-### 4. @Binds vs @Provides
+### 4. @Binds Vs @Provides
 
 ```kotlin
 @Module
@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
 
 **Rule:** constructor > field injection.
 
-### 4. @Binds vs @Provides
+### 4. @Binds Vs @Provides
 
 ```kotlin
 @Module

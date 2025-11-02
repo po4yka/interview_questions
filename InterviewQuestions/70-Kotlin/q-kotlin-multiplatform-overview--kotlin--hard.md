@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [kotlin-multiplatform, kmp, cross-platform, native]
+subtopics: [cross-platform, kmp, kotlin-multiplatform, native]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-type-aliases--kotlin--medium, q-enum-class-advanced--kotlin--medium, q-extensions-in-java--programming-languages--medium]
+related: [q-enum-class-advanced--kotlin--medium, q-extensions-in-java--programming-languages--medium, q-type-aliases--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, kotlin-multiplatform, kmp, cross-platform, native, difficulty/hard]
+tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, native]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > Kotlin Multiplatform - How does it work?
 # Вопрос (RU)
@@ -137,17 +140,17 @@ actual class DatabaseDriver {
 Common Code (Kotlin)
         ↓
 
-   Compiler    
-   Frontend    
+   Compiler
+   Frontend
 
         ↓
    Kotlin IR (Intermediate Representation)
         ↓
 
-                               
+
 Android Backend        iOS/Native Backend
 (JVM bytecode)         (LLVM IR → native)
-                               
+
         ↓                       ↓
     .dex/.jar              .framework/.klib
 ```
@@ -311,7 +314,7 @@ kotlin {
 
 ```
 
-   Platform-Specific UI      
+   Platform-Specific UI
    + Presentation              ← ViewModels are native
 
    Shared Business Logic       ← Use Cases
@@ -509,11 +512,11 @@ actual class TokenStorage {
 
 **Kotlin Multiplatform (KMP)** — это технология, позволяющая использовать общий код на разных платформах (Android, iOS, web, desktop, backend), сохраняя возможность доступа к платформо-специфичным API.
 
-### Основная концепция
+### Основная Концепция
 
 KMP использует **механизм "expect/actual"** для определения платформо-агностического кода в общих модулях и платформо-специфичных реализаций.
 
-### Архитектура слоев
+### Архитектура Слоев
 
 **1. Общий код (shared code)**
 
@@ -568,7 +571,7 @@ actual class DatabaseDriver {
 }
 ```
 
-### Как это работает внутри
+### Как Это Работает Внутри
 
 **Процесс компиляции:**
 
@@ -580,15 +583,15 @@ actual class DatabaseDriver {
 Kotlin IR (Промежуточное представление)
         ↓
 
-                               
+
 Android Backend        iOS/Native Backend
 (JVM bytecode)         (LLVM IR → native)
-                               
+
         ↓                       ↓
     .dex/.jar              .framework/.klib
 ```
 
-### Ключевые технологии
+### Ключевые Технологии
 
 **Популярные KMP библиотеки:**
 - **Ktor** - Сеть (HTTP клиент)
@@ -638,7 +641,7 @@ kotlin {
 }
 ```
 
-### Стратегии использования
+### Стратегии Использования
 
 **Делиться всем (кроме UI):**
 
@@ -655,7 +658,7 @@ kotlin {
 
 ```
 
-### Интеграция с iOS
+### Интеграция С iOS
 
 **Генерация iOS Framework:**
 
@@ -684,7 +687,7 @@ class ViewController: UIViewController {
 }
 ```
 
-### Модель потоков
+### Модель Потоков
 
 **Корутины работают по-разному на iOS:**
 

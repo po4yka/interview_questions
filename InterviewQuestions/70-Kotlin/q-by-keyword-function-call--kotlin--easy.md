@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lambda-expressions--kotlin--medium, q-kotlin-when-vs-switch--programming-languages--easy, q-kotlin-reified-types--kotlin--hard]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - delegation
-  - by-keyword
-  - difficulty/easy
+tags: [by-keyword, delegation, difficulty/easy, programming-languages]
+date created: Saturday, November 1st 2025, 1:26:53 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Can you call a function or constructor after by
+
+# Can You Call a Function or Constructor after by
 
 # Question (EN)
 > Can you call a function or constructor after the `by` keyword in Kotlin?
@@ -352,7 +351,7 @@ class DelegationSummary {
 - Можно использовать свойства, параметры или любое выражение, возвращающее подходящий делегат
 - Ключевое требование: выражение должно возвращать объект с правильным контрактом делегирования
 
-### Что работает с `by`
+### Что Работает С `by`
 
 ```kotlin
 //  РАБОТАЕТ: Вызов функции, возвращающей делегат
@@ -382,5 +381,4 @@ val value2: String by getDelegate()
 ## Related Questions
 
 - [[q-kotlin-lambda-expressions--kotlin--medium]]
-- [[q-kotlin-when-vs-switch--programming-languages--easy]]
 - [[q-kotlin-reified-types--kotlin--hard]]

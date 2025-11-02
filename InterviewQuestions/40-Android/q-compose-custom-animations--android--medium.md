@@ -13,14 +13,14 @@ moc: moc-android
 related:
   - q-animated-visibility-vs-content--android--medium
   - q-how-to-create-animations-in-android--android--medium
-  - q-vector-graphics-animations--android--medium
   - q-jetpack-compose-basics--android--medium
+  - q-vector-graphics-animations--android--medium
 created: 2025-10-13
 updated: 2025-10-29
 tags: [android/ui-animation, android/ui-compose, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:18:59 am
-date modified: Thursday, October 30th 2025, 12:43:41 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -50,7 +50,7 @@ date modified: Thursday, October 30th 2025, 12:43:41 pm
 - Инспектирование через Layout Inspector
 - Consistent timing для группы анимаций
 
-### Примеры реализации
+### Примеры Реализации
 
 **animate*AsState** (декларативный):
 ```kotlin
@@ -110,7 +110,7 @@ fun AnimatedCard(isExpanded: Boolean) {
 }
 ```
 
-### AnimationSpec стратегии
+### AnimationSpec Стратегии
 
 **spring()** — естественное поведение с физикой:
 - Прерываемые анимации без рывков
@@ -126,7 +126,7 @@ fun AnimatedCard(isExpanded: Boolean) {
 - Сложные траектории
 - Кастомные кривые анимации
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 - Используйте `graphicsLayer` вместо `offset`/`size` для hardware-accelerated анимаций
 - Ограничивайте recomposition через `derivedStateOf` для вычисляемых значений
@@ -267,5 +267,4 @@ fun AnimatedCard(isExpanded: Boolean) {
 - [[q-remember-remembersaveable--android--medium]] - State preservation patterns in Compose
 
 ### Advanced (Harder)
-- [[q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard]] - Performance optimization techniques
 - [[q-compose-compiler-plugin--android--hard]] - Understanding Compose compiler optimizations

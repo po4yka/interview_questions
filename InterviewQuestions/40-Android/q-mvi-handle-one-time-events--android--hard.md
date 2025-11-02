@@ -1,31 +1,33 @@
 ---
 id: android-431
 title: "MVI Handle One Time Events / Обработка одноразовых событий в MVI"
-aliases: [MVI One-Time Events, SingleLiveEvent, Event Wrapper, Обработка событий MVI, Одноразовые события]
+aliases: [Event Wrapper, MVI One-Time Events, SingleLiveEvent, Обработка событий MVI, Одноразовые события]
 
 # Classification
 topic: android
-subtopics: [architecture-mvi, ui-state, coroutines, flow]
+subtopics: [architecture-mvi, coroutines, flow, ui-state]
 question_kind: android
 difficulty: hard
 
 # Language
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 
 # Workflow
 status: draft
 
 # Links
 moc: moc-android
-related: [q-mvi-architecture--android--hard, q-stateflow-flow-sharedflow-livedata--android--medium, q-mvi-one-time-events--android--medium, q-sharedflow-stateflow--kotlin--medium]
+related: [q-mvi-architecture--android--hard, q-mvi-one-time-events--android--medium, q-sharedflow-stateflow--kotlin--medium, q-stateflow-flow-sharedflow-livedata--android--medium]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-30
 
 # Tags
-tags: [android/architecture-mvi, android/ui-state, android/coroutines, android/flow, architecture-mvi, stateflow, sharedflow, viewmodel, difficulty/hard]
+tags: [android/architecture-mvi, android/coroutines, android/flow, android/ui-state, architecture-mvi, difficulty/hard, sharedflow, stateflow, viewmodel]
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -40,7 +42,7 @@ tags: [android/architecture-mvi, android/ui-state, android/coroutines, android/f
 
 В MVI существует фундаментальное противоречие: State должен быть воспроизводимым и surviv configuration changes, но события (навигация, toast, snackbar) должны показываться только один раз. Существует несколько паттернов решения этой проблемы.
 
-### 1. SharedFlow с replay = 0 (Рекомендуемый подход)
+### 1. SharedFlow С Replay = 0 (Рекомендуемый подход)
 
 ✅ **Best Practice** - чистое reactive решение для событий:
 
@@ -78,7 +80,7 @@ lifecycleScope.launch {
 - `extraBufferCapacity = 1` - буфер для событий при отсутствии активных подписчиков
 - `BufferOverflow.DROP_OLDEST` - при переполнении удаляет старейшие события
 
-### 2. Канал (Channel) для гарантированной доставки
+### 2. Канал (Channel) Для Гарантированной Доставки
 
 ✅ **Для критичных событий** - гарантирует доставку:
 
@@ -104,7 +106,7 @@ lifecycleScope.launch {
 
 **Гарантии**: события не теряются даже если View временно неактивна.
 
-### 3. EventWrapper для StateFlow
+### 3. EventWrapper Для StateFlow
 
 ❌ **Legacy подход** - используется, если нужна совместимость с StateFlow:
 
@@ -128,7 +130,7 @@ data class UiState(
 
 **Недостатки**: mutable state в immutable объекте, сложное тестирование.
 
-### 4. Разделение State и Effects
+### 4. Разделение State И Effects
 
 ✅ **Архитектурный подход** - разделение ответственности:
 
@@ -148,7 +150,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-### Edge Cases для HARD уровня
+### Edge Cases Для HARD Уровня
 
 **1. Потеря событий при быстрой ротации**:
 ```kotlin
@@ -205,7 +207,7 @@ fun `event emitted once`() = runTest {
 }
 ```
 
-### Рекомендации по выбору подхода
+### Рекомендации По Выбору Подхода
 
 | Сценарий | Решение | Причина |
 |----------|---------|---------|
@@ -218,7 +220,7 @@ fun `event emitted once`() = runTest {
 
 In MVI, there's a fundamental contradiction: State should be reproducible and survive configuration changes, but events (navigation, toast, snackbar) should be shown only once. Several patterns exist to solve this problem.
 
-### 1. SharedFlow with replay = 0 (Recommended)
+### 1. SharedFlow with Replay = 0 (Recommended)
 
 ✅ **Best Practice** - pure reactive solution for events:
 

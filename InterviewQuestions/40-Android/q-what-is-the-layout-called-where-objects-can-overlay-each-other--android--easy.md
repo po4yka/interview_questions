@@ -1,20 +1,22 @@
 ---
 id: android-308
 title: "What Is The Layout Called Where Objects Can Overlay Each Other / Как называется layout где объекты могут перекрывать друг друга"
-aliases: ["Overlay Layout", "Layout для наложения элементов"]
+aliases: ["Layout для наложения элементов", "Overlay Layout"]
 topic: android
-subtopics: [ui-views, ui-compose]
+subtopics: [ui-compose, ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-framelayout, c-box-compose, q-compose-custom-layout--android--hard]
+related: [c-framelayout, c-layout-types]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/ui-views, android/ui-compose, framelayout, box, layouts, difficulty/easy]
+tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, layouts]
+date created: Saturday, November 1st 2025, 1:25:40 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

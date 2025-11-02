@@ -1,7 +1,7 @@
 ---
 id: kotlin-125
 title: "flowOn operator and context switching in flows / flowOn оператор и переключение контекста"
-aliases: [Flowon, Operator, Context, Switching]
+aliases: [Context, Flowon, Operator, Switching]
 topic: kotlin
 subtopics: []
 question_kind: theory
@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en]
 status: draft
 moc: moc-kotlin
-related: [q-associatewith-vs-associateby--kotlin--easy, q-retrofit-coroutines-best-practices--kotlin--medium, q-kotlin-constructor-keyword--programming-languages--easy]
+related: [q-associatewith-vs-associateby--kotlin--easy, q-kotlin-constructor-keyword--programming-languages--easy, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-12
 updated: 2025-10-12
-tags: ["flowon", "context-switching", "dispatchers", "buffer", "performance", "flow-operators"]
+tags: ["buffer", "context-switching", "dispatchers", "flow-operators", "flowon", "performance", difficulty/hard]
+date created: Saturday, October 18th 2025, 3:06:32 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# flowOn operator and context switching in flows / flowOn оператор и переключение контекста
+
+# flowOn Operator and Context Switching in Flows / flowOn Оператор И Переключение Контекста
 
 ## English Version
 
@@ -396,7 +399,7 @@ flow { emit(1) }
     .collect { }
 ```
 
-#### Upstream vs Downstream Context
+#### Upstream Vs Downstream Context
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -727,14 +730,14 @@ class FlowOnTests {
 
 ---
 
-## Russian Version / Русская версия
+## Russian Version / Русская Версия
 
 ### Вопрос
 Что делает оператор `flowOn` в Kotlin потоках? Чем он отличается от `withContext`? Объясните сохранение контекста, поведение буферизации, множественные операторы flowOn в цепочке и влияние на производительность с реальными примерами.
 
 ### Ответ
 
-#### Что делает flowOn
+#### Что Делает flowOn
 
 `flowOn` изменяет **upstream** контекст выполнения потока. Он влияет на то, где производятся эмиссии потока, а не где они собираются.
 
@@ -762,7 +765,7 @@ fun demonstrateFlowOn() = runBlocking {
 
 **Ключевой принцип**: `flowOn` влияет на **всё выше** его в цепочке, не ниже.
 
-#### Почему withContext не работает в потоках
+#### Почему withContext Не Работает В Потоках
 
 Вы **не можете** использовать `withContext` внутри flow builder:
 
@@ -786,7 +789,7 @@ fun correctFlow() = flow {
 }.flowOn(Dispatchers.IO) // Изменить контекст всего upstream
 ```
 
-#### Как flowOn вносит буферизацию
+#### Как flowOn Вносит Буферизацию
 
 `flowOn` создаёт **буфер на основе канала** между контекстами:
 
@@ -815,7 +818,7 @@ fun demonstrateBuffering() = runBlocking {
 
 **Размер буфера по умолчанию**: 64 (из `Channel.BUFFERED`)
 
-#### Несколько операторов flowOn в цепочке
+#### Несколько Операторов flowOn В Цепочке
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -850,7 +853,7 @@ fun demonstrateMultipleFlowOn() = runBlocking {
    IO       IO                     Default                      Main
 ```
 
-#### Реальный пример: Загрузка данных из сети и базы данных
+#### Реальный Пример: Загрузка Данных Из Сети И Базы Данных
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -887,7 +890,7 @@ class UserRepository {
 }
 ```
 
-#### Типичные ошибки
+#### Типичные Ошибки
 
 **1. flowOn на терминальном операторе**
 
@@ -935,7 +938,7 @@ flow {
 }.flowOn(Dispatchers.IO)
 ```
 
-#### Лучшие практики
+#### Лучшие Практики
 
 **1. Сопоставляйте диспетчер с нагрузкой**
 

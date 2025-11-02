@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, suspend, blocking, concurrency, threads]
+subtopics: [blocking, concurrency, coroutines, suspend, threads]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-kotlin-coroutines-introduction--kotlin--medium, q-suspend-functions-
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, coroutines, suspend, blocking, concurrency, difficulty/medium]
+tags: [blocking, concurrency, coroutines, difficulty/medium, kotlin, suspend]
+date created: Friday, October 17th 2025, 9:47:58 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What is the difference between suspending and blocking in Kotlin?
 # Вопрос (RU)
@@ -224,7 +227,7 @@ suspend fun suspendFunction(counter: Int, delay: Long) {
 
 **Преимущество**: Пока корутины приостановлены, главный поток может выполнять другие задачи. **Главный метод НЕ заблокирован**, поэтому он может выполнять другую работу.
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Аспект | Blocking | Suspending |
 |--------|----------|------------|
@@ -236,7 +239,7 @@ suspend fun suspendFunction(counter: Int, delay: Long) {
 | **Тип функции** | Обычная функция | `suspend` функция |
 | **Вызов из** | Откуда угодно | Только из корутины или suspend функции |
 
-### Визуальное сравнение
+### Визуальное Сравнение
 
 **Blocking:**
 ```
@@ -250,7 +253,7 @@ suspend fun suspendFunction(counter: Int, delay: Long) {
         ^приостановка ^    ^возобновление
 ```
 
-### Практический пример
+### Практический Пример
 
 ```kotlin
 // - Blocking - замораживает UI

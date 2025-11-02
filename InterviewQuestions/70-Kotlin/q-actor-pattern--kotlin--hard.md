@@ -6,10 +6,10 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - coroutines
   - actor
-  - concurrency
   - channels
+  - concurrency
+  - coroutines
   - state-management
 question_kind: theory
 difficulty: hard
@@ -23,14 +23,17 @@ source_note: Comprehensive guide on Actor pattern with Kotlin Coroutines
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-advanced-coroutine-patterns--kotlin--hard, q-fan-in-fan-out--kotlin--hard, q-channel-buffering-strategies--kotlin--hard]
+related: [q-advanced-coroutine-patterns--kotlin--hard, q-channel-buffering-strategies--kotlin--hard, q-fan-in-fan-out--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, actor, concurrency, channels, message-passing, state-encapsulation, difficulty/hard]
+tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, message-passing, state-encapsulation]
+date created: Sunday, October 12th 2025, 3:04:52 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
+
 # Question (EN)
 > What is the Actor pattern in Kotlin coroutines? Explain message passing with channels, state encapsulation, and provide real-world examples of actors.
 
@@ -56,23 +59,23 @@ The **Actor pattern** is a concurrency model where actors are isolated units tha
 
 ```
 
-            Actor                    
-    
-       Private State              
-    (only actor can access)       
-    
-                                    
-                                    
-    
-     Message Processing Loop      
-     (processes one at a time)    
-    
-                                    
-    
-        Mailbox (Channel)         
-    
+            Actor
 
-               
+       Private State
+    (only actor can access)
+
+
+
+
+     Message Processing Loop
+     (processes one at a time)
+
+
+
+        Mailbox (Channel)
+
+
+
           Messages from
           external senders
 ```
@@ -121,7 +124,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-### actor Builder Function
+### Actor Builder Function
 
 ```kotlin
 fun <T> CoroutineScope.actor(
@@ -640,7 +643,7 @@ class SafeBankAccount(scope: CoroutineScope) {
 }
 ```
 
-### Actor vs Mutex Comparison
+### Actor Vs Mutex Comparison
 
 ```kotlin
 // Using Mutex (traditional approach)
@@ -789,7 +792,7 @@ private val actor = scope.actor<Msg> {
 
 Паттерн **Actor** - это модель параллелизма, где акторы являются изолированными единицами, которые обрабатывают сообщения последовательно, устраняя необходимость в блокировках и синхронизации. В Kotlin акторы реализуются с использованием корутин и каналов.
 
-### Ключевые концепции
+### Ключевые Концепции
 
 1. **Actor**: Независимая сущность с приватным состоянием
 2. **Передача сообщений**: Коммуникация через каналы
@@ -798,7 +801,7 @@ private val actor = scope.actor<Msg> {
 5. **Потокобезопасность**: Нет гонки условий по дизайну
 6. **Почтовый ящик**: Очередь сообщений (реализована как Channel)
 
-### Базовая реализация актора
+### Базовая Реализация Актора
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -841,7 +844,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-### Реальный пример: Банковский счёт актор
+### Реальный Пример: Банковский Счёт Актор
 
 ```kotlin
 sealed class AccountMsg
@@ -914,7 +917,7 @@ class BankAccount(
 }
 ```
 
-### Actor vs Mutex
+### Actor Vs Mutex
 
 ```kotlin
 // Используя Mutex (традиционный подход)
@@ -944,7 +947,7 @@ class ActorCounter(scope: CoroutineScope) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 
@@ -980,7 +983,7 @@ val actor = actor<Msg> { /* ... */ }
 actor.close()  // Всегда закрывайте!
 ```
 
-### Когда использовать акторы
+### Когда Использовать Акторы
 
 **Используйте акторы когда:**
 - Нужно управлять изменяемым состоянием с конкурентным доступом

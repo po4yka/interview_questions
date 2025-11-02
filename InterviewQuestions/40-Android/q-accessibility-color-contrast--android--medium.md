@@ -16,7 +16,7 @@ updated: 2025-10-29
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 sources: []
 date created: Wednesday, October 29th 2025, 4:21:05 pm
-date modified: Thursday, October 30th 2025, 11:12:45 am
+date modified: Saturday, November 1st 2025, 3:59:39 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 11:12:45 am
 
 [[c-accessibility|Контрастность цвета]] — отношение яркости текста к фону. WCAG требует минимум **4.5:1** для обычного текста (AA) и **7:1** для AAA. Material Design гарантирует контраст через систему цветовых ролей.
 
-### Требования WCAG и Material цветовые роли
+### Требования WCAG И Material Цветовые Роли
 
 **WCAG AA**: обычный текст < 18pt — 4.5:1, крупный ≥ 18pt — 3:1
 **WCAG AAA**: обычный текст — 7:1, крупный — 4.5:1
@@ -48,7 +48,7 @@ fun MaterialColorExample() {
 // Основные пары: primary/onPrimary, surface/onSurface, background/onBackground
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // ❌ 1. Недостаточная контрастность (1.6:1)
@@ -75,7 +75,7 @@ Row {
 }
 ```
 
-### Цветовая слепота и тестирование
+### Цветовая Слепота И Тестирование
 
 8% мужчин и 0.5% женщин имеют дефицит цветового зрения — не полагайтесь только на цвет:
 

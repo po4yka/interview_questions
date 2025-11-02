@@ -11,15 +11,14 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - collections
-  - map
-  - difficulty/easy
+tags: [collections, difficulty/easy, map, programming-languages]
 moc: moc-kotlin
-related: [q-kotlin-property-delegates--programming-languages--medium, q-visibility-modifiers-kotlin--kotlin--medium, q-list-set-map-differences--programming-languages--easy]
+related: [q-kotlin-property-delegates--programming-languages--medium, q-visibility-modifiers-kotlin--kotlin--medium]
+date created: Friday, October 31st 2025, 6:30:31 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Расскажи про коллекцию Map
+
+# Расскажи Про Коллекцию Map
 
 # Question (EN)
 > Tell me about the Map collection
@@ -102,14 +101,14 @@ val nested = listOf(1, 2, 3).flatMap { listOf(it, it * 2) }
 
 Функция `map` трансформирует каждый элемент коллекции используя заданную функцию трансформации.
 
-### Базовое использование
+### Базовое Использование
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
 val doubled = numbers.map { it * 2 }
 // Результат: [2, 4, 6, 8, 10]
 ```
 
-### Распространенные паттерны
+### Распространенные Паттерны
 
 **1. Трансформация объектов**
 ```kotlin
@@ -168,12 +167,12 @@ val nested = listOf(1, 2, 3).flatMap { listOf(it, it * 2) }
 ## Related Questions
 
 ### Android Implementation
-- [[q-kak-izmenit-kolichestvo-kolonok-v-recyclerview-v-zavisimosti-ot-orientatsii--programming-languages--easy]] - Data Structures
+-  - Data Structures
 
 ### Kotlin Language Features
-- [[q-collection-implementations--programming-languages--easy]] - Data Structures
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
-- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
+-  - Data Structures
+-  - Data Structures
+-  - Data Structures
 - [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures
 - [[q-kotlin-collections--kotlin--medium]] - Data Structures
 - [[q-kotlin-map-flatmap--kotlin--medium]] - Data Structures

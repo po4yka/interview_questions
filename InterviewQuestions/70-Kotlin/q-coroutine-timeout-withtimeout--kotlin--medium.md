@@ -10,13 +10,16 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-10-31"
-tags: ["kotlin", "coroutines", "timeout", "cancellation", "error-handling", "difficulty/medium"]
+tags: ["cancellation", "coroutines", "difficulty/medium", "error-handling", "kotlin", "timeout"]
 description: "Comprehensive guide to timeout handling in Kotlin coroutines, covering withTimeout, withTimeoutOrNull, TimeoutCancellationException, and practical patterns"
 moc: moc-kotlin
-related: [q-nested-vs-inner-class--kotlin--medium, q-class-initialization-order--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
+related: []
 subtopics: [coroutines, timeout]
+date created: Saturday, November 1st 2025, 1:07:52 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull
+
+# How to Handle Timeouts in Coroutines: withTimeout Vs withTimeoutOrNull
 
 ## English
 
@@ -256,7 +259,7 @@ suspend fun fetchStocks(): String {
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 При работе с корутинами операции могут занимать больше времени, чем ожидается, что приводит к плохому пользовательскому опыту или потере ресурсов. Как эффективно реализовать таймауты, используя `withTimeout` и `withTimeoutOrNull`, и в чём различия между ними?
 
@@ -264,7 +267,7 @@ suspend fun fetchStocks(): String {
 
 **`withTimeout`** выбрасывает `TimeoutCancellationException`, если операция превышает указанное время. **`withTimeoutOrNull`** возвращает `null` вместо выбрасывания исключения, обеспечивая более мягкое резервное поведение.
 
-#### Базовое использование
+#### Базовое Использование
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -300,7 +303,7 @@ fun basicTimeouts() = runBlocking {
 }
 ```
 
-#### Обработка исключений
+#### Обработка Исключений
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -330,7 +333,7 @@ suspend fun performLongOperation(): String {
 }
 ```
 
-#### Паттерны для сетевых запросов
+#### Паттерны Для Сетевых Запросов
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -377,7 +380,7 @@ class ApiClient {
 data class Data(val id: String, val content: String)
 ```
 
-#### Таблица сравнения
+#### Таблица Сравнения
 
 | Аспект | withTimeout | withTimeoutOrNull |
 |--------|-------------|-------------------|
@@ -386,7 +389,7 @@ data class Data(val id: String, val content: String)
 | Обработка ошибок | Требуется try-catch | Оператор Elvis (?:) |
 | Ясность кода | Явная ошибка | Неявная с проверкой null |
 
-#### Практические примеры
+#### Практические Примеры
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -480,7 +483,7 @@ suspend fun fetchStocks(): String {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте withTimeout для критических операций** - когда операция обязательно должна завершиться или провалиться
 2. **Используйте withTimeoutOrNull для опциональных операций** - когда можно работать без результата
@@ -510,6 +513,6 @@ suspend fun fetchStocks(): String {
 ## Related Questions
 
 - [[q-coroutine-cancellation--kotlin--medium]]
-- [[q-coroutine-exception-handling--kotlin--hard]]
+- [[q-coroutine-exception-handling--kotlin--medium]]
 - [[q-withcontext-use-cases--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]

@@ -18,7 +18,7 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-fix-slow-app-startup-legacy--android--hard, q-looper-thread-connection--android--medium, q-macrobenchmark-startup--performance--medium]
+related: [q-fix-slow-app-startup-legacy--android--hard, q-looper-thread-connection--android--medium, q-macrobenchmark-startup--android--medium]
 
 # Timestamps
 created: 2025-10-06
@@ -26,7 +26,7 @@ updated: 2025-10-06
 
 tags: [android/gradle, difficulty/medium, en, ru]
 date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:08:03 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Question (EN)

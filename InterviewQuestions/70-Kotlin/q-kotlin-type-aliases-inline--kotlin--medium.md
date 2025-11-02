@@ -1,27 +1,24 @@
 ---
 id: kotlin-164
 title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
-aliases: [Type Aliases, Inline Classes, Inline Functions, Type Aliases и inline]
+aliases: [Inline Classes, Inline Functions, Type Aliases, Type Aliases и inline]
 topic: kotlin
-subtopics: [type-system, inline-functions, performance]
+subtopics: [inline-functions, performance, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-requirements--programming-languages--medium, q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
+related: [q-actor-pattern--kotlin--hard, q-coroutine-resource-cleanup--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - type-aliases
-  - inline-classes
-  - type-safety
-  - performance
-  - difficulty/medium
+tags: [difficulty/medium, inline-classes, kotlin, performance, type-aliases, type-safety]
+date created: Friday, October 31st 2025, 6:28:52 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Type Aliases vs Inline Classes vs Wrapper Classes
+
+# Type Aliases Vs Inline Classes Vs Wrapper Classes
 
 **English**: When should you use type aliases vs inline classes vs wrapper classes? Compare memory overhead and type safety.
 
@@ -282,11 +279,11 @@ Need type abstraction?
      (Complex generics, function types)
 
  Need type safety?
-  
+
    Single value wrapper?
      Use INLINE CLASS
        (IDs, primitive wrappers, units)
-  
+
    Multiple properties OR inheritance?
       Use WRAPPER CLASS
         (Domain models, complex types)
@@ -383,7 +380,7 @@ data class Address(
 
 Kotlin предоставляет три способа создания типовых абстракций: псевдонимы типов (type aliases), встроенные классы (inline classes) и классы-обертки (wrapper classes). Каждый имеет различные компромиссы.
 
-### Type Aliases - Только compile-time
+### Type Aliases - Только Compile-time
 
 **Назначение**: Создание альтернативных имен для существующих типов. Нет runtime overhead, нет type safety.
 
@@ -422,7 +419,7 @@ typealias ClickListener = (View) -> Unit
 typealias Validator = (String) -> Boolean
 ```
 
-### Inline Classes (Value Classes) - Type Safety без overhead
+### Inline Classes (Value Classes) - Type Safety Без overhead
 
 **Назначение**: Оборачивает одно значение с type safety и нулевой runtime стоимостью.
 
@@ -511,7 +508,7 @@ val list: List<UserId> = listOf()  // Boxing!
 val any: Any = UserId("123")       // Boxing!
 ```
 
-### Wrapper Classes - Полный OOP с overhead
+### Wrapper Classes - Полный OOP С overhead
 
 **Назначение**: Создание отдельных типов с полными OOP возможностями но с runtime overhead.
 
@@ -562,7 +559,7 @@ class UserId(value: String) : Identifier(value)
 class ProductId(value: String) : Identifier(value)
 ```
 
-### Сравнение производительности
+### Сравнение Производительности
 
 ```kotlin
 // Результаты бенчмарков (приблизительно)
@@ -589,7 +586,7 @@ fun wrapperClass(): String {
 }
 ```
 
-### Сравнение затрат памяти
+### Сравнение Затрат Памяти
 
 ```kotlin
 // Type Alias
@@ -606,7 +603,7 @@ data class UserId(val value: String)
 val id = UserId("123")  // 40 байт (String) + 16 байт (объект UserId) = 56 байт
 ```
 
-### Матрица сравнения
+### Матрица Сравнения
 
 | Функция | Type Alias | Inline Class | Wrapper Class |
 |---------|------------|--------------|---------------|
@@ -619,7 +616,7 @@ val id = UserId("123")  // 40 байт (String) + 16 байт (объект User
 | **Nullable** | Зависит от базового типа | Явно | Явно |
 | **Boxing** | Н/Д | Иногда (интерфейсы, коллекции) | Всегда объект |
 
-### Дерево принятия решений
+### Дерево Принятия Решений
 
 ```
 Нужна типовая абстракция?
@@ -639,7 +636,7 @@ val id = UserId("123")  // 40 байт (String) + 16 байт (объект User
         (Доменные модели, сложные типы)
 ```
 
-### Примеры из реальной жизни
+### Примеры Из Реальной Жизни
 
 **Type Aliases**:
 ```kotlin
@@ -713,7 +710,7 @@ data class Address(
 - Аллокация памяти
 - Нагрузка на GC для часто создаваемых объектов
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте type aliases** для сложных generic типов и читаемости
 2. **Используйте inline classes** для type-safe wrappers без overhead
@@ -730,6 +727,6 @@ data class Address(
 
 ## Related Questions
 
-- [[q-data-class-requirements--programming-languages--medium]]
+-
 - [[q-actor-pattern--kotlin--hard]]
 - [[q-coroutine-resource-cleanup--kotlin--medium]]

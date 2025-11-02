@@ -3,19 +3,19 @@ id: lang-047
 title: "Reference Types Criteria / Критерии типов ссылок"
 aliases: [Reference Types Criteria, Критерии типов ссылок]
 topic: programming-languages
-subtopics: [type-design, immutability, object-model]
+subtopics: [immutability, object-model, type-design]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-interface-vs-abstract-class--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium, q-xml-acronym--programming-languages--easy]
+related: [q-interface-vs-abstract-class--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [best-practices, design, immutability, kotlin, programming-languages, reference-types, difficulty/medium]
+tags: [best-practices, design, difficulty/medium, immutability, kotlin, programming-languages, reference-types]
 date created: Friday, October 3rd 2025, 6:48:06 pm
-date modified: Sunday, October 26th 2025, 1:37:19 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Каким Критериям Должны Соответствовать Ссылочные Типы?
@@ -160,6 +160,6 @@ open class BaseEntity {
 
 ## Related Questions
 
-- [[q-xml-acronym--programming-languages--easy]]
+-
 - [[q-interface-vs-abstract-class--programming-languages--medium]]
 - [[q-linkedlist-arraylist-insert-behavior--programming-languages--medium]]

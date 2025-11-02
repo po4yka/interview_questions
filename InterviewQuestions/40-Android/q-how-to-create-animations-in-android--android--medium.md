@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-animation, animations, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:39:55 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Как В Android Можно Сделать Анимацию?

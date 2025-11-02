@@ -16,7 +16,7 @@ updated: 2025-10-27
 tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
 sources: [https://dagger.dev/api/latest/dagger/Scope.html]
 date created: Monday, October 27th 2025, 10:27:07 pm
-date modified: Thursday, October 30th 2025, 12:47:31 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:47:31 pm
 
 **Scope** в Dagger — это механизм управления временем жизни зависимостей. Scope гарантирует, что в рамках одного компонента создается только один экземпляр объекта.
 
-### Принцип работы
+### Принцип Работы
 
 Scope привязывает зависимость к жизненному циклу Dagger-компонента:
 - Компонент создан → создается scoped-зависимость
@@ -50,7 +50,7 @@ Scope привязывает зависимость к жизненному ци
   └─ @ServiceScoped           // ✅ Service
 ```
 
-### Типичные кейсы
+### Типичные Кейсы
 
 ```kotlin
 // ✅ Singleton для глобальных сервисов
@@ -73,7 +73,7 @@ class ProfileRepository @Inject constructor(
 )
 ```
 
-### Правила использования
+### Правила Использования
 
 **Scope Hierarchy Rule**: дочерний компонент может использовать зависимости из родительского scope, но не наоборот:
 
@@ -101,7 +101,7 @@ class GlobalService @Inject constructor(
 
 **Scope** in Dagger is a mechanism for managing dependency lifetimes. A scope guarantees that only one instance of an object is created within a single component.
 
-### How it works
+### How it Works
 
 Scope binds a dependency to the lifecycle of a Dagger component:
 - Component created → scoped dependency instantiated

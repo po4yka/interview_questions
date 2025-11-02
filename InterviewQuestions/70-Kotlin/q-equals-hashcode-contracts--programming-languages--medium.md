@@ -3,17 +3,19 @@ id: lang-072
 title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 aliases: [Equals Hashcode Contracts, Контракты equals и hashCode]
 topic: programming-languages
-subtopics: [object-methods, collections, equality]
+subtopics: [collections, equality, object-methods]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-equality, q-java-equals-default-behavior--programming-languages--easy, q-equals-hashcode-purpose--programming-languages--hard]
+related: [c-equality, q-equals-hashcode-purpose--programming-languages--hard, q-java-equals-default-behavior--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, object-methods, equality, collections, contracts, difficulty/medium]
+tags: [collections, contracts, difficulty/medium, equality, object-methods, programming-languages]
+date created: Friday, October 31st 2025, 6:29:22 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Расскажи О Контрактах Equals И hashCode
@@ -260,5 +262,5 @@ override fun hashCode() = Objects.hash(property1, property2, property3)
 ## Related Questions
 
 - [[q-what-is-garbage-in-gc--programming-languages--easy]]
-- [[q-composite-pattern--design-patterns--medium]]
+-
 - [[q-flyweight-pattern--design-patterns--hard]]

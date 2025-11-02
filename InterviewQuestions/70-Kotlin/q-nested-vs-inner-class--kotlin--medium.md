@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [nested-class, inner-class, classes, oop]
+subtopics: [classes, inner-class, nested-class, oop]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-prohibit-object-creation--programming-languages--easy, q-coroutine-memory-leaks--kotlin--hard, q-retry-operators-flow--kotlin--medium]
+related: [q-coroutine-memory-leaks--kotlin--hard, q-prohibit-object-creation--programming-languages--easy, q-retry-operators-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, nested-class, inner-class, classes, oop, difficulty/medium]
+tags: [classes, difficulty/medium, inner-class, kotlin, nested-class, oop]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What is the difference between nested class and inner class in Kotlin?
 # Вопрос (RU)
@@ -80,7 +83,7 @@ val demo = Outer().Inner().foo() // == 1
 | **Memory** | No reference to outer | Holds reference to outer |
 | **Use case** | Utility classes, logical grouping | Callbacks, tightly coupled logic |
 
-### Kotlin vs Java Comparison
+### Kotlin Vs Java Comparison
 
 | Kotlin | Java |
 |--------|------|
@@ -123,7 +126,7 @@ class Activity {
 
 ## Ответ (RU)
 
-### Вложенный класс (Nested)
+### Вложенный Класс (Nested)
 
 Класс, объявленный внутри другого класса. **Не может получить доступ к членам внешнего класса**. Не требует экземпляра внешнего класса.
 
@@ -139,7 +142,7 @@ class Outer {
 val demo = Outer.Nested().foo()  // Не нужен экземпляр Outer!
 ```
 
-### Внутренний класс (Inner)
+### Внутренний Класс (Inner)
 
 Вложенный класс с ключевым словом `inner`. **Может получить доступ ко всем членам** внешнего класса. Требует экземпляр внешнего класса.
 
@@ -155,7 +158,7 @@ class Outer {
 val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Функция | Nested | Inner |
 |---------|--------|-------|

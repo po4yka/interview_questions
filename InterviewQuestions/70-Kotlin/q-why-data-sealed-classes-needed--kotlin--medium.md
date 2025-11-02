@@ -1,7 +1,7 @@
 ---
 id: kotlin-220
 title: "Why Data Sealed Classes Needed / Зачем нужны Data и Sealed классы"
-aliases: [Data Classes, Sealed Classes, Class Design, Классы в Kotlin]
+aliases: [Class Design, Data Classes, Sealed Classes, Классы в Kotlin]
 topic: kotlin
 subtopics: [classes, data-classes, sealed-classes]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-exception-handling--kotlin--medium, q-channel-buffering-strategies--kotlin--hard, q-channel-closing-completion--kotlin--medium]
+related: [q-channel-buffering-strategies--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-flow-exception-handling--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - data-classes
-  - sealed-classes
-  - classes
-  - design
-  - difficulty/medium
+tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
+date created: Friday, October 31st 2025, 6:32:04 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Why are Data Class and Sealed Classes needed?
+
+# Why Are Data Class and Sealed Classes Needed?
 
 **English**: Why are Data Class and Sealed Classes needed in Kotlin?
 
@@ -89,7 +86,7 @@ sealed class Status {
 
 Data и sealed классы решают специфические проблемы в типобезопасном программировании.
 
-### Преимущества Data классов
+### Преимущества Data Классов
 
 **1. Равенство по значению**
 ```kotlin
@@ -110,7 +107,7 @@ val updated = user.copy(age = 26)  // Новый экземпляр
 val (name, age) = user
 ```
 
-### Преимущества Sealed классов
+### Преимущества Sealed Классов
 
 **1. Типобезопасное управление состоянием**
 ```kotlin

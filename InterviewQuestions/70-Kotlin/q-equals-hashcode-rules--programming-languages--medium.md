@@ -3,7 +3,7 @@ id: lang-049
 title: "Equals Hashcode Rules / Правила equals и hashCode"
 aliases: [Equals Hashcode Rules, Правила equals и hashCode]
 topic: programming-languages
-subtopics: [object-methods, collections, equality]
+subtopics: [collections, equality, object-methods]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, object-methods, equality, collections, contracts, difficulty/medium]
+tags: [collections, contracts, difficulty/medium, equality, object-methods, programming-languages]
+date created: Friday, October 31st 2025, 6:29:51 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Какие Существуют Правила Для Методов Equals И Hashcode?
@@ -66,6 +68,6 @@ Methods `equals()` and `hashCode()` are important for correct operation of colle
 
 ## Related Questions
 
-- [[q-interpreter-pattern--design-patterns--hard]]
-- [[q-coroutine-context-essence--programming-languages--medium]]
-- [[q-oop-principles-deep-dive--computer-science--medium]]
+-
+-
+-

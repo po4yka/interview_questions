@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, sharedin, statein, hot-flows]
+subtopics: [coroutines, flow, hot-flows, sharedin, statein]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140019
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-java-type-differences--programming-languages--medium, q-what-is-coroutine--kotlin--easy, q-desugaring-android-java--kotlin--medium]
+related: [q-desugaring-android-java--kotlin--medium, q-kotlin-java-type-differences--programming-languages--medium, q-what-is-coroutine--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140019
 
@@ -145,7 +148,7 @@ val stateFlow = dataFlow
     )
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Функция | shareIn | stateIn |
 |---------|---------|---------|
@@ -154,7 +157,7 @@ val stateFlow = dataFlow
 | Replay | Настраиваемый | Всегда 1 |
 | Применение | События | Состояние |
 
-### Практический пример
+### Практический Пример
 ```kotlin
 class ViewModel : ViewModel() {
     // Состояние - используйте stateIn

@@ -10,22 +10,24 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-kmm-dependency-injection--multiplatform--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, q-what-does-itemdecoration-do--android--medium]
+related: [q-kmm-dependency-injection--multiplatform--medium, q-what-does-itemdecoration-do--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-views, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Что известно про RecyclerView?
+# Что Известно Про RecyclerView?
 
 **English**: What do you know about RecyclerView?
 
 ## Answer (EN)
 RecyclerView — это мощный компонент пользовательского интерфейса, предоставляемый библиотекой AndroidX, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена ListView.
 
-### Key features
+### Key Features
 
-#### 1. Efficient View recycling
+#### 1. Efficient View Recycling
 
 Uses ViewHolder pattern for efficient reuse of list items during scrolling.
 
@@ -38,7 +40,7 @@ class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 This improves performance for large lists since the number of created View objects is limited to only those visible to the user.
 
-#### 2. Flexible item display
+#### 2. Flexible Item Display
 
 Supports various layouts through LayoutManager API:
 
@@ -63,7 +65,7 @@ recyclerView.layoutManager = StaggeredGridLayoutManager(
 )
 ```
 
-#### 3. Change animations
+#### 3. Change Animations
 
 Built-in animation support for add, remove, and move operations.
 
@@ -83,7 +85,7 @@ class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
 }
 ```
 
-#### 4. Decorations and dividers
+#### 4. Decorations and Dividers
 
 ItemDecoration class makes it easy to add dividers between items.
 
@@ -97,7 +99,7 @@ class DividerItemDecoration : RecyclerView.ItemDecoration() {
 recyclerView.addItemDecoration(DividerItemDecoration())
 ```
 
-#### 5. Click event handling
+#### 5. Click Event Handling
 
 Unlike ListView, RecyclerView doesn't have built-in method for handling item clicks, providing more flexibility.
 
@@ -118,7 +120,7 @@ adapter.onItemClick = { position ->
 }
 ```
 
-### Key components
+### Key Components
 
 **Adapter** - responsible for binding data to ViewHolder and creating ViewHolder.
 
@@ -148,7 +150,7 @@ class MyAdapter(private val items: List<String>) :
 
 **ViewHolder** - holds references to all Views that need to be filled with data.
 
-### Complete example
+### Complete Example
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -188,9 +190,9 @@ class MainActivity : AppCompatActivity() {
 
 RecyclerView - это мощный компонент пользовательского интерфейса, предоставляемый библиотекой AndroidX, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена ListView.
 
-### Основные особенности
+### Основные Особенности
 
-#### 1. Эффективное повторное использование View
+#### 1. Эффективное Повторное Использование View
 
 Использует концепцию ViewHolder для эффективного повторного использования элементов списка при прокрутке.
 
@@ -203,7 +205,7 @@ class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 Это повышает производительность для больших списков, поскольку количество создаваемых объектов View ограничивается только теми, которые видны пользователю.
 
-#### 2. Гибкое отображение элементов
+#### 2. Гибкое Отображение Элементов
 
 Поддерживает различные компоновки через LayoutManager API:
 
@@ -228,7 +230,7 @@ recyclerView.layoutManager = StaggeredGridLayoutManager(
 )
 ```
 
-#### 3. Анимация изменений
+#### 3. Анимация Изменений
 
 Встроенная поддержка анимаций для операций добавления, удаления и перемещения элементов.
 
@@ -248,7 +250,7 @@ class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
 }
 ```
 
-#### 4. Декорации и разделители
+#### 4. Декорации И Разделители
 
 С помощью класса ItemDecoration можно легко добавлять разделители между элементами.
 
@@ -262,7 +264,7 @@ class DividerItemDecoration : RecyclerView.ItemDecoration() {
 recyclerView.addItemDecoration(DividerItemDecoration())
 ```
 
-#### 5. Обработка событий нажатий
+#### 5. Обработка Событий Нажатий
 
 В отличие от ListView, RecyclerView не имеет встроенного метода для обработки нажатий на элементы, что предоставляет больше гибкости.
 
@@ -283,7 +285,7 @@ adapter.onItemClick = { position ->
 }
 ```
 
-### Ключевые компоненты
+### Ключевые Компоненты
 
 **Adapter** - отвечает за связь данных с ViewHolder и создание ViewHolder.
 
@@ -313,7 +315,7 @@ class MyAdapter(private val items: List<String>) :
 
 **ViewHolder** - содержит ссылки на все View, которые необходимо заполнить данными.
 
-### Полный пример
+### Полный Пример
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -339,7 +341,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Преимущества перед ListView
+### Преимущества Перед ListView
 
 | Аспект | ListView | RecyclerView |
 |--------|----------|--------------|

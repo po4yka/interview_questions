@@ -11,23 +11,13 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - circuit-breaker
-  - resilience
-  - patterns
-  - error-handling
-  - production
-  - microservices
-  - difficulty/hard
+tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, microservices, patterns, production, resilience]
 moc: moc-kotlin
 related: [q-flatmap-variants-flow--kotlin--medium, q-flow-vs-livedata-comparison--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
-  - resilience
-  - patterns
-  - error-handling
-  - production
+date created: Saturday, November 1st 2025, 12:10:11 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Circuit Breaker Pattern with Coroutines
 
 **English** | [Русский](#russian-version)
@@ -82,19 +72,19 @@ The Circuit Breaker pattern prevents an application from repeatedly trying to ex
 The Circuit Breaker pattern is inspired by electrical circuit breakers that automatically stop the flow of electricity when a fault is detected.
 
 ```
-                  
-   Client       Circuit      Service   
-                         Breaker              (Backend)  
-                  
-                              
+
+   Client       Circuit      Service
+                         Breaker              (Backend)
+
+
                                Monitors failures
                                Controls access
                                Manages state
-                              
-                        
-                           State    
-                          Machine   
-                        
+
+
+                           State
+                          Machine
+
 ```
 
 ### Why Use Circuit Breaker?
@@ -148,14 +138,14 @@ class PaymentService(
 
 ```
 
-         CLOSED State                    
-  (Normal Operation)                     
-                                         
-  • All requests pass through            
-  • Failures are counted                 
-  • Success resets failure counter       
-  • When failures exceed threshold:      
-    → Transition to OPEN                 
+         CLOSED State
+  (Normal Operation)
+
+  • All requests pass through
+  • Failures are counted
+  • Success resets failure counter
+  • When failures exceed threshold:
+    → Transition to OPEN
 
 ```
 
@@ -184,14 +174,14 @@ sealed class CircuitBreakerState {
 
 ```
 
-         OPEN State                      
-  (Service is Down)                      
-                                         
-  • All requests fail immediately        
-  • No calls to backend service          
-  • Failure counter is at maximum        
-  • After timeout period:                
-    → Transition to HALF_OPEN            
+         OPEN State
+  (Service is Down)
+
+  • All requests fail immediately
+  • No calls to backend service
+  • Failure counter is at maximum
+  • After timeout period:
+    → Transition to HALF_OPEN
 
 ```
 
@@ -213,15 +203,15 @@ sealed class CircuitBreakerState {
 
 ```
 
-         HALF_OPEN State                 
-  (Testing Recovery)                     
-                                         
-  • Limited requests pass through        
-  • Testing if service recovered         
-  • On success:                          
-    → Transition to CLOSED               
-  • On failure:                          
-    → Transition back to OPEN            
+         HALF_OPEN State
+  (Testing Recovery)
+
+  • Limited requests pass through
+  • Testing if service recovered
+  • On success:
+    → Transition to CLOSED
+  • On failure:
+    → Transition back to OPEN
 
 ```
 
@@ -249,36 +239,36 @@ sealed class CircuitBreakerState {
 ## State Transition Diagram
 
 ```
-                    
-                       CLOSED    
-                      (Normal)                     
-                                      
-                                                    
+
+                       CLOSED
+                      (Normal)
+
+
                             Failure threshold        Success threshold
                             exceeded                 in HALF_OPEN
-                                                    
-                                                    
-                                      
-                        OPEN                       
-                      (Failing)                    
-                                      
-                                                    
-                            Timeout period          
-                            elapsed                 
-                                                    
-                                                    
-                                      
-                      HALF_OPEN  
-                      (Testing)  
-                    
-                           
+
+
+
+                        OPEN
+                      (Failing)
+
+
+                            Timeout period
+                            elapsed
+
+
+
+                      HALF_OPEN
+                      (Testing)
+
+
                             Failure
-                           
-                           
-                    
-                        OPEN     
-                      (Failing)  
-                    
+
+
+
+                        OPEN
+                      (Failing)
+
 ```
 
 **State Transitions:**
@@ -1283,7 +1273,7 @@ fun StateIndicator(state: CircuitBreakerState) {
 
 <a name="russian-version"></a>
 
-# Circuit Breaker паттерн с корутинами
+# Circuit Breaker Паттерн С Корутинами
 
 [English](#circuit-breaker-pattern-with-coroutines) | **Русский**
 
@@ -1327,13 +1317,13 @@ fun StateIndicator(state: CircuitBreakerState) {
 
 ---
 
-## Определение и мотивация паттерна
+## Определение И Мотивация Паттерна
 
-### Что такое Circuit Breaker?
+### Что Такое Circuit Breaker?
 
 Паттерн Circuit Breaker вдохновлён электрическими автоматическими выключателями, которые автоматически останавливают поток электричества при обнаружении неисправности.
 
-### Зачем использовать Circuit Breaker?
+### Зачем Использовать Circuit Breaker?
 
 **Проблема без Circuit Breaker:**
 
@@ -1377,9 +1367,9 @@ class PaymentService(
 
 ---
 
-## Три состояния
+## Три Состояния
 
-### Состояние: Closed (Закрыто - нормальная работа)
+### Состояние: Closed (Закрыто - Нормальная работа)
 
 **Пример кода:**
 
@@ -1408,7 +1398,7 @@ sealed class CircuitBreakerState {
 - Успех сбрасывает счётчик ошибок
 - При превышении порога → переход в OPEN
 
-### Состояние: Open (Открыто - сервис не работает)
+### Состояние: Open (Открыто - Сервис Не работает)
 
 **Пример кода:**
 
@@ -1459,7 +1449,7 @@ sealed class CircuitBreakerState {
 
 ---
 
-## Диаграмма переходов состояний {#диаграмма-переходов-состояний-ru}
+## Диаграмма Переходов Состояний {#диаграмма-переходов-состояний-ru}
 
 **Переходы состояний:**
 
@@ -1470,9 +1460,9 @@ sealed class CircuitBreakerState {
 
 ---
 
-## Конфигурация порога ошибок
+## Конфигурация Порога Ошибок
 
-### Базовая конфигурация
+### Базовая Конфигурация
 
 ```kotlin
 data class CircuitBreakerConfig(
@@ -1502,7 +1492,7 @@ data class CircuitBreakerConfig(
 )
 ```
 
-### Различные конфигурации для разных сервисов
+### Различные Конфигурации Для Разных Сервисов
 
 ```kotlin
 object CircuitBreakerConfigs {
@@ -1534,9 +1524,9 @@ object CircuitBreakerConfigs {
 
 ---
 
-## Тайм-ауты и период восстановления
+## Тайм-ауты И Период Восстановления
 
-### Конфигурация тайм-аута
+### Конфигурация Тайм-аута
 
 ```kotlin
 class CircuitBreaker(
@@ -1560,7 +1550,7 @@ class CircuitBreaker(
 }
 ```
 
-### Стратегии периода восстановления
+### Стратегии Периода Восстановления
 
 ```kotlin
 // Стратегия 1: Фиксированная задержка
@@ -1600,7 +1590,7 @@ interface RecoveryStrategy {
 
 ---
 
-## Механизм полуоткрытого состояния
+## Механизм Полуоткрытого Состояния
 
 ### Реализация
 
@@ -1651,9 +1641,9 @@ class CircuitBreaker(
 
 ---
 
-## Полная реализация {#полная-реализация-ru}
+## Полная Реализация {#полная-реализация-ru}
 
-### Полный класс Circuit Breaker
+### Полный Класс Circuit Breaker
 
 ```kotlin
 class CircuitBreaker(
@@ -1758,9 +1748,9 @@ class CircuitBreaker(
 
 ---
 
-## Потокобезопасные переходы состояний
+## Потокобезопасные Переходы Состояний
 
-### Использование AtomicReference и Mutex
+### Использование AtomicReference И Mutex
 
 ```kotlin
 class ThreadSafeCircuitBreaker(
@@ -1823,9 +1813,9 @@ class ThreadSafeCircuitBreaker(
 
 ---
 
-## Полный API клиент с Circuit Breaker
+## Полный API Клиент С Circuit Breaker
 
-### Retrofit API с Circuit Breaker обёрткой
+### Retrofit API С Circuit Breaker Обёрткой
 
 ```kotlin
 interface PaymentApi {
@@ -1877,7 +1867,7 @@ class PaymentService(
 
 ---
 
-## Комбинирование с Retry и Timeout
+## Комбинирование С Retry И Timeout
 
 ### Circuit Breaker + Retry + Timeout
 
@@ -1951,9 +1941,9 @@ data class RetryConfig(
 
 ---
 
-## Мониторинг состояния Circuit Breaker
+## Мониторинг Состояния Circuit Breaker
 
-### Мониторинг состояния в реальном времени
+### Мониторинг Состояния В Реальном Времени
 
 ```kotlin
 class CircuitBreakerMonitor(
@@ -1996,7 +1986,7 @@ class CircuitBreakerMonitor(
 
 ---
 
-## Лучшие практики {#лучшие-практики-ru}
+## Лучшие Практики {#лучшие-практики-ru}
 
 1. **Используйте разные конфигурации для разных типов сервисов**
    - Критические сервисы: низкий порог ошибок, быстрый сброс
@@ -2024,7 +2014,7 @@ class CircuitBreakerMonitor(
 
 ---
 
-## Когда НЕ использовать
+## Когда НЕ Использовать
 
 1. **Идемпотентные операции без побочных эффектов**
    - Простые запросы только на чтение
@@ -2040,7 +2030,7 @@ class CircuitBreakerMonitor(
 
 ---
 
-## Распространённые ошибки {#распространённые-ошибки-ru}
+## Распространённые Ошибки {#распространённые-ошибки-ru}
 
 1. **Слишком низкий порог ошибок**
    - Может привести к ложным срабатываниям

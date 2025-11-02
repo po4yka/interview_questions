@@ -1,22 +1,23 @@
 ---
 id: kotlin-177
 title: "Heap Pollution Generics / Загрязнение кучи дженериками"
-aliases: [Heap, Pollution, Generics]
+aliases: [Generics, Heap, Pollution]
 topic: kotlin
-subtopics: [flow, sealed-classes, inline-functions]
+subtopics: [flow, inline-functions, sealed-classes]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-requirements--programming-languages--medium, q-suspend-functions-basics--kotlin--easy, q-kotlin-class-initializers--programming-languages--medium]
+related: [q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/hard
+tags: [difficulty/hard]
+date created: Thursday, October 16th 2025, 12:35:35 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Heap Pollution (Загрязнение кучи)
 
 # Question (EN)
@@ -62,7 +63,7 @@ val list: List = listOf("A", "B", "C")  // Информация о <String> по
 
 Это приводит к тому, что во время выполнения невозможно проверить фактический тип дженерика.
 
-### Пример 1: Базовый случай Heap Pollution
+### Пример 1: Базовый Случай Heap Pollution
 
 ```kotlin
 fun heapPollutionExample() {
@@ -87,7 +88,7 @@ fun heapPollutionExample() {
 }
 ```
 
-### Пример 2: Проблема с Varargs
+### Пример 2: Проблема С Varargs
 
 ```kotlin
 // Небезопасный метод с varargs
@@ -115,7 +116,7 @@ fun testDangerousVarargs() {
 }
 ```
 
-### Пример 3: Проблема с Array<T> в Kotlin
+### Пример 3: Проблема С Array<T> В Kotlin
 
 ```kotlin
 fun <T> unsafeArrayCreation(size: Int, defaultValue: T): Array<T> {
@@ -139,9 +140,9 @@ fun testUnsafeArray() {
 }
 ```
 
-### Как избежать Heap Pollution
+### Как Избежать Heap Pollution
 
-#### Решение 1: Использовать reified в inline функциях
+#### Решение 1: Использовать Reified В Inline Функциях
 
 ```kotlin
 // БЕЗОПАСНО: reified позволяет сохранить информацию о типе
@@ -159,7 +160,7 @@ fun testSafeArray() {
 }
 ```
 
-#### Решение 2: Использовать List вместо Array
+#### Решение 2: Использовать List Вместо Array
 
 ```kotlin
 // БЕЗОПАСНО: List<T> в Kotlin неизменяемый
@@ -177,7 +178,7 @@ fun testSafeList() {
 }
 ```
 
-#### Решение 3: Передавать KClass для создания типизированных массивов
+#### Решение 3: Передавать KClass Для Создания Типизированных Массивов
 
 ```kotlin
 // БЕЗОПАСНО: явная передача информации о типе
@@ -197,7 +198,7 @@ fun testSafeTypedArray() {
 }
 ```
 
-### Пример 4: Проблема с коллекциями в Android
+### Пример 4: Проблема С Коллекциями В Android
 
 ```kotlin
 // ПЛОХО: Heap pollution в RecyclerView Adapter
@@ -267,7 +268,7 @@ class GoodAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 }
 ```
 
-### Пример 5: Проблема с Bundle в Android
+### Пример 5: Проблема С Bundle В Android
 
 ```kotlin
 // ПЛОХО: Heap pollution через Bundle
@@ -318,7 +319,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-### Предупреждения компилятора
+### Предупреждения Компилятора
 
 Kotlin компилятор выдаёт предупреждения при потенциальном heap pollution:
 
@@ -335,7 +336,7 @@ fun <T> varargsMethod(vararg items: T): Array<T> {
 }
 ```
 
-### Аннотации для подавления предупреждений
+### Аннотации Для Подавления Предупреждений
 
 ```kotlin
 // @SafeVarargs: гарантирует, что метод не создаёт heap pollution
@@ -355,7 +356,7 @@ fun <T> unsafeCast(obj: Any): T {
 
 ### Best Practices
 
-#### 1. Используйте неизменяемые коллекции
+#### 1. Используйте Неизменяемые Коллекции
 
 ```kotlin
 // ХОРОШО
@@ -369,7 +370,7 @@ fun createMutableList(): MutableList<String> {
 }
 ```
 
-#### 2. Избегайте raw types
+#### 2. Избегайте Raw Types
 
 ```kotlin
 // ПЛОХО
@@ -379,7 +380,7 @@ val list: MutableList = mutableListOf()  // Raw type
 val list: MutableList<String> = mutableListOf()  // Типизированный
 ```
 
-#### 3. Используйте sealed классы для разнородных данных
+#### 3. Используйте Sealed Классы Для Разнородных Данных
 
 ```kotlin
 // ХОРОШО
@@ -392,7 +393,7 @@ sealed class Result<out T> {
 data class MixedResult(val data: Any?, val error: Exception?)  // Any?!
 ```
 
-#### 4. Используйте inline + reified для типобезопасности
+#### 4. Используйте Inline + Reified Для Типобезопасности
 
 ```kotlin
 // ХОРОШО
@@ -404,7 +405,7 @@ inline fun <reified T> fromJson(json: String): T {
 val user: User = fromJson<User>(jsonString)
 ```
 
-### Проверка на heap pollution в runtime
+### Проверка На Heap Pollution В Runtime
 
 ```kotlin
 fun <T> checkHeapPollution(array: Array<T>, expectedClass: KClass<*>) {
@@ -455,6 +456,6 @@ fun test() {
 
 ## Related Questions
 
-- [[q-data-class-requirements--programming-languages--medium]]
+-
 - [[q-suspend-functions-basics--kotlin--easy]]
-- [[q-kotlin-class-initializers--programming-languages--medium]]
+-

@@ -1,7 +1,7 @@
 ---
 id: android-256
 title: "Which Event On Screen Press / Какое событие при нажатии на экран"
-aliases: ["Which Event On Screen Press", "Какое событие при нажатии на экран", "Touch Events", "MotionEvent", "События касания"]
+aliases: ["MotionEvent", "Touch Events", "Which Event On Screen Press", "Какое событие при нажатии на экран", "События касания"]
 topic: android
 subtopics: [ui-views]
 question_kind: android
@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-view-lifecycle, c-custom-views, q-custom-view-drawing--android--medium]
+related: [c-custom-views, c-gesture-detection, c-touch-events, c-view-lifecycle]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-views, touch-events, event-handling, motionevent, difficulty/easy]
+tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-events]
+date created: Saturday, November 1st 2025, 1:26:26 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -106,7 +108,7 @@ view.setOnTouchListener { _, e -> e.action == MotionEvent.ACTION_DOWN }
 - [[c-view-lifecycle]]
 
 ### Same Level
-- [[q-custom-view-drawing--android--medium]]
+- [[q-custom-view-animation--android--medium]]
 - [[q-list-elements-problems--android--medium]]
 
 ### Advanced

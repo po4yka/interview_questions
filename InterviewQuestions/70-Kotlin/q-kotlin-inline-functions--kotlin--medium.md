@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [inline-functions, performance, lambdas, reified, optimization]
+subtopics: [inline-functions, lambdas, optimization, performance, reified]
 question_kind: theory
 difficulty: medium
 
@@ -18,13 +18,15 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lambda-expressions--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium, q-reified-type-parameters--kotlin--medium, q-crossinline-keyword--kotlin--medium, q-inline-function-limitations--kotlin--medium]
+related: [q-crossinline-keyword--kotlin--medium, q-inline-function-limitations--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium, q-reified-type-parameters--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, inline-functions, performance, lambdas, reified, optimization, difficulty/medium]
+tags: [difficulty/medium, inline-functions, kotlin, lambdas, optimization, performance, reified]
+date created: Sunday, October 12th 2025, 2:02:58 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Question (EN)
@@ -421,7 +423,7 @@ val list = mutableListOf(1, 2, 3)
     .alsoIf(shouldSort) { it.sort() }
 ```
 
-### The noinline Modifier
+### The Noinline Modifier
 
 Sometimes you need to prevent specific lambda parameters from being inlined:
 
@@ -489,7 +491,7 @@ inline fun <T, R> List<T>.myMap(
 }
 ```
 
-### The crossinline Modifier
+### The Crossinline Modifier
 
 `crossinline` prevents non-local returns in lambdas that are called in a different context:
 
@@ -572,7 +574,7 @@ fun processData() {
 }
 ```
 
-### Combining noinline and crossinline
+### Combining Noinline and Crossinline
 
 ```kotlin
 inline fun complexOperation(
@@ -618,7 +620,7 @@ inline fun largeFunction(block: () -> Unit) {
 
 **Guideline**: Only inline small functions (typically 1-3 lines) or functions with lambda parameters.
 
-#### 2. Can't Be Virtual (open, override, abstract)
+#### 2. Can't Be Virtual (open, Override, abstract)
 
 ```kotlin
 open class Base {
@@ -840,7 +842,7 @@ inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
 }
 ```
 
-#### 2. Forgetting noinline
+#### 2. Forgetting Noinline
 
 ```kotlin
 //  Doesn't compile
@@ -854,7 +856,7 @@ inline fun registerHandler(noinline handler: () -> Unit) {
 }
 ```
 
-#### 3. Unnecessary crossinline
+#### 3. Unnecessary Crossinline
 
 ```kotlin
 //  Unnecessary - lambda not used in different context
@@ -943,7 +945,7 @@ inline fun <T> retry(
 
 Inline функции - это мощная возможность Kotlin, которая инструктирует компилятор вставлять байт-код функции непосредственно в место вызова вместо создания отдельного вызова функции. Это устраняет накладные расходы на вызов функции и позволяет использовать продвинутые возможности, такие как реифицированные параметры типов.
 
-### Зачем нужны Inline функции
+### Зачем Нужны Inline Функции
 
 В Kotlin лямбда-выражения обычно компилируются в экземпляры анонимных классов (Function0, Function1 и т.д.). Каждая лямбда создает объект, который:
 1. Выделяет память в куче
@@ -994,7 +996,7 @@ for (int i = 0; i < 5; i++) {
 }
 ```
 
-### Как работают Inline функции
+### Как Работают Inline Функции
 
 Компилятор выполняет **копирование-вставку** как тела функции, так и тел лямбд в место вызова:
 
@@ -1020,9 +1022,9 @@ val end = System.nanoTime()
 val time = end - start
 ```
 
-### Преимущества Inline функций
+### Преимущества Inline Функций
 
-#### 1. Устраняет накладные расходы на вызов функций
+#### 1. Устраняет Накладные Расходы На Вызов Функций
 
 ```kotlin
 // Бенчмарк производительности
@@ -1055,7 +1057,7 @@ fun benchmark() {
 }
 ```
 
-#### 2. Избегает выделения объектов для лямбд
+#### 2. Избегает Выделения Объектов Для Лямбд
 
 ```kotlin
 // Сравнение выделения памяти
@@ -1076,7 +1078,7 @@ class MemoryTest {
 // processItemsInline: Ноль выделений → Нет влияния на GC
 ```
 
-#### 3. Позволяет использовать реифицированные параметры типов
+#### 3. Позволяет Использовать Реифицированные Параметры Типов
 
 Только inline функции могут использовать `reified`, что дает доступ к информации о типе во время выполнения:
 
@@ -1107,7 +1109,7 @@ inline fun <reified T> Gson.fromJson(json: String): T {
 val user: User = gson.fromJson<User>(jsonString)
 ```
 
-#### 4. Разрешает нелокальные возвраты
+#### 4. Разрешает Нелокальные Возвраты
 
 В inline функциях лямбда может использовать `return` для выхода из охватывающей функции:
 
@@ -1126,9 +1128,9 @@ val result = findFirstNegative(listOf(1, 2, -3, 4))
 // Возвращает -3 и выходит из всей функции
 ```
 
-### Полные практические примеры
+### Полные Практические Примеры
 
-#### Пример 1: Реализация синхронизированного блока
+#### Пример 1: Реализация Синхронизированного Блока
 
 ```kotlin
 // Реализация из стандартной библиотеки
@@ -1188,7 +1190,7 @@ fun readFirstLine(path: String): String {
 }
 ```
 
-#### Пример 3: Измерение и профилирование
+#### Пример 3: Измерение И Профилирование
 
 ```kotlin
 inline fun <T> measureTimeMillis(block: () -> T): Pair<T, Long> {
@@ -1219,7 +1221,7 @@ inline fun <T> measureMemory(block: () -> T): Pair<T, Long> {
 }
 ```
 
-### Модификатор noinline
+### Модификатор Noinline
 
 Иногда нужно предотвратить встраивание конкретных параметров-лямбд:
 
@@ -1235,7 +1237,7 @@ inline fun performOperation(
 
 **Когда использовать noinline**:
 
-#### 1. Сохранение лямбды для последующего использования
+#### 1. Сохранение Лямбды Для Последующего Использования
 
 ```kotlin
 class EventBus {
@@ -1252,7 +1254,7 @@ class EventBus {
 }
 ```
 
-#### 2. Передача лямбды в не-inline функцию
+#### 2. Передача Лямбды В Не-inline Функцию
 
 ```kotlin
 inline fun processAsync(
@@ -1267,7 +1269,7 @@ inline fun processAsync(
 }
 ```
 
-### Модификатор crossinline
+### Модификатор Crossinline
 
 `crossinline` предотвращает нелокальные возвраты в лямбдах, которые вызываются в другом контексте:
 
@@ -1287,9 +1289,9 @@ fun test() {
 }
 ```
 
-### Ограничения и соображения
+### Ограничения И Соображения
 
-#### 1. Увеличение размера кода
+#### 1. Увеличение Размера Кода
 
 Встраивание копирует код в каждое место вызова, увеличивая размер байт-кода:
 
@@ -1311,7 +1313,7 @@ inline fun largeFunction(block: () -> Unit) {
 
 **Рекомендация**: Встраивайте только маленькие функции (обычно 1-3 строки) или функции с параметрами-лямбдами.
 
-#### 2. Не может быть виртуальной (open, override, abstract)
+#### 2. Не Может Быть Виртуальной (open, Override, abstract)
 
 ```kotlin
 open class Base {
@@ -1324,9 +1326,9 @@ open class Base {
 
 **Причина**: Встраивание происходит во время компиляции, но виртуальная диспетчеризация - во время выполнения.
 
-### Анализ производительности
+### Анализ Производительности
 
-#### Бенчмарк: Накладные расходы функций высшего порядка
+#### Бенчмарк: Накладные Расходы Функций Высшего Порядка
 
 ```kotlin
 fun benchmarkInlinePerformance() {
@@ -1372,7 +1374,7 @@ fun benchmarkInlinePerformance() {
 }
 ```
 
-### Когда использовать Inline функции
+### Когда Использовать Inline Функции
 
  **ИСПОЛЬЗУЙТЕ inline для**:
 - Функций высшего порядка с параметрами-лямбдами
@@ -1389,7 +1391,7 @@ fun benchmarkInlinePerformance() {
 - Функций, где выделение лямбды незначительно
 - Функций публичного API (нельзя изменить сигнатуру позже)
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Встраивайте маленькие, часто вызываемые функции**
 2. **Используйте noinline когда лямбду нужно сохранить**
@@ -1397,9 +1399,9 @@ fun benchmarkInlinePerformance() {
 4. **Предпочитайте inline для DSL построителей**
 5. **Будьте осторожны с публичным API**
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
-#### 1. Избыточное встраивание
+#### 1. Избыточное Встраивание
 
 ```kotlin
 //  Плохо - большая функция, редко вызывается
@@ -1417,7 +1419,7 @@ inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
 }
 ```
 
-#### 2. Забытый noinline
+#### 2. Забытый Noinline
 
 ```kotlin
 //  Не компилируется
@@ -1431,7 +1433,7 @@ inline fun registerHandler(noinline handler: () -> Unit) {
 }
 ```
 
-#### 3. Ненужный crossinline
+#### 3. Ненужный Crossinline
 
 ```kotlin
 //  Ненужный - лямбда не используется в другом контексте
@@ -1445,9 +1447,9 @@ inline fun simpleOperation(block: () -> Unit) {
 }
 ```
 
-### Примеры из реального мира
+### Примеры Из Реального Мира
 
-#### Примеры из стандартной библиотеки
+#### Примеры Из Стандартной Библиотеки
 
 ```kotlin
 // 1. Операции с коллекциями

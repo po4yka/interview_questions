@@ -3,7 +3,7 @@ id: android-021
 title: Modifier System in Compose / Система Modifier в Compose
 aliases: [Modifier System in Compose, Система Modifier в Compose]
 topic: android
-subtopics: [ui-compose, performance-memory]
+subtopics: [performance-memory, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,16 +11,16 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
+  - q-android-performance-measurement-tools--android--medium
   - q-animated-visibility-vs-content--android--medium
   - q-compose-compiler-plugin--android--hard
   - q-compose-gesture-detection--android--medium
-  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-06
 updated: 2025-10-30
-tags: [android/ui-compose, android/performance-memory, difficulty/medium]
+tags: [android/performance-memory, android/ui-compose, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/modifiers]
 date created: Thursday, October 30th 2025, 11:23:05 am
-date modified: Thursday, October 30th 2025, 12:43:46 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:43:46 pm
 
 ## Ответ (RU)
 
-### Концепция и архитектура
+### Концепция И Архитектура
 
 Modifier — упорядоченная неизменяемая цепочка декораторов, применяемая к Composable-функциям. Каждый элемент цепочки влияет на фазы measure, layout и draw, образуя конвейер трансформаций.
 
@@ -41,7 +41,7 @@ Modifier — упорядоченная неизменяемая цепочка 
 - **Measure/Layout** (сверху вниз): внешний → внутренний. Каждый Modifier получает ограничения (constraints) от предыдущего и передает их следующему.
 - **Draw** (снизу вверх): внутренний → внешний. Поздние Modifier рисуются поверх ранних.
 
-### Критическое влияние порядка
+### Критическое Влияние Порядка
 
 **Padding и background**:
 ```kotlin
@@ -111,7 +111,7 @@ val modifier = Modifier
   .then(if (isSelected) Modifier.border(2.dp, Color.Blue) else Modifier)
 ```
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 - **Draw-only modifiers** предпочтительнее layout modifiers для визуальных эффектов (избегают перекомпоновки layout-фазы).
 - Используйте `remember {}` для дорогих вычислений внутри Modifier.
@@ -217,7 +217,7 @@ val modifier = Modifier
 
 - [[c-jetpack-compose]]
 - [[c-compose-recomposition]]
-- [[c-android-performance-optimization]]
+- [[c-performance-optimization]]
 - https://developer.android.com/jetpack/compose/modifiers
 - https://developer.android.com/jetpack/compose/modifiers-list
 - https://developer.android.com/develop/ui/compose/performance
@@ -226,13 +226,11 @@ val modifier = Modifier
 
 ### Prerequisites (Easier)
 - [[q-android-jetpack-overview--android--easy]]
-- [[q-compose-basics--android--easy]]
 
 ### Related (Same Level)
 - [[q-animated-visibility-vs-content--android--medium]]
 - [[q-compose-gesture-detection--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
-- [[q-compose-recomposition-optimization--android--medium]]
 
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]]

@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-140000
 title: Repository Pattern / Паттерн Repository
-aliases: [Repository Pattern, Repository, Паттерн Repository]
+aliases: [Repository, Repository Pattern, Паттерн Repository]
 kind: concept
 summary: Abstraction layer that mediates between data sources and business logic
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, architecture-patterns, repository, clean-architecture, data-layer]
+tags: [architecture-patterns, clean-architecture, concept, data-layer, repository]
+date created: Thursday, October 30th 2025, 12:29:27 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -64,7 +66,7 @@ ViewModel → Repository → [RemoteDataSource, LocalDataSource, CacheManager]
 
 ---
 
-## Architecture Position / Позиция в архитектуре
+## Architecture Position / Позиция В Архитектуре
 
 **Clean Architecture Layers** (EN):
 ```
@@ -102,7 +104,7 @@ Data Sources (Network API, Local DB, SharedPreferences)
 
 ---
 
-## Code Example / Пример кода
+## Code Example / Пример Кода
 
 ```kotlin
 // Data model
@@ -182,7 +184,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 ---
 
-## Best Practices / Лучшие практики
+## Best Practices / Лучшие Практики
 
 **EN**:
 1. **Use sealed classes/Result wrapper**: Handle success, error, and loading states explicitly

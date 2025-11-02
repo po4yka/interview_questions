@@ -3,7 +3,7 @@ id: lang-094
 title: "Kotlin Java Primitives / Примитивы Kotlin и Java"
 aliases: [Kotlin Java Primitives, Примитивы Kotlin и Java]
 topic: programming-languages
-subtopics: [type-system, null-safety]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,15 +13,12 @@ moc: moc-kotlin
 related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-init-block-features--programming-languages--easy, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - java
-  - primitives
-  - types
-  - wrappers
-  - difficulty/medium
+tags: [difficulty/medium, java, primitives, programming-languages, types, wrappers]
+date created: Friday, October 31st 2025, 6:30:30 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какие примитивы есть в Kotlin, а какие в Java?
+
+# Какие Примитивы Есть В Kotlin, А Какие В Java?
 
 # Question (EN)
 > What primitives exist in Kotlin and Java?
@@ -147,7 +144,7 @@ fun addNullable(a: Int?, b: Int?): Int? {
 // Uses wrapper classes internally
 ```
 
-### When Kotlin Uses Primitives vs Wrappers
+### When Kotlin Uses Primitives Vs Wrappers
 
 **Compiles to JVM primitives:**
 - Non-nullable types in local variables
@@ -184,7 +181,7 @@ val boxedArray: Array<Int> = arrayOf(1)  // Integer[] (wrapper array)
 
 Kotlin и Java используют разные подходы к примитивным типам данных. Java имеет явные примитивы, а Kotlin предоставляет унифицированную систему типов.
 
-### Java примитивы
+### Java Примитивы
 
 Java содержит **8 примитивных типов** и соответствующие классы-обертки:
 
@@ -264,9 +261,9 @@ println(a == b)   // true (всегда сравнение значений!)
 println(a === b)  // зависит от оптимизации (сравнение ссылок)
 ```
 
-### Ключевые различия
+### Ключевые Различия
 
-#### 1. Унифицированная система типов
+#### 1. Унифицированная Система Типов
 
 **Kotlin:**
 ```kotlin
@@ -304,7 +301,7 @@ public double identityDouble(double value) { return value; }
 // Или использовать обертки везде (потеря производительности)
 ```
 
-#### 2. Nullable типы
+#### 2. Nullable Типы
 
 **Kotlin:**
 ```kotlin
@@ -344,7 +341,7 @@ if (wrapper != null) {
 // Нет различия на уровне типов для null-safety
 ```
 
-#### 3. Методы на "примитивах"
+#### 3. Методы На "примитивах"
 
 **Kotlin:**
 ```kotlin
@@ -385,7 +382,7 @@ int max = Math.max(5, 10);
 int abs = Math.abs(-5);
 ```
 
-#### 4. Когда Kotlin использует примитивы vs обертки
+#### 4. Когда Kotlin Использует Примитивы Vs Обертки
 
 **Компилируется в JVM примитивы:**
 ```kotlin
@@ -435,7 +432,7 @@ public Integer calculate(int a, Integer b) {
 }
 ```
 
-### Массивы - особый случай
+### Массивы - Особый Случай
 
 **Kotlin:**
 ```kotlin
@@ -521,7 +518,7 @@ val list = List(1_000_000) { 0 }
 // Нельзя изменить элементы напрямую
 ```
 
-### Unsigned типы (Kotlin 1.3+)
+### Unsigned Типы (Kotlin 1.3+)
 
 Kotlin добавляет беззнаковые типы (недоступны в Java):
 
@@ -544,7 +541,7 @@ println(UByte.MAX_VALUE)  // 255
 println(UInt.MAX_VALUE)   // 4294967295
 ```
 
-### Взаимодействие с Java
+### Взаимодействие С Java
 
 **Из Kotlin вызов Java:**
 ```kotlin
@@ -571,7 +568,7 @@ int[] array = kotlinObject.getNumbers();  // Примитивный массив
 Integer[] boxedArray = kotlinObject.getBoxed();  // Массив объектов
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Аспект | Java | Kotlin |
 |--------|------|--------|

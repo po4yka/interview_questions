@@ -1,22 +1,22 @@
 ---
 id: net-005
 title: "Network Request Deduplication / Дедупликация сетевых запросов"
-aliases: [Network Request Deduplication, Дедупликация сетевых запросов, Request Deduplication, Дедупликация запросов]
+aliases: [Network Request Deduplication, Request Deduplication, Дедупликация запросов, Дедупликация сетевых запросов]
 topic: networking
-subtopics: [optimization, concurrency, caching]
+subtopics: [caching, concurrency, optimization]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-flow, q-retrofit-call-adapter-advanced--networking--medium, q-data-sync-unstable-network--android--hard]
+related: [c-coroutines, c-flow, q-data-sync-unstable-network--android--hard, q-retrofit-call-adapter-advanced--networking--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [networking, optimization, deduplication, concurrency, performance, caching, difficulty/hard]
+tags: [caching, concurrency, deduplication, difficulty/hard, networking, optimization, performance]
 date created: Tuesday, October 28th 2025, 9:50:49 pm
-date modified: Thursday, October 30th 2025, 3:15:08 pm
+date modified: Saturday, November 1st 2025, 5:44:12 pm
 ---
 
 # Вопрос (RU)
@@ -44,9 +44,9 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-### Стратегии дедупликации
+### Стратегии Дедупликации
 
-#### 1. Дедупликация на основе Mutex
+#### 1. Дедупликация На Основе Mutex
 
 Простой подход: только одна корутина может выполнять запрос для конкретного ключа.
 
@@ -61,7 +61,7 @@ class MutexDeduplicator {
 }
 ```
 
-#### 2. Дедупликация на основе Deferred
+#### 2. Дедупликация На Основе Deferred
 
 Эффективнее для множества одновременных вызывающих.
 
@@ -83,7 +83,7 @@ class DeferredDeduplicator(private val scope: CoroutineScope) {
 }
 ```
 
-### Паттерн Cache-Aside с дедупликацией
+### Паттерн Cache-Aside С Дедупликацией
 
 ```kotlin
 class CacheAsideRepository<K, V>(
@@ -108,7 +108,7 @@ class CacheAsideRepository<K, V>(
 }
 ```
 
-### Debouncing и Throttling
+### Debouncing И Throttling
 
 ```kotlin
 // Debouncing: ждать период тишины перед выполнением
@@ -138,7 +138,7 @@ class Throttler {
 }
 ```
 
-### Полный Repository с дедупликацией
+### Полный Repository С Дедупликацией
 
 ```kotlin
 class OptimizedUserRepository(
@@ -197,7 +197,7 @@ class OptimizedUserRepository(
    searchDebouncer.debounce(300L) { searchUsers(query) }
    ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Не обработка ошибок и очистка

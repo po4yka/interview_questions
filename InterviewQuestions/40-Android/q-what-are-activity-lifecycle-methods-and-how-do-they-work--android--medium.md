@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-fragment-lifecycle, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard]
+related: [c-activity-lifecycle, c-fragment-lifecycle, q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/lifecycle, lifecycle, onCreate, onStart, onResume, difficulty/medium]
+tags: [android/activity, android/lifecycle, difficulty/medium, lifecycle, onCreate, onResume, onStart]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What are Activity lifecycle methods and how do they work?
+# What Are Activity Lifecycle Methods and how Do They Work?
 
 ## Answer (EN)
 Activity lifecycle methods are callback functions that the Android system calls at different stages of an Activity's life. Understanding these methods is crucial for proper resource management, state preservation, and creating a smooth user experience.
@@ -25,36 +27,36 @@ Activity lifecycle methods are callback functions that the Android system calls 
 
 ```
 
-   Activity Launched 
+   Activity Launched
 
            ↓
-     
+
      onCreate() ← Activity is being created
-     
+
           ↓
-     
+
      onStart()  ← Activity is becoming visible
-     
+
           ↓
-     
+
      onResume()  ← Activity is in foreground and interactive
-     
+
           ↓
-   
+
     Running State
-   
+
           ↓
-     
+
      onPause()  ← Activity is losing focus
-     
+
           ↓
-     
+
      onStop()   ← Activity is no longer visible
-     
+
           ↓
-     
+
      onDestroy()  ← Activity is being destroyed
-     
+
 ```
 
 ### Complete Lifecycle Methods

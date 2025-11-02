@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, lifecycle, viewmodelscope, lifecyclescope, android]
+subtopics: [android, coroutines, lifecycle, lifecyclescope, viewmodelscope]
 question_kind: theory
 difficulty: hard
 
@@ -18,13 +18,15 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
+related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, lifecycle, viewmodelscope, lifecyclescope, android, difficulty/hard]
+tags: [android, coroutines, difficulty/hard, kotlin, lifecycle, lifecyclescope, viewmodelscope]
+date created: Sunday, October 12th 2025, 2:12:24 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Question (EN)
@@ -288,7 +290,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-#### Fragment Lifecycle vs View Lifecycle
+#### Fragment Lifecycle Vs View Lifecycle
 
 ```kotlin
 class ImportantFragment : Fragment() {
@@ -957,7 +959,7 @@ class MyViewModel(
 
 Корутины с учетом жизненного цикла автоматически управляют отменой корутин на основе событий жизненного цикла Android, предотвращая утечки памяти и уменьшая шаблонный код.
 
-### Проблема без учета жизненного цикла
+### Проблема Без Учета Жизненного Цикла
 
 ```kotlin
 //  ПЛОХО: Ручное управление жизненным циклом
@@ -984,7 +986,7 @@ class OldFragment : Fragment() {
 // 4. Риск утечек памяти
 ```
 
-### Области видимости корутин с учетом жизненного цикла
+### Области Видимости Корутин С Учетом Жизненного Цикла
 
 Android предоставляет три основные области видимости:
 
@@ -994,7 +996,7 @@ Android предоставляет три основные области вид
 | **lifecycleScope** | Lifecycle уничтожен | Обновления UI, одноразовые операции | Когда lifecycle уничтожен |
 | **repeatOnLifecycle** | Конкретное состояние | Сбор Flow, непрерывные обновления | При выходе из состояния |
 
-### 1. viewModelScope - Жизненный цикл ViewModel
+### 1. viewModelScope - Жизненный Цикл ViewModel
 
 ```kotlin
 class UserViewModel(
@@ -1019,7 +1021,7 @@ class UserViewModel(
 }
 ```
 
-#### Лучшие практики viewModelScope
+#### Лучшие Практики viewModelScope
 
 ```kotlin
 class ProductViewModel(
@@ -1048,7 +1050,7 @@ class ProductViewModel(
 }
 ```
 
-### 2. lifecycleScope - Область владельца жизненного цикла
+### 2. lifecycleScope - Область Владельца Жизненного Цикла
 
 ```kotlin
 class ProfileFragment : Fragment() {
@@ -1074,7 +1076,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-### 3. repeatOnLifecycle - Сбор с учетом состояния
+### 3. repeatOnLifecycle - Сбор С Учетом Состояния
 
 ```kotlin
 class NewsFragment : Fragment() {
@@ -1130,9 +1132,9 @@ class GoodFragment : Fragment() {
 }
 ```
 
-### Изменения конфигурации и Process Death
+### Изменения Конфигурации И Process Death
 
-#### Переживание изменений конфигурации
+#### Переживание Изменений Конфигурации
 
 ```kotlin
 //  ViewModel переживает изменения конфигурации
@@ -1174,7 +1176,7 @@ class DataFragment : Fragment() {
 }
 ```
 
-#### Восстановление после Process Death
+#### Восстановление После Process Death
 
 ```kotlin
 class CheckoutViewModel(
@@ -1195,7 +1197,7 @@ class CheckoutViewModel(
 }
 ```
 
-### Предотвращение утечек памяти
+### Предотвращение Утечек Памяти
 
 ```kotlin
 //  ПЛОХО: GlobalScope создает утечки
@@ -1219,7 +1221,7 @@ class SafeViewModel : ViewModel() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте viewModelScope для бизнес-логики**
 2. **Используйте viewLifecycleOwner.lifecycleScope во Fragments**

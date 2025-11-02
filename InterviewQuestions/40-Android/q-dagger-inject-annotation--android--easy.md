@@ -3,20 +3,20 @@ id: android-463
 title: Dagger Inject Annotation / Аннотация Inject Dagger
 aliases: ["Dagger Inject Annotation", "Аннотация Inject Dagger"]
 topic: android
-subtopics: [di-hilt, dependency-management]
+subtopics: [dependency-management, di-hilt]
 question_kind: android
 difficulty: easy
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-dagger-field-injection--android--medium, q-dagger-framework-overview--android--hard, q-hilt-components-scope--android--medium, c-dependency-injection, c-dagger]
+related: [c-dagger, c-dependency-injection, q-dagger-field-injection--android--medium, q-dagger-framework-overview--android--hard, q-hilt-components-scope--android--medium]
 created: 2025-10-20
 updated: 2025-10-30
 sources: []
-tags: [android/di-hilt, android/dependency-management, dagger, hilt, dependency-injection, difficulty/easy]
+tags: [android/dependency-management, android/di-hilt, dagger, dependency-injection, difficulty/easy, hilt]
 date created: Thursday, October 30th 2025, 12:02:51 pm
-date modified: Thursday, October 30th 2025, 12:47:27 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -73,7 +73,7 @@ class AnalyticsTracker @Inject constructor() {
 }
 ```
 
-### Hilt и Field Injection
+### Hilt И Field Injection
 
 Hilt автоматизирует инъекцию в Android-компоненты через `@AndroidEntryPoint`:
 

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, async, await, parallel, networking]
+subtopics: [async, await, coroutines, networking, parallel]
 question_kind: coding
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [coroutines, async-await, structured-concurrency, networking]
+related: [async-await, coroutines, networking, structured-concurrency]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-31
 
-tags: [kotlin, coroutines, async, parallel, networking, performance, difficulty/medium]
+tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, performance]
+date created: Saturday, November 1st 2025, 9:25:31 am
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > How do you make multiple network calls in parallel using Kotlin coroutines?
 # Вопрос (RU)
@@ -484,7 +487,7 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 
 Выполнение параллельных сетевых запросов - распространенное требование в Android приложениях для улучшения производительности и сокращения времени загрузки.
 
-### 1. Использование `async` и `await`
+### 1. Использование `async` И `await`
 
 ```kotlin
 suspend fun fetchUserData(userId: String): UserData = coroutineScope {
@@ -502,7 +505,7 @@ suspend fun fetchUserData(userId: String): UserData = coroutineScope {
 }
 ```
 
-### 2. Обработка частичных ошибок
+### 2. Обработка Частичных Ошибок
 
 ```kotlin
 suspend fun fetchUserDataWithErrorHandling(userId: String) = coroutineScope {
@@ -517,7 +520,7 @@ suspend fun fetchUserDataWithErrorHandling(userId: String) = coroutineScope {
 }
 ```
 
-### 3. Использование `awaitAll` для коллекций
+### 3. Использование `awaitAll` Для Коллекций
 
 ```kotlin
 suspend fun fetchMultipleUsers(userIds: List<String>): List<User> = coroutineScope {
@@ -527,7 +530,7 @@ suspend fun fetchMultipleUsers(userIds: List<String>): List<User> = coroutineSco
 }
 ```
 
-### 4. Ограничение параллельных запросов
+### 4. Ограничение Параллельных Запросов
 
 ```kotlin
 class ThrottledApiClient(maxConcurrent: Int = 5) {
@@ -544,7 +547,7 @@ class ThrottledApiClient(maxConcurrent: Int = 5) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### - ДЕЛАЙТЕ:
 
@@ -558,7 +561,7 @@ class ThrottledApiClient(maxConcurrent: Int = 5) {
 - Не игнорируйте отмену
 - Не await в неправильном порядке
 
-### Сравнение производительности
+### Сравнение Производительности
 
 - **Последовательно**: ~3 секунды (1s + 1s + 1s)
 - **Параллельно**: ~1 секунда (макс. из трех запросов)

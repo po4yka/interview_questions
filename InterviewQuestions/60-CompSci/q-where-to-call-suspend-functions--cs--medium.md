@@ -3,18 +3,20 @@ id: cs-032
 title: "Where to Call Suspend Functions / Где можно вызывать suspend-функции"
 aliases: ["Suspend Functions Call Context", "Контекст вызова suspend-функций"]
 topic: cs
-subtopics: [coroutines, suspend-functions, async-programming]
+subtopics: [async-programming, coroutines, suspend-functions]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-how-to-create-suspend-function--programming-languages--medium, q-coroutine-context-essence--programming-languages--medium, q-launch-vs-async-await--programming-languages--medium]
+related: [q-how-to-create-suspend-function--programming-languages--medium, q-launch-vs-async-await--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [kotlin, coroutines, suspend-functions, async-programming, difficulty/medium]
+tags: [async-programming, coroutines, difficulty/medium, kotlin, suspend-functions]
 sources: [https://kotlinlang.org/docs/composing-suspending-functions.html]
+date created: Saturday, November 1st 2025, 1:26:12 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -353,7 +355,6 @@ fun regularFunctionFixed() {
 
 ### Related (Same Level)
 - [[q-how-to-create-suspend-function--programming-languages--medium]] - Creating suspend functions
-- [[q-coroutine-context-essence--programming-languages--medium]] - Coroutine context
 - [[q-launch-vs-async-await--programming-languages--medium]] - launch vs async
 
 ### Advanced (Harder)

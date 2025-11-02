@@ -13,17 +13,17 @@ moc: moc-android
 related:
   - c-compose-recomposition
   - c-compose-stability
+  - q-android-performance-measurement-tools--android--medium
   - q-compose-compiler-plugin--android--hard
   - q-compose-lazy-layout-optimization--android--hard
-  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources:
-  - https://developer.android.com/jetpack/compose/performance
   - https://developer.android.com/jetpack/compose/mental-model
+  - https://developer.android.com/jetpack/compose/performance
 date created: Thursday, October 30th 2025, 11:23:16 am
-date modified: Thursday, October 30th 2025, 12:43:49 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +38,7 @@ date modified: Thursday, October 30th 2025, 12:43:49 pm
 
 ## Ответ (RU)
 
-### Принципы оптимизации
+### Принципы Оптимизации
 
 1. **Минимизация области рекомпозиции** — разбивать UI на мелкие компоненты, наблюдать за гранулярным состоянием
 2. **Стабильность входных данных** — использовать immutable/@Stable классы, стабильные колбэки
@@ -47,7 +47,7 @@ date modified: Thursday, October 30th 2025, 12:43:49 pm
 5. **Снижение аллокаций** — кэшировать shapes/brushes/painters, избегать создания объектов в composable
 6. **Измерение** — Layout Inspector, Perfetto, compiler metrics для валидации оптимизаций
 
-### Ключевые техники
+### Ключевые Техники
 
 **1. Гранулярное наблюдение состояния**
 
@@ -116,7 +116,7 @@ LazyColumn {
 }
 ```
 
-### Инструменты измерения
+### Инструменты Измерения
 
 - **Layout Inspector** — счетчики рекомпозиции, пропусков, visual bounds
 - **Perfetto/Systrace** — frame timing, jank detection, correlation со всплесками
@@ -234,7 +234,6 @@ LazyColumn {
 ### Prerequisites (Easier)
 
 - [[q-android-performance-measurement-tools--android--medium]]
-- [[q-compose-state-management--android--medium]]
 
 ### Related (Same Level)
 

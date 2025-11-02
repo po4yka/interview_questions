@@ -5,7 +5,7 @@ aliases: ["What Are Px Dp Sp", "Что такое px dp и sp"]
 
 # Classification
 topic: android
-subtopics: [ui-views, ui-theming]
+subtopics: [ui-theming, ui-views]
 question_kind: theory
 difficulty: easy
 
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-density-independent-pixels, q-how-to-add-custom-attributes-to-custom-view--android--medium]
+related: [c-density-independent-pixels, c-dimension-units]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android/ui-views, android/ui-theming, dp, sp, measurement-units, accessibility, difficulty/easy]
+tags: [accessibility, android/ui-theming, android/ui-views, difficulty/easy, dp, measurement-units, sp]
+date created: Saturday, November 1st 2025, 1:24:45 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +49,7 @@ Android использует три основные единицы измере
 
 **sp (scale-independent pixels)** — масштабируемые пиксели для текста. Как dp, но также учитывает настройки размера шрифта пользователя. Используется **только для текста**.
 
-### Основные правила
+### Основные Правила
 
 | Единица | Использовать для | Не использовать для |
 |---------|------------------|---------------------|
@@ -55,7 +57,7 @@ Android использует три основные единицы измере
 | **sp** | Размер текста | Размеры view |
 | **px** | Редкие случаи (canvas) | Любые UI элементы |
 
-### Таблица конверсии плотности
+### Таблица Конверсии Плотности
 
 | Плотность | Множитель | Пример |
 |-----------|-----------|--------|
@@ -66,7 +68,7 @@ Android использует три основные единицы измере
 | xxhdpi | 3.0x | 1dp = 3px |
 | xxxhdpi | 4.0x | 1dp = 4px |
 
-### Примеры кода
+### Примеры Кода
 
 #### XML (правильное использование)
 
@@ -141,7 +143,7 @@ fun ProperDimensions() {
 }
 ```
 
-#### Утилиты для конверсии
+#### Утилиты Для Конверсии
 
 ```kotlin
 class DimensionUtils(private val context: Context) {
@@ -166,7 +168,7 @@ class DimensionUtils(private val context: Context) {
 }
 ```
 
-### Почему sp для текста критично важно
+### Почему Sp Для Текста Критично Важно
 
 ```kotlin
 // ❌ Плохо: игнорирует настройки пользователя
@@ -307,7 +309,7 @@ class DimensionUtils(private val context: Context) {
 }
 ```
 
-### Why sp for Text is Critical
+### Why Sp for Text is Critical
 
 ```kotlin
 // ❌ Bad: ignores user preferences
@@ -348,5 +350,5 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 - [[q-resources-qualifiers--android--easy]] — Screen density qualifiers
 
 ### Advanced (Harder)
-- [[q-custom-view-drawing--android--medium]] — Drawing with px on canvas
+- [[q-custom-view-animation--android--medium]] — Drawing with px on canvas
 - [[q-accessibility-testing--android--medium]] — Testing font scale changes

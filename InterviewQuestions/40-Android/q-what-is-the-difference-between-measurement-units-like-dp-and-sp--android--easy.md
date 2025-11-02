@@ -3,18 +3,20 @@ id: android-264
 title: "Measurement Units: dp vs sp / Единицы измерения: dp vs sp"
 aliases: ["Measurement Units: dp vs sp", "Единицы измерения: dp vs sp"]
 topic: android
-subtopics: [ui-widgets, ui-accessibility]
+subtopics: [ui-accessibility, ui-widgets]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-dp-sp-units, q-accessibility-color-contrast--android--medium, q-compose-navigation-advanced--android--medium]
+related: [c-accessibility, c-dimension-units]
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/ui-widgets, android/ui-accessibility, dp, sp, ui, accessibility, difficulty/easy]
+tags: [accessibility, android/ui-accessibility, android/ui-widgets, difficulty/easy, dp, sp, ui]
 sources: [https://developer.android.com/guide/topics/resources/more-resources#Dimension]
+date created: Saturday, November 1st 2025, 1:25:40 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

@@ -29,8 +29,11 @@ related: [q-actor-pattern--kotlin--hard, q-fan-in-fan-out--kotlin--hard, q-struc
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, patterns, pipeline, producer-consumer, semaphore, mutex, difficulty/hard]
+tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-consumer, semaphore]
+date created: Sunday, October 12th 2025, 3:06:29 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
+
 # Question (EN)
 > What are advanced coroutine patterns in Kotlin? Explain pipeline pattern, producer-consumer with multiple stages, resource pooling with Mutex/Semaphore, custom scope builders, and rate limiting patterns.
 
@@ -869,7 +872,7 @@ fun CoroutineScope.square(numbers: ReceiveChannel<Int>) = produce {
 }
 ```
 
-### Пулинг ресурсов с Semaphore
+### Пулинг Ресурсов С Semaphore
 
 ```kotlin
 class ConnectionPool(private val size: Int) {
@@ -912,7 +915,7 @@ class RateLimiter(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 

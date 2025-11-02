@@ -3,20 +3,20 @@ id: android-152
 title: "How Compose Draws On Screen / Как Compose рисует на экране"
 aliases: ["How Compose Draws On Screen", "Как Compose рисует на экране"]
 topic: android
-subtopics: [ui-compose, performance-rendering]
+subtopics: [performance-rendering, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-recomposition-compose--android--medium, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
+related: [q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/ui-compose, android/performance-rendering, compose, rendering, difficulty/medium]
+tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/medium, rendering]
 sources: []
 date created: Monday, October 27th 2025, 4:02:03 pm
-date modified: Thursday, October 30th 2025, 12:48:11 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

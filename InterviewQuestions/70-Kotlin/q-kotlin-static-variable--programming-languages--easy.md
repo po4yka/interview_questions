@@ -3,25 +3,22 @@ id: lang-093
 title: "Kotlin Static Variable / Статические переменные в Kotlin"
 aliases: [Kotlin Static Variable, Статические переменные в Kotlin]
 topic: programming-languages
-subtopics: [type-system, initialization]
+subtopics: [initialization, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-structured-concurrency-patterns--kotlin--hard, q-enum-class-advanced--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium]
+related: [q-enum-class-advanced--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium, q-structured-concurrency-patterns--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - companion-object
-  - const
-  - jvmstatic
-  - static
-  - difficulty/easy
+tags: [companion-object, const, difficulty/easy, jvmstatic, programming-languages, static]
+date created: Friday, October 31st 2025, 6:32:57 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Как сделать статическую переменную?
+
+# Как Сделать Статическую Переменную?
 
 # Question (EN)
 > How to create a static variable?
@@ -275,7 +272,7 @@ Kotlin **не имеет** ключевого слова `static`, но есть
 
 **5. object** - Синглтон
 
-### 1. companion object - Наиболее распространенный:
+### 1. Companion Object - Наиболее Распространенный:
 
 ```kotlin
 class User {
@@ -306,7 +303,7 @@ println(User.MAX_AGE)
 val guest = User.createGuest()
 ```
 
-### 2. Top-level объявления:
+### 2. Top-level Объявления:
 
 ```kotlin
 // Файл: Constants.kt
@@ -328,7 +325,7 @@ requestCount++
 log("Привет")
 ```
 
-### 3. @JvmField - Java-совместимое поле:
+### 3. @JvmField - Java-совместимое Поле:
 
 ```kotlin
 class Config {
@@ -341,7 +338,7 @@ class Config {
 }
 ```
 
-### 4. @JvmStatic - Java-совместимый метод:
+### 4. @JvmStatic - Java-совместимый Метод:
 
 ```kotlin
 class Calculator {
@@ -363,7 +360,7 @@ Calculator.add(2, 3);  // Работает с @JvmStatic
 Calculator.Companion.multiply(2, 3);  // Без @JvmStatic
 ```
 
-### 5. const val - Константы времени компиляции:
+### 5. Const Val - Константы Времени Компиляции:
 
 ```kotlin
 class Constants {
@@ -382,7 +379,7 @@ class Constants {
 }
 ```
 
-### 6. object - Синглтон со статико-подобным доступом:
+### 6. Object - Синглтон Со Статико-подобным Доступом:
 
 ```kotlin
 object DatabaseConfig {
@@ -399,7 +396,7 @@ DatabaseConfig.host = "192.168.1.1"
 DatabaseConfig.connect()
 ```
 
-### Таблица сравнения:
+### Таблица Сравнения:
 
 | Метод | Расположение | Java совместимость | Время компиляции |
 |-------|--------------|-------------------|-----------------|
@@ -410,7 +407,7 @@ DatabaseConfig.connect()
 | **Top-level** | Вне класса | Static | Нет |
 | **object** | Автономный | Instance | Нет |
 
-### Полный пример:
+### Полный Пример:
 
 ```kotlin
 class User(val name: String) {
@@ -447,7 +444,7 @@ val id = User.generateId()
 val admin = User.createAdmin("Алиса")
 ```
 
-### Когда использовать каждый метод:
+### Когда Использовать Каждый Метод:
 
 | Случай использования | Решение |
 |---------------------|---------|

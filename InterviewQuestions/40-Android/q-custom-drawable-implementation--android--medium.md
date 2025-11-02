@@ -16,7 +16,7 @@ updated: 2025-10-30
 tags: [android/ui-graphics, android/ui-views, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:56:29 am
-date modified: Thursday, October 30th 2025, 12:44:39 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,14 +29,14 @@ date modified: Thursday, October 30th 2025, 12:44:39 pm
 
 ## Ответ (RU)
 
-### Что такое Custom Drawable
+### Что Такое Custom Drawable
 Легковесный переиспользуемый графический примитив для отображения в нескольких View. Эффективнее кастомной View для простой неинтерактивной графики — не требует сложного жизненного цикла, управляется системой.
 
 **Когда использовать Drawable**: неинтерактивная графика (иконки, фоны), переиспользование в разных View, простые формы и анимации.
 
 **Когда использовать Custom View**: обработка касаний, сложный жизненный цикл, требования доступности, координация анимаций.
 
-### Ключевые методы
+### Ключевые Методы
 
 **draw(canvas: Canvas)** — основной метод отрисовки, вызывается системой.
 
@@ -48,7 +48,7 @@ date modified: Thursday, October 30th 2025, 12:44:39 pm
 
 **setColorFilter(colorFilter: ColorFilter?)** — применяет цветовой фильтр для тонирования.
 
-### Минимальная реализация
+### Минимальная Реализация
 
 ```kotlin
 class CircleDrawable : Drawable() {
@@ -97,7 +97,7 @@ class CircleDrawable : Drawable() {
 - invalidateSelf() запрашивает перерисовку при изменении состояния
 - intrinsic размеры определяют дефолтные размеры для wrap_content
 
-### Управление состоянием
+### Управление Состоянием
 
 ```kotlin
 class StatefulDrawable : Drawable() {
@@ -157,7 +157,7 @@ class PulsingDrawable : Drawable() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Кэшируйте Paint** — не создавайте в draw(), это аллокации на каждом фрейме
 2. **Вызывайте invalidateSelf()** при изменении внешнего вида
@@ -165,7 +165,7 @@ class PulsingDrawable : Drawable() {
 4. **Избегайте вычислений в draw()** — предварительно вычисляйте в setBounds()
 5. **Правильно обрабатывайте bounds** — система может их изменить
 
-### Подводные камни
+### Подводные Камни
 
 - **Аллокации в draw()** — критично для производительности, вызывается каждый фрейм
 - **Забыт invalidateSelf()** — изменения не отрисуются
@@ -338,12 +338,8 @@ class PulsingDrawable : Drawable() {
 ## Related Questions
 
 ### Prerequisites
-- [[q-canvas-drawing-basics--android--easy]] - Basic Canvas drawing operations
-- [[q-paint-and-canvas-api--android--easy]] - Understanding Paint and Canvas API
 
 ### Related
-- [[q-vector-drawable-usage--android--medium]] - VectorDrawable vs custom Drawable
-- [[q-custom-view-basics--android--medium]] - When to use Custom View instead
 
 ### Advanced
 - [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas optimization techniques

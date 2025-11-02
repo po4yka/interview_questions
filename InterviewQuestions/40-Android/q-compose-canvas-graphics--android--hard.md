@@ -15,15 +15,13 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - q-android-performance-measurement-tools--android--medium
-  - q-animated-visibility-vs-content--android--medium
-  - q-canvas-drawing-optimization--android--hard
+  - c-jetpack-compose
 created: 2025-10-11
 updated: 2025-10-30
 sources: []
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 date created: Thursday, October 30th 2025, 11:18:11 am
-date modified: Thursday, October 30th 2025, 12:43:39 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +34,7 @@ date modified: Thursday, October 30th 2025, 12:43:39 pm
 
 ## Ответ (RU)
 
-### Основные концепции
+### Основные Концепции
 - **DrawScope**: рисование в immediate-режиме внутри `Canvas(modifier) { ... }`
 - **State**: рекомпозиция триггерит перерисовку; минимизируйте записи состояния в hot paths
 - **Remember/кэширование**: предвычисляйте пути/битмапы; избегайте аллокаций в draw-лямбдах
@@ -97,7 +95,7 @@ Canvas(Modifier.fillMaxSize()) {
 Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ```
 
-### Чеклист производительности
+### Чеклист Производительности
 - Предвычисляйте пути/битмапы в `remember`; никаких новых объектов в draw
 - Используйте `Stroke`/`Brush` осторожно; избегайте лишнего альфа-блендинга
 - Клиппинг только когда нужно; предпочитайте геометрическую отсечку
@@ -184,7 +182,6 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ## References
 - [[c-compose-state]] - State management in Compose
 - [[c-compose-recomposition]] - Recomposition lifecycle
-- [[c-remember-derivedstateof]] - Memoization patterns
 - [[c-android-graphics-pipeline]] - Graphics rendering fundamentals
 - https://developer.android.com/develop/ui/compose/graphics/draw/overview
 - https://perfetto.dev
@@ -199,7 +196,6 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ### Related (Same Level)
 - [[q-canvas-drawing-optimization--android--hard]] - Advanced drawing optimization techniques
 - [[q-compose-custom-layout--android--hard]] - Custom layout performance
-- [[q-compose-remember-derivedstateof--android--medium]] - State optimization patterns
 
 ### Advanced (Harder)
 - [[q-android-runtime-art--android--medium]] - Runtime and memory management

@@ -3,7 +3,7 @@ id: android-299
 title: "WebP Image Format Android / Формат изображений WebP в Android"
 aliases: [WebP Image Format, Формат WebP]
 topic: android
-subtopics: [performance-memory, files-media]
+subtopics: [files-media, performance-memory]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-image-formats, c-performance, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/performance-memory, android/files-media, webp, optimization, images, difficulty/easy]
+tags: [android/files-media, android/performance-memory, difficulty/easy, images, optimization, webp]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# WebP - самый экономичный формат изображений
+# WebP - Самый Экономичный Формат Изображений
 
 **English**: WebP - most efficient image format for Android
 
@@ -25,7 +27,7 @@ tags: [android/performance-memory, android/files-media, webp, optimization, imag
 
 ### Преимущества WebP
 
-#### 1. Размер файла
+#### 1. Размер Файла
 
 WebP обеспечивает значительно меньший размер файла по сравнению с традиционными форматами:
 
@@ -70,7 +72,7 @@ WebP поддерживает анимацию, как GIF, но с горазд
 // WebP анимация: 500 KB - 1 MB (экономия 50-75%)
 ```
 
-### Поддержка в Android
+### Поддержка В Android
 
 | Android версия | Поддержка WebP |
 |----------------|----------------|
@@ -78,7 +80,7 @@ WebP поддерживает анимацию, как GIF, но с горазд
 | Android 4.3+ (API 18) | WebP lossless + transparency |
 | Android 9.0+ (API 28) | WebP animated |
 
-### Конвертация изображений в WebP
+### Конвертация Изображений В WebP
 
 #### Способ 1: Android Studio (встроенная конвертация)
 
@@ -97,7 +99,7 @@ Android Studio автоматически:
 - Заменяет оригинал
 - Сохраняет резервную копию в `drawable-nodpi` для старых версий Android
 
-#### Способ 2: Командная строка (cwebp)
+#### Способ 2: Командная Строка (cwebp)
 
 ```bash
 
@@ -122,15 +124,15 @@ for file in *.jpg; do
 done
 ```
 
-#### Способ 3: Online конвертеры
+#### Способ 3: Online Конвертеры
 
 - https://cloudconvert.com/webp-converter
 - https://squoosh.app/ (от Google)
 - https://convertio.co/webp-converter/
 
-### Использование WebP в Android-приложении
+### Использование WebP В Android-приложении
 
-#### 1. Обычное использование в XML
+#### 1. Обычное Использование В XML
 
 ```xml
 <!-- res/layout/activity_main.xml -->
@@ -142,7 +144,7 @@ done
     android:contentDescription="@string/photo_description" />
 ```
 
-#### 2. Программная загрузка
+#### 2. Программная Загрузка
 
 ```kotlin
 // Из ресурсов
@@ -160,7 +162,7 @@ val bitmap = BitmapFactory.decodeFile(file.absolutePath)
 imageView.setImageBitmap(bitmap)
 ```
 
-#### 3. Загрузка с сервера через Glide
+#### 3. Загрузка С Сервера Через Glide
 
 ```kotlin
 // build.gradle
@@ -176,7 +178,7 @@ Glide.with(context)
     .into(imageView)
 ```
 
-#### 4. Загрузка с сервера через Coil
+#### 4. Загрузка С Сервера Через Coil
 
 ```kotlin
 // build.gradle
@@ -192,9 +194,9 @@ imageView.load("https://example.com/image.webp") {
 }
 ```
 
-### Пример: Оптимизация приложения с WebP
+### Пример: Оптимизация Приложения С WebP
 
-#### До оптимизации
+#### До Оптимизации
 
 ```
 app/
@@ -210,7 +212,7 @@ app/
 APK размер: +1680 KB
 ```
 
-#### После конвертации в WebP
+#### После Конвертации В WebP
 
 ```
 app/
@@ -227,7 +229,7 @@ APK размер: +1088 KB
 Экономия: 592 KB (35%)
 ```
 
-### Сравнение форматов для разных типов изображений
+### Сравнение Форматов Для Разных Типов Изображений
 
 #### 1. Фотографии (lossy)
 
@@ -237,14 +239,14 @@ WebP (q=80):     800x600, 95 KB  (экономия 37%)
 WebP (q=90):     800x600, 110 KB (экономия 27%)
 ```
 
-#### 2. Логотипы и иконки (lossless)
+#### 2. Логотипы И Иконки (lossless)
 
 ```
 Оригинал (PNG):  512x512, 120 KB
 WebP (lossless): 512x512, 70 KB  (экономия 42%)
 ```
 
-#### 3. Прозрачные изображения
+#### 3. Прозрачные Изображения
 
 ```
 Оригинал (PNG):  1024x1024 с прозрачностью, 250 KB
@@ -260,7 +262,7 @@ WebP (animated): 320x240, 30 frames, 400 KB (экономия 73%)
 
 ### Best Practices
 
-#### 1. Выбор типа сжатия
+#### 1. Выбор Типа Сжатия
 
 ```kotlin
 // Для фотографий → Lossy (q=75-85)
@@ -273,7 +275,7 @@ cwebp -lossless logo.png -o logo.webp
 cwebp -lossless -alpha_q 100 button.png -o button.webp
 ```
 
-#### 2. Настройка качества
+#### 2. Настройка Качества
 
 ```bash
 
@@ -290,7 +292,7 @@ cwebp -q 90 hero_image.jpg -o hero_image.webp
 cwebp -lossless logo.png -o logo.webp
 ```
 
-#### 3. Fallback для старых версий Android
+#### 3. Fallback Для Старых Версий Android
 
 ```kotlin
 // res/drawable/image.webp (Android 4.0+)
@@ -301,9 +303,9 @@ cwebp -lossless logo.png -o logo.webp
 imageView.setImageResource(R.drawable.image)
 ```
 
-### Мониторинг размера APK
+### Мониторинг Размера APK
 
-#### Анализ APK в Android Studio
+#### Анализ APK В Android Studio
 
 ```
 Build → Analyze APK → Выбрать APK
@@ -313,7 +315,7 @@ Build → Analyze APK → Выбрать APK
 - Сравниваем до и после конвертации
 ```
 
-#### Gradle отчёт
+#### Gradle Отчёт
 
 ```gradle
 // build.gradle
@@ -327,7 +329,7 @@ android {
 }
 ```
 
-### Пример: Динамическая загрузка WebP
+### Пример: Динамическая Загрузка WebP
 
 ```kotlin
 class ImageLoader {

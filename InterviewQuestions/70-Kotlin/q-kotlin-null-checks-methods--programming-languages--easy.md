@@ -10,19 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotlin--easy]
+related: [q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - elvis
-  - null-checks
-  - null-safety
-  - operators
-  - safe-call
-  - difficulty/easy
+tags: [difficulty/easy, elvis, null-checks, null-safety, operators, programming-languages, safe-call]
+date created: Friday, October 31st 2025, 6:30:56 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Каким образом осуществлять проверки на null?
+
+# Каким Образом Осуществлять Проверки На Null?
 
 # Question (EN)
 > How to perform null checks?
@@ -94,7 +90,7 @@ val length: Int = name!!.length  // NPE if name is null
 // Use sparingly, only when 100% sure value is not null
 ```
 
-### 6. `let` with Safe Call
+### 6. `let` With Safe Call
 
 Execute block only if not null:
 
@@ -132,7 +128,7 @@ val validEmail = email.takeIf { it.contains("@") }
 
 Kotlin предлагает несколько операторов и методов для проверки на null:
 
-### 1. Оператор безопасного вызова `?.`
+### 1. Оператор Безопасного Вызова `?.`
 
 Возвращает null если объект null, иначе вызывает метод/свойство:
 
@@ -155,7 +151,7 @@ val text = nullableText ?: "по умолчанию"
 val nonNull = value ?: throw IllegalArgumentException("Значение обязательно")
 ```
 
-### 3. Явная проверка с `if`
+### 3. Явная Проверка С `if`
 
 Традиционная проверка на null:
 
@@ -180,7 +176,7 @@ val nonNull: String = requireNotNull(nullable) {
 requireNotNull(user) // Выбрасывает IllegalArgumentException если null
 ```
 
-### 5. Двойной восклицательный знак `!!`
+### 5. Двойной Восклицательный Знак `!!`
 
 Гарантирует не-null, выбрасывает NPE если null:
 
@@ -190,7 +186,7 @@ val length: Int = name!!.length  // NPE если name null
 // Используйте осторожно, только когда на 100% уверены что значение не null
 ```
 
-### 6. `let` с безопасным вызовом
+### 6. `let` С Безопасным Вызовом
 
 Выполняет блок только если не null:
 
@@ -226,6 +222,6 @@ val validEmail = email.takeIf { it.contains("@") }
 
 ## Related Questions
 
-- [[q-kotlin-default-inheritance-type--programming-languages--easy]]
+-
 - [[q-catch-operator-flow--kotlin--medium]]
 - [[q-coroutine-scope-basics--kotlin--easy]]

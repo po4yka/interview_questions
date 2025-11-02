@@ -10,12 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-concurrency-fundamentals--computer-science--hard, q-data-structures-algorithms--computer-science--hard, q-decorator-pattern--design-patterns--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, kotlin, job, difficulty/medium]
+tags: [coroutines, difficulty/medium, job, kotlin, programming-languages]
 date created: Saturday, October 4th 2025, 10:55:52 am
-date modified: Sunday, October 26th 2025, 1:39:59 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # What is the Job Object For?
@@ -426,7 +426,3 @@ class JobBestPractices {
 Job — это элемент управления жизненным циклом корутины. С его помощью можно: отменять корутину; отслеживать завершение; объединять с другими задачами; управлять родительскими и дочерними корутинами.
 
 ## Related Questions
-
-- [[q-concurrency-fundamentals--computer-science--hard]]
-- [[q-data-structures-algorithms--computer-science--hard]]
-- [[q-decorator-pattern--design-patterns--medium]]

@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-dynamic-programming, q-backtracking-algorithms--algorithms--hard, q-two-pointers-sliding-window--algorithms--medium]
+related: [c-dynamic-programming]
 created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, difficulty/hard, dp, dynamic-programming, memoization, optimization]
 sources: [https://en.wikipedia.org/wiki/Dynamic_programming]
 date created: Sunday, October 12th 2025, 9:42:52 pm
-date modified: Saturday, October 25th 2025, 5:21:15 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -333,7 +333,6 @@ fun maxSubArray(nums: IntArray): Int {
 
 ### Prerequisites (Easier)
 - [[q-data-structures-overview--algorithms--easy]] - Data structures basics
-- [[q-recursion-basics--algorithms--easy]] - Recursion concepts
 
 ### Related (Same Level)
 - [[q-two-pointers-sliding-window--algorithms--medium]] - Two pointers technique
@@ -341,4 +340,3 @@ fun maxSubArray(nums: IntArray): Int {
 
 ### Advanced (Harder)
 - [[q-backtracking-algorithms--algorithms--hard]] - Backtracking algorithms
-- [[q-advanced-dp-patterns--algorithms--hard]] - Advanced DP patterns

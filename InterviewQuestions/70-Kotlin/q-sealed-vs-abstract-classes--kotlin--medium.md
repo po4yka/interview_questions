@@ -1,7 +1,7 @@
 ---
 id: kotlin-209
 title: "Sealed Vs Abstract Classes / Sealed против Abstract Классы"
-aliases: [Sealed Classes, Abstract Classes, Class Hierarchies, Sealed vs Abstract]
+aliases: [Abstract Classes, Class Hierarchies, Sealed Classes, Sealed vs Abstract]
 topic: kotlin
 subtopics: [classes, sealed-classes]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-native--kotlin--hard, q-flow-operators-map-filter--kotlin--medium, q-select-expression-channels--kotlin--hard]
+related: [q-flow-operators-map-filter--kotlin--medium, q-kotlin-native--kotlin--hard, q-select-expression-channels--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - sealed-classes
-  - abstract-classes
-  - classes
-  - polymorphism
-  - difficulty/medium
+tags: [abstract-classes, classes, difficulty/medium, kotlin, polymorphism, sealed-classes]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# В чем отличие sealed классов от абстрактных
+
+# В Чем Отличие Sealed Классов От Абстрактных
 
 **English**: What is the difference between sealed and abstract classes?
 

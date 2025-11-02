@@ -1,19 +1,28 @@
 ---
 id: android-092
-title: "WebSocket Implementation / Реализация WebSocket"
+title: WebSocket Implementation / Реализация WebSocket
 aliases: [WebSocket Implementation, Реализация WebSocket]
 topic: android
-subtopics: [networking-http, performance-startup]
+subtopics:
+  - networking-http
+  - performance-startup
 question_kind: coding
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+  - en
+  - ru
 status: draft
 moc: moc-android
-related: [c-networking, c-real-time-communication, q-what-are-services-for--android--easy]
+related:
+  - c-networking
+  - c-real-time-communication
+  - q-what-are-services-for--android--easy
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/networking-http, websocket, okhttp, real-time, resilience, difficulty/medium]
+tags: [android/networking-http, android/performance-startup, difficulty/medium, okhttp, real-time, resilience, websocket]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # WebSocket Implementation / Реализация WebSocket
@@ -63,14 +72,14 @@ Client: "Here's data" → Server (instant send)
 
         onMessage(), send()
         ping/pong heartbeat
-       
+
        → Network issue → DISCONNECTED
        → Manual close() → CLOSING → CLOSED
        → onFailure() → DISCONNECTED
                 ↓
-       
-       DISCONNECTED 
-       
+
+       DISCONNECTED
+
                Auto-reconnect (exponential backoff)
               → CONNECTING
 ```
@@ -961,7 +970,7 @@ Master WebSocket to build responsive, real-time Android applications.
 - Низкая задержка: Мгновенная двунаправленная связь
 - Дружественно к ресурсам: Одно соединение в обоих направлениях
 
-### Жизненный цикл WebSocket
+### Жизненный Цикл WebSocket
 
 ```
 
@@ -979,19 +988,19 @@ Master WebSocket to build responsive, real-time Android applications.
 
         onMessage(), send()
         ping/pong heartbeat
-       
+
        → Сетевая проблема → DISCONNECTED
        → Ручной close() → CLOSING → CLOSED
        → onFailure() → DISCONNECTED
                 ↓
-       
-       DISCONNECTED 
-       
+
+       DISCONNECTED
+
                Авто-переподключение
               → CONNECTING
 ```
 
-### Полная реализация WebSocket клиента
+### Полная Реализация WebSocket Клиента
 
 ```kotlin
 class WebSocketClient(
@@ -1160,7 +1169,7 @@ class WebSocketClient(
 }
 ```
 
-### Пример чат-приложения
+### Пример Чат-приложения
 
 ```kotlin
 @Serializable
@@ -1210,7 +1219,7 @@ class ChatClient(
 }
 ```
 
-### UI с Jetpack Compose
+### UI С Jetpack Compose
 
 ```kotlin
 @Composable
@@ -1256,7 +1265,7 @@ fun ChatScreen(chatClient: ChatClient) {
 
 8. **Jitter**: Предотвращение thundering herd
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. **Нет heartbeat**: Не обнаруживаются мёртвые соединения
 

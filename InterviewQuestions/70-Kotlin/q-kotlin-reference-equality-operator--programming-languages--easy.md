@@ -3,7 +3,7 @@ id: lang-048
 title: "Kotlin Reference Equality Operator / Оператор ссылочного равенства в Kotlin"
 aliases: [Kotlin Reference Equality Operator, Оператор ссылочного равенства в Kotlin]
 topic: programming-languages
-subtopics: [type-system, operators]
+subtopics: [operators, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,15 +13,12 @@ moc: moc-kotlin
 related: [q-data-class-detailed--kotlin--medium, q-destructuring-declarations--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - equality
-  - operators
-  - reference-equality
-  - structural-equality
-  - difficulty/easy
+tags: [difficulty/easy, equality, operators, programming-languages, reference-equality, structural-equality]
+date created: Friday, October 31st 2025, 6:32:17 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Какой оператор используется для проверки равенства ссылок в Kotlin?
+
+# Какой Оператор Используется Для Проверки Равенства Ссылок В Kotlin?
 
 # Question (EN)
 > Which operator is used to check reference equality in Kotlin?

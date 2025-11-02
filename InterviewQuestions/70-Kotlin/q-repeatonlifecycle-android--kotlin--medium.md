@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, android, lifecycle, repeatonlifecycle, flow]
+subtopics: [android, coroutines, flow, lifecycle, repeatonlifecycle]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Android repeatOnLifecycle Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium, q-lifecycle-aware-coroutines--kotlin--hard]
+related: [q-lifecycle-aware-coroutines--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, android, lifecycle, repeatonlifecycle, flow, difficulty/medium]
+tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeatonlifecycle]
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What is repeatOnLifecycle and why is it important? Explain how it prevents memory leaks when collecting Flows, comparison with launchWhenStarted, and best practices.
 
@@ -44,7 +47,7 @@ tags: [kotlin, coroutines, android, lifecycle, repeatonlifecycle, flow, difficul
 //  BAD: Potential memory leak
 class BadFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
@@ -54,11 +57,11 @@ class BadFragment : Fragment() {
             }
         }
     }
-    
+
     private fun updateUI(state: String) {
         // Potential crash if view is destroyed
     }
-    
+
     class MyViewModel : ViewModel() {
         val uiState = flow {
             while (true) {
@@ -76,7 +79,7 @@ class BadFragment : Fragment() {
 //  GOOD: Safe Flow collection
 class GoodFragment : Fragment() {
     private val viewModel: MyViewModel by viewModels()
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -88,9 +91,9 @@ class GoodFragment : Fragment() {
             }
         }
     }
-    
+
     private fun updateUI(state: String) {}
-    
+
     class MyViewModel : ViewModel() {
         val uiState = flow {
             while (true) {
@@ -107,19 +110,19 @@ class GoodFragment : Fragment() {
 ```kotlin
 /**
  * repeatOnLifecycle behavior:
- * 
+ *
  * 1. When lifecycle reaches target state (e.g., STARTED):
  *    - Launches block
  *    - Starts collecting
- * 
+ *
  * 2. When lifecycle goes below target state:
  *    - Cancels block
  *    - Stops collecting
- * 
+ *
  * 3. When lifecycle returns to target state:
  *    - Launches block again
  *    - Restarts collecting
- * 
+ *
  * Lifecycle states:
  * INITIALIZED → CREATED → STARTED → RESUMED
  *                  ↓         ↓         ↓
@@ -139,7 +142,7 @@ class LifecycleExample : Fragment() {
                 }
             }
         }
-        
+
         // Log output:
         // onStart → "Block started"
         // onStop → "Block cancelled"
@@ -149,12 +152,12 @@ class LifecycleExample : Fragment() {
 }
 ```
 
-### Comparison: repeatOnLifecycle vs launchWhenStarted
+### Comparison: repeatOnLifecycle Vs launchWhenStarted
 
 ```kotlin
 class ComparisonExample : Fragment() {
     private val viewModel: FlowViewModel by viewModels()
-    
+
     //  launchWhenStarted (DEPRECATED)
     fun withLaunchWhenStarted() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -166,7 +169,7 @@ class ComparisonExample : Fragment() {
             }
         }
     }
-    
+
     //  repeatOnLifecycle (RECOMMENDED)
     fun withRepeatOnLifecycle() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -180,9 +183,9 @@ class ComparisonExample : Fragment() {
             }
         }
     }
-    
+
     private fun updateUI(data: String) {}
-    
+
     class FlowViewModel : ViewModel() {
         val dataFlow = flow {
             var i = 0
@@ -200,7 +203,7 @@ class ComparisonExample : Fragment() {
  * onStart → Emitting 0, 1, 2...
  * onStop → Still emitting! 10, 11, 12... (LEAK)
  * onStart → Receives buffered values
- * 
+ *
  * repeatOnLifecycle output:
  * onStart → Emitting 0, 1, 2...
  * onStop → Emission stopped (GOOD)
@@ -213,7 +216,7 @@ class ComparisonExample : Fragment() {
 ```kotlin
 class MultipleFlowsExample : Fragment() {
     private val viewModel: MultiViewModel by viewModels()
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -223,13 +226,13 @@ class MultipleFlowsExample : Fragment() {
                         updateState(state)
                     }
                 }
-                
+
                 launch {
                     viewModel.events.collect { event ->
                         handleEvent(event)
                     }
                 }
-                
+
                 launch {
                     viewModel.loading.collect { isLoading ->
                         showLoading(isLoading)
@@ -238,11 +241,11 @@ class MultipleFlowsExample : Fragment() {
             }
         }
     }
-    
+
     private fun updateState(state: String) {}
     private fun handleEvent(event: String) {}
     private fun showLoading(isLoading: Boolean) {}
-    
+
     class MultiViewModel : ViewModel() {
         val uiState = MutableStateFlow("state")
         val events = MutableSharedFlow<String>()
@@ -255,7 +258,7 @@ class MultipleFlowsExample : Fragment() {
 
 ```kotlin
 class BestPractices {
-    
+
     //  Use STARTED for UI updates
     class UIUpdateFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -266,7 +269,7 @@ class BestPractices {
             }
         }
     }
-    
+
     //  Use CREATED for data that survives backgrounding
     class DataFragment : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -277,7 +280,7 @@ class BestPractices {
             }
         }
     }
-    
+
     //  Use viewLifecycleOwner in Fragments
     class CorrectLifecycleOwner : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -287,7 +290,7 @@ class BestPractices {
                     // Cancelled when view is destroyed
                 }
             }
-            
+
             // BAD: this (Fragment lifecycle)
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -306,20 +309,20 @@ class BestPractices {
 class ProductDetailViewModel : ViewModel() {
     private val _product = MutableStateFlow<Product?>(null)
     val product: StateFlow<Product?> = _product.asStateFlow()
-    
+
     private val _relatedProducts = MutableStateFlow<List<Product>>(emptyList())
     val relatedProducts: StateFlow<List<Product>> = _relatedProducts.asStateFlow()
-    
+
     private val _events = MutableSharedFlow<Event>()
     val events: SharedFlow<Event> = _events.asSharedFlow()
-    
+
     data class Product(val id: Int, val name: String, val price: Double)
-    
+
     sealed class Event {
         data class ShowError(val message: String) : Event()
         object AddedToCart : Event()
     }
-    
+
     fun loadProduct(id: Int) {
         viewModelScope.launch {
             // Load product and related products in parallel
@@ -331,7 +334,7 @@ class ProductDetailViewModel : ViewModel() {
             }
         }
     }
-    
+
     fun addToCart() {
         viewModelScope.launch {
             try {
@@ -342,17 +345,17 @@ class ProductDetailViewModel : ViewModel() {
             }
         }
     }
-    
+
     private suspend fun fetchProduct(id: Int): Product {
         delay(500)
         return Product(id, "Product $id", 99.99)
     }
-    
+
     private suspend fun fetchRelatedProducts(id: Int): List<Product> {
         delay(500)
         return List(5) { Product(it, "Related $it", 49.99) }
     }
-    
+
     private suspend fun saveToCart(product: Product) {
         delay(200)
     }
@@ -361,10 +364,10 @@ class ProductDetailViewModel : ViewModel() {
 // Fragment
 class ProductDetailFragment : Fragment() {
     private val viewModel: ProductDetailViewModel by viewModels()
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         // Collect all flows with repeatOnLifecycle
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -374,14 +377,14 @@ class ProductDetailFragment : Fragment() {
                         product?.let { displayProduct(it) }
                     }
                 }
-                
+
                 // Related products
                 launch {
                     viewModel.relatedProducts.collect { products ->
                         displayRelatedProducts(products)
                     }
                 }
-                
+
                 // One-time events
                 launch {
                     viewModel.events.collect { event ->
@@ -397,11 +400,11 @@ class ProductDetailFragment : Fragment() {
                 }
             }
         }
-        
+
         // Load data
         viewModel.loadProduct(productId)
     }
-    
+
     private val productId = 1
     private fun displayProduct(product: ProductDetailViewModel.Product) {}
     private fun displayRelatedProducts(products: List<ProductDetailViewModel.Product>) {}

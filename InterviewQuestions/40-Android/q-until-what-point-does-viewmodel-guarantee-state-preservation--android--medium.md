@@ -3,19 +3,22 @@ id: android-434
 title: "Until What Point Does ViewModel Guarantee State Preservation / До какого момента ViewModel гарантирует сохранение состояния"
 aliases: ["Until What Point Does ViewModel Guarantee State Preservation", "До какого момента ViewModel гарантирует сохранение состояния"]
 topic: android
-subtopics: [lifecycle, architecture-mvvm]
+subtopics: [architecture-mvvm, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-viewmodel--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-mvvm-pattern--android--medium]
+related: [q-mvvm-pattern--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android, android/lifecycle, android/architecture-mvvm, viewmodel, lifecycle, savedstatehandle, difficulty/medium]
+tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium, lifecycle, savedstatehandle, viewmodel]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 До какого момента ViewModel гарантирует сохранение состояния?
@@ -30,7 +33,7 @@ Until what point does ViewModel guarantee state preservation?
 
 ViewModel гарантирует сохранение состояния до момента полного завершения Activity или уничтожения процесса. Она переживает изменения конфигурации (поворот экрана), но не переживает смерть процесса.
 
-### Когда данные сохраняются
+### Когда Данные Сохраняются
 
 **Изменения конфигурации**:
 ```kotlin
@@ -44,7 +47,7 @@ class MyActivity : AppCompatActivity() {
 
 **Activity в фоне**: Activity в onStop(), процесс жив.
 
-### Когда данные теряются
+### Когда Данные Теряются
 
 **Activity.finish()**:
 ```kotlin
@@ -57,7 +60,7 @@ fun closeActivity() {
 
 **Back навигация**: нажатие back на корневой Activity.
 
-### Обработка смерти процесса
+### Обработка Смерти Процесса
 
 Используйте SavedStateHandle для критичных данных:
 
@@ -88,7 +91,7 @@ class MyFragment : Fragment() {
 
 **Fragment ViewModel очищается**: при окончательном удалении Fragment (не в back stack) или завершении родительской Activity.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Критичные данные**: SavedStateHandle
 2. **Большие данные**: Repository/Database

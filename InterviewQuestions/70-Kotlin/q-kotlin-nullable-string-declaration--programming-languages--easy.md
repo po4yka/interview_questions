@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-operator-overloading--kotlin--medium, q-launch-vs-async--kotlin--easy, q-coroutine-job-lifecycle--kotlin--medium]
+related: [q-coroutine-job-lifecycle--kotlin--medium, q-kotlin-operator-overloading--kotlin--medium, q-launch-vs-async--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - null-safety
-  - nullable
-  - string
-  - syntax
-  - difficulty/easy
+tags: [difficulty/easy, null-safety, nullable, programming-languages, string, syntax]
+date created: Friday, October 31st 2025, 6:30:57 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Как правильно объявить переменную типа nullable String в Kotlin?
+
+# Как Правильно Объявить Переменную Типа Nullable String В Kotlin?
 
 # Question (EN)
 > How to correctly declare a nullable String variable in Kotlin?

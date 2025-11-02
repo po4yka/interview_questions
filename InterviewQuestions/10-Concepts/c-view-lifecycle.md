@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-140000
 title: View Lifecycle / Жизненный цикл View
-aliases: [View Lifecycle, Custom View Lifecycle, Lifecycle View, Жизненный цикл View]
+aliases: [Custom View Lifecycle, Lifecycle View, View Lifecycle, Жизненный цикл View]
 kind: concept
 summary: Android View lifecycle methods from creation to cleanup
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, custom-views, lifecycle, ui]
+tags: [android, concept, custom-views, lifecycle, ui]
+date created: Thursday, October 30th 2025, 12:29:24 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -52,7 +54,7 @@ The Android View lifecycle defines the sequence of callback methods invoked as a
 
 **onSaveInstanceState()** / **onRestoreInstanceState()**: Save/restore view state across configuration changes or process death.
 
-## Методы жизненного цикла (RU)
+## Методы Жизненного Цикла (RU)
 
 **Конструктор(context: Context, attrs: AttributeSet?)**: Инициализация view, парсинг атрибутов из XML. Должен быть легковесным - избегать тяжелых операций.
 

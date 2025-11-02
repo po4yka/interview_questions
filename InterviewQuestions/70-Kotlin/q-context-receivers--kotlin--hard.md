@@ -1,27 +1,23 @@
 ---
 id: kotlin-142
 title: "Context Receivers / Context Receivers"
-aliases: [Context Receivers, Context Receivers]
+aliases: [Context Receivers]
 topic: kotlin
-subtopics: [type-system, advanced-features]
+subtopics: [advanced-features, type-system]
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en]
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-infix-functions--kotlin--medium, q-kotlin-conversion-functions--programming-languages--medium, q-coroutine-exception-handling--kotlin--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - context-receivers
-  - dsl
-  - advanced
-  - receivers
-  - scope-functions
-  - difficulty/hard
+tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, scope-functions]
+date created: Saturday, November 1st 2025, 5:30:55 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Context Receivers in Kotlin
 
 # Question (EN)
@@ -125,7 +121,7 @@ fun main() {
 
 ---
 
-### Context Receivers vs Extension Receivers
+### Context Receivers Vs Extension Receivers
 
 | Feature | Extension Receiver | Context Receiver |
 |---------|-------------------|------------------|
@@ -496,7 +492,7 @@ Context receivers: множество, экспериментальны.
 
 HTML builder, SQL query builder, dependency injection - все становятся чище с context receivers.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте @DslMarker для предотвращения утечки области видимости
 2. Предоставляйте convenience функции
@@ -507,5 +503,4 @@ Context receivers - мощный инструмент для создания в
 ## Related Questions
 
 - [[q-infix-functions--kotlin--medium]]
-- [[q-kotlin-conversion-functions--programming-languages--medium]]
 - [[q-coroutine-exception-handling--kotlin--medium]]

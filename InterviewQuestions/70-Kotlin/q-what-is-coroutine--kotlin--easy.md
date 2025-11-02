@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, concurrency, async]
+subtopics: [async, concurrency, coroutines]
 question_kind: theory
 difficulty: easy
 
@@ -18,13 +18,15 @@ source_note: Comprehensive Kotlin Coroutines Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutines-vs-threads--programming-languages--medium, q-suspend-functions-basics--kotlin--easy, q-coroutine-scope-basics--kotlin--easy]
+related: [q-coroutine-scope-basics--kotlin--easy, q-suspend-functions-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, concurrency, async, difficulty/easy]
+tags: [async, concurrency, coroutines, difficulty/easy, kotlin]
+date created: Saturday, November 1st 2025, 1:01:33 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Question (EN)
@@ -92,7 +94,7 @@ In this example, `delay()` is a `suspend` function. When the coroutine calls `de
 
 **Корутина** (или сопрограмма) — это экземпляр **приостанавливаемого вычисления**. Концептуально она похожа на поток, так как выполняет блок кода параллельно с остальной частью программы. Однако корутина не привязана к какому-либо конкретному потоку. Она может приостановить свое выполнение в одном потоке и возобновить в другом.
 
-### Ключевые концепции
+### Ключевые Концепции
 
 1.  **Приостанавливаемость (Suspendable)**: Корутину можно приостановить в определенных точках, не блокируя при этом основной поток. Это ключевая особенность, делающая их такими эффективными.
 2.  **Легковесность**: Вы можете запустить тысячи или даже миллионы корутин в одном потоке, в то время как потоки дороги в создании и поддержании.
@@ -147,6 +149,5 @@ fun main() = runBlocking { // Создает CoroutineScope
 
 ## Related Questions
 
-- [[q-coroutines-vs-threads--programming-languages--medium]]
 - [[q-suspend-functions-basics--kotlin--easy]]
 - [[q-coroutine-scope-basics--kotlin--easy]]

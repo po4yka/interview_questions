@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [higher-order-functions, functional-programming, lambda-expressions, inline-functions]
+subtopics: [functional-programming, higher-order-functions, inline-functions, lambda-expressions]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-kotlin-any-inheritance--programming-languages--easy, q-kotlin-collec
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, higher-order-functions, functional-programming, lambda-expressions, difficulty/medium]
+tags: [difficulty/medium, functional-programming, higher-order-functions, kotlin, lambda-expressions]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What are higher-order functions in Kotlin?
 # Вопрос (RU)
@@ -169,7 +172,7 @@ val grouped = numbers.groupBy { it % 2 }
 
 Using higher-order functions imposes certain runtime penalties: each function is an object, and it captures a closure (variables accessed in the function body). Memory allocations (both for function objects and classes) and virtual calls introduce runtime overhead.
 
-#### The inline Keyword
+#### The Inline Keyword
 
 To eliminate this overhead, you can mark higher-order functions with the `inline` modifier. The compiler will then copy the function code at the calling place:
 
@@ -342,7 +345,7 @@ val page = html {
 
 **Функция высшего порядка** — это функция, которая принимает одну или несколько функций в качестве параметров, или возвращает функцию в качестве результата. Это обеспечивает паттерны функционального программирования и делает код более переиспользуемым и выразительным.
 
-### Базовая концепция
+### Базовая Концепция
 
 ```kotlin
 // Функция высшего порядка: принимает функцию как параметр
@@ -356,7 +359,7 @@ val product = calculate(5, 3) { a, b -> a * b }    // 15
 val max = calculate(5, 3) { a, b -> if (a > b) a else b }  // 5
 ```
 
-### Типы функций
+### Типы Функций
 
 В Kotlin типы функций указываются с помощью синтаксиса: `(ТипыПараметров) -> ТипВозврата`
 
@@ -374,9 +377,9 @@ val nullableFunc: ((Int) -> Int)? = null
 val withReceiver: String.() -> Int = { this.length }
 ```
 
-### Общие паттерны
+### Общие Паттерны
 
-#### 1. Функция как параметр
+#### 1. Функция Как Параметр
 
 ```kotlin
 // Функция filter - принимает функцию-предикат
@@ -395,7 +398,7 @@ val evens = filter(numbers) { it % 2 == 0 }  // [2, 4, 6]
 val greaterThanThree = filter(numbers) { it > 3 }  // [4, 5, 6]
 ```
 
-#### 2. Функция как возвращаемое значение
+#### 2. Функция Как Возвращаемое Значение
 
 ```kotlin
 // Возвращает функцию
@@ -421,7 +424,7 @@ println(studentDiscount(100.0))  // 80.0
 println(seniorDiscount(100.0))   // 70.0
 ```
 
-#### 3. Несколько функциональных параметров
+#### 3. Несколько Функциональных Параметров
 
 ```kotlin
 fun doubleAction(
@@ -440,7 +443,7 @@ doubleAction(
 )
 ```
 
-### Примеры из стандартной библиотеки
+### Примеры Из Стандартной Библиотеки
 
 Стандартная библиотека Kotlin активно использует функции высшего порядка:
 
@@ -470,11 +473,11 @@ val grouped = numbers.groupBy { it % 2 }
 // {1=[1, 3, 5], 0=[2, 4]}
 ```
 
-### Соображения производительности
+### Соображения Производительности
 
 Использование функций высшего порядка создаёт определённые накладные расходы времени выполнения: каждая функция — это объект, и она захватывает замыкание (переменные, к которым обращается в теле функции). Выделение памяти (как для функциональных объектов, так и для классов) и виртуальные вызовы создают накладные расходы времени выполнения.
 
-#### Ключевое слово inline
+#### Ключевое Слово Inline
 
 Чтобы устранить эти накладные расходы, вы можете пометить функции высшего порядка модификатором `inline`. Компилятор затем скопирует код функции в место вызова:
 
@@ -521,9 +524,9 @@ try {
 }
 ```
 
-### Примеры из реальной практики
+### Примеры Из Реальной Практики
 
-#### 1. Управление ресурсами
+#### 1. Управление Ресурсами
 
 ```kotlin
 inline fun <T : Closeable, R> T.use(block: (T) -> R): R {
@@ -577,7 +580,7 @@ val result = retry(times = 3) {
 }
 ```
 
-#### 3. Измерение времени выполнения
+#### 3. Измерение Времени Выполнения
 
 ```kotlin
 inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
@@ -633,7 +636,7 @@ val page = html {
 }
 ```
 
-### Преимущества функций высшего порядка
+### Преимущества Функций Высшего Порядка
 
 1. **Переиспользуемость кода** - Пишите универсальные алгоритмы, которые работают с разным поведением
 2. **Абстракция** - Разделяйте "что делать" от "как делать"

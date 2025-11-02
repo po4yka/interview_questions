@@ -1,24 +1,22 @@
 ---
 id: android-061
 title: "Kotlin DSL Builders / Kotlin DSL строители"
-aliases:
-  - "Kotlin DSL Builders"
-  - "Kotlin DSL строители"
+aliases: ["Kotlin DSL Builders", "Kotlin DSL строители"]
 topic: android
-subtopics: [ui-compose, coroutines]
+subtopics: [coroutines, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-dsl-builders, q-kotlin-basics--kotlin--easy, q-kotlin-lambda-receivers--kotlin--medium]
+related: [c-dsl-builders, q-kotlin-lambda-receivers--kotlin--medium]
 created: 2025-10-12
 updated: 2025-10-31
-tags: [android/ui-compose, android/coroutines, dsl, builders, api-design, lambdas, difficulty/hard]
+tags: [android/coroutines, android/ui-compose, api-design, builders, difficulty/hard, dsl, lambdas]
 sources: [https://kotlinlang.org/docs/type-safe-builders.html]
 date created: Monday, October 13th 2025, 7:24:51 am
-date modified: Thursday, October 30th 2025, 3:11:55 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -375,15 +373,8 @@ val layout = verticalLayout {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-kotlin-basics--kotlin--easy]] - Kotlin basics
-- [[q-android-app-components--android--easy]] - App components
-
 ### Related (Same Level)
-- [[q-kotlin-lambda-receivers--kotlin--medium]] - Lambda receivers
-- [[q-kotlin-extension-functions--kotlin--medium]] - Extension functions
-- [[q-kotlin-operator-overloading--kotlin--medium]] - Operator overloading
+- [[q-kotlin-lambda-expressions--kotlin--medium]] - Lambda receivers
 
 ### Advanced (Harder)
-- [[q-kotlin-context-receivers--kotlin--hard]] - Context receivers
-- [[q-kotlin-multiplatform--kotlin--hard]] - Multiplatform
+- [[q-kotlin-context-receivers--android--hard]] - Context receivers

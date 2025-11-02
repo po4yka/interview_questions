@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-class-initializers--programming-languages--medium, q-flow-basics--kotlin--easy]
+related: [q-flow-basics--kotlin--easy, q-kotlin-extensions-overview--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - extension-functions
-  - extensions
-  - difficulty/easy
+tags: [difficulty/easy, extension-functions, extensions, programming-languages]
+date created: Friday, October 31st 2025, 6:28:53 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Что такое Extensions?
+
+# Что Такое Extensions?
 
 # Question (EN)
 > What are Extensions?
@@ -85,7 +84,7 @@ println(numbers.average())  // 3.0
 
 Термин **'Extensions'** используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
 
-### Ключевые концепции
+### Ключевые Концепции
 
 **Функции расширения** позволяют добавлять новые функции к существующим классам:
 ```kotlin
@@ -115,7 +114,7 @@ println(text.lastChar)  // 'o'
 3. **Типобезопасность**: Разрешаются во время компиляции
 4. **Дружественность к библиотекам**: Расширение сторонних классов, которые нельзя изменить
 
-### Важные замечания
+### Важные Замечания
 
 - Расширения разрешаются **статически** (во время компиляции)
 - Не могут переопределять существующие члены
@@ -134,5 +133,5 @@ println(numbers.average())  // 3.0
 ## Related Questions
 
 - [[q-kotlin-extensions-overview--programming-languages--medium]]
-- [[q-kotlin-class-initializers--programming-languages--medium]]
+-
 - [[q-flow-basics--kotlin--easy]]

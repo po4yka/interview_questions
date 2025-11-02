@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-room-transactions-dao--room--medium, q-android-runtime-art--android--medium, q-compose-navigation-advanced--jetpack-compose--medium]
+related: [q-android-runtime-art--android--medium, q-compose-navigation-advanced--jetpack-compose--medium, q-room-transactions-dao--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/room, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# В чем разница между Room & SQLite?
+# В Чем Разница Между Room & SQLite?
 
 **English**: What is the difference between Room and SQLite?
 
@@ -440,9 +442,9 @@ class UserRepository(private val userDao: UserDao) {
 
 Room упрощает работу с базой данных и делает код более читаемым, но **внутри все равно использует SQLite**.
 
-### Ключевые различия
+### Ключевые Различия
 
-#### 1. Уровень абстракции
+#### 1. Уровень Абстракции
 
 **SQLite - низкоуровневый:**
 
@@ -484,7 +486,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-#### 2. Обработка SQL запросов
+#### 2. Обработка SQL Запросов
 
 **SQLite - ручные строки:**
 
@@ -525,7 +527,7 @@ interface UserDao {
 }
 ```
 
-#### 3. CRUD операции
+#### 3. CRUD Операции
 
 **SQLite - многословный:**
 
@@ -576,7 +578,7 @@ interface UserDao {
 }
 ```
 
-#### 4. Реактивные данные
+#### 4. Реактивные Данные
 
 **SQLite - нет встроенной поддержки:**
 
@@ -619,7 +621,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 }
 ```
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Функция | SQLite | Room |
 |---------|--------|------|
@@ -635,7 +637,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 | **Производительность** | Быстро | Быстро (использует SQLite) |
 | **Зависимости** | Встроено | Jetpack библиотека |
 
-### Полный пример сравнения
+### Полный Пример Сравнения
 
 **SQLite:**
 
@@ -725,10 +727,10 @@ class UserRepository(private val userDao: UserDao) {
 
 ### Related (Medium)
 - [[q-room-code-generation-timing--android--medium]] - Storage
-- [[q-room-transactions-dao--room--medium]] - Storage
-- [[q-room-paging3-integration--room--medium]] - Storage
-- [[q-room-type-converters-advanced--room--medium]] - Storage
+- [[q-room-transactions-dao--android--medium]] - Storage
+- [[q-room-paging3-integration--android--medium]] - Storage
+- [[q-room-type-converters-advanced--android--medium]] - Storage
 - [[q-room-type-converters--android--medium]] - Storage
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--room--hard]] - Storage
+- [[q-room-fts-full-text-search--android--hard]] - Storage

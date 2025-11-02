@@ -19,11 +19,11 @@ related:
   - q-hilt-components-scope--android--medium
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/di-hilt, difficulty/hard, dependency-injection, dagger, hilt]
+tags: [android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
   - https://dagger.dev/hilt/components.html
 date created: Thursday, October 30th 2025, 12:02:34 pm
-date modified: Thursday, October 30th 2025, 12:47:13 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -111,7 +111,7 @@ object UserSessionHolder {
 - Зависимостей, совпадающих с жизненным циклом Activity/Fragment
 - Простого state без кросс-экранной логики
 
-### Сравнение с Hilt
+### Сравнение С Hilt
 
 В Hilt кастомные скоупы ограничены. Можно создавать через `@EntryPoint`, но проще использовать встроенные:
 - `@Singleton`, `@ActivityRetainedScoped`, `@ActivityScoped`, `@ViewModelScoped`, `@FragmentScoped`, `@ViewScoped`

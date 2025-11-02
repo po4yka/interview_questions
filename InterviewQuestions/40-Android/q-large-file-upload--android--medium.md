@@ -3,7 +3,7 @@ id: android-116
 title: "Large File Upload / Загрузка больших файлов"
 aliases: ["Large File Upload", "Загрузка больших файлов"]
 topic: android
-subtopics: [networking-http, background-execution, files-media]
+subtopics: [background-execution, files-media, networking-http]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -14,9 +14,9 @@ related: [q-viewmodel-vs-onsavedinstancestate--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/networking-http, android/background-execution, android/files-media, file-upload, workmanager, retrofit, multipart, difficulty/medium]
+tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, file-upload, multipart, retrofit, workmanager]
 date created: Monday, October 27th 2025, 3:33:06 pm
-date modified: Thursday, October 30th 2025, 3:12:02 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -129,7 +129,7 @@ fun uploadFile(filePath: String): UUID {
 }
 ```
 
-### 2. Chunked Upload (для файлов > 50 MB)
+### 2. Chunked Upload (для Файлов > 50 MB)
 
 ```kotlin
 class ChunkedFileUploadWorker : CoroutineWorker() {

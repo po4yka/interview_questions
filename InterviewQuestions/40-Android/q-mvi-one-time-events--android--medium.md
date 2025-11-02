@@ -1,7 +1,7 @@
 ---
 id: android-159
 title: "MVI One-Time Events / Одноразовые события в MVI"
-aliases: ["MVI One-Time Events", "Одноразовые события в MVI", "One-time events in MVI", "SharedFlow для событий"]
+aliases: ["MVI One-Time Events", "One-time events in MVI", "SharedFlow для событий", "Одноразовые события в MVI"]
 topic: android
 subtopics: [architecture-mvi]
 question_kind: android
@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-viewmodel, c-lifecycle, q-mvi-architecture--android--hard]
+related: [c-lifecycle, c-viewmodel, q-mvi-architecture--android--hard]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/architecture-mvi, mvi, architecture, events, difficulty/medium]
+tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
 date created: Monday, October 27th 2025, 5:03:14 pm
-date modified: Thursday, October 30th 2025, 3:14:24 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

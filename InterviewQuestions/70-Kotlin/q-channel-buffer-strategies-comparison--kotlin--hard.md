@@ -3,28 +3,22 @@ topic: kotlin
 id: kotlin-097
 title: "Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов"
 aliases: [Channel Buffer Strategies, Стратегии буферизации каналов]
-subtopics: [coroutines, channels]
+subtopics: [channels, coroutines]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 moc: moc-kotlin
-related: [q-cold-vs-hot-flows--kotlin--medium, q-coroutine-delay-vs-thread-sleep--kotlin--easy, q-kotlin-constants--programming-languages--easy]
+related: [q-statein-sharein-flow--kotlin--medium]
 status: draft
 created: 2025-10-12
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - channels
-  - difficulty/hard
-  - buffer
-  - backpressure
-  - performance
-  - capacity
-  - producer-consumer
+tags: [backpressure, buffer, capacity, channels, coroutines, difficulty/hard, kotlin, performance, producer-consumer]
+date created: Saturday, November 1st 2025, 1:27:21 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
-# Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов
+
+# Channel Buffer Strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии Буферизации Каналов
 
 ## English
 
@@ -536,7 +530,7 @@ Sending 9
   Received 9  (only latest value)
 ```
 
-#### Conflated vs StateFlow
+#### Conflated Vs StateFlow
 
 Conflated channels are similar to `StateFlow` but with different semantics:
 
@@ -696,7 +690,7 @@ Sending 11
 ...
 ```
 
-### send() vs trySend() Behavior
+### send() Vs trySend() Behavior
 
 Each strategy affects `send()` and `trySend()` differently:
 
@@ -741,7 +735,7 @@ fun demonstrateSendVsTrySend() = runBlocking {
 }
 ```
 
-### receive() vs tryReceive() Behavior
+### receive() Vs tryReceive() Behavior
 
 All strategies behave the same for receive operations:
 
@@ -1465,7 +1459,7 @@ class ChannelStrategyTest {
 
 Kotlin корутины каналы поддерживают несколько стратегий буферизации, которые фундаментально изменяют взаимодействие производителей и потребителей. Понимание различий между `RENDEZVOUS`, `BUFFERED`, `UNLIMITED`, `CONFLATED` и явной емкостью критически важно для проектирования эффективных, корректных параллельных систем.
 
-### Обзор стратегий буферизации
+### Обзор Стратегий Буферизации
 
 | Стратегия | Емкость | Поведение send() | Противодавление | Случай использования |
 |-----------|---------|------------------|-----------------|----------------------|
@@ -1487,18 +1481,18 @@ Kotlin корутины каналы поддерживают несколько
 - **Противодавление:** Полное (отправитель ждёт получателя)
 - **Память:** Минимальная (нет буфера)
 
-#### Когда использовать RENDEZVOUS
+#### Когда Использовать RENDEZVOUS
 
 1. **Требуется строгая синхронизация**
 2. **Среды с ограниченной памятью**
 3. **Естественное согласование скоростей**
 4. **Тестирование синхронизации**
 
-### 2. Channel.BUFFERED (Емкость по умолчанию = 64)
+### 2. Channel.BUFFERED (Емкость По Умолчанию = 64)
 
 **Buffered** каналы используют размер буфера по умолчанию (64 элемента по умолчанию, настраивается через системное свойство). Обеспечивает разумную буферизацию для большинства случаев использования.
 
-#### Когда использовать BUFFERED
+#### Когда Использовать BUFFERED
 
 1. **Производитель-потребитель общего назначения**
 2. **Временные несоответствия скоростей**
@@ -1508,7 +1502,7 @@ Kotlin корутины каналы поддерживают несколько
 
 **Unlimited** каналы имеют неограниченную емкость буфера. `send()` никогда не приостанавливается, но может вызвать проблемы с памятью, если производитель постоянно быстрее потребителя.
 
-#### Когда использовать UNLIMITED
+#### Когда Использовать UNLIMITED
 
 1. **Известный ограниченный производитель** (используйте с осторожностью!)
 2. **Обработка временных всплесков**
@@ -1516,18 +1510,18 @@ Kotlin корутины каналы поддерживают несколько
 
 **ПРЕДУПРЕЖДЕНИЕ:** Избегайте UNLIMITED, если у вас нет гарантий относительно скорости производителя или потребления.
 
-### 4. Channel.CONFLATED (Емкость = 1, с перезаписью)
+### 4. Channel.CONFLATED (Емкость = 1, С перезаписью)
 
 **Conflated** каналы хранят только последнее значение. Новый `send()` перезаписывает предыдущее значение, если оно ещё не получено. Идеально для обновлений состояния, где важно только последнее значение.
 
-#### Когда использовать CONFLATED
+#### Когда Использовать CONFLATED
 
 1. **Обновления состояния**
 2. **Ограничение частоты обновлений**
 3. **Отчёты о прогрессе**
 4. **Выборка быстрых потоков**
 
-### Дерево решений: Какую стратегию использовать?
+### Дерево Решений: Какую Стратегию Использовать?
 
 ```
 Нужны ВСЕ значения для потребления?
@@ -1547,7 +1541,7 @@ Kotlin корутины каналы поддерживают несколько
     Скорость производителя неизвестна → UNLIMITED (ОПАСНО)
 ```
 
-### Рекомендации для продакшена
+### Рекомендации Для Продакшена
 
 1. **По умолчанию используйте BUFFERED** для большинства случаев
 2. **Используйте RENDEZVOUS для** строгой синхронизации
@@ -1577,7 +1571,4 @@ Kotlin корутины каналы поддерживают несколько
 
 ## Related Questions
 
-- [[q-flow-vs-channel-comparison--kotlin--medium|Flow vs Channel comparison]]
-- [[q-coroutine-cancellation-exception-handling--kotlin--hard|Coroutine cancellation and exception handling]]
-- [[q-shared-mutable-state-concurrency--kotlin--hard|Shared mutable state and concurrency]]
-- [[q-testing-coroutine-timing-control--kotlin--medium|Testing coroutine timing control]]
+- [[q-statein-sharein-flow--kotlin--medium|StateFlow and SharedFlow]]

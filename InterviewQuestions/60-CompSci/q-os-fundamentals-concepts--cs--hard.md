@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [cpu-scheduling, difficulty/hard, memory, os, processes, threads, virtual-memory]
 sources: [https://en.wikipedia.org/wiki/Operating_system]
 date created: Monday, October 13th 2025, 7:49:07 am
-date modified: Sunday, October 26th 2025, 1:31:18 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

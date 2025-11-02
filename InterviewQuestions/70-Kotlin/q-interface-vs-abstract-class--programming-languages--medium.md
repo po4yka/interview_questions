@@ -3,17 +3,19 @@ id: lang-064
 title: "Interface Vs Abstract Class / Интерфейс против абстрактного класса"
 aliases: [Interface Vs Abstract Class, Интерфейс против абстрактного класса]
 topic: programming-languages
-subtopics: [interfaces, abstract-classes, oop, inheritance]
+subtopics: [abstract-classes, inheritance, interfaces, oop]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-oop-concepts, c-inheritance, q-class-composition--oop--medium]
+related: [c-inheritance, c-oop-concepts, q-class-composition--oop--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, oop, interfaces, abstract-classes, inheritance, kotlin, difficulty/medium]
+tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, oop, programming-languages]
+date created: Friday, October 31st 2025, 6:31:49 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Что Такое Interface И Чем Он Отличается От Абстрактного Класса?
@@ -279,6 +281,6 @@ class Duck : Animal(), Flyable, Swimmable {
 
 ## Related Questions
 
-- [[q-mvi-pattern--architecture-patterns--hard]]
+-
 - [[q-garbage-collector-basics--programming-languages--medium]]
 - [[q-error-handling-in-coroutines--programming-languages--medium]]

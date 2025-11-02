@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related: [q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-to-do-in-android-project-to-start-drawing-ui-on-screen--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
 tags: [android/ui-views, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое View и что отвечает за её визуальную часть?
@@ -28,7 +31,7 @@ tags: [android/ui-views, difficulty/medium]
 
 **View** — базовый строительный блок пользовательских интерфейсов в Android. Это объект, который отрисовывается на экране и может взаимодействовать с пользователем.
 
-### Основные характеристики
+### Основные Характеристики
 
 **View** — базовый класс для виджетов (Button, TextView, ImageView). **ViewGroup** — контейнер для других View, образующий иерархию (LinearLayout, ConstraintLayout).
 
@@ -41,7 +44,7 @@ class CustomTextView : TextView(context)
 class CustomLayout : LinearLayout(context)
 ```
 
-### Отрисовка и измерения
+### Отрисовка И Измерения
 
 Каждая View отвечает за свою отрисовку через `onDraw(Canvas)`, измерения через `onMeasure()`, и позиционирование через `onLayout()`.
 
@@ -74,7 +77,7 @@ class CustomView(context: Context) : View(context) {
 }
 ```
 
-### Что управляет визуальной частью
+### Что Управляет Визуальной Частью
 
 **1. XML Layouts** — декларативное определение UI с атрибутами (размеры, цвета, шрифты)
 

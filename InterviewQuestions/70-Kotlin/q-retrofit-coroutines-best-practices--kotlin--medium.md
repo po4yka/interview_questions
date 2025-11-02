@@ -1,7 +1,7 @@
 ---
 id: kotlin-184
 title: "Retrofit with coroutines: best practices / Retrofit с корутинами: лучшие практики"
-aliases: [Retrofit, Coroutines Retrofit, Networking, REST API, Retrofit с корутинами]
+aliases: [Coroutines Retrofit, Networking, REST API, Retrofit, Retrofit с корутинами]
 topic: kotlin
 subtopics: [coroutines, networking]
 question_kind: theory
@@ -10,24 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-why-data-sealed-classes--programming-languages--medium, q-by-keyword-function-call--programming-languages--easy, q-flow-basics--kotlin--easy]
+related: [q-by-keyword-function-call--programming-languages--easy, q-flow-basics--kotlin--easy, q-why-data-sealed-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - retrofit
-  - networking
-  - okhttp
-  - rest-api
-  - error-handling
-  - android
-  - difficulty/medium
-  - android
-  - retrofit
-  - networking
-  - best-practices
+tags: [android, best-practices, coroutines, difficulty/medium, error-handling, kotlin, networking, okhttp, rest-api, retrofit]
+date created: Friday, October 31st 2025, 6:30:28 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Retrofit with Coroutines: Best Practices
 
 **English** | [Русский](#russian-version)
@@ -142,7 +132,7 @@ object RetrofitClient {
 
 ---
 
-## Response Types: Response&lt;T&gt; vs T
+## Response Types: Response&lt;T&gt; Vs T
 
 ### When to Use Direct T
 
@@ -654,7 +644,7 @@ suspend fun getDashboardDataSupervisor(): DashboardData = supervisorScope {
 
 ---
 
-## Sequential vs Parallel Patterns
+## Sequential Vs Parallel Patterns
 
 ### Sequential Execution
 
@@ -738,7 +728,7 @@ suspend fun processOrder(orderId: String): OrderResult = coroutineScope {
 
 ---
 
-## Call Adapter vs Suspend Functions
+## Call Adapter Vs Suspend Functions
 
 ### Old Approach: Call Adapter
 
@@ -1645,7 +1635,7 @@ val okHttpClient = OkHttpClient.Builder()
 
 ## Best Practices Checklist
 
-### Do's 
+### Do's
 
 1. **Use suspend functions instead of Call&lt;T&gt;**
    ```kotlin
@@ -1731,7 +1721,7 @@ val okHttpClient = OkHttpClient.Builder()
        userDao.observeUser(id)
    ```
 
-### Don'ts 
+### Don'ts
 
 1. **Don't use Call&lt;T&gt; with coroutines**
    ```kotlin
@@ -2352,7 +2342,7 @@ fun onCreate() {
 
 <a name="russian-version"></a>
 
-# Retrofit с корутинами: лучшие практики
+# Retrofit С Корутинами: Лучшие Практики
 
 [English](#retrofit-with-coroutines-best-practices) | **Русский**
 
@@ -2395,9 +2385,9 @@ Retrofit с Kotlin корутинами предоставляет соврем�
 
 ---
 
-## Suspend функции в Retrofit
+## Suspend Функции В Retrofit
 
-### Современный Retrofit интерфейс
+### Современный Retrofit Интерфейс
 
 ```kotlin
 interface ApiService {
@@ -2436,7 +2426,7 @@ interface ApiService {
 }
 ```
 
-### Настройка Retrofit для корутин
+### Настройка Retrofit Для Корутин
 
 ```kotlin
 object RetrofitClient {
@@ -2465,9 +2455,9 @@ object RetrofitClient {
 ---
 
 <a name="типы-ответов-responset-vs-t"></a>
-## Типы ответов: Response&lt;T&gt; vs T
+## Типы Ответов: Response&lt;T&gt; Vs T
 
-### Когда использовать прямой тип T
+### Когда Использовать Прямой Тип T
 
 Используйте прямой тип `T`, когда вас интересует только случай успеха:
 
@@ -2498,7 +2488,7 @@ suspend fun loadUser(userId: String): Result<User> {
 - Нет доступа к коду статуса
 - Выбрасывает исключение при ошибке
 
-### Когда использовать Response&lt;T&gt;
+### Когда Использовать Response&lt;T&gt;
 
 Используйте `Response<T>`, когда нужны заголовки, коды статуса или пользовательская обработка ошибок:
 
@@ -2543,7 +2533,7 @@ sealed class UserResult {
 ---
 
 <a name="стратегии-обработки-ошибок-ru"></a>
-## Стратегии обработки ошибок
+## Стратегии Обработки Ошибок
 
 ### Стратегия 1: Try-Catch (Простая)
 
@@ -2667,9 +2657,9 @@ class UserRepository(private val api: ApiService) {
 ---
 
 <a name="конкурентные-запросы-ru"></a>
-## Конкурентные запросы
+## Конкурентные Запросы
 
-### Параллельные запросы с async/await
+### Параллельные Запросы С async/await
 
 ```kotlin
 class UserRepository(private val api: ApiService) {
@@ -2782,9 +2772,9 @@ class UserRepositoryTest {
 ---
 
 <a name="распространенные-ошибки-ru"></a>
-## Распространенные ошибки
+## Распространенные Ошибки
 
-### 1. Не повторное выбрасывание CancellationException
+### 1. Не Повторное Выбрасывание CancellationException
 
 ```kotlin
 //  Неправильно
@@ -2805,7 +2795,7 @@ try {
 }
 ```
 
-### 2. Использование withContext(Dispatchers.IO) для Retrofit
+### 2. Использование withContext(Dispatchers.IO) Для Retrofit
 
 ```kotlin
 //  Неправильно - Ненужное переключение диспетчера
@@ -2821,7 +2811,7 @@ suspend fun getUser(id: String): User {
 }
 ```
 
-### 3. Не обработка null тела ответа
+### 3. Не Обработка Null Тела Ответа
 
 ```kotlin
 //  Неправильно
@@ -2833,7 +2823,7 @@ val response = api.getUserWithResponse(id)
 val user = response.body() ?: throw Exception("Пустое тело ответа")
 ```
 
-### 4. Забывание закрыть тело ошибки
+### 4. Забывание Закрыть Тело Ошибки
 
 ```kotlin
 //  Неправильно - Утечка памяти
@@ -2852,7 +2842,7 @@ if (!response.isSuccessful) {
 }
 ```
 
-### 5. Создание множественных экземпляров Retrofit
+### 5. Создание Множественных Экземпляров Retrofit
 
 ```kotlin
 //  Неправильно
@@ -2876,7 +2866,7 @@ object RetrofitClient {
 }
 ```
 
-### 6. Не реализация правильного таймаута
+### 6. Не Реализация Правильного Таймаута
 
 ```kotlin
 //  Неправильно - Использование таймаутов по умолчанию (10 секунд)
@@ -2890,7 +2880,7 @@ val okHttpClient = OkHttpClient.Builder()
     .build()
 ```
 
-### 7. Блокирование главного потока с runBlocking
+### 7. Блокирование Главного Потока С runBlocking
 
 ```kotlin
 //  Неправильно
@@ -2910,7 +2900,7 @@ fun onCreate() {
 
 ---
 
-## Чек-лист лучших практик
+## Чек-лист Лучших Практик
 
 ### Делать:
 
@@ -2998,7 +2988,7 @@ fun onCreate() {
        userDao.observeUser(id)
    ```
 
-### Не делать:
+### Не Делать:
 
 1. **Не используйте Call&lt;T&gt; с корутинами**
    ```kotlin

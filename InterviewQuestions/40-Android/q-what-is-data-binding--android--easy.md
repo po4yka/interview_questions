@@ -1,9 +1,9 @@
 ---
 id: android-141
 title: "What Is Data Binding / Что такое Data Binding"
-aliases: ["Data Binding", "Что такое Data Binding", "Android Data Binding"]
+aliases: ["Android Data Binding", "Data Binding", "Что такое Data Binding"]
 topic: android
-subtopics: [ui-views, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -14,8 +14,11 @@ related: [q-what-is-known-about-recyclerview--android--easy, q-which-event-is-ca
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-views, android/architecture-mvvm, data-binding, ui, difficulty/easy]
+tags: [android/architecture-mvvm, android/ui-views, data-binding, difficulty/easy, ui]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое Data Binding в Android и как его использовать?
@@ -30,7 +33,7 @@ tags: [android/ui-views, android/architecture-mvvm, data-binding, ui, difficulty
 
 **Data Binding** — библиотека Android для прямой привязки UI-компонентов к источникам данных, устраняющая необходимость в `findViewById()` и синхронизации UI вручную.
 
-### Ключевые возможности
+### Ключевые Возможности
 
 1. **Устраняет `findViewById()`** — прямой доступ к view
 2. **Двусторонняя привязка** — автоматическое обновление при изменении данных
@@ -47,7 +50,7 @@ android {
 }
 ```
 
-### Базовое использование
+### Базовое Использование
 
 ```xml
 <!-- activity_main.xml -->
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Наблюдаемые данные
+### Наблюдаемые Данные
 
 ```kotlin
 class User : BaseObservable() {
@@ -95,7 +98,7 @@ class User : BaseObservable() {
 user.name = "Jane"  // TextView обновится автоматически
 ```
 
-### Двусторонняя привязка
+### Двусторонняя Привязка
 
 ```xml
 <!-- ✅ @= вместо @ для двусторонней привязки -->
@@ -132,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Data Binding vs View Binding
+### Data Binding Vs View Binding
 
 | Функция | Data Binding | View Binding |
 |---------|--------------|--------------|
@@ -143,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 | Скорость сборки | Медленнее | Быстрее |
 | Рекомендация Google | ❌ | ✅ |
 
-### Когда использовать
+### Когда Использовать
 
 **Data Binding:**
 - Нужна двусторонняя привязка
@@ -261,7 +264,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Data Binding vs View Binding
+### Data Binding Vs View Binding
 
 | Feature | Data Binding | View Binding |
 |---------|--------------|--------------|

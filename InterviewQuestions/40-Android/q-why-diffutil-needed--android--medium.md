@@ -1,19 +1,21 @@
 ---
 id: android-367
 title: "Why DiffUtil Needed / Зачем нужен DiffUtil"
-aliases: [DiffUtil, AsyncListDiffer, ListAdapter, Зачем DiffUtil]
+aliases: [AsyncListDiffer, DiffUtil, ListAdapter, Зачем DiffUtil]
 topic: android
-subtopics: [ui-views, performance-rendering]
+subtopics: [performance-rendering, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-recyclerview, c-adapter-pattern, q-recyclerview-optimization--android--hard]
+related: [c-adapter-pattern, c-diffutil, c-listadapter, c-recyclerview]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-views, android/performance-rendering, recyclerview, adapter, diffutil, performance, difficulty/medium]
+tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
+date created: Saturday, November 1st 2025, 1:26:27 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [android/ui-views, android/performance-rendering, recyclerview, adapter, d
 
 **DiffUtil** — утилита для вычисления разницы между двумя списками и генерации минимального набора операций обновления RecyclerView.
 
-### Проблема без DiffUtil
+### Проблема Без DiffUtil
 
 **❌ Неэффективный подход:**
 
@@ -80,7 +82,7 @@ fun updateUsers(newUsers: List<User>) {
 }
 ```
 
-### Частичное обновление через Payload
+### Частичное Обновление Через Payload
 
 **✅ Оптимизация для больших объектов:**
 
@@ -153,7 +155,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(DiffCallback) {
 adapter.submitList(newUsers)
 ```
 
-### Compose vs Views
+### Compose Vs Views
 
 **В Compose DiffUtil не нужен:**
 
@@ -304,7 +306,7 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(DiffCallback) {
 adapter.submitList(newUsers)
 ```
 
-### Compose vs Views
+### Compose Vs Views
 
 **In Compose, DiffUtil is not needed:**
 
@@ -351,7 +353,7 @@ fun UserList(users: List<User>) {
 - [[q-viewholder-pattern--android--easy]]
 
 ### Related (Same Level)
-- [[q-recyclerview-optimization--android--medium]]
+- [[q-recyclerview-explained--android--medium]]
 - [[q-listadapter-vs-adapter--android--medium]]
 - [[q-payload-updates--android--medium]]
 

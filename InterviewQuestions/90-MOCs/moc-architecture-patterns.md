@@ -4,7 +4,9 @@ title: Architecture Patterns — Map of Content
 kind: moc
 created: 2025-10-06
 updated: 2025-10-06
-tags: [moc, architecture-patterns, design-patterns]
+tags: [architecture-patterns, design-patterns, moc]
+date created: Monday, October 6th 2025, 1:57:31 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Architecture Patterns & Design Patterns — Map of Content

@@ -3,7 +3,7 @@ id: android-170
 title: "What To Do In Android Project To Start Drawing UI On Screen / Что делать в Android проекте чтобы начать рисовать UI на экране"
 aliases: ["What To Do In Android Project To Start Drawing UI On Screen", "Что делать в Android проекте чтобы начать рисовать UI на экране"]
 topic: android
-subtopics: [activity, ui-views, ui-compose]
+subtopics: [activity, ui-compose, ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -14,9 +14,9 @@ related: [c-jetpack-compose, q-how-to-pass-parameters-to-fragment--android--easy
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/activity, android/ui-views, android/ui-compose, difficulty/easy]
+tags: [android, android/activity, android/ui-compose, android/ui-views, difficulty/easy]
 date created: Monday, October 27th 2025, 6:42:43 pm
-date modified: Thursday, October 30th 2025, 4:53:26 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -31,13 +31,13 @@ date modified: Thursday, October 30th 2025, 4:53:26 pm
 
 Чтобы отобразить UI на экране в Android, необходимо: **(1)** создать Activity как точку входа, **(2)** установить content view с помощью XML layout или [[c-jetpack-compose|Compose]], **(3)** объявить Activity в AndroidManifest.xml как `LAUNCHER`. При запуске система вызывает `onCreate()` и UI прикрепляется к экрану.
 
-### Минимальные шаги
+### Минимальные Шаги
 
 1. **Создать Activity**
 2. **Установить content view** (XML, Compose или программно)
 3. **Зарегистрировать в AndroidManifest.xml**
 
-### Классический подход (XML + Views)
+### Классический Подход (XML + Views)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -65,7 +65,7 @@ XML layout:
 </LinearLayout>
 ```
 
-### Jetpack Compose подход
+### Jetpack Compose Подход
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Регистрация в AndroidManifest.xml
+### Регистрация В AndroidManifest.xml
 
 ```xml
 <application ...>

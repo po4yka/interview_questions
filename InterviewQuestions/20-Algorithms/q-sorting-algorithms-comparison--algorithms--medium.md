@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [algorithms, complexity, difficulty/medium, mergesort, quicksort, sorting]
 sources: [https://en.wikipedia.org/wiki/Sorting_algorithm]
 date created: Sunday, October 12th 2025, 8:53:02 pm
-date modified: Saturday, October 25th 2025, 5:25:51 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -341,12 +341,10 @@ fun countingSort(arr: IntArray): IntArray {
 
 ### Prerequisites (Easier)
 - [[q-data-structures-overview--algorithms--easy]] - Data structures basics
-- [[q-time-complexity-analysis--algorithms--easy]] - Complexity analysis
 
 ### Related (Same Level)
 - [[q-binary-search-variants--algorithms--medium]] - Search algorithms
 - [[q-two-pointers-sliding-window--algorithms--medium]] - Two pointers technique
 
 ### Advanced (Harder)
-- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Graph algorithms
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP algorithms

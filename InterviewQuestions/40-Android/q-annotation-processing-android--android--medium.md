@@ -3,20 +3,20 @@ id: android-024
 title: Annotation Processing in Android / Обработка аннотаций в Android
 aliases: ["Annotation Processing in Android", "Обработка аннотаций в Android"]
 topic: android
-subtopics: [gradle, build-variants, dependency-management]
+subtopics: [build-variants, dependency-management, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-gradle, c-room, c-hilt, c-dagger, q-kapt-vs-ksp--android--medium, q-gradle-build-system--android--medium, q-build-optimization-gradle--android--medium]
+related: [c-dagger, c-gradle, c-hilt, c-room, q-build-optimization-gradle--android--medium, q-gradle-build-system--android--medium, q-kapt-vs-ksp--android--medium]
 sources: []
 created: 2025-10-06
 updated: 2025-10-30
-tags: [android/gradle, android/build-variants, android/dependency-management, difficulty/medium]
+tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:36:06 am
-date modified: Thursday, October 30th 2025, 12:43:07 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

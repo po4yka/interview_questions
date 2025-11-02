@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-choose-layout-for-fragment--android--easy, q-webp-image-format-android--android--easy, q-databases-android--android--easy]
+related: [q-databases-android--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-webp-image-format-android--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/networking-http, android/room, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Реализация RSS-агрегатора на Android
+# Реализация RSS-агрегатора На Android
 
 **English**: How to implement RSS feed aggregator on Android?
 
@@ -29,17 +31,17 @@ RSS-агрегатор собирает и отображает ленты из 
 
    UI Layer    ← Compose/XML + ViewModel
 
-       
+
 
  Repository        ← Координация данных
 
-       
-    
-                                    
-     
- Network        Room      WorkManager 
-  (RSS)       Database      (Sync)    
-     
+
+
+
+
+ Network        Room      WorkManager
+  (RSS)       Database      (Sync)
+
 ```
 
 ### 1. Data Models
@@ -272,7 +274,7 @@ class RssRepository(
 }
 ```
 
-### 5. WorkManager для фонового обновления
+### 5. WorkManager Для Фонового Обновления
 
 ```kotlin
 class RssSyncWorker(

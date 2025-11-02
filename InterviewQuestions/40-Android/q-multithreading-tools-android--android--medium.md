@@ -1,20 +1,22 @@
 ---
 id: android-275
 title: "Multithreading Tools Android / Инструменты многопоточности Android"
-aliases: [Multithreading Tools Android, Инструменты многопоточности Android, Android Threading, Многопоточность Android]
+aliases: [Android Threading, Multithreading Tools Android, Инструменты многопоточности Android, Многопоточность Android]
 topic: android
-subtopics: [coroutines, background-execution, performance-startup]
+subtopics: [background-execution, coroutines, performance-startup]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-background-vs-foreground-service--android--medium, q-push-notification-navigation--android--medium, q-room-vs-sqlite--android--medium]
+related: [q-background-vs-foreground-service--android--easy]
 created: 2025-10-15
 updated: 2025-10-30
 sources: [https://developer.android.com/kotlin/coroutines, https://developer.android.com/topic/libraries/architecture/workmanager]
-tags: [android/coroutines, android/background-execution, android/performance-startup, concurrency, workmanager, rxjava, difficulty/medium]
+tags: [android/background-execution, android/coroutines, android/performance-startup, concurrency, difficulty/medium, rxjava, workmanager]
+date created: Saturday, November 1st 2025, 1:25:23 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -176,7 +178,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 
 **Альтернатива:** Kotlin Coroutines или Executors
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Инструмент | Статус | Лучше всего для | Сложность |
 |------------|--------|-----------------|-----------|
@@ -185,7 +187,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 | **RxJava** | Зрелый | Сложные потоки событий, реактивное программирование | Высокая |
 | **AsyncTask** | ❌ Устарел | Ничего (используйте альтернативы) | Низкая |
 
-### Современные рекомендации
+### Современные Рекомендации
 
 Для новой разработки Android:
 1. **Kotlin Coroutines** — для асинхронных операций, сетевых вызовов, доступа к БД
@@ -380,14 +382,10 @@ For new Android development:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]]
-- [[q-background-vs-foreground-service--android--easy]]
+- [[q-background-vs-foreground-service--android--medium]]
 
 ### Related (Same Level)
-- [[q-background-vs-foreground-service--android--medium]]
-- [[q-push-notification-navigation--android--medium]]
-- [[q-room-vs-sqlite--android--medium]]
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-structured-concurrency--kotlin--hard]]
-- [[q-coroutine-context--kotlin--hard]]
+- Related content to be added

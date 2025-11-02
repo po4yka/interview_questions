@@ -3,7 +3,7 @@ id: lang-021
 title: "Garbage Collector Definition / Определение Garbage Collector"
 aliases: [Garbage Collector Definition, Определение Garbage Collector]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, jvm]
+subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-roots--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, memory-management, garbage-collection, java, kotlin, jvm, difficulty/easy]
+tags: [difficulty/easy, garbage-collection, java, jvm, kotlin, memory-management, programming-languages]
+date created: Friday, October 31st 2025, 6:31:04 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Что Такое Сборщик Мусора?
@@ -694,5 +696,5 @@ GC нужна дополнительная память для отслежив�
 ## Related Questions
 
 - [[q-iterator-order-guarantee--programming-languages--medium]]
-- [[q-service-locator-pattern--design-patterns--medium]]
-- [[q-abstract-class-purpose--programming-languages--medium]]
+-
+-

@@ -1,7 +1,7 @@
 ---
 id: "20251025-143200"
 title: "Clean Architecture / Чистая Архитектура"
-aliases: ["Clean Architecture", "Clean Code Architecture", "Чистая Архитектура", "Архитектура Роберта Мартина"]
+aliases: ["Clean Architecture", "Clean Code Architecture", "Архитектура Роберта Мартина", "Чистая Архитектура"]
 summary: "Software architecture pattern with layered structure promoting independence, testability, and maintainability by separating concerns into Domain, Data, and Presentation layers"
 topic: "android"
 subtopics: ["architecture-patterns", "clean-architecture", "domain-layer"]
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "architecture-patterns", "clean-architecture", "domain-layer", "use-cases", "repository", "difficulty/medium"]
+tags: ["android", "architecture-patterns", "clean-architecture", "concept", "difficulty/medium", "domain-layer", "repository", "use-cases"]
+date created: Saturday, October 25th 2025, 12:52:57 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Clean Architecture / Чистая Архитектура
@@ -24,7 +26,7 @@ tags: ["concept", "android", "architecture-patterns", "clean-architecture", "dom
 
 Clean Architecture is a software architecture pattern introduced by Robert C. Martin (Uncle Bob) that organizes code into concentric layers with strict dependency rules. The core principle is the Dependency Rule: dependencies point inward, with outer layers depending on inner layers, never the reverse. This creates a highly testable, maintainable, and framework-independent codebase. In Android, Clean Architecture typically consists of three layers: Domain (business logic, use cases, entities), Data (repositories, data sources), and Presentation (ViewModels, UI). The Domain layer is the innermost, containing pure Kotlin code with no Android dependencies, making it highly testable and reusable.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Clean Architecture - это паттерн архитектуры программного обеспечения, представленный Робертом Мартином (Дядя Боб), который организует код в концентрические слои со строгими правилами зависимостей. Основной принцип - Правило Зависимостей: зависимости направлены внутрь, внешние слои зависят от внутренних, никогда наоборот. Это создает высоко тестируемую, поддерживаемую и независимую от фреймворков кодовую базу. В Android Clean Architecture обычно состоит из трех слоев: Domain (бизнес-логика, use cases, entities), Data (репозитории, источники данных) и Presentation (ViewModels, UI). Слой Domain является самым внутренним, содержит чистый Kotlin код без зависимостей от Android, что делает его высоко тестируемым и переиспользуемым.
 
@@ -40,7 +42,7 @@ Clean Architecture - это паттерн архитектуры програм
 - **Repository pattern**: Abstract data sources in Data layer
 - **Pure Kotlin domain**: Domain layer has no Android dependencies
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Правило зависимостей**: Зависимости направлены внутрь (внешний → внутренний), никогда наоборот
 - **Независимость слоев**: Внутренние слои ничего не знают о внешних

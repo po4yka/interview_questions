@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-infix-functions--kotlin--medium, q-coroutine-scope-basics--kotlin--easy, q-request-coalescing-deduplication--kotlin--hard]
+related: [q-coroutine-scope-basics--kotlin--easy, q-infix-functions--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - dispatchers
-  - threading
-  - concurrency
-  - difficulty/medium
+tags: [concurrency, coroutines, difficulty/medium, dispatchers, kotlin, threading]
+date created: Friday, October 31st 2025, 6:34:14 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Dispatchers.IO vs Dispatchers.Default
+
+# Dispatchers.IO Vs Dispatchers.Default
 
 # Question (EN)
 > What's the difference between Dispatchers.IO and Dispatchers.Default? When should you use each?
@@ -51,7 +48,7 @@ tags:
 
 **Dispatchers.IO** и **Dispatchers.Default** - два предустановленных диспетчера для выполнения корутин на разных thread pools с разными характеристиками.
 
-### Ключевые различия
+### Ключевые Различия
 
 **Dispatchers.IO** предназначен для операций ввода-вывода (I/O), таких как сетевые запросы, чтение/запись файлов и работа с базами данных. Пул потоков содержит 64+ потоков (расширяемый). Используйте для: HTTP запросов, файловых операций, запросов к БД, блокирующих системных вызовов. Потоки проводят время в ожидании (не нагружая CPU).
 
@@ -71,7 +68,7 @@ tags:
 | **Пример** | `readFile()`, `apiCall()` | `sortList()`, `parseJson()` |
 | **Thread starvation** | Устойчив (большой пул) | Опасен при блокирующих операциях |
 
-### Dispatchers.IO - для I/O операций
+### Dispatchers.IO - Для I/O Операций
 
 ```kotlin
 // - Network запросы
@@ -98,7 +95,7 @@ suspend fun saveUser(user: User) = withContext(Dispatchers.IO) {
 - Динамически расширяется при необходимости
 - Потоки проводят много времени в состоянии ожидания (waiting)
 
-### Dispatchers.Default - для CPU работы
+### Dispatchers.Default - Для CPU Работы
 
 ```kotlin
 // - Парсинг больших JSON
@@ -128,7 +125,7 @@ suspend fun encryptData(data: ByteArray): ByteArray = withContext(Dispatchers.De
 - НЕ расширяется динамически
 - Потоки активно используют CPU
 
-### Почему размер пула разный?
+### Почему Размер Пула Разный?
 
 ```kotlin
 // IO операции - потоки ЖДУТ ответа
@@ -150,9 +147,9 @@ suspend fun computeResult() = withContext(Dispatchers.Default) {
 - **IO**: Много потоков OK - они в основном ждут, не нагружают CPU
 - **Default**: Потоков = ядрам CPU - максимальная эффективность без overhead
 
-### Практические примеры
+### Практические Примеры
 
-#### ViewModel с разными диспетчерами
+#### ViewModel С Разными Диспетчерами
 
 ```kotlin
 class UserViewModel(
@@ -204,7 +201,7 @@ class UserViewModel(
 }
 ```
 
-#### Repository pattern
+#### Repository Pattern
 
 ```kotlin
 class UserRepository(
@@ -237,7 +234,7 @@ class UserRepository(
 }
 ```
 
-### Когда использовать IO
+### Когда Использовать IO
 
 ```kotlin
 // - Network запросы
@@ -266,7 +263,7 @@ withContext(Dispatchers.IO) {
 }
 ```
 
-### Когда использовать Default
+### Когда Использовать Default
 
 ```kotlin
 // - Парсинг JSON/XML
@@ -300,9 +297,9 @@ withContext(Dispatchers.Default) {
 }
 ```
 
-### Ошибки и антипаттерны
+### Ошибки И Антипаттерны
 
-#### - Использование IO для CPU работы
+#### - Использование IO Для CPU Работы
 
 ```kotlin
 // - НЕПРАВИЛЬНО - забивает IO pool
@@ -321,7 +318,7 @@ suspend fun sortLargeList(items: List<Int>): List<Int> = withContext(Dispatchers
 }
 ```
 
-#### - Использование Default для I/O
+#### - Использование Default Для I/O
 
 ```kotlin
 // - НЕПРАВИЛЬНО - блокирует CPU threads
@@ -340,7 +337,7 @@ suspend fun loadFile(): String = withContext(Dispatchers.IO) {
 }
 ```
 
-#### - Nested withContext без необходимости
+#### - Nested withContext Без Необходимости
 
 ```kotlin
 // - Избыточные переключения контекста
@@ -359,7 +356,7 @@ suspend fun processData() = withContext(Dispatchers.IO) {
 }
 ```
 
-### Dispatchers.Main - бонус для Android
+### Dispatchers.Main - Бонус Для Android
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -441,7 +438,7 @@ suspend fun fixedWithLimit() {
 }
 ```
 
-### Настройка размера пулов
+### Настройка Размера Пулов
 
 ```kotlin
 // Настройка IO pool
@@ -458,7 +455,7 @@ fun checkDispatchers() {
 }
 ```
 
-### limitedParallelism - создание custom пулов
+### limitedParallelism - Создание Custom Пулов
 
 ```kotlin
 // Создаем dispatcher с ограниченным параллелизмом
@@ -487,7 +484,7 @@ suspend fun processImages(images: List<Bitmap>) = coroutineScope {
 }
 ```
 
-### Комбинирование диспетчеров
+### Комбинирование Диспетчеров
 
 ```kotlin
 suspend fun complexWorkflow() {
@@ -516,7 +513,7 @@ suspend fun complexWorkflow() {
 }
 ```
 
-### Dispatchers и Flow
+### Dispatchers И Flow
 
 ```kotlin
 flow {
@@ -532,7 +529,7 @@ flow {
 }
 ```
 
-### Production пример
+### Production Пример
 
 ```kotlin
 class ArticleRepository(

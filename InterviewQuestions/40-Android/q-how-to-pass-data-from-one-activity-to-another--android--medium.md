@@ -1,7 +1,7 @@
 ---
 id: android-366
 title: "How To Pass Data From One Activity To Another / Как передать данные из одной Activity в другую"
-aliases: [Pass Data Between Activities, Передача данных между Activity, Intent Extras, Parcelable Android]
+aliases: [Intent Extras, Parcelable Android, Pass Data Between Activities, Передача данных между Activity]
 topic: android
 subtopics: [activity, intents-deeplinks, ui-navigation]
 question_kind: android
@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-components-besides-activity--android--easy, q-activity-lifecycle-methods--android--medium, q-how-is-navigation-implemented--android--medium]
+related: [q-activity-lifecycle-methods--android--medium, q-android-components-besides-activity--android--easy, q-how-is-navigation-implemented--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android, android/activity, android/intents-deeplinks, android/ui-navigation, activity, intent, navigation, difficulty/medium]
+tags: [activity, android, android/activity, android/intents-deeplinks, android/ui-navigation, difficulty/medium, intent, navigation]
 sources: []
 date created: Tuesday, October 28th 2025, 9:48:44 am
-date modified: Thursday, October 30th 2025, 12:49:12 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:49:12 pm
 
 В Android есть несколько способов передачи данных между Activity:
 
-### 1. Intent Extras (Рекомендуется для простых данных)
+### 1. Intent Extras (Рекомендуется Для Простых данных)
 
 Для примитивных типов и строк:
 
@@ -50,7 +50,7 @@ val name = intent.getStringExtra("user_name")
 val age = intent.getIntExtra("user_age", 0)
 ```
 
-### 2. Parcelable (Рекомендуется для объектов)
+### 2. Parcelable (Рекомендуется Для объектов)
 
 Эффективная передача сложных объектов:
 

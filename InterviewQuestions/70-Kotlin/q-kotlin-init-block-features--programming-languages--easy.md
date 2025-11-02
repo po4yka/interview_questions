@@ -3,25 +3,22 @@ id: lang-033
 title: "Kotlin Init Block Features / Возможности блока init в Kotlin"
 aliases: [Kotlin Init Block Features, Возможности блока init в Kotlin]
 topic: programming-languages
-subtopics: [type-system, initialization]
+subtopics: [initialization, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-noncancellable-context-cleanup--kotlin--medium, q-room-coroutines-flow--kotlin--medium, q-kotlin-favorite-features--programming-languages--easy]
+related: [q-kotlin-favorite-features--programming-languages--easy, q-noncancellable-context-cleanup--kotlin--medium, q-room-coroutines-flow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - constructors
-  - init
-  - initialization
-  - oop
-  - difficulty/easy
+tags: [constructors, difficulty/easy, init, initialization, oop, programming-languages]
+date created: Friday, October 31st 2025, 6:29:34 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Есть какие-то особенности использования init block?
+
+# Есть Какие-то Особенности Использования Init Block?
 
 # Question (EN)
 > Are there any features of using init block?
@@ -121,7 +118,7 @@ class Complex {
 
 Init блоки в Kotlin выполняют код инициализации когда создается экземпляр класса. Они выполняются в порядке появления в теле класса.
 
-### Базовое использование
+### Базовое Использование
 ```kotlin
 class Person(val name: String) {
     init {
@@ -134,7 +131,7 @@ val person = Person("Alice")
 // Выводит: Creating person: Alice
 ```
 
-### Порядок выполнения
+### Порядок Выполнения
 ```kotlin
 class Example(val value: Int) {
     val doubled: Int
@@ -155,7 +152,7 @@ class Example(val value: Int) {
 // Порядок: Первичный конструктор → свойства → init блоки (по порядку)
 ```
 
-### Распространенные применения
+### Распространенные Применения
 
 **1. Валидация**
 ```kotlin
@@ -187,7 +184,7 @@ class Service {
 }
 ```
 
-### Множественные Init блоки
+### Множественные Init Блоки
 ```kotlin
 class Complex {
     init { step1() }

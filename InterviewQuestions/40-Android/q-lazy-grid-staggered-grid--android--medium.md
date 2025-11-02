@@ -1,24 +1,22 @@
 ---
 id: android-071
 title: "LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid"
-aliases:
-  - "LazyGrid & LazyStaggeredGrid"
-  - "LazyGrid и LazyStaggeredGrid"
+aliases: ["LazyGrid & LazyStaggeredGrid", "LazyGrid и LazyStaggeredGrid"]
 topic: android
-subtopics: [ui-compose, performance-rendering]
+subtopics: [performance-rendering, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-lazy-grid, q-compose-lazy-layout-optimization--jetpack-compose--hard, q-compose-performance-optimization--android--hard]
+related: [c-lazy-grid]
 created: 2025-10-12
 updated: 2025-10-31
-tags: [android/ui-compose, android/performance-rendering, jetpack-compose, lazy-layout, grid, performance, difficulty/medium]
+tags: [android/performance-rendering, android/ui-compose, difficulty/medium, grid, jetpack-compose, lazy-layout, performance]
 sources: [https://developer.android.com/jetpack/compose/lists]
 date created: Sunday, October 12th 2025, 10:43:54 pm
-date modified: Thursday, October 30th 2025, 3:12:12 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -198,14 +196,10 @@ LazyVerticalGrid(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-basics--android--easy]] - Compose basics
-- [[q-android-app-components--android--easy]] - App components
+- Related content to be added
 
 ### Related (Same Level)
-- [[q-compose-lazy-layout-optimization--jetpack-compose--hard]] - Lazy layout optimization
-- [[q-compose-performance-optimization--android--hard]] - Performance optimization
-- [[q-compose-navigation-advanced--android--medium]] - Navigation
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - Custom layout
-- [[q-compose-slot-table-recomposition--android--hard]] - Slot table
+- Related content to be added

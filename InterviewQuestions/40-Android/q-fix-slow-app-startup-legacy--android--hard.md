@@ -3,20 +3,20 @@ id: android-271
 title: "Fix Slow App Startup Legacy / Исправление медленного запуска приложения"
 aliases: ["Fix Slow App Startup in Legacy Project", "Исправление медленного запуска приложения в легаси-проекте"]
 topic: android
-subtopics: [performance-startup, architecture-modularization, profiling]
+subtopics: [architecture-modularization, performance-startup, profiling]
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-startup, c-lazy-initialization, q-what-are-services-used-for--android--medium, q-android-profiling-tools--android--medium]
+related: [c-app-startup, c-lazy-initialization, q-android-profiling-tools--android--medium, q-what-are-services-used-for--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/performance-startup, android/architecture-modularization, android/profiling, app-startup, difficulty/hard, lazy-init, legacy-code, optimization]
+tags: [android/architecture-modularization, android/performance-startup, android/profiling, app-startup, difficulty/hard, lazy-init, legacy-code, optimization]
 date created: Tuesday, October 28th 2025, 7:38:29 am
-date modified: Thursday, October 30th 2025, 12:47:50 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -267,10 +267,9 @@ Effect: 15-30% cold start improvement through pre-compilation.
 
 ### Prerequisites
 - [[q-what-are-services-used-for--android--medium]] - Understanding Android components
-- [[q-android-lifecycle-basics--android--easy]] - Activity/Application lifecycle
 
 ### Related
-- [[q-android-profiling-tools--android--medium]] - Profiling techniques
+- [[q-android-lint-tool--android--medium]] - Profiling techniques
 - [[q-optimize-memory-leaks-android--android--hard]] - Memory optimization
 
 ### Advanced

@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-structured-concurrency-violations--kotlin--hard, q-sequences-vs-collections-performance--kotlin--medium, q-zip-parallelism-guarantee--programming-languages--medium]
+related: [q-sequences-vs-collections-performance--kotlin--medium, q-structured-concurrency-violations--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - classes
-  - constructor
-  - singleton
-  - design
-  - difficulty/easy
+tags: [classes, constructor, design, difficulty/easy, kotlin, singleton]
+date created: Friday, October 31st 2025, 6:29:56 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# How to programmatically prohibit creating a class object?
+
+# How to Programmatically Prohibit Creating a Class Object?
 
 **English**: How to programmatically prohibit creating a class object in Kotlin?
 
@@ -426,7 +423,7 @@ fun main() {
 3. **`object` declaration** - для синглтонов (без конструктора вообще)
 4. **Abstract class** - нельзя создать экземпляр напрямую
 
-### Примеры кода
+### Примеры Кода
 
 **Приватный primary constructor:**
 
@@ -621,4 +618,4 @@ fun main() {
 
 - [[q-structured-concurrency-violations--kotlin--hard]]
 - [[q-sequences-vs-collections-performance--kotlin--medium]]
-- [[q-zip-parallelism-guarantee--programming-languages--medium]]
+-

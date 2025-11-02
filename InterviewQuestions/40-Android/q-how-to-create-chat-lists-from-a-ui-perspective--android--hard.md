@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-views, difficulty/hard, recyclerview]
 date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Thursday, October 30th 2025, 12:48:28 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Как Делать Списки Чатов С Точки Зрения UI?

@@ -1,9 +1,9 @@
 ---
 id: android-100
 title: "List Elements Problems / Проблемы элементов списка"
-aliases: ["List Elements Problems", "Проблемы элементов списка", "RecyclerView Issues", "Проблемы RecyclerView"]
+aliases: ["List Elements Problems", "RecyclerView Issues", "Проблемы RecyclerView", "Проблемы элементов списка"]
 topic: android
-subtopics: [performance-rendering, ui-views, performance-memory]
+subtopics: [performance-memory, performance-rendering, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,10 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/performance-rendering, android/ui-views, android/performance-memory, recyclerview, diffutil, memory, concurrency, difficulty/medium]
+tags: [android/performance-memory, android/performance-rendering, android/ui-views, concurrency, difficulty/medium, diffutil, memory, recyclerview]
 moc: moc-android
-related: [q-view-methods-and-their-purpose--android--medium, q-multithreading-tools-android--android--medium]
+related: []
 sources: []
+date created: Saturday, November 1st 2025, 1:25:03 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -488,13 +490,10 @@ override fun onViewRecycled(holder: ViewHolder) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-vs-listview--android--easy]] - Understanding basic recycling concepts
-- [[q-view-holder-pattern--android--easy]] - ViewHolder pattern fundamentals
+- Related content to be added
 
 ### Related (Same Level)
-- [[q-view-methods-and-their-purpose--android--medium]] - View lifecycle methods
-- [[q-multithreading-tools-android--android--medium]] - Threading and concurrency tools
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-custom-layoutmanager--android--hard]] - Custom LayoutManager implementation
-- [[q-recyclerview-performance-optimization--android--hard]] - Advanced performance tuning
+- Related content to be added

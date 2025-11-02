@@ -11,12 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-01-27
-tags: [android/performance-memory, android/profiling, performance, profiling, difficulty/medium]
+tags: [android/performance-memory, android/profiling, difficulty/medium, performance, profiling]
 moc: moc-android
-related: [q-list-to-detail-navigation--android--medium, q-how-to-fix-a-bad-element-layout--android--easy, c-memory-management]
+related: [c-memory-management, q-how-to-fix-a-bad-element-layout--android--easy, q-list-to-detail-navigation--android--medium]
 sources: []
 date created: Monday, October 27th 2025, 4:02:09 pm
-date modified: Thursday, October 30th 2025, 3:15:34 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [destructuring, data-classes, componentN, syntax]
+subtopics: [componentN, data-classes, destructuring, syntax]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-data-class-purpose--kotlin--easy, q-data-class-detailed--kotlin--medium, q-kotlin-operator-overloading--kotlin--medium]
+related: [q-data-class-detailed--kotlin--medium, q-data-class-purpose--kotlin--easy, q-kotlin-operator-overloading--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, destructuring, data-classes, componentN, difficulty/medium]
+tags: [componentN, data-classes, destructuring, difficulty/medium, kotlin]
+date created: Saturday, October 18th 2025, 3:06:33 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What are destructuring declarations in Kotlin?
 # Вопрос (RU)
@@ -141,7 +144,7 @@ val (a, b) = MyClass("test", 42)  // Works!
 
 Деструктурирующие объявления — это техника распаковки экземпляра класса в отдельные переменные. Можно взять объект и создать отдельные переменные из его свойств одной строкой кода.
 
-### Базовый пример
+### Базовый Пример
 
 ```kotlin
 data class Book(val author: String, val title: String, val year: Int)
@@ -154,7 +157,7 @@ if (year > 2016) {
 }
 ```
 
-### Возврат нескольких значений
+### Возврат Нескольких Значений
 
 ```kotlin
 data class Result(val result: Int, val status: Status)
@@ -174,13 +177,13 @@ for ((key, value) in map) {
 }
 ```
 
-### Подчеркивание для неиспользуемых переменных
+### Подчеркивание Для Неиспользуемых Переменных
 
 ```kotlin
 val (_, status) = getResult()  // Игнорируем первый компонент
 ```
 
-### Как это работает: функции componentN
+### Как Это Работает: Функции componentN
 
 ```kotlin
 data class Person(val name: String, val age: Int)
@@ -194,7 +197,7 @@ val age = person.component2()
 
 Data классы автоматически генерируют `component1()`, `component2()` и т.д. для всех свойств.
 
-### Случаи использования
+### Случаи Использования
 
 1. **Возврат нескольких значений из функций**
 2. **Итерация по коллекциям со структурированными данными**

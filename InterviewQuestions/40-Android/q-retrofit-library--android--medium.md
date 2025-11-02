@@ -3,19 +3,22 @@ id: android-369
 title: "Retrofit Library / Библиотека Retrofit"
 aliases: ["Retrofit Library", "Библиотека Retrofit"]
 topic: android
-subtopics: [networking-http, architecture-mvvm, coroutines]
+subtopics: [architecture-mvvm, coroutines, networking-http]
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-http-client, c-rest-api, q-okhttp-vs-retrofit--android--medium]
+related: [c-http-client, c-rest-api, q-what-is-rest-api--networking--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/networking-http, android/architecture-mvvm, android/coroutines, retrofit, networking, rest-api, difficulty/medium]
+tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, rest-api, retrofit]
+date created: Saturday, November 1st 2025, 1:04:11 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 Что из себя представляет Retrofit и зачем он нужен в Android-разработке?
@@ -28,7 +31,7 @@ What is Retrofit and why is it needed in Android development?
 
 **Retrofit** — типобезопасный HTTP-клиент от Square, преобразующий REST API в Kotlin/Java интерфейсы. Упрощает сетевое взаимодействие через декларативный подход с аннотациями.
 
-### Ключевые возможности
+### Ключевые Возможности
 
 **1. Декларативные API интерфейсы**
 
@@ -92,7 +95,7 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
-### Пример с Repository паттерном
+### Пример С Repository Паттерном
 
 ```kotlin
 // API definition
@@ -121,7 +124,7 @@ class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
 }
 ```
 
-### HTTP методы и формы
+### HTTP Методы И Формы
 
 ```kotlin
 interface ApiService {
@@ -140,7 +143,7 @@ interface ApiService {
 }
 ```
 
-### Обработка ошибок
+### Обработка Ошибок
 
 ```kotlin
 sealed class ApiResult<out T> {
@@ -327,4 +330,4 @@ suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
 
 ### Advanced (Harder)
 - [[q-custom-retrofit-call-adapter--android--hard]]
-- [[q-network-request-deduplication--android--hard]]
+- [[q-network-request-deduplication--networking--hard]]

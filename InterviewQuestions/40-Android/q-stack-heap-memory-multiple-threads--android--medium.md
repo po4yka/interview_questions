@@ -3,7 +3,7 @@ id: android-080
 title: "Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких потоков"
 aliases: [Stack vs Heap Memory In Multithreading, Stack и Heap память для нескольких потоков]
 topic: android
-subtopics: [threads-sync, performance-memory]
+subtopics: [performance-memory, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,12 +11,14 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/threads-sync, android/performance-memory, difficulty/medium]
+tags: [android/performance-memory, android/threads-sync, difficulty/medium]
 moc: moc-android
-related: [q-accessibility-testing--accessibility--medium, q-compose-modifier-system--android--medium, q-background-tasks-decision-guide--android--medium]
+related: [c-coroutines, c-memory-management]
+date created: Saturday, November 1st 2025, 1:24:35 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Изменится ли объём памяти стека/кучи, если в приложении создано несколько потоков?
+# Изменится Ли Объём Памяти стека/кучи, Если В Приложении Создано Несколько Потоков?
 
 **English**: Will stack/heap memory size change if multiple threads are created in the app?
 

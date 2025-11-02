@@ -1,7 +1,7 @@
 ---
 id: kotlin-183
 title: "Kotlin Unit Singleton / Unit как синглтон в Kotlin"
-aliases: [Unit, Unit Singleton, Kotlin Unit, Unit Объект]
+aliases: [Kotlin Unit, Unit, Unit Singleton, Unit Объект]
 topic: kotlin
 subtopics: [type-system, unit]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-channel-buffer-strategies-comparison--kotlin--hard, q-suspend-functions-basics--kotlin--easy, q-kotlin-generic-function-syntax--programming-languages--easy]
+related: [q-channel-buffer-strategies-comparison--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - type-system
-  - singleton
-  - unit
-  - void
-  - difficulty/easy
+tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
+date created: Friday, October 31st 2025, 6:28:54 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# Сколько инстансов Unit на одно приложение
+
+# Сколько Инстансов Unit На Одно Приложение
 
 # Question (EN)
 > How many Unit instances per application?

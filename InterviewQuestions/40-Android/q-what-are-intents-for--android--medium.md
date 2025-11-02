@@ -5,7 +5,7 @@ aliases: ["What Are Intents For", "Для чего нужны Intent"]
 
 # Classification
 topic: android
-subtopics: [intents-deeplinks, activity, service]
+subtopics: [activity, intents-deeplinks, service]
 question_kind: android
 difficulty: medium
 
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-annotation-processing--android--medium, q-android-components-besides-activity--android--easy, q-what-is-layout-types-and-when-to-use--android--easy]
+related: [q-android-components-besides-activity--android--easy, q-annotation-processing--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android, android/intents-deeplinks, android/activity, android/service, difficulty/medium]
+tags: [android, android/activity, android/intents-deeplinks, android/service, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +43,7 @@ tags: [android, android/intents-deeplinks, android/activity, android/service, di
 
 Intent — это объект сообщения в Android для коммуникации между компонентами. Основные назначения: запуск Activity, Service, отправка Broadcast и передача данных между модулями.
 
-### Основные сценарии использования
+### Основные Сценарии Использования
 
 **1. Запуск Activity**
 
@@ -172,7 +174,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
     .build()
 ```
 
-### Когда использовать что
+### Когда Использовать Что
 
 | Тип Intent | Применение | Пример |
 |-----------|-----------|--------|

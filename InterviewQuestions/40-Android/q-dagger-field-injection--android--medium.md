@@ -3,7 +3,7 @@ id: android-469
 title: Dagger Field Injection / Инъекция полей Dagger
 aliases: ["Dagger Field Injection", "Инъекция полей Dagger"]
 topic: android
-subtopics: [di-hilt, architecture-mvvm]
+subtopics: [architecture-mvvm, di-hilt]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimiza
 sources: []
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/di-hilt, android/architecture-mvvm, dependency-injection, dagger, difficulty/medium]
+tags: [android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/medium]
 date created: Thursday, October 30th 2025, 12:02:28 pm
-date modified: Thursday, October 30th 2025, 12:47:14 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:47:14 pm
 
 Field injection в Dagger внедряет зависимости в поля класса через `@Inject` **после создания объекта**. Используется для Android компонентов (Activity, Fragment, Service), где конструктор недоступен для модификации.
 
-### Жизненный цикл
+### Жизненный Цикл
 
 1. Создание объекта через конструктор по умолчанию
 2. Вызов метода `inject()` компонента
@@ -75,7 +75,7 @@ interface AppComponent {
 @Inject val repository: UserRepository // ❌ Не компилируется
 ```
 
-### Hilt упрощение
+### Hilt Упрощение
 
 Hilt автоматизирует field injection:
 
@@ -212,7 +212,6 @@ class MainActivity : AppCompatActivity() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-dependency-injection-basics--android--easy]]
 
 ### Related (Same Level)
 - [[q-dagger-build-time-optimization--android--medium]]

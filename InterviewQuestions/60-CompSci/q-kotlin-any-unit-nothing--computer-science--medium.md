@@ -3,21 +3,22 @@ id: cs-004
 title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [functions, type-system, null-safety]
+subtopics: [functions, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-java-primitives--programming-languages--medium, q-coroutine-supervisorjob-use-cases--kotlin--medium, q-sharedflow-stateflow--kotlin--medium]
+related: [q-coroutine-supervisorjob-use-cases--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium, q-sharedflow-stateflow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Что известно про типы any, unit, nothing в Kotlin ?
+
+# Что Известно Про Типы Any, Unit, Nothing В Kotlin ?
 
 # Question (EN)
 > What do you know about Any, Unit, Nothing types in Kotlin?

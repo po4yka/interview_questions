@@ -3,18 +3,20 @@ id: android-225
 title: "View Fundamentals / Основы View"
 aliases: ["View Fundamentals", "Основы View"]
 topic: android
-subtopics: [ui-views, ui-widgets, lifecycle]
+subtopics: [lifecycle, ui-views, ui-widgets]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-the-main-application-execution-thread--android--easy, q-fragments-and-activity-relationship--android--hard, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related: [q-fragments-and-activity-relationship--android--hard, q-what-is-known-about-methods-that-redraw-view--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/ui-views, android/ui-widgets, android/lifecycle, view, view-hierarchy, difficulty/easy]
+tags: [android/lifecycle, android/ui-views, android/ui-widgets, difficulty/easy, view, view-hierarchy]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -47,7 +49,7 @@ ViewGroup (LinearLayout)
 └── Button (Кнопка действия)
 ```
 
-### Основные операции
+### Основные Операции
 
 **1. Установка свойств**
 
@@ -95,7 +97,7 @@ progressBar.visibility = View.INVISIBLE
 progressBar.visibility = View.GONE
 ```
 
-### View ID и поиск
+### View ID И Поиск
 
 **findViewById (старый способ):**
 ```kotlin
@@ -117,7 +119,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Жизненный цикл View
+### Жизненный Цикл View
 
 ```
 Событие → Обработка → requestLayout()/invalidate() → Measure/Layout/Draw
@@ -135,7 +137,7 @@ textView.setTextColor(Color.RED)
 // invalidate() вызывается автоматически
 ```
 
-### Потоки и UI
+### Потоки И UI
 
 **КРИТИЧЕСКОЕ ПРАВИЛО**: View можно изменять ТОЛЬКО из UI потока.
 
@@ -182,7 +184,7 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-### Ключевые практики
+### Ключевые Практики
 
 1. **XML для статических макетов** — проще визуализировать и поддерживать
 2. **View Binding** вместо findViewById — типобезопасность

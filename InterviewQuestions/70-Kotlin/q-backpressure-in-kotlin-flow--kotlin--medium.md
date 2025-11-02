@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, backpressure, buffer, conflate, operators]
+subtopics: [backpressure, buffer, conflate, flow, operators]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-debounce-throttle-flow--kotlin--medium]
+related: [q-debounce-throttle-flow--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-07
 
-tags: [kotlin, flow, backpressure, buffer, conflate, operators, difficulty/medium]
+tags: [backpressure, buffer, conflate, difficulty/medium, flow, kotlin, operators]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
+
 # Question (EN)
 > What is Back Pressure in Kotlin Flow? What strategies exist to handle it?
 # Вопрос (RU)
@@ -656,7 +659,7 @@ fun dataUpdates(): Flow<Data> = dataSource
     }
 ```
 
-### Стратегия 4: Буфер с Обработкой Переполнения
+### Стратегия 4: Буфер С Обработкой Переполнения
 
 ```kotlin
 // Буфер с обработкой переполнения
@@ -855,7 +858,7 @@ class DownloadManager {
 }
 ```
 
-### Безопасный для Памяти Паттерн
+### Безопасный Для Памяти Паттерн
 
 ```kotlin
 // Предотвращаем OOM с ограниченным буфером

@@ -3,20 +3,20 @@ id: android-243
 title: "How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево"
 aliases: ["How To Implement View Behavior When It Is Added To The Tree", "Как реализовать поведение View при добавлении в дерево"]
 topic: android
-subtopics: [ui-views, lifecycle]
+subtopics: [lifecycle, ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium, q-viewmodel-pattern--android--easy]
+related: [q-recyclerview-sethasfixedsize--android--easy, q-viewmodel-pattern--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-views, android/lifecycle, custom-view, difficulty/easy, ui, view-lifecycle]
+tags: [android/lifecycle, android/ui-views, custom-view, difficulty/easy, ui, view-lifecycle]
 date created: Tuesday, October 28th 2025, 9:49:46 am
-date modified: Thursday, October 30th 2025, 12:49:11 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How to implement view behavior when it is added to the tree?
 
 Для реализации поведения View при её добавлении в дерево View используется метод **`onAttachedToWindow()`**, который вызывается, когда View добавляется в окно. Этот метод позволяет выполнять действия, когда View становится видимой для пользователя.
 
-### Основные методы жизненного цикла View
+### Основные Методы Жизненного Цикла View
 
 При добавлении View в иерархию:
 1. **Constructor** - создание View
@@ -46,7 +46,7 @@ How to implement view behavior when it is added to the tree?
 При удалении View:
 1. **onDetachedFromWindow()** - открепление от окна
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -71,9 +71,9 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-### Практические сценарии использования
+### Практические Сценарии Использования
 
-#### 1. Автоматический запуск видео
+#### 1. Автоматический Запуск Видео
 
 ```kotlin
 class VideoPlayerView @JvmOverloads constructor(
@@ -100,7 +100,7 @@ class VideoPlayerView @JvmOverloads constructor(
 }
 ```
 
-#### 2. Работа с сенсорами
+#### 2. Работа С Сенсорами
 
 ```kotlin
 class SensorView @JvmOverloads constructor(
@@ -165,7 +165,7 @@ class LifecycleAwareView @JvmOverloads constructor(
 }
 ```
 
-### Альтернативный подход: AddOnAttachStateChangeListener
+### Альтернативный Подход: AddOnAttachStateChangeListener
 
 ```kotlin
 myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {

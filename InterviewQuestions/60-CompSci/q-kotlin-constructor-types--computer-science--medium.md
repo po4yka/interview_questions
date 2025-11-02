@@ -3,21 +3,22 @@ id: cs-012
 title: "Kotlin Constructor Types / Типы конструкторов Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [access-modifiers, type-system, null-safety]
+subtopics: [access-modifiers, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-abstract-class-vs-interface--kotlin--medium, q-access-modifiers--programming-languages--medium, q-channel-closing-completion--kotlin--medium]
+related: [q-access-modifiers--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Saturday, November 1st 2025, 1:26:20 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Какие типы конструкторов есть у классов в Kotlin?
+
+# Какие Типы Конструкторов Есть У Классов В Kotlin?
 
 # Question (EN)
 > What types of constructors do classes in Kotlin have?

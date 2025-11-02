@@ -3,7 +3,7 @@ topic: kotlin
 id: kotlin-063
 title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"
 aliases: [Deferred Async Patterns, Deferred и async паттерны]
-subtopics: [coroutines, async]
+subtopics: [async, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -12,13 +12,15 @@ status: draft
 created: 2025-10-12
 updated: 2025-10-31
 category: "coroutines-advanced"
-tags: ["deferred", "async", "await", "parallel-execution", "concurrency", "performance", "difficulty/medium"]
+tags: ["async", "await", "concurrency", "deferred", "difficulty/medium", "parallel-execution", "performance"]
 description: "Complete guide to Deferred<T>, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
 moc: moc-kotlin
-related: [q-lifecyclescope-viewmodelscope--kotlin--medium, q-kotlin-sealed-classes-purpose--programming-languages--medium, q-singleton-object-keyword--programming-languages--easy]
+related: [q-kotlin-sealed-classes-purpose--programming-languages--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-singleton-object-keyword--programming-languages--easy]
+date created: Friday, October 31st 2025, 6:33:46 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
-# Deferred and async patterns deep dive / Deferred и async паттерны подробно
+# Deferred and Async Patterns Deep Dive / Deferred И Async Паттерны Подробно
 
 # Question (EN)
 
@@ -52,7 +54,7 @@ public interface Deferred<out T> : Job {
 - **Non-blocking**: await() is a suspend function, doesn't block threads
 - **Cancellable**: Can be cancelled like any Job
 
-#### Deferred vs Job Comparison
+#### Deferred Vs Job Comparison
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -86,7 +88,7 @@ fun demonstrateDeferredVsJob() = runBlocking {
 | Created by | launch | async |
 | Exception handling | Propagates to parent | Stored until await() |
 
-#### The async Builder
+#### The Async Builder
 
 `async` is a coroutine builder that starts a coroutine and returns a `Deferred` object:
 
@@ -610,7 +612,7 @@ fun main() = runBlocking {
 
 **Performance improvement**: 3x faster with parallel execution
 
-#### Performance: Parallel vs Sequential
+#### Performance: Parallel Vs Sequential
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -755,7 +757,7 @@ fun main() = runBlocking {
 }
 ```
 
-#### When to Use async vs launch
+#### When to Use Async Vs Launch
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -839,7 +841,7 @@ class DataProcessor {
 | Error handling | Exception in await() | Exception to parent |
 | Use case | Computation | Side effect |
 
-#### Testing async Code
+#### Testing Async Code
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -990,7 +992,7 @@ suspend fun loadDataGood() = coroutineScope {
 
 *(Краткое содержание основных пунктов из английской версии)*
 
-#### Что такое Deferred<T>?
+#### Что Такое Deferred<T>?
 
 `Deferred<T>` - это неблокирующее отменяемое будущее (future), представляющее обещание будущего значения результата типа `T`. Он расширяет интерфейс `Job` и добавляет возможность возвращать результат при завершении вычисления.
 
@@ -1010,7 +1012,7 @@ public interface Deferred<out T> : Job {
 - **Неблокирующий**: await() - приостанавливающая функция, не блокирует потоки
 - **Отменяемый**: Можно отменить как любой Job
 
-#### Сравнение Deferred и Job
+#### Сравнение Deferred И Job
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1044,7 +1046,7 @@ fun demonstrateDeferredVsJob() = runBlocking {
 | Создаётся через | launch | async |
 | Обработка исключений | Пробрасывается родителю | Хранится до await() |
 
-#### Билдер async
+#### Билдер Async
 
 `async` - это билдер корутин, который запускает корутину и возвращает объект `Deferred`:
 
@@ -1109,7 +1111,7 @@ fun demonstrateDeferredStates() = runBlocking {
 }
 ```
 
-#### Функция await() и распространение исключений
+#### Функция await() И Распространение Исключений
 
 `await()` приостанавливает корутину до завершения Deferred и возвращает результат. Если Deferred завершается с ошибкой, `await()` выбрасывает исключение:
 
@@ -1152,7 +1154,7 @@ suspend fun demonstrateAwaitExceptions() = coroutineScope {
 - Если никогда не вызвать await(), исключение **теряется** (с обычным Job)
 - С SupervisorJob исключения дочерних корутин не отменяют родителя
 
-#### Объединение нескольких Deferred с awaitAll()
+#### Объединение Нескольких Deferred С awaitAll()
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1196,7 +1198,7 @@ suspend fun fetchAllApisFailFast() = coroutineScope {
 - **Fail-fast**: отменяет все при первой ошибке
 - Типобезопасный: `List<Deferred<T>>` → `List<T>`
 
-#### Паттерны параллельного выполнения
+#### Паттерны Параллельного Выполнения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1255,7 +1257,7 @@ fun main() = runBlocking {
 }
 ```
 
-#### Ленивый async с CoroutineStart.LAZY
+#### Ленивый Async С CoroutineStart.LAZY
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1279,7 +1281,7 @@ suspend fun demonstrateLazyAsync() = coroutineScope {
 }
 ```
 
-#### CompletableDeferred для ручного завершения
+#### CompletableDeferred Для Ручного Завершения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1307,7 +1309,7 @@ class AsyncCache<K, V> {
 }
 ```
 
-#### Реальный пример: Параллельные API вызовы
+#### Реальный Пример: Параллельные API Вызовы
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1370,7 +1372,7 @@ fun main() = runBlocking {
 
 **Улучшение производительности**: в 3 раза быстрее с параллельным выполнением
 
-#### Обработка ошибок в async/await
+#### Обработка Ошибок В async/await
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1411,7 +1413,7 @@ suspend fun errorHandlingPattern2() = coroutineScope {
 }
 ```
 
-#### Когда использовать async vs launch
+#### Когда Использовать Async Vs Launch
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1445,7 +1447,7 @@ suspend fun useLaunch() = coroutineScope {
 | Обработка ошибок | Исключение в await() | Исключение родителю |
 | Случай использования | Вычисление | Побочный эффект |
 
-#### Тестирование async кода
+#### Тестирование Async Кода
 
 ```kotlin
 import kotlinx.coroutines.*

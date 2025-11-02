@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - coroutines
-  - structured-concurrency
   - cancellation
+  - coroutines
   - exception-handling
   - scope
+  - structured-concurrency
 question_kind: theory
 difficulty: hard
 
@@ -29,8 +29,11 @@ related: [q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, structured-concurrency, cancellation, exception-handling, scope, difficulty/hard]
+tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, scope, structured-concurrency]
+date created: Sunday, October 12th 2025, 3:22:19 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What is structured concurrency in Kotlin? Explain parent-child coroutine hierarchy, cancellation propagation, exception propagation, and differences between coroutineScope, supervisorScope, and withContext.
 
@@ -606,7 +609,7 @@ fun testExceptionPropagation() = runTest {
 
 **Структурированная параллельность** гарантирует, что корутины следуют чёткой иерархии родитель-потомок, обеспечивая автоматическое распространение отмены, обработку исключений и очистку ресурсов.
 
-### Основные принципы
+### Основные Принципы
 
 1. **Иерархия**: Корутины формируют отношения родитель-потомок
 2. **Время жизни**: Время жизни потомка привязано к родителю
@@ -655,7 +658,7 @@ suspend fun loadUser(id: Int): User = withContext(Dispatchers.IO) {
 }
 ```
 
-### Таблица сравнения
+### Таблица Сравнения
 
 | Функция | coroutineScope | supervisorScope | withContext |
 |---------|---------------|-----------------|-------------|

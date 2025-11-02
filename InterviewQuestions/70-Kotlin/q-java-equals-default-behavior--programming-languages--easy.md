@@ -3,7 +3,7 @@ id: lang-010
 title: "Java Equals Default Behavior / Поведение equals по умолчанию в Java"
 aliases: [Java Equals Default Behavior, Поведение equals по умолчанию в Java]
 topic: programming-languages
-subtopics: [java, object-methods, equality]
+subtopics: [equality, java, object-methods]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-equality, c-java-features, q-equals-hashcode-contracts--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [programming-languages, java, object-methods, equality, reference-equality, difficulty/easy]
+tags: [difficulty/easy, equality, java, object-methods, programming-languages, reference-equality]
+date created: Friday, October 31st 2025, 6:32:22 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Как В Оригинальном Java Equals Работает, Что Он Сравнивает?

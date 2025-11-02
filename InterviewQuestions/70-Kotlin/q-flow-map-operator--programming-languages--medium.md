@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-flow, c-coroutines, q-flow-flatmap-operator--programming-languages--easy]
+related: [c-coroutines, c-flow, q-flow-flatmap-operator--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, coroutines, flow, operators, reactive, difficulty/medium]
+tags: [coroutines, difficulty/medium, flow, kotlin, operators, programming-languages, reactive]
+date created: Friday, October 31st 2025, 6:30:45 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Flow Map Operator for Type Transformation
@@ -309,5 +311,5 @@ flowOf(1, 2, 3, 4)
 ## Related Questions
 
 - [[q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]]
-- [[q-coroutinescope-vs-supervisorscope--programming-languages--medium]]
+-
 - [[q-suspend-functions-under-the-hood--programming-languages--hard]]

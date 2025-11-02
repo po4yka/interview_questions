@@ -7,16 +7,16 @@ subtopics: [activity, ui-views]
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-fragment-vs-activity-lifecycle--android--medium, q-retrofit-library--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/activity, android/ui-views, ui, difficulty/easy]
+tags: [android, android/activity, android/ui-views, difficulty/easy, ui]
 sources: []
 date created: Monday, October 27th 2025, 3:42:02 pm
-date modified: Thursday, October 30th 2025, 3:10:06 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:10:06 pm
 
 Чтобы начать отображать UI в Android, необходимо: (1) создать [[c-activity|Activity]], (2) определить layout (разметку), (3) связать их через `setContentView()`.
 
-### Основные способы
+### Основные Способы
 
 **1. XML Layout (традиционный)**
 
@@ -90,7 +90,7 @@ class CustomView(context: Context) : View(context) {
 
 To display UI in Android, you need to: (1) create an [[c-activity|Activity]], (2) define a layout, (3) connect them via `setContentView()`.
 
-### Main approaches
+### Main Approaches
 
 **1. XML Layout (traditional)**
 

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-structured-concurrency-kotlin--kotlin--medium, q-data-sealed-usage--programming-languages--medium, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
 tags:
@@ -547,5 +547,4 @@ parent.join()
 ## Related Questions
 
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
-- [[q-data-sealed-usage--programming-languages--medium]]
 - [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]]

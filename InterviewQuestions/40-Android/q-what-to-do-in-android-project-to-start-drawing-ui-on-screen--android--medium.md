@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-layouts, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related: [c-activity-lifecycle, c-layouts, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/ui-views, ui, activity, layout, setup, difficulty/medium]
+tags: [activity, android/activity, android/ui-views, difficulty/medium, layout, setup, ui]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What needs to be done in Android project to start drawing UI on screen?
+# What Needs to Be Done in Android Project to Start Drawing UI on Screen?
 
 # Question (EN)
 > What needs to be done in an Android project to start drawing UI on the screen?

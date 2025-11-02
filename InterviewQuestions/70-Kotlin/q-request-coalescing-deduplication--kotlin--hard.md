@@ -1,7 +1,7 @@
 ---
 id: kotlin-200
 title: "Request coalescing and deduplication patterns / Объединение и дедупликация запросов"
-aliases: [Request Coalescing, Deduplication, Caching, Optimization, Объединение запросов]
+aliases: [Caching, Deduplication, Optimization, Request Coalescing, Объединение запросов]
 topic: kotlin
 subtopics: [coroutines, patterns, performance]
 question_kind: theory
@@ -13,21 +13,11 @@ moc: moc-kotlin
 related: [q-job-vs-supervisorjob--kotlin--medium, q-kotlin-combine-collections--programming-languages--easy, q-kotlin-vs-java-class-creation--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - optimization
-  - caching
-  - performance
-  - patterns
-  - deduplication
-  - coalescing
-  - difficulty/hard
-  - optimization
-  - caching
-  - performance
-  - patterns
+tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, optimization, patterns, performance]
+date created: Friday, October 31st 2025, 6:30:28 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Request Coalescing and Deduplication Patterns
 
 **English** | [Русский](#russian-version)
@@ -86,35 +76,35 @@ Request coalescing (also called request deduplication or request collapsing) is 
 
 ```
 WITHOUT Coalescing:
-     Request 1      
-  Client            
-    A               
-                              
-     Request 2                
-  Client   Backend  
-    B               
-                              
-     Request 3                
-  Client            
-    C               
-                    
+     Request 1
+  Client
+    A
+
+     Request 2
+  Client   Backend
+    B
+
+     Request 3
+  Client
+    C
+
 
 Result: 3 identical backend calls
 
 
 WITH Coalescing:
-                    
-  Client                            
-    A                               
-                             
-     Single                  
-  Client  Request Backend  
-    B                               
-                             
-                             
-  Client                            
-    C               
-                    
+
+  Client
+    A
+
+     Single
+  Client  Request Backend
+    B
+
+
+  Client
+    C
+
 
 Result: 1 backend call, 3 clients get result
 ```
@@ -221,37 +211,37 @@ class RequestCoalescer<K, V> {
 
 ```
 Request 1 arrives
-    
+
      Check inFlightRequests[key]
         Not found
-    
+
      Create Deferred
         Store in inFlightRequests[key]
-    
+
      Execute operation
-    
-    
+
+
 Request 2 arrives (same key)
-    
+
      Check inFlightRequests[key]
         Found! Deferred exists
-    
+
      await() on existing Deferred
         No new operation executed
-    
-    
+
+
 Request 3 arrives (same key)
-    
+
      Check inFlightRequests[key]
         Found! Same Deferred
-    
+
      await() on existing Deferred
-    
-    
+
+
 Operation completes
-    
+
      All 3 requests receive result
-    
+
      Cleanup: remove from inFlightRequests
 ```
 
@@ -428,7 +418,7 @@ class MutexRequestCoalescer<K, V> {
 }
 ```
 
-### Comparison: ConcurrentHashMap vs Mutex
+### Comparison: ConcurrentHashMap Vs Mutex
 
 ```kotlin
 // Performance test
@@ -706,25 +696,25 @@ data class CoalescerConfig(
 
 ---
 
-## Request Batching vs Coalescing
+## Request Batching Vs Coalescing
 
 ### Comparison
 
 ```kotlin
 // COALESCING: Multiple identical requests → Single execution
 class Coalescing {
-    // Request 1: getUser("123")  
+    // Request 1: getUser("123")
     // Request 2: getUser("123")   Single API call: getUser("123")
-    // Request 3: getUser("123")  
+    // Request 3: getUser("123")
     //
     // All 3 get same result
 }
 
 // BATCHING: Multiple different requests → Single batch execution
 class Batching {
-    // Request 1: getUser("123")  
+    // Request 1: getUser("123")
     // Request 2: getUser("456")   Single API call: getUsers(["123", "456", "789"])
-    // Request 3: getUser("789")  
+    // Request 3: getUser("789")
     //
     // Each gets their specific result
 }
@@ -1479,7 +1469,7 @@ val imageLoader = ImageLoader.Builder(context)
 
 ## Best Practices
 
-### Do's 
+### Do's
 
 1. **Use for expensive, idempotent operations**
    ```kotlin
@@ -1523,7 +1513,7 @@ val imageLoader = ImageLoader.Builder(context)
    }
    ```
 
-### Don'ts 
+### Don'ts
 
 1. **Don't coalesce non-idempotent operations**
    ```kotlin
@@ -1788,7 +1778,7 @@ suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
 
 <a name="russian-version"></a>
 
-# Объединение и дедупликация запросов
+# Объединение И Дедупликация Запросов
 
 [English](#request-coalescing-and-deduplication-patterns) | **Русский**
 
@@ -1813,9 +1803,9 @@ suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
 
 ---
 
-## Определение паттерна
+## Определение Паттерна
 
-### Что такое объединение запросов?
+### Что Такое Объединение Запросов?
 
 ```
 БЕЗ объединения:
@@ -1849,7 +1839,7 @@ suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
 Результат: 1 вызов бэкенда, 3 клиента получают результат
 ```
 
-### Основные концепции
+### Основные Концепции
 
 1. **Отслеживание выполняющихся запросов**: Отслеживание текущих запросов
 2. **Совместное использование Deferred**: Совместное использование `Deferred<T>` между одновременными запрашивающими
@@ -1859,9 +1849,9 @@ suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
 
 ---
 
-## Проблемный сценарий
+## Проблемный Сценарий
 
-### Сценарий: Загрузка профиля пользователя
+### Сценарий: Загрузка Профиля Пользователя
 
 ```kotlin
 //  ПРОБЛЕМА: Несколько компонентов загружают один профиль пользователя
@@ -1886,7 +1876,7 @@ class UserProfileScreen : Fragment() {
 // Пользователь ждет 4 отдельных сетевых вызова
 ```
 
-### Реальное влияние
+### Реальное Влияние
 
 ```kotlin
 // Реальные метрики из production приложения:
@@ -1907,9 +1897,9 @@ class UserProfileScreen : Fragment() {
 
 ---
 
-## Архитектура решения
+## Архитектура Решения
 
-### Базовая архитектура
+### Базовая Архитектура
 
 ```kotlin
 class RequestCoalescer<K, V> {
@@ -1949,9 +1939,9 @@ class RequestCoalescer<K, V> {
 
 ---
 
-## Потокобезопасная реализация с ConcurrentHashMap
+## Потокобезопасная Реализация С ConcurrentHashMap
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 class RequestCoalescer<K, V> {
@@ -1990,7 +1980,7 @@ class RequestCoalescer<K, V> {
 }
 ```
 
-### Исправление состояния гонки
+### Исправление Состояния Гонки
 
 ```kotlin
 class SafeRequestCoalescer<K, V> {
@@ -2020,7 +2010,7 @@ class SafeRequestCoalescer<K, V> {
 }
 ```
 
-### Обработка ошибок
+### Обработка Ошибок
 
 ```kotlin
 class ResilientRequestCoalescer<K, V> {
@@ -2071,9 +2061,9 @@ when {
 
 ---
 
-## Альтернативная реализация с Mutex
+## Альтернативная Реализация С Mutex
 
-### Реализация на основе Mutex
+### Реализация На Основе Mutex
 
 ```kotlin
 class MutexRequestCoalescer<K, V> {
@@ -2126,9 +2116,9 @@ class MutexRequestCoalescer<K, V> {
 
 ---
 
-## Реальные примеры
+## Реальные Примеры
 
-### Пример 1: Кэш профиля пользователя с объединением
+### Пример 1: Кэш Профиля Пользователя С Объединением
 
 ```kotlin
 class UserRepository(
@@ -2166,7 +2156,7 @@ class ProfileScreen : Fragment() {
 }
 ```
 
-### Пример 2: Дедупликация загрузки изображений
+### Пример 2: Дедупликация Загрузки Изображений
 
 ```kotlin
 class ImageLoader(
@@ -2199,9 +2189,9 @@ class ImageAdapter : RecyclerView.Adapter<ImageViewHolder>() {
 
 ---
 
-## Преимущества производительности
+## Преимущества Производительности
 
-### Результаты бенчмарков
+### Результаты Бенчмарков
 
 ```kotlin
 @Test
@@ -2246,7 +2236,7 @@ fun benchmarkCoalescing() = runBlocking {
 }
 ```
 
-### Реальные метрики production
+### Реальные Метрики Production
 
 ```kotlin
 /**
@@ -2275,9 +2265,9 @@ data class ProductionMetrics(
 
 ---
 
-## Комбинирование с кэшем в памяти
+## Комбинирование С Кэшем В Памяти
 
-### Двухуровневая стратегия: Объединение + Кэширование
+### Двухуровневая Стратегия: Объединение + Кэширование
 
 ```kotlin
 class OptimizedRepository<K, V>(
@@ -2330,9 +2320,9 @@ data class CacheEntry<V>(
 
 ---
 
-## Лучшие практики
+## Лучшие Практики
 
-### Что делать
+### Что Делать
 
 1. **Использовать для дорогих, идемпотентных операций**
    ```kotlin
@@ -2376,7 +2366,7 @@ data class CacheEntry<V>(
    }
    ```
 
-### Чего не делать
+### Чего Не Делать
 
 1. **Не объединять не-идемпотентные операции**
    ```kotlin
@@ -2421,9 +2411,9 @@ data class CacheEntry<V>(
 
 ---
 
-## Распространенные ошибки
+## Распространенные Ошибки
 
-### 1. Объединение не-идемпотентных операций
+### 1. Объединение Не-идемпотентных Операций
 
 ```kotlin
 //  НЕПРАВИЛЬНО: Обработка платежей НЕ должна быть объединена
@@ -2443,7 +2433,7 @@ class PaymentService(private val api: PaymentApi) {
 }
 ```
 
-### 2. Утечки памяти из неограниченных карт
+### 2. Утечки Памяти Из Неограниченных Карт
 
 ```kotlin
 //  НЕПРАВИЛЬНО: Нет очистки
@@ -2483,7 +2473,7 @@ class ProperCoalescer<K, V> {
 }
 ```
 
-### 3. Игнорирование отмены
+### 3. Игнорирование Отмены
 
 ```kotlin
 //  НЕПРАВИЛЬНО: Не обрабатывает отмену
@@ -2516,7 +2506,7 @@ suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
 
 ---
 
-## Дополнительные вопросы
+## Дополнительные Вопросы
 
 1. **В чем разница между объединением запросов и кэшированием?**
    - Объединение: Дедуплицирует одновременные запросы (одно время)
@@ -2563,7 +2553,7 @@ suspend fun execute(key: K, operation: suspend () -> V): V = coroutineScope {
 
 ---
 
-## Связанные вопросы
+## Связанные Вопросы
 
 - [Стратегии кэширования](q-caching-strategies--kotlin--medium.md)
 - [Паттерн Circuit breaker](q-circuit-breaker-coroutines--kotlin--hard.md)

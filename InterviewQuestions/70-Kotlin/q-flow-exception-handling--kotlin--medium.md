@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, exceptions, error-handling, retry, catch]
+subtopics: [catch, error-handling, exceptions, flow, retry]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-coroutine-exception-handling--kotlin--medium, q-catch-operator-flow--kotlin--medium]
+related: [q-catch-operator-flow--kotlin--medium, q-coroutine-exception-handling--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
 updated: 2025-10-18
 
-tags: [kotlin, flow, exceptions, error-handling, retry, catch, difficulty/medium]
+tags: [catch, difficulty/medium, error-handling, exceptions, flow, kotlin, retry]
+date created: Saturday, October 18th 2025, 3:12:22 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > How do you handle exceptions in Flows? Explain catch, retry, retryWhen operators. Implement exponential backoff retry strategy.
 
@@ -60,7 +63,7 @@ flow {
 .catch { /* This catches exceptions from flow and map */ }
 ```
 
-### The catch Operator
+### The Catch Operator
 
 The `catch` operator intercepts exceptions from upstream and allows you to handle them.
 
@@ -160,7 +163,7 @@ suspend fun loadArticle() {
 }
 ```
 
-### The retry Operator
+### The Retry Operator
 
 The `retry` operator automatically retries the flow when an exception occurs.
 
@@ -636,7 +639,7 @@ class UserViewModel : ViewModel() {
 
 Обработка исключений в Flow критична для построения надежных приложений. Kotlin Flow предоставляет несколько операторов для изящной обработки ошибок.
 
-### Принцип прозрачности исключений
+### Принцип Прозрачности Исключений
 
 Flow следует принципу **прозрачности исключений**: исключения можно поймать только ниже по потоку, а не выше места их возникновения.
 
@@ -655,11 +658,11 @@ flow { emit(1) }
 .catch { /* Это ловит исключения из flow и map */ }
 ```
 
-### Оператор catch
+### Оператор Catch
 
 Оператор `catch` перехватывает исключения из upstream и позволяет их обработать.
 
-#### Базовое использование
+#### Базовое Использование
 
 ```kotlin
 fun fetchUser(id: Int): Flow<User> = flow {
@@ -681,7 +684,7 @@ fetchUser(-1)
     }
 ```
 
-### Реальный пример: Сетевой запрос с fallback
+### Реальный Пример: Сетевой Запрос С Fallback
 
 ```kotlin
 class ArticleRepository(
@@ -707,11 +710,11 @@ class ArticleRepository(
 }
 ```
 
-### Оператор retry
+### Оператор Retry
 
 Оператор `retry` автоматически повторяет поток при возникновении исключения.
 
-#### Простой retry
+#### Простой Retry
 
 ```kotlin
 // Повтор до 3 раз при любом исключении
@@ -724,7 +727,7 @@ flow {
 .collect { println("Успех: $it") }
 ```
 
-#### Условный retry
+#### Условный Retry
 
 ```kotlin
 // Повтор только для конкретных исключений
@@ -762,7 +765,7 @@ flow {
 .collect { println("Успех: $it") }
 ```
 
-### Реализация экспоненциальной задержки
+### Реализация Экспоненциальной Задержки
 
 Экспоненциальная задержка - стандартная стратегия обработки ошибок, где задержки повтора растут экспоненциально.
 
@@ -810,7 +813,7 @@ fetchDataFlow()
     .collect { result -> println("Результат: $result") }
 ```
 
-#### Зачем нужен jitter?
+#### Зачем Нужен Jitter?
 
 Jitter предотвращает проблему "стада", когда все клиенты повторяют запросы одновременно:
 
@@ -826,7 +829,7 @@ Jitter предотвращает проблему "стада", когда вс
 // Нагрузка распределена во времени
 ```
 
-### Продвинутый паттерн: Circuit Breaker
+### Продвинутый Паттерн: Circuit Breaker
 
 ```kotlin
 class CircuitBreaker(
@@ -862,7 +865,7 @@ class CircuitBreaker(
 }
 ```
 
-### Комбинирование стратегий обработки ошибок
+### Комбинирование Стратегий Обработки Ошибок
 
 ```kotlin
 // Комплексная обработка ошибок
@@ -891,7 +894,7 @@ fun <T> Flow<T>.withRobustErrorHandling(
     }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда используйте catch для критичных потоков**:
    ```kotlin
@@ -927,7 +930,7 @@ fun <T> Flow<T>.withRobustErrorHandling(
    .catch { }
    ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Ловля исключений в collect**:
    ```kotlin

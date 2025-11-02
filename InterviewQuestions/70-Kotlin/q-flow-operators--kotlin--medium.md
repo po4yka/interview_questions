@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, operators, transformation, filtering, combining]
+subtopics: [combining, filtering, flow, operators, transformation]
 question_kind: theory
 difficulty: medium
 
@@ -18,13 +18,15 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-operators-deep-dive--kotlin--hard, q-stateflow-sharedflow-differences--kotlin--medium, q-instant-search-flow-operators--kotlin--medium, q-flow-backpressure-strategies--kotlin--hard]
+related: [q-flow-backpressure-strategies--kotlin--hard, q-flow-operators-deep-dive--kotlin--hard, q-instant-search-flow-operators--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, flow, operators, transformation, filtering, combining, difficulty/medium]
+tags: [combining, difficulty/medium, filtering, flow, kotlin, operators, transformation]
+date created: Sunday, October 12th 2025, 2:10:07 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Question (EN)
@@ -55,7 +57,7 @@ flow {
 
 ### 1. Transformation Operators
 
-#### map - Transform each element
+#### Map - Transform Each Element
 
 ```kotlin
 // Basic map
@@ -93,7 +95,7 @@ fun displayUsers() = runBlocking {
 }
 ```
 
-#### transform - Flexible transformation
+#### Transform - Flexible Transformation
 
 Can emit multiple values or skip values:
 
@@ -121,7 +123,7 @@ fun loadDataWithStates(): Flow<DataState> = flow {
 }
 ```
 
-#### flatMapConcat - Sequential flattening
+#### flatMapConcat - Sequential Flattening
 
 ```kotlin
 // Basic example
@@ -151,7 +153,7 @@ fun fetchAllUserDetails(userIds: List<Int>): Flow<UserDetail> =
         }
 ```
 
-#### flatMapMerge - Concurrent flattening
+#### flatMapMerge - Concurrent Flattening
 
 ```kotlin
 // Processes multiple flows concurrently
@@ -180,7 +182,7 @@ fun fetchMultipleUsers(userIds: List<Int>): Flow<UserData> =
         }
 ```
 
-#### flatMapLatest - Cancel previous on new emission
+#### flatMapLatest - Cancel Previous on New Emission
 
 ```kotlin
 // Cancels previous inner flow when new value emitted
@@ -221,7 +223,7 @@ fun SearchScreen(viewModel: SearchViewModel) {
 
 ### 2. Filtering Operators
 
-#### filter - Keep elements matching predicate
+#### Filter - Keep Elements Matching Predicate
 
 ```kotlin
 flow {
@@ -240,7 +242,7 @@ fun validateInputs(inputs: Flow<FormInput>): Flow<FormInput> =
     }
 ```
 
-#### distinctUntilChanged - Eliminate consecutive duplicates
+#### distinctUntilChanged - Eliminate Consecutive Duplicates
 
 ```kotlin
 flow {
@@ -271,7 +273,7 @@ class LocationViewModel : ViewModel() {
 }
 ```
 
-#### distinctUntilChangedBy - Compare by specific property
+#### distinctUntilChangedBy - Compare by Specific Property
 
 ```kotlin
 data class User(val id: Int, val name: String, val online: Boolean)
@@ -286,7 +288,7 @@ flow {
 // Emits: User(1, Alice, true), User(2, Bob, true)
 ```
 
-#### take - Take first N elements
+#### Take - Take First N Elements
 
 ```kotlin
 flow {
@@ -301,7 +303,7 @@ fun searchWithLimit(query: String): Flow<SearchResult> =
         .take(10)  // Maximum 10 results
 ```
 
-#### drop - Skip first N elements
+#### Drop - Skip First N Elements
 
 ```kotlin
 flow {
@@ -317,7 +319,7 @@ fun loadPage(pageNumber: Int, pageSize: Int): Flow<Item> =
         .take(pageSize)
 ```
 
-#### debounce - Emit only after quiet period
+#### Debounce - Emit only after Quiet Period
 
 ```kotlin
 flow {
@@ -354,7 +356,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-#### sample - Emit at fixed intervals
+#### Sample - Emit at Fixed Intervals
 
 ```kotlin
 flow {
@@ -374,7 +376,7 @@ fun sampleSensorData(): Flow<SensorReading> =
 
 ### 3. Combining Operators
 
-#### zip - Combine corresponding elements
+#### Zip - Combine Corresponding Elements
 
 ```kotlin
 val numbers = flowOf(1, 2, 3)
@@ -401,7 +403,7 @@ suspend fun loadUserProfile(userId: Int) {
 }
 ```
 
-#### combine - Combine latest values
+#### Combine - Combine Latest Values
 
 ```kotlin
 val numbers = flow {
@@ -443,7 +445,7 @@ class FormViewModel : ViewModel() {
 }
 ```
 
-#### merge - Merge multiple flows
+#### Merge - Merge Multiple Flows
 
 ```kotlin
 val flow1 = flow {
@@ -471,7 +473,7 @@ fun observeAllNotifications(): Flow<Notification> = merge(
 
 ### 4. Exception Handling Operators
 
-#### catch - Handle upstream exceptions
+#### Catch - Handle upstream Exceptions
 
 ```kotlin
 flow {
@@ -505,7 +507,7 @@ fun fetchDataSafely(): Flow<Data> =
     }
 ```
 
-#### retry - Retry on failure
+#### Retry - Retry on Failure
 
 ```kotlin
 var attempts = 0
@@ -535,7 +537,7 @@ fun fetchWithRetry(): Flow<Data> = flow {
 }
 ```
 
-#### retryWhen - Custom retry logic
+#### retryWhen - Custom Retry Logic
 
 ```kotlin
 flow {
@@ -554,7 +556,7 @@ flow {
 
 ### 5. Utility Operators
 
-#### onEach - Perform action on each element
+#### onEach - Perform Action on Each Element
 
 ```kotlin
 flow {
@@ -575,7 +577,7 @@ fun fetchDataWithLogging(): Flow<Data> =
         }
 ```
 
-#### onStart - Execute before flow starts
+#### onStart - Execute before Flow Starts
 
 ```kotlin
 flow {
@@ -601,7 +603,7 @@ fun loadDataWithLoading(): Flow<UiState> =
     }
 ```
 
-#### onCompletion - Execute when flow completes
+#### onCompletion - Execute when Flow Completes
 
 ```kotlin
 flow {
@@ -625,7 +627,7 @@ fun loadDataWithLoadingState(): Flow<Data> =
 
 ### 6. Terminal Operators
 
-#### collect - Consume flow
+#### Collect - Consume Flow
 
 ```kotlin
 flow {
@@ -637,7 +639,7 @@ flow {
 }
 ```
 
-#### toList - Collect to list
+#### toList - Collect to List
 
 ```kotlin
 val list = flow {
@@ -649,7 +651,7 @@ val list = flow {
 println(list)  // [1, 2, 3]
 ```
 
-#### toSet - Collect to set
+#### toSet - Collect to Set
 
 ```kotlin
 val set = flow {
@@ -662,7 +664,7 @@ val set = flow {
 println(set)  // [1, 2, 3]
 ```
 
-#### first - Get first element
+#### First - Get First Element
 
 ```kotlin
 val first = flow {
@@ -684,7 +686,7 @@ val firstEven = flow {
 println(firstEven)  // 2
 ```
 
-#### single - Ensure single element
+#### Single - Ensure Single Element
 
 ```kotlin
 try {
@@ -697,7 +699,7 @@ try {
 }
 ```
 
-#### reduce - Accumulate values
+#### Reduce - Accumulate Values
 
 ```kotlin
 val sum = flow {
@@ -718,7 +720,7 @@ suspend fun calculateTotal(items: Flow<CartItem>): Double =
     }
 ```
 
-#### fold - Accumulate with initial value
+#### Fold - Accumulate with Initial Value
 
 ```kotlin
 val sum = flow {
@@ -740,7 +742,7 @@ suspend fun buildReport(events: Flow<Event>): Report =
 
 ### 7. Buffering Operators
 
-#### buffer - Allow concurrent collection
+#### Buffer - Allow Concurrent Collection
 
 ```kotlin
 flow {
@@ -756,7 +758,7 @@ flow {
 // Buffer allows producer to continue while collector processes
 ```
 
-#### conflate - Keep only latest
+#### Conflate - Keep only Latest
 
 ```kotlin
 flow {
@@ -919,7 +921,7 @@ fun fetchDataOfflineFirst(): Flow<Data> = flow {
 
 Операторы Flow - это функции расширения, которые трансформируют, фильтруют, комбинируют или собирают потоки Flow. Они позволяют строить сложные реактивные конвейеры данных декларативным способом.
 
-### Обзор категорий операторов
+### Обзор Категорий Операторов
 
 ```kotlin
 // Пример конвейера Flow
@@ -933,9 +935,9 @@ flow {
     .collect { println(it) }  // Терминальный оператор
 ```
 
-### 1. Операторы трансформации
+### 1. Операторы Трансформации
 
-#### map - Трансформация каждого элемента
+#### Map - Трансформация Каждого Элемента
 
 ```kotlin
 flow {
@@ -965,7 +967,7 @@ fun displayUsers() = runBlocking {
 }
 ```
 
-#### flatMapConcat - Последовательное выравнивание
+#### flatMapConcat - Последовательное Выравнивание
 
 ```kotlin
 // Базовый пример
@@ -981,7 +983,7 @@ flow {
 // Вывод: 1-a, 1-b, 2-a, 2-b (последовательно)
 ```
 
-#### flatMapLatest - Отмена предыдущего при новой эмиссии
+#### flatMapLatest - Отмена Предыдущего При Новой Эмиссии
 
 ```kotlin
 // Практический пример: Поиск с автодополнением
@@ -999,9 +1001,9 @@ flow {
 // Вывод: "Результат поиска: kotlin" (только последний завершается)
 ```
 
-### 2. Операторы фильтрации
+### 2. Операторы Фильтрации
 
-#### filter - Оставить элементы по условию
+#### Filter - Оставить Элементы По Условию
 
 ```kotlin
 flow {
@@ -1012,7 +1014,7 @@ flow {
 // Вывод: 2, 4, 6, 8, 10
 ```
 
-#### distinctUntilChanged - Исключить последовательные дубликаты
+#### distinctUntilChanged - Исключить Последовательные Дубликаты
 
 ```kotlin
 flow {
@@ -1036,7 +1038,7 @@ class LocationViewModel : ViewModel() {
 }
 ```
 
-#### debounce - Эмиссия только после периода тишины
+#### Debounce - Эмиссия Только После Периода Тишины
 
 ```kotlin
 // Практический пример: Debouncing ввода поиска
@@ -1053,9 +1055,9 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-### 3. Операторы комбинирования
+### 3. Операторы Комбинирования
 
-#### zip - Комбинировать соответствующие элементы
+#### Zip - Комбинировать Соответствующие Элементы
 
 ```kotlin
 val numbers = flowOf(1, 2, 3)
@@ -1067,7 +1069,7 @@ numbers.zip(letters) { num, letter ->
 // Вывод: 1A, 2B, 3C
 ```
 
-#### combine - Комбинировать последние значения
+#### Combine - Комбинировать Последние Значения
 
 ```kotlin
 // Практический пример: Валидация формы
@@ -1084,9 +1086,9 @@ class FormViewModel : ViewModel() {
 }
 ```
 
-### 4. Обработка исключений
+### 4. Обработка Исключений
 
-#### catch - Обработка исключений
+#### Catch - Обработка Исключений
 
 ```kotlin
 flow {
@@ -1111,7 +1113,7 @@ fun fetchDataSafely(): Flow<Data> =
     }
 ```
 
-#### retry - Повтор при ошибке
+#### Retry - Повтор При Ошибке
 
 ```kotlin
 flow {
@@ -1123,9 +1125,9 @@ flow {
 }
 ```
 
-### 5. Утилитарные операторы
+### 5. Утилитарные Операторы
 
-#### onEach - Выполнить действие на каждом элементе
+#### onEach - Выполнить Действие На Каждом Элементе
 
 ```kotlin
 flow {
@@ -1138,7 +1140,7 @@ flow {
 }
 ```
 
-#### onStart - Выполнить перед началом потока
+#### onStart - Выполнить Перед Началом Потока
 
 ```kotlin
 // Практический пример: Показать состояние загрузки
@@ -1152,9 +1154,9 @@ fun loadDataWithLoading(): Flow<UiState> =
     }
 ```
 
-### 6. Терминальные операторы
+### 6. Терминальные Операторы
 
-#### collect - Потребление потока
+#### Collect - Потребление Потока
 
 ```kotlin
 flow {
@@ -1165,7 +1167,7 @@ flow {
 }
 ```
 
-#### toList - Собрать в список
+#### toList - Собрать В Список
 
 ```kotlin
 val list = flow {
@@ -1177,7 +1179,7 @@ val list = flow {
 println(list)  // [1, 2, 3]
 ```
 
-#### first - Получить первый элемент
+#### First - Получить Первый Элемент
 
 ```kotlin
 val first = flow {
@@ -1188,7 +1190,7 @@ val first = flow {
 println(first)  // 1
 ```
 
-### Реальный пример: Поиск со всеми операторами
+### Реальный Пример: Поиск Со Всеми Операторами
 
 ```kotlin
 class SearchViewModel(
@@ -1221,7 +1223,7 @@ class SearchViewModel(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 //  Хорошо: Ясный, читаемый конвейер
@@ -1247,7 +1249,7 @@ fun processData(input: Flow<RawData>): Flow<ProcessedData> =
 - [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
+-  - Flow
 
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines

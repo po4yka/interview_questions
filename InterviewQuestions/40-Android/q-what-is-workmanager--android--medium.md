@@ -17,15 +17,18 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-coroutines, c-background-tasks, q-coroutines-flow--kotlin--medium]
+related: [c-background-tasks, c-coroutines, c-jetpack, c-workmanager]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-29
 
 # Tags (EN only; no leading #)
-tags: [android/background-execution, android/coroutines, workmanager, jetpack, scheduled-tasks, difficulty/medium]
+tags: [android/background-execution, android/coroutines, difficulty/medium, jetpack, scheduled-tasks, workmanager]
+date created: Saturday, November 1st 2025, 1:26:05 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
+
 # Вопрос (RU)
 > Что такое WorkManager и когда его следует использовать?
 
@@ -38,7 +41,7 @@ tags: [android/background-execution, android/coroutines, workmanager, jetpack, s
 
 **WorkManager** — это Jetpack библиотека для **откладываемых гарантированных фоновых задач**, которые должны выполняться даже при закрытии приложения или перезагрузке устройства.
 
-### Ключевые особенности
+### Ключевые Особенности
 
 **Гарантированное выполнение**: задачи сохраняются в SQLite БД и переживают перезагрузки, уничтожение процесса, режим Doze.
 
@@ -50,7 +53,7 @@ tags: [android/background-execution, android/coroutines, workmanager, jetpack, s
 
 **Интеграция с корутинами**: `CoroutineWorker` для suspend-функций без блокировки потоков.
 
-### Основные компоненты
+### Основные Компоненты
 
 ```kotlin
 // 1. Worker — определяет задачу
@@ -90,7 +93,7 @@ val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
 WorkManager.getInstance(context).enqueue(uploadRequest)
 ```
 
-### Цепочки работ
+### Цепочки Работ
 
 ```kotlin
 // Последовательно-параллельное выполнение
@@ -101,7 +104,7 @@ WorkManager.getInstance(context)
     .enqueue()
 ```
 
-### Мониторинг выполнения
+### Мониторинг Выполнения
 
 ```kotlin
 WorkManager.getInstance(context)
@@ -125,7 +128,7 @@ WorkManager.getInstance(context)
     }
 ```
 
-### Когда использовать
+### Когда Использовать
 
 **Используйте WorkManager**:
 - Загрузка файлов, которая должна завершиться
@@ -273,7 +276,7 @@ WorkManager.getInstance(context)
 
 ### Related (Same Level)
 - [[q-coroutines-flow--kotlin--medium]] — Asynchronous data streams with Flow
-- [[q-foreground-service--android--medium]] — Long-running visible background work
+- [[q-foreground-service-types--android--medium]] — Long-running visible background work
 - [[q-jobscheduler--android--medium]] — Lower-level scheduled task API
 
 ### Advanced (Harder)

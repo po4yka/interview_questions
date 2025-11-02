@@ -3,21 +3,22 @@ id: cs-017
 title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [operators, type-system, class-features]
+subtopics: [class-features, operators, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-debugging-coroutines-techniques--kotlin--medium, q-retry-operators-flow--kotlin--medium, q-noncancellable-context-cleanup--kotlin--medium]
+related: [q-debugging-coroutines-techniques--kotlin--medium, q-noncancellable-context-cleanup--kotlin--medium, q-retry-operators-flow--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Какие в базовом классе Kotlin есть методы и что они делают?
+
+# Какие В Базовом Классе Kotlin Есть Методы И Что Они Делают?
 
 # Question (EN)
 > What methods exist in Kotlin base class and what do they do?

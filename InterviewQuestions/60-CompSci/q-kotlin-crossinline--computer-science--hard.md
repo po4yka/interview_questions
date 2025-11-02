@@ -3,21 +3,22 @@ id: cs-006
 title: "Kotlin Crossinline / crossinline в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [functions, class-features]
+subtopics: [class-features, functions]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-semaphore-rate-limiting--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-data-class-detailed--kotlin--medium]
+related: [q-data-class-detailed--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/hard
+tags: [difficulty/hard]
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Зачем нужен crossinline?
+
+# Зачем Нужен Crossinline?
 
 # Question (EN)
 > What is crossinline used for?

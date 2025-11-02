@@ -1,9 +1,7 @@
 ---
 id: android-481
 title: Custom View Animation / Анимация Custom View
-aliases:
-  - Custom View Animation
-  - Анимация Custom View
+aliases: [Custom View Animation, Анимация Custom View]
 topic: android
 subtopics:
   - ui-animation
@@ -17,21 +15,18 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - c-value-animator
   - c-choreographer
   - c-interpolator
+  - c-value-animator
   - q-canvas-drawing-optimization--android--hard
   - q-custom-view-lifecycle--android--medium
 sources:
   - https://developer.android.com/guide/topics/graphics/prop-animation
 created: 2025-10-21
 updated: 2025-10-30
-tags:
-  - android/ui-animation
-  - android/ui-views
-  - difficulty/medium
+tags: [android/ui-animation, android/ui-views, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:56:25 am
-date modified: Thursday, October 30th 2025, 12:44:40 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -44,7 +39,7 @@ date modified: Thursday, October 30th 2025, 12:44:40 pm
 
 ## Ответ (RU)
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Подход | Назначение | Производительность | Управление |
 |--------|------------|-------------------|------------|
@@ -52,7 +47,7 @@ date modified: Thursday, October 30th 2025, 12:44:40 pm
 | **Property Animation** | Анимация стандартных свойств View | Отличная (Hardware-accelerated) | Простое |
 | **Canvas Animation** | Сложная математическая графика | Хорошая | Требует математики |
 
-### ValueAnimator - универсальный подход
+### ValueAnimator - Универсальный Подход
 
 **Принцип**: Интерполяция значений через Choreographer, синхронизация с VSYNC (60 FPS), работа только с примитивами.
 
@@ -92,7 +87,7 @@ class AnimatedProgressBar : View {
 }
 ```
 
-### Property Animation - для стандартных свойств
+### Property Animation - Для Стандартных Свойств
 
 **Принцип**: ViewPropertyAnimator для цепочек анимаций, аппаратное ускорение трансформаций (scale, rotation, translation).
 
@@ -112,7 +107,7 @@ class AnimatedButton : Button {
 }
 ```
 
-### Canvas Animation - математическая графика
+### Canvas Animation - Математическая Графика
 
 **Принцип**: Тригонометрия (sin, cos) для циклических анимаций, математические функции для вычисления значений.
 
@@ -148,7 +143,7 @@ class AnimatedCircleView : View {
 }
 ```
 
-### Управление жизненным циклом
+### Управление Жизненным Циклом
 
 ```kotlin
 class LifecycleAwareAnimatedView : View {

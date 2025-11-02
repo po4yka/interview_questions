@@ -3,18 +3,20 @@ id: android-319
 title: "List To Detail Navigation / Навигация от списка к детализации"
 aliases: ["List To Detail Navigation", "Навигация от списка к детализации"]
 topic: android
-subtopics: [ui-navigation, fragment, intents-deeplinks]
+subtopics: [fragment, intents-deeplinks, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, c-activity, c-viewmodel, c-compose-navigation]
+related: [c-activity, c-compose-navigation, c-fragments, c-viewmodel]
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-navigation, android/fragment, android/intents-deeplinks, navigation-component, bundle, parcelable, difficulty/medium]
+tags: [android/fragment, android/intents-deeplinks, android/ui-navigation, bundle, difficulty/medium, navigation-component, parcelable]
+date created: Saturday, November 1st 2025, 12:46:57 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ How do you implement navigation from a list to detail screens in Android?
 
 Переход от списка к экрану деталей реализуется через **Intent + Bundle** (для Activity), **Navigation Component** (для Fragment) или **shared ViewModel** (для связанных экранов). Современный подход — Single Activity архитектура с Navigation Component и Safe Args для type-safe передачи аргументов.
 
-### Основные подходы
+### Основные Подходы
 
 **1. Intent + Bundle (Activity → Activity)**
 
@@ -136,7 +138,7 @@ class UserDetailFragment : Fragment() {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Подход | Когда использовать | Преимущества | Недостатки |
 |--------|-------------------|-------------|-----------|

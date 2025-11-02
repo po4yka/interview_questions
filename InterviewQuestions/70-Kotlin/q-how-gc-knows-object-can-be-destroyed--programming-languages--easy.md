@@ -3,7 +3,7 @@ id: lang-046
 title: "How Gc Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
 aliases: [How Gc Knows Object Can Be Destroyed, Как GC знает что объект можно уничтожить]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, jvm]
+subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-roots--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, memory-management, garbage-collection, jvm, kotlin, difficulty/easy]
+tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
+date created: Friday, October 31st 2025, 6:31:27 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Как Сборщик Мусора Понимает Что Объект Можно Уничтожить?
@@ -144,4 +146,4 @@ GC uses **reachability analysis from GC Roots**. If an object cannot be reached 
 
 - [[q-what-is-job-object--programming-languages--medium]]
 - [[q-mediator-pattern--design-patterns--medium]]
-- [[q-zip-operator-parallel-requests--programming-languages--medium]]
+-

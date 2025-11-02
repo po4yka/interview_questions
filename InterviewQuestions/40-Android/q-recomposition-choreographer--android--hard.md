@@ -3,19 +3,22 @@ id: android-165
 title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
 aliases: ["Recomposition Choreographer", "Рекомпозиция и Choreographer"]
 topic: android
-subtopics: [ui-compose, performance-rendering, coroutines]
+subtopics: [coroutines, performance-rendering, ui-compose]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-stability-skippability--android--hard, q-compose-performance-optimization--android--hard, q-recomposition-compose--android--medium]
+related: [q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-compose, android/performance-rendering, android/coroutines, choreographer, vsync, difficulty/hard]
+tags: [android/coroutines, android/performance-rendering, android/ui-compose, choreographer, difficulty/hard, vsync]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
+
 # Вопрос (RU)
 
 Рекомпозиция происходит в рандомное время или по команде Choreographer?

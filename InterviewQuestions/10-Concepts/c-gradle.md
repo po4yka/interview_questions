@@ -1,10 +1,10 @@
 ---
 id: "20251025-140200"
 title: "Gradle / Gradle"
-aliases: ["Gradle", "Gradle Build System", "Build Automation", "Система сборки Gradle", "Автоматизация сборки"]
+aliases: ["Build Automation", "Gradle Build System", "Gradle", "Автоматизация сборки", "Система сборки Gradle"]
 summary: "Build automation tool for Android and JVM projects using Groovy or Kotlin DSL"
 topic: "android"
-subtopics: ["gradle", "build-system", "kotlin-dsl"]
+subtopics: ["build-system", "gradle", "kotlin-dsl"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "gradle", "build-system", "android", "kotlin-dsl", "groovy", "automation", "difficulty/medium"]
+tags: ["android", "automation", "build-system", "concept", "difficulty/medium", "gradle", "groovy", "kotlin-dsl"]
+date created: Saturday, October 25th 2025, 11:06:08 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Gradle / Gradle
@@ -24,7 +26,7 @@ tags: ["concept", "gradle", "build-system", "android", "kotlin-dsl", "groovy", "
 
 Gradle is a powerful, flexible build automation tool used for Android and JVM-based projects. It manages dependencies, compiles code, runs tests, and packages applications using build scripts written in Groovy or Kotlin DSL. Gradle uses a directed acyclic graph (DAG) of tasks, supports incremental builds, and provides extensive customization through plugins. Android projects use the Android Gradle Plugin (AGP) to add Android-specific build capabilities like APK/AAB generation, resource merging, and build variants.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Gradle - это мощный, гибкий инструмент автоматизации сборки, используемый для Android и JVM-проектов. Управляет зависимостями, компилирует код, запускает тесты и упаковывает приложения с помощью скриптов сборки, написанных на Groovy или Kotlin DSL. Gradle использует направленный ациклический граф (DAG) задач, поддерживает инкрементальные сборки и предоставляет обширные возможности настройки через плагины. Android-проекты используют Android Gradle Plugin (AGP) для добавления специфичных для Android возможностей сборки, таких как генерация APK/AAB, слияние ресурсов и варианты сборки.
 
@@ -41,7 +43,7 @@ Gradle - это мощный, гибкий инструмент автомати
 - **Configuration Cache**: Speeds up subsequent builds by caching configuration
 - **Version Catalogs**: Centralized dependency management (libs.versions.toml)
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Скрипты сборки**: `build.gradle.kts` (Kotlin DSL) или `build.gradle` (Groovy DSL)
 - **Структура проекта**: Многомодульные проекты с корневыми и модульными скриптами

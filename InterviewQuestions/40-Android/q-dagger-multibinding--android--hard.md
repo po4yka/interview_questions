@@ -3,7 +3,7 @@ id: android-459
 title: Dagger Multibinding / Multibinding в Dagger
 aliases: ["Dagger Multibinding", "Multibinding в Dagger"]
 topic: android
-subtopics: [di-hilt, architecture-modularization]
+subtopics: [architecture-modularization, di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -16,10 +16,10 @@ related:
   - q-dagger-framework-overview--android--hard
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/di-hilt, android/architecture-modularization, dagger, dependency-injection, multibinding, difficulty/hard]
+tags: [android/architecture-modularization, android/di-hilt, dagger, dependency-injection, difficulty/hard, multibinding]
 sources: []
 date created: Thursday, October 30th 2025, 12:03:46 pm
-date modified: Thursday, October 30th 2025, 12:47:29 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)

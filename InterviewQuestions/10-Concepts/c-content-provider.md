@@ -1,7 +1,7 @@
 ---
 id: "20251025-140400"
 title: "ContentProvider / ContentProvider"
-aliases: ["ContentProvider", "Content Provider", "Content Resolver", "Android Data Sharing", "Поставщик контента", "Провайдер контента"]
+aliases: ["Android Data Sharing", "Content Provider", "Content Resolver", "ContentProvider", "Поставщик контента", "Провайдер контента"]
 summary: "Android component for managing and sharing structured data between applications"
 topic: "android"
 subtopics: ["content-provider", "data-sharing", "ipc"]
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "content-provider", "data-sharing", "ipc", "uri", "crud", "difficulty/medium"]
+tags: ["android", "concept", "content-provider", "crud", "data-sharing", "difficulty/medium", "ipc", "uri"]
+date created: Saturday, October 25th 2025, 11:08:40 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # ContentProvider / ContentProvider
@@ -24,7 +26,7 @@ tags: ["concept", "android", "content-provider", "data-sharing", "ipc", "uri", "
 
 ContentProvider is one of Android's four fundamental components that manages access to a structured set of data and provides a standard interface for data sharing between applications. It acts as an abstraction layer between the data source (database, files, network) and the rest of the application or other applications. ContentProviders use content URIs to identify data, support CRUD operations (Create, Read, Update, Delete), and can enforce permissions to control data access. Common examples include ContactsContract, MediaStore, and CalendarContract.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 ContentProvider - один из четырёх фундаментальных компонентов Android, который управляет доступом к структурированному набору данных и предоставляет стандартный интерфейс для обмена данными между приложениями. Выступает в качестве слоя абстракции между источником данных (база данных, файлы, сеть) и остальной частью приложения или другими приложениями. ContentProvider использует URI контента для идентификации данных, поддерживает CRUD операции (Create, Read, Update, Delete) и может применять разрешения для контроля доступа к данным. Распространённые примеры: ContactsContract, MediaStore, CalendarContract.
 
@@ -41,7 +43,7 @@ ContentProvider - один из четырёх фундаментальных к
 - **File Descriptors**: openFile() for sharing files
 - **Synchronous**: Operations run on caller's thread (use async methods)
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Абстракция данных**: Скрывает реализацию хранилища данных
 - **Межпроцессное взаимодействие (IPC)**: Безопасный обмен данными между приложениями

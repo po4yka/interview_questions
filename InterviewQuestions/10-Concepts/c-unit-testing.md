@@ -1,7 +1,7 @@
 ---
 id: "20251025-110311"
 title: "Unit Testing / Модульное Тестирование"
-aliases: ["Unit Testing", "Unit Tests", "Модульное Тестирование", "Юнит-Тесты", "JUnit"]
+aliases: ["JUnit", "Unit Testing", "Unit Tests", "Модульное Тестирование", "Юнит-Тесты"]
 summary: "Testing individual units of code in isolation to ensure correctness"
 topic: "testing"
 subtopics: ["junit", "quality-assurance", "tdd"]
@@ -15,7 +15,9 @@ moc: "moc-testing"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "testing", "junit", "quality-assurance", "tdd", "difficulty/medium"]
+tags: ["concept", "difficulty/medium", "junit", "quality-assurance", "tdd", "testing"]
+date created: Saturday, October 25th 2025, 11:04:38 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Unit Testing / Модульное Тестирование
@@ -24,7 +26,7 @@ tags: ["concept", "testing", "junit", "quality-assurance", "tdd", "difficulty/me
 
 Unit testing is the practice of testing individual units or components of software in isolation from the rest of the application. A unit is the smallest testable part of an application, typically a function, method, or class. Unit tests verify that each unit works correctly on its own, catching bugs early and ensuring code quality through automated validation.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Модульное тестирование - это практика тестирования отдельных модулей или компонентов программного обеспечения в изоляции от остальной части приложения. Модуль - это наименьшая тестируемая часть приложения, обычно функция, метод или класс. Модульные тесты проверяют, что каждый модуль работает корректно сам по себе, выявляя ошибки на ранней стадии и обеспечивая качество кода через автоматизированную проверку.
 
@@ -38,7 +40,7 @@ Unit testing is the practice of testing individual units or components of softwa
 - **Coverage**: Aim for high code coverage of critical logic
 - **Mocking**: Use mock objects to isolate dependencies
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Изоляция**: Тесты выполняются независимо без внешних зависимостей
 - **Быстрое выполнение**: Модульные тесты должны выполняться быстро (миллисекунды)

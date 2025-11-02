@@ -5,22 +5,16 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - testing
-  - test-dispatcher
-  - runtest
+tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 moc: moc-kotlin
-related: [q-inline-function-limitations--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium, q-flow-backpressure--kotlin--hard]
-  - q-debugging-coroutines-techniques--kotlin--medium
-  - q-common-coroutine-mistakes--kotlin--medium
-  - q-channelflow-callbackflow-flow--kotlin--medium
+related: [q-channelflow-callbackflow-flow--kotlin--medium, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-flow-backpressure--kotlin--hard, q-inline-function-limitations--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
 subtopics:
   - coroutines
-  - testing
-  - test-dispatcher
   - runtest
+  - test-dispatcher
+  - testing
+date created: Saturday, November 1st 2025, 12:10:13 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Question (EN)
@@ -736,7 +730,7 @@ fun goodTest() = runTest {
 
 [Полный русский перевод следует той же структуре]
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **StandardTestDispatcher по умолчанию** - Ставит корутины в очередь
 2. **UnconfinedTestDispatcher выполняется немедленно** - До первой приостановки

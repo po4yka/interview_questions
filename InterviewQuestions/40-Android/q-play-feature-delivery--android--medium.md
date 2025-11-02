@@ -1,20 +1,22 @@
 ---
 id: android-189
 title: Play Feature Delivery / Play Feature Delivery
-aliases: [Play Feature Delivery, Dynamic Feature Modules, App Bundle, Динамические модули]
+aliases: [App Bundle, Dynamic Feature Modules, Play Feature Delivery, Динамические модули]
 topic: android
-subtopics: [app-bundle, gradle, build-variants]
+subtopics: [app-bundle, build-variants, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-anr-application-not-responding--android--medium, q-which-class-to-use-for-detecting-gestures--android--medium, q-handler-looper-comprehensive--android--medium]
+related: [q-build-optimization--android--hard, q-modularization-strategies--android--hard, q-what-is-app-bundle--android--easy]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android, android/app-bundle, android/gradle, android/build-variants, app-bundle, dynamic-modules, difficulty/medium]
+tags: [android, android/app-bundle, android/build-variants, android/gradle, app-bundle, difficulty/medium, dynamic-modules]
 sources: []
+date created: Saturday, November 1st 2025, 1:03:33 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +35,7 @@ What do you know about Play Feature Delivery?
 
 Google Play генерирует оптимизированные APK для конкретной конфигурации устройства из App Bundle, поэтому пользователи загружают только нужный код и ресурсы.
 
-### Типы доставки модулей
+### Типы Доставки Модулей
 
 **1. Install-time** — модуль устанавливается автоматически вместе с приложением:
 
@@ -76,7 +78,7 @@ splitInstallManager.startInstall(request)
 </dist:module>
 ```
 
-### Конфигурация feature-модуля
+### Конфигурация Feature-модуля
 
 ```gradle
 // Feature-модуль
@@ -101,7 +103,7 @@ android {
 - `minifyEnabled` (настраивается только в базовом модуле)
 - `versionCode`, `versionName` (берутся из базового модуля)
 
-### Мониторинг загрузки
+### Мониторинг Загрузки
 
 ```kotlin
 private val listener = SplitInstallStateUpdatedListener { state ->
@@ -125,7 +127,7 @@ private val listener = SplitInstallStateUpdatedListener { state ->
 }
 ```
 
-### SplitCompat — доступ к загруженным модулям
+### SplitCompat — Доступ К Загруженным Модулям
 
 ```kotlin
 // Вариант 1: Наследование от SplitCompatApplication
@@ -140,7 +142,7 @@ class MyApplication : Application() {
 }
 ```
 
-### Проверка установки модуля
+### Проверка Установки Модуля
 
 ```kotlin
 fun isModuleInstalled(moduleName: String): Boolean {
@@ -171,7 +173,7 @@ if (isModuleInstalled("ar_preview")) {
 - Возможность удаления неиспользуемых модулей
 - Быстрые обновления отдельных модулей
 
-### Примеры использования
+### Примеры Использования
 
 ```
 :app (базовый модуль — списки товаров, навигация)
@@ -189,7 +191,7 @@ if (isModuleInstalled("ar_preview")) {
 
 Google Play generates optimized APKs for specific device configurations from App Bundles, so users download only the code and resources they need.
 
-### Module delivery types
+### Module Delivery Types
 
 **1. Install-time** — module installed automatically with the app:
 
@@ -232,7 +234,7 @@ splitInstallManager.startInstall(request)
 </dist:module>
 ```
 
-### Feature module configuration
+### Feature Module Configuration
 
 ```gradle
 // Feature module
@@ -257,7 +259,7 @@ android {
 - `minifyEnabled` (configured only in base module)
 - `versionCode`, `versionName` (taken from base module)
 
-### Download monitoring
+### Download Monitoring
 
 ```kotlin
 private val listener = SplitInstallStateUpdatedListener { state ->
@@ -281,7 +283,7 @@ private val listener = SplitInstallStateUpdatedListener { state ->
 }
 ```
 
-### SplitCompat — accessing downloaded modules
+### SplitCompat — Accessing Downloaded Modules
 
 ```kotlin
 // Option 1: Extend SplitCompatApplication
@@ -296,7 +298,7 @@ class MyApplication : Application() {
 }
 ```
 
-### Checking module installation
+### Checking Module Installation
 
 ```kotlin
 fun isModuleInstalled(moduleName: String): Boolean {
@@ -327,7 +329,7 @@ if (isModuleInstalled("ar_preview")) {
 - Ability to uninstall unused modules
 - Fast updates of individual modules
 
-### Example use cases
+### Example Use Cases
 
 ```
 :app (base module — product listings, navigation)
@@ -367,5 +369,5 @@ if (isModuleInstalled("ar_preview")) {
 
 ### Advanced (Harder)
 
-- [[q-modularization-strategies--android--hard]]
+- [[q-modularization-patterns--android--hard]]
 - [[q-build-optimization--android--hard]]

@@ -1,7 +1,7 @@
 ---
 id: kotlin-181
 title: "Fan-in and fan-out patterns with Channels / Fan-in и fan-out паттерны с каналами"
-aliases: [Fan, In, Fan, Out, Channels]
+aliases: [Channels, Fan, In, Out]
 topic: kotlin
 subtopics: []
 question_kind: theory
@@ -10,14 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-nullable-string-declaration--programming-languages--easy, q-data-sealed-classes-definition--programming-languages--hard, q-delegation-by-keyword--kotlin--medium]
+related: [q-data-sealed-classes-definition--programming-languages--hard, q-delegation-by-keyword--kotlin--medium, q-kotlin-nullable-string-declaration--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/hard
+tags: [difficulty/hard]
+date created: Sunday, October 12th 2025, 3:43:59 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Fan-in and fan-out patterns with Channels
+
+# Fan-in and Fan-out Patterns with Channels
 
 ## English
 
@@ -1288,11 +1289,11 @@ val numWorkers = Runtime.getRuntime().availableProcessors()
 ```
 
 ### Related Questions
-- [[q-channels-basics--kotlin--medium]] - Channel fundamentals
+-  - Channel fundamentals
 - [[q-flow-operators--kotlin--medium]] - Flow operators and transformations
-- [[q-coroutine-scope-context--kotlin--medium]] - Coroutine scope management
+-  - Coroutine scope management
 - [[q-structured-concurrency--kotlin--hard]] - Structured concurrency principles
-- [[q-shared-mutable-state--kotlin--hard]] - Thread-safe shared state
+-  - Thread-safe shared state
 
 ## Follow-ups
 1. How would you implement a priority queue with fan-out pattern where high-priority tasks are processed first?
@@ -1319,7 +1320,7 @@ val numWorkers = Runtime.getRuntime().availableProcessors()
 
 **Fan-out** и **Fan-in** — это фундаментальные паттерны конкурентности для распределения работы между несколькими обработчиками и агрегации результатов.
 
-#### 1. Основные концепции
+#### 1. Основные Концепции
 
 **Паттерн Fan-out:**
 - **Один производитель** → **Несколько потребителей**
@@ -1347,7 +1348,7 @@ Fan-in:
 Производитель 3 →
 ```
 
-#### 2. Базовая реализация Fan-out
+#### 2. Базовая Реализация Fan-out
 
 **Несколько потребителей из одного канала:**
 
@@ -1393,7 +1394,7 @@ suspend fun basicFanOut() {
 - Встроенная балансировка нагрузки (первый доступный потребитель получает работу)
 - Необходимо закрыть канал для сигнала о завершении
 
-#### 3. Базовая реализация Fan-in
+#### 3. Базовая Реализация Fan-in
 
 **Несколько производителей к одному потребителю:**
 
@@ -1445,7 +1446,7 @@ suspend fun basicFanIn() {
 
 *(Продолжение с детальными примерами обработки изображений, агрегации логов, тестированием, обработкой ошибок и production use cases на русском языке следует той же структуре, что и английская версия)*
 
-#### 4. Продвинутое распределение работы
+#### 4. Продвинутое Распределение Работы
 
 **Production-ready очередь работы с приоритизацией:**
 
@@ -1470,7 +1471,7 @@ class ОчередьРаботы(
 }
 ```
 
-#### 5. Сравнение производительности
+#### 5. Сравнение Производительности
 
 **Таблица сравнения:**
 
@@ -1482,14 +1483,14 @@ class ОчередьРаботы(
 | Типобезопасность | Хорошая | Отличная | Хорошая (sealed классы) |
 | Лучше для | Очереди задач | Потоки данных | Обработчики с состоянием |
 
-### Связанные вопросы
-- [[q-channels-basics--kotlin--medium]] - Основы каналов
+### Связанные Вопросы
+-  - Основы каналов
 - [[q-flow-operators--kotlin--medium]] - Операторы Flow
-- [[q-coroutine-scope-context--kotlin--medium]] - Управление scope
+-  - Управление scope
 - [[q-structured-concurrency--kotlin--hard]] - Структурированная конкурентность
-- [[q-shared-mutable-state--kotlin--hard]] - Потокобезопасное разделяемое состояние
+-  - Потокобезопасное разделяемое состояние
 
-### Дополнительные вопросы
+### Дополнительные Вопросы
 1. Как реализовать priority queue с fan-out паттерном, где задачи с высоким приоритетом обрабатываются первыми?
 2. Какие различия в производительности между fan-out на каналах и Flow shareIn? Когда выбирать каждый подход?
 3. Как реализовать backpressure в fan-out сценарии, когда обработчики медленнее производителя?

@@ -1,21 +1,24 @@
 ---
 id: android-060
 title: "Recomposition in Compose / Рекомпозиция в Compose"
-aliases: [Recomposition, Рекомпозиция, Compose Recomposition, Рекомпозиция Compose]
+aliases: [Compose Recomposition, Recomposition, Рекомпозиция, Рекомпозиция Compose]
 topic: android
-subtopics: [ui-compose, ui-state, performance-rendering]
+subtopics: [performance-rendering, ui-compose, ui-state]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-jetpack-compose-basics--android--medium, q-compose-performance-optimization--android--hard]
+related: [c-jetpack-compose, q-compose-performance-optimization--android--hard, q-jetpack-compose-basics--android--medium]
 created: 2025-10-12
 updated: 2025-10-27
 sources: [https://developer.android.com/jetpack/compose/lifecycle]
-tags: [android/ui-compose, android/ui-state, android/performance-rendering, jetpack-compose, recomposition, state, performance, difficulty/medium]
+tags: [android/performance-rendering, android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, performance, recomposition, state]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое рекомпозиция в Jetpack Compose? Что триггерит рекомпозицию и как Compose решает какие composable нужно перерисовать?
@@ -30,7 +33,7 @@ tags: [android/ui-compose, android/ui-state, android/performance-rendering, jetp
 
 **Рекомпозиция** — процесс повторного выполнения composable функций при изменении параметров или состояния. См. [[c-jetpack-compose]].
 
-### Как работает
+### Как Работает
 
 В отличие от View (`textView.text = "new"`), Compose перезапускает функцию с новыми данными:
 
@@ -51,7 +54,7 @@ fun Counter() {
 3. Функция `Counter()` выполняется заново
 4. UI обновляется
 
-### Что триггерит рекомпозицию?
+### Что Триггерит Рекомпозицию?
 
 #### 1. Изменения State
 
@@ -72,7 +75,7 @@ fun UserProfile(viewModel: ProfileViewModel) {
 - `collectAsState()` emits from Flow
 - `observeAsState()` for LiveData
 
-#### 2. Изменения параметров
+#### 2. Изменения Параметров
 
 ```kotlin
 @Composable
@@ -90,7 +93,7 @@ fun Parent() {
 }
 ```
 
-### Область рекомпозиции (Scoping)
+### Область Рекомпозиции (Scoping)
 
 Compose делает рекомпозицию **в максимально узкой области**:
 
@@ -110,7 +113,7 @@ fun Screen() {
 }
 ```
 
-### Стабильность и пропуск рекомпозиции
+### Стабильность И Пропуск Рекомпозиции
 
 Compose **пропускает рекомпозицию** если параметры стабильны и не изменились:
 
@@ -133,7 +136,7 @@ fun ItemList(items: List<Item>) // ВСЕГДА делает рекомпози�
 
 **Почему `List` нестабилен?** Kotlin's `List` = `java.util.List`, может быть изменён извне.
 
-#### Решение: Сделать стабильным
+#### Решение: Сделать Стабильным
 
 ```kotlin
 // Option 1: @Stable wrapper
@@ -147,9 +150,9 @@ import kotlinx.collections.immutable.ImmutableList
 fun ItemList(items: ImmutableList<Item>) // ✅ Стабильно
 ```
 
-### Контроль рекомпозиции
+### Контроль Рекомпозиции
 
-#### 1. `remember {}` — Сохранить между рекомпозициями
+#### 1. `remember {}` — Сохранить Между Рекомпозициями
 
 ```kotlin
 @Composable
@@ -162,7 +165,7 @@ fun ExpensiveCalculation() {
 }
 ```
 
-#### 2. `remember(key) {}` — Пересчёт при изменении ключа
+#### 2. `remember(key) {}` — Пересчёт При Изменении Ключа
 
 ```kotlin
 @Composable
@@ -180,7 +183,7 @@ fun FilteredList(items: List<Item>, query: String) {
 }
 ```
 
-#### 3. `derivedStateOf {}` — Вычисляемое состояние
+#### 3. `derivedStateOf {}` — Вычисляемое Состояние
 
 ```kotlin
 @Composable
@@ -205,9 +208,9 @@ fun ScrollToTopButton(listState: LazyListState) {
 
 **Почему?** `derivedStateOf` батчит изменения и уведомляет только при изменении boolean результата.
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
-#### 1. Нестабильность лямбд
+#### 1. Нестабильность Лямбд
 
 ```kotlin
 // ❌ ПЛОХО: Новая лямбда каждый раз
@@ -227,7 +230,7 @@ fun GoodButton(viewModel: ViewModel) {
 }
 ```
 
-#### 2. Чтение состояния слишком высоко
+#### 2. Чтение Состояния Слишком Высоко
 
 ```kotlin
 // ❌ ПЛОХО: Вся Column делает рекомпозицию

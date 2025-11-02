@@ -3,7 +3,7 @@ id: android-135
 title: "What Is Known About Methods That Redraw View / Что известно о методах перерисовывающих View"
 aliases: ["Methods That Redraw View", "Методы перерисовки View"]
 topic: android
-subtopics: [ui-views, ui-graphics, performance-rendering]
+subtopics: [performance-rendering, ui-graphics, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,8 +14,11 @@ related: [q-handler-looper-main-thread--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/ui-views, android/ui-graphics, android/performance-rendering, requestLayout, postInvalidate, ui, views, rendering, difficulty/medium]
+tags: [android, android/performance-rendering, android/ui-graphics, android/ui-views, difficulty/medium, postInvalidate, rendering, requestLayout, ui, views]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 Что известно про методы, которые перерисовывают View?
@@ -112,7 +115,7 @@ class LoadingView : View {
 }
 ```
 
-### Сравнение методов
+### Сравнение Методов
 
 | Метод | Поток | Вызывает | Использование |
 |-------|-------|----------|---------------|
@@ -120,7 +123,7 @@ class LoadingView : View {
 | `requestLayout()` | UI | `onMeasure()`, `onLayout()` | Изменения размера/позиции |
 | `postInvalidate()` | Любой | `onDraw()` (на UI) | Из фоновых потоков |
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **invalidate()** — только для визуальных изменений
 2. **requestLayout()** — когда размер/позиция меняются

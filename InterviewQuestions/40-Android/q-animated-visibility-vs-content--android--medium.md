@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-compose-recomposition--android--medium, q-compose-performance--android--hard, q-jetpack-compose-basics--android--medium]
+related: [c-jetpack-compose]
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/ui-animation, android/ui-compose, compose, animation, difficulty/medium]
+tags: [android/ui-animation, android/ui-compose, animation, compose, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:36:05 am
-date modified: Thursday, October 30th 2025, 12:43:05 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -82,7 +82,7 @@ Crossfade(targetState = screen) { currentScreen ->
 
 **Применение**: прототипирование, простые переключения экранов.
 
-### Ключевые различия
+### Ключевые Различия
 
 | Критерий | AnimatedVisibility | AnimatedContent | Crossfade |
 |---------|-------------------|-----------------|-----------|
@@ -182,11 +182,11 @@ Crossfade(targetState = screen) { currentScreen ->
 - [[q-how-jetpack-compose-works--android--medium]] - Compose architecture
 
 ### Related (Same Level)
-- [[q-compose-recomposition--android--medium]] - Recomposition mechanics
+ - Recomposition mechanics
 - [[q-compose-remember-derived-state--android--medium]] - State management
 - [[q-compose-modifier-system--android--medium]] - Modifier API
 
 ### Advanced (Harder)
-- [[q-compose-performance--android--hard]] - Performance optimization
+ - Performance optimization
 - [[q-compose-custom-layout--android--hard]] - Custom layout and measurement
 - [[q-compose-stability-skippability--android--hard]] - Stability system

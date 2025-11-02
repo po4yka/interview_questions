@@ -10,13 +10,16 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-10-31"
-tags: ["kotlin", "coroutines", "supervisorjob", "error-handling", "job", "difficulty/medium"]
+tags: ["coroutines", "difficulty/medium", "error-handling", "job", "kotlin", "supervisorjob"]
 description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, covering independent failure handling, comparison with regular Job, and real-world use cases in Android development"
 moc: moc-kotlin
-related: [q-delegation-by-keyword--kotlin--medium, q-flow-performance--kotlin--hard, q-dispatchers-unconfined--kotlin--medium]
+related: []
 subtopics: [coroutines, supervisor-job]
+date created: Saturday, November 1st 2025, 1:29:01 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# SupervisorJob: when and why to use it?
+
+# SupervisorJob: when and why to Use It?
 
 ## English
 
@@ -28,7 +31,7 @@ In structured concurrency, when a child coroutine fails, it normally cancels its
 
 **SupervisorJob** is a special implementation of Job where the failure of a child doesn't affect the parent or other children. Each child is supervised independently.
 
-#### Regular Job vs SupervisorJob
+#### Regular Job Vs SupervisorJob
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -194,7 +197,7 @@ fun supervisorExceptionHandling() = runBlocking {
 }
 ```
 
-#### supervisorScope vs coroutineScope
+#### supervisorScope Vs coroutineScope
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -802,7 +805,7 @@ class SupervisorJobTest {
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 В структурированном параллелизме, когда дочерняя корутина падает с ошибкой, она обычно отменяет родителя и всех siblings. Однако иногда нам нужна независимая обработка ошибок, где сбой одной корутины не влияет на другие. Когда следует использовать SupervisorJob вместо обычного Job, и каковы реальные случаи использования, особенно в Android-разработке?
 
@@ -810,7 +813,7 @@ class SupervisorJobTest {
 
 **SupervisorJob** - это специальная реализация Job, где сбой дочерней корутины не влияет на родителя или других потомков. Каждый потомок контролируется независимо.
 
-#### Обычный Job vs SupervisorJob
+#### Обычный Job Vs SupervisorJob
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -922,7 +925,7 @@ fun supervisorJobCreation() = runBlocking {
 }
 ```
 
-#### Обработка исключений с SupervisorJob
+#### Обработка Исключений С SupervisorJob
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -976,7 +979,7 @@ fun supervisorExceptionHandling() = runBlocking {
 }
 ```
 
-#### supervisorScope vs coroutineScope
+#### supervisorScope Vs coroutineScope
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1032,7 +1035,7 @@ suspend fun compareScopeBuilders() {
 }
 ```
 
-#### Случаи использования в Android
+#### Случаи Использования В Android
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1197,7 +1200,7 @@ data class User(val id: String, val name: String)
 data class Post(val id: String, val title: String)
 ```
 
-#### Продвинутые паттерны
+#### Продвинутые Паттерны
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1348,7 +1351,7 @@ fun demonstrateAdvancedPatterns() = runBlocking {
 }
 ```
 
-#### Управление жизненным циклом SupervisorJob
+#### Управление Жизненным Циклом SupervisorJob
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1515,7 +1518,7 @@ class SupervisorJobTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте SupervisorJob для независимых операций**
    ```kotlin
@@ -1569,7 +1572,7 @@ class SupervisorJobTest {
    }
    ```
 
-### Частые ошибки
+### Частые Ошибки
 
 1. **Забывание exception handler'а с SupervisorJob**
    - Исключения теряются без handler'а
@@ -1603,7 +1606,5 @@ class SupervisorJobTest {
 ## Related Questions
 
 - [[q-coroutine-job-lifecycle--kotlin--medium]]
-- [[q-coroutine-parent-child-relationship--kotlin--medium]]
-- [[q-coroutine-exception-handling--kotlin--hard]]
 - [[q-coroutine-context-elements--kotlin--hard]]
 - [[q-structured-concurrency--kotlin--hard]]

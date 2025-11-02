@@ -1,24 +1,22 @@
 ---
 id: android-069
 title: "Kotlin Value Classes (Inline Classes) / Value классы в Kotlin"
-aliases:
-  - "Kotlin Value Classes (Inline Classes)"
-  - "Value классы в Kotlin"
+aliases: ["Kotlin Value Classes (Inline Classes)", "Value классы в Kotlin"]
 topic: android
-subtopics: [performance-memory, coroutines]
+subtopics: [coroutines, performance-memory]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-value-classes, q-kotlin-basics--kotlin--easy, q-kotlin-data-classes--kotlin--medium]
+related: [c-value-classes, q-kotlin-data-classes--kotlin--medium]
 created: 2025-10-12
 updated: 2025-10-31
-tags: [android/performance-memory, android/coroutines, value-classes, inline-classes, performance, type-safety, difficulty/medium]
+tags: [android/coroutines, android/performance-memory, difficulty/medium, inline-classes, performance, type-safety, value-classes]
 sources: [https://kotlinlang.org/docs/inline-classes.html]
 date created: Saturday, October 18th 2025, 2:15:55 pm
-date modified: Thursday, October 30th 2025, 3:11:56 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -265,15 +263,8 @@ val id: Identifier = userId             // 4. Interfaces
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-kotlin-basics--kotlin--easy]] - Kotlin basics
-- [[q-android-app-components--android--easy]] - App components
-
 ### Related (Same Level)
 - [[q-kotlin-data-classes--kotlin--medium]] - Data classes
-- [[q-kotlin-sealed-classes--kotlin--medium]] - Sealed classes
-- [[q-kotlin-generics--kotlin--medium]] - Generics
 
 ### Advanced (Harder)
-- [[q-kotlin-coroutines-advanced--kotlin--hard]] - Coroutines advanced
-- [[q-kotlin-multiplatform--kotlin--hard]] - Multiplatform
+- Advanced content to be added

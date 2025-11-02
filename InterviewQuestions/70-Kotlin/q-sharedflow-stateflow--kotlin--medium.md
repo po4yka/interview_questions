@@ -7,10 +7,10 @@ aliases: []
 topic: kotlin
 subtopics:
   - flow
-  - sharedflow
-  - stateflow
   - hot-flow
+  - sharedflow
   - state-management
+  - stateflow
 question_kind: theory
 difficulty: medium
 
@@ -23,14 +23,17 @@ source_note: Comprehensive comparison of SharedFlow and StateFlow
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-stateflow-sharedflow-differences--kotlin--medium, q-hot-cold-flows--kotlin--medium, q-flow-basics--kotlin--easy]
+related: [q-flow-basics--kotlin--easy, q-hot-cold-flows--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-31
 
-tags: [kotlin, flow, sharedflow, stateflow, hot-flow, coroutines, state-management, difficulty/medium]
+tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharedflow, state-management, stateflow]
+date created: Saturday, November 1st 2025, 9:25:31 am
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What's the difference between SharedFlow and StateFlow? When should you use each?
 
@@ -333,7 +336,7 @@ val suspend = MutableSharedFlow<Int>(
 
 ### When to Use StateFlow
 
-####  Use StateFlow for:
+#### Use StateFlow For:
 
 ```kotlin
 // 1. UI State
@@ -372,7 +375,7 @@ class Repository {
 
 ### When to Use SharedFlow
 
-####  Use SharedFlow for:
+#### Use SharedFlow For:
 
 ```kotlin
 // 1. One-time Events
@@ -425,17 +428,17 @@ class EventBus {
 }
 ```
 
-### StateFlow vs SharedFlow: Detailed Comparison
+### StateFlow Vs SharedFlow: Detailed Comparison
 
 #### Initialization
 
 ```kotlin
 // StateFlow: Must have initial value
-val state = MutableStateFlow<String>("initial")  // 
+val state = MutableStateFlow<String>("initial")  //
 // val state = MutableStateFlow<String>()        //  Error
 
 // SharedFlow: No initial value required
-val shared = MutableSharedFlow<String>()         // 
+val shared = MutableSharedFlow<String>()         //
 val shared2 = MutableSharedFlow<String?>(replay = 1).apply {
     tryEmit(null)  // Can set initial value if needed
 }
@@ -619,7 +622,7 @@ repeat(1000) {
 
 **SharedFlow** и **StateFlow** — горячие реализации Flow, предназначенные для разделения состояния и событий между несколькими коллекторами. Хотя оба являются горячими потоками, излучающими значения всем активным коллекторам, они служат разным целям и имеют разные характеристики.
 
-### Ключевые различия
+### Ключевые Различия
 
 | Аспект | StateFlow | SharedFlow |
 |--------|-----------|------------|
@@ -630,7 +633,7 @@ repeat(1000) {
 | **Различные значения** | Только различные | Все значения |
 | **Случай использования** | UI состояние, конфигурация | События, уведомления |
 
-### StateFlow: Хранитель состояния
+### StateFlow: Хранитель Состояния
 
 StateFlow специально разработан для представления состояния, которое всегда имеет значение:
 
@@ -658,7 +661,7 @@ _state.update { it + 1 }  // Атомарное обновление
 4. **Только различные значения** - Не излучает если новое значение равно текущему
 5. **Никогда не завершается** - Остаётся активным пока scope не отменён
 
-### SharedFlow: Вещатель событий
+### SharedFlow: Вещатель Событий
 
 SharedFlow — универсальный горячий поток для вещания значений:
 
@@ -686,7 +689,7 @@ val _results = MutableSharedFlow<Result>(
 4. **Излучает все значения** - Включая дубликаты
 5. **Может завершиться** - Через операторы flow
 
-### Реальный пример: ViewModel
+### Реальный Пример: ViewModel
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -715,9 +718,9 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Когда использовать StateFlow
+### Когда Использовать StateFlow
 
-####  Использовать StateFlow для:
+#### Использовать StateFlow Для:
 
 ```kotlin
 // 1. Состояние UI
@@ -742,9 +745,9 @@ class SessionManager {
 }
 ```
 
-### Когда использовать SharedFlow
+### Когда Использовать SharedFlow
 
-####  Использовать SharedFlow для:
+#### Использовать SharedFlow Для:
 
 ```kotlin
 // 1. Одноразовые события
@@ -784,7 +787,7 @@ class EventBus {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 ```kotlin

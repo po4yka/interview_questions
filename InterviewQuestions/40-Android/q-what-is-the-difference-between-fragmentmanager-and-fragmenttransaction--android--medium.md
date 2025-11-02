@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-can-state-loss-be-related-to-a-fragment--android--medium]
+related: [q-can-state-loss-be-related-to-a-fragment--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/fragment, android/lifecycle, android/ui-views, fragments, fragmentmanager, fragmenttransaction, difficulty/medium]
+tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/medium, fragmentmanager, fragments, fragmenttransaction]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
+
 # Вопрос (RU)
 
 В чём разница между FragmentManager и FragmentTransaction?
@@ -34,7 +37,7 @@ What is the difference between FragmentManager and FragmentTransaction?
 
 Аналогия: FragmentManager — это база данных, FragmentTransaction — SQL-транзакция с операциями.
 
-### Основные возможности FragmentManager
+### Основные Возможности FragmentManager
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -59,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### FragmentTransaction операции
+### FragmentTransaction Операции
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -89,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Варианты commit
+### Варианты Commit
 
 ```kotlin
 // ✅ Асинхронный commit (рекомендуется)
@@ -123,7 +126,7 @@ transaction.commitNowAllowingStateLoss()
 
 Analogy: FragmentManager is a database, FragmentTransaction is a SQL transaction with operations.
 
-### Core FragmentManager capabilities
+### Core FragmentManager Capabilities
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -148,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### FragmentTransaction operations
+### FragmentTransaction Operations
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -178,7 +181,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Commit variants
+### Commit Variants
 
 ```kotlin
 // ✅ Asynchronous commit (recommended)

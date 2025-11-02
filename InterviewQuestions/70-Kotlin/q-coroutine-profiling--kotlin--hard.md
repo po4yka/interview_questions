@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140025
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-sam-conversions--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium, q-associatewith-vs-associateby--kotlin--easy]
+related: [q-associatewith-vs-associateby--kotlin--easy, q-kotlin-higher-order-functions--kotlin--medium, q-sam-conversions--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
+date created: Saturday, October 18th 2025, 12:38:46 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140025
 
@@ -267,7 +270,7 @@ fun getCoroutinePoolStats(): PoolStats {
 
 Профилирование и отладка корутин требуют специализированных инструментов и техник, поскольку корутины могут переключаться между потоками и имеют сложные потоки выполнения. Понимание эффективного профилирования и отладки критически важно для продакшн-приложений.
 
-### Инструменты отладки
+### Инструменты Отладки
 
 **1. Отладчик корутин IntelliJ IDEA**
 
@@ -297,7 +300,7 @@ launch(Dispatchers.Default) {
 }
 ```
 
-### Инструменты профилирования
+### Инструменты Профилирования
 
 **1. Android Studio Profiler**
 
@@ -319,7 +322,7 @@ System.setProperty("kotlinx.coroutines.scheduler.core.pool.size", "4")
 System.setProperty("kotlinx.coroutines.scheduler.max.pool.size", "128")
 ```
 
-### Распространенные паттерны отладки
+### Распространенные Паттерны Отладки
 
 **Паттерн 1: Добавление отладочных имен корутинам**
 ```kotlin
@@ -364,7 +367,7 @@ suspend fun debugMultipleOperations() = supervisorScope {
 }
 ```
 
-### Обнаружение утечек памяти
+### Обнаружение Утечек Памяти
 
 **Распространенные причины утечек**:
 1. **Не отменяются корутины**:
@@ -404,7 +407,7 @@ class Activity {
 }
 ```
 
-### Профилирование производительности
+### Профилирование Производительности
 
 **Измерение накладных расходов корутин**:
 ```kotlin
@@ -436,7 +439,7 @@ suspend fun profileSuspendPoints() {
 }
 ```
 
-### Отладка в продакшене
+### Отладка В Продакшене
 
 **1. Структурированное логирование**:
 ```kotlin
@@ -480,7 +483,7 @@ fun getCoroutinePoolStats(): PoolStats {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда именуйте важные корутины** для упрощения отладки
 2. **Используйте структурированную конкурентность** чтобы избежать осиротевших корутин

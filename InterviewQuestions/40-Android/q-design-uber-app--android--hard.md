@@ -1,13 +1,7 @@
 ---
 id: android-445
 title: Design Uber App / Проектирование приложения Uber
-aliases:
-    [
-        Design Uber App,
-        Проектирование приложения Uber,
-        Uber Android architecture,
-        Архитектура Uber Android,
-    ]
+aliases: []
 topic: android
 subtopics: [location, networking-http, service]
 question_kind: android
@@ -16,31 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-    [
-        q-data-sync-unstable-network--android--hard,
-        q-deep-link-vs-app-link--android--medium,
-        q-load-balancing-strategies--system-design--medium,
-        c-service,
-        c-workmanager,
-    ]
-sources:
-    [https://developers.google.com/location-context/fused-location-provider]
+related: []
+sources: []
 created: 2025-10-20
 updated: 2025-10-28
-tags:
-    [
-        android/location,
-        android/networking-http,
-        android/service,
-        difficulty/hard,
-        maps,
-        realtime,
-        platform/android,
-        lang/kotlin,
-    ]
+tags: []
 date created: Tuesday, October 28th 2025, 9:22:54 am
-date modified: Wednesday, October 29th 2025, 5:07:35 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)

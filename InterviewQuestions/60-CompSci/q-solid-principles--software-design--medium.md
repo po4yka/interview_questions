@@ -3,7 +3,7 @@ id: software-design-002
 title: "SOLID Principles / Принципы SOLID"
 aliases: [SOLID Principles, Принципы SOLID]
 topic: software-design
-subtopics: [design-principles, oop, code-quality]
+subtopics: [code-quality, design-principles, oop]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-software-design
 related: [q-database-fundamentals--computer-science--hard, q-oop-principles-deep-dive--computer-science--medium, q-where-to-call-suspend-functions--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [architecture, design-principles, dip, isp, lsp, ocp, oop, software-design, solid, srp, difficulty/medium]
+tags: [architecture, design-principles, difficulty/medium, dip, isp, lsp, ocp, oop, software-design, solid, srp]
 date created: Saturday, October 4th 2025, 6:57:44 pm
-date modified: Sunday, October 26th 2025, 1:39:49 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Такое Принципы SOLID?

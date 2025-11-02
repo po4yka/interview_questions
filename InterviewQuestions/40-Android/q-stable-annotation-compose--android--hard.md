@@ -3,18 +3,20 @@ id: android-429
 title: "Stable Annotation Compose / Аннотация Stable в Compose"
 aliases: ["Stable Annotation Compose", "Аннотация Stable в Compose"]
 topic: android
-subtopics: [ui-compose, performance-rendering]
+subtopics: [performance-rendering, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-recomposition--android--medium, q-compose-stability-skippability--android--hard, q-compose-performance-optimization--android--hard]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/ui-compose, android/performance-rendering, jetpack-compose, stable-annotation, recomposition, difficulty/hard]
+tags: [android/performance-rendering, android/ui-compose, difficulty/hard, jetpack-compose, recomposition, stable-annotation]
+date created: Saturday, November 1st 2025, 1:24:29 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ What is known about `@Stable` in Jetpack Compose?
 
 **`@Stable`** — аннотация в Compose, которая сообщает компилятору, что объект **стабилен** и его свойства **не меняются спонтанно**. Это позволяет Compose **эффективно определять**, когда нужна перерисовка UI, сокращая ненужные рекомпозиции.
 
-### Контракт стабильности
+### Контракт Стабильности
 
 Тип **стабилен**, если гарантирует:
 
@@ -59,7 +61,7 @@ class UnstableCounter {
 }
 ```
 
-### Когда использовать @Stable
+### Когда Использовать @Stable
 
 **Case 1**: Compose не может вывести стабильность автоматически (интерфейсы, внешние классы).
 
@@ -88,7 +90,7 @@ class StableThirdPartyData(private val data: ThirdPartyData) {
 }
 ```
 
-### @Stable vs @Immutable
+### @Stable Vs @Immutable
 
 | Аспект | @Immutable | @Stable |
 |--------|-----------|---------|
@@ -97,7 +99,7 @@ class StableThirdPartyData(private val data: ThirdPartyData) {
 | Уведомления Compose | N/A | Обязательны при изменении |
 | Типичное применение | Чистые data class | ViewModel, observable state |
 
-### Влияние на производительность
+### Влияние На Производительность
 
 ```kotlin
 @Stable
@@ -118,7 +120,7 @@ ProductCard(Product("1", "Laptop", 999.99))  // ✅ Пропущена (equals()
 // ❌ Без @Stable — рекомпозиция каждый раз, даже с тем же экземпляром
 ```
 
-### Частые ошибки
+### Частые Ошибки
 
 ```kotlin
 // ❌ @Stable без правильного equals()
@@ -131,7 +133,7 @@ class User(val id: String, val name: String)
 data class User(val id: String, val name: String)
 ```
 
-### Проверка стабильности
+### Проверка Стабильности
 
 Включите метрики компилятора Compose в `build.gradle.kts`:
 
@@ -216,7 +218,7 @@ class StableThirdPartyData(private val data: ThirdPartyData) {
 }
 ```
 
-### @Stable vs @Immutable
+### @Stable Vs @Immutable
 
 | Aspect | @Immutable | @Stable |
 |--------|-----------|---------|
@@ -305,7 +307,7 @@ stable class User {
 ## Related Questions
 
 ### Prerequisites (Medium)
-- [[q-compose-recomposition--android--medium]] - Understand how recomposition works
+- [[q-compose-testing--android--medium]] - Understand how recomposition works
 - [[q-jetpack-compose-basics--android--medium]] - Compose fundamentals
 
 ### Related (Hard)

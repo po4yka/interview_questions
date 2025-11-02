@@ -3,7 +3,7 @@ id: android-127
 title: "How Dialog Differs From Other Navigation / Чем Dialog отличается от другой навигации"
 aliases: ["How Dialog Differs From Other Navigation", "Чем Dialog отличается от другой навигации"]
 topic: android
-subtopics: [ui-navigation, ui-compose]
+subtopics: [ui-compose, ui-navigation]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-main-thread-android--android--medium, q-what-is-layout-performance-measured-in--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/ui-navigation, android/ui-compose, navigation, dialog, difficulty/medium]
+tags: [android, android/ui-compose, android/ui-navigation, dialog, difficulty/medium, navigation]
 sources: []
 date created: Monday, October 27th 2025, 3:36:06 pm
-date modified: Thursday, October 30th 2025, 12:48:09 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -199,7 +199,6 @@ AlertDialog.Builder(context)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-fragment--android--easy]] - Fragment basics for DialogFragment understanding
 
 ### Related (Medium)
 - [[q-main-thread-android--android--medium]] - Main thread and UI operations

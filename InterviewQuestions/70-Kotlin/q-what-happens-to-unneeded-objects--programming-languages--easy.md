@@ -3,19 +3,19 @@ id: lang-050
 title: "What Happens To Unneeded Objects / Что происходит с ненужными объектами"
 aliases: [What Happens To Unneeded Objects, Что происходит с ненужными объектами]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, jvm]
+subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-java-lambda-type--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard, q-xml-acronym--programming-languages--easy]
+related: [q-java-lambda-type--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [automatic-memory, garbage-collection, jvm, kotlin, memory-management, programming-languages, difficulty/easy]
+tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
 date created: Saturday, October 4th 2025, 1:23:34 pm
-date modified: Sunday, October 26th 2025, 1:39:56 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Что Происходит С Объектами, Которые Больше Не Нужны?
@@ -181,6 +181,6 @@ This is automatic memory management in Kotlin/Java!
 
 ## Related Questions
 
-- [[q-xml-acronym--programming-languages--easy]]
+-
 - [[q-suspend-function-return-type-after-compilation--programming-languages--hard]]
 - [[q-java-lambda-type--programming-languages--easy]]

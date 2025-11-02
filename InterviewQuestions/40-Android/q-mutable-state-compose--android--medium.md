@@ -1,7 +1,7 @@
 ---
 id: android-204
 title: "MutableState в Compose / MutableState in Compose"
-aliases: ["MutableState в Compose", "MutableState in Compose", "Изменяемое состояние Compose", "Compose State Management"]
+aliases: ["Compose State Management", "MutableState in Compose", "MutableState в Compose", "Изменяемое состояние Compose"]
 topic: android
 subtopics: [ui-compose, ui-state]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-compose-state, c-jetpack-compose, q-state-hoisting-compose--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-compose-remember-derived-state--android--medium]
+related: [c-compose-state, c-jetpack-compose, q-compose-remember-derived-state--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-compose, android/ui-state, jetpack-compose, state-management, recomposition, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, recomposition, state-management]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:59 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ What is MutableState in Compose?
 
 **`MutableState<T>`** — это обёртка для хранения состояния в Jetpack Compose, которая автоматически отслеживает изменения и инициирует рекомпозицию при изменении значения.
 
-### Основная концепция
+### Основная Концепция
 
 ```kotlin
 interface MutableState<T> : State<T> {
@@ -45,7 +47,7 @@ interface MutableState<T> : State<T> {
 - **Типобезопасность** — строгая типизация через `<T>`
 - **Переживает рекомпозицию** — работает с `remember`
 
-### Создание состояния
+### Создание Состояния
 
 **С явным .value:**
 ```kotlin
@@ -71,7 +73,7 @@ fun Counter() {
 }
 ```
 
-### Как работает отслеживание
+### Как Работает Отслеживание
 
 Compose автоматически подписывает composable на изменения состояния:
 
@@ -92,7 +94,7 @@ fun UserProfile() {
 }
 ```
 
-### MutableState vs обычная переменная
+### MutableState Vs Обычная Переменная
 
 **❌ Обычная переменная:**
 ```kotlin
@@ -118,7 +120,7 @@ fun Counter() {
 }
 ```
 
-### remember vs без remember
+### Remember Vs Без Remember
 
 **❌ Без remember:**
 ```kotlin
@@ -130,7 +132,7 @@ var count by mutableStateOf(0)  // ❌ Сбрасывается на каждо�
 var count by remember { mutableStateOf(0) }  // ✅ Кэшируется между рекомпозициями
 ```
 
-### Типы состояний
+### Типы Состояний
 
 **Примитивы:**
 ```kotlin
@@ -158,7 +160,7 @@ val items = remember { mutableStateListOf<String>() }
 items.add("Новый элемент")  // Триггерит рекомпозицию напрямую
 ```
 
-### Подъём состояния (State Hoisting)
+### Подъём Состояния (State Hoisting)
 
 **Паттерн:** состояние хранится в родителе, передаётся вниз через параметры.
 
@@ -187,7 +189,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
 - Переиспользуемые stateless компоненты
 - Простое тестирование
 
-### Интеграция с ViewModel
+### Интеграция С ViewModel
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -212,7 +214,7 @@ fun UserProfile(viewModel: UserViewModel = viewModel()) {
 }
 ```
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 **Умная рекомпозиция:**
 Compose перерисовывает ТОЛЬКО composables, читающие изменённое состояние.
@@ -316,7 +318,7 @@ fun UserProfile() {
 }
 ```
 
-### MutableState vs Regular Variable
+### MutableState Vs Regular Variable
 
 **❌ Regular variable:**
 ```kotlin
@@ -342,7 +344,7 @@ fun Counter() {
 }
 ```
 
-### remember vs Without remember
+### Remember Vs Without Remember
 
 **❌ Without remember:**
 ```kotlin

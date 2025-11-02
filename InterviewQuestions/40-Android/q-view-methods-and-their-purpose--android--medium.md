@@ -3,20 +3,22 @@ id: android-303
 title: "View Methods And Their Purpose / Методы View и их назначение"
 aliases: [View Methods, Методы View]
 topic: android
-subtopics: [ui-views, lifecycle]
+subtopics: [lifecycle, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-views, c-view-lifecycle, q-what-methods-redraw-views--android--medium, q-viewgroup-vs-view-differences--android--easy]
+related: [c-view-lifecycle, c-views, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, android/lifecycle, view, lifecycle, drawing, rendering, difficulty/medium]
+tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, lifecycle, rendering, view]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Какие методы есть у view и что каждый из них делает?
+# Какие Методы Есть У view И Что Каждый Из Них Делает?
 
 **English**: What methods does View have and what does each do?
 
@@ -112,7 +114,7 @@ Thread {
 
 ### Size and Position Methods
 
-#### getWidth() and getHeight()
+#### getWidth() And getHeight()
 
 Returns the View's current dimensions.
 
@@ -128,7 +130,7 @@ view.post {
 }
 ```
 
-#### getMeasuredWidth() and getMeasuredHeight()
+#### getMeasuredWidth() And getMeasuredHeight()
 
 Returns the size determined by `onMeasure()`.
 
@@ -438,7 +440,7 @@ override fun onDetachedFromWindow() {
 
 Класс **View** в Android предоставляет множество методов для управления внешним видом, поведением и жизненным циклом. Понимание этих методов критически важно для разработки пользовательских представлений и оптимизации UI.
 
-### Методы измерения и макетирования
+### Методы Измерения И Макетирования
 
 #### onMeasure()
 
@@ -473,7 +475,7 @@ override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom:
 }
 ```
 
-### Методы рисования
+### Методы Рисования
 
 #### onDraw()
 
@@ -525,9 +527,9 @@ Thread {
 }.start()
 ```
 
-### Методы размера и позиции
+### Методы Размера И Позиции
 
-#### getWidth() и getHeight()
+#### getWidth() И getHeight()
 
 Возвращает текущие размеры View.
 
@@ -543,7 +545,7 @@ view.post {
 }
 ```
 
-#### getMeasuredWidth() и getMeasuredHeight()
+#### getMeasuredWidth() И getMeasuredHeight()
 
 Возвращает размер, определенный в `onMeasure()`.
 
@@ -556,7 +558,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 }
 ```
 
-### Методы видимости
+### Методы Видимости
 
 #### setVisibility()
 
@@ -586,7 +588,7 @@ if (view.isShown) {
 }
 ```
 
-### Фон и внешний вид
+### Фон И Внешний Вид
 
 #### setBackgroundColor()
 
@@ -619,7 +621,7 @@ view.background = null
 view.alpha = 0.5f // 50% прозрачность
 ```
 
-### Методы взаимодействия
+### Методы Взаимодействия
 
 #### setOnClickListener()
 
@@ -670,7 +672,7 @@ view.setOnTouchListener { v, event ->
 }
 ```
 
-### Методы фокуса
+### Методы Фокуса
 
 #### requestFocus()
 
@@ -692,7 +694,7 @@ imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 editText.clearFocus()
 ```
 
-### Методы анимации
+### Методы Анимации
 
 #### animate()
 
@@ -736,7 +738,7 @@ view.scaleX = 1.5f // Масштаб до 150% по горизонтали
 view.scaleY = 1.5f // Масштаб до 150% по вертикали
 ```
 
-### Управление состоянием
+### Управление Состоянием
 
 #### setEnabled()
 
@@ -772,7 +774,7 @@ view.isSelected = true
 view.isPressed = true
 ```
 
-### Отступы и поля
+### Отступы И Поля
 
 #### setPadding()
 
@@ -795,7 +797,7 @@ params.setMargins(16, 16, 16, 16)
 view.layoutParams = params
 ```
 
-### Методы тегов
+### Методы Тегов
 
 #### setTag() / getTag()
 
@@ -810,7 +812,7 @@ view.setTag(R.id.user_data, userData)
 val data = view.getTag(R.id.user_data) as? UserData
 ```
 
-### Методы жизненного цикла
+### Методы Жизненного Цикла
 
 #### onAttachedToWindow()
 
@@ -834,7 +836,7 @@ override fun onDetachedFromWindow() {
 }
 ```
 
-### Резюме ключевых методов
+### Резюме Ключевых Методов
 
 | Метод | Назначение |
 |--------|---------|

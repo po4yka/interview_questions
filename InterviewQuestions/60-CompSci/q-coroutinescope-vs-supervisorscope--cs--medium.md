@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-coroutine-context, q-concurrency-fundamentals--computer-science--hard, q-coroutine-context-essence--programming-languages--medium]
+related: [c-coroutine-context]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [coroutines, coroutinescope, difficulty/medium, error-handling, kotlin, programming-languages, supervisorscope]
 sources: [https://kotlinlang.org/docs/exception-handling.html]
 date created: Saturday, October 4th 2025, 10:54:27 am
-date modified: Sunday, October 26th 2025, 11:21:01 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -470,11 +470,7 @@ suspend fun initializeApp() = supervisorScope {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-coroutine-context-essence--programming-languages--medium]] - CoroutineContext basics
-
-### Related (Same Level)
-- [[q-coroutine-dispatchers--programming-languages--medium]] - Dispatchers
-- [[q-concurrency-fundamentals--computer-science--hard]] - Concurrency concepts
+- CoroutineContext basics
 
 ### Advanced (Harder)
 - Custom Job implementations

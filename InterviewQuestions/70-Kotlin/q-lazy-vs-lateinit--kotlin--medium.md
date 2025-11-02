@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [lazy, lateinit, delegation, initialization, properties]
+subtopics: [delegation, initialization, lateinit, lazy, properties]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-kotlin-lateinit--kotlin--medium, q-property-delegates--kotlin--mediu
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, lazy, lateinit, delegation, initialization, difficulty/medium]
+tags: [delegation, difficulty/medium, initialization, kotlin, lateinit, lazy]
+date created: Friday, October 17th 2025, 9:48:25 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What is the difference between lazy and lateinit in Kotlin?
 # Вопрос (RU)
@@ -51,7 +54,7 @@ fun main() {
 }
 ```
 
-### lateinit
+### Lateinit
 
 A keyword that enables declaration of non-nullable properties without immediate initialization. Must be initialized before access, otherwise throws `UninitializedPropertyAccessException`.
 
@@ -138,7 +141,7 @@ fun main() {
 }
 ```
 
-### lateinit
+### Lateinit
 
 Ключевое слово, которое позволяет объявлять ненулевые свойства без немедленной инициализации. Должно быть инициализировано перед доступом, иначе выбрасывает `UninitializedPropertyAccessException`.
 
@@ -160,7 +163,7 @@ class DemoClass {
 }
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Функция | lazy | lateinit |
 |---------|------|----------|
@@ -191,7 +194,7 @@ fun initialize() {
 }
 ```
 
-### Случаи использования
+### Случаи Использования
 
 **Используйте lazy когда**:
 - Свойство `val` (неизменяемое)

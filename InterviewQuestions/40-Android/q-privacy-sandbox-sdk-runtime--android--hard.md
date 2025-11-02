@@ -1,20 +1,22 @@
 ---
 id: android-430
 title: "Privacy Sandbox SDK Runtime / Privacy Sandbox SDK Runtime"
-aliases: [Privacy Sandbox, SDK Runtime, Privacy Sandbox SDK Runtime, Изоляция SDK]
+aliases: [Privacy Sandbox, Privacy Sandbox SDK Runtime, SDK Runtime, Изоляция SDK]
 topic: android
-subtopics: [privacy-sdks, permissions]
+subtopics: [permissions, privacy-sdks]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-service-thread--android--medium, q-process-isolation--android--medium, q-binder-ipc--android--hard]
+related: [q-content-provider-security--android--hard, q-custom-sandbox-implementation--android--hard]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/privacy-sdks, android/permissions, privacy, sandboxing, difficulty/hard]
+tags: [android/permissions, android/privacy-sdks, difficulty/hard, privacy, sandboxing]
+date created: Saturday, November 1st 2025, 1:03:51 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -55,7 +57,7 @@ App Process <-> SDK Runtime Process <-> Network/Services
 - ❌ Не могут запускать activities/services
 - ❌ Нет доступа к другим приложениям
 
-### Загрузка SDK в Sandbox
+### Загрузка SDK В Sandbox
 
 ```kotlin
 class SdkRuntimeManager(private val context: Context) {
@@ -161,7 +163,7 @@ class SandboxedAdClient(
 ✅ **Bundle** для передачи данных
 ✅ **Result type** для error handling
 
-### Вызовы миграции SDK
+### Вызовы Миграции SDK
 
 **1. Архитектурные изменения:**
 - Переход на Binder IPC (вместо прямых вызовов)
@@ -197,7 +199,7 @@ class SdkMigrationManager(private val context: Context) {
 ✅ **Fallback** к традиционному SDK
 ✅ **Adapter pattern** для унификации
 
-### Лучшие практики
+### Лучшие Практики
 
 **Миграция:**
 - Постепенная стратегия с fallback
@@ -221,7 +223,7 @@ class SdkMigrationManager(private val context: Context) {
 - Release resources в `beforeUnloadSdk()`
 - Тестирование на low-end устройствах
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. **Передача sensitive data** → нарушения приватности
    - Решение: только анонимизированные данные

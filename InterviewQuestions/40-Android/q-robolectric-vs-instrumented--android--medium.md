@@ -5,7 +5,7 @@ aliases: ["Robolectric Vs Instrumented", "Robolectric против Instrumented"
 
 # Classification
 topic: android
-subtopics: [testing-unit, testing-instrumented]
+subtopics: [testing-instrumented, testing-unit]
 question_kind: theory
 difficulty: medium
 
@@ -17,15 +17,18 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-splash-screen-api-android12--android--medium]
+related: [q-junit-basics--android--easy, q-test-flakiness-strategies--android--hard, q-unit-testing-basics--android--easy]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android/testing-unit, android/testing-instrumented, robolectric, strategy, comparison, difficulty/medium]
+tags: [android/testing-instrumented, android/testing-unit, comparison, difficulty/medium, robolectric, strategy]
+date created: Saturday, November 1st 2025, 1:04:41 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 > Когда следует использовать Robolectric вместо инструментальных тестов? Какие компромиссы в скорости, надежности и покрытии?
@@ -40,7 +43,7 @@ tags: [android/testing-unit, android/testing-instrumented, robolectric, strategy
 
 **Robolectric** выполняет Android-тесты на JVM без устройства/эмулятора, **Инструментальные тесты** работают на реальном Android. У каждого подхода свои преимущества и компромиссы.
 
-### Основные различия
+### Основные Различия
 
 **Robolectric** (JVM-тесты):
 - Симулирует Android Framework на JVM
@@ -56,7 +59,7 @@ tags: [android/testing-unit, android/testing-instrumented, robolectric, strategy
 - Требуют эмулятор/устройство
 - Могут быть нестабильными (flaky)
 
-### Когда использовать Robolectric
+### Когда Использовать Robolectric
 
 **Подходит для:**
 - Тестирование ViewModel с Android-зависимостями
@@ -81,7 +84,7 @@ class UserViewModelTest {
 }
 ```
 
-### Когда использовать Инструментальные тесты
+### Когда Использовать Инструментальные Тесты
 
 **Подходит для:**
 - Сложные UI-взаимодействия (swipe, drag, animations)
@@ -121,7 +124,7 @@ class ComplexUiTest {
 | Реальность | Симуляция | Настоящий Android |
 | Hardware | Mock | Реальные сенсоры |
 
-### Пирамида тестирования
+### Пирамида Тестирования
 
 Рекомендуемое распределение:
 - **70%** - Unit-тесты (чистый JVM)
@@ -156,7 +159,7 @@ class LoginFlowTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Начинайте с unit-тестов** для бизнес-логики
 2. **Используйте Robolectric** для интеграционных тестов с Android
@@ -360,7 +363,7 @@ class UserProfileE2ETest {
 
 ### Prerequisites (Easier)
 - [[q-unit-testing-basics--android--easy]] - Understanding unit tests
-- [[q-junit-basics--android--easy]] - JUnit framework basics
+- [[q-fragment-basics--android--easy]] - JUnit framework basics
 
 ### Related (Medium)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing ViewModels

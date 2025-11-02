@@ -1,13 +1,7 @@
 ---
 id: android-487
 title: Design Client Observability & Health-Gated Rollouts / Проектирование клиентской наблюдаемости и health-gated релизов
-aliases:
-    [
-        Design Observability SDK,
-        Проектирование SDK наблюдаемости,
-        Client Telemetry Architecture,
-        Архитектура клиентской телеметрии,
-    ]
+aliases: []
 topic: android
 subtopics: [analytics, logging-tracing, performance-startup]
 question_kind: android
@@ -16,24 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-feature-flags-sdk--android--hard, c-workmanager, c-room]
+related: [c-room, c-workmanager, q-feature-flags-sdk--android--hard]
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags:
-    [
-        android/analytics,
-        android/logging-tracing,
-        android/performance-startup,
-        difficulty/hard,
-        platform/android,
-        lang/kotlin,
-        observability,
-        telemetry,
-        crash-reporting,
-    ]
+tags: []
 date created: Wednesday, October 29th 2025, 5:03:55 pm
-date modified: Thursday, October 30th 2025, 3:15:10 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -102,7 +85,7 @@ Observability SDK collects performance metrics, crashes, and enables health‑ga
 
 metrics-core, trace, crash-anr, sampler, store, uploader, gates, flags.
 
-### Data model
+### Data Model
 
 Envelopes with session ID, device/app versions, sampled traces (cold/warm start, frame time percentiles), network timings, custom events.
 
@@ -118,7 +101,7 @@ Dynamic sampling keys per cohort; server‑tunable; ensure experiment cells keep
 
 Backoff on failures; Wi‑Fi preferred; batch. PII redaction and hashing for IDs; GDPR/CCPA toggles.
 
-### Health gates
+### Health Gates
 
 Define SLOs (e.g., Crash‑free sessions > 99.8%, ANR rate < 0.3%, cold start p95 < 2.5s). The release pipeline pauses or rolls back automatically if thresholds breach.
 

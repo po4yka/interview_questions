@@ -1,9 +1,9 @@
 ---
 id: android-099
 title: "Rendering Views in Background Thread / Отрисовка View в фоновом потоке"
-aliases: ["Rendering Views in Background Thread", "Отрисовка View в фоновом потоке", "SurfaceView", "TextureView"]
+aliases: ["Rendering Views in Background Thread", "SurfaceView", "TextureView", "Отрисовка View в фоновом потоке"]
 topic: android
-subtopics: [ui-graphics, threads-sync, performance-rendering]
+subtopics: [performance-rendering, threads-sync, ui-graphics]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -13,10 +13,10 @@ created: 2025-10-13
 updated: 2025-10-29
 sources: []
 moc: moc-android
-related: [q-what-is-the-main-application-execution-thread--android--easy, c-surfaceview, c-textureview]
-tags: [android, android/ui-graphics, android/threads-sync, android/performance-rendering, graphics, multithreading, difficulty/hard]
+related: [c-surfaceview, c-textureview, c-threading]
+tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
 date created: Wednesday, October 29th 2025, 12:15:33 pm
-date modified: Thursday, October 30th 2025, 3:18:02 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +41,7 @@ Which class should be used to render View in a background thread?
 - Обеспечивает высокую производительность для игр и видео
 - Не блокирует UI поток
 
-### Базовая реализация SurfaceView
+### Базовая Реализация SurfaceView
 
 ```kotlin
 class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
@@ -82,7 +82,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 }
 ```
 
-### TextureView как альтернатива
+### TextureView Как Альтернатива
 
 **TextureView** — современная альтернатива с поддержкой трансформаций:
 
@@ -118,7 +118,7 @@ class CustomTextureView(context: Context) :
 }
 ```
 
-### Сравнение SurfaceView vs TextureView
+### Сравнение SurfaceView Vs TextureView
 
 | Характеристика | SurfaceView | TextureView |
 |----------------|-------------|-------------|
@@ -129,7 +129,7 @@ class CustomTextureView(context: Context) :
 | **Анимации View** | Нет | Да |
 | **Лучше для** | Игры, видео | UI с анимацией |
 
-### Использование с корутинами
+### Использование С Корутинами
 
 ```kotlin
 class ModernSurfaceView(context: Context) :
@@ -177,7 +177,7 @@ class ModernSurfaceView(context: Context) :
 3. **Правильная остановка**: используйте флаги и `join()` для завершения потоков
 4. **Синхронизация**: защищайте доступ к общим данным через `synchronized`
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // ❌ ПЛОХО: Не освобожден Canvas
@@ -295,7 +295,7 @@ class CustomTextureView(context: Context) :
 }
 ```
 
-### SurfaceView vs TextureView Comparison
+### SurfaceView Vs TextureView Comparison
 
 | Feature | SurfaceView | TextureView |
 |---------|-------------|-------------|

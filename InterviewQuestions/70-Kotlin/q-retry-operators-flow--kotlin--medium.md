@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, retry, error-handling, operators]
+subtopics: [error-handling, flow, operators, retry]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-race-conditions-coroutines--kotlin--hard, q-kotlin-any-class-methods--programming-languages--medium, q-suspend-functions-basics--kotlin--easy]
+related: [q-kotlin-any-class-methods--programming-languages--medium, q-race-conditions-coroutines--kotlin--hard, q-suspend-functions-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, flow, retry, error-handling, operators, difficulty/medium]
+tags: [difficulty/medium, error-handling, flow, kotlin, operators, retry]
+date created: Sunday, October 12th 2025, 2:24:09 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What are Retry and RetryWhen operators in Kotlin Flow? How do they work?
 # Вопрос (RU)
@@ -37,7 +40,7 @@ tags: [kotlin, flow, retry, error-handling, operators, difficulty/medium]
 
 **`retry` and `retryWhen`** are Flow operators that automatically re-execute a flow when it encounters an exception, implementing resilient error handling.
 
-### retry - Simple Retry Logic
+### Retry - Simple Retry Logic
 
 **Basic retry with count:**
 
@@ -59,7 +62,7 @@ flow {
 - **Predicate** determines which exceptions to retry
 - **Simple** - good for basic retry logic
 
-### retry Signature
+### Retry Signature
 
 ```kotlin
 fun <T> Flow<T>.retry(
@@ -68,7 +71,7 @@ fun <T> Flow<T>.retry(
 ): Flow<T>
 ```
 
-### Real-World retry Examples
+### Real-World Retry Examples
 
 **Example 1: Network Request with Retry**
 
@@ -197,7 +200,7 @@ fun syncData(): Flow<SyncResult> = flow {
 }
 ```
 
-### Comparison: retry vs retryWhen
+### Comparison: Retry Vs retryWhen
 
 | Feature | retry | retryWhen |
 |---------|-------|-----------|
@@ -455,7 +458,7 @@ fun `retryWhen should apply exponential backoff`() = runTest {
 
 **`retry` и `retryWhen`** — операторы Flow, которые автоматически пере-выполняют flow при возникновении исключения, реализуя устойчивую обработку ошибок.
 
-### retry - Простая логика повтора
+### Retry - Простая Логика Повтора
 
 **Базовый retry с подсчетом:**
 
@@ -477,7 +480,7 @@ flow {
 - **Предикат** определяет какие исключения повторять
 - **Просто** - хорошо для базовой логики повтора
 
-### retryWhen - Продвинутая логика повтора
+### retryWhen - Продвинутая Логика Повтора
 
 **`retryWhen` предоставляет контроль над временем и поведением повтора.**
 
@@ -549,7 +552,7 @@ fun syncData(): Flow<SyncResult> = flow {
 }
 ```
 
-### Сравнение: retry vs retryWhen
+### Сравнение: Retry Vs retryWhen
 
 | Функция | retry | retryWhen |
 |---------|-------|-----------|
@@ -558,7 +561,7 @@ fun syncData(): Flow<SyncResult> = flow {
 | **Сложность** | Простой | Более гибкий |
 | **Применение** | Базовый повтор | Продвинутые стратегии повтора |
 
-### Продвинутые паттерны
+### Продвинутые Паттерны
 
 **Паттерн 1: Повтор с таймаутом**
 
@@ -598,7 +601,7 @@ fun getUserData(): Flow<User> = flow {
 }
 ```
 
-### Интеграция с ViewModel
+### Интеграция С ViewModel
 
 ```kotlin
 class ProductViewModel : ViewModel() {
@@ -632,7 +635,7 @@ class ProductViewModel : ViewModel() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Всегда используйте предикат для фильтрации исключений**
 

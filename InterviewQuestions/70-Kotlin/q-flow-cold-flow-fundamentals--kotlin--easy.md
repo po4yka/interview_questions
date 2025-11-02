@@ -1,21 +1,24 @@
 ---
 id: kotlin-089
 title: "What makes Flow a cold stream?"
-aliases: [Flow, Cold, Flow, Fundamentals]
+aliases: [Cold, Flow, Fundamentals]
 topic: kotlin
-subtopics: ["coroutines", "flow", "cold-streams", "basics"]
+subtopics: ["basics", "cold-streams", "coroutines", "flow"]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lambda-expressions--kotlin--medium, q-sequences-vs-collections-performance--kotlin--medium, q-kotlin-init-block--kotlin--easy]
+related: [q-kotlin-init-block--kotlin--easy, q-kotlin-lambda-expressions--kotlin--medium, q-sequences-vs-collections-performance--kotlin--medium]
 created: 2025-10-12
 updated: 2025-10-31
-tags: ["kotlin", "coroutines", "difficulty/medium"]
+tags: ["coroutines", "difficulty/medium", "kotlin", difficulty/easy]
+date created: Saturday, October 18th 2025, 3:07:33 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# What makes Flow a cold stream?
+
+# What Makes Flow a Cold Stream?
 
 ## English
 
@@ -37,7 +40,7 @@ tags: ["kotlin", "coroutines", "difficulty/medium"]
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 [Russian translation of problem statement]
 

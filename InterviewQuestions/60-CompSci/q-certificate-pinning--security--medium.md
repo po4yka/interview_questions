@@ -22,7 +22,7 @@ language_tags:
   - ru
 tags: [difficulty/medium, networking, okhttp, security, tls]
 date created: Sunday, October 12th 2025, 12:27:51 pm
-date modified: Saturday, October 25th 2025, 8:32:52 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)

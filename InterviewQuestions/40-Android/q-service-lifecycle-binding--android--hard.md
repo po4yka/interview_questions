@@ -14,12 +14,14 @@ related: [q-how-to-add-custom-attributes-to-custom-view--android--medium, q-migr
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/service, difficulty/hard]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Service Lifecycle and Binding - Advanced Patterns
 
 # Question (EN)
-> 
+>
 Explain the Service lifecycle, binding mechanisms, and communication patterns. How do you implement bound services with AIDL? What are the differences between startService() and bindService()? How do you handle service lifecycle in modern Android (12+)?
 
 ## Answer (EN)
@@ -851,13 +853,13 @@ Key considerations: proper lifecycle management, foreground service compliance, 
 ---
 
 # Вопрос (RU)
-> 
+>
 Объясните жизненный цикл Service, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между startService() и bindService()? Как управлять жизненным циклом сервисов в современном Android (12+)?
 
 ## Ответ (RU)
 Services — фундаментальные Android-компоненты для фоновых операций со сложным управлением жизненным циклом и множественными паттернами binding для межпроцессной коммуникации.
 
-#### Основы жизненного цикла
+#### Основы Жизненного Цикла
 
 **Started Service**:
 - `onCreate()` → `onStartCommand()` → ... → `onDestroy()`
@@ -901,7 +903,7 @@ Services — фундаментальные Android-компоненты для 
 - Нельзя запустить foreground service из background
 - Исключения: WorkManager, Firebase FCM, Exact Alarms
 
-#### Лучшие практики
+#### Лучшие Практики
 
 1. **Управление жизненным циклом**:
    - Всегда сопоставляйте bind/unbind вызовы

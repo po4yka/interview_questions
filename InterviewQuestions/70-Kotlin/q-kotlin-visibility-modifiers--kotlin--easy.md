@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [visibility, modifiers, access-control, encapsulation]
+subtopics: [access-control, encapsulation, modifiers, visibility]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-array-vs-list-kotlin--kotlin--easy, q-java-kotlin-abstract-classes-difference--programming-languages--medium, q-coroutine-memory-leaks--kotlin--hard]
+related: [q-array-vs-list-kotlin--kotlin--easy, q-coroutine-memory-leaks--kotlin--hard, q-java-kotlin-abstract-classes-difference--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, visibility, modifiers, access-control, encapsulation, difficulty/easy]
+tags: [access-control, difficulty/easy, encapsulation, kotlin, modifiers, visibility]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What are visibility modifiers in Kotlin?
 # Вопрос (RU)
@@ -46,7 +49,7 @@ There are four visibility modifiers in Kotlin: **private**, **protected**, **int
 
 If you don't supply a visibility modifier, you get the default visibility level, which is **public**.
 
-### Java vs Kotlin
+### Java Vs Kotlin
 
 - In Java, the default modifier is **package private**, in Kotlin is **public**.
 - Java's **package private** doesn't have an equivalent in Kotlin, the closest is **internal**.
@@ -66,7 +69,7 @@ Kotlin позволяет контролировать видимость сим
 
 Если вы не указываете модификатор видимости, вы получаете уровень видимости по умолчанию, которым является **public**.
 
-### Java vs Kotlin
+### Java Vs Kotlin
 
 - В Java модификатор по умолчанию — **package private**, в Kotlin — **public**.
 - **package private** в Java не имеет эквивалента в Kotlin, ближайшим является **internal**.
@@ -84,5 +87,5 @@ Kotlin позволяет контролировать видимость сим
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-access-modifiers--programming-languages--medium]] - Access Modifiers
+-  - Access Modifiers
 - [[q-visibility-modifiers-kotlin--kotlin--medium]] - Classes

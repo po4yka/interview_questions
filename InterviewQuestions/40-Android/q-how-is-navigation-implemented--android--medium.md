@@ -1,9 +1,9 @@
 ---
 id: android-421
 title: "How Is Navigation Implemented / Как реализована навигация"
-aliases: ["How Is Navigation Implemented", "Как реализована навигация", "Android Navigation", "Навигация в Android"]
+aliases: ["Android Navigation", "How Is Navigation Implemented", "Как реализована навигация", "Навигация в Android"]
 topic: android
-subtopics: [ui-navigation, fragment]
+subtopics: [fragment, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-navigation-methods-in-kotlin--android--medium, q-what-is-the-layout-
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-navigation, android/fragment, difficulty/medium, navigation, ui, fragments, navigation-component]
+tags: [android/fragment, android/ui-navigation, difficulty/medium, fragments, navigation, navigation-component, ui]
 date created: Tuesday, October 28th 2025, 9:35:24 am
-date modified: Thursday, October 30th 2025, 12:48:17 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How is navigation implemented in Android applications?
 
 Навигация в Android — это процесс перехода между экранами (Fragments, Activities) или их частями. Существует несколько подходов к реализации навигации, от традиционных до современных.
 
-### Основные подходы к навигации
+### Основные Подходы К Навигации
 
 #### 1. Navigation Component (рекомендуемый подход)
 
@@ -128,7 +128,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-### Ключевые концепции
+### Ключевые Концепции
 
 **Back Stack** — стек фрагментов для навигации назад. Navigation Component автоматически управляет back stack.
 

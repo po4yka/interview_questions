@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [multiplatform, expect-actual, platform-specific, kmp, common-code]
+subtopics: [common-code, expect-actual, kmp, multiplatform, platform-specific]
 question_kind: theory
 difficulty: medium
 
@@ -18,13 +18,15 @@ source_note: Comprehensive guide on Kotlin Multiplatform expect/actual mechanism
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-native--kotlin--hard, q-kotlin-constructors--kotlin--easy, q-kotlin-collections--kotlin--medium]
+related: [q-kotlin-collections--kotlin--medium, q-kotlin-constructors--kotlin--easy, q-kotlin-native--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, multiplatform, kmp, expect-actual, platform-specific, cross-platform, difficulty/medium]
+tags: [cross-platform, difficulty/medium, expect-actual, kmp, kotlin, multiplatform, platform-specific]
+date created: Sunday, October 12th 2025, 3:00:59 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Question (EN)
@@ -51,19 +53,19 @@ The **expect/actual** mechanism in Kotlin Multiplatform (KMP) allows you to writ
 
 ```
 
-         commonMain                   
-      
-    expect fun getPlatform()      
-    expect class Storage          
-      
+         commonMain
 
-               
-      
-                       
-   
- androidMain     iosMain   
+    expect fun getPlatform()
+    expect class Storage
+
+
+
+
+
+
+ androidMain     iosMain
  actual impl    actual impl
-   
+
 ```
 
 ### expect/actual Functions
@@ -204,7 +206,7 @@ actual class KeyValueStorage {
 }
 ```
 
-### expect/actual with Type Parameters
+### expect/actual With Type Parameters
 
 ```kotlin
 // commonMain/Serializer.kt
@@ -490,7 +492,7 @@ actual class HttpClient {
 }
 ```
 
-### expect/actual with Interfaces
+### expect/actual With Interfaces
 
 ```kotlin
 // commonMain/Database.kt
@@ -763,7 +765,7 @@ myproject/
 
 Механизм **expect/actual** в Kotlin Multiplatform (KMP) позволяет писать общий код, который может иметь разные реализации на разных платформах (Android, iOS, JVM, JS, Native). Он обеспечивает типобезопасный способ доступа к платформо-специфичным API при сохранении возможности разделения кода.
 
-### Ключевые концепции
+### Ключевые Концепции
 
 1. **expect**: Объявление в общем коде, что что-то будет предоставлено платформо-специфичным кодом
 2. **actual**: Платформо-специфичная реализация ожидаемого объявления
@@ -771,7 +773,7 @@ myproject/
 4. **Типобезопасность**: Компилятор гарантирует, что actual реализации соответствуют expect объявлениям
 5. **Гибкость**: Может использоваться для функций, классов, свойств и объектов
 
-### expect/actual функции
+### expect/actual Функции
 
 Базовые объявления функций:
 
@@ -817,7 +819,7 @@ actual fun generateUUID(): String =
     NSUUID().UUIDString()
 ```
 
-### expect/actual классы
+### expect/actual Классы
 
 Полные реализации классов:
 
@@ -909,7 +911,7 @@ actual class KeyValueStorage {
 }
 ```
 
-### expect/actual свойства
+### expect/actual Свойства
 
 ```kotlin
 // commonMain/Platform.kt
@@ -941,7 +943,7 @@ actual val platformVersion: String = UIDevice.currentDevice.systemVersion
 actual val deviceModel: String = UIDevice.currentDevice.model
 ```
 
-### Реальный пример: HTTP клиент
+### Реальный Пример: HTTP Клиент
 
 ```kotlin
 // commonMain/HttpClient.kt
@@ -970,7 +972,7 @@ class ApiRepository(private val client: HttpClient) {
 }
 ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ПЛОХО: Использование платформо-специфичных типов в expect
@@ -995,7 +997,7 @@ actual fun format(value: Double, precision: Int): String =
     String.format("%.${precision}f", value)
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 
@@ -1039,7 +1041,7 @@ expect abstract class ComplexBase {
 }
 ```
 
-### Структура проекта
+### Структура Проекта
 
 ```
 myproject/

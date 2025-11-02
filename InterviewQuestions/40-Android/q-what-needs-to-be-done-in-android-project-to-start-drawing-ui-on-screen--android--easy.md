@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-activity-lifecycle, c-layouts, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/activity, android/ui-views, ui, activity, layout, manifest, difficulty/easy]
+tags: [activity, android/activity, android/ui-views, difficulty/easy, layout, manifest, ui]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What needs to be done in Android project to start drawing UI on screen?
+# What Needs to Be Done in Android Project to Start Drawing UI on Screen?
 
 # Вопрос (RU)
 

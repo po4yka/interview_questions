@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-intent-filters-android--android--medium, q-what-unifies-android-components--android--easy, q-anr-application-not-responding--android--medium]
+related: [q-anr-application-not-responding--android--medium, q-intent-filters-android--android--medium, q-what-unifies-android-components--android--easy]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android, android/intents-deeplinks, android/notifications, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -29,14 +31,14 @@ tags: [android, android/intents-deeplinks, android/notifications, difficulty/med
 
 **PendingIntent** — это обёртка вокруг Intent, которая позволяет другим компонентам или приложениям выполнить Intent с правами вашего приложения, даже когда оно неактивно. По сути, это токен разрешения для отложенного действия.
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 - **Отложенное выполнение** — Intent выполняется позже, не сразу
 - **Делегирование прав** — выполняется с правами вашего приложения
 - **Неизменяемость** — нельзя изменить после создания (FLAG_IMMUTABLE)
 - **Системное использование** — уведомления, AlarmManager, виджеты
 
-### Три типа PendingIntent
+### Три Типа PendingIntent
 
 ```kotlin
 // 1. Для Activity (открыть экран)

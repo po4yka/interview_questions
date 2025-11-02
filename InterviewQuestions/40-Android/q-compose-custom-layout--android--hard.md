@@ -1,7 +1,7 @@
 ---
 id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
-aliases: [Compose Custom Layout, Кастомный layout в Compose, Custom Layout Jetpack Compose, Кастомная разметка Compose]
+aliases: [Compose Custom Layout, Custom Layout Jetpack Compose, Кастомная разметка Compose, Кастомный layout в Compose]
 topic: android
 subtopics: [ui-compose, ui-graphics]
 question_kind: android
@@ -13,13 +13,12 @@ moc: moc-android
 related:
   - q-compose-canvas-graphics--android--hard
   - q-compose-compiler-plugin--android--hard
-  - q-compose-recomposition-optimization--android--medium
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/ui-compose, android/ui-graphics, difficulty/hard, custom-layout, layout-measurement]
+tags: [android/ui-compose, android/ui-graphics, custom-layout, difficulty/hard, layout-measurement]
 date created: Thursday, October 30th 2025, 11:18:12 am
-date modified: Thursday, October 30th 2025, 12:43:42 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:43:42 pm
 
 ## Ответ (RU)
 
-### Основные концепции
+### Основные Концепции
 
 **Layout** в Compose использует `MeasurePolicy` — контракт из трех шагов:
 1. **Measure** — каждый дочерний элемент измеряется с переданными `Constraints` (min/max width/height)
@@ -44,7 +43,7 @@ date modified: Thursday, October 30th 2025, 12:43:42 pm
 - Нельзя аллоцировать объекты в measure/place (performance)
 - Использовать `placeRelative` для RTL-поддержки
 
-### Минимальный пример: TwoColumn
+### Минимальный Пример: TwoColumn
 
 ```kotlin
 @Composable
@@ -282,8 +281,6 @@ val policy = object : MeasurePolicy {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-modifier-chain--android--medium]] — Understanding modifier chain is crucial before custom layouts
-- [[q-compose-recomposition-optimization--android--medium]] — Recomposition affects layout performance
 
 ### Related (Same Level)
 - [[q-compose-canvas-graphics--android--hard]] — Canvas for custom drawing, Layout for custom measurement

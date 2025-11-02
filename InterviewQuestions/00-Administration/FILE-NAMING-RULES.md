@@ -1,3 +1,8 @@
+---
+date created: Saturday, October 18th 2025, 2:02:21 pm
+date modified: Saturday, November 1st 2025, 5:43:39 pm
+---
+
 # File Naming Rules
 
 **Date Established**: 2025-10-03
@@ -306,7 +311,7 @@ q-binary-search-tree-structure--algorithms--medium.md  # redundant
 
 ## Language Handling
 
-### Content vs Filename
+### Content Vs Filename
 
 | Aspect | Language | Rule | Example |
 |--------|----------|------|---------|
@@ -590,22 +595,22 @@ def title_to_slug(title):
 
 ### Practical Reasons
 
-6. **Search efficiency**
+1. **Search efficiency**
    - Easier to search and reference in English
    - Works with all search tools and grep
    - Consistent with technical documentation
 
-7. **Consistency**
+2. **Consistency**
    - Maintains uniform naming across knowledge base
    - Easier to write scripts and automation
    - Clear conventions for all contributors
 
-8. **Accessibility**
+3. **Accessibility**
    - Easier for international collaboration
    - Works in all keyboard layouts
    - Standard in technical documentation worldwide
 
-9. **Obsidian compatibility**
+4. **Obsidian compatibility**
    - Wikilinks work consistently
    - Graph view displays properly
    - Dataview queries work correctly

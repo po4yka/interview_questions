@@ -1,19 +1,21 @@
 ---
 id: oop-002
 title: "Inheritance Composition Aggregation / Наследование, композиция и агрегация"
-aliases: [Inheritance Composition Aggregation, Наследование, композиция и агрегация]
+aliases: [Inheritance Composition Aggregation, композиция и агрегация, Наследование]
 topic: oop
-subtopics: [inheritance, composition, aggregation, relationships]
+subtopics: [aggregation, composition, inheritance, relationships]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-oop
-related: [c-inheritance, c-composition, c-aggregation, q-inheritance-vs-composition--oop--medium]
+related: [c-aggregation, c-composition, c-inheritance, q-inheritance-vs-composition--oop--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [oop, inheritance, composition, aggregation, relationships, design-patterns, difficulty/medium]
+tags: [aggregation, composition, design-patterns, difficulty/medium, inheritance, oop, relationships]
+date created: Saturday, November 1st 2025, 12:43:04 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # В Чём Различия Наследования, Композиции, Агрегации?
@@ -488,7 +490,7 @@ class ProductActivity : AppCompatActivity() {
 - [[q-kotlin-enum-classes--kotlin--easy]] - Enums
 
 ### Related (Medium)
-- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-when-inheritance-useful--cs--medium]] - Inheritance
 - [[q-inheritance-vs-composition--oop--medium]] - Inheritance
 - [[q-class-composition--oop--medium]] - Inheritance
 - [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance

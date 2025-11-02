@@ -3,19 +3,19 @@ id: lang-070
 title: "PriorityQueue Vs Deque / PriorityQueue против Deque"
 aliases: [PriorityQueue Vs Deque, PriorityQueue против Deque]
 topic: programming-languages
-subtopics: [data-structures, collections, queues]
+subtopics: [collections, data-structures, queues]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-class-composition--oop--medium, q-data-class-component-functions--programming-languages--easy, q-what-is-coroutinescope--programming-languages--medium]
+related: [q-class-composition--oop--medium, q-what-is-coroutinescope--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [collections, data-structures, deque, kotlin, priority-queue, programming-languages, queue, difficulty/easy]
+tags: [collections, data-structures, deque, difficulty/easy, kotlin, priority-queue, programming-languages, queue]
 date created: Friday, October 3rd 2025, 4:43:42 pm
-date modified: Sunday, October 26th 2025, 1:31:20 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Какова Разница Между PriorityQueue И Deque?
@@ -47,6 +47,6 @@ PriorityQueue — структура данных, где элементы об�
 
 ## Related Questions
 
-- [[q-data-class-component-functions--programming-languages--easy]]
+-
 - [[q-class-composition--oop--medium]]
 - [[q-what-is-coroutinescope--programming-languages--medium]]

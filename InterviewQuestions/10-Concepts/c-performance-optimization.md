@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-143000
 title: Performance Optimization / Оптимизация производительности
-aliases: [Performance Optimization, Android Performance, Оптимизация производительности]
+aliases: [Android Performance, Performance Optimization, Оптимизация производительности]
 kind: concept
 summary: Strategies and tools for optimizing Android app performance
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, performance, optimization, profiling]
+tags: [android, concept, optimization, performance, profiling]
+date created: Thursday, October 30th 2025, 12:30:19 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

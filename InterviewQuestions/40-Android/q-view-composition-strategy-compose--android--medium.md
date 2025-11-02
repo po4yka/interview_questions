@@ -3,19 +3,22 @@ id: android-014
 title: "ViewCompositionStrategy in Compose / ViewCompositionStrategy в Compose"
 aliases: ["ViewCompositionStrategy in Compose", "ViewCompositionStrategy в Compose"]
 topic: android
-subtopics: [ui-compose, lifecycle]
+subtopics: [lifecycle, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-viewcompositionstrategy, q-compose-lifecycle--android--medium, q-compose-performance-optimization--android--hard]
+related: [c-compose-lifecycle, c-viewcompositionstrategy]
 created: 2025-10-05
 updated: 2025-10-28
-tags: [android/ui-compose, android/lifecycle, compose, viewcompositionstrategy, lifecycle, interop, difficulty/medium]
+tags: [android/lifecycle, android/ui-compose, compose, difficulty/medium, interop, lifecycle, viewcompositionstrategy]
 sources: ["https://developer.android.com/jetpack/compose/interop/view-composition-strategy"]
+date created: Saturday, November 1st 2025, 1:24:45 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 > Что такое ViewCompositionStrategy и когда её использовать?
 
@@ -42,7 +45,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-2. **DisposeOnLifecycleDestroyed**
+1. **DisposeOnLifecycleDestroyed**
    - Привязывает Composition к Lifecycle (Fragment, Activity)
    - Освобождается только при onDestroy
 
@@ -53,7 +56,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-3. **DisposeOnViewTreeLifecycleDestroyed**
+1. **DisposeOnViewTreeLifecycleDestroyed**
    - Использует Lifecycle из ViewTreeLifecycleOwner
    - Для случаев, когда Lifecycle недоступен напрямую
 
@@ -105,7 +108,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-2. **DisposeOnLifecycleDestroyed**
+1. **DisposeOnLifecycleDestroyed**
    - Binds Composition to Lifecycle (Fragment, Activity)
    - Releases only on onDestroy
 
@@ -116,7 +119,7 @@ composeView.setViewCompositionStrategy(
 )
 ```
 
-3. **DisposeOnViewTreeLifecycleDestroyed**
+1. **DisposeOnViewTreeLifecycleDestroyed**
    - Uses Lifecycle from ViewTreeLifecycleOwner
    - For cases when Lifecycle isn't directly available
 
@@ -173,7 +176,7 @@ composeView.setViewCompositionStrategy(
 - [[q-android-lifecycle--android--easy]] - Lifecycle basics
 
 ### Related (Same Level)
-- [[q-compose-lifecycle--android--medium]] - Compose lifecycle details
+- [[q-custom-view-lifecycle--android--medium]] - Compose lifecycle details
 - [[q-compose-interop-androidview--android--medium]] - Compose-View interop
 - [[q-fragment-lifecycle-viewlifecycle--android--medium]] - Fragment lifecycle nuances
 

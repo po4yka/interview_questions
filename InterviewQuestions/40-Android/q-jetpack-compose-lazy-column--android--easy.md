@@ -1,20 +1,22 @@
 ---
 id: android-438
 title: "Jetpack Compose Lazy Column / LazyColumn в Jetpack Compose"
-aliases: ["Jetpack Compose Lazy Column", "LazyColumn в Jetpack Compose", "Compose список"]
+aliases: ["Compose список", "Jetpack Compose Lazy Column", "LazyColumn в Jetpack Compose"]
 topic: android
 subtopics: [ui-compose, ui-widgets]
 question_kind: android
 difficulty: easy
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [c-jetpack-compose, c-recyclerview, q-jetpack-compose-basics--android--medium, q-which-layout-for-large-list--android--easy]
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/ui-compose, android/ui-widgets, jetpack-compose, lazy-list, difficulty/easy]
+tags: [android/ui-compose, android/ui-widgets, difficulty/easy, jetpack-compose, lazy-list]
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -31,14 +33,14 @@ How to create a RecyclerView-like list in Jetpack Compose?
 
 Используйте **LazyColumn** или **LazyRow** для вертикальных и горизонтальных списков соответственно.
 
-### Основные характеристики
+### Основные Характеристики
 
 LazyColumn создает элементы по требованию (lazy) — только видимые на экране:
 - Аналог RecyclerView с автоматическим переиспользованием
 - Не требует настройки Adapter и ViewHolder
 - Поддерживает разные типы элементов в одном списке
 
-### Базовый пример
+### Базовый Пример
 
 ```kotlin
 @Composable
@@ -51,7 +53,7 @@ fun ContactsList(contacts: List<Contact>) {
 }
 ```
 
-### Работа с индексами
+### Работа С Индексами
 
 ```kotlin
 LazyColumn {
@@ -61,7 +63,7 @@ LazyColumn {
 }
 ```
 
-### Разнородные элементы
+### Разнородные Элементы
 
 ```kotlin
 LazyColumn {
@@ -75,7 +77,7 @@ LazyColumn {
 }
 ```
 
-### Ключевые различия с RecyclerView
+### Ключевые Различия С RecyclerView
 
 | RecyclerView | LazyColumn |
 |--------------|------------|
@@ -83,7 +85,7 @@ LazyColumn {
 | notifyDataSetChanged() | Автоматическая реакция на State |
 | XML-разметка | Декларативный Compose-код |
 
-### Когда использовать
+### Когда Использовать
 
 - **LazyColumn/LazyRow**: динамические списки любого размера
 - **Column/Row**: статичный контент из 5-10 элементов (без lazy-загрузки)

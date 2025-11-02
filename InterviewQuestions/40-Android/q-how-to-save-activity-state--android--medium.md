@@ -1,20 +1,22 @@
 ---
 id: android-413
 title: "How To Save Activity State / Как сохранить состояние Activity"
-aliases: ["How To Save Activity State", "Как сохранить состояние Activity", "Save Activity State", "Сохранение состояния Activity"]
+aliases: ["How To Save Activity State", "Save Activity State", "Как сохранить состояние Activity", "Сохранение состояния Activity"]
 topic: android
-subtopics: [lifecycle, activity, architecture-mvvm, datastore]
+subtopics: [activity, architecture-mvvm, datastore, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium]
+related: [q-activity-lifecycle-methods--android--medium, q-in-which-thread-does-a-regular-service-run--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android, android/lifecycle, android/activity, android/architecture-mvvm, android/datastore, state-management, difficulty/medium]
+tags: [android, android/activity, android/architecture-mvvm, android/datastore, android/lifecycle, difficulty/medium, state-management]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -89,7 +91,7 @@ class ProfileActivity : AppCompatActivity() {
 - Только примитивы и Parcelable/Serializable объекты
 - Может не сработать при смерти процесса в фоне
 
-### 2. ViewModel с SavedStateHandle (рекомендуется)
+### 2. ViewModel С SavedStateHandle (рекомендуется)
 
 Современный подход, переживающий и изменения конфигурации, и смерть процесса.
 

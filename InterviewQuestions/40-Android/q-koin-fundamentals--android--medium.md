@@ -1,9 +1,9 @@
 ---
 id: android-160
 title: "Koin Fundamentals / Основы Koin"
-aliases: [Koin DI, Koin Framework, Service Locator, Основы Koin, Koin внедрение зависимостей]
+aliases: [Koin DI, Koin Framework, Koin внедрение зависимостей, Service Locator, Основы Koin]
 topic: android
-subtopics: [di-koin, architecture-clean, lifecycle]
+subtopics: [architecture-clean, di-koin, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-compositionlocal-compose--android--hard, q-how-to-register-broadcast
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/di-koin, android/architecture-clean, android/lifecycle, architecture, difficulty/medium, injection, koin, service-locator]
+tags: [android/architecture-clean, android/di-koin, android/lifecycle, architecture, difficulty/medium, injection, koin, service-locator]
 date created: Tuesday, October 28th 2025, 9:24:37 pm
-date modified: Thursday, October 30th 2025, 3:11:51 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

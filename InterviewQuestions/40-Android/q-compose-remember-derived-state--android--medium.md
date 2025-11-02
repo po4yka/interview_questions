@@ -13,14 +13,14 @@ moc: moc-android
 related:
   - q-compose-compiler-plugin--android--hard
   - q-compose-performance-optimization--android--hard
-  - q-remember-vs-remembersaveable-compose--android--medium
   - q-compose-slot-table-recomposition--android--hard
+  - q-remember-vs-remembersaveable-compose--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:23:10 am
-date modified: Thursday, October 30th 2025, 12:43:49 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:43:49 pm
 
 ## Ответ (RU)
 
-### Основные концепции
+### Основные Концепции
 
 **remember** — кеширует значения в композиции; переживает рекомпозицию, но не пересоздание активити.
 
@@ -41,9 +41,9 @@ date modified: Thursday, October 30th 2025, 12:43:49 pm
 
 **derivedStateOf** — вычисляет производное состояние, которое инвалидируется только при изменении результата, а не зависимостей.
 
-### Паттерны использования
+### Паттерны Использования
 
-#### remember (область композиции)
+#### Remember (область композиции)
 
 Используйте для временного UI-состояния или кешированных вычислений, привязанных к параметрам.
 
@@ -56,7 +56,7 @@ fun Counter() {
 }
 ```
 
-#### remember с ключами
+#### Remember С Ключами
 
 Сбрасывает кешированное значение при изменении ключа.
 
@@ -82,7 +82,7 @@ fun Login() {
 }
 ```
 
-#### Custom Saver для сложных типов
+#### Custom Saver Для Сложных Типов
 
 ```kotlin
 data class Form(val email: String, val agree: Boolean)
@@ -112,7 +112,7 @@ val showFab by remember {
 val showFabWrong = listState.firstVisibleItemIndex > 0
 ```
 
-### Когда что использовать
+### Когда Что Использовать
 
 | Функция | Область видимости | Персистентность | Применение |
 |---------|-------------------|-----------------|------------|
@@ -132,7 +132,7 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 
 ### Usage Patterns
 
-#### remember (composition-scoped)
+#### Remember (composition-scoped)
 
 Use for temporary UI state or cached computations tied to parameters.
 
@@ -145,7 +145,7 @@ fun Counter() {
 }
 ```
 
-#### remember with keys
+#### Remember with Keys
 
 Resets cached value when key changes.
 
@@ -171,7 +171,7 @@ fun Login() {
 }
 ```
 
-#### Custom Saver for complex types
+#### Custom Saver for Complex Types
 
 ```kotlin
 data class Form(val email: String, val agree: Boolean)
@@ -230,11 +230,8 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 
 ### Prerequisites (Easier)
 - [[q-remember-vs-remembersaveable-compose--android--medium]] — Basic difference between remember variants
-- [[q-compose-state-hoisting--android--easy]] — State management fundamentals
 
 ### Related (Same Level)
-- [[q-compose-side-effects--android--medium]] — Side effect APIs in Compose
-- [[q-compose-state-flow-integration--android--medium]] — Integrating Flow with Compose state
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] — Advanced performance optimization techniques

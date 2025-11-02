@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-windowinsets, q-compose-navigation-advanced--android--medium, q-compose-scaffold--android--medium]
+related: [c-system-ui, c-windowinsets]
 created: 2025-10-12
 updated: 2025-10-29
-tags: [android/ui-compose, android/ui-views, windowinsets, edge-to-edge, system-ui, immersive, difficulty/medium]
+tags: [android/ui-compose, android/ui-views, difficulty/medium, edge-to-edge, immersive, system-ui, windowinsets]
 sources: ["https://developer.android.com/develop/ui/views/layout/edge-to-edge"]
 date created: Wednesday, October 29th 2025, 1:00:50 pm
-date modified: Thursday, October 30th 2025, 3:16:49 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

@@ -1,22 +1,22 @@
 ---
 id: android-335
 title: "In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service"
-aliases: [Service Thread, Main Thread Service, Поток Service, Сервис в главном потоке]
+aliases: [Main Thread Service, Service Thread, Поток Service, Сервис в главном потоке]
 topic: android
-subtopics: [service, threads-sync, lifecycle]
+subtopics: [lifecycle, service, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-service-types--android--easy, q-service-component--android--medium, q-foreground-service-types--android--medium]
+related: [q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-service-component--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/service, android/threads-sync, android/lifecycle, difficulty/medium]
+tags: [android, android/lifecycle, android/service, android/threads-sync, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:12:00 pm
-date modified: Thursday, October 30th 2025, 3:10:28 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:10:28 pm
 
 **Обычный Service работает в главном потоке (UI thread) по умолчанию**, а не в отдельном фоновом потоке. Это распространённое заблуждение.
 
-### Ключевые моменты
+### Ключевые Моменты
 
 1. **Service работает в главном потоке** - Все методы жизненного цикла (`onCreate()`, `onStartCommand()`, `onBind()`) выполняются в главном потоке
 2. **Длительные операции нужно выгружать** - Сетевые запросы, БД, файловые операции должны выполняться в отдельных потоках
@@ -54,9 +54,9 @@ class MyService : Service() {
 }
 ```
 
-### Паттерны работы с Service
+### Паттерны Работы С Service
 
-#### 1. Started Service с ручным управлением потоками
+#### 1. Started Service С Ручным Управлением Потоками
 
 ```kotlin
 class DataSyncService : Service() {
@@ -77,7 +77,7 @@ class DataSyncService : Service() {
 }
 ```
 
-#### 2. Foreground Service с корутинами (рекомендуется)
+#### 2. Foreground Service С Корутинами (рекомендуется)
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -136,7 +136,7 @@ val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
-### Сравнение типов Service
+### Сравнение Типов Service
 
 | Тип Service | Поток по умолчанию | Нужен фоновый поток | Рекомендация |
 |-------------|-------------------|---------------------|--------------|

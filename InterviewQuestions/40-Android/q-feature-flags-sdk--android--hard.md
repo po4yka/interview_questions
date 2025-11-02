@@ -1,13 +1,7 @@
 ---
 id: android-488
 title: Design Feature Flags & Experimentation SDK / Проектирование SDK флагов и экспериментов
-aliases:
-    [
-        Design Feature Flags SDK,
-        Проектирование SDK флагов функций,
-        Feature Flags Architecture,
-        Архитектура флагов функций,
-    ]
+aliases: []
 topic: android
 subtopics: [architecture-clean, networking-http, service]
 question_kind: android
@@ -20,20 +14,9 @@ related: [c-clean-architecture, c-dependency-injection, c-workmanager]
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags:
-    [
-        android/architecture-clean,
-        android/networking-http,
-        android/service,
-        difficulty/hard,
-        platform/android,
-        lang/kotlin,
-        feature-flags,
-        experimentation,
-        sdk,
-    ]
+tags: []
 date created: Wednesday, October 29th 2025, 5:03:10 pm
-date modified: Thursday, October 30th 2025, 12:47:49 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

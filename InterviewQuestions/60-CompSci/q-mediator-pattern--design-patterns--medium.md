@@ -3,19 +3,19 @@ id: design-patterns-004
 title: "Mediator Pattern / Mediator Паттерн"
 aliases: [Mediator Pattern, Mediator Паттерн]
 topic: design-patterns
-subtopics: [behavioral-patterns, coupling-reduction, architecture]
+subtopics: [architecture, behavioral-patterns, coupling-reduction]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-design-patterns
-related: [q-composite-pattern--design-patterns--medium, q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-state-pattern--design-patterns--medium]
+related: [q-adapter-pattern--design-patterns--medium, q-command-pattern--design-patterns--medium, q-iterator-pattern--design-patterns--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [behavioral-patterns, coupling, design-patterns, gof-patterns, mediator, difficulty/medium]
+tags: [behavioral-patterns, coupling, design-patterns, difficulty/medium, gof-patterns, mediator]
 date created: Monday, October 6th 2025, 7:29:48 am
-date modified: Sunday, October 26th 2025, 12:08:08 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Mediator Pattern

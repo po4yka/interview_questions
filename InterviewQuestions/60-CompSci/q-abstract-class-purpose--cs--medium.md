@@ -3,18 +3,20 @@ id: cs-017
 title: "Abstract Class Purpose / Назначение абстрактных классов"
 aliases: ["Abstract Class Purpose", "Назначение абстрактных классов"]
 topic: cs
-subtopics: [oop, inheritance, abstraction]
+subtopics: [abstraction, inheritance, oop]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-interface-vs-abstract-class--programming-languages--medium, q-oop-principles-deep-dive--computer-science--medium, q-inheritance-vs-composition--oop--medium]
+related: [c-inheritance, c-oop-principles]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [abstract-class, inheritance, kotlin, oop, template-method, difficulty/medium]
+tags: [abstract-class, difficulty/medium, inheritance, kotlin, oop, template-method]
 sources: [https://kotlinlang.org/docs/inheritance.html]
+date created: Saturday, November 1st 2025, 1:26:52 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

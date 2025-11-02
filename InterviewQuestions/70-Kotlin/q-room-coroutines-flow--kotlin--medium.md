@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, android, room, database, flow]
+subtopics: [android, coroutines, database, flow, room]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Room Coroutines Flow Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-stateflow-sharedflow-android--kotlin--medium, q-viewmodel-coroutines-lifecycle--kotlin--medium, q-flow-basics--kotlin--medium]
+related: [q-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium, q-viewmodel-coroutines-lifecycle--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, android, room, database, flow, difficulty/medium]
+tags: [android, coroutines, database, difficulty/medium, flow, kotlin, room]
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > How to use Room database with coroutines and Flow? Explain suspend functions in DAO, Flow for reactive queries, transaction handling, and best practices.
 
@@ -264,7 +267,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
 Room предоставляет первоклассную поддержку корутин и Flow для работы с БД.
 
-### Основные возможности
+### Основные Возможности
 
 - **Suspend функции**: Для одноразовых операций
 - **Flow**: Для реактивных запросов (автообновление)

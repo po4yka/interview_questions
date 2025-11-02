@@ -1,9 +1,9 @@
 ---
 id: android-203
 title: "Koin Scope Management / Управление Scope В Koin"
-aliases: [Koin Scope Management, Управление Scope В Koin, Koin Scopes, Жизненный цикл Koin]
+aliases: [Koin Scope Management, Koin Scopes, Жизненный цикл Koin, Управление Scope В Koin]
 topic: android
-subtopics: [di-koin, lifecycle, architecture-mvvm]
+subtopics: [architecture-mvvm, di-koin, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [c-dependency-injection, q-how-to-display-snackbar-or-toast-based-on-re
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/di-koin, android/lifecycle, android/architecture-mvvm, dependency-injection, koin, scopes, difficulty/medium]
+tags: [android/architecture-mvvm, android/di-koin, android/lifecycle, dependency-injection, difficulty/medium, koin, scopes]
 date created: Tuesday, October 28th 2025, 9:23:52 pm
-date modified: Thursday, October 30th 2025, 3:11:52 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

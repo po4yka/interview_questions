@@ -3,27 +3,22 @@ id: lang-091
 title: "Kotlin Non Inheritable Class / Не наследуемый класс в Kotlin"
 aliases: [Kotlin Non Inheritable Class, Не наследуемый класс в Kotlin]
 topic: programming-languages
-subtopics: [type-system, inheritance]
+subtopics: [inheritance, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-generics--kotlin--hard, q-common-coroutine-mistakes--kotlin--medium, q-kotlin-coroutines-overview--programming-languages--medium]
+related: [q-common-coroutine-mistakes--kotlin--medium, q-kotlin-generics--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - class-design
-  - classes
-  - final
-  - inheritance
-  - keywords
-  - open
-  - difficulty/easy
+tags: [class-design, classes, difficulty/easy, final, inheritance, keywords, open, programming-languages]
+date created: Friday, October 31st 2025, 6:30:56 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Как в Kotlin определить класс, который не может быть унаследован?
+
+# Как В Kotlin Определить Класс, Который Не Может Быть Унаследован?
 
 # Question (EN)
 > How to define a class in Kotlin that cannot be inherited?
@@ -112,4 +107,4 @@ class MoreDerived : Derived() {
 
 - [[q-kotlin-generics--kotlin--hard]]
 - [[q-common-coroutine-mistakes--kotlin--medium]]
-- [[q-kotlin-coroutines-overview--programming-languages--medium]]
+-

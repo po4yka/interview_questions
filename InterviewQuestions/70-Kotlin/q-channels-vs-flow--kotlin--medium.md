@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [channels, flow, async, buffering, coroutines]
+subtopics: [async, buffering, channels, coroutines, flow]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-kotlin-channels--kotlin--medium, q-kotlin-flow-basics--kotlin--mediu
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, channels, flow, async, buffering, difficulty/medium]
+tags: [async, buffering, channels, difficulty/medium, flow, kotlin]
+date created: Friday, October 17th 2025, 11:24:31 am
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > When should you use Channels vs Flow? Implement a buffered channel with different capacity strategies and explain their behavior.
 
@@ -83,7 +86,7 @@ fun main() = runBlocking {
 
 Channels support different buffering strategies via capacity parameter:
 
-#### 1. Rendezvous (Default, capacity = 0)
+#### 1. Rendezvous (Default, Capacity = 0)
 
 ```kotlin
 val channel = Channel<Int>() // or Channel<Int>(Channel.RENDEZVOUS)
@@ -313,7 +316,7 @@ suspend fun testChannel(channel: Channel<Int>, name: String) = coroutineScope {
 }
 ```
 
-### When to Use Channels vs Flow
+### When to Use Channels Vs Flow
 
 #### Use Channels When:
 
@@ -596,7 +599,7 @@ val flow = flow { emit(data) }
 
 Channels и Flows используются для асинхронных потоков данных, но служат разным целям.
 
-### Ключевые различия
+### Ключевые Различия
 
 | Характеристика | Channel | Flow |
 |----------------|---------|------|
@@ -608,9 +611,9 @@ Channels и Flows используются для асинхронных пот�
 | **Применение** | Producer-consumer, события | Трансформации данных |
 | **Жизненный цикл** | Требует закрытия | Авто-закрытие |
 
-### Стратегии емкости Channel
+### Стратегии Емкости Channel
 
-#### 1. Rendezvous (по умолчанию, емкость = 0)
+#### 1. Rendezvous (по Умолчанию, Емкость = 0)
 
 ```kotlin
 val channel = Channel<Int>() // или Channel<Int>(Channel.RENDEZVOUS)
@@ -796,7 +799,7 @@ fun main() = runBlocking {
 */
 ```
 
-### Когда использовать Channels
+### Когда Использовать Channels
 
 1. **Горячие потоки** - Данные производятся независимо от потребителей
 2. **Один producer, один consumer**
@@ -831,7 +834,7 @@ class WorkerPool(private val workerCount: Int) {
 }
 ```
 
-### Когда использовать Flow
+### Когда Использовать Flow
 
 1. **Холодные потоки** - Ленивые вычисления по требованию
 2. **Трансформации данных** - map, filter, reduce
@@ -863,7 +866,7 @@ userRepository.getUserUpdates(123)
 // Каждый коллектор получает независимый поток!
 ```
 
-### Полный пример: Все типы буферов
+### Полный Пример: Все Типы Буферов
 
 ```kotlin
 suspend fun demonstrateBufferTypes() {
@@ -907,7 +910,7 @@ suspend fun testChannel(channel: Channel<Int>, name: String) = coroutineScope {
 }
 ```
 
-### Реальный пример: Шина событий с Channels
+### Реальный Пример: Шина Событий С Channels
 
 ```kotlin
 sealed class AppEvent {
@@ -955,7 +958,7 @@ launch {
 eventBus.publish(AppEvent.UserLoggedIn(123))
 ```
 
-### Реальный пример: Конвейер данных с Flow
+### Реальный Пример: Конвейер Данных С Flow
 
 ```kotlin
 class DataPipeline {
@@ -990,7 +993,7 @@ pipeline.processStream()
     .collect { data -> saveToCache(data) }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбирайте на основе горячий vs холодный**:
    ```kotlin
@@ -1036,7 +1039,7 @@ pipeline.processStream()
    // Нужна ручная передача
    ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Забывание закрытия каналов**:
    ```kotlin
@@ -1070,7 +1073,7 @@ pipeline.processStream()
    flowOf(1,2,3).map { process(it) }.collect()
    ```
 
-### Преобразование между Channels и Flow
+### Преобразование Между Channels И Flow
 
 ```kotlin
 // Flow -> Channel (производит в канал)
@@ -1093,7 +1096,7 @@ val channel = flow.produceIn(GlobalScope)
 val newFlow = channel.consumeAsFlow()
 ```
 
-### Соображения производительности
+### Соображения Производительности
 
 ```kotlin
 // Channel: Горячий, накладные расходы памяти на буфер

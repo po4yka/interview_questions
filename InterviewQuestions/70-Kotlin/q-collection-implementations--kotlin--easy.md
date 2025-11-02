@@ -10,20 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-globalscope-antipattern--kotlin--easy, q-fan-in-fan-out-channels--kotlin--hard, q-kotlin-generics--kotlin--hard]
+related: [q-fan-in-fan-out-channels--kotlin--hard, q-globalscope-antipattern--kotlin--easy, q-kotlin-generics--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - collections
-  - implementations
-  - kotlin
-  - list
-  - map
-  - programming-languages
-  - set
-  - difficulty/easy
+tags: [collections, difficulty/easy, implementations, kotlin, list, map, programming-languages, set]
+date created: Friday, October 31st 2025, 6:30:09 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Какие есть реализации коллекций?
+
+# Какие Есть Реализации Коллекций?
 
 # Question (EN)
 > What collection implementations are available in Kotlin?
@@ -234,7 +229,7 @@ Kotlin использует реализации коллекций Java. Осн
   - Операции O(log n)
   - Ключи автоматически сортируются
 
-### Когда что использовать
+### Когда Что Использовать
 
 | Задача | Реализация |
 |--------|------------|

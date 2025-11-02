@@ -1,13 +1,7 @@
 ---
 id: android-468
 title: Design WhatsApp App / Проектирование приложения WhatsApp
-aliases:
-    [
-        Design WhatsApp App,
-        Проектирование приложения WhatsApp,
-        WhatsApp Architecture,
-        Архитектура WhatsApp,
-    ]
+aliases: []
 topic: android
 subtopics: [media, networking-http, service]
 question_kind: android
@@ -16,29 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-    [
-        q-data-sync-unstable-network--android--hard,
-        q-database-encryption-android--android--medium,
-    ]
+related: []
 sources: [https://signal.org/docs/specifications/doubleratchet/]
 created: 2025-10-20
 updated: 2025-10-28
-tags:
-    [
-        android/media,
-        android/networking-http,
-        android/service,
-        difficulty/hard,
-        e2ee,
-        messaging,
-        realtime,
-        websocket,
-        platform/android,
-        lang/kotlin,
-    ]
+tags: []
 date created: Tuesday, October 28th 2025, 9:23:06 am
-date modified: Thursday, October 30th 2025, 12:47:40 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -107,14 +85,14 @@ if (!networkAvailable) {
 -   **Call Signaling:** relay SDP/ICE candidates, не участвует в медиа-потоке (P2P через WebRTC).
 -   **Push Service:** FCM integration, приоритизация (high для звонков, normal для сообщений).
 
-### E2EE и Signal Protocol
+### E2EE И Signal Protocol
 
 -   **Identity Keys:** долгосрочные ed25519 ключи для аутентификации устройств, валидация через QR-код safety numbers.
 -   **Pre-Keys:** одноразовые ECDH ключи (пачка из 100), инициация сессии с оффлайн-пользователем.
 -   **Double Ratchet:** DH ratchet для обновления session key, symmetric ratchet для forward secrecy, поддержка out-of-order доставки.
 -   **Group Sessions:** каждый участник имеет sender key, распределяется через pairwise sessions, полный re-key при изменении состава.
 
-### Хранение данных
+### Хранение Данных
 
 -   **Cassandra (Messages):** partition (userId, YYYYMM), clustering timestamp DESC, зашифрованные сообщения, TTL 30d, RF=3, eventual consistency.
 -   **PostgreSQL (Users, Groups):** strong consistency для metadata, индексы на phoneNumber/userId, master-slave replication.
@@ -198,7 +176,7 @@ Android client (Room DB, E2EE engine, WebSocket, media cache) → Load Balancer 
 -   **Call Signaling:** relay SDP/ICE, no media (P2P WebRTC).
 -   **Push Service:** FCM integration, prioritization (high for calls, normal for messages).
 
-### E2EE and Signal Protocol
+### E2EE And Signal Protocol
 
 -   **Identity Keys:** long-term ed25519 for device auth, validated via QR safety numbers.
 -   **Pre-Keys:** one-time ECDH keys (batch of 100), used for offline user session init.

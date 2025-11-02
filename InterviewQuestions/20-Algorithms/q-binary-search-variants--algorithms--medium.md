@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [algorithms, binary-search, difficulty/medium, log-n, searching]
 sources: [https://en.wikipedia.org/wiki/Binary_search_algorithm]
 date created: Sunday, October 12th 2025, 8:53:58 pm
-date modified: Saturday, October 25th 2025, 5:14:20 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -369,4 +369,3 @@ fun minEatingSpeed(piles: IntArray, h: Int): Int {
 
 ### Advanced (Harder)
 - [[q-binary-search-trees-bst--algorithms--hard]] - BST implementation
-- [[q-median-two-sorted-arrays--algorithms--hard]] - Advanced binary search

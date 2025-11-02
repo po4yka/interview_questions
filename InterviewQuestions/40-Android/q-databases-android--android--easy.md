@@ -3,7 +3,7 @@ id: android-475
 title: Databases Android / Базы данных в Android
 aliases: ["Databases Android", "Базы данных в Android"]
 topic: android
-subtopics: [room, datastore]
+subtopics: [datastore, room]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-database-encryption-android--android--medium, q-database-optimization-android--android--medium]
 created: 2025-10-20
 updated: 2025-10-27
-tags: [android/room, android/datastore, database, difficulty/easy]
+tags: [android/datastore, android/room, database, difficulty/easy]
 sources: [https://developer.android.com/training/data-storage]
 date created: Monday, October 27th 2025, 10:28:31 pm
-date modified: Thursday, October 30th 2025, 12:47:37 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)

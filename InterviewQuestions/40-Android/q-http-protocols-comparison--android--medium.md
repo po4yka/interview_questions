@@ -1,11 +1,11 @@
 ---
 id: android-022
 title: "HTTP vs Long-Polling vs WebSocket vs SSE / HTTP против Long-Polling против WebSocket против SSE"
-aliases: [HTTP Protocols Comparison, WebSocket vs HTTP, Протоколы HTTP, WebSocket против HTTP]
+aliases: [HTTP Protocols Comparison, WebSocket vs HTTP, WebSocket против HTTP, Протоколы HTTP]
 
 # Classification
 topic: android
-subtopics: [networking-http, websockets, performance-memory]
+subtopics: [networking-http, performance-memory, websockets]
 question_kind: theory
 difficulty: medium
 
@@ -17,15 +17,15 @@ sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-retrofit-library--android--medium, q-websocket-implementation--networking--medium, q-server-sent-events-sse--networking--medium]
+related: [q-retrofit-library--android--medium, q-server-sent-events-sse--android--medium, q-websocket-implementation--android--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-28
 
-tags: [android/networking-http, android/websockets, android/performance-memory, difficulty/medium]
+tags: [android/networking-http, android/performance-memory, android/websockets, difficulty/medium]
 date created: Tuesday, October 28th 2025, 9:12:30 pm
-date modified: Thursday, October 30th 2025, 3:10:22 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -444,8 +444,8 @@ class SSEClient(private val client: OkHttpClient) {
 
 ### Related (Same Level)
 - [[q-retrofit-library--android--medium]] - REST API client
-- [[q-websocket-implementation--networking--medium]] - WebSocket setup
-- [[q-server-sent-events-sse--networking--medium]] - SSE implementation
+- [[q-websocket-implementation--android--medium]] - WebSocket setup
+- [[q-server-sent-events-sse--android--medium]] - SSE implementation
 - [[q-network-error-handling-strategies--networking--medium]] - Error handling
 
 ### Advanced (Harder)

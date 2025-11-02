@@ -5,25 +5,17 @@ topic: kotlin
 difficulty: hard
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - race-conditions
-  - thread-safety
-  - concurrency
-  - data-races
-  - bugs
+tags: [bugs, concurrency, coroutines, data-races, difficulty/hard, kotlin, race-conditions, thread-safety]
 moc: moc-kotlin
-related: [q-job-vs-supervisorjob--kotlin--medium, q-flow-time-operators--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
-  - q-mutex-synchronized-coroutines--kotlin--medium
-  - q-semaphore-rate-limiting--kotlin--medium
-  - q-debugging-coroutines-techniques--kotlin--medium
+related: [q-debugging-coroutines-techniques--kotlin--medium, q-flow-time-operators--kotlin--medium, q-job-vs-supervisorjob--kotlin--medium, q-kotlin-partition-function--programming-languages--easy, q-mutex-synchronized-coroutines--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
 subtopics:
+  - bugs
+  - concurrency
   - coroutines
   - race-conditions
   - thread-safety
-  - concurrency
-  - bugs
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Question (EN)
@@ -40,7 +32,7 @@ Coroutines make concurrent programming easier, but they don't eliminate race con
 
 
 
-### Race Condition vs Data Race
+### Race Condition Vs Data Race
 
 **Race Condition:** Bug where program behavior depends on timing/ordering of concurrent operations.
 
@@ -826,7 +818,7 @@ launch { val value = channel.receive() }
 
 [Полный русский перевод следует той же структуре]
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **Состояния гонки все еще происходят** - Корутины не устраняют их
 2. **Check-then-act опасен** - Атомизируйте с Mutex

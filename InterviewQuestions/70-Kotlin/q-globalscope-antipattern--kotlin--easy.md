@@ -1,7 +1,7 @@
 ---
 id: kotlin-193
 title: "GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope"
-aliases: [Globalscope, Antipattern]
+aliases: [Antipattern, Globalscope]
 topic: kotlin
 subtopics: []
 question_kind: theory
@@ -10,13 +10,14 @@ original_language: en
 language_tags: []
 status: draft
 moc: moc-kotlin
-related: [q-object-companion-object--kotlin--medium, q-test-dispatcher-types--kotlin--medium, q-kotlin-unit-singleton--programming-languages--easy]
+related: [q-object-companion-object--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > Why should you avoid using GlobalScope in Android applications?
 # Вопрос (RU)
@@ -458,7 +459,7 @@ fun testLoadUser() {
 }
 ```
 
-### Правильный Способ: Корутины с Жизненным Циклом
+### Правильный Способ: Корутины С Жизненным Циклом
 
 **Решение 1: Использовать lifecycleScope (Activity/Fragment)**
 
@@ -613,4 +614,4 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 
 - [[q-object-companion-object--kotlin--medium]]
 - [[q-test-dispatcher-types--kotlin--medium]]
-- [[q-kotlin-unit-singleton--programming-languages--easy]]
+-

@@ -1,22 +1,23 @@
 ---
 id: kotlin-227
 title: "Kotlin Contracts Smart Casts / Контракты и smart casts в Kotlin"
-aliases: [Kotlin, Contracts, Smart, Casts]
+aliases: [Casts, Contracts, Kotlin, Smart]
 topic: kotlin
-subtopics: [flow, type-system, coroutines]
+subtopics: [coroutines, flow, type-system]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-delegation-by-restriction--programming-languages--medium, q-coroutine-cancellation-cooperation--kotlin--medium, q-flow-operators-deep-dive--kotlin--hard]
+related: [q-coroutine-cancellation-cooperation--kotlin--medium, q-flow-operators-deep-dive--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/hard
+tags: [difficulty/hard]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Kotlin Contracts and Smart Casts
 
 # Question (EN)
@@ -33,7 +34,7 @@ tags:
 
 ---
 
-### What are Smart Casts?
+### What Are Smart Casts?
 
 Smart casts automatically cast types when the compiler can prove type safety:
 
@@ -588,11 +589,11 @@ fun isPositive(value: Int?): Boolean {
 
 **Контракты Kotlin** — это экспериментальная функция, которая позволяет функциям объявлять гарантии о своем поведении компилятору, обеспечивая лучшие умные приведения типов, null-безопасность и оптимизацию.
 
-### Что такое умные приведения типов?
+### Что Такое Умные Приведения Типов?
 
 Умные приведения автоматически преобразуют типы, когда компилятор может доказать безопасность типов.
 
-### Проблема без контрактов
+### Проблема Без Контрактов
 
 Пользовательские функции валидации не обеспечивают умные приведения. Компилятор не знает гарантий функции.
 
@@ -600,7 +601,7 @@ fun isPositive(value: Int?): Boolean {
 
 Контракты сообщают компилятору о гарантиях функции, используя синтаксис `contract { }`.
 
-### Типы контрактов
+### Типы Контрактов
 
 1. **returns(value) implies (condition)** - гарантирует условие при возврате значения
 2. **returns() implies (condition)** - гарантирует условие при нормальном возврате
@@ -613,7 +614,7 @@ fun isPositive(value: Int?): Boolean {
 2. Контракт не может зависеть от runtime значений
 3. Контракты не проверяются компилятором
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Используйте контракты только когда необходимо
 2. Убедитесь, что контракты правдивы
@@ -623,6 +624,6 @@ fun isPositive(value: Int?): Boolean {
 
 ## Related Questions
 
-- [[q-kotlin-delegation-by-restriction--programming-languages--medium]]
+-
 - [[q-coroutine-cancellation-cooperation--kotlin--medium]]
 - [[q-flow-operators-deep-dive--kotlin--hard]]

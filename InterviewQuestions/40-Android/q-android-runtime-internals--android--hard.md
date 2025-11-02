@@ -3,7 +3,7 @@ id: android-107
 title: Android Runtime Internals / Внутреннее устройство Android Runtime
 aliases: ["Android Runtime Internals", "Внутреннее устройство Android Runtime"]
 topic: android
-subtopics: [performance-memory, profiling, processes]
+subtopics: [performance-memory, processes, profiling]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium, q-android-runtime-art--android--medium]
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/performance-memory, android/profiling, android/processes, difficulty/hard]
+tags: [android/performance-memory, android/processes, android/profiling, difficulty/hard]
 sources: []
 date created: Thursday, October 30th 2025, 11:27:26 am
-date modified: Thursday, October 30th 2025, 12:42:58 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

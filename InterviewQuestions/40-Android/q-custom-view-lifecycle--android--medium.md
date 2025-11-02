@@ -3,20 +3,20 @@ id: android-479
 title: Custom View Lifecycle / Жизненный цикл Custom View
 aliases: [Custom View Lifecycle, Жизненный цикл Custom View]
 topic: android
-subtopics: [lifecycle, ui-views, ui-graphics]
+subtopics: [lifecycle, ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-view-lifecycle, c-custom-views, q-view-measure-layout--android--medium, q-view-rendering-performance--android--hard]
+related: [c-custom-views, c-view-lifecycle, q-view-measure-layout--android--medium, q-view-rendering-performance--android--hard]
 created: 2025-10-21
 updated: 2025-10-30
-tags: [android/lifecycle, android/ui-views, android/ui-graphics, custom-views, difficulty/medium]
+tags: [android/lifecycle, android/ui-graphics, android/ui-views, custom-views, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:56:31 am
-date modified: Thursday, October 30th 2025, 12:44:42 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +35,7 @@ date modified: Thursday, October 30th 2025, 12:44:42 pm
 Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onDetachedFromWindow
 ```
 
-### Фазы жизненного цикла
+### Фазы Жизненного Цикла
 
 #### 1. Constructor — Инициализация
 
@@ -66,7 +66,7 @@ class CustomProgressBar @JvmOverloads constructor(
 }
 ```
 
-#### 2. onAttachedToWindow — Присоединение к окну
+#### 2. onAttachedToWindow — Присоединение К Окну
 
 View добавлена в иерархию, можно начинать анимации, регистрировать listeners.
 
@@ -82,7 +82,7 @@ override fun onDetachedFromWindow() {
 }
 ```
 
-#### 3. onMeasure — Измерение размеров
+#### 3. onMeasure — Измерение Размеров
 
 Вызывается многократно. **Обязательно** установить размеры через `setMeasuredDimension()`.
 
@@ -121,7 +121,7 @@ override fun onDraw(canvas: Canvas) {
 }
 ```
 
-### Ключевые правила
+### Ключевые Правила
 
 1. **Constructor**: инициализация Paint, атрибутов; НЕ использовать размеры
 2. **onAttachedToWindow**: запуск анимаций, регистрация listeners
@@ -129,7 +129,7 @@ override fun onDraw(canvas: Canvas) {
 4. **onDraw**: НЕ создавать объекты, НЕ выделять память
 5. **onDetachedFromWindow**: остановить анимации, отписаться от listeners, освободить ресурсы
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 ```kotlin
 class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -287,13 +287,11 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-view-basics--android--easy]]
-- [[q-xml-layouts--android--easy]]
 
 ### Related (Same Level)
 - [[q-view-measure-layout--android--medium]]
 - [[q-canvas-drawing-techniques--android--medium]]
-- [[q-view-state-saving--android--medium]]
+- [[q-custom-view-state-saving--android--medium]]
 
 ### Advanced (Harder)
 - [[q-custom-viewgroup-layout--android--hard]]

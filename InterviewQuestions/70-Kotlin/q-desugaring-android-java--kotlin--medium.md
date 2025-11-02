@@ -10,18 +10,15 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-double-bang-operator--programming-languages--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-kotlin-any-unit-nothing--programming-languages--medium]
+related: [q-coroutine-cancellation-mechanisms--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - java
-  - android
-  - compilation
-  - backward-compatibility
-  - difficulty/medium
+tags: [android, backward-compatibility, compilation, difficulty/medium, java, kotlin]
+date created: Friday, October 31st 2025, 6:34:09 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Desugaring в Android
+
+# Desugaring В Android
 
 # Question (EN)
 > What is desugaring in Android and how does it work?
@@ -65,7 +62,7 @@ dependencies {
 
 **Desugaring** — это процесс преобразования современного синтаксиса языка программирования в более простой код, совместимый со старыми версиями платформы. В контексте Android это означает трансформацию новых возможностей Java и Kotlin в код, который может работать на устаревших версиях Android Runtime.
 
-### Зачем нужен Desugaring?
+### Зачем Нужен Desugaring?
 
 Android-устройства используют разные версии Android Runtime (ART или старую Dalvik VM). Многие устройства работают на Android 5.0 (API 21) или ниже, где нет поддержки современных Java API, таких как:
 
@@ -168,7 +165,7 @@ val optional = Optional.of("Hello")
 optional.ifPresent { println(it) }
 ```
 
-### Как работает Desugaring?
+### Как Работает Desugaring?
 
 #### Этап 1: Компиляция
 
@@ -188,7 +185,7 @@ JVM Bytecode (Java 8+) → D8/R8 Desugar → DEX bytecode (совместимы�
 DEX bytecode → APK/AAB
 ```
 
-### Какие API поддерживаются через Core Library Desugaring?
+### Какие API Поддерживаются Через Core Library Desugaring?
 
 | API | Минимальная версия Android | С Desugaring |
 |-----|----------------------------|--------------|
@@ -197,7 +194,7 @@ DEX bytecode → APK/AAB
 | `java.util.Optional` | Android 7.0 (API 24) | Android 5.0 (API 21) |
 | `java.util.function.*` | Android 7.0 (API 24) | Android 5.0 (API 21) |
 
-### Пример: Работа с датами без Desugaring
+### Пример: Работа С Датами Без Desugaring
 
 **Без Desugaring (старый способ):**
 
@@ -302,7 +299,7 @@ android {
 }
 ```
 
-### Проверка работы Desugaring
+### Проверка Работы Desugaring
 
 ```kotlin
 class DesugaringExample {
@@ -330,7 +327,7 @@ class DesugaringExample {
 }
 ```
 
-### Как включить Desugaring: Полная конфигурация
+### Как Включить Desugaring: Полная Конфигурация
 
 ```gradle
 // build.gradle (Module: app)
@@ -363,7 +360,7 @@ dependencies {
 }
 ```
 
-### Практический пример: До и После Desugaring
+### Практический Пример: До И После Desugaring
 
 **До Desugaring (Java 6/7 стиль):**
 
@@ -428,6 +425,6 @@ Desugaring — это мощный инструмент, который позв
 
 ## Related Questions
 
-- [[q-kotlin-double-bang-operator--programming-languages--medium]]
+-
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
-- [[q-kotlin-any-unit-nothing--programming-languages--medium]]
+-

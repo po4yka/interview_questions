@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-delegates-java-compilation--programming-languages--hard, q-java-all-classes-inherit-from-object--programming-languages--easy, q-template-method-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [cloneable, interfaces, java, marker-interface, programming-languages, serializable, difficulty/medium]
+tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, programming-languages, serializable]
 date created: Saturday, October 4th 2025, 3:02:36 pm
-date modified: Sunday, October 26th 2025, 12:08:03 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Перечислите Маркерные Интерфейсы
@@ -202,7 +202,7 @@ Marker interfaces have **no methods** but provide **type information** and **beh
 - [[q-kotlin-enum-classes--kotlin--easy]] - Enums
 
 ### Related (Medium)
-- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-when-inheritance-useful--cs--medium]] - Inheritance
 - [[q-inheritance-vs-composition--oop--medium]] - Inheritance
 - [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
 - [[q-class-composition--oop--medium]] - Inheritance

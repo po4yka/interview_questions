@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-does-jetpackcompose-work--android--medium, q-compose-stability-skippability--android--hard, q-compose-performance-optimization--android--hard]
+related: [q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android, android/ui-compose, android/ui-state, compose, recomposition, difficulty/medium]
+tags: [android, android/ui-compose, android/ui-state, compose, difficulty/medium, recomposition]
 date created: Wednesday, October 29th 2025, 12:15:21 pm
-date modified: Thursday, October 30th 2025, 3:18:08 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:18:08 pm
 
 Повторный вызов происходит из механизма **recomposition**. Compose автоматически вызывает функцию снова, если состояние, связанное с этой функцией, изменилось.
 
-### Как работает Recomposition
+### Как Работает Recomposition
 
 ```kotlin
 @Composable
@@ -84,7 +84,7 @@ fun RecompositionSources(viewModel: MyViewModel) {
 - Обновления `LiveData` через `observeAsState()`
 - Recomposition родительского composable
 
-### Оптимизация с derivedStateOf
+### Оптимизация С derivedStateOf
 
 ```kotlin
 @Composable

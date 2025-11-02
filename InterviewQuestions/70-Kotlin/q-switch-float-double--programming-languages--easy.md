@@ -3,19 +3,19 @@ id: lang-092
 title: "Switch Float Double / Switch с float и double"
 aliases: [Switch Float Double, Switch с float и double]
 topic: programming-languages
-subtopics: [type-system, language-features, switch-statement]
+subtopics: [language-features, switch-statement, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-delegates-java-compilation--programming-languages--hard, q-hashmap-how-it-works--programming-languages--medium, q-solid-principles--software-design--medium]
+related: [q-hashmap-how-it-works--programming-languages--medium, q-solid-principles--software-design--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [double, float, floating-point, java, kotlin, programming-languages, switch, difficulty/easy]
+tags: [difficulty/easy, double, float, floating-point, java, kotlin, programming-languages, switch]
 date created: Friday, October 3rd 2025, 7:03:57 pm
-date modified: Sunday, October 26th 2025, 1:39:53 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Работает Ли switch() С double/float?
@@ -218,5 +218,5 @@ System.out.println(sum == 100);  // Always true
 ## Related Questions
 
 - [[q-solid-principles--software-design--medium]]
-- [[q-delegates-java-compilation--programming-languages--hard]]
+-
 - [[q-hashmap-how-it-works--programming-languages--medium]]

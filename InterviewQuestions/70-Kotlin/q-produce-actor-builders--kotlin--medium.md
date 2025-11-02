@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, channels, produce, actor, channel-builders]
+subtopics: [actor, channel-builders, channels, coroutines, produce]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Channel Builders Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-channels-basics-types--kotlin--medium, q-channel-closing-completion--kotlin--medium, q-actor-pattern--kotlin--hard]
+related: [q-actor-pattern--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-channels-basics-types--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, channels, produce, actor, builders, difficulty/medium]
+tags: [actor, builders, channels, coroutines, difficulty/medium, kotlin, produce]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What are produce and actor channel builders? Explain their purpose, automatic resource management, and when to use each builder pattern.
 
@@ -38,7 +41,7 @@ tags: [kotlin, coroutines, channels, produce, actor, builders, difficulty/medium
 
 The `produce` and `actor` builders are high-level channel construction functions that simplify common coroutine patterns and provide automatic resource management.
 
-### produce: Producer Pattern Builder
+### Produce: Producer Pattern Builder
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -88,7 +91,7 @@ class ProduceComparison {
 }
 ```
 
-### produce Features and Benefits
+### Produce Features and Benefits
 
 ```kotlin
 class ProduceFeatures {
@@ -162,7 +165,7 @@ class ProduceFeatures {
 }
 ```
 
-### produce Use Cases
+### Produce Use Cases
 
 ```kotlin
 class ProduceUseCases {
@@ -226,7 +229,7 @@ class ProduceUseCases {
 }
 ```
 
-### actor: Actor Pattern Builder
+### Actor: Actor Pattern Builder
 
 ```kotlin
 // Basic actor usage
@@ -299,7 +302,7 @@ class ActorComparison {
 }
 ```
 
-### actor Features and Benefits
+### Actor Features and Benefits
 
 ```kotlin
 class ActorFeatures {
@@ -393,7 +396,7 @@ class ActorFeatures {
 }
 ```
 
-### actor Use Cases
+### Actor Use Cases
 
 ```kotlin
 class ActorUseCases {
@@ -502,23 +505,23 @@ class ActorUseCases {
 }
 ```
 
-### produce vs actor Comparison
+### Produce Vs Actor Comparison
 
 ```kotlin
 /**
  * PRODUCE vs ACTOR
  *
- * 
- *  Aspect            produce               actor                
- * 
- *  Purpose           Generate values       Process messages     
- *  Direction         Outbound (send)       Inbound (receive)    
- *  Return Type       ReceiveChannel        SendChannel          
- *  Primary Use       Producer pattern      Actor pattern        
- *  State             Usually stateless     Usually stateful     
- *  Consumer          External              Internal             
- *  Pattern           One-to-many           Many-to-one          
- * 
+ *
+ *  Aspect            produce               actor
+ *
+ *  Purpose           Generate values       Process messages
+ *  Direction         Outbound (send)       Inbound (receive)
+ *  Return Type       ReceiveChannel        SendChannel
+ *  Primary Use       Producer pattern      Actor pattern
+ *  State             Usually stateless     Usually stateful
+ *  Consumer          External              Internal
+ *  Pattern           One-to-many           Many-to-one
+ *
  */
 
 class ProduceVsActorExamples {
@@ -643,7 +646,7 @@ class AdvancedPatterns {
 }
 ```
 
-### Testing produce and actor
+### Testing Produce and Actor
 
 ```kotlin
 class BuilderTests {
@@ -712,7 +715,7 @@ class BuilderTests {
 
 Билдеры `produce` и `actor` - это высокоуровневые функции создания каналов, упрощающие общие паттерны корутин.
 
-### produce: Паттерн производителя
+### Produce: Паттерн Производителя
 
 ```kotlin
 val numbers = produce {
@@ -733,7 +736,7 @@ for (num in numbers) {
 - Пропаганда исключений
 - Настройка емкости и диспетчера
 
-### actor: Паттерн актора
+### Actor: Паттерн Актора
 
 ```kotlin
 val counter = actor<CounterMsg> {
@@ -755,7 +758,7 @@ counter.send(Increment)
 - Потокобезопасность
 - Паттерн "актор-модель"
 
-### Когда использовать
+### Когда Использовать
 
 **produce**: Генерация последовательности значений, потоки данных
 **actor**: Обработка запросов, управление состоянием, координация

@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-custom-view-lifecycle--android--medium]
 created: 2025-10-21
 updated: 2025-10-30
-tags: [android/lifecycle, android/ui-views, custom-view, state-management, difficulty/medium]
+tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, state-management]
 sources: []
 date created: Thursday, October 30th 2025, 12:02:06 pm
-date modified: Thursday, October 30th 2025, 12:44:43 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -299,12 +299,10 @@ class ComplexView : View {
 
 ### Prerequisites
 - [[q-activity-lifecycle-methods--android--medium]]
-- [[q-parcelable-vs-serializable--android--easy]]
 
 ### Related
 - [[q-custom-view-lifecycle--android--medium]]
-- [[q-fragment-savedinstancestate--android--medium]]
-- [[q-viewmodel-vs-savedstate--android--medium]]
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
 
 ### Advanced
 - [[q-custom-viewgroup-layout--android--hard]]

@@ -1,10 +1,10 @@
 ---
 id: "20251018-140002"
 title: "Array / Массив"
-aliases: ["Array", "Arrays", "Массив", "Массивы", "Fixed-size Array", "Фиксированный массив"]
+aliases: ["Array", "Arrays", "Fixed-size Array", "Массив", "Массивы", "Фиксированный массив"]
 summary: "Fixed-size sequential collection with contiguous memory and O(1) random access"
 topic: "data-structures"
-subtopics: ["arrays", "algorithms", "collections"]
+subtopics: ["algorithms", "arrays", "collections"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-algorithms"
 related: []
 created: "2025-10-18"
 updated: "2025-10-18"
-tags: ["concept", "data-structures", "arrays", "algorithms", "collections", "difficulty/medium"]
+tags: ["algorithms", "arrays", "collections", "concept", "data-structures", "difficulty/medium"]
+date created: Saturday, October 18th 2025, 3:07:28 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -24,7 +26,7 @@ An **array** is a fundamental data structure that stores a fixed-size sequential
 
 Arrays are one of the most basic and widely-used data structures in computer science, serving as the foundation for many other data structures and algorithms.
 
-# Краткое описание (RU)
+# Краткое Описание (RU)
 
 **Массив** - это фундаментальная структура данных, которая хранит коллекцию элементов фиксированного размера одного типа в последовательных ячейках памяти. Массивы обеспечивают O(1) доступ к элементам по индексу, что делает их эффективными для операций чтения, но негибкими для динамического изменения размера.
 
@@ -43,7 +45,7 @@ Arrays are one of the most basic and widely-used data structures in computer sci
 5. **Random Access**: Direct access to any element in O(1) time
 6. **Memory Efficient**: No overhead for pointers or metadata per element
 
-### Основные свойства (RU)
+### Основные Свойства (RU)
 
 1. **Фиксированный размер**: После создания размер не может быть изменён
 2. **Последовательная память**: Элементы хранятся в последовательных ячейках памяти
@@ -54,7 +56,7 @@ Arrays are one of the most basic and widely-used data structures in computer sci
 
 ---
 
-## Memory Layout / Размещение в памяти
+## Memory Layout / Размещение В Памяти
 
 ### Contiguous Memory (EN)
 
@@ -73,7 +75,7 @@ address = base + (i × element_size)
 
 This formula enables O(1) access to any element.
 
-### Последовательное размещение (RU)
+### Последовательное Размещение (RU)
 
 Массивы хранят элементы в последовательных ячейках памяти, что обеспечивает эффективное использование кэша и предсказуемые паттерны доступа к памяти.
 
@@ -86,7 +88,7 @@ This formula enables O(1) access to any element.
 
 ---
 
-## Time Complexity / Временная сложность
+## Time Complexity / Временная Сложность
 
 | Operation | Time Complexity | Explanation |
 |-----------|----------------|-------------|
@@ -112,7 +114,7 @@ This formula enables O(1) access to any element.
 
 ---
 
-## Arrays vs Lists vs ArrayList
+## Arrays Vs Lists Vs ArrayList
 
 ### Comparison Table (EN)
 
@@ -128,7 +130,7 @@ This formula enables O(1) access to any element.
 | **Null Safety** | Can contain nulls | Can be List<T?> or List<T> | Can contain nulls |
 | **Methods** | Basic (size, get, set) | Rich API (filter, map, etc.) | Rich API + mutability |
 
-### Таблица сравнения (RU)
+### Таблица Сравнения (RU)
 
 | Характеристика | Array | List (интерфейс) | ArrayList |
 |----------------|-------|------------------|-----------|
@@ -142,7 +144,7 @@ This formula enables O(1) access to any element.
 
 ---
 
-## When to Use Arrays / Когда использовать массивы
+## When to Use Arrays / Когда Использовать Массивы
 
 ### Use Arrays When (EN):
 
@@ -173,7 +175,7 @@ This formula enables O(1) access to any element.
    val matrix = Array(3) { IntArray(3) }  // 3x3 matrix
    ```
 
-### Используйте массивы когда (RU):
+### Используйте Массивы Когда (RU):
 
 1. **Размер известен и фиксирован** - Количество элементов не изменится
 2. **Критична производительность с примитивами** - Избежать накладных расходов на упаковку
@@ -216,7 +218,7 @@ val initialized = IntArray(5) { it * 2 }  // [0, 2, 4, 6, 8]
 val matrix = Array(3) { IntArray(3) }  // 3x3 matrix
 ```
 
-### Типы массивов в Kotlin (RU)
+### Типы Массивов В Kotlin (RU)
 
 ```kotlin
 // Обобщённый массив (использует упакованные типы)
@@ -231,7 +233,7 @@ val byteArray: ByteArray = byteArrayOf(1, 2, 3)  // byte[]
 
 ---
 
-## Common Operations / Основные операции
+## Common Operations / Основные Операции
 
 ### Kotlin Examples (EN)
 
@@ -321,7 +323,7 @@ String str = Arrays.toString(array);  // "[1, 2, 3, 4, 5]"
 
 ---
 
-## Advanced Topics / Продвинутые темы
+## Advanced Topics / Продвинутые Темы
 
 ### Array Resizing (Dynamic Arrays)
 
@@ -387,7 +389,7 @@ val element = jagged[1][2]  // 5
 
 ---
 
-## Common Pitfalls / Распространённые ошибки
+## Common Pitfalls / Распространённые Ошибки
 
 ### 1. Array Comparison (EN)
 
@@ -442,7 +444,7 @@ Arrays have excellent cache locality due to contiguous memory, making them faste
 
 ---
 
-## Use Cases / Примеры использования
+## Use Cases / Примеры Использования
 
 ### Algorithm Problems (EN)
 ```kotlin

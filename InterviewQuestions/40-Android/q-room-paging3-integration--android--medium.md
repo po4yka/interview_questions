@@ -3,19 +3,22 @@ id: android-242
 title: "Room Paging3 Integration / Интеграция Room с Paging3"
 aliases: ["Room Paging3 Integration", "Интеграция Room с Paging3"]
 topic: android
-subtopics: [room, ui-compose, architecture-mvvm]
+subtopics: [architecture-mvvm, room, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-room-library-definition--android--easy, q-room-transactions-dao--room--medium]
+related: [q-room-library-definition--android--easy, q-room-transactions-dao--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/room, android/ui-compose, android/architecture-mvvm, paging3, database, pagination, offline-first, difficulty/medium]
+tags: [android/architecture-mvvm, android/room, android/ui-compose, database, difficulty/medium, offline-first, pagination, paging3]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
+
 # Вопрос (RU)
 
 Как интегрировать Room с Paging 3? Реализуйте источник данных из Room и обработку RemoteMediator для офлайн-first архитектуры с сетью и базой данных.
@@ -183,7 +186,7 @@ class UserRepository(
 7. **withTransaction** — атомарность операций
 8. **Retry mechanism** — восстановление после ошибок
 
-### Ключевые моменты
+### Ключевые Моменты
 
 - **PagingSource**: автоматическая пагинация из Room запросов
 - **RemoteMediator**: офлайн-first с сеть + БД
@@ -390,9 +393,9 @@ Use **PagingSource** for simple local pagination, **RemoteMediator** for offline
 - [[q-room-library-definition--android--easy]] - Room database basics
 
 ### Related (Medium)
-- [[q-room-transactions-dao--room--medium]] - Room transactions
+- [[q-room-transactions-dao--android--medium]] - Room transactions
 - [[q-room-type-converters--android--medium]] - Room type converters
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--room--hard]] - Full-text search with Room
+- [[q-room-fts-full-text-search--android--hard]] - Full-text search with Room
 - Database migrations and versioning strategies

@@ -3,20 +3,20 @@ id: android-277
 title: App Security Best Practices / Лучшие практики безопасности приложения
 aliases: ["App Security Best Practices", "Лучшие практики безопасности приложения"]
 topic: android
-subtopics: [keystore-crypto, permissions, network-security-config]
+subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-encryption, c-android-keystore, q-android-runtime-permissions--android--medium, q-android-network-security--android--medium]
+related: [c-android-keystore, c-encryption]
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/keystore-crypto, android/permissions, android/network-security-config, security, owasp, difficulty/medium]
+tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
 date created: Thursday, October 30th 2025, 11:43:21 am
-date modified: Thursday, October 30th 2025, 12:43:10 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -27,7 +27,7 @@ date modified: Thursday, October 30th 2025, 12:43:10 pm
 
 **Концепция**: Безопасность Android требует defense-in-depth — многоуровневой защиты сети, данных, кода и runtime. Если один слой скомпрометирован, остальные продолжают защищать приложение.
 
-### 1. Защита сетевых соединений
+### 1. Защита Сетевых Соединений
 
 **Certificate Pinning** предотвращает MITM-атаки:
 
@@ -54,7 +54,7 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
-### 2. Защита данных
+### 2. Защита Данных
 
 **EncryptedSharedPreferences** с hardware-backed ключами:
 
@@ -73,7 +73,7 @@ prefs.edit().putString("token", authToken).apply()
 
 Ключи хранятся в Android Keystore и не могут быть извлечены.
 
-### 3. Обфускация кода
+### 3. Обфускация Кода
 
 **R8** затрудняет реверс-инжиниринг:
 
@@ -91,7 +91,7 @@ android {
 }
 ```
 
-### 4. Защита от SQL-инъекций
+### 4. Защита От SQL-инъекций
 
 ```kotlin
 // ✅ Параметризованные запросы
@@ -102,7 +102,7 @@ suspend fun findUser(email: String): User?
 // db.rawQuery("SELECT * FROM users WHERE email = '$email'")
 ```
 
-### 5. Критические правила
+### 5. Критические Правила
 
 - **Permissions**: Минимальный набор, проверка во время выполнения
 - **Logging**: Никогда не логировать токены, пароли, PII
@@ -221,12 +221,12 @@ suspend fun findUser(email: String): User?
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-runtime-permissions--android--easy]] — Runtime permission basics
-- [[q-android-manifest-security--android--easy]] — Manifest security configuration
+ — Runtime permission basics
+ — Manifest security configuration
 
 ### Related
-- [[q-android-runtime-permissions--android--medium]] — Permission handling patterns
-- [[q-android-network-security--android--medium]] — Network security configuration
+ — Permission handling patterns
+ — Network security configuration
 - [[q-android-data-encryption--android--medium]] — Data encryption strategies
 
 ### Advanced

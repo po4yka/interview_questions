@@ -3,7 +3,7 @@ id: kotlin-170
 title: "Coroutines and side effects in Jetpack Compose / Корутины и side effects в Jetpack Compose"
 aliases: [Coroutines Side Effects Compose, Корутины side effects Jetpack Compose]
 topic: kotlin
-subtopics: [coroutines, compose-integration]
+subtopics: [compose-integration, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,26 +11,14 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - android
-  - jetpack-compose
-  - side-effects
-  - launchedeffect
-  - rememberCoroutineScope
-  - lifecycle
-  - state-management
-  - difficulty/medium
+tags: [android, coroutines, difficulty/medium, jetpack-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
 moc: moc-kotlin
-related: [q-kotlin-sealed-when-exhaustive--kotlin--medium, q-select-expression-channels--kotlin--hard, q-sealed-class-sealed-interface--kotlin--medium]
-  - coroutines
-  - android
-  - compose
-  - side-effects
-  - launchedeffect
+related: [q-stateflow-sharedflow--kotlin--medium]
+date created: Saturday, November 1st 2025, 1:28:03 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# Coroutines and side effects in Jetpack Compose
+
+# Coroutines and Side Effects in Jetpack Compose
 
 ## English
 
@@ -884,10 +872,7 @@ fun testArticleLoading() = runTest {
 ```
 
 ### Related Questions
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutine fundamentals
-- [[q-flow-basics--kotlin--easy]] - Flow fundamentals
-- [[q-android-lifecycle-coroutines--kotlin--medium]] - Android lifecycle integration
-- [[q-stateflow-sharedflow--kotlin--medium]] - StateFlow and SharedFlow
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - StateFlow and SharedFlow
 
 ## Follow-ups
 1. When would you choose LaunchedEffect over produceState for loading data?
@@ -914,7 +899,7 @@ fun testArticleLoading() = runTest {
 
 **Side effects** в Compose — это операции, которые выходят за рамки composable функции и влияют на состояние приложения вне самой композиции.
 
-#### 1. Что такое Side Effects?
+#### 1. Что Такое Side Effects?
 
 **Определение:**
 - Side effects — это операции **вне** композиции
@@ -948,13 +933,10 @@ fun GoodExample() {
 
 *(Продолжение следует той же структуре с подробными примерами всех side effects на русском языке, включая LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, SideEffect, derivedStateOf, snapshotFlow, production примеры, тестирование и best practices)*
 
-### Связанные вопросы
-- [[q-what-is-coroutine--kotlin--easy]] - Основы корутин
-- [[q-flow-basics--kotlin--easy]] - Основы Flow
-- [[q-android-lifecycle-coroutines--kotlin--medium]] - Интеграция с Android lifecycle
-- [[q-stateflow-sharedflow--kotlin--medium]] - StateFlow и SharedFlow
+### Связанные Вопросы
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - StateFlow и SharedFlow
 
-### Дополнительные вопросы
+### Дополнительные Вопросы
 1. Когда выбрать LaunchedEffect вместо produceState для загрузки данных?
 2. Как collectAsStateWithLifecycle отличается от collectAsState с точки зрения производительности и управления жизненным циклом?
 3. Что происходит с LaunchedEffect когда меняется его ключ? Объясните жизненный цикл.

@@ -14,9 +14,9 @@ related: [q-android-app-lag-analysis--android--medium, q-android-performance-mea
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/performance-rendering, android/ui-views, custom-views, performance, canvas, difficulty/hard]
+tags: [android/performance-rendering, android/ui-views, canvas, custom-views, difficulty/hard, performance]
 date created: Thursday, October 30th 2025, 11:11:20 am
-date modified: Thursday, October 30th 2025, 12:43:32 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:43:32 pm
 
 **Цель производительности**: 60 FPS = 16.67 мс на кадр, `onDraw()` должен занимать < 5 мс, нулевые аллокации на кадр.
 
-### 1. Нулевые аллокации памяти
+### 1. Нулевые Аллокации Памяти
 
 Создание объектов в `onDraw()` вызывает GC паузы и пропуски кадров.
 
@@ -53,7 +53,7 @@ class OptimizedView(context: Context) : View(context) {
 }
 ```
 
-### 2. Аппаратное ускорение
+### 2. Аппаратное Ускорение
 
 GPU кеширует содержимое слоя, минуя CPU повторную отрисовку.
 
@@ -67,7 +67,7 @@ view.animate().alpha(0f).withLayer() // Автоматически управл�
 
 **Когда использовать**: сложные Path, многослойные эффекты, частые анимации. До 10x ускорения.
 
-### 3. Bitmap кеширование
+### 3. Bitmap Кеширование
 
 Дорогостоящие операции отрисовываем один раз в Bitmap, затем только `drawBitmap()`.
 

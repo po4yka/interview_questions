@@ -3,7 +3,7 @@ id: android-118
 title: "Is LayoutInflater A Singleton And Why / Является ли LayoutInflater синглтоном и почему"
 aliases: ["Is LayoutInflater A Singleton And Why", "Является ли LayoutInflater синглтоном и почему"]
 topic: android
-subtopics: [ui-views, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-home-screen-widgets--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/ui-views, android/architecture-mvvm, difficulty/medium, context, system-services]
+tags: [android, android/architecture-mvvm, android/ui-views, context, difficulty/medium, system-services]
 sources: []
 date created: Monday, October 27th 2025, 3:32:43 pm
-date modified: Thursday, October 30th 2025, 3:10:59 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:10:59 pm
 
 Нет, **LayoutInflater не является глобальным синглтоном**. Каждый Context кэширует свой экземпляр LayoutInflater, полученный через `getSystemService()`. Это паттерн «синглтон в пределах области видимости» (scope-bound singleton).
 
-### Ключевые моменты
+### Ключевые Моменты
 
 **Не глобальный синглтон**
 - Разные Context (Activity, Application) имеют разные экземпляры LayoutInflater
@@ -47,7 +47,7 @@ date modified: Thursday, October 30th 2025, 3:10:59 pm
 - LayoutInflater не сохраняет состояние между вызовами `inflate()`
 - Безопасно переиспользовать для множественных инфляций
 
-### Пример: один экземпляр на Context
+### Пример: Один Экземпляр На Context
 
 ```kotlin
 val inflater1 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -59,7 +59,7 @@ val appInflater = LayoutInflater.from(applicationContext)
 println(activityInflater === appInflater) // ❌ false - разные Context
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 // ✅ ХОРОШО: передать в конструктор
@@ -85,7 +85,7 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 No, **LayoutInflater is not a global singleton**. Each Context caches its own LayoutInflater instance obtained via `getSystemService()`. This is a scope-bound singleton pattern.
 
-### Key points
+### Key Points
 
 **Not a global singleton**
 - Different Contexts (Activity, Application) have different LayoutInflater instances
@@ -99,7 +99,7 @@ No, **LayoutInflater is not a global singleton**. Each Context caches its own La
 - LayoutInflater doesn't preserve state between `inflate()` calls
 - Safe to reuse for multiple inflations
 
-### Example: one instance per Context
+### Example: One Instance per Context
 
 ```kotlin
 val inflater1 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -111,7 +111,7 @@ val appInflater = LayoutInflater.from(applicationContext)
 println(activityInflater === appInflater) // ❌ false - different Contexts
 ```
 
-### Best practices
+### Best Practices
 
 ```kotlin
 // ✅ GOOD: pass in constructor

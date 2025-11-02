@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-separate-ui-business-logic--android--easy, q-what-is-hilt--android--medium]
+related: [q-separate-ui-business-logic--android--easy, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-what-is-hilt--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# State Hoisting в Jetpack Compose
+# State Hoisting В Jetpack Compose
 
 **English**: What is state hoisting in Jetpack Compose and why is it considered a best practice for building reusable components?
 
@@ -371,7 +373,7 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel()) {
 }
 ```
 
-### Stateful vs Stateless Composables
+### Stateful Vs Stateless Composables
 
 #### Stateful - Internal State
 

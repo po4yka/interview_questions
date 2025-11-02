@@ -1,11 +1,11 @@
 ---
 id: android-241
 title: When to Use PNG, WebP, or SVG / Когда использовать PNG, WebP или SVG
-aliases: [Image Formats Android, Форматы изображений Android, PNG vs WebP vs SVG]
+aliases: [Image Formats Android, PNG vs WebP vs SVG, Форматы изображений Android]
 
 # Classification
 topic: android
-subtopics: [ui-graphics, performance-rendering, gradle]
+subtopics: [gradle, performance-rendering, ui-graphics]
 question_kind: android
 difficulty: easy
 
@@ -17,16 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-dagger-purpose--android--easy, q-compose-ui-testing-advanced--testing--hard, q-dagger-build-time-optimization--android--medium]
+related: [q-compose-ui-testing-advanced--android--hard, q-dagger-build-time-optimization--android--medium, q-dagger-purpose--android--easy]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-29
 
 # Tags (EN only; no leading #)
-tags: [android/ui-graphics, android/performance-rendering, android/gradle, image-formats, ui, difficulty/easy]
+tags: [android/gradle, android/performance-rendering, android/ui-graphics, difficulty/easy, image-formats, ui]
 date created: Wednesday, October 29th 2025, 12:17:15 pm
-date modified: Thursday, October 30th 2025, 3:18:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +41,7 @@ date modified: Thursday, October 30th 2025, 3:18:09 pm
 
 Выбор формата изображения влияет на производительность приложения, размер APK и визуальное качество. Правильный выбор зависит от типа контента.
 
-### Когда использовать Vector Drawables (SVG)
+### Когда Использовать Vector Drawables (SVG)
 
 **Лучший выбор для:**
 - Иконки и UI-элементы
@@ -77,7 +77,7 @@ date modified: Thursday, October 30th 2025, 3:18:09 pm
 - Не подходит для фотографий или сложной графики
 - Сложные векторы нагружают CPU при рендеринге
 
-### Когда использовать WebP
+### Когда Использовать WebP
 
 **Лучший выбор для:**
 - Фотографии и сложные изображения
@@ -107,7 +107,7 @@ cwebp -q 80 input.png -o output.webp
 - Требуется Android 4.0+ (базовая поддержка)
 - Немного больше нагрузка на CPU при декодировании
 
-### Когда использовать PNG
+### Когда Использовать PNG
 
 **Лучший выбор для:**
 - Легаси-совместимость
@@ -129,7 +129,7 @@ res/drawable-hdpi/icon.png
 res/drawable-xhdpi/icon.png
 ```
 
-### Сравнение форматов
+### Сравнение Форматов
 
 | Критерий | Vector | WebP | PNG |
 |----------|--------|------|-----|
@@ -309,7 +309,7 @@ android {
 - [[q-dagger-purpose--android--easy]]
 
 ### Related (Same Level)
-- [[q-compose-ui-testing-advanced--testing--hard]]
+- [[q-compose-ui-testing-advanced--android--hard]]
 
 ### Advanced (Harder)
 - [[q-dagger-build-time-optimization--android--medium]]

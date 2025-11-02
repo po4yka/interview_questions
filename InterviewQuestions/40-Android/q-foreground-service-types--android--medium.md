@@ -3,7 +3,7 @@ id: android-057
 title: "Foreground Service Types / Типы Foreground Service"
 aliases: ["Foreground Service Types", "Типы Foreground Service"]
 topic: android
-subtopics: [service, background-execution]
+subtopics: [background-execution, service]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [q-android-service-types--android--easy, q-workmanager-vs-alternatives--android--medium]
 created: 2025-10-12
 updated: 2025-01-27
-tags: [android/service, android/background-execution, difficulty/medium, foreground-service, notifications]
+tags: [android/background-execution, android/service, difficulty/medium, foreground-service, notifications]
 sources: [https://developer.android.com/guide/components/foreground-services]
 date created: Monday, October 27th 2025, 3:32:31 pm
-date modified: Thursday, October 30th 2025, 12:47:54 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

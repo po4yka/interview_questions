@@ -1,10 +1,10 @@
 ---
 id: "20251025-110314"
 title: "Android Permissions / Разрешения Android"
-aliases: ["Permissions", "Android Permissions", "Разрешения", "Runtime Permissions", "Разрешения Времени Выполнения"]
+aliases: ["Android Permissions", "Permissions", "Runtime Permissions", "Разрешения Времени Выполнения", "Разрешения"]
 summary: "System for controlling app access to sensitive user data and device features"
 topic: "android"
-subtopics: ["permissions", "security", "privacy"]
+subtopics: ["permissions", "privacy", "security"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "permissions", "security", "privacy", "difficulty/medium"]
+tags: ["android", "concept", "difficulty/medium", "permissions", "privacy", "security"]
+date created: Saturday, October 25th 2025, 11:07:59 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Android Permissions / Разрешения Android
@@ -24,7 +26,7 @@ tags: ["concept", "android", "permissions", "security", "privacy", "difficulty/m
 
 Android permissions are a security mechanism that controls app access to sensitive user data and device features. Apps must declare required permissions in the manifest, and starting from Android 6.0 (API 23), dangerous permissions require explicit user approval at runtime. The permission system protects user privacy by ensuring users are informed and in control of what data and features apps can access.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Разрешения Android - это механизм безопасности, контролирующий доступ приложений к конфиденциальным пользовательским данным и функциям устройства. Приложения должны объявлять требуемые разрешения в манифесте, и начиная с Android 6.0 (API 23), опасные разрешения требуют явного одобрения пользователя во время выполнения. Система разрешений защищает конфиденциальность пользователей, гарантируя, что пользователи информированы и контролируют, какие данные и функции могут использовать приложения.
 
@@ -38,7 +40,7 @@ Android permissions are a security mechanism that controls app access to sensiti
 - **Best practices**: Request only necessary permissions, explain why needed
 - **Android 11+**: One-time permissions and auto-reset
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Типы разрешений**: Обычные, опасные, подписи, специальные
 - **Разрешения времени выполнения**: Требуются для опасных разрешений на API 23+

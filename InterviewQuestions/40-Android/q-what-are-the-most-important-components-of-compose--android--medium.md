@@ -3,7 +3,7 @@ id: android-123
 title: "What Are The Most Important Components Of Compose / Какие самые важные компоненты Compose"
 aliases: ["Compose Components", "Компоненты Compose"]
 topic: android
-subtopics: [ui-compose, architecture-mvvm, coroutines]
+subtopics: [architecture-mvvm, coroutines, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,8 +14,11 @@ related: [c-jetpack-compose, q-how-does-jetpack-compose-work--android--medium, q
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/ui-compose, android/architecture-mvvm, android/coroutines, jetpack-compose, difficulty/medium]
+tags: [android, android/architecture-mvvm, android/coroutines, android/ui-compose, difficulty/medium, jetpack-compose]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Какие самые важные компоненты Jetpack Compose?
@@ -30,7 +33,7 @@ tags: [android, android/ui-compose, android/architecture-mvvm, android/coroutine
 
 Jetpack Compose построен на нескольких ключевых компонентах, которые работают вместе для создания декларативного UI-фреймворка.
 
-### 1. Composable функции
+### 1. Composable Функции
 
 Основные строительные блоки UI с аннотацией `@Composable`. Они описывают, **как должен выглядеть** UI, а не как его создать.
 
@@ -53,7 +56,7 @@ fun UserProfile(user: User) {
 - Выполняются многократно и в любом порядке (idempotent)
 - Не возвращают значения, только описывают UI-дерево
 
-### 2. State и Recomposition
+### 2. State И Recomposition
 
 State управляет данными UI. При изменении состояния зависимые composables автоматически перерисовываются (recompose).
 

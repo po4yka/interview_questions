@@ -3,20 +3,20 @@ id: android-216
 title: Android Project Parts / Части Android проекта
 aliases: ["Android Project Parts", "Части Android проекта"]
 topic: android
-subtopics: [gradle, build-variants]
+subtopics: [build-variants, gradle]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-manifest-file--android--easy, q-gradle-build-system--android--medium, q-android-modularization--android--medium]
+related: [q-android-manifest-file--android--easy]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/gradle, android/build-variants, build-system, project-structure, difficulty/easy]
+tags: [android/build-variants, android/gradle, build-system, difficulty/easy, project-structure]
 sources: []
 date created: Thursday, October 30th 2025, 11:26:32 am
-date modified: Thursday, October 30th 2025, 12:42:56 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -206,7 +206,7 @@ android {
 
 ### Related
 - [[q-gradle-build-system--android--medium]]
-- [[q-android-resources-qualifiers--android--medium]]
+
 
 ### Advanced
 - [[q-android-modularization--android--medium]]

@@ -1,22 +1,23 @@
 ---
 id: kotlin-145
 title: "Inline Value Classes Performance"
-aliases: [Inline, Value, Classes, Performance]
+aliases: [Classes, Inline, Performance, Value]
 topic: kotlin
-subtopics: [object-comparison, null-safety, delegation]
+subtopics: [delegation, null-safety, object-comparison]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-kotlin-default-access-modifier--programming-languages--easy]
+related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Inline Value Classes and Performance
 
 # Question (EN)
@@ -165,11 +166,11 @@ val any: Any = UserId(1) // Boxed
 
 **Inline value классы** - это обертки без затрат, обеспечивающие безопасность типов без runtime накладных расходов путем инлайнинга во время компиляции.
 
-### Преимущество производительности
+### Преимущество Производительности
 
 Нет аллокации объектов - значение передается как примитив.
 
-### Когда использовать
+### Когда Использовать
 
 - Безопасные по типам примитивы (метры, секунды)
 - API ключи, ID
@@ -187,4 +188,4 @@ Value классы обеспечивают type-safety без performance overh
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
 - [[q-kotlin-static-variable--programming-languages--easy]]
-- [[q-kotlin-default-access-modifier--programming-languages--easy]]
+-

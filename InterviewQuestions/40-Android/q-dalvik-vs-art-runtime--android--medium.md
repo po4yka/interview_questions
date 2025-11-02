@@ -16,7 +16,7 @@ updated: 2025-01-27
 tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
 sources: [https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime]
 date created: Monday, October 27th 2025, 3:46:58 pm
-date modified: Thursday, October 30th 2025, 12:47:32 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:47:32 pm
 
 Dalvik и ART (Android Runtime) - это среды выполнения для Android приложений. ART заменил Dalvik начиная с Android 5.0 для улучшения производительности и энергоэффективности.
 
-### Ключевые различия
+### Ключевые Различия
 
 **Dalvik (устаревший):**
 - JIT (Just-In-Time) компиляция во время выполнения
@@ -46,7 +46,7 @@ Dalvik и ART (Android Runtime) - это среды выполнения для 
 - Больше места на диске, эффективное использование RAM
 - Улучшенная сборка мусора
 
-### Архитектура выполнения
+### Архитектура Выполнения
 
 ```text
 # ❌ Dalvik - компиляция при каждом запуске

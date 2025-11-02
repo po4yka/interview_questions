@@ -10,13 +10,16 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-10-31"
-tags: ["kotlin", "coroutines", "delay", "threads", "suspending", "difficulty/easy"]
+tags: ["coroutines", "delay", "difficulty/easy", "kotlin", "suspending", "threads"]
 description: "Understanding the fundamental differences between suspending delay() and blocking Thread.sleep() in Kotlin coroutines, including thread usage and performance implications"
 moc: moc-kotlin
-related: [q-array-vs-list-kotlin--kotlin--easy, q-kotlin-java-type-differences--programming-languages--medium, q-kotlin-inline-functions--programming-languages--medium]
+related: [q-array-vs-list-kotlin--kotlin--easy, q-kotlin-inline-functions--programming-languages--medium, q-kotlin-java-type-differences--programming-languages--medium]
 subtopics: [coroutines, threading]
+date created: Friday, October 31st 2025, 6:31:14 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# delay() vs Thread.sleep(): what's the difference?
+
+# delay() Vs Thread.sleep(): What's the Difference?
 
 ## English
 
@@ -50,7 +53,7 @@ fun basicDifference() = runBlocking {
 }
 ```
 
-#### Thread Blocking vs Suspending
+#### Thread Blocking Vs Suspending
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -633,7 +636,7 @@ fun legacyCode() {
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 И `delay()`, и `Thread.sleep()` приостанавливают выполнение на указанное время, но работают они принципиально по-разному. Одна приостанавливает корутину без блокировки потока, в то время как другая блокирует весь поток. Каковы последствия для производительности, использования ресурсов, и когда следует использовать каждую из них?
 
@@ -641,7 +644,7 @@ fun legacyCode() {
 
 **`delay()`** - это **приостанавливающая функция (suspending function)**, которая останавливает корутину без блокировки базового потока, позволяя работать другим корутинам. **`Thread.sleep()`** - это **блокирующая функция**, которая блокирует весь поток, предотвращая любую другую работу на этом потоке.
 
-#### Базовое различие
+#### Базовое Различие
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -663,7 +666,7 @@ fun basicDifference() = runBlocking {
 }
 ```
 
-#### Блокировка потока vs приостановка
+#### Блокировка Потока Vs Приостановка
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -705,7 +708,7 @@ fun demonstrateThreadBlocking() = runBlocking {
 }
 ```
 
-#### Визуализация различий
+#### Визуализация Различий
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -739,7 +742,7 @@ fun visualizeTheorem() = runBlocking {
 }
 ```
 
-#### Влияние на производительность
+#### Влияние На Производительность
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -775,7 +778,7 @@ fun performanceComparison() = runBlocking {
 }
 ```
 
-#### Истощение пула потоков
+#### Истощение Пула Потоков
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -813,7 +816,7 @@ fun threadPoolExhaustion() {
 }
 ```
 
-#### Поддержка отмены
+#### Поддержка Отмены
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -855,7 +858,7 @@ fun cancellationSupport() = runBlocking {
 }
 ```
 
-#### Примеры использования
+#### Примеры Использования
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -931,7 +934,7 @@ fun verify(result: String) {
 }
 ```
 
-#### Когда Thread.sleep может быть допустим
+#### Когда Thread.sleep Может Быть Допустим
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -964,7 +967,7 @@ fun whenThreadSleepIsOk() {
 }
 ```
 
-#### Реальные примеры
+#### Реальные Примеры
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1076,7 +1079,7 @@ fun demonstrateRealWorld() = runBlocking {
 }
 ```
 
-#### Соображения по тестированию
+#### Соображения По Тестированию
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1130,7 +1133,7 @@ class DelayVsSleepTest {
 }
 ```
 
-#### Распространённые ошибки
+#### Распространённые Ошибки
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1188,7 +1191,7 @@ fun commonMistakes() = runBlocking {
 }
 ```
 
-### Краткая справка
+### Краткая Справка
 
 ```kotlin
 //  Используйте delay() когда:
@@ -1223,7 +1226,7 @@ fun legacyCode() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда используйте `delay()` в корутинах, никогда `Thread.sleep()`**
 2. **Используйте `delay()` для любого временного ожидания в приостанавливающих функциях**
@@ -1231,7 +1234,7 @@ fun legacyCode() {
 4. **Тестируйте код корутин с `delay()` для быстрого тестирования**
 5. **Проверяйте `isActive` в долгоработающих циклах с `delay()`**
 
-### Сводка по производительности
+### Сводка По Производительности
 
 | Аспект | delay() | Thread.sleep() |
 |--------|---------|----------------|

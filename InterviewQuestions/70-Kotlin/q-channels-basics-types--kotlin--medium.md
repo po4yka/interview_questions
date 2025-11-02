@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, channels, channel-types, rendezvous, buffered]
+subtopics: [buffered, channel-types, channels, coroutines, rendezvous]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Channel Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-channel-flow-comparison--kotlin--medium, q-channel-closing-completion--kotlin--medium, q-channel-buffering-strategies--kotlin--hard]
+related: [q-channel-buffering-strategies--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-channel-flow-comparison--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, channels, channel-types, buffered, rendezvous, difficulty/medium]
+tags: [buffered, channel-types, channels, coroutines, difficulty/medium, kotlin, rendezvous]
+date created: Sunday, October 12th 2025, 3:43:52 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > What are Channels in Kotlin coroutines? Explain different channel types (Rendezvous, Buffered, Unlimited, Conflated), their characteristics, and when to use each type.
 
@@ -691,7 +694,7 @@ class ChannelPatterns {
 
 Каналы в корутинах Kotlin предоставляют способ передачи потока значений между корутинами. Они похожи на BlockingQueue, но разработаны для корутин с suspend-функциями вместо блокирующих операций.
 
-### Основная концепция: Примитив коммуникации
+### Основная Концепция: Примитив Коммуникации
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -726,7 +729,7 @@ suspend fun basicChannelExample() {
 - **Приостанавливаемые операции**: send/receive приостанавливаются при необходимости
 - **Закрываемый**: Может быть закрыт для сигнала о завершении
 
-### Сравнение типов каналов
+### Сравнение Типов Каналов
 
 ```kotlin
 // 1. RENDEZVOUS канал (по умолчанию, вместимость = 0)
@@ -812,14 +815,14 @@ suspend fun conflatedChannel() {
 }
 ```
 
-### Когда использовать каждый тип
+### Когда Использовать Каждый Тип
 
 **RENDEZVOUS**: Паттерн запрос-ответ, синхронная коммуникация
 **BUFFERED**: Сглаживание всплесков, балансировка нагрузки
 **UNLIMITED**: Fire-and-forget операции, логирование
 **CONFLATED**: Обновления UI, показания датчиков (важно только последнее значение)
 
-### Операции с каналами
+### Операции С Каналами
 
 ```kotlin
 // Безопасные операции
@@ -841,7 +844,7 @@ try {
 }
 ```
 
-### Соображения производительности
+### Соображения Производительности
 
 - **Rendezvous**: Низкая пропускная способность, минимум памяти
 - **Buffered**: Баланс между производительностью и памятью

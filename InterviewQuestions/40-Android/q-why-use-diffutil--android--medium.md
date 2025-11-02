@@ -1,20 +1,22 @@
 ---
 id: android-338
 title: "Why Use DiffUtil / Почему использовать DiffUtil"
-aliases: [DiffUtil, RecyclerView DiffUtil, ListAdapter, DiffUtil в RecyclerView]
+aliases: [DiffUtil, DiffUtil в RecyclerView, ListAdapter, RecyclerView DiffUtil]
 topic: android
-subtopics: [ui-views, performance-rendering]
+subtopics: [performance-rendering, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard, q-cicd-pipeline-android--android--medium]
+related: [q-cicd-pipeline-android--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
 sources: [https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil]
-tags: [android/ui-views, android/performance-rendering, recyclerview, diffutil, performance, difficulty/medium]
+tags: [android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +40,7 @@ tags: [android/ui-views, android/performance-rendering, recyclerview, diffutil, 
 3. **Алгоритм Myers** — O(N + D²) вместо O(N²)
 4. **Сохранение состояния** — позиция скролла и фокус не сбрасываются
 
-### 1. Базовая реализация
+### 1. Базовая Реализация
 
 ```kotlin
 data class User(val id: Int, val name: String)
@@ -101,7 +103,7 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(
 adapter.submitList(newUsers) // DiffUtil применяется автоматически
 ```
 
-### 3. Partial Updates с Payloads
+### 3. Partial Updates С Payloads
 
 Обновление только изменённых полей:
 
@@ -137,7 +139,7 @@ class UserAdapter : ListAdapter<User, ViewHolder>(UserDiffCallback()) {
 }
 ```
 
-### 4. AsyncListDiffer для больших списков
+### 4. AsyncListDiffer Для Больших Списков
 
 ✅ **BEST PRACTICE**: Для списков >100 элементов
 

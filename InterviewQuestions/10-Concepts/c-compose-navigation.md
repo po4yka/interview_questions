@@ -7,7 +7,9 @@ summary: Navigation component for Jetpack Compose with type-safe routing
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, jetpack-compose, navigation, ui]
+tags: [android, concept, jetpack-compose, navigation, ui]
+date created: Thursday, October 30th 2025, 12:29:19 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -42,7 +44,7 @@ NavHost(
 
 **Composable Destinations**: Define navigation graph with composable builders
 
-## Основные компоненты (RU)
+## Основные Компоненты (RU)
 
 **NavController**: Центральный координатор навигации, управляющий стеком возврата и состоянием навигации
 
@@ -71,7 +73,7 @@ composable(Screen.Home.route) { HomeScreen() }
 composable(Screen.Profile.route) { ProfileScreen() }
 ```
 
-## Типобезопасная навигация (RU)
+## Типобезопасная Навигация (RU)
 
 **Sealed-классы для маршрутов**: Определение маршрутов как sealed-классов для безопасности на этапе компиляции
 
@@ -103,7 +105,7 @@ val viewModel: SharedViewModel = viewModel(
 )
 ```
 
-## Ключевые возможности (RU)
+## Ключевые Возможности (RU)
 
 1. **Передача аргументов**: Обязательные и опциональные аргументы через паттерны маршрутов
 2. **Deep Links**: Поддержка implicit и explicit deep links
@@ -121,7 +123,7 @@ val viewModel: SharedViewModel = viewModel(
 4. **SavedStateHandle**: Access arguments via ViewModel's SavedStateHandle
 5. **Testing**: Use TestNavHostController for navigation testing
 
-## Лучшие практики (RU)
+## Лучшие Практики (RU)
 
 1. **Единый NavController**: Один NavController на приложение/activity
 2. **Подъем NavController**: Держать NavController на верхнем уровне, передавать navigation callbacks вниз

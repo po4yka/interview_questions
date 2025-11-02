@@ -1,19 +1,21 @@
 ---
 id: android-266
 title: "Large File Upload App / Загрузка больших файлов в приложении"
-aliases: [Large File Upload, Загрузка больших файлов, File Upload Android, WorkManager Upload]
+aliases: [File Upload Android, Large File Upload, WorkManager Upload, Загрузка больших файлов]
 topic: android
-subtopics: [background-execution, networking-http, coroutines]
+subtopics: [background-execution, coroutines, networking-http]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-workmanager, c-retrofit, c-coroutines, q-background-processing-strategies--android--hard, q-foreground-service-use-cases--android--medium]
+related: [c-coroutines, c-retrofit, c-workmanager]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/background-execution, android/networking-http, android/coroutines, background-processing, file-upload, networking, retrofit, workmanager, foreground-service, difficulty/hard]
+tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
+date created: Saturday, November 1st 2025, 1:24:41 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -28,7 +30,7 @@ tags: [android/background-execution, android/networking-http, android/coroutines
 
 ## Ответ (RU)
 
-### Архитектура решения
+### Архитектура Решения
 
 **Ключевые компоненты:**
 
@@ -40,7 +42,7 @@ tags: [android/background-execution, android/networking-http, android/coroutines
 
 ### Реализация
 
-#### 1. API интерфейс
+#### 1. API Интерфейс
 
 ```kotlin
 interface FileUploadApi {
@@ -149,7 +151,7 @@ class FileUploadWorker(
 }
 ```
 
-#### 4. Запуск загрузки
+#### 4. Запуск Загрузки
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -190,7 +192,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 5. Chunked Upload для больших файлов
+#### 5. Chunked Upload Для Больших Файлов
 
 ```kotlin
 class ChunkedUploadWorker(
@@ -256,7 +258,7 @@ class ChunkedUploadWorker(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ✅ **Правильно:**
 - Использовать WorkManager для гарантированного выполнения
@@ -566,13 +568,10 @@ class ChunkedUploadWorker(
 ## Related Questions
 
 ### Prerequisites (Medium)
-- [[q-foreground-service-use-cases--android--medium]]
-- [[q-workmanager-vs-jobscheduler--android--medium]]
+- Related content to be added
 
 ### Related (Hard)
-- [[q-background-processing-strategies--android--hard]]
-- [[q-network-optimization-techniques--android--hard]]
+- Related content to be added
 
 ### Advanced (Hard)
-- [[q-resilient-network-architecture--android--hard]]
-- [[q-offline-first-sync-strategy--android--hard]]
+- Related content to be added

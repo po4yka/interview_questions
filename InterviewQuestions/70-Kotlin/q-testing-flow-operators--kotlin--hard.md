@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, testing, flow, operators]
+subtopics: [coroutines, flow, operators, testing]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Advanced Flow Testing Techniques
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-coroutines-runtest--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium, q-flow-operators-deep-dive--kotlin--hard]
+related: [q-flow-operators-deep-dive--kotlin--hard, q-testing-coroutines-runtest--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, testing, flow, operators, difficulty/hard]
+tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
+date created: Sunday, October 12th 2025, 1:23:06 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > How to test Flow operators and transformations like flatMap, debounce, retry, and combine? Cover virtual time testing, turbine usage, and complex flow chain testing strategies.
 
@@ -40,7 +43,7 @@ Testing Flow operators requires understanding timing, cancellation, error handli
 
 ### Testing Basic Transformations
 
-#### map and filter
+#### Map and Filter
 
 ```kotlin
 class DataProcessor {
@@ -76,7 +79,7 @@ fun `map and filter with turbine`() = runTest {
 }
 ```
 
-#### transform
+#### Transform
 
 ```kotlin
 fun Flow<Int>.duplicateEach(): Flow<Int> = transform { value ->
@@ -121,7 +124,7 @@ fun `splitWords emits each word separately`() = runTest {
 
 ### Testing Timing Operators
 
-#### debounce
+#### Debounce
 
 ```kotlin
 class SearchQueryProcessor {
@@ -206,7 +209,7 @@ fun `debounce with virtual time`() = runTest {
 }
 ```
 
-#### sample and throttle
+#### Sample and Throttle
 
 ```kotlin
 @Test
@@ -454,9 +457,9 @@ fun `flatMapLatest for search`() = runTest {
 }
 ```
 
-### Testing combine and zip
+### Testing Combine and Zip
 
-#### combine
+#### Combine
 
 ```kotlin
 @Test
@@ -510,7 +513,7 @@ fun `combine with 3 flows`() = runTest {
 }
 ```
 
-#### zip
+#### Zip
 
 ```kotlin
 @Test
@@ -561,7 +564,7 @@ fun `zip waits for both flows`() = runTest {
 
 ### Testing Error Handling Operators
 
-#### catch
+#### Catch
 
 ```kotlin
 class DataSource {
@@ -620,7 +623,7 @@ fun `catch does not handle downstream exceptions`() = runTest {
 }
 ```
 
-#### retry and retryWhen
+#### Retry and retryWhen
 
 ```kotlin
 @Test
@@ -1201,7 +1204,7 @@ fun goodTest() = runTest {
 
 Тестирование операторов Flow требует понимания времени выполнения, отмены, обработки ошибок и того, как операторы трансформируют поток данных.
 
-### Тестирование базовых трансформаций
+### Тестирование Базовых Трансформаций
 
 ```kotlin
 @Test
@@ -1220,7 +1223,7 @@ fun `map и filter трансформируют данные правильно`
 }
 ```
 
-### Тестирование операторов времени
+### Тестирование Операторов Времени
 
 ```kotlin
 @Test
@@ -1241,7 +1244,7 @@ fun `debounce эмитит только после тихого периода`(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте turbine** для тестирования Flow
 2. **Используйте виртуальное время** для контроля таймингов

@@ -1,3 +1,8 @@
+---
+date created: Wednesday, October 29th 2025, 4:40:43 pm
+date modified: Saturday, November 1st 2025, 5:43:39 pm
+---
+
 # Android System Design — Interviewer One-Pager
 
 Open with the upgraded prompt and numeric targets. Listen for Android-specific constraints and measurable tradeoffs. Push on state machines, data models, background plans, observability, and rollout.

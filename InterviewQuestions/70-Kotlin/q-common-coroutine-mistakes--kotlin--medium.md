@@ -5,25 +5,17 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - mistakes
-  - anti-patterns
-  - best-practices
-  - gotchas
-  - code-review
+tags: [anti-patterns, best-practices, code-review, coroutines, difficulty/medium, gotchas, kotlin, mistakes]
 moc: moc-kotlin
-related: [q-flow-backpressure--kotlin--hard, q-coroutine-virtual-time--kotlin--medium, q-kotlin-collections-overview--programming-languages--easy]
-  - q-coroutine-exception-handler--kotlin--medium
-  - q-debugging-coroutines-techniques--kotlin--medium
-  - q-mutex-synchronized-coroutines--kotlin--medium
+related: [q-coroutine-exception-handler--kotlin--medium, q-coroutine-virtual-time--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-flow-backpressure--kotlin--hard, q-kotlin-collections-overview--programming-languages--easy, q-mutex-synchronized-coroutines--kotlin--medium]
 subtopics:
-  - coroutines
-  - mistakes
   - anti-patterns
   - best-practices
+  - coroutines
   - gotchas
+  - mistakes
+date created: Saturday, November 1st 2025, 12:10:17 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Question (EN)
@@ -394,7 +386,7 @@ Parent
  Child 3 (continues)
 ```
 
-### Mistake 6: Forgetting to Call await() on async
+### Mistake 6: Forgetting to Call await() on Async
 
 **Problem:** `async` result never collected, exception silently lost.
 
@@ -659,7 +651,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-### Mistake 10: Improper Exception Handling in launch vs async
+### Mistake 10: Improper Exception Handling in Launch Vs Async
 
 **Problem:** Not understanding exception handling differences.
 
@@ -902,7 +894,7 @@ dependencies {
 
 [Полный русский перевод следует той же структуре]
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **Никогда не используйте GlobalScope** - Используйте lifecycle-aware области
 2. **Всегда обрабатывайте отмену** - Проверяйте isActive, используйте ensureActive()

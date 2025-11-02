@@ -9,26 +9,16 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 moc: moc-kotlin
-related: [q-object-keyword-kotlin--programming-languages--medium, q-kotlin-object-companion-object--programming-languages--easy, q-nothing-instances--programming-languages--easy]
+related: [q-coroutine-resource-cleanup--kotlin--medium]
 status: draft
 created: 2025-10-12
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - memory-leaks
-  - debugging
-  - android
-  - lifecycle
-  - difficulty/hard
-  - android
-  - lifecycle
-  - debugging
-  - leakcanary
-  - profiling
+tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, lifecycle, memory-leaks, profiling]
+date created: Saturday, November 1st 2025, 1:28:52 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
-# Detecting and preventing coroutine memory leaks / Обнаружение и предотвращение утечек памяти
+# Detecting and Preventing Coroutine Memory Leaks / Обнаружение И Предотвращение Утечек Памяти
 
 ## English
 
@@ -1291,7 +1281,7 @@ class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
 
 Утечки памяти в приложениях на основе корутин могут быть незаметными и разрушительными. Одна утёкшая корутина может удерживать ссылки на большие объекты (Activities, Fragments, Views), предотвращая сборку мусора и вызывая OutOfMemoryErrors.
 
-### Что такое утечка памяти корутины?
+### Что Такое Утечка Памяти Корутины?
 
 Утечка памяти корутины происходит когда:
 1. Корутина продолжает работать после уничтожения компонента
@@ -1303,31 +1293,31 @@ class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
 
 **Проблема:** Корутины `GlobalScope` живут всё время работы приложения и никогда не отменяются автоматически.
 
-### Утечка #2: Неотмена при уничтожении компонента
+### Утечка #2: Неотмена При Уничтожении Компонента
 
 **Проблема:** Создание корутин с пользовательскими скоупами и забывание их отменить.
 
-### Утечка #3: Захваченные сильные ссылки
+### Утечка #3: Захваченные Сильные Ссылки
 
 **Проблема:** Корутины захватывают сильные ссылки на Activities, Views или Contexts в лямбдах.
 
-### Утечка #4: Длительные операции удерживают ссылки
+### Утечка #4: Длительные Операции Удерживают Ссылки
 
 **Проблема:** Долгие сетевые/БД операции удерживают ссылки на UI компоненты.
 
-### Утечка #5: Коллекторы Flow не отменены
+### Утечка #5: Коллекторы Flow Не Отменены
 
 **Проблема:** Коллекторы Flow продолжают собирать после уничтожения компонента.
 
-### Инструмент обнаружения #1: LeakCanary 2.x
+### Инструмент Обнаружения #1: LeakCanary 2.x
 
 LeakCanary 2.x имеет встроенную поддержку корутин и может обнаруживать утёкшие корутины.
 
-### Инструмент обнаружения #2: Android Studio Memory Profiler
+### Инструмент Обнаружения #2: Android Studio Memory Profiler
 
 Анализ heap dump для поиска утёкших объектов.
 
-### Инструмент обнаружения #3: DebugProbes для корутин
+### Инструмент Обнаружения #3: DebugProbes Для Корутин
 
 `kotlinx-coroutines-debug` предоставляет специфичную для корутин отладку.
 
@@ -1335,11 +1325,11 @@ LeakCanary 2.x имеет встроенную поддержку корутин
 
 Использование встроенных в Android скоупов для автоматической отмены.
 
-### Тестирование на утечки
+### Тестирование На Утечки
 
 Автоматизированные тесты для обнаружения утечек корутин.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда используйте lifecycle-aware скоупы**
 2. **Никогда не используйте GlobalScope**
@@ -1371,7 +1361,4 @@ LeakCanary 2.x имеет встроенную поддержку корутин
 
 ## Related Questions
 
-- [[q-structured-concurrency-violations--kotlin--hard|Structured concurrency violations]]
-- [[q-coroutine-lifecycle-management--kotlin--medium|Coroutine lifecycle management]]
-- [[q-job-state-machine-transitions--kotlin--medium|Job state machine and transitions]]
-- [[q-android-lifecycle-coroutines-integration--kotlin--medium|Android lifecycle and coroutines integration]]
+- [[q-coroutine-resource-cleanup--kotlin--medium|Resource cleanup in coroutines]]

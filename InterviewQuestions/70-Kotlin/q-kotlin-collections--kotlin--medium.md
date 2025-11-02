@@ -8,9 +8,9 @@ topic: kotlin
 subtopics:
   - collections
   - list
-  - set
   - map
   - sequences
+  - set
 question_kind: theory
 difficulty: medium
 
@@ -23,14 +23,17 @@ source_note: Comprehensive guide on Kotlin Collections
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-val-vs-var--kotlin--easy, q-flow-basics--kotlin--easy, q-expect-actual-kotlin--kotlin--medium]
+related: [q-expect-actual-kotlin--kotlin--medium, q-flow-basics--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, collections, list, set, map, sequences, operators, filter, map, flatmap, difficulty/medium]
+tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, operators, sequences, set]
+date created: Sunday, October 12th 2025, 3:02:56 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What are Kotlin collections? Explain List, Set, Map, their mutable variants, collection operators, and the difference between Collections and Sequences.
 
@@ -48,24 +51,24 @@ Kotlin provides a rich set of collection types and operations that make data man
 ```
 Collections Hierarchy:
 
-    Iterable<T>     
+    Iterable<T>
 
-         
-    
-                         
-    
- List      Set      Map  
-    
-                        
-          
- MutableList           
-          
-            
-          MutableSet    
-            
-                    
-                     MutableMap 
-                    
+
+
+
+
+ List      Set      Map
+
+
+
+ MutableList
+
+
+          MutableSet
+
+
+                     MutableMap
+
 ```
 
 ### List - Ordered Collection
@@ -499,7 +502,7 @@ println(numbers.single { it == 3 })     // 3
 println(numbers.singleOrNull { it > 10 }) // null
 ```
 
-### Collections vs Sequences
+### Collections Vs Sequences
 
 **Collections** evaluate eagerly (immediately):
 
@@ -811,7 +814,7 @@ val result = small.asSequence()  // Overhead not worth it
 
 Kotlin предоставляет богатый набор типов коллекций и операций, которые делают манипуляцию данными элегантной и лаконичной. Коллекции в Kotlin разделены на **неизменяемые** (read-only) и **изменяемые** варианты.
 
-### Обзор типов коллекций
+### Обзор Типов Коллекций
 
 **List**: Упорядоченная коллекция только для чтения с индексным доступом
 **MutableList**: Изменяемый вариант, позволяющий модификации
@@ -820,9 +823,9 @@ Kotlin предоставляет богатый набор типов колл�
 **Map**: Коллекция пар ключ-значение только для чтения
 **MutableMap**: Изменяемая карта
 
-### Операторы коллекций
+### Операторы Коллекций
 
-#### map - Преобразовать каждый элемент:
+#### Map - Преобразовать Каждый Элемент:
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
@@ -830,7 +833,7 @@ val doubled = numbers.map { it * 2 }
 // [2, 4, 6, 8, 10]
 ```
 
-#### filter - Выбрать элементы по условию:
+#### Filter - Выбрать Элементы По Условию:
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6)
@@ -838,7 +841,7 @@ val even = numbers.filter { it % 2 == 0 }
 // [2, 4, 6]
 ```
 
-#### flatMap - Преобразовать и сгладить:
+#### flatMap - Преобразовать И Сгладить:
 
 ```kotlin
 val lists = listOf(listOf(1, 2), listOf(3, 4))
@@ -846,7 +849,7 @@ val flattened = lists.flatten()
 // [1, 2, 3, 4]
 ```
 
-#### groupBy - Группировать элементы по ключу:
+#### groupBy - Группировать Элементы По Ключу:
 
 ```kotlin
 val words = listOf("apple", "banana", "apricot")
@@ -854,7 +857,7 @@ val byFirstLetter = words.groupBy { it.first() }
 // {a=[apple, apricot], b=[banana]}
 ```
 
-### Коллекции vs Последовательности
+### Коллекции Vs Последовательности
 
 **Коллекции** оцениваются немедленно (eagerly):
 - Каждая операция создаёт промежуточную коллекцию
@@ -878,7 +881,7 @@ val result = largeList.asSequence()
     .toList()
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
 ```kotlin
 data class User(val name: String, val age: Int)
@@ -901,7 +904,7 @@ val adultNames = users
 // [Alice, Bob, Charlie]
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 

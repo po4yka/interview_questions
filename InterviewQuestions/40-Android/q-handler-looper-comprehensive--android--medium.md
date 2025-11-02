@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [android/threads-sync, concurrency, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, October 25th 2025, 4:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Handler and Looper: Complete Guide

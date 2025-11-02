@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-recyclerview, c-list-adapter, q-what-is-diffutil-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related: [c-list-adapter, c-recyclerview, q-what-is-diffutil-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, recyclerview, layoutmanager, viewholder, ui, performance, difficulty/easy]
+tags: [android/ui-views, difficulty/easy, layoutmanager, performance, recyclerview, ui, viewholder]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Что известно про RecyclerView?
+# Что Известно Про RecyclerView?
 
 **English**: What is known about RecyclerView?
 

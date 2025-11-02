@@ -3,21 +3,22 @@ id: cs-005
 title: "Kotlin Delegation By Restriction / Ограничения делегирования в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [functions, access-modifiers, class-features]
+subtopics: [access-modifiers, class-features, functions]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-sequences-detailed--kotlin--medium, q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium]
+related: [q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-lifecyclescope--kotlin--medium, q-sequences-detailed--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Friday, October 17th 2025, 9:46:30 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
-# Можно ли после by вызвать функцию или конструктор?
+
+# Можно Ли После by Вызвать Функцию Или Конструктор?
 
 # Question (EN)
 > Can you call a function or constructor after `by`?

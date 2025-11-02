@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-workmanager, c-alarmmanager, q-workmanager-return-result--android--medium]
+related: [c-alarmmanager, c-jobscheduler, c-workmanager]
 created: 2025-10-12
 updated: 2025-10-29
-tags: [android/background-execution, workmanager, alarmmanager, jobscheduler, foreground-service, difficulty/medium]
+tags: [alarmmanager, android/background-execution, difficulty/medium, foreground-service, jobscheduler, workmanager]
 sources: []
 date created: Wednesday, October 29th 2025, 1:01:02 pm
-date modified: Thursday, October 30th 2025, 11:51:06 am
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -183,9 +183,9 @@ class MusicService : Service() {
 
 ### Related (Same Level)
 - [[q-workmanager-return-result--android--medium]] - WorkManager results
-- [[q-foreground-service-types--background--medium]] - Foreground services
+- [[q-foreground-service-types--android--medium]] - Foreground services
 - [[q-android-background-limits--android--medium]] - Background limits
 
 ### Advanced (Harder)
-- [[q-workmanager-advanced--background--medium]] - Advanced WorkManager
+- [[q-workmanager-advanced--android--medium]] - Advanced WorkManager
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

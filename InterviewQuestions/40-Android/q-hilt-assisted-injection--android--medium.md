@@ -3,20 +3,20 @@ id: android-049
 title: "Hilt Assisted Injection / Hilt Assisted Injection"
 aliases: ["Hilt Assisted Injection"]
 topic: android
-subtopics: [di-hilt, architecture-mvvm]
+subtopics: [architecture-mvvm, di-hilt]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-assisted-injection, q-dagger-basics--android--medium, q-hilt-entry-points--android--medium]
+related: [c-assisted-injection, q-hilt-entry-points--android--medium]
 created: 2025-10-11
 updated: 2025-10-31
-tags: [android/di-hilt, android/architecture-mvvm, assisted-inject, dagger, dependency-injection, difficulty/medium, hilt]
+tags: [android/architecture-mvvm, android/di-hilt, assisted-inject, dagger, dependency-injection, difficulty/medium, hilt]
 sources: [https://dagger.dev/hilt/assisted-injection.html]
 date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:47:00 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -490,13 +490,11 @@ interface ProductViewHolderFactory {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-hilt-basics--android--easy]] - Hilt basics
-- [[q-dagger-basics--android--medium]] - Dagger basics
 
 ### Related (Same Level)
 - [[q-hilt-entry-points--android--medium]] - Entry Points
 - [[q-hilt-viewmodel-injection--android--medium]] - ViewModel injection
-- [[q-dependency-injection-patterns--android--medium]] - DI patterns
+- [[q-kmm-dependency-injection--android--medium]] - DI patterns
 
 ### Advanced (Harder)
 - [[q-dagger-multibinding--android--hard]] - Multibinding

@@ -3,20 +3,20 @@ id: android-314
 title: "How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед"
 aliases: [RecyclerView Cache Ahead, RecyclerView Prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
 topic: android
-subtopics: [ui-views, performance-rendering, cache-offline]
+subtopics: [cache-offline, performance-rendering, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-recyclerview-sethasfixedsize--android--easy, q-recyclerview-async-list-differ--android--medium, q-how-animations-work-in-recyclerview--android--medium]
+related: [q-how-animations-work-in-recyclerview--android--medium, q-recyclerview-async-list-differ--android--medium, q-recyclerview-sethasfixedsize--android--easy]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/ui-views, android/performance-rendering, android/cache-offline, recyclerview, prefetching, optimization, difficulty/medium]
+tags: [android/cache-offline, android/performance-rendering, android/ui-views, difficulty/medium, optimization, prefetching, recyclerview]
 date created: Tuesday, October 28th 2025, 9:12:06 pm
-date modified: Thursday, October 30th 2025, 3:09:40 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -1,10 +1,10 @@
 ---
 id: "20251025-110310"
 title: "Software Design Patterns / Паттерны Проектирования"
-aliases: ["Design Patterns", "Паттерны Проектирования", "Software Patterns", "Архитектурные Паттерны"]
+aliases: ["Design Patterns", "Software Patterns", "Архитектурные Паттерны", "Паттерны Проектирования"]
 summary: "Reusable solutions to common software design problems"
 topic: "cs"
-subtopics: ["design-patterns", "architecture", "software-engineering"]
+subtopics: ["architecture", "design-patterns", "software-engineering"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-cs"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "design-patterns", "architecture", "software-engineering", "difficulty/medium"]
+tags: ["architecture", "concept", "design-patterns", "difficulty/medium", "software-engineering"]
+date created: Saturday, October 25th 2025, 11:03:49 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Software Design Patterns / Паттерны Проектирования
@@ -24,7 +26,7 @@ tags: ["concept", "design-patterns", "architecture", "software-engineering", "di
 
 Design patterns are reusable, proven solutions to common problems that occur in software design. They represent best practices evolved over time and provide a shared vocabulary for developers to communicate design decisions. Patterns are not finished code but templates for how to solve problems in various contexts.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Паттерны проектирования - это переиспользуемые, проверенные решения общих проблем, возникающих при проектировании программного обеспечения. Они представляют лучшие практики, развившиеся со временем, и обеспечивают общий словарь для разработчиков при обсуждении архитектурных решений. Паттерны - это не готовый код, а шаблоны решения проблем в различных контекстах.
 
@@ -37,7 +39,7 @@ Design patterns are reusable, proven solutions to common problems that occur in 
 - **Language-agnostic**: Applicable across different programming languages and platforms
 - **Not silver bullets**: Must be applied appropriately based on context
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Порождающие паттерны**: Управляют механизмами создания объектов (Singleton, Factory, Builder)
 - **Структурные паттерны**: Компонуют объекты и классы в более крупные структуры (Adapter, Decorator, Facade)

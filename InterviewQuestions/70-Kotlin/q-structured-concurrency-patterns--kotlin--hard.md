@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, structured-concurrency, coroutinescope, supervision, advanced]
+subtopics: [advanced, coroutines, coroutinescope, structured-concurrency, supervision]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Structured Concurrency Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-coroutine-exception-handling--kotlin--medium, q-advanced-coroutine-patterns--kotlin--hard]
+related: [q-advanced-coroutine-patterns--kotlin--hard, q-coroutine-exception-handling--kotlin--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, structured-concurrency, coroutinescope, supervision, advanced, difficulty/hard]
+tags: [advanced, coroutines, coroutinescope, difficulty/hard, kotlin, structured-concurrency, supervision]
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What is structured concurrency? Explain coroutineScope vs supervisorScope, parent-child relationships, cancellation propagation, and advanced patterns like withContext, async-await coordination.
 
@@ -67,7 +70,7 @@ suspend fun structuredExample() = coroutineScope {
 // (then function returns)
 ```
 
-### coroutineScope vs supervisorScope
+### coroutineScope Vs supervisorScope
 
 ```kotlin
 // coroutineScope: One child fails → all fail
@@ -162,7 +165,7 @@ private suspend fun task3() {}
 2. Отмена родителя отменяет детей
 3. Ошибка ребенка отменяет родителя (кроме supervisor)
 
-### coroutineScope vs supervisorScope
+### coroutineScope Vs supervisorScope
 
 - **coroutineScope**: Ошибка одного → отмена всех
 - **supervisorScope**: Ошибка одного → остальные продолжают

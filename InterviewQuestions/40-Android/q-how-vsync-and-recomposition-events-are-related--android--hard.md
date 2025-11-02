@@ -3,7 +3,7 @@ id: android-110
 title: "How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события рекомпозиции"
 aliases: ["VSYNC Recomposition", "VSYNC и рекомпозиция"]
 topic: android
-subtopics: [ui-compose, performance-rendering]
+subtopics: [performance-rendering, ui-compose]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -14,9 +14,9 @@ related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android, android/ui-compose, android/performance-rendering, compose, vsync, performance, difficulty/hard]
+tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/hard, performance, vsync]
 date created: Tuesday, October 28th 2025, 9:12:56 pm
-date modified: Thursday, October 30th 2025, 3:10:21 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:10:21 pm
 
 **VSYNC (Vertical Synchronization)** — это сигнал синхронизации, который привязывает отрисовку UI к частоте обновления экрана (обычно 60Hz, 90Hz, 120Hz). Jetpack Compose использует VSYNC как триггер для выполнения рекомпозиции и отрисовки кадров.
 
-### Ключевой механизм
+### Ключевой Механизм
 
 1. **Изменение состояния** вызывает запрос рекомпозиции
 2. **Рекомпозиция планируется**, но не выполняется немедленно
@@ -54,7 +54,7 @@ fun VSyncDemo() {
 }
 ```
 
-### Бюджет кадра (60Hz = 16.6ms)
+### Бюджет Кадра (60Hz = 16.6ms)
 
 ```text
 Composition:     ~2-3ms
@@ -67,7 +67,7 @@ Total:           ~16.6ms
 
 Если превышен бюджет — кадр пропускается (dropped frame), возникает jank.
 
-### Батчинг состояний
+### Батчинг Состояний
 
 Compose группирует множественные изменения в одну рекомпозицию:
 
@@ -87,7 +87,7 @@ fun BatchedUpdates() {
 }
 ```
 
-### Пропуск промежуточных состояний
+### Пропуск Промежуточных Состояний
 
 Если состояние меняется быстрее, чем VSYNC, промежуточные значения пропускаются:
 
@@ -102,7 +102,7 @@ LaunchedEffect(Unit) {
 // Промежуточные значения (1,2,3,5,6,7,9) пропущены между VSYNC
 ```
 
-### Оптимизация для VSYNC
+### Оптимизация Для VSYNC
 
 **derivedStateOf** — пересчет только при реальных изменениях:
 
@@ -130,7 +130,7 @@ Box(
 )
 ```
 
-### Автоматическая адаптация к частоте обновления
+### Автоматическая Адаптация К Частоте Обновления
 
 Compose автоматически подстраивается под частоту экрана:
 

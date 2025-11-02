@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, exceptions, error-handling, supervisorscope]
+subtopics: [coroutines, error-handling, exceptions, supervisorscope]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-jit-compilation-definition--programming-languages--medium, q-kotlin-
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, coroutines, exceptions, error-handling, supervisorscope, difficulty/medium]
+tags: [coroutines, difficulty/medium, error-handling, exceptions, kotlin, supervisorscope]
+date created: Sunday, October 12th 2025, 1:56:16 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > How does exception handling work in Kotlin Coroutines? What is the difference between coroutineScope and supervisorScope?
 # Вопрос (RU)
@@ -67,7 +70,7 @@ viewModelScope.launch {
 }
 ```
 
-### try-catch in Coroutines
+### Try-catch in Coroutines
 
 **Works for direct code:**
 
@@ -95,7 +98,7 @@ viewModelScope.launch {
 }
 ```
 
-### coroutineScope vs supervisorScope
+### coroutineScope Vs supervisorScope
 
 **coroutineScope - Cancels all siblings on failure**
 
@@ -289,7 +292,7 @@ viewModelScope.launch {
 
 Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа.
 
-### Правила распространения исключений
+### Правила Распространения Исключений
 
 **1. launch - Распространяет немедленно к родителю**
 
@@ -319,7 +322,7 @@ viewModelScope.launch {
 }
 ```
 
-### try-catch в корутинах
+### Try-catch В Корутинах
 
 **Работает для прямого кода:**
 
@@ -347,7 +350,7 @@ viewModelScope.launch {
 }
 ```
 
-### coroutineScope vs supervisorScope
+### coroutineScope Vs supervisorScope
 
 **coroutineScope - Отменяет всех братьев при сбое**
 
@@ -387,7 +390,7 @@ viewModelScope.launch {
 }
 ```
 
-### Примеры из реальной практики
+### Примеры Из Реальной Практики
 
 **Пример 1: Параллельные запросы с supervisorScope**
 
@@ -433,7 +436,7 @@ suspend fun processOrder(order: Order) = coroutineScope {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте supervisorScope для независимых параллельных задач**
 

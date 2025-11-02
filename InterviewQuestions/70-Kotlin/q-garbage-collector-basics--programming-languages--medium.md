@@ -3,7 +3,7 @@ id: lang-015
 title: "Garbage Collector Basics / Основы сборки мусора"
 aliases: [Garbage Collector Basics, Основы сборки мусора]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, performance]
+subtopics: [garbage-collection, memory-management, performance]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-garbage-collection, q-garbage-collector-definition--programming-languages--easy, q-garbage-collector-roots--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [memory-management, garbage-collection, java, kotlin, performance, programming-languages, difficulty/medium]
+tags: [difficulty/medium, garbage-collection, java, kotlin, memory-management, performance, programming-languages]
+date created: Friday, October 31st 2025, 6:29:22 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Что Такое Сборщик Мусора?

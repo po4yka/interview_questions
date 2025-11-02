@@ -13,7 +13,9 @@ moc: moc-android
 related: [c-broadcast-receiver, c-intent, q-what-each-android-component-represents--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/service, broadcast-receiver, system-events, intent, components, difficulty/easy]
+tags: [android/service, broadcast-receiver, components, difficulty/easy, intent, system-events]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Question (EN)
@@ -459,11 +461,11 @@ class AppUpdateReceiver : BroadcastReceiver() {
 
 **BroadcastReceiver** - это один из фундаментальных компонентов Android, который позволяет приложениям **получать и реагировать на широковещательные сообщения** от системы или других приложений.
 
-### Основная концепция
+### Основная Концепция
 
 BroadcastReceiver работает по принципу publish-subscribe (издатель-подписчик), позволяя приложениям подписываться на определенные события.
 
-### Типы широковещательных сообщений
+### Типы Широковещательных Сообщений
 
 **1. Системные broadcasts:**
 
@@ -476,7 +478,7 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 
 Приложения могут отправлять собственные broadcasts для коммуникации между компонентами.
 
-### Методы регистрации
+### Методы Регистрации
 
 **Статическая (в манифесте):**
 
@@ -488,7 +490,7 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 -   Работает только пока компонент активен
 -   Необходимо отменять регистрацию
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Держите onReceive() коротким (< 10 секунд)
 2. Всегда отменяйте регистрацию динамических receivers

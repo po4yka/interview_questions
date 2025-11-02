@@ -5,6 +5,8 @@ kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/backend]
+date created: Saturday, October 18th 2025, 2:47:35 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Backend — Map of Content
@@ -566,7 +568,7 @@ SORT difficulty ASC, file.name ASC
 
 **Key Questions** (Curated Learning Path):
 
-#### Horizontal vs Vertical Scaling
+#### Horizontal Vs Vertical Scaling
 - Vertical scaling (scale-up) benefits and limits
 - Horizontal scaling (scale-out) strategies
 - Auto-scaling based on metrics
@@ -692,7 +694,7 @@ SORT difficulty ASC, file.name ASC
 - Monotonic reads and monotonic writes
 - Session consistency
 
-#### BASE vs ACID
+#### BASE Vs ACID
 - BASE (Basically Available, Soft state, Eventually consistent)
 - ACID vs BASE trade-offs
 - When to choose ACID vs BASE

@@ -3,20 +3,22 @@ id: android-091
 title: "List Optimization / Оптимизация больших списков"
 aliases: [List Optimization, Оптимизация списков]
 topic: android
-subtopics: [ui-views, performance-memory, performance-rendering]
+subtopics: [performance-memory, performance-rendering, ui-views]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-recyclerview, c-performance, q-what-is-known-about-recyclerview--android--easy, q-what-is-diffutil-for--android--medium]
+related: [c-performance, c-recyclerview, q-what-is-diffutil-for--android--medium, q-what-is-known-about-recyclerview--android--easy]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/ui-views, android/performance-memory, android/performance-rendering, recyclerview, optimization, performance, difficulty/hard]
+tags: [android/performance-memory, android/performance-rendering, android/ui-views, difficulty/hard, optimization, performance, recyclerview]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# На что следует обращать внимание, чтобы оптимизировать большой список?
+# На Что Следует Обращать Внимание, Чтобы Оптимизировать Большой Список?
 
 **English**: What should you pay attention to in order to optimize a large list?
 
@@ -516,7 +518,7 @@ To optimize large lists:
 
 Оптимизация больших списков в Android-приложениях критична для плавной прокрутки и хорошего пользовательского опыта. Вот ключевые области для фокуса:
 
-### 1. Правильное использование ViewHolder в RecyclerView
+### 1. Правильное Использование ViewHolder В RecyclerView
 
 **Паттерн ViewHolder** важен для повторного использования view и производительности.
 
@@ -558,7 +560,7 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 }
 ```
 
-### 2. Использование DiffUtil для эффективных обновлений
+### 2. Использование DiffUtil Для Эффективных Обновлений
 
 **DiffUtil** вычисляет минимальное количество обновлений при изменении данных.
 
@@ -640,7 +642,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallba
 adapter.submitList(newItems)
 ```
 
-### 3. Оптимизация загрузки изображений
+### 3. Оптимизация Загрузки Изображений
 
 **Использовать библиотеки** как Glide, Coil или Picasso с правильной конфигурацией.
 
@@ -671,7 +673,7 @@ class ImageOptimizedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
 }
 ```
 
-### 4. Реализация пагинации
+### 4. Реализация Пагинации
 
 Загружать данные порциями, а не все сразу.
 
@@ -759,7 +761,7 @@ class MyViewModel(repository: ItemRepository) : ViewModel() {
 }
 ```
 
-### 5. Избегать тяжелых операций в onBindViewHolder
+### 5. Избегать Тяжелых Операций В onBindViewHolder
 
 Держать `onBindViewHolder()` легким - он вызывается часто во время прокрутки.
 
@@ -791,7 +793,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### 6. Оптимизация конфигурации RecyclerView
+### 6. Оптимизация Конфигурации RecyclerView
 
 ```kotlin
 recyclerView.apply {
@@ -812,7 +814,7 @@ recyclerView.apply {
 }
 ```
 
-### 7. Оптимизация сложности Layout
+### 7. Оптимизация Сложности Layout
 
 ```xml
 <!-- ПЛОХО - Глубокая иерархия view -->
@@ -850,7 +852,7 @@ recyclerView.apply {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### 8. Использование View Binding для типобезопасности
+### 8. Использование View Binding Для Типобезопасности
 
 ```kotlin
 class ViewBindingViewHolder(
@@ -879,7 +881,7 @@ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewBindingVi
 }
 ```
 
-### 9. Реализация предварительной загрузки элементов
+### 9. Реализация Предварительной Загрузки Элементов
 
 ```kotlin
 class PrefetchingLayoutManager(context: Context) : LinearLayoutManager(context) {
@@ -895,7 +897,7 @@ class PrefetchingLayoutManager(context: Context) : LinearLayoutManager(context) 
 recyclerView.layoutManager = PrefetchingLayoutManager(context)
 ```
 
-### 10. Мониторинг производительности
+### 10. Мониторинг Производительности
 
 ```kotlin
 // Включить strict mode в debug сборках

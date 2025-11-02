@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-builder-pattern--design-patterns--medium, q-factory-method-pattern--design-patterns--medium, q-singleton-pattern--design-patterns--medium]
+related: [q-builder-pattern--design-patterns--medium, q-singleton-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [creational-patterns, design-patterns, difficulty/medium, object-cloning, prototype]
 sources: [https://refactoring.guru/design-patterns/prototype]
 date created: Monday, October 6th 2025, 7:33:01 am
-date modified: Sunday, October 26th 2025, 1:37:11 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

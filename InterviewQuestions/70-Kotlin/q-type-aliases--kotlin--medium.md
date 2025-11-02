@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [type-aliases, types, readability, dsl]
+subtopics: [dsl, readability, type-aliases, types]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-generics--kotlin--hard, q-inline-classes-value-classes--kotlin--medium, q-kotlin-type-system--kotlin--medium]
+related: [q-inline-classes-value-classes--kotlin--medium, q-kotlin-generics--kotlin--hard, q-kotlin-type-system--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, type-aliases, types, readability, dsl, difficulty/medium]
+tags: [difficulty/medium, dsl, kotlin, readability, type-aliases, types]
+date created: Saturday, October 18th 2025, 3:06:33 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What are type aliases in Kotlin and when should you use them?
 # Вопрос (RU)
@@ -233,16 +236,16 @@ val phone2: PhoneNumber = email2  // - Compilation error! Real type safety
 
 Псевдонимы типов (type aliases) предоставляют альтернативные имена для существующих типов. Если имя типа слишком длинное, можно ввести другое, более короткое имя и использовать его.
 
-### Базовый синтаксис
+### Базовый Синтаксис
 
 ```kotlin
 typealias NodeSet = Set<Network.Node>
 typealias FileTable<K> = MutableMap<K, MutableList<File>>
 ```
 
-### Частые случаи использования
+### Частые Случаи Использования
 
-#### 1. Сокращение длинных обобщенных типов
+#### 1. Сокращение Длинных Обобщенных Типов
 
 ```kotlin
 // До
@@ -253,7 +256,7 @@ typealias UserCache = MutableMap<String, MutableList<User>>
 val userCache: UserCache = mutableMapOf()
 ```
 
-#### 2. Псевдонимы функциональных типов
+#### 2. Псевдонимы Функциональных Типов
 
 ```kotlin
 typealias MyHandler = (Int, String, Any) -> Unit
@@ -261,7 +264,7 @@ typealias Predicate<T> = (T) -> Boolean
 typealias ClickListener = (View) -> Unit
 ```
 
-#### 3. Семантические имена типов
+#### 3. Семантические Имена Типов
 
 ```kotlin
 typealias UserId = String
@@ -273,7 +276,7 @@ fun fetchUserProfile(userId: UserId): UserProfile {
 }
 ```
 
-### Важно: Псевдонимы не создают новые типы
+### Важно: Псевдонимы Не Создают Новые Типы
 
 Псевдонимы типов **не являются новыми типами** - они эквивалентны соответствующим базовым типам. Компилятор всегда разворачивает их в исходный тип.
 
@@ -293,14 +296,14 @@ fun main() {
 }
 ```
 
-### Почему использовать псевдонимы типов?
+### Почему Использовать Псевдонимы Типов?
 
 1. **Улучшенная читаемость** - Делает код понятнее с осмысленными именами
 2. **Абстракция и инкапсуляция** - Может абстрагировать детали реализации
 3. **Переиспользуемость кода** - Последовательный способ представления концепций
 4. **Создание DSL** - Помогает создавать предметно-ориентированные языки
 
-### Ограничения псевдонимов типов
+### Ограничения Псевдонимов Типов
 
 1. **Не создают новые типы** - Это просто альтернативные имена
 2. **Нет усиленной типобезопасности** - Любая строка может быть присвоена `typealias Email = String`

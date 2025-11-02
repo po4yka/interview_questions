@@ -3,7 +3,7 @@ id: lang-006
 title: "LinkedList ArrayList Insert Behavior / Поведение вставки LinkedList и ArrayList"
 aliases: [LinkedList ArrayList Insert Behavior, Поведение вставки LinkedList и ArrayList]
 topic: programming-languages
-subtopics: [data-structures, collections, complexity-analysis]
+subtopics: [collections, complexity-analysis, data-structures]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-flow-map-operator--programming-languages--medium, q-iterator-pattern--design-patterns--medium, q-what-is-flow--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [collections, data-structures, kotlin, programming-languages, linkedlist, arraylist, difficulty/medium]
+tags: [arraylist, collections, data-structures, difficulty/medium, kotlin, linkedlist, programming-languages]
 date created: Friday, October 3rd 2025, 4:14:01 pm
-date modified: Sunday, October 26th 2025, 12:08:07 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Как Будут Вести Себя Linked List И Array List, Если Вставить В Них Элемент?
@@ -45,11 +45,11 @@ LinkedList и ArrayList представляют собой две разные 
 
 ### Android Implementation
 - [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] - Data Structures
-- [[q-kak-izmenit-kolichestvo-kolonok-v-recyclerview-v-zavisimosti-ot-orientatsii--programming-languages--easy]] - Data Structures
+-  - Data Structures
 
 ### Kotlin Language Features
-- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
-- [[q-collection-implementations--programming-languages--easy]] - Data Structures
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
-- [[q-equals-hashcode-contracts--programming-languages--hard]] - Data Structures
+-  - Data Structures
+-  - Data Structures
+-  - Data Structures
+-  - Data Structures
 - [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures

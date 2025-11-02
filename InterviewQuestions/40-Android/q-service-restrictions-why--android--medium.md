@@ -14,9 +14,11 @@ related: [q-canvas-drawing-optimization--custom-views--hard, q-what-is-data-bind
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/service, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Why are there restrictions on starting services?
+# Why Are there Restrictions on Starting Services?
 
 **Russian**: С чем связаны ограничения на запуск сервисов?
 

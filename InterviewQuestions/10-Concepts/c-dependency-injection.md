@@ -1,10 +1,10 @@
 ---
 id: "20251023-120000"
 title: "Dependency Injection / Внедрение зависимостей"
-aliases: ["DI", "Dependency Injection", "Внедрение зависимостей", "Инъекция зависимостей"]
+aliases: ["Dependency Injection", "DI", "Внедрение зависимостей", "Инъекция зависимостей"]
 summary: "Design pattern where object dependencies are provided externally rather than created internally"
 topic: "architecture-patterns"
-subtopics: ["dependency-injection", "android"]
+subtopics: ["android", "dependency-injection"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,16 +15,18 @@ moc: "moc-architecture-patterns"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "architecture-patterns", "dependency-injection", "android", "difficulty/medium"]
+tags: ["android", "architecture-patterns", "concept", "dependency-injection", "difficulty/medium"]
+date created: Thursday, October 23rd 2025, 1:45:31 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
-# Dependency Injection / Внедрение зависимостей
+# Dependency Injection / Внедрение Зависимостей
 
 ## Summary (EN)
 
 Dependency Injection (DI) is a design pattern where an object receives its dependencies from external sources rather than creating them internally. This promotes loose coupling, testability, and maintainability by separating object creation from business logic. In Android, DI is commonly implemented using frameworks like Dagger, Hilt, or Koin.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Внедрение зависимостей (DI) — это паттерн проектирования, при котором объект получает свои зависимости из внешних источников, а не создает их внутри себя. Это способствует слабой связанности, тестируемости и поддерживаемости кода, разделяя создание объектов от бизнес-логики. В Android DI обычно реализуется с помощью фреймворков, таких как Dagger, Hilt или Koin.
 
@@ -36,7 +38,7 @@ Dependency Injection (DI) is a design pattern where an object receives its depen
 - **Compile-time vs runtime**: Dagger/Hilt use compile-time generation, Koin uses runtime reflection
 - **Scopes**: Control lifetime of dependencies (Singleton, Activity-scoped, ViewModel-scoped, etc.)
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Инверсия управления**: Зависимости предоставляются объектам извне, а не создаются внутри них
 - **Три основных типа**: Инъекция через конструктор, поле или метод

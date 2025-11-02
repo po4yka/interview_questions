@@ -11,20 +11,22 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/architecture, android/repository, android/data-layer, android/clean-architecture, android/mvvm, difficulty/medium]
+language_tags: [android/architecture, android/clean-architecture, android/data-layer, android/mvvm, android/repository, difficulty/medium, en, ru]
 source: internal
 source_note: Created for vault completeness
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-repository-multiple-sources--android--medium, q-clean-architecture-android--android--hard]
+related: [q-clean-architecture-android--android--hard, q-repository-multiple-sources--android--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-31
 
-tags: [android/architecture-clean, android/architecture-mvvm, en, ru, difficulty/medium]
+tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium, en, ru]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Question (EN)
@@ -764,7 +766,7 @@ class UserRepository {
 
 **Repository Pattern** - это архитектурный паттерн, который абстрагирует источники данных (сеть, база данных, кэш) за чистым API, предоставляя единый источник истины и разделяя бизнес-логику от логики доступа к данным.
 
-### Зачем нужен Repository Pattern?
+### Зачем Нужен Repository Pattern?
 
 **Проблемы, которые он решает:**
 1. **Связанность с источниками данных** - ViewModel не должна знать откуда данные: из API или БД
@@ -805,7 +807,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### Repository в MVVM архитектуре
+### Repository В MVVM Архитектуре
 
 ```
 View (Activity/Fragment/Composable)
@@ -817,7 +819,7 @@ Repository
 DataSources (API, Database, Cache)
 ```
 
-### Единый источник истины (Single Source of Truth)
+### Единый Источник Истины (Single Source of Truth)
 
 **База данных как источник истины** - Сеть обновляет БД, UI наблюдает за БД:
 
@@ -848,7 +850,7 @@ class ProductRepository(
 - Автоматические обновления через Flow/LiveData
 - Не нужно управлять состоянием в UI
 
-### Стратегии кэширования
+### Стратегии Кэширования
 
 #### 1. Cache-First Strategy (Кэш сначала)
 
@@ -872,7 +874,7 @@ class ArticleRepository(
 }
 ```
 
-#### 2. Time-Based Caching (Кэширование по времени)
+#### 2. Time-Based Caching (Кэширование По времени)
 
 ```kotlin
 class WeatherRepository(
@@ -905,7 +907,7 @@ class WeatherRepository(
 }
 ```
 
-### Dependency Injection с Hilt
+### Dependency Injection С Hilt
 
 ```kotlin
 @Module

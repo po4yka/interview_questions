@@ -7,15 +7,18 @@ subtopics: [activity, fragment, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-activity-lifecycle-methods--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/activity, android/fragment, android/ui-navigation, fragment, single-activity, viewmodel, navigation, difficulty/medium]
+tags: [android, android/activity, android/fragment, android/ui-navigation, difficulty/medium, fragment, navigation, single-activity, viewmodel]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 Какие у подхода Single Activity этого подхода плюсы и минусы?
@@ -111,7 +114,7 @@ class MyFragment : Fragment() {
 | Утечки памяти | ViewBinding cleanup нужен | Менее подвержено |
 | Тестирование | Больше setup | Проще |
 
-### Когда использовать
+### Когда Использовать
 
 **Хорошо для:**
 - Приложений с общими UI элементами (toolbar, bottom nav)

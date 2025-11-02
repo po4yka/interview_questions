@@ -3,7 +3,7 @@ id: android-433
 title: Android Services Purpose / Назначение Service в Android
 aliases: ["Android Services Purpose", "Назначение Service в Android"]
 topic: android
-subtopics: [service, background-execution, lifecycle]
+subtopics: [background-execution, lifecycle, service]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -11,14 +11,16 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
+  - c-lifecycle
   - q-android-service-types--android--easy
-  - q-android-async-primitives--android--easy
-  - q-android-architectural-patterns--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/service, android/background-execution, android/lifecycle, difficulty/easy]
+tags: [android/background-execution, android/lifecycle, android/service, difficulty/easy]
+date created: Saturday, November 1st 2025, 1:03:09 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
+
 # Вопрос (RU)
 > Для чего используются Service-компоненты в Android и когда они необходимы?
 
@@ -125,7 +127,7 @@ Background work not tied to lifecycle. Background execution limits (Android 8+) 
 
 ### Prerequisites
 - [[q-android-app-components--android--easy]] - Android app components overview
-- [[q-android-lifecycle--android--easy]] - Component lifecycle basics
+ - Component lifecycle basics
 
 ### Related
 - [[q-android-service-types--android--easy]] - Service types and lifecycle
@@ -133,4 +135,4 @@ Background work not tied to lifecycle. Background execution limits (Android 8+) 
 
 ### Advanced
 - [[q-android-architectural-patterns--android--medium]] - Architectural patterns for background work
-- [[q-foreground-service-restrictions--android--hard]] - Foreground Service restrictions
+ - Foreground Service restrictions

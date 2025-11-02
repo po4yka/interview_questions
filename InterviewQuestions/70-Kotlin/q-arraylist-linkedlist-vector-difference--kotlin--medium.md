@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-enum-classes--kotlin--easy, q-coroutine-resource-cleanup--kotlin--medium, q-coroutine-exception-handler--kotlin--medium]
+related: [q-coroutine-exception-handler--kotlin--medium, q-coroutine-resource-cleanup--kotlin--medium, q-kotlin-enum-classes--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - collections
-  - data structures
-  - kotlin
-  - difficulty/medium
+tags: [collections, data structures, difficulty/medium, kotlin]
+date created: Friday, October 31st 2025, 6:29:06 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# В чем разница ArrayList, LinkedList, Vector
+
+# В Чем Разница ArrayList, LinkedList, Vector
 
 **English**: What is the difference between ArrayList, LinkedList, Vector?
 

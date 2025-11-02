@@ -3,7 +3,7 @@ id: android-097
 title: "Offline First Architecture / Архитектура Offline First"
 aliases: ["Offline First Architecture", "Архитектура Offline First"]
 topic: android
-subtopics: [architecture-clean, room, cache-offline]
+subtopics: [architecture-clean, cache-offline, room]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -11,12 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android, android/architecture-clean, android/room, android/cache-offline, architecture, offline-first, sync, workmanager, difficulty/hard]
+tags: [android, android/architecture-clean, android/cache-offline, android/room, architecture, difficulty/hard, offline-first, sync, workmanager]
 moc: moc-android
 related: [q-clean-architecture-android--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard]
 sources: []
 date created: Tuesday, October 28th 2025, 9:53:45 pm
-date modified: Thursday, October 30th 2025, 3:15:20 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -45,7 +45,7 @@ UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → Wo
 - Операции CUD пишут локально, затем синхронизируются
 - WorkManager — надежная фоновая синхронизация
 
-### Ключевые компоненты
+### Ключевые Компоненты
 
 **1. Room Entity с метаданными синхронизации:**
 
@@ -210,7 +210,7 @@ fun ArticlesScreen(viewModel: ArticlesViewModel = hiltViewModel()) {
 }
 ```
 
-### Стратегии кэширования
+### Стратегии Кэширования
 
 **Cache-First** (кэш сначала, затем обновление):
 ```kotlin
@@ -250,7 +250,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **Архитектура:**
 - Локальная БД как единственный источник истины (Single Source of Truth)
@@ -292,7 +292,7 @@ UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → Wo
 - CUD operations write locally first, then sync
 - WorkManager ensures reliable background sync
 
-### Key components
+### Key Components
 
 **1. Room Entity with sync metadata:**
 
@@ -457,7 +457,7 @@ fun ArticlesScreen(viewModel: ArticlesViewModel = hiltViewModel()) {
 }
 ```
 
-### Caching strategies
+### Caching Strategies
 
 **Cache-First** (cache first, then update):
 ```kotlin
@@ -497,7 +497,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 }
 ```
 
-### Best practices
+### Best Practices
 
 **Architecture:**
 - Local DB as single source of truth

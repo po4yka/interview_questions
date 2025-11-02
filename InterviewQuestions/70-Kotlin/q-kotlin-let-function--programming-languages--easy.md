@@ -3,24 +3,22 @@ id: lang-097
 title: "Kotlin Let Function / Функция let в Kotlin"
 aliases: [Kotlin Let Function, Функция let в Kotlin]
 topic: programming-languages
-subtopics: [scope-functions, null-safety]
+subtopics: [null-safety, scope-functions]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-conversion-functions--programming-languages--medium, q-kotlin-type-system--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium]
+related: [q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - let
-  - null-safety
-  - scope-functions
-  - difficulty/easy
+tags: [difficulty/easy, let, null-safety, programming-languages, scope-functions]
+date created: Friday, October 31st 2025, 6:30:30 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Для чего нужен let?
+
+# Для Чего Нужен Let?
 
 # Question (EN)
 > What is the `let` function used for in Kotlin?
@@ -116,6 +114,6 @@ user?.let {
 
 ## Related Questions
 
-- [[q-kotlin-conversion-functions--programming-languages--medium]]
+-
 - [[q-kotlin-type-system--kotlin--medium]]
 - [[q-kotlin-higher-order-functions--kotlin--medium]]

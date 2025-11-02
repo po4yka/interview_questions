@@ -14,9 +14,9 @@ related: [q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--mediu
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/performance-memory, android/serialization, json, xml, optimization, difficulty/medium]
+tags: [android/performance-memory, android/serialization, difficulty/medium, json, optimization, xml]
 date created: Monday, October 27th 2025, 3:43:24 pm
-date modified: Thursday, October 30th 2025, 3:15:54 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

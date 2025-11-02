@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [by-keyword, classes, delegation, difficulty/medium, kotlin, kotlin-features]
 sources: [https://kotlinlang.org/docs/delegation.html]
 date created: Sunday, October 12th 2025, 1:58:08 pm
-date modified: Sunday, October 26th 2025, 8:53:19 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Вопрос (RU)

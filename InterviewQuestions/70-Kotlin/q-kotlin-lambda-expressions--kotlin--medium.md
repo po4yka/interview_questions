@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [lambda-expressions, functional-programming, sam-conversion, higher-order-functions]
+subtopics: [functional-programming, higher-order-functions, lambda-expressions, sam-conversion]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - adapted from fun
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-dispatchers-unconfined--kotlin--medium, q-withcontext-use-cases--kotlin--medium, q-coroutine-timeout-withtimeout--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium]
+related: [q-coroutine-timeout-withtimeout--kotlin--medium, q-dispatchers-unconfined--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium, q-withcontext-use-cases--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, lambda-expressions, functional-programming, sam-conversion, difficulty/medium]
+tags: [difficulty/medium, functional-programming, kotlin, lambda-expressions, sam-conversion]
+date created: Saturday, October 18th 2025, 3:12:53 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What are lambda expressions in Kotlin and how do they work?
 # Вопрос (RU)
@@ -248,7 +251,7 @@ html {
 }
 ```
 
-### Lambda vs Anonymous Function
+### Lambda Vs Anonymous Function
 
 ```kotlin
 // Lambda
@@ -269,7 +272,7 @@ val typedFunc = fun(x: Int): String = x.toString()
 
 Лямбда-выражения (или лямбда-функции) — это анонимные функции, которые можно использовать для создания функциональных литералов. Они предоставляют лаконичный способ представления блока кода, который можно передавать и выполнять позже.
 
-### Базовый синтаксис
+### Базовый Синтаксис
 
 ```kotlin
 // Синтаксис лямбды: { параметры -> тело }
@@ -285,7 +288,7 @@ val double = { x: Int -> x * 2 }
 val doubleSimplified = { it: Int -> it * 2 }
 ```
 
-### Вывод типов
+### Вывод Типов
 
 Kotlin часто может вывести типы параметров лямбды:
 
@@ -301,7 +304,7 @@ val doubledInferred = numbers.map { x -> x * 2 }
 val doubledIt = numbers.map { it * 2 }
 ```
 
-### Лямбда как параметр функции
+### Лямбда Как Параметр Функции
 
 Лямбды обычно передаются как аргументы функциям высшего порядка:
 
@@ -350,7 +353,7 @@ println("Is 7 even? - ${isEven2.accept(7)}")  // false
 println("Is 8 even? - ${isEven2.accept(8)}")  // true
 ```
 
-### Синтаксис замыкающей лямбды
+### Синтаксис Замыкающей Лямбды
 
 Если лямбда является последним параметром функции, её можно вынести за скобки:
 
@@ -372,7 +375,7 @@ fun calculate(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
 val sum = calculate(5, 3) { a, b -> a + b }
 ```
 
-### Лямбда с получателем
+### Лямбда С Получателем
 
 Лямбды можно определять с типом-получателем, что позволяет вызывать методы объекта без квалификации:
 
@@ -392,7 +395,7 @@ val result = buildString {
 println(result)  // "Hello World"
 ```
 
-### Захват переменных (Замыкания)
+### Захват Переменных (Замыкания)
 
 Лямбды могут обращаться к переменным из окружающей области видимости и изменять их:
 
@@ -409,7 +412,7 @@ val prefix = "Number: "
 numbers.map { "$prefix$it" }  // [Number: 1, Number: 2, ...]
 ```
 
-### Возврат из лямбды
+### Возврат Из Лямбды
 
 По умолчанию `return` в лямбде возвращает управление из охватывающей функции:
 
@@ -439,9 +442,9 @@ fun processNumbersCustomLabel(numbers: List<Int>): Int {
 }
 ```
 
-### Общие случаи использования
+### Общие Случаи Использования
 
-#### 1. Операции с коллекциями
+#### 1. Операции С Коллекциями
 
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5)
@@ -451,7 +454,7 @@ val evens = numbers.filter { it % 2 == 0 }     // [2, 4]
 val sum = numbers.reduce { acc, n -> acc + n } // 15
 ```
 
-#### 2. Обработчики событий
+#### 2. Обработчики Событий
 
 ```kotlin
 button.setOnClickListener { view ->
@@ -459,7 +462,7 @@ button.setOnClickListener { view ->
 }
 ```
 
-#### 3. Асинхронные операции
+#### 3. Асинхронные Операции
 
 ```kotlin
 GlobalScope.launch {
@@ -480,7 +483,7 @@ html {
 }
 ```
 
-### Лямбда vs Анонимная функция
+### Лямбда Vs Анонимная Функция
 
 ```kotlin
 // Лямбда

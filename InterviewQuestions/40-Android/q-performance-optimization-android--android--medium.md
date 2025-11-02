@@ -3,7 +3,7 @@ id: android-136
 title: "Performance Optimization Android / Performance Оптимизация Android"
 aliases: ["Performance Optimization Android", "Performance Оптимизация Android"]
 topic: android
-subtopics: [performance-rendering, performance-memory, performance-battery]
+subtopics: [performance-battery, performance-memory, performance-rendering]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-baseline-profiles-android--android--medium, q-notification-channels-
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [performance, optimization, performance-rendering, performance-memory, checklist, difficulty/medium, android/performance-rendering, android/performance-memory, android/performance-battery]
+tags: [android/performance-battery, android/performance-memory, android/performance-rendering, checklist, difficulty/medium, optimization, performance, performance-memory, performance-rendering]
 date created: Monday, October 27th 2025, 3:42:23 pm
-date modified: Thursday, October 30th 2025, 3:16:04 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:16:04 pm
 
 Оптимизация производительности требует системного подхода к нескольким критическим областям. Основные направления: запуск приложения, рендеринг UI, управление памятью, работа с сетью и батареей.
 
-### 1. Оптимизация запуска приложения
+### 1. Оптимизация Запуска Приложения
 
 **Целевые метрики**: Cold start < 1000ms, warm start < 500ms.
 
@@ -66,7 +66,7 @@ val imageLoader by lazy { Coil.imageLoader(context) }
 - Baseline Profiles для предкомпиляции критического кода
 - Splash screen через windowBackground (не отдельная Activity)
 
-### 2. Оптимизация UI и рендеринга
+### 2. Оптимизация UI И Рендеринга
 
 **Целевая метрика**: 60 FPS (16ms на кадр).
 
@@ -126,7 +126,7 @@ recyclerView.apply {
 
 **Для больших списков**: Paging 3 library с инкрементальной загрузкой.
 
-### 4. Управление памятью
+### 4. Управление Памятью
 
 ```kotlin
 // ✅ Правильная работа с изображениями
@@ -157,7 +157,7 @@ val sparse = SparseIntArray() // Вместо HashMap<Int, Int>
 
 **Инструменты**: LeakCanary для детектирования утечек, ViewModel для сохранения данных при пересоздании Activity.
 
-### 5. Оптимизация сети
+### 5. Оптимизация Сети
 
 ```kotlin
 // ✅ Offline-first архитектура
@@ -187,7 +187,7 @@ val client = OkHttpClient.Builder()
 - Field filtering (запрос только нужных полей)
 - Сжатие (gzip автоматически в OkHttp)
 
-### 6. Оптимизация батареи
+### 6. Оптимизация Батареи
 
 ```kotlin
 // ✅ WorkManager с constraints
@@ -211,7 +211,7 @@ fusedLocationClient.requestLocationUpdates(
 )
 ```
 
-### 7. Оптимизация сборки
+### 7. Оптимизация Сборки
 
 ```kotlin
 // build.gradle.kts
@@ -239,7 +239,7 @@ android {
 
 **Цель**: APK < 20MB через Android App Bundle, WebP для изображений, удаление неиспользуемых зависимостей.
 
-### Инструменты профилирования
+### Инструменты Профилирования
 
 - **Android Profiler**: CPU, Memory, Network, Energy
 - **Layout Inspector**: анализ UI иерархии в runtime
@@ -247,7 +247,7 @@ android {
 - **Firebase Performance Monitoring**: метрики в production
 - **Perfetto/Systrace**: детальный анализ производительности системы
 
-### Целевые метрики
+### Целевые Метрики
 
 | Метрика       | Хорошо   | Приемлемо |
 |--------------|----------|-----------|

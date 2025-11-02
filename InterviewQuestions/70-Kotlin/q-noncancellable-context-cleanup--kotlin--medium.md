@@ -1,29 +1,24 @@
 ---
 id: kotlin-119
 title: "NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций"
-aliases: [NonCancellable, Cancellation, Cleanup, Resource Management, NonCancellable контекст]
+aliases: [Cancellation, Cleanup, NonCancellable, NonCancellable контекст, Resource Management]
 topic: kotlin
-subtopics: [coroutines, cancellation]
+subtopics: [cancellation, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-sealed-class-sealed-interface--kotlin--medium, q-kotlin-final-modifier--programming-languages--easy, q-java-kotlin-abstract-classes-difference--programming-languages--medium]
+related: [q-java-kotlin-abstract-classes-difference--programming-languages--medium, q-kotlin-final-modifier--programming-languages--easy, q-sealed-class-sealed-interface--kotlin--medium]
 created: 2025-10-12
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - cancellation
-  - noncancellable
-  - cleanup
-  - resource-management
-  - difficulty/medium
+tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancellable, resource-management]
+date created: Friday, October 31st 2025, 6:29:31 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
-# NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций
+# NonCancellable Context for Critical Cleanup Operations / NonCancellable Контекст Для Критических Операций
 
 ## English Version
 
@@ -67,7 +62,7 @@ Use NonCancellable **only** for critical cleanup operations:
 - Operations that should be cancellable
 - "Just in case" scenarios
 
-#### Using NonCancellable in finally Blocks
+#### Using NonCancellable in Finally Blocks
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -531,7 +526,7 @@ suspend fun longCleanup() {
 
 **Guideline**: NonCancellable operations should complete in **< 1 second** ideally, **< 5 seconds** maximum.
 
-#### Alternative: Use Regular Blocking Code in finally
+#### Alternative: Use Regular Blocking Code in Finally
 
 For very simple cleanup, consider **not using suspend functions**:
 
@@ -712,14 +707,14 @@ try {
 
 ---
 
-## Russian Version / Русская версия
+## Russian Version / Русская Версия
 
 ### Вопрос
 Что такое `NonCancellable` в корутинах Kotlin? Когда следует его использовать? Объясните как использовать его в блоках finally для критической очистки, связанные риски и лучшие практики с реальными примерами.
 
 ### Ответ
 
-#### Что такое NonCancellable?
+#### Что Такое NonCancellable?
 
 `NonCancellable` - это специальный `CoroutineContext`, который делает корутину **не отменяемой**. Он позволяет suspend функциям выполняться даже когда корутина была отменена.
 
@@ -738,7 +733,7 @@ public object NonCancellable : AbstractCoroutineContextElement(Job), Job {
 - **Ограничен по времени**: Даже NonCancellable имеет лимиты (таймауты всё равно работают)
 - **Используйте экономно**: Только для критической очистки
 
-#### Когда использовать NonCancellable
+#### Когда Использовать NonCancellable
 
 Используйте NonCancellable **только** для критических операций очистки:
 
@@ -754,7 +749,7 @@ public object NonCancellable : AbstractCoroutineContextElement(Job), Job {
 - Операций которые должны быть отменяемыми
 - Сценариев "на всякий случай"
 
-#### Использование NonCancellable в блоках finally
+#### Использование NonCancellable В Блоках Finally
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -791,7 +786,7 @@ suspend fun demonstrateNonCancellable() = coroutineScope {
 
 **Почему нужно**: После отмены корутина находится в отменённом состоянии. Обычно вызов suspend функций выбрасывает `CancellationException`. NonCancellable подавляет это.
 
-#### Реальный пример: Закрытие ресурсов
+#### Реальный Пример: Закрытие Ресурсов
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -835,7 +830,7 @@ suspend fun demonstrateFileCleanup() {
 // Файл закрыт
 ```
 
-#### Реальный пример: Сохранение состояния
+#### Реальный Пример: Сохранение Состояния
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -891,7 +886,7 @@ suspend fun demonstrateStateSave() {
 // Job отменён и очистка завершена
 ```
 
-#### Реальный пример: Коммит транзакции базы данных
+#### Реальный Пример: Коммит Транзакции Базы Данных
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -967,7 +962,7 @@ suspend fun demonstrateTransaction() {
 // Транзакция закрыта
 ```
 
-#### Реальный пример: Событие аналитики при отмене
+#### Реальный Пример: Событие Аналитики При Отмене
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1024,7 +1019,7 @@ suspend fun demonstrateAnalytics() {
 // Аналитика отправлена
 ```
 
-#### Риски использования NonCancellable
+#### Риски Использования NonCancellable
 
 **1. Блокирование отмены слишком долго**
 
@@ -1115,7 +1110,7 @@ suspend fun safeCleanup() {
 }
 ```
 
-#### NonCancellable не предотвращает отмену
+#### NonCancellable Не Предотвращает Отмену
 
 NonCancellable не **предотвращает** отмену; он позволяет suspend функциям **завершиться несмотря на** отмену:
 
@@ -1154,7 +1149,7 @@ suspend fun demonstrateCancellationStillHappens() {
 
 **Ключевая идея**: NonCancellable - это **временное переопределение контекста**, а не постоянное предотвращение отмены.
 
-#### Временные лимиты даже с NonCancellable
+#### Временные Лимиты Даже С NonCancellable
 
 Даже NonCancellable уважает **таймауты**:
 
@@ -1185,7 +1180,7 @@ suspend fun demonstrateTimeout() {
 
 **Важно**: NonCancellable позволяет завершиться очистке, но не предотвращает срабатывание родительского таймаута.
 
-#### Лучшая практика: Держите коротким
+#### Лучшая Практика: Держите Коротким
 
 ```kotlin
 // ХОРОШО: Короткая, целенаправленная очистка
@@ -1218,7 +1213,7 @@ suspend fun longCleanup() {
 
 **Руководство**: Операции NonCancellable должны завершаться за **< 1 секунду** идеально, **< 5 секунд** максимум.
 
-#### Альтернатива: Используйте обычный блокирующий код в finally
+#### Альтернатива: Используйте Обычный Блокирующий Код В Finally
 
 Для очень простой очистки рассмотрите **не использование suspend функций**:
 
@@ -1241,7 +1236,7 @@ suspend fun cleanupWithoutSuspend() {
 // - NonCancellable: Когда очистка требует suspend функций (сеть, delay)
 ```
 
-#### Тестирование очистки с отменой
+#### Тестирование Очистки С Отменой
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1315,7 +1310,7 @@ class NonCancellableTests {
 }
 ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 **1. Забыли перебросить CancellationException**
 

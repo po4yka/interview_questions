@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-backend
-related: [q-http-protocols-comparison--android--medium, q-repository-multiple-sources--android--medium, q-large-file-upload-app--android--hard]
+related: [q-http-protocols-comparison--android--medium, q-large-file-upload-app--android--hard, q-repository-multiple-sources--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [api-design, graphql, rest, difficulty/easy]
+tags: [api-design, difficulty/easy, graphql, rest]
 date created: Monday, October 27th 2025, 3:57:25 pm
-date modified: Thursday, October 30th 2025, 12:48:02 pm
+date modified: Saturday, November 1st 2025, 5:44:08 pm
 ---
 
 # Вопрос (RU)

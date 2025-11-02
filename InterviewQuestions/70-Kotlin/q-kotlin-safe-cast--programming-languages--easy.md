@@ -3,26 +3,22 @@ id: lang-075
 title: "Kotlin Safe Cast / Безопасное приведение типов в Kotlin"
 aliases: [Kotlin Safe Cast, Безопасное приведение типов в Kotlin]
 topic: programming-languages
-subtopics: [type-system, null-safety]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-arraylist-linkedlist-vector-difference--programming-languages--medium, q-variance-type-projections--kotlin--hard, q-class-initialization-order--kotlin--medium]
+related: [q-class-initialization-order--kotlin--medium, q-variance-type-projections--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - as?
-  - casting
-  - safe-cast
-  - type-conversion
-  - type-safety
-  - difficulty/easy
+tags: [as?, casting, difficulty/easy, programming-languages, safe-cast, type-conversion, type-safety]
+date created: Friday, October 31st 2025, 6:32:39 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения?
+
+# Как В Kotlin Привести Переменную Типа Any К Типу String Безопасно, Чтобы Избежать Исключения?
 
 # Question (EN)
 > How to safely cast Any to String in Kotlin to avoid exceptions?
@@ -106,6 +102,6 @@ val result = any as? String ?: "default"
 
 ## Related Questions
 
-- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]]
+-
 - [[q-variance-type-projections--kotlin--hard]]
 - [[q-class-initialization-order--kotlin--medium]]

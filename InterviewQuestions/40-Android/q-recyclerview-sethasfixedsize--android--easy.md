@@ -3,19 +3,22 @@ id: android-027
 title: "What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true) в RecyclerView?"
 aliases: ["setHasFixedSize in RecyclerView", "setHasFixedSize в RecyclerView"]
 topic: android
-subtopics: [ui-views, performance-memory]
+subtopics: [performance-memory, ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-events-are-activity-methods-tied-to--android--medium, q-handler-looper-main-thread--android--medium]
+related: [q-handler-looper-main-thread--android--medium, q-what-events-are-activity-methods-tied-to--android--medium]
 created: 2025-10-06
 updated: 2025-10-27
 sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
-tags: [android/ui-views, android/performance-memory, difficulty/easy]
+tags: [android/performance-memory, android/ui-views, difficulty/easy]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 > Что такое setHasFixedSize(true) в RecyclerView?
@@ -30,14 +33,14 @@ tags: [android/ui-views, android/performance-memory, difficulty/easy]
 
 `setHasFixedSize(true)` — метод оптимизации RecyclerView, сообщающий, что **размер RecyclerView не изменится** при изменении содержимого адаптера.
 
-### Как работает
+### Как Работает
 
 Когда вызывается `setHasFixedSize(true)`:
 - Добавление/удаление элементов не меняет размеры RecyclerView
 - Пропускаются дорогостоящие пересчеты layout
 - Только содержимое обновляется, иерархия представлений не пересчитывается
 
-### Когда использовать
+### Когда Использовать
 
 **✅ Используйте** когда:
 
@@ -83,7 +86,7 @@ recyclerView.setHasFixedSize(true)
 recyclerView.setHasFixedSize(true) // Неправильно!
 ```
 
-### Пример использования
+### Пример Использования
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -99,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Влияние на производительность
+### Влияние На Производительность
 
 | Сценарий | With setHasFixedSize(true) | Without |
 |----------|----------------------------|---------|

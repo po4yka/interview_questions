@@ -3,7 +3,7 @@ id: lang-053
 title: "Launch Vs Async Await / Launch против Async Await"
 aliases: [Launch Vs Async Await, Launch против Async Await]
 topic: programming-languages
-subtopics: [coroutines, async-programming, concurrency]
+subtopics: [async-programming, concurrency, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-hot-vs-cold-flows--programming-languages--medium, q-iterator-concept--programming-languages--easy, q-visitor-pattern--design-patterns--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [async, await, coroutines, kotlin, launch, programming-languages, difficulty/medium]
+tags: [async, await, coroutines, difficulty/medium, kotlin, launch, programming-languages]
 date created: Friday, October 3rd 2025, 5:21:02 pm
-date modified: Sunday, October 26th 2025, 12:08:05 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Чем Launch Отличается От async/await ?

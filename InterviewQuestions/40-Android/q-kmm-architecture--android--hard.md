@@ -1,22 +1,22 @@
 ---
 id: android-435
 title: "KMM Architecture / Архитектура KMM"
-aliases: ["KMM Architecture", "Архитектура KMM", "Kotlin Multiplatform Mobile"]
+aliases: ["KMM Architecture", "Kotlin Multiplatform Mobile", "Архитектура KMM"]
 topic: android
-subtopics: [kmp, architecture-clean, di-hilt]
+subtopics: [architecture-clean, di-hilt, kmp]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-clean-architecture-android--android--hard, q-mvi-architecture--android--hard, q-offline-first-architecture--android--hard]
+related: [q-clean-architecture-android--android--hard, q-mvi-architecture--android--hard]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android, android/kmp, android/architecture-clean, android/di-hilt, kmm, kotlin, multiplatform, difficulty/hard]
+tags: [android, android/architecture-clean, android/di-hilt, android/kmp, difficulty/hard, kmm, kotlin, multiplatform]
 date created: Tuesday, October 28th 2025, 9:23:29 pm
-date modified: Thursday, October 30th 2025, 3:11:36 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -604,5 +604,3 @@ object KoinKt {
 - [[q-offline-first-architecture--android--hard]] - Offline-first architecture strategies
 
 ### Advanced (Hard)
-- [[q-modularization-strategies--android--hard]] - Multi-module architecture patterns
-- [[q-gradle-dependency-management--android--hard]] - Complex build configuration

@@ -1,7 +1,7 @@
 ---
 id: android-473
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
-aliases: [DiffUtil Background Calculation Issues, Проблемы фонового вычисления DiffUtil, DiffUtil background issues, Проблемы DiffUtil в фоне]
+aliases: [DiffUtil Background Calculation Issues, DiffUtil background issues, Проблемы DiffUtil в фоне, Проблемы фонового вычисления DiffUtil]
 topic: android
 subtopics: [performance-memory, ui-views]
 question_kind: android
@@ -16,7 +16,7 @@ created: 2025-10-20
 updated: 2025-10-28
 tags: [android/performance-memory, android/ui-views, difficulty/medium, diffutil, recyclerview]
 date created: Tuesday, October 28th 2025, 9:22:13 am
-date modified: Thursday, October 30th 2025, 12:47:42 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -295,12 +295,10 @@ fun updateUsers(newUsers: List<User>) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-basics--android--easy]]
 
 ### Related (Same Level)
 - [[q-main-causes-ui-lag--android--medium]]
-- [[q-android-performance-optimization--android--medium]]
-- [[q-recyclerview-optimization--android--medium]]
+- [[q-recyclerview-explained--android--medium]]
 
 ### Advanced (Harder)
 - [[q-implement-custom-diffutil-algorithm--android--hard]]

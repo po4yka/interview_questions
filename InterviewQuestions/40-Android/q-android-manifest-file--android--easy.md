@@ -3,20 +3,20 @@ id: android-360
 title: AndroidManifest.xml / Файл манифеста Android
 aliases: ["AndroidManifest.xml", "Файл манифеста Android"]
 topic: android
-subtopics: [app-startup, permissions, intents-deeplinks]
+subtopics: [app-startup, intents-deeplinks, permissions]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-android-app-components--android--easy, q-intent-filters-android--android--medium]
+related: [q-android-app-components--android--easy, q-intent-filters-android--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/app-startup, android/permissions, android/intents-deeplinks, difficulty/easy]
+tags: [android/app-startup, android/intents-deeplinks, android/permissions, difficulty/easy]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 date created: Thursday, October 30th 2025, 11:26:39 am
-date modified: Thursday, October 30th 2025, 12:42:51 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -197,8 +197,8 @@ date modified: Thursday, October 30th 2025, 12:42:51 pm
 ### Related
 - [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
 - [[q-intent-filters-android--android--medium]] - Intent filter patterns
-- [[q-android-permissions-runtime--android--medium]] - Runtime permissions
+ - Runtime permissions
 
 ### Advanced
-- [[q-android-gradle-manifest-merge--android--hard]] - Manifest merge strategies
+ - Manifest merge strategies
 - [[q-android-security-practices-checklist--android--medium]] - Security best practices

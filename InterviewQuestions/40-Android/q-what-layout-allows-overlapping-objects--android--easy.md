@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-layouts, c-view-positioning, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, layouts, view-positioning, ui, framelayout, difficulty/easy]
+tags: [android/ui-views, difficulty/easy, framelayout, layouts, ui, view-positioning]
+date created: Saturday, November 1st 2025, 12:47:09 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What is the layout called where objects can overlap each other?
+# What is the Layout Called where Objects Can Overlap Each Other?
 
 ## EN (expanded)
 
@@ -258,6 +260,6 @@ fun LayeringExample() {
 
 ## Related Questions
 
-- [[q-room-database-migrations--room--medium]]
-- [[q-server-sent-events-sse--networking--medium]]
+- [[q-room-database-migrations--android--medium]]
+- [[q-server-sent-events-sse--android--medium]]
 - [[q-retrofit-call-adapter-advanced--networking--medium]]

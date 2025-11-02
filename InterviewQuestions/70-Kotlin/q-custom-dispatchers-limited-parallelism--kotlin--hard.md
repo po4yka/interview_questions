@@ -12,13 +12,15 @@ status: draft
 created: 2025-10-12
 updated: 2025-10-31
 category: "coroutines-advanced"
-tags: ["dispatchers", "threading", "limitedparallelism", "performance", "resource-management", "concurrency", "difficulty/hard"]
+tags: ["concurrency", "difficulty/hard", "dispatchers", "limitedparallelism", "performance", "resource-management", "threading"]
 description: "Deep dive into creating custom dispatchers, limitedParallelism API, thread pool sizing, and resource-specific dispatchers"
 moc: moc-kotlin
-related: [q-kotlin-map-collection--programming-languages--easy, q-visibility-modifiers-kotlin--kotlin--medium, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
+related: [q-kotlin-map-collection--programming-languages--easy, q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
+date created: Friday, October 31st 2025, 6:32:38 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
-# Creating custom CoroutineDispatchers with limitedParallelism / Создание кастомных диспетчеров
+# Creating Custom CoroutineDispatchers with limitedParallelism / Создание Кастомных Диспетчеров
 
 # Question (EN)
 
@@ -540,7 +542,7 @@ suspend fun demonstrateCameraAccess() {
 }
 ```
 
-#### Dispatcher.IO.limitedParallelism(1) for Serial Execution
+#### Dispatcher.IO.limitedParallelism(1) For Serial Execution
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -952,7 +954,7 @@ Choose the right dispatcher for your workload to maximize performance and resour
 
 *(Краткое содержание основных пунктов из английской версии)*
 
-#### Когда создавать кастомные диспетчеры
+#### Когда Создавать Кастомные Диспетчеры
 
 Кастомные диспетчеры нужны когда:
 
@@ -1018,7 +1020,7 @@ val newSingleThread = Dispatchers.IO.limitedParallelism(1)
 val newLimitedPool = Dispatchers.IO.limitedParallelism(4)
 ```
 
-#### Почему старые API устарели
+#### Почему Старые API Устарели
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1047,7 +1049,7 @@ fun newWaySafe() = runBlocking {
 }
 ```
 
-#### Создание диспетчера из ExecutorService
+#### Создание Диспетчера Из ExecutorService
 
 При интеграции с legacy кодом или кастомными пулами потоков:
 
@@ -1080,7 +1082,7 @@ fun createFromExecutor() = runBlocking {
 }
 ```
 
-#### Стратегии размера пула потоков
+#### Стратегии Размера Пула Потоков
 
 **CPU-зависимые задачи:**
 
@@ -1112,7 +1114,7 @@ val ioDispatcher = Dispatchers.IO.limitedParallelism(cores * 10)
 | API вызовы (с лимитом) | Лимит rate | Соблюдать ограничения API |
 | Файловый I/O | 4-8 | Ограничение конкурентности диска |
 
-#### Кастомный диспетчер для специфических ресурсов
+#### Кастомный Диспетчер Для Специфических Ресурсов
 
 **Пример 1: Диспетчер базы данных (один писатель)**
 
@@ -1224,7 +1226,7 @@ class CameraManager(private val cameraDispatcher: CameraDispatcher) {
 }
 ```
 
-#### Dispatcher.IO.limitedParallelism(1) для последовательного выполнения
+#### Dispatcher.IO.limitedParallelism(1) Для Последовательного Выполнения
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1252,7 +1254,7 @@ class SerialExecutionExamples {
 }
 ```
 
-#### Управление жизненным циклом
+#### Управление Жизненным Циклом
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1283,7 +1285,7 @@ suspend fun safeDispatcherUsage() {
 }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 1. **Забыть закрыть ExecutorCoroutineDispatcher**
 ```kotlin

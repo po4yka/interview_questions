@@ -3,18 +3,20 @@ id: net-002
 title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
 aliases: ["Retrofit Call Adapter Advanced", "Продвинутый CallAdapter для Retrofit"]
 topic: networking
-subtopics: [retrofit, error-handling, sealed-classes]
+subtopics: [error-handling, retrofit, sealed-classes]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-backend
-related: [c-sealed-classes, c-error-handling, c-retrofit]
+related: [c-error-handling, c-retrofit, c-sealed-classes]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [networking, retrofit, call-adapter, result, error-handling, sealed-classes, difficulty/medium]
+tags: [call-adapter, difficulty/medium, error-handling, networking, result, retrofit, sealed-classes]
+date created: Monday, October 27th 2025, 3:57:02 pm
+date modified: Saturday, November 1st 2025, 5:44:14 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ How to implement custom Retrofit CallAdapter for Result<T> type? How to centrall
 
 **Retrofit CallAdapter** - механизм трансформации HTTP ответов в кастомные типы. Позволяет централизовать обработку ошибок, стандартизировать работу с API и интегрироваться с корутинами.
 
-### Зачем нужен CallAdapter?
+### Зачем Нужен CallAdapter?
 
 Без CallAdapter обработка ошибок дублируется в каждом вызове:
 
@@ -57,7 +59,7 @@ suspend fun getUser(id: String): Result<User> {
 }
 ```
 
-### Result Type с Sealed Classes
+### Result Type С Sealed Classes
 
 Sealed классы обеспечивают exhaustive checking разных типов ошибок:
 
@@ -198,7 +200,7 @@ interface ApiService {
 }
 ```
 
-### Использование в Repository
+### Использование В Repository
 
 ```kotlin
 class UserRepository(
@@ -230,7 +232,7 @@ class UserRepository(
 }
 ```
 
-### Интеграция с ViewModel
+### Интеграция С ViewModel
 
 ```kotlin
 class UserViewModel(
@@ -268,7 +270,7 @@ class UserViewModel(
 4. **Не бросать исключения** - возвращаем Result.Error вместо throw
 5. **Тестируемость** - легко тестировать с MockWebServer
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Неполная обработка ошибок (не exhaustive)

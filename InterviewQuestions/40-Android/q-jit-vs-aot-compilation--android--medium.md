@@ -1,20 +1,22 @@
 ---
 id: android-412
 title: JIT vs AOT Compilation / JIT vs AOT компиляция
-aliases: [JIT vs AOT Compilation, JIT vs AOT компиляция, Just-In-Time, Ahead-Of-Time, ART, Android Runtime]
+aliases: [Ahead-Of-Time, Android Runtime, ART, JIT vs AOT Compilation, JIT vs AOT компиляция, Just-In-Time]
 topic: android
-subtopics: [performance-startup, gradle, profiling]
+subtopics: [gradle, performance-startup, profiling]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-performance-optimization, c-gradle, q-kapt-vs-ksp--android--medium, q-app-startup-optimization--android--medium, q-android-build-optimization--android--medium]
+related: [c-gradle, c-performance-optimization, q-android-build-optimization--android--medium, q-app-startup-optimization--android--medium, q-kapt-vs-ksp--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/performance-startup, android/gradle, android/profiling, compilation, jit, aot, art, baseline-profiles, difficulty/medium]
+tags: [android/gradle, android/performance-startup, android/profiling, aot, art, baseline-profiles, compilation, difficulty/medium, jit]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -86,7 +88,7 @@ class AOTExample {
 - ❌ Большой размер (~60 MB, 2x больше)
 - ❌ Компилирует весь код, даже неиспользуемый
 
-### Гибридный подход (Android 7+)
+### Гибридный Подход (Android 7+)
 
 **Profile-Guided Optimization:**
 
@@ -153,7 +155,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 - Cold start: ~33% быстрее
 - Warm start: ~38% быстрее
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Аспект | JIT | AOT | Hybrid (Profile-Guided) |
 |--------|-----|-----|------------------------|
@@ -164,7 +166,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 | Батарея | Выше | Ниже | Низкий |
 | Обновления | Быстро | Медленно | Быстро |
 
-### Стратегия выбора
+### Стратегия Выбора
 
 ```kotlin
 fun chooseStrategy(appType: AppType): Strategy {

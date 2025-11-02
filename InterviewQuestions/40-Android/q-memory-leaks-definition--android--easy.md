@@ -3,7 +3,7 @@ id: android-086
 title: "Memory Leaks Definition / Определение утечек памяти"
 aliases: ["Memory Leaks Definition", "Определение утечек памяти"]
 topic: android
-subtopics: [performance-memory, lifecycle]
+subtopics: [lifecycle, performance-memory]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -12,11 +12,11 @@ status: draft
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android/performance-memory, android/lifecycle, memory-leaks, performance, difficulty/easy]
+tags: [android/lifecycle, android/performance-memory, difficulty/easy, memory-leaks, performance]
 moc: moc-android
-related: [q-coroutine-memory-leaks--kotlin--hard, q-coroutine-memory-leak-detection--kotlin--hard]
+related: [q-coroutine-memory-leak-detection--kotlin--hard, q-coroutine-memory-leaks--kotlin--hard]
 date created: Tuesday, October 28th 2025, 9:36:26 pm
-date modified: Thursday, October 30th 2025, 3:13:19 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

@@ -3,17 +3,19 @@ id: lang-080
 title: "Garbage Collector Roots / Корни Garbage Collector"
 aliases: [Garbage Collector Roots, Корни Garbage Collector]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, jvm]
+subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-garbage-collection, q-garbage-collector-definition--programming-languages--easy, q-garbage-collector-basics--programming-languages--medium]
+related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, memory-management, garbage-collection, jvm, kotlin, difficulty/medium]
+tags: [difficulty/medium, garbage-collection, jvm, kotlin, memory-management, programming-languages]
+date created: Friday, October 31st 2025, 6:31:04 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Что Такое Garbage Collector Roots?

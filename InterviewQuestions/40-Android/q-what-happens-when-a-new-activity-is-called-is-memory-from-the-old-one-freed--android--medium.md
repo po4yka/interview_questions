@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-activity-navigation-how-it-works--android--medium]
+related: [q-activity-lifecycle-methods--android--medium, q-activity-navigation-how-it-works--android--medium, q-how-does-activity-lifecycle-work--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags:
-  - android
-  - android/lifecycle
-  - android/performance-memory
-  - lifecycle
-  - performance-memory
-  - difficulty/medium
+tags: [android, android/lifecycle, android/performance-memory, difficulty/medium, lifecycle, performance-memory]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что происходит, когда запускается новая Activity? Освобождается ли память предыдущей?
@@ -36,7 +33,7 @@ tags:
 
 Когда запускается новая Activity, старая **не освобождает память немедленно**. Она проходит через переходы жизненного цикла и остаётся в back stack. Система может освободить её память позже при нехватке памяти.
 
-### Последовательность жизненного цикла
+### Последовательность Жизненного Цикла
 
 При вызове `startActivity()`:
 
@@ -46,9 +43,9 @@ tags:
 
 **Ключевой момент**: Activity A остаётся в памяти в состоянии `STOPPED`, включая все её поля, ViewModel и выделенные ресурсы.
 
-### Когда память освобождается
+### Когда Память Освобождается
 
-#### Явное завершение
+#### Явное Завершение
 
 ```kotlin
 override fun onDestroy() {
@@ -64,7 +61,7 @@ override fun onDestroy() {
 }
 ```
 
-#### Системное уничтожение
+#### Системное Уничтожение
 
 Когда система испытывает нехватку памяти, она убивает остановленные Activity (от самой старой):
 
@@ -78,7 +75,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 При возврате пользователя создаётся **новый экземпляр** с восстановленным состоянием через `onCreate(savedInstanceState)`.
 
-### Управление памятью в onStop()
+### Управление Памятью В onStop()
 
 ```kotlin
 class MemoryEfficientActivity : AppCompatActivity() {
@@ -101,7 +98,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
 }
 ```
 
-### ViewModel переживает onStop()
+### ViewModel Переживает onStop()
 
 ```kotlin
 class DataViewModel : ViewModel() {

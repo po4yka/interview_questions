@@ -10,14 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-function-limitations--kotlin--medium, q-kotlin-native--kotlin--hard, q-kotlin-extensions-overview--programming-languages--medium]
+related: [q-inline-function-limitations--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-native--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Что такое константы и можно ли их изменять?
+
+# Что Такое Константы И Можно Ли Их Изменять?
 
 # Question (EN)
 > What are constants and can they be changed?

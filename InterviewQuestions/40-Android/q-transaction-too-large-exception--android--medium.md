@@ -3,19 +3,22 @@ id: android-168
 title: "TransactionTooLargeException / Исключение TransactionTooLargeException"
 aliases: ["TransactionTooLargeException", "Исключение TransactionTooLargeException"]
 topic: android
-subtopics: [lifecycle, performance-memory, intents-deeplinks]
+subtopics: [intents-deeplinks, lifecycle, performance-memory]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-intent--android--easy, q-viewmodel-vs-onsavedinstancestate--android--medium, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
+related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-intent--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/lifecycle, android/performance-memory, android/intents-deeplinks, binder, exceptions, intent, savedinstancestate, difficulty/medium]
+tags: [android/intents-deeplinks, android/lifecycle, android/performance-memory, binder, difficulty/medium, exceptions, intent, savedinstancestate]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 Что такое TransactionTooLargeException и как его избежать?
@@ -35,7 +38,7 @@ What is TransactionTooLargeException and how to avoid it?
 - Сохранение крупных данных в onSaveInstanceState
 - Передача bitmap или списков между Activity/Fragment
 
-### Основные решения
+### Основные Решения
 
 **1. Передавать ID вместо объекта**
 
@@ -98,7 +101,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 - Saving large data in onSaveInstanceState
 - Transferring bitmaps or lists between Activity/Fragment
 
-### Primary solutions
+### Primary Solutions
 
 **1. Pass ID instead of object**
 
@@ -146,7 +149,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 }
 ```
 
-### Binder limits
+### Binder Limits
 
 - **1 MB** — total per-process buffer for all transactions
 - Bundle size measured via Parcel serialization

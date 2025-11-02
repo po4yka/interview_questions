@@ -3,20 +3,22 @@ id: android-396
 title: "Fragments and Multiple Activities / Фрагменты и несколько Activity"
 aliases: [Fragments and Activities, Фрагменты и Activities]
 topic: android
-subtopics: [fragment, activity, ui-navigation]
+subtopics: [activity, fragment, ui-navigation]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, c-activity-fragments-relationship, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related: [c-activity-fragments-relationship, c-fragments, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/fragment, android/activity, android/ui-navigation, fragments, ui-navigation, difficulty/hard]
+tags: [android/activity, android/fragment, android/ui-navigation, difficulty/hard, fragments, ui-navigation]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Что такое фрагменты и почему их удобнее использовать вместо множества activity?
+# Что Такое Фрагменты И Почему Их Удобнее Использовать Вместо Множества Activity?
 
 **English**: What are fragments and why are they more convenient to use instead of multiple activities?
 

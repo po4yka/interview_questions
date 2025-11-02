@@ -3,7 +3,7 @@ id: android-474
 title: Fast Chat Rendering / Быстрый рендеринг чата
 aliases: [Fast Chat Rendering, Быстрый рендеринг чата]
 topic: android
-subtopics: [performance-memory, ui-views, ui-compose]
+subtopics: [performance-memory, ui-compose, ui-views]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -11,18 +11,16 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-android-performance-optimization--android--medium
-  - q-diffutil-background-calculation-issues--android--medium
-  - q-recyclerview-optimization--android--medium
   - c-performance-optimization
   - c-recyclerview
+  - q-diffutil-background-calculation-issues--android--medium
 sources:
   - https://developer.android.com/topic/performance/rendering
 created: 2025-10-20
 updated: 2025-10-28
-tags: [android/performance-memory, android/ui-views, android/ui-compose, chat, difficulty/hard, diffutil, paging, performance, recyclerview]
+tags: [android/performance-memory, android/ui-compose, android/ui-views, chat, difficulty/hard, diffutil, paging, performance, recyclerview]
 date created: Tuesday, October 28th 2025, 9:22:19 am
-date modified: Thursday, October 30th 2025, 12:47:48 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -37,7 +35,7 @@ date modified: Thursday, October 30th 2025, 12:47:48 pm
 
 Для быстрого рендеринга чатов оптимизируйте UI (RecyclerView/LazyColumn), загрузку данных (Paging 3), изображения (Glide/Coil) и кэш (Room).
 
-### XML Views с RecyclerView
+### XML Views С RecyclerView
 
 **1. DiffUtil с Payloads**
 
@@ -102,7 +100,7 @@ lifecycleScope.launch {
 }
 ```
 
-### Compose с LazyColumn
+### Compose С LazyColumn
 
 **1. Стабильные ключи и remember**
 
@@ -185,7 +183,7 @@ fun ChatScreen(viewModel: ChatViewModel) {
 }
 ```
 
-### Оптимизация изображений
+### Оптимизация Изображений
 
 **Glide (XML Views):**
 ```kotlin
@@ -216,7 +214,7 @@ fun ChatImageMessage(imageUrl: String) {
 }
 ```
 
-### Офлайн кэш
+### Офлайн Кэш
 
 ```kotlin
 @Entity
@@ -237,7 +235,7 @@ interface ChatDao {
 }
 ```
 
-### Ключевые принципы
+### Ключевые Принципы
 
 **RecyclerView:**
 - ViewHolder Pattern для переиспользования
@@ -406,7 +404,7 @@ fun ChatScreen(viewModel: ChatViewModel) {
 }
 ```
 
-### Image optimization
+### Image Optimization
 
 **Glide (XML Views):**
 ```kotlin
@@ -437,7 +435,7 @@ fun ChatImageMessage(imageUrl: String) {
 }
 ```
 
-### Offline cache
+### Offline Cache
 
 ```kotlin
 @Entity
@@ -458,7 +456,7 @@ interface ChatDao {
 }
 ```
 
-### Key principles
+### Key Principles
 
 **RecyclerView:**
 - ViewHolder Pattern for reuse
@@ -494,11 +492,8 @@ interface ChatDao {
 ## Related Questions
 
 ### Prerequisites
-- [[q-recyclerview-optimization--android--medium]]
 - [[q-diffutil-background-calculation-issues--android--medium]]
 
 ### Same Level
-- [[q-android-performance-optimization--android--medium]]
 
 ### Advanced
-- [[q-memory-optimization-large-datasets--android--hard]]

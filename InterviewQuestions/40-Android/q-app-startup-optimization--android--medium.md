@@ -3,20 +3,20 @@ id: android-192
 title: App Startup Optimization / Оптимизация запуска приложения
 aliases: ["App Startup Optimization", "Оптимизация запуска приложения"]
 topic: android
-subtopics: [performance-startup, performance-memory, app-startup]
+subtopics: [app-startup, performance-memory, performance-startup]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-startup, c-content-provider, c-lazy-initialization, q-android-performance-measurement-tools--android--medium, q-app-start-types-android--android--medium, q-app-startup-library--android--medium]
+related: [c-app-startup, c-content-provider, c-lazy-initialization]
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/performance-startup, android/performance-memory, android/app-startup, difficulty/medium]
+tags: [android/app-startup, android/performance-memory, android/performance-startup, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:43:03 am
-date modified: Thursday, October 30th 2025, 12:43:13 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:43:13 pm
 
 **Оптимизация запуска** сокращает время холодного/теплого/горячего старта через консолидацию ContentProvider, ленивую инициализацию, отложенное выполнение и измерения производительности.
 
-### Ключевые техники
+### Ключевые Техники
 
 **1. Консолидация ContentProvider**
 
@@ -112,7 +112,7 @@ override fun onCreate() {
 - ContentProviders: 8 → 1
 - Оптимизации: App Startup (-175ms), lazy init (-260ms), deferred (-150ms)
 
-### Лучшие практики
+### Лучшие Практики
 
 - Измеряйте через Perfetto/systrace перед оптимизацией
 - Инициализируйте только критичные сервисы в Application.onCreate()
@@ -247,7 +247,7 @@ override fun onCreate() {
 ### Related
 - [[q-app-startup-library--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
-- [[q-baseline-profiles--android--medium]]
+- [[q-baseline-profiles-android--android--medium]]
 
 ### Advanced
 - [[q-android-runtime-internals--android--hard]]

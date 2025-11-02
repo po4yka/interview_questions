@@ -10,18 +10,15 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-backpressure--kotlin--hard, q-rxjava-to-coroutines-migration--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium]
+related: [q-flow-backpressure--kotlin--hard, q-kotlin-delegation-detailed--kotlin--medium, q-rxjava-to-coroutines-migration--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - delegates
-  - compilation
-  - bytecode
-  - advanced
-  - difficulty/hard
+tags: [advanced, bytecode, compilation, delegates, difficulty/hard, kotlin]
+date created: Friday, October 31st 2025, 6:33:51 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Как делегаты работают на уровне компиляции?
+
+# Как Делегаты Работают На Уровне Компиляции?
 
 # Question (EN)
 > How do Kotlin delegates work at the compilation level? What bytecode and auxiliary structures are generated?
@@ -76,7 +73,7 @@ public final class Example {
 
 Kotlin property delegates (делегированные свойства) используют ключевое слово `by` для делегирования логики геттеров/сеттеров другому объекту. На уровне компиляции в Java компилятор Kotlin генерирует вспомогательные поля, классы и методы доступа.
 
-### Базовый пример делегата
+### Базовый Пример Делегата
 
 ```kotlin
 // Kotlin код
@@ -97,7 +94,7 @@ class StringDelegate {
 }
 ```
 
-### Что генерируется в Java bytecode
+### Что Генерируется В Java Bytecode
 
 ```java
 // Сгенерированный Java код (примерный)
@@ -134,9 +131,9 @@ public final class Example {
 }
 ```
 
-### Компоненты компиляции делегатов
+### Компоненты Компиляции Делегатов
 
-#### 1. Скрытое поле делегата (`$delegate`)
+#### 1. Скрытое Поле Делегата (`$delegate`)
 
 ```kotlin
 // Kotlin
@@ -160,7 +157,7 @@ public final class User {
 }
 ```
 
-#### 2. Property metadata (KProperty)
+#### 2. Property Metadata (KProperty)
 
 ```kotlin
 // KProperty содержит метаданные о свойстве
@@ -181,7 +178,7 @@ static final KProperty[] $$delegatedProperties = new KProperty[]{
 };
 ```
 
-#### 3. Методы доступа (геттеры/сеттеры)
+#### 3. Методы Доступа (геттеры/сеттеры)
 
 ```kotlin
 // Kotlin свойство
@@ -197,9 +194,9 @@ public void setValue(String value) {
 }
 ```
 
-### Примеры популярных делегатов
+### Примеры Популярных Делегатов
 
-#### `lazy` делегат
+#### `lazy` Делегат
 
 ```kotlin
 // Kotlin
@@ -260,7 +257,7 @@ internal class SynchronizedLazyImpl<out T>(
 }
 ```
 
-#### `observable` делегат
+#### `observable` Делегат
 
 ```kotlin
 // Kotlin
@@ -316,7 +313,7 @@ open class ObservableProperty<T>(
 }
 ```
 
-#### `vetoable` делегат
+#### `vetoable` Делегат
 
 ```kotlin
 // Kotlin
@@ -336,7 +333,7 @@ private final ObservableProperty age$delegate = new ObservableProperty(
 );
 ```
 
-### Кастомный делегат - полная компиляция
+### Кастомный Делегат - Полная Компиляция
 
 ```kotlin
 // Kotlin
@@ -422,7 +419,7 @@ public final class Example {
 }
 ```
 
-### provideDelegate - кастомизация создания делегата
+### provideDelegate - Кастомизация Создания Делегата
 
 ```kotlin
 // Kotlin
@@ -476,7 +473,7 @@ public final class Example {
 }
 ```
 
-### Map делегаты
+### Map Делегаты
 
 ```kotlin
 // Kotlin
@@ -515,7 +512,7 @@ public final class User {
 }
 ```
 
-### Оптимизации компилятора
+### Оптимизации Компилятора
 
 ```kotlin
 // 1. Inline делегаты - встраиваются напрямую
@@ -533,7 +530,7 @@ val String.uppercase: String
     by lazy { this.uppercase() }
 ```
 
-### Performance сравнение
+### Performance Сравнение
 
 ```kotlin
 // Обычное свойство

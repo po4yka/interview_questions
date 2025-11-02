@@ -1,9 +1,9 @@
 ---
 id: android-300
 title: How To Pass Data From One Fragment To Another / Как передать данные из одного Fragment в другой
-aliases: [Pass Data Between Fragments, Fragment Communication, Передача данных между фрагментами]
+aliases: [Fragment Communication, Pass Data Between Fragments, Передача данных между фрагментами]
 topic: android
-subtopics: [fragment, lifecycle, architecture-mvvm]
+subtopics: [architecture-mvvm, fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,14 +12,14 @@ status: draft
 moc: moc-android
 related:
   - q-fragment-basics--android--easy
-  - q-save-data-outside-fragment--android--medium
   - q-fragment-vs-activity-lifecycle--android--medium
+  - q-save-data-outside-fragment--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/fragment, android/lifecycle, android/architecture-mvvm, difficulty/medium]
+tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 12:51:22 pm
-date modified: Thursday, October 30th 2025, 12:53:12 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -1,7 +1,7 @@
 ---
 id: android-342
 title: "How To Draw UI Without XML / Как рисовать UI без XML"
-aliases: [Draw UI Without XML, Рисовать UI без XML, Jetpack Compose, Programmatic Views]
+aliases: [Draw UI Without XML, Jetpack Compose, Programmatic Views, Рисовать UI без XML]
 topic: android
 subtopics: [ui-compose, ui-views]
 question_kind: android
@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-android-views, q-what-each-android-component-represents--android--easy]
+related: [c-android-views, c-jetpack-compose, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/ui-compose, android/ui-views, compose, views, ui, difficulty/easy]
+tags: [android/ui-compose, android/ui-views, compose, difficulty/easy, ui, views]
 sources: []
 date created: Tuesday, October 28th 2025, 9:49:16 am
-date modified: Thursday, October 30th 2025, 12:48:36 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Пример программного создания View
+### Пример Программного Создания View
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Гибридный подход
+### Гибридный Подход
 
 ```kotlin
 // ComposeView в традиционной иерархии View
@@ -225,5 +225,4 @@ linearLayout.addView(composeView)
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI basics
 
 ### Advanced (Harder)
-- [[q-compose-state-management--android--medium]] - State in Compose
-- [[q-compose-recomposition--android--medium]] - Recomposition optimization
+- [[q-compose-testing--android--medium]] - Recomposition optimization

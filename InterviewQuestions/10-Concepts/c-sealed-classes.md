@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-122934
 title: Sealed Classes / Запечатанные классы
-aliases: [Sealed Classes, Kotlin Sealed, Запечатанные классы, Sealed Class Hierarchy]
+aliases: [Kotlin Sealed, Sealed Class Hierarchy, Sealed Classes, Запечатанные классы]
 kind: concept
 summary: Kotlin sealed classes for restricted class hierarchies enabling exhaustive when expressions
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, kotlin, sealed-classes, type-safety, adt, exhaustive-when]
+tags: [adt, concept, exhaustive-when, kotlin, sealed-classes, type-safety]
+date created: Thursday, October 30th 2025, 12:30:04 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

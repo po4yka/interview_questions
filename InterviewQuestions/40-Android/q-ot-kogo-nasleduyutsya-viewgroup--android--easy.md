@@ -1,7 +1,7 @@
 ---
 id: android-278
 title: "Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup"
-aliases: [ViewGroup Inheritance, Наследование ViewGroup, View Hierarchy, Иерархия View]
+aliases: [View Hierarchy, ViewGroup Inheritance, Иерархия View, Наследование ViewGroup]
 topic: android
 subtopics: [ui-views]
 question_kind: theory
@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-canvas-optimization--graphics--medium, q-what-does-itemdecoration-do--android--medium]
+related: [q-canvas-optimization--android--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-what-does-itemdecoration-do--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [android, android/ui-views, difficulty/easy]
 date created: Tuesday, October 28th 2025, 9:50:23 pm
-date modified: Thursday, October 30th 2025, 3:15:36 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:15:36 pm
 
 **ViewGroup наследуется от класса View** - базового класса для всех UI элементов в Android.
 
-### Иерархия наследования
+### Иерархия Наследования
 
 ```
 Object
@@ -45,7 +45,7 @@ ViewGroup (контейнер для других View)
 Конкретные Layout классы (LinearLayout, RelativeLayout, и т.д.)
 ```
 
-### Ключевые методы View
+### Ключевые Методы View
 
 ✅ **Правильно** - View предоставляет базовую функциональность:
 
@@ -68,7 +68,7 @@ abstract class View {
 }
 ```
 
-### Дополнительная функциональность ViewGroup
+### Дополнительная Функциональность ViewGroup
 
 ViewGroup расширяет View и добавляет управление дочерними элементами:
 
@@ -88,7 +88,7 @@ abstract class ViewGroup : View {
 }
 ```
 
-### Пример пользовательского ViewGroup
+### Пример Пользовательского ViewGroup
 
 ```kotlin
 class CustomLayout @JvmOverloads constructor(
@@ -123,7 +123,7 @@ class CustomLayout @JvmOverloads constructor(
 }
 ```
 
-### Почему это важно
+### Почему Это Важно
 
 1. **Полиморфизм** - ViewGroup можно использовать везде, где ожидается View
 2. **Единый API** - все UI элементы имеют общие методы
@@ -282,5 +282,5 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 
 ### Advanced (Harder)
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]]
-- [[q-canvas-optimization--graphics--medium]]
+- [[q-canvas-optimization--android--medium]]
 - [[q-testing-viewmodels-turbine--android--medium]]

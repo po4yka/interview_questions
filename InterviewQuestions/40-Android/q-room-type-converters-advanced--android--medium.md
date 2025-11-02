@@ -14,9 +14,11 @@ related: [q-how-to-animate-adding-removing-items-in-recyclerview--android--mediu
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/room, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
-# Room Advanced Type Converters / Продвинутые Type Converters в Room
+# Room Advanced Type Converters / Продвинутые Type Converters В Room
 
 **English**: Implement complex type converters for custom types, enums, and collections. Handle JSON serialization with performance considerations.
 
@@ -362,7 +364,7 @@ data class Address(
 )
 ```
 
-##### Using Moshi (Better performance, null-safe)
+##### Using Moshi (Better Performance, null-safe)
 
 ```kotlin
 class MoshiConverters {
@@ -869,7 +871,7 @@ Choose serialization strategy based on data complexity, performance requirements
 ## Ответ (RU)
 **Продвинутые Type Converters** в Room позволяют хранить сложные типы данных, такие как пользовательские объекты, коллекции, enum'ы и специализированные типы (UUID, BigDecimal, LocalDateTime), сохраняя при этом производительность и типобезопасность.
 
-### Продвинутые конвертеры Date/Time
+### Продвинутые Конвертеры Date/Time
 
 ```kotlin
 class DateTimeConverters {
@@ -947,7 +949,7 @@ class UuidConverters {
 }
 ```
 
-### Конвертеры коллекций
+### Конвертеры Коллекций
 
 ```kotlin
 class SimpleCollectionConverters {
@@ -975,9 +977,9 @@ class SimpleCollectionConverters {
 }
 ```
 
-### JSON конвертеры
+### JSON Конвертеры
 
-#### С использованием Gson
+#### С Использованием Gson
 
 ```kotlin
 class GsonConverters {
@@ -1006,7 +1008,7 @@ class GsonConverters {
 }
 ```
 
-#### С использованием kotlinx.serialization (лучшая интеграция с Kotlin)
+#### С Использованием kotlinx.serialization (лучшая Интеграция С Kotlin)
 
 ```kotlin
 class KotlinxSerializationConverters {
@@ -1027,14 +1029,14 @@ class KotlinxSerializationConverters {
 }
 ```
 
-### Сравнение производительности
+### Сравнение Производительности
 
 Типичные результаты бенчмарка (10000 итераций):
 - Gson: 850ms
 - Moshi: 520ms (на 38% быстрее)
 - kotlinx.serialization: 380ms (на 55% быстрее)
 
-### Стратегии оптимизации производительности
+### Стратегии Оптимизации Производительности
 
 ```kotlin
 // ХОРОШО: Простой разделитель для примитивных списков (быстрее всего)
@@ -1079,7 +1081,7 @@ class GoodConverters {
 
 7. **Бенчмарк**: Измерять производительность с реалистичными данными
 
-### Таблица сравнения: Библиотеки сериализации
+### Таблица Сравнения: Библиотеки Сериализации
 
 | Библиотека | Плюсы | Минусы | Случай использования |
 |------------|-------|--------|---------------------|
@@ -1112,10 +1114,10 @@ class GoodConverters {
 
 ### Related (Medium)
 - [[q-room-code-generation-timing--android--medium]] - Storage
-- [[q-room-transactions-dao--room--medium]] - Storage
-- [[q-room-paging3-integration--room--medium]] - Storage
+- [[q-room-transactions-dao--android--medium]] - Storage
+- [[q-room-paging3-integration--android--medium]] - Storage
 - [[q-room-vs-sqlite--android--medium]] - Storage
 - [[q-room-type-converters--android--medium]] - Storage
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--room--hard]] - Storage
+- [[q-room-fts-full-text-search--android--hard]] - Storage

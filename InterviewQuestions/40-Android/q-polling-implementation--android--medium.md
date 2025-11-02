@@ -1,20 +1,22 @@
 ---
 id: android-363
 title: "Polling Implementation / Реализация Polling"
-aliases: ["Polling Implementation", "Реализация Polling", "Android Polling"]
+aliases: ["Android Polling", "Polling Implementation", "Реализация Polling"]
 topic: android
-subtopics: [coroutines, background-execution, networking-http]
+subtopics: [background-execution, coroutines, networking-http]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-workmanager-periodic-tasks--android--medium, q-coroutine-flow-basics--kotlin--medium, q-background-work--android--hard]
+related: [q-coroutine-basics--kotlin--easy, q-coroutine-flow-basics--kotlin--medium, q-workmanager-periodic-tasks--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/coroutines, android/background-execution, android/networking-http, polling, background-tasks, difficulty/medium]
+tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
 sources: []
+date created: Saturday, November 1st 2025, 1:03:49 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -172,7 +174,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 4. **Error handling**: Используйте exponential backoff для retry.
 5. **Adaptive intervals**: Подстраивайте частоту под реальные изменения данных.
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Метод | Use Case | Интервал | Lifecycle |
 |-------|----------|----------|-----------|
@@ -368,5 +370,5 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Advanced (Harder)
 - [[q-background-work--android--hard]] - Complex background task orchestration
-- [[q-websocket-implementation--android--hard]] - Real-time alternatives to polling
+- [[q-websocket-implementation--android--medium]] - Real-time alternatives to polling
 - [[q-battery-optimization--android--hard]] - Power-efficient background work

@@ -7,7 +7,9 @@ summary: Android mechanisms for executing work outside main thread
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, background-tasks, workmanager, performance]
+tags: [android, background-tasks, concept, performance, workmanager]
+date created: Thursday, October 30th 2025, 12:30:17 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

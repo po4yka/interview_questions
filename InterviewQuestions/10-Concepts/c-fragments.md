@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-122939
 title: Fragments / Фрагменты
-aliases: [Fragment, Android Fragment, Фрагменты, Фрагмент]
+aliases: [Android Fragment, Fragment, Фрагмент, Фрагменты]
 kind: concept
 summary: Reusable UI component with its own lifecycle, part of an Activity
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, fragments, ui, android-components]
+tags: [android, android-components, concept, fragments, ui]
+date created: Thursday, October 30th 2025, 12:30:09 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

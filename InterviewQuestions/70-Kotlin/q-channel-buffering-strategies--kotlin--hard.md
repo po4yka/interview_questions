@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - coroutines
-  - channels
   - buffering
-  - rendezvous
+  - channels
   - conflated
+  - coroutines
+  - rendezvous
 question_kind: theory
 difficulty: hard
 
@@ -23,14 +23,17 @@ source_note: Comprehensive guide on Channel buffering strategies
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-backpressure--kotlin--hard, q-actor-pattern--kotlin--hard, q-fan-in-fan-out--kotlin--hard]
+related: [q-actor-pattern--kotlin--hard, q-fan-in-fan-out--kotlin--hard, q-flow-backpressure--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, channels, buffering, rendezvous, conflated, unlimited, performance, difficulty/hard]
+tags: [buffering, channels, conflated, coroutines, difficulty/hard, kotlin, performance, rendezvous, unlimited]
+date created: Sunday, October 12th 2025, 3:16:28 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > What are channel buffering strategies in Kotlin? Explain RENDEZVOUS, BUFFERED, UNLIMITED, and CONFLATED channels and when to use each.
 
@@ -730,7 +733,7 @@ repeat(1_000_000) {
 - Максимальная пропускная способность
 - Использовать с крайней осторожностью
 
-### CONFLATED (Размер 1, сбрасывает старое)
+### CONFLATED (Размер 1, Сбрасывает старое)
 
 ```kotlin
 val channel = Channel<Int>(Channel.CONFLATED)
@@ -749,7 +752,7 @@ val latest = channel.receive() // Получит только 9
 - Важно только последнее значение
 - Постоянное использование памяти
 
-### Выбор стратегии буферизации
+### Выбор Стратегии Буферизации
 
 | Стратегия | Память | Скорость | Потеря данных | Случай использования |
 |-----------|--------|----------|---------------|---------------------|

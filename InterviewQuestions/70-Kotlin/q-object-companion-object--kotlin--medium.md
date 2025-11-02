@@ -1,7 +1,7 @@
 ---
 id: kotlin-143
 title: "Object Companion Object / Object и Companion Object"
-aliases: [Object, Companion Object, Singleton, Object Keyword, Companion]
+aliases: [Companion, Companion Object, Object, Object Keyword, Singleton]
 topic: kotlin
 subtopics: [classes, singleton]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-java-type-differences--programming-languages--medium, q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kotlin--hard]
+related: [q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kotlin--hard, q-kotlin-java-type-differences--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - object-keyword
-  - companion-object
-  - singleton
-  - classes
-  - difficulty/medium
+tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, singleton]
+date created: Friday, October 31st 2025, 6:29:55 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Что такое object / companion object?
+
+# Что Такое Object / Companion Object?
 
 # Question (EN)
 > What are `object` and `companion object` in Kotlin? What are their differences and use cases?
@@ -68,7 +65,7 @@ val user = User.create("Alice")
 
 `object` и `companion object` используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
 
-### object - одиночка (Singleton)
+### Object - Одиночка (Singleton)
 
 Используется для создания одиночного экземпляра класса, то есть реализации паттерна Singleton.
 
@@ -105,7 +102,7 @@ object Config {
 }
 ```
 
-### companion object - статические члены
+### Companion Object - Статические Члены
 
 Используется внутри класса и служит для объявления членов класса, доступных без создания экземпляра этого класса (аналогично статическим членам в Java).
 
@@ -128,7 +125,7 @@ val user2 = User.create("Bob")
 println(User.MAX_NAME_LENGTH)  // 50
 ```
 
-### Основные различия
+### Основные Различия
 
 | Aspect | object | companion object |
 |--------|--------|------------------|
@@ -137,9 +134,9 @@ println(User.MAX_NAME_LENGTH)  // 50
 | **Назначение** | Singleton | "Статические" члены |
 | **Количество** | Один на файл | Один на класс |
 
-### Примеры использования
+### Примеры Использования
 
-#### 1. Factory Pattern с companion object
+#### 1. Factory Pattern С Companion Object
 
 ```kotlin
 class DatabaseConnection private constructor(
@@ -166,7 +163,7 @@ val localDb = DatabaseConnection.createLocalConnection()
 val remoteDb = DatabaseConnection.createRemoteConnection("192.168.1.1")
 ```
 
-#### 2. Константы в companion object
+#### 2. Константы В Companion Object
 
 ```kotlin
 class HttpClient {
@@ -186,7 +183,7 @@ val timeout = HttpClient.DEFAULT_TIMEOUT
 val client = HttpClient.create()
 ```
 
-#### 3. object для утилит
+#### 3. Object Для Утилит
 
 ```kotlin
 object MathUtils {
@@ -208,7 +205,7 @@ val fact = MathUtils.factorial(5)  // 120
 val prime = MathUtils.isPrime(17)  // true
 ```
 
-#### 4. Anonymous objects
+#### 4. Anonymous Objects
 
 ```kotlin
 // Для одноразовых реализаций интерфейсов
@@ -222,7 +219,7 @@ button.setOnClickListener(object : View.OnClickListener {
 button.setOnClickListener { println("Button clicked") }
 ```
 
-### Расширение companion object
+### Расширение Companion Object
 
 ```kotlin
 class MyClass {

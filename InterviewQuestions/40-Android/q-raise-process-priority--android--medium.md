@@ -3,7 +3,7 @@ id: android-147
 title: "Raise Process Priority / Повышение приоритета процесса"
 aliases: ["Raise Process Priority", "Повышение приоритета процесса"]
 topic: android
-subtopics: [service, lifecycle, processes]
+subtopics: [lifecycle, processes, service]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,8 +14,11 @@ related: [q-network-operations-android--android--medium, q-what-events-are-activ
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/service, android/lifecycle, android/processes, foreground-service, lifecycle, process-priority, services, difficulty/medium]
+tags: [android/lifecycle, android/processes, android/service, difficulty/medium, foreground-service, lifecycle, process-priority, services]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
+
 # Вопрос (RU)
 
 > Можно ли поднять приоритет процесса в Android?
@@ -30,7 +33,7 @@ tags: [android/service, android/lifecycle, android/processes, foreground-service
 
 **Да**, можно поднять приоритет процесса используя **`startForeground()`** в сервисах. Это переводит сервис в режим **foreground service** с высоким приоритетом, защищая его от уничтожения системой при нехватке памяти.
 
-### Уровни приоритета процессов
+### Уровни Приоритета Процессов
 
 Android использует иерархию важности процессов для принятия решений об освобождении памяти:
 
@@ -82,7 +85,7 @@ class DownloadService : Service() {
 }
 ```
 
-### Запуск foreground service
+### Запуск Foreground Service
 
 ```kotlin
 // Android 8.0+ требует startForegroundService()
@@ -95,7 +98,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 **Важно:** На Android 8.0+ необходимо вызвать `startForeground()` в течение **5 секунд** после старта, иначе система убьёт сервис.
 
-### Когда использовать
+### Когда Использовать
 
 **✅ Используйте** foreground service для:
 - Воспроизведения музыки
@@ -107,7 +110,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 - Простых фоновых задач (используйте WorkManager)
 - Периодической синхронизации (используйте JobScheduler)
 
-### Другие способы влияния на приоритет
+### Другие Способы Влияния На Приоритет
 
 **Bound Service с foreground activity:**
 ```kotlin

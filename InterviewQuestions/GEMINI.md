@@ -1,6 +1,6 @@
 ---
 date created: Sunday, October 19th 2025, 11:19:33 am
-date modified: Saturday, October 25th 2025, 1:02:39 pm
+date modified: Saturday, November 1st 2025, 5:43:56 pm
 ---
 
 # Gemini CLI Agent Guide
@@ -163,19 +163,19 @@ List issues by file."
 
 ## File Reading/Writing
 
-### Read vault documentation
+### Read Vault Documentation
 ```bash
 gemini "Read 00-Administration/README.md and summarize YAML schema for Q&A notes."
 gemini "List all valid topics from 00-Administration/TAXONOMY.md."
 gemini "Show Android subtopics from TAXONOMY.md."
 ```
 
-### Read templates
+### Read Templates
 ```bash
 gemini "Show the Q&A template structure from _templates/_tpl-qna.md."
 ```
 
-### Read/analyze notes
+### Read/analyze Notes
 ```bash
 gemini "Read 20-Algorithms/q-two-sum--algorithms--easy.md and check if it follows all rules."
 gemini "List all notes in 40-Android/ with status=draft."
@@ -236,7 +236,7 @@ tags: [android/ui-compose, android/lifecycle, difficulty/medium]
 # Missing android/* tags
 ```
 
-### 5. Status = draft (for agent-created)
+### 5. Status = Draft (for agent-created)
 ```yaml
 # CORRECT
 status: draft  # Always for Gemini-created/modified notes
@@ -337,7 +337,7 @@ coding | theory | system-design | android
 en | ru
 ```
 
-### Status (Gemini always uses)
+### Status (Gemini Always uses)
 ```
 draft
 ```

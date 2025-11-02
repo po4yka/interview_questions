@@ -3,24 +3,22 @@ id: kotlin-195
 title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 aliases: [Equals, Hashcode, Object Comparison]
 topic: kotlin
-subtopics: [object-comparison, equality, collections]
+subtopics: [collections, equality, object-comparison]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-sealed-classes-purpose--programming-languages--medium, q-kotlin-when-expression--programming-languages--easy, q-kotlin-map-flatmap--kotlin--medium]
+related: [q-kotlin-map-flatmap--kotlin--medium, q-kotlin-sealed-classes-purpose--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - object-comparison
-  - hashmap
-  - equality
-  - difficulty/medium
+tags: [difficulty/medium, equality, hashmap, kotlin, object-comparison]
+date created: Friday, October 31st 2025, 6:29:04 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Зачем нужны методы equals и hashcode?
+
+# Зачем Нужны Методы Equals И Hashcode?
 
 # Question (EN)
 > Why are equals() and hashCode() methods needed in Kotlin/Java?
@@ -102,7 +100,7 @@ users[User("Alice", 30)] = "Engineer"
 println(users[User("Alice", 30)])  // "Engineer"
 ```
 
-### Контракт между equals() и hashCode()
+### Контракт Между equals() И hashCode()
 
 **Критически важно соблюдать**:
 
@@ -118,11 +116,11 @@ if (user1 == user2) {
 }
 ```
 
-2. **Если `a.equals(b)` возвращает false, hashCode() может быть одинаковым или разным**
+1. **Если `a.equals(b)` возвращает false, hashCode() может быть одинаковым или разным**
 
-3. **Если `a.hashCode() != b.hashCode()`, то `a.equals(b)` должен возвращать false**
+2. **Если `a.hashCode() != b.hashCode()`, то `a.equals(b)` должен возвращать false**
 
-### Проблемы при нарушении контракта
+### Проблемы При Нарушении Контракта
 
 **Неправильная реализация**:
 
@@ -165,7 +163,7 @@ data class User(val name: String, val age: Int)
 // equals() и hashCode() генерируются автоматически
 ```
 
-### Использование в коллекциях
+### Использование В Коллекциях
 
 ```kotlin
 data class User(val name: String, val age: Int)
@@ -185,5 +183,5 @@ println(userRoles[User("Alice", 30)])  // "Engineer"
 ## Related Questions
 
 - [[q-kotlin-sealed-classes-purpose--programming-languages--medium]]
-- [[q-kotlin-when-expression--programming-languages--easy]]
+-
 - [[q-kotlin-map-flatmap--kotlin--medium]]

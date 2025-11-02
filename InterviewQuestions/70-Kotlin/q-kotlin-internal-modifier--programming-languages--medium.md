@@ -3,7 +3,7 @@ id: lang-032
 title: "Kotlin Internal Modifier / Модификатор internal в Kotlin"
 aliases: [Kotlin Internal Modifier, Модификатор internal в Kotlin]
 topic: programming-languages
-subtopics: [type-system, access-control]
+subtopics: [access-control, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,13 +13,9 @@ moc: moc-kotlin
 related: [q-flow-completion-oncompletion--kotlin--medium, q-flow-exception-handling--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - access-modifiers
-  - internal
-  - module
-  - visibility
-  - difficulty/medium
+tags: [access-modifiers, difficulty/medium, internal, module, programming-languages, visibility]
+date created: Friday, October 31st 2025, 6:29:59 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Что Известно Про Internal?

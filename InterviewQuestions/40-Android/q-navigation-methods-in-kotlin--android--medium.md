@@ -1,22 +1,22 @@
 ---
 id: android-344
 title: "Navigation Methods In Kotlin / Методы навигации в Kotlin"
-aliases: [Navigation Methods, Методы навигации, Android Navigation]
+aliases: [Android Navigation, Navigation Methods, Методы навигации]
 topic: android
-subtopics: [ui-navigation, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-navigation-component, c-fragments, q-activity-navigation-how-it-works--android--medium]
+related: [c-fragments, c-navigation-component, q-activity-navigation-how-it-works--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/ui-navigation, android/architecture-mvvm, navigation, difficulty/medium]
+tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navigation]
 date created: Tuesday, October 28th 2025, 9:50:22 pm
-date modified: Thursday, October 30th 2025, 3:14:51 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

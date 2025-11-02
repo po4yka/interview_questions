@@ -3,7 +3,7 @@ id: android-105
 title: Анализ тормозов приложения Android / Android App Lag Analysis
 aliases: ["Android App Lag Analysis", "Анализ тормозов приложения Android"]
 topic: android
-subtopics: [performance-rendering, performance-memory, profiling]
+subtopics: [performance-memory, performance-rendering, profiling]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -11,24 +11,15 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-android-performance-measurement-tools--android--medium
-  - q-strictmode-debugging--android--medium
-  - q-compose-performance-optimization--android--hard
   - c-android-profiler
   - c-strictmode
+  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-13
 updated: 2025-10-29
 sources: []
-tags:
-  - android/performance-rendering
-  - android/performance-memory
-  - android/profiling
-  - lag
-  - fps
-  - ui-thread
-  - difficulty/medium
+tags: [android/performance-memory, android/performance-rendering, android/profiling, difficulty/medium, fps, lag, ui-thread]
 date created: Wednesday, October 29th 2025, 4:46:47 pm
-date modified: Thursday, October 30th 2025, 11:13:02 am
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -45,11 +36,11 @@ date modified: Thursday, October 30th 2025, 11:13:02 am
 
 ## Ответ (RU)
 
-### Причина лагов
+### Причина Лагов
 
 Лаги возникают когда рендеринг кадра превышает 16ms (60 FPS) или UI-поток блокирован. Основные причины: блокировка главного потока, утечки памяти, сложная иерархия View, неоптимизированные списки.
 
-### Блокировка главного потока
+### Блокировка Главного Потока
 
 ```kotlin
 // ❌ Синхронный вызов блокирует UI
@@ -73,7 +64,7 @@ fun loadData() {
 }
 ```
 
-### Утечки памяти
+### Утечки Памяти
 
 ```kotlin
 // ❌ Статическая ссылка на listener
@@ -89,7 +80,7 @@ lifecycleScope.launch {
 }
 ```
 
-### Оптимизация списков
+### Оптимизация Списков
 
 ```kotlin
 // ✅ RecyclerView с DiffUtil
@@ -102,7 +93,7 @@ val diff = DiffUtil.calculateDiff(ItemDiffCallback(oldList, newList))
 diff.dispatchUpdatesTo(adapter)
 ```
 
-### Инструменты диагностики
+### Инструменты Диагностики
 
 **1. Android Profiler** - CPU/Memory/Network анализ в реальном времени
 
@@ -124,7 +115,7 @@ StrictMode.setThreadPolicy(
 
 **5. Systrace/Perfetto** - детальный анализ системных вызовов
 
-### Алгоритм диагностики
+### Алгоритм Диагностики
 
 1. Включить GPU Profiling (Settings → Profile GPU Rendering)
 2. Запустить Android Profiler и записать сессию
@@ -252,8 +243,5 @@ StrictMode.setThreadPolicy(
 
 ### Related
 - [[q-performance-monitoring-jank-compose--android--medium]]
-- [[q-android-memory-profiler-analysis--android--medium]]
 
 ### Advanced
-- [[q-compose-performance-optimization--android--hard]]
-- [[q-android-baseline-profiles--android--hard]]

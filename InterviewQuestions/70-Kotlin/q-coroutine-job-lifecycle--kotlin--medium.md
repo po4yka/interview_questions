@@ -10,13 +10,16 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-10-31"
-tags: ["kotlin", "coroutines", "job", "lifecycle", "cancellation", "difficulty/medium"]
+tags: ["cancellation", "coroutines", "difficulty/medium", "job", "kotlin", "lifecycle"]
 description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
 moc: moc-kotlin
-related: [q-kotlin-properties--kotlin--easy, q-property-delegates--kotlin--medium, q-coroutine-context-explained--kotlin--medium]
+related: []
 subtopics: [coroutines, lifecycle]
+date created: Saturday, November 1st 2025, 1:28:34 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# What is a Job and its lifecycle in Kotlin coroutines?
+
+# What is a Job and Its Lifecycle in Kotlin Coroutines?
 
 ## English
 
@@ -719,7 +722,7 @@ fun jobEdgeCases() = runBlocking {
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 Понимание интерфейса Job и его жизненного цикла является фундаментальным для эффективной работы с корутинами Kotlin. Job представляет отменяемую задачу с жизненным циклом, который завершается её выполнением. Это один из ключевых элементов CoroutineContext. Какие существуют состояния Job, и как работают отношения родитель-потомок?
 
@@ -791,7 +794,7 @@ fun demonstrateJobStates() = runBlocking {
 }
 ```
 
-#### Полная диаграмма состояний
+#### Полная Диаграмма Состояний
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -838,7 +841,7 @@ fun Job.getDetailedState(): String {
 
 [Продолжение следует с полным переводом всех разделов...]
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Не создавайте ненужные Job**
 2. **Используйте invokeOnCompletion для очистки**
@@ -846,7 +849,7 @@ fun Job.getDetailedState(): String {
 4. **Используйте SupervisorJob когда уместно**
 5. **Не перехватывайте CancellationException**
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. Забывание о состоянии COMPLETING
 2. Не ожидание завершения потомков
@@ -875,8 +878,6 @@ fun Job.getDetailedState(): String {
 ## Related Questions
 
 - [[q-coroutine-supervisorjob-use-cases--kotlin--medium]]
-- [[q-coroutine-parent-child-relationship--kotlin--medium]]
 - [[q-coroutine-context-elements--kotlin--hard]]
 - [[q-coroutine-builders-comparison--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]
-- [[q-coroutine-cancellation--kotlin--medium]]

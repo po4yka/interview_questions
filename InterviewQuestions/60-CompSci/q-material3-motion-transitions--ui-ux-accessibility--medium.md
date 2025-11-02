@@ -14,9 +14,9 @@ related: [q-jetpack-compose-basics--android--medium, q-navigation-methods-in-and
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [design, material3, animation, transitions, motion, difficulty/medium]
+tags: [animation, design, difficulty/medium, material3, motion, transitions]
 date created: Tuesday, October 28th 2025, 9:36:31 pm
-date modified: Thursday, October 30th 2025, 3:12:59 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)
@@ -33,14 +33,14 @@ date modified: Thursday, October 30th 2025, 3:12:59 pm
 
 **Material 3 motion** создаёт осмысленные переходы, которые направляют пользователей. Движение обеспечивает ясность, эффективность и индивидуальность.
 
-### Принципы движения Material 3
+### Принципы Движения Material 3
 
 1. **Informative** - Направляет внимание и показывает связи между элементами
 2. **Focused** - Направляет к одной фокальной точке, избегая отвлечения
 3. **Expressive** - Добавляет индивидуальность и полированность
 4. **Practical** - Улучшает юзабилити без излишеств
 
-### Стандартные длительности
+### Стандартные Длительности
 
 Material 3 определяет стандартные длительности для согласованности:
 
@@ -52,7 +52,7 @@ Material 3 определяет стандартные длительности 
 | **400ms** | Сложные переходы | Переходы между экранами |
 | **500ms+** | Подчёркнутые переходы | Большие расширения |
 
-### Базовые переходы
+### Базовые Переходы
 
 **Fade transition:**
 
@@ -193,7 +193,7 @@ fun PredictiveBackExample() {
 }
 ```
 
-### Переходы навигации
+### Переходы Навигации
 
 ```kotlin
 @Composable
@@ -222,7 +222,7 @@ fun NavigationWithTransitions() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 // ✅ Правильно: стандартные длительности

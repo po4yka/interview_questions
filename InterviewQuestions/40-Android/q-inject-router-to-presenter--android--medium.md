@@ -1,7 +1,7 @@
 ---
 id: android-215
 title: "Inject Router To Presenter / Инъекция Router в Presenter"
-aliases: ["Inject Router To Presenter", "Инъекция Router в Presenter", "Router DI", "Инъекция роутера"]
+aliases: ["Inject Router To Presenter", "Router DI", "Инъекция Router в Presenter", "Инъекция роутера"]
 topic: android
 subtopics: [architecture-mvi, di-hilt, di-koin]
 question_kind: android
@@ -13,7 +13,9 @@ moc: moc-android
 related: [q-play-feature-delivery--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-injection, router, navigation, difficulty/medium]
+tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-injection, difficulty/medium, navigation, router]
+date created: Saturday, November 1st 2025, 12:46:55 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -316,7 +318,7 @@ class Presenter @Inject constructor(private val navController: NavController)
 
 - [[c-dependency-injection]] — DI principles
 - [[c-navigation-component]] — Android Navigation Component
-- [[c-mvp-pattern]] — Presenter pattern
+- [[c-mvvm-pattern]] — Presenter pattern
 - [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Koin Documentation](https://insert-koin.io/)
 - [Navigation Component Guide](https://developer.android.com/guide/navigation)

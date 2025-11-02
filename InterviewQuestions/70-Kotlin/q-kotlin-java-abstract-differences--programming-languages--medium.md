@@ -3,26 +3,22 @@ id: lang-014
 title: "Kotlin Java Abstract Differences / Различия abstract в Kotlin и Java"
 aliases: [Kotlin Java Abstract Differences, Различия abstract в Kotlin и Java]
 topic: programming-languages
-subtopics: [type-system, inheritance]
+subtopics: [inheritance, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-structured-concurrency-patterns--kotlin--hard, q-prohibit-object-creation--programming-languages--easy, q-by-keyword-function-call--programming-languages--easy]
+related: [q-structured-concurrency-patterns--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - abstract
-  - inheritance
-  - java
-  - oop
-  - open
-  - difficulty/medium
+tags: [abstract, difficulty/medium, inheritance, java, oop, open, programming-languages]
+date created: Friday, October 31st 2025, 6:30:00 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какое главное отличие между Java и Kotlin касательно абстрактных классов и методов?
+
+# Какое Главное Отличие Между Java И Kotlin Касательно Абстрактных Классов И Методов?
 
 **English**: What is the main difference between Java and Kotlin regarding abstract classes and methods?
 
@@ -122,5 +118,5 @@ abstract class Animal {
 ## Related Questions
 
 - [[q-structured-concurrency-patterns--kotlin--hard]]
-- [[q-prohibit-object-creation--programming-languages--easy]]
-- [[q-by-keyword-function-call--programming-languages--easy]]
+-
+-

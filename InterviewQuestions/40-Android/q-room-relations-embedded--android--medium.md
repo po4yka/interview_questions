@@ -5,7 +5,7 @@ aliases: ["Room Relations and Embedded", "Отношения и Embedded в Room
 
 # Classification
 topic: android
-subtopics: [room, architecture-clean]
+subtopics: [architecture-clean, room]
 question_kind: theory
 difficulty: medium
 
@@ -17,15 +17,18 @@ sources: []
 # Workflow
 status: draft
 moc: moc-android
-related: [c-room-database, c-database-relations, q-room-transactions-dao--room--medium]
+related: [c-database-relations, c-room-database]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags
-tags: [android/room, android/architecture-clean, database, relations, embedded, difficulty/medium]
+tags: [android/architecture-clean, android/room, database, difficulty/medium, embedded, relations]
+date created: Saturday, November 1st 2025, 1:04:43 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
+
 # Вопрос (RU)
 
 > Как реализовать связи между сущностями в Room Database? Объясни использование `@Relation` для отношений один-ко-многим и многие-ко-многим, а также `@Embedded` для встраивания объектов в одну таблицу.
@@ -40,7 +43,7 @@ tags: [android/room, android/architecture-clean, database, relations, embedded, 
 
 Room предоставляет два механизма для работы с связями: `@Embedded` для встраивания объектов в одну таблицу и `@Relation` для моделирования связей между отдельными сущностями.
 
-### @Embedded — Встраивание объектов
+### @Embedded — Встраивание Объектов
 
 `@Embedded` позволяет встроить поля объекта непосредственно в таблицу, избегая создания отдельных таблиц или JSON-сериализации.
 
@@ -70,7 +73,7 @@ data class Store(
 )
 ```
 
-### @Relation — Связи между сущностями
+### @Relation — Связи Между Сущностями
 
 **Один-ко-многим**:
 
@@ -159,7 +162,7 @@ interface EnrollmentDao {
 }
 ```
 
-### Ключевые принципы
+### Ключевые Принципы
 
 1. **Foreign Keys обязательны**: Гарантируют целостность данных на уровне БД
 2. **Индексы критичны**: Индексируйте все внешние ключи (иначе JOIN будет медленным)
@@ -342,12 +345,12 @@ interface EnrollmentDao {
 - [[q-sharedpreferences-commit-vs-apply--android--easy]] — Alternative storage options
 
 ### Related (Same Level)
-- [[q-room-transactions-dao--room--medium]] — Transaction handling in Room
-- [[q-room-type-converters-advanced--room--medium]] — Converting complex types
+- [[q-room-transactions-dao--android--medium]] — Transaction handling in Room
+- [[q-room-type-converters-advanced--android--medium]] — Converting complex types
 - [[q-room-code-generation-timing--android--medium]] — Room annotation processing
 - [[q-room-vs-sqlite--android--medium]] — Room vs raw SQLite comparison
 
 ### Advanced (Harder)
-- [[q-room-fts-full-text-search--room--hard]] — Full-text search in Room
+- [[q-room-fts-full-text-search--android--hard]] — Full-text search in Room
 - [[q-room-paging3-integration--room--hard]] — Integrating Room with Paging 3
 - [[q-room-multidb-sharding--room--hard]] — Multi-database architecture

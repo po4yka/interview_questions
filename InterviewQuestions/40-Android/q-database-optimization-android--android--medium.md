@@ -16,7 +16,7 @@ updated: 2025-10-27
 tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, sql]
 sources: [https://developer.android.com/training/data-storage/room]
 date created: Monday, October 27th 2025, 10:27:30 pm
-date modified: Thursday, October 30th 2025, 12:47:36 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -262,9 +262,9 @@ class UserRepository @Inject constructor(
 
 ### Related (Same Level)
 - [[q-room-vs-sqlite--android--medium]] - Room vs raw SQLite comparison
-- [[q-room-database-migrations--room--medium]] - Handling schema changes
+- [[q-room-database-migrations--android--medium]] - Handling schema changes
 - [[q-performance-optimization-android--android--medium]] - General Android performance
 
 ### Advanced
-- [[q-room-fts-full-text-search--room--hard]] - Full-text search implementation
-- [[q-room-paging3-integration--room--medium]] - Efficient pagination patterns
+- [[q-room-fts-full-text-search--android--hard]] - Full-text search implementation
+- [[q-room-paging3-integration--android--medium]] - Efficient pagination patterns

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [generics, star-projection, variance, type-safety]
+subtopics: [generics, star-projection, type-safety, variance]
 question_kind: theory
 difficulty: hard
 
@@ -24,8 +24,11 @@ related: [q-kotlin-generics--kotlin--hard, q-kotlin-type-system--kotlin--medium,
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, generics, star-projection, variance, type-safety, difficulty/hard]
+tags: [difficulty/hard, generics, kotlin, star-projection, type-safety, variance]
+date created: Saturday, October 18th 2025, 3:06:33 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What is the difference between `*` (star projection) and `Any` in Kotlin generics?
 # Вопрос (RU)
@@ -175,13 +178,13 @@ List<Any>  // Can read Any, can write Any
 
 ## Ответ (RU)
 
-### Краткое изложение
+### Краткое Изложение
 
 `MutableList<*>` представляет список **чего-то неизвестного** - нельзя добавлять, но можно читать как `Any?`.
 
 `MutableList<Any>` представляет список, который может содержать **любые типы вместе** - можно добавлять любой объект и читать как `Any`.
 
-### Звездная проекция (`*`)
+### Звездная Проекция (`*`)
 
 Тип `MutableList<*>` представляет список чего-то (точно не знаете чего). Поскольку тип неизвестен:
 - **Нельзя добавлять** ничего (кроме null) - компилятор не может проверить типобезопасность
@@ -189,11 +192,11 @@ List<Any>  // Can read Any, can write Any
 
 `List<*>` может содержать объекты **любого типа, но только этого одного типа**.
 
-### Any в обобщениях
+### Any В Обобщениях
 
 `List<Any>` может содержать **разные типы вместе** - String, Int и что угодно еще, все в одном списке.
 
-### Детальный пример
+### Детальный Пример
 
 ```kotlin
 class Crate<T> {
@@ -204,7 +207,7 @@ class Crate<T> {
 }
 ```
 
-#### Звездная проекция: не производитель, не потребитель
+#### Звездная Проекция: Не Производитель, Не Потребитель
 
 ```kotlin
 fun useAsStar(star: Crate<*>) {
@@ -219,7 +222,7 @@ fun useAsStar(star: Crate<*>) {
 }
 ```
 
-#### Any: может производить и потреблять
+#### Any: Может Производить И Потреблять
 
 ```kotlin
 fun useAsAny(any: Crate<Any>) {
@@ -235,7 +238,7 @@ fun useAsAny(any: Crate<Any>) {
 }
 ```
 
-### Когда что использовать
+### Когда Что Использовать
 
 **Используйте `List<*>` когда**:
 - Не знаете или не важен точный тип

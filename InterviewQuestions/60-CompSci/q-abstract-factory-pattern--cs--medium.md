@@ -3,18 +3,20 @@ id: cs-030
 title: "Abstract Factory Pattern / Abstract Factory Паттерн"
 aliases: ["Abstract Factory Pattern", "Паттерн Abstract Factory"]
 topic: cs
-subtopics: [design-patterns, creational-patterns, factory]
+subtopics: [creational-patterns, design-patterns, factory]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-factory-method-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium, q-design-patterns-fundamentals--software-engineering--hard]
+related: [c-builder-pattern, c-design-patterns, c-factory-pattern]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [abstract-factory, creational-patterns, design-patterns, factory, gof-patterns, difficulty/medium]
+tags: [abstract-factory, creational-patterns, design-patterns, difficulty/medium, factory, gof-patterns]
 sources: [https://refactoring.guru/design-patterns/abstract-factory]
+date created: Saturday, November 1st 2025, 1:26:52 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

@@ -16,7 +16,7 @@ updated: 2025-01-27
 tags: [android, android/broadcast-receiver, android/lifecycle, difficulty/medium]
 sources: []
 date created: Monday, October 27th 2025, 5:05:25 pm
-date modified: Thursday, October 30th 2025, 2:17:32 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ How to register BroadcastReceiver to receive messages?
 
 Существует **два способа** регистрации [[c-broadcast-receiver|BroadcastReceiver]]:
 
-### 1. Динамическая регистрация (Runtime)
+### 1. Динамическая Регистрация (Runtime)
 
 Регистрируется программно через IntentFilter:
 
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 - Требует явной отмены регистрации
 - Не работает когда приложение закрыто
 
-### 2. Статическая регистрация (Manifest)
+### 2. Статическая Регистрация (Manifest)
 
 Регистрируется в AndroidManifest.xml:
 
@@ -105,7 +105,7 @@ class BootReceiver : BroadcastReceiver() {
 - Ограничения с Android 8+ для implicit broadcasts
 - Всегда в памяти
 
-### Современные альтернативы
+### Современные Альтернативы
 
 ```kotlin
 // ❌ Устарело: LocalBroadcastManager

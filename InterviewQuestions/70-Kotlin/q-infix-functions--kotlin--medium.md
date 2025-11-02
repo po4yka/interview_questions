@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [infix, functions, syntax, operators]
+subtopics: [functions, infix, operators, syntax]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-operator-overloading--kotlin--medium, q-kotlin-extension-functions--kotlin--medium, q-kotlin-dsl-creation--kotlin--hard]
+related: [q-kotlin-dsl-creation--kotlin--hard, q-kotlin-extension-functions--kotlin--medium, q-kotlin-operator-overloading--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-18
 
-tags: [kotlin, infix, functions, syntax, operators, difficulty/medium]
+tags: [difficulty/medium, functions, infix, kotlin, operators, syntax]
+date created: Saturday, October 18th 2025, 3:06:33 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What are infix functions in Kotlin?
 # Вопрос (RU)
@@ -91,7 +94,7 @@ if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.admin) {
 
 ### Important Rules
 
-#### Must use `this` explicitly
+#### Must Use `this` Explicitly
 
 ```kotlin
 class MyStringCollection {
@@ -169,23 +172,23 @@ infix fun Int.shl(x: Int): Int { ... }
 1.shl(2)
 ```
 
-### Частые примеры
+### Частые Примеры
 
-#### 1. Создание пар с `to`
+#### 1. Создание Пар С `to`
 
 ```kotlin
 val pair = 1 to "apple"  // Инфиксный
 val pair = 1.to("apple")  // Обычный
 ```
 
-#### 2. Побитовые операции
+#### 2. Побитовые Операции
 
 ```kotlin
 val color = 0x123456
 val red = (color and 0xff0000) shr 16
 ```
 
-#### 3. Булевы операции
+#### 3. Булевы Операции
 
 ```kotlin
 if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.admin) {

@@ -3,20 +3,20 @@ id: android-297
 title: Android Runtime (ART) / Android Runtime (ART)
 aliases: ["Android Runtime (ART)", "АРТ"]
 topic: android
-subtopics: [processes, performance-memory]
+subtopics: [performance-memory, processes]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium, q-android-build-optimization--android--medium]
+related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/processes, android/performance-memory, runtime, compilation, gc, difficulty/medium]
+tags: [android/performance-memory, android/processes, compilation, difficulty/medium, gc, runtime]
 sources: []
 date created: Thursday, October 30th 2025, 11:26:48 am
-date modified: Thursday, October 30th 2025, 12:42:57 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:42:57 pm
 
 **Android Runtime (ART)** — среда выполнения приложений Android, отвечающая за компиляцию, запуск кода и управление памятью. ART заменил Dalvik VM и использует гибридную компиляцию для оптимального баланса производительности и размера приложения.
 
-### Гибридная компиляция
+### Гибридная Компиляция
 
 ```kotlin
 // ✅ Установка: базовый профиль → быстрая установка
@@ -51,7 +51,7 @@ class ColdPath {
 2. **Выполнение** — JIT профилирование активного кода
 3. **Фоновая оптимизация** — полная AOT-компиляция при зарядке и бездействии
 
-### Улучшенная сборка мусора
+### Улучшенная Сборка Мусора
 
 ```kotlin
 // ✅ Concurrent copying GC минимизирует паузы
@@ -67,7 +67,7 @@ class MemoryExample {
 // ❌ В Dalvik: stop-the-world паузы замораживали UI
 ```
 
-### DEX формат
+### DEX Формат
 
 ```kotlin
 // ✅ DEX: все классы в одном контейнере
@@ -82,7 +82,7 @@ val dexFormat = """
 // ❌ Java bytecode: отдельный .class для каждого класса
 ```
 
-### ART vs Dalvik
+### ART Vs Dalvik
 
 | Характеристика | Dalvik | ART |
 |----------------|--------|-----|
@@ -92,7 +92,7 @@ val dexFormat = """
 | GC | Mark-and-sweep (паузы) | Concurrent copying (параллельная) |
 | Батарея | Больше расход (постоянная JIT) | Меньше расход |
 
-### Проверка runtime
+### Проверка Runtime
 
 ```kotlin
 fun detectRuntime(): String {
@@ -165,7 +165,7 @@ val dexFormat = """
 // ❌ Java bytecode: separate .class for each class
 ```
 
-### ART vs Dalvik
+### ART Vs Dalvik
 
 | Feature | Dalvik | ART |
 |---------|--------|-----|
@@ -218,5 +218,5 @@ class CriticalPath {
 - [[q-android-build-optimization--android--medium]]
 
 ### Advanced
-- [[q-android-memory-leaks--android--hard]]
-- [[q-r8-proguard-optimization--android--hard]]
+
+

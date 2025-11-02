@@ -1,7 +1,7 @@
 ---
 id: kotlin-113
 title: "Sealed classes vs sealed interfaces in Kotlin / Sealed классы vs интерфейсы"
-aliases: [Sealed Classes, Sealed Interfaces, Polymorphism, Sealed в Kotlin]
+aliases: [Polymorphism, Sealed Classes, Sealed Interfaces, Sealed в Kotlin]
 topic: kotlin
 subtopics: [classes, polymorphism, sealed-classes]
 question_kind: theory
@@ -13,16 +13,12 @@ moc: moc-kotlin
 related: [q-advanced-coroutine-patterns--kotlin--hard, q-kotlin-enum-classes--kotlin--easy, q-star-projection-vs-any-generics--kotlin--hard]
 created: 2025-10-12
 updated: 2025-10-31
-tags:
-  - kotlin
-  - classes
-  - sealed-classes
-  - sealed-interfaces
-  - polymorphism
-  - when-expression
-  - difficulty/medium
+tags: [classes, difficulty/medium, kotlin, polymorphism, sealed-classes, sealed-interfaces, when-expression]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# Sealed classes vs sealed interfaces in Kotlin
+
+# Sealed Classes Vs Sealed Interfaces in Kotlin
 
 ## English
 
@@ -69,7 +65,7 @@ sealed interface Refreshable
 data class Content(val items: List<String>) : UiState, Loadable, Refreshable
 ```
 
-#### Sealed Class vs Sealed Interface
+#### Sealed Class Vs Sealed Interface
 
 ```kotlin
 // Sealed class: single inheritance
@@ -123,7 +119,7 @@ fun calculate(initial: Int, operations: List<Operation>): Int {
 }
 ```
 
-#### Sealed vs Enum
+#### Sealed Vs Enum
 
 ```kotlin
 // Enum: Fixed set of constants
@@ -188,7 +184,7 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 Sealed классы и sealed интерфейсы ограничивают иерархии классов, обеспечивая exhaustive when выражения. В чем их различия, случаи использования, и как они соотносятся с enum?
 
@@ -196,7 +192,7 @@ Sealed классы и sealed интерфейсы ограничивают ие
 
 **Sealed классы** и **sealed интерфейсы** определяют ограниченные иерархии классов, где все подклассы должны быть объявлены в том же пакете и модуле. Они позволяют компилятору проверять полноту when выражений.
 
-#### Базовый sealed класс
+#### Базовый Sealed Класс
 
 ```kotlin
 sealed class Result<out T> {
@@ -215,7 +211,7 @@ fun handleResult(result: Result<String>) {
 }
 ```
 
-#### Sealed интерфейс (Kotlin 1.5+)
+#### Sealed Интерфейс (Kotlin 1.5+)
 
 ```kotlin
 sealed interface UiState
@@ -231,7 +227,7 @@ sealed interface Refreshable
 data class Content(val items: List<String>) : UiState, Loadable, Refreshable
 ```
 
-#### Sealed класс vs Sealed интерфейс
+#### Sealed Класс Vs Sealed Интерфейс
 
 ```kotlin
 // Sealed класс: одиночное наследование
@@ -260,7 +256,7 @@ data class Card(val content: String) : Clickable, Swipeable {
 }
 ```
 
-#### Exhaustive when выражение
+#### Exhaustive when Выражение
 
 ```kotlin
 sealed class Operation {
@@ -285,7 +281,7 @@ fun calculate(initial: Int, operations: List<Operation>): Int {
 }
 ```
 
-#### Sealed vs Enum
+#### Sealed Vs Enum
 
 ```kotlin
 // Enum: Фиксированный набор констант
@@ -310,7 +306,7 @@ sealed class Result {
 // Enum для простых случаев, Sealed для сложных иерархий
 ```
 
-#### Вложенные иерархии
+#### Вложенные Иерархии
 
 ```kotlin
 sealed class NetworkResult<out T> {
@@ -338,7 +334,7 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте sealed классы для ограниченных иерархий**
    - Когда нужно представить фиксированный набор типов
@@ -360,7 +356,7 @@ fun handleNetworkResult(result: NetworkResult<String>) {
    - Облегчает понимание всех возможных подтипов
    - Улучшает читаемость кода
 
-### Ключевые различия
+### Ключевые Различия
 
 | Аспект | Sealed класс | Sealed интерфейс | Enum |
 |--------|--------------|------------------|------|
@@ -370,7 +366,7 @@ fun handleNetworkResult(result: NetworkResult<String>) {
 | **Exhaustive when** | Да | Да | Да |
 | **Версия Kotlin** | 1.0+ | 1.5+ | 1.0+ |
 
-### Краткое резюме
+### Краткое Резюме
 
 **Sealed классы и интерфейсы** ограничивают иерархии классов, обеспечивая:
 - Exhaustive when выражения (компилятор проверяет полноту)

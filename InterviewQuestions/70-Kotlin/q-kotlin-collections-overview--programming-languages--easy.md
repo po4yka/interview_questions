@@ -3,21 +3,22 @@ id: lang-002
 title: "Kotlin Collections Overview / Обзор коллекций Kotlin"
 aliases: []
 topic: programming-languages
-subtopics: [functions, class-features, java-interop]
+subtopics: [class-features, functions, java-interop]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-supervisor-scope-vs-coroutine-scope--kotlin--medium, q-nothing-instances--programming-languages--easy, q-lambdas-java-kotlin-syntax--programming-languages--medium]
+related: [q-lambdas-java-kotlin-syntax--programming-languages--medium, q-nothing-instances--programming-languages--easy, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Saturday, October 18th 2025, 9:35:30 am
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какие коллекции знаешь?
+
+# Какие Коллекции Знаешь?
 
 # Question (EN)
 > What collections do you know?
@@ -68,17 +69,17 @@ val mutableMap = mutableMapOf("key" to "value")
 
 В Kotlin есть **неизменяемые (read-only)** и **изменяемые** коллекции:
 
-### Неизменяемые коллекции (Read-only интерфейсы)
+### Неизменяемые Коллекции (Read-only интерфейсы)
 - **List** - упорядоченная коллекция, допускающая дубликаты
 - **Set** - неупорядоченная коллекция уникальных элементов
 - **Map** - пары ключ-значение с уникальными ключами
 
-### Изменяемые коллекции
+### Изменяемые Коллекции
 - **MutableList** - можно добавлять/удалять элементы
 - **MutableSet** - можно добавлять/удалять уникальные элементы
 - **MutableMap** - можно добавлять/удалять пары ключ-значение
 
-### Специализированные реализации
+### Специализированные Реализации
 - **ArrayList** - реализация MutableList на основе динамического массива
 - **LinkedList** - реализация на основе двусвязного списка
 - **HashSet** - реализация MutableSet на основе хеш-таблицы
@@ -105,12 +106,12 @@ val mutableMap = mutableMapOf("key" to "value")
 ## Related Questions
 
 ### Android Implementation
-- [[q-kak-izmenit-kolichestvo-kolonok-v-recyclerview-v-zavisimosti-ot-orientatsii--programming-languages--easy]] - Data Structures
+-  - Data Structures
 
 ### Kotlin Language Features
 - [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures
-- [[q-collection-implementations--programming-languages--easy]] - Data Structures
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
-- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
+-  - Data Structures
+-  - Data Structures
+-  - Data Structures
 - [[q-kotlin-collections--kotlin--medium]] - Data Structures
 - [[q-kotlin-collections--kotlin--easy]] - Data Structures

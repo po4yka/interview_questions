@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-sliding-window, c-two-pointers, q-sorting-algorithms-comparison--algorithms--medium]
+related: [c-sliding-window, c-two-pointers]
 created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, array, difficulty/medium, optimization, sliding-window, two-pointers]
 sources: [https://en.wikipedia.org/wiki/Two_pointer_technique]
 date created: Sunday, October 12th 2025, 10:29:05 pm
-date modified: Saturday, October 25th 2025, 5:50:29 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -345,12 +345,9 @@ fun minWindow(s: String, t: String): String {
 
 ### Prerequisites (Easier)
 - [[q-data-structures-overview--algorithms--easy]] - Data structures basics
-- [[q-array-basics--algorithms--easy]] - Array fundamentals
 
 ### Related (Same Level)
 - [[q-sorting-algorithms-comparison--algorithms--medium]] - Sorting algorithms
 - [[q-binary-search-variants--algorithms--medium]] - Search algorithms
 
 ### Advanced (Harder)
-- [[q-graph-algorithms-bfs-dfs--algorithms--hard]] - Graph algorithms
-- [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP algorithms

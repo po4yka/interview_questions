@@ -4,7 +4,7 @@ title: "Version Control Systems / Системы контроля версий"
 aliases: []
 summary: ""
 topic: "cs"
-subtopics: ["vcs", "git", "version-control"]
+subtopics: ["git", "vcs", "version-control"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "vcs", "git", "version-control", "collaboration", "difficulty/medium"]
+tags: ["collaboration", "concept", "difficulty/medium", "git", "vcs", "version-control"]
+date created: Sunday, October 12th 2025, 2:37:10 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

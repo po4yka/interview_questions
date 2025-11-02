@@ -11,26 +11,14 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - dispatchers
-  - main
-  - immediate
-  - performance
-  - android
-  - ui-thread
-  - optimization
-  - difficulty/medium
+tags: [android, coroutines, difficulty/medium, dispatchers, immediate, kotlin, main, optimization, performance, ui-thread]
 moc: moc-kotlin
-related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy, q-kotlin-non-inheritable-class--programming-languages--easy]
-  - coroutines
-  - dispatchers
-  - main
-  - performance
-  - android
+related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-visibility-modifiers--kotlin--easy]
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# Dispatchers.Main.immediate vs Dispatchers.Main
+
+# Dispatchers.Main.immediate Vs Dispatchers.Main
 
 ## English
 
@@ -571,7 +559,7 @@ fun onButtonClick() {
 }
 ```
 
-#### 9. Testing Main vs Main.immediate
+#### 9. Testing Main Vs Main.immediate
 
 **Unit test setup:**
 
@@ -753,9 +741,9 @@ lifecycleScope.launch(Dispatchers.Main) {
 ```
 
 ### Related Questions
-- [[q-dispatchers-basics--kotlin--medium]] - Dispatcher fundamentals
-- [[q-coroutine-context--kotlin--medium]] - Coroutine context
-- [[q-android-lifecycle-coroutines--kotlin--medium]] - Android lifecycle integration
+-  - Dispatcher fundamentals
+-  - Coroutine context
+-  - Android lifecycle integration
 - [[q-flow-basics--kotlin--easy]] - Flow fundamentals
 
 ## Follow-ups
@@ -785,13 +773,13 @@ lifecycleScope.launch(Dispatchers.Main) {
 
 *(Продолжение следует той же структуре с подробными примерами разницы Main и Main.immediate, случаев использования, production примеров, performance measurements, testing и best practices на русском языке)*
 
-### Связанные вопросы
-- [[q-dispatchers-basics--kotlin--medium]] - Основы диспетчеров
-- [[q-coroutine-context--kotlin--medium]] - Контекст корутины
-- [[q-android-lifecycle-coroutines--kotlin--medium]] - Интеграция с Android lifecycle
+### Связанные Вопросы
+-  - Основы диспетчеров
+-  - Контекст корутины
+-  - Интеграция с Android lifecycle
 - [[q-flow-basics--kotlin--easy]] - Основы Flow
 
-### Дополнительные вопросы
+### Дополнительные Вопросы
 1. Какой реальный механизм позволяет Main.immediate проверить, находится ли он уже на главном потоке?
 2. Какое улучшение производительности можно ожидать от использования Main.immediate в типичном Android приложении?
 3. Когда использование Main.immediate может навредить производительности вместо того, чтобы помочь?

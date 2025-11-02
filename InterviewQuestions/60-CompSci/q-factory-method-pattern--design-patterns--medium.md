@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-design-patterns
-related: [c-design-patterns, q-abstract-factory-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium]
+related: [c-design-patterns]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [design-patterns, gof-patterns, creational-patterns, factory, factory-method, difficulty/medium]
+tags: [creational-patterns, design-patterns, difficulty/medium, factory, factory-method, gof-patterns]
+date created: Saturday, November 1st 2025, 1:02:43 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Factory Method Pattern
@@ -385,13 +387,8 @@ sealed class Result<out T> {
 - [[q-design-patterns-types--design-patterns--medium]] - Design pattern categories overview
 
 ### Creational Patterns
-- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
-- [[q-builder-pattern--design-patterns--medium]] - Builder pattern
-- [[q-prototype-pattern--design-patterns--medium]] - Prototype pattern
 
 ### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter pattern
 
 ### Behavioral Patterns
-- [[q-strategy-pattern--design-patterns--medium]] - Strategy pattern
 

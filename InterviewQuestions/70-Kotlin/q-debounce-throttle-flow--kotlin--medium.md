@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, debounce, throttle, operators]
+subtopics: [debounce, flow, operators, throttle]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-suspend-functions-deep-dive--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
+related: [q-object-singleton-companion--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard, q-suspend-functions-deep-dive--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, flow, debounce, throttle, operators, difficulty/medium]
+tags: [debounce, difficulty/medium, flow, kotlin, operators, throttle]
+date created: Thursday, October 16th 2025, 4:20:35 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What is the difference between debounce and throttle in Kotlin Flow? When to use each?
 # Вопрос (RU)
@@ -52,7 +55,7 @@ throttle(500ms): Emits first, then pauses
         (Emits first, ignores for 500ms)
 ```
 
-### debounce - Wait for Quiet Period
+### Debounce - Wait for Quiet Period
 
 **Emits value only after specified time has passed without new emissions.**
 
@@ -72,7 +75,7 @@ searchQuery
 3. Timer completes → Emit latest value
 4. Repeat
 
-### debounce Use Cases
+### Debounce Use Cases
 
 **1. Search/Autocomplete**
 
@@ -131,7 +134,7 @@ class EditorViewModel : ViewModel() {
 }
 ```
 
-### throttle - Rate Limiting
+### Throttle - Rate Limiting
 
 **Emits first value, then ignores subsequent values for specified time.**
 
@@ -157,7 +160,7 @@ fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
 4. Window ends → Next value emits
 5. Repeat
 
-### throttle Use Cases
+### Throttle Use Cases
 
 **1. Button Click Prevention (debouncing clicks)**
 
@@ -301,7 +304,7 @@ fun <T> Flow<T>.debounceImmediate(timeoutMillis: Long): Flow<T> = flow {
 }
 ```
 
-### Combining debounce and throttle
+### Combining Debounce and Throttle
 
 **Example: Smart search with both**
 
@@ -430,7 +433,7 @@ searchQuery
 
 **Debounce** и **throttle** — операторы основанные на времени, которые контролируют частоту эмиссий из Flow, но работают по-разному.
 
-### Визуальное сравнение
+### Визуальное Сравнение
 
 ```
 Вход:  A----B-C---D------E-F-G--------H
@@ -445,7 +448,7 @@ throttle(500мс): Эмитит первый, затем пауза
        (Эмитит первый, игнорирует 500мс)
 ```
 
-### debounce - Ожидание периода тишины
+### Debounce - Ожидание Периода Тишины
 
 **Эмитит значение только после того как прошло указанное время без новых эмиссий.**
 
@@ -465,7 +468,7 @@ searchQuery
 3. Таймер завершается → Эмитится последнее значение
 4. Повтор
 
-### Применение debounce
+### Применение Debounce
 
 **1. Поиск/Автозаполнение**
 
@@ -520,7 +523,7 @@ class EditorViewModel : ViewModel() {
 }
 ```
 
-### throttle - Ограничение частоты
+### Throttle - Ограничение Частоты
 
 **Эмитит первое значение, затем игнорирует последующие значения на указанное время.**
 
@@ -539,7 +542,7 @@ fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
 }
 ```
 
-### Применение throttle
+### Применение Throttle
 
 **1. Предотвращение кликов по кнопке**
 
@@ -580,7 +583,7 @@ class LocationService {
 }
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Функция | debounce | throttle |
 |---------|----------|----------|
@@ -590,7 +593,7 @@ class LocationService {
 | **Пример** | Ввод поиска | Клики по кнопке |
 | **Задержка** | После последнего события | После первого события |
 
-### Сравнение в реальном мире
+### Сравнение В Реальном Мире
 
 **Ввод поиска (предпочтителен debounce):**
 
@@ -619,7 +622,7 @@ class LocationService {
 // → Ждет 500мс после ПОСЛЕДНЕГО клика → обрабатывает слишком поздно BAD
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Выбирайте подходящий таймаут:**
 
@@ -644,7 +647,7 @@ searchQuery
     .flatMapLatest { search(it) }
 ```
 
-### Продвинутые реализации
+### Продвинутые Реализации
 
 **Пользовательский throttleLast (эмитит последнее значение в окне):**
 
@@ -691,7 +694,7 @@ fun <T> Flow<T>.debounceImmediate(timeoutMillis: Long): Flow<T> = flow {
 }
 ```
 
-### Комбинирование debounce и throttle
+### Комбинирование Debounce И Throttle
 
 **Пример: Умный поиск с обоими**
 
@@ -709,7 +712,7 @@ class SmartSearchViewModel : ViewModel() {
 }
 ```
 
-### Соображения производительности
+### Соображения Производительности
 
 **debounce - Эффективность по памяти:**
 
@@ -789,7 +792,7 @@ fun `throttle should emit first value and ignore subsequent`() = runTest {
 ### Related (Medium)
 - [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
+-  - Flow
 - [[q-flow-operators--kotlin--medium]] - Flow
 
 ### Advanced (Harder)

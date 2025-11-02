@@ -3,26 +3,22 @@ id: lang-018
 title: "Kotlin Java Data Types / Типы данных Kotlin и Java"
 aliases: [Kotlin Java Data Types, Типы данных Kotlin и Java]
 topic: programming-languages
-subtopics: [type-system, null-safety]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-job-state-machine-transitions--kotlin--medium, q-delegates-compilation--kotlin--hard, q-testing-coroutines-runtest--kotlin--medium]
+related: [q-delegates-compilation--kotlin--hard, q-job-state-machine-transitions--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-types
-  - java
-  - primitives
-  - reference-types
-  - type-system
-  - difficulty/medium
+tags: [data-types, difficulty/medium, java, primitives, programming-languages, reference-types, type-system]
+date created: Friday, October 31st 2025, 6:30:00 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какие типы данных существуют в Java и Kotlin?
+
+# Какие Типы Данных Существуют В Java И Kotlin?
 
 # Question (EN)
 > What data types exist in Java and Kotlin?
@@ -66,7 +62,7 @@ Runnable r = () -> {};             // Interface
 
 ### Kotlin Data Types
 
-#### All Types are Objects
+#### All Types Are Objects
 **No primitive types from user perspective:**
 ```kotlin
 val b: Byte = 127         // Wrapper (compiles to byte when possible)

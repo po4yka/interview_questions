@@ -11,20 +11,22 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/jetpack-compose, android/state, android/remember, android/remembersaveable, difficulty/medium]
+language_tags: [android/jetpack-compose, android/remember, android/remembersaveable, android/state, difficulty/medium, en, ru]
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-how-animations-work-in-recyclerview--android--medium, q-transaction-too-large-exception--android--medium, q-rxjava-pagination-recyclerview--android--medium]
+related: [q-how-animations-work-in-recyclerview--android--medium, q-rxjava-pagination-recyclerview--android--medium, q-transaction-too-large-exception--android--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [android/ui-compose, android/ui-state, en, ru, difficulty/medium]
+tags: [android/ui-compose, android/ui-state, difficulty/medium, en, ru]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Question (EN)
@@ -38,7 +40,7 @@ tags: [android/ui-compose, android/ui-state, en, ru, difficulty/medium]
 
 **remember** stores value across recompositions. **rememberSaveable** stores value across configuration changes (rotation, process death).
 
-### remember - Survives Recomposition Only
+### Remember - Survives Recomposition Only
 
 ```kotlin
 @Composable
@@ -145,7 +147,7 @@ fun UserProfile() {
 
 **remember** хранит значение между рекомпозициями. **rememberSaveable** хранит значение при изменениях конфигурации (поворот, смерть процесса).
 
-### remember - Переживает только рекомпозицию
+### Remember - Переживает Только Рекомпозицию
 
 ```kotlin
 @Composable
@@ -161,7 +163,7 @@ fun Counter() {
 // - Теряется при: Изменении конфигурации, смерти процесса
 ```
 
-### rememberSaveable - Переживает изменения конфигурации
+### rememberSaveable - Переживает Изменения Конфигурации
 
 ```kotlin
 @Composable
@@ -177,7 +179,7 @@ fun Counter() {
 // Сохраняется в Bundle автоматически
 ```
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 **Используйте remember для:**
 - Временное UI состояние (развернуто/свернуто)

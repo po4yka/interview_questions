@@ -1,20 +1,22 @@
 ---
 id: android-231
 title: "How to Save and Apply Theme Settings / Как сохранять и применять настройки темы"
-aliases: ["How to Save and Apply Theme Settings", "Как сохранять и применять настройки темы", "Theme Settings", "Настройки темы"]
+aliases: ["How to Save and Apply Theme Settings", "Theme Settings", "Как сохранять и применять настройки темы", "Настройки темы"]
 topic: android
-subtopics: [ui-theming, datastore, ui-views, ui-compose]
+subtopics: [datastore, ui-compose, ui-theming, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-datastore-preferences-proto--android--medium, q-dark-theme-android--android--medium, q-how-to-save-activity-state--android--medium, c-jetpack-compose, c-lifecycle]
+related: [c-jetpack-compose, c-lifecycle, q-dark-theme-android--android--medium, q-datastore-preferences-proto--android--medium, q-how-to-save-activity-state--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-theming, android/datastore, android/ui-views, android/ui-compose, dark-mode, themes, sharedpreferences, difficulty/medium]
+tags: [android/datastore, android/ui-compose, android/ui-theming, android/ui-views, dark-mode, difficulty/medium, sharedpreferences, themes]
 sources: []
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ How to save and apply theme settings in an Android application?
 
 Сохранение и применение темы требует координации между хранением пользовательских предпочтений и их применением **до отрисовки UI**. Ключевой момент: тема должна применяться до `setContentView()` для традиционных Views или через `AppCompatDelegate` глобально для автоматического переключения.
 
-### Основные подходы
+### Основные Подходы
 
 **1. SharedPreferences + AppCompatDelegate (Views)**
 
@@ -132,7 +134,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Важные детали
+### Важные Детали
 
 **Применение темы для Views:**
 - Глобально: `Application.onCreate()` → `AppCompatDelegate.setDefaultNightMode()`

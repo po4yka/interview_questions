@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-does-the-lifecycle-library-do--android--medium, q-android-app-components--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium]
+related: [q-android-app-components--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium, q-what-does-the-lifecycle-library-do--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [networking, http, android/networking-http, difficulty/medium]
+tags: [android/networking-http, difficulty/medium, http, networking]
 date created: Tuesday, October 28th 2025, 9:50:52 pm
-date modified: Thursday, October 30th 2025, 3:15:05 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:15:05 pm
 
 В Android используется несколько библиотек для сетевых операций: от встроенного HttpURLConnection до современных решений вроде Retrofit и Ktor.
 
-### Основные инструменты
+### Основные Инструменты
 
 **HttpURLConnection** — встроенный базовый HTTP-клиент. Требует много boilerplate-кода, нет автоматического парсинга JSON, сложно управлять асинхронностью.
 
@@ -73,7 +73,7 @@ lifecycleScope.launch {
 
 **Ktor Client** — асинхронный Kotlin-first клиент для Kotlin Multiplatform проектов. Корутины из коробки, расширяемая архитектура через plugins.
 
-### Критические правила
+### Критические Правила
 
 **Фоновый поток обязателен**
 
@@ -129,7 +129,7 @@ suspend fun safeApiCall(): Result<User> {
 }
 ```
 
-### Проверка сети
+### Проверка Сети
 
 ```kotlin
 fun isNetworkAvailable(context: Context): Boolean {

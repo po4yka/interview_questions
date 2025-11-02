@@ -3,20 +3,20 @@ id: android-026
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
 aliases: ["Semantics in Jetpack Compose", "Семантика в Jetpack Compose"]
 topic: android
-subtopics: [ui-compose, ui-accessibility, testing-ui]
+subtopics: [testing-ui, ui-accessibility, ui-compose]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-compose-modifier-system--android--medium, q-compose-testing--android--medium, q-android-accessibility-services--android--medium]
+related: [c-jetpack-compose, q-compose-modifier-system--android--medium, q-compose-testing--android--medium]
 created: 2025-10-06
 updated: 2025-10-30
-tags: [android/ui-compose, android/ui-accessibility, android/testing-ui, accessibility, compose, testing, difficulty/medium]
-sources: [https://developer.android.com/jetpack/compose/semantics, https://developer.android.com/guide/topics/ui/accessibility]
+tags: [accessibility, android/testing-ui, android/ui-accessibility, android/ui-compose, compose, difficulty/medium, testing]
+sources: [https://developer.android.com/guide/topics/ui/accessibility, https://developer.android.com/jetpack/compose/semantics]
 date created: Thursday, October 30th 2025, 11:23:06 am
-date modified: Thursday, October 30th 2025, 12:43:52 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -34,7 +34,7 @@ Semantics — механизм в Compose для передачи смысла U
 
 **Ключевые свойства**: `contentDescription`, `role`, `stateDescription`, `progressBarRangeInfo`, `selected`, `disabled`, `onClick`.
 
-### Основные паттерны
+### Основные Паттерны
 
 **Доступная кнопка с ролью**
 ```kotlin
@@ -106,7 +106,7 @@ composeTestRule
   .performClick()
 ```
 
-### Критические правила
+### Критические Правила
 - **Информативный контент**: всегда `contentDescription` для изображений/иконок с данными
 - **Декоративные элементы**: явно `contentDescription = null`, чтобы TalkBack пропускал
 - **Составные компоненты**: используйте `mergeDescendants = true` для предотвращения повторяющихся объявлений
@@ -221,9 +221,6 @@ composeTestRule
 
 ### Related (Same Level)
 - [[q-compose-testing--android--medium]] — Testing Compose UIs with semantics
-- [[q-android-accessibility-services--android--medium]] — TalkBack and accessibility service APIs
-- [[q-compose-custom-layout--android--medium]] — Custom layouts with semantic annotations
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] — Optimizing semantics tree for large UIs
-- [[q-android-custom-accessibility-actions--android--hard]] — Implementing `customActions` for complex interactions

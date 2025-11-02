@@ -5,7 +5,7 @@ aliases: ["ProGuard and R8", "ProGuard и R8"]
 
 # Classification
 topic: android
-subtopics: [gradle, performance-memory, obfuscation]
+subtopics: [gradle, obfuscation, performance-memory]
 question_kind: theory
 difficulty: medium
 
@@ -17,14 +17,17 @@ sources: [https://github.com/Kirchhoff-Android-Interview-Questions]
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-reduce-app-size--android--medium, q-build-optimization-gradle--android--medium]
+related: [q-build-optimization-gradle--android--medium, q-reduce-app-size--android--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-01-27
 
-tags: [android/gradle, android/performance-memory, android/obfuscation, difficulty/medium]
+tags: [android/gradle, android/obfuscation, android/performance-memory, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
+
 # Вопрос (RU)
 > Что такое ProGuard и R8?
 
@@ -58,7 +61,7 @@ android {
 }
 ```
 
-### Сохранение кода с -keep правилами
+### Сохранение Кода С -keep Правилами
 
 R8 может ошибочно удалить код, используемый через:
 - **Reflection** — динамическое создание экземпляров
@@ -73,7 +76,7 @@ R8 может ошибочно удалить код, используемый �
 
 Альтернатива: аннотация `@Keep` из AndroidX.
 
-### Преимущества и недостатки
+### Преимущества И Недостатки
 
 **Преимущества:**
 - Уменьшение размера APK (на 20-40%)
@@ -110,7 +113,7 @@ android {
 }
 ```
 
-### Preserving code with -keep rules
+### Preserving Code with -keep Rules
 
 R8 may incorrectly remove code accessed via:
 - **Reflection** — dynamic instantiation

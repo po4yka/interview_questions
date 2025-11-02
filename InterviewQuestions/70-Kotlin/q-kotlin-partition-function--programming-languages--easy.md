@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-any-inheritance--programming-languages--easy, q-fan-in-fan-out-channels--kotlin--hard, q-continuation-cps-internals--kotlin--hard]
+related: [q-continuation-cps-internals--kotlin--hard, q-fan-in-fan-out-channels--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - collections
-  - functions
-  - difficulty/easy
+tags: [collections, difficulty/easy, functions, programming-languages]
+date created: Friday, October 31st 2025, 6:32:16 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Что делает функция коллекций partition()?
+
+# Что Делает Функция Коллекций partition()?
 
 # Question (EN)
 > What does the collection function partition() do?
@@ -132,7 +131,7 @@ val (letters, numbers) = inputs.partition {
 }
 ```
 
-### Тип возврата
+### Тип Возврата
 ```kotlin
 fun <T> Iterable<T>.partition(
     predicate: (T) -> Boolean
@@ -148,7 +147,7 @@ fun <T> Iterable<T>.partition(
 
 ## Related Questions
 
-- [[q-kotlin-any-inheritance--programming-languages--easy]]
+-
 - [[q-fan-in-fan-out-channels--kotlin--hard]]
 - [[q-continuation-cps-internals--kotlin--hard]]
 

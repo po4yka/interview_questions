@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140024
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-visibility-modifiers-kotlin--kotlin--medium, q-kotlin-sam-interfaces--kotlin--medium]
+related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-kotlin-sam-interfaces--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140024
 
@@ -101,7 +104,7 @@ class MyActivity : Activity() {
 
 Утечки памяти в корутинах обычно происходят когда корутины не отменяются должным образом, приводя к удержанию ссылок и расходу ресурсов.
 
-### Распространенные причины утечек
+### Распространенные Причины Утечек
 
 **1. Не отменяются Scopes**
 ```kotlin
@@ -144,7 +147,7 @@ class MyActivity : Activity() {
 }
 ```
 
-### Инструменты обнаружения
+### Инструменты Обнаружения
 - LeakCanary для Android
 - Memory Profiler в Android Studio
 - Анализ heap dumps

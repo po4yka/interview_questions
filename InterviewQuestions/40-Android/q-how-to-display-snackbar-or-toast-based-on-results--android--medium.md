@@ -3,7 +3,7 @@ id: android-426
 title: "How To Display Snackbar Or Toast Based On Results / Как отобразить Snackbar или Toast в зависимости от результатов"
 aliases: ["How To Display Snackbar Or Toast", "Как отобразить Snackbar или Toast"]
 topic: android
-subtopics: [ui-views, ui-compose, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-compose, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-android-architectural-patterns--android--medium, q-how-animations-wo
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/ui-views, android/ui-compose, android/architecture-mvvm, difficulty/medium, notifications, snackbar, toast]
+tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-views, difficulty/medium, notifications, snackbar, toast]
 date created: Tuesday, October 28th 2025, 9:49:45 am
-date modified: Thursday, October 30th 2025, 12:48:34 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ How to properly display Toast and Snackbar based on operation results in Android
 
 ## Ответ (RU)
 
-### Основные различия
+### Основные Различия
 
 **Toast** — простое временное уведомление без взаимодействия:
 - Не требует действий пользователя
@@ -43,7 +43,7 @@ How to properly display Toast and Snackbar based on operation results in Android
 - Привязывается к конкретному View
 - Появляется внизу экрана
 
-### Базовое использование
+### Базовое Использование
 
 ```kotlin
 // ✅ Toast для простых уведомлений
@@ -57,7 +57,7 @@ Snackbar.make(view, "Элемент удален", Snackbar.LENGTH_LONG)
     .show()
 ```
 
-### Архитектурный подход с ViewModel
+### Архитектурный Подход С ViewModel
 
 ```kotlin
 // Модель UI-событий

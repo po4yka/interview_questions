@@ -1,7 +1,7 @@
 ---
 id: android-313
 title: "Presenter Notify View / Presenter уведомляет View"
-aliases: ["Presenter Notify View", "Presenter уведомляет View", "MVP communication", "Взаимодействие MVP"]
+aliases: ["MVP communication", "Presenter Notify View", "Presenter уведомляет View", "Взаимодействие MVP"]
 topic: android
 subtopics: [architecture-mvvm, lifecycle]
 question_kind: android
@@ -10,12 +10,15 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-are-fragments-for-if-there-is-activity--android--medium, q-kapt-vs-ksp--android--medium, q-what-is-viewmodel--android--medium]
+related: [q-kapt-vs-ksp--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-viewmodel--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, lifecycle, mvp, presenter, view, callback, difficulty/medium, platform/android]
+tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback, difficulty/medium, lifecycle, mvp, platform/android, presenter, view]
+date created: Saturday, November 1st 2025, 12:47:00 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
+
 # Вопрос (RU)
 
 После получения результата внутри Presenter как сообщить об этом View?
@@ -30,7 +33,7 @@ After getting a result inside Presenter, how to notify the View?
 
 В MVP-архитектуре Presenter отвечает за бизнес-логику, а View — за отображение. Presenter не должен знать об Android-специфике View (Activity/Fragment), поэтому используется абстракция через интерфейс.
 
-### 1. Интерфейсный контракт (Interface Contract) ✅
+### 1. Интерфейсный Контракт (Interface Contract) ✅
 
 **Наиболее распространенный подход**. Presenter вызывает методы интерфейса, который реализует View:
 
@@ -161,7 +164,7 @@ presenter.userState.observe(this) { state ->
 - Это уже не чистый MVP, а гибрид с MVVM
 - Добавляет зависимость от Android Lifecycle
 
-### Важные моменты (Best Practices)
+### Важные Моменты (Best Practices)
 
 **Проверка жизненного цикла** — Presenter должен проверять, что View еще "жива":
 
@@ -384,7 +387,7 @@ fun notifyView(data: Data) {
 
 ## References
 
-- [[c-mvp-pattern]] - MVP architectural pattern
+- [[c-mvvm-pattern]] - MVP architectural pattern
 - [[c-mvvm-pattern]] - MVVM for comparison
 - [Android Architecture Guide](https://developer.android.com/topic/architecture)
 

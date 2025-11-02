@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140020
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-collections--kotlin--easy, q-testing-coroutine-timing-control--kotlin--medium, q-kotlin-operator-overloading--kotlin--medium]
+related: [q-kotlin-collections--kotlin--easy, q-kotlin-operator-overloading--kotlin--medium, q-testing-coroutine-timing-control--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:19 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140020
 
@@ -39,7 +42,7 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 Flow combining operators allow you to merge multiple Flows in different ways: `zip` pairs emissions, `combine` emits on any change, and `merge` interleaves all emissions.
 
-### zip
+### Zip
 Combines two flows by pairing their emissions:
 ```kotlin
 val flow1 = flowOf(1, 2, 3)
@@ -51,7 +54,7 @@ flow1.zip(flow2) { num, letter ->
 // Output: 1A, 2B, 3C (D is dropped)
 ```
 
-### combine
+### Combine
 Emits whenever ANY flow emits:
 ```kotlin
 val numbers = flow {
@@ -71,7 +74,7 @@ numbers.combine(letters) { num, letter ->
 // Output: 1A, 2A, 2B
 ```
 
-### merge
+### Merge
 Merges multiple flows into one:
 ```kotlin
 val flow1 = flowOf(1, 2, 3).onEach { delay(100) }
@@ -105,7 +108,7 @@ merge(cacheFlow, networkFlow, databaseFlow)
 
 Операторы комбинирования Flow позволяют объединять несколько Flow различными способами: `zip` связывает испускания попарно, `combine` испускает при любом изменении, а `merge` чередует все испускания.
 
-### zip
+### Zip
 Комбинирует два потока связывая их испускания:
 ```kotlin
 val flow1 = flowOf(1, 2, 3)
@@ -117,7 +120,7 @@ flow1.zip(flow2) { num, letter ->
 // Вывод: 1A, 2B, 3C (D отброшен)
 ```
 
-### combine
+### Combine
 Испускает когда ЛЮБОЙ поток испускает:
 ```kotlin
 val numbers = flow {
@@ -137,7 +140,7 @@ numbers.combine(letters) { num, letter ->
 // Вывод: 1A, 2A, 2B
 ```
 
-### merge
+### Merge
 Объединяет несколько потоков в один:
 ```kotlin
 val flow1 = flowOf(1, 2, 3).onEach { delay(100) }
@@ -147,7 +150,7 @@ merge(flow1, flow2).collect { println(it) }
 // Вывод: 1, 4, 2, 3, 5, 6 (чередуются)
 ```
 
-### Практические примеры
+### Практические Примеры
 ```kotlin
 // Комбинировать ввод пользователя с данными API
 searchQuery.combine(apiResults) { query, results ->

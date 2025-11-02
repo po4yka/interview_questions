@@ -10,17 +10,15 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-sealed-vs-abstract-classes--programming-languages--medium, q-star-projection-vs-any-generics--kotlin--hard, q-data-sealed-classes-definition--programming-languages--hard]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - inline-functions
-  - lambda
-  - non-local-returns
-  - difficulty/medium
+tags: [difficulty/medium, inline-functions, kotlin, lambda, non-local-returns]
+date created: Saturday, November 1st 2025, 1:07:52 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# Зачем нужен crossinline?
+
+# Зачем Нужен Crossinline?
 
 # Question (EN)
 > What is the `crossinline` keyword for in Kotlin inline functions?
@@ -47,7 +45,7 @@ tags:
 
 `crossinline` — это модификатор для параметров-лямбд inline функций, который запрещает non-local returns (возврат из внешней функции) из лямбды. Это необходимо когда лямбда выполняется в другом контексте (другой поток, вложенная функция, callback).
 
-### Проблема: non-local returns
+### Проблема: Non-local Returns
 
 ```kotlin
 // Обычная inline функция
@@ -75,7 +73,7 @@ fun caller() {
 // (функция caller() завершается)
 ```
 
-### Решение: crossinline
+### Решение: Crossinline
 
 ```kotlin
 // crossinline запрещает non-local return
@@ -103,9 +101,9 @@ fun caller() {
 }
 ```
 
-### Когда нужен crossinline
+### Когда Нужен Crossinline
 
-#### 1. Лямбда выполняется в другом потоке
+#### 1. Лямбда Выполняется В Другом Потоке
 
 ```kotlin
 // - БЕЗ crossinline - ошибка
@@ -133,7 +131,7 @@ fun downloadFile() {
 }
 ```
 
-#### 2. Лямбда вызывается из вложенной функции
+#### 2. Лямбда Вызывается Из Вложенной Функции
 
 ```kotlin
 inline fun transaction(crossinline block: () -> Unit) {
@@ -159,7 +157,7 @@ fun updateUser(user: User) {
 }
 ```
 
-#### 3. Лямбда сохраняется для отложенного выполнения
+#### 3. Лямбда Сохраняется Для Отложенного Выполнения
 
 ```kotlin
 inline fun defer(crossinline action: () -> Unit): () -> Unit {
@@ -178,7 +176,7 @@ fun scheduleTask() {
 }
 ```
 
-### Сравнение: обычная лямбда vs crossinline
+### Сравнение: Обычная Лямбда Vs Crossinline
 
 ```kotlin
 inline fun example(
@@ -207,9 +205,9 @@ fun caller() {
 }
 ```
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: Async execution
+#### Пример 1: Async Execution
 
 ```kotlin
 inline fun asyncTask(crossinline onComplete: (Result) -> Unit) {
@@ -232,7 +230,7 @@ fun loadData() {
 }
 ```
 
-#### Пример 2: Event listener
+#### Пример 2: Event Listener
 
 ```kotlin
 inline fun onClick(crossinline listener: (View) -> Unit) {
@@ -249,7 +247,7 @@ fun setupButton() {
 }
 ```
 
-#### Пример 3: Try-catch wrapper
+#### Пример 3: Try-catch Wrapper
 
 ```kotlin
 inline fun tryCatch(
@@ -277,7 +275,7 @@ fun saveData() {
 }
 ```
 
-### Комбинация с noinline
+### Комбинация С Noinline
 
 ```kotlin
 inline fun process(
@@ -299,7 +297,7 @@ inline fun process(
 }
 ```
 
-### Ошибки без crossinline
+### Ошибки Без Crossinline
 
 ```kotlin
 // - ОШИБКА - лямбда с return в другом контексте
@@ -347,7 +345,7 @@ fun test() {
 }
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Модификатор | Non-local return | Можно сохранить | Можно передать | Вызов из других контекстов |
 |-------------|------------------|-----------------|----------------|---------------------------|
@@ -357,6 +355,6 @@ fun test() {
 
 ## Related Questions
 
-- [[q-sealed-vs-abstract-classes--programming-languages--medium]]
+- [[q-interface-vs-abstract-class--programming-languages--medium]]
 - [[q-star-projection-vs-any-generics--kotlin--hard]]
 - [[q-data-sealed-classes-definition--programming-languages--hard]]

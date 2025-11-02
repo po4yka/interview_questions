@@ -1,7 +1,7 @@
 ---
 id: kotlin-165
 title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"
-aliases: [ViewModelScope, LifecycleScope, Lifecycle Scopes, Скоупы жизненного цикла]
+aliases: [Lifecycle Scopes, LifecycleScope, ViewModelScope, Скоупы жизненного цикла]
 topic: kotlin
 subtopics: [coroutines, lifecycle]
 question_kind: theory
@@ -10,19 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-constants--programming-languages--easy, q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
+related: [q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutines--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - lifecycle
-  - viewmodelscope
-  - lifecyclescope
-  - android
-  - difficulty/medium
+tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
+date created: Friday, October 31st 2025, 6:29:12 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# viewModelScope vs lifecycleScope
+
+# viewModelScope Vs lifecycleScope
 
 # Question (EN)
 > What's the difference between viewModelScope and lifecycleScope? When should you use each?
@@ -66,7 +62,7 @@ tags:
 | **Use case** | Business logic, data loading | UI updates, one-time events |
 | **Доступен в** | ViewModel классах | Activity/Fragment |
 
-### viewModelScope - для ViewModel
+### viewModelScope - Для ViewModel
 
 ```kotlin
 class UserViewModel(
@@ -110,7 +106,7 @@ class UserViewModel(
 - Идеален для **business logic** и загрузки данных
 - Требует зависимость: `androidx.lifecycle:lifecycle-viewmodel-ktx`
 
-### lifecycleScope - для Activity/Fragment
+### lifecycleScope - Для Activity/Fragment
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
@@ -145,7 +141,7 @@ class UserActivity : AppCompatActivity() {
 - Идеален для **UI операций** и one-time events
 - Требует зависимость: `androidx.lifecycle:lifecycle-runtime-ktx`
 
-### Что происходит при rotation
+### Что Происходит При Rotation
 
 ```kotlin
 // ViewModel
@@ -194,7 +190,7 @@ ViewModel: 3
 Activity: 1
 ```
 
-### Когда использовать viewModelScope
+### Когда Использовать viewModelScope
 
 ```kotlin
 class ProductsViewModel(
@@ -248,7 +244,7 @@ class ProductsViewModel(
 - Business logic operations
 - Любая работа, которая должна пережить rotation
 
-### Когда использовать lifecycleScope
+### Когда Использовать lifecycleScope
 
 ```kotlin
 class ProductsActivity : AppCompatActivity() {
@@ -298,7 +294,7 @@ class ProductsActivity : AppCompatActivity() {
 - UI-only operations
 - Любая работа, связанная только с текущим UI instance
 
-### repeatOnLifecycle - продвинутый lifecycleScope
+### repeatOnLifecycle - Продвинутый lifecycleScope
 
 ```kotlin
 class ProductsFragment : Fragment() {
@@ -333,7 +329,7 @@ class ProductsFragment : Fragment() {
 - Экономит ресурсы когда UI не видим
 - Предотвращает crash при обновлении UI в background
 
-### Lifecycle states
+### Lifecycle States
 
 ```kotlin
 viewLifecycleOwner.lifecycleScope.launch {
@@ -358,7 +354,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 }
 ```
 
-### Fragment: lifecycle vs viewLifecycle
+### Fragment: Lifecycle Vs viewLifecycle
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -389,7 +385,7 @@ class MyFragment : Fragment() {
 
 **В Fragment всегда используйте `viewLifecycleOwner.lifecycleScope`!**
 
-### Практический пример: Login screen
+### Практический Пример: Login Screen
 
 ```kotlin
 // ViewModel - business logic
@@ -464,7 +460,7 @@ class LoginActivity : AppCompatActivity() {
 }
 ```
 
-### Custom scope - когда ни один не подходит
+### Custom Scope - Когда Ни Один Не Подходит
 
 ```kotlin
 class ChatService {
@@ -509,7 +505,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-### GlobalScope - когда НЕ использовать
+### GlobalScope - Когда НЕ Использовать
 
 ```kotlin
 // НИКОГДА не используйте GlobalScope
@@ -539,7 +535,7 @@ class GoodViewModel : ViewModel() {
 
 **GlobalScope - только для application-level задач, НЕ привязанных к компонентам!**
 
-### Сравнение всех scopes
+### Сравнение Всех Scopes
 
 ```kotlin
 // 1. viewModelScope - переживает rotation
@@ -582,7 +578,7 @@ class App : Application() {
 }
 ```
 
-### Error handling
+### Error Handling
 
 ```kotlin
 // viewModelScope - ошибки обрабатываются внутри
@@ -716,6 +712,6 @@ class BadViewModel : ViewModel() {
 
 ## Related Questions
 
-- [[q-kotlin-constants--programming-languages--easy]]
+-
 - [[q-coroutine-context-detailed--kotlin--hard]]
 - [[q-race-conditions-coroutines--kotlin--hard]]

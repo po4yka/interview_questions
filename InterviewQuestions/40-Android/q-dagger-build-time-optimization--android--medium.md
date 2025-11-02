@@ -16,15 +16,15 @@ status: draft
 moc: moc-android
 related:
   - q-android-build-optimization--android--medium
-  - q-kapt-ksp-migration--android--medium
   - q-dagger-framework-overview--android--hard
+  - q-kapt-ksp-migration--android--medium
 created: 2025-10-20
 updated: 2025-01-27
 tags: [android/di-hilt, android/gradle, difficulty/medium]
 sources:
   - https://dagger.dev/hilt/
 date created: Monday, October 27th 2025, 3:27:45 pm
-date modified: Thursday, October 30th 2025, 11:51:12 am
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)

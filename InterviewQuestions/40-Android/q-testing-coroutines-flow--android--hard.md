@@ -3,19 +3,22 @@ id: android-312
 title: "Testing Coroutines Flow / Тестирование Coroutines Flow"
 aliases: ["Testing Coroutines Flow", "Тестирование Coroutines Flow"]
 topic: android
-subtopics: [testing-unit, coroutines, flow]
+subtopics: [coroutines, flow, testing-unit]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-singleton-scope-binding--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium, q-test-coverage-quality-metrics--testing--medium]
+related: [q-singleton-scope-binding--android--medium, q-test-coverage-quality-metrics--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/testing-unit, android/coroutines, android/flow, coroutines, flow, async, turbine, test-dispatcher, difficulty/hard]
+tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines, difficulty/hard, flow, test-dispatcher, turbine]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 > Как тестировать suspend функции, StateFlow и SharedFlow? Объясните TestDispatcher, runTest и библиотеку turbine.
@@ -30,7 +33,7 @@ tags: [android/testing-unit, android/coroutines, android/flow, coroutines, flow,
 
 Тестирование корутин и потоков требует специальных утилит для контроля времени и выполнения. **TestDispatcher**, **runTest** и **Turbine** — ключевые инструменты для детерминированного асинхронного тестирования.
 
-### TestDispatcher типы
+### TestDispatcher Типы
 
 **StandardTestDispatcher** - корутины не выполняются до явного продвижения времени:
 
@@ -58,7 +61,7 @@ fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher()) {
 }
 ```
 
-### Контроль времени
+### Контроль Времени
 
 ```kotlin
 @Test
@@ -218,7 +221,7 @@ fun testViewModel() = runTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте runTest:**
 
@@ -267,7 +270,7 @@ job.cancel()
 
 Testing coroutines and flows requires special utilities to control time and execution. **TestDispatcher**, **runTest**, and **Turbine** are essential tools for deterministic async testing.
 
-### TestDispatcher types
+### TestDispatcher Types
 
 **StandardTestDispatcher** - coroutines don't run until time advances explicitly:
 
@@ -295,7 +298,7 @@ fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher()) {
 }
 ```
 
-### Time control
+### Time Control
 
 ```kotlin
 @Test
@@ -377,7 +380,7 @@ fun testSharedFlow() = runTest {
 }
 ```
 
-### Turbine library
+### Turbine Library
 
 **Turbine** simplifies Flow testing with clean API:
 
@@ -455,7 +458,7 @@ fun testViewModel() = runTest {
 }
 ```
 
-### Best practices
+### Best Practices
 
 **1. Use runTest:**
 
@@ -530,6 +533,6 @@ job.cancel()
 
 ### Advanced (Harder)
 
-- [[q-test-coverage-quality-metrics--testing--medium]] - Test coverage metrics
+- [[q-test-coverage-quality-metrics--android--medium]] - Test coverage metrics
 - Advanced testing strategies for complex async scenarios
 - Performance testing with flows

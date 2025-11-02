@@ -3,20 +3,20 @@ id: android-094
 title: "Frame Time 120ms Meaning / Значение времени кадра 120мс"
 aliases: ["Frame Time 120ms Meaning", "Значение времени кадра 120мс"]
 topic: android
-subtopics: [performance-rendering, strictmode-anr, profiling]
+subtopics: [performance-rendering, profiling, strictmode-anr]
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android/performance-rendering, android/strictmode-anr, android/profiling, difficulty/easy, fps, frame-rate, performance, rendering, ui-performance]
+tags: [android/performance-rendering, android/profiling, android/strictmode-anr, difficulty/easy, fps, frame-rate, performance, rendering, ui-performance]
 moc: moc-android
-related: [c-android-frame-budget, c-choreographer, q-optimize-recyclerview-performance--android--medium]
+related: [c-android-frame-budget, c-choreographer]
 sources: []
 date created: Tuesday, October 28th 2025, 7:38:35 am
-date modified: Thursday, October 30th 2025, 12:47:58 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -196,8 +196,6 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - Basic knowledge of frame rate and vsync
 
 ### Related
-- [[q-optimize-recyclerview-performance--android--medium]] — practical rendering optimizations
-- [[q-strictmode-usage--android--easy]] — detecting main thread violations
 
 ### Advanced
 - [[q-systrace-analysis--android--hard]] — advanced profiling techniques

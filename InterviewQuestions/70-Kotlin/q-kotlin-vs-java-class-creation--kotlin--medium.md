@@ -13,15 +13,12 @@ moc: moc-kotlin
 related: [q-inline-function-limitations--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - classes
-  - data-classes
-  - java
-  - syntax
-  - difficulty/medium
+tags: [classes, data-classes, difficulty/medium, java, kotlin, syntax]
+date created: Friday, October 31st 2025, 6:28:54 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# Что при создании классов в Kotlin изменились по сравнению с Java?
+
+# Что При Создании Классов В Kotlin Изменились По Сравнению С Java?
 
 # Question (EN)
 > What changed when creating classes in Kotlin compared to Java?

@@ -3,24 +3,22 @@ id: lang-039
 title: "Kotlin Sam Conversions / SAM конверсии в Kotlin"
 aliases: [Kotlin Sam Conversions, SAM конверсии в Kotlin]
 topic: programming-languages
-subtopics: [type-system, functional-programming]
+subtopics: [functional-programming, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-extensions-overview--programming-languages--medium, q-infix-functions--kotlin--medium, q-kotlin-override-keyword--programming-languages--easy]
+related: [q-infix-functions--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-override-keyword--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - lambda
-  - lambda-functions
-  - sam
-  - difficulty/medium
+tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]
+date created: Friday, October 31st 2025, 6:32:39 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Как работают SAM (Single Abstract Method)?
+
+# Как Работают SAM (Single Abstract Method)?
 
 # Question (EN)
 > How do SAM (Single Abstract Method) conversions work?
@@ -92,7 +90,7 @@ val sorted = list.sortedWith { a, b ->
 }
 ```
 
-### Kotlin fun interfaces
+### Kotlin Fun Interfaces
 
 Kotlin 1.4+ supports `fun interface`:
 ```kotlin
@@ -129,7 +127,7 @@ setListener(object : KotlinListener {
 
 SAM (Single Abstract Method) конверсии позволяют использовать Kotlin лямбды там где ожидаются Java функциональные интерфейсы.
 
-### Java функциональный интерфейс
+### Java Функциональный Интерфейс
 ```java
 // Java
 public interface Clickable {
@@ -141,7 +139,7 @@ public void setListener(Clickable listener) {
 }
 ```
 
-### Kotlin SAM конверсия
+### Kotlin SAM Конверсия
 ```kotlin
 // Вместо:
 setListener(object : Clickable {
@@ -156,7 +154,7 @@ setListener { view ->
 }
 ```
 
-### Требования для SAM конверсии
+### Требования Для SAM Конверсии
 
 1. **Java интерфейс** (не Kotlin интерфейс)
 2. **Ровно один абстрактный метод**
@@ -186,7 +184,7 @@ val sorted = list.sortedWith { a, b ->
 }
 ```
 
-### Kotlin fun interfaces
+### Kotlin Fun Interfaces
 
 Kotlin 1.4+ поддерживает `fun interface`:
 ```kotlin
@@ -202,7 +200,7 @@ fun process(transformer: Transformer) {
 process { it.uppercase() }
 ```
 
-### Когда SAM не работает
+### Когда SAM Не Работает
 ```kotlin
 // Kotlin интерфейс - Нет SAM конверсии
 interface KotlinListener {

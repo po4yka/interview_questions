@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [functional-interfaces, type-aliases, sam, comparison]
+subtopics: [comparison, functional-interfaces, sam, type-aliases]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-kotlin-sam-interfaces--kotlin--medium, q-type-aliases--kotlin--mediu
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, functional-interfaces, type-aliases, sam, difficulty/medium]
+tags: [difficulty/medium, functional-interfaces, kotlin, sam, type-aliases]
+date created: Thursday, October 16th 2025, 4:43:56 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What is the difference between functional interfaces and type aliases in Kotlin?
 # Вопрос (RU)
@@ -108,7 +111,7 @@ fun ClickHandler.withLogging(): ClickHandler = { view ->
 
 ## Ответ (RU)
 
-### Функциональный интерфейс (SAM)
+### Функциональный Интерфейс (SAM)
 
 Интерфейс с **только одним абстрактным методом**. Объявляется с модификатором `fun`.
 
@@ -118,7 +121,7 @@ fun interface KRunnable {
 }
 ```
 
-### Псевдоним типа
+### Псевдоним Типа
 
 Альтернативное имя для **существующего типа**. Не создает новый тип.
 
@@ -127,7 +130,7 @@ typealias MyHandler = (Int, String, Any) -> Unit
 typealias Predicate<T> = (T) -> Boolean
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 
 | Функция | Функциональный интерфейс | Псевдоним типа |
 |---------|--------------------------|----------------|
@@ -137,7 +140,7 @@ typealias Predicate<T> = (T) -> Boolean
 | **Implements/Extends** | Может реализовать и расширить другие интерфейсы | Просто имя |
 | **Типобезопасность** | Сильнее (отдельный тип) | Слабее (тот же что базовый) |
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 **Функциональный интерфейс** когда:
 - API нужно больше чем просто функция (контракты, операции)
@@ -149,7 +152,7 @@ typealias Predicate<T> = (T) -> Boolean
 - Хотите более короткое имя для сложного типа
 - Не нужны дополнительные операции
 
-### Пример сравнения
+### Пример Сравнения
 
 ```kotlin
 // Псевдоним типа - простое переименование

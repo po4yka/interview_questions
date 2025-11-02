@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [android-architecture, difficulty/hard, mvi, mvp, mvvm, redux, state-management, unidirectional-data-flow]
 sources: [https://proandroiddev.com/mvi-a-new-member-of-the-mv-band-6f7f0d23bc8a]
 date created: Monday, October 6th 2025, 7:36:32 am
-date modified: Sunday, October 26th 2025, 12:35:54 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

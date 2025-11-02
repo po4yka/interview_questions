@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-performance-measurement-tools--android--medium, q-app-startup-optimization--android--medium]
+related: []
 sources: []
 created: 2025-10-11
 updated: 2025-10-30
 tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:36 am
-date modified: Thursday, October 30th 2025, 12:43:24 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +35,7 @@ date modified: Thursday, October 30th 2025, 12:43:24 pm
 - **Без профиля**: Запуск → Интерпретация байткода → Постепенная JIT-компиляция
 - **С профилем**: Установка → AOT-компиляция критических путей → Мгновенный нативный код
 
-### Структура реализации
+### Структура Реализации
 
 **1. Модуль генерации профиля**:
 ```kotlin
@@ -92,7 +92,7 @@ when (status.profileInstallResultCode) {
 }
 ```
 
-### Критерии качества
+### Критерии Качества
 
 - **Размер профиля** < 200KB (больше замедляет установку)
 - **Покрытие**: Запуск → Первый рендер → Основной user flow
@@ -107,7 +107,7 @@ when (status.profileInstallResultCode) {
 - **Without Profile**: Launch → Bytecode interpretation → Gradual JIT compilation
 - **With Profile**: Install → AOT-compile critical paths → Instant native code
 
-### Implementation structure
+### Implementation Structure
 
 **1. Profile generation module**:
 ```kotlin
@@ -164,7 +164,7 @@ when (status.profileInstallResultCode) {
 }
 ```
 
-### Quality criteria
+### Quality Criteria
 
 - **Profile size** < 200KB (larger slows installation)
 - **Coverage**: Startup → First render → Primary user flow
@@ -194,8 +194,8 @@ when (status.profileInstallResultCode) {
 
 ### Related (Same Level)
 - [[q-android-performance-measurement-tools--android--medium]] - Macrobenchmark for profile validation
-- [[q-r8-code-shrinking-optimization--android--medium]] - R8 interaction with baseline profiles
+ - R8 interaction with baseline profiles
 
 ### Advanced (Harder)
-- [[q-android-runtime-compilation-strategies--android--hard]] - ART internals: dex2oat, JIT, AOT trade-offs
-- [[q-modularized-app-performance-profiling--android--hard]] - Profile generation for multi-module apps
+ - ART internals: dex2oat, JIT, AOT trade-offs
+ - Profile generation for multi-module apps

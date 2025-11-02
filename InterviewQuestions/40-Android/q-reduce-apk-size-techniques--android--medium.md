@@ -5,7 +5,7 @@ aliases: ["How to reduce APK size", "Как уменьшить размер APK"
 
 # Classification
 topic: android
-subtopics: [gradle, app-bundle, performance-memory]
+subtopics: [app-bundle, gradle, performance-memory]
 question_kind: android
 difficulty: medium
 
@@ -23,8 +23,11 @@ related: [c-app-bundle, q-macrobenchmark-startup--android--medium]
 created: 2025-10-06
 updated: 2025-01-27
 
-tags: [android/gradle, android/app-bundle, android/performance-memory, difficulty/medium]
+tags: [android/app-bundle, android/gradle, android/performance-memory, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 > Какие техники можно использовать для уменьшения размера Android APK?
@@ -39,7 +42,7 @@ tags: [android/gradle, android/app-bundle, android/performance-memory, difficult
 
 Уменьшение размера APK критически важно для улучшения конверсии загрузок и пользовательского опыта. Основные подходы включают сжатие кода, оптимизацию ресурсов и использование [[c-app-bundle|Android App Bundle]].
 
-### 1. R8/ProGuard - сжатие кода
+### 1. R8/ProGuard - Сжатие Кода
 
 ```gradle
 android {
@@ -70,7 +73,7 @@ android {
 
 **Эффект**: Google Play генерирует оптимизированные APK для каждой конфигурации устройства. Пользователи загружают только нужные ресурсы. Уменьшение 15-35%.
 
-### 3. Оптимизация ресурсов
+### 3. Оптимизация Ресурсов
 
 ```gradle
 android {
@@ -85,7 +88,7 @@ android {
 - **VectorDrawable**: вместо множества PNG (50-80%)
 - **Lint**: автоматический поиск неиспользуемых ресурсов
 
-### 4. Нативные библиотеки
+### 4. Нативные Библиотеки
 
 ```gradle
 android {
@@ -111,7 +114,7 @@ implementation 'com.google.android.gms:play-services-maps:...'
 
 Анализ размера: `./gradlew :app:analyzeReleaseBundle`
 
-### Ожидаемые результаты
+### Ожидаемые Результаты
 
 | Техника | Уменьшение |
 |---------|-----------|
@@ -121,7 +124,7 @@ implementation 'com.google.android.gms:play-services-maps:...'
 | ABI фильтры | 30-50% |
 | **Комбинированно** | **40-70%** |
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Мониторинг размера APK в CI/CD
 2. Использование [[c-app-bundle|App Bundle]] вместо APK
@@ -132,7 +135,7 @@ implementation 'com.google.android.gms:play-services-maps:...'
 
 Reducing APK size is crucial for improving download conversion rates and user experience. Main approaches include code shrinking, resource optimization, and using [[c-app-bundle|Android App Bundle]].
 
-### 1. R8/ProGuard - code shrinking
+### 1. R8/ProGuard - Code Shrinking
 
 ```gradle
 android {
@@ -163,7 +166,7 @@ android {
 
 **Effect**: Google Play generates optimized APKs for each device configuration. Users download only required resources. Reduces by 15-35%.
 
-### 3. Resource optimization
+### 3. Resource Optimization
 
 ```gradle
 android {
@@ -178,7 +181,7 @@ android {
 - **VectorDrawable**: instead of multiple PNGs (50-80%)
 - **Lint**: automatic unused resource detection
 
-### 4. Native libraries
+### 4. Native Libraries
 
 ```gradle
 android {
@@ -204,7 +207,7 @@ implementation 'com.google.android.gms:play-services-maps:...'
 
 Size analysis: `./gradlew :app:analyzeReleaseBundle`
 
-### Expected results
+### Expected Results
 
 | Technique | Reduction |
 |-----------|-----------|
@@ -214,7 +217,7 @@ Size analysis: `./gradlew :app:analyzeReleaseBundle`
 | ABI filters | 30-50% |
 | **Combined** | **40-70%** |
 
-### Best practices
+### Best Practices
 
 1. Monitor APK size in CI/CD
 2. Use [[c-app-bundle|App Bundle]] instead of APK

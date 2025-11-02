@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, concurrency, channels, flow]
+subtopics: [channels, concurrency, coroutines, flow]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lateinit--kotlin--medium, q-coroutine-dispatchers--kotlin--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
+related: [q-coroutine-dispatchers--kotlin--medium, q-kotlin-lateinit--kotlin--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, coroutines, channels, concurrency, async, difficulty/medium]
+tags: [async, channels, concurrency, coroutines, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What do you know about Channels in Kotlin?
 # Вопрос (RU)
@@ -37,7 +40,7 @@ tags: [kotlin, coroutines, channels, concurrency, async, difficulty/medium]
 
 Deferred values provide a convenient way to transfer a single value between coroutines. Channels provide a way to transfer a stream of values. **Channel** is a non-blocking primitive for communication between a sender (via `SendChannel`) and a receiver (via `ReceiveChannel`).
 
-### Channel basics
+### Channel Basics
 
 A [Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) is conceptually very similar to `BlockingQueue`. One key difference is that instead of a blocking `put` operation it has a suspending [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/send.html), and instead of a blocking `take` operation it has a suspending [receive](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-receive-channel/receive.html).
 
@@ -62,7 +65,7 @@ The output of this code is:
 Done!
 ```
 
-### Closing and iteration over channels
+### Closing and Iteration over Channels
 
 Unlike a queue, a channel can be closed to indicate that no more elements are coming. On the receiver side it is convenient to use a regular `for` loop to receive elements from the channel.
 
@@ -79,7 +82,7 @@ for (y in channel) println(y)
 println("Done!")
 ```
 
-### Building channel producers
+### Building Channel Producers
 
 The pattern where a coroutine is producing a sequence of elements is quite common. This is a part of **producer-consumer** pattern that is often found in concurrent code. You could abstract such a producer into a function that takes channel as its parameter, but this goes contrary to common sense that results must be returned from functions.
 
@@ -122,7 +125,7 @@ println("Done!") // we are done
 coroutineContext.cancelChildren() // cancel children coroutines
 ```
 
-### Buffered channels
+### Buffered Channels
 
 The channels shown so far had no buffer. Unbuffered channels transfer elements when sender and receiver meet each other (aka rendezvous). If send is invoked first, then it is suspended until receive is invoked, if receive is invoked first, it is suspended until send is invoked.
 
@@ -154,7 +157,7 @@ Sending 4
 
 The first four elements are added to the buffer and the sender suspends when trying to send the fifth one.
 
-### Creating channels
+### Creating Channels
 
 The `Channel(capacity)` factory function is used to create channels of different kinds depending on the value of the `capacity` integer:
 
@@ -175,7 +178,7 @@ Buffered channels can be configured with an additional `onBufferOverflow` parame
 
 Отложенные значения (Deferred) предоставляют удобный способ передачи одного значения между корутинами. Каналы предоставляют способ передачи потока значений. **Channel** — это неблокирующий примитив для связи между отправителем (через `SendChannel`) и получателем (через `ReceiveChannel`).
 
-### Основы работы с каналами
+### Основы Работы С Каналами
 
 [Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) концептуально очень похож на `BlockingQueue`. Одно ключевое отличие заключается в том, что вместо блокирующей операции `put` он имеет приостанавливающую операцию [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/send.html), а вместо блокирующей операции `take` — приостанавливающую операцию [receive](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-receive-channel/receive.html).
 
@@ -200,7 +203,7 @@ println("Done!")
 Done!
 ```
 
-### Закрытие и итерация по каналам
+### Закрытие И Итерация По Каналам
 
 В отличие от очереди, канал может быть закрыт, чтобы указать, что больше элементов не будет. На стороне получателя удобно использовать обычный цикл `for` для получения элементов из канала.
 
@@ -217,7 +220,7 @@ for (y in channel) println(y)
 println("Done!")
 ```
 
-### Создание производителей каналов
+### Создание Производителей Каналов
 
 Паттерн, когда корутина производит последовательность элементов, довольно распространен. Это часть паттерна **производитель-потребитель**, который часто встречается в параллельном коде. Вы можете абстрагировать такого производителя в функцию, которая принимает канал в качестве параметра, но это противоречит здравому смыслу, что результаты должны возвращаться из функций.
 
@@ -260,7 +263,7 @@ println("Done!") // мы закончили
 coroutineContext.cancelChildren() // отменяем дочерние корутины
 ```
 
-### Буферизованные каналы
+### Буферизованные Каналы
 
 Показанные до сих пор каналы не имели буфера. Небуферизованные каналы передают элементы, когда отправитель и получатель встречаются друг с другом (aka rendezvous). Если send вызван первым, то он приостанавливается до вызова receive, если receive вызван первым, он приостанавливается до вызова send.
 
@@ -292,7 +295,7 @@ Sending 4
 
 Первые четыре элемента добавляются в буфер, и отправитель приостанавливается при попытке отправить пятый.
 
-### Создание каналов
+### Создание Каналов
 
 Фабричная функция `Channel(capacity)` используется для создания каналов различных типов в зависимости от значения целочисленного параметра `capacity`:
 

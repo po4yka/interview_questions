@@ -5,7 +5,7 @@ aliases: ["What Are Services Used For", "Для чего используютс�
 
 # Classification
 topic: android
-subtopics: [service, background-execution]
+subtopics: [background-execution, service]
 question_kind: android
 difficulty: medium
 
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-mvvm-pattern--android--medium, q-memory-leaks-definition--android--easy, q-what-does-the-lifecycle-library-do--android--medium]
+related: [c-background-tasks, c-service, c-workmanager]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android/service, android/background-execution, background-work, foreground-service, difficulty/medium]
+tags: [android/background-execution, android/service, background-work, difficulty/medium, foreground-service]
+date created: Saturday, November 1st 2025, 1:24:46 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -41,7 +43,7 @@ What are services used for in Android?
 
 **Service** — это компонент Android для длительных фоновых операций без пользовательского интерфейса.
 
-### Основные типы и применение
+### Основные Типы И Применение
 
 **1. Foreground Service** — основной тип для современных версий Android
 - **Требование**: обязательное уведомление для пользователя
@@ -143,7 +145,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Жизненный цикл
+### Жизненный Цикл
 
 **Started Service**:
 ```
@@ -155,7 +157,7 @@ startService() → onCreate() → onStartCommand() → stopSelf() → onDestroy(
 bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 ```
 
-### Современные альтернативы
+### Современные Альтернативы
 
 | Задача | Рекомендация |
 |--------|--------------|
@@ -392,7 +394,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ### Related (Same Level)
 - [[q-foreground-service-types--android--medium]] - Foreground service types
 - [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior
-- [[q-workmanager-vs-service--android--medium]] - WorkManager comparison
+- [[q-workmanager-vs-alternatives--android--medium]] - WorkManager comparison
 
 ### Advanced (Harder)
 - [[q-service-lifecycle-binding--android--hard]] - Complex service lifecycle scenarios

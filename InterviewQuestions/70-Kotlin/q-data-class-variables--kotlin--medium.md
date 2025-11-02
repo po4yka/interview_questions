@@ -10,15 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-stateflow-sharedflow-differences--kotlin--medium, q-suspend-functions-basics--kotlin--easy, q-lazy-initialization--programming-languages--easy]
+related: [q-stateflow-sharedflow-differences--kotlin--medium, q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-classes
-  - difficulty/medium
+tags: [data-classes, difficulty/medium, programming-languages]
+date created: Friday, October 31st 2025, 6:33:06 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What variables can be used in data class?
+
+# What Variables Can Be Used in Data Class?
 
 # Question (EN)
 > What variables can be used in a data class in Kotlin?
@@ -463,4 +463,4 @@ data class CachedData(
 
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 - [[q-suspend-functions-basics--kotlin--easy]]
-- [[q-lazy-initialization--programming-languages--easy]]
+-

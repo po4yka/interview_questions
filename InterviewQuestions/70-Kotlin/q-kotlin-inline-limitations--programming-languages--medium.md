@@ -10,19 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-access-modifiers--programming-languages--medium, q-object-companion-object--programming-languages--hard, q-context-receivers--kotlin--hard]
+related: [q-context-receivers--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - inline
-  - lambdas
-  - optimization
-  - performance
-  - recursion
-  - difficulty/medium
+tags: [difficulty/medium, inline, lambdas, optimization, performance, programming-languages, recursion]
+date created: Friday, October 31st 2025, 6:29:59 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Бывают ли случаи, когда нельзя использовать inline?
+
+# Бывают Ли Случаи, Когда Нельзя Использовать Inline?
 
 # Question (EN)
 > Are there cases when inline cannot be used?
@@ -286,7 +282,7 @@ public static final void process(@NotNull Function0 action) {
 
 ## Code Size Impact
 
-### Example: Inline vs Regular
+### Example: Inline Vs Regular
 
 ```kotlin
 // Inline function
@@ -348,7 +344,7 @@ inline fun <T> measureTime(block: () -> T): T {
 }
 ```
 
-2. **Functions with reified type parameters:**
+1. **Functions with reified type parameters:**
 
 ```kotlin
 inline fun <reified T> Gson.fromJson(json: String): T {
@@ -356,14 +352,14 @@ inline fun <reified T> Gson.fromJson(json: String): T {
 }
 ```
 
-3. **Small utility functions:**
+1. **Small utility functions:**
 
 ```kotlin
 inline fun Int.isEven() = this % 2 == 0
 inline fun String.isEmail() = contains("@")
 ```
 
-4. **Performance-critical lambdas:**
+1. **Performance-critical lambdas:**
 
 ```kotlin
 inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
@@ -482,7 +478,7 @@ fun factorial(n: Int): Int {
 
 ---
 
-### 3. Передача или Сохранение Лямбд (Non-Inlined)
+### 3. Передача Или Сохранение Лямбд (Non-Inlined)
 
 **Проблема:** Лямбды, переданные в не-inline функции или сохранённые, создают объекты.
 
@@ -606,7 +602,7 @@ abstract class Base {
 
 ---
 
-### 6. Функции с Reified Type Parameters (частично)
+### 6. Функции С Reified Type Parameters (частично)
 
 **Правильное использование:**
 
@@ -628,7 +624,7 @@ inline fun <reified T> createChecker(): (Any) -> Boolean {
 
 ---
 
-### 7. Функции Вызываемые из Java
+### 7. Функции Вызываемые Из Java
 
 **Проблема:** Java не понимает Kotlin inline.
 
@@ -653,9 +649,9 @@ public static final void process(@NotNull Function0 action) {
 
 ---
 
-## Влияние на Размер Кода
+## Влияние На Размер Кода
 
-### Пример: Inline vs Обычная
+### Пример: Inline Vs Обычная
 
 ```kotlin
 // Inline функция
@@ -717,7 +713,7 @@ inline fun <T> measureTime(block: () -> T): T {
 }
 ```
 
-2. **Функции с reified type parameters:**
+1. **Функции с reified type parameters:**
 
 ```kotlin
 inline fun <reified T> Gson.fromJson(json: String): T {
@@ -725,14 +721,14 @@ inline fun <reified T> Gson.fromJson(json: String): T {
 }
 ```
 
-3. **Маленькие утилитные функции:**
+1. **Маленькие утилитные функции:**
 
 ```kotlin
 inline fun Int.isEven() = this % 2 == 0
 inline fun String.isEmail() = contains("@")
 ```
 
-4. **Производительно-критичные лямбды:**
+1. **Производительно-критичные лямбды:**
 
 ```kotlin
 inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
@@ -770,6 +766,6 @@ inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
 
 ## Related Questions
 
-- [[q-kotlin-access-modifiers--programming-languages--medium]]
-- [[q-object-companion-object--programming-languages--hard]]
+-
+-
 - [[q-context-receivers--kotlin--hard]]

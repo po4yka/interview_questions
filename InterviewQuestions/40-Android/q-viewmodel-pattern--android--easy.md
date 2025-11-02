@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-mvvm-pattern, c-architecture-patterns, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related: [c-architecture-patterns, c-mvvm-pattern, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, viewmodel, mvvm, difficulty/easy]
+tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, difficulty/easy, mvvm, viewmodel]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Какой архитектурный паттерн реализуется благодаря ViewModel?
+# Какой Архитектурный Паттерн Реализуется Благодаря ViewModel?
 
 **English**: What architectural pattern is implemented using ViewModel?
 
@@ -27,7 +29,7 @@ ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is respo
 
 ViewModel реализует архитектурный паттерн MVVM (Model-View-ViewModel). ViewModel выполняет роль посредника между Model (данные и бизнес-логика) и View (UI компоненты), обеспечивая четкое разделение ответственности.
 
-### Основные характеристики паттерна MVVM с ViewModel
+### Основные Характеристики Паттерна MVVM С ViewModel
 
 **Model-View-ViewModel (MVVM):**
 - **Model**: Данные и бизнес-логика приложения
@@ -56,7 +58,7 @@ ViewModel реализует архитектурный паттерн MVVM (Mod
    - Автоматически очищается через onCleared()
    - Предотвращает утечки памяти
 
-### Пример реализации MVVM
+### Пример Реализации MVVM
 
 ```kotlin
 // Model - Domain model или data class
@@ -128,14 +130,14 @@ sealed class UiState<out T> {
 }
 ```
 
-### Ключевые принципы MVVM в Android
+### Ключевые Принципы MVVM В Android
 
 1. **Однонаправленный поток данных**: View наблюдает за ViewModel, но ViewModel не знает о View
 2. **Reactive подход**: Использование LiveData, StateFlow, Flow для наблюдения за изменениями
 3. **Dependency Injection**: ViewModel получает зависимости через конструктор
 4. **Тестируемость**: ViewModel легко тестируется изолированно от UI
 
-### Сравнение с другими паттернами
+### Сравнение С Другими Паттернами
 
 **MVVM vs MVP:**
 - MVP: Presenter напрямую управляет View через интерфейс

@@ -3,7 +3,7 @@ id: android-206
 title: "Android Components Unity / Объединение основных компонентов"
 aliases: [Android Components Unity, Объединение компонентов]
 topic: android
-subtopics: [activity, service, fragment]
+subtopics: [activity, fragment, service]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-android-components, c-context, c-manifest, q-what-each-android-component-represents--android--easy, q-what-unifies-android-components--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/service, android/fragment, components, context, architecture, difficulty/medium]
+tags: [android/activity, android/fragment, android/service, architecture, components, context, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:10 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What unites the main components of an Android application?
+# What Unites the Main Components of an Android Application?
 
 ## Answer (EN)
 The main Android components (Activity, Service, BroadcastReceiver, ContentProvider) share several fundamental characteristics that unite them in the Android framework.
@@ -321,7 +323,7 @@ Main Android components are united by:
 
 Основные компоненты Android (Activity, Service, BroadcastReceiver, ContentProvider) разделяют несколько фундаментальных характеристик, которые объединяют их в Android framework.
 
-### Четыре основных компонента
+### Четыре Основных Компонента
 
 ```
 Компоненты Android приложения
@@ -331,9 +333,9 @@ Main Android components are united by:
  ContentProvider   → Обмен данными
 ```
 
-### Общие характеристики
+### Общие Характеристики
 
-#### 1. Объявление в AndroidManifest.xml
+#### 1. Объявление В AndroidManifest.xml
 
 Все компоненты должны быть объявлены в манифесте:
 
@@ -367,7 +369,7 @@ Main Android components are united by:
 </manifest>
 ```
 
-#### 2. Управление системой
+#### 2. Управление Системой
 
 Все компоненты **создаются и управляются системой Android**, а не разработчиком:
 
@@ -388,7 +390,7 @@ activity.onCreate()
 - Управление памятью
 - Уничтожение компонентов
 
-#### 3. Взаимодействие через Intent
+#### 3. Взаимодействие Через Intent
 
 Компоненты взаимодействуют через **Intents**:
 
@@ -410,7 +412,7 @@ val uri = Uri.parse("content://com.example.app.provider/users")
 contentResolver.query(uri, null, null, null, null)
 ```
 
-#### 4. Доступ к Context
+#### 4. Доступ К Context
 
 Все компоненты имеют доступ к **Context**:
 
@@ -447,7 +449,7 @@ class MyProvider : ContentProvider() {
 }
 ```
 
-#### 5. Определенные жизненные циклы
+#### 5. Определенные Жизненные Циклы
 
 Каждый компонент имеет **специфический жизненный цикл**, управляемый системой:
 
@@ -483,7 +485,7 @@ class MyProvider : ContentProvider() {
 }
 ```
 
-#### 6. Выполнение в процессе приложения
+#### 6. Выполнение В Процессе Приложения
 
 Все компоненты по умолчанию выполняются в **одном процессе**:
 
@@ -500,7 +502,7 @@ class MyProvider : ContentProvider() {
     android:process=":background" />
 ```
 
-#### 7. Требования разрешений
+#### 7. Требования Разрешений
 
 Компоненты могут требовать **разрешения**:
 
@@ -527,7 +529,7 @@ class MyProvider : ContentProvider() {
     android:writePermission="com.example.app.WRITE_DATA" />
 ```
 
-### Таблица сравнения компонентов
+### Таблица Сравнения Компонентов
 
 | Характеристика | Activity | Service | BroadcastReceiver | ContentProvider |
 |----------------|----------|---------|-------------------|-----------------|
@@ -541,7 +543,7 @@ class MyProvider : ContentProvider() {
 | Процесс | Процесс приложения | Приложения/отдельный | Процесс приложения | Процесс приложения |
 | Макс. время работы | Контролируется пользователем | Неограниченное | 10 секунд | Время жизни процесса |
 
-### Унифицированная архитектура
+### Унифицированная Архитектура
 
 Все компоненты следуют схожим паттернам:
 
@@ -582,7 +584,7 @@ class DownloadService : Service() {
 }
 ```
 
-### Коммуникация между компонентами
+### Коммуникация Между Компонентами
 
 ```kotlin
 // Activity → Service
@@ -608,7 +610,7 @@ override fun onReceive(context: Context, intent: Intent) {
 }
 ```
 
-### Практические сценарии использования
+### Практические Сценарии Использования
 
 **Сценарий 1: Скачивание файла с уведомлением**
 ```kotlin
@@ -858,7 +860,7 @@ class MusicPlayerService : Service() {
 6. **Выполнением в процессе** - выполняются в процессе приложения
 7. **Системой разрешений** - последовательная модель безопасности
 
-### Ключевые моменты для интервью
+### Ключевые Моменты Для Интервью
 
 **Что спросят:**
 - Какие основные компоненты Android?

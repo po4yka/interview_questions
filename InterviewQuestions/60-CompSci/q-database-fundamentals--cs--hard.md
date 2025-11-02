@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [acid, database, difficulty/hard, indexing, normalization, nosql, sql, transactions]
 sources: [https://en.wikipedia.org/wiki/Database]
 date created: Monday, October 13th 2025, 8:07:02 am
-date modified: Sunday, October 26th 2025, 11:45:29 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

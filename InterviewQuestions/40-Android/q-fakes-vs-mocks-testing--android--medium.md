@@ -3,21 +3,21 @@ id: android-457
 title: Fakes Vs Mocks Testing / Fakes против Mocks Тестирование
 aliases: [Fakes Vs Mocks Testing, Fakes против Mocks Тестирование, Test Doubles, Тестовые дублёры]
 topic: android
-subtopics: [testing-unit, testing-instrumented]
+subtopics: [testing-instrumented, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-testing-strategies--android--medium, q-mockito-vs-mockk--testing--medium, c-dependency-injection]
+related: [c-dependency-injection]
 sources:
   - https://developer.android.com/training/testing/unit-testing/local-unit-tests
 created: 2025-10-20
 updated: 2025-10-28
-tags: [android/testing-unit, android/testing-instrumented, difficulty/medium, fakes, mocks, test-doubles]
+tags: [android/testing-instrumented, android/testing-unit, difficulty/medium, fakes, mocks, test-doubles]
 date created: Tuesday, October 28th 2025, 9:22:36 am
-date modified: Thursday, October 30th 2025, 12:47:46 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +32,7 @@ date modified: Thursday, October 30th 2025, 12:47:46 pm
 
 **Test doubles** — объекты, заменяющие реальные зависимости в тестах. Основные типы: **Stub**, **Mock**, **Fake**, **Spy**.
 
-### Основные типы
+### Основные Типы
 
 **1. Stub — предопределённые ответы**
 - Возвращает жёстко заданные значения
@@ -125,7 +125,7 @@ class UserRepositorySpy(private val real: UserRepository) : UserRepository {
 }
 ```
 
-### Когда использовать
+### Когда Использовать
 
 | Type | Use Case | Verification |
 |------|----------|-------------|
@@ -362,11 +362,8 @@ fun `repository throws on missing user`() = runTest {
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-testing-strategies--android--medium]]
 
 ### Related (Same Level)
-- [[q-mockito-vs-mockk--testing--medium]]
-- [[q-testing-best-practices--testing--medium]]
 
 ### Advanced
 - [[q-espresso-advanced-patterns--android--medium]]

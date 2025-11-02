@@ -3,7 +3,7 @@ id: android-066
 title: "Flow Testing with Turbine / Тестирование Flow с Turbine"
 aliases: ["Flow Testing with Turbine", "Тестирование Flow с Turbine"]
 topic: android
-subtopics: [testing-unit, coroutines, flow]
+subtopics: [coroutines, flow, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [c-turbine-testing, q-compose-testing--android--medium, q-unit-testing-coroutines-flow--android--medium]
 created: 2025-10-12
 updated: 2025-10-28
-tags: [android/testing-unit, android/coroutines, android/flow, difficulty/medium, turbine, unit-testing]
+tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, turbine, unit-testing]
 sources: [https://github.com/cashapp/turbine]
 date created: Tuesday, October 28th 2025, 7:39:15 am
-date modified: Thursday, October 30th 2025, 12:47:52 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -370,13 +370,11 @@ stateFlow.test {
 ## Related Questions
 
 ### Prerequisites
-- [[q-kotlin-flow-basics--kotlin--easy]] - Understanding Flow fundamentals
-- [[q-coroutines-basics--kotlin--easy]] - Coroutines and structured concurrency
 - [[q-unit-testing-basics--android--easy]] - Unit testing foundations
 
 ### Related
 - [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flows
-- [[q-viewmodel-testing--android--medium]] - Testing ViewModels with Flows
+- [[q-compose-testing--android--medium]] - Testing ViewModels with Flows
 - [[q-compose-testing--android--medium]] - Testing Compose UI with state Flows
 
 ### Advanced

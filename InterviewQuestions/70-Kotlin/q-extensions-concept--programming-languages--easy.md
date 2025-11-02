@@ -3,7 +3,7 @@ id: lang-068
 title: "Extensions Concept / Концепция расширений"
 aliases: [Extensions Concept, Концепция расширений]
 topic: programming-languages
-subtopics: [kotlin, extensions, functions]
+subtopics: [extensions, functions, kotlin]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-extensions, c-kotlin-features, q-extension-properties--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, extensions, extension-functions, difficulty/easy]
+tags: [difficulty/easy, extension-functions, extensions, kotlin, programming-languages]
+date created: Friday, October 31st 2025, 6:30:12 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Что Такое Extensions?

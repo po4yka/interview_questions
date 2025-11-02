@@ -5,7 +5,7 @@ aliases: ["View Binding", "Привязка View"]
 
 # Classification
 topic: android
-subtopics: [ui-views, gradle]
+subtopics: [gradle, ui-views]
 question_kind: android
 difficulty: medium
 
@@ -17,14 +17,16 @@ sources: [https://developer.android.com/topic/libraries/view-binding]
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-what-is-viewmodel--android--medium, q-reduce-apk-size-techniques--android--medium]
+related: [q-reduce-apk-size-techniques--android--medium, q-what-is-viewmodel--android--medium]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android/ui-views, android/gradle, view-binding, type-safety, difficulty/medium]
+tags: [android/gradle, android/ui-views, difficulty/medium, type-safety, view-binding]
+date created: Saturday, November 1st 2025, 12:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -52,7 +54,7 @@ android {
 }
 ```
 
-### Использование в Activity
+### Использование В Activity
 
 ```kotlin
 private lateinit var binding: ResultProfileBinding
@@ -66,7 +68,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Использование во Fragment
+### Использование Во Fragment
 
 ```kotlin
 private var _binding: ResultProfileBinding? = null
@@ -95,7 +97,7 @@ override fun onDestroyView() {
 
 **Производительность**: Прямые ссылки вместо поиска по ID
 
-### Генерация классов
+### Генерация Классов
 
 `result_profile.xml` → `ResultProfileBinding` (Pascal case + "Binding")
 

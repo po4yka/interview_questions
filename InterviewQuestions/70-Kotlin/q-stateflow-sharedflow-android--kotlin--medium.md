@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, android, stateflow, sharedflow, flow]
+subtopics: [android, coroutines, flow, sharedflow, stateflow]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Android StateFlow SharedFlow Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-viewmodel-coroutines-lifecycle--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related: [q-flow-basics--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium, q-viewmodel-coroutines-lifecycle--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-18
 
-tags: [kotlin, coroutines, android, stateflow, sharedflow, flow, difficulty/medium]
+tags: [android, coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
+date created: Saturday, October 18th 2025, 3:12:22 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > How to use StateFlow and SharedFlow in Android? Explain the difference, replay cache, when to use each, and patterns for ViewModels.
 
@@ -45,15 +48,15 @@ class UserViewModel : ViewModel() {
     // StateFlow for UI state
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-    
+
     data class UiState(
         val user: User? = null,
         val isLoading: Boolean = false,
         val error: String? = null
     )
-    
+
     data class User(val id: String, val name: String)
-    
+
     fun loadUser(id: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -65,7 +68,7 @@ class UserViewModel : ViewModel() {
             }
         }
     }
-    
+
     private suspend fun fetchUser(id: String): User {
         delay(1000)
         return User(id, "User $id")
@@ -80,12 +83,12 @@ class EventViewModel : ViewModel() {
     // SharedFlow for one-time events
     private val _events = MutableSharedFlow<Event>()
     val events: SharedFlow<Event> = _events.asSharedFlow()
-    
+
     sealed class Event {
         data class ShowToast(val message: String) : Event()
         object NavigateBack : Event()
     }
-    
+
     fun saveData() {
         viewModelScope.launch {
             try {
@@ -96,7 +99,7 @@ class EventViewModel : ViewModel() {
             }
         }
     }
-    
+
     private val repository = Repository()
     class Repository {
         suspend fun save() {}
@@ -109,13 +112,13 @@ class EventViewModel : ViewModel() {
 ```kotlin
 /**
  * StateFlow vs SharedFlow
- * 
+ *
  * StateFlow:
  * - Always has value
  * - Replay = 1 (always)
  * - Conflates (drops intermediate values)
  * - For STATE management
- * 
+ *
  * SharedFlow:
  * - May not have value
  * - Configurable replay
@@ -127,16 +130,16 @@ class ComparisonExample : ViewModel() {
     // StateFlow: Current screen state
     private val _screenState = MutableStateFlow(ScreenState.Loading)
     val screenState = _screenState.asStateFlow()
-    
+
     // SharedFlow: One-time events
     private val _navigationEvents = MutableSharedFlow<Navigation>()
     val navigationEvents = _navigationEvents.asSharedFlow()
-    
+
     sealed class ScreenState {
         object Loading : ScreenState()
         data class Content(val data: String) : ScreenState()
     }
-    
+
     sealed class Navigation {
         object GoBack : Navigation()
         data class GoToDetails(val id: String) : Navigation()
@@ -151,7 +154,7 @@ class ComparisonExample : ViewModel() {
 class GoodStateUsage : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
-    
+
     private val _userName = MutableStateFlow<String?>(null)
     val userName = _userName.asStateFlow()
 }
@@ -160,10 +163,10 @@ class GoodStateUsage : ViewModel() {
 class GoodEventUsage : ViewModel() {
     private val _snackbarMessages = MutableSharedFlow<String>()
     val snackbarMessages = _snackbarMessages.asSharedFlow()
-    
+
     private val _navigationCommands = MutableSharedFlow<NavCommand>()
     val navigationCommands = _navigationCommands.asSharedFlow()
-    
+
     sealed class NavCommand {
         object Back : NavCommand()
     }
@@ -176,7 +179,7 @@ class GoodEventUsage : ViewModel() {
 
 StateFlow и SharedFlow — это горячие типы Flow, предназначенные для обмена состоянием и событиями между компонентами в Android приложениях.
 
-### StateFlow: Управление состоянием
+### StateFlow: Управление Состоянием
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -242,7 +245,7 @@ class EventViewModel : ViewModel() {
 }
 ```
 
-### Ключевые различия
+### Ключевые Различия
 
 ```kotlin
 /**
@@ -282,7 +285,7 @@ class ComparisonExample : ViewModel() {
 }
 ```
 
-### Когда использовать каждый
+### Когда Использовать Каждый
 
 ```kotlin
 // StateFlow: Всегда используйте для состояния, которое должен отображать UI

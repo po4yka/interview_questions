@@ -1,7 +1,7 @@
 ---
 id: kotlin-093
 title: "Testing coroutine timing: advanceTimeBy vs advanceUntilIdle / Тестирование таймингов корутин"
-aliases: [Coroutine Testing, Virtual Time, Testing Timing, Тестирование таймингов]
+aliases: [Coroutine Testing, Testing Timing, Virtual Time, Тестирование таймингов]
 topic: kotlin
 subtopics: [coroutines, testing]
 question_kind: theory
@@ -10,24 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-enum-class-advanced--kotlin--medium, q-lambdas-java-kotlin-syntax--programming-languages--medium, q-kotlin-constructor-types--programming-languages--medium]
+related: []
 created: 2025-10-12
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - testing
-  - timing
-  - virtual-time
-  - runtest
-  - difficulty/medium
-  - virtual-time
-  - test-dispatcher
-  - timing
-  - deterministic
+tags: [coroutines, deterministic, difficulty/medium, kotlin, runtest, test-dispatcher, testing, timing, virtual-time]
+date created: Saturday, November 1st 2025, 1:29:52 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
-# Testing coroutine timing: advanceTimeBy vs advanceUntilIdle / Тестирование таймингов корутин
+# Testing Coroutine Timing: advanceTimeBy Vs advanceUntilIdle / Тестирование Таймингов Корутин
 
 ## English
 
@@ -41,7 +32,7 @@ Understanding `advanceTimeBy()`, `advanceUntilIdle()`, `runCurrent()`, and `curr
 
 Virtual time allows tests to "skip ahead" in time without actually waiting. A `delay(1000)` in test code executes instantly by advancing virtual time.
 
-#### Real Time vs Virtual Time
+#### Real Time Vs Virtual Time
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1100,7 +1091,7 @@ class CommonMistakes {
 }
 ```
 
-### Testing Immediate vs Delayed Execution
+### Testing Immediate Vs Delayed Execution
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1244,31 +1235,31 @@ class ImmediateVsDelayedExecution {
 
 Тестирование корутин с зависимостью от времени без виртуального времени потребовало бы реальных задержек, делая тесты медленными и недетерминированными. Kotlin корутины предоставляют контроль виртуального времени через `TestScope` и `TestDispatcher`, позволяя мгновенное выполнение отложенных операций и детерминированное тестирование чувствительного к времени кода.
 
-### Концепция виртуального времени
+### Концепция Виртуального Времени
 
 Виртуальное время позволяет тестам "перепрыгивать" во времени без реального ожидания. `delay(1000)` в тестовом коде выполняется мгновенно путём продвижения виртуального времени.
 
-### TestScope и TestDispatcher
+### TestScope И TestDispatcher
 
 `runTest` создаёт `TestScope` с `TestDispatcher`, который контролирует виртуальное время.
 
-### advanceTimeBy(delayMillis) - Точное продвижение времени
+### advanceTimeBy(delayMillis) - Точное Продвижение Времени
 
 `advanceTimeBy(millis)` продвигает виртуальное время ровно на указанное количество и выполняет все задачи, запланированные до этого времени.
 
-### advanceUntilIdle() - Выполнить всю отложенную работу
+### advanceUntilIdle() - Выполнить Всю Отложенную Работу
 
 `advanceUntilIdle()` продвигает время до тех пор, пока не останется отложенных задач. Это как перемотка вперёд до конца всей запланированной работы.
 
-### runCurrent() - Выполнить только текущие задачи
+### runCurrent() - Выполнить Только Текущие Задачи
 
 `runCurrent()` выполняет задачи, запланированные на текущее виртуальное время, без продвижения времени.
 
-### currentTime - Текущее виртуальное время
+### currentTime - Текущее Виртуальное Время
 
 `currentTime` возвращает текущее виртуальное время в миллисекундах.
 
-### Тестирование операций delay()
+### Тестирование Операций delay()
 
 Виртуальное время позволяет тестировать `delay()` без реального ожидания.
 
@@ -1276,15 +1267,15 @@ class ImmediateVsDelayedExecution {
 
 Тайм-ауты можно тестировать детерминированно с виртуальным временем.
 
-### Тестирование периодических операций
+### Тестирование Периодических Операций
 
 Циклы с `delay()`, тикеры, опросы - всё тестируется быстро с виртуальным временем.
 
-### Тестирование debounce/throttle в Flow
+### Тестирование debounce/throttle В Flow
 
 Flow операторы с временем (`debounce`, `sample`, `delay`) тестируются детерминированно.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте `runTest` для всех тестов корутин**
 2. **Используйте `advanceUntilIdle()` для полного выполнения**
@@ -1314,7 +1305,5 @@ Flow операторы с временем (`debounce`, `sample`, `delay`) те
 
 ## Related Questions
 
-- [[q-coroutine-lifecycle-management--kotlin--medium|Coroutine lifecycle management]]
 - [[q-flow-testing-strategies--kotlin--medium|Flow testing strategies]]
-- [[q-job-state-machine-transitions--kotlin--medium|Job state machine and transitions]]
 - [[q-structured-concurrency-violations--kotlin--hard|Structured concurrency violations]]

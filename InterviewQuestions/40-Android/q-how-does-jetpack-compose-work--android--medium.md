@@ -1,22 +1,22 @@
 ---
 id: android-368
 title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
-aliases: [Jetpack Compose, Compose UI, Декларативный UI, Declarative UI]
+aliases: [Compose UI, Declarative UI, Jetpack Compose, Декларативный UI]
 topic: android
-subtopics: [ui-compose, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-jetpack-compose-basics--android--medium, q-what-are-the-most-important-components-of-compose--android--medium, q-mutable-state-compose--android--medium]
+related: [q-mutable-state-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-compose, android/architecture-mvvm, compose, declarative-ui, recomposition, difficulty/medium]
+tags: [android/architecture-mvvm, android/ui-compose, compose, declarative-ui, difficulty/medium, recomposition]
 date created: Tuesday, October 28th 2025, 9:34:08 am
-date modified: Thursday, October 30th 2025, 12:48:15 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +35,7 @@ date modified: Thursday, October 30th 2025, 12:48:15 pm
 
 **Основные Концепции**:
 
-### 1. Декларативный vs Императивный
+### 1. Декларативный Vs Императивный
 
 ```kotlin
 // ❌ Императивный (View System)
@@ -140,7 +140,7 @@ fun UserProfile(userId: String) {
 
 **Core Concepts**:
 
-### 1. Declarative vs Imperative
+### 1. Declarative Vs Imperative
 
 ```kotlin
 // ❌ Imperative (View System)
@@ -257,10 +257,8 @@ fun UserProfile(userId: String) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-jetpack-compose--android--easy]] - Basic introduction
 
 ### Related (Same Level)
-- [[q-jetpack-compose-basics--android--medium]] - Comprehensive introduction
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential components
 - [[q-mutable-state-compose--android--medium]] - State management
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - State persistence

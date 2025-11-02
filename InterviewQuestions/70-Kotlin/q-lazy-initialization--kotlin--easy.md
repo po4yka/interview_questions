@@ -1,7 +1,7 @@
 ---
 id: kotlin-215
 title: "Lazy Initialization / Ленивая инициализация"
-aliases: [Lazy Property, Lazy Delegate, Lazy Initialization, Ленивая инициализация]
+aliases: [Lazy Delegate, Lazy Initialization, Lazy Property, Ленивая инициализация]
 topic: kotlin
 subtopics: [delegates, performance]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutinescope-vs-coroutinecontext--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
+related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-coroutinescope-vs-coroutinecontext--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - delegates
-  - lazy
-  - initialization
-  - performance
-  - difficulty/easy
+tags: [delegates, difficulty/easy, initialization, kotlin, lazy, performance]
+date created: Friday, October 31st 2025, 6:29:12 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What function in Kotlin is used for lazy property initialization?
+
+# What Function in Kotlin is Used for Lazy Property Initialization?
 
 # Question (EN)
 > What function in Kotlin is used for lazy property initialization?

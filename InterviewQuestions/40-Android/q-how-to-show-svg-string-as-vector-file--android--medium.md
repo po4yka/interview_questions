@@ -1,20 +1,22 @@
 ---
 id: android-294
 title: "How To Show SVG String As Vector File / Как показать SVG строку как векторный файл"
-aliases: ["SVG String Display", "Отображение SVG строки", "SVG Vector Rendering"]
+aliases: ["SVG String Display", "SVG Vector Rendering", "Отображение SVG строки"]
 topic: android
-subtopics: [ui-graphics, ui-views, ui-compose]
+subtopics: [ui-compose, ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-vector-graphics-animations--android--medium, q-what-is-known-about-view-lifecycles--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
 sources: [https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources]
-tags: [android/ui-graphics, android/ui-views, android/ui-compose, difficulty/medium, svg, vector-graphics, image-loading]
+tags: [android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, image-loading, svg, vector-graphics]
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android/ui-graphics, android/ui-views, android/ui-compose, difficulty/med
 
 Android не поддерживает SVG нативно, но существует несколько проверенных подходов для отображения SVG-строк: AndroidSVG библиотека, Coil с SVG декодером, конвертация в Bitmap, или custom Drawable.
 
-### 1. AndroidSVG Библиотека — Прямая Работа со Строками
+### 1. AndroidSVG Библиотека — Прямая Работа Со Строками
 
 ✅ **Рекомендуемый подход** для большинства сценариев.
 
@@ -62,7 +64,7 @@ fun displaySvgWithSize(svgString: String, imageView: ImageView, width: Int, heig
 **Преимущества:** Легковесность, простота, хорошая производительность.
 **Недостатки:** Нет кэширования из коробки, ручное управление.
 
-### 2. Coil с SVG Декодером — Современный Подход
+### 2. Coil С SVG Декодером — Современный Подход
 
 ✅ **Лучший выбор** для приложений с загрузкой из сети.
 
@@ -139,7 +141,7 @@ fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-### 5. Конвертация в Bitmap
+### 5. Конвертация В Bitmap
 
 ❌ **Избегать** для векторной графики — теряется масштабируемость.
 

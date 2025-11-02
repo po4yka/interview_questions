@@ -15,7 +15,9 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "database", "design", "normalization", "schema", "relational", "difficulty/medium"]
+tags: ["concept", "database", "design", "difficulty/medium", "normalization", "relational", "schema"]
+date created: Sunday, October 12th 2025, 2:28:05 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -54,7 +56,7 @@ Database design is the process of organizing data according to a database model.
 
 ---
 
-## Core Principles / Основные принципы
+## Core Principles / Основные Принципы
 
 ### 1. Normalization / Нормализация
 
@@ -179,7 +181,7 @@ CREATE TABLE professor_courses (
 );
 ```
 
-### 2. Entity-Relationship Modeling / Моделирование сущность-связь
+### 2. Entity-Relationship Modeling / Моделирование Сущность-связь
 
 #### Entities (Сущности)
 ```sql
@@ -293,7 +295,7 @@ CREATE TABLE products (
 );
 ```
 
-### 4. Indexing Strategy / Стратегия индексации
+### 4. Indexing Strategy / Стратегия Индексации
 
 ```sql
 -- Primary index (automatic)
@@ -324,7 +326,7 @@ CREATE FULLTEXT INDEX idx_posts_content
 
 ---
 
-## Design Patterns / Паттерны проектирования
+## Design Patterns / Паттерны Проектирования
 
 ### 1. Temporal Data (History Tracking)
 
@@ -483,7 +485,7 @@ CREATE TABLE categories_closure (
 
 ---
 
-## Best Practices / Лучшие практики
+## Best Practices / Лучшие Практики
 
 ### 1. Naming Conventions
 
@@ -647,14 +649,14 @@ CREATE TABLE orders (
 
 ---
 
-## Related Questions / Связанные вопросы
+## Related Questions / Связанные Вопросы
 
 - [[q-database-migration-purpose--backend--medium]]
 - [[q-relational-table-unique-data--backend--medium]]
 - [[q-sql-join-algorithms-complexity--backend--hard]]
 - [[q-virtual-tables-disadvantages--backend--medium]]
 
-## Related Concepts / Связанные концепции
+## Related Concepts / Связанные Концепции
 
 - [[c-relational-databases]]
 - [[c-database-performance]]

@@ -1,39 +1,22 @@
 ---
 id: android-485
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
-aliases:
-    [
-        Design Offline Maps & Navigation,
-        Проектирование офлайн карт и навигации,
-        Offline Maps Architecture,
-        Архитектура офлайн карт,
-    ]
+aliases: []
 topic: android
-subtopics: [location, files-media, service]
+subtopics: [files-media, location, service]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-design-uber-app--android--hard, c-lifecycle, c-workmanager]
+related: [c-lifecycle, c-workmanager, q-design-uber-app--android--hard]
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags:
-    [
-        android/location,
-        android/files-media,
-        android/service,
-        difficulty/hard,
-        platform/android,
-        lang/kotlin,
-        maps,
-        navigation,
-        offline,
-    ]
+tags: []
 date created: Wednesday, October 29th 2025, 5:02:58 pm
-date modified: Thursday, October 30th 2025, 3:15:12 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -62,7 +45,7 @@ Build offline‑first maps & navigation. Requirements: no network for 24h, GPS d
 
 Модули: maps-core, tiles-store, nav-engine, voice, download-manager, location-core, analytics, flags.
 
-### Тайлы и Хранилище
+### Тайлы И Хранилище
 
 Векторные тайлы (protobuf); региональные пакеты с манифестом; LRU эвикция по редкости региона + размер; лимит 2–4GB. Дельта-обновления при онлайне.
 

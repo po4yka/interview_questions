@@ -1,11 +1,7 @@
 ---
 id: android-317
 title: Compose Modifier Order Performance / Порядок модификаторов и производительность
-aliases:
-  - Compose Modifier Order Performance
-  - Порядок модификаторов и производительность Compose
-  - Modifier Chain Optimization
-  - Оптимизация цепочки модификаторов
+aliases: [Compose Modifier Order Performance, Modifier Chain Optimization, Оптимизация цепочки модификаторов, Порядок модификаторов и производительность Compose]
 topic: android
 subtopics:
   - performance-memory
@@ -19,21 +15,14 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - c-compose-phases
   - c-compose-modifiers
-  - q-compose-recomposition-optimization--android--hard
-  - q-compose-custom-layout--android--hard
+  - c-compose-phases
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags:
-  - android/performance-memory
-  - android/ui-compose
-  - difficulty/medium
-  - compose
-  - optimization
+tags: [android/performance-memory, android/ui-compose, compose, difficulty/medium, optimization]
 date created: Thursday, October 30th 2025, 11:23:09 am
-date modified: Thursday, October 30th 2025, 12:43:45 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -46,7 +35,7 @@ date modified: Thursday, October 30th 2025, 12:43:45 pm
 
 ## Ответ (RU)
 
-### Направление обработки
+### Направление Обработки
 
 Модификаторы работают в двух фазах:
 - **Constraints & measurement** (верх → низ): размерные ограничения идут вниз
@@ -54,7 +43,7 @@ date modified: Thursday, October 30th 2025, 12:43:45 pm
 
 **Оптимизация**: размещайте size/width/height рано в цепочке — downstream модификаторы получают фиксированные constraints, избегая лишних измерений.
 
-### Критические паттерны
+### Критические Паттерны
 
 **1. Padding + Background**
 ```kotlin
@@ -125,7 +114,7 @@ fun Modifier.debugBorder() = drawWithContent {
 fun Modifier.debugBorder() = border(2.dp, Color.Red)
 ```
 
-### Ключевые принципы
+### Ключевые Принципы
 
 - **Draw-only дешевле layout**: используйте `drawBehind`/`drawWithContent` для визуальных эффектов
 - **Переиспользуйте объекты**: `Brush`, `Shape`, `Painter` — выносите в константы или `remember`
@@ -145,7 +134,7 @@ fun Modifier.debugBorder() = border(2.dp, Color.Red)
 
 ## Answer (EN)
 
-### Processing direction
+### Processing Direction
 
 Modifiers operate in two phases:
 - **Constraints & measurement** (top → bottom): size constraints flow down
@@ -153,7 +142,7 @@ Modifiers operate in two phases:
 
 **Optimization**: place size/width/height early in chain — downstream modifiers receive fixed constraints, avoiding unnecessary measurements.
 
-### Critical patterns
+### Critical Patterns
 
 **1. Padding + Background**
 ```kotlin
@@ -224,7 +213,7 @@ fun Modifier.debugBorder() = drawWithContent {
 fun Modifier.debugBorder() = border(2.dp, Color.Red)
 ```
 
-### Key principles
+### Key Principles
 
 - **Draw-only cheaper than layout**: use `drawBehind`/`drawWithContent` for visual effects
 - **Reuse objects**: `Brush`, `Shape`, `Painter` — extract to constants or `remember`
@@ -265,16 +254,12 @@ fun Modifier.debugBorder() = border(2.dp, Color.Red)
 
 ### Prerequisites (Easier)
 - [[q-android-jetpack-overview--android--easy]]
-- [[q-compose-state-vs-remember--android--easy]]
-- [[q-compose-side-effects--android--medium]]
 
 ### Related (Same Level)
 - [[q-compose-gesture-detection--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
-- [[q-compose-lazy-column-optimization--android--medium]]
 
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]]
 - [[q-compose-custom-layout--android--hard]]
-- [[q-compose-recomposition-optimization--android--hard]]
 - [[q-compose-lazy-layout-optimization--android--hard]]

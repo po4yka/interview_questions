@@ -1,7 +1,7 @@
 ---
 id: android-354
 title: Room Type Converters / TypeConverters в Room
-aliases: [Room Type Converters, TypeConverters в Room, Room конвертеры типов]
+aliases: [Room Type Converters, Room конвертеры типов, TypeConverters в Room]
 
 # Classification
 topic: android
@@ -26,8 +26,11 @@ created: 2025-10-15
 updated: 2025-10-28
 
 # Tags
-tags: [android/room, android/serialization, room, database, typeconverter, difficulty/medium]
+tags: [android/room, android/serialization, database, difficulty/medium, room, typeconverter]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 Что вы знаете о TypeConverters в Room?
@@ -42,7 +45,7 @@ What do you know about Converters in Room?
 
 **Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы, которые Room умеет сохранять в SQLite. Они позволяют работать с Date, Enum, List и сложными объектами как с обычными полями Entity.
 
-### Основной принцип
+### Основной Принцип
 
 Room знает только примитивы (Int, Long, String, Boolean, etc). Для кастомных типов нужны конвертеры.
 
@@ -64,7 +67,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-### Области видимости
+### Области Видимости
 
 Конвертеры можно применять на 4 уровнях:
 
@@ -91,7 +94,7 @@ data class User(
 )
 ```
 
-### Распространённые примеры
+### Распространённые Примеры
 
 **Enum:**
 
@@ -126,7 +129,7 @@ class Converters {
 }
 ```
 
-### ProvidedTypeConverter — инъекция зависимостей
+### ProvidedTypeConverter — Инъекция Зависимостей
 
 Когда конвертеру нужны зависимости (например, Gson):
 
@@ -147,7 +150,7 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
     .build()
 ```
 
-### Ограничения и best practices
+### Ограничения И Best Practices
 
 1. **Избегайте тяжёлых операций** — конвертеры вызываются на каждой операции чтения/записи
 2. **Не для связей** — Room запрещает хранить ссылки на другие Entity (используйте Foreign Keys + @Relation)
@@ -355,4 +358,4 @@ Reasons:
 - [[q-room-code-generation-timing--android--medium]] - Room annotation processing
 
 ### Advanced (Harder)
-- [[q-room-database-migrations--room--medium]] - Database schema migrations
+- [[q-room-database-migrations--android--medium]] - Database schema migrations

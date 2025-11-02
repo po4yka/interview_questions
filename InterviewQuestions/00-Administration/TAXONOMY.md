@@ -1,3 +1,8 @@
+---
+date created: Saturday, October 18th 2025, 1:36:05 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
+---
+
 # Controlled Vocabularies & Taxonomy
 
 **Purpose**: Single source of truth for all controlled vocabularies used in YAML frontmatter across the vault.
@@ -609,7 +614,7 @@ Before finalizing any note, verify:
 
 ## Common Mistakes
 
-### WRONG: Multiple topics
+### WRONG: Multiple Topics
 ```yaml
 topic: [algorithms, data-structures]  # FORBIDDEN - only ONE topic
 ```
@@ -620,19 +625,19 @@ moc: [[moc-algorithms]]               # FORBIDDEN - no brackets
 related: [[c-hash-map]], [[c-array]]  # FORBIDDEN - array without double brackets
 ```
 
-### WRONG: Russian in tags
+### WRONG: Russian in Tags
 ```yaml
 tags: [массивы, хеш-таблица]          # FORBIDDEN - English only
 ```
 
-### WRONG: Android without android/* tags
+### WRONG: Android without android/* Tags
 ```yaml
 topic: android
 subtopics: [ui-compose, lifecycle]
 tags: [compose, lifecycle]            # FORBIDDEN - missing android/* tags
 ```
 
-### CORRECT: Proper Android note
+### CORRECT: Proper Android Note
 ```yaml
 topic: android
 subtopics: [ui-compose, lifecycle]

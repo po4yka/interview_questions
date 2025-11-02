@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - kotlin-native
-  - multiplatform
-  - interop
   - cinterop
+  - interop
+  - kotlin-native
   - memory-model
+  - multiplatform
 question_kind: theory
 difficulty: hard
 
@@ -23,14 +23,17 @@ source_note: Comprehensive guide on Kotlin/Native
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-expect-actual-kotlin--kotlin--medium, q-structured-concurrency--kotlin--hard, q-kotlin-collections--kotlin--medium]
+related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-collections--kotlin--medium, q-structured-concurrency--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, kotlin-native, multiplatform, interop, cinterop, ios, native, difficulty/hard]
+tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplatform, native]
+date created: Sunday, October 12th 2025, 3:21:04 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What is Kotlin/Native? Explain native compilation, interop with C libraries and Objective-C/Swift, memory model differences, and use cases for iOS development.
 
@@ -56,24 +59,24 @@ tags: [kotlin, kotlin-native, multiplatform, interop, cinterop, ios, native, dif
 
 ```
 
-       Kotlin Source Code              
+       Kotlin Source Code
 
-                
-        
-          Kotlin/Native  
-            Compiler     
-        
-                
-    
-                           
-           
-  LLVM                LLVM   
-  iOS                 macOS  
-           
-                          
-         
- .framework           Binary  
-         
+
+
+          Kotlin/Native
+            Compiler
+
+
+
+
+
+  LLVM                LLVM
+  iOS                 macOS
+
+
+
+ .framework           Binary
+
 ```
 
 ### Basic Kotlin/Native Project
@@ -92,8 +95,8 @@ fun getPlatformName(): String {
 import platform.UIKit.UIDevice
 
 actual class Platform {
-    actual val name: String = 
-        UIDevice.currentDevice.systemName() + " " + 
+    actual val name: String =
+        UIDevice.currentDevice.systemName() + " " +
         UIDevice.currentDevice.systemVersion
 }
 
@@ -125,19 +128,19 @@ import curl.*
 
 fun httpGet(url: String): String? {
     val curl = curl_easy_init()
-    
+
     if (curl != null) {
         curl_easy_setopt(curl, CURLOPT_URL, url)
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L)
-        
+
         val result = curl_easy_perform(curl)
         curl_easy_cleanup(curl)
-        
+
         if (result == CURLE_OK) {
             return "Success"
         }
     }
-    
+
     return null
 }
 
@@ -168,16 +171,16 @@ import mylib.*
 
 fun useStruct() {
     val struct = nativeHeap.alloc<MyStruct>()
-    
+
     struct.id = 42
     struct.name[0] = 'T'.code.toByte()
     struct.name[1] = 'e'.code.toByte()
     struct.name[2] = 's'.code.toByte()
     struct.name[3] = 't'.code.toByte()
     struct.value = 3.14
-    
+
     process_struct(struct.ptr)
-    
+
     nativeHeap.free(struct)
 }
 ```
@@ -213,14 +216,14 @@ import cocoapods.MyFramework.*
 
 fun useObjCClass() {
     val obj = MyClass()
-    
+
     // Call methods
     val greeting = obj.greet("World")
     println(greeting) // Hello, World!
-    
+
     val sum = obj.addAnd(5, 3)
     println(sum) // 8
-    
+
     // Properties
     obj.title = "My Title"
     println(obj.title)
@@ -247,7 +250,7 @@ data class User(val id: Int, val name: String)
 @OptIn(ExperimentalForeignApi::class)
 fun iosGetUsers(completion: (List<User>) -> Unit) {
     val repository = UserRepository()
-    
+
     MainScope().launch {
         val users = repository.getUsers()
         completion(users)
@@ -262,7 +265,7 @@ import Shared
 
 class ViewModel: ObservableObject {
     @Published var users: [User] = []
-    
+
     func loadUsers() {
         SharedKt.iosGetUsers { users in
             DispatchQueue.main.async {
@@ -275,7 +278,7 @@ class ViewModel: ObservableObject {
 // SwiftUI View
 struct UsersView: View {
     @StateObject var viewModel = ViewModel()
-    
+
     var body: some View {
         List(viewModel.users, id: \.id) { user in
             Text(user.name)
@@ -336,7 +339,7 @@ import kotlinx.cinterop.*
 fun manualMemory() {
     // Allocate
     val buffer = nativeHeap.allocArray<ByteVar>(1024)
-    
+
     try {
         // Use buffer
         buffer[0] = 'H'.code.toByte()
@@ -367,7 +370,7 @@ class FlowWrapper<T>(private val flow: Flow<T>) {
         onThrow: (Throwable) -> Unit
     ): Cancellable {
         val scope = MainScope()
-        
+
         scope.launch {
             try {
                 flow.collect { value ->
@@ -378,7 +381,7 @@ class FlowWrapper<T>(private val flow: Flow<T>) {
                 onThrow(e)
             }
         }
-        
+
         return object : Cancellable {
             override fun cancel() {
                 scope.cancel()
@@ -394,7 +397,7 @@ interface Cancellable {
 // Swift usage
 func observeFlow() {
     let wrapper = FlowWrapper(flow: myFlow)
-    
+
     let cancellable = wrapper.subscribe(
         onEach: { value in
             print("Got value: \(value)")
@@ -406,7 +409,7 @@ func observeFlow() {
             print("Error: \(error)")
         }
     )
-    
+
     // Later
     cancellable.cancel()
 }
@@ -433,7 +436,7 @@ actual class PlatformFile actual constructor(private val path: String) {
             error = null
         ) as String
     }
-    
+
     actual fun writeText(text: String) {
         val url = NSURL.fileURLWithPath(path)
         (text as NSString).writeToURL(
@@ -452,30 +455,30 @@ actual class PlatformFile actual constructor(private val path: String) {
 // build.gradle.kts
 kotlin {
     ios()
-    
+
     // Or specific targets
     iosArm64()
     iosX64() // iOS Simulator
     iosSimulatorArm64() // M1 Simulator
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
             }
         }
-        
+
         val iosMain by creating {
             dependsOn(commonMain)
             dependencies {
                 // iOS-specific dependencies
             }
         }
-        
+
         val iosArm64Main by getting {
             dependsOn(iosMain)
         }
-        
+
         val iosX64Main by getting {
             dependsOn(iosMain)
         }
@@ -502,7 +505,7 @@ class ApiServiceImpl(private val client: NetworkClient) : ApiService {
         val json = client.get("https://api.example.com/users")
         return Json.decodeFromString(json)
     }
-    
+
     override suspend fun createUser(user: User): User {
         val body = Json.encodeToString(user)
         val json = client.post("https://api.example.com/users", body)
@@ -517,7 +520,7 @@ actual class NetworkClient {
     actual suspend fun get(url: String): String = suspendCoroutine { continuation ->
         val nsUrl = NSURL(string = url)
         val request = NSURLRequest(uRL = nsUrl)
-        
+
         NSURLSession.sharedSession.dataTaskWithRequest(request) { data, response, error ->
             when {
                 error != null -> continuation.resumeWithException(
@@ -531,7 +534,7 @@ actual class NetworkClient {
             }
         }.resume()
     }
-    
+
     actual suspend fun post(url: String, body: String): String {
         // Similar implementation
         return ""
@@ -613,7 +616,7 @@ suspend fun getData(): List<User>
 
 **Kotlin/Native** - это технология для компиляции Kotlin кода в нативные бинарные файлы, которые могут работать без виртуальной машины. Позволяет Kotlin таргетировать платформы как iOS, macOS, Linux, Windows и встроенные системы.
 
-### Ключевые возможности
+### Ключевые Возможности
 
 1. **Нативная компиляция**: Компилируется в платформо-специфичный машинный код
 2. **Не требует JVM**: Автономные исполняемые файлы
@@ -630,17 +633,17 @@ import curl.*
 
 fun httpGet(url: String): String? {
     val curl = curl_easy_init()
-    
+
     if (curl != null) {
         curl_easy_setopt(curl, CURLOPT_URL, url)
         val result = curl_easy_perform(curl)
         curl_easy_cleanup(curl)
-        
+
         if (result == CURLE_OK) {
             return "Success"
         }
     }
-    
+
     return null
 }
 ```
@@ -669,7 +672,7 @@ class ViewModel {
 }
 ```
 
-### Модель памяти
+### Модель Памяти
 
 **Новая модель памяти (1.7.20+):**
 
@@ -680,7 +683,7 @@ class DataHolder {
 }
 ```
 
-### Случаи использования
+### Случаи Использования
 
 1. **iOS разработка** - Разделение бизнес-логики
 2. **Кросс-платформенные библиотеки** - Один код, множество платформ

@@ -1,15 +1,11 @@
 ---
 id: android-096
 title: Почему данные пользователя могут исчезать при повороте экрана? / Why might user data disappear during screen rotation?
-aliases:
-  - Screen rotation data loss
-  - Configuration change data loss
-  - Потеря данных при повороте
-  - Данные исчезают при повороте
+aliases: [Configuration change data loss, Screen rotation data loss, Данные исчезают при повороте, Потеря данных при повороте]
 topic: android
 subtopics:
-  - lifecycle
   - architecture-mvvm
+  - lifecycle
   - ui-state
 question_kind: android
 difficulty: hard
@@ -20,22 +16,16 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
   - q-compose-gesture-detection--android--medium
+  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
 created: 2025-10-13
 updated: 2025-10-30
-tags:
-  - android/lifecycle
-  - android/architecture-mvvm
-  - android/ui-state
-  - lifecycle
-  - configuration-changes
-  - state-management
-  - viewmodel
-  - difficulty/hard
+tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, configuration-changes, difficulty/hard, lifecycle, state-management, viewmodel]
 sources:
   - https://developer.android.com/guide/topics/resources/runtime-changes
   - https://developer.android.com/topic/libraries/architecture/saving-states
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -52,7 +42,7 @@ sources:
 
 Android по умолчанию уничтожает и пересоздает Activity при изменении конфигурации (поворот экрана). Непонятые переменные сбрасываются, и данные теряются.
 
-### Почему Android пересоздаёт Activity
+### Почему Android Пересоздаёт Activity
 
 Система пересоздаёт Activity для:
 1. Применения новых ресурсов (layout-land, values-sw600dp)
@@ -60,7 +50,7 @@ Android по умолчанию уничтожает и пересоздает A
 3. Пересчёта размеров layout
 4. Применения изменений плотности/языка/темы
 
-### Жизненный цикл при повороте
+### Жизненный Цикл При Повороте
 
 ```
 Поворот устройства
@@ -78,7 +68,7 @@ onCreate(savedInstanceState)  ← ВОССТАНОВИТЬ СОСТОЯНИЕ
 onStart() → onRestoreInstanceState() → onResume()
 ```
 
-### ❌ Проблема: потеря данных
+### ❌ Проблема: Потеря Данных
 
 ```kotlin
 // Данные будут потеряны при повороте
@@ -131,7 +121,7 @@ class FormActivity : AppCompatActivity() {
 - Bundle имеет лимит ~500KB (TransactionTooLargeException)
 - Только сериализуемые типы (Parcelable, Serializable, примитивы)
 
-### ✅ Решение 2: ViewModel (для сложных данных)
+### ✅ Решение 2: ViewModel (для Сложных данных)
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -235,7 +225,7 @@ class MainActivity : AppCompatActivity() {
 - Усложняет код
 - Считается bad practice
 
-### Автоматическое сохранение View
+### Автоматическое Сохранение View
 
 ```xml
 <!-- View с android:id автоматически сохраняют базовое состояние -->
@@ -256,7 +246,7 @@ class MainActivity : AppCompatActivity() {
 - View должна иметь `android:id`
 - View должна быть присоединена к window во время `onSaveInstanceState()`
 
-### Что требует ручного сохранения
+### Что Требует Ручного Сохранения
 
 ```kotlin
 // ❌ НЕ сохраняется автоматически
@@ -276,7 +266,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 }
 ```
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Ошибка 1: игнорирование savedInstanceState
@@ -310,7 +300,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Матрица решений
+### Матрица Решений
 
 | Тип данных | Решение | Причина |
 |------------|---------|---------|
@@ -321,7 +311,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 | Сетевые данные | ViewModel + Repository | Не перезагружать |
 | Ввод формы | SavedStateHandle | Должен пережить process death |
 
-### Полный пример (best practice)
+### Полный Пример (best practice)
 
 ```kotlin
 class RegistrationViewModel(
@@ -459,7 +449,7 @@ class FormActivity : AppCompatActivity() {
 - Bundle has ~500KB limit (TransactionTooLargeException)
 - Only serializable types (Parcelable, Serializable, primitives)
 
-### ✅ Solution 2: ViewModel (for complex data)
+### ✅ Solution 2: ViewModel (for Complex data)
 
 ```kotlin
 class FormViewModel : ViewModel() {

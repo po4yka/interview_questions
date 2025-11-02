@@ -1,10 +1,10 @@
 ---
 id: "20251025-110313"
 title: "Broadcast Receiver / Широковещательный Приемник"
-aliases: ["Broadcast Receiver", "BroadcastReceiver", "Широковещательный Приемник", "Приемник Трансляций"]
+aliases: ["Broadcast Receiver", "BroadcastReceiver", "Приемник Трансляций", "Широковещательный Приемник"]
 summary: "Android component that responds to system-wide or app-specific broadcast messages"
 topic: "android"
-subtopics: ["components", "broadcast", "system-events"]
+subtopics: ["broadcast", "components", "system-events"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "components", "broadcast", "system-events", "difficulty/medium"]
+tags: ["android", "broadcast", "components", "concept", "difficulty/medium", "system-events"]
+date created: Saturday, October 25th 2025, 11:06:45 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Broadcast Receiver / Широковещательный Приемник
@@ -24,7 +26,7 @@ tags: ["concept", "android", "components", "broadcast", "system-events", "diffic
 
 BroadcastReceiver is one of Android's four fundamental components that allows applications to receive and respond to broadcast messages from the Android system or other applications. Broadcasts are asynchronous messages sent system-wide or to specific apps, enabling loose coupling between components. Receivers can listen for system events (battery low, connectivity changes) or custom app events.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 BroadcastReceiver - это один из четырех фундаментальных компонентов Android, который позволяет приложениям получать и обрабатывать широковещательные сообщения от системы Android или других приложений. Трансляции - это асинхронные сообщения, отправляемые системно или конкретным приложениям, обеспечивающие слабую связанность между компонентами. Приемники могут прослушивать системные события (низкий заряд батареи, изменения подключения) или пользовательские события приложения.
 
@@ -38,7 +40,7 @@ BroadcastReceiver - это один из четырех фундаменталь
 - **Background limitations**: Android 8.0+ restricts implicit broadcasts
 - **Lifecycle**: Short-lived, cannot perform long-running operations
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Системные трансляции**: Отправляются системой Android (подключение, батарея, загрузка)
 - **Пользовательские трансляции**: Отправляются вашим приложением или другими приложениями

@@ -1,7 +1,7 @@
 ---
 id: android-415
 title: "Privacy Sandbox FLEDGE / Privacy Sandbox FLEDGE (Protected Audience API)"
-aliases: [FLEDGE, Protected Audience API, Privacy Sandbox FLEDGE, On-Device Ad Auctions]
+aliases: [FLEDGE, On-Device Ad Auctions, Privacy Sandbox FLEDGE, Protected Audience API]
 topic: android
 subtopics: [privacy-sdks]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-retrofit-modify-all-requests--android--hard, q-http-protocols-comparison--android--medium]
+related: [q-http-protocols-comparison--android--medium, q-retrofit-modify-all-requests--android--hard]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/privacy-sdks, privacy-sandbox, fledge, protected-audience, remarketing, privacy, advertising, difficulty/hard]
+tags: [advertising, android/privacy-sdks, difficulty/hard, fledge, privacy, privacy-sandbox, protected-audience, remarketing]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -212,7 +214,7 @@ class EcommerceRemarketingManager(
 }
 ```
 
-### Технические вызовы
+### Технические Вызовы
 
 **1. Производительность**
 - JavaScript execution < 50ms (иначе таймаут)

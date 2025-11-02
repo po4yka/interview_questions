@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-flow, c-coroutines, q-flow-map-operator--programming-languages--medium]
+related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, coroutines, flow, operators, reactive, difficulty/easy]
+tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languages, reactive]
+date created: Friday, October 31st 2025, 6:30:45 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Чем Воспользоваться Если Нужно Преобразовать Один Поток Данных В Другой Поток Данных

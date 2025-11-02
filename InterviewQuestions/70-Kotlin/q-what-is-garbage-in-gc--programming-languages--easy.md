@@ -3,19 +3,19 @@ id: lang-061
 title: "What Is Garbage In GC / Что такое мусор в GC"
 aliases: [What Is Garbage In GC, Что такое мусор в GC]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, jvm]
+subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-interpreter-pattern--design-patterns--hard, q-mvvm-pattern--architecture-patterns--medium, q-prototype-pattern--design-patterns--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [garbage-collection, jvm, kotlin, memory-management, programming-languages, difficulty/easy]
+tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
 date created: Saturday, October 4th 2025, 1:21:00 pm
-date modified: Sunday, October 26th 2025, 1:39:58 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # О Каком Мусоре Идет Речь В Сборщике Мусора?
@@ -117,7 +117,3 @@ val data = ByteArray(1000)
 Это объекты в памяти, которые больше не используются и недостижимы из корневых объектов. Сборщик мусора освобождает эти объекты, чтобы уменьшить использование памяти.
 
 ## Related Questions
-
-- [[q-prototype-pattern--design-patterns--medium]]
-- [[q-interpreter-pattern--design-patterns--hard]]
-- [[q-mvvm-pattern--architecture-patterns--medium]]

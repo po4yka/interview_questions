@@ -10,17 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-destructuring-declarations--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-coroutine-exception-handler--kotlin--medium]
+related: [q-coroutine-exception-handler--kotlin--medium, q-destructuring-declarations--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - equals
-  - hashcode
-  - contracts
-  - difficulty/hard
+tags: [contracts, difficulty/hard, equals, hashcode, programming-languages]
+date created: Friday, October 31st 2025, 6:34:31 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Tell about equals and hashCode contracts
+
+# Tell about Equals and hashCode Contracts
 
 # Question (EN)
 > Tell about equals() and hashCode() contracts in Kotlin. What are their requirements and how do they work together?
@@ -362,7 +360,7 @@ fun demonstrateMistakes() {
 
 **В Kotlin можно использовать `data class` для автоматической генерации `equals()`, `hashCode()`, а также `copy()` и `toString()`.**
 
-### Примеры кода
+### Примеры Кода
 
 **Нарушения контракта equals() и исправления:**
 

@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-fragment--android--easy, q-fragment-lifecycle--android--easy, q-viewmodel-in-fragment--android--medium]
+related: [q-viewmodel-in-fragment--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/fragment, android/serialization, fragment, bundle, data-passing, difficulty/easy]
+tags: [android/fragment, android/serialization, bundle, data-passing, difficulty/easy, fragment]
 date created: Thursday, October 30th 2025, 12:57:36 pm
-date modified: Thursday, October 30th 2025, 2:17:20 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How to pass parameters to a Fragment?
 
 Рекомендуемый и безопасный способ передачи параметров во фрагмент в Android — использование **Bundle** через свойство `arguments` фрагмента. Этот подход поддерживается системой Android и переживает изменения конфигурации (например, поворот экрана).
 
-### Основные принципы
+### Основные Принципы
 
 1. **Фабричный метод (Factory Method)**
    Создайте статический метод `newInstance()` в companion object, который принимает параметры и возвращает экземпляр фрагмента с установленным Bundle.
@@ -47,7 +47,7 @@ How to pass parameters to a Fragment?
 4. **Извлечение в onCreate()**
    Получайте аргументы в методе `onCreate()` через `requireArguments()` или `arguments?.let {}`.
 
-### Пример 1: Передача примитивных типов
+### Пример 1: Передача Примитивных Типов
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -91,7 +91,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-### Пример 2: Передача сложных объектов через Parcelable
+### Пример 2: Передача Сложных Объектов Через Parcelable
 
 ```kotlin
 // Data класс с Parcelable
@@ -154,7 +154,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. ✅ **Всегда используйте Bundle и arguments** — не передавайте данные через конструктор
 2. ✅ **Создавайте фабричные методы** (`newInstance`) в companion object
@@ -164,7 +164,7 @@ class UserFragment : Fragment() {
 6. ❌ **Никогда не передавайте данные через конструктор** — они теряются при пересоздании
 7. ❌ **Не используйте setter-методы** — небезопасно при изменении конфигурации
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ НЕПРАВИЛЬНО - использование конструктора
@@ -381,7 +381,7 @@ class CorrectFragment : Fragment() {
 
 ## References
 
-- [[c-fragment]] - Fragment basics and lifecycle
+- [[c-fragments]] - Fragment basics and lifecycle
 - [[c-bundle]] - Android Bundle data container
 - [[c-parcelable]] - Parcelable interface for efficient serialization
 - [Android Developer Guide: Fragments](https://developer.android.com/guide/fragments)
@@ -390,8 +390,6 @@ class CorrectFragment : Fragment() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-fragment--android--easy]] - Fragment fundamentals
-- [[q-fragment-lifecycle--android--easy]] - Understanding fragment lifecycle
 
 ### Related (Same Level)
 - [[q-fragment-communication--android--easy]] - Communication between fragments

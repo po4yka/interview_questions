@@ -1,28 +1,24 @@
 ---
 id: kotlin-141
 title: "Kotlin Type System Features / Возможности системы типов Kotlin"
-aliases: [Type System, Null Safety, Type Safety, Система типов Kotlin]
+aliases: [Null Safety, Type Safety, Type System, Система типов Kotlin]
 topic: kotlin
-subtopics: [type-system, null-safety, data-classes]
+subtopics: [data-classes, null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutines-vs-threads--programming-languages--medium, q-testing-viewmodels-coroutines--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
+related: [q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - null-safety
-  - data-classes
-  - sealed-classes
-  - type-inference
-  - type-system
-  - difficulty/medium
+tags: [data-classes, difficulty/medium, kotlin, null-safety, sealed-classes, type-inference, type-system]
+date created: Friday, October 31st 2025, 6:28:53 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Какие знаешь особенности системы типов в Kotlin?
+
+# Какие Знаешь Особенности Системы Типов В Kotlin?
 
 # Question (EN)
 > What Kotlin type system features do you know?
@@ -43,7 +39,7 @@ var nonNull: String = "Hello"     // Cannot be null
 var nullable: String? = null      // Explicitly nullable
 ```
 
-### 2. Collections (Mutable vs Immutable)
+### 2. Collections (Mutable Vs Immutable)
 Clear separation between read-only and mutable collections:
 ```kotlin
 val list: List<String> = listOf("a", "b")           // Read-only
@@ -92,6 +88,6 @@ Null Safety (Безопасность null), Коллекции разделен
 
 ## Related Questions
 
-- [[q-coroutines-vs-threads--programming-languages--medium]]
+-
 - [[q-testing-viewmodels-coroutines--kotlin--medium]]
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]

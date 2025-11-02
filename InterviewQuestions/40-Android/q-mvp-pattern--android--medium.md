@@ -1,7 +1,7 @@
 ---
 id: android-200
 title: "MVP Pattern / MVP Паттерн"
-aliases: ["MVP Pattern", "MVP Паттерн", "Model-View-Presenter"]
+aliases: ["Model-View-Presenter", "MVP Pattern", "MVP Паттерн"]
 topic: android
 subtopics: [architecture-mvvm, testing-unit]
 question_kind: theory
@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-architectural-patterns--android--medium, c-mvvm-pattern, c-architecture-patterns]
+related: [c-architecture-patterns, c-mvvm-pattern, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/architecture-mvvm, android/testing-unit, architecture-patterns, mvp, model-view-presenter, difficulty/medium]
+tags: [android/architecture-mvvm, android/testing-unit, architecture-patterns, difficulty/medium, model-view-presenter, mvp]
 date created: Tuesday, October 28th 2025, 9:50:53 pm
-date modified: Thursday, October 30th 2025, 3:14:31 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -123,7 +123,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 3. **Boilerplate код** — требуется больше кода по сравнению с простыми подходами
 4. **Потеря состояния** — при изменениях конфигурации Presenter пересоздаётся (если не сохранён)
 
-### MVP vs MVVM vs MVC
+### MVP Vs MVVM Vs MVC
 
 | Аспект | MVP | MVVM | MVC |
 |--------|-----|------|-----|
@@ -252,7 +252,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 3. **Boilerplate** — requires more code compared to simple approaches
 4. **State loss** — Presenter is typically recreated on configuration changes (unless retained)
 
-### MVP vs MVVM vs MVC
+### MVP Vs MVVM Vs MVC
 
 | Aspect | MVP | MVVM | MVC |
 |--------|-----|------|-----|
@@ -298,7 +298,7 @@ view?.showData(data)
 ## References
 
 - [[c-mvvm-pattern]]
-- [[c-architecture-patterns]]
+- [[moc-architecture-patterns]]
 - [Model–view–presenter (Wikipedia)](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter)
 - [Android Architecture Patterns Part 2: Model-View-Presenter](https://medium.com/upday-devs/android-architecture-patterns-part-2-model-view-presenter-8a6faaae14a5)
 

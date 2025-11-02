@@ -4,7 +4,7 @@ title: "Accessibility / Доступность"
 aliases: ["Accessibility", "Android Accessibility", "TalkBack", "Доступность", "Специальные возможности Android"]
 summary: "Features and APIs that make Android apps usable for people with disabilities"
 topic: "android"
-subtopics: ["accessibility", "ui-ux", "talkback"]
+subtopics: ["accessibility", "talkback", "ui-ux"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "accessibility", "ui-ux", "talkback", "a11y", "difficulty/medium"]
+tags: ["a11y", "accessibility", "android", "concept", "difficulty/medium", "talkback", "ui-ux"]
+date created: Saturday, October 25th 2025, 11:03:49 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Accessibility / Доступность
@@ -24,7 +26,7 @@ tags: ["concept", "android", "accessibility", "ui-ux", "talkback", "a11y", "diff
 
 Android Accessibility encompasses a set of features, services, and APIs designed to make apps usable by people with visual, auditory, motor, or cognitive disabilities. It includes screen readers like TalkBack, switch access controls, content descriptions, and semantic properties that help assistive technologies understand and navigate app interfaces. Implementing accessibility ensures your app reaches a wider audience and complies with legal accessibility requirements.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Доступность Android включает набор функций, сервисов и API, предназначенных для людей с нарушениями зрения, слуха, двигательных функций или когнитивных способностей. Включает программы чтения с экрана, такие как TalkBack, элементы управления переключением, описания контента и семантические свойства, которые помогают вспомогательным технологиям понимать и перемещаться по интерфейсам приложений. Реализация доступности обеспечивает охват более широкой аудитории и соответствие юридическим требованиям.
 
@@ -40,7 +42,7 @@ Android Accessibility encompasses a set of features, services, and APIs designed
 - **Live Regions**: Announce dynamic content changes to screen readers
 - **Custom Actions**: Define custom accessibility actions for complex gestures
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Поддержка TalkBack**: Программа чтения с экрана с голосовой обратной связью для элементов UI
 - **Описания контента**: Текстовые альтернативы для нетекстовых элементов (изображения, иконки, кнопки)

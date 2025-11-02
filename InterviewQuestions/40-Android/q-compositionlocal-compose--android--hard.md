@@ -16,7 +16,7 @@ updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
 sources: ["https://developer.android.com/jetpack/compose/compositionlocal"]
 date created: Thursday, October 30th 2025, 11:56:59 am
-date modified: Thursday, October 30th 2025, 12:44:37 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -42,7 +42,7 @@ CompositionLocal — механизм передачи данных через �
 - Локальных зависимостей с явным API
 - Часто меняющихся данных на верхних уровнях
 
-### Dynamic vs Static
+### Dynamic Vs Static
 
 **compositionLocalOf** (динамический):
 ```kotlin
@@ -64,13 +64,13 @@ val LocalTheme = staticCompositionLocalOf<Theme> {
 
 **Правило выбора**: часто меняется + узкая рекомпозиция → `compositionLocalOf`; редко меняется + широкое использование → `staticCompositionLocalOf`.
 
-### Границы инвалидации
+### Границы Инвалидации
 
 - **Dynamic**: инвалидирует только читателей
 - **Static**: инвалидирует всё поддерево от Provider
 - **Оптимизация**: размещай Provider близко к потребителям при частых обновлениях
 
-### Безопасные дефолты
+### Безопасные Дефолты
 
 ```kotlin
 // ✅ Падаем явно — обнаруживаем ошибку сразу
@@ -82,7 +82,7 @@ val LocalAuth = compositionLocalOf<Auth> {
 val LocalAuth = compositionLocalOf<Auth?> { null }
 ```
 
-### Типичный паттерн
+### Типичный Паттерн
 
 ```kotlin
 // Статический контекст приложения
@@ -132,7 +132,7 @@ CompositionLocal is a mechanism for passing data through the composition tree wi
 - Local dependencies with explicit API
 - Frequently changing data at high levels
 
-### Dynamic vs Static
+### Dynamic Vs Static
 
 **compositionLocalOf** (dynamic):
 ```kotlin
@@ -229,14 +229,9 @@ fun SomeScreen() {
 
 ### Prerequisites
 - [[q-compose-remember-derived-state--android--medium]] — State management fundamentals
-- [[q-compose-recomposition--android--medium]] — Understanding recomposition
 
 ### Related
 - [[q-compositionlocal-advanced--android--medium]] — Advanced CompositionLocal patterns
-- [[q-compose-state-hoisting--android--medium]] — State management alternatives
-- [[q-compose-side-effects--android--medium]] — Side effects and composition lifecycle
 
 ### Advanced
 - [[q-compose-performance-optimization--android--hard]] — Performance optimization strategies
-- [[q-compose-stability--android--hard]] — Stability and skippability
-- [[q-compose-compiler-intrinsics--android--hard]] — Compiler optimizations

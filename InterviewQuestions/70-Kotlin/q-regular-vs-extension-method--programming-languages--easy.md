@@ -3,7 +3,7 @@ id: lang-036
 title: "Regular Vs Extension Method / Обычный метод против Extension метода"
 aliases: [Regular Vs Extension Method, Обычный метод против Extension метода]
 topic: programming-languages
-subtopics: [functions, extension-functions, language-features]
+subtopics: [extension-functions, functions, language-features]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-hot-vs-cold-flows--programming-languages--medium, q-reference-types-protect-from-deletion--programming-languages--easy, q-solid-principles--software-design--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [extension-functions, functions, kotlin, programming-languages, static-methods, difficulty/easy]
+tags: [difficulty/easy, extension-functions, functions, kotlin, programming-languages, static-methods]
 date created: Friday, October 3rd 2025, 7:03:57 pm
-date modified: Sunday, October 26th 2025, 1:37:21 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # В Чём Отличие Обычного Метода От Extension Метода В Kotlin

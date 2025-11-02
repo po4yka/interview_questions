@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-design-patterns, c-collections, q-iterator-order-guarantee--programming-languages--medium]
+related: [c-collections, c-design-patterns, q-iterator-order-guarantee--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, collections, design-patterns, iterator, kotlin, difficulty/easy]
+tags: [collections, design-patterns, difficulty/easy, iterator, kotlin, programming-languages]
+date created: Friday, October 31st 2025, 6:32:07 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Что Такое Итератор?
@@ -205,4 +207,4 @@ val filtered = list.filter { it % 2 != 0 }
 
 - [[q-what-happens-to-unneeded-objects--programming-languages--easy]]
 - [[q-interface-vs-abstract-class--programming-languages--medium]]
-- [[q-data-class-component-functions--programming-languages--easy]]
+-

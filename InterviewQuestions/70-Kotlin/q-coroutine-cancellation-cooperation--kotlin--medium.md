@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, cancellation, cooperation, yield, ensureActive]
+subtopics: [cancellation, cooperation, coroutines, ensureActive, yield]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-kotlin-coroutin
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, coroutines, cancellation, cooperation, yield, ensureActive, difficulty/medium]
+tags: [cancellation, cooperation, coroutines, difficulty/medium, ensureActive, kotlin, yield]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Implement cancellation-aware long-running operations. Use yield(), ensureActive(), and isActive properly. Handle CancellationException correctly.
 
@@ -525,7 +528,7 @@ onPause {
 
 Отмена корутин **кооперативная** - корутины должны проверять отмену и реагировать соответственно.
 
-### Методы проверки отмены
+### Методы Проверки Отмены
 
 #### 1. ensureActive()
 
@@ -602,9 +605,9 @@ try {
 }
 ```
 
-### Реальные примеры
+### Реальные Примеры
 
-#### Обработка изображений
+#### Обработка Изображений
 
 ```kotlin
 suspend fun processImages(images: List<Image>): List<ProcessedImage> {
@@ -625,7 +628,7 @@ suspend fun processImages(images: List<Image>): List<ProcessedImage> {
 }
 ```
 
-#### Сетевой запрос с очисткой
+#### Сетевой Запрос С Очисткой
 
 ```kotlin
 suspend fun fetchData(endpoint: String): Data {
@@ -644,7 +647,7 @@ suspend fun fetchData(endpoint: String): Data {
 }
 ```
 
-#### Фоновая синхронизация
+#### Фоновая Синхронизация
 
 ```kotlin
 suspend fun startSync() = coroutineScope {
@@ -661,7 +664,7 @@ suspend fun startSync() = coroutineScope {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда проверяйте отмену в циклах**:
    ```kotlin
@@ -695,7 +698,7 @@ suspend fun startSync() = coroutineScope {
    }
    ```
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Не проверка отмены**:
    ```kotlin

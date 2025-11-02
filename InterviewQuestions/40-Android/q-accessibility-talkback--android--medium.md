@@ -13,12 +13,12 @@ moc: moc-android
 related: [c-accessibility, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/ui-accessibility, android/ui-navigation, accessibility, talkback, difficulty/medium]
+tags: [accessibility, android/ui-accessibility, android/ui-navigation, difficulty/medium, talkback]
 sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/accessibility
 date created: Wednesday, October 29th 2025, 4:18:49 pm
-date modified: Thursday, October 30th 2025, 11:12:47 am
+date modified: Saturday, November 1st 2025, 3:59:44 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 11:12:47 am
 
 [[c-accessibility|TalkBack]] - встроенная программа чтения с экрана Android для незрячих и слабовидящих пользователей, обеспечивающая голосовую обратную связь.
 
-### 1. Описания контента
+### 1. Описания Контента
 
 Каждый значимый UI элемент должен иметь осмысленное описание, объясняющее назначение:
 
@@ -58,7 +58,7 @@ Image(
 
 **Декоративные элементы**: используйте `contentDescription = null` для иконок, которые дублируют текст рядом.
 
-### 2. Семантическое объединение
+### 2. Семантическое Объединение
 
 Группируйте связанные элементы, чтобы TalkBack читал их как единое целое:
 
@@ -80,7 +80,7 @@ Divider(
 )
 ```
 
-### 3. Порядок фокуса
+### 3. Порядок Фокуса
 
 Контролируйте навигацию TalkBack для логической последовательности:
 
@@ -97,7 +97,7 @@ view.accessibilityTraversalBefore = R.id.next_view
 view.accessibilityTraversalAfter = R.id.previous_view
 ```
 
-### 4. Пользовательские действия
+### 4. Пользовательские Действия
 
 Добавляйте кастомные действия для контекстных операций:
 
@@ -118,7 +118,7 @@ Box(
 )
 ```
 
-### 5. Живые регионы
+### 5. Живые Регионы
 
 Уведомляйте пользователей об изменениях без фокуса:
 

@@ -3,19 +3,19 @@ id: android-236
 title: "Gradle Basics / Gradle Основы"
 aliases: [Gradle Basics, Gradle Основы]
 topic: android
-subtopics: [gradle, build-variants]
+subtopics: [build-variants, gradle]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-runtime-art--android--medium, q-large-file-upload--android--medium, q-room-transactions-dao--room--medium]
+related: [q-android-runtime-art--android--medium, q-large-file-upload--android--medium, q-room-transactions-dao--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/gradle, android/build-variants, build-system, dependencies, difficulty/easy]
+tags: [android/build-variants, android/gradle, build-system, dependencies, difficulty/easy]
 date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Gradle Basics

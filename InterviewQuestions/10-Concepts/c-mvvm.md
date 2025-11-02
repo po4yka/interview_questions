@@ -1,7 +1,7 @@
 ---
 id: "20251025-143100"
 title: "MVVM Pattern / Паттерн MVVM"
-aliases: ["MVVM", "Model-View-ViewModel", "MVVM Pattern", "Паттерн MVVM", "Архитектура MVVM"]
+aliases: ["Model-View-ViewModel", "MVVM Pattern", "MVVM", "Архитектура MVVM", "Паттерн MVVM"]
 summary: "Architectural pattern that separates UI (View) from business logic (Model) using an intermediary ViewModel that exposes observable data and commands"
 topic: "android"
 subtopics: ["architecture-patterns", "mvvm", "viewmodel"]
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "architecture-patterns", "mvvm", "viewmodel", "livedata", "databinding", "difficulty/medium"]
+tags: ["android", "architecture-patterns", "concept", "databinding", "difficulty/medium", "livedata", "mvvm", "viewmodel"]
+date created: Saturday, October 25th 2025, 12:51:28 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # MVVM Pattern / Паттерн MVVM
@@ -24,7 +26,7 @@ tags: ["concept", "android", "architecture-patterns", "mvvm", "viewmodel", "live
 
 MVVM (Model-View-ViewModel) is an architectural pattern that separates the user interface (View) from business logic (Model) using an intermediary component called ViewModel. The ViewModel exposes observable data and commands that the View can bind to, enabling automatic UI updates when data changes. This pattern promotes testability by isolating business logic from Android framework dependencies, supports reactive programming with LiveData/Flow, and survives configuration changes like screen rotations. MVVM is the recommended architecture pattern for Android development, integrated deeply with Android Architecture Components.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 MVVM (Model-View-ViewModel) - это архитектурный паттерн, который разделяет пользовательский интерфейс (View) от бизнес-логики (Model) с помощью промежуточного компонента ViewModel. ViewModel предоставляет наблюдаемые данные и команды, к которым View может привязаться, обеспечивая автоматическое обновление UI при изменении данных. Этот паттерн способствует тестируемости, изолируя бизнес-логику от зависимостей Android framework, поддерживает реактивное программирование с LiveData/Flow и переживает изменения конфигурации, такие как поворот экрана. MVVM - рекомендуемый архитектурный паттерн для разработки Android, глубоко интегрированный с Android Architecture Components.
 
@@ -39,7 +41,7 @@ MVVM (Model-View-ViewModel) - это архитектурный паттерн, 
 - Supports reactive programming and declarative UI
 - Recommended by Google for Android apps
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - Разделение обязанностей: View (UI), ViewModel (логика представления), Model (данные/бизнес-логика)
 - View наблюдает за данными ViewModel через LiveData, StateFlow или Data Binding

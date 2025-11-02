@@ -1,9 +1,9 @@
 ---
 id: android-112
 title: "Module Types Android / Типы модулей Android"
-aliases: [Android Module Types, Module Types, Типы модулей Android, Типы модулей]
+aliases: [Android Module Types, Module Types, Типы модулей, Типы модулей Android]
 topic: android
-subtopics: [architecture-modularization, gradle, build-variants]
+subtopics: [architecture-modularization, build-variants, gradle]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,10 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/architecture-modularization, android/gradle, android/build-variants, modularization, modules, architecture, difficulty/medium]
+tags: [android/architecture-modularization, android/build-variants, android/gradle, architecture, difficulty/medium, modularization, modules]
 moc: moc-android
-related: [c-modularization, c-gradle, q-dependency-injection-android--android--medium]
+related: [c-gradle, c-modularization]
 sources: [https://developer.android.com/topic/modularization/patterns]
+date created: Saturday, November 1st 2025, 1:25:21 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ sources: [https://developer.android.com/topic/modularization/patterns]
 
 В модуляризации Android существует 5 основных типов модулей:
 
-### 1. Data модули (Модули данных)
+### 1. Data Модули (Модули данных)
 
 Data модуль содержит репозиторий, источники данных и классы моделей. Три основные обязанности:
 
@@ -51,7 +53,7 @@ Data модуль содержит репозиторий, источники д
     User.kt
 ```
 
-### 2. Feature модули (Модули функций)
+### 2. Feature Модули (Модули функций)
 
 Feature модуль — изолированная часть функциональности приложения, соответствующая экрану или серии связанных экранов (регистрация, checkout flow).
 
@@ -70,7 +72,7 @@ Feature модули:
     ProfileHeader.kt
 ```
 
-### 3. App модули (Модули приложения)
+### 3. App Модули (Модули приложения)
 
 App модули — точка входа в приложение:
 - Зависят от feature модулей
@@ -97,7 +99,7 @@ App модули — точка входа в приложение:
 :app-auto         // Android Auto
 ```
 
-### 4. Common модули (Core модули)
+### 4. Common Модули (Core модули)
 
 Common/core модули содержат код, часто используемый другими модулями. Уменьшают избыточность и не представляют конкретный слой архитектуры:
 
@@ -140,7 +142,7 @@ Common/core модули содержат код, часто используе�
     EmailValidator.kt
 ```
 
-### 5. Test модули (Тестовые модули)
+### 5. Test Модули (Тестовые модули)
 
 Test модули используются только для тестирования. Содержат тестовый код, ресурсы и зависимости.
 
@@ -161,7 +163,7 @@ Test модули используются только для тестиров�
     TestData.kt
 ```
 
-### Пример зависимостей модулей
+### Пример Зависимостей Модулей
 
 ```
 :app
@@ -357,9 +359,7 @@ Test modules are used for testing purposes only. They contain test code, resourc
 ## Related Questions
 
 ### Same Level (Medium)
-- [[q-dependency-injection-android--android--medium]]
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]]
-- [[q-workmanager-execution-guarantee--android--medium]]
+- Related content to be added
 
 ### Advanced (Hard)
-- [[q-task-affinity--android--medium]]
+- Related content to be added

@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-concurrency, q-kotlin-coroutines-advanced--kotlin--hard, q-os-fundamentals-concepts--computer-science--hard]
+related: [c-concurrency]
 created: 2025-10-12
 updated: 2025-01-25
 tags: [concurrency, difficulty/hard, multithreading, mutexes, race-conditions, synchronization]
 sources: [https://en.wikipedia.org/wiki/Concurrency_(computer_science)]
 date created: Monday, October 13th 2025, 7:54:11 am
-date modified: Sunday, October 26th 2025, 10:43:27 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -597,8 +597,6 @@ class SafeTask {
 - [[q-clean-code-principles--software-engineering--medium]] - Clean code principles
 - Basic threading concepts
 
-### Related (Same Level)
-- [[q-os-fundamentals-concepts--computer-science--hard]] - OS fundamentals
 
 ### Advanced (Harder)
 - Advanced concurrency patterns

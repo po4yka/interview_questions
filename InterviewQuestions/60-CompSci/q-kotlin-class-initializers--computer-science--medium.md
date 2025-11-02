@@ -10,14 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-actor-pattern--kotlin--hard, q-zip-parallelism-guarantee--programming-languages--medium, q-channelflow-callbackflow-flow--kotlin--medium]
+related: [q-zip-parallelism-guarantee--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Saturday, November 1st 2025, 1:26:01 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Расскажи про инициализаторы в классах в Kotlin
+
+# Расскажи Про Инициализаторы В Классах В Kotlin
 
 # Question (EN)
 > Tell me about class initializers in Kotlin
@@ -120,7 +121,7 @@ class Example(val param: String) {
 
 В Kotlin есть несколько механизмов инициализации:
 
-### 1. Первичный конструктор (Primary Constructor)
+### 1. Первичный Конструктор (Primary Constructor)
 
 Объявляется в заголовке класса, используется для основной инициализации:
 
@@ -130,7 +131,7 @@ class Person(val name: String, val age: Int) {
 }
 ```
 
-### 2. Блоки init
+### 2. Блоки Init
 
 Выполняются при вызове первичного конструктора, может быть несколько:
 
@@ -149,7 +150,7 @@ class Person(val name: String) {
 }
 ```
 
-### 3. Вторичные конструкторы (Secondary Constructors)
+### 3. Вторичные Конструкторы (Secondary Constructors)
 
 Объявляются с ключевым словом `constructor`, должны вызывать первичный конструктор:
 

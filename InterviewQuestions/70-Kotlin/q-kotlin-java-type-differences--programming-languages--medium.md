@@ -3,27 +3,22 @@ id: lang-051
 title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"
 aliases: [Kotlin Java Type Differences, Различия типов Kotlin и Java]
 topic: programming-languages
-subtopics: [type-system, null-safety]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-static-variable--programming-languages--easy, q-executor-service-java--java--medium, q-kotlin-constructor-types--programming-languages--medium]
+related: [q-executor-service-java--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - collections
-  - comparison
-  - java
-  - null-safety
-  - type-inference
-  - type-system
-  - difficulty/medium
+tags: [collections, comparison, difficulty/medium, java, null-safety, programming-languages, type-inference, type-system]
+date created: Saturday, November 1st 2025, 12:42:09 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Чем типы в Kotlin отличаются от типов в Java
+
+# Чем Типы В Kotlin Отличаются От Типов В Java
 
 # Question (EN)
 > How do Kotlin types differ from Java types?
@@ -83,7 +78,7 @@ if (obj instanceof String) {
 
 Типы в Kotlin и Java существенно различаются в нескольких ключевых аспектах, что делает Kotlin более безопасным и выразительным языком.
 
-### Основные различия
+### Основные Различия
 
 | Особенность | Kotlin | Java |
 |---------|--------|------|
@@ -94,7 +89,7 @@ if (obj instanceof String) {
 | **Умные приведения** | Автоматические после проверки `is` | Явное приведение после `instanceof` |
 | **Примитивные типы** | Нет примитивов (унифицированная система типов) | Отдельные примитивы (`int`) и обертки (`Integer`) |
 
-### 1. Null Safety - Безопасность от null
+### 1. Null Safety - Безопасность От Null
 
 **Kotlin:**
 ```kotlin
@@ -157,7 +152,7 @@ fun getUpperCaseSafe(text: String?): String? {
 }
 ```
 
-### 2. Коллекции - Изменяемые vs Неизменяемые
+### 2. Коллекции - Изменяемые Vs Неизменяемые
 
 **Kotlin:**
 ```kotlin
@@ -205,7 +200,7 @@ List<String> list2 = List.of("a", "b");
 // Оба имеют тип List<String>, но разное поведение
 ```
 
-### 3. Data классы - Автогенерация методов
+### 3. Data Классы - Автогенерация Методов
 
 **Kotlin:**
 ```kotlin
@@ -293,7 +288,7 @@ public class User {
 public record User(int id, String name, String email) {}
 ```
 
-### 4. Вывод типов - Type Inference
+### 4. Вывод Типов - Type Inference
 
 **Kotlin:**
 ```kotlin
@@ -351,7 +346,7 @@ public class Example {
 }
 ```
 
-### 5. Умные приведения - Smart Casts
+### 5. Умные Приведения - Smart Casts
 
 **Kotlin:**
 ```kotlin
@@ -428,7 +423,7 @@ public String process(Object value) {
 // Но все еще менее мощный чем Kotlin
 ```
 
-### 6. Примитивные типы
+### 6. Примитивные Типы
 
 **Kotlin:**
 ```kotlin
@@ -479,7 +474,7 @@ int[] primitiveArray = {1, 2, 3};
 Integer[] objectArray = {1, 2, 3};
 ```
 
-### 7. Функциональные типы
+### 7. Функциональные Типы
 
 **Kotlin:**
 ```kotlin
@@ -521,7 +516,7 @@ interface MyFunction {
 MyFunction multiply = (a, b) -> a * b;
 ```
 
-### Итоговое сравнение
+### Итоговое Сравнение
 
 **Почему типы Kotlin лучше:**
 
@@ -598,7 +593,7 @@ if (adult != null) {  // Обязательная проверка
 }
 ```
 
-### Резюме ключевых различий
+### Резюме Ключевых Различий
 
 1. **Null Safety**: Kotlin предотвращает NPE на этапе компиляции
 2. **Коллекции**: Явное различие изменяемых/неизменяемых
@@ -610,5 +605,5 @@ if (adult != null) {  // Обязательная проверка
 ## Related Questions
 
 - [[q-kotlin-static-variable--programming-languages--easy]]
-- [[q-executor-service-java--java--medium]]
-- [[q-kotlin-constructor-types--programming-languages--medium]]
+- [[q-executor-service-java--kotlin--medium]]
+-

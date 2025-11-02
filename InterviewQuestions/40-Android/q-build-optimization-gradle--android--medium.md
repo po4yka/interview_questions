@@ -3,23 +3,20 @@ id: android-043
 title: Gradle Build Optimization / Оптимизация сборки Gradle
 aliases: ["Gradle Build Optimization", "Оптимизация сборки Gradle"]
 topic: android
-subtopics: [gradle, build-variants, dependency-management]
+subtopics: [build-variants, dependency-management, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related:
-  - q-android-build-optimization--android--medium
-  - q-android-modularization--android--medium
-  - q-baseline-profiles-optimization--android--medium
+related: []
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/gradle, android/build-variants, android/dependency-management, gradle, build-performance, difficulty/medium]
+tags: [android/build-variants, android/dependency-management, android/gradle, build-performance, difficulty/medium, gradle]
 date created: Thursday, October 30th 2025, 11:11:42 am
-date modified: Thursday, October 30th 2025, 12:43:28 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -32,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:43:28 pm
 
 ## Ответ (RU)
 
-### Ключевые стратегии
+### Ключевые Стратегии
 
 **1. Configuration Cache** — крупнейший выигрыш для чистых сборок
 - Кэширует фазу конфигурации; последующие сборки пропускают переконфигурацию
@@ -243,12 +240,12 @@ Analyze: task timeline, cache hit rates, configuration time, dependency resoluti
 
 ### Prerequisites (Easier)
 - [[q-android-build-optimization--android--medium]] — General Android build optimization strategies
-- [[q-gradle-basics--tools--easy]] — Gradle fundamentals and build lifecycle
+- [[q-gradle-basics--android--easy]] — Gradle fundamentals and build lifecycle
 
 ### Related (Same Level)
 - [[q-android-modularization--android--medium]] — Module structure for better build performance
 - [[q-baseline-profiles-optimization--android--medium]] — Runtime and build-time optimization
-- [[q-dependency-management-gradle--android--medium]] — Managing dependencies efficiently
+ — Managing dependencies efficiently
 
 ### Advanced (Harder)
 - [[q-cicd-pipeline-android--android--medium]] — CI/CD setup with build caching

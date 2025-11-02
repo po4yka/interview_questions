@@ -26,7 +26,7 @@ updated: 2025-10-31
 
 tags: [android/cache-offline, android/files-media, android/performance-memory, difficulty/medium, en, ru]
 date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Saturday, October 25th 2025, 4:47:06 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Question (EN)
@@ -45,22 +45,22 @@ Image loading libraries like Glide, Fresco, and Coil solve complex problems rela
 ```kotlin
 // High-level overview of Glide architecture
 
-           Glide Request Manager             
-  (Lifecycle-aware request management)       
+           Glide Request Manager
+  (Lifecycle-aware request management)
 
-                   
 
-         Request Coordinator & Engine        
-    (Job scheduling, deduplication)          
 
-                   
-       
-                             
-  
- Memory        Disk      Network 
- Cache         Cache     Fetcher 
+         Request Coordinator & Engine
+    (Job scheduling, deduplication)
+
+
+
+
+
+ Memory        Disk      Network
+ Cache         Cache     Fetcher
  (LruCache)    (DiskLRU  (OkHttp)
-  
+
 ```
 
 ### 2. Loading Pipeline
@@ -100,13 +100,13 @@ class GlideRequestFlow {
             networkExecutor.execute {
                 val stream = httpClient.fetch(url)
                 val bitmap = BitmapFactory.decodeStream(stream)
-                
+
                 // Save to disk cache
                 diskCache.put(url, bitmap)
-                
+
                 // Save to memory cache
                 memoryCache.put(url, bitmap)
-                
+
                 mainHandler.post {
                     target.setImageBitmap(bitmap)
                 }
@@ -208,15 +208,15 @@ class CenterCropTransformation : Transformation {
             targetWidth.toFloat() / source.width,
             targetHeight.toFloat() / source.height
         )
-        
+
         val scaledWidth = (scale * source.width).toInt()
         val scaledHeight = (scale * source.height).toInt()
-        
+
         val scaled = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true)
-        
+
         val left = (scaled.width - targetWidth) / 2
         val top = (scaled.height - targetHeight) / 2
-        
+
         return Bitmap.createBitmap(scaled, left, top, targetWidth, targetHeight)
     }
 }
@@ -257,7 +257,7 @@ class BitmapPool(maxSize: Int) {
     fun get(width: Int, height: Int, config: Bitmap.Config): Bitmap? {
         val size = width * height * config.bytesPerPixel
         val bitmaps = pool.get(size) ?: return null
-        
+
         return if (bitmaps.isNotEmpty()) {
             bitmaps.removeAt(bitmaps.size - 1)
         } else null
@@ -265,7 +265,7 @@ class BitmapPool(maxSize: Int) {
 
     fun put(bitmap: Bitmap) {
         if (!bitmap.isMutable) return
-        
+
         val size = bitmap.byteCount
         val bitmaps = pool.get(size) ?: mutableListOf()
         bitmaps.add(bitmap)
@@ -288,7 +288,7 @@ sealed class DiskCacheStrategy {
 class DiskCacheManager {
     fun shouldCacheData(strategy: DiskCacheStrategy): Boolean {
         return when (strategy) {
-            DiskCacheStrategy.All, 
+            DiskCacheStrategy.All,
             DiskCacheStrategy.Data,
             DiskCacheStrategy.Automatic -> true
             else -> false

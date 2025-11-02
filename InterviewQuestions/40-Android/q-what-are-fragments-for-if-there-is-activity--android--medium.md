@@ -3,20 +3,22 @@ id: android-291
 title: "Fragments vs Activity / Фрагменты vs Activity"
 aliases: [Fragments vs Activity, Фрагменты vs Activity]
 topic: android
-subtopics: [fragment, activity, ui-navigation]
+subtopics: [activity, fragment, ui-navigation]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, c-activity-lifecycle, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]
+related: [c-activity-lifecycle, c-fragments, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard, q-what-is-activity-and-what-is-it-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/fragment, android/activity, android/ui-navigation, fragments, activity, difficulty/medium]
+tags: [activity, android/activity, android/fragment, android/ui-navigation, difficulty/medium, fragments]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What are fragments for if there is Activity?
+# What Are Fragments for if there is Activity?
 
 # Вопрос (RU)
 

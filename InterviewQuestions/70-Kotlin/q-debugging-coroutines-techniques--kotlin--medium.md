@@ -5,23 +5,16 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - debugging
-  - profiling
-  - troubleshooting
-  - tools
+tags: [coroutines, debugging, difficulty/medium, kotlin, profiling, tools, troubleshooting]
 moc: moc-kotlin
-related: [q-produce-actor-builders--kotlin--medium, q-kotlin-null-safety--kotlin--medium, q-kotlin-any-unit-nothing--programming-languages--medium]
-  - q-coroutine-exception-handler--kotlin--medium
-  - q-common-coroutine-mistakes--kotlin--medium
-  - q-race-conditions-coroutines--kotlin--hard
+related: [q-common-coroutine-mistakes--kotlin--medium, q-coroutine-exception-handler--kotlin--medium, q-kotlin-any-unit-nothing--programming-languages--medium, q-kotlin-null-safety--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
 subtopics:
   - coroutines
   - debugging
   - profiling
   - troubleshooting
+date created: Saturday, November 1st 2025, 12:10:44 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Question (EN)
@@ -720,7 +713,7 @@ fun debugTest() = runTest {
 
 
 
-### 1. Включение режима отладки
+### 1. Включение Режима Отладки
 
 **Первый шаг:** Включите режим отладки kotlinx.coroutines для добавления информации о корутинах в имена потоков.
 
@@ -742,7 +735,7 @@ Thread: DefaultDispatcher-worker-1
 Thread: DefaultDispatcher-worker-1 @coroutine#2
 ```
 
-### 2. CoroutineName для отладки
+### 2. CoroutineName Для Отладки
 
 **Используйте CoroutineName** для идентификации корутин в логах и отладчике:
 
@@ -768,7 +761,7 @@ fun main() = runBlocking {
 // Загрузка изображений на: main @ImageDownloader#3
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **Включайте режим отладки** - Добавляет информацию о корутинах в имена потоков
 2. **Используйте CoroutineName** - Значительно упрощает отладку

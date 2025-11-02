@@ -1,7 +1,7 @@
 ---
 id: android-446
 title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
-aliases: [FileProvider for Secure File Sharing, FileProvider для безопасного обмена файлами, FileProvider, Безопасный обмен файлами]
+aliases: [FileProvider, FileProvider for Secure File Sharing, FileProvider для безопасного обмена файлами, Безопасный обмен файлами]
 topic: android
 subtopics: [files-media, permissions]
 question_kind: android
@@ -11,12 +11,12 @@ language_tags: [en, ru]
 sources: [https://developer.android.com/reference/androidx/core/content/FileProvider]
 status: draft
 moc: moc-android
-related: [c-content-provider, q-runtime-permissions-best-practices--permissions--medium, q-android-storage-types--android--medium]
+related: [c-content-provider, q-android-storage-types--android--medium, q-runtime-permissions-best-practices--android--medium]
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/files-media, android/permissions, content-provider, difficulty/medium, file-sharing, security]
 date created: Tuesday, October 28th 2025, 7:39:08 am
-date modified: Thursday, October 30th 2025, 12:47:50 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -80,7 +80,7 @@ val intent = Intent(Intent.ACTION_SEND).apply {
 context.startActivity(Intent.createChooser(intent, null))
 ```
 
-### Типы путей
+### Типы Путей
 
 | Элемент | Системный путь | Назначение |
 |---------|---------------|------------|
@@ -205,7 +205,7 @@ context.startActivity(Intent.createChooser(intent, null))
 - [[c-content-provider|ContentProvider Basics]]
 
 ### Related
-- [[q-runtime-permissions-best-practices--permissions--medium|Runtime Permissions Best Practices]]
+- [[q-runtime-permissions-best-practices--android--medium|Runtime Permissions Best Practices]]
 - [[q-intent-filters-android--android--medium|Intent Filters]]
 
 ### Advanced

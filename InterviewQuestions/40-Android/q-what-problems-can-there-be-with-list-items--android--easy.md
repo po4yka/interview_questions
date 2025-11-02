@@ -3,20 +3,22 @@ id: android-079
 title: "List Items Problems / Проблемы с элементами списка"
 aliases: [List Items Problems, Проблемы с элементами списка]
 topic: android
-subtopics: [ui-views, performance-memory]
+subtopics: [performance-memory, ui-views]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-recyclerview, c-performance, q-what-is-known-about-recyclerview--android--easy, q-what-is-diffutil-for--android--medium]
+related: [c-memory-optimization, c-performance, c-recyclerview]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/ui-views, android/performance-memory, recyclerview, listview, performance, memory, difficulty/easy]
+tags: [android/performance-memory, android/ui-views, difficulty/easy, listview, memory, performance, recyclerview]
+date created: Saturday, November 1st 2025, 1:26:05 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# Какие могут быть проблемы с элементами списка?
+# Какие Могут Быть Проблемы С Элементами Списка?
 
 **English**: What problems can there be with list items?
 

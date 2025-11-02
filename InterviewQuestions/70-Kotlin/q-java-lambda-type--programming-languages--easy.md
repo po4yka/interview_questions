@@ -3,7 +3,7 @@ id: lang-012
 title: "Java Lambda Type / Тип лямбд Java"
 aliases: [Java Lambda Type, Тип лямбд Java]
 topic: programming-languages
-subtopics: [java, functional-programming, lambda-expressions]
+subtopics: [functional-programming, java, lambda-expressions]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-functional-programming, c-java-features, c-lambda-expressions]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [programming-languages, java, functional-programming, lambda, functional-interface, difficulty/easy]
+tags: [difficulty/easy, functional-interface, functional-programming, java, lambda, programming-languages]
+date created: Friday, October 31st 2025, 6:32:22 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Какой Тип У Лямбды В Java?

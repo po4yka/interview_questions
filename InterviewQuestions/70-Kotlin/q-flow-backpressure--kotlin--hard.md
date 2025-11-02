@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - flow
   - backpressure
   - buffer
-  - conflate
   - collectlatest
+  - conflate
+  - flow
 question_kind: theory
 difficulty: hard
 
@@ -23,14 +23,17 @@ source_note: Comprehensive guide on Flow backpressure handling
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-basics--kotlin--easy, q-channel-buffering-strategies--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
+related: [q-advanced-coroutine-patterns--kotlin--hard, q-channel-buffering-strategies--kotlin--hard, q-flow-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, flow, backpressure, buffer, conflate, collectlatest, performance, difficulty/hard]
+tags: [backpressure, buffer, collectlatest, conflate, difficulty/hard, flow, kotlin, performance]
+date created: Sunday, October 12th 2025, 3:14:51 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What is backpressure in Kotlin Flow? Explain buffer(), conflate(), and collectLatest() operators and when to use each strategy.
 
@@ -579,7 +582,7 @@ fastSensor
 
 **Противодавление** (backpressure) возникает когда производитель создаёт значения быстрее, чем потребитель может их обработать. Kotlin Flow предоставляет несколько операторов для работы с противодавлением.
 
-### buffer() - Параллельная обработка
+### buffer() - Параллельная Обработка
 
 ```kotlin
 flow {
@@ -595,7 +598,7 @@ flow {
 // Время: ~1000мс вместо 1200мс
 ```
 
-### conflate() - Только последнее значение
+### conflate() - Только Последнее Значение
 
 ```kotlin
 flow {
@@ -611,7 +614,7 @@ flow {
 // Собирает только: 0, 3, 6, 9
 ```
 
-### collectLatest() - Отмена и перезапуск
+### collectLatest() - Отмена И Перезапуск
 
 ```kotlin
 searchQuery.collectLatest { query ->
@@ -619,7 +622,7 @@ searchQuery.collectLatest { query ->
 }
 ```
 
-### Выбор стратегии
+### Выбор Стратегии
 
 | Случай | Стратегия | Причина |
 |--------|-----------|---------|
@@ -643,7 +646,7 @@ searchQuery.collectLatest { query ->
 - [[q-flow-testing-advanced--kotlin--hard]] - Flow
 
 ### Prerequisites (Easier)
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
+-  - Flow
 - [[q-catch-operator-flow--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 

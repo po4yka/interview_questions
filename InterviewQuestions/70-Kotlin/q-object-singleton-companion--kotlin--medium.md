@@ -3,18 +3,20 @@ id: kotlin-234
 title: "Object, Companion Object, and Singleton Pattern / object, companion object и паттерн Singleton"
 aliases: ["Object Singleton Companion", "Объект Singleton Companion"]
 topic: kotlin
-subtopics: [object-keyword, singleton-pattern, companion-object]
+subtopics: [companion-object, object-keyword, singleton-pattern]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inheritance-open-final--kotlin--medium, q-class-initialization-order--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+related: [q-class-initialization-order--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
 created: "2025-10-12"
 updated: 2025-01-25
-tags: [kotlin, object-keyword, singleton-pattern, companion-object, kotlin-features, difficulty/medium]
+tags: [companion-object, difficulty/medium, kotlin, kotlin-features, object-keyword, singleton-pattern]
 sources: [https://kotlinlang.org/docs/object-declarations.html]
+date created: Saturday, November 1st 2025, 12:42:09 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Вопрос (RU)
@@ -265,7 +267,6 @@ object Logger {
 
 ## References
 
-- [[c-oop-fundamentals]]
 - https://kotlinlang.org/docs/object-declarations.html
 
 ## Related Questions

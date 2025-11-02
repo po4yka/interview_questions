@@ -4,7 +4,7 @@ title: "SQL Queries / SQL запросы"
 aliases: []
 summary: ""
 topic: "cs"
-subtopics: ["sql", "queries", "joins"]
+subtopics: ["joins", "queries", "sql"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-cs"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "sql", "queries", "joins", "subqueries", "ctes", "difficulty/medium"]
+tags: ["concept", "ctes", "difficulty/medium", "joins", "queries", "sql", "subqueries"]
+date created: Sunday, October 12th 2025, 2:31:41 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

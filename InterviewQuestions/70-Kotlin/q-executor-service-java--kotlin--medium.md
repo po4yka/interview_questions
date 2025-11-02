@@ -1,23 +1,24 @@
 ---
 id: kotlin-218
 title: "Executor Service Java / ExecutorService в Java"
-aliases: [Executor, Service, Java]
+aliases: [Executor, Java, Service]
 topic: kotlin
-subtopics: [access-modifiers, type-system, class-features]
+subtopics: [access-modifiers, class-features, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-data-sealed-classes-combined--programming-languages--medium, q-kotlin-inline-functions--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
+related: [q-kotlin-inline-functions--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Как работают Executor и ExecutorService?
+
+# Как Работают Executor И ExecutorService?
 
 # Question (EN)
 > How does Executor and ExecutorService work in Java?
@@ -45,7 +46,7 @@ tags:
 
 `Executor` — это интерфейс из библиотеки `java.util.concurrent`, который представляет собой абстракцию для запуска задач. Он позволяет отделить создание задач от их выполнения, обеспечивая гибкость и контроль над выполнением параллельных операций.
 
-### 1. Базовый интерфейс Executor
+### 1. Базовый Интерфейс Executor
 
 ```java
 public interface Executor {
@@ -228,9 +229,9 @@ scheduler.schedule(() -> {
 
 **Use case**: Периодическое обновление данных, polling, отложенные уведомления.
 
-### 4. Future и Callable
+### 4. Future И Callable
 
-#### Callable - задача с результатом
+#### Callable - Задача С Результатом
 
 ```java
 Callable<String> task = () -> {
@@ -260,7 +261,7 @@ try {
 executor.shutdown();
 ```
 
-#### Future с timeout
+#### Future С Timeout
 
 ```java
 Future<String> future = executor.submit(() -> {
@@ -277,7 +278,7 @@ try {
 }
 ```
 
-#### Отмена задач
+#### Отмена Задач
 
 ```java
 Future<Integer> future = executor.submit(() -> {
@@ -296,9 +297,9 @@ Thread.sleep(1000);
 future.cancel(true); // true = прервать поток если задача уже запущена
 ```
 
-### 5. invokeAll и invokeAny
+### 5. invokeAll И invokeAny
 
-#### invokeAll - выполнить все задачи
+#### invokeAll - Выполнить Все Задачи
 
 ```java
 List<Callable<Integer>> tasks = Arrays.asList(
@@ -320,7 +321,7 @@ for (Future<Integer> future : futures) {
 executor.shutdown();
 ```
 
-#### invokeAny - выполнить пока одна не завершится
+#### invokeAny - Выполнить Пока Одна Не Завершится
 
 ```java
 List<Callable<String>> tasks = Arrays.asList(
@@ -339,7 +340,7 @@ System.out.println("First result: " + result); // "Fast task"
 executor.shutdown();
 ```
 
-### 6. Кастомная конфигурация ThreadPoolExecutor
+### 6. Кастомная Конфигурация ThreadPoolExecutor
 
 ```java
 ThreadPoolExecutor executor = new ThreadPoolExecutor(
@@ -409,7 +410,7 @@ new RejectedExecutionHandler() {
 }
 ```
 
-### 8. Android использование
+### 8. Android Использование
 
 ```kotlin
 // Android - использовать Executors для фоновых задач
@@ -439,7 +440,7 @@ class UserRepository(private val apiService: ApiService) {
 // Executor подходит для простых случаев или Java кода
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Тип | Потоки | Use Case | Преимущества |
 |-----|--------|----------|--------------|
@@ -486,6 +487,6 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(
 
 ## Related Questions
 
-- [[q-kotlin-data-sealed-classes-combined--programming-languages--medium]]
+-
 - [[q-kotlin-inline-functions--kotlin--medium]]
 - [[q-kotlin-partition-function--programming-languages--easy]]

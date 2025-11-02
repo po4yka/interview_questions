@@ -5,24 +5,17 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - flow
-  - channelflow
-  - callbackflow
-  - builders
+tags: [builders, callbackflow, channelflow, coroutines, difficulty/medium, flow, kotlin]
 moc: moc-kotlin
-related: [q-channel-pipelines--kotlin--hard, q-kotlin-flow-basics--kotlin--medium, q-compose-side-effects-coroutines--kotlin--medium]
-  - q-suspend-cancellable-coroutine--kotlin--hard
-  - q-mutex-synchronized-coroutines--kotlin--medium
-  - q-common-coroutine-mistakes--kotlin--medium
+related: [q-channel-pipelines--kotlin--hard, q-common-coroutine-mistakes--kotlin--medium, q-compose-side-effects-coroutines--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 subtopics:
+  - builders
+  - callbackflow
+  - channelflow
   - coroutines
   - flow
-  - channelflow
-  - callbackflow
-  - builders
+date created: Saturday, November 1st 2025, 12:10:04 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Question (EN)
@@ -361,7 +354,7 @@ webSocketFlow("wss://example.com/ws")
     }
 ```
 
-### send() vs trySend() vs emit()
+### send() Vs trySend() Vs emit()
 
 **emit():** Suspending, waits for collector
 - Use in: `flow{}`, `channelFlow{}`
@@ -748,7 +741,7 @@ Kotlin Flow предоставляет несколько билдеров (`flo
 
 [Полный русский перевод следует той же структуре]
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **flow{}** - Выбор по умолчанию, последовательный, холодный
 2. **channelFlow{}** - Конкурентные производители, горячий

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140029
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-data-sealed-usage--programming-languages--medium, q-kotlin-null-safety--programming-languages--medium, q-data-class-detailed--kotlin--medium]
+related: [q-data-class-detailed--kotlin--medium, q-data-sealed-usage--programming-languages--medium, q-kotlin-null-safety--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140029
 
@@ -39,7 +42,7 @@ tags: [kotlin, coroutines, difficulty/medium]
 
 Coroutine builders are functions that create and start coroutines. The main builders are `launch`, `async`, and `runBlocking`.
 
-### launch
+### Launch
 Starts a new coroutine and returns a Job:
 ```kotlin
 val job = GlobalScope.launch {
@@ -52,7 +55,7 @@ println("Hello,")
 // World!
 ```
 
-### async
+### Async
 Starts a coroutine that returns a result via Deferred:
 ```kotlin
 val deferred = GlobalScope.async {
@@ -104,7 +107,7 @@ fun main() = runBlocking {
 
 Coroutine builders - это функции создающие и запускающие корутины. Основные builders: `launch`, `async` и `runBlocking`.
 
-### launch
+### Launch
 Запускает новую корутину и возвращает Job:
 ```kotlin
 val job = GlobalScope.launch {
@@ -117,7 +120,7 @@ println("Hello,")
 // World!
 ```
 
-### async
+### Async
 Запускает корутину возвращающую результат через Deferred:
 ```kotlin
 val deferred = GlobalScope.async {
@@ -137,14 +140,14 @@ runBlocking {
 // Блокируется на 1 секунду, затем выводит Done
 ```
 
-### Ключевые отличия
+### Ключевые Отличия
 | Builder | Возвращает | Блокирует поток | Применение |
 |---------|------------|-----------------|------------|
 | launch | Job | Нет | Запустить и забыть |
 | async | Deferred<T> | Нет | Нужен результат |
 | runBlocking | T | Да | main(), тесты |
 
-### Практические примеры
+### Практические Примеры
 ```kotlin
 // Запустить несколько операций
 launch { operation1() }

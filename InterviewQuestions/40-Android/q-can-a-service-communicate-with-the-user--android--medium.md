@@ -3,20 +3,20 @@ id: android-330
 title: Can a Service Communicate With the User / Может ли сервис общаться с пользователем
 aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
 topic: android
-subtopics: [service, notifications]
+subtopics: [notifications, service]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-service, q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium, q-service-lifecycle--android--easy]
+related: [c-service, q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/service, android/notifications, service-ui-communication, foreground-service, difficulty/medium]
+tags: [android/notifications, android/service, difficulty/medium, foreground-service, service-ui-communication]
 date created: Thursday, October 30th 2025, 11:11:11 am
-date modified: Thursday, October 30th 2025, 12:43:29 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +38,7 @@ date modified: Thursday, October 30th 2025, 12:43:29 pm
 3. **Broadcast/LiveData/Flow** — сервис отправляет событие → UI-слой реагирует
 4. **Запуск Activity** — только для критичных user-initiated сценариев
 
-### Foreground Service с уведомлением
+### Foreground Service С Уведомлением
 
 ```kotlin
 class MusicService : Service() {
@@ -58,7 +58,7 @@ class MusicService : Service() {
 }
 ```
 
-### Bound Service с callbacks
+### Bound Service С Callbacks
 
 ```kotlin
 // Service
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), DataListener {
 }
 ```
 
-### Broadcast (LocalBroadcastManager устарел → Flow/LiveData)
+### Broadcast (LocalBroadcastManager Устарел → Flow/LiveData)
 
 ```kotlin
 // ❌ Legacy approach
@@ -165,7 +165,7 @@ lifecycleScope.launch {
 3. **Broadcast/LiveData/Flow** — service sends event → UI layer reacts
 4. **Start Activity** — only for critical user-initiated scenarios
 
-### Foreground Service with notification
+### Foreground Service with Notification
 
 ```kotlin
 class MusicService : Service() {
@@ -185,7 +185,7 @@ class MusicService : Service() {
 }
 ```
 
-### Bound Service with callbacks
+### Bound Service with Callbacks
 
 ```kotlin
 // Service
@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity(), DataListener {
 }
 ```
 
-### Broadcast (LocalBroadcastManager deprecated → Flow/LiveData)
+### Broadcast (LocalBroadcastManager Deprecated → Flow/LiveData)
 
 ```kotlin
 // ❌ Legacy approach
@@ -301,11 +301,11 @@ lifecycleScope.launch {
 
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]] - Service types overview
-- [[q-service-lifecycle--android--easy]] - Service lifecycle basics
+ - Service lifecycle basics
 
 ### Related (Same Level)
 - [[q-background-vs-foreground-service--android--medium]] - Foreground vs background services
-- [[q-workmanager-vs-service--android--medium]] - When to use WorkManager vs Service
+ - When to use WorkManager vs Service
 
 ### Advanced (Harder)
 - [[q-service-anr-prevention--android--hard]] - Preventing ANR in services

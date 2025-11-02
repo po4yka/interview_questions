@@ -3,20 +3,20 @@ id: android-410
 title: "Where Is Composition Created For Calling Composable Function / Где создается Composition для вызова Composable функции"
 aliases: ["Where Is Composition Created", "Где создается Composition"]
 topic: android
-subtopics: [ui-compose, lifecycle]
+subtopics: [lifecycle, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, q-how-does-jetpackcompose-work--android--medium, q-compositionlocal-advanced--android--medium]
+related: [c-jetpack-compose, q-compositionlocal-advanced--android--medium, q-how-does-jetpackcompose-work--android--medium]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/ui-compose, android/lifecycle, setContent, jetpack-compose, difficulty/medium]
+tags: [android/lifecycle, android/ui-compose, difficulty/medium, jetpack-compose, setContent]
 date created: Wednesday, October 29th 2025, 12:15:40 pm
-date modified: Thursday, October 30th 2025, 3:18:07 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:18:07 pm
 
 **Композиция создается в точке вызова `setContent`** — это корневая точка входа в Compose UI, которая инициирует построение UI-дерева и управление состоянием.
 
-### Основные места создания
+### Основные Места Создания
 
 **1. В Activity через ComponentActivity.setContent():**
 
@@ -80,7 +80,7 @@ class MyCustomView(context: Context) : LinearLayout(context) {
 }
 ```
 
-### Множественные композиции
+### Множественные Композиции
 
 Каждый вызов `setContent` создает **отдельную независимую композицию**:
 
@@ -97,7 +97,7 @@ layout.addView(ComposeView(context).apply {
 })
 ```
 
-### Жизненный цикл композиции
+### Жизненный Цикл Композиции
 
 ```kotlin
 @Composable

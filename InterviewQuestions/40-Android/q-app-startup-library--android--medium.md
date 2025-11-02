@@ -10,13 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-app-start-types-android--android--medium, q-android-performance-measurement-tools--android--medium, q-android-build-optimization--android--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/app-startup, android/performance-startup, jetpack, difficulty/medium]
+tags: [android/app-startup, android/performance-startup, difficulty/medium, jetpack]
 date created: Thursday, October 30th 2025, 11:43:07 am
-date modified: Thursday, October 30th 2025, 12:43:13 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -73,7 +73,7 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 </provider>
 ```
 
-### Управление зависимостями
+### Управление Зависимостями
 
 ```kotlin
 // ✅ Явный граф: Logger → Analytics
@@ -90,7 +90,7 @@ class AnalyticsInitializer : Initializer<Analytics> {
 
 **Автоматическая топологическая сортировка** предотвращает циклические зависимости.
 
-### Ленивая инициализация
+### Ленивая Инициализация
 
 ```kotlin
 // ❌ AndroidManifest: отключить auto-init
@@ -220,4 +220,4 @@ if (userLoggedIn) {
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] — App initialization internals
-- [[q-android-startup-best-practices--android--hard]] — Advanced startup optimization
+ — Advanced startup optimization

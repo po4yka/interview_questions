@@ -1,3 +1,8 @@
+---
+date created: Wednesday, October 29th 2025, 4:40:17 pm
+date modified: Saturday, November 1st 2025, 5:43:39 pm
+---
+
 # Android System Design Checklist
 
 Use this end-to-end checklist to drive staff-level, Android-aware system design answers. Set measurable targets and enforce Android platform realities.
@@ -17,7 +22,7 @@ Use this end-to-end checklist to drive staff-level, Android-aware system design 
 -   Play services: present/absent fallbacks (Maps, FusedLocation, Integrity)
 -   Manufacturer throttling: alarms, jobs, sockets; mitigations and UX fallbacks
 
-## 3) Non-Functionals (make tradeoffs testable)
+## 3) Non-Functionals (make Tradeoffs testable)
 
 -   Cold start p95: e.g., ≤2.5s
 -   Interaction latency (input→render): e.g., ≤150–200ms p95

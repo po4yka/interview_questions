@@ -3,7 +3,7 @@ id: lang-004
 title: "Primitive Vs Reference Types / Примитивные типы против ссылочных типов"
 aliases: [Primitive Vs Reference Types, Примитивные типы против ссылочных типов]
 topic: programming-languages
-subtopics: [memory-model, type-system, jvm]
+subtopics: [jvm, memory-model, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-adapter-pattern--design-patterns--medium, q-os-fundamentals-concepts--computer-science--hard, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [java, kotlin, memory, primitive-types, programming-languages, reference-types, difficulty/easy]
+tags: [difficulty/easy, java, kotlin, memory, primitive-types, programming-languages, reference-types]
 date created: Friday, October 3rd 2025, 7:03:57 pm
-date modified: Sunday, October 26th 2025, 1:31:20 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # В Чем Разница Примитивного И Ссылочного Типов

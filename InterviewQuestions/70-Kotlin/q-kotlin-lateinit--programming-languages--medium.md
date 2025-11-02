@@ -3,25 +3,22 @@ id: lang-073
 title: "Kotlin Lateinit / lateinit в Kotlin"
 aliases: [Kotlin Lateinit, lateinit в Kotlin]
 topic: programming-languages
-subtopics: [type-system, null-safety]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-map-flatmap--kotlin--medium, q-job-vs-supervisorjob--programming-languages--medium, q-kotlin-advantages-for-android--kotlin--easy]
+related: [q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-map-flatmap--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - dependency-injection
-  - initialization
-  - lateinit
-  - properties
-  - difficulty/medium
+tags: [dependency-injection, difficulty/medium, initialization, lateinit, programming-languages, properties]
+date created: Friday, October 31st 2025, 6:30:30 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Что известно о lateinit?
+
+# Что Известно О Lateinit?
 
 # Question (EN)
 > What do you know about lateinit?
@@ -110,5 +107,5 @@ if (::name.isInitialized) {
 ## Related Questions
 
 - [[q-kotlin-map-flatmap--kotlin--medium]]
-- [[q-job-vs-supervisorjob--programming-languages--medium]]
+-
 - [[q-kotlin-advantages-for-android--kotlin--easy]]

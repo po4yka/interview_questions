@@ -16,7 +16,7 @@ updated: 2025-01-25
 tags: [architecture, difficulty/hard, distributed-systems, microservices, system-design]
 sources: [https://en.wikipedia.org/wiki/Microservices]
 date created: Sunday, October 12th 2025, 8:31:16 pm
-date modified: Saturday, October 25th 2025, 8:27:44 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: hard
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140021
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-lifecyclescope-viewmodelscope--kotlin--medium, q-delegates-compilation--kotlin--hard, q-stateflow-purpose--programming-languages--medium]
+related: [q-delegates-compilation--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-purpose--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
+date created: Saturday, October 18th 2025, 12:40:07 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140021
 
@@ -158,7 +161,7 @@ suspend fun measurePerformance() {
 
 Оптимизация производительности корутин включает понимание выбора диспетчеров, минимизацию переключения контекста, эффективное использование ресурсов и избежание распространенных проблем производительности.
 
-### Ключевые принципы производительности
+### Ключевые Принципы Производительности
 
 **1. Выбор правильного Dispatcher**
 ```kotlin
@@ -248,7 +251,7 @@ flow {
  .collect { save(it) }
 ```
 
-### Мониторинг производительности
+### Мониторинг Производительности
 
 ```kotlin
 suspend fun measurePerformance() {
@@ -263,7 +266,7 @@ suspend fun measurePerformance() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Переиспользуйте CoroutineScope** вместо создания новых
 2. **Используйте структурированную конкурентность** чтобы избежать утечек

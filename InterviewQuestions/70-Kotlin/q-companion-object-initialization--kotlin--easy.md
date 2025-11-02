@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-sealed-classes-overview--programming-languages--medium, q-kotlin-serialization--programming-languages--easy, q-kotlin-crossinline--programming-languages--hard]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - companion-objects
-  - initialization
-  - difficulty/easy
+tags: [companion-objects, difficulty/easy, initialization, programming-languages]
+date created: Saturday, November 1st 2025, 1:27:44 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# When is companion object initialized?
+
+# When is Companion Object Initialized?
 
 # Question (EN)
 > When is a companion object initialized in Kotlin?
@@ -399,7 +398,7 @@ Companion object инициализируется **лениво при перв
 - Просто создается экземпляр содержащего класса (если члены companion не используются)
 - Класс загружен, но члены companion object не используются
 
-### Пример базовой инициализации
+### Пример Базовой Инициализации
 
 ```kotlin
 class MyClass {
@@ -422,7 +421,7 @@ fun main() {
 }
 ```
 
-### Важные особенности
+### Важные Особенности
 
 1. **Один companion на все экземпляры** - companion object инициализируется один раз, независимо от количества созданных экземпляров класса
 
@@ -431,7 +430,3 @@ fun main() {
 3. **Потокобезопасность** - инициализация гарантированно произойдет только один раз, даже при многопоточном доступе
 
 ## Related Questions
-
-- [[q-data-sealed-classes-overview--programming-languages--medium]]
-- [[q-kotlin-serialization--programming-languages--easy]]
-- [[q-kotlin-crossinline--programming-languages--hard]]

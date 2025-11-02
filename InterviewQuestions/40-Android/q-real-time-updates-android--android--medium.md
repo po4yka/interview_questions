@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-websockets, c-firebase-realtime, c-server-sent-events, q-networking-in-android--android--medium]
+related: [c-firebase-realtime, c-server-sent-events, c-websockets]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android, networking, websockets, sse, firebase, fcm, real-time, difficulty/medium, android/networking-http, android/websockets]
+tags: [android, android/networking-http, android/websockets, difficulty/medium, fcm, firebase, networking, real-time, sse, websockets]
+date created: Saturday, November 1st 2025, 1:04:10 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ How do you implement real-time updates in Android applications? What are the ava
 
 Real-time обновления обеспечивают мгновенную синхронизацию данных между сервером и клиентом. Основные технологии:
 
-### 1. WebSockets — полнодуплексная связь
+### 1. WebSockets — Полнодуплексная Связь
 
 ```kotlin
 class WebSocketManager(
@@ -81,7 +83,7 @@ class WebSocketManager(
 **Плюсы**: низкая задержка, двусторонний обмен
 **Минусы**: расход батареи, управление соединением
 
-### 2. Server-Sent Events (SSE) — односторонние обновления
+### 2. Server-Sent Events (SSE) — Односторонние Обновления
 
 ```kotlin
 fun connectSSE(url: String): Flow<ServerEvent> = flow {
@@ -136,7 +138,7 @@ fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
 **Плюсы**: быстрое развертывание, масштабируемость
 **Минусы**: vendor lock-in, стоимость
 
-### 4. Firebase Cloud Messaging (FCM) — push-уведомления
+### 4. Firebase Cloud Messaging (FCM) — Push-уведомления
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -160,7 +162,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 **Плюсы**: надежная доставка, кроссплатформенность
 **Минусы**: требует Google Services
 
-### 5. Polling / Long Polling — fallback стратегия
+### 5. Polling / Long Polling — Fallback Стратегия
 
 ```kotlin
 fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
@@ -183,7 +185,7 @@ fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
 **Плюсы**: простота реализации
 **Минусы**: высокая нагрузка на сервер, задержки
 
-### Lifecycle-aware подключение
+### Lifecycle-aware Подключение
 
 ```kotlin
 @HiltViewModel
@@ -209,7 +211,7 @@ class ChatViewModel @Inject constructor(
 }
 ```
 
-### Сравнение технологий
+### Сравнение Технологий
 
 | Технология | Когда использовать | Ключевая особенность |
 |------------|-------------------|---------------------|
@@ -482,7 +484,7 @@ class ChatViewModel @Inject constructor(
 
 ### Related
 - [[q-workmanager-background-tasks--android--medium]]
-- [[q-retrofit-implementation--android--medium]]
+- [[q-websocket-implementation--android--medium]]
 
 ### Advanced
 - [[q-distributed-systems-consistency--system-design--hard]]

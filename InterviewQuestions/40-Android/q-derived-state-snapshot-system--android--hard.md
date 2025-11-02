@@ -16,7 +16,7 @@ updated: 2025-10-27
 tags: [android/performance-memory, android/ui-compose, compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
 sources: [https://developer.android.com/jetpack/compose/state]
 date created: Monday, October 27th 2025, 10:27:49 pm
-date modified: Wednesday, October 29th 2025, 5:07:37 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -63,7 +63,7 @@ class Snapshot {
 - **Atomicity**: изменения применяются одновременно
 - **Conflict resolution**: handling при параллельных записях
 
-### derivedStateOf: Оптимизация через Memoization
+### derivedStateOf: Оптимизация Через Memoization
 
 **Проблема:**
 ```kotlin
@@ -93,7 +93,7 @@ fun ListScreen(items: List<Item>) {
 3. **Structural equality**: `equals()` сравнение старого и нового результата
 4. **Conditional invalidation**: recomposition только если результат отличается
 
-### Практические паттерны
+### Практические Паттерны
 
 **Complex filtering:**
 ```kotlin

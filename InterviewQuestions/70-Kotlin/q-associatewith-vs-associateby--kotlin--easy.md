@@ -10,24 +10,22 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-function-limitations--kotlin--medium, q-kotlin-reflection--programming-languages--medium, q-kotlin-constructor-types--programming-languages--medium]
+related: [q-inline-function-limitations--kotlin--medium, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - collections
-  - map
-  - transformation
-  - difficulty/easy
+tags: [collections, difficulty/easy, kotlin, map, transformation]
+date created: Saturday, November 1st 2025, 1:26:23 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
-# associateWith() vs associateBy(): создание Map из коллекций
+
+# associateWith() Vs associateBy(): Создание Map Из Коллекций
 
 **English**: Difference between associateWith() and associateBy()
 
 ## Answer (EN)
 `associateBy()` создает `Map`, где **ключи** вычисляются из элементов, а **значениями** становятся сами элементы. `associateWith()` делает наоборот — элементы становятся **ключами**, а **значения** вычисляются.
 
-### associateBy - element becomes value
+### associateBy - Element Becomes Value
 
 ```kotlin
 data class User(val id: Int, val name: String)
@@ -49,7 +47,7 @@ println(usersById[2])  // User(id=2, name=Bob)
 
 **Формула**: `List<T>.associateBy { key } → Map<Key, T>`
 
-### associateWith - element becomes key
+### associateWith - Element Becomes Key
 
 ```kotlin
 val users = listOf("Alice", "Bob", "Charlie")
@@ -83,7 +81,7 @@ println(numberToSquare)
 // Ключ: число, Значение: квадрат
 ```
 
-### associateBy with two parameters
+### associateBy with Two Parameters
 
 You can specify both key and value separately:
 
@@ -108,9 +106,9 @@ println(productNames)
 println(productNames[1])  // "Laptop"
 ```
 
-### Practical examples
+### Practical Examples
 
-#### Example 1: Object cache by ID
+#### Example 1: Object Cache by ID
 
 ```kotlin
 data class Article(val id: Int, val title: String, val content: String)
@@ -131,7 +129,7 @@ class ArticleRepository {
 }
 ```
 
-#### Example 2: String indexing
+#### Example 2: String Indexing
 
 ```kotlin
 val words = listOf("apple", "banana", "cherry", "apricot", "blueberry")
@@ -148,7 +146,7 @@ println(groupedByFirstLetter)
 // {a=[apple, apricot], b=[banana, blueberry], c=[cherry]}
 ```
 
-#### Example 3: Settings with default values
+#### Example 3: Settings with Default Values
 
 ```kotlin
 enum class Setting { THEME, LANGUAGE, FONT_SIZE }
@@ -171,7 +169,7 @@ fun getSetting(key: Setting): String {
 }
 ```
 
-#### Example 4: Computation caching
+#### Example 4: Computation Caching
 
 ```kotlin
 fun fibonacci(n: Int): Long {
@@ -189,7 +187,7 @@ println(fibCache)
 fun getFib(n: Int): Long = fibCache[n] ?: fibonacci(n)
 ```
 
-### Key collisions
+### Key Collisions
 
 ```kotlin
 data class Person(val name: String, val age: Int)
@@ -212,7 +210,7 @@ println(groupedByName)
 // {Alice=[Person(Alice, 25), Person(Alice, 28)], Bob=[Person(Bob, 30)]}
 ```
 
-### associate - maximum flexibility
+### Associate - Maximum Flexibility
 
 Creates both key and value via `Pair`:
 
@@ -232,7 +230,7 @@ Equivalent to:
 - `associateBy { key }` = `associate { it -> key(it) to it }`
 - `associateWith { value }` = `associate { it -> it to value(it) }`
 
-### Comparison table
+### Comparison Table
 
 | Function | Key | Value | Formula | Use Case |
 |---------|------|----------|---------|----------|
@@ -295,7 +293,7 @@ val itemsById = items.associateBy { it.id }
 
 `associateBy()` создает `Map`, где **ключи** вычисляются из элементов, а **значениями** становятся сами элементы: `List<T>.associateBy { key } → Map<Key, T>`. `associateWith()` делает наоборот — элементы становятся **ключами**, а **значения** вычисляются: `List<T>.associateWith { value } → Map<T, Value>`.
 
-### Основные различия
+### Основные Различия
 
 - **associateBy**: элемент → значение, вычисляем ключ (для индексации объектов по ID)
 - **associateWith**: элемент → ключ, вычисляем значение (для маппинга элементов к их свойствам)
@@ -309,4 +307,3 @@ val itemsById = items.associateBy { it.id }
 
 - [[q-inline-function-limitations--kotlin--medium]]
 - [[q-kotlin-reflection--programming-languages--medium]]
-- [[q-kotlin-constructor-types--programming-languages--medium]]

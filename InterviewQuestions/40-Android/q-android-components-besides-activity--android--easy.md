@@ -3,20 +3,20 @@ id: android-272
 title: Android Components Besides Activity / Компоненты Android кроме Activity
 aliases: ["Android Components Besides Activity", "Компоненты Android кроме Activity"]
 topic: android
-subtopics: [service, broadcast-receiver, content-provider]
+subtopics: [broadcast-receiver, content-provider, service]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy, q-fragment-vs-activity-lifecycle--android--medium, q-service-types-android--android--easy, c-service, c-lifecycle]
+related: [c-lifecycle, c-service, q-android-app-components--android--easy]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/service, android/broadcast-receiver, android/content-provider, difficulty/easy]
+tags: [android/broadcast-receiver, android/content-provider, android/service, difficulty/easy]
 sources: []
 date created: Thursday, October 30th 2025, 11:26:39 am
-date modified: Thursday, October 30th 2025, 12:42:46 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -203,4 +203,4 @@ class DetailsFragment : Fragment() {
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment lifecycle comparison
 
 ### Advanced
-- [[q-workmanager-vs-service--android--medium]] - Modern background work patterns
+ - Modern background work patterns

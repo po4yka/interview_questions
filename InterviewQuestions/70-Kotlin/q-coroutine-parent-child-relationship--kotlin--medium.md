@@ -10,13 +10,16 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-10-31"
-tags: ["kotlin", "coroutines", "difficulty/medium", "structured-concurrency", "job", "hierarchy"]
+tags: ["coroutines", "difficulty/medium", "hierarchy", "job", "kotlin", "structured-concurrency"]
 description: "Comprehensive guide to Parent-child relationships in structured concurrency in Kotlin coroutines"
 moc: moc-kotlin
-related: [q-retry-operators-flow--kotlin--medium, q-coroutine-performance-optimization--kotlin--hard, q-kotlin-collections--kotlin--easy]
+related: [q-coroutine-performance-optimization--kotlin--hard, q-kotlin-collections--kotlin--easy, q-retry-operators-flow--kotlin--medium]
 subtopics: [coroutines, structured-concurrency]
+date created: Friday, October 31st 2025, 6:31:32 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-# Parent-child relationships in structured concurrency
+
+# Parent-child Relationships in Structured Concurrency
 
 ## English
 
@@ -38,7 +41,7 @@ subtopics: [coroutines, structured-concurrency]
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 [Russian translation of problem statement]
 

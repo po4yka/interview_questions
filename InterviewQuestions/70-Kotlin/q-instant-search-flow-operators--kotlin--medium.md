@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, operators, debounce, distinctuntilchanged, search]
+subtopics: [debounce, distinctuntilchanged, flow, operators, search]
 question_kind: coding
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [flow-operators, debounce, search-optimization, performance]
+related: [debounce, flow-operators, performance, search-optimization]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-31
 
-tags: [kotlin, flow, search, debounce, operators, performance, difficulty/medium]
+tags: [debounce, difficulty/medium, flow, kotlin, operators, performance, search]
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > How do you implement instant/real-time search functionality using Kotlin Flow operators?
 # Вопрос (RU)
@@ -495,7 +498,7 @@ fun `search debounces user input`() = runTest {
 
 Мгновенный поиск - распространенный UX паттерн, требующий эффективной обработки пользовательского ввода, дебаунсинга и API вызовов.
 
-### 1. Базовая реализация
+### 1. Базовая Реализация
 
 ```kotlin
 @OptIn(FlowPreview::class)
@@ -510,7 +513,7 @@ val searchResults = searchQuery
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 ```
 
-### 2. С состояниями загрузки и ошибок
+### 2. С Состояниями Загрузки И Ошибок
 
 ```kotlin
 val searchState = _searchQuery
@@ -526,7 +529,7 @@ val searchState = _searchQuery
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SearchUiState.Idle)
 ```
 
-### 3. Гибридный поиск (локальный + удаленный)
+### 3. Гибридный Поиск (локальный + удаленный)
 
 ```kotlin
 val searchResults = _searchQuery
@@ -540,7 +543,7 @@ val searchResults = _searchQuery
     }
 ```
 
-### Таблица операторов
+### Таблица Операторов
 
 | Оператор | Назначение | Типичное значение |
 |----------|-----------|-------------------|
@@ -549,7 +552,7 @@ val searchResults = _searchQuery
 | `filter` | Минимальная длина | 2-3 символа |
 | `mapLatest` | Отмена предыдущих запросов | Для API |
 
-### Лучшие практики
+### Лучшие Практики
 
 #### - ДЕЛАЙТЕ:
 

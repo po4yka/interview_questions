@@ -10,13 +10,16 @@ question_kind: theory
 status: draft
 created: "2025-10-12"
 updated: "2025-10-31"
-tags: ["kotlin", "coroutines", "difficulty/medium", "dispatchers", "unconfined"]
+tags: ["coroutines", "difficulty/medium", "dispatchers", "kotlin", "unconfined"]
 description: "Comprehensive guide to What is Dispatchers.Unconfined and when to use it? in Kotlin coroutines"
 moc: moc-kotlin
-related: [q-partition-function--kotlin--easy, q-kotlin-override-keyword--programming-languages--easy, q-parallel-network-calls-coroutines--kotlin--medium]
+related: [q-kotlin-override-keyword--programming-languages--easy, q-parallel-network-calls-coroutines--kotlin--medium, q-partition-function--kotlin--easy]
 subtopics: [coroutines, dispatchers]
+date created: Friday, October 31st 2025, 6:34:25 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-# What is Dispatchers.Unconfined and when to use it?
+
+# What is Dispatchers.Unconfined and when to Use It?
 
 ## English
 
@@ -38,7 +41,7 @@ subtopics: [coroutines, dispatchers]
 
 ## Русский
 
-### Описание проблемы
+### Описание Проблемы
 
 [Russian translation of problem statement]
 

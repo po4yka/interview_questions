@@ -3,21 +3,22 @@ id: kotlin-174
 title: "Generics Types Overview / Обзор обобщенных типов"
 aliases: []
 topic: kotlin
-subtopics: [functions, type-system, class-features]
+subtopics: [class-features, functions, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-produce-actor-builders--kotlin--medium, q-job-vs-supervisorjob--programming-languages--medium, q-coroutine-parent-child-relationship--kotlin--medium]
+related: [q-coroutine-parent-child-relationship--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:41 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Какие виды дженериков есть?
+
+# Какие Виды Дженериков Есть?
 
 # Question (EN)
 > What types of generics exist in Kotlin and Java?
@@ -114,7 +115,7 @@ List     // Java - raw type (deprecated)
 
 Дженерики существуют в нескольких формах:
 
-### 1. Обобщённые классы (Generic Classes)
+### 1. Обобщённые Классы (Generic Classes)
 Классы с параметрами типа:
 ```kotlin
 class Box<T>(val value: T)
@@ -135,7 +136,7 @@ fun <T> List<T>.second(): T {
 }
 ```
 
-### 3. Ограничения типов (Type Bounds/Constraints)
+### 3. Ограничения Типов (Type Bounds/Constraints)
 
 **Верхние границы** (`extends` в Java, `:` в Kotlin):
 ```kotlin
@@ -157,7 +158,7 @@ fun <T> process(value: T)
 }
 ```
 
-### 4. Аннотации вариантности (Variance Annotations)
+### 4. Аннотации Вариантности (Variance Annotations)
 
 **Ковариантность** (`out` в Kotlin, `extends` в Java):
 ```kotlin
@@ -173,7 +174,7 @@ interface Consumer<in T> {   // Может только потреблять T
 }
 ```
 
-### 5. Звездочная проекция (Star Projection) / Сырые типы (Raw Types)
+### 5. Звездочная Проекция (Star Projection) / Сырые Типы (Raw Types)
 ```kotlin
 List<*>  // Kotlin - звездочная проекция
 List     // Java - сырой тип (deprecated)
@@ -194,5 +195,5 @@ List     // Java - сырой тип (deprecated)
 ## Related Questions
 
 - [[q-produce-actor-builders--kotlin--medium]]
-- [[q-job-vs-supervisorjob--programming-languages--medium]]
+-
 - [[q-coroutine-parent-child-relationship--kotlin--medium]]

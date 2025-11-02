@@ -3,21 +3,22 @@ id: cs-014
 title: "Kotlin Access Modifiers / Модификаторы доступа Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [functions, access-modifiers, class-features]
+subtopics: [access-modifiers, class-features, functions]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-intrange--programming-languages--easy, q-suspend-functions-deep-dive--kotlin--medium, q-semaphore-rate-limiting--kotlin--medium]
+related: [q-kotlin-intrange--programming-languages--easy, q-semaphore-rate-limiting--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Что известно про модификатор доступа?
+
+# Что Известно Про Модификатор Доступа?
 
 # Question (EN)
 > What is known about access modifiers?

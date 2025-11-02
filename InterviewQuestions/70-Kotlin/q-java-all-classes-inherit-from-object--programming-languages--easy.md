@@ -3,7 +3,7 @@ id: lang-009
 title: "Java All Classes Inherit From Object / В Java все классы наследуются от Object"
 aliases: [Java All Classes Inherit From Object, В Java все классы наследуются от Object]
 topic: programming-languages
-subtopics: [java, inheritance, object-class]
+subtopics: [inheritance, java, object-class]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-inheritance, c-java-features, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [programming-languages, java, inheritance, object-class, oop, difficulty/easy]
+tags: [difficulty/easy, inheritance, java, object-class, oop, programming-languages]
+date created: Saturday, November 1st 2025, 12:43:06 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # От Какого Объекта Наследуются Все Классы В Java?
@@ -322,5 +324,5 @@ class User {
 
 ### Advanced (Harder)
 - [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance
-- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-when-inheritance-useful--cs--medium]] - Inheritance
 - [[q-inheritance-vs-composition--oop--medium]] - Inheritance

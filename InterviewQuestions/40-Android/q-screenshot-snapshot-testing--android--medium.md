@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-kmm-production-readiness--multiplatform--hard, q-hilt-entry-points--di--medium, q-privacy-sandbox-topics-api--privacy--medium]
+related: [q-hilt-entry-points--di--medium, q-kmm-production-readiness--multiplatform--hard, q-privacy-sandbox-topics-api--privacy--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/testing-ui, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Screenshot and Snapshot Testing
@@ -383,7 +385,7 @@ class ResponsiveShotTest {
 
 ---
 
-### Paparazzi vs Shot Comparison
+### Paparazzi Vs Shot Comparison
 
 | Feature        | Paparazzi           | Shot                  |
 | -------------- | ------------------- | --------------------- |
@@ -634,29 +636,29 @@ paparazzi.snapshot("test1") { }
 
 **Shot** использует инструментальные тесты для сравнения screenshots. Точный рендеринг, но медленнее.
 
-### Разные конфигурации устройств
+### Разные Конфигурации Устройств
 
 Тестируйте разные размеры экранов (телефон, планшет), ориентации и масштабы шрифтов.
 
-### Тестирование тем
+### Тестирование Тем
 
 Тестируйте светлую и темную темы для всех компонентов.
 
-### Параметризованные тесты
+### Параметризованные Тесты
 
 Создавайте тесты для всех комбинаций устройств, тем и состояний.
 
-### Обработка нестабильных screenshots
+### Обработка Нестабильных Screenshots
 
 -   Отключайте анимации
 -   Используйте фиксированные timestamps
 -   Избегайте динамического контента
 
-### CI интеграция
+### CI Интеграция
 
 Автоматизируйте screenshot тесты в CI/CD pipeline.
 
-### Лучшие практики
+### Лучшие Практики
 
 1. Тестируйте критические UI компоненты
 2. Тестируйте множество состояний

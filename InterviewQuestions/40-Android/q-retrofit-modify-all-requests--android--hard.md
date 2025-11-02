@@ -3,18 +3,20 @@ id: android-090
 title: "Retrofit Modify All Requests / Изменение всех запросов Retrofit"
 aliases: ["Retrofit Modify All Requests", "Изменение всех запросов Retrofit"]
 topic: android
-subtopics: [networking-http, di-hilt]
+subtopics: [di-hilt, networking-http]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-retrofit-interceptors, q-retrofit-basics--android--medium, q-okhttp-interceptors--android--medium]
+related: [c-retrofit-interceptors, q-networking-basics--android--easy]
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android/networking-http, android/di-hilt, authentication, interceptor, logging, okhttp, difficulty/hard]
+tags: [android/di-hilt, android/networking-http, authentication, difficulty/hard, interceptor, logging, okhttp]
 sources: [https://square.github.io/okhttp/interceptors/]
+date created: Saturday, November 1st 2025, 1:04:41 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -62,7 +64,7 @@ class BadAuthInterceptor : Interceptor {
 }
 ```
 
-### Пример 2: Обработка 401 с обновлением токена
+### Пример 2: Обработка 401 С Обновлением Токена
 
 ```kotlin
 class TokenRefreshInterceptor @Inject constructor(
@@ -92,7 +94,7 @@ class TokenRefreshInterceptor @Inject constructor(
 }
 ```
 
-### Пример 3: Общие query-параметры
+### Пример 3: Общие Query-параметры
 
 ```kotlin
 // ✅ Best: Добавляем только если параметр отсутствует
@@ -112,7 +114,7 @@ class CommonParamsInterceptor : Interceptor {
 }
 ```
 
-### Пример 4: Логирование (только для debug)
+### Пример 4: Логирование (только Для debug)
 
 ```kotlin
 // ✅ Best: Conditional logging с разными уровнями
@@ -185,7 +187,7 @@ class BadAuthInterceptor : Interceptor {
 }
 ```
 
-### Example 2: Handle 401 with token refresh
+### Example 2: Handle 401 with Token Refresh
 
 ```kotlin
 class TokenRefreshInterceptor @Inject constructor(
@@ -215,7 +217,7 @@ class TokenRefreshInterceptor @Inject constructor(
 }
 ```
 
-### Example 3: Common query parameters
+### Example 3: Common Query Parameters
 
 ```kotlin
 // ✅ Best: Add only if parameter is missing
@@ -312,7 +314,7 @@ addInterceptor(HttpLoggingInterceptor().apply {
 - [[q-retrofit-basics--android--medium]] - Retrofit basics
 - [[q-okhttp-interceptors--android--medium]] - OkHttp interceptors
 - [[q-authentication-patterns--android--medium]] - Authentication patterns
-- [[q-hilt-modules--android--medium]] - DI with Hilt modules
+- [[q-cicd-multi-module--android--medium]] - DI with Hilt modules
 
 ### Advanced (Harder)
 - [[q-retrofit-advanced--android--hard]] - Retrofit advanced

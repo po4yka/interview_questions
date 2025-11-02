@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [sequences, lazy-evaluation, collections, performance]
+subtopics: [collections, lazy-evaluation, performance, sequences]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-kotlin-collections--kotlin--easy, q-list-vs-sequence--kotlin--medium
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, sequences, lazy-evaluation, collections, performance, difficulty/medium]
+tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, sequences]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > What are sequences in Kotlin and how do they differ from Iterables?
 # Вопрос (RU)
@@ -37,7 +40,7 @@ tags: [kotlin, sequences, lazy-evaluation, collections, performance, difficulty/
 
 Sequences offer the same functions as Iterable but implement a different approach to multi-step collection processing through **lazy evaluation**.
 
-### Eager vs Lazy Evaluation
+### Eager Vs Lazy Evaluation
 
 **Iterable (Eager)**: Each processing step completes fully and returns intermediate collection. Next step executes on this collection.
 
@@ -101,7 +104,7 @@ Require no state, process each element independently:
 Require significant state, proportional to number of elements:
 - `sorted()`, `distinct()`
 
-### Intermediate vs Terminal Operations
+### Intermediate Vs Terminal Operations
 
 **Intermediate**: Returns another sequence (lazy), like `filter()`, `map()`
 
@@ -130,7 +133,7 @@ However, lazy nature adds overhead for small collections or simple computations.
 
 Последовательности предлагают те же функции что и Iterable, но реализуют другой подход к многоэтапной обработке коллекций через **ленивое вычисление**.
 
-### Жадное vs ленивое вычисление
+### Жадное Vs Ленивое Вычисление
 
 **Iterable (жадное)**: Каждый этап обработки завершается полностью и возвращает промежуточную коллекцию.
 
@@ -157,7 +160,7 @@ sequenceOf("A", "B", "C")
 // forEach: C
 ```
 
-### Когда использовать
+### Когда Использовать
 
 **Используйте Sequence когда**:
 - Обработка больших коллекций

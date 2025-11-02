@@ -3,27 +3,22 @@ id: lang-074
 title: "Kotlin Final Modifier / Модификатор final в Kotlin"
 aliases: [Kotlin Final Modifier, Модификатор final в Kotlin]
 topic: programming-languages
-subtopics: [type-system, inheritance]
+subtopics: [inheritance, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-infix-functions--kotlin--medium, q-list-set-map-differences--programming-languages--easy, q-flowon-operator-context-switching--kotlin--hard]
+related: [q-flowon-operator-context-switching--kotlin--hard, q-infix-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - class-modifiers
-  - classes
-  - final
-  - inheritance
-  - open
-  - syntax
-  - difficulty/easy
+tags: [class-modifiers, classes, difficulty/easy, final, inheritance, open, programming-languages, syntax]
+date created: Friday, October 31st 2025, 6:29:33 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какой модификатор в Kotlin делает класс нерасширяемым?
+
+# Какой Модификатор В Kotlin Делает Класс Нерасширяемым?
 
 # Question (EN)
 > Which modifier makes a class non-extendable in Kotlin?
@@ -96,5 +91,5 @@ class Derived : OpenClass()
 ## Related Questions
 
 - [[q-infix-functions--kotlin--medium]]
-- [[q-list-set-map-differences--programming-languages--easy]]
+-
 - [[q-flowon-operator-context-switching--kotlin--hard]]

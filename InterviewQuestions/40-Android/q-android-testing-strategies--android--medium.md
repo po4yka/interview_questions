@@ -3,7 +3,7 @@ id: android-175
 title: Android Testing Strategies / Стратегии тестирования Android
 aliases: ["Android Testing Strategies", "Стратегии тестирования Android"]
 topic: android
-subtopics: [testing-unit, testing-instrumented, testing-ui]
+subtopics: [testing-instrumented, testing-ui, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-android-architectural-patterns--android--medium, q-android-performan
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/testing-unit, android/testing-instrumented, android/testing-ui, testing, junit, espresso, mockk, difficulty/medium]
+tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, difficulty/medium, espresso, junit, mockk, testing]
 date created: Thursday, October 30th 2025, 11:36:54 am
-date modified: Thursday, October 30th 2025, 12:43:03 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -145,7 +145,7 @@ fun clickButton_displaysToast() {
 
 **Инструменты**: Compose UI Test, Espresso, UI Automator (для межприложенческого взаимодействия)
 
-### Ключевые практики
+### Ключевые Практики
 
 1. **Изоляция через DI** — Hilt/Koin позволяют подменять зависимости в тестах
 2. **Идемпотентность** — тесты не зависят от порядка выполнения

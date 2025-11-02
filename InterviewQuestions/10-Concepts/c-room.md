@@ -1,10 +1,10 @@
 ---
 id: "20251025-120100"
 title: "Room Database / База данных Room"
-aliases: ["Room", "Room Database", "Room Persistence Library", "База данных Room"]
+aliases: ["Room Database", "Room Persistence Library", "Room", "База данных Room"]
 summary: "Android persistence library that provides an abstraction layer over SQLite for fluent database access"
 topic: "android"
-subtopics: ["room", "database", "sqlite"]
+subtopics: ["database", "room", "sqlite"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,16 +15,18 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "room", "database", "sqlite", "persistence", "jetpack", "difficulty/medium"]
+tags: ["android", "concept", "database", "difficulty/medium", "jetpack", "persistence", "room", "sqlite"]
+date created: Saturday, October 25th 2025, 11:08:48 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
-# Room Database / База данных Room
+# Room Database / База Данных Room
 
 ## Summary (EN)
 
 Room is a persistence library that provides an abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite. Room handles much of the boilerplate code for working with databases, provides compile-time verification of SQL queries, and works seamlessly with LiveData, Flow, and RxJava for reactive data observation.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Room - это библиотека для сохранения данных, которая предоставляет слой абстракции над SQLite, позволяя удобный доступ к базе данных при сохранении всей мощности SQLite. Room обрабатывает большую часть шаблонного кода для работы с базами данных, обеспечивает проверку SQL-запросов на этапе компиляции и бесшовно работает с LiveData, Flow и RxJava для реактивного наблюдения за данными.
 
@@ -38,7 +40,7 @@ Room - это библиотека для сохранения данных, к�
 - Type converters allow storing custom types
 - Database migrations ensure smooth schema updates
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - Часть Android Jetpack Architecture Components
 - Три основных компонента: Database, Entity и DAO (Data Access Object)

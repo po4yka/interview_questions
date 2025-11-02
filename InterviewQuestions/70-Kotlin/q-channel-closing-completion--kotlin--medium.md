@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, channels, channel-closing, exceptions, cleanup]
+subtopics: [channel-closing, channels, cleanup, coroutines, exceptions]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Channel Lifecycle Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-channels-basics-types--kotlin--medium, q-channel-exception-handling--kotlin--hard, q-produce-actor-builders--kotlin--medium]
+related: [q-channel-exception-handling--kotlin--hard, q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, channels, closing, completion, cleanup, difficulty/medium]
+tags: [channels, cleanup, closing, completion, coroutines, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:43:52 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > How do you properly close and complete channels? Explain close(), cancel(), the difference between ClosedSendChannelException and ClosedReceiveChannelException, and best practices for cleanup.
 
@@ -67,7 +70,7 @@ fun channelStates() = runBlocking {
 }
 ```
 
-### close() vs cancel() vs closeCause
+### close() Vs cancel() Vs closeCause
 
 ```kotlin
 class ChannelClosingMethods {
@@ -149,7 +152,7 @@ class ChannelClosingMethods {
 }
 ```
 
-### Exceptions: ClosedSendChannelException vs ClosedReceiveChannelException
+### Exceptions: ClosedSendChannelException Vs ClosedReceiveChannelException
 
 ```kotlin
 class ChannelExceptions {
@@ -359,7 +362,7 @@ class ProperCleanupPatterns {
 }
 ```
 
-### Using produce Builder (Recommended)
+### Using Produce Builder (Recommended)
 
 ```kotlin
 class ProduceBuilderPattern {
@@ -729,14 +732,14 @@ class BestPractices {
 
 Правильное управление жизненным циклом каналов критически важно для предотвращения утечек ресурсов и обеспечения корректного завершения работы.
 
-### Понимание состояний канала
+### Понимание Состояний Канала
 
 Канал имеет три основных состояния:
 1. **АКТИВЕН**: Можно отправлять и получать
 2. **ЗАКРЫТ ДЛЯ ОТПРАВКИ**: Нельзя отправлять, но можно получать буферизованные значения
 3. **ЗАКРЫТ ДЛЯ ПОЛУЧЕНИЯ**: Все значения получены
 
-### close() vs cancel()
+### close() Vs cancel()
 
 ```kotlin
 // close(): Изящное завершение
@@ -751,7 +754,7 @@ channel.cancel() // Все операции прекращаются
 - **ClosedSendChannelException**: При send() в закрытый канал
 - **ClosedReceiveChannelException**: При receive() из пустого закрытого канала
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 //  Всегда закрывать в finally

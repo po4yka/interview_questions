@@ -1,22 +1,22 @@
 ---
 id: android-194
 title: "Keep Service Running Background / Удержание Service в фоне"
-aliases: ["Keep Service Running Background", "Удержание Service в фоне", "Background Service", "Фоновый сервис"]
+aliases: ["Background Service", "Keep Service Running Background", "Удержание Service в фоне", "Фоновый сервис"]
 topic: android
-subtopics: [service, background-execution, coroutines]
+subtopics: [background-execution, coroutines, service]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-service-types--android--easy, q-service-component--android--medium, q-foreground-service-types--android--medium]
+related: [q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-service-component--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/service, android/background-execution, android/coroutines, difficulty/medium, foreground-service, jobscheduler, workmanager]
+tags: [android/background-execution, android/coroutines, android/service, difficulty/medium, foreground-service, jobscheduler, workmanager]
 date created: Tuesday, October 28th 2025, 9:24:10 pm
-date modified: Thursday, October 30th 2025, 3:11:30 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -156,7 +156,7 @@ class SyncJobService : JobService() {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Критерий | Foreground Service | WorkManager | JobScheduler |
 |----------|-------------------|-------------|--------------|
@@ -167,7 +167,7 @@ class SyncJobService : JobService() {
 | **Переживает перезагрузку** | Нет | Да | Да (если persisted) |
 | **Случай использования** | Музыка, навигация | Фоновая синхронизация | Периодическая очистка |
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Выбирайте правильный инструмент:**
 ```kotlin
@@ -205,7 +205,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Алгоритм выбора
+### Алгоритм Выбора
 
 ```text
 Задача инициирована пользователем и срочна?
@@ -393,7 +393,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Decision flowchart
+### Decision Flowchart
 
 ```text
 Is task user-initiated and time-sensitive?

@@ -10,20 +10,22 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-handler-looper-main-thread--android--medium, q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium, q-accessibility-testing--accessibility--medium]
+related: [q-accessibility-testing--accessibility--medium, q-handler-looper-main-thread--android--medium, q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Remember vs RememberSaveable в Compose
+# Remember Vs RememberSaveable В Compose
 
 **English**: What's the difference between remember and rememberSaveable in Compose for preserving state across configuration changes?
 
 ## Answer (EN)
 `remember` сохраняет состояние **только в памяти** во время composition, теряя его при configuration changes (поворот экрана). `rememberSaveable` сохраняет состояние в **Bundle**, переживая configuration changes как `onSaveInstanceState`.
 
-### remember - Сохранение в памяти
+### Remember - Сохранение В Памяти
 
 ```kotlin
 @Composable
@@ -46,7 +48,7 @@ fun CounterWithRemember() {
 - - **Теряется** при process death
 - - Быстрое, без сериализации
 
-### rememberSaveable - Сохранение в Bundle
+### rememberSaveable - Сохранение В Bundle
 
 ```kotlin
 @Composable
@@ -69,7 +71,7 @@ fun CounterWithRememberSaveable() {
 - - **Переживает** process death (в некоторых случаях)
 - WARNING: Требует типы, поддерживающие Bundle (Parcelable/Serializable)
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Аспект | remember | rememberSaveable |
 |--------|----------|------------------|
@@ -83,9 +85,9 @@ fun CounterWithRememberSaveable() {
 
 \* Process death восстановление работает только если Activity/Fragment корректно сохраняют state
 
-### Что можно сохранить в rememberSaveable
+### Что Можно Сохранить В rememberSaveable
 
-#### Автоматически поддерживаемые типы
+#### Автоматически Поддерживаемые Типы
 
 ```kotlin
 @Composable
@@ -108,7 +110,7 @@ fun AutoSupportedTypes() {
 - Parcelable
 - Serializable
 
-### Custom типы с Parcelable
+### Custom Типы С Parcelable
 
 ```kotlin
 @Parcelize
@@ -132,7 +134,7 @@ fun UserProfile() {
 }
 ```
 
-### Custom типы с Saver
+### Custom Типы С Saver
 
 Для типов, не поддерживающих Parcelable, используйте custom `Saver`:
 
@@ -196,7 +198,7 @@ fun ProductFilter() {
 }
 ```
 
-### ListSaver для List-based данных
+### ListSaver Для List-based Данных
 
 ```kotlin
 data class CartItem(val productId: Int, val quantity: Int)
@@ -221,7 +223,7 @@ fun ShoppingCart() {
 }
 ```
 
-### rememberSaveable с ViewModel
+### rememberSaveable С ViewModel
 
 ```kotlin
 @Composable
@@ -259,7 +261,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 }
 ```
 
-### Когда использовать remember
+### Когда Использовать Remember
 
 **- Используйте remember для**:
 
@@ -284,7 +286,7 @@ fun AnimatedButton() {
 }
 ```
 
-2. **Производительность-критичных объектов**:
+1. **Производительность-критичных объектов**:
 
 ```kotlin
 @Composable
@@ -298,7 +300,7 @@ fun ExpensiveComputationExample() {
 }
 ```
 
-3. **Состояние, управляемое ViewModel**:
+1. **Состояние, управляемое ViewModel**:
 
 ```kotlin
 @Composable
@@ -311,7 +313,7 @@ fun DataScreen(viewModel: DataViewModel) {
 }
 ```
 
-### Когда использовать rememberSaveable
+### Когда Использовать rememberSaveable
 
 **- Используйте rememberSaveable для**:
 
@@ -335,7 +337,7 @@ fun RegistrationForm() {
 }
 ```
 
-2. **Scroll позиция**:
+1. **Scroll позиция**:
 
 ```kotlin
 @Composable
@@ -361,7 +363,7 @@ fun ArticleList() {
 }
 ```
 
-3. **Выбранные элементы**:
+1. **Выбранные элементы**:
 
 ```kotlin
 @Composable
@@ -392,7 +394,7 @@ fun SelectableList(items: List<String>) {
 }
 ```
 
-4. **Expanded/collapsed состояние**:
+1. **Expanded/collapsed состояние**:
 
 ```kotlin
 @Composable
@@ -441,7 +443,7 @@ fun LargeDataExample() {
 }
 ```
 
-#### 2. Типы не поддерживающие сериализацию
+#### 2. Типы Не Поддерживающие Сериализацию
 
 ```kotlin
 @Composable
@@ -479,7 +481,7 @@ fun PerformanceComparison() {
 }
 ```
 
-### rememberSaveable с keys
+### rememberSaveable С Keys
 
 ```kotlin
 @Composable

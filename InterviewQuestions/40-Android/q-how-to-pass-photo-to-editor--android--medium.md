@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fileprovider-secure-sharing--android--medium, q-what-are-intents-for--android--medium, q-android-storage-types--android--medium]
+related: [q-android-storage-types--android--medium, q-fileprovider-secure-sharing--android--medium, q-what-are-intents-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, image-processing, difficulty/medium]
+tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, difficulty/medium, image-processing]
 date created: Thursday, October 30th 2025, 12:58:05 pm
-date modified: Thursday, October 30th 2025, 2:17:19 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

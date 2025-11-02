@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-clean-code-principles--software-engineering--medium, q-design-patterns-fundamentals--software-engineering--hard, q-solid-principles--software-design--medium]
+related: [q-clean-code-principles--software-engineering--medium, q-design-patterns-fundamentals--software-engineering--hard]
 created: 2025-10-12
 updated: 2025-01-25
 tags: [abstraction, composition, difficulty/medium, encapsulation, inheritance, oop, polymorphism]
 sources: [https://en.wikipedia.org/wiki/Object-oriented_programming]
 date created: Monday, October 13th 2025, 7:55:46 am
-date modified: Sunday, October 26th 2025, 1:18:54 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

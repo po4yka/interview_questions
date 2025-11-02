@@ -5,7 +5,7 @@ aliases: ["What Does The Lifecycle Library Do", "Что делает библи�
 
 # Classification
 topic: android
-subtopics: [lifecycle, architecture-mvvm]
+subtopics: [architecture-mvvm, lifecycle]
 question_kind: theory
 difficulty: medium
 
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-why-was-the-lifecycle-library-created--android--hard, q-what-is-viewmodel--android--medium, q-service-lifecycle-binding--android--hard]
+related: [q-service-lifecycle-binding--android--hard, q-what-is-viewmodel--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-29
 
 # Tags (EN only; no leading #)
-tags: [android, android/lifecycle, android/architecture-mvvm, lifecycle-aware, difficulty/medium]
+tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium, lifecycle-aware]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -41,13 +43,13 @@ tags: [android, android/lifecycle, android/architecture-mvvm, lifecycle-aware, d
 
 **Библиотека Lifecycle** предоставляет классы и интерфейсы для создания **lifecycle-aware компонентов**, которые автоматически адаптируют свое поведение в зависимости от текущего состояния жизненного цикла Activity и Fragment. Это предотвращает утечки памяти, крэши и улучшает архитектуру кода.
 
-### Основные компоненты
+### Основные Компоненты
 
 **1. Lifecycle** — представляет состояние жизненного цикла
 **2. LifecycleOwner** — интерфейс, реализуемый Activity/Fragment
 **3. LifecycleObserver** — наблюдатель за изменениями жизненного цикла
 
-### Современный подход: DefaultLifecycleObserver
+### Современный Подход: DefaultLifecycleObserver
 
 ```kotlin
 class VideoPlayerObserver(
@@ -73,7 +75,7 @@ class VideoActivity : AppCompatActivity() {
 }
 ```
 
-### Состояния и события
+### Состояния И События
 
 **States (состояния):** INITIALIZED → CREATED → STARTED → RESUMED → DESTROYED
 
@@ -86,7 +88,7 @@ if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
 }
 ```
 
-### Интеграция с LiveData и корутинами
+### Интеграция С LiveData И Корутинами
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -112,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### ProcessLifecycleOwner (жизненный цикл приложения)
+### ProcessLifecycleOwner (жизненный Цикл приложения)
 
 ```kotlin
 class MyApp : Application() {

@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-null-checks-methods--programming-languages--easy, q-expect-actual-kotlin--kotlin--medium, q-kotlin-reified-types--kotlin--hard]
+related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-null-checks-methods--programming-languages--easy, q-kotlin-reified-types--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - oop
-  - sealed-classes
-  - type-hierarchy
-  - when-expressions
-  - difficulty/medium
+tags: [difficulty/medium, oop, programming-languages, sealed-classes, type-hierarchy, when-expressions]
+date created: Friday, October 31st 2025, 6:32:40 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Что такое sealed классы и зачем они нужны?
+
+# Что Такое Sealed Классы И Зачем Они Нужны?
 
 # Question (EN)
 > What are sealed classes and why are they needed?

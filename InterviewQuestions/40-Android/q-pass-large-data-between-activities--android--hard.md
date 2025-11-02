@@ -1,7 +1,7 @@
 ---
 id: android-365
 title: "Pass Large Data Between Activities / Передача больших данных между Activity"
-aliases: [Pass Large Data Between Activities, Передача больших данных между Activity, FileProvider, Content URI, Large Data Transfer]
+aliases: [Content URI, FileProvider, Large Data Transfer, Pass Large Data Between Activities, Передача больших данных между Activity]
 topic: android
 subtopics: [activity, content-provider, intents-deeplinks]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-pass-data-from-one-activity-to-another--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard, c-android-ipc]
+related: [c-android-ipc, q-android-ipc-mechanisms--android--hard, q-android-security-best-practices--android--hard]
 created: 2025-10-15
 updated: 2025-10-30
-sources: [Android Developers, Android Content Provider Documentation]
-tags: [android/activity, android/content-provider, android/intents-deeplinks, file-provider, binder, ipc, difficulty/hard]
+sources: [Android Content Provider Documentation, Android Developers]
+tags: [android/activity, android/content-provider, android/intents-deeplinks, binder, difficulty/hard, file-provider, ipc]
+date created: Saturday, November 1st 2025, 1:03:32 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ tags: [android/activity, android/content-provider, android/intents-deeplinks, fi
 
 ## Ответ (RU)
 
-### Проблема: Ограничение размера Intent
+### Проблема: Ограничение Размера Intent
 
 **❌ Неправильно** - передавать большие данные напрямую:
 
@@ -295,7 +297,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ---
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Метод | Персистентность | Сложность | Межпроцессный | Рекомендация |
 |-------|----------------|-----------|---------------|--------------|
@@ -324,7 +326,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ---
 
-### Архитектурные особенности
+### Архитектурные Особенности
 
 **Binder Transaction Buffer:**
 - Общий буфер для всех IPC-транзакций процесса (~1MB)
@@ -687,4 +689,4 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 ### Related (Hard)
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Component architecture
 - [[q-android-ipc-mechanisms--android--hard]] - Inter-process communication
-- [[q-android-security-best-practices--android--hard]] - Secure file sharing
+- [[q-android-security-best-practices--android--medium]] - Secure file sharing

@@ -3,24 +3,21 @@ id: kotlin-229
 title: "Kotlin Extension Functions Advanced / Продвинутые Extension Functions в Kotlin"
 aliases: [Kotlin Extension Functions Advanced, Продвинутые Extension Functions в Kotlin]
 topic: kotlin
-subtopics: [extensions, generics, dsl]
+subtopics: [dsl, extensions, generics]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-crossinline-keyword--kotlin--medium, q-object-singleton-companion--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium]
+related: [q-crossinline-keyword--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium, q-object-singleton-companion--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - extensions
-  - receivers
-  - generics
-  - dsl
-  - difficulty/hard
+tags: [difficulty/hard, dsl, extensions, generics, kotlin, receivers]
+date created: Friday, October 31st 2025, 6:28:53 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Advanced Extension Functions
 
 **English**: Implement extension functions with receivers, generic extensions, and nullable receivers. Understand resolution and scope.
@@ -233,7 +230,7 @@ Extension functions добавляют функциональность суще
 
 [Полные примеры generic extensions, nullable receivers, DSL patterns и operator extensions приведены в английском разделе]
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Держите extensions сфокусированными**
 2. **Именуйте четко** - избегайте двусмысленности с members

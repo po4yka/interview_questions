@@ -3,18 +3,20 @@ id: cs-007
 title: "Xml Acronym / Расшифровка аббревиатуры XML"
 aliases: ["XML Acronym", "Аббревиатура XML"]
 topic: cs
-subtopics: [fundamentals, markup-language, data-format]
+subtopics: [data-format, fundamentals, markup-language]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-design-patterns-types--design-patterns--medium, q-factory-method-pattern--design-patterns--medium, q-builder-pattern--design-patterns--medium]
+related: [q-builder-pattern--design-patterns--medium, q-design-patterns-types--design-patterns--medium, q-factory-method-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-01-25
-tags: [xml, markup-language, data-format, fundamentals, difficulty/easy]
+tags: [data-format, difficulty/easy, fundamentals, markup-language, xml]
 sources: [https://www.w3.org/XML/]
+date created: Friday, October 3rd 2025, 7:03:56 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

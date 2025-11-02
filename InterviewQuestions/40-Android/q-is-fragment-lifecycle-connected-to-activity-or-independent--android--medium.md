@@ -3,7 +3,7 @@ id: android-156
 title: "Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный цикл Fragment с Activity или независим"
 aliases: ["Fragment Lifecycle Connection", "Связь жизненного цикла Fragment"]
 topic: android
-subtopics: [lifecycle, fragment]
+subtopics: [fragment, lifecycle]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-how-to-add-fragment-synchronously-asynchronously--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/lifecycle, android/fragment, difficulty/medium]
+tags: [android, android/fragment, android/lifecycle, difficulty/medium]
 date created: Monday, October 27th 2025, 5:03:51 pm
-date modified: Thursday, October 30th 2025, 3:10:53 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

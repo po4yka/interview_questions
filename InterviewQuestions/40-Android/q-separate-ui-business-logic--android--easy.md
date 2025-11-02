@@ -10,13 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-proguard-r8--android--medium, q-how-to-draw-ui-without-xml--android--easy, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
+related: [q-how-to-draw-ui-without-xml--android--easy, q-proguard-r8--android--medium, q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/architecture-mvvm, difficulty/easy]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Зачем нужно разделять отображение и бизнес-логику?
+# Зачем Нужно Разделять Отображение И Бизнес-логику?
 
 **English**: Why do we need to separate presentation and business logic?
 
@@ -612,7 +614,7 @@ class UserActivity : AppCompatActivity() {
 ## Ответ (RU)
 Разделение отображения (UI) и бизнес-логики - это фундаментальный принцип архитектуры программного обеспечения. Это разделение улучшает качество кода, тестируемость, поддерживаемость и командную работу.
 
-### Зачем разделять UI и бизнес-логику?
+### Зачем Разделять UI И Бизнес-логику?
 
 #### 1. Тестируемость
 
@@ -659,21 +661,21 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel())
 
 Изменения в логике не требуют изменений в UI и наоборот.
 
-#### 4. Командная работа
+#### 4. Командная Работа
 
 Разные команды могут работать параллельно: Backend-команда над Repository, команда бизнес-логики над ViewModel, UI/UX команда над Activity/Compose.
 
-#### 5. Сохранение состояния
+#### 5. Сохранение Состояния
 
 ViewModel переживает изменения конфигурации (поворот экрана), сохраняя состояние приложения.
 
-### Популярные паттерны
+### Популярные Паттерны
 
 **MVVM** - Model-View-ViewModel
 **MVI** - Model-View-Intent
 **MVP** - Model-View-Presenter
 
-### Резюме преимуществ
+### Резюме Преимуществ
 
 - Тестируемость: чистые unit-тесты без UI
 - Переиспользуемость: одна логика для Activity/Fragment/Compose

@@ -1,22 +1,22 @@
 ---
 id: android-284
 title: "Where Is Composition Created / Где создается Composition"
-aliases: [Composition Creation, Создание Composition, setContent, ComposeView]
+aliases: [ComposeView, Composition Creation, setContent, Создание Composition]
 topic: android
-subtopics: [ui-compose, lifecycle, ui-views]
+subtopics: [lifecycle, ui-compose, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-is-layoutinflater-a-singleton-and-why--android--medium, q-network-error-handling-strategies--networking--medium, c-jetpack-compose]
+related: [c-jetpack-compose, q-is-layoutinflater-a-singleton-and-why--android--medium, q-network-error-handling-strategies--networking--medium]
 created: 2025-10-15
 updated: 2025-10-27
 sources: []
-tags: [android/ui-compose, android/lifecycle, android/ui-views, jetpack-compose, composition, difficulty/medium]
+tags: [android/lifecycle, android/ui-compose, android/ui-views, composition, difficulty/medium, jetpack-compose]
 date created: Monday, October 27th 2025, 6:53:26 pm
-date modified: Thursday, October 30th 2025, 3:18:07 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ Where is composition created for calling composable functions?
 
 **Композиция** создается при вызове **setContent** в Activity (или ComposeView во Fragment). Это точка входа для Compose UI.
 
-### setContent в Activity
+### setContent В Activity
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -55,7 +55,7 @@ fun MyApp() {
 }
 ```
 
-### ComposeView во Fragment
+### ComposeView Во Fragment
 
 ```kotlin
 class MyFragment : Fragment() {

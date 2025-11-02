@@ -1,10 +1,10 @@
 ---
 id: "20251018-140003"
 title: "Kotlin Coroutines / Корутины Kotlin"
-aliases: ["Coroutines", "Корутины", "Сопрограммы", "Kotlin Coroutines"]
+aliases: ["Coroutines", "Kotlin Coroutines", "Корутины", "Сопрограммы"]
 summary: "Lightweight concurrency framework for asynchronous programming with structured concurrency and suspend functions"
 topic: "kotlin"
-subtopics: ["coroutines", "async", "concurrency"]
+subtopics: ["async", "concurrency", "coroutines"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-kotlin"
 related: []
 created: "2025-10-18"
 updated: "2025-10-18"
-tags: ["concept", "kotlin", "coroutines", "async", "concurrency", "structured-concurrency", "difficulty/medium"]
+tags: ["async", "concept", "concurrency", "coroutines", "difficulty/medium", "kotlin", "structured-concurrency"]
+date created: Saturday, October 18th 2025, 3:07:46 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -29,7 +31,7 @@ Key characteristics:
 - Built-in cancellation and exception handling
 - Thread-efficient execution
 
-# Краткое описание (RU)
+# Краткое Описание (RU)
 
 **Корутины Kotlin** — это легковесная система параллелизма, которая позволяет писать асинхронный, неблокирующий код с помощью приостанавливаемых функций. Корутины предоставляют элегантный способ написания параллельного кода, который выглядит последовательным, но выполняется асинхронно, делая сложные асинхронные операции простыми и читаемыми.
 
@@ -65,7 +67,7 @@ A **coroutine** is an instance of **suspendable computation**. It is conceptuall
 - Parent-child relationship ensures proper lifecycle management
 - Automatic cancellation and cleanup
 
-### Coroutines vs Threads
+### Coroutines Vs Threads
 
 | Feature | Coroutine | Thread |
 |---------|-----------|--------|
@@ -341,7 +343,7 @@ scope.launch {
 - **Exception handling**: Predictable propagation through hierarchy
 - **Resource management**: Automatic cleanup
 
-### Anti-pattern vs Best Practice
+### Anti-pattern Vs Best Practice
 
 **WRONG: Unstructured (GlobalScope)**
 ```kotlin

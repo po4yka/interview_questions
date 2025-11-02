@@ -99,5 +99,5 @@ Virtual tables (views) are useful for abstraction and security but should be use
 - [[moc-backend]]
 
 ## Related Questions
-- [[q-sql-join-algorithms-complexity--backend--hard]]
-- [[q-relational-table-unique-data--backend--medium]]
+- [[q-sql-join-algorithms-complexity--databases--hard]]
+- [[q-relational-table-unique-data--databases--medium]]

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [types, any, nothing, unit, type-system]
+subtopics: [any, nothing, type-system, types, unit]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-const--kotlin--easy, q-data-class-detailed--kotlin--medium, q-kotlin-enum-classes--kotlin--easy]
+related: [q-data-class-detailed--kotlin--medium, q-kotlin-const--kotlin--easy, q-kotlin-enum-classes--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, types, any, nothing, unit, type-system, difficulty/medium]
+tags: [any, difficulty/medium, kotlin, nothing, type-system, types, unit]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What do you know about Any, Nothing, Unit types in Kotlin?
 # Вопрос (RU)

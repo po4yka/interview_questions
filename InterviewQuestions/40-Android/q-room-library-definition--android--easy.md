@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-room-library, q-room-basics--android--easy, q-sqlite-vs-room--android--medium]
+related: [c-room-library, q-data-storage-options--android--easy]
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android/room, room, database, orm, sqlite, difficulty/easy]
+tags: [android/room, database, difficulty/easy, orm, room, sqlite]
 sources: []
+date created: Saturday, November 1st 2025, 1:04:42 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -157,6 +159,6 @@ abstract class AppDatabase : RoomDatabase() {
 - [[q-room-dao--android--medium]] - DAO implementation patterns
 
 ### Advanced (Harder)
-- [[q-room-migrations--android--medium]] - Database schema migrations
+- [[q-room-database-migrations--android--medium]] - Database schema migrations
 - [[q-room-relationships--android--medium]] - Modeling table relationships
 - [[q-room-testing--android--hard]] - Testing Room databases

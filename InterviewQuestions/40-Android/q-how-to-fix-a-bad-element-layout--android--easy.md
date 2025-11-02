@@ -3,20 +3,20 @@ id: android-408
 title: "How To Fix A Bad Element Layout / Как исправить плохой layout элемента"
 aliases: ["How To Fix A Bad Element Layout", "Как исправить плохой layout элемента"]
 topic: android
-subtopics: [ui-views, performance-rendering]
+subtopics: [performance-rendering, ui-views]
 question_kind: android
 difficulty: easy
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-known-about-methods-that-redraw-view--android--medium, q-performance-optimization-android--android--medium, q-recyclerview-sethasfixedsize--android--easy]
+related: [q-performance-optimization-android--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-views, android/performance-rendering, layouts, performance, difficulty/easy]
+tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts, performance]
 date created: Tuesday, October 28th 2025, 9:49:15 am
-date modified: Thursday, October 30th 2025, 12:48:37 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How to fix a bad element layout?
 
 Плохие layouts вызывают проблемы с производительностью, задержки рендеринга и ухудшают UX. Основные стратегии оптимизации:
 
-### 1. Уменьшить вложенность
+### 1. Уменьшить Вложенность
 
 **Проблема:** Глубокая иерархия View замедляет рендеринг.
 
@@ -71,7 +71,7 @@ How to fix a bad element layout?
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### 2. Использовать ViewStub для редких элементов
+### 2. Использовать ViewStub Для Редких Элементов
 
 ViewStub — это view нулевого размера, который инфлейтит layout только по требованию.
 
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### 3. Применять `<merge>` для сокращения уровней
+### 3. Применять `<merge>` Для Сокращения Уровней
 
 Тег `<merge>` устраняет избыточные ViewGroups при использовании `<include>`.
 
@@ -145,7 +145,7 @@ class OptimizedView(context: Context) : View(context) {
 }
 ```
 
-### Инструменты диагностики
+### Инструменты Диагностики
 
 - **Layout Inspector**: View > Tool Windows > Layout Inspector
 - **GPU Overdraw**: Developer Options > Debug GPU Overdraw

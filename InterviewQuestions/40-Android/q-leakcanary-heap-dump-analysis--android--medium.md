@@ -11,10 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/performance-memory, android/profiling, leakcanary, heap-dump, memory-analysis, shark, difficulty/medium]
+tags: [android/performance-memory, android/profiling, difficulty/medium, heap-dump, leakcanary, memory-analysis, shark]
 moc: moc-android
-related: [q-main-thread-android--android--medium, q-canvas-optimization--graphics--medium]
+related: [q-activity-lifecycle--android--easy]
 sources: []
+date created: Saturday, November 1st 2025, 1:25:01 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -257,9 +259,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - [[q-activity-lifecycle--android--easy]] - Activity lifecycle and destruction
 
 ### Related (Same Level)
-- [[q-memory-profiler-android--android--medium]] - Alternative memory analysis tools
-- [[q-weakreference-android--android--medium]] - WeakReference usage patterns
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-bitmap-memory-optimization--android--hard]] - Memory optimization strategies
-- [[q-custom-memory-leak-detection--android--hard]] - Building custom leak detectors
+- Related content to be added

@@ -3,7 +3,7 @@ id: lang-062
 title: "Suspend Function Suspension Mechanism / Механизм приостановки suspend функции"
 aliases: [Suspend Function Suspension Mechanism, Механизм приостановки suspend функции]
 topic: programming-languages
-subtopics: [coroutines, suspension, control-flow]
+subtopics: [control-flow, coroutines, suspension]
 question_kind: theory
 difficulty: hard
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-equals-hashcode-purpose--programming-languages--hard, q-extensions-concept--programming-languages--easy, q-list-vs-sequence--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, kotlin, suspension, difficulty/hard]
+tags: [coroutines, difficulty/hard, kotlin, programming-languages, suspension]
 date created: Saturday, October 4th 2025, 10:56:46 am
-date modified: Sunday, October 26th 2025, 1:39:51 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Suspend Function Suspension Mechanism

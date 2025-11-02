@@ -3,7 +3,7 @@ id: android-254
 title: Compose Side Effects (Advanced) / Побочные эффекты Compose (продвинуто)
 aliases: ["Compose Side Effects Advanced", "Побочные эффекты Compose"]
 topic: android
-subtopics: [ui-compose, ui-state, lifecycle]
+subtopics: [lifecycle, ui-compose, ui-state]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -14,13 +14,12 @@ related:
   - q-compose-compiler-plugin--android--hard
   - q-compose-performance-optimization--android--hard
   - q-compose-remember-derived-state--android--medium
-  - q-compose-recomposition-lifecycle--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/ui-compose, android/ui-state, android/lifecycle, difficulty/hard]
+tags: [android/lifecycle, android/ui-compose, android/ui-state, difficulty/hard]
 sources: ["https://developer.android.com/jetpack/compose/side-effects"]
 date created: Thursday, October 30th 2025, 11:23:25 am
-date modified: Thursday, October 30th 2025, 12:43:50 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -232,13 +231,10 @@ DisposableEffect(lifecycleOwner) {
 ### Prerequisites
 - [[q-compose-remember-derived-state--android--medium]] — understanding state management basics
 - [[q-android-jetpack-overview--android--easy]] — Compose fundamentals
-- [[q-coroutine-basics--kotlin--easy]] — coroutine concepts
 
 ### Related
 - [[q-compose-performance-optimization--android--hard]] — avoiding unnecessary recompositions
 - [[q-compose-compiler-plugin--android--hard]] — how Compose tracks effects
-- [[q-compose-recomposition-lifecycle--android--medium]] — recomposition mechanics
 
 ### Advanced
 - [[q-compose-slot-table-recomposition--android--hard]] — internal composition mechanics
-- [[q-compose-stability-optimization--android--hard]] — stability inference and optimization

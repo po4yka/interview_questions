@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, coroutine-context, async, concurrency]
+subtopics: [async, concurrency, coroutine-context, coroutines]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: ""
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-zip-parallelism-guarantee--programming-languages--medium, q-kotlin-channels--kotlin--medium, q-inline-value-classes-performance--kotlin--medium]
+related: [q-inline-value-classes-performance--kotlin--medium, q-kotlin-channels--kotlin--medium, q-zip-parallelism-guarantee--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, coroutines, coroutine-context, async-programming, concurrency, difficulty/medium]
+tags: [async-programming, concurrency, coroutine-context, coroutines, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > What is CoroutineContext and what are its main elements?
 
@@ -449,11 +452,11 @@ val newContext = context.minusKey(CoroutineName)
 
 **CoroutineContext** — это индексированный набор элементов `Element`, который определяет поведение и окружение корутины. Это фундаментальная концепция в Kotlin coroutines, определяющая как, где и при каких условиях выполняется корутина.
 
-### Основная концепция
+### Основная Концепция
 
 CoroutineContext — это **неизменяемый индексированный набор**, где каждый элемент имеет уникальный `Key`. Можно представить как `Map<Key, Element>`, где элементы можно комбинировать и получать по ключам.
 
-### Основные элементы контекста
+### Основные Элементы Контекста
 
 **1. Job** - Управляет жизненным циклом корутины. Позволяет отменять корутину и отслеживать её состояние.
 
@@ -505,7 +508,7 @@ launch(CoroutineName("MyCoroutine")) {
 }
 ```
 
-### Композиция контекста
+### Композиция Контекста
 
 Элементы контекста можно комбинировать с помощью оператора `+`:
 
@@ -517,7 +520,7 @@ launch(context) {
 }
 ```
 
-### Наследование контекста
+### Наследование Контекста
 
 Дочерние корутины наследуют контекст родителя, но могут переопределять элементы:
 
@@ -531,7 +534,7 @@ launch(parentContext) {
 }
 ```
 
-### Пример для Android
+### Пример Для Android
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -550,7 +553,7 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-### Ключевые моменты
+### Ключевые Моменты
 
 1. **CoroutineContext неизменяем** - операции возвращают новые контексты
 2. **Элементы индексируются по Key** - уникальный на тип элемента

@@ -3,7 +3,7 @@ id: android-355
 title: CI/CD Deployment Automation / Автоматизация деплоя в CI/CD
 aliases: [CI/CD Deployment Automation, Автоматизация деплоя в CI/CD]
 topic: android
-subtopics: [gradle, ci-cd, play-console]
+subtopics: [ci-cd, gradle, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-android-lint-tool--android--medium, q-app-store-optimization--androi
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/gradle, android/ci-cd, android/play-console, ci-cd, deployment, difficulty/medium]
+tags: [android/ci-cd, android/gradle, android/play-console, ci-cd, deployment, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:19:02 am
-date modified: Thursday, October 30th 2025, 12:43:33 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -83,7 +83,7 @@ android {
 - **mapping.txt** для деобфускации стектрейсов
 - **Release notes** автогенерируются из conventional commits
 
-### CI конфигурация
+### CI Конфигурация
 ```yaml
 # ✅ GitHub Actions deploy
 name: Deploy
@@ -103,7 +103,7 @@ jobs:
           ./gradlew publishBundle -Pplay.track=internal
 ```
 
-### Staged rollout
+### Staged Rollout
 **Internal** (PR merge) → **Alpha** (5%) → **Beta** (20%) → **Production** (100%)
 
 Автоповышение при прохождении метрик: crash rate < 0.5%, ANR стабилен.

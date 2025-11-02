@@ -3,21 +3,22 @@ id: lang-007
 title: "Kotlin Combine Collections / Объединение коллекций Kotlin"
 aliases: []
 topic: programming-languages
-subtopics: [operators, class-features, java-interop]
+subtopics: [class-features, java-interop, operators]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-vs-java-class-creation--programming-languages--medium, q-channels-vs-flow--kotlin--medium]
+related: [q-channels-vs-flow--kotlin--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-vs-java-class-creation--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Thursday, October 16th 2025, 4:16:12 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какая функция Kotlin используется для объединения двух коллекций?
+
+# Какая Функция Kotlin Используется Для Объединения Двух Коллекций?
 
 # Question (EN)
 > What Kotlin function is used to combine two collections?
@@ -92,12 +93,12 @@ mutableList.addAll(listOf(4, 5, 6))
 ## Related Questions
 
 ### Android Implementation
-- [[q-kak-izmenit-kolichestvo-kolonok-v-recyclerview-v-zavisimosti-ot-orientatsii--programming-languages--easy]] - Data Structures
+-  - Data Structures
 
 ### Kotlin Language Features
 - [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures
-- [[q-collection-implementations--programming-languages--easy]] - Data Structures
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
-- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
+-  - Data Structures
+-  - Data Structures
+-  - Data Structures
 - [[q-kotlin-collections--kotlin--medium]] - Data Structures
 - [[q-kotlin-collections--kotlin--easy]] - Data Structures

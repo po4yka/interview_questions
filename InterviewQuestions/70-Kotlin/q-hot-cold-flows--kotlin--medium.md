@@ -6,10 +6,10 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
+  - cold-flows
   - coroutines
   - flow
   - hot-flows
-  - cold-flows
   - sharedflow
 question_kind: theory
 difficulty: medium
@@ -23,14 +23,17 @@ source_note: Comprehensive Kotlin Hot Cold Flows Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium, q-sharedin-statein--kotlin--medium]
+related: [q-kotlin-flow-basics--kotlin--medium, q-sharedin-statein--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, flow, hot-flows, cold-flows, difficulty/medium]
+tags: [cold-flows, coroutines, difficulty/medium, flow, hot-flows, kotlin]
+date created: Saturday, October 18th 2025, 9:34:33 am
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > What's the difference between hot and cold Flows? Explain Flow (cold), SharedFlow, StateFlow (hot), when to use each, and how to convert between them.
 
@@ -89,7 +92,7 @@ val hotFlow = MutableSharedFlow<Int>()
 // Всегда активен, общий для всех подписчиков
 ```
 
-### Когда использовать
+### Когда Использовать
 
 - **Flow (холодный)**: Запросы к базе данных, API вызовы
 - **SharedFlow (горячий)**: События, широковещание

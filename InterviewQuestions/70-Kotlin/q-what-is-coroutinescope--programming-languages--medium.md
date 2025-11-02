@@ -3,19 +3,19 @@ id: lang-090
 title: "What Is CoroutineScope / Что такое CoroutineScope"
 aliases: [What Is CoroutineScope, Что такое CoroutineScope]
 topic: programming-languages
-subtopics: [coroutines, scope-management, lifecycle]
+subtopics: [coroutines, lifecycle, scope-management]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-hot-vs-cold-flows--programming-languages--medium, q-memento-pattern--design-patterns--medium, q-template-method-pattern--design-patterns--medium]
+related: [q-hot-vs-cold-flows--programming-languages--medium, q-template-method-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, kotlin, scope, difficulty/medium]
+tags: [coroutines, difficulty/medium, kotlin, programming-languages, scope]
 date created: Saturday, October 4th 2025, 10:52:06 am
-date modified: Sunday, October 26th 2025, 1:39:57 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # What is CoroutineScope?
@@ -391,5 +391,4 @@ class MyRepositoryTest {
 ## Related Questions
 
 - [[q-template-method-pattern--design-patterns--medium]]
-- [[q-memento-pattern--design-patterns--medium]]
 - [[q-hot-vs-cold-flows--programming-languages--medium]]

@@ -5,7 +5,7 @@ aliases: ["Service Types Android", "Типы Service в Android"]
 
 # Classification
 topic: android
-subtopics: [service, background-execution]
+subtopics: [background-execution, service]
 question_kind: android
 difficulty: easy
 
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-foreground-service-types--android--medium, q-when-can-the-system-restart-a-service--android--medium]
+related: [q-four-main-components-of-android--android--easy]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android/service, android/background-execution, background-tasks, difficulty/easy]
+tags: [android/background-execution, android/service, background-tasks, difficulty/easy]
+date created: Saturday, November 1st 2025, 1:05:10 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

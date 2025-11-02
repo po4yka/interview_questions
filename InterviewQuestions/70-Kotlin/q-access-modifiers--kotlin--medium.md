@@ -17,7 +17,7 @@ created: 2025-10-06
 updated: 2025-10-06
 tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibility]
 date created: Sunday, October 5th 2025, 6:51:27 pm
-date modified: Sunday, October 26th 2025, 8:53:30 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Question (EN)

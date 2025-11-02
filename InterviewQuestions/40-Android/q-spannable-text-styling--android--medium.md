@@ -12,10 +12,13 @@ status: draft
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android/ui-views, android/ui-widgets, spannable, text-styling, difficulty/medium]
+tags: [android/ui-views, android/ui-widgets, difficulty/medium, spannable, text-styling]
 moc: moc-android
-related: [q-custom-view-attributes--android--medium, q-how-to-break-text-by-screen-width--android--easy, q-accessibility-text-scaling--android--medium]
+related: [q-accessibility-text-scaling--android--medium, q-custom-view-attributes--android--medium, q-how-to-break-text-by-screen-width--android--easy]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 Что такое Spannable и как его использовать для стилизации текста?
@@ -28,7 +31,7 @@ What is Spannable and how do you use it for text styling?
 
 **Spannable** — интерфейс для текста, к которому можно прикреплять объекты разметки во время выполнения. Используется для динамической стилизации части текста или целых абзацев.
 
-### Основные классы
+### Основные Классы
 
 | Класс | Текст | Разметка | Использование |
 |-------|-------|----------|---------------|
@@ -36,7 +39,7 @@ What is Spannable and how do you use it for text styling?
 | **SpannableString** | Неизменяемый | Изменяемая | <10 spans |
 | **SpannableStringBuilder** | Изменяемый | Изменяемая | >10 spans |
 
-### Базовый пример
+### Базовый Пример
 
 ```kotlin
 val text = SpannableString("Hello World")

@@ -1,7 +1,7 @@
 ---
 id: android-224
 title: "RecyclerView AsyncListDiffer / RecyclerView AsyncListDiffer"
-aliases: [RecyclerView AsyncListDiffer, AsyncListDiffer]
+aliases: [AsyncListDiffer, RecyclerView AsyncListDiffer]
 topic: android
 subtopics: [ui-views]
 question_kind: theory
@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-what-are-services-used-for--android--medium, q-vector-graphics-animations--graphics--medium]
+related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-vector-graphics-animations--graphics--medium, q-what-are-services-used-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-views, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # RecyclerView Async List Diffing
@@ -137,7 +139,7 @@ Update UI (smooth!)
 
 ---
 
-### AsyncListDiffer vs ListAdapter
+### AsyncListDiffer Vs ListAdapter
 
 | Feature | AsyncListDiffer | ListAdapter |
 |---------|----------------|-------------|
@@ -760,7 +762,7 @@ searchView.onQueryTextChange { query ->
 
 **AsyncListDiffer** - это вспомогательный класс, который вычисляет разницу списков в фоновом потоке и отправляет обновления в RecyclerView. Он предотвращает зависание UI при обновлении больших списков.
 
-### Проблема: Блокировка UI потока
+### Проблема: Блокировка UI Потока
 
 ```kotlin
 //  ПРОБЛЕМА - Блокирует UI поток
@@ -839,7 +841,7 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
 ---
 
-### Как AsyncListDiffer работает внутри
+### Как AsyncListDiffer Работает Внутри
 
 **Поток выполнения:**
 
@@ -867,7 +869,7 @@ dispatchUpdatesTo(adapter)
 
 ---
 
-### AsyncListDiffer vs ListAdapter
+### AsyncListDiffer Vs ListAdapter
 
 | Функция | AsyncListDiffer | ListAdapter |
 |---------|----------------|-------------|
@@ -918,7 +920,7 @@ adapter.submitList(items) // Тот же API, что и AsyncListDiffer!
 
 ---
 
-### Безопасность потоков с submitList()
+### Безопасность Потоков С submitList()
 
 **submitList() потокобезопасен:**
 
@@ -951,7 +953,7 @@ adapter.submitList(newItems) // Безопасно!
 
 ---
 
-### Безопасная обработка мутаций списка
+### Безопасная Обработка Мутаций Списка
 
 **Проблема: Изменение списка во время diff:**
 
@@ -1012,7 +1014,7 @@ lifecycleScope.launch {
 
 ---
 
-### Callback завершения
+### Callback Завершения
 
 **Получить уведомление, когда diff завершен:**
 
@@ -1062,7 +1064,7 @@ val differ = AsyncListDiffer(
 
 ---
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 **1. Debounce быстрых обновлений:**
 
@@ -1130,7 +1132,7 @@ data class Item(
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте неизменяемые списки**
 ```kotlin

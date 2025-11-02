@@ -3,20 +3,20 @@ id: android-162
 title: "Handler Looper Main Thread / Handler и Looper главного потока"
 aliases: ["Handler and Looper on Main Thread", "Handler и Looper главного потока"]
 topic: android
-subtopics: [threads-sync, background-execution]
+subtopics: [background-execution, threads-sync]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-main-thread-android--android--medium, q-looper-thread-connection--android--medium, q-multithreading-tools-android--android--medium]
+related: [q-looper-thread-connection--android--medium, q-main-thread-android--android--medium, q-multithreading-tools-android--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/threads-sync, android/background-execution, concurrency, difficulty/medium, handler, looper, main-thread, message-queue]
+tags: [android/background-execution, android/threads-sync, concurrency, difficulty/medium, handler, looper, main-thread, message-queue]
 date created: Monday, October 27th 2025, 5:04:18 pm
-date modified: Thursday, October 30th 2025, 12:48:05 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +35,7 @@ How can you receive messages on the main thread using Handler and Looper?
 2. Отправьте сообщение из любого потока через `sendMessage()` или `post()`
 3. Обработайте в `handleMessage()` или лямбде
 
-### Основной подход
+### Основной Подход
 
 ```kotlin
 // ✅ Правильно: Handler привязан к главному потоку
@@ -74,7 +74,7 @@ fun loadData() {
 }
 ```
 
-### Предотвращение утечек памяти
+### Предотвращение Утечек Памяти
 
 ```kotlin
 // ❌ Плохо: анонимный класс держит ссылку на Activity
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Handler vs Coroutines
+### Handler Vs Coroutines
 
 **Handler (традиционный)**:
 ```kotlin
@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Handler vs Coroutines
+### Handler Vs Coroutines
 
 **Handler (traditional)**:
 ```kotlin

@@ -1,20 +1,22 @@
 ---
 id: android-305
 title: "Push Notification Navigation / Навигация из push уведомлений"
-aliases: [Push Notification Navigation, Навигация из push уведомлений, FCM Navigation, Navigation from Notifications]
+aliases: [FCM Navigation, Navigation from Notifications, Push Notification Navigation, Навигация из push уведомлений]
 topic: android
-subtopics: [notifications, ui-navigation, intents-deeplinks]
+subtopics: [intents-deeplinks, notifications, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-navigation-advanced--android--medium, q-activity-navigation-how-it-works--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+related: [q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-navigation-methods-do-you-know--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/notifications, android/ui-navigation, android/intents-deeplinks, notifications, fcm, navigation, deeplink, difficulty/medium]
+tags: [android/intents-deeplinks, android/notifications, android/ui-navigation, deeplink, difficulty/medium, fcm, navigation, notifications]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +35,7 @@ How to open a specific Activity or Fragment from a push notification?
 
 **Сложность**: Time O(1), Space O(1)
 
-### 1. FCM Service с навигационными данными
+### 1. FCM Service С Навигационными Данными
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -78,7 +80,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 ✅ **Правильно**: FLAG_IMMUTABLE для PendingIntent (Android 12+)
 ❌ **Неправильно**: Использование notification payload без data - ограниченные возможности кастомизации
 
-### 2. Обработка навигации в MainActivity
+### 2. Обработка Навигации В MainActivity
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -119,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 ✅ **Правильно**: Проверка extras перед навигацией
 ❌ **Неправильно**: Навигация только в `onCreate()` - не работает если Activity уже открыта
 
-### 3. Deep Links для навигации
+### 3. Deep Links Для Навигации
 
 ```kotlin
 // AndroidManifest.xml
@@ -150,7 +152,7 @@ private fun createDeepLinkIntent(itemId: Int): Intent {
 ✅ **Правильно**: setPackage() предотвращает открытие в других приложениях
 ❌ **Неправильно**: Отсутствие autoVerify для HTTPS deep links
 
-### 4. Back Stack для правильной навигации
+### 4. Back Stack Для Правильной Навигации
 
 ```kotlin
 private fun createIntentWithBackStack(itemId: Int): PendingIntent {
@@ -186,7 +188,7 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 
 **Complexity**: Time O(1), Space O(1)
 
-### 1. FCM Service with navigation data
+### 1. FCM Service with Navigation Data
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -231,7 +233,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 ✅ **Correct**: FLAG_IMMUTABLE for PendingIntent (Android 12+)
 ❌ **Incorrect**: Using notification payload without data - limited customization
 
-### 2. Handle navigation in MainActivity
+### 2. Handle Navigation in MainActivity
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -272,7 +274,7 @@ class MainActivity : AppCompatActivity() {
 ✅ **Correct**: Check extras before navigation
 ❌ **Incorrect**: Navigation only in `onCreate()` - doesn't work if Activity already open
 
-### 3. Deep Links for navigation
+### 3. Deep Links for Navigation
 
 ```kotlin
 // AndroidManifest.xml
@@ -303,7 +305,7 @@ private fun createDeepLinkIntent(itemId: Int): Intent {
 ✅ **Correct**: setPackage() prevents opening in other apps
 ❌ **Incorrect**: Missing autoVerify for HTTPS deep links
 
-### 4. Back Stack for proper navigation
+### 4. Back Stack for Proper Navigation
 
 ```kotlin
 private fun createIntentWithBackStack(itemId: Int): PendingIntent {

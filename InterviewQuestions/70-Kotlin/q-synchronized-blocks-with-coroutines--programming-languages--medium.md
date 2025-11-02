@@ -3,7 +3,7 @@ id: lang-037
 title: "Synchronized Blocks With Coroutines / Синхронизированные блоки с корутинами"
 aliases: [Synchronized Blocks With Coroutines, Синхронизированные блоки с корутинами]
 topic: programming-languages
-subtopics: [coroutines, concurrency, synchronization]
+subtopics: [concurrency, coroutines, synchronization]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-java-lambda-type--programming-languages--easy, q-proxy-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, kotlin, synchronization, difficulty/medium]
+tags: [coroutines, difficulty/medium, kotlin, programming-languages, synchronization]
 date created: Saturday, October 4th 2025, 10:53:02 am
-date modified: Sunday, October 26th 2025, 1:39:53 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Why Not Use Synchronized Blocks with Coroutines?

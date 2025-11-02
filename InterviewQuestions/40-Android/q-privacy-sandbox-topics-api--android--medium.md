@@ -1,7 +1,7 @@
 ---
 id: android-388
 title: "Privacy Sandbox Topics API / Privacy Sandbox Topics API"
-aliases: ["Privacy Sandbox Topics API", "Topics API", "Privacy Sandbox Topics API"]
+aliases: ["Privacy Sandbox Topics API", "Topics API"]
 topic: android
 subtopics: [privacy-sdks]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gdpr-compliance-android--android--medium, q-app-permissions-runtime--android--medium, q-data-storage-security--android--medium]
+related: [q-app-permissions-runtime--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [privacy-sandbox, topics-api, privacy, advertising, user-privacy, difficulty/medium, android/privacy-sdks]
+tags: [advertising, android/privacy-sdks, difficulty/medium, privacy, privacy-sandbox, topics-api, user-privacy]
+date created: Saturday, November 1st 2025, 1:03:51 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ What is the Privacy Sandbox Topics API in Android? How does it provide privacy-p
 
 Topics API — это механизм Privacy Sandbox, который обеспечивает рекламу на основе интересов без кросс-приложенского отслеживания. Темы интересов вычисляются на устройстве на основе использования приложений за последние 3 недели и хранятся локально.
 
-### Ключевые принципы
+### Ключевые Принципы
 
 **Как работает:**
 - Система определяет 3-5 тем из таксономии (~350 категорий: Спорт, Путешествия, Технологии)
@@ -46,7 +48,7 @@ Topics API — это механизм Privacy Sandbox, который обес�
 - Нет передачи истории просмотров
 - Пользовательский контроль и прозрачность
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 import android.adservices.topics.TopicsManager
@@ -86,7 +88,7 @@ class TopicsApiManager(private val context: Context) {
 }
 ```
 
-### Использование для таргетинга рекламы
+### Использование Для Таргетинга Рекламы
 
 ```kotlin
 class PrivacyPreservingAdManager(
@@ -120,7 +122,7 @@ class PrivacyPreservingAdManager(
 }
 ```
 
-### Пользовательский контроль
+### Пользовательский Контроль
 
 ```kotlin
 class PrivacySandboxControls(private val context: Context) {
@@ -159,7 +161,7 @@ class PrivacySandboxControls(private val context: Context) {
 5. **Прозрачность**: объясняйте пользователям механизм работы
 6. **Уважение выбора**: немедленно прекращайте использование при opt-out
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 ```kotlin
 // ❌ Не проверяется доступность API

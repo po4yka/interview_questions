@@ -3,7 +3,7 @@ id: android-249
 title: "What Is Layout Performance Measured In / В чем измеряется производительность layout"
 aliases: ["Layout Performance Measurement", "Измерение производительности layout"]
 topic: android
-subtopics: [performance-rendering, ui-views, profiling]
+subtopics: [performance-rendering, profiling, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,7 +14,9 @@ related: [q-compose-modifier-order-performance--android--medium, q-macrobenchmar
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/performance-rendering, android/ui-views, android/profiling, performance, rendering, difficulty/medium]
+tags: [android/performance-rendering, android/profiling, android/ui-views, difficulty/medium, performance, rendering]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ What is layout performance measured in Android?
 
 Производительность layout в Android измеряется в **миллисекундах (мс)** времени рендеринга, отслеживая три основных фазы: **measure** (измерение), **layout** (размещение) и **draw** (отрисовка). Дополнительно отслеживаются **потерянные кадры** и **количество перекомпоновок** в Compose.
 
-### Ключевые метрики
+### Ключевые Метрики
 
 **Целевое время кадра:**
 - 60 FPS = 16.67мс на кадр
@@ -41,7 +43,7 @@ What is layout performance measured in Android?
 - Layout phase < 5мс
 - Draw phase < 6.67мс
 
-### Инструменты измерения
+### Инструменты Измерения
 
 **1. Choreographer API** - измерение времени кадров:
 
@@ -107,7 +109,7 @@ fun PerformanceTracker() {
 }
 ```
 
-### Метрики сложности layout
+### Метрики Сложности Layout
 
 **View hierarchy analyzer:**
 
@@ -132,7 +134,7 @@ fun analyzeComplexity(view: View): Metrics {
 // ❌ Превышение лимитов ведет к замедлению
 ```
 
-### Практические рекомендации
+### Практические Рекомендации
 
 | Техника | Цель | Инструмент |
 |---------|------|-----------|

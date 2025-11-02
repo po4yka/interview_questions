@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [operators, overloading, conventions, language-features]
+subtopics: [conventions, language-features, operators, overloading]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-internal-modifier--programming-languages--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-sealed-classes-features--programming-languages--medium]
+related: [q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-internal-modifier--programming-languages--medium, q-kotlin-sealed-classes-features--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, operators, overloading, conventions, difficulty/medium]
+tags: [conventions, difficulty/medium, kotlin, operators, overloading]
+date created: Sunday, October 12th 2025, 12:27:46 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What do you know about operator overloading in Kotlin?
 # Вопрос (RU)
@@ -63,7 +66,7 @@ The following operators can be overloaded:
 - Equality and inequality operators
 - Comparison operators
 
-### Unary prefix operators
+### Unary Prefix Operators
 
 | Expression | Translated to    |
 |------------|------------------|
@@ -91,7 +94,7 @@ fun main() {
 }
 ```
 
-### Arithmetic operators
+### Arithmetic Operators
 
 | Expression | Translated to   |
 |------------|-----------------|
@@ -132,7 +135,7 @@ When you run the program, the output will be:
 sum = (5, 1)
 ```
 
-### Indexed access operator
+### Indexed Access Operator
 
 | Expression             | Translated to              |
 |------------------------|----------------------------|
@@ -145,7 +148,7 @@ sum = (5, 1)
 
 Square brackets are translated to calls to `get` and `set` with appropriate numbers of arguments.
 
-### Invoke operator
+### Invoke Operator
 
 | Expression           | Translated to            |
 |----------------------|--------------------------|
@@ -174,7 +177,7 @@ fun main(args: Array<String>) {
 }
 ```
 
-### Augmented assignments
+### Augmented Assignments
 
 | Expression | Translated to       |
 |------------|---------------------|
@@ -191,7 +194,7 @@ For the assignment operations, for example `a += b`, the compiler performs the f
   - Generate code for `a.plusAssign(b)`.
 - Otherwise, try to generate code for `a = a + b` (this includes a type check: the type of `a + b` must be a subtype of `a`).
 
-### Equality and inequality operators
+### Equality and Inequality Operators
 
 | Expression | Translated to                      |
 |------------|------------------------------------|
@@ -200,7 +203,7 @@ For the assignment operations, for example `a += b`, the compiler performs the f
 
 These operators only work with the function `equals(other: Any?): Boolean`, which can be overridden to provide custom equality check implementation. Any other function with the same name (like `equals(other: Foo)`) will not be called.
 
-### Comparison operators
+### Comparison Operators
 
 | Expression | Translated to        |
 |------------|----------------------|
@@ -241,7 +244,7 @@ class OrdersList: IndexedContainer {
 - Операторы равенства и неравенства
 - Операторы сравнения
 
-### Унарные префиксные операторы
+### Унарные Префиксные Операторы
 
 | Выражение  | Переводится в    |
 |------------|------------------|
@@ -269,7 +272,7 @@ fun main() {
 }
 ```
 
-### Арифметические операторы
+### Арифметические Операторы
 
 | Выражение  | Переводится в    |
 |------------|------------------|
@@ -310,7 +313,7 @@ class Point(val x: Int = 0, val y: Int = 10) {
 sum = (5, 1)
 ```
 
-### Оператор индексированного доступа
+### Оператор Индексированного Доступа
 
 | Выражение              | Переводится в              |
 |------------------------|----------------------------|
@@ -323,7 +326,7 @@ sum = (5, 1)
 
 Квадратные скобки переводятся в вызовы `get` и `set` с соответствующим количеством аргументов.
 
-### Оператор invoke
+### Оператор Invoke
 
 | Выражение            | Переводится в             |
 |----------------------|---------------------------|
@@ -352,7 +355,7 @@ fun main(args: Array<String>) {
 }
 ```
 
-### Дополненные присваивания
+### Дополненные Присваивания
 
 | Выражение  | Переводится в       |
 |------------|---------------------|
@@ -369,7 +372,7 @@ fun main(args: Array<String>) {
   - Сгенерировать код для `a.plusAssign(b)`.
 - В противном случае попытаться сгенерировать код для `a = a + b` (это включает проверку типа: тип `a + b` должен быть подтипом `a`).
 
-### Операторы равенства и неравенства
+### Операторы Равенства И Неравенства
 
 | Выражение  | Переводится в                      |
 |------------|------------------------------------|
@@ -378,7 +381,7 @@ fun main(args: Array<String>) {
 
 Эти операторы работают только с функцией `equals(other: Any?): Boolean`, которая может быть переопределена для предоставления пользовательской реализации проверки равенства. Любая другая функция с таким же именем (например, `equals(other: Foo)`) не будет вызвана.
 
-### Операторы сравнения
+### Операторы Сравнения
 
 | Выражение  | Переводится в        |
 |------------|----------------------|
@@ -406,7 +409,7 @@ fun main(args: Array<String>) {
 - [[q-instant-search-flow-operators--kotlin--medium]] - Flow
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
 - [[q-kotlin-collections--kotlin--medium]] - Collections
-- [[q-backpressure-in-kotlin-flow--programming-languages--medium]] - Flow
+-  - Flow
 ### Advanced (Harder)
 - [[q-testing-flow-operators--kotlin--hard]] - Coroutines
 - [[q-flow-operators-deep-dive--kotlin--hard]] - Flow

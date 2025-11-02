@@ -1,27 +1,24 @@
 ---
 id: kotlin-163
 title: "Zip Parallelism Guarantee / Гарантия параллелизма zip"
-aliases: [Zip Operator, Flow Zip, Parallelism, Zip в Flow]
+aliases: [Flow Zip, Parallelism, Zip Operator, Zip в Flow]
 topic: kotlin
-subtopics: [flow, coroutines]
+subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-double-bang-operator--programming-languages--medium, q-coroutine-memory-leak-detection--kotlin--hard, q-partition-function--kotlin--easy]
+related: [q-partition-function--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - flow
-  - zip
-  - coroutines
-  - operators
-  - difficulty/medium
+tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]
+date created: Saturday, November 1st 2025, 1:01:40 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Will zip guarantee parallel execution of 2 network requests launched for Coroutine
+
+# Will Zip Guarantee Parallel Execution of 2 Network Requests Launched for Coroutine
 
 **English**: Will zip guarantee parallel execution of 2 network requests launched for Coroutine?
 
@@ -29,7 +26,7 @@ tags:
 
 The `zip` operator in Kotlin Flow does NOT guarantee parallel execution. It combines emissions from two flows sequentially, pairing them up.
 
-### Sequential Nature of zip
+### Sequential Nature of Zip
 ```kotlin
 val flow1 = flow {
     println("Flow1: Starting")
@@ -92,7 +89,7 @@ coroutineScope {
 
 Оператор `zip` в Kotlin Flow НЕ гарантирует параллельное выполнение. Он комбинирует испускания из двух потоков последовательно, связывая их попарно.
 
-### Последовательная природа zip
+### Последовательная Природа Zip
 ```kotlin
 val flow1 = flow {
     println("Flow1: Starting")
@@ -115,7 +112,7 @@ flow1.zip(flow2) { num, letter ->
 // Но испускания связываются последовательно
 ```
 
-### Ключевые моменты
+### Ключевые Моменты
 
 **1. Нет гарантии параллелизма**
 - Потоки выполняются конкурентно по природе
@@ -152,7 +149,5 @@ coroutineScope {
 
 ## Related Questions
 
-- [[q-kotlin-double-bang-operator--programming-languages--medium]]
-- [[q-coroutine-memory-leak-detection--kotlin--hard]]
 - [[q-partition-function--kotlin--easy]]
 

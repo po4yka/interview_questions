@@ -3,7 +3,7 @@ id: android-253
 title: "Testing Compose UI / Тестирование Compose UI"
 aliases: [Testing Compose UI, Тестирование Compose UI]
 topic: android
-subtopics: [ui-compose, testing-ui]
+subtopics: [testing-ui, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-android
 related: [c-jetpack-compose, c-testing, q-what-is-diffutil-for--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-compose, android/testing-ui, jetpack-compose, testing, ui-testing, difficulty/medium]
+tags: [android/testing-ui, android/ui-compose, difficulty/medium, jetpack-compose, testing, ui-testing]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Testing Compose UI
@@ -23,7 +25,7 @@ tags: [android/ui-compose, android/testing-ui, jetpack-compose, testing, ui-test
 ## Answer (EN)
 **Compose UI testing** использует декларативный API для поиска, взаимодействия и верификации composable функций.
 
-### Basic setup
+### Basic Setup
 
 ```kotlin
 class LoginScreenTest {
@@ -54,7 +56,7 @@ class LoginScreenTest {
 - - Синхронизируется с recomposition
 - - Предоставляет finders, assertions, actions
 
-### Finders - finding elements
+### Finders - Finding Elements
 
 ```kotlin
 // By text
@@ -88,7 +90,7 @@ composeTestRule.onAllNodesWithText("Item")
     .onFirst()
 ```
 
-### Test Tags - best way for testing
+### Test Tags - Best way for Testing
 
 ```kotlin
 // Composable with test tags
@@ -140,7 +142,7 @@ fun loginButton_enabled_when_fields_valid() {
 - - Явно показывают testable элементы
 - - Работают быстрее чем text search
 
-### Actions - interacting with elements
+### Actions - Interacting with Elements
 
 ```kotlin
 // Click
@@ -175,7 +177,7 @@ composeTestRule.onNodeWithTag("item").performTouchInput {
 }
 ```
 
-### Assertions - verifying state
+### Assertions - Verifying State
 
 ```kotlin
 // Existence
@@ -210,7 +212,7 @@ composeTestRule.onNodeWithTag("progress")
     .assert(hasProgressBarRangeInfo(ProgressBarRangeInfo(0.5f, 0f..1f)))
 ```
 
-### Testing State changes
+### Testing State Changes
 
 ```kotlin
 @Composable
@@ -383,7 +385,7 @@ class ProductsScreenTest {
 }
 ```
 
-### waitUntil - waiting for state
+### waitUntil - Waiting for State
 
 ```kotlin
 // Wait until element appears
@@ -501,7 +503,7 @@ fun dialog_cancels_deletion() {
 }
 ```
 
-### unmergedTree - for nested elements
+### unmergedTree - for Nested Elements
 
 ```kotlin
 // By default Compose merges child semantics
@@ -584,7 +586,7 @@ fun animatedVisibility_shows_and_hides_content() {
 }
 ```
 
-### mainClock - time control
+### mainClock - time Control
 
 ```kotlin
 @Test

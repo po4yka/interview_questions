@@ -1,7 +1,7 @@
 ---
 id: kotlin-190
 title: "Kotlin When Expression / Выражение when в Kotlin"
-aliases: [When Expression, When Statement, Pattern Matching, When Выражение]
+aliases: [Pattern Matching, When Expression, When Statement, When Выражение]
 topic: kotlin
 subtopics: [control-flow, syntax]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-lazy-initialization--programming-languages--easy, q-reified-type-parameters--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium]
+related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-reified-type-parameters--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - control-flow
-  - syntax
-  - pattern-matching
-  - when
-  - difficulty/easy
+tags: [control-flow, difficulty/easy, kotlin, pattern-matching, syntax, when]
+date created: Friday, October 31st 2025, 6:29:12 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# Как использовать when в Kotlin вместо switch?
+
+# Как Использовать when В Kotlin Вместо Switch?
 
 # Question (EN)
 > How to use when in Kotlin instead of switch?
@@ -191,6 +188,6 @@ val result = when (val x = getValue()) {
 
 ## Related Questions
 
-- [[q-lazy-initialization--programming-languages--easy]]
+-
 - [[q-reified-type-parameters--kotlin--medium]]
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

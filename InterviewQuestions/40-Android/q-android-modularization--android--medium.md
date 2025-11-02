@@ -3,20 +3,20 @@ id: android-269
 title: Android Modularization / Модуляризация Android
 aliases: ["Android Modularization", "Модуляризация Android"]
 topic: android
-subtopics: [architecture-modularization, gradle, dependency-management]
+subtopics: [architecture-modularization, dependency-management, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-gradle, c-dependency-injection, c-clean-architecture, q-gradle-build-system--android--medium, q-android-build-optimization--android--medium]
+related: [c-clean-architecture, c-dependency-injection, c-gradle, q-android-build-optimization--android--medium, q-gradle-build-system--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/architecture-modularization, android/gradle, android/dependency-management, difficulty/medium]
+tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:26:58 am
-date modified: Thursday, October 30th 2025, 12:42:52 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

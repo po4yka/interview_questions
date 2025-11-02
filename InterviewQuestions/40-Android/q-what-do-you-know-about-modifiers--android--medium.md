@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-webp-image-format-android--android--easy, q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-dagger-framework-overview--android--hard]
+related: [c-compose-layout, c-compose-modifiers]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/ui-compose, android/ui-state, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:25:39 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что вы знаете о модификаторах в Jetpack Compose?
@@ -30,7 +33,7 @@ tags: [android, android/ui-compose, android/ui-state, difficulty/medium]
 
 **Modifiers** в Jetpack Compose — это мощная система для декорирования и изменения поведения composable-функций. Они позволяют настраивать размеры, внешний вид, поведение и позиционирование UI-элементов.
 
-### 1. Основные возможности Modifiers
+### 1. Основные Возможности Modifiers
 
 Модификаторы позволяют:
 - Изменять размер, форму, фон
@@ -39,7 +42,7 @@ tags: [android, android/ui-compose, android/ui-state, difficulty/medium]
 - Применять трансформации и анимации
 - Управлять компоновкой элементов
 
-### 2. Порядок модификаторов имеет значение
+### 2. Порядок Модификаторов Имеет Значение
 
 Порядок применения модификаторов критически важен для результата.
 
@@ -66,7 +69,7 @@ fun ModifierOrderExample() {
 }
 ```
 
-### 3. Основные категории модификаторов
+### 3. Основные Категории Модификаторов
 
 #### Размеры
 
@@ -80,7 +83,7 @@ Box(
 )
 ```
 
-#### Отступы и границы
+#### Отступы И Границы
 
 ```kotlin
 Box(
@@ -91,7 +94,7 @@ Box(
 )
 ```
 
-#### Клики и взаимодействие
+#### Клики И Взаимодействие
 
 ```kotlin
 var count by remember { mutableIntStateOf(0) }
@@ -121,7 +124,7 @@ Column(
 }
 ```
 
-### 4. Создание собственных модификаторов
+### 4. Создание Собственных Модификаторов
 
 ```kotlin
 // ✅ Extension-функция для переиспользования
@@ -145,7 +148,7 @@ fun Modifier.dashedBorder(
 }
 ```
 
-### 5. Условные модификаторы
+### 5. Условные Модификаторы
 
 ```kotlin
 var isSelected by remember { mutableStateOf(false) }
@@ -166,7 +169,7 @@ Text(
 )
 ```
 
-### 6. Трансформации и анимации
+### 6. Трансформации И Анимации
 
 ```kotlin
 var expanded by remember { mutableStateOf(false) }
@@ -189,7 +192,7 @@ Text(
 )
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Порядок важен** — применяйте модификаторы в логическом порядке
 2. **Переиспользуйте** — создавайте цепочки модификаторов для консистентности
@@ -451,7 +454,7 @@ fun Modifier.shimmer(): Modifier = composed {
 
 ### Related
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
-- [[q-compose-layout-system--android--medium]]
+- [[q-compose-modifier-system--android--medium]]
 
 ### Advanced
 - [[q-compose-performance-optimization--android--hard]]

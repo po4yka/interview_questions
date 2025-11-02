@@ -13,14 +13,12 @@ moc: moc-android
 related:
   - c-compose-navigation
   - c-deep-linking
-  - q-compose-navigation-basics--android--easy
-  - q-compose-state-management--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-navigation, difficulty/medium]
 sources: [https://developer.android.com/jetpack/compose/navigation]
 date created: Thursday, October 30th 2025, 11:23:15 am
-date modified: Thursday, October 30th 2025, 12:43:48 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:43:48 pm
 
 ## Ответ (RU)
 
-### Типы аргументов
+### Типы Аргументов
 
 **Path-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, с дефолтами, передаются через `?key=value`.
 
@@ -58,7 +56,7 @@ composable(
 }
 ```
 
-### Type-safe маршруты
+### Type-safe Маршруты
 
 Используйте sealed class для централизованного определения маршрутов и избежания строковых ошибок.
 
@@ -102,7 +100,7 @@ composable(
 </intent-filter>
 ```
 
-### Контроль back stack
+### Контроль back Stack
 
 **launchSingleTop** — предотвращает дублирование верхней записи. **popUpTo** — очищает стек до указанного маршрута, `inclusive = true` удаляет и сам маршрут.
 
@@ -119,7 +117,7 @@ nav.navigate("main") {
 nav.navigate("home")
 ```
 
-### Передача сложных данных
+### Передача Сложных Данных
 
 Для объектов используйте **shared ViewModel** между экранами или **SavedStateHandle** для восстановления после гибели процесса. URL-параметры ограничены размером и типами.
 
@@ -268,14 +266,12 @@ val data = viewModel.data.collectAsState().value
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-compose-navigation-basics--android--easy]]
 - [[q-android-jetpack-overview--android--easy]]
 
 ### Related (Same Level)
-- [[q-compose-state-management--android--medium]]
 - [[q-viewmodel-savedstate--android--medium]]
 - [[q-hilt-injection-compose--android--medium]]
 
 ### Advanced (Harder)
-- [[q-compose-custom-navigation--android--hard]]
+- [[q-compose-custom-layout--android--hard]]
 - [[q-multi-module-navigation--android--hard]]

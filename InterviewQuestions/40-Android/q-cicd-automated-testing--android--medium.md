@@ -3,20 +3,20 @@ id: android-237
 title: CI/CD Automated Testing / Автоматизированное тестирование в CI/CD
 aliases: ["CI/CD Automated Testing", "Автоматизированное тестирование в CI/CD"]
 topic: android
-subtopics: [gradle, testing-instrumented, testing-unit, ci-cd]
+subtopics: [ci-cd, gradle, testing-instrumented, testing-unit]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-lint-tool--android--medium, q-android-testing-strategies--android--medium, q-build-optimization-gradle--android--medium, c-gradle-build-cache, c-test-sharding]
+related: [c-gradle-build-cache, c-test-sharding]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/gradle, android/testing-instrumented, android/testing-unit, android/ci-cd, ci-cd, testing, difficulty/medium]
+tags: [android/ci-cd, android/gradle, android/testing-instrumented, android/testing-unit, ci-cd, difficulty/medium, testing]
 date created: Thursday, October 30th 2025, 11:10:59 am
-date modified: Thursday, October 30th 2025, 12:43:34 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +29,7 @@ date modified: Thursday, October 30th 2025, 12:43:34 pm
 
 ## Ответ (RU)
 
-### Архитектура пайплайна
+### Архитектура Пайплайна
 
 **Pre-merge (быстрая обратная связь < 10 мин)**:
 - Статический анализ (lint/detekt)
@@ -43,7 +43,7 @@ date modified: Thursday, October 30th 2025, 12:43:34 pm
 - Device farm на разных API/размерах
 - Производительность и метрики
 
-### Стратегии тестирования
+### Стратегии Тестирования
 
 ```kotlin
 // ✅ Unit-тесты: быстрые, изолированные, мокируем Android API
@@ -92,7 +92,7 @@ fun loadData() {
 }
 ```
 
-### Оптимизация скорости
+### Оптимизация Скорости
 
 ```yaml
 # ✅ GitHub Actions с кэшированием
@@ -140,7 +140,7 @@ android {
   -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
 ```
 
-### Управление нестабильными тестами
+### Управление Нестабильными Тестами
 
 ```kotlin
 // ✅ Стратегия карантина для flaky тестов
@@ -155,7 +155,7 @@ fun animationTest() {
   -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
 ```
 
-### Отчетность и артефакты
+### Отчетность И Артефакты
 
 **Что сохранять**:
 - JUnit XML (для CI-системы)
@@ -168,7 +168,7 @@ fun animationTest() {
 - Дашборд с трендами (coverage, flakiness)
 - Ссылки на device farm результаты
 
-### Безопасность в CI
+### Безопасность В CI
 
 ```yaml
 # ✅ Подписание APK в защищенной среде
@@ -371,7 +371,7 @@ fun animationTest() {
 
 ### Prerequisites (Easier)
 - [[q-android-testing-strategies--android--medium]] - Testing strategies overview
-- [[q-gradle-basics--tools--easy]] - Gradle build system fundamentals
+- [[q-gradle-basics--android--easy]] - Gradle build system fundamentals
 
 ### Related (Same Level)
 - [[q-android-lint-tool--android--medium]] - Static analysis with Android Lint

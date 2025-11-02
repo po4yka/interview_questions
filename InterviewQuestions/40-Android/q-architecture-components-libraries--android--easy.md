@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-viewmodel, c-lifecycle, c-room, q-android-architectural-patterns--android--medium, q-android-jetpack-overview--android--easy]
+related: [c-lifecycle, c-room, c-viewmodel]
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/architecture-mvvm, android/lifecycle, android/room, jetpack, difficulty/easy]
+tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
 date created: Thursday, October 30th 2025, 11:43:31 am
-date modified: Thursday, October 30th 2025, 12:43:20 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -31,14 +31,14 @@ date modified: Thursday, October 30th 2025, 12:43:20 pm
 
 **Android Architecture Components** — набор библиотек для построения robust, testable, maintainable приложений. Решают проблемы lifecycle management, конфигурационных изменений, утечек памяти.
 
-### Ключевые принципы
+### Ключевые Принципы
 
 - **Separation of concerns**: UI не содержит бизнес-логику
 - **Lifecycle-aware**: компоненты автоматически реагируют на lifecycle events
 - **Unidirectional data flow**: ViewModel → UI (предсказуемость состояния)
 - **Testability**: слои изолированы через чёткие контракты
 
-### 1) ViewModel — Переживает configuration changes
+### 1) ViewModel — Переживает Configuration Changes
 
 Хранит UI state; отделяет логику от UI; ViewModelScope для корутин; **не хранит Context**.
 
@@ -59,7 +59,7 @@ class BadViewModel(val context: Context) : ViewModel()
 
 **Когда использовать**: любая UI-логика, которая должна пережить recreate Activity/Fragment.
 
-### 2) LiveData / StateFlow — Observable состояние
+### 2) LiveData / StateFlow — Observable Состояние
 
 **LiveData**: lifecycle-aware out-of-the-box; автоматическая отписка; legacy в новых проектах.
 **StateFlow**: Kotlin-first; требует manual lifecycle scope; лучшая интеграция с Compose/Flow.
@@ -100,7 +100,7 @@ interface UserDao {
 
 **Когда использовать**: любое локальное хранилище structured data; замена SQLiteOpenHelper.
 
-### 4) WorkManager — Гарантированное выполнение
+### 4) WorkManager — Гарантированное Выполнение
 
 Deferrable background tasks; constraints (network, battery); backoff policies; переживает reboot.
 
@@ -126,7 +126,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>()
 
 **Когда использовать**: отложенные задачи (sync, cleanup); **НЕ** для срочных (используй ForegroundService).
 
-### 5) Navigation — Централизованная навигация
+### 5) Navigation — Централизованная Навигация
 
 Single-activity pattern; type-safe arguments (Safe Args); ViewModel scoping к графу; deep linking.
 
@@ -141,7 +141,7 @@ val args: ProfileFragmentArgs by navArgs()
 
 **Когда использовать**: multi-screen flows; shared ViewModels между экранами.
 
-### Архитектурная интеграция
+### Архитектурная Интеграция
 
 ```
 Data Layer (Room, DataStore)
@@ -172,7 +172,7 @@ UI Layer (Compose / Views)
 - **Unidirectional data flow**: ViewModel → UI (state predictability)
 - **Testability**: layers isolated via clear contracts
 
-### 1) ViewModel — Survives configuration changes
+### 1) ViewModel — Survives Configuration Changes
 
 Stores UI state; separates logic from UI; ViewModelScope for coroutines; **no Context**.
 
@@ -193,7 +193,7 @@ class BadViewModel(val context: Context) : ViewModel()
 
 **When to use**: any UI logic that should survive Activity/Fragment recreate.
 
-### 2) LiveData / StateFlow — Observable state
+### 2) LiveData / StateFlow — Observable State
 
 **LiveData**: lifecycle-aware out-of-the-box; automatic unsubscribe; legacy in new projects.
 **StateFlow**: Kotlin-first; requires manual lifecycle scope; better Compose/Flow integration.
@@ -234,7 +234,7 @@ interface UserDao {
 
 **When to use**: any local storage of structured data; SQLiteOpenHelper replacement.
 
-### 4) WorkManager — Guaranteed execution
+### 4) WorkManager — Guaranteed Execution
 
 Deferrable background tasks; constraints (network, battery); backoff policies; survives reboot.
 
@@ -260,7 +260,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>()
 
 **When to use**: deferred tasks (sync, cleanup); **NOT** for urgent (use ForegroundService).
 
-### 5) Navigation — Centralized navigation
+### 5) Navigation — Centralized Navigation
 
 Single-activity pattern; type-safe arguments (Safe Args); ViewModel scoping to graph; deep linking.
 
@@ -323,5 +323,5 @@ UI Layer (Compose / Views)
 - [[q-android-architectural-patterns--android--medium]]
 
 ### Advanced (Harder)
-- [[q-android-lifecycle-aware-components--android--medium]]
+
 - [[q-android-runtime-internals--android--hard]]

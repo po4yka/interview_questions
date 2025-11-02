@@ -3,7 +3,7 @@ id: lang-084
 title: "When Coroutine Cannot Be Cancelled / Когда корутина не может быть отменена"
 aliases: [When Coroutine Cannot Be Cancelled, Когда корутина не может быть отменена]
 topic: programming-languages
-subtopics: [coroutines, cancellation, lifecycle]
+subtopics: [cancellation, coroutines, lifecycle]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-equals-hashcode-rules--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, kotlin, cancellation, difficulty/medium]
+tags: [cancellation, coroutines, difficulty/medium, kotlin, programming-languages]
 date created: Saturday, October 4th 2025, 10:48:38 am
-date modified: Sunday, October 26th 2025, 1:40:00 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # When Coroutine Cannot Be Cancelled?

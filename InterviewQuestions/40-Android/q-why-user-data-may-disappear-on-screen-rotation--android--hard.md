@@ -3,26 +3,20 @@ id: android-417
 title: "Why User Data May Disappear On Screen Rotation / Почему данные пользователя могут пропасть при повороте экрана"
 aliases: ["Why User Data May Disappear On Screen Rotation", "Почему данные пользователя могут пропасть при повороте экрана"]
 topic: android
-subtopics: [lifecycle, activity, architecture-mvvm]
+subtopics: [activity, architecture-mvvm, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-viewmodel, c-mvvm, q-compose-side-effects-advanced--jetpack-compose--hard]
+related: [c-lifecycle, c-mvvm, c-savedstate, c-viewmodel]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags:
-  - android/lifecycle
-  - android/activity
-  - android/architecture-mvvm
-  - configuration-change
-  - state-preservation
-  - difficulty/hard
+tags: [android/activity, android/architecture-mvvm, android/lifecycle, configuration-change, difficulty/hard, state-preservation]
 date created: Wednesday, October 29th 2025, 1:00:44 pm
-date modified: Thursday, October 30th 2025, 3:16:50 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -39,7 +33,7 @@ Why does user data disappear on screen rotation?
 
 При повороте экрана Android **уничтожает и пересоздаёт Activity** как часть обработки изменения конфигурации. Если состояние не сохранено должным образом, все временные данные теряются.
 
-### Почему Activity пересоздаётся
+### Почему Activity Пересоздаётся
 
 Поворот экрана = изменение конфигурации. Android:
 1. Вызывает `onDestroy()` для текущей Activity
@@ -51,7 +45,7 @@ Why does user data disappear on screen rotation?
 - UI состояние может быть потеряно
 - Асинхронные операции прерываются
 
-### Основные причины потери данных
+### Основные Причины Потери Данных
 
 **1. Переменные не сохранены**
 ```kotlin
@@ -147,7 +141,7 @@ class MyViewModel(
 <!-- ✅ Автоматическое сохранение/восстановление -->
 ```
 
-### Жизненный цикл при изменении конфигурации
+### Жизненный Цикл При Изменении Конфигурации
 
 ```
 Поворот экрана
@@ -167,7 +161,7 @@ onRestoreInstanceState() ← ВОССТАНОВИТЬ ДАННЫЕ
 onResume()
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. ✅ Используйте **ViewModel** для всех UI данных
 2. ✅ Добавляйте **SavedStateHandle** для критического состояния
@@ -177,7 +171,7 @@ onResume()
 6. ❌ Не полагайтесь на переменные экземпляра Activity
 7. ❌ Не делайте повторные сетевые запросы после поворота
 
-### Современное решение
+### Современное Решение
 
 ```kotlin
 class MyViewModel(
@@ -370,7 +364,7 @@ This ensures data survives both configuration changes **and** process death.
 ## Related Questions
 
 ### Prerequisites
-- [[q-activity-lifecycle--android--medium]] - Activity lifecycle basics
+- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle basics
 - [[q-viewmodel-basics--android--easy]] - Introduction to ViewModel
 
 ### Related

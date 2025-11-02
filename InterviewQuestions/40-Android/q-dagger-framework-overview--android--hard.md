@@ -3,7 +3,7 @@ id: android-456
 title: Dagger Framework Overview / Обзор фреймворка Dagger
 aliases: ["Dagger Framework Overview", "Обзор фреймворка Dagger"]
 topic: android
-subtopics: [di-hilt, architecture-mvvm, architecture-clean]
+subtopics: [architecture-clean, architecture-mvvm, di-hilt]
 question_kind: android
 difficulty: hard
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-dagger-custom-scopes--android--hard]
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/di-hilt, android/architecture-mvvm, android/architecture-clean, dagger, dependency-injection, hilt, difficulty/hard]
+tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources: [https://dagger.dev/]
 date created: Thursday, October 30th 2025, 12:01:59 pm
-date modified: Thursday, October 30th 2025, 12:47:14 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -82,7 +82,7 @@ class ViewModel @Inject constructor()
 // ❌ Без scope — создается новый экземпляр при каждом запросе
 ```
 
-### [[c-hilt]] — Упрощенный Dagger для Android
+### [[c-hilt]] — Упрощенный Dagger Для Android
 
 Hilt автоматизирует boilerplate-код и предоставляет стандартные компоненты:
 

@@ -1,22 +1,22 @@
 ---
 id: android-179
 title: "Gradle Version Catalog / Каталог версий Gradle"
-aliases: [Gradle Version Catalog, Каталог версий Gradle, Version Catalog, libs.versions.toml]
+aliases: [Gradle Version Catalog, libs.versions.toml, Version Catalog, Каталог версий Gradle]
 topic: android
-subtopics: [gradle, dependency-management, build-variants]
+subtopics: [build-variants, dependency-management, gradle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gradle-build-system--android--medium, q-kapt-ksp-migration--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium]
+related: [q-gradle-build-system--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-kapt-ksp-migration--android--medium]
 created: 2025-10-15
 updated: 2025-10-27
-tags: [android/gradle, android/dependency-management, android/build-variants, gradle, dependency-management, toml, difficulty/medium]
-sources: [Kirchhoff repo, Android Developer Docs]
+tags: [android/build-variants, android/dependency-management, android/gradle, dependency-management, difficulty/medium, gradle, toml]
+sources: [Android Developer Docs, Kirchhoff repo]
 date created: Monday, October 27th 2025, 6:55:47 pm
-date modified: Thursday, October 30th 2025, 12:48:01 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -59,7 +59,7 @@ retrofit = ["retrofit-core", "retrofit-gson"]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ```
 
-### Использование в build.gradle.kts
+### Использование В build.gradle.kts
 
 ```kotlin
 plugins {
@@ -86,7 +86,7 @@ dependencies {
 
 **Невалидные**: `this.#invalid` (спецсимволы запрещены)
 
-### Пример для Android-проекта
+### Пример Для Android-проекта
 
 ```toml
 [versions]

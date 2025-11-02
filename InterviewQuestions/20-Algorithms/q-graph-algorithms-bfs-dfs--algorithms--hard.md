@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-algorithms
-related: [c-graph-algorithms, q-advanced-graph-algorithms--algorithms--hard, q-dynamic-programming-fundamentals--algorithms--hard]
+related: [c-graph-algorithms]
 created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, bfs, dfs, difficulty/hard, graphs, traversal]
 sources: [https://en.wikipedia.org/wiki/Breadth-first_search, https://en.wikipedia.org/wiki/Depth-first_search]
 date created: Sunday, October 12th 2025, 9:44:02 pm
-date modified: Saturday, October 25th 2025, 5:23:33 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -399,12 +399,9 @@ fun numIslands(grid: Array<CharArray>): Int {
 
 ### Prerequisites (Easier)
 - [[q-data-structures-overview--algorithms--easy]] - Data structures basics
-- [[q-recursion-basics--algorithms--easy]] - Recursion concepts
 
 ### Related (Same Level)
 - [[q-dynamic-programming-fundamentals--algorithms--hard]] - DP algorithms
 - [[q-binary-search-variants--algorithms--medium]] - Search algorithms
 
 ### Advanced (Harder)
-- [[q-advanced-graph-algorithms--algorithms--hard]] - Advanced graph algorithms
-- [[q-dijkstra-algorithm--algorithms--hard]] - Shortest path algorithms

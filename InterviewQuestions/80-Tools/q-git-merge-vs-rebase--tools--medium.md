@@ -1,7 +1,7 @@
 ---
 id: tools-003
 title: "Git Merge vs Rebase / Git Merge vs Rebase"
-aliases: [Git Merge, Git Rebase, Version Control, Merge vs Rebase]
+aliases: [Git Merge, Git Rebase, Merge vs Rebase, Version Control]
 topic: tools
 subtopics: [git, version-control]
 question_kind: theory
@@ -10,18 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-tools
-related: [q-git-squash-commits--tools--medium, q-git-pull-vs-fetch--tools--easy]
+related: [q-git-pull-vs-fetch--tools--easy, q-git-squash-commits--tools--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - tools
-  - git
-  - merge
-  - rebase
-  - version-control
-  - workflow
-  - difficulty/medium
+tags: [difficulty/medium, git, merge, rebase, tools, version-control, workflow]
+date created: Friday, October 31st 2025, 6:32:23 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
+
 # Question (EN)
 > What is the difference between git merge and git rebase?
 # Вопрос (RU)
@@ -33,7 +29,7 @@ tags:
 
 `git merge` and `git rebase` are both commands for integrating changes from one branch into another, but they work differently and produce different commit histories.
 
-### git merge — Merging with History Preservation
+### Git Merge — Merging with History Preservation
 
 **Creates a merge commit**, preserving the complete history of both branches.
 
@@ -80,7 +76,7 @@ git log --graph --oneline
 # * pqr1234 Common ancestor
 ```
 
-### git rebase — Rewriting History
+### Git Rebase — Rewriting History
 
 **Moves commits** from feature branch onto the tip of main, creating a linear history.
 
@@ -208,7 +204,7 @@ pick ghi9012 Add tests
 
 ### Resolving Conflicts
 
-#### With merge
+#### With Merge
 
 ```bash
 git merge feature
@@ -220,7 +216,7 @@ git add file.txt
 git commit  # Complete merge
 ```
 
-#### With rebase
+#### With Rebase
 
 ```bash
 git rebase main
@@ -269,7 +265,7 @@ git rebase feature  # DON'T DO THIS!
 
 ### Practical Workflows
 
-#### Workflow 1: Feature branch with merge
+#### Workflow 1: Feature Branch with Merge
 
 ```bash
 # 1. Create feature branch
@@ -288,7 +284,7 @@ git push
 git branch -d feature/new-ui
 ```
 
-#### Workflow 2: Feature branch with rebase
+#### Workflow 2: Feature Branch with Rebase
 
 ```bash
 # 1. Create feature branch
@@ -307,7 +303,7 @@ git merge feature/new-ui
 git push
 ```
 
-#### Workflow 3: Interactive rebase + merge
+#### Workflow 3: Interactive Rebase + Merge
 
 ```bash
 # 1. Work on feature branch
@@ -357,7 +353,7 @@ git revert -m 1 <merge-commit-hash>
 
 `git merge` и `git rebase` — команды для объединения веток, но работают по-разному и дают разную историю коммитов.
 
-### git merge — объединение с сохранением истории
+### Git Merge — Объединение С Сохранением Истории
 
 **Создает merge commit**, сохраняя всю историю обеих веток.
 
@@ -404,7 +400,7 @@ git log --graph --oneline
 # * pqr1234 Common ancestor
 ```
 
-### git rebase — переписывание истории
+### Git Rebase — Переписывание Истории
 
 **Переносит коммиты** feature ветки на вершину main, создавая линейную историю.
 
@@ -458,7 +454,7 @@ git merge feature  # Просто передвинет указатель main �
 | **Для опубликованных веток** |  Безопасно |  Опасно (переписывает историю) |
 | **Для локальных веток** |  OK |  OK |
 
-### Когда использовать merge
+### Когда Использовать Merge
 
 ** Используйте merge когда:**
 
@@ -480,7 +476,7 @@ git checkout main
 git merge feature  # История сохранена
 ```
 
-### Когда использовать rebase
+### Когда Использовать Rebase
 
 ** Используйте rebase когда:**
 
@@ -504,7 +500,7 @@ git merge feature  # Fast-forward merge
 git rebase -i main  # Редактировать/объединить коммиты
 ```
 
-### Интерактивный rebase
+### Интерактивный Rebase
 
 Мощный инструмент для очистки истории.
 
@@ -530,9 +526,9 @@ fixup def5678 Fix typo
 pick ghi9012 Add tests
 ```
 
-### Разрешение конфликтов
+### Разрешение Конфликтов
 
-#### С merge
+#### С Merge
 
 ```bash
 git merge feature
@@ -544,7 +540,7 @@ git add file.txt
 git commit  # Завершить merge
 ```
 
-#### С rebase
+#### С Rebase
 
 ```bash
 git rebase main
@@ -561,7 +557,7 @@ git rebase --abort
 
 **Важно**: При rebase конфликты могут возникнуть для КАЖДОГО коммита.
 
-### Опасности rebase
+### Опасности Rebase
 
 ** НЕ делайте rebase для опубликованных веток!**
 
@@ -591,9 +587,9 @@ git checkout main
 git rebase feature  # НЕ ДЕЛАЙТЕ ТАК!
 ```
 
-### Практические workflow
+### Практические Workflow
 
-#### Workflow 1: Feature branch с merge
+#### Workflow 1: Feature Branch С Merge
 
 ```bash
 # 1. Создать feature ветку
@@ -612,7 +608,7 @@ git push
 git branch -d feature/new-ui
 ```
 
-#### Workflow 2: Feature branch с rebase
+#### Workflow 2: Feature Branch С Rebase
 
 ```bash
 # 1. Создать feature ветку
@@ -631,7 +627,7 @@ git merge feature/new-ui
 git push
 ```
 
-#### Workflow 3: Интерактивный rebase + merge
+#### Workflow 3: Интерактивный Rebase + Merge
 
 ```bash
 # 1. Работа на feature ветке
@@ -650,7 +646,7 @@ git checkout main
 git merge feature/new-ui
 ```
 
-### Команды для отмены
+### Команды Для Отмены
 
 ```bash
 # Отменить merge (если еще не push)

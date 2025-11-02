@@ -13,10 +13,12 @@ moc: moc-android
 related: [c-activity-lifecycle, c-android-components, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/lifecycle, activity, ui, components, difficulty/medium]
+tags: [activity, android/activity, android/lifecycle, components, difficulty/medium, ui]
+date created: Saturday, November 1st 2025, 12:47:08 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What is Activity and what is it used for?
+# What is Activity and what is it Used For?
 
 ## Answer (EN)
 Activity is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each Activity represents a single screen with a user interface.

@@ -8,9 +8,9 @@ topic: kotlin
 subtopics:
   - channels
   - coroutines
-  - pipelines
-  - fan-out
   - fan-in
+  - fan-out
+  - pipelines
 question_kind: theory
 difficulty: hard
 
@@ -23,14 +23,17 @@ source_note: Created for vault completeness
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-channels--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-flow-backpressure-strategies--kotlin--hard, q-structured-concurrency-kotlin--kotlin--medium]
+related: [q-flow-backpressure-strategies--kotlin--hard, q-kotlin-channels--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-structured-concurrency-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, channels, coroutines, pipelines, fan-out, fan-in, backpressure, difficulty/hard]
+tags: [backpressure, channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, pipelines]
+date created: Sunday, October 12th 2025, 2:05:38 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Explain channel pipelines in Kotlin coroutines. How do you implement producer-consumer patterns, fan-out, fan-in, and buffering strategies? Provide examples of real-world pipeline architectures.
 
@@ -1006,7 +1009,7 @@ suspend fun processAsync(item: Int): Int {
 
 Конвейеры каналов - это мощный паттерн для построения систем конкурентной обработки данных, где корутины производят, трансформируют и потребляют данные через серию соединенных каналов.
 
-### Основные концепции
+### Основные Концепции
 
 Конвейер состоит из:
 - **Производителей**: Корутины, генерирующие данные и отправляющие в каналы
@@ -1014,7 +1017,7 @@ suspend fun processAsync(item: Int): Int {
 - **Потребителей**: Корутины, получающие и обрабатывающие финальные данные
 - **Каналов**: Примитивы коммуникации, соединяющие этапы
 
-### Простой пример конвейера
+### Простой Пример Конвейера
 
 ```kotlin
 // Этап 1: Производитель - генерирует числа
@@ -1053,7 +1056,7 @@ fun main() = runBlocking {
 }
 ```
 
-### Fan-Out: Множественные потребители
+### Fan-Out: Множественные Потребители
 
 Fan-out распределяет работу от одного производителя нескольким потребителям для параллельной обработки.
 
@@ -1090,7 +1093,7 @@ class FanOutProcessor {
 }
 ```
 
-### Fan-In: Множественные производители
+### Fan-In: Множественные Производители
 
 Fan-in объединяет вывод от нескольких производителей в один канал.
 
@@ -1126,7 +1129,7 @@ class FanInProcessor {
 }
 ```
 
-### Стратегии буферизации
+### Стратегии Буферизации
 
 Различные конфигурации буфера влияют на поведение и производительность конвейера:
 
@@ -1194,7 +1197,7 @@ class BufferingStrategies {
 }
 ```
 
-### Реальный пример: Обработка изображений
+### Реальный Пример: Обработка Изображений
 
 ```kotlin
 class ImageProcessingPipeline(private val scope: CoroutineScope) {
@@ -1270,7 +1273,7 @@ class ImageProcessingPipeline(private val scope: CoroutineScope) {
 }
 ```
 
-### Управление противодавлением (Backpressure)
+### Управление Противодавлением (Backpressure)
 
 ```kotlin
 class BackpressureExample {
@@ -1322,7 +1325,7 @@ class BackpressureExample {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Выбирайте подходящие размеры буфера**
 2. **Правильно обрабатывайте отмену**
@@ -1330,7 +1333,7 @@ class BackpressureExample {
 4. **Мониторьте емкость каналов**
 5. **Реализуйте правильную обработку ошибок**
 
-### Распространенные ошибки
+### Распространенные Ошибки
 
 1. **Неограниченные каналы, вызывающие OOM**
 2. **Незакрытые каналы**

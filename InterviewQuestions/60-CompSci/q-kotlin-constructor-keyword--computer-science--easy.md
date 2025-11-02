@@ -3,21 +3,22 @@ id: cs-010
 title: "Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin"
 aliases: []
 topic: computer-science
-subtopics: [type-system, class-features, access-modifiers]
+subtopics: [access-modifiers, class-features, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-equals-hashcode-contracts--programming-languages--hard, q-lifecyclescope-viewmodelscope--kotlin--medium, q-abstract-class-vs-interface--kotlin--medium]
+related: [q-equals-hashcode-contracts--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/easy
+tags: [difficulty/easy]
+date created: Saturday, November 1st 2025, 1:26:01 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Какое ключевое слово используется для объявления параметров конструктора в Kotlin?
+
+# Какое Ключевое Слово Используется Для Объявления Параметров Конструктора В Kotlin?
 
 # Question (EN)
 > Which keyword is used to declare constructor parameters in Kotlin?

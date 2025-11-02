@@ -1,3 +1,8 @@
+---
+date created: Thursday, October 23rd 2025, 10:11:42 am
+date modified: Saturday, November 1st 2025, 5:43:54 pm
+---
+
 # Note Validation System
 
 Automated validation for Obsidian Q&A notes in the Interview Questions vault.
@@ -223,14 +228,14 @@ Edit existing validators in `validators/` directory. Each validator is modular a
 
 ## Troubleshooting
 
-### "No module named 'validators'"
+### "No Module Named 'validators'"
 
 Ensure virtual environment is activated:
 ```bash
 source .venv/bin/activate
 ```
 
-### "TAXONOMY.md not found"
+### "TAXONOMY.md Not found"
 
 Run from vault root directory or check path to `00-Administration/TAXONOMY.md`.
 

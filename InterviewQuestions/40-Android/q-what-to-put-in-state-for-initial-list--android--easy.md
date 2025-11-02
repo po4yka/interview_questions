@@ -3,20 +3,22 @@ id: android-082
 title: "State for Initial List / Состояние для начального списка"
 aliases: [State for Initial List, Состояние для начального списка]
 topic: android
-subtopics: [ui-state, architecture-mvvm]
+subtopics: [architecture-mvvm, ui-state]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-state-management, c-data-loading, q-what-is-known-about-recyclerview--android--easy, q-viewmodel-pattern--android--easy]
+related: [c-data-loading, c-mutablestate, c-state-management]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/ui-state, android/architecture-mvvm, state-management, data-loading, ui, difficulty/easy]
+tags: [android/architecture-mvvm, android/ui-state, data-loading, difficulty/easy, state-management, ui]
+date created: Saturday, November 1st 2025, 1:26:06 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What to put in state for initial list?
+# What to Put in State for Initial List?
 
 **Russian**: Что положить в state для отображения первоначального списка?
 
@@ -97,7 +99,7 @@ class ListViewModel : ViewModel() {
 
 Для отображения начального состояния списка вы можете использовать **пустой список**, если данные загружаются асинхронно, или **заранее подготовленный статический список**, если данные известны при запуске приложения.
 
-### Подход с асинхронной загрузкой
+### Подход С Асинхронной Загрузкой
 
 ```kotlin
 class ListViewModel : ViewModel() {
@@ -118,7 +120,7 @@ class ListViewModel : ViewModel() {
 }
 ```
 
-### С состояниями загрузки
+### С Состояниями Загрузки
 
 ```kotlin
 sealed class UiState<out T> {
@@ -148,7 +150,7 @@ class ListViewModel : ViewModel() {
 }
 ```
 
-### Подход со статическими данными
+### Подход Со Статическими Данными
 
 ```kotlin
 class ListViewModel : ViewModel() {

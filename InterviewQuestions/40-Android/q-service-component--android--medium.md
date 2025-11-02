@@ -5,26 +5,28 @@ aliases: []
 
 # Classification
 topic: android
-subtopics: [service, background-execution, lifecycle]
+subtopics: [background-execution, lifecycle, service]
 question_kind: theory
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/components, android/background-processing, android/lifecycle, difficulty/medium]
+language_tags: [android/background-processing, android/components, android/lifecycle, difficulty/medium, en, ru]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-kmm-dependency-injection--multiplatform--medium, q-anr-application-not-responding--android--medium, q-how-to-start-drawing-ui-in-android--android--easy]
+related: [q-anr-application-not-responding--android--medium, q-how-to-start-drawing-ui-in-android--android--easy, q-kmm-dependency-injection--multiplatform--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [android/service, android/background-execution, android/lifecycle, en, ru, difficulty/medium]
+tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
+date created: Saturday, November 1st 2025, 12:47:03 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Question (EN)
@@ -66,7 +68,7 @@ To declare your service, add a `<service>` element as a child of the `<applicati
 </manifest>
 ```
 
-### The basics
+### The Basics
 
 To create a service, you must create a subclass of `Service` or use one of its existing subclasses. In your implementation, you must override some callback methods that handle key aspects of the service lifecycle and provide a mechanism that allows the components to bind to the service, if appropriate. These are the most important callback methods that you should override:
 
@@ -81,7 +83,7 @@ If a component calls `bindService()` to create the service and `onStartCommand()
 
 The Android system stops a service only when memory is low and it must recover system resources for the activity that has user focus. If the service is bound to an activity that has user focus, it's less likely to be killed; if the service is declared to run in the foreground, it's rarely killed.
 
-### onStartCommand() return values
+### onStartCommand() Return Values
 
 `onStartCommand()` requires we return an Integer as result. This integer represents how the Service should be handled by the OS:
 
@@ -89,7 +91,7 @@ The Android system stops a service only when memory is low and it must recover s
 - **START_STICKY** - If the system kills the service after `onStartCommand()` returns, recreate the service and call `onStartCommand()`, but do not redeliver the last intent. Instead, the system calls `onStartCommand()` with a null intent unless there are pending intents to start the service. In that case, those intents are delivered. This is suitable for media players (or similar services) that are not executing commands but are running indefinitely and waiting for a job
 - **START_REDELIVER_INTENT** - If the system kills the service after `onStartCommand()` returns, recreate the service and call `onStartCommand()` with the last intent that was delivered to the service. Any pending intents are delivered in turn. This is suitable for services that are actively performing a job that should be immediately resumed, such as downloading a file
 
-### Service lifecycle
+### Service Lifecycle
 
 The lifecycle of a service is much simpler than that of an activity. However, it's even more important that you pay close attention to how your service is created and destroyed because a service can run in the background without the user being aware.
 
@@ -109,7 +111,7 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 Сервисы работают с более высоким приоритетом, чем неактивные или невидимые активити, и поэтому менее вероятно, что система Android их завершит. Сервисы также могут быть настроены на перезапуск, если они были завершены системой Android, как только снова станут доступны достаточные системные ресурсы.
 
-### Типы сервисов
+### Типы Сервисов
 
 Существует три различных типа сервисов: Foreground (передний план), Background (фоновый), Bound (привязанный).
 
@@ -117,7 +119,7 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 - **Bound (привязанный)**: Сервис становится привязанным, когда компонент приложения привязывается к нему, вызывая `bindService()`. Привязанный сервис предлагает клиент-серверный интерфейс, который позволяет компонентам взаимодействовать с сервисом, отправлять запросы, получать результаты и даже делать это между процессами с помощью межпроцессного взаимодействия (IPC). Привязанный сервис работает только до тех пор, пока к нему привязан другой компонент приложения. Несколько компонентов могут привязаться к сервису одновременно, но когда все они отвязываются, сервис уничтожается
 - **Foreground (передний план)**: Сервис переднего плана выполняет некоторую операцию, заметную для пользователя. Например, аудио приложение использует сервис переднего плана для воспроизведения аудиодорожки. Сервисы переднего плана должны отображать уведомление. Сервисы переднего плана продолжают работать, даже когда пользователь не взаимодействует с приложением
 
-### Объявление сервиса
+### Объявление Сервиса
 
 Вы должны объявить все сервисы в файле манифеста вашего приложения, так же, как вы делаете это для активити и других компонентов.
 
@@ -148,7 +150,7 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 Система Android останавливает сервис только тогда, когда памяти мало, и она должна восстановить системные ресурсы для активити, которая находится в фокусе пользователя. Если сервис привязан к активити, которая находится в фокусе пользователя, он с меньшей вероятностью будет убит; если сервис объявлен для запуска на переднем плане, он редко убивается.
 
-### Возвращаемые значения onStartCommand()
+### Возвращаемые Значения onStartCommand()
 
 `onStartCommand()` требует, чтобы мы вернули целое число в качестве результата. Это целое число представляет, как сервис должен обрабатываться ОС:
 
@@ -156,7 +158,7 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 - **START_STICKY** - Если система убивает сервис после возврата `onStartCommand()`, пересоздайте сервис и вызовите `onStartCommand()`, но не доставляйте повторно последний интент. Вместо этого система вызывает `onStartCommand()` с null интентом, если нет ожидающих интентов для запуска сервиса. В этом случае эти интенты доставляются. Это подходит для медиа-плееров (или аналогичных сервисов), которые не выполняют команды, но работают бесконечно и ждут задания
 - **START_REDELIVER_INTENT** - Если система убивает сервис после возврата `onStartCommand()`, пересоздайте сервис и вызовите `onStartCommand()` с последним интентом, который был доставлен сервису. Любые ожидающие интенты доставляются по очереди. Это подходит для сервисов, которые активно выполняют задание, которое должно быть немедленно возобновлено, например, загрузка файла
 
-### Жизненный цикл сервиса
+### Жизненный Цикл Сервиса
 
 Жизненный цикл сервиса гораздо проще, чем у активити. Однако еще более важно, чтобы вы уделяли пристальное внимание тому, как ваш сервис создается и уничтожается, потому что сервис может работать в фоновом режиме без ведома пользователя.
 

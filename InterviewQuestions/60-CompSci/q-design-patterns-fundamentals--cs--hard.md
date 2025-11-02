@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-design-patterns-types--design-patterns--medium, q-factory-method-pattern--design-patterns--medium, q-singleton-pattern--design-patterns--easy]
+related: []
 created: "2025-10-13"
 updated: 2025-01-25
 tags: [android, behavioral, creational, design-patterns, difficulty/hard, gof, kotlin, structural]
 sources: [https://refactoring.guru/design-patterns]
 date created: Monday, October 13th 2025, 8:04:10 am
-date modified: Sunday, October 26th 2025, 11:57:28 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -422,17 +422,8 @@ sealed class UiState {
 
 ### Creational Patterns
 - [[q-singleton-pattern--design-patterns--easy]] - Singleton
-- [[q-factory-method-pattern--design-patterns--medium]] - Factory Method
-- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory
-- [[q-builder-pattern--design-patterns--medium]] - Builder
-- [[q-prototype-pattern--design-patterns--medium]] - Prototype
 
 ### Structural Patterns
-- [[q-adapter-pattern--design-patterns--medium]] - Adapter
-- [[q-decorator-pattern--design-patterns--medium]] - Decorator
-- [[q-facade-pattern--design-patterns--medium]] - Facade
-- [[q-proxy-pattern--design-patterns--medium]] - Proxy
-- [[q-composite-pattern--design-patterns--medium]] - Composite
 
 ### Behavioral Patterns
 - [[q-observer-pattern--design-patterns--medium]] - Observer
@@ -441,10 +432,5 @@ sealed class UiState {
 - [[q-state-pattern--design-patterns--medium]] - State
 - [[q-template-method-pattern--design-patterns--medium]] - Template Method
 - [[q-iterator-pattern--design-patterns--medium]] - Iterator
-- [[q-mediator-pattern--design-patterns--medium]] - Mediator
-- [[q-memento-pattern--design-patterns--medium]] - Memento
 
 ### Advanced Patterns
-- [[q-bridge-pattern--design-patterns--hard]] - Bridge
-- [[q-visitor-pattern--design-patterns--hard]] - Visitor
-- [[q-flyweight-pattern--design-patterns--hard]] - Flyweight

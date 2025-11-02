@@ -15,7 +15,7 @@ original_language: ru
 language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [c-gradle, c-android-manifest, q-gradle-optimization--android--medium, q-dependency-injection-hilt--android--medium]
+related: [c-gradle, c-android-manifest]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-modularization, android/gradle, android/dependency-management, manifest-merging, modularization, difficulty/medium]
@@ -244,14 +244,10 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-unifies-android-components--android--easy]]
-- [[q-android-jetpack-overview--android--easy]]
+- Related content to be added
 
 ### Related (Same Level)
-- [[q-gradle-optimization--android--medium]]
-- [[q-dependency-injection-hilt--android--medium]]
-- [[q-intent-filters-android--android--medium]]
+- Related content to be added
 
 ### Advanced (Harder)
-- [[q-kmm-architecture--multiplatform--hard]]
-- [[q-how-application-priority-is-determined-by-the-system--android--hard]]
+- Related content to be added

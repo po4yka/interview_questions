@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, advanced, patterns]
+subtopics: [advanced, coroutines, patterns]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140030
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-sealed-classes-features--programming-languages--medium, q-data-class-variables--programming-languages--medium, q-coroutinescope-vs-supervisorscope--kotlin--medium]
+related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-data-class-variables--programming-languages--medium, q-kotlin-sealed-classes-features--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, difficulty/medium]
+tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
+date created: Sunday, October 12th 2025, 3:39:12 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > Kotlin Coroutines advanced topic 140030
 
@@ -106,7 +109,7 @@ scope.launch { /* работа */ }
 scope.cancel()  // Отменяет все дочерние корутины
 ```
 
-### Структурированная конкурентность
+### Структурированная Конкурентность
 ```kotlin
 suspend fun fetchData() = coroutineScope {
     val data1 = async { fetch1() }
@@ -115,7 +118,7 @@ suspend fun fetchData() = coroutineScope {
 }  // Ждет все дочерние
 ```
 
-### Лучшие практики
+### Лучшие Практики
 1. Используйте lifecycle-aware scopes в Android
 2. Всегда отменяйте кастомные scopes
 3. Предпочитайте `coroutineScope` вместо `GlobalScope`

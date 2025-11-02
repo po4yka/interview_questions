@@ -1,21 +1,21 @@
 ---
 id: android-386
 title: "Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity"
-aliases: ["Fragments And Activity Relationship", "Взаимосвязь Фрагментов И Activity", "Fragment Lifecycle Dependency", "Зависимость жизненного цикла фрагмента"]
+aliases: ["Fragment Lifecycle Dependency", "Fragments And Activity Relationship", "Взаимосвязь Фрагментов И Activity", "Зависимость жизненного цикла фрагмента"]
 topic: android
-subtopics: [fragment, lifecycle, architecture-mvvm]
+subtopics: [architecture-mvvm, fragment, lifecycle]
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-can-a-service-communicate-with-the-user--android--medium, q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard, q-sharedpreferences-commit-vs-apply--android--easy]
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/fragment, android/lifecycle, android/architecture-mvvm, difficulty/hard, fragments, ui]
+tags: [android, android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/hard, fragments, ui]
 date created: Tuesday, October 28th 2025, 7:39:14 am
-date modified: Thursday, October 30th 2025, 12:47:56 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

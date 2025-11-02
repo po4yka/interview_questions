@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [delegation, by-keyword, delegates, patterns]
+subtopics: [by-keyword, delegates, delegation, patterns]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-infix-functions--kotlin--medium, q-destructuring-declarations--kotlin--medium, q-sequences-vs-collections-performance--kotlin--medium]
+related: [q-destructuring-declarations--kotlin--medium, q-infix-functions--kotlin--medium, q-sequences-vs-collections-performance--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, delegation, by-keyword, delegates, patterns, difficulty/medium]
+tags: [by-keyword, delegates, delegation, difficulty/medium, kotlin, patterns]
+date created: Sunday, October 12th 2025, 1:56:16 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > Explain the delegation pattern in Kotlin in detail. What are class delegation and property delegation?
 # Вопрос (RU)
@@ -294,7 +297,7 @@ class User {
 
 Kotlin предоставляет нативную поддержку **паттерна делегирования** через ключевое слово `by`, позволяя переиспользовать реализацию без наследования.
 
-### Делегирование классов
+### Делегирование Классов
 
 **Делегирует реализацию интерфейса другому объекту.**
 
@@ -330,7 +333,7 @@ class CachedRepository(
 }
 ```
 
-### Делегирование свойств
+### Делегирование Свойств
 
 **Делегирует логику getter/setter свойства другому объекту.**
 
@@ -370,7 +373,7 @@ class Product {
 }
 ```
 
-### Пользовательский делегат свойства
+### Пользовательский Делегат Свойства
 
 ```kotlin
 class Uppercase : ReadWriteProperty<Any?, String> {
@@ -394,7 +397,7 @@ user.name = "alice"
 println(user.name)  // Печатает: ALICE
 ```
 
-### Примеры из реальной практики
+### Примеры Из Реальной Практики
 
 **Пример 1: SharedPreferences делегат**
 

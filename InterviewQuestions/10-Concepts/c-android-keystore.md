@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-143000
 title: Android Keystore / Android Keystore
-aliases: [Android Keystore, Keystore System, AndroidKeyStore]
+aliases: [Android Keystore, AndroidKeyStore, Keystore System]
 kind: concept
 summary: Secure hardware-backed key storage system for cryptographic keys
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, security, encryption, keystore]
+tags: [android, concept, encryption, keystore, security]
+date created: Thursday, October 30th 2025, 12:29:18 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

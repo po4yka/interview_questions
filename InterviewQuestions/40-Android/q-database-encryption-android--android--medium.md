@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-encryption, c-android-keystore, q-room-database-basics--android--medium]
+related: [c-android-keystore, c-encryption]
 created: 2025-10-20
 updated: 2025-10-27
 tags: [android/keystore-crypto, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
 sources: [https://developer.android.com/topic/security/data]
 date created: Monday, October 27th 2025, 10:27:23 pm
-date modified: Thursday, October 30th 2025, 12:47:35 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -246,13 +246,9 @@ class DatabaseProvider @Inject constructor(private val context: Context) {
 ## Related Questions
 
 ### Prerequisites
-- [[q-room-database-basics--android--medium]] — Room fundamentals required for understanding encryption integration
 - Understanding of Android Keystore API and symmetric encryption
 
 ### Related (Same Level)
-- [[q-android-data-security--android--medium]] — Other data protection techniques
 - [[q-biometric-authentication--android--medium]] — Combining biometrics with encryption
 
 ### Advanced
-- [[q-android-security-hardening--android--hard]] — Advanced security patterns
-- [[q-key-rotation-strategies--android--hard]] — Implementing key rotation in production

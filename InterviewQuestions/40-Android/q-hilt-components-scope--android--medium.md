@@ -15,7 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [android/di-hilt, dependency-injection, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, October 25th 2025, 4:43:45 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Какие Готовые Компоненты С Готовым Скоупом Есть В Dagger Hilt И Как Модуль Добавить К Этой Компоненте?

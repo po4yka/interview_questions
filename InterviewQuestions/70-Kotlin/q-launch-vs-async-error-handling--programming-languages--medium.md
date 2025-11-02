@@ -3,19 +3,19 @@ id: lang-031
 title: "Launch Vs Async Error Handling / Launch против Async Error Обработка"
 aliases: [Launch Vs Async Error Handling, Launch против Async Error Обработка]
 topic: programming-languages
-subtopics: [coroutines, error-handling, async-programming]
+subtopics: [async-programming, coroutines, error-handling]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-concurrency-fundamentals--computer-science--hard, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
+related: [q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, coroutines, error-handling, exception-handling, difficulty/medium]
+tags: [coroutines, difficulty/medium, error-handling, exception-handling, programming-languages]
 date created: Saturday, October 4th 2025, 10:53:49 am
-date modified: Sunday, October 26th 2025, 12:08:06 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Error Handling Differences: Launch Vs Async
@@ -376,6 +376,6 @@ class ErrorHandlingBestPractices {
 
 ## Related Questions
 
-- [[q-concurrency-fundamentals--computer-science--hard]]
+-
 - [[q-suspend-function-suspension-mechanism--programming-languages--hard]]
 - [[q-what-is-job-object--programming-languages--medium]]

@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-kmm-production-readiness--multiplatform--hard, q-koin-scope-management--dependency-injection--medium, q-android-project-parts--android--easy]
+related: [q-android-project-parts--android--easy, q-kmm-production-readiness--multiplatform--hard, q-koin-scope-management--dependency-injection--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/ui-views, difficulty/medium]
+date created: Saturday, November 1st 2025, 12:47:01 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # RecyclerView DiffUtil Advanced
@@ -708,7 +710,7 @@ fun updateData(newList: List<Item>) {
 
 ---
 
-### Как работает DiffUtil (алгоритм Myers)
+### Как Работает DiffUtil (алгоритм Myers)
 
 DiffUtil использует **алгоритм Myers diff** для нахождения минимального количества операций преобразования одного списка в другой.
 
@@ -741,7 +743,7 @@ DiffUtil использует **алгоритм Myers diff** для нахож�
 
 ---
 
-### Базовая реализация DiffUtil
+### Базовая Реализация DiffUtil
 
 ```kotlin
 data class Item(
@@ -881,7 +883,7 @@ adapter.submitList(newItems) // DiffUtil вычисляется автомати
 
 ---
 
-### Async DiffUtil (большие наборы данных)
+### Async DiffUtil (большие Наборы данных)
 
 Для больших списков вычисляйте diff в фоновом потоке.
 
@@ -947,7 +949,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ---
 
-### Оптимизация производительности DiffUtil
+### Оптимизация Производительности DiffUtil
 
 **1. Реализуйте эффективный equals()**
 
@@ -1032,7 +1034,7 @@ class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()
 
 ---
 
-### Частичные обновления с Payloads
+### Частичные Обновления С Payloads
 
 **Используйте payloads для эффективных частичных обновлений:**
 
@@ -1095,7 +1097,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ---
 
-### Бенчмарки производительности
+### Бенчмарки Производительности
 
 **Тест: Обновление 1,000 элементов, 10 элементов изменено**
 
@@ -1109,7 +1111,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ---
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Используйте ListAdapter когда возможно**
 ```kotlin

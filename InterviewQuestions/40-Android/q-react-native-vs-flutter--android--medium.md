@@ -17,13 +17,15 @@ sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-leakcanary-heap-dump-analysis--android--medium, q-room-type-converters--android--medium, q-splash-screen-api-android12--android--medium]
+related: [q-android-ui-toolkit-basics--android--easy, q-native-vs-cross-platform--android--easy]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-28
 
-tags: [android/kmp, android/cross-platform, difficulty/medium]
+tags: [android/cross-platform, android/kmp, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:04:10 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -122,7 +124,7 @@ ListView.builder(
 | **Обновление зависимостей** | Чаще breaking changes | Стабильная версионность |
 | **Сообщество** | Больше (2015) | Быстрорастущее (2017) |
 
-### Сценарии использования
+### Сценарии Использования
 
 **Выбирайте React Native:**
 - Команда с опытом JavaScript/TypeScript
@@ -319,7 +321,7 @@ Container(
 - [[q-android-ui-toolkit-basics--android--easy]] - Android UI fundamentals
 
 ### Related (Medium)
-- [[q-kotlin-multiplatform-overview--kotlin--medium]] - Kotlin Multiplatform approach
+- [[q-kotlin-multiplatform-overview--kotlin--hard]] - Kotlin Multiplatform approach
 - [[q-compose-vs-xml--android--medium]] - UI toolkit comparison within Android
 - [[q-webview-vs-native--android--medium]] - Hybrid approaches
 

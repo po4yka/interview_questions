@@ -17,14 +17,17 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-repository-pattern--android--medium, q-clean-architecture-android--android--hard]
+related: [c-clean-architecture, c-repository-pattern, c-usecase-pattern]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-28
 
 tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, difficulty/medium]
+date created: Saturday, November 1st 2025, 1:24:35 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 > Что такое паттерн UseCase в Android? Когда и как его реализовать?
 
@@ -37,7 +40,7 @@ tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, d
 
 **UseCase** (или Interactor) — компонент domain-слоя, инкапсулирующий одну бизнес-операцию. Делает логику переиспользуемой, тестируемой и изолирует ViewModel от деталей repository.
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 // ✅ Простой UseCase для одного репозитория
@@ -63,7 +66,7 @@ class UserViewModel(
 }
 ```
 
-### Когда использовать
+### Когда Использовать
 
 **✅ Использовать:**
 - Сложная бизнес-логика (валидация, трансформации, вычисления)
@@ -98,7 +101,7 @@ class PurchaseProductUseCase(
 }
 ```
 
-### UseCase с реактивными данными
+### UseCase С Реактивными Данными
 
 ```kotlin
 // ✅ UseCase возвращающий Flow для реактивных обновлений
@@ -225,7 +228,7 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 
 ### Related (Same Level)
 - [[q-viewmodel-livedata--android--medium]] - ViewModel basics
-- [[q-what-is-dependency-injection--android--medium]] - DI fundamentals
+- [[q-kmm-dependency-injection--android--medium]] - DI fundamentals
 
 ### Advanced (Harder)
 - [[q-clean-architecture-android--android--hard]] - Full Clean Architecture

@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-sealed-vs-abstract-classes--programming-languages--medium, q-kotlin-sealed-classes-features--programming-languages--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
+related: [q-kotlin-sealed-classes-features--programming-languages--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - functions
-  - generics
-  - syntax
-  - type-parameters
-  - difficulty/easy
+tags: [difficulty/easy, functions, generics, programming-languages, syntax, type-parameters]
+date created: Friday, October 31st 2025, 6:29:34 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какой синтаксис используется для объявления обобщенной функции в Kotlin?
+
+# Какой Синтаксис Используется Для Объявления Обобщенной Функции В Kotlin?
 
 # Question (EN)
 > What syntax is used to declare a generic function in Kotlin?
@@ -109,6 +106,6 @@ val name = identity("Hello")     // T выводится как String
 
 ## Related Questions
 
-- [[q-sealed-vs-abstract-classes--programming-languages--medium]]
+-
 - [[q-kotlin-sealed-classes-features--programming-languages--medium]]
 - [[q-retrofit-coroutines-best-practices--kotlin--medium]]

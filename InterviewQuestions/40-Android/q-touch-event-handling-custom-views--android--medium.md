@@ -3,18 +3,20 @@ id: android-378
 title: "Touch Event Handling Custom Views / Обработка касаний в пользовательских View"
 aliases: ["Touch Event Handling Custom Views", "Обработка касаний в пользовательских View"]
 topic: android
-subtopics: [ui-views, ui-state]
+subtopics: [ui-state, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-does-itemdecoration-do--android--medium, q-modularization-patterns--android--hard]
+related: [q-modularization-patterns--android--hard, q-what-does-itemdecoration-do--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-views, android/ui-state, views, touch-events, gestures, difficulty/medium]
+tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events, views]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -27,7 +29,7 @@ tags: [android/ui-views, android/ui-state, views, touch-events, gestures, diffic
 
 ## Ответ (RU)
 
-### Механизм диспетчеризации событий
+### Механизм Диспетчеризации Событий
 
 Android использует трехэтапный механизм обработки касаний:
 
@@ -46,7 +48,7 @@ Child.onTouchEvent()
 - `onInterceptTouchEvent()` позволяет родителю "украсть" события у детей
 - `ACTION_CANCEL` отправляется, когда родитель перехватывает события
 
-### Базовая обработка касаний
+### Базовая Обработка Касаний
 
 ```kotlin
 class DraggableView @JvmOverloads constructor(
@@ -126,7 +128,7 @@ class GestureView @JvmOverloads constructor(
 }
 ```
 
-### Перехват событий в ViewGroup
+### Перехват Событий В ViewGroup
 
 `onInterceptTouchEvent()` позволяет родителю перехватывать события:
 
@@ -174,7 +176,7 @@ class SwipeToDeleteLayout @JvmOverloads constructor(
 }
 ```
 
-### Мультитач и ScaleGestureDetector
+### Мультитач И ScaleGestureDetector
 
 ```kotlin
 class ZoomableView @JvmOverloads constructor(
@@ -209,7 +211,7 @@ class ZoomableView @JvmOverloads constructor(
 }
 ```
 
-### Отслеживание скорости (VelocityTracker)
+### Отслеживание Скорости (VelocityTracker)
 
 ```kotlin
 class FlingView @JvmOverloads constructor(
@@ -245,7 +247,7 @@ class FlingView @JvmOverloads constructor(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Возвращайте true из ACTION_DOWN** — иначе не получите последующие события
 2. **Переопределяйте performClick()** — для accessibility services

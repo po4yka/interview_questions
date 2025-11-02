@@ -3,17 +3,19 @@ id: oop-003
 title: "Class Composition / Композиция классов"
 aliases: [Class Composition, Композиция классов]
 topic: oop
-subtopics: [composition, inheritance, encapsulation, relationships]
+subtopics: [composition, encapsulation, inheritance, relationships]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-oop
-related: [c-inheritance, c-composition, q-inheritance-vs-composition--oop--medium, q-interface-vs-abstract-class--programming-languages--medium]
+related: [c-composition, c-inheritance, q-inheritance-vs-composition--oop--medium, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [oop, composition, inheritance, encapsulation, relationships, code-reuse, difficulty/medium]
+tags: [code-reuse, composition, difficulty/medium, encapsulation, inheritance, oop, relationships]
+date created: Saturday, November 1st 2025, 12:43:03 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Известно О Композиции Классов?
@@ -546,5 +548,5 @@ class UserActivity : AppCompatActivity() {
 ### Related (Medium)
 - [[q-inheritance-vs-composition--oop--medium]] - Inheritance
 - [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
-- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-when-inheritance-useful--cs--medium]] - Inheritance
 - [[q-sealed-class-sealed-interface--kotlin--medium]] - Classes

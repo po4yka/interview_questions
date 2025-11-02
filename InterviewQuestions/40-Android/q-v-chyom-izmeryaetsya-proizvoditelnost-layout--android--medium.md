@@ -1,20 +1,22 @@
 ---
 id: android-391
 title: "В чём измеряется производительность layout / How is layout performance measured"
-aliases: ["В чём измеряется производительность layout", "How is layout performance measured", "Layout performance metrics", "Метрики производительности layout"]
+aliases: ["How is layout performance measured", "Layout performance metrics", "В чём измеряется производительность layout", "Метрики производительности layout"]
 topic: android
-subtopics: [performance-rendering, ui-views, profiling]
+subtopics: [performance-rendering, profiling, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-main-causes-ui-lag--android--medium, c-choreographer, c-systrace]
+related: [c-android-profiler, c-choreographer, c-layout-performance, c-performance]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android, android/performance-rendering, android/ui-views, android/profiling, performance, rendering, frame-timing, difficulty/medium]
+tags: [android, android/performance-rendering, android/profiling, android/ui-views, difficulty/medium, frame-timing, performance, rendering]
+date created: Saturday, November 1st 2025, 1:24:44 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ tags: [android, android/performance-rendering, android/ui-views, android/profili
 
 Производительность layout измеряется в **миллисекундах (ms)** времени отрисовки каждого кадра. Android отрисовывает UI в три фазы: **measure**, **layout**, **draw**. Для плавной работы весь кадр должен укладываться в бюджет времени (16.67ms для 60fps, 11.11ms для 90fps).
 
-### Основные метрики
+### Основные Метрики
 
 **Целевое время кадра:**
 - 60 FPS → 16.67ms на кадр
@@ -43,7 +45,7 @@ tags: [android, android/performance-rendering, android/ui-views, android/profili
 - Layout: до 5ms
 - Draw: до 6.67ms
 
-### 1. Измерение через Choreographer
+### 1. Измерение Через Choreographer
 
 `Choreographer` синхронизирует анимации с частотой обновления экрана:
 
@@ -75,7 +77,7 @@ class FrameMonitor {
 }
 ```
 
-### 2. Измерение фаз через FrameMetrics (API 24+)
+### 2. Измерение Фаз Через FrameMetrics (API 24+)
 
 ```kotlin
 class DetailedFrameMonitor(activity: Activity) {
@@ -96,7 +98,7 @@ class DetailedFrameMonitor(activity: Activity) {
 }
 ```
 
-### 3. Трассировка через Trace API
+### 3. Трассировка Через Trace API
 
 ```kotlin
 class OptimizedView : View(context) {
@@ -124,7 +126,7 @@ adb shell atrace --async_start view gfx input
 adb shell atrace --async_stop > trace.html
 ```
 
-### 4. Анализ сложности иерархии
+### 4. Анализ Сложности Иерархии
 
 ```kotlin
 data class LayoutComplexity(
@@ -162,7 +164,7 @@ fun analyzeHierarchy(view: View): LayoutComplexity {
 }
 ```
 
-### 5. Recomposition в Jetpack Compose
+### 5. Recomposition В Jetpack Compose
 
 В Compose производительность измеряется количеством recomposition:
 
@@ -190,7 +192,7 @@ kotlinOptions {
 }
 ```
 
-### Таблица метрик производительности
+### Таблица Метрик Производительности
 
 | Метрика | Единица | Целевое значение (60fps) |
 |---------|---------|--------------------------|

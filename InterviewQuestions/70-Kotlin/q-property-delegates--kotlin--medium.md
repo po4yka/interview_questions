@@ -1,7 +1,7 @@
 ---
 id: kotlin-147
 title: "Property Delegates / Делегаты свойств"
-aliases: [Property Delegates, Delegates, Property, Делегаты свойств]
+aliases: [Delegates, Property, Property Delegates, Делегаты свойств]
 topic: kotlin
 subtopics: [delegates]
 question_kind: theory
@@ -13,20 +13,19 @@ moc: moc-kotlin
 related: [q-coroutine-memory-leak-detection--kotlin--hard, q-dispatchers-unconfined--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - delegates
-  - properties
-  - difficulty/medium
+tags: [delegates, difficulty/medium, kotlin, properties]
+date created: Friday, October 31st 2025, 6:30:28 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# В чем особенность делегатов свойств
+
+# В Чем Особенность Делегатов Свойств
 
 **English**: What is special about property delegates in Kotlin?
 
 ## Answer (EN)
 Делегаты свойств (Property Delegates) — это мощная функциональность Kotlin, позволяющая делегировать выполнение операций получения и установки значения свойства другому объекту.
 
-### Main idea
+### Main Idea
 
 Instead of each property storing data or performing operations independently, it can delegate these tasks to another object.
 
@@ -40,9 +39,9 @@ class Example {
 }
 ```
 
-### Standard delegates
+### Standard Delegates
 
-#### 1. lazy - lazy initialization
+#### 1. Lazy - Lazy Initialization
 
 Value is computed only on first access.
 
@@ -66,7 +65,7 @@ connection.query()  // Now prints "Initializing database..."
 connection.query()  // Database already initialized, not created again
 ```
 
-#### 2. observable - change observation
+#### 2. Observable - Change Observation
 
 ```kotlin
 class User {
@@ -81,7 +80,7 @@ user.name = "Alice"  // Prints: name changed from Initial Name to Alice
 user.name = "Bob"    // Prints: name changed from Alice to Bob
 ```
 
-#### 3. vetoable - validation before change
+#### 3. Vetoable - Validation before Change
 
 ```kotlin
 class Product {
@@ -97,7 +96,7 @@ product.price = -50   // Rejected, price remains 100
 println(product.price)  // 100
 ```
 
-#### 4. notNull - late initialization with check
+#### 4. notNull - Late Initialization with Check
 
 ```kotlin
 class Configuration {
@@ -113,7 +112,7 @@ class Configuration {
 }
 ```
 
-### Custom delegates
+### Custom Delegates
 
 ```kotlin
 // Delegate for logging property access
@@ -191,7 +190,7 @@ settings.username = "Alice"  // Automatically saved to SharedPreferences
 println(settings.username)   // Automatically read from SharedPreferences
 ```
 
-### Map delegates
+### Map Delegates
 
 ```kotlin
 class User(map: Map<String, Any?>) {
@@ -212,9 +211,9 @@ println(user.name)   // Alice
 println(user.age)    // 30
 ```
 
-### Key features and benefits
+### Key Features and Benefits
 
-#### 1. Logic isolation
+#### 1. Logic Isolation
 
 Getter/setter logic is extracted into a separate class.
 
@@ -235,7 +234,7 @@ class Form {
 }
 ```
 
-#### 2. Code reusability
+#### 2. Code Reusability
 
 One delegate can be used for multiple properties.
 
@@ -262,7 +261,7 @@ class GameCharacter {
 
 Easy to create new delegates for specific needs.
 
-#### 4. Built-in language support
+#### 4. Built-in Language Support
 
 Kotlin provides `by` syntax for working with delegates.
 
@@ -272,14 +271,14 @@ Kotlin provides `by` syntax for working with delegates.
 
 Делегаты свойств (Property Delegates) позволяют делегировать операции получения и установки значения свойства другому объекту, избегая дублирования кода и делая код модульным.
 
-### Встроенные делегаты
+### Встроенные Делегаты
 
 - **lazy** - ленивая инициализация (значение вычисляется только при первом обращении)
 - **observable** - наблюдение за изменениями (вызывается callback при каждом изменении)
 - **vetoable** - валидация перед изменением (можно отклонить новое значение)
 - **notNull** - поздняя инициализация с проверкой (IllegalStateException если не инициализировано)
 
-### Пользовательские делегаты
+### Пользовательские Делегаты
 
 Реализуют интерфейс `ReadWriteProperty`, что позволяет создавать переиспользуемую логику для:
 - SharedPreferences (автоматическое сохранение/чтение)

@@ -1,21 +1,24 @@
 ---
 id: android-289
 title: "Retrofit Path Parameter / Path параметр Retrofit"
-aliases: ["Retrofit Path Parameter", "Path параметр Retrofit"]
+aliases: ["Path параметр Retrofit", "Retrofit Path Parameter"]
 topic: android
 subtopics: [networking-http]
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-retrofit-usage-tutorial--android--medium, q-retrofit-library--android--medium, q-http-protocols-comparison--android--medium]
+related: [q-http-protocols-comparison--android--medium, q-retrofit-library--android--medium, q-retrofit-usage-tutorial--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/networking-http, networking, retrofit, rest-api, path-parameters, difficulty/medium]
+tags: [android/networking-http, difficulty/medium, networking, path-parameters, rest-api, retrofit]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 Как в Retrofit в GET-методе поставить атрибут в конкретное место пути?
 
@@ -43,14 +46,14 @@ api.getPost("123", "456")
 // URL: GET /users/123/posts/456
 ```
 
-### @Path vs @Query
+### @Path Vs @Query
 
 | Аннотация | Где | Пример URL | Когда использовать |
 |-----------|-----|------------|-------------------|
 | `@Path` | В пути | `/users/123` | ID ресурса, обязательные параметры |
 | `@Query` | В query-string | `/users?id=123` | Фильтры, опциональные параметры |
 
-### Множественные параметры
+### Множественные Параметры
 
 ```kotlin
 @GET("categories/{category}/products/{productId}")
@@ -63,7 +66,7 @@ suspend fun getProduct(
 // URL: /categories/electronics/products/prod789
 ```
 
-### Комбинация с @Query
+### Комбинация С @Query
 
 ```kotlin
 @GET("users/{userId}/posts")
@@ -101,7 +104,7 @@ api.getFile("folder/subfolder/file.txt")
 // URL: /files/folder/subfolder/file.txt
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // ❌ НЕПРАВИЛЬНО: нет плейсхолдера
@@ -142,7 +145,7 @@ api.getPost("123", "456")
 // URL: GET /users/123/posts/456
 ```
 
-### @Path vs @Query
+### @Path Vs @Query
 
 | Annotation | Location | Example URL | When to Use |
 |------------|----------|-------------|-------------|

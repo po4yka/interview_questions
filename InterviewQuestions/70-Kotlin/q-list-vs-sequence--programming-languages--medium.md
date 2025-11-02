@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-data-class-component-functions--programming-languages--easy, q-iterator-order-guarantee--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [collections, kotlin, list, programming-languages, sequence, difficulty/medium]
+tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequence]
 date created: Friday, October 3rd 2025, 4:14:02 pm
-date modified: Sunday, October 26th 2025, 12:08:07 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # В Чем Разница Между Работой С List И Работой С Sequence
@@ -47,9 +47,9 @@ List является жадной коллекцией, где все опер�
 - [[q-what-problems-can-there-be-with-list-items--android--easy]] - Data Structures
 
 ### Kotlin Language Features
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
-- [[q-collection-implementations--programming-languages--easy]] - Data Structures
-- [[q-arraylist-linkedlist-vector-difference--programming-languages--medium]] - Data Structures
-- [[q-equals-hashcode-contracts--programming-languages--hard]] - Data Structures
+-  - Data Structures
+-  - Data Structures
+-  - Data Structures
+-  - Data Structures
 - [[q-list-vs-sequence--kotlin--medium]] - Data Structures
 - [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures

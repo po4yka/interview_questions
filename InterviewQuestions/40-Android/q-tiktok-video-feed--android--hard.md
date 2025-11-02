@@ -1,13 +1,7 @@
 ---
 id: android-486
 title: Design TikTok-style Short-Video Feed / Проектирование коротких видео (TikTok-стиль)
-aliases:
-    [
-        Design TikTok-style Short-Video Feed,
-        Проектирование коротких видео TikTok-стиль,
-        TikTok Feed Architecture,
-        Архитектура ленты TikTok,
-    ]
+aliases: []
 topic: android
 subtopics: [media, performance-rendering, service]
 question_kind: android
@@ -16,22 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-design-instagram-stories--android--hard, c-workmanager, c-room]
+related: [c-room, c-workmanager, q-design-instagram-stories--android--hard]
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags:
-    [
-        android/media,
-        android/performance-rendering,
-        android/service,
-        difficulty/hard,
-        platform/android,
-        lang/kotlin,
-        video-feed,
-        abr,
-        prefetch,
-    ]
+tags: []
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

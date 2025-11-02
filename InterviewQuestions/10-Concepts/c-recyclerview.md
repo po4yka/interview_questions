@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-140000
 title: RecyclerView / RecyclerView
-aliases: [RecyclerView, Android RecyclerView]
+aliases: [Android RecyclerView, RecyclerView]
 kind: concept
 summary: Flexible view for displaying large datasets with view recycling and efficient scrolling
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, recyclerview, ui, performance]
+tags: [android, concept, performance, recyclerview, ui]
+date created: Thursday, October 30th 2025, 12:30:06 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

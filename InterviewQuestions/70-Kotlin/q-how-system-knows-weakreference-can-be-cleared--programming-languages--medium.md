@@ -3,7 +3,7 @@ id: lang-086
 title: "How System Knows Weakreference Can Be Cleared / Как система знает что WeakReference можно очистить"
 aliases: [How System Knows Weakreference Can Be Cleared, Как система знает что WeakReference можно очистить]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, references]
+subtopics: [garbage-collection, memory-management, references]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-garbage-collection, c-references, q-garbage-collector-basics--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, memory-management, garbage-collection, weak-references, kotlin, difficulty/medium]
+tags: [difficulty/medium, garbage-collection, kotlin, memory-management, programming-languages, weak-references]
+date created: Friday, October 31st 2025, 6:31:28 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Как Система Понимает, Что WeakReference Можно Очистить?
@@ -191,6 +193,6 @@ The GC determines WeakReference can be cleared when:
 
 ## Related Questions
 
-- [[q-data-class-special-features--programming-languages--easy]]
+-
 - [[q-java-access-modifiers--programming-languages--medium]]
-- [[q-mvp-pattern--architecture-patterns--medium]]
+-

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, android, viewmodel, lifecycle, viewmodelscope]
+subtopics: [android, coroutines, lifecycle, viewmodel, viewmodelscope]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Comprehensive Kotlin Android Coroutines ViewModel Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium, q-coroutines-cancellation--kotlin--medium]
+related: [q-coroutines-cancellation--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, android, viewmodel, lifecycle, viewmodelscope, difficulty/medium]
+tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, viewmodel, viewmodelscope]
+date created: Sunday, October 12th 2025, 3:43:53 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Question (EN)
 > How to use coroutines in ViewModel? Explain viewModelScope, automatic cancellation on onCleared(), best practices for launching coroutines, and handling configuration changes.
 
@@ -600,7 +603,7 @@ ViewModel с корутинами обеспечивает мощный патт
 - Использует `Dispatchers.Main.immediate`
 - Не требует ручной очистки
 
-### Лучшие практики
+### Лучшие Практики
 
 ```kotlin
 class MyViewModel : ViewModel() {

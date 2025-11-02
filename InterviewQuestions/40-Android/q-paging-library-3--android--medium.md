@@ -1,20 +1,22 @@
 ---
 id: android-409
 title: Paging Library 3 / Библиотека Paging 3
-aliases: [Paging Library 3, Библиотека Paging 3, Paging 3, Android Paging]
+aliases: [Android Paging, Paging 3, Paging Library 3, Библиотека Paging 3]
 topic: android
-subtopics: [performance-rendering, architecture-clean, room]
+subtopics: [architecture-clean, performance-rendering, room]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-recyclerview, c-room, c-viewmodel, q-recyclerview-optimization--android--medium]
+related: [c-recyclerview, c-room, c-viewmodel]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/performance-rendering, android/architecture-clean, android/room, paging, pagination, recyclerview, jetpack, difficulty/medium]
+tags: [android/architecture-clean, android/performance-rendering, android/room, difficulty/medium, jetpack, pagination, paging, recyclerview]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
+date created: Saturday, November 1st 2025, 1:03:32 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -31,14 +33,14 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 
 **Библиотека Paging** помогает загружать и отображать данные порционно, снижая нагрузку на сеть и системные ресурсы.
 
-### Архитектура данных
+### Архитектура Данных
 
 Библиотека поддерживает три подхода:
 - **Network-only**: прямая загрузка с сервера в UI
 - **Database-only**: данные только из локальной БД
 - **Network + Database**: сервер → Room → UI (кэширование)
 
-### Ключевые компоненты Paging 3
+### Ключевые Компоненты Paging 3
 
 **PagingSource**: источник данных с поддержкой инкрементальной загрузки
 
@@ -94,7 +96,7 @@ class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBA
 }
 ```
 
-### Room интеграция
+### Room Интеграция
 
 ```kotlin
 @Dao
@@ -106,7 +108,7 @@ interface ConcertDao {
 
 ✅ Room автоматически генерирует `PagingSource` для запросов
 
-### Обработка состояний загрузки
+### Обработка Состояний Загрузки
 
 ```kotlin
 adapter.addLoadStateListener { loadState ->
@@ -256,7 +258,7 @@ adapter.addLoadStateListener { loadState ->
 ### Related (Same Level)
 - [[q-recyclerview-optimization--android--medium]]
 - [[q-room-migration--android--medium]]
-- [[q-flow-state-flow--kotlin--medium]]
+- [[q-sharedflow-stateflow--kotlin--medium]]
 
 ### Advanced (Harder)
 - [[q-remotemediator-implementation--android--hard]]

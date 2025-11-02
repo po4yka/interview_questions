@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gradle-build-optimization--android--medium, q-testing-strategies--android--hard]
+related: []
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/ci-cd, android/gradle, android/testing-unit, devops, automation, difficulty/medium]
+tags: [android/ci-cd, android/gradle, android/testing-unit, automation, devops, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:18:03 am
-date modified: Thursday, October 30th 2025, 12:43:36 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,21 +29,21 @@ date modified: Thursday, October 30th 2025, 12:43:36 pm
 
 ## Ответ (RU)
 
-### Выбор платформы
+### Выбор Платформы
 GitHub Actions (облачные раннеры + бесплатный минуты), GitLab CI (встроенная интеграция), или Jenkins (self-hosted, максимальная гибкость). Для Android предпочтительны Linux-раннеры с Docker-образами, содержащими Android SDK.
 
-### Базовая конфигурация окружения
+### Базовая Конфигурация Окружения
 - **JDK**: указать точную версию через `setup-java` (обычно LTS-релиз)
 - **Android SDK**: использовать cmdline-tools или готовые Docker-образы типа `cimg/android`
 - **Gradle**: полагаться на wrapper в репозитории, активировать build cache и configuration cache
 
-### Секреты и подписывание
+### Секреты И Подписывание
 Хранить keystores, service account JSON, API-ключи в защищенных переменных CI. Никогда не коммитить credential файлы. По возможности использовать OIDC для доступа к облачным ресурсам.
 
-### Стратегия кеширования
+### Стратегия Кеширования
 Кешировать `~/.gradle/caches`, `~/.gradle/wrapper`, зависимости и Build Cache. На self-hosted раннерах можно кешировать emulator system images для ускорения инструментальных тестов.
 
-### Типичный пайплайн
+### Типичный Пайплайн
 ```yaml
 # ✅ Минимальная GitHub Actions конфигурация
 name: Android CI
@@ -74,10 +74,10 @@ jobs:
           path: '**/build/reports/**'
 ```
 
-### Инструментальное тестирование
+### Инструментальное Тестирование
 Для UI-тестов использовать матрицу эмуляторов (разные API levels / ABI). Применять test sharding для параллелизации, настроить retry при flaky tests. Полный набор тестов запускать nightly, на PR — smoke subset.
 
-### Артефакты и отчеты
+### Артефакты И Отчеты
 Сохранять JUnit XML, lint results, code coverage (Jacoco/Kover). Аннотировать PR комментариями при падении тестов или lint warnings. Публиковать build scans для диагностики производительности сборки.
 
 ## Answer (EN)
@@ -152,10 +152,10 @@ Save JUnit XML, lint results, code coverage (Jacoco/Kover). Annotate PRs with co
 
 ### Prerequisites
 - [[q-gradle-basics--android--easy]]
-- [[q-unit-testing-fundamentals--android--easy]]
+
 
 ### Related
-- [[q-gradle-build-optimization--android--medium]]
+- [[q-android-build-optimization--android--medium]]
 - [[q-testing-strategies--android--hard]]
 - [[q-docker-android-builds--tools--medium]]
 

@@ -16,7 +16,7 @@ tags: [android/fragment, android/lifecycle, android/ui-navigation, difficulty/ea
 moc: moc-android
 related: [q-android-build-optimization--android--medium, q-what-each-android-component-represents--android--easy]
 date created: Tuesday, October 28th 2025, 7:38:56 am
-date modified: Thursday, October 30th 2025, 12:47:54 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -31,13 +31,13 @@ date modified: Thursday, October 30th 2025, 12:47:54 pm
 
 **Fragment** — это переиспользуемая часть пользовательского интерфейса в Android-приложении. Fragment определяет свой layout, имеет собственный жизненный цикл и обрабатывает события ввода независимо.
 
-### Ключевые характеристики
+### Ключевые Характеристики
 
 - Fragment не может существовать сам по себе — он должен быть размещен в Activity или другом Fragment
 - Иерархия View фрагмента присоединяется к иерархии View хоста
 - Fragment инкапсулирует View и логику для повторного использования
 
-### Основные способы добавления
+### Основные Способы Добавления
 
 **1. Статическое добавление** — через XML-разметку:
 
@@ -69,14 +69,14 @@ supportFragmentManager.beginTransaction()
 
 **3. Navigation Component** — современный подход для управления навигацией и транзакциями.
 
-### Основные сценарии использования
+### Основные Сценарии Использования
 
 1. **Модульность UI** — разделение экрана на переиспользуемые компоненты
 2. **Адаптивный дизайн** — комбинирование фрагментов для планшетов, разделение для телефонов
 3. **Динамическое изменение UI** — добавление, замена, удаление в runtime
 4. **Back stack** — управление историей навигации
 
-### Пример простого Fragment
+### Пример Простого Fragment
 
 ```kotlin
 class ProfileFragment : Fragment() {
@@ -96,7 +96,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 - Всегда предоставляйте конструктор без параметров
 - Используйте ViewModel для связи с Activity вместо прямых ссылок

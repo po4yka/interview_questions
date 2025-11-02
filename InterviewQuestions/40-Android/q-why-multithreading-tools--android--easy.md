@@ -1,20 +1,22 @@
 ---
 id: android-437
 title: "Why Multithreading Tools / Зачем инструменты многопоточности"
-aliases: [Multithreading Tools, Инструменты многопоточности, Android Concurrency]
+aliases: [Android Concurrency, Multithreading Tools, Инструменты многопоточности]
 topic: android
-subtopics: [coroutines, threads-sync, background-execution]
+subtopics: [background-execution, coroutines, threads-sync]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-multithreading, q-repository-multiple-sources--android--medium]
+related: [c-coroutines, c-main-thread, c-multithreading, c-workmanager]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/coroutines, android/threads-sync, android/background-execution, difficulty/easy]
+tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/easy]
 sources: [https://developer.android.com/guide/background, https://developer.android.com/kotlin/coroutines]
+date created: Saturday, November 1st 2025, 1:26:27 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ Why is multithreading needed in Android and which tools should be used?
 
 ## Ответ (RU)
 
-### Зачем нужна многопоточность
+### Зачем Нужна Многопоточность
 
 **Проблема:** UI поток (Main Thread) выполняет:
 - Отрисовку интерфейса (60 FPS = 16ms на кадр)
@@ -67,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Какие задачи выполнять в фоновых потоках
+### Какие Задачи Выполнять В Фоновых Потоках
 
 1. **Сетевые запросы**
 2. **Операции с базой данных**
@@ -75,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 4. **Обработка изображений**
 5. **Парсинг больших данных**
 
-### Основные инструменты многопоточности
+### Основные Инструменты Многопоточности
 
 #### 1. Kotlin Coroutines (Рекомендуется)
 
@@ -167,7 +169,7 @@ class MainActivity : AppCompatActivity() {
 - Нет автоматической отмены
 - Нужно вручную управлять потоками
 
-### Выбор диспетчера для Coroutines
+### Выбор Диспетчера Для Coroutines
 
 ```kotlin
 // Сеть, БД, файлы
@@ -373,5 +375,5 @@ Dispatchers.Main
 - [[q-coroutine-basics--kotlin--easy]]
 
 ### Advanced (Harder)
-- [[q-how-to-reduce-the-number-of-recompositions-besides-side-effects--android--hard]]
+- [[q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]]
 - [[q-how-to-display-snackbar-or-toast-based-on-results--android--medium]]

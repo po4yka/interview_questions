@@ -3,7 +3,7 @@ id: android-358
 title: "Main Android Components / Основные компоненты Android"
 aliases: ["Main Android Components", "Основные компоненты Android"]
 topic: android
-subtopics: [activity, service, content-provider]
+subtopics: [activity, content-provider, service]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -14,9 +14,9 @@ related: [q-how-does-activity-lifecycle-work--android--medium, q-jit-vs-aot-comp
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/activity, android/service, android/content-provider, components, difficulty/easy]
+tags: [android, android/activity, android/content-provider, android/service, components, difficulty/easy]
 date created: Tuesday, October 28th 2025, 9:35:52 pm
-date modified: Thursday, October 30th 2025, 3:12:54 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

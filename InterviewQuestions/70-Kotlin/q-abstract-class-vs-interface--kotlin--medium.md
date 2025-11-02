@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium, q-data-class-detailed--kotlin--medium]
+related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
 created: 2025-10-05
 updated: 2025-01-25
-tags: [kotlin, abstract-class, interface, inheritance, oop, kotlin-features, difficulty/medium]
+tags: [abstract-class, difficulty/medium, inheritance, interface, kotlin, kotlin-features, oop]
 sources: [https://kotlinlang.org/docs/interfaces.html]
+date created: Sunday, October 5th 2025, 10:54:10 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

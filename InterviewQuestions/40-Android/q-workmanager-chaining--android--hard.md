@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-workmanager, c-coroutines]
+related: [c-coroutines, c-workmanager]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/background-execution, android/coroutines, workmanager, background, difficulty/hard]
+tags: [android, android/background-execution, android/coroutines, background, difficulty/hard, workmanager]
 date created: Monday, October 27th 2025, 6:44:39 pm
-date modified: Thursday, October 30th 2025, 11:51:10 am
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 11:51:10 am
 
 [[c-workmanager|WorkManager]] предоставляет мощные возможности для построения сложных графов выполнения работ с зависимостями, параллельным выполнением и продвинутыми стратегиями обработки ошибок.
 
-### Базовые паттерны цепочек
+### Базовые Паттерны Цепочек
 
 **Последовательное выполнение**
 ```kotlin
@@ -58,7 +58,7 @@ WorkManager.getInstance(context)
     .enqueue()
 ```
 
-### Передача данных между воркерами
+### Передача Данных Между Воркерами
 
 **Ограничения WorkData**
 - Максимальный размер: 10 KB
@@ -97,7 +97,7 @@ class ProcessWorker : CoroutineWorker(context, params) {
 }
 ```
 
-### Обработка ошибок
+### Обработка Ошибок
 
 **Селективная retry-стратегия**
 ```kotlin
@@ -134,7 +134,7 @@ workManager
     .enqueue()
 ```
 
-### Мониторинг и наблюдение
+### Мониторинг И Наблюдение
 
 **Отслеживание прогресса цепи**
 ```kotlin
@@ -164,7 +164,7 @@ class ChainMonitor(private val workManager: WorkManager) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **1. Передача данных**
 - Держите WorkData < 10 KB
@@ -201,7 +201,7 @@ val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
     .build()
 ```
 
-### Частые ошибки
+### Частые Ошибки
 
 1. **Слишком сложные цепи** — усложняют отладку
 2. **Большие объемы в WorkData** — превышают лимит 10 KB

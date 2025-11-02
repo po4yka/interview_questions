@@ -1,7 +1,7 @@
 ---
 id: kotlin-176
 title: "Sequences Vs Collections Performance / Sequences vs Collections Performance"
-aliases: [Sequences, Collections Performance, Lazy Evaluation, Performance Comparison]
+aliases: [Collections Performance, Lazy Evaluation, Performance Comparison, Sequences]
 topic: kotlin
 subtopics: [collections, performance]
 question_kind: theory
@@ -10,19 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-callsuper-annotation--kotlin--medium, q-kotlin-native--kotlin--hard, q-kotlin-constructor-types--programming-languages--medium]
+related: [q-callsuper-annotation--kotlin--medium, q-kotlin-native--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - sequences
-  - collections
-  - performance
-  - lazy-evaluation
-  - optimization
-  - difficulty/medium
+tags: [collections, difficulty/medium, kotlin, lazy-evaluation, optimization, performance, sequences]
+date created: Friday, October 31st 2025, 6:30:53 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# Sequences vs Collections Performance
+
+# Sequences Vs Collections Performance
 
 # Question (EN)
 > When should you use Sequences over Collections? Explain intermediate vs terminal operations and performance implications.
@@ -167,13 +163,13 @@ val count = seq.count() // Evaluates again!
 
 Не создают промежуточные коллекции. Эффективнее для больших данных и цепочек операций.
 
-### Когда использовать Sequences
+### Когда Использовать Sequences
 
 - Большие наборы данных
 - Множество цепных операций
 - Ранняя терминация (firstOrNull, take)
 
-### Когда использовать Collections
+### Когда Использовать Collections
 
 - Малые наборы данных
 - Одна операция
@@ -185,4 +181,4 @@ Sequences оптимизируют производительность для �
 
 - [[q-callsuper-annotation--kotlin--medium]]
 - [[q-kotlin-native--kotlin--hard]]
-- [[q-kotlin-constructor-types--programming-languages--medium]]
+-

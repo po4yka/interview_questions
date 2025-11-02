@@ -16,7 +16,7 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:56:22 am
-date modified: Thursday, October 30th 2025, 12:44:40 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -70,7 +70,7 @@ class AccessibleButton @JvmOverloads constructor(
 }
 ```
 
-### Комплексные View с Действиями
+### Комплексные View С Действиями
 
 ```kotlin
 class ScrollableCustomView : View {
@@ -301,8 +301,6 @@ class ProgressView : View {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-accessibility-basics--android--easy]] - Understanding accessibility fundamentals
-- [[q-content-description--android--easy]] - Using content descriptions properly
 
 ### Related (Same Level)
 - [[q-compose-semantics--android--medium]] - Compose accessibility semantics
@@ -310,6 +308,6 @@ class ProgressView : View {
 - [[q-accessibility-compose--android--medium]] - Compose accessibility implementation
 
 ### Advanced (Harder)
-- [[q-accessibility-testing--android--hard]] - Comprehensive accessibility testing
+- [[q-accessibility-testing--android--medium]] - Comprehensive accessibility testing
 - [[q-accessibility-services--android--hard]] - Building custom accessibility services
 - [[q-viewgroup-accessibility--android--hard]] - Complex ViewGroup accessibility

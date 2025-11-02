@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - val
-  - var
   - immutability
   - mutability
   - read-only
+  - val
+  - var
 question_kind: theory
 difficulty: easy
 
@@ -23,14 +23,17 @@ source_note: Deep dive into val vs var in Kotlin
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-properties--kotlin--easy, q-kotlin-const--kotlin--easy, q-kotlin-constructors--kotlin--easy]
+related: [q-kotlin-const--kotlin--easy, q-kotlin-constructors--kotlin--easy, q-kotlin-properties--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-31
 
-tags: [kotlin, val, var, immutability, mutability, read-only, constants, difficulty/easy]
+tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, val, var]
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What's the difference between val and var in Kotlin? When should you use each?
 
@@ -139,7 +142,7 @@ println(rect.area)  // 200
 
 ### When to Use Val
 
-#### DO use val when:
+#### DO Use Val When:
 
 ```kotlin
 // 1. Value doesn't need to change
@@ -178,7 +181,7 @@ class Circle(val radius: Double) {
 
 ### When to Use Var
 
-#### DO use var when:
+#### DO Use Var When:
 
 ```kotlin
 // 1. Value needs to change over time
@@ -211,7 +214,7 @@ class HttpRequestBuilder {
 }
 ```
 
-### Val vs Var in Classes
+### Val Vs Var in Classes
 
 ```kotlin
 // Primary constructor
@@ -237,7 +240,7 @@ class User {
 }
 ```
 
-### Val vs Var with Nullable Types
+### Val Vs Var with Nullable Types
 
 ```kotlin
 val name: String? = null
@@ -439,7 +442,7 @@ class ResourceManager {
 }
 ```
 
-### Val vs Const Val
+### Val Vs Const Val
 
 ```kotlin
 // const val: Compile-time constant
@@ -532,7 +535,7 @@ class AppConfig {
 
 `val` и `var` — ключевые слова для объявления переменных/свойств в Kotlin. Понимание когда использовать каждое из них фундаментально для написания идиоматичного, безопасного Kotlin кода.
 
-### Основное различие
+### Основное Различие
 
 ```kotlin
 val name = "Alice"      // Только для чтения (неизменяемая ссылка)
@@ -545,7 +548,7 @@ age = 26                // OK: Var можно переназначить
 **val** = **value** = ссылка только для чтения (как `final` в Java)
 **var** = **variable** = изменяемая ссылка
 
-### Val: Ссылка только для чтения
+### Val: Ссылка Только Для Чтения
 
 ```kotlin
 val x = 10
@@ -563,7 +566,7 @@ list.add(4)                // OK: содержимое может менятьс
 4. НЕ означает, что объект неизменяем
 5. Предпочтительна в Kotlin (подход immutability-first)
 
-### Var: Изменяемая ссылка
+### Var: Изменяемая Ссылка
 
 ```kotlin
 var counter = 0
@@ -578,7 +581,7 @@ counter += 10    // OK
 3. Использовать когда значение нужно менять со временем
 4. Менее предпочтительна чем val
 
-### Val это не глубокая неизменяемость
+### Val Это Не Глубокая Неизменяемость
 
 ```kotlin
 // Val означает что ссылка только для чтения, НЕ объект
@@ -596,9 +599,9 @@ val immutableNumbers = listOf(1, 2, 3)
 // immutableNumbers.add(4)       // Ошибка: List<T> неизменяем
 ```
 
-### Когда использовать Val
+### Когда Использовать Val
 
-#### ИСПОЛЬЗОВАТЬ val когда:
+#### ИСПОЛЬЗОВАТЬ Val Когда:
 
 ```kotlin
 // 1. Значение не нужно менять
@@ -629,9 +632,9 @@ class DataStore {
 }
 ```
 
-### Когда использовать Var
+### Когда Использовать Var
 
-#### ИСПОЛЬЗОВАТЬ var когда:
+#### ИСПОЛЬЗОВАТЬ Var Когда:
 
 ```kotlin
 // 1. Значение нужно менять со временем
@@ -657,7 +660,7 @@ class ViewModel {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 ```kotlin

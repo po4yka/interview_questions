@@ -1,10 +1,10 @@
 ---
 id: "20251025-120000"
 title: "Android Service / Сервис Android"
-aliases: ["Service", "Android Service", "Сервис", "Фоновый сервис"]
+aliases: ["Android Service", "Service", "Сервис", "Фоновый сервис"]
 summary: "Android component for executing long-running operations in the background without a user interface"
 topic: "android"
-subtopics: ["service", "background-tasks", "lifecycle"]
+subtopics: ["background-tasks", "lifecycle", "service"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "service", "background-tasks", "lifecycle", "difficulty/medium"]
+tags: ["android", "background-tasks", "concept", "difficulty/medium", "lifecycle", "service"]
+date created: Saturday, October 25th 2025, 11:08:08 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Android Service / Сервис Android
@@ -24,7 +26,7 @@ tags: ["concept", "android", "service", "background-tasks", "lifecycle", "diffic
 
 An Android Service is a component that performs long-running operations in the background without providing a user interface. Services can be started to perform a task (Started Service) or bound to provide client-server interaction (Bound Service). Unlike Activities, Services have no UI and continue running even when the user switches to another application.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Android Service - это компонент, который выполняет длительные операции в фоновом режиме без пользовательского интерфейса. Сервисы могут быть запущены для выполнения задачи (Started Service) или привязаны для клиент-серверного взаимодействия (Bound Service). В отличие от Activity, Service не имеет UI и продолжает работу даже когда пользователь переключается на другое приложение.
 
@@ -37,7 +39,7 @@ Android Service - это компонент, который выполняет �
 - Foreground Services require a notification and have higher priority
 - Since Android 8.0 (API 26), background execution limits apply to Services
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - Сервисы по умолчанию работают в главном потоке и не создают свой собственный поток
 - Запущенные сервисы (Started Services) продолжают работу пока не будут явно остановлены

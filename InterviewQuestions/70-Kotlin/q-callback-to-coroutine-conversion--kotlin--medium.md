@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, callbacks, suspendcoroutine, migration, async]
+subtopics: [async, callbacks, coroutines, migration, suspendcoroutine]
 question_kind: coding
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Amit Shekhar Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [coroutines, suspend-functions, continuation, callback-hell]
+related: [callback-hell, continuation, coroutines, suspend-functions]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-31
 
-tags: [kotlin, coroutines, callbacks, suspendcoroutine, async, migration, difficulty/medium]
+tags: [async, callbacks, coroutines, difficulty/medium, kotlin, migration, suspendcoroutine]
+date created: Saturday, November 1st 2025, 9:25:30 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
+
 # Question (EN)
 > How do you convert callback-based APIs to coroutines in Kotlin?
 # Вопрос (RU)
@@ -524,7 +527,7 @@ suspend fun downloadFileSuspend(
 }
 ```
 
-### 3. Преобразование простых колбэков
+### 3. Преобразование Простых Колбэков
 
 ```kotlin
 suspend fun calculate(a: Int, b: Int): Int = suspendCoroutine { continuation ->
@@ -534,7 +537,7 @@ suspend fun calculate(a: Int, b: Int): Int = suspendCoroutine { continuation ->
 }
 ```
 
-### 4. Использование Flow для потоковых данных
+### 4. Использование Flow Для Потоковых Данных
 
 ```kotlin
 fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
@@ -561,7 +564,7 @@ fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### - ДЕЛАЙТЕ:
 
@@ -577,7 +580,7 @@ fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
 - Не игнорируйте очистку ресурсов
 - Не забывайте про обработку отмены
 
-### Таблица паттернов
+### Таблица Паттернов
 
 | Паттерн колбэка | Решение с корутинами | Случай использования |
 |-----------------|---------------------|---------------------|

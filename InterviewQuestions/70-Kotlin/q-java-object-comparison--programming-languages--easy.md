@@ -3,7 +3,7 @@ id: lang-011
 title: "Java Object Comparison / Java Object Сравнение"
 aliases: [Java Object Comparison, Java Object Сравнение]
 topic: programming-languages
-subtopics: [java, object-model, equality]
+subtopics: [equality, java, object-model]
 question_kind: theory
 difficulty: easy
 original_language: en
@@ -13,9 +13,9 @@ moc: moc-programming-languages
 related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-flow-map-operator--programming-languages--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [equality, equals, hashcode, java, object-comparison, programming-languages, difficulty/easy]
+tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, programming-languages]
 date created: Saturday, October 4th 2025, 3:02:36 pm
-date modified: Sunday, October 26th 2025, 12:08:04 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Как Сравниваются Объекты В Java?

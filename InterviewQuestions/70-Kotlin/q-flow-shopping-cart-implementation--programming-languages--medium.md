@@ -10,10 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [c-flow, c-coroutines, q-flow-map-operator--programming-languages--medium]
+related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, kotlin, coroutines, flow, reactive, state-management, difficulty/medium]
+tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages, reactive, state-management]
+date created: Friday, October 31st 2025, 6:30:46 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Implementing Flow for Shopping Cart Management
@@ -460,6 +462,6 @@ class ShoppingCartManagerTest {
 
 ## Related Questions
 
-- [[q-nothing-class-purpose--programming-languages--medium]]
+-
 - [[q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]]
-- [[q-observer-pattern--design-patterns--medium]]
+-

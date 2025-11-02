@@ -3,18 +3,20 @@ id: kotlin-231
 title: "Advanced Enum Class Features in Kotlin / Продвинутые возможности enum классов"
 aliases: ["Advanced Enum Features", "Продвинутые возможности enum"]
 topic: kotlin
-subtopics: [enums, classes, kotlin-features]
+subtopics: [classes, enums, kotlin-features]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-enum-classes--kotlin--easy, q-sealed-class-sealed-interface--kotlin--medium, q-data-class-detailed--kotlin--medium]
+related: [q-data-class-detailed--kotlin--medium, q-kotlin-enum-classes--kotlin--easy, q-sealed-class-sealed-interface--kotlin--medium]
 created: "2025-10-12"
 updated: 2025-01-25
-tags: [kotlin, enums, classes, kotlin-features, advanced-enums, difficulty/medium]
+tags: [advanced-enums, classes, difficulty/medium, enums, kotlin, kotlin-features]
 sources: [https://kotlinlang.org/docs/enum-classes.html]
+date created: Sunday, October 12th 2025, 1:58:08 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Вопрос (RU)

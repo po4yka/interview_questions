@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, testing, testscope, async, coroutines]
+subtopics: [async, coroutines, flow, testing, testscope]
 question_kind: theory
 difficulty: hard
 
@@ -24,8 +24,11 @@ related: [q-kotlin-flow-basics--kotlin--medium, q-testing-viewmodels-coroutines-
 created: 2025-10-11
 updated: 2025-10-11
 
-tags: [kotlin, flow, testing, testscope, async, difficulty/hard]
+tags: [async, difficulty/hard, flow, kotlin, testing, testscope]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+
 # Question (EN)
 > Test complex Flow chains with delays, errors, and multiple emissions. Use TestScope, TestDispatcher, and virtual time for deterministic testing.
 
@@ -255,7 +258,7 @@ fun `test flow propagates uncaught exception`() = runTest {
 }
 ```
 
-### Testing Cold vs Hot Flows
+### Testing Cold Vs Hot Flows
 
 ```kotlin
 @Test
@@ -568,7 +571,7 @@ fun `test conflate drops intermediate values`() = runTest {
 
 Тестирование Flow требует специальных инструментов для обработки асинхронного поведения детерминистично.
 
-### TestScope и TestDispatcher
+### TestScope И TestDispatcher
 
 ```kotlin
 @Test
@@ -589,7 +592,7 @@ fun `test flow with delays`() = runTest {
 }
 ```
 
-### Тестирование с Turbine
+### Тестирование С Turbine
 
 ```kotlin
 @Test
@@ -605,7 +608,7 @@ fun `test flow emissions`() = runTest {
 }
 ```
 
-### Тестирование обработки ошибок
+### Тестирование Обработки Ошибок
 
 ```kotlin
 @Test
@@ -642,7 +645,7 @@ fun `test stateflow updates`() = runTest {
 }
 ```
 
-### Тестирование сложных сценариев
+### Тестирование Сложных Сценариев
 
 ```kotlin
 @Test
@@ -664,7 +667,7 @@ fun `test search debouncing`() = runTest {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте runTest**:
    ```kotlin

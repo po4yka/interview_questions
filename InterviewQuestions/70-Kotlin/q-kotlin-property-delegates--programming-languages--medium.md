@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-map-flatmap--kotlin--medium, q-coroutine-scope-basics--kotlin--easy, q-kotlin-channels--kotlin--medium]
+related: [q-coroutine-scope-basics--kotlin--easy, q-kotlin-channels--kotlin--medium, q-kotlin-map-flatmap--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - delegates
-  - property-delegates
-  - difficulty/medium
+tags: [delegates, difficulty/medium, programming-languages, property-delegates]
+date created: Friday, October 31st 2025, 6:32:16 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# В чем особенность делегатов свойств
+
+# В Чем Особенность Делегатов Свойств
 
 # Question (EN)
 > What are the features of property delegates?

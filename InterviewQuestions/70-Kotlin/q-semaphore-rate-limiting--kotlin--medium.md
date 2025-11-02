@@ -5,24 +5,17 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - semaphore
-  - rate-limiting
-  - concurrency
-  - resource-management
+tags: [concurrency, coroutines, difficulty/medium, kotlin, rate-limiting, resource-management, semaphore]
 moc: moc-kotlin
-related: [q-kotlin-favorite-features--programming-languages--easy, q-stateflow-purpose--programming-languages--medium, q-kotlin-type-system-features--programming-languages--medium]
-  - q-mutex-synchronized-coroutines--kotlin--medium
-  - q-channelflow-callbackflow-flow--kotlin--medium
-  - q-race-conditions-coroutines--kotlin--hard
+related: [q-channelflow-callbackflow-flow--kotlin--medium, q-kotlin-favorite-features--programming-languages--easy, q-kotlin-type-system-features--programming-languages--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-race-conditions-coroutines--kotlin--hard, q-stateflow-purpose--programming-languages--medium]
 subtopics:
-  - coroutines
-  - semaphore
-  - rate-limiting
   - concurrency
+  - coroutines
+  - rate-limiting
   - resource-pool
+  - semaphore
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Question (EN)
@@ -72,7 +65,7 @@ suspend fun limitedOperation() {
 - `tryAcquire()` - Try to acquire without suspending
 - `availablePermits` - Number of available permits
 
-### Semaphore vs Mutex
+### Semaphore Vs Mutex
 
 | Feature | Semaphore(N) | Mutex |
 |---------|--------------|-------|
@@ -386,7 +379,7 @@ class DownloadViewModel : ViewModel() {
 }
 ```
 
-### Fair vs Unfair Semaphores
+### Fair Vs Unfair Semaphores
 
 By default, Semaphore in kotlinx.coroutines is **unfair** - permits may be granted out of order.
 
@@ -791,7 +784,7 @@ class SemaphoreTest {
 
 
 
-### Что такое Semaphore?
+### Что Такое Semaphore?
 
 **Semaphore** - это примитив синхронизации, который поддерживает набор **разрешений (permits)**. Корутины получают разрешения для продолжения и освобождают их после завершения. В отличие от Mutex (который по сути является Semaphore с 1 разрешением), Semaphore может иметь несколько разрешений, позволяя контролируемый конкурентный доступ.
 
@@ -810,7 +803,7 @@ suspend fun limitedOperation() {
 }
 ```
 
-### Ключевые концепции
+### Ключевые Концепции
 
 **Разрешения (Permits):**
 - Количество корутин, которые могут войти в критическую секцию одновременно
@@ -824,7 +817,7 @@ suspend fun limitedOperation() {
 - `tryAcquire()` - Попытаться получить без приостановки
 - `availablePermits` - Количество доступных разрешений
 
-### Паттерн 1: Ограничение скорости API вызовов
+### Паттерн 1: Ограничение Скорости API Вызовов
 
 ```kotlin
 class RateLimitedApiClient(maxConcurrent: Int = 5) {
@@ -848,7 +841,7 @@ class RateLimitedApiClient(maxConcurrent: Int = 5) {
 }
 ```
 
-### Паттерн 2: Реальный пример Android Retrofit
+### Паттерн 2: Реальный Пример Android Retrofit
 
 ```kotlin
 class ImageDownloadRepository(
@@ -886,7 +879,7 @@ class ImageDownloadRepository(
 }
 ```
 
-### Паттерн 3: Пул подключений к базе данных
+### Паттерн 3: Пул Подключений К Базе Данных
 
 ```kotlin
 class DatabaseConnectionPool(
@@ -933,7 +926,7 @@ class DatabaseConnectionPool(
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **Semaphore = обобщенный Mutex** - Разрешает N одновременных доступов
 2. **Идеален для ограничения скорости** - Контролирует конкурентные API вызовы

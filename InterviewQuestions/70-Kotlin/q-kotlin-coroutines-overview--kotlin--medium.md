@@ -3,21 +3,22 @@ id: kotlin-194
 title: "Kotlin Coroutines Overview / Обзор корутин Kotlin"
 aliases: []
 topic: kotlin
-subtopics: [functions, type-system, java-interop]
+subtopics: [functions, java-interop, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-performance--kotlin--hard, q-kotlin-java-type-differences--programming-languages--medium, q-debounce-throttle-flow--kotlin--medium]
+related: [q-debounce-throttle-flow--kotlin--medium, q-flow-performance--kotlin--hard, q-kotlin-java-type-differences--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 3:43:42 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-# Что известно про корутины?
+
+# Что Известно Про Корутины?
 
 # Question (EN)
 > What do you know about coroutines in Kotlin?

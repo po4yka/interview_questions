@@ -17,17 +17,18 @@ source_note: easy_kotlin Telegram channel
 # Workflow & relations
 status: draft
 moc: moc-tools
-related: [q-git-merge-vs-rebase--tools--medium, q-git-pull-vs-fetch--tools--easy]
-  - c-git
-  - c-version-control
+related: [c-git, c-version-control, q-git-merge-vs-rebase--tools--medium, q-git-pull-vs-fetch--tools--easy]
 
 # Timestamps
 created: 2025-10-03
 updated: 2025-10-03
 
 # Tags
-tags: [git, rebase, squash, version-control, difficulty/medium, easy_kotlin, lang/ru, tools]
+tags: [difficulty/medium, easy_kotlin, git, lang/ru, rebase, squash, tools, version-control]
+date created: Saturday, November 1st 2025, 12:09:51 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
+
 # Question (EN)
 > How to combine multiple commits into one in Git
 # Вопрос (RU)
@@ -95,7 +96,7 @@ squash ghi9012 Третий коммит
 
 4. Вы увидите ещё один редактор для объединения сообщений коммитов - отредактируйте по необходимости и сохраните
 
-### Способ 2: Soft Reset и новый коммит
+### Способ 2: Soft Reset И Новый Коммит
 
 1. Создайте временную ветку (опционально, для безопасности)
 2. Сделайте soft reset до нужного момента:

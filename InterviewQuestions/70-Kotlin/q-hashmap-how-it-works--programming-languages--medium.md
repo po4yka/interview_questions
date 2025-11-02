@@ -13,7 +13,9 @@ moc: moc-programming-languages
 related: [c-collections, c-hash-tables, q-equals-hashcode-contracts--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [programming-languages, collections, data-structures, hashmap, hash-tables, kotlin, difficulty/medium]
+tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, kotlin, programming-languages]
+date created: Friday, October 31st 2025, 6:31:04 pm
+date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Как Работает HashMap?
@@ -40,4 +42,4 @@ HashMap в Kotlin хранит пары ключ-значение и испол�
 
 - [[q-switch-float-double--programming-languages--easy]]
 - [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
-- [[q-data-sealed-classes-why--programming-languages--medium]]
+-

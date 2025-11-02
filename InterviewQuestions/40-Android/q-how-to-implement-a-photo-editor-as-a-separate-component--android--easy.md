@@ -1,22 +1,22 @@
 ---
 id: android-247
 title: "How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент"
-aliases: [Photo Editor Component, Separate Photo Editor, Фоторедактор как компонент, Отдельный компонент редактора]
+aliases: [Photo Editor Component, Separate Photo Editor, Отдельный компонент редактора, Фоторедактор как компонент]
 topic: android
-subtopics: [fragment, ui-views, ui-graphics]
+subtopics: [fragment, ui-graphics, ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-custom-layout--jetpack-compose--hard, q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-workmanager-vs-alternatives--background--medium]
+related: [q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-workmanager-vs-alternatives--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android, android/fragment, android/ui-views, android/ui-graphics, fragments, views, bitmap, canvas, imageview, difficulty/easy]
+tags: [android, android/fragment, android/ui-graphics, android/ui-views, bitmap, canvas, difficulty/easy, fragments, imageview, views]
 date created: Tuesday, October 28th 2025, 9:48:51 am
-date modified: Thursday, October 30th 2025, 12:49:10 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:49:10 pm
 
 Фоторедактор реализуется как Fragment с ImageView для отображения и методами обработки Bitmap. Используйте Matrix для трансформаций и ColorMatrix для фильтров.
 
-### Основной компонент
+### Основной Компонент
 
 ```kotlin
 // ✅ Fragment-based photo editor
@@ -62,7 +62,7 @@ class PhotoEditorFragment : Fragment() {
 }
 ```
 
-### Базовые операции
+### Базовые Операции
 
 ```kotlin
 // ✅ Rotate image
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Сохранение изменений
+### Сохранение Изменений
 
 ```kotlin
 // ✅ Save to MediaStore
@@ -288,13 +288,10 @@ override fun onDestroyView() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-fragment--android--easy]]
-- [[q-bitmap-basics--android--easy]]
 
 ### Related (Same Level)
-- [[q-compose-custom-layout--jetpack-compose--hard]]
 - [[q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium]]
 
 ### Advanced (Harder)
-- [[q-workmanager-vs-alternatives--background--medium]]
+- [[q-workmanager-vs-alternatives--android--medium]]
 - [[q-custom-view-optimization--android--hard]]

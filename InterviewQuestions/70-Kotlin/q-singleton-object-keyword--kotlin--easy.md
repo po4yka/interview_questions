@@ -1,7 +1,7 @@
 ---
 id: kotlin-180
 title: "Singleton Object Keyword / Синглтон с ключевым словом object"
-aliases: [Singleton, Object Keyword, Singleton Pattern, Синглтон]
+aliases: [Object Keyword, Singleton, Singleton Pattern, Синглтон]
 topic: kotlin
 subtopics: [classes, singleton]
 question_kind: theory
@@ -10,18 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lateinit--programming-languages--medium, q-coroutine-cancellation-cooperation--kotlin--medium, q-associatewith-vs-associateby--kotlin--easy]
+related: [q-associatewith-vs-associateby--kotlin--easy, q-coroutine-cancellation-cooperation--kotlin--medium, q-kotlin-lateinit--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - singleton
-  - object-keyword
-  - classes
-  - design-patterns
-  - difficulty/easy
+tags: [classes, design-patterns, difficulty/easy, kotlin, object-keyword, singleton]
+date created: Friday, October 31st 2025, 6:31:33 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What keyword is used to create singleton objects in Kotlin?
+
+# What Keyword is Used to Create Singleton Objects in Kotlin?
 
 **English**: What keyword is used to create singleton objects (singleton) in Kotlin?
 
@@ -212,7 +209,7 @@ fun main() {
 - Может содержать свойства, методы и init блоки
 - Может реализовывать интерфейсы и наследовать классы
 
-### Примеры кода
+### Примеры Кода
 
 **Базовый синглтон:**
 ```kotlin

@@ -92,10 +92,10 @@ Migrations ensure smooth transitions while preserving data integrity and applica
 ## Related Questions
 
 ### Related (Medium)
-- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
-- [[q-relational-table-unique-data--backend--medium]] - Databases
-- [[q-kapt-ksp-migration--gradle--medium]] - Kapt
+- [[q-virtual-tables-disadvantages--databases--medium]] - Databases
+- [[q-relational-table-unique-data--databases--medium]] - Databases
+- [[q-kapt-ksp-migration--android--medium]] - Kapt
 - [[q-callback-to-coroutine-conversion--kotlin--medium]] - Coroutines
 
 ### Advanced (Harder)
-- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
+- [[q-sql-join-algorithms-complexity--databases--hard]] - Databases

@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-workmanager, c-coroutines, q-workmanager-constraints--android--medium]
+related: [c-coroutines, c-flow, c-livedata, c-workmanager]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/background-execution, android/coroutines, background-processing, coroutines, livedata, workmanager, difficulty/medium]
+tags: [android/background-execution, android/coroutines, background-processing, coroutines, difficulty/medium, livedata, workmanager]
 date created: Wednesday, October 29th 2025, 1:01:15 pm
-date modified: Thursday, October 30th 2025, 11:51:06 am
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -67,7 +67,7 @@ class DataWorker(
 }
 ```
 
-### Наблюдение в ViewModel (рекомендуемый способ)
+### Наблюдение В ViewModel (рекомендуемый способ)
 
 ```kotlin
 class DataViewModel(
@@ -112,7 +112,7 @@ sealed class WorkResult {
 }
 ```
 
-### Современный подход с Flow
+### Современный Подход С Flow
 
 ```kotlin
 class DataRepository(
@@ -144,7 +144,7 @@ class DataRepository(
 }
 ```
 
-### Передача сложных данных через JSON
+### Передача Сложных Данных Через JSON
 
 ```kotlin
 @Serializable
@@ -173,7 +173,7 @@ val json = workInfo.outputData.getString("result_json")
 val result = Json.decodeFromString<ProcessingResult>(json)
 ```
 
-### Наблюдение по тегу или уникальному имени
+### Наблюдение По Тегу Или Уникальному Имени
 
 ```kotlin
 // By tag
@@ -426,5 +426,5 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 - [[q-livedata-vs-flow--kotlin--medium]] — LiveData vs Flow comparison
 
 ### Advanced (Harder)
-- [[q-workmanager-testing--android--hard]] — Testing WorkManager
+- [[q-workmanager-chaining--android--hard]] — Testing WorkManager
 - [[q-background-execution-limits--android--hard]] — Background execution strategies

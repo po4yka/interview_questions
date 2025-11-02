@@ -3,20 +3,20 @@ id: android-002
 title: Android Security Practices Checklist / Чек-лист практик безопасности Android
 aliases: ["Android Security Practices Checklist", "Чек-лист практик безопасности Android"]
 topic: android
-subtopics: [keystore-crypto, permissions, network-security-config]
+subtopics: [keystore-crypto, network-security-config, permissions]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-encryption, c-android-keystore, q-android-manifest-file--android--easy]
+related: [c-android-keystore, c-encryption]
 created: 2025-10-05
 updated: 2025-10-30
-tags: [android/keystore-crypto, android/permissions, android/network-security-config, security, difficulty/medium]
+tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, security]
 sources: []
 date created: Thursday, October 30th 2025, 11:36:04 am
-date modified: Thursday, October 30th 2025, 12:42:58 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:42:58 pm
 
 **Систематический подход** к защите через [[c-encryption|шифрование]] данных, Android Keystore, Network Security Config, обфускацию кода и биометрическую аутентификацию.
 
-### 1. Защита данных в хранилище
+### 1. Защита Данных В Хранилище
 
 **[[c-encryption|EncryptedSharedPreferences]]** для токенов и ключей:
 
@@ -56,7 +56,7 @@ val plainPrefs = getSharedPreferences("prefs", MODE_PRIVATE)
 - Избегать external storage для токенов/паролей
 - [[c-android-keystore|Android Keystore]] для криптографических ключей
 
-### 2. Сетевая безопасность
+### 2. Сетевая Безопасность
 
 **Network Security Config** блокирует cleartext HTTP:
 
@@ -84,7 +84,7 @@ val plainPrefs = getSharedPreferences("prefs", MODE_PRIVATE)
     android:networkSecurityConfig="@xml/network_security_config">
 ```
 
-### 3. Защита компонентов
+### 3. Защита Компонентов
 
 **Отключение экспорта** для внутренних компонентов:
 
@@ -103,7 +103,7 @@ val plainPrefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
 **Правило**: `exported="false"` по умолчанию, явно разрешать только публичные API.
 
-### 4. Обфускация кода
+### 4. Обфускация Кода
 
 **R8** усложняет обратную инженерию:
 
@@ -123,7 +123,7 @@ android {
 }
 ```
 
-### 5. Биометрическая аутентификация
+### 5. Биометрическая Аутентификация
 
 **BiometricPrompt** для критичных операций:
 
@@ -300,11 +300,11 @@ val promptInfo = BiometricPrompt.PromptInfo.Builder()
 - [[q-android-manifest-file--android--easy]] - Manifest configuration and permissions fundamentals
 
 ### Related (Medium)
-- [[q-android-keystore-implementation--android--medium]] - Android Keystore patterns and cryptographic key lifecycle
-- [[q-network-security-config--android--medium]] - Advanced network security configurations and certificate pinning strategies
-- [[q-proguard-rules-optimization--android--medium]] - R8/ProGuard rules for third-party library obfuscation
+ - Android Keystore patterns and cryptographic key lifecycle
+ - Advanced network security configurations and certificate pinning strategies
+ - R8/ProGuard rules for third-party library obfuscation
 
 ### Advanced (Harder)
-- [[q-runtime-security-monitoring--android--hard]] - Runtime threat detection, root detection, and response strategies
+ - Runtime threat detection, root detection, and response strategies
 - [[q-secure-multiprocess-architecture--android--hard]] - Inter-process security in modular multi-process architectures
 - [[q-hardware-key-attestation--android--hard]] - Hardware-backed key attestation and SafetyNet integration

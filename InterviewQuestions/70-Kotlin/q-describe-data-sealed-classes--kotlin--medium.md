@@ -1,7 +1,7 @@
 ---
 id: kotlin-152
 title: "Describe Data Sealed Classes / Data и Sealed классы описание"
-aliases: [Describe Data Sealed Classes, Data и Sealed классы описание]
+aliases: [Data и Sealed классы описание, Describe Data Sealed Classes]
 topic: kotlin
 subtopics: [data-classes, sealed-classes]
 question_kind: theory
@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-immutable-collections--programming-languages--easy, q-serialization-basics--programming-languages--medium, q-kotlin-sam-interfaces--kotlin--medium]
+related: [q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-classes
-  - sealed-classes
-  - difficulty/medium
+tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
+date created: Friday, October 31st 2025, 6:33:57 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# Describe data classes and sealed classes
+
+# Describe Data Classes and Sealed Classes
 
 # Question (EN)
 > Describe data classes and sealed classes in Kotlin. What are their key features and use cases?
@@ -469,7 +468,7 @@ fun main() {
 
 ## Ответ (RU)
 
-### Data классы
+### Data Классы
 
 **Data классы** в Kotlin предназначены для хранения данных и автоматически генерируют методы: `equals()`, `hashCode()`, `toString()` и `copy()`. Они идеально подходят для создания POJO/POCO объектов (Plain Old Java/C# Objects).
 
@@ -546,7 +545,7 @@ data class Address(
 )
 ```
 
-### Sealed классы
+### Sealed Классы
 
 **Sealed классы** используются для представления ограниченного набора типов, похожих на перечисления, но с возможностью иметь классы с разными свойствами и методами. Это обеспечивает безопасное использование при работе с типами во время компиляции, улучшая обработку ошибок и логику ветвления.
 
@@ -653,7 +652,7 @@ fun processPayment(method: PaymentMethod, amount: Double) {
 }
 ```
 
-### Комбинирование data классов с sealed классами
+### Комбинирование Data Классов С Sealed Классами
 
 **Универсальный Result тип:**
 ```kotlin
@@ -799,7 +798,7 @@ fun handleValidation(result: ValidationResult) {
 }
 ```
 
-### Краткий ответ
+### Краткий Ответ
 
 **Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и компонентные функции. Идеальны для POJO/POCO объектов, DTOs, моделей данных и value objects. Поддерживают деструктуризацию и простое копирование с изменениями.
 
@@ -808,5 +807,5 @@ fun handleValidation(result: ValidationResult) {
 ## Related Questions
 
 - [[q-kotlin-immutable-collections--programming-languages--easy]]
-- [[q-serialization-basics--programming-languages--medium]]
+-
 - [[q-kotlin-sam-interfaces--kotlin--medium]]

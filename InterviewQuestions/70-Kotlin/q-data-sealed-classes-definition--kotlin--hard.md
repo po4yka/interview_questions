@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-sam-conversions--programming-languages--medium, q-sequences-vs-collections-performance--kotlin--medium, q-kotlin-channels--kotlin--medium]
+related: [q-kotlin-channels--kotlin--medium, q-kotlin-sam-conversions--programming-languages--medium, q-sequences-vs-collections-performance--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-classes
-  - sealed-classes
-  - difficulty/hard
+tags: [data-classes, difficulty/hard, programming-languages, sealed-classes]
+date created: Friday, October 31st 2025, 6:33:11 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What are Data Class and Sealed Classes?
+
+# What Are Data Class and Sealed Classes?
 
 # Question (EN)
 > What are Data Class and Sealed Classes in Kotlin? Explain their characteristics, use cases, and provide comprehensive examples.
@@ -689,7 +688,7 @@ fun displayArticles(response: ApiResponse<List<Article>>) {
 }
 ```
 
-### Комбинирование Data Class и Sealed Class
+### Комбинирование Data Class И Sealed Class
 
 **Очень распространённый паттерн - sealed class с data подклассами:**
 ```kotlin
@@ -758,7 +757,7 @@ fun handleFormState(state: FormState) {
 }
 ```
 
-### Сравнительная таблица
+### Сравнительная Таблица
 
 | Характеристика | Data Class | Sealed Class |
 |----------------|-----------|--------------|
@@ -771,7 +770,7 @@ fun handleFormState(state: FormState) {
 | **Деструктуризация** | Да (componentN) | Нет (только у data подклассов) |
 | **copy()** | Да | Нет (только у data подклассов) |
 
-### Краткий ответ
+### Краткий Ответ
 
 **Data Class**: Специальный класс для хранения данных. Автоматически генерирует `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Требования: минимум один параметр в primary constructor, все параметры `val`/`var`. Используется для моделей данных, DTOs, API responses, MVC/MVVM моделей.
 

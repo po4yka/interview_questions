@@ -16,7 +16,7 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
 date created: Wednesday, October 29th 2025, 4:48:34 pm
-date modified: Thursday, October 30th 2025, 11:13:04 am
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -101,7 +101,7 @@ lifecycleScope.launch {
 }
 ```
 
-### 3. WorkManager (гарантированная фоновая работа)
+### 3. WorkManager (гарантированная Фоновая работа)
 
 ```kotlin
 class DataSyncWorker(context: Context, params: WorkerParameters)
@@ -215,7 +215,7 @@ lifecycleScope.launch {
 }
 ```
 
-### 3. WorkManager (guaranteed background work)
+### 3. WorkManager (guaranteed Background work)
 
 ```kotlin
 class DataSyncWorker(context: Context, params: WorkerParameters)

@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-val-vs-var--kotlin--easy, q-kotlin-coroutines-overview--programming-languages--medium, q-serialization-basics--programming-languages--medium]
+related: [q-kotlin-val-vs-var--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - collections
-  - immutability
-  - difficulty/easy
+tags: [collections, difficulty/easy, immutability, programming-languages]
+date created: Friday, October 31st 2025, 6:29:34 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-# Какой механизм позволяет создавать иммутабельные коллекции в Kotlin?
+
+# Какой Механизм Позволяет Создавать Иммутабельные Коллекции В Kotlin?
 
 **English**: What mechanism allows creating immutable collections in Kotlin?
 
@@ -32,5 +31,5 @@ In Kotlin, immutable collections are created using a mechanism based on interfac
 ## Related Questions
 
 - [[q-kotlin-val-vs-var--kotlin--easy]]
-- [[q-kotlin-coroutines-overview--programming-languages--medium]]
-- [[q-serialization-basics--programming-languages--medium]]
+-
+-

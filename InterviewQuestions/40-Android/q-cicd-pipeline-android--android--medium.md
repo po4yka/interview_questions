@@ -19,7 +19,7 @@ updated: 2025-10-29
 sources: []
 tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:18:34 am
-date modified: Thursday, October 30th 2025, 12:43:36 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -32,14 +32,14 @@ date modified: Thursday, October 30th 2025, 12:43:36 pm
 
 ## Ответ (RU)
 
-### Цели пайплайна
+### Цели Пайплайна
 
 * **Скорость**: проверки PR ≤10 минут на средних проектах
 * **Воспроизводимость**: Gradle wrapper, зафиксированные версии SDK/build-tools
 * **Безопасность**: OIDC для Play Console (без долгоживущих ключей), secret scanning
 * **Надёжность**: минимальная flakiness, детерминированные релизы
 
-### Основные этапы
+### Основные Этапы
 
 **1. Setup**
 ```yaml
@@ -114,7 +114,7 @@ testOptions {
 * Независимые jobs (checks/tests/build)
 * Matrix runs по API levels
 
-### Quality gates
+### Quality Gates
 
 | Gate | Threshold | Action |
 |------|-----------|--------|
@@ -123,7 +123,7 @@ testOptions {
 | Security | High/Critical CVE | Block merge |
 | Tests | ≥99% pass rate | Quarantine flaky |
 
-### Release workflow
+### Release Workflow
 
 ```yaml
 # Staged rollout
@@ -223,7 +223,7 @@ testOptions {
 * Independent jobs (checks/tests/build)
 * Matrix runs across API levels
 
-### Quality gates
+### Quality Gates
 
 | Gate | Threshold | Action |
 |------|-----------|--------|
@@ -232,7 +232,7 @@ testOptions {
 | Security | High/Critical CVE | Block merge |
 | Tests | ≥99% pass rate | Quarantine flaky |
 
-### Release workflow
+### Release Workflow
 
 ```yaml
 # Staged rollout

@@ -3,7 +3,7 @@ id: android-140
 title: "What Can Be Done Through Composer / Что можно сделать через Composer"
 aliases: ["Composer in Jetpack Compose", "Composer в Jetpack Compose"]
 topic: android
-subtopics: [ui-compose, architecture-mvvm, performance-rendering]
+subtopics: [architecture-mvvm, performance-rendering, ui-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,15 +14,11 @@ related: [c-jetpack-compose, q-compose-stability-skippability--android--hard, q-
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags:
-  - android
-  - android/ui-compose
-  - android/architecture-mvvm
-  - android/performance-rendering
-  - jetpack-compose
-  - recomposition
-  - difficulty/medium
+tags: [android, android/architecture-mvvm, android/performance-rendering, android/ui-compose, difficulty/medium, jetpack-compose, recomposition]
+date created: Saturday, November 1st 2025, 12:47:07 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
+
 # Вопрос (RU)
 
 > Что можно делать через Composer в Jetpack Compose? За что он отвечает и как правильно им пользоваться?
@@ -43,9 +39,9 @@ tags:
 4. **Обеспечивает CompositionLocal** — передаёт контекстные данные вниз по дереву
 5. **Координирует side effects** — выполняет эффекты в правильный момент жизненного цикла
 
-### Ключевые концепции
+### Ключевые Концепции
 
-#### Отслеживание состояния
+#### Отслеживание Состояния
 
 ```kotlin
 @Composable
@@ -59,7 +55,7 @@ fun Counter() {
 }
 ```
 
-#### Slot Table и Remember
+#### Slot Table И Remember
 
 Composer хранит значения между рекомпозициями в slot table:
 
@@ -73,7 +69,7 @@ fun RememberExample() {
 }
 ```
 
-#### Композиционные ключи
+#### Композиционные Ключи
 
 Composer использует ключи для идентификации элементов:
 
@@ -120,7 +116,7 @@ fun UserProfile(userId: String) {
 }
 ```
 
-### Умная рекомпозиция
+### Умная Рекомпозиция
 
 Composer автоматически определяет минимальный scope для обновления:
 
@@ -145,7 +141,7 @@ fun SmartRecomposition() {
 4. **Используйте `derivedStateOf`** — для вычисляемых значений
 5. **Не пытайтесь управлять рекомпозицией вручную**
 
-### Что НЕ делать
+### Что НЕ Делать
 
 ```kotlin
 // ❌ Глобальное состояние не отслеживается

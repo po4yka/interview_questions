@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-clean-code, q-design-patterns-types--design-patterns--medium, q-solid-principles--software-design--medium]
+related: [c-clean-code]
 created: 2025-10-12
 updated: 2025-01-25
 tags: [best-practices, clean-code, code-quality, difficulty/medium, refactoring]
 sources: [https://en.wikipedia.org/wiki/Clean_code]
 date created: Monday, October 13th 2025, 7:50:49 am
-date modified: Sunday, October 26th 2025, 10:35:07 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -523,9 +523,3 @@ fun createUser(email: Email, age: Age)
 - Basic programming concepts
 - Object-oriented programming
 
-### Related (Same Level)
-- [[q-solid-principles--software-design--medium]] - SOLID principles
-- [[q-design-patterns-types--design-patterns--medium]] - Design patterns
-
-### Advanced (Harder)
-- [[q-refactoring-techniques--software-engineering--medium]] - Refactoring techniques

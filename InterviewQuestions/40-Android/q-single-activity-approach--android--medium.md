@@ -24,8 +24,11 @@ created: 2025-10-15
 updated: 2025-10-28
 
 # Tags (EN only; no leading #)
-tags: [android, android/activity, android/ui-navigation, activity, fragment, jetpack-navigation, difficulty/medium]
+tags: [activity, android, android/activity, android/ui-navigation, difficulty/medium, fragment, jetpack-navigation]
+date created: Saturday, November 1st 2025, 12:47:04 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 > Что означает в Android-разработке подход Single Activity?
 
@@ -38,7 +41,7 @@ tags: [android, android/activity, android/ui-navigation, activity, fragment, jet
 
 **Определение**: Подход Single Activity — архитектурный паттерн, при котором всё пользовательское взаимодействие происходит в рамках одной Activity, а различные экраны реализуются через Fragment'ы.
 
-### Основные преимущества
+### Основные Преимущества
 
 **Упрощённое управление состоянием**
 - Один контекст Activity для всего приложения
@@ -55,7 +58,7 @@ tags: [android, android/activity, android/ui-navigation, activity, fragment, jet
 - Встроенная поддержка Deep Links
 - Предсказуемый BackStack
 
-### Реализация с Navigation Component
+### Реализация С Navigation Component
 
 ```kotlin
 // MainActivity.kt - единственная Activity
@@ -101,7 +104,7 @@ class ProductListFragment : Fragment() {
 </navigation>
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 **Multi-Activity (традиционный)**
 ```kotlin
@@ -123,7 +126,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Когда использовать Multi-Activity
+### Когда Использовать Multi-Activity
 
 Несмотря на преимущества Single Activity, есть случаи для нескольких Activity:
 

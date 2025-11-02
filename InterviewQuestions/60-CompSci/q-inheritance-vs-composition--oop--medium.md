@@ -3,17 +3,19 @@ id: oop-001
 title: "Inheritance Vs Composition / Наследование против композиции"
 aliases: [Inheritance Vs Composition, Наследование против композиции]
 topic: oop
-subtopics: [inheritance, composition, relationships, design-patterns]
+subtopics: [composition, design-patterns, inheritance, relationships]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-oop
-related: [c-inheritance, c-composition, q-inheritance-composition-aggregation--oop--medium, q-class-composition--oop--medium]
+related: [c-composition, c-inheritance, q-class-composition--oop--medium, q-inheritance-composition-aggregation--oop--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [oop, inheritance, composition, relationships, design-patterns, difficulty/medium]
+tags: [composition, design-patterns, difficulty/medium, inheritance, oop, relationships]
+date created: Saturday, November 1st 2025, 12:43:04 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Какие Отличия Наследования От Композиции?
@@ -876,7 +878,7 @@ class UserService(private val logger: Logger) {
 - [[q-kotlin-enum-classes--kotlin--easy]] - Enums
 
 ### Related (Medium)
-- [[q-when-inheritance-useful--oop--medium]] - Inheritance
+- [[q-when-inheritance-useful--cs--medium]] - Inheritance
 - [[q-inheritance-composition-aggregation--oop--medium]] - Inheritance
 - [[q-class-composition--oop--medium]] - Inheritance
 - [[q-java-marker-interfaces--programming-languages--medium]] - Inheritance

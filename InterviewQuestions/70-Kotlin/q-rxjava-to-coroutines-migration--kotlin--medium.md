@@ -1,7 +1,7 @@
 ---
 id: kotlin-188
 title: "Migrating from RxJava to Kotlin Coroutines / Миграция с RxJava на Kotlin корутины"
-aliases: [RxJava Migration, Coroutines Migration, Reactive Programming, RxJava to Coroutines]
+aliases: [Coroutines Migration, Reactive Programming, RxJava Migration, RxJava to Coroutines]
 topic: kotlin
 subtopics: [coroutines, migration, reactive-programming]
 question_kind: theory
@@ -10,19 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-testing-flow-operators--kotlin--hard, q-delegation-by-keyword--kotlin--medium, q-channel-flow-comparison--kotlin--medium]
+related: [q-channel-flow-comparison--kotlin--medium, q-delegation-by-keyword--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - rxjava
-  - migration
-  - refactoring
-  - reactive-programming
-  - difficulty/medium
-  - refactoring
+tags: [coroutines, difficulty/medium, kotlin, migration, reactive-programming, refactoring, rxjava]
+date created: Friday, October 31st 2025, 6:30:29 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Migrating from RxJava to Kotlin Coroutines
 
 **English** | [Русский](#russian-version)
@@ -683,7 +678,7 @@ class MessageStore {
 
 ---
 
-## combineLatest and zip
+## combineLatest and Zip
 
 ### combineLatest Migration
 
@@ -711,7 +706,7 @@ fun observeDashboard(): Flow<DashboardData> {
 }
 ```
 
-### zip Migration
+### Zip Migration
 
 ```kotlin
 // RxJava: zip
@@ -789,7 +784,7 @@ class DataStore {
 
 ## Error Handling Migration
 
-### onError to catch
+### onError to Catch
 
 ```kotlin
 // RxJava: onError operators
@@ -833,7 +828,7 @@ suspend fun loadUser(userId: String): User {
 }
 ```
 
-### retry and retryWhen
+### Retry and retryWhen
 
 ```kotlin
 // RxJava: retry
@@ -1421,8 +1416,8 @@ class UserRepository(private val api: UserApi) {
 }
 
 // Remove RxJava dependencies from build.gradle
-// implementation 'io.reactivex.rxjava3:rxjava:3.1.5' 
-// implementation 'io.reactivex.rxjava3:rxandroid:3.0.0' 
+// implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
+// implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 ```
 
 ---
@@ -1669,7 +1664,7 @@ class UserRepository { /* ... */ }
 
 <a name="russian-version"></a>
 
-# Миграция с RxJava на Kotlin корутины
+# Миграция С RxJava На Kotlin Корутины
 
 [English](#migrating-from-rxjava-to-kotlin-coroutines) | **Русский**
 
@@ -1686,9 +1681,9 @@ class UserRepository { /* ... */ }
 - Использовать возможности Kotlin
 - Улучшить производительность
 
-## Почему мигрировать
+## Почему Мигрировать
 
-### Преимущества Kotlin корутин
+### Преимущества Kotlin Корутин
 
 | Аспект | RxJava | Kotlin корутины |
 |--------|--------|-----------------|
@@ -1702,7 +1697,7 @@ class UserRepository { /* ... */ }
 | **Размер APK** | ~3 МБ (RxJava + RxAndroid) | ~100 КБ (корутины) |
 | **Поддержка Android** | Сторонняя | Официальная (Jetpack) |
 
-## Observable в Flow
+## Observable В Flow
 
 ### Холодный Observable → Flow
 
@@ -1737,9 +1732,9 @@ lifecycleScope.launch {
 }
 ```
 
-## Single в suspend функцию
+## Single В Suspend Функцию
 
-### Базовая конвертация
+### Базовая Конвертация
 
 ```kotlin
 // RxJava: Single
@@ -1765,9 +1760,9 @@ lifecycleScope.launch {
 }
 ```
 
-## Таблица сопоставления операторов
+## Таблица Сопоставления Операторов
 
-### Операторы трансформации
+### Операторы Трансформации
 
 | RxJava | Корутины Flow | Описание |
 |--------|---------------|----------|
@@ -1778,7 +1773,7 @@ lifecycleScope.launch {
 | `scan` | `scan` | Накопление элементов |
 | `buffer` | `chunked` | Буферизация элементов в списки |
 
-### Операторы фильтрации
+### Операторы Фильтрации
 
 | RxJava | Корутины Flow | Описание |
 |--------|---------------|----------|
@@ -1797,7 +1792,7 @@ lifecycleScope.launch {
 | `merge` | `merge` | Слить несколько потоков |
 | `concat` | `+ оператор` | Конкатенировать потоки |
 
-### Обработка ошибок
+### Обработка Ошибок
 
 | RxJava | Корутины Flow | Описание |
 |--------|---------------|----------|
@@ -1812,9 +1807,9 @@ lifecycleScope.launch {
 | `subscribeOn` | `flowOn` | Изменить dispatcher для upstream |
 | `observeOn` | N/A (collect в scope) | Изменить dispatcher для downstream |
 
-## Subjects в Flow
+## Subjects В Flow
 
-### PublishSubject в SharedFlow
+### PublishSubject В SharedFlow
 
 ```kotlin
 // RxJava: PublishSubject (горячий)
@@ -1846,7 +1841,7 @@ lifecycleScope.launch {
 }
 ```
 
-### BehaviorSubject в StateFlow
+### BehaviorSubject В StateFlow
 
 ```kotlin
 // RxJava: BehaviorSubject (горячий с начальным значением)
@@ -1878,9 +1873,9 @@ lifecycleScope.launch {
 }
 ```
 
-## Миграция потоков
+## Миграция Потоков
 
-### Schedulers в Dispatchers
+### Schedulers В Dispatchers
 
 ```kotlin
 // RxJava: Schedulers
@@ -1935,7 +1930,7 @@ fun produceData2(): Flow<Data> = flow {
 
 ## Взаимодействие
 
-### Использование RxJava и корутин вместе
+### Использование RxJava И Корутин Вместе
 
 ```kotlin
 // Добавить зависимость
@@ -1977,9 +1972,9 @@ fun observeUsersAsRx(): Observable<User> = rxObservable {
 }
 ```
 
-## Стратегия постепенной миграции
+## Стратегия Постепенной Миграции
 
-### Фаза 1: Только новые функции
+### Фаза 1: Только Новые Функции
 
 ```kotlin
 // Новые функции используют корутины
@@ -2000,7 +1995,7 @@ class LegacyRepository(private val api: LegacyApi) {
 }
 ```
 
-### Фаза 2: Обёртка RxJava корутинами
+### Фаза 2: Обёртка RxJava Корутинами
 
 ```kotlin
 // Обернуть существующий RxJava код suspend функциями
@@ -2018,9 +2013,9 @@ lifecycleScope.launch {
 }
 ```
 
-## Распространённые ошибки
+## Распространённые Ошибки
 
-### 1. Забывание flowOn для Flow
+### 1. Забывание flowOn Для Flow
 
 ```kotlin
 // ❌ Неправильно: Flow выполняется на dispatcher коллектора
@@ -2034,7 +2029,7 @@ fun observeData(): Flow<Data> = flow {
 }.flowOn(Dispatchers.IO)
 ```
 
-### 2. Использование runBlocking в продакшене
+### 2. Использование runBlocking В Продакшене
 
 ```kotlin
 // ❌ Неправильно: Блокирует поток
@@ -2050,7 +2045,7 @@ suspend fun loadUser(userId: String): User {
 }
 ```
 
-### 3. Необработка отмены
+### 3. Необработка Отмены
 
 ```kotlin
 // ❌ Неправильно: Не обрабатывает отмену должным образом
@@ -2070,9 +2065,9 @@ try {
 }
 ```
 
-## Лучшие практики
+## Лучшие Практики
 
-### 1. Начните с новых функций
+### 1. Начните С Новых Функций
 
 ```kotlin
 // ✓ Хорошо: Новые функции используют корутины
@@ -2083,7 +2078,7 @@ class NewRepository(private val api: NewApi) {
 }
 ```
 
-### 2. Используйте взаимодействие для постепенной миграции
+### 2. Используйте Взаимодействие Для Постепенной Миграции
 
 ```kotlin
 // ✓ Хорошо: Оберните RxJava корутинами
@@ -2096,7 +2091,7 @@ suspend fun migrateGradually() {
 }
 ```
 
-### 3. Мигрируйте тесты вместе с кодом
+### 3. Мигрируйте Тесты Вместе С Кодом
 
 ```kotlin
 // Мигрируйте тесты одновременно с реализацией
@@ -2107,7 +2102,7 @@ fun `test with coroutines`() = runTest {
 }
 ```
 
-### 4. Используйте StateFlow для управления состоянием
+### 4. Используйте StateFlow Для Управления Состоянием
 
 ```kotlin
 // ✓ Хорошо: StateFlow для состояния UI
@@ -2117,9 +2112,9 @@ class ViewModel : ViewModel() {
 }
 ```
 
-## Чеклист миграции
+## Чеклист Миграции
 
-### До миграции
+### До Миграции
 
 - [ ] Идентифицировать использование RxJava в кодовой базе
 - [ ] Приоритизировать цели миграции (высокое влияние, часто используемое)
@@ -2127,7 +2122,7 @@ class ViewModel : ViewModel() {
 - [ ] Добавить зависимости взаимодействия (kotlinx-coroutines-rx3)
 - [ ] Настроить инфраструктуру тестирования корутин
 
-### Во время миграции
+### Во Время Миграции
 
 - [ ] Мигрировать API интерфейсы в suspend функции
 - [ ] Конвертировать Singles в suspend функции
@@ -2138,7 +2133,7 @@ class ViewModel : ViewModel() {
 - [ ] Обновить обработку ошибок (onError → catch/try-catch)
 - [ ] Мигрировать тесты для использования runTest
 
-### После миграции
+### После Миграции
 
 - [ ] Удалить зависимости RxJava
 - [ ] Удалить адаптеры взаимодействия

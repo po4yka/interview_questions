@@ -3,20 +3,20 @@ id: android-103
 title: Android Jetpack Overview / Обзор Android Jetpack
 aliases: ["Android Jetpack Overview", "Обзор Android Jetpack"]
 topic: android
-subtopics: [architecture-mvvm, ui-compose, lifecycle]
+subtopics: [architecture-mvvm, lifecycle, ui-compose]
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-viewmodel, c-room, q-viewmodel-pattern--android--easy, q-room-library-definition--android--easy, q-workmanager-decision-guide--android--medium]
+related: [c-room, c-viewmodel, q-room-library-definition--android--easy, q-viewmodel-pattern--android--easy]
 sources: []
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/architecture-mvvm, android/ui-compose, android/lifecycle, jetpack, difficulty/easy]
+tags: [android/architecture-mvvm, android/lifecycle, android/ui-compose, difficulty/easy, jetpack]
 date created: Thursday, October 30th 2025, 11:26:44 am
-date modified: Thursday, October 30th 2025, 12:42:48 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -224,7 +224,7 @@ class UserViewModel @Inject constructor(
 ### Related
 - [[q-viewmodel-pattern--android--easy]] - ViewModel pattern details
 - [[q-room-library-definition--android--easy]] - Room database details
-- [[q-compose-state--android--medium]] - State management in Compose
+ - State management in Compose
 
 ### Advanced
 - [[q-workmanager-decision-guide--android--medium]] - Background work strategies

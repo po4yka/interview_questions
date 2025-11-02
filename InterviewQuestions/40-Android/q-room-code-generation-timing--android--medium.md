@@ -3,19 +3,22 @@ id: android-122
 title: "Room Code Generation Timing / Время генерации кода Room"
 aliases: ["Room Code Generation Timing", "Время генерации кода Room"]
 topic: android
-subtopics: [room, gradle]
+subtopics: [gradle, room]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-kapt-vs-ksp--android--medium, q-kapt-ksp-migration--android--medium, q-dagger-framework-overview--android--hard]
+related: [q-dagger-framework-overview--android--hard, q-kapt-ksp-migration--android--medium, q-kapt-vs-ksp--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/room, android/gradle, code-generation, compile-time, kapt, ksp, difficulty/medium]
+tags: [android/gradle, android/room, code-generation, compile-time, difficulty/medium, kapt, ksp]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 
 В какой момент генерируется код при использовании SQLite/Room?
@@ -30,7 +33,7 @@ When is code generated when using SQLite/Room?
 
 **SQLite** сам по себе не генерирует код - это runtime библиотека. Room как слой абстракции над SQLite использует annotation processing для генерации реализаций DAO и Database классов.
 
-### Процесс генерации
+### Процесс Генерации
 
 1. **Аннотированный код**
 ```kotlin
@@ -76,7 +79,7 @@ class UserDao_Impl : UserDao {
 }
 ```
 
-### kapt vs KSP
+### Kapt Vs KSP
 
 | Аспект | kapt | KSP |
 |--------|------|-----|
@@ -86,7 +89,7 @@ class UserDao_Impl : UserDao {
 
 **Рекомендация:** KSP для новых проектов.
 
-### Валидация на этапе компиляции
+### Валидация На Этапе Компиляции
 
 ```kotlin
 @Query("SELECT * FROM usres") // ❌ Ошибка: таблица не существует
@@ -153,7 +156,7 @@ class UserDao_Impl : UserDao {
 }
 ```
 
-### kapt vs KSP
+### Kapt Vs KSP
 
 | Aspect | kapt | KSP |
 |--------|------|-----|

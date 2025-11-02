@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [interfaces, functional-programming, sam, lambdas]
+subtopics: [functional-programming, interfaces, lambdas, sam]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-nothing-instances--programming-languages--easy, q-semaphore-rate-limiting--kotlin--medium, q-data-sealed-usage--programming-languages--medium]
+related: [q-data-sealed-usage--programming-languages--medium, q-nothing-instances--programming-languages--easy, q-semaphore-rate-limiting--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, sam, interfaces, functional-programming, lambdas, difficulty/medium]
+tags: [difficulty/medium, functional-programming, interfaces, kotlin, lambdas, sam]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What do you know about functional (SAM) interfaces in Kotlin?
 # Вопрос (RU)
@@ -45,7 +48,7 @@ fun interface KRunnable {
 }
 ```
 
-### SAM conversions
+### SAM Conversions
 
 For functional interfaces, you can use SAM conversions that help make your code more concise and readable by using lambda expressions.
 
@@ -91,7 +94,7 @@ fun main() {
 }
 ```
 
-### @FunctionalInterface annotation
+### @FunctionalInterface Annotation
 
 `@FunctionalInterface` Annotation:
 - This annotation is not mandatory but helps indicate that an interface is intended to be a functional interface;
@@ -151,7 +154,7 @@ fun interface KRunnable {
 }
 ```
 
-### SAM конверсии
+### SAM Конверсии
 
 Для функциональных интерфейсов вы можете использовать SAM конверсии, которые помогают сделать ваш код более кратким и читаемым, используя лямбда-выражения.
 
@@ -210,7 +213,7 @@ interface MyFunctionalInterface {
 }
 ```
 
-### Функциональные интерфейсы с методами по умолчанию
+### Функциональные Интерфейсы С Методами По Умолчанию
 
 Функциональные интерфейсы могут иметь методы по умолчанию, которые предоставляют дополнительную функциональность без нарушения правила единственного абстрактного метода:
 

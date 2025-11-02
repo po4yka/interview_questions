@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-does-jetpack-compose-work--android--medium, q-compose-side-effects-launchedeffect-disposableeffect--android--hard]
+related: [q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-how-does-jetpack-compose-work--android--medium]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-views, android/ui-widgets, gesture-detector, gestures, ui, difficulty/easy]
+tags: [android/ui-views, android/ui-widgets, difficulty/easy, gesture-detector, gestures, ui]
 date created: Monday, October 27th 2025, 3:57:45 pm
-date modified: Thursday, October 30th 2025, 3:18:05 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:18:05 pm
 
 Используйте **GestureDetector** для обработки стандартных жестов: tap, swipe, long press, double tap, fling.
 
-### Основное использование
+### Основное Использование
 
 ```kotlin
 // ✅ Правильно: использовать SimpleOnGestureListener
@@ -71,7 +71,7 @@ view.setOnTouchListener { _, event ->
 
 **SimpleOnGestureListener** — adapter класс, позволяет переопределить только нужные методы вместо реализации всего интерфейса `OnGestureListener`.
 
-### В кастомных View
+### В Кастомных View
 
 ```kotlin
 class GestureView(context: Context) : View(context) {
@@ -88,7 +88,7 @@ class GestureView(context: Context) : View(context) {
 }
 ```
 
-### Дополнительные детекторы
+### Дополнительные Детекторы
 
 - **ScaleGestureDetector** — pinch-to-zoom (два пальца)
 - **Compose gestures** — `Modifier.pointerInput { detectTapGestures() }`

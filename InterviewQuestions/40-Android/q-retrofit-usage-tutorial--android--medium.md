@@ -3,18 +3,20 @@ id: android-276
 title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
 aliases: ["Retrofit Usage Tutorial", "Retrofit Использование Tutorial"]
 topic: android
-subtopics: [networking-http, architecture-mvvm, coroutines]
+subtopics: [architecture-mvvm, coroutines, networking-http]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-data-binding--android--easy, q-flow-testing-turbine--testing--medium, q-compose-navigation-advanced--jetpack-compose--medium]
+related: [q-compose-navigation-advanced--jetpack-compose--medium, q-flow-testing-turbine--android--medium, q-what-is-data-binding--android--easy]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/networking-http, android/architecture-mvvm, android/coroutines, retrofit, networking, difficulty/medium]
+tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, retrofit]
+date created: Saturday, November 1st 2025, 12:47:02 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ How to make network requests with Retrofit?
 
 Retrofit — это type-safe HTTP клиент для Android. Основная идея: вы описываете API через интерфейс с аннотациями, а Retrofit генерирует реализацию.
 
-### Основные шаги
+### Основные Шаги
 
 **1. Добавить зависимости**
 
@@ -152,7 +154,7 @@ class UserViewModel(
 }
 ```
 
-### Особые случаи
+### Особые Случаи
 
 **Form URL Encoded (логин)**
 
@@ -198,7 +200,7 @@ suspend fun getPosts(
 ): List<Post>
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Используйте suspend функции** с корутинами вместо Call<T>
 2. **Оборачивайте в Result/Either** для обработки ошибок
@@ -410,7 +412,7 @@ suspend fun getPosts(
 - [[q-graphql-vs-rest--networking--easy]] - REST API concepts
 
 ### Related (Medium)
-- [[q-flow-testing-turbine--testing--medium]] - Testing with Flow
+- [[q-flow-testing-turbine--android--medium]] - Testing with Flow
 - [[q-http-protocols-comparison--android--medium]] - HTTP protocols
 - [[q-retrofit-path-parameter--android--medium]] - Retrofit path parameters
 - [[q-retrofit-library--android--medium]] - Retrofit library overview

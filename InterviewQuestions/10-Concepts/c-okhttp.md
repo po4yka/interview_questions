@@ -7,7 +7,9 @@ summary: Efficient HTTP client for Android and Java by Square
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, networking, okhttp, http]
+tags: [android, concept, http, networking, okhttp]
+date created: Thursday, October 30th 2025, 12:29:20 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -48,7 +50,7 @@ OkHttp - современный, эффективный HTTP-клиент для
 
 **Caching**: Built-in response cache that respects HTTP cache headers, reducing bandwidth and improving response times.
 
-## Основная концепция (RU)
+## Основная Концепция (RU)
 
 **Пулинг соединений**: OkHttp поддерживает пул соединений, которые можно переиспользовать, снижая латентность и улучшая производительность. Соединения автоматически освобождаются при простое.
 
@@ -74,7 +76,7 @@ OkHttp - современный, эффективный HTTP-клиент для
 
 **Integration with Retrofit**: Retrofit uses OkHttp as its HTTP client, benefiting from all OkHttp features.
 
-## Ключевые возможности (RU)
+## Ключевые Возможности (RU)
 
 **Паттерн Singleton**: Создайте один экземпляр `OkHttpClient` и переиспользуйте его во всем приложении для максимизации пулинга соединений и снижения расхода памяти.
 

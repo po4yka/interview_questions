@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 sources: []
 status: draft
-related: [c-compose-semantics, c-ui-testing, c-accessibility, q-compose-testing--android--medium, q-compose-semantics--android--medium]
+related: [c-accessibility, c-compose-semantics, c-ui-testing, q-compose-semantics--android--medium, q-compose-testing--android--medium]
 created: 2025-10-20
 updated: 2025-10-30
-tags: [android/testing-ui, android/ui-compose, compose-testing, accessibility, semantics, difficulty/hard]
+tags: [accessibility, android/testing-ui, android/ui-compose, compose-testing, difficulty/hard, semantics]
 moc: moc-android
 date created: Thursday, October 30th 2025, 11:56:49 am
-date modified: Thursday, October 30th 2025, 12:43:58 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -280,7 +280,7 @@ fun testAccessibility() {
 ## References
 
 - [[c-compose-semantics]] — Semantic tree fundamentals
-- [[c-ui-testing]] — UI testing principles
+- [[c-unit-testing]] — UI testing principles
 - [[c-accessibility]] — Accessibility best practices
 - [[c-testing-pyramid]] — Testing strategy overview
 - https://developer.android.com/jetpack/compose/testing
@@ -294,7 +294,6 @@ fun testAccessibility() {
 
 ### Related (Same Level)
 - [[q-compose-performance-optimization--android--hard]] — Performance testing and profiling
-- [[q-android-testing-strategies--testing--hard]] — Test isolation and architecture
 
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]] — Compiler internals and optimization

@@ -10,16 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-extension-functions-advanced--kotlin--hard, q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-equals-hashcode-purpose--programming-languages--medium]
+related: [q-kotlin-equals-hashcode-purpose--programming-languages--medium, q-kotlin-extension-functions-advanced--kotlin--hard, q-kotlin-higher-order-functions--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-classes
-  - sealed-classes
-  - difficulty/medium
+tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
+date created: Friday, October 31st 2025, 6:33:32 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-# What are data classes and sealed classes used for?
+
+# What Are Data Classes and Sealed Classes Used For?
 
 # Question (EN)
 > What are data classes and sealed classes used for in Kotlin? What are their practical applications?
@@ -409,7 +408,7 @@ fun main() {
 
 ## Ответ (RU)
 
-### Data классы — для хранения и работы с данными
+### Data Классы — Для Хранения И Работы С Данными
 
 **data class** используется для хранения и работы с данными. Удобны при:
 - **Копировании** — метод `copy()` для создания изменённых копий
@@ -500,7 +499,7 @@ println("Восстановлено: $restored")
 println("Равны: ${item == restored}")  // true
 ```
 
-### Sealed классы — для ограниченного набора подтипов
+### Sealed Классы — Для Ограниченного Набора Подтипов
 
 **sealed class** используется для ограниченного набора подтипов. Удобны при использовании `when`, так как все случаи должны быть обработаны — это повышает **безопасность** и **читаемость**.
 
@@ -592,7 +591,7 @@ fun render(state: UiState<List<String>>) {
 }
 ```
 
-### Комбинирование: API клиент
+### Комбинирование: API Клиент
 
 **Очень распространённый паттерн - data классы для данных + sealed классы для результатов:**
 
@@ -658,7 +657,7 @@ fun handleLoginResult(result: ApiResult<UserData>) {
 }
 ```
 
-### Валидация формы
+### Валидация Формы
 
 ```kotlin
 // Data класс для данных формы
@@ -719,7 +718,7 @@ fun handleValidation(result: ValidationResult) {
 }
 ```
 
-### Краткий ответ
+### Краткий Ответ
 
 **data class** — для хранения и работы с данными:
 - Автоматическое копирование (`copy()`)

@@ -10,12 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-sparsearray, q-android-memory-optimization--android--medium, q-hashmap-vs-sparsearray--android--medium]
+related: [c-sparsearray]
 created: 2025-10-05
 updated: 2025-10-28
-tags: [android/performance-memory, android/profiling, sparsearray, memory-optimization, difficulty/medium]
+tags: [android/performance-memory, android/profiling, difficulty/medium, memory-optimization, sparsearray]
 sources: []
+date created: Saturday, November 1st 2025, 1:24:28 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 > Что такое SparseArray и когда его использовать вместо HashMap?
 
@@ -141,7 +144,7 @@ sparseArray.put(key, newValue)  // May reuse the slot
 - [[q-boxing-unboxing--kotlin--easy]] - Boxing overhead
 
 ### Related (Same Level)
-- [[q-android-memory-optimization--android--medium]] - Memory optimization strategies
+- [[q-android-build-optimization--android--medium]] - Memory optimization strategies
 - [[q-hashmap-vs-sparsearray--android--medium]] - Performance comparison
 - [[q-view-holder-pattern--android--medium]] - SparseArray in ViewHolder
 

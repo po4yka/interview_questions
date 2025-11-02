@@ -1,7 +1,7 @@
 ---
 id: android-423
 title: "How To Save Scroll State When Activity Is Recreated / Как сохранить состояние скролла при пересоздании Activity"
-aliases: [Scroll State Persistence, Save RecyclerView Position, Сохранение позиции скролла, Восстановление состояния RecyclerView]
+aliases: [Save RecyclerView Position, Scroll State Persistence, Восстановление состояния RecyclerView, Сохранение позиции скролла]
 topic: android
 subtopics: [lifecycle, ui-views]
 question_kind: android
@@ -13,7 +13,9 @@ moc: moc-android
 related: [c-savedstatehandle, c-viewmodel, q-activity-lifecycle-methods--android--medium, q-diffutil-background-calculation-issues--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android, android/lifecycle, android/ui-views, state-preservation, recyclerview, scrollview, difficulty/medium]
+tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recyclerview, scrollview, state-preservation]
+date created: Saturday, November 1st 2025, 12:46:54 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +32,7 @@ tags: [android, android/lifecycle, android/ui-views, state-preservation, recycle
 
 При пересоздании Activity (rotation, process death) позиция скролла сбрасывается. Существует несколько подходов для сохранения состояния.
 
-### Подход 1: ScrollView с onSaveInstanceState
+### Подход 1: ScrollView С onSaveInstanceState
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Подход 2: RecyclerView с LayoutManager State
+### Подход 2: RecyclerView С LayoutManager State
 
 ✅ **Рекомендуемый подход** - использует встроенный механизм:
 
@@ -94,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Подход 3: SavedStateHandle в ViewModel
+### Подход 3: SavedStateHandle В ViewModel
 
 ✅ **Best Practice** - переживает process death:
 
@@ -164,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Подход | Config Changes | Process Death | Точность | Сложность |
 |--------|----------------|---------------|----------|-----------|

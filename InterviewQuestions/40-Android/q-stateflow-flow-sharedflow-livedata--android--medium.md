@@ -1,21 +1,24 @@
 ---
 id: android-484
 title: "StateFlow vs Flow vs SharedFlow vs LiveData / StateFlow против Flow, SharedFlow и LiveData"
-aliases: [StateFlow vs Flow vs SharedFlow vs LiveData, StateFlow против Flow, SharedFlow и LiveData]
+aliases: [SharedFlow и LiveData, StateFlow vs Flow vs SharedFlow vs LiveData, StateFlow против Flow]
 topic: android
 subtopics: [coroutines, flow, ui-state]
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [ru, en]
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [c-coroutines, q-flow-vs-livedata-comparison--kotlin--medium, q-testing-coroutines-flow--android--hard]
 created: 2025-10-26
 updated: 2025-10-26
-tags: [android/coroutines, android/flow, android/ui-state, state-management, difficulty/medium]
+tags: [android/coroutines, android/flow, android/ui-state, difficulty/medium, state-management]
 sources: [https://developer.android.com/kotlin/flow/stateflow-and-sharedflow, https://developer.android.com/topic/libraries/architecture/livedata]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 > Когда в Android приложении стоит выбирать StateFlow, SharedFlow, обычный Flow или LiveData для доставки и наблюдения состояния UI?
 
@@ -47,13 +50,13 @@ StateFlow и SharedFlow являются горячими потоками по�
 - Уместен, если проект на Java или базируется на XML-фрагментах без Compose, и требуется интеграция с `DataBinding`.
 - Ограничен только основным потоком и беден в API операторах по сравнению с Flow.
 
-#### Правила выбора
+#### Правила Выбора
 - Нужен последний слепок состояния + поддержка Compose → `StateFlow`.
 - Нужны множественные получатели событий или одноразовые триггеры → `SharedFlow`.
 - Данные вычисляются по требованию, каждый сбор независим → холодный `Flow`.
 - Наследие на Java/XML или требуется жизненный цикл без корутин → `LiveData`.
 
-#### Практические рекомендации
+#### Практические Рекомендации
 - Храните мутируемый поток внутри слоя (`private val _state = MutableStateFlow(...)`), снаружи отдавайте только read-only интерфейс.
 - Конвертируйте `Flow` в `StateFlow` через `stateIn`, если нужно кэшировать последний результат.
 - Для LiveData в новых слоях используйте адаптеры (`asLiveData()`) только на границе с UI, чтобы остальная часть стека оставалась на Flow.
@@ -81,13 +84,13 @@ StateFlow and SharedFlow are hot flows built on Kotlin Flow, while LiveData is a
 - Helpful when the stack is still XML/Java-based and you need tight integration with DataBinding.
 - Main-thread only and limited operator surface compared with Flow.
 
-#### Decision rules
+#### Decision Rules
 - Need the latest UI snapshot with Compose-first UI → `StateFlow`.
 - Need multi-consumer events or fire-and-forget signals → `SharedFlow`.
 - Need on-demand, independent computations → cold `Flow`.
 - Legacy Java/XML or lifecycle handling without coroutines → `LiveData`.
 
-#### Practical guidance
+#### Practical Guidance
 - Keep the mutable stream private (`private val _state = MutableStateFlow(...)`) and expose read-only types outward.
 - Convert `Flow` into `StateFlow` via `stateIn` when you must cache the latest emission.
 - If LiveData is required, adapt at the UI boundary (`asLiveData()`) so the rest of the stack remains Flow-based.

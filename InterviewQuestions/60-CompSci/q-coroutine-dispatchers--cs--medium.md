@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [c-coroutine-context, q-concurrency-fundamentals--computer-science--hard, q-coroutine-context-essence--programming-languages--medium]
+related: [c-coroutine-context]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [coroutines, difficulty/medium, dispatchers, kotlin, programming-languages, threading]
 sources: [https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html]
 date created: Friday, October 3rd 2025, 5:21:02 pm
-date modified: Sunday, October 26th 2025, 11:18:08 am
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -378,11 +378,7 @@ repeat(10) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-coroutine-context-essence--programming-languages--medium]] - CoroutineContext basics
-
-### Related (Same Level)
-- [[q-concurrency-fundamentals--computer-science--hard]] - Concurrency concepts
-- [[q-kotlin-coroutines-advanced--kotlin--hard]] - Advanced coroutines
+- CoroutineContext basics
 
 ### Advanced (Harder)
 - Custom dispatcher implementation

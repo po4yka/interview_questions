@@ -17,14 +17,17 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-datastore, c-sharedpreferences, q-datastore-migration--android--medium]
+related: [c-datastore, c-sharedpreferences]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-28
 
-tags: [android/datastore, android/performance-memory, sharedpreferences, performance, difficulty/easy]
+tags: [android/datastore, android/performance-memory, difficulty/easy, performance, sharedpreferences]
+date created: Saturday, November 1st 2025, 1:24:28 pm
+date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
+
 # Вопрос (RU)
 > В чем разница между методами commit() и apply() в SharedPreferences?
 
@@ -37,7 +40,7 @@ tags: [android/datastore, android/performance-memory, sharedpreferences, perform
 
 **Ключевая разница**: `commit()` работает синхронно и возвращает результат, `apply()` работает асинхронно в фоновом потоке.
 
-### Быстрое сравнение
+### Быстрое Сравнение
 
 | Характеристика | commit() | apply() |
 |----------------|----------|---------|
@@ -46,7 +49,7 @@ tags: [android/datastore, android/performance-memory, sharedpreferences, perform
 | Производительность | Медленнее | Быстрее |
 | Использование | Нужен результат операции | Fire-and-forget (99% случаев) |
 
-### Пример 1: commit() - синхронный
+### Пример 1: commit() - Синхронный
 
 ```kotlin
 val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -64,7 +67,7 @@ if (success) {
 }
 ```
 
-### Пример 2: apply() - асинхронный
+### Пример 2: apply() - Асинхронный
 
 ```kotlin
 // ✅ apply() возвращается немедленно
@@ -77,7 +80,7 @@ prefs.edit()
 Log.d("Prefs", "apply() вызван, запись происходит в фоне")
 ```
 
-### Пример 3: Когда использовать commit()
+### Пример 3: Когда Использовать commit()
 
 ```kotlin
 // Случай 1: Нужен результат операции
@@ -99,7 +102,7 @@ suspend fun saveInBackground() = withContext(Dispatchers.IO) {
 }
 ```
 
-### Пример 4: Когда использовать apply()
+### Пример 4: Когда Использовать apply()
 
 ```kotlin
 // ✅ Обычные настройки (99% случаев)
@@ -118,7 +121,7 @@ fun onSliderChanged(value: Int) {
 }
 ```
 
-### Типичные ошибки
+### Типичные Ошибки
 
 ```kotlin
 // ❌ НЕ ДЕЛАЙТЕ: commit() на главном потоке для некритичных данных
@@ -148,7 +151,7 @@ fun saveWithValidation(): Boolean {
 }
 ```
 
-### Современная альтернатива: DataStore
+### Современная Альтернатива: DataStore
 
 ```kotlin
 // Для нового кода используйте DataStore вместо SharedPreferences
@@ -343,5 +346,5 @@ suspend fun savePreference(value: String) {
 
 ### Advanced (Harder)
 - [[q-datastore-migration--android--medium]] - Migrating from SharedPreferences
-- [[q-strict-mode-android--android--medium]] - Detecting main thread I/O
+- [[q-launch-modes-android--android--medium]] - Detecting main thread I/O
 - [[q-performance-memory--android--medium]] - Android performance optimization

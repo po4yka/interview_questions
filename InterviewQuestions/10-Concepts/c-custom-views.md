@@ -1,10 +1,10 @@
 ---
 id: "20251025-120200"
 title: "Custom Views / Пользовательские View"
-aliases: ["Custom Views", "Custom View", "Android Custom Views", "Пользовательские View", "Кастомные View"]
+aliases: ["Android Custom Views", "Custom View", "Custom Views", "Кастомные View", "Пользовательские View"]
 summary: "Creating custom UI components in Android by extending View or ViewGroup classes to implement unique visual elements and interactions"
 topic: "android"
-subtopics: ["custom-views", "ui", "canvas"]
+subtopics: ["canvas", "custom-views", "ui"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,7 +15,9 @@ moc: "moc-android"
 related: []
 created: "2025-10-25"
 updated: "2025-10-25"
-tags: ["concept", "android", "custom-views", "ui", "canvas", "drawing", "view-lifecycle", "difficulty/medium"]
+tags: ["android", "canvas", "concept", "custom-views", "difficulty/medium", "drawing", "ui", "view-lifecycle"]
+date created: Saturday, October 25th 2025, 11:09:44 am
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Custom Views / Пользовательские View
@@ -24,7 +26,7 @@ tags: ["concept", "android", "custom-views", "ui", "canvas", "drawing", "view-li
 
 Custom Views in Android are created by extending the View or ViewGroup classes to implement unique visual elements and interactions that aren't available in standard Android UI components. This involves overriding key methods like onDraw(), onMeasure(), and onLayout() to control how the view renders, sizes itself, and positions child views. Custom views are essential for creating complex, reusable UI components with custom drawing, animations, and user interactions.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Пользовательские View в Android создаются путем расширения классов View или ViewGroup для реализации уникальных визуальных элементов и взаимодействий, которые недоступны в стандартных компонентах Android UI. Это включает переопределение ключевых методов, таких как onDraw(), onMeasure() и onLayout(), для управления тем, как view отрисовывается, определяет свой размер и позиционирует дочерние view. Пользовательские view необходимы для создания сложных, переиспользуемых UI компонентов с кастомной отрисовкой, анимациями и взаимодействием с пользователем.
 
@@ -38,7 +40,7 @@ Custom Views in Android are created by extending the View or ViewGroup classes t
 - Custom attributes defined in attrs.xml allow XML configuration
 - Hardware acceleration improves performance for most drawing operations
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - Расширяйте View для простой отрисовки или ViewGroup для контейнерных layout'ов
 - Переопределяйте onDraw() для выполнения кастомной отрисовки с помощью Canvas и Paint

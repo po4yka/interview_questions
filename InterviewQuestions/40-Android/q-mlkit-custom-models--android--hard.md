@@ -3,20 +3,20 @@ id: android-126
 title: "ML Kit Custom Models / Кастомные модели ML Kit"
 aliases: ["ML Kit Custom Models", "Кастомные модели ML Kit"]
 topic: android
-subtopics: [performance-memory, ab-testing, analytics]
+subtopics: [ab-testing, analytics, performance-memory]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy, q-performance-optimization-android--android--medium]
+related: [q-performance-optimization-android--android--medium, q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/performance-memory, android/ab-testing, android/analytics, ml-kit, tensorflow-lite, machine-learning, difficulty/hard]
+tags: [android/ab-testing, android/analytics, android/performance-memory, difficulty/hard, machine-learning, ml-kit, tensorflow-lite]
 date created: Monday, October 27th 2025, 3:39:17 pm
-date modified: Thursday, October 30th 2025, 3:13:29 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:13:29 pm
 
 ML Kit поддерживает пользовательские модели через интеграцию TensorFlow Lite, позволяя использовать специализированные модели для конкретных случаев. Это обеспечивает гибкость за пределами предобученных моделей ML Kit.
 
-### Типы моделей
+### Типы Моделей
 
 **1. Локальные модели (Bundled):**
 - Упакованы в APK, доступны офлайн
@@ -89,7 +89,7 @@ class CustomModelManager(private val context: Context) {
 }
 ```
 
-### A/B тестирование моделей
+### A/B Тестирование Моделей
 
 ```kotlin
 class ModelABTestingManager(private val context: Context) {
@@ -136,7 +136,7 @@ class ModelABTestingManager(private val context: Context) {
 }
 ```
 
-### Оптимизация моделей
+### Оптимизация Моделей
 
 **Post-training quantization (Python):**
 ```python
@@ -168,7 +168,7 @@ fun createOptimizedInterpreter(modelPath: String): Interpreter {
 }
 ```
 
-### Стратегии развёртывания
+### Стратегии Развёртывания
 
 **1. Постепенный rollout:**
 - 10% пользователей → мониторинг метрик
@@ -188,7 +188,7 @@ val conditions = DownloadConditions.Builder()
 - Использовать удалённую при доступности
 - Graceful degradation при ошибках
 
-### Метрики производительности
+### Метрики Производительности
 
 Отслеживать:
 - **Inference time** (latency): <100ms для real-time
@@ -197,7 +197,7 @@ val conditions = DownloadConditions.Builder()
 - **Memory usage**: peak memory во время inference
 - **Success rate**: процент успешных inference
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Всегда имейте локальную fallback модель**
 2. **Используйте условия загрузки (WiFi, зарядка)**

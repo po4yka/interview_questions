@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-workmanager, q-workmanager-vs-alternatives--android--medium, q-workmanager-return-result--android--medium]
+related: [c-background-tasks, c-constraints, c-workmanager]
 created: 2025-10-12
 updated: 2025-10-29
-tags: [android/background-execution, workmanager, background-processing, jetpack, difficulty/medium]
+tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]
 sources: [https://developer.android.com/topic/libraries/architecture/workmanager]
 date created: Wednesday, October 29th 2025, 1:00:28 pm
-date modified: Thursday, October 30th 2025, 3:16:48 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

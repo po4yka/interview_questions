@@ -3,7 +3,7 @@ id: android-088
 title: Canvas Optimization / Оптимизация Canvas
 aliases: ["Canvas Optimization", "Оптимизация Canvas"]
 topic: android
-subtopics: [ui-graphics, ui-views, performance-rendering]
+subtopics: [performance-rendering, ui-graphics, ui-views]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [c-custom-views, q-android-app-lag-analysis--android--medium, q-android
 sources: []
 created: 2025-10-13
 updated: 2025-10-29
-tags: [android/ui-graphics, android/ui-views, android/performance-rendering, custom-views, performance, difficulty/medium]
+tags: [android/performance-rendering, android/ui-graphics, android/ui-views, custom-views, difficulty/medium, performance]
 date created: Thursday, October 30th 2025, 11:10:52 am
-date modified: Thursday, October 30th 2025, 12:43:32 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -29,10 +29,10 @@ date modified: Thursday, October 30th 2025, 12:43:32 pm
 
 ## Ответ (RU)
 
-### Цель производительности
+### Цель Производительности
 **60 FPS = 16.67 мс/кадр**. Бюджет onDraw(): **< 5 мс** (остальное — измерение, компоновка, системные операции). Нулевые аллокации в цикле отрисовки.
 
-### 1. Паттерн без аллокаций
+### 1. Паттерн Без Аллокаций
 
 Создавайте Paint/Path/Rect/Matrix как поля класса. Переиспользуйте через `reset()`/`set()`.
 
@@ -59,7 +59,7 @@ class OptimizedView : View {
 
 **Результат**: нет GC пауз во время отрисовки.
 
-### 2. Аппаратное ускорение (GPU)
+### 2. Аппаратное Ускорение (GPU)
 
 ```kotlin
 // GPU кеширует команды отрисовки
@@ -75,7 +75,7 @@ setLayerType(LAYER_TYPE_HARDWARE, null)
 
 **Компромисс**: дополнительная память (копия текстуры в GPU); не подходит для часто меняющегося контента.
 
-### 3. Bitmap кеширование
+### 3. Bitmap Кеширование
 
 Рендерьте дорогой контент один раз, сохраните в Bitmap, переиспользуйте.
 
@@ -102,7 +102,7 @@ fun invalidateCache() {
 
 **Применение**: фоновые узоры, сложные статичные слои, шейдеры.
 
-### 4. Клиппинг видимой области
+### 4. Клиппинг Видимой Области
 
 Рисуйте только видимые элементы.
 

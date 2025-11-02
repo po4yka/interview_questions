@@ -5,7 +5,7 @@ aliases: ["Which Layout For Large List", "Какой layout для большо�
 
 # Classification
 topic: android
-subtopics: [ui-views, performance-memory]
+subtopics: [performance-memory, ui-views]
 question_kind: theory
 difficulty: easy
 
@@ -17,14 +17,16 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-recyclerview-sethasfixedsize--android--easy, q-what-do-you-know-about-modifications--android--medium, q-how-to-create-list-like-recyclerview-in-compose--android--medium]
+related: [c-adapter-pattern, c-recyclerview, c-view-recycling, c-viewholder]
 
 # Timestamps
 created: 2025-10-15
 updated: 2025-10-30
 
 # Tags (EN only; no leading #)
-tags: [android/ui-views, android/performance-memory, recyclerview, difficulty/easy]
+tags: [android/performance-memory, android/ui-views, difficulty/easy, recyclerview]
+date created: Saturday, November 1st 2025, 1:26:26 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -49,7 +51,7 @@ tags: [android/ui-views, android/performance-memory, recyclerview, difficulty/ea
 3. **Гибкие LayoutManager'ы** — вертикальные/горизонтальные списки, сетки
 4. **Встроенные анимации** — плавные изменения списка
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
@@ -92,7 +94,7 @@ GridLayoutManager(context, spanCount = 2)
 LinearLayoutManager(context, HORIZONTAL, false)
 ```
 
-### Сравнение: RecyclerView vs ListView
+### Сравнение: RecyclerView Vs ListView
 
 | Критерий | RecyclerView | ListView |
 |----------|--------------|----------|
@@ -101,7 +103,7 @@ LinearLayoutManager(context, HORIZONTAL, false)
 | Layout варианты | ✅ Списки, сетки | ❌ Только список |
 | Статус | ✅ Рекомендуется | ❌ Deprecated |
 
-### Когда НЕ использовать RecyclerView
+### Когда НЕ Использовать RecyclerView
 
 Для маленьких статических списков (<20 элементов):
 - **LinearLayout + ScrollView** — для 5-10 элементов
@@ -162,7 +164,7 @@ GridLayoutManager(context, spanCount = 2)
 LinearLayoutManager(context, HORIZONTAL, false)
 ```
 
-### Comparison: RecyclerView vs ListView
+### Comparison: RecyclerView Vs ListView
 
 | Criterion | RecyclerView | ListView |
 |-----------|--------------|----------|
@@ -199,7 +201,7 @@ For small static lists (<20 items):
 ### Prerequisites (Easier)
 
 - [[q-recyclerview-sethasfixedsize--android--easy]] — RecyclerView optimization
-- [[q-what-is-view--android--easy]] — View basics
+- [[q-what-is-intent--android--easy]] — View basics
 
 ### Related (Same Level)
 

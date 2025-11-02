@@ -3,20 +3,20 @@ id: android-450
 title: Deep Link Vs App Link / Deep Link против App Link
 aliases: ["Deep Link Vs App Link", "Deep Link против App Link"]
 topic: android
-subtopics: [ui-navigation, intents-deeplinks]
+subtopics: [intents-deeplinks, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-intent-system--android--medium, q-android-navigation-component--android--medium, q-android-webview-basics--android--easy]
+related: [c-deep-linking]
 created: 2025-10-20
 updated: 2025-10-27
-tags: [android/ui-navigation, android/intents-deeplinks, app-links, deep-linking, difficulty/medium]
+tags: [android/intents-deeplinks, android/ui-navigation, app-links, deep-linking, difficulty/medium]
 sources: [https://developer.android.com/training/app-links]
 date created: Monday, October 27th 2025, 10:26:58 pm
-date modified: Thursday, October 30th 2025, 12:47:38 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -272,19 +272,14 @@ userState?.hostToStateMap?.forEach { (domain, state) ->
 
 ## References
 
-- [[q-android-intent-system--android--medium]] - Android Intent system basics
-- [[q-android-navigation-component--android--medium]] - Jetpack Navigation integration
 - [Android App Links Documentation](https://developer.android.com/training/app-links)
 - [assetlinks.json Generator](https://developers.google.com/digital-asset-links/tools/generator)
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-android-intent-system--android--medium]] - Understanding Intent system required for link handling
-- [[q-android-webview-basics--android--easy]] - WebView integration for fallback scenarios
 
 ### Related
-- [[q-android-navigation-component--android--medium]] - Deep link integration with Navigation component
 - How to implement deferred deep linking for app installs
 - App Link verification debugging and troubleshooting
 

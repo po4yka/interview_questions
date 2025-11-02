@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fragment-vs-activity-lifecycle--android--medium, q-viewmodel-pattern--android--easy, c-lifecycle, q-configuration-changes--android--medium]
+related: [c-lifecycle]
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/activity, android/lifecycle, jetpack, difficulty/medium]
+tags: [android/activity, android/lifecycle, difficulty/medium, jetpack]
 sources: []
 date created: Wednesday, October 29th 2025, 4:18:27 pm
-date modified: Thursday, October 30th 2025, 11:12:49 am
+date modified: Saturday, November 1st 2025, 3:59:49 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 11:12:49 am
 
 Методы жизненного цикла Activity - это callback-функции, вызываемые системой при изменении состояния. Понимание жизненного цикла критично для правильного управления ресурсами и избежания утечек памяти.
 
-### Основные методы
+### Основные Методы
 
 ```kotlin
 onCreate() → onStart() → onResume() → RUNNING
@@ -48,7 +48,7 @@ onCreate() → onStart() → onResume() → RUNNING
 - `onStop()`: Activity больше не видна - освободить тяжёлые ресурсы
 - `onDestroy()`: Activity уничтожается - финальная очистка
 
-### Правила управления ресурсами
+### Правила Управления Ресурсами
 
 ```kotlin
 // ❌ ПЛОХО - Утечка ресурсов
@@ -87,7 +87,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-### Современный подход: Lifecycle Observer
+### Современный Подход: Lifecycle Observer
 
 ```kotlin
 // ✅ Используйте DefaultLifecycleObserver
@@ -108,7 +108,7 @@ class LocationObserver(
 lifecycle.addObserver(LocationObserver(locationManager))
 ```
 
-### Важные различия
+### Важные Различия
 
 **onPause() vs onStop()**:
 - `onPause()`: Activity частично видна (диалог поверх) - должен быть БЫСТРЫМ
@@ -118,7 +118,7 @@ lifecycle.addObserver(LocationObserver(locationManager))
 - `onStop()`: Activity может быть убита системой без вызова `onDestroy()`
 - `onDestroy()`: Гарантированная очистка только если вызван явно
 
-### Обработка конфигурационных изменений
+### Обработка Конфигурационных Изменений
 
 ```kotlin
 // ✅ Сохранение состояния при повороте экрана
@@ -259,14 +259,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]]
-- [[q-what-is-activity--android--easy]]
 
 ### Related (Medium)
 - [[q-fragment-vs-activity-lifecycle--android--medium]]
-- [[q-configuration-changes--android--medium]]
-- [[q-savedinstancestate--android--medium]]
 
 ### Advanced (Harder)
-- [[q-process-death-handling--android--hard]]
-- [[q-lifecycle-aware-components--android--hard]]

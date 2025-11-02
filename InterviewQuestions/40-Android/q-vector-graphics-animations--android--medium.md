@@ -3,18 +3,20 @@ id: android-432
 title: "Vector Graphics Animations / Анимации векторной графики"
 aliases: ["Vector Graphics Animations", "Анимации векторной графики"]
 topic: android
-subtopics: [ui-graphics, ui-animation, performance-rendering]
+subtopics: [performance-rendering, ui-animation, ui-graphics]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-graphics, c-animation-framework, q-canvas-custom-views--android--medium]
+related: [c-animation, c-drawable, c-vector-graphics]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-graphics, android/ui-animation, android/performance-rendering, vector-graphics, animated-vector-drawable, difficulty/medium]
+tags: [android/performance-rendering, android/ui-animation, android/ui-graphics, animated-vector-drawable, difficulty/medium, vector-graphics]
+date created: Saturday, November 1st 2025, 1:24:44 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -29,7 +31,7 @@ How do you work with vector graphics and AnimatedVectorDrawable in Android? What
 
 ## Ответ (RU)
 
-### Основные концепции
+### Основные Концепции
 
 **VectorDrawable** — это XML-представление векторной графики на основе SVG path синтаксиса. Обеспечивает независимость от разрешения экрана и минимальный размер APK без bitmap ресурсов для разных плотностей.
 
@@ -45,7 +47,7 @@ How do you work with vector graphics and AnimatedVectorDrawable in Android? What
 - Поддержка tinting и theme attributes
 - Плавные анимации без промежуточных кадров
 
-### Основные примеры
+### Основные Примеры
 
 **1. VectorDrawable с тематизацией:**
 
@@ -131,7 +133,7 @@ val path1 = "M10,10L20,20L30,10Z"
 val path2 = "M10,15L20,25L30,15Z"
 ```
 
-### Оптимизация производительности
+### Оптимизация Производительности
 
 **1. Кеширование для повторного использования:**
 
@@ -190,7 +192,7 @@ fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCo
 }
 ```
 
-### Compose интеграция
+### Compose Интеграция
 
 ```kotlin
 @Composable
@@ -219,7 +221,7 @@ fun AnimatedVectorIcon(
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Path morphing**: используйте инструменты для нормализации путей (Android Studio Vector Asset Studio, svg-path-morph)
 2. **Performance**: кешируйте inflated drawable, растеризуйте сложные векторы для RecyclerView, используйте hardware layers
@@ -227,7 +229,7 @@ fun AnimatedVectorIcon(
 4. **Animation**: длительность 200-400мс, используйте FastOutSlowInInterpolator, избегайте одновременной анимации >3 путей
 5. **Compatibility**: VectorDrawableCompat для backward compatibility, тестируйте на API 21+
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 1. **Несовместимые пути** → сломанный морфинг (нормализуйте структуру команд)
 2. **Отсутствие кеширования** → repeated inflation overhead (используйте LruCache)

@@ -1,7 +1,7 @@
 ---
 id: android-460
 title: Factory Pattern Android / Паттерн Factory в Android
-aliases: [Factory Pattern Android, Паттерн Factory в Android, Factory Method Pattern, Abstract Factory Pattern]
+aliases: [Abstract Factory Pattern, Factory Method Pattern, Factory Pattern Android, Паттерн Factory в Android]
 topic: android
 subtopics: [architecture-clean, ui-views]
 question_kind: android
@@ -11,12 +11,12 @@ language_tags: [en, ru]
 sources: [https://developer.android.com/guide/topics/ui/declaring-layout]
 status: draft
 moc: moc-android
-related: [q-android-architecture-patterns--architecture-patterns--medium, q-fragment-lifecycle--android--medium, q-view-lifecycle--android--medium]
+related: [c-factory-pattern]
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
 date created: Tuesday, October 28th 2025, 9:22:07 am
-date modified: Thursday, October 30th 2025, 12:47:44 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -116,7 +116,7 @@ class ViewHolderFactory {
 }
 ```
 
-### Преимущества Factory Pattern в Android
+### Преимущества Factory Pattern В Android
 
 - **Декларативность**: XML описывает UI, factory создает объекты
 - **Расширяемость**: легко добавлять новые типы Views/Fragments
@@ -238,12 +238,9 @@ class ViewHolderFactory {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-architecture-patterns--architecture-patterns--medium]]
 
 ### Related (Same Level)
-- [[q-fragment-lifecycle--android--medium]]
-- [[q-view-lifecycle--android--medium]]
-- [[q-singleton-pattern-android--android--medium]]
+- [[q-usecase-pattern-android--android--medium]]
 
 ### Advanced (Harder)
 - [[q-custom-view-factory--android--hard]]

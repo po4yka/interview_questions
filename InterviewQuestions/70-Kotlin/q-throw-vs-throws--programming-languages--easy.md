@@ -3,19 +3,19 @@ id: lang-035
 title: "Throw Vs Throws / Throw против Throws"
 aliases: [Throw Vs Throws, Throw против Throws]
 topic: programming-languages
-subtopics: [exception-handling, java, error-handling]
+subtopics: [error-handling, exception-handling, java]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-data-structures-algorithms--computer-science--hard, q-observer-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium]
+related: [q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [exceptions, java, kotlin, programming-languages, throw, throws, difficulty/easy]
+tags: [difficulty/easy, exceptions, java, kotlin, programming-languages, throw, throws]
 date created: Friday, October 3rd 2025, 7:03:56 pm
-date modified: Sunday, October 26th 2025, 1:39:54 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Разница Между Throw И Throws
@@ -524,6 +524,6 @@ public void initDatabase() {
 
 ## Related Questions
 
-- [[q-observer-pattern--design-patterns--medium]]
+-
 - [[q-sealed-vs-enum-classes--programming-languages--medium]]
-- [[q-data-structures-algorithms--computer-science--hard]]
+-

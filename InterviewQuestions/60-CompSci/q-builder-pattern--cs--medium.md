@@ -3,18 +3,20 @@ id: cs-015
 title: "Builder Pattern / Builder Паттерн"
 aliases: ["Builder Pattern", "Паттерн Builder"]
 topic: cs
-subtopics: [design-patterns, creational-patterns, builder]
+subtopics: [builder, creational-patterns, design-patterns]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: [q-factory-method-pattern--design-patterns--medium, q-abstract-factory-pattern--design-patterns--medium, q-prototype-pattern--design-patterns--medium]
+related: [q-factory-method-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-01-25
-tags: [builder, creational-patterns, design-patterns, gof-patterns, kotlin, difficulty/medium]
+tags: [builder, creational-patterns, design-patterns, difficulty/medium, gof-patterns, kotlin]
 sources: [https://refactoring.guru/design-patterns/builder]
+date created: Saturday, November 1st 2025, 1:24:17 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)
@@ -228,12 +230,5 @@ val user = User(
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-design-patterns-fundamentals--software-engineering--hard]] - Design patterns overview
-
 ### Related (Medium)
 - [[q-factory-method-pattern--design-patterns--medium]] - Factory Method pattern
-- [[q-abstract-factory-pattern--design-patterns--medium]] - Abstract Factory pattern
-
-### Advanced (Harder)
-- [[q-prototype-pattern--design-patterns--medium]] - Prototype pattern

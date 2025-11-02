@@ -11,22 +11,22 @@ difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [en, ru, android/activity, android/task-management, android/navigation, difficulty/medium]
+language_tags: [android/activity, android/navigation, android/task-management, difficulty/medium, en, ru]
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium, q-kapt-vs-ksp--android--medium]
+related: [q-kapt-vs-ksp--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [android/activity, android/ui-navigation, en, ru, difficulty/medium]
+tags: [android/activity, android/ui-navigation, difficulty/medium, en, ru]
 date created: Sunday, October 12th 2025, 12:27:51 pm
-date modified: Thursday, October 30th 2025, 3:12:11 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Question (EN)
@@ -48,7 +48,7 @@ There are five different launch modes you can assign to the `launchMode` attribu
 - `singleInstance`
 - `singleInstancePerTask`
 
-### standard (the default mode)
+### Standard (the Default mode)
 
 Default. The system creates a new instance of the activity in the task from which it was started and routes the intent to it. The activity can be instantiated multiple times, each instance can belong to different tasks, and one task can have multiple instances.
 
@@ -111,7 +111,7 @@ The activity can only be running as the root activity of the task, the first act
 - `singleInstance`
 - `singleInstancePerTask`
 
-### standard (режим по умолчанию)
+### Standard (режим По умолчанию)
 
 Режим по умолчанию. Система создает новый экземпляр активити в задаче, из которой она была запущена, и направляет туда интент. Активити может быть создана несколько раз, каждый экземпляр может принадлежать разным задачам, и одна задача может иметь несколько экземпляров.
 

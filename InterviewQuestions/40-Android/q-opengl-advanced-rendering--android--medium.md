@@ -3,20 +3,20 @@ id: android-383
 title: "OpenGL Advanced Rendering / Продвинутый рендеринг OpenGL"
 aliases: ["OpenGL Advanced Rendering", "Продвинутый рендеринг OpenGL"]
 topic: android
-subtopics: [ui-graphics, performance-rendering, profiling]
+subtopics: [performance-rendering, profiling, ui-graphics]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [q-custom-views-canvas--android--medium, q-vulkan-basics--android--hard]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-graphics, android/performance-rendering, android/profiling, opengl-es, 3d-graphics, shaders, rendering, difficulty/medium]
+tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, opengl-es, rendering, shaders]
 date created: Tuesday, October 28th 2025, 9:52:21 pm
-date modified: Thursday, October 30th 2025, 3:15:32 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:15:32 pm
 
 OpenGL ES — основной API Android для 3D-графики и продвинутого 2D-рендеринга. Понимание продвинутых техник критично для высокопроизводительных графических приложений.
 
-### Основные компоненты
+### Основные Компоненты
 
 **GLSurfaceView и Renderer:**
 Управление OpenGL контекстом через GLSurfaceView с кастомным Renderer.
@@ -216,7 +216,7 @@ class Framebuffer(width: Int, height: Int) {
 }
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 **Управление шейдерами:**
 - Кешируйте скомпилированные программы
@@ -243,7 +243,7 @@ class Framebuffer(width: Int, height: Int) {
 - Используйте renderbuffer для depth/stencil
 - Проверяйте completeness после создания
 
-### Распространённые ошибки
+### Распространённые Ошибки
 
 - ❌ Не проверять компиляцию шейдеров — тихие сбои
 - ❌ Забывать привязывать текстуры — чёрный экран
@@ -495,10 +495,10 @@ class Framebuffer(width: Int, height: Int) {
 ## Related Questions
 
 ### Prerequisites
-- [[q-custom-views-canvas--android--medium]] — Canvas-based 2D rendering
+- [[q-custom-view-animation--android--medium]] — Canvas-based 2D rendering
 
 ### Related
-- [[q-jank-detection-frame-metrics--performance--medium]] — Performance monitoring
+- [[q-jank-detection-frame-metrics--android--medium]] — Performance monitoring
 - [[q-vulkan-basics--android--hard]] — Next-gen graphics API
 
 ### Advanced

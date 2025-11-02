@@ -1,7 +1,7 @@
 ---
 id: android-418
 title: "In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях может понадобиться commitAllowingStateLoss"
-aliases: [commitAllowingStateLoss, commitAllowingStateLoss vs commit, Fragment state loss, commitAllowingStateLoss в Android]
+aliases: [commitAllowingStateLoss, commitAllowingStateLoss vs commit, commitAllowingStateLoss в Android, Fragment state loss]
 topic: android
 subtopics: [fragment, lifecycle]
 question_kind: android
@@ -14,9 +14,9 @@ related: [q-fragments-and-activity-relationship--android--hard, q-how-can-data-b
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/fragment, android/lifecycle, fragments, lifecycle, difficulty/hard]
+tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle]
 date created: Tuesday, October 28th 2025, 9:11:11 pm
-date modified: Thursday, October 30th 2025, 3:10:27 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +35,7 @@ date modified: Thursday, October 30th 2025, 3:10:27 pm
 
 **Когда использовать**:
 
-### 1. Критические операции
+### 1. Критические Операции
 Операции, которые должны выполниться немедленно:
 
 ```kotlin
@@ -49,7 +49,7 @@ class NotificationHandler {
 }
 ```
 
-### 2. Закрытие диалогов
+### 2. Закрытие Диалогов
 Dismiss диалогов при паузе активности:
 
 ```kotlin
@@ -60,7 +60,7 @@ override fun onPause() {
 }
 ```
 
-### 3. Фоновые процессы
+### 3. Фоновые Процессы
 Background задачи, которые обновляют UI:
 
 ```kotlin

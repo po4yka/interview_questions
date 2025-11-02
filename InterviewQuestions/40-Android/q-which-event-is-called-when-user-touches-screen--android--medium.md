@@ -3,20 +3,20 @@ id: android-155
 title: "Which Event Is Called When User Touches Screen / Какое событие вызывается когда пользователь касается экрана"
 aliases: ["Touch Events", "События касания"]
 topic: android
-subtopics: [ui-views, ui-compose]
+subtopics: [ui-compose, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-to-create-dynamic-screens-at-runtime--android--hard, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]
+related: [q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-views, android/ui-compose, touch-events, ui, difficulty/medium]
+tags: [android/ui-compose, android/ui-views, difficulty/medium, touch-events, ui]
 date created: Monday, October 27th 2025, 4:02:54 pm
-date modified: Thursday, October 30th 2025, 3:18:01 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 3:18:01 pm
 
 Когда пользователь касается экрана в Android, система вызывает цепочку методов обработки касаний. Основные события: **dispatchTouchEvent()** (распределение), **onInterceptTouchEvent()** (перехват для ViewGroup), **onTouchEvent()** (обработка), и **onClick()** (если настроен).
 
-### Поток событий
+### Поток Событий
 
 ```kotlin
 // Activity.dispatchTouchEvent()
@@ -43,7 +43,7 @@ date modified: Thursday, October 30th 2025, 3:18:01 pm
 //         → View.OnClickListener.onClick()
 ```
 
-### Основные методы
+### Основные Методы
 
 **dispatchTouchEvent()** — первый метод, распределяет событие:
 
@@ -123,7 +123,7 @@ Box(modifier = Modifier.pointerInput(Unit) {
 })
 ```
 
-### Последовательность для одиночного клика
+### Последовательность Для Одиночного Клика
 
 ```text
 1. ACTION_DOWN → dispatchTouchEvent()
@@ -134,7 +134,7 @@ Box(modifier = Modifier.pointerInput(Unit) {
 6. onClick()
 ```
 
-### Ключевые моменты
+### Ключевые Моменты
 
 - Возвращайте `true` из onTouchEvent() для потребления события
 - onClick() срабатывает только на ACTION_UP без движения

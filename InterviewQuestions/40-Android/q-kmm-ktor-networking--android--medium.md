@@ -3,7 +3,7 @@ id: android-164
 title: "KMM Ktor Networking / Сетевое взаимодействие с Ktor в KMM"
 aliases: ["KMM Ktor Networking", "Сетевое взаимодействие с Ktor в KMM"]
 topic: android
-subtopics: [networking-http, coroutines]
+subtopics: [coroutines, networking-http]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,10 +13,10 @@ moc: moc-android
 related: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/networking-http, android/coroutines, difficulty/medium, kmm, ktor, multiplatform]
+tags: [android/coroutines, android/networking-http, difficulty/medium, kmm, ktor, multiplatform]
 sources: []
 date created: Monday, October 27th 2025, 5:12:45 pm
-date modified: Thursday, October 30th 2025, 3:11:47 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

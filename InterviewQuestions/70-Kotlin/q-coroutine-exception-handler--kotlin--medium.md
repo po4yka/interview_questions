@@ -5,22 +5,16 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - exception-handling
-  - error-handling
-  - ceh
+tags: [ceh, coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
 moc: moc-kotlin
-related: [q-channels-basics-types--kotlin--medium, q-callback-to-coroutine-conversion--kotlin--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard]
-  - q-common-coroutine-mistakes--kotlin--medium
-  - q-debugging-coroutines-techniques--kotlin--medium
-  - q-suspend-cancellable-coroutine--kotlin--hard
+related: [q-callback-to-coroutine-conversion--kotlin--medium, q-channels-basics-types--kotlin--medium, q-common-coroutine-mistakes--kotlin--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
 subtopics:
-  - coroutines
-  - exception-handling
   - ceh
+  - coroutines
   - error-handling
+  - exception-handling
+date created: Saturday, November 1st 2025, 12:10:38 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Question (EN)
@@ -70,7 +64,7 @@ fun main() = runBlocking {
 3.  **runBlocking** (exceptions thrown directly)
 4.  **supervisorScope children** (need own CEH)
 
-### CEH with launch (Works)
+### CEH with Launch (Works)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -94,7 +88,7 @@ fun main() = runBlocking {
 // Program continues
 ```
 
-### CEH with async (Does NOT Work)
+### CEH with Async (Does NOT Work)
 
 ```kotlin
 fun main() = runBlocking {
@@ -290,7 +284,7 @@ fun Exception.toUserFriendlyMessage(): String {
 }
 ```
 
-### Why CEH Doesn't Catch Exceptions in async
+### Why CEH Doesn't Catch Exceptions in Async
 
 ```kotlin
 fun main() = runBlocking {
@@ -710,11 +704,11 @@ launch(handler) {
 
 
 
-### Что такое CoroutineExceptionHandler?
+### Что Такое CoroutineExceptionHandler?
 
 **CoroutineExceptionHandler** - это `CoroutineContext.Element`, который обрабатывает необработанные исключения в корутинах. Он действует как **обработчик последней инстанции** - аналогично `Thread.UncaughtExceptionHandler` для потоков.
 
-### Ключевые принципы
+### Ключевые Принципы
 
 **CEH работает ТОЛЬКО на:**
 1.  **Корневых корутинах** (прямых потомках CoroutineScope)
@@ -727,7 +721,7 @@ launch(handler) {
 3.  **runBlocking** (исключения выбрасываются напрямую)
 4.  **Потомках supervisorScope** (нужен собственный CEH)
 
-### CEH с launch (Работает)
+### CEH С Launch (Работает)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -751,7 +745,7 @@ fun main() = runBlocking {
 // Программа продолжается
 ```
 
-### CEH с async (НЕ работает)
+### CEH С Async (НЕ работает)
 
 ```kotlin
 fun main() = runBlocking {
@@ -778,7 +772,7 @@ fun main() = runBlocking {
 
 **Почему?** `async` предоставляет исключения через свой результат `Deferred`. Вы должны вызвать `await()` и обработать исключение там. CEH обходится.
 
-### Реальный пример Android ViewModel
+### Реальный Пример Android ViewModel
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -808,7 +802,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **CEH - обработчик последней инстанции** - Не замена try-catch
 2. **Работает только на корневых корутинах** - И только с launch/actor

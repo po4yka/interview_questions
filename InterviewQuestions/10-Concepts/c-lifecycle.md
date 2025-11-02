@@ -1,10 +1,10 @@
 ---
 id: "20251023-120100"
 title: "Android Lifecycle / Жизненный цикл Android"
-aliases: ["Lifecycle", "Android Lifecycle", "Жизненный цикл", "Lifecycle Components"]
+aliases: ["Android Lifecycle", "Lifecycle Components", "Lifecycle", "Жизненный цикл"]
 summary: "Framework for managing Android component states and lifecycle-aware behavior"
 topic: "android"
-subtopics: ["lifecycle", "architecture-components"]
+subtopics: ["architecture-components", "lifecycle"]
 question_kind: "theory"
 difficulty: "medium"
 original_language: "en"
@@ -15,16 +15,18 @@ moc: "moc-android"
 related: []
 created: "2025-10-23"
 updated: "2025-10-23"
-tags: ["concept", "android", "lifecycle", "architecture-components", "difficulty/medium"]
+tags: ["android", "architecture-components", "concept", "difficulty/medium", "lifecycle"]
+date created: Thursday, October 23rd 2025, 1:45:31 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
-# Android Lifecycle / Жизненный цикл Android
+# Android Lifecycle / Жизненный Цикл Android
 
 ## Summary (EN)
 
 Android Lifecycle refers to the series of states that Android components (Activity, Fragment, Service) go through from creation to destruction. The Lifecycle Architecture Component provides classes and interfaces that help build lifecycle-aware components, which automatically adjust their behavior based on the current lifecycle state, preventing memory leaks and crashes.
 
-## Краткое описание (RU)
+## Краткое Описание (RU)
 
 Жизненный цикл Android — это серия состояний, через которые проходят компоненты Android (Activity, Fragment, Service) от создания до уничтожения. Архитектурный компонент Lifecycle предоставляет классы и интерфейсы для создания компонентов, учитывающих жизненный цикл, которые автоматически адаптируют свое поведение в зависимости от текущего состояния, предотвращая утечки памяти и сбои.
 
@@ -36,7 +38,7 @@ Android Lifecycle refers to the series of states that Android components (Activi
 - **LifecycleObserver**: Interface for components that observe lifecycle changes
 - **Lifecycle-aware components**: Automatically respond to lifecycle changes
 
-## Ключевые моменты (RU)
+## Ключевые Моменты (RU)
 
 - **Состояния жизненного цикла**: CREATED, STARTED, RESUMED, DESTROYED
 - **События жизненного цикла**: ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY

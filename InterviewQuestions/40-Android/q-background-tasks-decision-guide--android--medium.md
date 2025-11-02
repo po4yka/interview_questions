@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-what-is-workmanager--android--medium, q-foreground-service-types--android--medium, q-async-operations-android--android--medium, c-coroutines, c-service]
+related: [c-coroutines, c-service, q-async-operations-android--android--medium, q-foreground-service-types--android--medium, q-what-is-workmanager--android--medium]
 sources: []
 created: 2025-10-05
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:26 am
-date modified: Thursday, October 30th 2025, 12:43:22 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

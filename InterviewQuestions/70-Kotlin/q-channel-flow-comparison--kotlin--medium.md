@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, channels, flow, hot-cold-streams, backpressure]
+subtopics: [backpressure, channels, coroutines, flow, hot-cold-streams]
 question_kind: theory
 difficulty: medium
 
@@ -24,8 +24,11 @@ related: [q-channels-basics-types--kotlin--medium, q-kotlin-flow-basics--kotlin-
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, coroutines, channels, flow, hot-stream, cold-stream, backpressure, difficulty/medium]
+tags: [backpressure, channels, cold-stream, coroutines, difficulty/medium, flow, hot-stream, kotlin]
+date created: Tuesday, October 14th 2025, 8:56:38 pm
+date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+
 # Question (EN)
 > What's the difference between Channel and Flow? Explain hot vs cold streams, backpressure handling, and when to choose each approach.
 
@@ -38,7 +41,7 @@ tags: [kotlin, coroutines, channels, flow, hot-stream, cold-stream, backpressure
 
 Channel and Flow are both mechanisms for handling streams of values in Kotlin coroutines, but they have fundamentally different characteristics and use cases.
 
-### Core Difference: Hot vs Cold
+### Core Difference: Hot Vs Cold
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -215,20 +218,20 @@ class ChannelVsFlowComparison {
 /**
  * CHANNEL vs FLOW Detailed Comparison
  *
- * 
- *  Feature              Channel              Flow                
- * 
- *  Stream Type          Hot                  Cold                
- *  Activation           Immediate            On collection       
- *  Collectors           Single (compete)     Multiple (all)      
- *  Value Sharing        One-to-one           One-to-many         
- *  Buffering            Explicit             Implicit            
- *  Backpressure         Manual               Automatic           
- *  Exception Handling   Try-catch            Operators           
- *  Cancellation         Manual               Automatic           
- *  Lifecycle            Independent          Tied to collector   
- *  Use Case             Communication        Reactive streams    
- * 
+ *
+ *  Feature              Channel              Flow
+ *
+ *  Stream Type          Hot                  Cold
+ *  Activation           Immediate            On collection
+ *  Collectors           Single (compete)     Multiple (all)
+ *  Value Sharing        One-to-one           One-to-many
+ *  Buffering            Explicit             Implicit
+ *  Backpressure         Manual               Automatic
+ *  Exception Handling   Try-catch            Operators
+ *  Cancellation         Manual               Automatic
+ *  Lifecycle            Independent          Tied to collector
+ *  Use Case             Communication        Reactive streams
+ *
  */
 
 // Practical demonstration
@@ -696,7 +699,7 @@ class Patterns {
 
 Channel и Flow - это механизмы для обработки потоков значений в корутинах Kotlin, но они имеют фундаментально разные характеристики.
 
-### Основное различие: Горячие и холодные потоки
+### Основное Различие: Горячие И Холодные Потоки
 
 **Channel**: Горячий поток
 - Производит значения независимо от потребителей
@@ -708,7 +711,7 @@ Channel и Flow - это механизмы для обработки поток
 - Каждый подписчик получает все значения
 - Подходит для реактивных потоков данных
 
-### Ключевые различия
+### Ключевые Различия
 
 ```kotlin
 // CHANNEL: Один потребитель, значения распределяются
@@ -724,7 +727,7 @@ launch { flow.collect { println("F2: $it") } }
 // Каждый подписчик получает все значения
 ```
 
-### Когда использовать
+### Когда Использовать
 
 **Channel**:
 - Паттерн производитель-потребитель

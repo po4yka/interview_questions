@@ -16,7 +16,7 @@ updated: 2025-10-28
 sources: [https://developer.android.com/topic/security/data]
 tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore]
 date created: Tuesday, October 28th 2025, 9:23:47 am
-date modified: Thursday, October 30th 2025, 12:47:43 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 12:47:43 pm
 
 EncryptedFile API из библиотеки Security Crypto обеспечивает прозрачное шифрование файлов с автоматическим управлением ключами через Android Keystore. Использует AES-256-GCM с HKDF для деривации ключей.
 
-### Базовая реализация
+### Базовая Реализация
 
 ```kotlin
 class EncryptedFileManager(private val context: Context) {
@@ -66,7 +66,7 @@ class EncryptedFileManager(private val context: Context) {
 }
 ```
 
-### Streaming для больших файлов
+### Streaming Для Больших Файлов
 
 ```kotlin
 // ✅ Правильно: 8KB буфер оптимален для большинства случаев
@@ -86,7 +86,7 @@ fun copyWrong(source: InputStream, fileName: String) {
 }
 ```
 
-### Ключевые концепции
+### Ключевые Концепции
 
 **AES-256-GCM:**
 - Authenticated encryption: одновременно шифрует и проверяет целостность
@@ -103,7 +103,7 @@ fun copyWrong(source: InputStream, fileName: String) {
 - Ключи никогда не экспортируются в память приложения
 - Поддержка биометрической аутентификации
 
-### Best practices
+### Best Practices
 
 **Управление ключами:**
 - Один MasterKey на приложение
@@ -126,7 +126,7 @@ fun copyWrong(source: InputStream, fileName: String) {
 
 EncryptedFile API from Security Crypto library provides transparent file encryption with automatic key management via Android Keystore. Uses AES-256-GCM with HKDF for key derivation.
 
-### Basic implementation
+### Basic Implementation
 
 ```kotlin
 class EncryptedFileManager(private val context: Context) {
@@ -161,7 +161,7 @@ class EncryptedFileManager(private val context: Context) {
 }
 ```
 
-### Streaming for large files
+### Streaming for Large Files
 
 ```kotlin
 // ✅ Correct: 8KB buffer optimal for most cases
@@ -181,7 +181,7 @@ fun copyWrong(source: InputStream, fileName: String) {
 }
 ```
 
-### Key concepts
+### Key Concepts
 
 **AES-256-GCM:**
 - Authenticated encryption: encrypts and verifies integrity simultaneously
@@ -198,7 +198,7 @@ fun copyWrong(source: InputStream, fileName: String) {
 - Keys never exported to app memory
 - Biometric authentication support
 
-### Best practices
+### Best Practices
 
 **Key management:**
 - Single MasterKey per application

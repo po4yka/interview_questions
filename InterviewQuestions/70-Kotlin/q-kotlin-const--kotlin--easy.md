@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [const, compile-time-constants, properties]
+subtopics: [compile-time-constants, const, properties]
 question_kind: theory
 difficulty: easy
 
@@ -18,14 +18,17 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-structured-concurrency-kotlin--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium, q-kotlin-java-primitives--programming-languages--medium]
+related: [q-kotlin-java-primitives--programming-languages--medium, q-structured-concurrency-kotlin--kotlin--medium, q-visibility-modifiers-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, const, compile-time-constants, properties, difficulty/easy]
+tags: [compile-time-constants, const, difficulty/easy, kotlin, properties]
+date created: Sunday, October 12th 2025, 12:27:47 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What is the `const` keyword in Kotlin?
 # Вопрос (RU)
@@ -37,7 +40,7 @@ tags: [kotlin, const, compile-time-constants, properties, difficulty/easy]
 
 If the value of a read-only property is known at the compile time, mark it as a **compile time constant** using the `const` modifier. Such properties need to fulfil the following requirements:
 
-### Requirements for const
+### Requirements for Const
 
 1. **Top-level, or member of an `object declaration` or a `companion object`** - The constant must be declared at the top level of a file, inside an object, or inside a companion object
 2. **Initialized with a value of type `String` or a primitive type** - Can only be String or primitive types (Int, Long, Float, Double, Boolean, Char, Byte, Short)
@@ -65,7 +68,7 @@ object AppConstants {
 }
 ```
 
-### const val vs val
+### Const Val Vs Val
 
 The main difference between `const val` and `val`:
 
@@ -84,14 +87,14 @@ class Example {
 }
 ```
 
-### When to use const
+### When to Use Const
 
 - **Configuration values** that never change (API endpoints, timeouts, etc.)
 - **Magic numbers** that need meaningful names
 - **String constants** used throughout the application
 - When you want the **best performance** - values are inlined at compile time
 
-### Performance benefit
+### Performance Benefit
 
 ```kotlin
 const val MAX_SIZE = 1000
@@ -112,7 +115,7 @@ fun checkSize(size: Int) {
 
 Если значение свойства только для чтения известно во время компиляции, пометьте его как **константу времени компиляции**, используя модификатор `const`. Такие свойства должны соответствовать следующим требованиям:
 
-### Требования к const
+### Требования К Const
 
 1. **Верхнего уровня, или член `object declaration` или `companion object`** - Константа должна быть объявлена на верхнем уровне файла, внутри object или внутри companion object
 2. **Инициализирована значением типа `String` или примитивного типа** - Может быть только String или примитивные типы (Int, Long, Float, Double, Boolean, Char, Byte, Short)
@@ -140,7 +143,7 @@ object AppConstants {
 }
 ```
 
-### const val vs val
+### Const Val Vs Val
 
 Основное различие между `const val` и `val`:
 
@@ -159,14 +162,14 @@ class Example {
 }
 ```
 
-### Когда использовать const
+### Когда Использовать Const
 
 - **Значения конфигурации**, которые никогда не меняются (API endpoints, таймауты и т.д.)
 - **Магические числа**, которым нужны осмысленные имена
 - **Строковые константы**, используемые во всем приложении
 - Когда нужна **лучшая производительность** - значения встраиваются во время компиляции
 
-### Преимущество производительности
+### Преимущество Производительности
 
 ```kotlin
 const val MAX_SIZE = 1000

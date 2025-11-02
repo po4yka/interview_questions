@@ -3,21 +3,22 @@ id: cs-011
 title: "Kotlin Data Sealed Classes Combined"
 aliases: []
 topic: computer-science
-subtopics: [operators, type-system, class-features]
+subtopics: [class-features, operators, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-stateflow-sharedflow-differences--kotlin--medium, q-channels-basics-types--kotlin--medium, q-kotlin-native--kotlin--hard]
+related: [q-channels-basics-types--kotlin--medium, q-kotlin-native--kotlin--hard, q-stateflow-sharedflow-differences--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - 
-  - difficulty/medium
+tags: [difficulty/medium]
+date created: Sunday, October 12th 2025, 12:27:48 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
-# Расскажи data классы и sealed классы
+
+# Расскажи Data Классы И Sealed Классы
 
 # Question (EN)
 > Tell me about data classes and sealed classes
@@ -78,7 +79,7 @@ fun handleResult(result: Result<String>) = when (result) {
 
 ## Ответ (RU)
 
-### Data классы
+### Data Классы
 
 Data классы предназначены для **хранения данных** и автоматически генерируют полезные методы:
 - `equals()` - равенство на основе значений
@@ -93,7 +94,7 @@ val user1 = User("John", 30)
 val user2 = user1.copy(age = 31)
 ```
 
-### Sealed классы
+### Sealed Классы
 
 Sealed классы представляют **ограниченные иерархии наследования**, где все возможные подклассы известны во время компиляции:
 
@@ -105,7 +106,7 @@ sealed class Result<out T> {
 }
 ```
 
-### Комбинация обоих
+### Комбинация Обоих
 
 Вместе они создают **типобезопасные и легко управляемые структуры данных**, особенно для выражений `when`:
 

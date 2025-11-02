@@ -26,9 +26,9 @@ related: [app-startup-optimization, build-optimization-gradle]
 created: 2025-10-11
 updated: 2025-10-31
 
-tags: [android/gradle, android/performance-startup, kapt, ksp, annotation-processing, difficulty/medium, en, ru]
+tags: [android/gradle, android/performance-startup, annotation-processing, difficulty/medium, en, kapt, ksp, ru]
 date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Saturday, October 25th 2025, 4:08:04 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Question (EN)

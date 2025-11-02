@@ -3,7 +3,7 @@ id: android-310
 title: Baseline Profiles Android / Базовые профили Android
 aliases: ["Baseline Profiles Android", "Базовые профили Android"]
 topic: android
-subtopics: [performance-startup, gradle, profiling]
+subtopics: [gradle, performance-startup, profiling]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -12,15 +12,12 @@ status: draft
 moc: moc-android
 related:
   - c-jit-aot-compilation
-  - q-android-build-optimization--android--medium
-  - q-app-startup-optimization--android--medium
-  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/performance-startup, android/gradle, android/profiling, performance, aot, difficulty/medium]
+tags: [android/gradle, android/performance-startup, android/profiling, aot, difficulty/medium, performance]
 date created: Thursday, October 30th 2025, 11:50:58 am
-date modified: Thursday, October 30th 2025, 12:43:24 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -241,9 +238,9 @@ when {
 
 ### Related (Same Level)
 - [[q-android-performance-measurement-tools--android--medium]] — Profilers and measurement tools
-- [[q-r8-proguard-optimization--android--medium]] — Code shrinking and optimization
+ — Code shrinking and optimization
 - [[q-app-startup-library--android--medium]] — Androidx Startup library for initialization
 
 ### Advanced (Harder)
-- [[q-android-runtime-art--android--hard]] — Deep dive into ART internals
-- [[q-dex-optimization-strategies--android--hard]] — Advanced DEX optimization techniques
+ — Deep dive into ART internals
+ — Advanced DEX optimization techniques

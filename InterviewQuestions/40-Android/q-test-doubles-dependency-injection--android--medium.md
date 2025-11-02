@@ -3,7 +3,7 @@ id: android-128
 title: "Test Doubles Dependency Injection / Тестовые двойники Dependency Injection"
 aliases: [Test Doubles, Тестовые двойники]
 topic: android
-subtopics: [testing-unit, di-hilt]
+subtopics: [di-hilt, testing-unit]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -13,7 +13,9 @@ moc: moc-android
 related: [c-dependency-injection, c-testing, q-what-is-hilt--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/testing-unit, android/di-hilt, hilt, dependency-injection, test-doubles, difficulty/medium]
+tags: [android/di-hilt, android/testing-unit, dependency-injection, difficulty/medium, hilt, test-doubles]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Test Doubles with Hilt
@@ -302,7 +304,7 @@ class MockTest {
 Hilt предоставляет мощные возможности для тестирования с dependency injection, позволяя легко заменять production зависимости на test doubles (mock'и, fake'и, stub'ы).
 
 
-### @TestInstallIn для замены модулей
+### @TestInstallIn Для Замены Модулей
 
 Позволяет заменить production модули test модулями глобально.
 
@@ -312,7 +314,7 @@ Fake - это рабочая реализация с упрощенным пов
 
 [Полные примеры приведены в английском разделе]
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Предпочитайте fakes вместо mocks** для сложных взаимодействий
 2. **Используйте @TestInstallIn** для глобальной замены модулей

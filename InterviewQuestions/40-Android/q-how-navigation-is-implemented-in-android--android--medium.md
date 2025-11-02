@@ -1,9 +1,9 @@
 ---
 id: android-282
 title: "How Navigation Is Implemented In Android / Как реализована навигация в Android"
-aliases: ["How Navigation Is Implemented In Android", "Как реализована навигация в Android", "Navigation Implementation", "Реализация навигации"]
+aliases: ["How Navigation Is Implemented In Android", "Navigation Implementation", "Как реализована навигация в Android", "Реализация навигации"]
 topic: android
-subtopics: [ui-navigation, activity, fragment]
+subtopics: [activity, fragment, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [q-activity-navigation-how-it-works--android--medium, q-compose-navigat
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/ui-navigation, android/activity, android/fragment, difficulty/medium, navigation, ui]
+tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation, ui]
 date created: Tuesday, October 28th 2025, 9:35:54 am
-date modified: Thursday, October 30th 2025, 12:48:19 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ How is navigation implemented in Android?
 
 Навигация в Android реализуется на двух уровнях: **системном** (между приложениями) и **уровне приложения** (внутри приложения).
 
-### Системная навигация
+### Системная Навигация
 
 #### Жесты (Android 10+)
 
@@ -61,7 +61,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 Три экранные кнопки: Назад, Домой, Недавние приложения.
 
-### Навигация в приложении
+### Навигация В Приложении
 
 #### 1. Activity Navigation
 
@@ -90,7 +90,7 @@ supportFragmentManager.beginTransaction()
 findNavController().navigate(R.id.action_home_to_detail)
 ```
 
-#### 3. Навигационные паттерны
+#### 3. Навигационные Паттерны
 
 **Bottom Navigation** — для 3-5 главных разделов:
 

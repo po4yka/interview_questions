@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-accessibility-compose--android--medium, q-accessibility-talkback--android--medium, q-cicd-automated-testing--android--medium]
+related: [q-accessibility-compose--android--medium, q-accessibility-talkback--android--medium]
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/testing-ui, android/ui-accessibility, testing, a11y, difficulty/medium]
+tags: [a11y, android/testing-ui, android/ui-accessibility, difficulty/medium, testing]
 sources: []
 date created: Wednesday, October 29th 2025, 4:18:42 pm
-date modified: Thursday, October 30th 2025, 11:12:48 am
+date modified: Saturday, November 1st 2025, 3:59:45 pm
 ---
 
 # Вопрос (RU)
@@ -246,6 +246,4 @@ Text(
 - [[q-compose-testing--android--medium]] - Compose testing patterns
 
 ### Advanced (Harder)
-- [[q-testing-coroutines-flow--android--hard]] - Testing async state updates
-- [[q-cicd-automated-testing--android--hard]] - Advanced CI/CD strategies
 

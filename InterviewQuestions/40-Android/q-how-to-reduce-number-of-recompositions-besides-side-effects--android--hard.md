@@ -1,22 +1,22 @@
 ---
 id: android-281
 title: "How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
-aliases: ["Reduce Recompositions", "Уменьшить рекомпозиции", "Compose Performance", "Производительность Compose"]
+aliases: ["Compose Performance", "Reduce Recompositions", "Производительность Compose", "Уменьшить рекомпозиции"]
 topic: android
-subtopics: [ui-compose, performance-rendering]
+subtopics: [performance-rendering, ui-compose]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium, q-compose-remember-derived-state--android--medium]
+related: [q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android, android/ui-compose, android/performance-rendering, compose, recomposition, difficulty/hard]
+tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/hard, recomposition]
 date created: Thursday, October 30th 2025, 12:57:11 pm
-date modified: Thursday, October 30th 2025, 2:17:18 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

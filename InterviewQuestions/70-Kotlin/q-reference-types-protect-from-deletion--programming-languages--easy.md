@@ -3,19 +3,19 @@ id: lang-052
 title: "Reference Types Protect From Deletion / Типы ссылок защищают от удаления"
 aliases: [Reference Types Protect From Deletion, Типы ссылок защищают от удаления]
 topic: programming-languages
-subtopics: [memory-management, garbage-collection, jvm]
+subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-programming-languages
-related: [q-detect-unused-object--programming-languages--easy, q-java-marker-interfaces--programming-languages--medium, q-xml-acronym--programming-languages--easy]
+related: [q-detect-unused-object--programming-languages--easy, q-java-marker-interfaces--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [garbage-collection, jvm, kotlin, memory-management, phantom-reference, programming-languages, references, soft-reference, strong-reference, weak-reference, difficulty/easy]
+tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, phantom-reference, programming-languages, references, soft-reference, strong-reference, weak-reference]
 date created: Saturday, October 4th 2025, 1:22:21 pm
-date modified: Sunday, October 26th 2025, 1:37:20 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Все Ли Виды Ссылок Защищают Объект От Удаления?
@@ -160,4 +160,4 @@ fun example() {
 
 - [[q-detect-unused-object--programming-languages--easy]]
 - [[q-java-marker-interfaces--programming-languages--medium]]
-- [[q-xml-acronym--programming-languages--easy]]
+-

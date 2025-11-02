@@ -3,17 +3,19 @@ id: android-087
 title: "Test Coverage Quality Metrics / Метрики покрытия и качества тестов"
 aliases: [Test Coverage Quality Metrics, Метрики покрытия и качества тестов]
 topic: android
-subtopics: [testing-unit, testing-instrumented]
+subtopics: [testing-instrumented, testing-unit]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-testing, c-junit, q-what-is-diffutil-for--android--medium]
+related: [c-junit, c-testing, q-what-is-diffutil-for--android--medium]
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/testing-unit, android/testing-instrumented, coverage, jacoco, metrics, difficulty/medium]
+tags: [android/testing-instrumented, android/testing-unit, coverage, difficulty/medium, jacoco, metrics]
+date created: Saturday, November 1st 2025, 12:47:05 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Test Coverage and Quality Metrics
@@ -183,7 +185,7 @@ open app/build/reports/jacoco/jacocoTestReport/html/index.html
 ```
 Package: com.example.data
  Class: UserRepository (85% coverage)
-   getUser() - 100% 
+   getUser() - 100%
    updateUser() - 90%  (missing error branch)
    deleteUser() - 0%  (not tested)
 ```
@@ -246,7 +248,7 @@ val coverageTargets = mapOf(
 )
 ```
 
-### Quality vs Coverage Balance
+### Quality Vs Coverage Balance
 
 **High coverage doesn't mean high quality**:
 
@@ -398,7 +400,7 @@ class CoverageReporter {
 
 Метрики покрытия тестами помогают идентифицировать непротестированный код, но высокое покрытие не гарантирует качество.
 
-### Типы покрытия
+### Типы Покрытия
 
 - **Line Coverage**: процент выполненных строк
 - **Branch Coverage**: процент выполненных ветвей
@@ -407,7 +409,7 @@ class CoverageReporter {
 
 [Полные примеры настройки JaCoCo, анализа отчетов и CI/CD интеграции приведены в английском разделе]
 
-### Лучшие практики
+### Лучшие Практики
 
 1. **Устанавливайте реалистичные цели покрытия** (70-85%)
 2. **Фокусируйтесь на критичных путях**

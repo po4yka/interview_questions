@@ -4,7 +4,9 @@ title: Interview Questions Vault — Start Here
 kind: moc
 created: 2025-10-06
 updated: 2025-10-06
-tags: [moc, index, start-here]
+tags: [index, moc, start-here]
+date created: Saturday, October 18th 2025, 3:06:01 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Interview Questions Vault — Start Here
@@ -13,7 +15,7 @@ Welcome to your comprehensive interview questions knowledge base! This vault con
 
 ---
 
-##  Browse by Topic
+## Browse by Topic
 
 ### Primary Topics
 
@@ -28,7 +30,7 @@ Welcome to your comprehensive interview questions knowledge base! This vault con
 
 ---
 
-##  Vault Statistics
+## Vault Statistics
 
 ### Total Questions
 
@@ -57,7 +59,7 @@ SORT length(rows) DESC
 
 ---
 
-##  Quick Access
+## Quick Access
 
 ### Recently Added Questions (Last 10)
 
@@ -99,7 +101,7 @@ LIMIT 20
 
 ---
 
-##  Study Paths
+## Study Paths
 
 ### Junior Developer Path
 
@@ -136,7 +138,7 @@ LIMIT 20
 
 ---
 
-##  Search & Filter
+## Search & Filter
 
 ### By Language Coverage
 
@@ -179,7 +181,7 @@ SORT difficulty ASC
 
 ---
 
-##  Templates
+## Templates
 
 Create new content using these templates:
 
@@ -191,7 +193,7 @@ Create new content using these templates:
 
 ---
 
-##  Documentation
+## Documentation
 
 - [[00-Administration/TAXONOMY]] - Topic and subtopic taxonomy
 - [[00-Administration/FILE-NAMING-RULES]] - File naming conventions
@@ -199,7 +201,7 @@ Create new content using these templates:
 
 ---
 
-##  Popular Tags
+## Popular Tags
 
 ### Most Used Tags
 
@@ -217,7 +219,7 @@ LIMIT 20
 
 ---
 
-##  Featured Topics
+## Featured Topics
 
 ### Android Jetpack Compose
 
@@ -251,7 +253,7 @@ LIMIT 10
 
 ---
 
-##  Quick Links
+## Quick Links
 
 - [[Homepage]] - Dashboard with analytics
 - **MOCs**: [[moc-android]] • [[moc-kotlin]] • [[moc-algorithms]] • [[moc-architecture-patterns]]

@@ -1,7 +1,7 @@
 ---
 id: android-238
 title: "Privacy Sandbox Attribution / Attribution Reporting API в Privacy Sandbox"
-aliases: ["Privacy Sandbox Attribution", "Attribution Reporting API", "Attribution Reporting API в Privacy Sandbox"]
+aliases: ["Attribution Reporting API в Privacy Sandbox", "Attribution Reporting API", "Privacy Sandbox Attribution"]
 topic: android
 subtopics: [privacy-sdks]
 question_kind: android
@@ -10,11 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-privacy-sandbox, q-privacy-sandbox-topics--android--medium, q-privacy-sandbox-fledge--android--hard]
+related: [c-privacy-sandbox, q-privacy-sandbox-topics-api--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/privacy-sdks, privacy-sandbox, attribution-reporting, privacy, advertising, difficulty/medium]
+tags: [advertising, android/privacy-sdks, attribution-reporting, difficulty/medium, privacy, privacy-sandbox]
+date created: Saturday, November 1st 2025, 1:03:50 pm
+date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -49,7 +51,7 @@ Attribution Reporting API обеспечивает измерение конве
 - Отчёты отправляются на reporting endpoint с задержкой
 - Rate limits предотвращают злоупотребления
 
-### Регистрация Source и Trigger
+### Регистрация Source И Trigger
 
 ```kotlin
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -492,7 +494,7 @@ class ConversionTracker(private val prefs: SharedPreferences) {
 
 ### Related
 - [[q-privacy-sandbox-fledge--android--hard]] - FLEDGE API for remarketing
-- [[q-privacy-sandbox-sdk-runtime--android--medium]] - SDK Runtime isolation
+- [[q-privacy-sandbox-sdk-runtime--android--hard]] - SDK Runtime isolation
 
 ### Advanced
 - [[q-implementing-aggregation-service--backend--hard]] - Backend aggregation service

@@ -1,13 +1,15 @@
 ---
 id: ivc-20251030-140000
 title: Room Database / Room Database
-aliases: [Room, Room Database, Android Room, Room Persistence]
+aliases: [Android Room, Room, Room Database, Room Persistence]
 kind: concept
 summary: SQLite abstraction layer providing compile-time verification and easier database access
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, room, database, persistence, sqlite]
+tags: [android, concept, database, persistence, room, sqlite]
+date created: Thursday, October 30th 2025, 12:30:16 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -84,7 +86,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-## Основные компоненты (RU)
+## Основные Компоненты (RU)
 
 ### Entity
 Представляет таблицу БД. Каждый экземпляр — это строка.
@@ -109,7 +111,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 **Transaction support**: `@Transaction` annotation for atomic operations.
 
-## Ключевые преимущества (RU)
+## Ключевые Преимущества (RU)
 
 **Проверка на этапе компиляции**: SQL-запросы проверяются при компиляции, предотвращая runtime-ошибки из-за опечаток.
 
@@ -161,12 +163,12 @@ class Converters {
 abstract class AppDatabase : RoomDatabase()
 ```
 
-## Миграции и конвертеры типов (RU)
+## Миграции И Конвертеры Типов (RU)
 
 ### Миграции
 Обрабатывают изменения схемы между версиями БД.
 
-### Конвертеры типов
+### Конвертеры Типов
 Хранят кастомные типы (Date, enum, списки).
 
 ---

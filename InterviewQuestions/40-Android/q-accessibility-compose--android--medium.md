@@ -10,15 +10,15 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-accessibility, c-jetpack-compose, q-accessibility-talkback--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
+related: [c-accessibility, c-jetpack-compose, q-accessibility-testing--android--medium]
 created: 2025-10-11
 updated: 2025-10-29
 sources:
-  - https://developer.android.com/jetpack/compose/accessibility
   - https://developer.android.com/guide/topics/ui/accessibility
-tags: [android/ui-accessibility, android/ui-compose, accessibility, compose, talkback, semantics, difficulty/medium]
+  - https://developer.android.com/jetpack/compose/accessibility
+tags: [accessibility, android/ui-accessibility, android/ui-compose, compose, difficulty/medium, semantics, talkback]
 date created: Wednesday, October 29th 2025, 4:19:08 pm
-date modified: Thursday, October 30th 2025, 11:12:46 am
+date modified: Saturday, November 1st 2025, 3:59:40 pm
 ---
 
 # Вопрос (RU)
@@ -35,7 +35,7 @@ date modified: Thursday, October 30th 2025, 11:12:46 am
 
 **Доступность в Compose** обеспечивает использование приложения людьми с ограниченными возможностями через TalkBack, семантические свойства и минимальные размеры сенсорных целей (48dp).
 
-### Ключевые техники
+### Ключевые Техники
 
 **1. Content Descriptions** — описания для изображений:
 
@@ -112,7 +112,7 @@ Card(
 )
 ```
 
-### Ключевые принципы
+### Ключевые Принципы
 
 - **ContentDescription**: обязательно для информативных элементов, `null` для декоративных
 - **Touch targets**: минимум 48dp для всех интерактивных элементов
@@ -240,5 +240,3 @@ Card(
 - [[q-custom-view-accessibility--android--medium]] — Custom view accessibility
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--android--hard]] — Compose stability and skippability
-- [[q-compose-modifier-order--android--hard]] — Modifier order importance

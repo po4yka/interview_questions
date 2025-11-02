@@ -15,7 +15,9 @@ moc: "moc-performance"
 related: []
 created: "2025-10-12"
 updated: "2025-10-12"
-tags: ["concept", "database", "performance", "indexing", "optimization", "query-tuning", "difficulty/medium"]
+tags: ["concept", "database", "difficulty/medium", "indexing", "optimization", "performance", "query-tuning"]
+date created: Sunday, October 12th 2025, 2:28:52 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -50,7 +52,7 @@ Database performance optimization involves improving query execution speed, redu
 
 ---
 
-## Indexing Strategies / Стратегии индексации
+## Indexing Strategies / Стратегии Индексации
 
 ### B-Tree Indexes (Default)
 
@@ -121,7 +123,7 @@ CREATE INDEX idx_users_bio ON users(bio);  -- If never queried
 
 ---
 
-## Query Optimization / Оптимизация запросов
+## Query Optimization / Оптимизация Запросов
 
 ### EXPLAIN / EXPLAIN ANALYZE
 
@@ -220,7 +222,7 @@ LIMIT 10;
 
 ---
 
-## Query Patterns / Паттерны запросов
+## Query Patterns / Паттерны Запросов
 
 ### Batch Operations
 
@@ -304,7 +306,7 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY user_order_summary;
 
 ---
 
-## Connection Pooling / Пул соединений
+## Connection Pooling / Пул Соединений
 
 ```kotlin
 // HikariCP configuration (optimal settings)
@@ -336,7 +338,7 @@ val dataSource = HikariDataSource(config)
 
 ---
 
-## Monitoring & Analysis / Мониторинг и анализ
+## Monitoring & Analysis / Мониторинг И Анализ
 
 ### Slow Query Log
 

@@ -1,9 +1,9 @@
 ---
 id: android-222
 title: "KMM Dependency Injection / Dependency Injection в KMM"
-aliases: [KMM DI, Koin, KMM Dependency Injection, Dependency Injection в KMM, Koin для KMM]
+aliases: [Dependency Injection в KMM, KMM Dependency Injection, KMM DI, Koin, Koin для KMM]
 topic: android
-subtopics: [kmp, di-koin]
+subtopics: [di-koin, kmp]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -14,9 +14,9 @@ related: [c-dependency-injection, c-koin]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/kmp, android/di-koin, DI, Koin, Kotlin, difficulty/medium]
+tags: [android/di-koin, android/kmp, DI, difficulty/medium, Koin, Kotlin]
 date created: Tuesday, October 28th 2025, 9:23:40 pm
-date modified: Thursday, October 30th 2025, 3:11:46 pm
+date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -307,8 +307,4 @@ actual class DatabaseDriverFactory {
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-viewmodel-lifecycle--android--medium]]
-
 ### Advanced (Harder)
-- [[q-android-security-practices-checklist--android--medium]]

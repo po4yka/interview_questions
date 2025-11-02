@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [inline, anonymous-classes, lambdas, performance, optimization]
+subtopics: [anonymous-classes, inline, lambdas, optimization, performance]
 question_kind: theory
 difficulty: medium
 
@@ -18,14 +18,17 @@ source_note: ""
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-structured-concurrency-kotlin--kotlin--medium, q-delegates-compilation--kotlin--hard, q-coroutine-timeout-withtimeout--kotlin--medium]
+related: [q-coroutine-timeout-withtimeout--kotlin--medium, q-delegates-compilation--kotlin--hard, q-structured-concurrency-kotlin--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
 updated: 2025-10-06
 
-tags: [kotlin, inline, anonymous-classes, lambdas, object-expressions, performance, difficulty/medium]
+tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-expressions, performance]
+date created: Saturday, November 1st 2025, 12:43:05 pm
+date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
+
 # Question (EN)
 > Can you create an anonymous class inside an inline function in Kotlin?
 
@@ -162,7 +165,7 @@ println(42)  // No object, no lambda object!
 
 ---
 
-## Comparison: Anonymous Class vs Lambda
+## Comparison: Anonymous Class Vs Lambda
 
 ### Anonymous Class
 
@@ -245,7 +248,7 @@ fun registerHandler(): EventHandler {
 
 ---
 
-## Workaround: noinline
+## Workaround: Noinline
 
 If you need to use object expressions with an inline function:
 
@@ -348,7 +351,7 @@ inline fun <T> measureTime(block: () -> T): T {
 }
 ```
 
-2. **Use regular functions for anonymous classes:**
+1. **Use regular functions for anonymous classes:**
 
 ```kotlin
 fun createClickListener(onClick: () -> Unit): View.OnClickListener {
@@ -360,7 +363,7 @@ fun createClickListener(onClick: () -> Unit): View.OnClickListener {
 }
 ```
 
-3. **Use noinline when necessary:**
+1. **Use noinline when necessary:**
 
 ```kotlin
 inline fun process(
@@ -385,7 +388,7 @@ inline fun process() {
 }
 ```
 
-2. **Don't use inline for functions that must create objects:**
+1. **Don't use inline for functions that must create objects:**
 
 ```kotlin
 // - BAD
@@ -437,13 +440,13 @@ fun createHandler(): Handler {
 
 **Анонимные классы** (object expressions) всегда создают экземпляры объектов, что противоречит цели инлайна.
 
-### Ключевые проблемы
+### Ключевые Проблемы
 
 1. **Создает объект** (сводит на нет inline)
 2. **Не может захватывать inline лямбда-параметры**
 3. **Ухудшает производительность** вместо улучшения
 
-### Правильный подход: используйте лямбды
+### Правильный Подход: Используйте Лямбды
 
 ```kotlin
 // - Анонимный класс (создает объект)
@@ -462,7 +465,7 @@ inline fun process(action: (Int) -> Unit) {
 }
 ```
 
-### Когда нужны анонимные классы
+### Когда Нужны Анонимные Классы
 
 Используйте **обычные функции** (не inline) для анонимных классов:
 
@@ -477,7 +480,7 @@ fun createHandler(): EventHandler {
 }
 ```
 
-### Обходной путь: noinline
+### Обходной Путь: Noinline
 
 Если необходимо смешать:
 
@@ -527,7 +530,7 @@ inline fun process(
 ### Related (Medium)
 - [[q-inline-classes-value-classes--kotlin--medium]] - Inline Class
 - [[q-kotlin-inline-functions--kotlin--medium]] - Inline Functions
-- [[q-macrobenchmark-startup--performance--medium]] - Performance
+- [[q-macrobenchmark-startup--android--medium]] - Performance
 - [[q-app-startup-optimization--android--medium]] - Performance
 
 ### Advanced (Harder)

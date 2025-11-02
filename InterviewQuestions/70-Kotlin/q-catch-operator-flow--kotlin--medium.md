@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [flow, catch, exception-handling, error-handling, coroutines]
+subtopics: [catch, coroutines, error-handling, exception-handling, flow]
 question_kind: theory
 difficulty: medium
 
@@ -18,13 +18,15 @@ source_note: Deep dive into catch operator in Kotlin Flow
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-exception-handling--kotlin--medium, q-flow-basics--kotlin--easy, q-retry-operators-flow--kotlin--medium]
+related: [q-flow-basics--kotlin--easy, q-flow-exception-handling--kotlin--medium, q-retry-operators-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, flow, catch, exception-handling, error-handling, coroutines, difficulty/medium]
+tags: [catch, coroutines, difficulty/medium, error-handling, exception-handling, flow, kotlin]
+date created: Sunday, October 12th 2025, 2:49:28 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Question (EN)
@@ -167,7 +169,7 @@ fun loadData(): Flow<Data> = flow {
 }
 ```
 
-### Catch vs Try-Catch
+### Catch Vs Try-Catch
 
 ```kotlin
 // Try-catch in flow builder (imperative)
@@ -520,7 +522,7 @@ class DataService(
 
 Оператор `catch` в Kotlin Flow — декларативный способ обработки исключений, возникающих выше по цепочке flow. Он реализует принцип **прозрачности исключений**, означающий, что исключения текут вниз по потоку так же, как обычные значения.
 
-### Базовое использование Catch
+### Базовое Использование Catch
 
 ```kotlin
 flow {
@@ -542,7 +544,7 @@ flow {
 // Собрано: -1
 ```
 
-### Прозрачность исключений
+### Прозрачность Исключений
 
 Прозрачность исключений — ключевой принцип: исключения обрабатываются как данные и текут вниз:
 
@@ -566,7 +568,7 @@ flow {
 }
 ```
 
-### Catch ловит только upstream исключения
+### Catch Ловит Только upstream Исключения
 
 Это критически важно: `catch` ловит только исключения из операторов выше по потоку, НЕ из нижестоящих:
 
@@ -590,7 +592,7 @@ flow {
 }
 ```
 
-### Где размещать Catch
+### Где Размещать Catch
 
 ```kotlin
 class UserRepository {
@@ -620,7 +622,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Catch и Emit
+### Catch И Emit
 
 Вы можете излучать значения восстановления в блоке catch:
 
@@ -648,7 +650,7 @@ fun loadData(): Flow<Data> = flow {
 }
 ```
 
-### Catch vs Try-Catch
+### Catch Vs Try-Catch
 
 ```kotlin
 // Try-catch в билдере flow (императивный)
@@ -676,7 +678,7 @@ flow {
 3. **Ясность**: оператор catch делает обработку ошибок явной в pipeline
 4. **Прозрачность исключений**: оператор catch следует принципу прозрачности исключений Flow
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 ```kotlin

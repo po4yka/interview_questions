@@ -10,17 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-reified-type-parameters--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-access-modifiers--programming-languages--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - android
-  - annotations
-  - best-practices
-  - lifecycle
-  - difficulty/medium
+tags: [android, annotations, best-practices, difficulty/medium, kotlin, lifecycle]
+date created: Saturday, November 1st 2025, 1:27:05 pm
+date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
+
 # Аннотация @CallSuper
 
 # Question (EN)
@@ -41,7 +38,7 @@ The `@CallSuper` annotation indicates that when overriding a method in a subclas
 
 Аннотация `@CallSuper` указывает, что при переопределении метода в подклассе необходимо обязательно вызывать метод суперкласса. Это особенно полезно при работе с методами жизненного цикла Android (onCreate, onStart, onDestroy), где пропуск вызова super может привести к серьёзным проблемам: утечкам памяти, некорректной работе компонентов или крашам приложения.
 
-### Основы использования @CallSuper
+### Основы Использования @CallSuper
 
 ```kotlin
 import androidx.annotation.CallSuper
@@ -123,9 +120,9 @@ class BadActivity : BaseActivity() {
 }
 ```
 
-### Зачем нужна @CallSuper
+### Зачем Нужна @CallSuper
 
-#### 1. Предотвращение ошибок жизненного цикла
+#### 1. Предотвращение Ошибок Жизненного Цикла
 
 ```kotlin
 abstract class BaseFragment : Fragment() {
@@ -177,7 +174,7 @@ class ProperFragment : BaseFragment() {
 }
 ```
 
-#### 2. Обеспечение корректной инициализации
+#### 2. Обеспечение Корректной Инициализации
 
 ```kotlin
 abstract class BaseViewModel : ViewModel() {
@@ -239,9 +236,9 @@ class UserViewModel : BaseViewModel() {
 }
 ```
 
-### Практические примеры
+### Практические Примеры
 
-#### Пример 1: RecyclerView Adapter с @CallSuper
+#### Пример 1: RecyclerView Adapter С @CallSuper
 
 ```kotlin
 abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> :
@@ -330,7 +327,7 @@ class UserAdapter : BaseAdapter<User, UserAdapter.UserViewHolder>() {
 data class User(val id: Int, val name: String)
 ```
 
-#### Пример 2: Custom View с @CallSuper
+#### Пример 2: Custom View С @CallSuper
 
 ```kotlin
 abstract class BaseCustomView @JvmOverloads constructor(
@@ -397,7 +394,7 @@ class CircleView @JvmOverloads constructor(
 }
 ```
 
-#### Пример 3: Repository Pattern с @CallSuper
+#### Пример 3: Repository Pattern С @CallSuper
 
 ```kotlin
 abstract class BaseRepository {
@@ -472,7 +469,7 @@ class UserRepository : BaseRepository() {
 }
 ```
 
-### @CallSuper vs @Override
+### @CallSuper Vs @Override
 
 ```kotlin
 // @Override - проверяет что метод переопределён
@@ -514,9 +511,9 @@ class Child : Parent() {
 }
 ```
 
-### Продвинутые случаи использования
+### Продвинутые Случаи Использования
 
-#### 1. Множественные уровни наследования
+#### 1. Множественные Уровни Наследования
 
 ```kotlin
 abstract class Level1Activity : AppCompatActivity() {
@@ -577,7 +574,7 @@ class ConcreteActivity : Level2Activity() {
 // Concrete: onCreate
 ```
 
-#### 2. Интерфейсы с default методами (Java 8+)
+#### 2. Интерфейсы С Default Методами (Java 8+)
 
 ```kotlin
 // Интерфейс с default методом
@@ -619,7 +616,7 @@ class ProperTrackedActivity : AppCompatActivity(), Trackable {
 }
 ```
 
-#### 3. Композиция компонентов с @CallSuper
+#### 3. Композиция Компонентов С @CallSuper
 
 ```kotlin
 abstract class BasePresenter<V : BaseView> {
@@ -687,7 +684,7 @@ interface UserView : BaseView {
 }
 ```
 
-### Проверка во время компиляции
+### Проверка Во Время Компиляции
 
 ```kotlin
 // Android Studio и Lint проверяют @CallSuper автоматически
@@ -736,7 +733,7 @@ class SuppressedChild : BaseClass() {
 3. **Подавить предупреждение @Suppress** → скрывает проблему вместо её решения
 4. **Не использовать @CallSuper** в базовых классах библиотек → пользователи забудут вызвать super
 
-### Связанные аннотации
+### Связанные Аннотации
 
 ```kotlin
 // @CallSuper - требует вызов super
@@ -851,4 +848,3 @@ class MyActivity : AppCompatActivity() {
 
 - [[q-reified-type-parameters--kotlin--medium]]
 - [[q-testing-flow-operators--kotlin--hard]]
-- [[q-access-modifiers--programming-languages--medium]]

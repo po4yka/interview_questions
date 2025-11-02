@@ -111,8 +111,8 @@ To store unique information for each element in a relational table, unique keys 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-virtual-tables-disadvantages--backend--medium]] - Databases
-- [[q-database-migration-purpose--backend--medium]] - Databases
+- [[q-virtual-tables-disadvantages--databases--medium]] - Databases
+- [[q-database-migration-purpose--databases--medium]] - Databases
 
 ### Advanced (Harder)
-- [[q-sql-join-algorithms-complexity--backend--hard]] - Databases
+- [[q-sql-join-algorithms-complexity--databases--hard]] - Databases

@@ -5,24 +5,17 @@ topic: kotlin
 difficulty: medium
 status: draft
 created: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - concurrency
-  - thread-safety
-  - mutex
-  - synchronization
+tags: [concurrency, coroutines, difficulty/medium, kotlin, mutex, synchronization, thread-safety]
 moc: moc-kotlin
-related: [q-debounce-throttle-flow--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-data-sealed-difference--programming-languages--medium]
-  - q-race-conditions-coroutines--kotlin--hard
-  - q-semaphore-rate-limiting--kotlin--medium
-  - q-channelflow-callbackflow-flow--kotlin--medium
+related: [q-channelflow-callbackflow-flow--kotlin--medium, q-data-sealed-difference--programming-languages--medium, q-debounce-throttle-flow--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-race-conditions-coroutines--kotlin--hard, q-semaphore-rate-limiting--kotlin--medium]
 subtopics:
+  - concurrency
   - coroutines
   - mutex
   - synchronization
   - thread-safety
-  - concurrency
+date created: Saturday, November 1st 2025, 12:10:12 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Question (EN)
@@ -57,7 +50,7 @@ suspend fun incrementCounter() {
 }
 ```
 
-### Mutex vs synchronized: Key Differences
+### Mutex Vs Synchronized: Key Differences
 
 | Feature | Mutex | synchronized |
 |---------|-------|--------------|
@@ -166,7 +159,7 @@ private fun innerWithoutLock() {
 }
 ```
 
-### Mutex vs AtomicInteger/AtomicReference
+### Mutex Vs AtomicInteger/AtomicReference
 
 For simple operations like counter increment, use **atomic types** instead of Mutex:
 
@@ -719,7 +712,7 @@ class BankAccountTest {
 
 
 
-### Что такое Mutex?
+### Что Такое Mutex?
 
 **Mutex** (Взаимное исключение) - это примитив синхронизации из `kotlinx.coroutines.sync`, который обеспечивает взаимное исключение без блокировки потоков. Вместо блокировки он **приостанавливает** корутину, пока блокировка не станет доступной.
 
@@ -737,7 +730,7 @@ suspend fun incrementCounter() {
 }
 ```
 
-### Mutex vs synchronized: Ключевые различия
+### Mutex Vs Synchronized: Ключевые Различия
 
 | Характеристика | Mutex | synchronized |
 |----------------|-------|--------------|
@@ -750,7 +743,7 @@ suspend fun incrementCounter() {
 | **Try lock** | Доступен `tryLock()` | `synchronized` не поддерживает |
 | **Производительность** | Лучше при высокой конкуренции | Лучше при очень низкой конкуренции |
 
-### Базовое использование Mutex
+### Базовое Использование Mutex
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -803,7 +796,7 @@ suspend fun main() = coroutineScope {
 }
 ```
 
-### Почему Mutex НЕ реентерабельный (Критично!)
+### Почему Mutex НЕ Реентерабельный (Критично!)
 
 **Реентерабельность** означает, что один и тот же поток может захватить блокировку несколько раз. Mutex **НЕ реентерабельный** и приведет к deadlock:
 
@@ -846,7 +839,7 @@ private fun innerWithoutLock() {
 }
 ```
 
-### Mutex vs AtomicInteger/AtomicReference
+### Mutex Vs AtomicInteger/AtomicReference
 
 Для простых операций типа увеличения счетчика используйте **атомарные типы** вместо Mutex:
 
@@ -912,7 +905,7 @@ class UserSession {
 - Высокая конкуренция: Потоки блокируются, тратя ресурсы ОС
 - Масштабируемость: Плохая (100и потоков конкурируют за блокировку)
 
-### Общие паттерны
+### Общие Паттерны
 
 **Паттерн 1: Общий счетчик**
 
@@ -969,7 +962,7 @@ class CacheWithMutex<K, V> {
 }
 ```
 
-### Реальный пример Android ViewModel
+### Реальный Пример Android ViewModel
 
 ```kotlin
 class UserProfileViewModel : ViewModel() {
@@ -1019,7 +1012,7 @@ class UserProfileViewModel : ViewModel() {
 }
 ```
 
-### Ключевые выводы
+### Ключевые Выводы
 
 1. **Mutex приостанавливает, synchronized блокирует** - Mutex эффективнее для корутин
 2. **Mutex НЕ реентерабельный** - Избегайте вложенных блокировок

@@ -7,7 +7,9 @@ summary: Core Compose mechanism for updating UI when state changes
 links: []
 created: 2025-10-30
 updated: 2025-10-30
-tags: [concept, android, jetpack-compose, recomposition, ui]
+tags: [android, concept, jetpack-compose, recomposition, ui]
+date created: Thursday, October 30th 2025, 12:30:15 pm
+date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)
@@ -24,7 +26,7 @@ tags: [concept, android, jetpack-compose, recomposition, ui]
 
 ---
 
-## Core Concept / Основная концепция
+## Core Concept / Основная Концепция
 
 ### What Triggers Recomposition (EN)
 
@@ -44,7 +46,7 @@ fun Counter() {
 }
 ```
 
-### Что запускает рекомпозицию (RU)
+### Что Запускает Рекомпозицию (RU)
 
 1. **Изменения состояния**: Чтение `State<T>` или `MutableState<T>` создает наблюдение
 2. **Observable-коллекции**: `Flow.collectAsState()`, `LiveData.observeAsState()`
@@ -64,7 +66,7 @@ fun Counter() {
 
 ---
 
-## Smart Recomposition / Умная рекомпозиция
+## Smart Recomposition / Умная Рекомпозиция
 
 ### Scoped Updates (EN)
 
@@ -89,7 +91,7 @@ fun Screen() {
 }
 ```
 
-### Ограниченные обновления (RU)
+### Ограниченные Обновления (RU)
 
 Compose использует **позиционную мемоизацию** для отслеживания того, какие composable-функции читают какое состояние. Рекомпонуются только затронутые поддеревья.
 
@@ -114,7 +116,7 @@ fun Screen() {
 
 ---
 
-## Optimization Strategies / Стратегии оптимизации
+## Optimization Strategies / Стратегии Оптимизации
 
 ### 1. Stable Parameters (EN)
 
@@ -130,7 +132,7 @@ fun UserCard(user: User) {  // Skippable: User is @Stable
 }
 ```
 
-### 1. Стабильные параметры (RU)
+### 1. Стабильные Параметры (RU)
 
 Composable-функции со **стабильными** параметрами (примитивы, неизменяемые data-классы) могут быть **пропущены**, если параметры не изменились.
 
@@ -158,7 +160,7 @@ fun List(scrollPosition: State<Int>) {
 }
 ```
 
-### 2. derivedStateOf для вычисляемых значений (RU)
+### 2. derivedStateOf Для Вычисляемых Значений (RU)
 
 Снижает частоту рекомпозиции, выполняя её только при изменении производного значения.
 

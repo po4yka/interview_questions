@@ -3,20 +3,20 @@ id: android-407
 title: "What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin"
 aliases: ["Navigation Methods in Kotlin", "Методы навигации в Kotlin"]
 topic: android
-subtopics: [ui-navigation, activity, fragment]
+subtopics: [activity, fragment, ui-navigation]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-inject-router-to-presenter--android--medium, q-android-modularization--android--medium, q-dagger-purpose--android--easy]
+related: [q-android-modularization--android--medium, q-dagger-purpose--android--easy, q-inject-router-to-presenter--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/ui-navigation, android/activity, android/fragment, navigation, difficulty/medium]
+tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation]
 date created: Wednesday, October 29th 2025, 11:41:07 am
-date modified: Thursday, October 30th 2025, 4:53:33 pm
+date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Сравнение подходов
+### Сравнение Подходов
 
 | Метод | Применение | Плюсы | Минусы |
 |-------|-----------|-------|--------|

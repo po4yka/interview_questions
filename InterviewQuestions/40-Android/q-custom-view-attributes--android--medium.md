@@ -3,20 +3,20 @@ id: android-476
 title: Custom View Attributes / Атрибуты Custom View
 aliases: [Custom View Attributes, Атрибуты Custom View]
 topic: android
-subtopics: [ui-views, ui-theming]
+subtopics: [ui-theming, ui-views]
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-custom-views, q-custom-view-lifecycle--android--medium, q-theme-attribute-resolution--android--hard]
+related: [c-custom-views, q-custom-view-lifecycle--android--medium]
 created: 2025-10-21
 updated: 2025-10-30
-tags: [android/ui-views, android/ui-theming, difficulty/medium]
+tags: [android/ui-theming, android/ui-views, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:56:26 am
-date modified: Thursday, October 30th 2025, 12:44:41 pm
+date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
@@ -36,7 +36,7 @@ date modified: Thursday, October 30th 2025, 12:44:41 pm
 2. Считать значения через `TypedArray` в конструкторе view
 3. Обязательно вызвать `recycle()` для освобождения ресурсов
 
-### Объявление атрибутов
+### Объявление Атрибутов
 
 ```xml
 <!-- res/values/attrs.xml -->
@@ -55,7 +55,7 @@ date modified: Thursday, October 30th 2025, 12:44:41 pm
 - `enum` — набор именованных значений
 - `flags` — битовая маска (можно комбинировать)
 
-### Чтение атрибутов
+### Чтение Атрибутов
 
 ```kotlin
 class ProgressBar @JvmOverloads constructor(
@@ -91,7 +91,7 @@ class ProgressBar @JvmOverloads constructor(
 - `defStyleAttr: Int` — атрибут темы с дефолтным стилем (`R.attr.customProgressBarStyle`)
 - `defStyleRes: Int` — ID стиля по умолчанию (`R.style.DefaultProgressBar`)
 
-### Использование в XML
+### Использование В XML
 
 ```xml
 <ProgressBar
@@ -102,7 +102,7 @@ class ProgressBar @JvmOverloads constructor(
     app:barHeight="12dp" />
 ```
 
-### Enum и Flags
+### Enum И Flags
 
 ```xml
 <!-- Enum: выбор одного значения -->
@@ -127,7 +127,7 @@ val features = getInt(R.styleable.ProgressBar_features, 0)
 val shouldAnimate = (features and 0x01) != 0
 ```
 
-### Почему recycle() обязателен
+### Почему recycle() Обязателен
 
 `TypedArray` использует внутренний пул ресурсов. Без `recycle()` происходит утечка памяти, и пул исчерпывается, вызывая падения приложения.
 
@@ -247,7 +247,7 @@ val features = getInt(R.styleable.ProgressBar_features, 0)
 val shouldAnimate = (features and 0x01) != 0
 ```
 
-### Why recycle() is mandatory
+### Why recycle() is Mandatory
 
 `TypedArray` uses an internal resource pool. Without `recycle()`, memory leaks occur and the pool depletes, causing app crashes.
 
@@ -290,7 +290,6 @@ context.obtainStyledAttributes(attrs, R.styleable.MyView, 0, 0).apply {
 - [[q-custom-view-lifecycle--android--medium]] — Understanding view initialization lifecycle
 
 ### Related
-- [[q-theme-attribute-resolution--android--hard]] — How Android resolves attribute values
 - Custom view state persistence patterns
 
 ### Advanced

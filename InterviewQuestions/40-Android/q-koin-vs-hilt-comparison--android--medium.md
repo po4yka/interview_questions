@@ -10,13 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-app-start-types-android--android--medium, q-network-request-deduplication--networking--hard]
+related: []
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android, di, hilt, koin, architecture, difficulty/medium, android/di-hilt, android/di-koin]
+tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/medium, hilt, koin]
 date created: Tuesday, October 28th 2025, 9:26:11 pm
-date modified: Thursday, October 30th 2025, 3:11:53 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)
@@ -43,7 +43,7 @@ Compare Koin and Hilt in detail. When would you choose one over the other? Discu
 | **Обучение** | Легко (1-2 дня) | Сложнее (1-2 недели) |
 | **Тестирование** | Простое | Умеренное |
 
-### Compile-Time vs Runtime DI
+### Compile-Time Vs Runtime DI
 
 **Compile-Time DI (Hilt):**
 - Генерация кода на этапе компиляции
@@ -157,7 +157,7 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 | **Learning Curve** | Easy (1-2 days) | Moderate (1-2 weeks) |
 | **Testing** | Simple | Moderate |
 
-### Compile-Time vs Runtime DI
+### Compile-Time Vs Runtime DI
 
 **Compile-Time DI (Hilt):**
 - Code generation at compile time
@@ -271,14 +271,8 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 
 ## Related Questions
 
-### Prerequisites
-- [[q-what-is-dependency-injection--android--easy]]
-- [[q-dagger-basics--android--medium]]
-
 ### Related
-- [[q-app-start-types-android--android--medium]]
-- [[q-viewmodel-factory-injection--android--medium]]
+- Related content to be added
 
 ### Advanced
-- [[q-network-request-deduplication--networking--hard]]
-- [[q-custom-scopes-hilt--android--hard]]
+- Advanced content to be added

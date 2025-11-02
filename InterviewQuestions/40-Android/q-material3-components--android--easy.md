@@ -13,10 +13,10 @@ moc: moc-android
 related: []
 created: 2025-10-13
 updated: 2025-01-27
-tags: [android, android/ui-compose, android/ui-theming, material3, design-system, difficulty/easy]
+tags: [android, android/ui-compose, android/ui-theming, design-system, difficulty/easy, material3]
 sources: []
 date created: Monday, October 27th 2025, 3:43:58 pm
-date modified: Thursday, October 30th 2025, 3:12:57 pm
+date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +31,7 @@ date modified: Thursday, October 30th 2025, 3:12:57 pm
 
 **Material 3** (Material You) — дизайн-система Google с персонализацией, динамическими цветами и современными компонентами.
 
-### Ключевые различия: Material 2 vs Material 3
+### Ключевые Различия: Material 2 Vs Material 3
 
 | Функция | Material 2 | Material 3 |
 |---------|------------|------------|
@@ -39,7 +39,7 @@ date modified: Thursday, October 30th 2025, 3:12:57 pm
 | **Персонализация** | Статические темы | Темы из обоев пользователя |
 | **Elevation** | На основе теней | Тональные поверхности |
 
-### Основные компоненты Material 3
+### Основные Компоненты Material 3
 
 **1. Кнопки:**
 ```kotlin
@@ -81,7 +81,7 @@ Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8DEF8)))
 - `InputChip` — ввод пользователя
 - `SuggestionChip` — предложения
 
-### Миграция с Material 2 на Material 3
+### Миграция С Material 2 На Material 3
 
 **1. Обновить зависимости:**
 ```gradle
@@ -119,7 +119,7 @@ Card(elevation = 4.dp)
 Card(elevation = CardDefaults.cardElevation(defaultElevation = 4.dp))
 ```
 
-### Динамический цвет (Android 12+)
+### Динамический Цвет (Android 12+)
 
 ```kotlin
 @Composable
@@ -147,7 +147,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 
 **Material 3** (Material You) is Google's design system with personalization, dynamic colors, and modern components.
 
-### Key Differences: Material 2 vs Material 3
+### Key Differences: Material 2 Vs Material 3
 
 | Feature | Material 2 | Material 3 |
 |---------|------------|------------|

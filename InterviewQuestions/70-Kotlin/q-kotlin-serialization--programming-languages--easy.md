@@ -3,24 +3,22 @@ id: lang-042
 title: "Kotlin Serialization / Сериализация в Kotlin"
 aliases: [Kotlin Serialization, Сериализация в Kotlin]
 topic: programming-languages
-subtopics: [type-system, serialization]
+subtopics: [serialization, type-system]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-singleton-creation--programming-languages--easy, q-functional-interfaces-vs-type-aliases--kotlin--medium]
+related: [q-functional-interfaces-vs-type-aliases--kotlin--medium, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-singleton-creation--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - programming-languages
-  - data-persistence
-  - json
-  - serialization
-  - difficulty/easy
+tags: [data-persistence, difficulty/easy, json, programming-languages, serialization]
+date created: Friday, October 31st 2025, 6:32:56 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-# Что такое сериализация?
+
+# Что Такое Сериализация?
 
 # Question (EN)
 > What is serialization?

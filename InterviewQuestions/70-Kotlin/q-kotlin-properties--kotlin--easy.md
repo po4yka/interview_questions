@@ -6,11 +6,11 @@ aliases: []
 # Classification
 topic: kotlin
 subtopics:
-  - properties
-  - getters
-  - setters
   - backing-field
+  - getters
   - lateinit
+  - properties
+  - setters
 question_kind: theory
 difficulty: easy
 
@@ -23,14 +23,17 @@ source_note: Comprehensive guide on Kotlin properties
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-val-vs-var--kotlin--easy, q-kotlin-constructors--kotlin--easy, q-property-delegates--kotlin--medium, q-kotlin-lateinit--kotlin--medium]
+related: [q-kotlin-constructors--kotlin--easy, q-kotlin-lateinit--kotlin--medium, q-kotlin-val-vs-var--kotlin--easy, q-property-delegates--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
 updated: 2025-10-12
 
-tags: [kotlin, properties, getters, setters, backing-field, lateinit, lazy, delegated-properties, difficulty/easy]
+tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, lateinit, lazy, properties, setters]
+date created: Sunday, October 12th 2025, 2:44:42 pm
+date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+
 # Question (EN)
 > What are properties in Kotlin? Explain val vs var, custom getters and setters, backing fields, lateinit, and property delegation basics.
 
@@ -53,7 +56,7 @@ Properties in Kotlin are first-class language features that replace Java's field
 6. **Lazy**: Initialization on first access
 7. **Delegated Properties**: Delegate behavior to another object
 
-### Val vs Var Properties
+### Val Vs Var Properties
 
 ```kotlin
 class Person {
@@ -559,7 +562,7 @@ val items = mutableListOf<String>()  // Bad: external code can modify
 
 ### Common Patterns
 
-#### Singleton with lazy
+#### Singleton with Lazy
 
 ```kotlin
 object Database {
@@ -598,7 +601,7 @@ class PreferenceDelegate<T>(
 
 Свойства в Kotlin — это первоклассные языковые конструкции, заменяющие паттерн Java с полем + getter/setter. Они обеспечивают компактный синтаксис, сохраняя инкапсуляцию и позволяя настраивать поведение.
 
-### Ключевые концепции
+### Ключевые Концепции
 
 1. **Val vs Var**: Неизменяемые vs изменяемые свойства
 2. **Пользовательские Getters/Setters**: Добавление логики при доступе/изменении
@@ -608,7 +611,7 @@ class PreferenceDelegate<T>(
 6. **Lazy**: Инициализация при первом обращении
 7. **Делегированные свойства**: Делегирование поведения другому объекту
 
-### Val vs Var свойства
+### Val Vs Var Свойства
 
 ```kotlin
 class Person {
@@ -724,7 +727,7 @@ println(repo.strings)        // [Hello]
 // repo.strings.add("World") // Ошибка: List только для чтения
 ```
 
-### Late-Initialized свойства (lateinit)
+### Late-Initialized Свойства (lateinit)
 
 Используйте `lateinit` для non-null свойств, которые нельзя инициализировать в конструкторе:
 
@@ -777,7 +780,7 @@ class Example {
 }
 ```
 
-### Lazy свойства
+### Lazy Свойства
 
 Используйте `lazy` для свойств, которые должны инициализироваться при первом обращении:
 
@@ -803,7 +806,7 @@ println(resource.data)  // Выводит: Вычисленный результ
 - Должно быть `val` (не `var`)
 - Блок инициализации выполняется при первом обращении
 
-### Делегированные свойства
+### Делегированные Свойства
 
 Kotlin позволяет делегировать реализацию свойства другому объекту:
 
@@ -831,7 +834,7 @@ user.age = -5        // Тихо отклоняется (age остаётся 25
 println(user.age)    // 25
 ```
 
-### Видимость свойств
+### Видимость Свойств
 
 ```kotlin
 class User {
@@ -863,7 +866,7 @@ user.email                     // OK: можно читать
 user.updateEmail("new@test")  // OK
 ```
 
-### Лучшие практики
+### Лучшие Практики
 
 #### ДЕЛАТЬ:
 ```kotlin

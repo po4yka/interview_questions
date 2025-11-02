@@ -1,7 +1,7 @@
 ---
 id: kotlin-201
 title: "Variance Type Projections / Вариантность и проекции типов"
-aliases: [Variance, Type Projections, Covariance, Contravariance, Variance типов]
+aliases: [Contravariance, Covariance, Type Projections, Variance, Variance типов]
 topic: kotlin
 subtopics: [generics, type-system]
 question_kind: theory
@@ -10,19 +10,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-constructor-keyword--programming-languages--easy, q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--easy]
+related: [q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - generics
-  - variance
-  - type-system
-  - projections
-  - covariance
-  - contravariance
-  - difficulty/hard
+tags: [contravariance, covariance, difficulty/hard, generics, kotlin, projections, type-system, variance]
+date created: Friday, October 31st 2025, 6:32:04 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Variance and Type Projections in Kotlin
 
 # Question (EN)
@@ -181,6 +176,6 @@ Variance обеспечивает type-safety при работе с generic т�
 
 ## Related Questions
 
-- [[q-kotlin-constructor-keyword--programming-languages--easy]]
+-
 - [[q-equals-hashcode-purpose--kotlin--medium]]
 - [[q-launch-vs-async--kotlin--easy]]

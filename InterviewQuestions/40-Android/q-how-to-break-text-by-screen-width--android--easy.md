@@ -3,7 +3,7 @@ id: android-131
 title: "How To Break Text By Screen Width / Как разбить текст по ширине экрана"
 aliases: ["How To Break Text By Screen Width", "Как разбить текст по ширине экрана"]
 topic: android
-subtopics: [ui-views, ui-graphics]
+subtopics: [ui-graphics, ui-views]
 question_kind: android
 difficulty: easy
 original_language: en
@@ -14,9 +14,9 @@ related: [c-custom-views, c-views]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/ui-views, android/ui-graphics, difficulty/easy]
+tags: [android, android/ui-graphics, android/ui-views, difficulty/easy]
 date created: Monday, October 27th 2025, 3:42:25 pm
-date modified: Thursday, October 30th 2025, 12:48:21 pm
+date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -33,7 +33,7 @@ date modified: Thursday, October 30th 2025, 12:48:21 pm
 
 Используйте класс **Paint** и метод **breakText()** для определения количества символов, помещающихся в строку с учетом доступной ширины.
 
-### Основной подход
+### Основной Подход
 
 ```kotlin
 val paint = Paint().apply { textSize = 48f }
@@ -45,7 +45,7 @@ val charsFit = paint.breakText(text, true, maxWidth, null)
 val fittingText = text.substring(0, charsFit)
 ```
 
-### Разбиение на несколько строк
+### Разбиение На Несколько Строк
 
 ```kotlin
 fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String> {
@@ -63,7 +63,7 @@ fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String
 }
 ```
 
-### В кастомном View
+### В Кастомном View
 
 ```kotlin
 class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attrs) {

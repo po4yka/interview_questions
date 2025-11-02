@@ -1,35 +1,23 @@
 ---
 id: kotlin-168
 title: "Using CoroutineWorker with WorkManager / Использование CoroutineWorker с WorkManager"
-aliases: [CoroutineWorker, WorkManager, Background Work, CoroutineWorker Background]
+aliases: [Background Work, CoroutineWorker, CoroutineWorker Background, WorkManager]
 topic: kotlin
-subtopics: [coroutines, android]
+subtopics: [android, coroutines]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-when-vs-switch--programming-languages--easy, q-lazy-initialization--programming-languages--easy, q-equality-operators-kotlin--kotlin--easy]
+related: [q-lazy-initialization--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
-tags:
-  - kotlin
-  - coroutines
-  - android
-  - workmanager
-  - background
-  - coroutineworker
-  - worker
-  - periodic-work
-  - constraints
-  - difficulty/medium
-  - coroutines
-  - android
-  - workmanager
-  - background
-  - worker
+tags: [android, background, constraints, coroutines, coroutineworker, difficulty/medium, kotlin, periodic-work, worker, workmanager]
+date created: Saturday, November 1st 2025, 1:30:19 pm
+date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+
 # Using CoroutineWorker with WorkManager
 
 ## English
@@ -132,7 +120,7 @@ class RxBasedWorker(context: Context, params: WorkerParameters)
 | Modern | No | Yes | Legacy |
 | Best for | Simple blocking I/O | Modern Kotlin apps | Existing RxJava code |
 
-#### 3. When to Use WorkManager vs Direct Coroutines
+#### 3. When to Use WorkManager Vs Direct Coroutines
 
 **Decision matrix:**
 
@@ -1008,10 +996,8 @@ override suspend fun doWork(): Result {
 ```
 
 ### Related Questions
-- [[q-what-is-coroutine--kotlin--easy]] - Coroutine fundamentals
-- [[q-android-lifecycle-coroutines--kotlin--medium]] - Android lifecycle integration
 - [[q-structured-concurrency--kotlin--hard]] - Structured concurrency principles
-- [[q-flow-basics--kotlin--easy]] - Flow for reactive updates
+- [[q-kotlin-serialization--programming-languages--easy]]
 
 ## Follow-ups
 1. How does WorkManager ensure work execution survives app process death?
@@ -1080,7 +1066,7 @@ class MyCoroutineWorker(
 }
 ```
 
-#### 2. Сравнение типов Worker
+#### 2. Сравнение Типов Worker
 
 **CoroutineWorker vs Worker vs RxWorker:**
 
@@ -1130,7 +1116,7 @@ class RxBasedWorker(context: Context, params: WorkerParameters)
 | Современность | Нет | Да | Устаревший |
 | Лучше для | Простой блокирующий I/O | Современные Kotlin приложения | Существующий RxJava код |
 
-#### 3. Когда использовать WorkManager vs прямые корутины
+#### 3. Когда Использовать WorkManager Vs Прямые Корутины
 
 **Матрица решений:**
 
@@ -1203,7 +1189,7 @@ fun observeMessages() = channelFlow {
 | Миграция базы данных | WorkManager | Длительная, гарантированная |
 | API вызов по клику кнопки | ViewModel + корутина | Немедленно, отменяемо |
 
-#### 4. Production пример: Data Sync Worker
+#### 4. Production Пример: Data Sync Worker
 
 **Полная реализация синхронизации данных:**
 
@@ -1347,7 +1333,7 @@ class DataSyncWorker(
 }
 ```
 
-#### 5. Worker загрузки файлов с прогрессом
+#### 5. Worker Загрузки Файлов С Прогрессом
 
 **Полная реализация загрузки файлов:**
 
@@ -1476,7 +1462,7 @@ class FileUploadWorker(
 }
 ```
 
-#### 6. Периодический Worker очистки
+#### 6. Периодический Worker Очистки
 
 **Периодическая работа с задачами обслуживания:**
 
@@ -1584,7 +1570,7 @@ class CleanupWorker(
 }
 ```
 
-#### 7. Наблюдение за прогрессом работы
+#### 7. Наблюдение За Прогрессом Работы
 
 **Мониторинг статуса работы и прогресса:**
 
@@ -1708,7 +1694,7 @@ class DataSyncWorkerTest {
 }
 ```
 
-#### 9. Лучшие практики
+#### 9. Лучшие Практики
 
 **Production-ready паттерны:**
 
@@ -1760,13 +1746,13 @@ override suspend fun doWork(): Result {
 }
 ```
 
-### Связанные вопросы
+### Связанные Вопросы
 - [[q-what-is-coroutine--kotlin--easy]] - Основы корутин
 - [[q-android-lifecycle-coroutines--kotlin--medium]] - Интеграция с Android lifecycle
 - [[q-structured-concurrency--kotlin--hard]] - Принципы структурированной конкурентности
 - [[q-flow-basics--kotlin--easy]] - Flow для реактивных обновлений
 
-### Дополнительные вопросы
+### Дополнительные Вопросы
 1. Как WorkManager гарантирует выполнение работы даже после смерти процесса приложения?
 2. В чем разница между setForeground() и createForegroundInfo() в CoroutineWorker?
 3. Как реализовать менеджер загрузок с паузой/возобновлением используя CoroutineWorker?

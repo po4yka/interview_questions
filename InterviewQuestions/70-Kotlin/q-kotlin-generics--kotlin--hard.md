@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [generics, types, variance, type-erasure]
+subtopics: [generics, type-erasure, types, variance]
 question_kind: theory
 difficulty: hard
 
@@ -24,8 +24,11 @@ related: [q-hot-cold-flows--kotlin--medium, q-kotlin-any-inheritance--programmin
 created: 2025-10-05
 updated: 2025-10-05
 
-tags: [kotlin, generics, types, variance, type-erasure, difficulty/hard]
+tags: [difficulty/hard, generics, kotlin, type-erasure, types, variance]
+date created: Thursday, October 16th 2025, 12:35:35 pm
+date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+
 # Question (EN)
 > What do you know about Generics in Kotlin?
 # Вопрос (RU)
@@ -39,7 +42,7 @@ Generic programming is a way of writing our code in a flexible manner like we wo
 
 Using generics in Kotlin enables the developer to focus on creating reusable solutions, or templates, for a wider range of problems.
 
-### Generic class
+### Generic Class
 
 Classes in Kotlin can have type parameters, just like in Java:
 
@@ -61,7 +64,7 @@ But if the parameters can be inferred, for example, from the constructor argumen
 val box = Box(1) // 1 has type Int, so the compiler figures out that it is Box<Int>
 ```
 
-### Generic functions
+### Generic Functions
 
 Classes aren't the only declarations that can have type parameters. Functions can, too. Type parameters are placed *before* the name of the function:
 
@@ -87,11 +90,11 @@ Type arguments can be omitted if they can be inferred from the context, so the f
 val l = singletonList(1)
 ```
 
-### Generic constraints
+### Generic Constraints
 
 The set of all possible types that can be substituted for a given type parameter may be restricted by *generic constraints*.
 
-#### Upper bounds
+#### Upper Bounds
 
 The most common type of constraint is an *upper bound*, which corresponds to Java's `extends` keyword:
 
@@ -118,11 +121,11 @@ fun <T> copyWhenGreater(list: List<T>, threshold: T): List<String>
 
 The passed type must satisfy all conditions of the `where` clause simultaneously. In the above example, the `T` type must implement *both* `CharSequence` and `Comparable`.
 
-### Type erasure
+### Type Erasure
 
 The type safety checks that Kotlin performs for generic declaration usages are done at compile time. At runtime, the instances of generic types do not hold any information about their actual type arguments. The type information is said to be *erased*. For example, the instances of `Foo<Bar>` and `Foo<Baz?>` are erased to just `Foo<*>`.
 
-#### Generics type checks and casts
+#### Generics Type Checks and Casts
 
 Due to the type erasure, there is no general way to check whether an instance of a generic type was created with certain type arguments at runtime, and the compiler prohibits such `is` - checks such as `ints is List<Int>` or `list is T` (type parameter). However, you can check an instance against a star-projected type:
 
@@ -144,7 +147,7 @@ fun handleStrings(list: MutableList<String>) {
 
 The same syntax but with the type arguments omitted can be used for casts that do not take type arguments into account: `list as ArrayList`.
 
-#### Unchecked casts
+#### Unchecked Casts
 
 Type casts to generic types with concrete type arguments such as `foo as List<String>` cannot be checked at runtime.
 
@@ -173,7 +176,7 @@ To avoid unchecked casts, you can redesign the program structure. In the example
 
 Использование обобщений в Kotlin позволяет разработчику сосредоточиться на создании переиспользуемых решений или шаблонов для более широкого круга проблем.
 
-### Обобщенный класс
+### Обобщенный Класс
 
 Классы в Kotlin могут иметь параметры типа, точно так же, как в Java:
 
@@ -195,7 +198,7 @@ val box: Box<Int> = Box<Int>(1)
 val box = Box(1) // 1 имеет тип Int, поэтому компилятор понимает, что это Box<Int>
 ```
 
-### Обобщенные функции
+### Обобщенные Функции
 
 Классы — не единственные объявления, которые могут иметь параметры типа. Функции тоже могут. Параметры типа размещаются *перед* именем функции:
 
@@ -221,11 +224,11 @@ val l = singletonList<Int>(1)
 val l = singletonList(1)
 ```
 
-### Ограничения обобщений
+### Ограничения Обобщений
 
 Набор всех возможных типов, которые могут быть подставлены для данного параметра типа, может быть ограничен *ограничениями обобщений*.
 
-#### Верхние границы
+#### Верхние Границы
 
 Наиболее распространенный тип ограничения — это *верхняя граница*, которая соответствует ключевому слову `extends` в Java:
 
@@ -252,11 +255,11 @@ fun <T> copyWhenGreater(list: List<T>, threshold: T): List<String>
 
 Переданный тип должен одновременно удовлетворять всем условиям клаузы `where`. В приведенном выше примере тип `T` должен реализовывать *и* `CharSequence`, *и* `Comparable`.
 
-### Стирание типов
+### Стирание Типов
 
 Проверки безопасности типов, которые Kotlin выполняет для использования обобщенных объявлений, выполняются во время компиляции. Во время выполнения экземпляры обобщенных типов не содержат никакой информации о своих фактических аргументах типа. Говорят, что информация о типе *стирается*. Например, экземпляры `Foo<Bar>` и `Foo<Baz?>` стираются до просто `Foo<*>`.
 
-#### Проверки и приведения обобщенных типов
+#### Проверки И Приведения Обобщенных Типов
 
 Из-за стирания типов нет общего способа проверить, был ли экземпляр обобщенного типа создан с определенными аргументами типа во время выполнения, и компилятор запрещает такие проверки `is`, как `ints is List<Int>` или `list is T` (параметр типа). Однако вы можете проверить экземпляр на star-projected тип:
 
@@ -278,7 +281,7 @@ fun handleStrings(list: MutableList<String>) {
 
 Тот же синтаксис, но с опущенными аргументами типа, может использоваться для приведений, которые не учитывают аргументы типа: `list as ArrayList`.
 
-#### Непроверяемые приведения
+#### Непроверяемые Приведения
 
 Приведения типов к обобщенным типам с конкретными аргументами типа, такие как `foo as List<String>`, не могут быть проверены во время выполнения.
 

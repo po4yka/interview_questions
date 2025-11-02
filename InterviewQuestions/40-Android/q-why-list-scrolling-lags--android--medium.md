@@ -1,9 +1,9 @@
 ---
 id: android-104
 title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
-aliases: ["Why List Scrolling Lags", "Почему тормозит скроллинг списка", "RecyclerView Performance"]
+aliases: ["RecyclerView Performance", "Why List Scrolling Lags", "Почему тормозит скроллинг списка"]
 topic: android
-subtopics: [performance-rendering, ui-views, profiling]
+subtopics: [performance-rendering, profiling, ui-views]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -11,10 +11,12 @@ language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/performance-rendering, android/ui-views, android/profiling, recyclerview, performance, optimization, difficulty/medium]
+tags: [android/performance-rendering, android/profiling, android/ui-views, difficulty/medium, optimization, performance, recyclerview]
 moc: moc-android
-related: [c-recyclerview, c-performance-optimization, q-recyclerview-explained--android--medium, q-recyclerview-diffutil-advanced--android--medium, q-performance-optimization-android--android--medium]
+related: [c-performance-optimization, c-recyclerview, q-performance-optimization-android--android--medium, q-recyclerview-diffutil-advanced--android--medium, q-recyclerview-explained--android--medium]
 sources: []
+date created: Saturday, November 1st 2025, 12:47:11 pm
+date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -31,7 +33,7 @@ Why might list scrolling lag?
 
 Торможение списка происходит из-за проблем производительности в реализации RecyclerView. Основные причины:
 
-### 1. Неправильное использование ViewHolder
+### 1. Неправильное Использование ViewHolder
 
 ❌ **Плохо**: findViewById вызывается при каждом скролле
 
@@ -60,7 +62,7 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 }
 ```
 
-### 2. Тяжелые операции в onBindViewHolder
+### 2. Тяжелые Операции В onBindViewHolder
 
 ❌ **Плохо**: Блокировка UI-потока
 
@@ -91,7 +93,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Принцип**: onBindViewHolder должен только устанавливать данные, не вычислять их.
 
-### 3. Неоптимизированная обработка изображений
+### 3. Неоптимизированная Обработка Изображений
 
 ✅ **Используйте библиотеки загрузки изображений**:
 
@@ -106,7 +108,7 @@ Glide.with(context)
 
 **Преимущества**: кэширование в памяти/на диске, управление жизненным циклом, оптимизация размера.
 
-### 4. Сложные иерархии layout
+### 4. Сложные Иерархии Layout
 
 ❌ **Плохо**: Вложенность 5 уровней
 
@@ -135,7 +137,7 @@ Glide.with(context)
 </ConstraintLayout>
 ```
 
-### 5. Избыточные вызовы notifyDataSetChanged()
+### 5. Избыточные Вызовы notifyDataSetChanged()
 
 ❌ **Плохо**: Перерисовка всего списка
 
@@ -169,7 +171,7 @@ class MyAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 adapter.submitList(newItems)
 ```
 
-### 6. Отсутствие кэширования данных
+### 6. Отсутствие Кэширования Данных
 
 ✅ **Repository pattern с кэшированием**:
 
@@ -185,7 +187,7 @@ class ItemRepository(private val api: ApiService, private val db: ItemDao) {
 }
 ```
 
-### Дополнительные оптимизации
+### Дополнительные Оптимизации
 
 ```kotlin
 // Предзагрузка элементов

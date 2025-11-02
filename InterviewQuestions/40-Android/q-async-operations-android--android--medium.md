@@ -3,7 +3,7 @@ id: android-190
 title: Async Operations in Android / Асинхронные операции в Android
 aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android
-subtopics: [coroutines, background-execution, threads-sync]
+subtopics: [background-execution, coroutines, threads-sync]
 question_kind: android
 difficulty: medium
 original_language: en
@@ -11,17 +11,15 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-android-async-primitives--android--easy
-  - q-anr-application-not-responding--android--medium
-  - q-android-performance-measurement-tools--android--medium
   - c-coroutines
   - c-lifecycle
+  - q-android-async-primitives--android--easy
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/coroutines, android/background-execution, android/threads-sync, difficulty/medium]
+tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:35 am
-date modified: Thursday, October 30th 2025, 12:43:21 pm
+date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)
@@ -38,7 +36,7 @@ date modified: Thursday, October 30th 2025, 12:43:21 pm
 
 Главный поток — только для UI, остальное — в фон. Выбор зависит от задачи: корутины (по умолчанию), WorkManager (отложенные задачи), Executor/HandlerThread (легаси), RxJava (реактивность).
 
-### Kotlin Coroutines — выбор по умолчанию
+### Kotlin Coroutines — Выбор По Умолчанию
 
 Структурированная конкурентность с автоматической отменой через lifecycle-scopes.
 
@@ -61,7 +59,7 @@ lifecycleScope.launch {
 GlobalScope.launch { /* ... */ }
 ```
 
-### WorkManager — гарантированное выполнение
+### WorkManager — Гарантированное Выполнение
 
 Переживает перезапуск, поддерживает constraints (сеть, батарея), цепочки задач.
 
@@ -90,7 +88,7 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
 
 **Важно**: Worker должен быть идемпотентным — может запуститься повторно.
 
-### ExecutorService — Java interop
+### ExecutorService — Java Interop
 
 Thread pools с ручным управлением, используется в легаси коде.
 
@@ -105,7 +103,7 @@ executor.execute {
 // ⚠️ Обязательно: executor.shutdown() в onDestroy
 ```
 
-### HandlerThread — message queue
+### HandlerThread — Message Queue
 
 Один фоновый Looper для последовательной обработки.
 
@@ -119,7 +117,7 @@ bgHandler.post {
 // Cleanup: handlerThread.quitSafely()
 ```
 
-### RxJava — reactive streams
+### RxJava — Reactive Streams
 
 Используйте если проект стандартизирован на Rx, иначе корутины.
 
@@ -298,13 +296,13 @@ disposables.add(
 
 ### Prerequisites (Easier)
 - [[q-android-async-primitives--android--easy]]
-- [[q-android-main-thread-ui-thread--android--easy]]
+
 
 ### Related (Same Level)
 - [[q-anr-application-not-responding--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
-- [[q-workmanager-constraints--android--medium]]
+
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
-- [[q-structured-concurrency-advanced--android--hard]]
+
