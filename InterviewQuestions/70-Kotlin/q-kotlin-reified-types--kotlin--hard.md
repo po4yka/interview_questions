@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111150
+id: kotlin-198
 title: "Kotlin Reified Types / Reified типы в Kotlin"
 aliases: [Kotlin Reified Types, Reified типы в Kotlin]
 topic: kotlin

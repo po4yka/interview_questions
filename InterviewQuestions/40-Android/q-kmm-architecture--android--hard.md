@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271118
+id: android-435
 title: "KMM Architecture / Архитектура KMM"
 aliases: ["KMM Architecture", "Архитектура KMM", "Kotlin Multiplatform Mobile"]
 topic: android

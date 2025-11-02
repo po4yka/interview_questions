@@ -1,5 +1,5 @@
 ---
-id: 20251012-122792
+id: android-273
 title: Cancel Presenter Requests / Отмена запросов презентера
 aliases: ["Cancel Presenter Requests", "Отмена запросов презентера"]
 topic: android

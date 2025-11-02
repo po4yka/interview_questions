@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711175
+id: android-364
 title: "Android UI Drawing Setup / Подготовка UI к рисованию"
 aliases: [Android UI Setup, Подготовка UI]
 topic: android

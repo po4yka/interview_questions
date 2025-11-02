@@ -1,5 +1,5 @@
 ---
-id: 20251012-154354
+id: kotlin-204
 title: "Data Sealed Difference / Разница data и sealed"
 aliases: [Data vs Sealed Classes, Разница data и sealed]
 topic: kotlin

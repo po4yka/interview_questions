@@ -1,5 +1,5 @@
 ---
-id: 20251012-122779
+id: android-161
 title: API File Upload Server / Загрузка файлов на сервер через API
 aliases: ["API File Upload Server", "Загрузка файлов на сервер через API"]
 

@@ -1,21 +1,20 @@
 ---
-id: 20251012-1227144
+id: android-011
 title: "Gradle Build System / Система сборки Gradle"
+aliases: [Gradle Build System, Система сборки Gradle]
 topic: android
 status: draft
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-10-31
 difficulty: medium
-subtopics:
-  - build-variants
-  - dependency-management
-  - gradle
-tags: [android/build-variants, android/dependency-management, build-system, dependency-management, difficulty/medium, gradle, groovy, kotlin-dsl]
+subtopics: [build-variants, dependency-management, gradle]
+question_kind: theory
 original_language: en
+language_tags: [en, ru]
+tags: [android/build-variants, android/dependency-management, build-system, dependency-management, difficulty/medium]
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Gradle.md
 related: [q-cache-implementation-strategies--android--medium, q-kapt-vs-ksp--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
 moc: moc-android
-connections: []
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:47:05 pm
 ---

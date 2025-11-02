@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-312
 title: "Testing Coroutines Flow / Тестирование Coroutines Flow"
 aliases: ["Testing Coroutines Flow", "Тестирование Coroutines Flow"]
 topic: android

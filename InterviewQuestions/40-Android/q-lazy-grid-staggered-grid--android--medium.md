@@ -1,5 +1,5 @@
 ---
-id: 20251012-400002
+id: android-071
 title: "LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid"
 aliases:
   - "LazyGrid & LazyStaggeredGrid"

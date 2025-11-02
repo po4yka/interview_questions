@@ -1,5 +1,5 @@
 ---
-id: 20251025-132630
+id: android-483
 title: 16kb Dex Page Size / Размер страницы DEX 16KB
 aliases: [16KB DEX Page Size, 16 КБ страница DEX]
 topic: android

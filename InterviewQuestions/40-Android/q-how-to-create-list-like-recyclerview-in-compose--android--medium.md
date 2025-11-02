@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227177
+id: android-248
 title: "How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView в Compose"
 aliases: [How To Create List Like RecyclerView In Compose, Как создать список как RecyclerView в Compose]
 topic: android

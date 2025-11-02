@@ -1,5 +1,5 @@
 ---
-id: 20251012-122745
+id: lang-056
 title: "How Suspend Function Detects Suspension / Как suspend функция определяет приостановку"
 aliases: [How Suspend Function Detects Suspension, Как suspend функция определяет приостановку]
 topic: programming-languages

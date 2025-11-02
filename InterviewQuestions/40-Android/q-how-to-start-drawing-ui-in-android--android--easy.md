@@ -1,5 +1,5 @@
 ---
-id: 20251012-122719
+id: android-137
 title: "How To Start Drawing UI In Android / Как начать рисовать UI в Android"
 aliases: ["How To Start Drawing UI In Android", "Как начать рисовать UI в Android"]
 topic: android

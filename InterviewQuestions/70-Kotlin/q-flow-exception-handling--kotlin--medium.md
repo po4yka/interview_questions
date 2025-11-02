@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111105
+id: kotlin-052
 title: "Flow Exception Handling / Обработка исключений в Flow"
 aliases: []
 

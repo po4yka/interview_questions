@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227189
+id: android-300
 title: How To Pass Data From One Fragment To Another / Как передать данные из одного Fragment в другой
 aliases: [Pass Data Between Fragments, Fragment Communication, Передача данных между фрагментами]
 topic: android

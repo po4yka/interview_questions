@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271160
+id: android-101
 title: "Parcelable Implementation / Реализация Parcelable"
 aliases: [Parcelable, Parcelable Implementation, Реализация Parcelable, Android Parcelable]
 topic: android

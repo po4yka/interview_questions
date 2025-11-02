@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-452
 title: Database Optimization Android / Оптимизация базы данных Android
 aliases: ["Database Optimization Android", "Оптимизация базы данных Android"]
 topic: android

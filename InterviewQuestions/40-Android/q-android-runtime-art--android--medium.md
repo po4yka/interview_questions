@@ -1,5 +1,5 @@
 ---
-id: 20251012-122770
+id: android-297
 title: Android Runtime (ART) / Android Runtime (ART)
 aliases: ["Android Runtime (ART)", "АРТ"]
 topic: android

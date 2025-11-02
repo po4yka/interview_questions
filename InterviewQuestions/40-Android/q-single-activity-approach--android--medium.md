@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-436
 title: "Single Activity Approach / Подход Single Activity"
 aliases: ["Single Activity Approach", "Подход Single Activity"]
 

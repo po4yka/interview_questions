@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271116
+id: android-357
 title: "Dialog vs Fragment / Диалог против Фрагмента"
 aliases: ["Dialog vs Fragment", "Диалог против Фрагмента"]
 topic: android

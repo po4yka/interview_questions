@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111142
+id: lang-091
 title: "Kotlin Non Inheritable Class / Не наследуемый класс в Kotlin"
 aliases: [Kotlin Non Inheritable Class, Не наследуемый класс в Kotlin]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122776
+id: android-293
 title: Android 14 Permissions / Разрешения Android 14
 aliases: ["Android 14 Permissions", "Разрешения Android 14"]
 topic: android

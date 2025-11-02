@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711172
+id: android-341
 title: "Navigation Methods Android / Методы навигации Android"
 aliases: [Navigation Methods, Методы навигации]
 topic: android

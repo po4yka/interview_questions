@@ -1,5 +1,5 @@
 ---
-id: 20251012-122784
+id: android-208
 title: Architecture Components Libraries / Библиотеки Architecture Components
 aliases: ["Architecture Components Libraries", "Библиотеки Architecture Components"]
 topic: android

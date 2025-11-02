@@ -1,5 +1,5 @@
 ---
-id: 20251029-170212
+id: android-489
 title: Design BLE Wearable Sync / Проектирование синхронизации BLE носимых устройств
 aliases:
     [

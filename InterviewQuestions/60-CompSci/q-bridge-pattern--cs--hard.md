@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111114
+id: cs-018
 title: "Bridge Pattern / Bridge Паттерн"
 aliases: ["Bridge Pattern", "Паттерн Bridge"]
 topic: cs

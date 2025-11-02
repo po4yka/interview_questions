@@ -1,5 +1,5 @@
 ---
-id: 20251012-400004
+id: android-062
 title: "WindowInsets & Edge-to-Edge / WindowInsets и Edge-to-Edge"
 aliases: ["WindowInsets & Edge-to-Edge", "WindowInsets и Edge-to-Edge"]
 topic: android

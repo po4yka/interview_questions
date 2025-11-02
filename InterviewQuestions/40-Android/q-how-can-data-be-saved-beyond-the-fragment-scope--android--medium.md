@@ -1,5 +1,5 @@
 ---
-id: 20251016-162905
+id: android-353
 title: "How Can Data Be Saved Beyond The Fragment Scope / Как можно сохранить данные за пределами скоупа Fragment"
 aliases: [Fragment Data Persistence, Сохранение данных Fragment, Fragment Scope, ViewModel Scope]
 topic: android

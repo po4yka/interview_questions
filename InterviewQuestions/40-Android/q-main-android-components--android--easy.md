@@ -1,5 +1,5 @@
 ---
-id: 20251016-162827
+id: android-358
 title: "Main Android Components / Основные компоненты Android"
 aliases: ["Main Android Components", "Основные компоненты Android"]
 topic: android

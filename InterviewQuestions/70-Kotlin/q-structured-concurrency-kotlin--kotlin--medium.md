@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111161
+id: kotlin-185
 title: "Structured Concurrency in Kotlin Coroutines / Структурированная параллельность"
 aliases: [Structured Concurrency, Coroutine Scope, Lifecycle, Структурированная параллельность]
 topic: kotlin

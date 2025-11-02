@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111159
+id: kotlin-190
 title: "Kotlin When Expression / Выражение when в Kotlin"
 aliases: [When Expression, When Statement, Pattern Matching, When Выражение]
 topic: kotlin

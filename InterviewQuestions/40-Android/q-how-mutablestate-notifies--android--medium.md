@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227163
+id: android-108
 title: "How MutableState Notifies / Как MutableState уведомляет"
 aliases: [MutableState notifications, MutableState уведомления, Snapshot system]
 topic: android

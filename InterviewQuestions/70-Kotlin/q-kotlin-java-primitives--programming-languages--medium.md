@@ -1,5 +1,5 @@
 ---
-id: 20251017-105059
+id: lang-094
 title: "Kotlin Java Primitives / Примитивы Kotlin и Java"
 aliases: [Kotlin Java Primitives, Примитивы Kotlin и Java]
 topic: programming-languages

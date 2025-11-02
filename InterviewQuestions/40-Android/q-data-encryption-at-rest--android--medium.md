@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-466
 title: Data Encryption At Rest / Шифрование данных в покое
 aliases: ["Data Encryption At Rest", "Шифрование данных в покое"]
 topic: android

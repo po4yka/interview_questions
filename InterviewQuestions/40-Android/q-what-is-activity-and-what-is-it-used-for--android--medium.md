@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711156
+id: android-187
 title: "Activity / Компонент Activity"
 aliases: [Activity, Компонент Activity]
 topic: android

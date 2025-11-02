@@ -1,5 +1,5 @@
 ---
-id: 20251012-122782
+id: android-336
 title: App Start Types Android / Типы запуска приложения Android
 aliases: ["App Start Types Android", "Типы запуска приложения Android"]
 topic: android

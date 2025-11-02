@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711187
+id: android-099
 title: "Rendering Views in Background Thread / Отрисовка View в фоновом потоке"
 aliases: ["Rendering Views in Background Thread", "Отрисовка View в фоновом потоке", "SurfaceView", "TextureView"]
 topic: android

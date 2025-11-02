@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711192
+id: android-367
 title: "Why DiffUtil Needed / Зачем нужен DiffUtil"
 aliases: [DiffUtil, AsyncListDiffer, ListAdapter, Зачем DiffUtil]
 topic: android

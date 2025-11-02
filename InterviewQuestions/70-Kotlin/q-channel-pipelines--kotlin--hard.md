@@ -1,5 +1,5 @@
 ---
-id: 20251012-100001
+id: kotlin-060
 title: "Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111136
+id: lang-060
 title: "Kotlin Intrange / IntRange в Kotlin"
 aliases: [Kotlin Intrange, IntRange в Kotlin]
 topic: programming-languages

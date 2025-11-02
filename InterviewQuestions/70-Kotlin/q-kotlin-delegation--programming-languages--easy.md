@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111122
+id: lang-005
 title: "Kotlin Delegation / Делегирование в Kotlin"
 aliases: []
 topic: programming-languages

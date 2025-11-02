@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711164
+id: android-411
 title: "What Is PendingIntent / Что такое PendingIntent"
 aliases: ["What is PendingIntent", "Что такое PendingIntent"]
 topic: android

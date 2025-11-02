@@ -1,10 +1,16 @@
 ---
-id: "20251012-180003"
+id: kotlin-170
 title: "Coroutines and side effects in Jetpack Compose / Корутины и side effects в Jetpack Compose"
+aliases: [Coroutines Side Effects Compose, Корутины side effects Jetpack Compose]
 topic: kotlin
+subtopics: [coroutines, compose-integration]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -15,9 +21,9 @@ tags:
   - rememberCoroutineScope
   - lifecycle
   - state-management
+  - difficulty/medium
 moc: moc-kotlin
 related: [q-kotlin-sealed-when-exhaustive--kotlin--medium, q-select-expression-channels--kotlin--hard, q-sealed-class-sealed-interface--kotlin--medium]
-subtopics:
   - coroutines
   - android
   - compose

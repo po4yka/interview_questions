@@ -1,5 +1,5 @@
 ---
-id: 20251017-144838
+id: android-348
 title: "RSS Feed Aggregator / Агрегатор RSS лент"
 aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
 topic: android

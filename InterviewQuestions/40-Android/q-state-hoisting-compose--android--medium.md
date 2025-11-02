@@ -1,5 +1,5 @@
 ---
-id: 20251017-144953
+id: android-371
 title: "State Hoisting in Compose / Поднятие состояния в Compose"
 aliases: [State Hoisting in Compose, Поднятие состояния в Compose]
 topic: android

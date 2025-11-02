@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711128
+id: android-239
 title: "ViewGroup vs View Differences / Различия ViewGroup и View"
 aliases: [ViewGroup vs View, Различия ViewGroup и View]
 topic: android

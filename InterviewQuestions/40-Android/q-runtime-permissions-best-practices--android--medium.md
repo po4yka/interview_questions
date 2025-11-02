@@ -1,5 +1,5 @@
 ---
-id: 20251027-120000
+id: android-213
 title: "Runtime Permissions Best Practices / Лучшие практики runtime разрешений"
 aliases: ["Runtime Permissions Best Practices", "Лучшие практики runtime разрешений"]
 topic: android

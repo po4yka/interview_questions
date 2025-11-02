@@ -1,5 +1,5 @@
 ---
-id: 20251012-122768
+id: android-098
 title: Android Performance Measurement Tools / Инструменты измерения производительности Android
 aliases: ["Android Performance Measurement Tools", "Инструменты измерения производительности Android"]
 topic: android

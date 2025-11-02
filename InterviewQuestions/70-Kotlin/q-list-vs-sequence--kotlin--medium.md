@@ -1,5 +1,5 @@
 ---
-id: 20251012-154381
+id: kotlin-216
 title: "List Vs Sequence / List против Sequence"
 aliases: [List, Sequence, Lazy Evaluation, Eager Evaluation, List vs Sequence]
 topic: kotlin

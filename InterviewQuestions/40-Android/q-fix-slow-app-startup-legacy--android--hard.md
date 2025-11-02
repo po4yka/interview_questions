@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227138
+id: android-271
 title: "Fix Slow App Startup Legacy / Исправление медленного запуска приложения"
 aliases: ["Fix Slow App Startup in Legacy Project", "Исправление медленного запуска приложения в легаси-проекте"]
 topic: android

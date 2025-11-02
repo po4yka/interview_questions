@@ -1,5 +1,5 @@
 ---
-id: 20251025-132630
+id: android-110
 title: "How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события рекомпозиции"
 aliases: ["VSYNC Recomposition", "VSYNC и рекомпозиция"]
 topic: android

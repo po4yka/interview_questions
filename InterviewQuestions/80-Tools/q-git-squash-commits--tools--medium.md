@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111164
+id: tools-002
 title: Git squashing commits / Объединение коммитов в Git
 aliases: []
 

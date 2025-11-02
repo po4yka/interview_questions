@@ -1,5 +1,5 @@
 ---
-id: 20251012-122757
+id: android-377
 title: Как работает навигация Activity / How Activity Navigation Works
 aliases:
   - Activity Navigation

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-086
 title: "Memory Leaks Definition / Определение утечек памяти"
 aliases: ["Memory Leaks Definition", "Определение утечек памяти"]
 topic: android

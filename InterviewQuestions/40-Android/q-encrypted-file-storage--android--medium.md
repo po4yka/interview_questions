@@ -1,5 +1,5 @@
 ---
-id: 20251020-200300
+id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
 aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
 topic: android

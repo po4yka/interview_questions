@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271121
+id: kotlin-138
 title: "KMM Production Readiness / Готовность KMM к production"
 aliases: ["KMM Production Readiness", "Готовность KMM к production"]
 topic: kotlin

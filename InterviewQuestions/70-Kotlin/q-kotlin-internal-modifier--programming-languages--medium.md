@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111135
+id: lang-032
 title: "Kotlin Internal Modifier / Модификатор internal в Kotlin"
 aliases: [Kotlin Internal Modifier, Модификатор internal в Kotlin]
 topic: programming-languages

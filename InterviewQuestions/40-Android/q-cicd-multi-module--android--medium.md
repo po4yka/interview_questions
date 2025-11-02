@@ -1,5 +1,5 @@
 ---
-id: 20251012-122798
+id: android-052
 title: CI/CD for Multi‑Module Android / CI/CD для мультимодульных Android‑проектов
 aliases: ["CI/CD for Multi-Module Android", "CI/CD для мультимодульных Android‑проектов"]
 topic: android

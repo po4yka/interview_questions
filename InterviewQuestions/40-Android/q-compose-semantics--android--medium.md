@@ -1,5 +1,5 @@
 ---
-id: 20251012-122710
+id: android-026
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
 aliases: ["Semantics in Jetpack Compose", "Семантика в Jetpack Compose"]
 topic: android

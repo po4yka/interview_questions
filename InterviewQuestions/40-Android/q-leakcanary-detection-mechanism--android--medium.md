@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271126
+id: android-095
 title: "LeakCanary Detection Mechanism / Механизм обнаружения LeakCanary"
 aliases: ["LeakCanary Detection Mechanism", "Механизм обнаружения LeakCanary", "How LeakCanary Detects Memory Leaks", "Как LeakCanary обнаруживает утечки памяти"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122735
+id: design-patterns-003
 title: "Factory Method Pattern / Паттерн фабричный метод"
 aliases: [Factory Method Pattern, Паттерн фабричный метод]
 topic: design-patterns

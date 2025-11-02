@@ -1,5 +1,5 @@
 ---
-id: 20251016-164233
+id: lang-058
 title: "Kotlin Null Checks Methods / Методы проверки на null в Kotlin"
 aliases: [Kotlin Null Checks Methods, Методы проверки на null в Kotlin]
 topic: programming-languages

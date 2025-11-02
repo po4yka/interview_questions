@@ -1,5 +1,5 @@
 ---
-id: 20251012-122800
+id: android-046
 title: CI/CD Pipeline Setup for Android / Настройка CI/CD пайплайна для Android
 aliases: ["CI/CD Pipeline Setup for Android", "Настройка CI/CD пайплайна для Android"]
 topic: android

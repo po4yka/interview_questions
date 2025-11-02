@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711112
+id: android-261
 title: "How To Stop Service / Остановка Service"
 aliases: [How To Stop Service, Остановка Service]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122774
+id: android-433
 title: Android Services Purpose / Назначение Service в Android
 aliases: ["Android Services Purpose", "Назначение Service в Android"]
 topic: android

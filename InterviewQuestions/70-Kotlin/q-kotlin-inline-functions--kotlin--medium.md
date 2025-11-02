@@ -1,5 +1,5 @@
 ---
-id: 20251012-100000
+id: kotlin-132
 title: "Kotlin Inline Functions / Inline функции в Kotlin"
 aliases: []
 

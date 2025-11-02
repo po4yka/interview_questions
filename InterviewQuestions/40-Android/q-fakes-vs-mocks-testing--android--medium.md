@@ -1,5 +1,5 @@
 ---
-id: 20251020-200600
+id: android-457
 title: Fakes Vs Mocks Testing / Fakes против Mocks Тестирование
 aliases: [Fakes Vs Mocks Testing, Fakes против Mocks Тестирование, Test Doubles, Тестовые дублёры]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251017-144924
+id: android-159
 title: "MVI One-Time Events / Одноразовые события в MVI"
 aliases: ["MVI One-Time Events", "Одноразовые события в MVI", "One-time events in MVI", "SharedFlow для событий"]
 topic: android

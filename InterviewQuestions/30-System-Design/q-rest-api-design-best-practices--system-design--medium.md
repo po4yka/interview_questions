@@ -1,5 +1,5 @@
 ---
-id: 20251012-300007
+id: sysdes-003
 title: "REST API Design Best Practices / Лучшие практики проектирования REST API"
 aliases: ["REST API Design", "Проектирование REST API"]
 topic: system-design

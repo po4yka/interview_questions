@@ -1,5 +1,5 @@
 ---
-id: 20251016-162644
+id: lang-009
 title: "Java All Classes Inherit From Object / В Java все классы наследуются от Object"
 aliases: [Java All Classes Inherit From Object, В Java все классы наследуются от Object]
 topic: programming-languages

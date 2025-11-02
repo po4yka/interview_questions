@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111160
+id: kotlin-139
 title: "Lambdas Java Kotlin Syntax / Синтаксис лямбд Java и Kotlin"
 aliases: [Lambdas, Lambda Syntax, Functional Programming, Лямбды]
 topic: kotlin

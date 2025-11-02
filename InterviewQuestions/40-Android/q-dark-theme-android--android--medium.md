@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-461
 title: Dark Theme Android / Темная тема Android
 aliases: ["Dark Theme Android", "Темная тема Android"]
 topic: android

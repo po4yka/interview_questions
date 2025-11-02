@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-422
 title: "Where Does The Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
 aliases: ["Where Does The Repeated Call Of Composable Function Come From", "Откуда берется повторный вызов Composable функции", "Recomposition in Compose", "Рекомпозиция в Compose"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251016-123535
+id: kotlin-177
 title: "Heap Pollution Generics / Загрязнение кучи дженериками"
 aliases: [Heap, Pollution, Generics]
 topic: kotlin

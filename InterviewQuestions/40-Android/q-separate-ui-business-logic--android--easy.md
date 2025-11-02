@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271198
+id: android-288
 title: "Separate UI and Business Logic / Разделение UI и бизнес-логики"
 aliases: [Separate UI and Business Logic, Разделение UI и бизнес-логики]
 topic: android

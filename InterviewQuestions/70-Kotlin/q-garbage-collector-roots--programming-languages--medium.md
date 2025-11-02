@@ -1,5 +1,5 @@
 ---
-id: 20251016-164117
+id: lang-080
 title: "Garbage Collector Roots / Корни Garbage Collector"
 aliases: [Garbage Collector Roots, Корни Garbage Collector]
 topic: programming-languages

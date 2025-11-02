@@ -1,5 +1,5 @@
 ---
-id: 20251012-154391
+id: kotlin-158
 title: "Stateflow Purpose / Назначение StateFlow"
 aliases: [StateFlow, State Management, Reactive State, StateFlow Flow]
 topic: kotlin

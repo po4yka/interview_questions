@@ -1,5 +1,5 @@
 ---
-id: 20251012-122728
+id: lang-072
 title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 aliases: [Equals Hashcode Contracts, Контракты equals и hashCode]
 topic: programming-languages

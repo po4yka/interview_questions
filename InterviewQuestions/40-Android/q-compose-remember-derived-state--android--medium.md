@@ -1,5 +1,5 @@
 ---
-id: 20251012-122710
+id: android-311
 title: Compose remember/derivedStateOf / remember и derivedStateOf в Compose
 aliases: [Compose remember and derivedStateOf, remember и derivedStateOf]
 topic: android

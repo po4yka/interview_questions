@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-443
 title: Compose Performance Optimization / Оптимизация производительности Compose
 aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
 topic: android

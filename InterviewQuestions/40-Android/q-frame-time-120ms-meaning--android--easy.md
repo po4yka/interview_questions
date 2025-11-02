@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227143
+id: android-094
 title: "Frame Time 120ms Meaning / Значение времени кадра 120мс"
 aliases: ["Frame Time 120ms Meaning", "Значение времени кадра 120мс"]
 topic: android

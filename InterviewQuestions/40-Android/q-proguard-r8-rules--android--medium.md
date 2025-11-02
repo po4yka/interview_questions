@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-153
 title: "ProGuard/R8 Rules / Правила ProGuard и R8"
 aliases: ["ProGuard/R8 Rules", "Правила ProGuard и R8"]
 topic: android

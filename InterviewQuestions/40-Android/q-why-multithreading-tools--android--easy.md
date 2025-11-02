@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711198
+id: android-437
 title: "Why Multithreading Tools / Зачем инструменты многопоточности"
 aliases: [Multithreading Tools, Инструменты многопоточности, Android Concurrency]
 topic: android

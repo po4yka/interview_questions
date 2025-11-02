@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271109
+id: android-402
 title: "Internal App Distribution / Внутреннее распространение приложения"
 aliases: [Internal App Distribution, Внутреннее распространение приложения, Beta Testing Distribution, Firebase App Distribution, Google Play Internal Testing]
 topic: android

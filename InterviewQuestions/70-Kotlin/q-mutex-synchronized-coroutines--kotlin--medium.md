@@ -1,5 +1,5 @@
 ---
-id: 20251012-160001
+id: kotlin-081
 title: "Mutex vs synchronized in Kotlin coroutines / Mutex vs synchronized в Kotlin корутинах"
 topic: kotlin
 difficulty: medium

@@ -1,5 +1,5 @@
 ---
-id: 20251012-154345
+id: kotlin-222
 title: "Companion Object Initialization / Инициализация Companion Object"
 aliases: [Companion Object Initialization, Инициализация Companion Object]
 topic: kotlin

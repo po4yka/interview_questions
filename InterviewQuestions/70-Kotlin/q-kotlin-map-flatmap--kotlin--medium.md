@@ -1,5 +1,5 @@
 ---
-id: 20251005-234502
+id: kotlin-032
 title: "map() vs flatMap() in Kotlin / map() против flatMap() в Kotlin"
 aliases: []
 

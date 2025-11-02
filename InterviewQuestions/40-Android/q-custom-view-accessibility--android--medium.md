@@ -1,5 +1,5 @@
 ---
-id: 20251021-150000
+id: android-477
 title: Custom View Accessibility / Доступность Custom View
 aliases: ["Custom View Accessibility", "Доступность Custom View"]
 topic: android

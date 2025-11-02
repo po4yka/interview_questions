@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111157
+id: lang-003
 title: "Java Marker Interfaces / Маркерные интерфейсы Java"
 aliases: [Java Marker Interfaces, Маркерные интерфейсы Java]
 topic: programming-languages

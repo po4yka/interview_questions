@@ -1,5 +1,5 @@
 ---
-id: 20251012-140029
+id: kotlin-102
 title: "Coroutine Builders: launch, async, runBlocking / Билдеры корутин: launch, async, runBlocking"
 aliases: []
 

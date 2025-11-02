@@ -1,5 +1,5 @@
 ---
-id: 20251026-150001
+id: android-484
 title: "StateFlow vs Flow vs SharedFlow vs LiveData / StateFlow против Flow, SharedFlow и LiveData"
 aliases: [StateFlow vs Flow vs SharedFlow vs LiveData, StateFlow против Flow, SharedFlow и LiveData]
 topic: android

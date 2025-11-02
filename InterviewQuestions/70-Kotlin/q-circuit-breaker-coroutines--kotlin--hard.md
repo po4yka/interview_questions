@@ -1,10 +1,16 @@
 ---
-id: 20251012-180008
+id: kotlin-172
 title: "Circuit breaker pattern with coroutines / Circuit breaker паттерн с корутинами"
+aliases: [Circuit Breaker Pattern, Circuit breaker паттерн]
 topic: kotlin
+subtopics: [coroutines, patterns]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -14,10 +20,9 @@ tags:
   - error-handling
   - production
   - microservices
+  - difficulty/hard
 moc: moc-kotlin
 related: [q-flatmap-variants-flow--kotlin--medium, q-flow-vs-livedata-comparison--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
-subtopics:
-  - coroutines
   - resilience
   - patterns
   - error-handling

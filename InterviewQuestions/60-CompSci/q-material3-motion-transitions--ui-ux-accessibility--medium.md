@@ -1,5 +1,5 @@
 ---
-id: 20251028-000000
+id: ui-001
 title: "Material3 Motion Transitions / Движение и переходы Material3"
 aliases: ["Material3 Motion Transitions", "Движение и переходы Material3"]
 topic: ui-ux-accessibility

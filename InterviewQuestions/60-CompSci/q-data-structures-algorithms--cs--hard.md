@@ -1,5 +1,5 @@
 ---
-id: "20251013-600005"
+id: cs-035
 title: "Data Structures and Algorithms Fundamentals / Фундаментальные структуры данных и алгоритмы"
 aliases: ["Data Structures and Algorithms Fundamentals", "Фундаментальные структуры данных и алгоритмы"]
 topic: cs

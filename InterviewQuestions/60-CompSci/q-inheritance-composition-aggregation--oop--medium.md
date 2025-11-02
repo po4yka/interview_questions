@@ -1,5 +1,5 @@
 ---
-id: 20251012-122748
+id: oop-002
 title: "Inheritance Composition Aggregation / Наследование, композиция и агрегация"
 aliases: [Inheritance Composition Aggregation, Наследование, композиция и агрегация]
 topic: oop

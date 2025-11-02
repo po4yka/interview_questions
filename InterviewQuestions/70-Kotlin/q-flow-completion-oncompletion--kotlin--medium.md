@@ -1,27 +1,21 @@
 ---
-id: "20251012-180005"
+id: kotlin-148
 title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
+aliases: [Flow, Completion, Oncompletion]
 topic: kotlin
+subtopics: []
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-15
-tags:
-  - kotlin
-  - coroutines
-  - flow
-  - oncompletion
-  - cleanup
-  - lifecycle
-  - operators
-  - error-handling
 moc: moc-kotlin
 related: [q-kotlin-extension-functions--kotlin--medium, q-access-modifiers--programming-languages--medium, q-kotlin-type-system--kotlin--medium]
-subtopics:
-  - coroutines
-  - flow
-  - completion
-  - cleanup
-  - operators
+created: 2025-10-15
+updated: 2025-10-31
+tags:
+  - 
+  - difficulty/medium
 ---
 # Flow completion with onCompletion operator
 

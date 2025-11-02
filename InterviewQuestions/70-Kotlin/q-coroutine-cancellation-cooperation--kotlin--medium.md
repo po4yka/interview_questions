@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111198
+id: kotlin-051
 title: "Coroutine Cancellation Cooperation / Кооперативная отмена корутин"
 aliases: []
 

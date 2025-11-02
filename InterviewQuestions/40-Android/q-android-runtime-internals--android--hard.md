@@ -1,5 +1,5 @@
 ---
-id: 20251012-122771
+id: android-107
 title: Android Runtime Internals / Внутреннее устройство Android Runtime
 aliases: ["Android Runtime Internals", "Внутреннее устройство Android Runtime"]
 topic: android

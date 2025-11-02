@@ -1,5 +1,5 @@
 ---
-id: 20251016-163856
+id: android-270
 title: "Room vs SQLite / Room против SQLite"
 aliases: [Room vs SQLite, Room против SQLite]
 topic: android

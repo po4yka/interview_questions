@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-383
 title: "OpenGL Advanced Rendering / Продвинутый рендеринг OpenGL"
 aliases: ["OpenGL Advanced Rendering", "Продвинутый рендеринг OpenGL"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122716
+id: android-131
 title: "How To Break Text By Screen Width / Как разбить текст по ширине экрана"
 aliases: ["How To Break Text By Screen Width", "Как разбить текст по ширине экрана"]
 topic: android

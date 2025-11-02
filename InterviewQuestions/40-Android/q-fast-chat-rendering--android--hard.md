@@ -1,5 +1,5 @@
 ---
-id: 20251020-200700
+id: android-474
 title: Fast Chat Rendering / Быстрый рендеринг чата
 aliases: [Fast Chat Rendering, Быстрый рендеринг чата]
 topic: android

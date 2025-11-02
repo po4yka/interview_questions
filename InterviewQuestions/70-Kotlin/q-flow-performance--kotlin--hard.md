@@ -1,5 +1,5 @@
 ---
-id: 20251012-140023
+id: kotlin-109
 title: "Flow Performance Optimization / Оптимизация производительности Flow"
 aliases: []
 

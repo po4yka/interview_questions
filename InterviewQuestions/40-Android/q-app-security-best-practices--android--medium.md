@@ -1,5 +1,5 @@
 ---
-id: 20251012-122781
+id: android-277
 title: App Security Best Practices / Лучшие практики безопасности приложения
 aliases: ["App Security Best Practices", "Лучшие практики безопасности приложения"]
 topic: android

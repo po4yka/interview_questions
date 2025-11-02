@@ -1,5 +1,5 @@
 ---
-id: 20251017-104930
+id: android-304
 title: "Which Layout Allows Views To Overlap / Какой layout позволяет View перекрываться"
 aliases: ["Which Layout Allows Views To Overlap", "Какой layout позволяет View перекрываться"]
 topic: android

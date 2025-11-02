@@ -1,5 +1,5 @@
 ---
-id: 20251029-170209
+id: android-486
 title: Design TikTok-style Short-Video Feed / Проектирование коротких видео (TikTok-стиль)
 aliases:
     [

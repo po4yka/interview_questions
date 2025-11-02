@@ -1,5 +1,5 @@
 ---
-id: 20251012-140019
+id: kotlin-094
 title: "shareIn and stateIn Operators / Операторы shareIn и stateIn"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711161
+id: android-329
 title: "RecyclerView / Компонент RecyclerView"
 aliases: [RecyclerView, Компонент RecyclerView]
 topic: android

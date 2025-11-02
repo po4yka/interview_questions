@@ -1,5 +1,5 @@
 ---
-id: 20251012-154372
+id: kotlin-192
 title: "Kotlin Dsl Creation / Создание DSL в Kotlin"
 aliases: [Kotlin, Dsl, Creation]
 topic: kotlin

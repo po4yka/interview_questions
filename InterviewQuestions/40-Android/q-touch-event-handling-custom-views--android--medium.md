@@ -1,5 +1,5 @@
 ---
-id: 20251016-174833
+id: android-378
 title: "Touch Event Handling Custom Views / Обработка касаний в пользовательских View"
 aliases: ["Touch Event Handling Custom Views", "Обработка касаний в пользовательских View"]
 topic: android

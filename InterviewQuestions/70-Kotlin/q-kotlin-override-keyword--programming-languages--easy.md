@@ -1,5 +1,5 @@
 ---
-id: 20251016-172627
+id: lang-095
 title: "Kotlin Override Keyword / Ключевое слово override в Kotlin"
 aliases: [Kotlin Override Keyword, Ключевое слово override в Kotlin]
 topic: programming-languages

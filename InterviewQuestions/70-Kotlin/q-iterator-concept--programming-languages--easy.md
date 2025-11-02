@@ -1,5 +1,5 @@
 ---
-id: 20251012-122751
+id: lang-030
 title: "Iterator Concept / Концепция Iterator"
 aliases: [Iterator Concept, Концепция Iterator]
 topic: programming-languages

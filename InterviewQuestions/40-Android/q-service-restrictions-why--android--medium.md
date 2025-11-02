@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711100
+id: android-205
 title: "Service Restrictions / Ограничения Service"
 aliases: [Service Restrictions, Ограничения Service]
 topic: android

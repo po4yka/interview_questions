@@ -1,5 +1,5 @@
 ---
-id: 20251012-160008
+id: kotlin-061
 title: "channelFlow vs callbackFlow vs flow: when to use each / channelFlow vs callbackFlow vs flow: когда использовать"
 topic: kotlin
 difficulty: medium

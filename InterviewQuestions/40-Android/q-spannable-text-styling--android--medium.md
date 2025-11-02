@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-109
 title: "Spannable Text Styling / Стилизация текста Spannable"
 aliases: ["Spannable Text Styling", "Стилизация текста Spannable"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111153
+id: cs-008
 title: "Iterator Pattern / Паттерн Итератор"
 aliases: ["Iterator Pattern", "Паттерн Итератор"]
 topic: cs

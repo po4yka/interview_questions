@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-455
 title: DataStore Preferences и Proto / DataStore Preferences and Proto
 aliases: ["DataStore Preferences and Proto", "DataStore Preferences и Proto"]
 topic: android

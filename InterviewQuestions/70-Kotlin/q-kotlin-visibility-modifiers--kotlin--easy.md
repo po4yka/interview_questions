@@ -1,5 +1,5 @@
 ---
-id: 20251005-222658
+id: kotlin-023
 title: "Kotlin Visibility Modifiers / Модификаторы видимости в Kotlin"
 aliases: []
 

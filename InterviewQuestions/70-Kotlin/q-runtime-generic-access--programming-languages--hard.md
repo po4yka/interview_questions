@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111175
+id: lang-024
 title: "Runtime Generic Access / Доступ к дженерикам во время выполнения"
 aliases: [Runtime Generic Access, Доступ к дженерикам во время выполнения]
 topic: programming-languages

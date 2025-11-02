@@ -1,13 +1,19 @@
 ---
-id: 20251012-12271199
-title: "Service Lifecycle Binding / Жизненный цикл и привязка Service"
+id: android-325
+title: "Service Lifecycle and Binding / Жизненный цикл и привязка Service"
+aliases: [Service Lifecycle and Binding, Жизненный цикл и привязка Service]
 topic: android
+subtopics: [service]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-how-to-add-custom-attributes-to-custom-view--android--medium, q-migration-to-compose--android--medium, q-viewmodel-pattern--android--easy]
 created: 2025-10-15
-tags: [Kotlin, Background, Service, IPC, difficulty/hard]
+updated: 2025-10-31
+tags: [android/service, difficulty/hard]
 ---
 
 # Service Lifecycle and Binding - Advanced Patterns

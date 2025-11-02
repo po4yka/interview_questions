@@ -1,5 +1,5 @@
 ---
-id: 20251021-180000
+id: android-479
 title: Custom View Lifecycle / Жизненный цикл Custom View
 aliases: [Custom View Lifecycle, Жизненный цикл Custom View]
 topic: android

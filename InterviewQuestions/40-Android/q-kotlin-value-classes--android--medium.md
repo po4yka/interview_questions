@@ -1,5 +1,5 @@
 ---
-id: 20251012-400006
+id: android-069
 title: "Kotlin Value Classes (Inline Classes) / Value классы в Kotlin"
 aliases:
   - "Kotlin Value Classes (Inline Classes)"

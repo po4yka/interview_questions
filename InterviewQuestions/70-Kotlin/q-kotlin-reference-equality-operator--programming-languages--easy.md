@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111148
+id: lang-048
 title: "Kotlin Reference Equality Operator / Оператор ссылочного равенства в Kotlin"
 aliases: [Kotlin Reference Equality Operator, Оператор ссылочного равенства в Kotlin]
 topic: programming-languages

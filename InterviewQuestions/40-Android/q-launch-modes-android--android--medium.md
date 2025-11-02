@@ -1,5 +1,5 @@
 ---
-id: 20251005-215454
+id: android-010
 title: "Android Activity Launch Modes / Режимы запуска Activity в Android"
 aliases: []
 

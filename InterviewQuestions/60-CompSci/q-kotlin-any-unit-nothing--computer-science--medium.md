@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111112
+id: cs-004
 title: "Kotlin Any Unit Nothing / Any Unit и Nothing в Kotlin"
 aliases: []
 topic: computer-science

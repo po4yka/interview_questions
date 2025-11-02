@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-469
 title: Dagger Field Injection / Инъекция полей Dagger
 aliases: ["Dagger Field Injection", "Инъекция полей Dagger"]
 topic: android

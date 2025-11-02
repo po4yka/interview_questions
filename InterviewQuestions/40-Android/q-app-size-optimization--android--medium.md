@@ -1,5 +1,5 @@
 ---
-id: 20251011-220007
+id: android-051
 title: App Size Optimization / Оптимизация размера приложения
 aliases: ["App Size Optimization", "Оптимизация размера приложения"]
 topic: android

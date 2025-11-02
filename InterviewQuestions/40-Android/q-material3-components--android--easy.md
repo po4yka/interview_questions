@@ -1,5 +1,5 @@
 ---
-id: 20251016-162207
+id: android-078
 title: "Material3 Components / Компоненты Material3"
 aliases: ["Material3 Components", "Компоненты Material3"]
 topic: android

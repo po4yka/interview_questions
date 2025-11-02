@@ -1,5 +1,5 @@
 ---
-id: 20251005-234500
+id: kotlin-017
 title: "Const Keyword in Kotlin / Ключевое слово const в Kotlin"
 aliases: []
 

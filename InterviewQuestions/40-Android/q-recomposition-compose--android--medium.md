@@ -1,5 +1,5 @@
 ---
-id: 20251012-140500
+id: android-060
 title: "Recomposition in Compose / Рекомпозиция в Compose"
 aliases: [Recomposition, Рекомпозиция, Compose Recomposition, Рекомпозиция Compose]
 topic: android

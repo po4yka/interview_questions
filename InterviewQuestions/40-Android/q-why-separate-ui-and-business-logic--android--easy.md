@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-129
 title: "Why Separate UI and Business Logic / Зачем разделять UI и бизнес-логику"
 aliases: ["Why Separate UI and Business Logic", "Зачем разделять UI и бизнес-логику"]
 topic: android

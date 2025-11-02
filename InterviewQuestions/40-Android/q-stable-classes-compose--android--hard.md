@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711110
+id: android-263
 title: "Stable Classes Compose / Stable Классы Compose"
 aliases: ["Stable Classes Compose", "Stable Классы Compose"]
 topic: android

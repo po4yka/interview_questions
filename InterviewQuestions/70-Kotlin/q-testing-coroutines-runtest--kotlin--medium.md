@@ -1,5 +1,5 @@
 ---
-id: 20251012-140001
+id: kotlin-106
 title: "Testing Coroutines with runTest and TestDispatcher / Тестирование корутин с runTest и TestDispatcher"
 aliases: []
 

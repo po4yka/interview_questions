@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111124
+id: cs-013
 title: "Kotlin Double Bang Operator / Оператор !! в Kotlin"
 aliases: []
 topic: computer-science

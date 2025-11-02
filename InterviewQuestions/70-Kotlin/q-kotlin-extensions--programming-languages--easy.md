@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111127
+id: lang-041
 title: "Kotlin Extensions / Расширения Kotlin"
 aliases: [Kotlin Extensions, Расширения Kotlin]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-284
 title: "Where Is Composition Created / Где создается Composition"
 aliases: [Composition Creation, Создание Composition, setContent, ComposeView]
 topic: android

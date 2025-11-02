@@ -1,5 +1,5 @@
 ---
-id: 20251011-220005
+id: android-043
 title: Gradle Build Optimization / Оптимизация сборки Gradle
 aliases: ["Gradle Build Optimization", "Оптимизация сборки Gradle"]
 topic: android

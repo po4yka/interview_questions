@@ -1,5 +1,5 @@
 ---
-id: 20251012-122710
+id: android-333
 title: Compose Slot Table & Recomposition / Slot Table и рекомпозиция Compose
 aliases: ["Compose Slot Table and Recomposition", "Slot Table и рекомпозиция"]
 topic: android

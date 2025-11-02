@@ -1,5 +1,5 @@
 ---
-id: 20251012-400003
+id: android-068
 title: Biometric Authentication / Биометрическая аутентификация
 aliases: ["Biometric Authentication", "Биометрическая аутентификация"]
 topic: android

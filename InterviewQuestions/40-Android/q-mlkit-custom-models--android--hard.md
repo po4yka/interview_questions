@@ -1,5 +1,5 @@
 ---
-id: 20251015-000000
+id: android-126
 title: "ML Kit Custom Models / Кастомные модели ML Kit"
 aliases: ["ML Kit Custom Models", "Кастомные модели ML Kit"]
 topic: android

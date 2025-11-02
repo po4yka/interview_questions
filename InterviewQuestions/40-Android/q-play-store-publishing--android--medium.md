@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271167
+id: android-258
 title: "Play Store Publishing / Публикация в Play Store"
 aliases: [Play Store Publishing, Публикация в Play Store, Google Play Publishing, App Bundle, Staged Rollout]
 topic: android

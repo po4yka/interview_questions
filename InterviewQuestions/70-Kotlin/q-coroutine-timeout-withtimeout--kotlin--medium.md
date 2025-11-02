@@ -1,5 +1,5 @@
 ---
-id: "20251012-150006"
+id: kotlin-244
 title: "How to handle timeouts in coroutines: withTimeout vs withTimeoutOrNull / Таймауты в корутинах"
 aliases: [Coroutine Timeouts, Таймауты в корутинах]
 topic: kotlin

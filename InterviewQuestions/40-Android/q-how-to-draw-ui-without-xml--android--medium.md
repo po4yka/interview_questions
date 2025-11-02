@@ -1,5 +1,5 @@
 ---
-id: 20251012-122718
+id: android-240
 title: "How To Draw UI Without XML / Как рисовать UI без XML"
 aliases: [Drawing UI without XML, Programmatic UI, Jetpack Compose UI, Рисование UI без XML, Программный UI]
 topic: android

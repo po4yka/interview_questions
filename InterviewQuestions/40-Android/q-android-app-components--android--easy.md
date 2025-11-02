@@ -1,5 +1,5 @@
 ---
-id: 20251012-122759
+id: android-393
 title: Android App Components / Компоненты Android приложения
 aliases: ["Android App Components", "Компоненты Android приложения"]
 topic: android

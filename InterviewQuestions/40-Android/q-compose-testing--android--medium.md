@@ -1,5 +1,5 @@
 ---
-id: 20251020-190000
+id: android-472
 title: Compose Testing / Тестирование Compose
 aliases: ["Compose Testing", "Тестирование Compose"]
 topic: android

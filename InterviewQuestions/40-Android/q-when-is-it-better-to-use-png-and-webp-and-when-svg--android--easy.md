@@ -1,5 +1,5 @@
 ---
-id: 20251016-161632
+id: android-241
 title: When to Use PNG, WebP, or SVG / Когда использовать PNG, WebP или SVG
 aliases: [Image Formats Android, Форматы изображений Android, PNG vs WebP vs SVG]
 

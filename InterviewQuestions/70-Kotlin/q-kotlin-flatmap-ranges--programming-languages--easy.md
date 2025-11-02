@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111131
+id: lang-038
 title: "Kotlin Flatmap Ranges / flatMap и диапазоны в Kotlin"
 aliases: [Kotlin Flatmap Ranges, flatMap и диапазоны в Kotlin]
 topic: programming-languages

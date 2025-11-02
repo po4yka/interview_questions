@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-202
 title: "What Do You Know About Modifiers / Что вы знаете о модификаторах"
 aliases: ["Compose Modifiers", "Модификаторы Compose"]
 topic: android

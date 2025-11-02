@@ -1,5 +1,5 @@
 ---
-id: 20251012-140012
+id: kotlin-087
 title: "lifecycleScope vs viewModelScope / lifecycleScope против viewModelScope"
 aliases: []
 

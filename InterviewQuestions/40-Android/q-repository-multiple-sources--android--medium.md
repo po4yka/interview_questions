@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271182
+id: android-030
 title: "Repository Pattern with Multiple Data Sources / Паттерн Repository с несколькими источниками данных"
 aliases: []
 

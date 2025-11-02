@@ -1,5 +1,5 @@
 ---
-id: 20251012-154388
+id: kotlin-176
 title: "Sequences Vs Collections Performance / Sequences vs Collections Performance"
 aliases: [Sequences, Collections Performance, Lazy Evaluation, Performance Comparison]
 topic: kotlin

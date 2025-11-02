@@ -1,5 +1,5 @@
 ---
-id: 20251005-222645
+id: kotlin-026
 title: "Kotlin Channels / Каналы в Kotlin"
 aliases: []
 

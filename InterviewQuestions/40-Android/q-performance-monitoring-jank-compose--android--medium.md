@@ -1,5 +1,5 @@
 ---
-id: 20251017-144929
+id: android-211
 title: "Performance Monitoring Jank Compose / Мониторинг производительности и джанка в Compose"
 aliases: [Performance Monitoring Jank Compose, Мониторинг производительности и джанка в Compose, Jank Detection, Compose Performance]
 topic: android

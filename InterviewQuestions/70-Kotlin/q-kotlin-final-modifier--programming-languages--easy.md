@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111130
+id: lang-074
 title: "Kotlin Final Modifier / Модификатор final в Kotlin"
 aliases: [Kotlin Final Modifier, Модификатор final в Kotlin]
 topic: programming-languages

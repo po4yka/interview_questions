@@ -1,5 +1,5 @@
 ---
-id: "20251013-600007"
+id: cs-036
 title: "Database Fundamentals / Фундаментальные основы баз данных"
 aliases: ["Database Fundamentals", "Фундаментальные основы баз данных"]
 topic: cs

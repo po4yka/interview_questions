@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711114
+id: android-346
 title: "SurfaceView Rendering / Рендеринг SurfaceView"
 aliases: [SurfaceView Rendering, Рендеринг SurfaceView]
 topic: android

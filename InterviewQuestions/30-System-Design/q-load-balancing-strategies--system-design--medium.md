@@ -1,5 +1,5 @@
 ---
-id: 20251012-300002
+id: sysdes-007
 title: "Load Balancing Algorithms and Strategies / Алгоритмы и стратегии балансировки нагрузки"
 aliases: ["Load Balancing Algorithms", "Алгоритмы балансировки нагрузки"]
 topic: system-design

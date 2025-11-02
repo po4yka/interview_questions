@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111168
+id: cs-033
 title: "Nothing Class Purpose / Назначение класса Nothing"
 aliases: ["Nothing Class", "Класс Nothing"]
 topic: cs

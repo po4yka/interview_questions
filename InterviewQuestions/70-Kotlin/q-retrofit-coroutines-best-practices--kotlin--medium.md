@@ -1,23 +1,28 @@
 ---
-id: 20251012-180007
+id: kotlin-184
 title: "Retrofit with coroutines: best practices / Retrofit с корутинами: лучшие практики"
+aliases: [Retrofit, Coroutines Retrofit, Networking, REST API, Retrofit с корутинами]
 topic: kotlin
+subtopics: [coroutines, networking]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-kotlin
+related: [q-why-data-sealed-classes--programming-languages--medium, q-by-keyword-function-call--programming-languages--easy, q-flow-basics--kotlin--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
   - retrofit
-  - android
   - networking
   - okhttp
   - rest-api
   - error-handling
-moc: moc-kotlin
-related: [q-why-data-sealed-classes--programming-languages--medium, q-by-keyword-function-call--programming-languages--easy, q-flow-basics--kotlin--easy]
-subtopics:
-  - coroutines
+  - android
+  - difficulty/medium
   - android
   - retrofit
   - networking

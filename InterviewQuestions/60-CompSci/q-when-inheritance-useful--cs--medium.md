@@ -1,5 +1,5 @@
 ---
-id: 20251016-164232
+id: cs-005
 title: "When Inheritance Useful / Когда полезно наследование"
 aliases: ["Inheritance Use Cases", "Когда использовать наследование"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251015-120000
+id: android-130
 title: "Parsing Optimization Android / Оптимизация парсинга Android"
 aliases: ["Parsing Optimization Android", "Оптимизация парсинга Android"]
 topic: android

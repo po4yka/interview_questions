@@ -1,5 +1,5 @@
 ---
-id: 20251012-144607
+id: kotlin-120
 title: "Val vs Var in Kotlin"
 aliases: []
 

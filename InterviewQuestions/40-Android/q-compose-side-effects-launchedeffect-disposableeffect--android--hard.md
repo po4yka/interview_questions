@@ -1,5 +1,5 @@
 ---
-id: 20251017-145045
+id: android-111
 title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect"
 aliases: ["Compose LaunchedEffect vs DisposableEffect", "Compose Side Effects", "Побочные эффекты Compose", "LaunchedEffect", "DisposableEffect"]
 topic: android

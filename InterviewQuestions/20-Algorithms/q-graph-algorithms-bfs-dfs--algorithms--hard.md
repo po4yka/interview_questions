@@ -1,5 +1,5 @@
 ---
-id: 20251012-200004
+id: algo-002
 title: "Graph Algorithms: BFS and DFS / Алгоритмы графов: BFS и DFS"
 aliases: ["BFS and DFS", "BFS и DFS", "Graph Algorithms", "Алгоритмы графов"]
 topic: algorithms

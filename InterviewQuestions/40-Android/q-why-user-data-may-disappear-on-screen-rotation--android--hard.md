@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111101
+id: android-417
 title: "Why User Data May Disappear On Screen Rotation / Почему данные пользователя могут пропасть при повороте экрана"
 aliases: ["Why User Data May Disappear On Screen Rotation", "Почему данные пользователя могут пропасть при повороте экрана"]
 topic: android

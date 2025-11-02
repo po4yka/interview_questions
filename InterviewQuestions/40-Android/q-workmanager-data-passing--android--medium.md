@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-210
 title: "WorkManager Data Passing / Передача данных WorkManager"
 aliases: [WorkManager Data Passing, Передача данных WorkManager, WorkManager Input Output, WorkManager workDataOf]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122749
+id: android-050
 title: Доступность в Compose / Accessibility in Compose
 aliases: ["Accessibility in Compose", "Доступность в Compose"]
 topic: android

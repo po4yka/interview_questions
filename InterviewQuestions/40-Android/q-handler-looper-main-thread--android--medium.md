@@ -1,5 +1,5 @@
 ---
-id: 20251012-122714
+id: android-162
 title: "Handler Looper Main Thread / Handler и Looper главного потока"
 aliases: ["Handler and Looper on Main Thread", "Handler и Looper главного потока"]
 topic: android

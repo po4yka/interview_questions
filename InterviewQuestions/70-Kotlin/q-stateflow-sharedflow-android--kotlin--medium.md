@@ -1,5 +1,5 @@
 ---
-id: 20251012-140013
+id: kotlin-084
 title: "StateFlow and SharedFlow in Android / StateFlow и SharedFlow в Android"
 aliases: []
 

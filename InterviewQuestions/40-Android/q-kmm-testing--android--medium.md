@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271123
+id: android-400
 title: "KMM Testing / Тестирование в KMM"
 aliases: [KMM Testing, Kotlin Multiplatform Testing, Тестирование KMM, Тестирование Kotlin Multiplatform]
 topic: android

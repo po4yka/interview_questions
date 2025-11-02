@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271146
+id: android-326
 title: "MVI Architecture / Архитектура MVI"
 aliases: [MVI, Model-View-Intent, Архитектура MVI, MVI паттерн]
 topic: android

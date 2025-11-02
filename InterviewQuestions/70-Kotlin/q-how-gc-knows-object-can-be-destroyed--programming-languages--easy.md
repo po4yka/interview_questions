@@ -1,5 +1,5 @@
 ---
-id: 20251012-122744
+id: lang-046
 title: "How Gc Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
 aliases: [How Gc Knows Object Can Be Destroyed, Как GC знает что объект можно уничтожить]
 topic: programming-languages

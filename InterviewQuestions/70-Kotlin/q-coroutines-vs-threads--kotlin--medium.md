@@ -1,5 +1,5 @@
 ---
-id: 20251012-154346
+id: kotlin-182
 title: "Coroutines Vs Threads / Корутины против потоков"
 aliases: [Coroutines vs Threads, Корутины против потоков]
 topic: kotlin

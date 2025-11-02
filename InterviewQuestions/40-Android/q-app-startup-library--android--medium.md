@@ -1,5 +1,5 @@
 ---
-id: 20251006-100006
+id: android-251
 title: App Startup Library / Библиотека App Startup
 aliases: ["App Startup Library", "Библиотека App Startup"]
 topic: android

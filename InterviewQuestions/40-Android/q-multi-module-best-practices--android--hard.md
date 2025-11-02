@@ -1,5 +1,5 @@
 ---
-id: 20251017-114546
+id: android-018
 title: "Multi-module Architecture Best Practices / Лучшие практики мульти-модульной архитектуры"
 aliases: ["Multi-module Architecture", "Мульти-модульная архитектура"]
 

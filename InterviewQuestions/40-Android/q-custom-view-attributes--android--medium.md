@@ -1,5 +1,5 @@
 ---
-id: 20251021-170000
+id: android-476
 title: Custom View Attributes / Атрибуты Custom View
 aliases: [Custom View Attributes, Атрибуты Custom View]
 topic: android

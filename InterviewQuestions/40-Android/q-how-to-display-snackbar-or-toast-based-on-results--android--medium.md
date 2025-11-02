@@ -1,5 +1,5 @@
 ---
-id: 20251012-122717
+id: android-426
 title: "How To Display Snackbar Or Toast Based On Results / Как отобразить Snackbar или Toast в зависимости от результатов"
 aliases: ["How To Display Snackbar Or Toast", "Как отобразить Snackbar или Toast"]
 topic: android

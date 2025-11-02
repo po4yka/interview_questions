@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-279
 title: "Room Transactions Dao / Транзакции DAO в Room"
 aliases: ["Room Transactions Dao", "Транзакции DAO в Room"]
 topic: android

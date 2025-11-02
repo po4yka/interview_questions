@@ -1,5 +1,5 @@
 ---
-id: 20251012-122710
+id: android-359
 title: Compose Navigation Advanced / Продвинутая навигация Compose
 aliases: [Compose Navigation Advanced, Продвинутая навигация Compose]
 topic: android

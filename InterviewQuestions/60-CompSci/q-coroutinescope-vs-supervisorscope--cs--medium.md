@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111121
+id: cs-011
 title: "CoroutineScope vs SupervisorScope / CoroutineScope против SupervisorScope"
 aliases: ["CoroutineScope vs SupervisorScope", "CoroutineScope против SupervisorScope"]
 topic: cs

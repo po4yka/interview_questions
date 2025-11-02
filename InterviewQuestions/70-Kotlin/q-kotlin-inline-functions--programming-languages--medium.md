@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111134
+id: lang-034
 title: "Kotlin Inline Functions / Kotlin Inline Функции"
 aliases: [Kotlin Inline Functions, Kotlin Inline Функции]
 topic: programming-languages

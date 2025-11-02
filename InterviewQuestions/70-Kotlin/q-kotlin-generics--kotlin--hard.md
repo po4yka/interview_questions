@@ -1,5 +1,5 @@
 ---
-id: 20251005-222652
+id: kotlin-029
 title: "Kotlin Generics / Обобщения (Generics) в Kotlin"
 aliases: []
 

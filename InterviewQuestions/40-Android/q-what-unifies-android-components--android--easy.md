@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711178
+id: android-209
 title: "Unified Android Components / Объединение компонентов Android"
 aliases: [Unified Components, Объединение компонентов]
 topic: android

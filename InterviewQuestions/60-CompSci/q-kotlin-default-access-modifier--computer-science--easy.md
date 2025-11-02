@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111120
+id: cs-002
 title: "Kotlin Default Access Modifier / Модификатор доступа по умолчанию в Kotlin"
 aliases: []
 topic: computer-science

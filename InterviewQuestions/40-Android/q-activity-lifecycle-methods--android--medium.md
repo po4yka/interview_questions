@@ -1,5 +1,5 @@
 ---
-id: 20251012-122756
+id: android-181
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
 aliases: ["Activity Lifecycle Methods", "Методы жизненного цикла Activity"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-154392
+id: kotlin-201
 title: "Variance Type Projections / Вариантность и проекции типов"
 aliases: [Variance, Type Projections, Covariance, Contravariance, Variance типов]
 topic: kotlin

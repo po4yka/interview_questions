@@ -1,5 +1,5 @@
 ---
-id: 20251005-215457
+id: android-004
 title: "Ways to Reduce Android App Size / Способы уменьшения размера Android приложения"
 aliases: []
 

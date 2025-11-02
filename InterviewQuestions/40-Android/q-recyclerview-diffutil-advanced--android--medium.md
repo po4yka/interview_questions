@@ -1,13 +1,19 @@
 ---
-id: 20251017-114326
-title: "Recyclerview Diffutil Advanced / Продвинутый DiffUtil для RecyclerView"
+id: android-350
+title: "RecyclerView DiffUtil Advanced / Продвинутый DiffUtil для RecyclerView"
+aliases: [RecyclerView DiffUtil Advanced, Продвинутый DiffUtil для RecyclerView]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-kmm-production-readiness--multiplatform--hard, q-koin-scope-management--dependency-injection--medium, q-android-project-parts--android--easy]
 created: 2025-10-15
-tags: [diffutil, performance, lists, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, difficulty/medium]
 ---
 
 # RecyclerView DiffUtil Advanced

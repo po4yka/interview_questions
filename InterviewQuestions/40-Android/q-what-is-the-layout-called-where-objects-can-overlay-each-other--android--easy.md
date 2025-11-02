@@ -1,5 +1,5 @@
 ---
-id: 20251016-161629
+id: android-308
 title: "What Is The Layout Called Where Objects Can Overlay Each Other / Как называется layout где объекты могут перекрывать друг друга"
 aliases: ["Overlay Layout", "Layout для наложения элементов"]
 topic: android

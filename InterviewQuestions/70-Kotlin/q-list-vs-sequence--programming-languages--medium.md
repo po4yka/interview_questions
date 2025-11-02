@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111162
+id: lang-001
 title: "List Vs Sequence / List против Sequence"
 aliases: [List Vs Sequence, List против Sequence]
 topic: programming-languages

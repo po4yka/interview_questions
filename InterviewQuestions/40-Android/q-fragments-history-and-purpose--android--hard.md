@@ -1,5 +1,5 @@
 ---
-id: 20251012-122714
+id: android-115
 title: "Fragments History And Purpose / История и назначение фрагментов"
 aliases: ["Fragments History And Purpose", "История и назначение фрагментов"]
 topic: android

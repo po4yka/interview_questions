@@ -1,5 +1,5 @@
 ---
-id: 20251005-222659
+id: kotlin-003
 title: "Kotlin fold and reduce / fold и reduce в Kotlin"
 aliases: []
 

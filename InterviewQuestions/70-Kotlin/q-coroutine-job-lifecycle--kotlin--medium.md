@@ -1,15 +1,20 @@
 ---
-id: "20251012-150001"
-title: "What is a Job and its lifecycle in Kotlin coroutines?"
+id: kotlin-241
+title: "What is a Job and its lifecycle in Kotlin coroutines? / Job и его жизненный цикл"
+aliases: [Job Lifecycle, Job и его жизненный цикл]
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
+question_kind: theory
 status: draft
 created: "2025-10-12"
+updated: "2025-10-31"
 tags: ["kotlin", "coroutines", "job", "lifecycle", "cancellation", "difficulty/medium"]
 description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
 moc: moc-kotlin
 related: [q-kotlin-properties--kotlin--easy, q-property-delegates--kotlin--medium, q-coroutine-context-explained--kotlin--medium]
-subtopics: ["coroutines", "job", "lifecycle", "cancellation"]
+subtopics: [coroutines, lifecycle]
 ---
 # What is a Job and its lifecycle in Kotlin coroutines?
 

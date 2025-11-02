@@ -1,5 +1,5 @@
 ---
-id: 20251012-144758
+id: kotlin-111
 title: "SharedFlow vs StateFlow / SharedFlow против StateFlow"
 aliases: []
 
@@ -11,7 +11,7 @@ subtopics:
   - stateflow
   - hot-flow
   - state-management
-question_kind: comparison
+question_kind: theory
 difficulty: medium
 
 # Language & provenance
@@ -27,7 +27,7 @@ related: [q-stateflow-sharedflow-differences--kotlin--medium, q-hot-cold-flows--
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 
 tags: [kotlin, flow, sharedflow, stateflow, hot-flow, coroutines, state-management, difficulty/medium]
 ---

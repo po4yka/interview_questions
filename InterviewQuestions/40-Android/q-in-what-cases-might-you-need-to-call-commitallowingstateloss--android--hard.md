@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271104
+id: android-418
 title: "In What Cases Might You Need To Call Commitallowingstateloss / В каких случаях может понадобиться commitAllowingStateLoss"
 aliases: [commitAllowingStateLoss, commitAllowingStateLoss vs commit, Fragment state loss, commitAllowingStateLoss в Android]
 topic: android

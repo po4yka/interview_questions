@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-475
 title: Databases Android / Базы данных в Android
 aliases: ["Databases Android", "Базы данных в Android"]
 topic: android

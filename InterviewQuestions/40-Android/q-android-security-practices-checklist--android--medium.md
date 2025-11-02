@@ -1,5 +1,5 @@
 ---
-id: 20251005-215456
+id: android-002
 title: Android Security Practices Checklist / Чек-лист практик безопасности Android
 aliases: ["Android Security Practices Checklist", "Чек-лист практик безопасности Android"]
 topic: android

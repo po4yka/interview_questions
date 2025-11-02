@@ -1,5 +1,5 @@
 ---
-id: 20251017-150407
+id: kotlin-154
 title: "Inline Function Limitations / Ограничения inline функций"
 aliases: [Inline, Function, Limitations]
 topic: kotlin

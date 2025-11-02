@@ -1,5 +1,5 @@
 ---
-id: 20251012-140030
+id: kotlin-116
 title: "CoroutineScope Basics and Usage / Основы CoroutineScope и использование"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251005-235014
+id: kotlin-022
 title: "Ranges in Kotlin / Диапазоны в Kotlin"
 aliases: []
 

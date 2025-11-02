@@ -1,5 +1,5 @@
 ---
-id: 20251012-400007
+id: android-066
 title: "Flow Testing with Turbine / Тестирование Flow с Turbine"
 aliases: ["Flow Testing with Turbine", "Тестирование Flow с Turbine"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-470
 title: Database Encryption Android / Шифрование базы данных Android
 aliases: ["Database Encryption Android", "Шифрование базы данных Android"]
 topic: android

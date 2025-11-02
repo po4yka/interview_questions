@@ -1,5 +1,5 @@
 ---
-id: 20251006-100003
+id: kotlin-036
 title: "How to implement instant search using Flow operators? / Как реализовать мгновенный поиск с помощью Flow операторов?"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251016-163920
+id: android-256
 title: "Which Event On Screen Press / Какое событие при нажатии на экран"
 aliases: ["Which Event On Screen Press", "Какое событие при нажатии на экран", "Touch Events", "MotionEvent", "События касания"]
 topic: android

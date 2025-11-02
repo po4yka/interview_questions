@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227173
+id: android-280
 title: "How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений"
 aliases: [How To Connect BroadcastReceiver So It Can Receive Messages, Как подключить BroadcastReceiver для получения сообщений]
 topic: android

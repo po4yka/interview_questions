@@ -1,5 +1,5 @@
 ---
-id: 20251005-222655
+id: kotlin-004
 title: "Kotlin Operator Overloading / Перегрузка операторов в Kotlin"
 aliases: []
 

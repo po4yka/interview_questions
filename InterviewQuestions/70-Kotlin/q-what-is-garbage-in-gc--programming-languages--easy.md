@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111191
+id: lang-061
 title: "What Is Garbage In GC / Что такое мусор в GC"
 aliases: [What Is Garbage In GC, Что такое мусор в GC]
 topic: programming-languages

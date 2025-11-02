@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271171
+id: android-430
 title: "Privacy Sandbox SDK Runtime / Privacy Sandbox SDK Runtime"
 aliases: [Privacy Sandbox, SDK Runtime, Privacy Sandbox SDK Runtime, Изоляция SDK]
 topic: android

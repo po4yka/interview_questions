@@ -1,5 +1,5 @@
 ---
-id: 20251017-115547
+id: android-381
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
 aliases: [Compose Lazy Layout Optimization, Оптимизация Lazy‑layout в Compose, LazyColumn optimization, LazyRow optimization, Оптимизация LazyColumn]
 topic: android

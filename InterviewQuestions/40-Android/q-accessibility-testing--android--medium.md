@@ -1,5 +1,5 @@
 ---
-id: 20251012-122754
+id: android-036
 title: Accessibility Testing / Тестирование доступности
 aliases: ["Accessibility Testing", "Тестирование доступности"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251006-100010
+id: android-023
 title: "React Native vs Flutter comparison / Сравнение React Native и Flutter"
 aliases: ["React Native vs Flutter", "Сравнение React Native и Flutter"]
 

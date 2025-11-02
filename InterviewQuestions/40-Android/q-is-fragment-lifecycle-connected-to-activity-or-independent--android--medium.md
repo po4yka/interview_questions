@@ -1,5 +1,5 @@
 ---
-id: 20251015-132629
+id: android-156
 title: "Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный цикл Fragment с Activity или независим"
 aliases: ["Fragment Lifecycle Connection", "Связь жизненного цикла Fragment"]
 topic: android

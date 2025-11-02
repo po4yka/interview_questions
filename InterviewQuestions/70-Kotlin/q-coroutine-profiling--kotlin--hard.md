@@ -1,5 +1,5 @@
 ---
-id: 20251012-140025
+id: kotlin-077
 title: "Coroutine Profiling and Debugging / Профилирование и отладка корутин"
 aliases: []
 

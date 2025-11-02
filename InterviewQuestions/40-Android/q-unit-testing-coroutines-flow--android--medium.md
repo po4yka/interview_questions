@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-425
 title: "Unit Testing Coroutines and Flow / Юнит-тестирование корутин и Flow"
 aliases: ["Unit Testing Coroutines Flow", "Юнит-тестирование корутин и Flow"]
 topic: android

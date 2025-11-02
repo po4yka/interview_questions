@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111144
+id: lang-026
 title: "Kotlin Nullable String Declaration / Объявление nullable String в Kotlin"
 aliases: [Kotlin Nullable String Declaration, Объявление nullable String в Kotlin]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111149
+id: lang-022
 title: "Kotlin Reflection / Рефлексия в Kotlin"
 aliases: [Kotlin Reflection, Рефлексия в Kotlin]
 topic: programming-languages

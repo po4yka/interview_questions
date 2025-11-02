@@ -1,5 +1,5 @@
 ---
-id: 20251005-234503
+id: kotlin-007
 title: "Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251016-175035
+id: cs-006
 title: "Default vs IO Dispatcher / Разница между Default и IO Dispatcher"
 aliases: ["Default vs IO Dispatcher", "Разница между Default и IO Dispatcher"]
 topic: cs

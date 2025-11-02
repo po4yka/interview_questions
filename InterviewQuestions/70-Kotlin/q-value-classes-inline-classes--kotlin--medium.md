@@ -1,5 +1,5 @@
 ---
-id: "20251012-150017"
+id: kotlin-235
 title: "Value Classes (Inline Classes) in Kotlin / Value классы в Kotlin"
 aliases: ["Value Classes", "Встраиваемые классы"]
 topic: kotlin

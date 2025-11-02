@@ -1,5 +1,5 @@
 ---
-id: 20251012-122775
+id: android-175
 title: Android Testing Strategies / Стратегии тестирования Android
 aliases: ["Android Testing Strategies", "Стратегии тестирования Android"]
 topic: android

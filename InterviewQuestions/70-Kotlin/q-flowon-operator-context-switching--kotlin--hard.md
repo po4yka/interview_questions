@@ -1,24 +1,19 @@
 ---
-topic: kotlin
-id: "20251012-170004"
+id: kotlin-125
 title: "flowOn operator and context switching in flows / flowOn оператор и переключение контекста"
-description: "Deep dive into flowOn operator, how it changes upstream execution context, buffering behavior, and performance implications"
+aliases: [Flowon, Operator, Context, Switching]
 topic: kotlin
-subtopics:
-  - coroutines
-  - flow
-  - flowon
-  - dispatchers
-  - context
+subtopics: []
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en]
 status: draft
-created: 2025-10-12
-updated: 2025-10-12
-category: "coroutines-advanced"
-tags: ["flowon", "context-switching", "dispatchers", "buffer", "performance", "flow-operators"]
 moc: moc-kotlin
 related: [q-associatewith-vs-associateby--kotlin--easy, q-retrofit-coroutines-best-practices--kotlin--medium, q-kotlin-constructor-keyword--programming-languages--easy]
-contributors: []
+created: 2025-10-12
+updated: 2025-10-12
+tags: ["flowon", "context-switching", "dispatchers", "buffer", "performance", "flow-operators"]
 ---
 # flowOn operator and context switching in flows / flowOn оператор и переключение контекста
 

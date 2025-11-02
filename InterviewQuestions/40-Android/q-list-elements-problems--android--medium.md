@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271129
+id: android-100
 title: "List Elements Problems / Проблемы элементов списка"
 aliases: ["List Elements Problems", "Проблемы элементов списка", "RecyclerView Issues", "Проблемы RecyclerView"]
 topic: android

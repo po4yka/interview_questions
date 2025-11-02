@@ -1,5 +1,5 @@
 ---
-id: 20251012-154389
+id: kotlin-150
 title: "Serialization Basics / Основы сериализации"
 aliases: [Serialization, Data Serialization, JSON Serialization, Сериализация]
 topic: kotlin

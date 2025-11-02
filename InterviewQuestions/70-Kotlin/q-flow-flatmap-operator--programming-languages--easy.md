@@ -1,5 +1,5 @@
 ---
-id: 20251012-122737
+id: lang-081
 title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 aliases: [Flow Flatmap Operator, Оператор flatMap для Flow]
 topic: programming-languages

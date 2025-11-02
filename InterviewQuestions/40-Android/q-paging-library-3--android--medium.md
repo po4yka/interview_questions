@@ -1,5 +1,5 @@
 ---
-id: 20251017-145100
+id: android-409
 title: Paging Library 3 / Библиотека Paging 3
 aliases: [Paging Library 3, Библиотека Paging 3, Paging 3, Android Paging]
 topic: android

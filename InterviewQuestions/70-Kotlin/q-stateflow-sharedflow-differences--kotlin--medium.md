@@ -1,5 +1,5 @@
 ---
-id: 20251005-235001
+id: kotlin-016
 title: "StateFlow and SharedFlow / StateFlow и SharedFlow"
 aliases: []
 

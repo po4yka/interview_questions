@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111151
+id: lang-075
 title: "Kotlin Safe Cast / Безопасное приведение типов в Kotlin"
 aliases: [Kotlin Safe Cast, Безопасное приведение типов в Kotlin]
 topic: programming-languages

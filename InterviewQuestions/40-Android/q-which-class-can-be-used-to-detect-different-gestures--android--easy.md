@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-176
 title: "Which Class Can Be Used To Detect Different Gestures / Какой класс можно использовать для обнаружения разных жестов"
 aliases: ["Which Class Can Be Used To Detect Different Gestures", "Какой класс можно использовать для обнаружения разных жестов"]
 topic: android

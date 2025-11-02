@@ -1,5 +1,5 @@
 ---
-id: 20251015-000000
+id: android-217
 title: "Why Was The Lifecycle Library Created / Зачем создали библиотеку Lifecycle"
 aliases: ["Why Was The Lifecycle Library Created", "Зачем создали библиотеку Lifecycle"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111110
+id: cs-017
 title: "Kotlin Any Class Methods / Методы класса Any в Kotlin"
 aliases: []
 topic: computer-science

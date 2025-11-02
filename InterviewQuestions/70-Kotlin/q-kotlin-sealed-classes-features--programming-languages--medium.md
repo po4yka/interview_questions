@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111153
+id: lang-066
 title: "Kotlin Sealed Classes Features / Особенности sealed классов в Kotlin"
 aliases: [Kotlin Sealed Classes Features, Особенности sealed классов в Kotlin]
 topic: programming-languages

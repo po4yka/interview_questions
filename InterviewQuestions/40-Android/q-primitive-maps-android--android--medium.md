@@ -1,5 +1,5 @@
 ---
-id: 20251016-123513
+id: android-321
 title: "Primitive Maps Android / Примитивные Map в Android"
 aliases: ["Primitive Maps Android", "Примитивные Map в Android", "SparseArray", "SparseIntArray"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111119
+id: cs-022
 title: "Coroutine Context Essence / Суть Coroutine Context"
 aliases: ["Coroutine Context", "Суть Coroutine Context"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251012-154361
+id: kotlin-218
 title: "Executor Service Java / ExecutorService в Java"
 aliases: [Executor, Service, Java]
 topic: kotlin

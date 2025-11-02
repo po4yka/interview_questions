@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227195
+id: android-413
 title: "How To Save Activity State / Как сохранить состояние Activity"
 aliases: ["How To Save Activity State", "Как сохранить состояние Activity", "Save Activity State", "Сохранение состояния Activity"]
 topic: android

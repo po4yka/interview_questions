@@ -1,5 +1,5 @@
 ---
-id: 20251012-122718
+id: android-243
 title: "How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево"
 aliases: ["How To Implement View Behavior When It Is Added To The Tree", "Как реализовать поведение View при добавлении в дерево"]
 topic: android

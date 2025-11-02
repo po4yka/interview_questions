@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-453
 title: Dagger Problems / Проблемы Dagger
 aliases: ["Dagger Problems", "Проблемы Dagger"]
 topic: android

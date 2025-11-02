@@ -1,5 +1,5 @@
 ---
-id: 20251012-152245
+id: android-236
 title: "Gradle Basics / Gradle Основы"
 aliases: [Gradle Basics, Gradle Основы]
 topic: android

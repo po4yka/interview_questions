@@ -1,5 +1,5 @@
 ---
-id: 20251016-162915
+id: lang-064
 title: "Interface Vs Abstract Class / Интерфейс против абстрактного класса"
 aliases: [Interface Vs Abstract Class, Интерфейс против абстрактного класса]
 topic: programming-languages

@@ -1,18 +1,26 @@
 ---
-id: 20251017-150748
+id: kotlin-199
 title: "Testing Viewmodels Coroutines / Тестирование Viewmodels Coroutines"
+aliases: [ViewModel Testing, Testing Coroutines, Unit Testing, Тестирование ViewModel]
 topic: kotlin
+subtopics: [coroutines, testing]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-kotlin-coroutines-overview--programming-languages--medium, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - testing
   - coroutines
   - viewmodel
   - unit-testing
+  - android
+  - difficulty/medium
 ---
 # Testing ViewModels with Coroutines
 

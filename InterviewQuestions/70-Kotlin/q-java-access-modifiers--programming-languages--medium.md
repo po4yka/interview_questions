@@ -1,5 +1,5 @@
 ---
-id: 20251012-122754
+id: lang-013
 title: "Java Access Modifiers / Модификаторы доступа Java"
 aliases: [Java Access Modifiers, Модификаторы доступа Java]
 topic: programming-languages

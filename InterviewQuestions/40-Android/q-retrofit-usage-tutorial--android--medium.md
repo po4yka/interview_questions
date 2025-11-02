@@ -1,5 +1,5 @@
 ---
-id: 20251017-150432
+id: android-276
 title: "Retrofit Usage Tutorial / Retrofit Использование Tutorial"
 aliases: ["Retrofit Usage Tutorial", "Retrofit Использование Tutorial"]
 topic: android

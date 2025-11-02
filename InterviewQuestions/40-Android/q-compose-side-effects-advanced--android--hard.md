@@ -1,5 +1,5 @@
 ---
-id: 20251017-104815
+id: android-254
 title: Compose Side Effects (Advanced) / Побочные эффекты Compose (продвинуто)
 aliases: ["Compose Side Effects Advanced", "Побочные эффекты Compose"]
 topic: android

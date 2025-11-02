@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111139
+id: lang-073
 title: "Kotlin Lateinit / lateinit в Kotlin"
 aliases: [Kotlin Lateinit, lateinit в Kotlin]
 topic: programming-languages

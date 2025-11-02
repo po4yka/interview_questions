@@ -1,5 +1,5 @@
 ---
-id: 20251015-120000
+id: android-405
 title: "Intent в Android / What Is Intent"
 aliases: [Intent, Android Intent, Явный Intent, Неявный Intent]
 topic: android

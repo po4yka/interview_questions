@@ -1,5 +1,5 @@
 ---
-id: 20251012-122758
+id: android-406
 title: Alternative Distribution / Альтернативное распространение
 aliases: ["Alternative Distribution", "Альтернативное распространение"]
 topic: android

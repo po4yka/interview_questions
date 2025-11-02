@@ -1,5 +1,5 @@
 ---
-id: "20251012-150016"
+id: kotlin-237
 title: "Class Delegation with 'by' Keyword / Делегирование класса с ключевым словом 'by'"
 aliases: ["Class Delegation", "Делегирование класса"]
 topic: kotlin

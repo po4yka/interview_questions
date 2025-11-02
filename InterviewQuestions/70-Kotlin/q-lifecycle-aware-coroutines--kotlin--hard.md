@@ -1,5 +1,5 @@
 ---
-id: 20251012-100004
+id: kotlin-130
 title: "Lifecycle-Aware Coroutines / Корутины с учетом жизненного цикла"
 aliases: []
 

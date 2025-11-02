@@ -1,5 +1,5 @@
 ---
-id: 20251012-154383
+id: kotlin-143
 title: "Object Companion Object / Object и Companion Object"
 aliases: [Object, Companion Object, Singleton, Object Keyword, Companion]
 topic: kotlin

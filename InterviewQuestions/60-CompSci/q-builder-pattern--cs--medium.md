@@ -1,5 +1,5 @@
 ---
-id: 20251016-173030
+id: cs-015
 title: "Builder Pattern / Builder Паттерн"
 aliases: ["Builder Pattern", "Паттерн Builder"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122766
+id: sec-001
 title: Android Keystore System / Система Android Keystore
 aliases: [Android Keystore System, Система Android Keystore]
 topic: security

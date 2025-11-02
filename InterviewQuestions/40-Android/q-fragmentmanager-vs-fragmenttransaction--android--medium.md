@@ -1,5 +1,5 @@
 ---
-id: 20251015-150000
+id: android-306
 title: "FragmentManager vs FragmentTransaction / FragmentManager против FragmentTransaction"
 aliases: ["FragmentManager vs FragmentTransaction", "FragmentManager против FragmentTransaction"]
 topic: android

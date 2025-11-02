@@ -1,5 +1,5 @@
 ---
-id: 20251012-122780
+id: android-385
 title: API Rate Limiting and Throttling / Ограничение скорости API и троттлинг
 aliases: [API Rate Limiting and Throttling, Ограничение скорости API и троттлинг]
 topic: android

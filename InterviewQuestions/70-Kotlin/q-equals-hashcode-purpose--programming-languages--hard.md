@@ -1,5 +1,5 @@
 ---
-id: 20251012-122729
+id: lang-083
 title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 aliases: [Equals Hashcode Purpose, Назначение equals и hashCode]
 topic: programming-languages

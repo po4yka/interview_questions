@@ -1,5 +1,5 @@
 ---
-id: 20251012-140028
+id: kotlin-075
 title: "Suspend Functions Basics / Основы suspend функций"
 aliases: []
 

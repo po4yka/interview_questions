@@ -1,5 +1,5 @@
 ---
-id: 20251012-160005
+id: kotlin-122
 title: "Continuation and CPS: how suspend functions work internally / Continuation и CPS: как работают suspend функции внутри"
 topic: kotlin
 difficulty: hard

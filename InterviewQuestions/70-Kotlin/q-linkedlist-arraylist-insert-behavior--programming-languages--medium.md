@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111161
+id: lang-006
 title: "LinkedList ArrayList Insert Behavior / Поведение вставки LinkedList и ArrayList"
 aliases: [LinkedList ArrayList Insert Behavior, Поведение вставки LinkedList и ArrayList]
 topic: programming-languages

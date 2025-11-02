@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-014
 title: "ViewCompositionStrategy in Compose / ViewCompositionStrategy в Compose"
 aliases: ["ViewCompositionStrategy in Compose", "ViewCompositionStrategy в Compose"]
 topic: android

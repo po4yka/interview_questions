@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111111
+id: cs-015
 title: "Kotlin Any Inheritance / Наследование от Any в Kotlin"
 aliases: []
 topic: computer-science

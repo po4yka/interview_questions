@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227174
+id: android-394
 title: "How To Create Animations In Android / Как создавать анимации в Android"
 aliases: [How To Create Animations In Android, Как создавать анимации в Android]
 topic: android

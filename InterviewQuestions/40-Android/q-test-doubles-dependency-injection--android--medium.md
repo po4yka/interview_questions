@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711117
+id: android-128
 title: "Test Doubles Dependency Injection / Тестовые двойники Dependency Injection"
 aliases: [Test Doubles, Тестовые двойники]
 topic: android

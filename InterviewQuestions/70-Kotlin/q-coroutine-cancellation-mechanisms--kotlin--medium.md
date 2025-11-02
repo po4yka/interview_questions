@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111199
+id: kotlin-205
 title: "Coroutine Cancellation Mechanisms / Механизмы Отмены Корутин"
 aliases: [Coroutine Cancellation, Механизмы отмены корутин]
 topic: kotlin

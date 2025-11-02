@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711123
+id: android-391
 title: "В чём измеряется производительность layout / How is layout performance measured"
 aliases: ["В чём измеряется производительность layout", "How is layout performance measured", "Layout performance metrics", "Метрики производительности layout"]
 topic: android

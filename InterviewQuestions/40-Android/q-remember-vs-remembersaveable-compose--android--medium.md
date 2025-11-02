@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271181
+id: android-295
 title: "Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose"
 aliases: [Remember vs RememberSaveable in Compose, Remember vs RememberSaveable в Compose]
 topic: android

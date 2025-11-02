@@ -1,5 +1,5 @@
 ---
-id: 20251012-140008
+id: kotlin-078
 title: "Channel Closing and Completion / Закрытие и завершение каналов"
 aliases: []
 

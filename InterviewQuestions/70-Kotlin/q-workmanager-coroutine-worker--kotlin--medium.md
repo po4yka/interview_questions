@@ -1,10 +1,18 @@
 ---
-id: "20251012-180002"
+id: kotlin-168
 title: "Using CoroutineWorker with WorkManager / Использование CoroutineWorker с WorkManager"
+aliases: [CoroutineWorker, WorkManager, Background Work, CoroutineWorker Background]
 topic: kotlin
+subtopics: [coroutines, android]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-kotlin
+related: [q-kotlin-when-vs-switch--programming-languages--easy, q-lazy-initialization--programming-languages--easy, q-equality-operators-kotlin--kotlin--easy]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -15,9 +23,7 @@ tags:
   - worker
   - periodic-work
   - constraints
-moc: moc-kotlin
-related: [q-kotlin-when-vs-switch--programming-languages--easy, q-lazy-initialization--programming-languages--easy, q-equality-operators-kotlin--kotlin--easy]
-subtopics:
+  - difficulty/medium
   - coroutines
   - android
   - workmanager

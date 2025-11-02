@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111129
+id: lang-079
 title: "Kotlin Favorite Features / Любимые возможности Kotlin"
 aliases: [Kotlin Favorite Features, Любимые возможности Kotlin]
 topic: programming-languages

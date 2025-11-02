@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-169
 title: "KMM vs React Native / KMM против React Native"
 aliases: ["KMM vs React Native", "KMM против React Native", "React Native Comparison", "React Native Сравнение"]
 topic: android

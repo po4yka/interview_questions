@@ -1,5 +1,5 @@
 ---
-id: 20251006-100011
+id: android-033
 title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
 aliases: [Cleartext traffic, Незашифрованный трафик, Network Security Config]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711140
+id: android-221
 title: "What Are Services Used For / Для чего используются Service"
 aliases: ["What Are Services Used For", "Для чего используются Service"]
 

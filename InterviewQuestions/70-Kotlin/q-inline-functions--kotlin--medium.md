@@ -1,5 +1,5 @@
 ---
-id: 20251012-154364
+id: kotlin-207
 title: "Inline Functions"
 aliases: [Inline, Functions]
 topic: kotlin

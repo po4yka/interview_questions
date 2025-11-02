@@ -1,5 +1,5 @@
 ---
-id: 20251015-000000
+id: android-166
 title: "Mlkit Face Detection / Распознавание лиц ML Kit"
 aliases: ["ML Kit Face Detection", "Распознавание лиц ML Kit"]
 topic: android

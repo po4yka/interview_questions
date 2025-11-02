@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111171
+id: cs-024
 title: "Prototype Pattern / Паттерн Прототип"
 aliases: ["Prototype Pattern", "Паттерн Прототип"]
 topic: cs

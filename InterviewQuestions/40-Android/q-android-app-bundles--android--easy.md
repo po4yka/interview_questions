@@ -1,5 +1,5 @@
 ---
-id: 20251005-143000
+id: android-015
 title: Android App Bundle (AAB) / Android App Bundle (AAB)
 aliases: ["Android App Bundle", "AAB", "Android App Bundles", "Формат AAB", "Андроид App Bundle"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251016-172614
+id: kotlin-183
 title: "Kotlin Unit Singleton / Unit как синглтон в Kotlin"
 aliases: [Unit, Unit Singleton, Kotlin Unit, Unit Объект]
 topic: kotlin

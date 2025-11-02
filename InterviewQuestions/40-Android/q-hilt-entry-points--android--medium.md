@@ -1,5 +1,5 @@
 ---
-id: 20251012-122715
+id: android-035
 title: "Hilt Entry Points / Точки входа Hilt"
 aliases: ["Hilt Entry Points", "Точки входа Hilt"]
 topic: android

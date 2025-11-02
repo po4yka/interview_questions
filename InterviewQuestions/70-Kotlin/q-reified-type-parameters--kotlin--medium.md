@@ -1,5 +1,5 @@
 ---
-id: 20251017-150501
+id: kotlin-155
 title: "Reified Type Parameters / Reified параметры типов"
 aliases: [Reified, Type Parameters, Generics, Reified Type Parameters]
 topic: kotlin

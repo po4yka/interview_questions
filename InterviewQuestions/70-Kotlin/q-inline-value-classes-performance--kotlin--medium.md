@@ -1,5 +1,5 @@
 ---
-id: 20251012-154365
+id: kotlin-145
 title: "Inline Value Classes Performance"
 aliases: [Inline, Value, Classes, Performance]
 topic: kotlin

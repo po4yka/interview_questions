@@ -1,12 +1,18 @@
 ---
-id: 20251016-174636
-title: Coroutines vs Threads on Android / Корутины vs Потоки на Android
+id: kotlin-219
+title: "Coroutines vs Threads on Android / Корутины vs Потоки на Android"
+aliases: [Coroutines vs Threads, Корутины против потоков]
 topic: kotlin
+subtopics: [coroutines, threading]
+question_kind: theory
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-rxjava-to-coroutines-migration--kotlin--medium, q-callsuper-annotation--kotlin--medium, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -15,9 +21,6 @@ tags:
   - android
   - comparison
   - difficulty/easy
-language_tags:
-  - en
-  - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
 subtopics:

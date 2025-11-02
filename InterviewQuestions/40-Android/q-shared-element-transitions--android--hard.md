@@ -1,5 +1,5 @@
 ---
-id: 20251015-120000
+id: android-420
 title: "Shared Element Transitions / Переходы с общими элементами"
 aliases: [Shared Element Transitions, Переходы с общими элементами, Hero Animations, Анимация героя]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-300008
+id: sysdes-008
 title: "Message Queues and Event-Driven Architecture / Очереди сообщений и событийная архитектура"
 aliases: ["Event-Driven Architecture", "Message Queues", "Очереди сообщений", "Событийная архитектура"]
 topic: system-design

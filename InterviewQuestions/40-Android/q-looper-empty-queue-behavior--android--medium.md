@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271130
+id: android-106
 title: "Looper Empty Queue Behavior / Поведение Looper при пустой очереди"
 aliases:
   - Looper Empty Queue

@@ -1,5 +1,5 @@
 ---
-id: 20251012-140016
+id: kotlin-110
 title: "Structured Concurrency Patterns / Паттерны структурированной конкурентности"
 aliases: []
 

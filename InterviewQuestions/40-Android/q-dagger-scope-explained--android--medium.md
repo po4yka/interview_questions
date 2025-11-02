@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-462
 title: Dagger Scope Explained / Объяснение скоупов Dagger
 aliases: ["Dagger Scope Explained", "Объяснение скоупов Dagger"]
 topic: android

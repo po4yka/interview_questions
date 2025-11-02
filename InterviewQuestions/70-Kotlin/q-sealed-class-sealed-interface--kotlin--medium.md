@@ -1,5 +1,5 @@
 ---
-id: "20251012-150012"
+id: kotlin-113
 title: "Sealed classes vs sealed interfaces in Kotlin / Sealed классы vs интерфейсы"
 aliases: [Sealed Classes, Sealed Interfaces, Polymorphism, Sealed в Kotlin]
 topic: kotlin

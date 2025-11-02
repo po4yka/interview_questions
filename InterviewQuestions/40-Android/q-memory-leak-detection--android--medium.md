@@ -1,5 +1,5 @@
 ---
-id: 20251011-220002
+id: android-045
 title: "Memory Leak Detection and Fixing / Обнаружение и исправление утечек памяти"
 aliases: [Memory Leak Detection, Обнаружение утечек памяти, LeakCanary, Memory Profiler]
 

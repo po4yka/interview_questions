@@ -1,5 +1,5 @@
 ---
-id: 20251015-120000
+id: android-259
 title: "What Is Dp / Что такое dp"
 aliases: [Dp, Density-independent Pixels, Плотность-независимые пиксели]
 topic: android

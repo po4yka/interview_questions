@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111109
+id: db-003
 title: Storing unique data in relational tables / Хранение уникальных данных в реляционных таблицах
 aliases: []
 

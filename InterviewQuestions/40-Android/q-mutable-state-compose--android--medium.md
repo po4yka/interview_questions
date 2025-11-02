@@ -1,5 +1,5 @@
 ---
-id: 20251017-105120
+id: android-204
 title: "MutableState в Compose / MutableState in Compose"
 aliases: ["MutableState в Compose", "MutableState in Compose", "Изменяемое состояние Compose", "Compose State Management"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-123
 title: "What Are The Most Important Components Of Compose / Какие самые важные компоненты Compose"
 aliases: ["Compose Components", "Компоненты Compose"]
 topic: android

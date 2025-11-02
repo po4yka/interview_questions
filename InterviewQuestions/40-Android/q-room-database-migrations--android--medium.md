@@ -1,5 +1,5 @@
 ---
-id: 20251015-120000
+id: android-230
 title: "Room Database Migrations / Миграции базы данных Room"
 aliases: ["Room Database Migrations", "Миграции базы данных Room"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271169
+id: android-238
 title: "Privacy Sandbox Attribution / Attribution Reporting API в Privacy Sandbox"
 aliases: ["Privacy Sandbox Attribution", "Attribution Reporting API", "Attribution Reporting API в Privacy Sandbox"]
 topic: android

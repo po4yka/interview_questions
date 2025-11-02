@@ -1,13 +1,19 @@
 ---
-id: 20251012-122711131
-title: "Vulkan Renderscript / Vulkan и RenderScript"
+id: android-380
+title: "Vulkan RenderScript / Vulkan и RenderScript"
+aliases: [Vulkan RenderScript]
 topic: android
+subtopics: [performance-rendering]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-dagger-field-injection--android--medium, q-accessibility-compose--accessibility--medium, q-compose-compiler-plugin--jetpack-compose--hard]
+related: [c-gpu-rendering, c-performance, q-surfaceview-rendering--android--medium]
 created: 2025-10-15
-tags: [vulkan, renderscript, gpu, graphics, low-level, compute, difficulty/hard]
+updated: 2025-10-31
+tags: [android/performance-rendering, vulkan, renderscript, gpu, graphics, compute, difficulty/hard]
 ---
 
 # Vulkan and RenderScript Alternatives for GPU Computing

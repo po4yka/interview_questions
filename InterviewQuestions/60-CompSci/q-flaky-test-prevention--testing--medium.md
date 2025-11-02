@@ -1,5 +1,5 @@
 ---
-id: 20251012-122713
+id: test-001
 title: "Flaky Test Prevention / Предотвращение нестабильных тестов"
 aliases: ["Flaky Test Prevention", "Предотвращение нестабильных тестов"]
 topic: testing

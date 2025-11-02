@@ -1,5 +1,5 @@
 ---
-id: 20251012-154360
+id: kotlin-195
 title: "Equals Hashcode Purpose / Назначение equals и hashCode"
 aliases: [Equals, Hashcode, Object Comparison]
 topic: kotlin

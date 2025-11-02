@@ -1,5 +1,5 @@
 ---
-id: 20251012-122783
+id: android-399
 title: App Store Optimization / Оптимизация App Store
 aliases: ["App Store Optimization", "Оптимизация App Store", "ASO"]
 topic: android

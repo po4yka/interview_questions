@@ -1,5 +1,5 @@
 ---
-id: 20251017-150235
+id: kotlin-146
 title: "Atomic Vs Synchronized / Atomic против Synchronized"
 aliases: [Atomic vs Synchronized, Atomic против Synchronized]
 topic: kotlin

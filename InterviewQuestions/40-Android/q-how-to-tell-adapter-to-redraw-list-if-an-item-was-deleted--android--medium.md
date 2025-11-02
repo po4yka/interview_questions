@@ -1,5 +1,5 @@
 ---
-id: 20251012-122719
+id: android-315
 title: "How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален"
 aliases: ["Adapter Redraw on Item Deletion", "Перерисовка адаптера при удалении элемента"]
 topic: android

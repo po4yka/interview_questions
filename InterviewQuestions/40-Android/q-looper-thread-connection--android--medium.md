@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-229
 title: "Looper Thread Connection / Связь Looper и потока"
 aliases: ["Looper Thread Connection", "Связь Looper и потока"]
 topic: android

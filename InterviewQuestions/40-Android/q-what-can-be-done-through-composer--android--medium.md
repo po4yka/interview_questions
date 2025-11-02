@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-140
 title: "What Can Be Done Through Composer / Что можно сделать через Composer"
 aliases: ["Composer in Jetpack Compose", "Composer в Jetpack Compose"]
 topic: android

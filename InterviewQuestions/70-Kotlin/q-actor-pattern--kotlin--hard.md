@@ -1,5 +1,5 @@
 ---
-id: 20251012-150452
+id: kotlin-066
 title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"
 aliases: []
 

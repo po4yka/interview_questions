@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271180
+id: android-029
 title: "remember vs rememberSaveable in Compose"
 aliases: []
 

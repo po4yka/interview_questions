@@ -1,5 +1,5 @@
 ---
-id: 20251012-122788
+id: android-387
 title: Bundle Data Types / Типы данных Bundle
 aliases: ["Bundle Data Types", "Типы данных Bundle"]
 topic: android

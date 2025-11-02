@@ -1,5 +1,5 @@
 ---
-id: 20251012-122740
+id: lang-015
 title: "Garbage Collector Basics / Основы сборки мусора"
 aliases: [Garbage Collector Basics, Основы сборки мусора]
 topic: programming-languages

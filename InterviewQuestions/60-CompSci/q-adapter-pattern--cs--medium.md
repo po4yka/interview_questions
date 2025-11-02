@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111113
+id: cs-009
 title: "Adapter Pattern / Adapter Паттерн"
 aliases: ["Adapter Pattern", "Паттерн Adapter"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-390
 title: "Why Use Fragments When We Have Activities / Зачем использовать Fragment когда есть Activity"
 aliases: ["Why Use Fragments When We Have Activities", "Зачем использовать Fragment когда есть Activity"]
 

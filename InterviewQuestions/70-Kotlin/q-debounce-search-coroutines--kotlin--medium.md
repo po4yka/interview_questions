@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111103
+id: kotlin-156
 title: "Debouncing Search with Coroutines / Отложенный Поиск с Корутинами"
 aliases: [Debouncing Search, Отложенный поиск]
 topic: kotlin

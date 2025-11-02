@@ -1,5 +1,5 @@
 ---
-id: 20251005-215455
+id: android-005
 title: "Android Modularization Patterns / Паттерны модуляризации в Android"
 aliases: []
 

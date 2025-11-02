@@ -1,5 +1,5 @@
 ---
-id: 20251012-140003
+id: kotlin-082
 title: "Testing Flow Operators and Transformations / Тестирование операторов и трансформаций Flow"
 aliases: []
 

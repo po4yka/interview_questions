@@ -1,5 +1,5 @@
 ---
-id: 20251005-235009
+id: kotlin-031
 title: "Nested Class vs Inner Class / Вложенный vs внутренний класс"
 aliases: []
 

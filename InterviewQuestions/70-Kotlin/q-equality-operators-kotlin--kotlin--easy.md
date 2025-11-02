@@ -1,5 +1,5 @@
 ---
-id: 20251005-235011
+id: kotlin-002
 title: "Equality Operators == vs === / Операторы равенства == vs ==="
 aliases: []
 

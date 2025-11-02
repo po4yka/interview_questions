@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111103
+id: android-065
 title: "WorkManager Advanced / Продвинутый WorkManager"
 aliases: ["WorkManager Advanced", "Продвинутый WorkManager"]
 topic: android

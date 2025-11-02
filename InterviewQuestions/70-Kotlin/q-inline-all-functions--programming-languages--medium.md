@@ -1,5 +1,5 @@
 ---
-id: 20251012-122749
+id: lang-069
 title: "Inline All Functions / Inline функции"
 aliases: [Inline All Functions, Inline функции]
 topic: programming-languages

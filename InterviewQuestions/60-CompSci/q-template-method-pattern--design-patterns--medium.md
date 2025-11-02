@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111186
+id: design-patterns-001
 title: "Template Method Pattern / Template Method Паттерн"
 aliases: [Template Method Pattern, Template Method Паттерн]
 topic: design-patterns

@@ -1,23 +1,26 @@
 ---
-topic: kotlin
-id: "20251012-170008"
+id: kotlin-093
 title: "Testing coroutine timing: advanceTimeBy vs advanceUntilIdle / Тестирование таймингов корутин"
-subtopics:
+aliases: [Coroutine Testing, Virtual Time, Testing Timing, Тестирование таймингов]
+topic: kotlin
+subtopics: [coroutines, testing]
+question_kind: theory
+difficulty: medium
+original_language: en
+language_tags: [en, ru]
+status: draft
+moc: moc-kotlin
+related: [q-enum-class-advanced--kotlin--medium, q-lambdas-java-kotlin-syntax--programming-languages--medium, q-kotlin-constructor-types--programming-languages--medium]
+created: 2025-10-12
+updated: 2025-10-31
+tags:
+  - kotlin
   - coroutines
   - testing
   - timing
   - virtual-time
   - runtest
-difficulty: medium
-moc: moc-kotlin
-related: [q-enum-class-advanced--kotlin--medium, q-lambdas-java-kotlin-syntax--programming-languages--medium, q-kotlin-constructor-types--programming-languages--medium]
-status: draft
-created: 2025-10-12
-updated: 2025-10-12
-tags:
-  - kotlin
-  - coroutines
-  - testing
+  - difficulty/medium
   - virtual-time
   - test-dispatcher
   - timing

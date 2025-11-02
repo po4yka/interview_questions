@@ -1,5 +1,5 @@
 ---
-id: 20251016-163945
+id: lang-093
 title: "Kotlin Static Variable / Статические переменные в Kotlin"
 aliases: [Kotlin Static Variable, Статические переменные в Kotlin]
 topic: programming-languages

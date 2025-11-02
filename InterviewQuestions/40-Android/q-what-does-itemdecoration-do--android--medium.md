@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-309
 title: "What Does ItemDecoration Do / Что делает ItemDecoration"
 aliases: ["ItemDecoration", "Что делает ItemDecoration"]
 topic: android

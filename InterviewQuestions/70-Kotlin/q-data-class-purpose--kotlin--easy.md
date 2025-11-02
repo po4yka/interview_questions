@@ -1,5 +1,5 @@
 ---
-id: 20251012-154349
+id: kotlin-228
 title: "Data Class Purpose / Назначение data class"
 aliases: [Data Class Purpose, Назначение data class]
 topic: kotlin

@@ -1,5 +1,5 @@
 ---
-id: 20251005-235012
+id: kotlin-020
 title: "Infix Functions / Инфиксные функции"
 aliases: []
 

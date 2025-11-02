@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-097
 title: "Offline First Architecture / Архитектура Offline First"
 aliases: ["Offline First Architecture", "Архитектура Offline First"]
 topic: android

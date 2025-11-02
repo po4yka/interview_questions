@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-125
 title: "MVVM Pattern / Паттерн MVVM"
 aliases: ["MVVM Pattern", "Паттерн MVVM", "Model-View-ViewModel"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-456
 title: Dagger Framework Overview / Обзор фреймворка Dagger
 aliases: ["Dagger Framework Overview", "Обзор фреймворка Dagger"]
 topic: android

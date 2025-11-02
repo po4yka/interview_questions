@@ -1,5 +1,5 @@
 ---
-id: 20251012-154370
+id: kotlin-227
 title: "Kotlin Contracts Smart Casts / Контракты и smart casts в Kotlin"
 aliases: [Kotlin, Contracts, Smart, Casts]
 topic: kotlin

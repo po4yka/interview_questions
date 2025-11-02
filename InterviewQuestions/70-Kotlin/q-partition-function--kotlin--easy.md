@@ -1,5 +1,5 @@
 ---
-id: 20251017-150747
+id: kotlin-208
 title: "Partition Function / Функция partition"
 aliases: [Partition, Collection Partition, Filtering, Partition Function]
 topic: kotlin

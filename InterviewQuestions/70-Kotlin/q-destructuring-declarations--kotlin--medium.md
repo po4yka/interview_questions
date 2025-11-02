@@ -1,5 +1,5 @@
 ---
-id: 20251005-235004
+id: kotlin-034
 title: "Destructuring Declarations / Деструктурирующие объявления"
 aliases: []
 

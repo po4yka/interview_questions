@@ -1,16 +1,19 @@
 ---
-id: 20251016-161819
-title: "Inheritance Vs Composition / Inheritance против Composition"
-topic: architecture-patterns
+id: oop-001
+title: "Inheritance Vs Composition / Наследование против композиции"
+aliases: [Inheritance Vs Composition, Наследование против композиции]
+topic: oop
+subtopics: [inheritance, composition, relationships, design-patterns]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-oop
+related: [c-inheritance, c-composition, q-inheritance-composition-aggregation--oop--medium, q-class-composition--oop--medium]
 created: 2025-10-13
-tags: [composition, coupling, dependency-injection, design-patterns, flexibility, has-a, inheritance, is-a, oop]
-moc: moc-architecture-patterns
-related: [q-java-object-comparison--programming-languages--easy, q-mediator-pattern--design-patterns--medium, q-os-fundamentals-concepts--computer-science--hard]
-subtopics: ["abstraction", "classes", "encapsulation", "inheritance", "polymorphism"]
-date created: Saturday, October 4th 2025, 7:06:29 pm
-date modified: Sunday, October 26th 2025, 11:57:58 am
+updated: 2025-10-31
+tags: [oop, inheritance, composition, relationships, design-patterns, difficulty/medium]
 ---
 
 # Какие Отличия Наследования От Композиции?

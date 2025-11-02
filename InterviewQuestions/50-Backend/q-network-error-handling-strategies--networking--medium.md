@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: net-003
 title: Network Error Handling Strategies / Стратегии обработки сетевых ошибок
 aliases: [Network Error Handling Strategies, Стратегии обработки сетевых ошибок]
 topic: networking

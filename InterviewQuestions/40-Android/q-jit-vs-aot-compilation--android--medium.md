@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271115
+id: android-412
 title: JIT vs AOT Compilation / JIT vs AOT компиляция
 aliases: [JIT vs AOT Compilation, JIT vs AOT компиляция, Just-In-Time, Ahead-Of-Time, ART, Android Runtime]
 topic: android

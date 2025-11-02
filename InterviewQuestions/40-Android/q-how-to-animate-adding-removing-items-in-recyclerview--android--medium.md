@@ -1,13 +1,19 @@
 ---
-id: 20251012-1227168
-title: "How To Animate Adding Removing Items In Recyclerview / Как анимировать добавление и удаление элементов в RecyclerView"
+id: android-419
+title: "How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление и удаление элементов в RecyclerView"
+aliases: [How To Animate Adding Removing Items In RecyclerView, Как анимировать добавление и удаление элементов в RecyclerView]
 topic: android
+subtopics: [ui-animation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-bundle-data-types--android--medium, q-compositionlocal-advanced--jetpack-compose--medium, q-stack-heap-memory-multiple-threads--android--medium]
 created: 2025-10-15
-tags: [animations, difficulty/medium, itemanimator, recyclerview]
+updated: 2025-10-31
+tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:40:03 pm
 ---

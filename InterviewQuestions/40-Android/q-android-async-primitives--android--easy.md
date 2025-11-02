@@ -1,5 +1,5 @@
 ---
-id: 20251012-122762
+id: android-143
 title: Android Async Primitives / Примитивы асинхронности Android
 aliases: ["Android Async Primitives", "Примитивы асинхронности Android"]
 topic: android

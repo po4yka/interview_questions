@@ -1,5 +1,5 @@
 ---
-id: 20251012-122795
+id: sec-002
 title: Certificate Pinning / Закрепление сертификатов
 aliases: [Certificate Pinning, Закрепление сертификатов]
 topic: security

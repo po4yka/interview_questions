@@ -1,5 +1,5 @@
 ---
-id: 20251012-160010
+id: kotlin-098
 title: "Top 10 common Kotlin coroutines mistakes and anti-patterns / 10 частых ошибок с Kotlin корутинами"
 topic: kotlin
 difficulty: medium

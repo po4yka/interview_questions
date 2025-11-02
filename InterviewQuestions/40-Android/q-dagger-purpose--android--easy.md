@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-447
 title: Dagger Purpose / Назначение Dagger
 aliases: ["Dagger Purpose", "Назначение Dagger"]
 topic: android

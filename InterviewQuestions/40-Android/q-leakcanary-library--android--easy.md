@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-075
 title: "Leakcanary Library / Библиотека LeakCanary"
 aliases: ["Leakcanary Library", "Библиотека LeakCanary"]
 topic: android

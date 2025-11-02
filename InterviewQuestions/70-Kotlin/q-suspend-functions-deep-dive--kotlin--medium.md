@@ -1,18 +1,25 @@
 ---
-id: 20251017-150640
-title: "Suspend Functions Deep Dive"
+id: kotlin-196
+title: "Suspend Functions Deep Dive / Suspend функции детальный разбор"
+aliases: [Suspend Functions, Coroutine Suspension, Deep Dive, Suspend функции]
 topic: kotlin
+subtopics: [coroutines, suspend-functions]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-reified-type-parameters--kotlin--medium, q-kotlin-delegation--programming-languages--easy, q-destructuring-declarations--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
   - suspend-functions
   - concurrency
-  - cps
+  - continuation
+  - difficulty/medium
 ---
 # Suspend Functions - Deep Dive
 

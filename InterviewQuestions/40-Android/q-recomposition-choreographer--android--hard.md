@@ -1,5 +1,5 @@
 ---
-id: 20251017-105224
+id: android-165
 title: "Recomposition Choreographer / Рекомпозиция и Choreographer"
 aliases: ["Recomposition Choreographer", "Рекомпозиция и Choreographer"]
 topic: android

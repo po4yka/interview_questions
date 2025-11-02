@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111138
+id: lang-085
 title: "Kotlin Java Equality Operators / Операторы равенства Kotlin и Java"
 aliases: [Kotlin Java Equality Operators, Операторы равенства Kotlin и Java]
 topic: programming-languages

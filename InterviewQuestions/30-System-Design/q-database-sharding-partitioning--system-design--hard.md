@@ -1,5 +1,5 @@
 ---
-id: 20251012-300009
+id: sysdes-010
 title: "Database Sharding and Partitioning / Шардирование и партиционирование баз данных"
 aliases: ["Database Sharding", "Шардирование баз данных"]
 topic: system-design

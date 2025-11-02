@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111190
+id: lang-076
 title: "What Is Flow / Что такое Flow"
 aliases: [What Is Flow, Что такое Flow]
 topic: programming-languages

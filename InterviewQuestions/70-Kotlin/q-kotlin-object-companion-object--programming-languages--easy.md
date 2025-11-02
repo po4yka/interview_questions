@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111145
+id: lang-088
 title: "Kotlin Object Companion Object / Object и Companion Object в Kotlin"
 aliases: [Kotlin Object Companion Object, Object и Companion Object в Kotlin]
 topic: programming-languages

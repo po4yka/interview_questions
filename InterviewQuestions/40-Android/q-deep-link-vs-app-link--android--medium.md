@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-450
 title: Deep Link Vs App Link / Deep Link против App Link
 aliases: ["Deep Link Vs App Link", "Deep Link против App Link"]
 topic: android

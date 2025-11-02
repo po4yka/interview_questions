@@ -1,5 +1,5 @@
 ---
-id: 20251006-000005
+id: android-019
 title: "How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок в Android?"
 aliases: [Voice Video Call Android, WebRTC Android, Голосовой видеозвонок Android]
 

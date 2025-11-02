@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227183
+id: android-408
 title: "How To Fix A Bad Element Layout / Как исправить плохой layout элемента"
 aliases: ["How To Fix A Bad Element Layout", "Как исправить плохой layout элемента"]
 topic: android

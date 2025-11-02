@@ -1,5 +1,5 @@
 ---
-id: 20251012-122716
+id: android-119
 title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
 aliases: ["How Does Jetpack Compose Work", "Как работает Jetpack Compose"]
 topic: android

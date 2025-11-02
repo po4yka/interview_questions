@@ -1,5 +1,5 @@
 ---
-id: 20251016-163408
+id: lang-004
 title: "Primitive Vs Reference Types / Примитивные типы против ссылочных типов"
 aliases: [Primitive Vs Reference Types, Примитивные типы против ссылочных типов]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122714
+id: net-001
 title: "GraphQL vs REST / GraphQL против REST"
 aliases: ["GraphQL vs REST", "GraphQL против REST"]
 topic: networking

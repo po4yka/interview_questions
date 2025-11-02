@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111118
+id: cs-006
 title: "Kotlin Crossinline / crossinline в Kotlin"
 aliases: []
 topic: computer-science

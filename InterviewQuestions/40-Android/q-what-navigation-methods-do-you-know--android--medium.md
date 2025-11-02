@@ -1,5 +1,5 @@
 ---
-id: 20251016-172837
+id: android-150
 title: "What Navigation Methods Do You Know / Какие методы навигации вы знаете"
 aliases: ["What Navigation Methods Do You Know", "Какие методы навигации вы знаете"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111132
+id: lang-059
 title: "Kotlin Generic Function Syntax / Синтаксис обобщенных функций Kotlin"
 aliases: [Kotlin Generic Function Syntax, Синтаксис обобщенных функций Kotlin]
 topic: programming-languages

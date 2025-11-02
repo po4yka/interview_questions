@@ -1,10 +1,18 @@
 ---
-id: 20251012-180010
+id: kotlin-188
 title: "Migrating from RxJava to Kotlin Coroutines / Миграция с RxJava на Kotlin корутины"
+aliases: [RxJava Migration, Coroutines Migration, Reactive Programming, RxJava to Coroutines]
 topic: kotlin
+subtopics: [coroutines, migration, reactive-programming]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-kotlin
+related: [q-testing-flow-operators--kotlin--hard, q-delegation-by-keyword--kotlin--medium, q-channel-flow-comparison--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -12,12 +20,7 @@ tags:
   - migration
   - refactoring
   - reactive-programming
-moc: moc-kotlin
-related: [q-testing-flow-operators--kotlin--hard, q-delegation-by-keyword--kotlin--medium, q-channel-flow-comparison--kotlin--medium]
-subtopics:
-  - coroutines
-  - rxjava
-  - migration
+  - difficulty/medium
   - refactoring
 ---
 # Migrating from RxJava to Kotlin Coroutines

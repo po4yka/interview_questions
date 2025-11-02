@@ -1,5 +1,5 @@
 ---
-id: 20251012-122712
+id: oop-003
 title: "Class Composition / Композиция классов"
 aliases: [Class Composition, Композиция классов]
 topic: oop

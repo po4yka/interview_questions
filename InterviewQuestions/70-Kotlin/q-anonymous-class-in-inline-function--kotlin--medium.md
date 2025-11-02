@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111196
+id: kotlin-047
 title: Anonymous Class in Inline Function / Анонимный класс в inline функции
 aliases: []
 

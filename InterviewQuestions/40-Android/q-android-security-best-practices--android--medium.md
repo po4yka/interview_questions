@@ -1,5 +1,5 @@
 ---
-id: 20251012-122772
+id: android-424
 title: "Android Security Best Practices / Лучшие практики безопасности Android"
 aliases: ["Android Security Best Practices", "Лучшие практики безопасности Android"]
 topic: android

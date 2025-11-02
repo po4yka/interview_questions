@@ -1,5 +1,5 @@
 ---
-id: 20251029-170214
+id: android-487
 title: Design Client Observability & Health-Gated Rollouts / Проектирование клиентской наблюдаемости и health-gated релизов
 aliases:
     [

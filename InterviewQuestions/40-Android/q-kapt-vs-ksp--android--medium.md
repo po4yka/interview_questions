@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271117
+id: android-020
 title: "kapt vs KSP comparison / Сравнение kapt и KSP"
 aliases: []
 

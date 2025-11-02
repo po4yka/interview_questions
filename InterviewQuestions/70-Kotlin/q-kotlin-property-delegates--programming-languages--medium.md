@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111147
+id: lang-045
 title: "Kotlin Property Delegates / Делегаты свойств Kotlin"
 aliases: [Kotlin Property Delegates, Делегаты свойств Kotlin]
 topic: programming-languages

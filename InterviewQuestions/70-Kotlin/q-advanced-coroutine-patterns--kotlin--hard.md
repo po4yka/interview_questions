@@ -1,5 +1,5 @@
 ---
-id: 20251012-150629
+id: kotlin-133
 title: "Advanced Coroutine Patterns / Продвинутые паттерны корутин"
 aliases: []
 

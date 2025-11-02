@@ -1,5 +1,5 @@
 ---
-id: 20251016-172637
+id: android-057
 title: "Foreground Service Types / Типы Foreground Service"
 aliases: ["Foreground Service Types", "Типы Foreground Service"]
 topic: android

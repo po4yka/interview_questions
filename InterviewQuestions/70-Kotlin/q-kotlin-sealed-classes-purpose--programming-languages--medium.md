@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111154
+id: lang-082
 title: "Kotlin Sealed Classes Purpose / Назначение sealed классов в Kotlin"
 aliases: [Kotlin Sealed Classes Purpose, Назначение sealed классов в Kotlin]
 topic: programming-languages

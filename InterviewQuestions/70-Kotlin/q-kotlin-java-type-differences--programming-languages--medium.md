@@ -1,5 +1,5 @@
 ---
-id: 20251017-104927
+id: lang-051
 title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"
 aliases: [Kotlin Java Type Differences, Различия типов Kotlin и Java]
 topic: programming-languages

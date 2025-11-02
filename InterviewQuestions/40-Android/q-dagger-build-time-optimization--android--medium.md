@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-439
 title: Dagger Build Time Optimization / Оптимизация времени сборки Dagger
 aliases: [Dagger Build Time Optimization, Оптимизация времени сборки Dagger]
 topic: android

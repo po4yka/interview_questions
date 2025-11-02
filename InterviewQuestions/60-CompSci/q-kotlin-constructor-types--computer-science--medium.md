@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111116
+id: cs-012
 title: "Kotlin Constructor Types / Типы конструкторов Kotlin"
 aliases: []
 topic: computer-science

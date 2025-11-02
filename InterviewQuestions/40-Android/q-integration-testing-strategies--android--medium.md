@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271107
+id: android-120
 title: "Integration Testing Strategies / Стратегии интеграционного тестирования"
 aliases: [Integration Testing Strategies, Стратегии интеграционного тестирования]
 topic: android

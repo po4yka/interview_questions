@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227175
+id: android-219
 title: "How To Create Chat Lists From A UI Perspective / Как создать списки чатов с точки зрения UI"
 aliases: [How To Create Chat Lists From A UI Perspective, Как создать списки чатов с точки зрения UI]
 topic: android

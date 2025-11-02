@@ -1,5 +1,5 @@
 ---
-id: 20251012-122710
+id: android-073
 title: Compose Custom Animations / Кастомные анимации Compose
 aliases: [Compose Custom Animations, Кастомные анимации Compose]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227156
+id: android-397
 title: "How Did Fragments Appear And Why Were They Started To Be Used / Как Появились Фрагменты И Для Чего Их Начали Использовать"
 aliases: [Fragments History, Fragment Origins, История фрагментов, Происхождение фрагментов]
 topic: android

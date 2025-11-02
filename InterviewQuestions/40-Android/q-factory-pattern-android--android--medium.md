@@ -1,5 +1,5 @@
 ---
-id: 20251020-200500
+id: android-460
 title: Factory Pattern Android / Паттерн Factory в Android
 aliases: [Factory Pattern Android, Паттерн Factory в Android, Factory Method Pattern, Abstract Factory Pattern]
 topic: android

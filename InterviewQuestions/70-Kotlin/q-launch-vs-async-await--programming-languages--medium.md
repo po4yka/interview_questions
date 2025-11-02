@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111159
+id: lang-053
 title: "Launch Vs Async Await / Launch против Async Await"
 aliases: [Launch Vs Async Await, Launch против Async Await]
 topic: programming-languages

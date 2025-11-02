@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111177
+id: cs-023
 title: "Service Locator Pattern / Паттерн Локатор Служб"
 aliases: ["Service Locator", "Локатор Служб"]
 topic: cs

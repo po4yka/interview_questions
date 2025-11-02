@@ -1,5 +1,5 @@
 ---
-id: 20251012-122730
+id: lang-049
 title: "Equals Hashcode Rules / Правила equals и hashCode"
 aliases: [Equals Hashcode Rules, Правила equals и hashCode]
 topic: programming-languages

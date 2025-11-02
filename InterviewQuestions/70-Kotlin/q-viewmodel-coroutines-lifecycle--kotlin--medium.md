@@ -1,5 +1,5 @@
 ---
-id: 20251012-140011
+id: kotlin-121
 title: "ViewModel Coroutines and Lifecycle / Корутины в ViewModel и жизненный цикл"
 aliases: []
 

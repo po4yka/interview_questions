@@ -1,5 +1,5 @@
 ---
-id: 20251029-120000
+id: android-234
 title: "WorkManager Execution Guarantee / Гарантия выполнения WorkManager"
 aliases: ["WorkManager Execution Guarantee", "Гарантия выполнения WorkManager"]
 topic: android

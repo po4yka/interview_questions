@@ -1,5 +1,5 @@
 ---
-id: 20251012-154369
+id: kotlin-225
 title: "Kotlin Advantages For Android / Преимущества Kotlin для Android"
 aliases: [Kotlin, Advantages, For, Android]
 topic: kotlin

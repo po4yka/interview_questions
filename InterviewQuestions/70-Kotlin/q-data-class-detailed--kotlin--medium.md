@@ -1,15 +1,20 @@
 ---
-id: "20251012-150011"
-title: "Data classes in Kotlin: features, limitations, and best practices"
+id: kotlin-245
+title: "Data classes in Kotlin: features, limitations, and best practices / Data classes в Kotlin"
+aliases: [Data Classes Kotlin, Data classes в Kotlin]
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
+question_kind: theory
 status: draft
 created: "2025-10-12"
+updated: "2025-10-31"
 tags: ["kotlin", "classes", "data-class", "kotlin-features", "difficulty/medium"]
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
 moc: moc-kotlin
 related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-collections-overview--programming-languages--easy, q-serialization-basics--programming-languages--medium]
-subtopics: ["classes", "data-class", "kotlin-features"]
+subtopics: [data-classes]
 ---
 # Data classes in Kotlin: features, limitations, and best practices
 

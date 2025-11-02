@@ -1,5 +1,5 @@
 ---
-id: 20251016-171706
+id: lang-043
 title: "Sealed Vs Enum Classes / Sealed против Enum Классов"
 aliases: [Sealed Vs Enum Classes, Sealed против Enum Классов]
 topic: programming-languages

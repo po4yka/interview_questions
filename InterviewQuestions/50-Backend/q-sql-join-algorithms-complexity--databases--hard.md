@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111110
+id: db-002
 title: SQL JOIN algorithms and complexity / Алгоритмы SQL JOIN и их сложность
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251016-163852
+id: kotlin-164
 title: "Kotlin Type Aliases Inline / Type aliases и inline в Kotlin"
 aliases: [Type Aliases, Inline Classes, Inline Functions, Type Aliases и inline]
 topic: kotlin

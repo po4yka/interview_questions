@@ -1,5 +1,5 @@
 ---
-id: 20251012-122790
+id: android-330
 title: Can a Service Communicate With the User / Может ли сервис общаться с пользователем
 aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
 topic: android

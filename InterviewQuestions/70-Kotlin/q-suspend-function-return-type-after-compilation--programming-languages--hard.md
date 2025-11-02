@@ -1,5 +1,5 @@
 ---
-id: 20251016-162953
+id: lang-023
 title: "Suspend Function Return Type After Compilation / Тип возвращаемого значения suspend функции после компиляции"
 aliases: [Suspend Function Return Type After Compilation, Тип возвращаемого значения suspend функции после компиляции]
 topic: programming-languages

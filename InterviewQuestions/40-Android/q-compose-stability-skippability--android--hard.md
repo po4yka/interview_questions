@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-142
 title: Compose Stability Skippability / Стабильность и пропускаемость Compose
 aliases: [Compose Stability Skippability, Стабильность и пропускаемость Compose]
 topic: android

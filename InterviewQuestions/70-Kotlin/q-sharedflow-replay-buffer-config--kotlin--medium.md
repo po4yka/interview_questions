@@ -1,23 +1,29 @@
 ---
-topic: kotlin
-id: "20251012-170003"
+id: kotlin-080
 title: "SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера"
-description: "Complete guide to SharedFlow configuration: replay cache, buffer capacity, overflow strategies, and performance implications"
+aliases: [SharedFlow, Replay Buffer, Hot Flow, SharedFlow Configuration]
 topic: kotlin
-subtopics:
-  - coroutines
-  - flow
-  - sharedflow
-  - replay
-  - buffer
+subtopics: [coroutines, flow]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-12
-updated: 2025-10-12
-category: "coroutines-advanced"
-tags: ["sharedflow", "replay", "buffer", "backpressure", "hot-flow", "configuration"]
 moc: moc-kotlin
 related: [q-channels-vs-flow--kotlin--medium, q-data-class-purpose--kotlin--easy, q-kotlin-any-class-methods--programming-languages--medium]
+created: 2025-10-12
+updated: 2025-10-31
+tags:
+  - kotlin
+  - sharedflow
+  - coroutines
+  - flow
+  - replay
+  - buffer
+  - backpressure
+  - hot-flow
+  - configuration
+  - difficulty/medium
 contributors: []
 ---
 # SharedFlow replay cache and buffer configuration / SharedFlow replay cache и конфигурация буфера

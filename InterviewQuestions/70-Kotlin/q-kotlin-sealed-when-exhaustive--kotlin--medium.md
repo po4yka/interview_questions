@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111155
+id: kotlin-149
 title: "Kotlin Sealed When Exhaustive / sealed и exhaustive when в Kotlin"
 aliases: [Kotlin Sealed When Exhaustive, sealed и exhaustive when в Kotlin]
 topic: kotlin

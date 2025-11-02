@@ -1,5 +1,5 @@
 ---
-id: 20251012-151628
+id: kotlin-114
 title: "Channel Buffering Strategies / Стратегии буферизации каналов"
 aliases: []
 

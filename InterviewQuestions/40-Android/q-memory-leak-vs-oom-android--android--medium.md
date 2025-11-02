@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271136
+id: android-084
 title: "Memory Leak vs OOM / Утечка памяти vs OOM"
 aliases: ["Memory Leak vs OOM", "Утечка памяти vs OOM"]
 topic: android

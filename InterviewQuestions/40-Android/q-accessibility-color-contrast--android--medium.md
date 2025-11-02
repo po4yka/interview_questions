@@ -1,5 +1,5 @@
 ---
-id: 20251012-122751
+id: android-039
 title: Accessibility Color Contrast / Контрастность цветов для доступности
 aliases: [Accessibility Color Contrast, Контрастность цветов для доступности]
 topic: android

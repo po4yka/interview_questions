@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-177
 title: "If Activity Starts After A Service Can You Connect To This Service / Можно ли подключиться к Service если Activity запустилась после него"
 aliases: ["If Activity Starts After A Service Can You Connect To This Service", "Можно ли подключиться к Service если Activity запустилась после него"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111101
+id: kotlin-210
 title: "Resource Cleanup in Coroutines / Очистка Ресурсов в Корутинах"
 aliases: [Resource Cleanup Coroutines, Очистка ресурсов в корутинах]
 topic: kotlin

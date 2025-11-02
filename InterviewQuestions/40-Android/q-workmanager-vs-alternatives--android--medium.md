@@ -1,5 +1,5 @@
 ---
-id: 20251017-114414
+id: android-059
 title: "WorkManager vs Alternatives / WorkManager против альтернатив"
 aliases: ["WorkManager vs Alternatives", "WorkManager против альтернатив"]
 topic: android

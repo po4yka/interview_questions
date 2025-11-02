@@ -1,5 +1,5 @@
 ---
-id: 20251017-144928
+id: android-200
 title: "MVP Pattern / MVP Паттерн"
 aliases: ["MVP Pattern", "MVP Паттерн", "Model-View-Presenter"]
 topic: android

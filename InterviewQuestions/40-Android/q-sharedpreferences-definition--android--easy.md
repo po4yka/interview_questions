@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-133
 title: "Sharedpreferences Definition / Определение SharedPreferences"
 aliases: ["Sharedpreferences Definition", "Определение SharedPreferences"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-400010
+id: android-061
 title: "Kotlin DSL Builders / Kotlin DSL строители"
 aliases:
   - "Kotlin DSL Builders"

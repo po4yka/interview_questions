@@ -1,5 +1,5 @@
 ---
-id: 20251012-142409
+id: kotlin-048
 title: "CoroutineContext explained in detail / CoroutineContext детально"
 aliases: []
 

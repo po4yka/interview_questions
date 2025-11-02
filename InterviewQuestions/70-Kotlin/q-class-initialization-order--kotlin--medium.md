@@ -1,5 +1,5 @@
 ---
-id: "20251012-150015"
+id: kotlin-230
 title: "Class Initialization Order in Kotlin / Порядок инициализации класса в Kotlin"
 aliases: ["Class Initialization Order", "Порядок инициализации класса"]
 topic: kotlin

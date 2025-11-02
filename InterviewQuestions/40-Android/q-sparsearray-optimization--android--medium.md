@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-012
 title: "SparseArray Optimization / Оптимизация SparseArray"
 aliases: ["SparseArray Optimization", "Оптимизация SparseArray"]
 topic: android

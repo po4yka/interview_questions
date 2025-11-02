@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711125
+id: android-432
 title: "Vector Graphics Animations / Анимации векторной графики"
 aliases: ["Vector Graphics Animations", "Анимации векторной графики"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251016-161705
+id: android-163
 title: "How To Register Broadcastreceiver To Receive Messages / Как зарегистрировать BroadcastReceiver для получения сообщений"
 aliases: ["How To Register BroadcastReceiver", "Как зарегистрировать BroadcastReceiver"]
 topic: android

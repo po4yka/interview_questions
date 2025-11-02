@@ -1,23 +1,23 @@
 ---
 topic: kotlin
-id: "20251012-170007"
+id: kotlin-097
 title: "Channel buffer strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии буферизации каналов"
-subtopics:
-  - coroutines
-  - channels
-  - buffer
-  - capacity
-  - backpressure
+aliases: [Channel Buffer Strategies, Стратегии буферизации каналов]
+subtopics: [coroutines, channels]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 moc: moc-kotlin
 related: [q-cold-vs-hot-flows--kotlin--medium, q-coroutine-delay-vs-thread-sleep--kotlin--easy, q-kotlin-constants--programming-languages--easy]
 status: draft
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
   - channels
+  - difficulty/hard
   - buffer
   - backpressure
   - performance

@@ -1,5 +1,5 @@
 ---
-id: 20251016-163003
+id: android-214
 title: "View Redraw Methods / Методы перерисовки View"
 aliases: [View Redraw Methods, Методы перерисовки View]
 topic: android

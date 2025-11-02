@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711148
+id: android-370
 title: "What Does The Lifecycle Library Do / Что делает библиотека Lifecycle"
 aliases: ["What Does The Lifecycle Library Do", "Что делает библиотека Lifecycle"]
 

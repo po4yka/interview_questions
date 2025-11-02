@@ -1,5 +1,5 @@
 ---
-id: 20251021-120500
+id: android-307
 title: CompositionLocal in Compose / CompositionLocal в Compose
 aliases: ["CompositionLocal in Compose", "CompositionLocal в Compose"]
 topic: android

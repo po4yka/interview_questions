@@ -1,5 +1,5 @@
 ---
-id: 20251012-100002
+id: android-064
 title: "Jetpack Compose Basics / Основы Jetpack Compose"
 aliases: []
 

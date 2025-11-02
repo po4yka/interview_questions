@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-267
 title: "How To Write RecyclerView So That It Caches Ahead / Как написать RecyclerView чтобы он кешировал вперед"
 aliases:
   - RecyclerView caching

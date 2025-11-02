@@ -1,5 +1,5 @@
 ---
-id: 20251012-154375
+id: lang-097
 title: "Kotlin Let Function / Функция let в Kotlin"
 aliases: [Kotlin Let Function, Функция let в Kotlin]
 topic: programming-languages

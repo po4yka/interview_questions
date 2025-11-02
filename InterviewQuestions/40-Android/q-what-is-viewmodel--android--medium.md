@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711168
+id: android-197
 title: "What Is Viewmodel / Что такое ViewModel"
 aliases: ["What Is ViewModel", "Что такое ViewModel"]
 topic: android

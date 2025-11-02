@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-226
 title: "What Is Workmanager / Что такое WorkManager"
 aliases: ["What Is WorkManager", "Что такое WorkManager"]
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122789
+id: android-074
 title: Cache Implementation Strategies / Стратегии реализации кэша
 aliases: ["Cache Implementation Strategies", "Стратегии реализации кэша"]
 topic: android

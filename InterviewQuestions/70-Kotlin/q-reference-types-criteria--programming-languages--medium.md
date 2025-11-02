@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111173
+id: lang-047
 title: "Reference Types Criteria / Критерии типов ссылок"
 aliases: [Reference Types Criteria, Критерии типов ссылок]
 topic: programming-languages

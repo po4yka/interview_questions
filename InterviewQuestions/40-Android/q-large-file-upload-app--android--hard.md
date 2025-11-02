@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271125
+id: android-266
 title: "Large File Upload App / Загрузка больших файлов в приложении"
 aliases: [Large File Upload, Загрузка больших файлов, File Upload Android, WorkManager Upload]
 topic: android

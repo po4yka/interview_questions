@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111193
+id: lang-084
 title: "When Coroutine Cannot Be Cancelled / Когда корутина не может быть отменена"
 aliases: [When Coroutine Cannot Be Cancelled, Когда корутина не может быть отменена]
 topic: programming-languages

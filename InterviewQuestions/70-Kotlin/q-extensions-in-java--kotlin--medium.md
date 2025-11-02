@@ -1,5 +1,5 @@
 ---
-id: 20251012-154362
+id: kotlin-187
 title: "Extensions In Java / Расширения в Java"
 aliases: []
 topic: kotlin

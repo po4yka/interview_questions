@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711129
+id: android-384
 title: "ViewModel Pattern / Паттерн ViewModel"
 aliases: [ViewModel Pattern, Паттерн ViewModel]
 topic: android

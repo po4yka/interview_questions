@@ -1,5 +1,5 @@
 ---
-id: 20251012-122747
+id: lang-063
 title: "How To Create Suspend Function / Как создать suspend функцию"
 aliases: [How To Create Suspend Function, Как создать suspend функцию]
 topic: programming-languages

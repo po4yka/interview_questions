@@ -1,13 +1,19 @@
 ---
-id: 20251017-150241
-title: "Testing Compose Ui / Тестирование Compose Ui"
+id: android-253
+title: "Testing Compose UI / Тестирование Compose UI"
+aliases: [Testing Compose UI, Тестирование Compose UI]
 topic: android
+subtopics: [ui-compose, testing-ui]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-modularization--android--medium, q-compose-compiler-plugin--jetpack-compose--hard, q-where-does-the-repeated-call-of-composable-function-come-from--android--medium]
+related: [c-jetpack-compose, c-testing, q-what-is-diffutil-for--android--medium]
 created: 2025-10-15
-tags: [jetpack-compose, testing, ui-testing, compose-test, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-compose, android/testing-ui, jetpack-compose, testing, ui-testing, difficulty/medium]
 ---
 
 # Testing Compose UI

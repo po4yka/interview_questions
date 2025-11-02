@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271197
+id: android-318
 title: "Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование"
 aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]
 topic: android

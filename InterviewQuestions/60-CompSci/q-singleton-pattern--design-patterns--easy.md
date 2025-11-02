@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111179
+id: design-patterns-006
 title: "Singleton Pattern / Singleton Паттерн"
 aliases: [Singleton Pattern, Singleton Паттерн]
 topic: design-patterns

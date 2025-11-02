@@ -1,5 +1,5 @@
 ---
-id: 20251012-122714
+id: android-009
 title: "Fragment Basics / Основы Fragment"
 aliases: ["Fragment Basics", "Основы Fragment"]
 topic: android

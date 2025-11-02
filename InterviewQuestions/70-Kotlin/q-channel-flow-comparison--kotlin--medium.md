@@ -1,5 +1,5 @@
 ---
-id: 20251012-140007
+id: kotlin-085
 title: "Channel vs Flow Comparison / Сравнение Channel и Flow"
 aliases: []
 

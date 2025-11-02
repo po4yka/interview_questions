@@ -1,15 +1,25 @@
 ---
-id: "20251012-150002"
-title: "When to use withContext in Kotlin coroutines?"
+id: kotlin-099
+title: "When to use withContext in Kotlin coroutines? / Когда использовать withContext"
+aliases: [WithContext, Context Switching, Dispatchers, WithContext Use Cases]
 topic: kotlin
+subtopics: [coroutines, dispatchers]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: "2025-10-12"
-tags: ["kotlin", "coroutines", "withcontext", "dispatchers", "context-switching", "difficulty/medium"]
-description: "A comprehensive guide to withContext in Kotlin coroutines, covering dispatcher switching, performance implications, and comparison with other coroutine builders"
 moc: moc-kotlin
 related: [q-race-conditions-coroutines--kotlin--hard, q-launch-vs-async-vs-runblocking--kotlin--medium, q-kotlin-non-inheritable-class--programming-languages--easy]
-subtopics: ["coroutines", "withcontext", "dispatchers", "context-switching"]
+created: 2025-10-12
+updated: 2025-10-31
+tags:
+  - kotlin
+  - coroutines
+  - withcontext
+  - dispatchers
+  - context-switching
+  - difficulty/medium
 ---
 # When to use withContext in Kotlin coroutines?
 

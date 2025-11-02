@@ -1,5 +1,5 @@
 ---
-id: 20251012-122739
+id: design-patterns-012
 title: "Flyweight Pattern / Паттерн легкий вес"
 aliases: [Flyweight Pattern, Паттерн легкий вес]
 topic: design-patterns

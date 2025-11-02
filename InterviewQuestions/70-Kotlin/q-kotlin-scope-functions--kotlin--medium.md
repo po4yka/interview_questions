@@ -1,5 +1,5 @@
 ---
-id: 20251005-222656
+id: kotlin-014
 title: "Kotlin Scope Functions / Функции области видимости в Kotlin"
 aliases: []
 

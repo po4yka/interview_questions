@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271140
+id: android-362
 title: "ML Kit Object Detection / Распознавание объектов ML Kit"
 aliases: [ML Kit Object Detection, Распознавание объектов ML Kit, ML Kit Image Labeling, ML Kit Barcode Scanning]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271147
+id: android-431
 title: "MVI Handle One Time Events / Обработка одноразовых событий в MVI"
 aliases: [MVI One-Time Events, SingleLiveEvent, Event Wrapper, Обработка событий MVI, Одноразовые события]
 

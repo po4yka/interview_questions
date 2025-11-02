@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271142
+id: android-351
 title: "MockK Advanced Features / Продвинутые возможности MockK"
 aliases: [MockK Advanced Features, Продвинутые возможности MockK]
 topic: android

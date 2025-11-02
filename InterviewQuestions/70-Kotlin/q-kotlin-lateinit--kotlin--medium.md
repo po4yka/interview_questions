@@ -1,5 +1,5 @@
 ---
-id: 20251005-222653
+id: kotlin-019
 title: "Kotlin lateinit Keyword / Ключевое слово lateinit в Kotlin"
 aliases: []
 

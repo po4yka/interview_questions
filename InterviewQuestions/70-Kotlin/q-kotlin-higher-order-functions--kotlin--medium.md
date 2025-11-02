@@ -1,5 +1,5 @@
 ---
-id: 20251005-234504
+id: kotlin-005
 title: "Higher-Order Functions in Kotlin / Функции высшего порядка в Kotlin"
 aliases: []
 

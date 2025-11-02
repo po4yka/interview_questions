@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711130
+id: android-389
 title: "ViewModel vs OnSavedInstanceState / ViewModel vs OnSavedInstanceState"
 aliases: [ViewModel vs OnSavedInstanceState]
 topic: android

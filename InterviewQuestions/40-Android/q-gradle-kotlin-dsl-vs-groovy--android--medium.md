@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227145
+id: android-028
 title: "Gradle Kotlin DSL vs Groovy"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711101
+id: android-340
 title: "Service Types Android / Типы Service в Android"
 aliases: ["Service Types Android", "Типы Service в Android"]
 

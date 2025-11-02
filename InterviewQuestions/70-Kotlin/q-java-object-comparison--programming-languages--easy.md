@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111158
+id: lang-011
 title: "Java Object Comparison / Java Object Сравнение"
 aliases: [Java Object Comparison, Java Object Сравнение]
 topic: programming-languages

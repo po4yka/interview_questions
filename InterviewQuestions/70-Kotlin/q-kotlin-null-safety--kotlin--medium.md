@@ -1,5 +1,5 @@
 ---
-id: 20251005-222654
+id: kotlin-008
 title: "Kotlin Null Safety / Null-безопасность в Kotlin"
 aliases: []
 

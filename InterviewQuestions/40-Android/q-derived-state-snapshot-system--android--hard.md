@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-464
 title: Derived State Snapshot System / Derived State и система Snapshot
 aliases: ["Derived State Snapshot System", "Derived State и система Snapshot"]
 topic: android

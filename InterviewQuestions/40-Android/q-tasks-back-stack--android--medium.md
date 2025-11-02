@@ -1,5 +1,5 @@
 ---
-id: 20251017-144930
+id: android-227
 title: Tasks and Back Stack / Задачи и стек возврата
 aliases: [Tasks and Back Stack, Задачи и стек возврата]
 topic: android

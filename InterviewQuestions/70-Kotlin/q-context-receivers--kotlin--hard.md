@@ -1,5 +1,5 @@
 ---
-id: 20251015-095858
+id: kotlin-142
 title: "Context Receivers / Context Receivers"
 aliases: [Context Receivers, Context Receivers]
 topic: kotlin

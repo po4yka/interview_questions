@@ -1,5 +1,5 @@
 ---
-id: 20251012-600004
+id: cs-002
 title: "OOP Principles Deep Dive / Глубокое погружение в принципы ООП"
 aliases: ["OOP Principles", "Принципы ООП"]
 topic: cs

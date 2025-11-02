@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271174
+id: android-305
 title: "Push Notification Navigation / Навигация из push уведомлений"
 aliases: [Push Notification Navigation, Навигация из push уведомлений, FCM Navigation, Navigation from Notifications]
 topic: android

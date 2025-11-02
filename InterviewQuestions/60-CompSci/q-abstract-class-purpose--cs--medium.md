@@ -1,5 +1,5 @@
 ---
-id: 20251012-122747
+id: cs-017
 title: "Abstract Class Purpose / Назначение абстрактных классов"
 aliases: ["Abstract Class Purpose", "Назначение абстрактных классов"]
 topic: cs

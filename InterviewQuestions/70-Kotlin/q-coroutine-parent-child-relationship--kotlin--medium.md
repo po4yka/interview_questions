@@ -1,5 +1,5 @@
 ---
-id: "20251012-150008"
+id: kotlin-242
 title: "Parent-child relationships in structured concurrency / Отношения родитель-дитя"
 aliases: [Parent-Child Relationships, Отношения родитель-дитя]
 topic: kotlin

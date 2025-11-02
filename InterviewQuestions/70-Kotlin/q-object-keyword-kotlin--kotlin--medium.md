@@ -1,5 +1,5 @@
 ---
-id: 20251012-154385
+id: kotlin-166
 title: "Object Keyword Kotlin / Ключевое слово object в Kotlin"
 aliases: [Object Keyword, Object Declaration, Singleton, Object в Kotlin]
 topic: kotlin

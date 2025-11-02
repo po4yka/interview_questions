@@ -1,5 +1,5 @@
 ---
-id: 20251012-142410
+id: kotlin-044
 title: "Retry and RetryWhen operators in Flow / Операторы Retry и RetryWhen во Flow"
 aliases: []
 

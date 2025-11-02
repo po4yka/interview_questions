@@ -1,10 +1,16 @@
 ---
-id: "20251012-180006"
-title: "Dispatchers.Main.immediate vs Dispatchers.Main"
+id: kotlin-217
+title: "Dispatchers.Main.immediate vs Dispatchers.Main / Dispatchers.Main.immediate vs Main"
+aliases: [Dispatchers Main Immediate, Dispatchers.Main.immediate vs Main]
 topic: kotlin
+subtopics: [coroutines, dispatchers]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -15,9 +21,9 @@ tags:
   - android
   - ui-thread
   - optimization
+  - difficulty/medium
 moc: moc-kotlin
 related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy, q-kotlin-non-inheritable-class--programming-languages--easy]
-subtopics:
   - coroutines
   - dispatchers
   - main

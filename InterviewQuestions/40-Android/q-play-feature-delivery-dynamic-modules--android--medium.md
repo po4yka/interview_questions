@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271166
+id: android-007
 title: "Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули"
 aliases:
   - "Play Feature Delivery and Dynamic Modules"

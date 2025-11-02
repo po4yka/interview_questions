@@ -1,5 +1,5 @@
 ---
-id: 20251005-235002
+id: kotlin-021
 title: "Type Aliases in Kotlin / Псевдонимы типов в Kotlin"
 aliases: []
 

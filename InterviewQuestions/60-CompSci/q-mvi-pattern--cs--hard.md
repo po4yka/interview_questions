@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111165
+id: cs-014
 title: "MVI Pattern / Паттерн MVI (Model-View-Intent)"
 aliases: ["MVI Pattern", "Паттерн MVI"]
 topic: cs

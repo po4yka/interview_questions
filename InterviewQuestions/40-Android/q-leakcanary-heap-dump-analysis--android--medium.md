@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271127
+id: android-089
 title: "LeakCanary Heap Dump Analysis / Анализ дампа памяти в LeakCanary"
 aliases: ["LeakCanary Heap Dump Analysis", "Анализ дампа памяти в LeakCanary"]
 topic: android

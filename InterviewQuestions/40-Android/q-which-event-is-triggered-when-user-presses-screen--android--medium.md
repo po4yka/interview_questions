@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-376
 title: "Which Event Is Triggered When User Presses Screen / Какое событие срабатывает когда пользователь нажимает на экран"
 aliases: ["Touch Events in Android", "События касания в Android"]
 topic: android

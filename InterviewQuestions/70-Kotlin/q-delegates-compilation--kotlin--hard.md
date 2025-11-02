@@ -1,5 +1,5 @@
 ---
-id: 20251012-154356
+id: kotlin-169
 title: "Delegates Compilation / Компиляция делегатов"
 aliases: [Delegates Compilation, Компиляция делегатов]
 topic: kotlin

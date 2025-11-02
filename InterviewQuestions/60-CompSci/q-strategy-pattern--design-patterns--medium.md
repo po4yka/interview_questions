@@ -1,13 +1,19 @@
 ---
-id: 20251016-172829
+id: design-patterns-002
 title: "Strategy Pattern / Strategy Паттерн"
-topic: computer-science
+aliases: [Strategy Pattern, Strategy Паттерн]
+topic: design-patterns
+subtopics: [behavioral-patterns, algorithm-encapsulation, polymorphism]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
+moc: moc-design-patterns
 related: [q-launch-vs-async-await--programming-languages--medium, q-mvi-pattern--architecture-patterns--hard, q-mvp-pattern--architecture-patterns--medium]
 created: 2025-10-15
-tags: [behavioral-patterns, design-patterns, gof-patterns, policy-pattern, strategy]
+updated: 2025-10-31
+tags: [behavioral-patterns, design-patterns, gof-patterns, policy-pattern, strategy, difficulty/medium]
 date created: Monday, October 6th 2025, 7:21:22 am
 date modified: Sunday, October 26th 2025, 1:39:50 pm
 ---

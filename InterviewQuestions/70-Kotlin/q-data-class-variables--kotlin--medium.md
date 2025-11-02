@@ -1,5 +1,5 @@
 ---
-id: 20251012-154351
+id: kotlin-151
 title: "Data Class Variables / Переменные data class"
 aliases: [Data Class Variables, Переменные data class]
 topic: kotlin

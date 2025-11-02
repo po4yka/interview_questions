@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111166
+id: cs-029
 title: "MVP Pattern / Паттерн MVP (Model-View-Presenter)"
 aliases: ["MVP Pattern", "Паттерн MVP"]
 topic: cs

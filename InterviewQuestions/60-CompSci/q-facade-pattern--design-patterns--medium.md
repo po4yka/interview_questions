@@ -1,5 +1,5 @@
 ---
-id: 20251012-122734
+id: design-patterns-007
 title: "Facade Pattern / Паттерн фасад"
 aliases: [Facade Pattern, Паттерн фасад]
 topic: design-patterns

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111189
+id: lang-090
 title: "What Is CoroutineScope / Что такое CoroutineScope"
 aliases: [What Is CoroutineScope, Что такое CoroutineScope]
 topic: programming-languages

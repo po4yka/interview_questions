@@ -1,5 +1,5 @@
 ---
-id: 20251017-144837
+id: android-369
 title: "Retrofit Library / Библиотека Retrofit"
 aliases: ["Retrofit Library", "Библиотека Retrofit"]
 topic: android

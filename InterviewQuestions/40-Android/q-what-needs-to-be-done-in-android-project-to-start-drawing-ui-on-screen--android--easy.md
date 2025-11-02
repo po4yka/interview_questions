@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711173
+id: android-113
 title: "UI Setup in Android Project / Настройка UI в проекте Android"
 aliases: [UI Setup, Настройка UI]
 topic: android

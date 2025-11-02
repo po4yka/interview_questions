@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111143
+id: lang-078
 title: "Kotlin Null Safety / Null Safety в Kotlin"
 aliases: [Kotlin Null Safety, Null Safety в Kotlin]
 topic: programming-languages

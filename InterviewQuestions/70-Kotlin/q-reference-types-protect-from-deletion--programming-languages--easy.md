@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111174
+id: lang-052
 title: "Reference Types Protect From Deletion / Типы ссылок защищают от удаления"
 aliases: [Reference Types Protect From Deletion, Типы ссылок защищают от удаления]
 topic: programming-languages

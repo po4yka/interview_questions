@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711157
+id: android-395
 title: "BroadcastReceiver / Компонент BroadcastReceiver"
 aliases: [BroadcastReceiver, Компонент BroadcastReceiver]
 topic: android

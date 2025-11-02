@@ -1,5 +1,5 @@
 ---
-id: 20251006-100001
+id: kotlin-049
 title: "How to convert callback-based APIs to coroutines? / Как конвертировать callback-based API в корутины?"
 aliases: []
 

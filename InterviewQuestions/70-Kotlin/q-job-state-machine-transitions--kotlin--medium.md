@@ -1,27 +1,21 @@
 ---
-topic: kotlin
-id: "20251012-170006"
+id: kotlin-105
 title: "Job state machine and state transitions / Job машина состояний и переходы"
-subtopics:
-  - coroutines
-  - job
-  - lifecycle
-  - states
-  - cancellation
+aliases: [Job, State, Machine, Transitions]
+topic: kotlin
+subtopics: []
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
+status: draft
 moc: moc-kotlin
 related: [q-list-set-map-differences--programming-languages--easy, q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium]
-status: draft
 created: 2025-10-12
 updated: 2025-10-12
 tags:
-  - kotlin
-  - coroutines
-  - job
-  - lifecycle
-  - state-machine
-  - cancellation
-  - structured-concurrency
+  - 
+  - difficulty/medium
 ---
 
 # Job state machine and state transitions / Job машина состояний и переходы

@@ -1,5 +1,5 @@
 ---
-id: 20251028-120000
+id: android-335
 title: "In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service"
 aliases: [Service Thread, Main Thread Service, Поток Service, Сервис в главном потоке]
 topic: android

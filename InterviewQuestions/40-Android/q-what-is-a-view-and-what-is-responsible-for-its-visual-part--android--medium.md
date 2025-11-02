@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-145
 title: "What Is A View And What Is Responsible For Its Visual Part / Что такое View и что отвечает за её визуальную часть"
 aliases: ["What Is A View And What Is Responsible For Its Visual Part", "Что такое View и что отвечает за её визуальную часть"]
 topic: android

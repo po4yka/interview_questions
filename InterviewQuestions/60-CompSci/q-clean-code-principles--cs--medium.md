@@ -1,5 +1,5 @@
 ---
-id: 20251012-600002
+id: cs-001
 title: "Clean Code Principles / Принципы чистого кода"
 aliases: ["Clean Code Principles", "Принципы чистого кода"]
 topic: cs

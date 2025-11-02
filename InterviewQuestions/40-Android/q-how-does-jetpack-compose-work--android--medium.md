@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227159
+id: android-368
 title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
 aliases: [Jetpack Compose, Compose UI, Декларативный UI, Declarative UI]
 topic: android

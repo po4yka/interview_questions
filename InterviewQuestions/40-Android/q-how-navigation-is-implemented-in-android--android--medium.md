@@ -1,5 +1,5 @@
 ---
-id: 20251012-122716
+id: android-282
 title: "How Navigation Is Implemented In Android / Как реализована навигация в Android"
 aliases: ["How Navigation Is Implemented In Android", "Как реализована навигация в Android", "Navigation Implementation", "Реализация навигации"]
 topic: android

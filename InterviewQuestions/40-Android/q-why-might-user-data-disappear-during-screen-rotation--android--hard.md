@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711197
+id: android-096
 title: Почему данные пользователя могут исчезать при повороте экрана? / Why might user data disappear during screen rotation?
 aliases:
   - Screen rotation data loss

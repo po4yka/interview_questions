@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111163
+id: tools-001
 title: Git pull vs fetch / Различия между git pull и git fetch
 aliases: []
 

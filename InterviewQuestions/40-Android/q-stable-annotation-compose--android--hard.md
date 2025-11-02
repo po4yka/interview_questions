@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711109
+id: android-429
 title: "Stable Annotation Compose / Аннотация Stable в Compose"
 aliases: ["Stable Annotation Compose", "Аннотация Stable в Compose"]
 topic: android

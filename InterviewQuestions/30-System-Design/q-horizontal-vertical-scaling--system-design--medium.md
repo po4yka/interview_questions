@@ -1,5 +1,5 @@
 ---
-id: 20251012-300001
+id: sysdes-009
 title: "Horizontal vs Vertical Scaling / Горизонтальное vs Вертикальное масштабирование"
 aliases: ["Horizontal vs Vertical Scaling", "Горизонтальное vs Вертикальное масштабирование"]
 topic: system-design

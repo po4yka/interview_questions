@@ -1,5 +1,5 @@
 ---
-id: 20251016-172047
+id: kotlin-224
 title: "Prohibit Object Creation / Запрет создания объектов"
 aliases: [Private Constructor, Prohibit Creation, Utility Classes, Запрет создания]
 topic: kotlin

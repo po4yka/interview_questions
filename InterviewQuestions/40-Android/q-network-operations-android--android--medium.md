@@ -1,5 +1,5 @@
 ---
-id: 20251017-150431
+id: android-283
 title: "Network Operations Android / Сетевые операции в Android"
 aliases: ["Network Operations Android", "Сетевые операции в Android"]
 topic: android

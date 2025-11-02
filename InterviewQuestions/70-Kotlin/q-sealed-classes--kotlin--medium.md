@@ -1,5 +1,5 @@
 ---
-id: 20251012-154386
+id: kotlin-136
 title: "Sealed Classes"
 topic: kotlin
 difficulty: medium

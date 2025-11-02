@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111140
+id: lang-008
 title: "Kotlin Map Collection / Map коллекция в Kotlin"
 aliases: [Kotlin Map Collection, Map коллекция в Kotlin]
 topic: programming-languages

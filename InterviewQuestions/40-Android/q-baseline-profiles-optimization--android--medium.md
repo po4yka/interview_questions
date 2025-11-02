@@ -1,5 +1,5 @@
 ---
-id: 20251011-220008
+id: android-037
 title: Baseline Profiles Optimization / Оптимизация с Baseline Profiles
 aliases: [Baseline Profiles Optimization, Оптимизация с Baseline Profiles]
 topic: android

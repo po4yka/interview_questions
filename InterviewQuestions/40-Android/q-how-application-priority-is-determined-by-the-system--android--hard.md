@@ -1,5 +1,5 @@
 ---
-id: 20251012-122715
+id: android-124
 title: "How Application Priority Is Determined By The System / Как система определяет приоритет приложения"
 aliases: ["How Application Priority Is Determined", "Как система определяет приоритет приложения"]
 topic: android

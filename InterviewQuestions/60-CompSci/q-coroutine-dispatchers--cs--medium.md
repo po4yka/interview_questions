@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111120
+id: cs-020
 title: "Coroutine Dispatchers / Диспетчеры корутин"
 aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
 topic: cs

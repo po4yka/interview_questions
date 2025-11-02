@@ -1,5 +1,5 @@
 ---
-id: 20251020-200800
+id: android-446
 title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
 aliases: [FileProvider for Secure File Sharing, FileProvider для безопасного обмена файлами, FileProvider, Безопасный обмен файлами]
 topic: android

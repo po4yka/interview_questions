@@ -1,5 +1,5 @@
 ---
-id: 20251012-122752
+id: algo-001
 title: "Data Structures Overview / Обзор структур данных"
 aliases: ["Data Structures Overview", "Обзор структур данных"]
 topic: algorithms

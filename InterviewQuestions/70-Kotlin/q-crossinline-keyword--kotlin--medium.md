@@ -1,5 +1,5 @@
 ---
-id: 20251012-154348
+id: kotlin-157
 title: "Crossinline Keyword / Ключевое слово crossinline"
 aliases: [Crossinline Keyword, Crossinline ключевое слово]
 topic: kotlin

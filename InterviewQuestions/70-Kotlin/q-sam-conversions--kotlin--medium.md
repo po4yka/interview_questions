@@ -1,5 +1,5 @@
 ---
-id: 20251017-150544
+id: kotlin-179
 title: "Sam Conversions / SAM конверсии"
 aliases: [SAM Conversion, Single Abstract Method, Functional Interfaces, SAM конверсии]
 topic: kotlin

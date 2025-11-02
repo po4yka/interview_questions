@@ -1,5 +1,5 @@
 ---
-id: 20251017-114527
+id: android-392
 title: "Как сказать адаптеру перерисовать список если элемент был удален / How To Tell Adapter To Redraw List If Element Was Deleted"
 aliases: ["Как сказать адаптеру перерисовать список", "How to tell adapter to redraw list", "RecyclerView adapter update", "Обновление адаптера RecyclerView"]
 topic: android

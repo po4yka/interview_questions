@@ -1,5 +1,5 @@
 ---
-id: 20251016-161849
+id: kotlin-050
 title: "flatMapConcat vs flatMapMerge vs flatMapLatest / flatMapConcat против flatMapMerge против flatMapLatest"
 aliases: []
 

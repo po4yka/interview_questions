@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271177
+id: android-328
 title: "Real Time Updates Android / Обновления в реальном времени Android"
 aliases: ["Real Time Updates Android", "Обновления в реальном времени Android"]
 topic: android

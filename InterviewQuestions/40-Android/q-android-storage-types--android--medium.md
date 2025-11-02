@@ -1,5 +1,5 @@
 ---
-id: 20251016-163010
+id: android-183
 title: Android Storage Types / Типы хранилища Android
 aliases: ["Android Storage Types", "Типы хранилища Android"]
 topic: android

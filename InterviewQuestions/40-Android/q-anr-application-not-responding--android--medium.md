@@ -1,5 +1,5 @@
 ---
-id: 20251012-122778
+id: android-003
 title: ANR (Application Not Responding) / ANR (Приложение не отвечает)
 aliases: ["ANR (Application Not Responding)", "ANR (Приложение не отвечает)"]
 topic: android

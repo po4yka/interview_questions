@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227197
+id: android-423
 title: "How To Save Scroll State When Activity Is Recreated / Как сохранить состояние скролла при пересоздании Activity"
 aliases: [Scroll State Persistence, Save RecyclerView Position, Сохранение позиции скролла, Восстановление состояния RecyclerView]
 topic: android

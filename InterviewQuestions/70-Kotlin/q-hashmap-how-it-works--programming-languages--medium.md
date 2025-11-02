@@ -1,5 +1,5 @@
 ---
-id: 20251012-122742
+id: lang-044
 title: "Hashmap How It Works / Как работает HashMap"
 aliases: [Hashmap How It Works, Как работает HashMap]
 topic: programming-languages

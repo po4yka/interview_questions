@@ -1,5 +1,5 @@
 ---
-id: 20251012-122804
+id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
 aliases: [Compose Custom Layout, Кастомный layout в Compose, Custom Layout Jetpack Compose, Кастомная разметка Compose]
 topic: android

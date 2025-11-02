@@ -1,5 +1,5 @@
 ---
-id: 20251005-235013
+id: kotlin-018
 title: "Inline Classes (Value Classes) / Встроенные классы (Value классы)"
 aliases: []
 

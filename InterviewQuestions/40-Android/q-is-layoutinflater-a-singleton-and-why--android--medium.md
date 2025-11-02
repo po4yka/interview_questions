@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-118
 title: "Is LayoutInflater A Singleton And Why / Является ли LayoutInflater синглтоном и почему"
 aliases: ["Is LayoutInflater A Singleton And Why", "Является ли LayoutInflater синглтоном и почему"]
 topic: android

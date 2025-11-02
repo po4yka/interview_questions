@@ -1,5 +1,5 @@
 ---
-id: 20251012-100003
+id: kotlin-103
 title: "Flow Operators in Kotlin / Операторы Flow в Kotlin"
 aliases: []
 

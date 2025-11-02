@@ -1,5 +1,5 @@
 ---
-id: 20251029-000001
+id: android-414
 title: "Workmanager Return Result / Возврат результата WorkManager"
 aliases: ["Workmanager Return Result", "Возврат результата WorkManager"]
 topic: android

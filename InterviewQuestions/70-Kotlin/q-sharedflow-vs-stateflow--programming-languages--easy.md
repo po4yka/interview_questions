@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111178
+id: lang-019
 title: "SharedFlow Vs StateFlow / SharedFlow против StateFlow"
 aliases: [SharedFlow Vs StateFlow, SharedFlow против StateFlow]
 topic: programming-languages

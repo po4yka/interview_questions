@@ -1,5 +1,5 @@
 ---
-id: 20251012-154342
+id: kotlin-211
 title: "By Keyword Function Call / Ключевое слово by и вызов функции"
 aliases: [By Keyword Function Call, Ключевое слово by]
 topic: kotlin

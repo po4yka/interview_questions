@@ -1,5 +1,5 @@
 ---
-id: 20251017-144927
+id: android-244
 title: "Чем Жизненный Цикл Fragment Отличается От Activity / Fragment vs Activity Lifecycle"
 aliases: ["Fragment vs Activity Lifecycle", "Чем отличается жизненный цикл Fragment от Activity"]
 topic: android

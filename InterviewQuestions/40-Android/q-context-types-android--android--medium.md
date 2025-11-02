@@ -1,5 +1,5 @@
 ---
-id: 20251021-130000
+id: android-482
 title: Context Types in Android / Типы Context в Android
 aliases: ["Context Types in Android", "Типы Context в Android"]
 topic: android

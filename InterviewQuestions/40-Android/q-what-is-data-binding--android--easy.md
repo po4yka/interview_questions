@@ -1,5 +1,5 @@
 ---
-id: 20251017-104847
+id: android-141
 title: "What Is Data Binding / Что такое Data Binding"
 aliases: ["Data Binding", "Что такое Data Binding", "Android Data Binding"]
 topic: android

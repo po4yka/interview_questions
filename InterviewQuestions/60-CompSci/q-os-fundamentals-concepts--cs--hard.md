@@ -1,5 +1,5 @@
 ---
-id: 20251012-600001
+id: cs-004
 title: "Operating System Fundamentals / Основы операционных систем"
 aliases: ["OS Fundamentals", "Основы ОС"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227191
+id: android-375
 title: "How To Pass Parameters To Fragment / Как передать параметры во Fragment"
 aliases: ["How To Pass Parameters To Fragment", "Как передать параметры во Fragment", "Fragment arguments", "Fragment Bundle"]
 topic: android

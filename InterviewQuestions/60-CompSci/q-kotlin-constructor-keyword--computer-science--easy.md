@@ -1,5 +1,5 @@
 ---
-id: 20251016-162841
+id: cs-010
 title: "Kotlin Constructor Keyword / Ключевое слово constructor в Kotlin"
 aliases: []
 topic: computer-science

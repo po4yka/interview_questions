@@ -1,5 +1,5 @@
 ---
-id: 20251012-122736
+id: lang-071
 title: "Find Object Without References / Поиск объектов без ссылок"
 aliases: [Find Object Without References, Поиск объектов без ссылок]
 topic: programming-languages

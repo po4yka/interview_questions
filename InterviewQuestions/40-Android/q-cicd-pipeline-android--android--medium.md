@@ -1,5 +1,5 @@
 ---
-id: 20251012-122799
+id: android-048
 title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
 aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android

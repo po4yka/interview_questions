@@ -1,5 +1,5 @@
 ---
-id: 20251012-122752
+id: lang-067
 title: "Iterator Order Guarantee / Гарантия порядка Iterator"
 aliases: [Iterator Order Guarantee, Гарантия порядка Iterator]
 topic: programming-languages

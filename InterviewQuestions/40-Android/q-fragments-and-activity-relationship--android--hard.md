@@ -1,5 +1,5 @@
 ---
-id: 20251017-114653
+id: android-386
 title: "Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity"
 aliases: ["Fragments And Activity Relationship", "Взаимосвязь Фрагментов И Activity", "Fragment Lifecycle Dependency", "Зависимость жизненного цикла фрагмента"]
 topic: android

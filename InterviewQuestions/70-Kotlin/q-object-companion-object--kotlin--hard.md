@@ -1,5 +1,5 @@
 ---
-id: 20251012-154384
+id: kotlin-159
 title: "Object Companion Object / Object и Companion Object Advanced"
 aliases: [Object, Companion Object, Advanced, Advanced Object Patterns]
 topic: kotlin

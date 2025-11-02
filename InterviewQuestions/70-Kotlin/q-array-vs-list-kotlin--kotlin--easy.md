@@ -1,5 +1,5 @@
 ---
-id: 20251012-154340
+id: kotlin-137
 title: "Array Vs List Kotlin"
 topic: kotlin
 difficulty: easy

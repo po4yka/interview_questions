@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227150
+id: android-403
 title: "Hilt Components Scope / Компоненты и скоупы Hilt"
 aliases: [Hilt Components Scope, Компоненты и скоупы Hilt]
 topic: android

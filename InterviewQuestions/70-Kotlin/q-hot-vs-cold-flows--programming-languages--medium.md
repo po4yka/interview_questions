@@ -1,5 +1,5 @@
 ---
-id: 20251012-122743
+id: lang-016
 title: "Hot Vs Cold Flows / Горячие и холодные потоки"
 aliases: [Hot Vs Cold Flows, Горячие и холодные потоки]
 topic: programming-languages

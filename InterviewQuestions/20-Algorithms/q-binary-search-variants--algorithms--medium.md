@@ -1,5 +1,5 @@
 ---
-id: 20251012-200002
+id: algo-005
 title: "Binary Search and Variants / Бинарный поиск и варианты"
 aliases: ["Binary Search", "Бинарный поиск"]
 topic: algorithms

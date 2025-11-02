@@ -1,5 +1,5 @@
 ---
-id: "20251012-150007"
+id: kotlin-239
 title: "What are CoroutineContext elements and how do they combine? / Элементы CoroutineContext"
 aliases: [CoroutineContext Elements, Элементы CoroutineContext]
 topic: kotlin

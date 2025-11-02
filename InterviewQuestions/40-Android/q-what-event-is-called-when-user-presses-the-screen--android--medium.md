@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711151
+id: android-322
 title: "Touch Events / События касания"
 aliases: [Touch Events, События касания]
 topic: android

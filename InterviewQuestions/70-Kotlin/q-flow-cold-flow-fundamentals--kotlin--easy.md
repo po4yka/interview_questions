@@ -1,5 +1,5 @@
 ---
-id: 20251016-123804
+id: kotlin-089
 title: "What makes Flow a cold stream?"
 aliases: [Flow, Cold, Flow, Fundamentals]
 topic: kotlin

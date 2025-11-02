@@ -1,5 +1,5 @@
 ---
-id: 20251012-122732
+id: lang-077
 title: "Extension Properties / Расширяющие свойства"
 aliases: [Extension Properties, Расширяющие свойства]
 topic: programming-languages

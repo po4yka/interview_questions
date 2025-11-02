@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-440
 title: Data Sync Unstable Network / Синхронизация данных при нестабильной сети
 aliases: [Data Sync Unstable Network, Синхронизация данных при нестабильной сети]
 topic: android

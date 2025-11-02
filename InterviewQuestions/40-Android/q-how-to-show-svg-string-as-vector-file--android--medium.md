@@ -1,5 +1,5 @@
 ---
-id: 20251017-105349
+id: android-294
 title: "How To Show SVG String As Vector File / Как показать SVG строку как векторный файл"
 aliases: ["SVG String Display", "Отображение SVG строки", "SVG Vector Rendering"]
 topic: android

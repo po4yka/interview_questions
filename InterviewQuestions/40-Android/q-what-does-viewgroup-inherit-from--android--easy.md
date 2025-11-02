@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711149
+id: android-255
 title: "ViewGroup Inheritance / Наследование ViewGroup"
 aliases: [ViewGroup Inheritance, Наследование ViewGroup]
 topic: android

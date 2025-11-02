@@ -1,5 +1,5 @@
 ---
-id: 20251017-112631
+id: kotlin-054
 title: "Flow Operators Deep Dive / Глубокое погружение в операторы Flow"
 aliases: []
 

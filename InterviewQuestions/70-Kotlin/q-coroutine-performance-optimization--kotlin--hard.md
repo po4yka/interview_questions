@@ -1,5 +1,5 @@
 ---
-id: 20251012-140021
+id: kotlin-083
 title: "Coroutine Performance Optimization / Оптимизация производительности корутин"
 aliases: []
 

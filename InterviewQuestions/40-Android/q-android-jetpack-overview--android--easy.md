@@ -1,5 +1,5 @@
 ---
-id: 20251012-122765
+id: android-103
 title: Android Jetpack Overview / Обзор Android Jetpack
 aliases: ["Android Jetpack Overview", "Обзор Android Jetpack"]
 topic: android

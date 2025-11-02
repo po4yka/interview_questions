@@ -1,5 +1,5 @@
 ---
-id: 20251027-160000
+id: android-164
 title: "KMM Ktor Networking / Сетевое взаимодействие с Ktor в KMM"
 aliases: ["KMM Ktor Networking", "Сетевое взаимодействие с Ktor в KMM"]
 topic: android

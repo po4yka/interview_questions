@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-203
 title: "Koin Scope Management / Управление Scope В Koin"
 aliases: [Koin Scope Management, Управление Scope В Koin, Koin Scopes, Жизненный цикл Koin]
 topic: android

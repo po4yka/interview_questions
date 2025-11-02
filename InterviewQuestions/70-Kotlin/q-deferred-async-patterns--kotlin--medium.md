@@ -1,19 +1,21 @@
 ---
 topic: kotlin
-id: "20251012-170001"
+id: kotlin-063
 title: "Deferred and async patterns deep dive / Deferred и async паттерны подробно"
-description: "Complete guide to Deferred<T>, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
-topic: kotlin
-subtopics: ["coroutines", "deferred", "async", "concurrency", "parallelism"]
+aliases: [Deferred Async Patterns, Deferred и async паттерны]
+subtopics: [coroutines, async]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 category: "coroutines-advanced"
-tags: ["deferred", "async", "await", "parallel-execution", "concurrency", "performance"]
+tags: ["deferred", "async", "await", "parallel-execution", "concurrency", "performance", "difficulty/medium"]
+description: "Complete guide to Deferred<T>, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
 moc: moc-kotlin
 related: [q-lifecyclescope-viewmodelscope--kotlin--medium, q-kotlin-sealed-classes-purpose--programming-languages--medium, q-singleton-object-keyword--programming-languages--easy]
-contributors: []
 ---
 
 # Deferred and async patterns deep dive / Deferred и async паттерны подробно

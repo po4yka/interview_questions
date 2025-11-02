@@ -1,5 +1,5 @@
 ---
-id: 20251016-164554
+id: android-427
 title: "Room Full-Text Search (FTS) / Полнотекстовый поиск FTS в Room"
 aliases: ["Room Full-Text Search", "Полнотекстовый поиск FTS в Room"]
 topic: android

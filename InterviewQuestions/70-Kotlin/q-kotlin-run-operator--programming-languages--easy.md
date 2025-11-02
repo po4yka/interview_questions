@@ -1,5 +1,5 @@
 ---
-id: 20251016-123551
+id: lang-017
 title: "Kotlin Run Operator / Оператор run в Kotlin"
 aliases: [Kotlin Run Operator, Оператор run в Kotlin]
 topic: programming-languages

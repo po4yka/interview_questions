@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-468
 title: Design WhatsApp App / Проектирование приложения WhatsApp
 aliases:
     [

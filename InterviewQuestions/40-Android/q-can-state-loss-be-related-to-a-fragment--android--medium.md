@@ -1,5 +1,5 @@
 ---
-id: 20251012-122791
+id: android-174
 title: Can Fragment State Loss Occur? / Бывает ли потеря состояния у Fragment
 aliases: ["Can Fragment State Loss Occur?", "Бывает ли потеря состояния у Fragment"]
 topic: android

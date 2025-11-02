@@ -1,5 +1,5 @@
 ---
-id: 20251012-122717
+id: android-245
 title: "How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно"
 aliases:
   - Display Two Identical Fragments

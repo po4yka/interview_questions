@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111156
+id: lang-042
 title: "Kotlin Serialization / Сериализация в Kotlin"
 aliases: [Kotlin Serialization, Сериализация в Kotlin]
 topic: programming-languages

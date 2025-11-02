@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271162
+id: android-365
 title: "Pass Large Data Between Activities / Передача больших данных между Activity"
 aliases: [Pass Large Data Between Activities, Передача больших данных между Activity, FileProvider, Content URI, Large Data Transfer]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111125
+id: lang-087
 title: "Kotlin Equals Hashcode Purpose / Назначение equals и hashCode в Kotlin"
 aliases: [Kotlin Equals Hashcode Purpose, Назначение equals и hashCode в Kotlin]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-145453
+id: kotlin-068
 title: "Testing ViewModels with Coroutines / Тестирование ViewModel с корутинами"
 aliases: []
 

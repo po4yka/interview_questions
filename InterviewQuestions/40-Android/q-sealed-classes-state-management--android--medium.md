@@ -1,5 +1,5 @@
 ---
-id: 20251012-400005
+id: android-058
 title: "Sealed Classes for State Management / Sealed классы для управления состоянием"
 aliases: ["Sealed Classes for State Management", "Sealed классы для управления состоянием"]
 topic: android

@@ -1,15 +1,20 @@
 ---
-id: "20251012-150004"
-title: "Comparison of all coroutine builders: launch, async, runBlocking, withContext, coroutineScope, supervisorScope"
+id: kotlin-238
+title: "Comparison of all coroutine builders / Сравнение всех builders корутин"
+aliases: [Coroutine Builders Comparison, Сравнение coroutine builders]
 topic: kotlin
 difficulty: medium
 status: draft
 created: "2025-10-12"
+updated: "2025-10-31"
+question_kind: theory
+original_language: en
+language_tags: [en, ru]
+subtopics: [coroutines, builders]
 tags: ["kotlin", "coroutines", "builders", "launch", "async", "runblocking", "difficulty/medium"]
 description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
 moc: moc-kotlin
 related: [q-dispatcher-performance--kotlin--hard, q-kotlin-inline-functions--kotlin--medium, q-kotlin-extension-functions-advanced--kotlin--hard]
-subtopics: ["coroutines", "builders", "launch", "async", "runblocking"]
 ---
 # Comparison of all coroutine builders: launch, async, runBlocking, withContext, coroutineScope, supervisorScope
 

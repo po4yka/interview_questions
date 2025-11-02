@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111195
+id: kotlin-045
 title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
 aliases: []
 topic: kotlin

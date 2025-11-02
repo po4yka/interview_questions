@@ -1,5 +1,5 @@
 ---
-id: 20251012-140014
+id: kotlin-118
 title: "repeatOnLifecycle in Android / repeatOnLifecycle в Android"
 aliases: []
 

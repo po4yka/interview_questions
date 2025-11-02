@@ -1,5 +1,5 @@
 ---
-id: 20251017-150433
+id: android-287
 title: "SharedPreferences / Хранилище пар ключ-значение"
 aliases: ["SharedPreferences", "Хранилище пар ключ-значение", "Shared Preferences"]
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227185
+id: android-247
 title: "How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент"
 aliases: [Photo Editor Component, Separate Photo Editor, Фоторедактор как компонент, Отдельный компонент редактора]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251020-200200
+id: android-444
 title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в Compose избежать состояния гонки
 aliases:
   - Does State Made In Compose Help Avoid Race Condition

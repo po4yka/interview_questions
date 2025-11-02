@@ -1,5 +1,5 @@
 ---
-id: 20251012-400008
+id: kotlin-079
 title: "Adaptive Layouts in Compose / Адаптивные layouts в Compose"
 aliases: [Adaptive Layouts Compose, Адаптивные layouts Compose]
 topic: kotlin

@@ -1,5 +1,5 @@
 ---
-id: 20251016-162753
+id: android-320
 title: BroadcastReceiver and ContentProvider / BroadcastReceiver и ContentProvider
 aliases: [BroadcastReceiver and ContentProvider, BroadcastReceiver и ContentProvider]
 topic: android

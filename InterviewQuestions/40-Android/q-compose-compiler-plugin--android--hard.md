@@ -1,5 +1,5 @@
 ---
-id: 20251012-122803
+id: android-041
 title: Compose Compiler Plugin / Плагин компилятора Compose
 aliases:
   - Compose Compiler Plugin

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271165
+id: android-189
 title: Play Feature Delivery / Play Feature Delivery
 aliases: [Play Feature Delivery, Dynamic Feature Modules, App Bundle, Динамические модули]
 topic: android

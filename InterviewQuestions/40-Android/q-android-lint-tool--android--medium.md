@@ -1,5 +1,5 @@
 ---
-id: 20251012-122748
+id: android-121
 title: Android Lint Tool / Инструмент Android Lint
 aliases: ["Android Lint Tool", "Инструмент Android Lint"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271170
+id: android-415
 title: "Privacy Sandbox FLEDGE / Privacy Sandbox FLEDGE (Protected Audience API)"
 aliases: [FLEDGE, Protected Audience API, Privacy Sandbox FLEDGE, On-Device Ad Auctions]
 topic: android

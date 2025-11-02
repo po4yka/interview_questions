@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111117
+id: cs-007
 title: "Kotlin Conversion Functions / Kotlin Conversion Функции"
 aliases: []
 topic: computer-science

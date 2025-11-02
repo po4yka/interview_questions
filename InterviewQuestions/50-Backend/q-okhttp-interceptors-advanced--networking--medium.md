@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: net-004
 title: "OkHttp Interceptors Advanced / Продвинутые перехватчики OkHttp"
 aliases: ["OkHttp Interceptors Advanced", "Продвинутые перехватчики OkHttp"]
 topic: networking

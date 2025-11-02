@@ -1,15 +1,20 @@
 ---
-id: "20251012-150003"
-title: "SupervisorJob: when and why to use it?"
+id: kotlin-243
+title: "SupervisorJob: when and why to use it? / SupervisorJob и его применение"
+aliases: [SupervisorJob Use Cases, SupervisorJob применение]
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
+question_kind: theory
 status: draft
 created: "2025-10-12"
+updated: "2025-10-31"
 tags: ["kotlin", "coroutines", "supervisorjob", "error-handling", "job", "difficulty/medium"]
 description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, covering independent failure handling, comparison with regular Job, and real-world use cases in Android development"
 moc: moc-kotlin
 related: [q-delegation-by-keyword--kotlin--medium, q-flow-performance--kotlin--hard, q-dispatchers-unconfined--kotlin--medium]
-subtopics: ["coroutines", "supervisorjob", "error-handling", "job"]
+subtopics: [coroutines, supervisor-job]
 ---
 # SupervisorJob: when and why to use it?
 

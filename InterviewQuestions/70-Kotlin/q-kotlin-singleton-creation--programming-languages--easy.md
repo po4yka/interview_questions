@@ -1,5 +1,5 @@
 ---
-id: 20251012-154376
+id: lang-028
 title: "Kotlin Singleton Creation / Создание синглтона в Kotlin"
 aliases: [Kotlin Singleton Creation, Создание синглтона в Kotlin]
 topic: programming-languages

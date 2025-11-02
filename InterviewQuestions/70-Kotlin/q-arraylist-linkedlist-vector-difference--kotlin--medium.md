@@ -1,5 +1,5 @@
 ---
-id: 20251012-154341
+id: kotlin-160
 title: "Arraylist Linkedlist Vector Difference / Разица ArrayList LinkedList и Vector"
 aliases: [ArrayList LinkedList Vector Difference, Разница ArrayList LinkedList Vector]
 topic: kotlin

@@ -1,5 +1,5 @@
 ---
-id: 20251015-094712
+id: android-182
 title: "View Binding / Привязка View"
 aliases: ["View Binding", "Привязка View"]
 

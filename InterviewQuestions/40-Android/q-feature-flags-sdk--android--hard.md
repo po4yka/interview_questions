@@ -1,5 +1,5 @@
 ---
-id: 20251029-170211
+id: android-488
 title: Design Feature Flags & Experimentation SDK / Проектирование SDK флагов и экспериментов
 aliases:
     [

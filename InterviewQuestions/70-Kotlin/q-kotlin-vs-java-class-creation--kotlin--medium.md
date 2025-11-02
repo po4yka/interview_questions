@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111158
+id: kotlin-171
 title: "Kotlin Vs Java Class Creation / Создание классов Kotlin vs Java"
 aliases: [Class Creation, Data Classes, Kotlin Classes, Создание классов]
 topic: kotlin

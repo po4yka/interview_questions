@@ -1,5 +1,5 @@
 ---
-id: 20251011-220001
+id: android-040
 title: "Macrobenchmark for App Startup / Macrobenchmark для запуска приложения"
 aliases: ["Macrobenchmark for App Startup", "Macrobenchmark для запуска приложения"]
 

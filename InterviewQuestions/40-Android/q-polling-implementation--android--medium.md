@@ -1,5 +1,5 @@
 ---
-id: 20251017-144836
+id: android-363
 title: "Polling Implementation / Реализация Polling"
 aliases: ["Polling Implementation", "Реализация Polling", "Android Polling"]
 topic: android

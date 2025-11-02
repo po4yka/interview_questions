@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111141
+id: kotlin-040
 title: "Kotlin Multiplatform - How does it work? / Kotlin Multiplatform - Как это работает?"
 aliases: []
 

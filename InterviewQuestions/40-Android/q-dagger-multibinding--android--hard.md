@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-459
 title: Dagger Multibinding / Multibinding в Dagger
 aliases: ["Dagger Multibinding", "Multibinding в Dagger"]
 topic: android

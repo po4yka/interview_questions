@@ -1,5 +1,5 @@
 ---
-id: 20251012-200008
+id: algo-006
 title: "Backtracking Algorithms (N-Queens, Sudoku, Subsets) / Алгоритмы с откатом"
 aliases: ["Backtracking Algorithms", "Алгоритмы с откатом"]
 topic: algorithms

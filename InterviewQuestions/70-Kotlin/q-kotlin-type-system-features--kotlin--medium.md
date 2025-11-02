@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111157
+id: kotlin-141
 title: "Kotlin Type System Features / Возможности системы типов Kotlin"
 aliases: [Type System, Null Safety, Type Safety, Система типов Kotlin]
 topic: kotlin

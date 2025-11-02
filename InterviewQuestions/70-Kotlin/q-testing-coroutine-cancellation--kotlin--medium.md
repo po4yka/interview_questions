@@ -1,5 +1,5 @@
 ---
-id: 20251012-140004
+id: kotlin-126
 title: "Testing Coroutine Cancellation Scenarios / Тестирование сценариев отмены корутин"
 aliases: []
 

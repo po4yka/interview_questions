@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711137
+id: android-250
 title: "What Are Intents For / Для чего нужны Intent"
 aliases: ["What Are Intents For", "Для чего нужны Intent"]
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-314
 title: "How To Write Recyclerview Cache Ahead / Как написать RecyclerView с кешированием вперед"
 aliases: [RecyclerView Cache Ahead, RecyclerView Prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
 topic: android

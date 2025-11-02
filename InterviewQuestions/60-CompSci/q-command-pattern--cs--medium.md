@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111117
+id: cs-034
 title: "Command Pattern / Паттерн Command"
 aliases: ["Command Pattern", "Паттерн Command"]
 topic: cs

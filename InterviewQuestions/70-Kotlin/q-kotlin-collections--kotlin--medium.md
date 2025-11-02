@@ -1,5 +1,5 @@
 ---
-id: 20251012-150256
+id: kotlin-100
 title: "Kotlin Collections / Коллекции в Kotlin"
 aliases: []
 

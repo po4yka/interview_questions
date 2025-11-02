@@ -1,5 +1,5 @@
 ---
-id: 20251027-120000
+id: android-147
 title: "Raise Process Priority / Повышение приоритета процесса"
 aliases: ["Raise Process Priority", "Повышение приоритета процесса"]
 topic: android

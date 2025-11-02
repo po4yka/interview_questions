@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111182
+id: design-patterns-009
 title: "State Pattern / State Паттерн"
 aliases: [State Pattern, State Паттерн]
 topic: design-patterns

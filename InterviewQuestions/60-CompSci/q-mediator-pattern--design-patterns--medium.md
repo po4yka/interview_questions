@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111163
+id: design-patterns-004
 title: "Mediator Pattern / Mediator Паттерн"
 aliases: [Mediator Pattern, Mediator Паттерн]
 topic: design-patterns

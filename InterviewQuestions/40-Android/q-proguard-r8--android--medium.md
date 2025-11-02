@@ -1,5 +1,5 @@
 ---
-id: 20251005-215458
+id: android-001
 title: "ProGuard and R8 / ProGuard и R8"
 aliases: ["ProGuard and R8", "ProGuard и R8"]
 

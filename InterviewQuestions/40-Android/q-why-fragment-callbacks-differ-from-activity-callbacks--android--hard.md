@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711193
+id: android-428
 title: "Почему колбэки Fragment отличаются от колбэков Activity / Why Fragment Callbacks Differ From Activity Callbacks"
 aliases: [Fragment Callbacks, Колбэки Fragment, Fragment Lifecycle Differences]
 topic: android

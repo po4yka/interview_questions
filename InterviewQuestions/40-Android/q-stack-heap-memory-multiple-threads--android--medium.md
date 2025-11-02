@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711111
+id: android-080
 title: "Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких потоков"
 aliases: [Stack vs Heap Memory In Multithreading, Stack и Heap память для нескольких потоков]
 topic: android

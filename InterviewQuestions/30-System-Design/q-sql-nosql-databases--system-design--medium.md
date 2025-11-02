@@ -1,5 +1,5 @@
 ---
-id: 20251012-300005
+id: sysdes-002
 title: "SQL vs NoSQL Databases / SQL vs NoSQL базы данных"
 aliases: ["SQL vs NoSQL базы данных", "SQL vs NoSQL"]
 topic: system-design

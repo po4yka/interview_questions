@@ -1,5 +1,5 @@
 ---
-id: 20251012-160002
+id: kotlin-107
 title: "Semaphore for rate limiting and resource pooling / Semaphore для ограничения скорости и пулов ресурсов"
 topic: kotlin
 difficulty: medium

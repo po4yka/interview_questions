@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-465
 title: Dagger Component Dependencies / Зависимости компонентов Dagger
 aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
 topic: android

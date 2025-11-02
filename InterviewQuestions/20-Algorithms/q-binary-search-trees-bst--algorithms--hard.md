@@ -1,5 +1,5 @@
 ---
-id: 20251012-200005
+id: algo-007
 title: "Binary Search Trees and AVL Trees / Бинарные деревья поиска и AVL деревья"
 aliases: ["AVL Trees", "AVL деревья", "Binary Search Trees", "Бинарные деревья поиска"]
 topic: algorithms

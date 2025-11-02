@@ -1,18 +1,25 @@
 ---
-id: 20251012-154343
+id: kotlin-197
 title: "Callsuper Annotation / Аннотация CallSuper"
+aliases: [CallSuper Annotation, Аннотация CallSuper]
 topic: kotlin
+subtopics: [annotations]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-reified-type-parameters--kotlin--medium, q-testing-flow-operators--kotlin--hard, q-access-modifiers--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - android
   - annotations
   - best-practices
   - lifecycle
+  - difficulty/medium
 ---
 # Аннотация @CallSuper
 

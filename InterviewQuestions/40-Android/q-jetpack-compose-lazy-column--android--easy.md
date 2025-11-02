@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271114
+id: android-438
 title: "Jetpack Compose Lazy Column / LazyColumn в Jetpack Compose"
 aliases: ["Jetpack Compose Lazy Column", "LazyColumn в Jetpack Compose", "Compose список"]
 topic: android

@@ -1,23 +1,25 @@
 ---
-topic: kotlin
-id: "20251012-170010"
+id: kotlin-086
 title: "Structured concurrency violations and escape hatches / Нарушения структурной параллельности"
-subtopics:
-  - coroutines
-  - structured-concurrency
-  - scope
-  - lifecycle
-  - anti-patterns
+aliases: [Structured Concurrency Violations, Escape Hatches, Anti-Patterns, Нарушения параллельности]
+topic: kotlin
+subtopics: [coroutines, structured-concurrency]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
+status: draft
 moc: moc-kotlin
 related: [q-lifecycle-aware-coroutines--kotlin--hard, q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-object-companion-object--programming-languages--easy]
-status: draft
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
   - structured-concurrency
+  - anti-patterns
+  - violations
+  - difficulty/hard
   - scope
   - lifecycle
   - anti-patterns

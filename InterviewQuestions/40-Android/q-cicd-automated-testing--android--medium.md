@@ -1,5 +1,5 @@
 ---
-id: 20251012-122796
+id: android-237
 title: CI/CD Automated Testing / Автоматизированное тестирование в CI/CD
 aliases: ["CI/CD Automated Testing", "Автоматизированное тестирование в CI/CD"]
 topic: android

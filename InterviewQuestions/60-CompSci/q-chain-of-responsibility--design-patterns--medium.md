@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: design-patterns-010
 title: "Chain Of Responsibility / Цепочка обязанностей"
 aliases: [Chain Of Responsibility, Цепочка обязанностей]
 topic: design-patterns

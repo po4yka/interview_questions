@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-407
 title: "What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin"
 aliases: ["Navigation Methods in Kotlin", "Методы навигации в Kotlin"]
 topic: android

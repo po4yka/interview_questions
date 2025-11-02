@@ -1,5 +1,5 @@
 ---
-id: 20251020-200400
+id: android-448
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
 aliases: [Espresso Advanced Patterns, Продвинутые паттерны Espresso, IdlingResource, Custom Matchers, Custom ViewActions]
 topic: android

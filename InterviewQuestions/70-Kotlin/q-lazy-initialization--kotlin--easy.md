@@ -1,5 +1,5 @@
 ---
-id: 20251012-154378
+id: kotlin-215
 title: "Lazy Initialization / Ленивая инициализация"
 aliases: [Lazy Property, Lazy Delegate, Lazy Initialization, Ленивая инициализация]
 topic: kotlin

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227188
+id: android-366
 title: "How To Pass Data From One Activity To Another / Как передать данные из одной Activity в другую"
 aliases: [Pass Data Between Activities, Передача данных между Activity, Intent Extras, Parcelable Android]
 topic: android

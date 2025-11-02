@@ -1,5 +1,5 @@
 ---
-id: 20251015-101500
+id: android-242
 title: "Room Paging3 Integration / Интеграция Room с Paging3"
 aliases: ["Room Paging3 Integration", "Интеграция Room с Paging3"]
 topic: android

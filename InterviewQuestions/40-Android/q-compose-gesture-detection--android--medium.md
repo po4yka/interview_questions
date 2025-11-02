@@ -1,5 +1,5 @@
 ---
-id: 20251012-122805
+id: android-038
 title: Compose Gesture Detection / Обработка жестов в Compose
 aliases: [Compose Gesture Detection, Обработка жестов в Compose]
 topic: android

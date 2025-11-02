@@ -1,5 +1,5 @@
 ---
-id: 20251012-154382
+id: kotlin-178
 title: "Nothing Instances / Экземпляры Nothing"
 aliases: [Nothing, Nothing Type, Bottom Type, Nothing тип]
 topic: kotlin

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271149
+id: android-114
 title: "Navigation Methods Android / Методы навигации Android"
 aliases: ["Navigation Methods Android", "Методы навигации Android"]
 topic: android

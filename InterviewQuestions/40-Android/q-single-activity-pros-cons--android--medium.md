@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-171
 title: "Single Activity Pros Cons / Преимущества и недостатки Single Activity"
 aliases: ["Single Activity Pros Cons", "Преимущества и недостатки Single Activity"]
 topic: android

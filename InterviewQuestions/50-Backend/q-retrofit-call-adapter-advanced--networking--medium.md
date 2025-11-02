@@ -1,5 +1,5 @@
 ---
-id: 20251027-140000
+id: net-002
 title: "Retrofit Call Adapter Advanced / Продвинутый CallAdapter для Retrofit"
 aliases: ["Retrofit Call Adapter Advanced", "Продвинутый CallAdapter для Retrofit"]
 topic: networking

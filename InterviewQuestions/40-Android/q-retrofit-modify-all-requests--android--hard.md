@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271184
+id: android-090
 title: "Retrofit Modify All Requests / Изменение всех запросов Retrofit"
 aliases: ["Retrofit Modify All Requests", "Изменение всех запросов Retrofit"]
 topic: android

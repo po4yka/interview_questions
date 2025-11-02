@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271122
+id: android-416
 title: "SQLDelight в KMM / SQLDelight in KMM"
 aliases: ["SQLDelight в KMM", "SQLDelight in KMM", "SQLDelight для мультиплатформы"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-451
 title: Dagger Custom Scopes / Кастомные скоупы Dagger
 aliases: [Dagger Custom Scopes, Кастомные скоупы Dagger]
 topic: android

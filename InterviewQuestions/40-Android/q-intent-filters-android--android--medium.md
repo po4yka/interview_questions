@@ -1,5 +1,5 @@
 ---
-id: 20251015-132600
+id: android-178
 title: "Intent Filters / Intent Фильтры"
 aliases: ["Intent Filters", "Intent Фильтры", "Фильтры намерений"]
 topic: android

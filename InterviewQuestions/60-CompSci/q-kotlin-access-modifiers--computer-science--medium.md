@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111109
+id: cs-014
 title: "Kotlin Access Modifiers / Модификаторы доступа Kotlin"
 aliases: []
 topic: computer-science

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111122
+id: cs-016
 title: "Data Class Component Functions / Компонентные функции Data Class"
 aliases: ["Data Class Component Functions", "Компонентные функции Data Class"]
 topic: cs

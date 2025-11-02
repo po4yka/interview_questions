@@ -1,5 +1,5 @@
 ---
-id: 20251021-160000
+id: android-481
 title: Custom View Animation / Анимация Custom View
 aliases:
   - Custom View Animation

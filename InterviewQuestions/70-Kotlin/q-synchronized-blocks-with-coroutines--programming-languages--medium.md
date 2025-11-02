@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111185
+id: lang-037
 title: "Synchronized Blocks With Coroutines / Синхронизированные блоки с корутинами"
 aliases: [Synchronized Blocks With Coroutines, Синхронизированные блоки с корутинами]
 topic: programming-languages

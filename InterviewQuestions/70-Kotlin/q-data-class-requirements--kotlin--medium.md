@@ -1,5 +1,5 @@
 ---
-id: 20251012-154350
+id: kotlin-214
 title: "Data Class Requirements / Требования Data Class"
 aliases: [Data Class Requirements, Требования Data Class]
 topic: kotlin

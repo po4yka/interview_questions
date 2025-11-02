@@ -1,5 +1,5 @@
 ---
-id: 20251017-105028
+id: android-155
 title: "Which Event Is Called When User Touches Screen / Какое событие вызывается когда пользователь касается экрана"
 aliases: ["Touch Events", "События касания"]
 topic: android

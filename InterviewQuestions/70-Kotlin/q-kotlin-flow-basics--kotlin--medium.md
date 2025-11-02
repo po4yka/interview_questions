@@ -1,5 +1,5 @@
 ---
-id: 20251005-222650
+id: kotlin-035
 title: "Kotlin Flow Basics / Основы Flow в Kotlin"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: "20251012-150014"
+id: kotlin-233
 title: "Inner vs Nested Classes in Kotlin / Внутренние и вложенные классы в Kotlin"
 aliases: ["Inner vs Nested Classes", "Внутренние vs вложенные классы"]
 topic: kotlin

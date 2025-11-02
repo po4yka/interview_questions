@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-323
 title: "Robolectric Vs Instrumented / Robolectric против Instrumented"
 aliases: ["Robolectric Vs Instrumented", "Robolectric против Instrumented"]
 

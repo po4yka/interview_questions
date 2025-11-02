@@ -1,5 +1,5 @@
 ---
-id: 20251006-100007
+id: android-031
 title: "commit() vs apply() in SharedPreferences / commit() против apply() в SharedPreferences"
 aliases: ["commit() vs apply() in SharedPreferences", "commit() против apply() в SharedPreferences"]
 

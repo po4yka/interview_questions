@@ -1,31 +1,21 @@
 ---
-id: 20251017-112205
-title: Flow vs LiveData Comparison / Сравнение Flow и LiveData
+id: kotlin-144
+title: "Flow vs LiveData Comparison / Сравнение Flow и LiveData"
+aliases: [Flow, Vs, Livedata, Comparison]
 topic: kotlin
+subtopics: []
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: []
 status: draft
 moc: moc-kotlin
 related: [q-testing-flow-operators--kotlin--hard, q-retry-operators-flow--kotlin--medium, q-executor-service-java--java--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
-  - kotlin
-  - flow
-  - livedata
-  - stateflow
-  - android
-  - lifecycle
-  - comparison
+  - 
   - difficulty/medium
-language_tags:
-  - en
-  - ru
-original_language: en
-source: Kotlin Coroutines Interview Questions PDF
-subtopics:
-  - flow
-  - livedata
-  - state-management
-  - lifecycle
 ---
 # Question (EN)
 > What are the differences between Kotlin Flow and LiveData? When should you use each?

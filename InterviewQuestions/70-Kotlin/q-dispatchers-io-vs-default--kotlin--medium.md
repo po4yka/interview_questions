@@ -1,18 +1,25 @@
 ---
-id: 20251016-174650
-title: "Dispatchers Io Vs Default"
+id: kotlin-153
+title: "Dispatchers IO Vs Default / Dispatchers.IO против Default"
+aliases: [Dispatchers IO vs Default, Dispatchers.IO против Default]
 topic: kotlin
+subtopics: [coroutines, dispatchers]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-infix-functions--kotlin--medium, q-coroutine-scope-basics--kotlin--easy, q-request-coalescing-deduplication--kotlin--hard]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
   - dispatchers
   - threading
   - concurrency
+  - difficulty/medium
 ---
 # Dispatchers.IO vs Dispatchers.Default
 

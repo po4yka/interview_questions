@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111169
+id: cs-028
 title: "Observer Pattern / Паттерн Observer"
 aliases: ["Observer Pattern", "Паттерн Observer"]
 topic: cs

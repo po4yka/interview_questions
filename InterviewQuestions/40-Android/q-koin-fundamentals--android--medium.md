@@ -1,5 +1,5 @@
 ---
-id: 20251017-112118
+id: android-160
 title: "Koin Fundamentals / Основы Koin"
 aliases: [Koin DI, Koin Framework, Service Locator, Основы Koin, Koin внедрение зависимостей]
 topic: android

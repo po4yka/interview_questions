@@ -1,5 +1,5 @@
 ---
-id: 20251012-160003
+id: kotlin-091
 title: "CoroutineExceptionHandler: installation and usage / CoroutineExceptionHandler: установка и использование"
 topic: kotlin
 difficulty: medium

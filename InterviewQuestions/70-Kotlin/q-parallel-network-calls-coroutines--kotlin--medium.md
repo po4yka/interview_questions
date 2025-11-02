@@ -1,5 +1,5 @@
 ---
-id: 20251006-100002
+id: kotlin-037
 title: "How to make parallel network calls using coroutines? / Как выполнять параллельные сетевые запросы с помощью корутин?"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111172
+id: design-patterns-005
 title: "Proxy Pattern / Proxy Паттерн"
 aliases: [Proxy Pattern, Proxy Паттерн]
 topic: design-patterns

@@ -1,13 +1,19 @@
 ---
-id: 20251012-1227166
+id: android-347
 title: "How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View"
+aliases: [How To Add Custom Attributes To Custom View, Как добавить кастомные атрибуты к кастомным View]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-app-security-best-practices--security--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-performance-optimization-android--android--medium]
 created: 2025-10-15
-tags: [difficulty/medium, languages]
+updated: 2025-10-31
+tags: [android/ui-views, difficulty/medium]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:40:05 pm
 ---

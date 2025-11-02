@@ -1,5 +1,5 @@
 ---
-id: 20251012-122801
+id: android-047
 title: Clean Architecture on Android / Clean Architecture в Android
 aliases: ["Clean Architecture on Android", "Clean Architecture в Android"]
 topic: android

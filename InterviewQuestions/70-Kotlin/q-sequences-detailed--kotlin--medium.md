@@ -1,5 +1,5 @@
 ---
-id: 20251005-235015
+id: kotlin-013
 title: "Sequences in Kotlin / Последовательности в Kotlin"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111119
+id: cs-011
 title: "Kotlin Data Sealed Classes Combined"
 aliases: []
 topic: computer-science

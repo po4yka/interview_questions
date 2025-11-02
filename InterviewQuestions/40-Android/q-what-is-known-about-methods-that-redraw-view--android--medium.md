@@ -1,5 +1,5 @@
 ---
-id: 20251016-163204
+id: android-135
 title: "What Is Known About Methods That Redraw View / Что известно о методах перерисовывающих View"
 aliases: ["Methods That Redraw View", "Методы перерисовки View"]
 topic: android

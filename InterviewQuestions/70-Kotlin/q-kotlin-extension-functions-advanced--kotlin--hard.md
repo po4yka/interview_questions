@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111126
+id: kotlin-229
 title: "Kotlin Extension Functions Advanced / Продвинутые Extension Functions в Kotlin"
 aliases: [Kotlin Extension Functions Advanced, Продвинутые Extension Functions в Kotlin]
 topic: kotlin

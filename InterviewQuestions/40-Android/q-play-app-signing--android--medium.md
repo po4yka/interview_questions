@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271164
+id: android-302
 title: "Play App Signing / Подписание приложений Play"
 aliases: ["Play App Signing", "Подписание приложений Play", "App Signing Key", "Upload Key"]
 topic: android

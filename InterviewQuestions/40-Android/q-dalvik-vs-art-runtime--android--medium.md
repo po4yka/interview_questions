@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-442
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
 aliases: ["Dalvik vs ART Runtime", "Dalvik против ART Runtime"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111187
+id: design-patterns-011
 title: "Visitor Pattern / Visitor Паттерн"
 aliases: [Visitor Pattern, Visitor Паттерн]
 topic: design-patterns

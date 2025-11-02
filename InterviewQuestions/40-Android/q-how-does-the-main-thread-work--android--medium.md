@@ -1,5 +1,5 @@
 ---
-id: 20251012-122716
+id: android-334
 title: "How Does The Main Thread Work / Как работает главный поток"
 aliases: ["How Does The Main Thread Work", "Как работает главный поток"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111123
+id: cs-019
 title: "Data Class Special Features / Специальные возможности Data Class"
 aliases: ["Data Class Special Features", "Специальные возможности Data Class"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122710
+id: android-021
 title: Modifier System in Compose / Система Modifier в Compose
 aliases: [Modifier System in Compose, Система Modifier в Compose]
 topic: android

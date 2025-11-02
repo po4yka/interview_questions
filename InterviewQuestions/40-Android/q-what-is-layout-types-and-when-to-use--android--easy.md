@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-134
 title: "What Is Layout Types And When To Use / What Is Layout Types и When To Use"
 aliases: ["What Is Layout Types And When To Use", "What Is Layout Types и When To Use"]
 topic: android

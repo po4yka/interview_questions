@@ -1,5 +1,5 @@
 ---
-id: 20251012-154380
+id: kotlin-175
 title: "List Set Map Differences / Различия List Set и Map"
 aliases: [Collections, List vs Set vs Map, Collection Types, Коллекции]
 topic: kotlin

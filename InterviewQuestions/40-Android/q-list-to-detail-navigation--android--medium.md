@@ -1,5 +1,5 @@
 ---
-id: 20251016-164009
+id: android-319
 title: "List To Detail Navigation / Навигация от списка к детализации"
 aliases: ["List To Detail Navigation", "Навигация от списка к детализации"]
 topic: android

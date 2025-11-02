@@ -1,5 +1,5 @@
 ---
-id: 20251016-163816
+id: android-278
 title: "Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup"
 aliases: [ViewGroup Inheritance, Наследование ViewGroup, View Hierarchy, Иерархия View]
 topic: android

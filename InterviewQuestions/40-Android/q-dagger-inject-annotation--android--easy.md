@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-463
 title: Dagger Inject Annotation / Аннотация Inject Dagger
 aliases: ["Dagger Inject Annotation", "Аннотация Inject Dagger"]
 topic: android

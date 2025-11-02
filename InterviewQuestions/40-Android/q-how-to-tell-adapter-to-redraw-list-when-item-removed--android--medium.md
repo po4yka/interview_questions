@@ -1,5 +1,5 @@
 ---
-id: 20251017-105057
+id: android-374
 title: "How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру перерисовать список когда элемент удален"
 aliases: ["How To Tell Adapter To Redraw List", "Как сказать адаптеру перерисовать список"]
 topic: android

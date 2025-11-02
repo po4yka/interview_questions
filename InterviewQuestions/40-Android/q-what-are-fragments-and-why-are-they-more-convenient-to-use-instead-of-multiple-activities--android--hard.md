@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711135
+id: android-396
 title: "Fragments and Multiple Activities / Фрагменты и несколько Activity"
 aliases: [Fragments and Activities, Фрагменты и Activities]
 topic: android

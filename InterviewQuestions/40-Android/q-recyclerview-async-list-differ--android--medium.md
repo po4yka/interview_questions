@@ -1,13 +1,19 @@
 ---
-id: 20251016-162723
-title: "Recyclerview Async List Differ"
+id: android-224
+title: "RecyclerView AsyncListDiffer / RecyclerView AsyncListDiffer"
+aliases: [RecyclerView AsyncListDiffer, AsyncListDiffer]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
 related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-what-are-services-used-for--android--medium, q-vector-graphics-animations--graphics--medium]
 created: 2025-10-15
-tags: [async, diffutil, performance, threading, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, difficulty/medium]
 ---
 
 # RecyclerView Async List Diffing

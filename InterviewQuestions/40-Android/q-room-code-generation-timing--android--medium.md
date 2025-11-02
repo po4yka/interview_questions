@@ -1,5 +1,5 @@
 ---
-id: 20251016-162640
+id: android-122
 title: "Room Code Generation Timing / Время генерации кода Room"
 aliases: ["Room Code Generation Timing", "Время генерации кода Room"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251017-104905
+id: lang-035
 title: "Throw Vs Throws / Throw против Throws"
 aliases: [Throw Vs Throws, Throw против Throws]
 topic: programming-languages

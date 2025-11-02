@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111111
+id: db-001
 title: Virtual tables disadvantages / Недостатки виртуальных таблиц
 aliases: []
 

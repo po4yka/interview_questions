@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227157
+id: android-102
 title: "Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment и Activity"
 aliases: ["Fragment Lifecycle Connection", "Связь жизненных циклов Fragment и Activity"]
 topic: android

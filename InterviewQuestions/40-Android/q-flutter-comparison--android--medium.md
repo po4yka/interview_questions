@@ -1,5 +1,5 @@
 ---
-id: 20251012-122714
+id: android-252
 title: "KMM vs Flutter Comparison / Сравнение KMM и Flutter"
 aliases: ["KMM vs Flutter", "Kotlin Multiplatform Mobile vs Flutter", "Сравнение KMM и Flutter"]
 topic: android

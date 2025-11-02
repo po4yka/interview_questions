@@ -1,5 +1,5 @@
 ---
-id: 20251017-144925
+id: android-185
 title: "Splash Screen API (Android 12+) / API Splash Screen (Android 12+)"
 aliases: ["Splash Screen API", "API Splash Screen"]
 topic: android

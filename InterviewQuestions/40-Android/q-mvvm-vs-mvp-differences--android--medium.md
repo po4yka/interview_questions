@@ -1,5 +1,5 @@
 ---
-id: 20251016-161930
+id: android-296
 title: "MVVM vs MVP Differences / Различия MVVM и MVP"
 aliases: ["MVVM vs MVP", "Различия MVVM и MVP"]
 topic: android

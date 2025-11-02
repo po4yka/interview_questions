@@ -1,5 +1,5 @@
 ---
-id: 20251012-122761
+id: android-154
 title: Android Architectural Patterns / Архитектурные паттерны Android
 aliases: ["Android Architectural Patterns", "Архитектурные паттерны Android"]
 topic: android

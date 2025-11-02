@@ -1,5 +1,5 @@
 ---
-id: 20251012-122767
+id: android-269
 title: Android Modularization / Модуляризация Android
 aliases: ["Android Modularization", "Модуляризация Android"]
 topic: android

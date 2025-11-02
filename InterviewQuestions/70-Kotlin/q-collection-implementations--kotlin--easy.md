@@ -1,5 +1,5 @@
 ---
-id: 20251012-154344
+id: kotlin-202
 title: "Collection Implementations / Реализации коллекций"
 aliases: [Collection Implementations, Реализации коллекций]
 topic: kotlin

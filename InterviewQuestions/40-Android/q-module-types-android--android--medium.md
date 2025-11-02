@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271143
+id: android-112
 title: "Module Types Android / Типы модулей Android"
 aliases: [Android Module Types, Module Types, Типы модулей Android, Типы модулей]
 topic: android

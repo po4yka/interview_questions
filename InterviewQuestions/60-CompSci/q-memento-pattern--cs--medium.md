@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111164
+id: cs-012
 title: "Memento Pattern / Паттерн Хранитель"
 aliases: ["Memento Pattern", "Паттерн Хранитель"]
 topic: cs

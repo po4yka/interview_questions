@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711162
+id: android-233
 title: "View Lifecycle in Android / Жизненный цикл View в Android"
 aliases: ["View Lifecycle", "Жизненный цикл View"]
 topic: android

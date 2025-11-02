@@ -1,5 +1,5 @@
 ---
-id: 20251012-122710
+id: android-317
 title: Compose Modifier Order Performance / Порядок модификаторов и производительность
 aliases:
   - Compose Modifier Order Performance

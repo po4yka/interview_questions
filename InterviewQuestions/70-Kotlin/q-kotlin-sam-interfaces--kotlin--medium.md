@@ -1,5 +1,5 @@
 ---
-id: 20251005-222651
+id: kotlin-025
 title: "Kotlin SAM Interfaces / SAM интерфейсы в Kotlin"
 aliases: []
 

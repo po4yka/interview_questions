@@ -1,5 +1,5 @@
 ---
-id: 20251012-203116
+id: sysdes-001
 title: "Microservices vs Monolith Architecture / Микросервисы vs Монолитная архитектура"
 aliases: ["Microservices vs Monolith", "Микросервисы vs Монолит"]
 topic: system-design

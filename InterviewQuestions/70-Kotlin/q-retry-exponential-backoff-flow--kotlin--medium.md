@@ -1,10 +1,18 @@
 ---
-id: "20251012-180004"
+id: kotlin-191
 title: "Retry and exponential backoff patterns in Flow / Retry и exponential backoff паттерны в Flow"
+aliases: [Retry, Exponential Backoff, Error Handling, Resilience, Retry паттерны]
 topic: kotlin
+subtopics: [coroutines, flow, patterns, error-handling]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-kotlin
+related: [q-fan-in-fan-out-channels--kotlin--hard, q-actor-pattern--kotlin--hard, q-coroutine-dispatchers--kotlin--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -15,9 +23,7 @@ tags:
   - resilience
   - circuit-breaker
   - production
-moc: moc-kotlin
-related: [q-fan-in-fan-out-channels--kotlin--hard, q-actor-pattern--kotlin--hard, q-coroutine-dispatchers--kotlin--medium]
-subtopics:
+  - difficulty/medium
   - coroutines
   - flow
   - retry

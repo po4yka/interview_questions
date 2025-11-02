@@ -1,5 +1,5 @@
 ---
-id: 20251012-154374
+id: lang-014
 title: "Kotlin Java Abstract Differences / Различия abstract в Kotlin и Java"
 aliases: [Kotlin Java Abstract Differences, Различия abstract в Kotlin и Java]
 topic: programming-languages

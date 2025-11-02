@@ -1,5 +1,5 @@
 ---
-id: 20251012-122797
+id: android-355
 title: CI/CD Deployment Automation / Автоматизация деплоя в CI/CD
 aliases: [CI/CD Deployment Automation, Автоматизация деплоя в CI/CD]
 topic: android

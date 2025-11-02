@@ -1,5 +1,5 @@
 ---
-id: 20251012-122733
+id: lang-068
 title: "Extensions Concept / Концепция расширений"
 aliases: [Extensions Concept, Концепция расширений]
 topic: programming-languages

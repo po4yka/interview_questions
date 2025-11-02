@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-410
 title: "Where Is Composition Created For Calling Composable Function / Где создается Composition для вызова Composable функции"
 aliases: ["Where Is Composition Created", "Где создается Composition"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271144
+id: android-265
 title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
 aliases: [
   "Multiple Manifests Multimodule",

@@ -1,5 +1,5 @@
 ---
-id: 20251017-114440
+id: android-081
 title: "RecyclerView ItemDecoration Advanced / Продвинутый ItemDecoration для RecyclerView"
 aliases:
   - "RecyclerView ItemDecoration Advanced"

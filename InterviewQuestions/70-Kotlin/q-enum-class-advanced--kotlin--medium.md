@@ -1,5 +1,5 @@
 ---
-id: "20251012-150018"
+id: kotlin-231
 title: "Advanced Enum Class Features in Kotlin / Продвинутые возможности enum классов"
 aliases: ["Advanced Enum Features", "Продвинутые возможности enum"]
 topic: kotlin

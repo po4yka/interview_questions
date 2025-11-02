@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111115
+id: cs-008
 title: "Kotlin Constants / Константы в Kotlin"
 aliases: []
 topic: computer-science

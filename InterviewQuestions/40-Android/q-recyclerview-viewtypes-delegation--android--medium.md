@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271179
+id: android-085
 title: "RecyclerView ViewTypes Delegation / Делегирование ViewTypes в RecyclerView"
 aliases:
   - "RecyclerView ViewTypes Delegation"

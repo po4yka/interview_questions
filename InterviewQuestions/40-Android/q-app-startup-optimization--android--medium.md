@@ -1,5 +1,5 @@
 ---
-id: 20251011-220003
+id: android-192
 title: App Startup Optimization / Оптимизация запуска приложения
 aliases: ["App Startup Optimization", "Оптимизация запуска приложения"]
 topic: android

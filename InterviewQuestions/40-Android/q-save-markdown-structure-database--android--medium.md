@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271196
+id: android-218
 title: "Save Markdown Structure To Database / Сохранение структуры Markdown в базе данных"
 aliases: [Save Markdown Structure To Database, Сохранение структуры Markdown в базе данных]
 topic: android

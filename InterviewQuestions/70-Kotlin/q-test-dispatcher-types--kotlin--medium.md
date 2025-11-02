@@ -1,5 +1,5 @@
 ---
-id: 20251012-160009
+id: kotlin-067
 title: "StandardTestDispatcher vs UnconfinedTestDispatcher / StandardTestDispatcher против UnconfinedTestDispatcher"
 topic: kotlin
 difficulty: medium

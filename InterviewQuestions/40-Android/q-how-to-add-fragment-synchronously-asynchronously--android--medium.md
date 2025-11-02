@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227167
+id: android-337
 title: "How To Add Fragment Synchronously/Asynchronously / Как добавить Fragment синхронно и асинхронно"
 aliases: [How To Add Fragment Synchronously Asynchronously, Как добавить Fragment синхронно и асинхронно]
 topic: android

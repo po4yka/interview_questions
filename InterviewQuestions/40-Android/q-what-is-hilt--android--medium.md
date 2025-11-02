@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711159
+id: android-199
 title: "Hilt / Фреймворк Hilt"
 aliases: [Hilt, Фреймворк Hilt]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111152
+id: lang-039
 title: "Kotlin Sam Conversions / SAM конверсии в Kotlin"
 aliases: [Kotlin Sam Conversions, SAM конверсии в Kotlin]
 topic: programming-languages

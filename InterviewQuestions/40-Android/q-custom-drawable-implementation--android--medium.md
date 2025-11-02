@@ -1,5 +1,5 @@
 ---
-id: 20251021-140000
+id: android-478
 title: Custom Drawable Implementation / Реализация Custom Drawable
 aliases: ["Custom Drawable Implementation", "Реализация Custom Drawable"]
 topic: android

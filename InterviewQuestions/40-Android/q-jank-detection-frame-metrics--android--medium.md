@@ -1,22 +1,19 @@
 ---
-id: 20251011-220004
+id: android-053
 title: "Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров"
 aliases: []
 
 # Classification
 topic: android
 subtopics:
-  - frames
-  - jank
-  - performance
+  - performance-rendering
   - profiling
-  - rendering
-question_kind: practical
+question_kind: coding
 difficulty: medium
 
 # Language & provenance
 original_language: en
-language_tags: [android/frames, android/jank, android/optimization, android/performance, android/profiling, android/rendering, difficulty/medium, en, ru]
+language_tags: [android/performance-rendering, android/profiling, difficulty/medium, en, ru]
 source: Original
 source_note: Frame rendering performance best practices
 
@@ -27,9 +24,9 @@ related: [app-startup-optimization, baseline-profiles-optimization, macrobenchma
 
 # Timestamps
 created: 2025-10-11
-updated: 2025-10-11
+updated: 2025-10-31
 
-tags: [android/frames, android/jank, android/optimization, android/performance, android/profiling, android/rendering, difficulty/medium, en, ru]
+tags: [android/performance-rendering, android/profiling, difficulty/medium, en, ru]
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, October 25th 2025, 4:10:59 pm
 ---

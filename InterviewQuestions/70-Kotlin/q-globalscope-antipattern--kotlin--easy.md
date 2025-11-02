@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111107
+id: kotlin-193
 title: "GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope"
 aliases: [Globalscope, Antipattern]
 topic: kotlin

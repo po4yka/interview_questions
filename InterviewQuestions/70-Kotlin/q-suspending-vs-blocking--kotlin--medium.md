@@ -1,5 +1,5 @@
 ---
-id: 20251005-235010
+id: kotlin-015
 title: "Suspending vs Blocking / Приостанавливающие vs блокирующие функции"
 aliases: []
 

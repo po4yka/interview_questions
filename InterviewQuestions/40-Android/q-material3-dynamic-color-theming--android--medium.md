@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-157
 title: "Material3 Dynamic Color Theming / Динамические цвета Material3"
 aliases: ["Material3 Dynamic Color Theming", "Динамические цвета Material3"]
 topic: android

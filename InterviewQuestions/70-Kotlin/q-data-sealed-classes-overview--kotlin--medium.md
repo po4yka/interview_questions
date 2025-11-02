@@ -1,5 +1,5 @@
 ---
-id: 20251012-154353
+id: kotlin-206
 title: "Data Sealed Classes Overview / Data и Sealed классы обзор"
 aliases: [Data Sealed Classes Overview, Data и Sealed классы обзор]
 topic: kotlin

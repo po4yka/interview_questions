@@ -1,5 +1,5 @@
 ---
-id: 20251012-154368
+id: kotlin-189
 title: "Job Vs Supervisorjob / Job против Supervisorjob"
 aliases: []
 topic: kotlin

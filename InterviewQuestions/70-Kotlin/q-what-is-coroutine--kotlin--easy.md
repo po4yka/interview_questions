@@ -1,5 +1,5 @@
 ---
-id: 20251012-140026
+id: kotlin-072
 title: "What is a Coroutine? Basic Concepts / Что такое корутина? Основные концепции"
 aliases: []
 

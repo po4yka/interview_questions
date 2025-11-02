@@ -1,5 +1,5 @@
 ---
-id: 20251012-140027
+id: kotlin-135
 title: "launch vs async: When to Use Each / launch против async: когда использовать"
 aliases: []
 

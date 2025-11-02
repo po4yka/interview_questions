@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271145
+id: android-275
 title: "Multithreading Tools Android / Инструменты многопоточности Android"
 aliases: [Multithreading Tools Android, Инструменты многопоточности Android, Android Threading, Многопоточность Android]
 topic: android

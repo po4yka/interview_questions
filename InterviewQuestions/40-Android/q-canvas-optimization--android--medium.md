@@ -1,5 +1,5 @@
 ---
-id: 20251012-122794
+id: android-088
 title: Canvas Optimization / Оптимизация Canvas
 aliases: ["Canvas Optimization", "Оптимизация Canvas"]
 topic: android

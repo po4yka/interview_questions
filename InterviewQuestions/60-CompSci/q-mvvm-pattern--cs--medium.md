@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111167
+id: cs-021
 title: "MVVM Pattern / Паттерн MVVM (Model-View-ViewModel)"
 aliases: ["MVVM Pattern", "Паттерн MVVM"]
 topic: cs

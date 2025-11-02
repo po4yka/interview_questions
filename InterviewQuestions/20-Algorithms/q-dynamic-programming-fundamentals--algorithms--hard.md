@@ -1,5 +1,5 @@
 ---
-id: 20251012-200003
+id: algo-009
 title: "Dynamic Programming Fundamentals / Основы динамического программирования"
 aliases: ["Dynamic Programming", "Основы динамического программирования"]
 topic: algorithms

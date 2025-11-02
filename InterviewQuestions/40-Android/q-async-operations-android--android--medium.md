@@ -1,5 +1,5 @@
 ---
-id: 20251012-122785
+id: android-190
 title: Async Operations in Android / Асинхронные операции в Android
 aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android

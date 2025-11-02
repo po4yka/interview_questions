@@ -1,5 +1,5 @@
 ---
-id: 20251012-400009
+id: android-063
 title: "Kotlin Context Receivers / Kotlin Context Receivers"
 aliases: ["Kotlin Context Receivers", "Kotlin Context Receivers"]
 topic: android

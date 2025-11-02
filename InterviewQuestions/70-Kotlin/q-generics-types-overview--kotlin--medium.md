@@ -1,5 +1,5 @@
 ---
-id: 20251012-154363
+id: kotlin-174
 title: "Generics Types Overview / Обзор обобщенных типов"
 aliases: []
 topic: kotlin

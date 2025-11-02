@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711153
+id: android-401
 title: "Activity Lifecycle on New Activity / Жизненный цикл при запуске новой Activity"
 aliases: [Activity Lifecycle on New Activity]
 topic: android

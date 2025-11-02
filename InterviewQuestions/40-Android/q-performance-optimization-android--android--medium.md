@@ -1,5 +1,5 @@
 ---
-id: 20251027-120000
+id: android-136
 title: "Performance Optimization Android / Performance Оптимизация Android"
 aliases: ["Performance Optimization Android", "Performance Оптимизация Android"]
 topic: android

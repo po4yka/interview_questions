@@ -1,5 +1,5 @@
 ---
-id: 20251016-162536
+id: kotlin-167
 title: "Kotlin Scope Functions Advanced / Продвинутые Scope Functions в Kotlin"
 aliases: [Kotlin Scope Functions Advanced, Продвинутые Scope Functions в Kotlin]
 topic: kotlin

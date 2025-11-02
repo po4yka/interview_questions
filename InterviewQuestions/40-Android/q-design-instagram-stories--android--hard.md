@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-441
 title: Design Instagram Stories / Проектирование Instagram Stories
 aliases: [Design Instagram Stories, Проектирование Instagram Stories]
 topic: android

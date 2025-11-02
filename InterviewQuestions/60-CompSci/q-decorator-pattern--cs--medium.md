@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111125
+id: cs-013
 title: "Decorator Pattern / Паттерн Декоратор"
 aliases: ["Decorator Pattern", "Паттерн Декоратор"]
 topic: cs

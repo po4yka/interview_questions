@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111150
+id: cs-031
 title: "Interpreter Pattern / Паттерн Интерпретатор"
 aliases: ["Interpreter Pattern", "Паттерн Интерпретатор"]
 topic: cs

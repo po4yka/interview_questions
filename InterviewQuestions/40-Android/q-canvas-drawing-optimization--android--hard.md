@@ -1,5 +1,5 @@
 ---
-id: 20251012-122793
+id: android-117
 title: Canvas Drawing Optimization / Оптимизация отрисовки Canvas
 aliases: ["Canvas Drawing Optimization", "Оптимизация отрисовки Canvas"]
 topic: android

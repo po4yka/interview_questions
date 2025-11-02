@@ -1,5 +1,5 @@
 ---
-id: 20251012-122719
+id: android-257
 title: "How To Pass Photo To Editor / Как передать фото в редактор"
 aliases: ["How To Pass Photo To Editor", "Как передать фото в редактор"]
 topic: android

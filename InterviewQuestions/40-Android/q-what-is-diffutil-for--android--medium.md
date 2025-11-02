@@ -1,13 +1,19 @@
 ---
-id: 20251017-112031
-title: "What Is Diffutil For / Для чего нужен DiffUtil"
+id: android-232
+title: "DiffUtil / Компонент DiffUtil"
+aliases: [DiffUtil, Компонент DiffUtil]
 topic: android
+subtopics: [ui-views]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-how-animations-work-in-recyclerview--android--medium, q-is-layoutinflater-a-singleton-and-why--programming-languages--medium, q-single-activity-pros-cons--android--medium]
+related: [c-recyclerview, c-list-adapter, q-what-is-known-about-recyclerview--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
 created: 2025-10-15
-tags: [diffutil, android, ui, difficulty/medium]
+updated: 2025-10-31
+tags: [android/ui-views, diffutil, recyclerview, performance, optimization, difficulty/medium]
 ---
 
 # What is DiffUtil for?

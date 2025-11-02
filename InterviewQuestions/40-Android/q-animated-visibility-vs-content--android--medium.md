@@ -1,5 +1,5 @@
 ---
-id: 20251012-122777
+id: android-076
 title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против AnimatedContent против Crossfade
 aliases: ["AnimatedVisibility vs AnimatedContent vs Crossfade", "AnimatedVisibility против AnimatedContent против Crossfade"]
 topic: android

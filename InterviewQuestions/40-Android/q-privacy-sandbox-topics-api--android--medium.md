@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271172
+id: android-388
 title: "Privacy Sandbox Topics API / Privacy Sandbox Topics API"
 aliases: ["Privacy Sandbox Topics API", "Topics API", "Privacy Sandbox Topics API"]
 topic: android

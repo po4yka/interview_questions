@@ -1,5 +1,5 @@
 ---
-id: 20251016-162730
+id: android-303
 title: "View Methods And Their Purpose / Методы View и их назначение"
 aliases: [View Methods, Методы View]
 topic: android

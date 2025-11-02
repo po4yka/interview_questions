@@ -1,5 +1,5 @@
 ---
-id: 20251012-154379
+id: kotlin-165
 title: "Lifecycle Scopes Viewmodelscope Lifecyclescope / Скоупы жизненного цикла ViewModelScope и LifecycleScope"
 aliases: [ViewModelScope, LifecycleScope, Lifecycle Scopes, Скоупы жизненного цикла]
 topic: kotlin

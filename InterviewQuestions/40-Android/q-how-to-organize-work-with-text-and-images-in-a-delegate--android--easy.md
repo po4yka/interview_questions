@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227187
+id: android-349
 title: "How To Organize Work With Text And Images In A Delegate / Как Организовать Работу С Текстом И Картинками В Делегате"
 aliases: [Adapter Delegates, RecyclerView Delegates, Делегаты адаптера]
 topic: android

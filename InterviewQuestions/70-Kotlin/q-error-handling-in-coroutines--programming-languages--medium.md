@@ -1,5 +1,5 @@
 ---
-id: 20251012-122731
+id: lang-057
 title: "Error Handling In Coroutines / Обработка ошибок в корутинах"
 aliases: [Error Handling In Coroutines, Обработка ошибок в корутинах]
 topic: programming-languages

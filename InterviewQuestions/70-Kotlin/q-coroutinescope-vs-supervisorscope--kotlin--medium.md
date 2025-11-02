@@ -1,5 +1,5 @@
 ---
-id: 20251012-154347
+id: kotlin-223
 title: "Coroutinescope Vs Supervisorscope / Coroutinescope против Supervisorscope"
 aliases: [CoroutineScope vs SupervisorScope, CoroutineScope против SupervisorScope]
 topic: kotlin

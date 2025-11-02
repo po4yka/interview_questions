@@ -1,5 +1,5 @@
 ---
-id: 20251012-122746
+id: lang-086
 title: "How System Knows Weakreference Can Be Cleared / Как система знает что WeakReference можно очистить"
 aliases: [How System Knows Weakreference Can Be Cleared, Как система знает что WeakReference можно очистить]
 topic: programming-languages

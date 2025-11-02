@@ -1,5 +1,5 @@
 ---
-id: 20251020-200100
+id: android-473
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
 aliases: [DiffUtil Background Calculation Issues, Проблемы фонового вычисления DiffUtil, DiffUtil background issues, Проблемы DiffUtil в фоне]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251005-235005
+id: kotlin-027
 title: "Star Projection (*) vs Any in Generics / Звездная проекция vs Any в обобщениях"
 aliases: []
 

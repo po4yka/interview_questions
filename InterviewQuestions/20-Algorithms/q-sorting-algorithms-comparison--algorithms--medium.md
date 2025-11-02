@@ -1,5 +1,5 @@
 ---
-id: 20251012-200001
+id: algo-008
 title: "Sorting Algorithms Comparison / Сравнение алгоритмов сортировки"
 aliases: ["Sorting Algorithms", "Сравнение алгоритмов сортировки"]
 topic: algorithms

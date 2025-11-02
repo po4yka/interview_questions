@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111192
+id: lang-040
 title: "What Is Job Object / Что такое объект Job"
 aliases: [What Is Job Object, Что такое объект Job]
 topic: programming-languages

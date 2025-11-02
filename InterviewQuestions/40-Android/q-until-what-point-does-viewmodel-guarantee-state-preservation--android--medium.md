@@ -1,5 +1,5 @@
 ---
-id: 20251016-164357
+id: android-434
 title: "Until What Point Does ViewModel Guarantee State Preservation / До какого момента ViewModel гарантирует сохранение состояния"
 aliases: ["Until What Point Does ViewModel Guarantee State Preservation", "До какого момента ViewModel гарантирует сохранение состояния"]
 topic: android

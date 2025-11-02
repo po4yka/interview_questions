@@ -1,5 +1,5 @@
 ---
-id: 20251017-150243
+id: android-262
 title: "Migration To Compose / Миграция на Compose"
 aliases: ["Migration To Compose", "Миграция на Compose"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-445
 title: Design Uber App / Проектирование приложения Uber
 aliases:
     [

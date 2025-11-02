@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711186
+id: android-196
 title: "Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов"
 aliases: ["Which Class To Use For Detecting Gestures", "Какой класс использовать для обнаружения жестов"]
 

@@ -1,5 +1,5 @@
 ---
-id: 20251006-100008
+id: android-027
 title: "What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true) в RecyclerView?"
 aliases: ["setHasFixedSize in RecyclerView", "setHasFixedSize в RecyclerView"]
 topic: android

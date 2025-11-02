@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271106
+id: android-215
 title: "Inject Router To Presenter / Инъекция Router в Presenter"
 aliases: ["Inject Router To Presenter", "Инъекция Router в Presenter", "Router DI", "Инъекция роутера"]
 topic: android

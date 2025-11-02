@@ -1,5 +1,5 @@
 ---
-id: 20251012-160006
+id: kotlin-095
 title: "Converting callbacks with suspendCancellableCoroutine / Преобразование callback с suspendCancellableCoroutine"
 topic: kotlin
 difficulty: hard

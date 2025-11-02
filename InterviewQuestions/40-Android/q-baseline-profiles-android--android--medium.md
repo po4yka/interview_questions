@@ -1,5 +1,5 @@
 ---
-id: 20251012-122787
+id: android-310
 title: Baseline Profiles Android / Базовые профили Android
 aliases: ["Baseline Profiles Android", "Базовые профили Android"]
 topic: android

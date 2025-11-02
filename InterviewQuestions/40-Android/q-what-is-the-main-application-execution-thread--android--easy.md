@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711167
+id: android-207
 title: "What Is The Main Application Execution Thread / Что такое главный поток выполнения приложения"
 aliases: ["Main Thread", "UI Thread", "Главный поток", "Поток UI"]
 

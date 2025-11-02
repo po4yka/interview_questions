@@ -1,5 +1,5 @@
 ---
-id: 20251012-200006
+id: algo-003
 title: "Two Pointers and Sliding Window Patterns / Паттерны двух указателей и скользящего окна"
 aliases: ["Sliding Window", "Two Pointers", "Два указателя", "Скользящее окно"]
 topic: algorithms

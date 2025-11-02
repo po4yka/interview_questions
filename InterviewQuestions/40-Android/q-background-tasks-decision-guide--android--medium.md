@@ -1,5 +1,5 @@
 ---
-id: 20251012-122786
+id: android-006
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
 aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам]
 topic: android

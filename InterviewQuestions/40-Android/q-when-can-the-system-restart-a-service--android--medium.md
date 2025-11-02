@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-144
 title: "When Can The System Restart A Service / Когда система может перезапустить Service"
 aliases: ["When Can The System Restart A Service", "Когда система может перезапустить Service"]
 topic: android

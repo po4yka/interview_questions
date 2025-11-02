@@ -1,5 +1,5 @@
 ---
-id: 20251016-164356
+id: android-138
 title: "How To Choose Layout For Fragment / Как выбрать layout для Fragment"
 aliases: ["How To Choose Layout For Fragment", "Как выбрать layout для Fragment"]
 topic: android

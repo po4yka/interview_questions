@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711196
+id: android-104
 title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
 aliases: ["Why List Scrolling Lags", "Почему тормозит скроллинг списка", "RecyclerView Performance"]
 topic: android

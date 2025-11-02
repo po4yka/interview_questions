@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711191
+id: android-235
 title: "Why Are Fragments Needed If There Is Activity / Зачем нужны Fragment если есть Activity"
 aliases: [Fragments vs Activity, Fragment Architecture, Зачем Fragment, Фрагменты против Activity]
 topic: android

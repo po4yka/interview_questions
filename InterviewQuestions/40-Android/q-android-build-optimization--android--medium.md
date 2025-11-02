@@ -1,5 +1,5 @@
 ---
-id: 20251012-122763
+id: android-158
 title: Android Build Optimization / Оптимизация сборки Android
 aliases: ["Android Build Optimization", "Оптимизация сборки Android"]
 topic: android

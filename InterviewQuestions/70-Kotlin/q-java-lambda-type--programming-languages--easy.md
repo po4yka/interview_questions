@@ -1,5 +1,5 @@
 ---
-id: 20251012-122756
+id: lang-012
 title: "Java Lambda Type / Тип лямбд Java"
 aliases: [Java Lambda Type, Тип лямбд Java]
 topic: programming-languages

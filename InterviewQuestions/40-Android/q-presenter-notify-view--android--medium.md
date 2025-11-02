@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-313
 title: "Presenter Notify View / Presenter уведомляет View"
 aliases: ["Presenter Notify View", "Presenter уведомляет View", "MVP communication", "Взаимодействие MVP"]
 topic: android

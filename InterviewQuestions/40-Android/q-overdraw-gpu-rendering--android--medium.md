@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271159
+id: android-301
 title: "Overdraw Gpu Rendering / Overdraw и GPU рендеринг"
 aliases: ["Overdraw GPU Rendering", "Overdraw и GPU рендеринг"]
 topic: android

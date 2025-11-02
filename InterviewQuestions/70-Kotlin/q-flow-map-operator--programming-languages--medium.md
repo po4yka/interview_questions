@@ -1,5 +1,5 @@
 ---
-id: 20251016-162242
+id: lang-065
 title: "Flow Map Operator / Оператор map для Flow"
 aliases: [Flow Map Operator, Оператор map для Flow]
 topic: programming-languages

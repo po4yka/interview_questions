@@ -1,5 +1,5 @@
 ---
-id: 20251016-162851
+id: android-223
 title: "Measure Project Size / Измерение размера проекта"
 aliases: ["Measure Project Size", "Измерение размера проекта"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-154395
+id: kotlin-163
 title: "Zip Parallelism Guarantee / Гарантия параллелизма zip"
 aliases: [Zip Operator, Flow Zip, Parallelism, Zip в Flow]
 topic: kotlin

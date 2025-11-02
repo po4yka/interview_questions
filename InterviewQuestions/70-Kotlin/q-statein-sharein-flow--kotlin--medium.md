@@ -1,5 +1,5 @@
 ---
-id: 20251014-205638
+id: kotlin-041
 title: "stateIn and shareIn operators in Flow / Операторы stateIn и shareIn во Flow"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251005-222648
+id: kotlin-010
 title: "Kotlin Enum Classes / Перечисления (Enum) в Kotlin"
 aliases: []
 

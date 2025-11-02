@@ -1,5 +1,5 @@
 ---
-id: 20251012-140002
+id: kotlin-062
 title: "Testing StateFlow and SharedFlow in ViewModels / Тестирование StateFlow и SharedFlow в ViewModels"
 aliases: []
 

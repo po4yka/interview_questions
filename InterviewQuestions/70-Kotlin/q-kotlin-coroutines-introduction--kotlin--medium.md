@@ -1,5 +1,5 @@
 ---
-id: 20251005-222647
+id: kotlin-009
 title: "Kotlin Coroutines Introduction / Введение в корутины Kotlin"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-372
 title: "Which Layout For Large List / Какой layout для большого списка"
 aliases: ["Which Layout For Large List", "Какой layout для большого списка"]
 

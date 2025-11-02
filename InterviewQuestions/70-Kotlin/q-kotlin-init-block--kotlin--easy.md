@@ -1,5 +1,5 @@
 ---
-id: 20251005-234501
+id: kotlin-001
 title: "Init Block in Kotlin / Блок init в Kotlin"
 aliases: []
 

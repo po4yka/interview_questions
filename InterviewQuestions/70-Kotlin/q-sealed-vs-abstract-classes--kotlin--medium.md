@@ -1,5 +1,5 @@
 ---
-id: 20251012-154387
+id: kotlin-209
 title: "Sealed Vs Abstract Classes / Sealed против Abstract Классы"
 aliases: [Sealed Classes, Abstract Classes, Class Hierarchies, Sealed vs Abstract]
 topic: kotlin

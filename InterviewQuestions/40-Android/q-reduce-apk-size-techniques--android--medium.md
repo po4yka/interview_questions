@@ -1,5 +1,5 @@
 ---
-id: 20251006-000006
+id: android-017
 title: "How to reduce APK size? / Как уменьшить размер APK?"
 aliases: ["How to reduce APK size", "Как уменьшить размер APK"]
 

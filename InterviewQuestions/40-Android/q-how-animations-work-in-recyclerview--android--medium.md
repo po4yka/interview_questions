@@ -1,5 +1,5 @@
 ---
-id: 20251017-114255
+id: android-201
 title: "How Animations Work In RecyclerView / Как работают анимации в RecyclerView"
 aliases: [How Animations Work In RecyclerView, Как работают анимации в RecyclerView]
 topic: android

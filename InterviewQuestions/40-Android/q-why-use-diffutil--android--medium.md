@@ -1,5 +1,5 @@
 ---
-id: 20251017-144835
+id: android-338
 title: "Why Use DiffUtil / Почему использовать DiffUtil"
 aliases: [DiffUtil, RecyclerView DiffUtil, ListAdapter, DiffUtil в RecyclerView]
 topic: android

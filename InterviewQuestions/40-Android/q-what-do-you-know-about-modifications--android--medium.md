@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711145
+id: android-298
 title: "Compose Modifiers / Модификаторы в Compose"
 aliases: ["Compose Modifiers", "Модификаторы в Compose", "Jetpack Compose Modifiers"]
 

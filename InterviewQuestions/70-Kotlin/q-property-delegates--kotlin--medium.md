@@ -1,5 +1,5 @@
 ---
-id: 20251017-150318
+id: kotlin-147
 title: "Property Delegates / Делегаты свойств"
 aliases: [Property Delegates, Delegates, Property, Делегаты свойств]
 topic: kotlin

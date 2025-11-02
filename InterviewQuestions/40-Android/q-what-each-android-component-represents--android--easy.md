@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711150
+id: android-382
 title: "Android Components / Компоненты Android"
 aliases: [Android Components, Компоненты Android]
 topic: android

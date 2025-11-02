@@ -1,5 +1,5 @@
 ---
-id: 20251015-000000
+id: android-148
 title: "Room Relations and Embedded / Отношения и Embedded в Room"
 aliases: ["Room Relations and Embedded", "Отношения и Embedded в Room"]
 

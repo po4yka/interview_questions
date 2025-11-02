@@ -1,5 +1,5 @@
 ---
-id: 20251006-100012
+id: android-024
 title: Annotation Processing in Android / Обработка аннотаций в Android
 aliases: ["Annotation Processing in Android", "Обработка аннотаций в Android"]
 topic: android

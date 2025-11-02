@@ -1,5 +1,5 @@
 ---
-id: 20251012-154358
+id: kotlin-173
 title: "Desugaring Android Java / Desugaring в Android"
 aliases: [Desugaring Android, Desugaring Android Java]
 topic: kotlin

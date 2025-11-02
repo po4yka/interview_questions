@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111133
+id: lang-033
 title: "Kotlin Init Block Features / Возможности блока init в Kotlin"
 aliases: [Kotlin Init Block Features, Возможности блока init в Kotlin]
 topic: programming-languages

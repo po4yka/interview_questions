@@ -1,5 +1,5 @@
 ---
-id: 20251012-600003
+id: cs-003
 title: "Concurrency Fundamentals / Основы параллелизма"
 aliases: ["Concurrency Fundamentals", "Основы параллелизма"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251012-144928
+id: kotlin-070
 title: "Catch Operator in Kotlin Flow / Оператор catch в Kotlin Flow"
 aliases: []
 

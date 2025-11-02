@@ -1,5 +1,5 @@
 ---
-id: "20251012-150009"
+id: kotlin-246
 title: "What is Dispatchers.Unconfined and when to use it? / Dispatchers.Unconfined применение"
 aliases: [Dispatchers Unconfined, Dispatchers.Unconfined применение]
 topic: kotlin

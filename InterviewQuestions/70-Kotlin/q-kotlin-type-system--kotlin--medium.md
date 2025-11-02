@@ -1,5 +1,5 @@
 ---
-id: 20251005-222657
+id: kotlin-028
 title: "Kotlin Type System (Any, Nothing, Unit) / Система типов Kotlin (Any, Nothing, Unit)"
 aliases: []
 

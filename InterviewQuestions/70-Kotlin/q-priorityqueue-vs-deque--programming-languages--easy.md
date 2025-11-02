@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111170
+id: lang-070
 title: "PriorityQueue Vs Deque / PriorityQueue против Deque"
 aliases: [PriorityQueue Vs Deque, PriorityQueue против Deque]
 topic: programming-languages

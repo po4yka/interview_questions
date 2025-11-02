@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111181
+id: software-design-002
 title: "SOLID Principles / Принципы SOLID"
 aliases: [SOLID Principles, Принципы SOLID]
 topic: software-design

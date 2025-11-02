@@ -1,5 +1,5 @@
 ---
-id: 20251021-190000
+id: android-480
 title: Custom View State Saving / Сохранение состояния Custom View
 aliases: ["Custom View State Saving", "Сохранение состояния Custom View"]
 topic: android

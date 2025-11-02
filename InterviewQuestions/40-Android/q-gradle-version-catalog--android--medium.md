@@ -1,5 +1,5 @@
 ---
-id: 20251015-094711
+id: android-179
 title: "Gradle Version Catalog / Каталог версий Gradle"
 aliases: [Gradle Version Catalog, Каталог версий Gradle, Version Catalog, libs.versions.toml]
 topic: android

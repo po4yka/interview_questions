@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711195
+id: android-316
 title: "Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что в нем происходит"
 aliases: [ViewModel Purpose, Назначение ViewModel, ViewModel Responsibilities, Обязанности ViewModel]
 

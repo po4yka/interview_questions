@@ -1,5 +1,5 @@
 ---
-id: 20251015-100154
+id: android-191
 title: Compose Multiplatform / Compose Multiplatform
 aliases: [Compose Multiplatform, KMP Compose, Мультиплатформенный Compose]
 topic: android

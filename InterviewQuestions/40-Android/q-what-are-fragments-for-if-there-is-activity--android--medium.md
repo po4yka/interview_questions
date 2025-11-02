@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711136
+id: android-291
 title: "Fragments vs Activity / Фрагменты vs Activity"
 aliases: [Fragments vs Activity, Фрагменты vs Activity]
 topic: android

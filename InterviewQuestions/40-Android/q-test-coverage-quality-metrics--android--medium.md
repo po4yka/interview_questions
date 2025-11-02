@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711116
+id: android-087
 title: "Test Coverage Quality Metrics / Метрики покрытия и качества тестов"
 aliases: [Test Coverage Quality Metrics, Метрики покрытия и качества тестов]
 topic: android

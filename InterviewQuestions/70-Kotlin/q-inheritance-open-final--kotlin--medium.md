@@ -1,5 +1,5 @@
 ---
-id: "20251012-150019"
+id: kotlin-232
 title: "Inheritance in Kotlin: open, final, abstract, override / Наследование в Kotlin: open, final, abstract, override"
 aliases: ["Inheritance in Kotlin", "Наследование в Kotlin"]
 topic: kotlin

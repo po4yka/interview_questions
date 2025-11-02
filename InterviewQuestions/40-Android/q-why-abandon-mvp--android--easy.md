@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711190
+id: android-379
 title: "Why Abandon MVP / Почему отказаться от MVP"
 aliases: [Why Abandon MVP, Почему отказаться от MVP, MVP problems, Проблемы MVP]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271113
+id: android-072
 title: Compose Core Components / Основные компоненты Compose
 aliases: [Compose Components, Jetpack Compose Architecture, Основные компоненты Compose, Архитектура Jetpack Compose]
 topic: android

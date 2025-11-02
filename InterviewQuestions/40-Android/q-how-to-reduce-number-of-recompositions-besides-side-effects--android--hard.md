@@ -1,5 +1,5 @@
 ---
-id: 20251030-120000
+id: android-281
 title: "How To Reduce Number Of Recompositions Besides Side Effects / Как уменьшить количество рекомпозиций кроме побочных эффектов"
 aliases: ["Reduce Recompositions", "Уменьшить рекомпозиции", "Compose Performance", "Производительность Compose"]
 topic: android

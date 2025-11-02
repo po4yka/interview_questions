@@ -1,5 +1,5 @@
 ---
-id: 20251012-140010
+id: kotlin-071
 title: "select Expression with Channels / Выражение select с каналами"
 aliases: []
 

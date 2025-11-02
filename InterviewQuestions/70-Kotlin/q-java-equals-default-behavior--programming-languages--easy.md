@@ -1,5 +1,5 @@
 ---
-id: 20251012-122755
+id: lang-010
 title: "Java Equals Default Behavior / Поведение equals по умолчанию в Java"
 aliases: [Java Equals Default Behavior, Поведение equals по умолчанию в Java]
 topic: programming-languages

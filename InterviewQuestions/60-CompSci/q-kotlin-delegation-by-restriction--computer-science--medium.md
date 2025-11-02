@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111123
+id: cs-005
 title: "Kotlin Delegation By Restriction / Ограничения делегирования в Kotlin"
 aliases: []
 topic: computer-science

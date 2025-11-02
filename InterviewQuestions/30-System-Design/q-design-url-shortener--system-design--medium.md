@@ -1,5 +1,5 @@
 ---
-id: 20251012-300010
+id: sysdes-006
 title: "Design URL Shortener (like bit.ly) / Проектирование сокращателя URL"
 aliases: ["URL Shortener Design", "Проектирование сокращателя URL"]
 topic: system-design

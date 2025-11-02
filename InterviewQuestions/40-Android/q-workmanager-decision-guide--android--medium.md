@@ -1,5 +1,5 @@
 ---
-id: 20251017-144931
+id: android-180
 title: "WorkManager Decision Guide / Руководство по выбору WorkManager"
 aliases: ["WorkManager Decision Guide", "Руководство по выбору WorkManager"]
 topic: android

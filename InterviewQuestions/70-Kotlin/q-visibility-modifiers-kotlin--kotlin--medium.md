@@ -1,5 +1,5 @@
 ---
-id: "20251012-150020"
+id: kotlin-236
 title: "Visibility Modifiers in Kotlin / Модификаторы видимости в Kotlin"
 aliases: ["Visibility Modifiers", "Модификаторы видимости"]
 topic: kotlin

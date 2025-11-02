@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271188
+id: android-083
 title: "Room Library Definition / Определение библиотеки Room"
 aliases: ["Room Library Definition", "Определение библиотеки Room"]
 topic: android

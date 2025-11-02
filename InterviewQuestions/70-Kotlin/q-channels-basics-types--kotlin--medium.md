@@ -1,5 +1,5 @@
 ---
-id: 20251012-140006
+id: kotlin-124
 title: "Channels Basics and Types / Основы и типы каналов"
 aliases: []
 

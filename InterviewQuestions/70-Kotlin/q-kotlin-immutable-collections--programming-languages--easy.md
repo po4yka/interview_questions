@@ -1,5 +1,5 @@
 ---
-id: 20251012-154373
+id: lang-096
 title: "Kotlin Immutable Collections / Неизменяемые коллекции Kotlin"
 aliases: [Kotlin Immutable Collections, Неизменяемые коллекции Kotlin]
 topic: programming-languages

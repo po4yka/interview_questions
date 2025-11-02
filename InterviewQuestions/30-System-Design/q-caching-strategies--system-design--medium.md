@@ -1,5 +1,5 @@
 ---
-id: 20251012-300003
+id: sysdes-005
 title: "Caching Strategies and Patterns / Стратегии и паттерны кеширования"
 aliases: ["Caching Strategies", "Стратегии кеширования"]
 topic: system-design

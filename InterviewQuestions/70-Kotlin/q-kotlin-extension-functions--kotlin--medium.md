@@ -1,5 +1,5 @@
 ---
-id: 20251005-222649
+id: kotlin-033
 title: "Kotlin Extension Functions / Функции-расширения в Kotlin"
 aliases: []
 

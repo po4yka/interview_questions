@@ -1,5 +1,5 @@
 ---
-id: 20251012-122769
+id: android-216
 title: Android Project Parts / Части Android проекта
 aliases: ["Android Project Parts", "Части Android проекта"]
 topic: android

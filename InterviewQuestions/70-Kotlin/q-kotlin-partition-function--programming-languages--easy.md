@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111146
+id: lang-055
 title: "Kotlin Partition Function / Функция partition в Kotlin"
 aliases: [Kotlin Partition Function, Функция partition в Kotlin]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227149
+id: android-049
 title: "Hilt Assisted Injection / Hilt Assisted Injection"
 aliases: ["Hilt Assisted Injection"]
 topic: android

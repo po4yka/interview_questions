@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111194
+id: cs-032
 title: "Where to Call Suspend Functions / Где можно вызывать suspend-функции"
 aliases: ["Suspend Functions Call Context", "Контекст вызова suspend-функций"]
 topic: cs

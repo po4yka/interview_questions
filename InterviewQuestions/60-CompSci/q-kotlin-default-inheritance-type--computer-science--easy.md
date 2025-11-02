@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111121
+id: cs-016
 title: "Kotlin Default Inheritance Type / Тип наследования по умолчанию в Kotlin"
 aliases: []
 topic: computer-science

@@ -1,5 +1,5 @@
 ---
-id: 20251012-140017
+id: kotlin-076
 title: "Hot vs Cold Flows / Горячие и холодные потоки"
 aliases: []
 

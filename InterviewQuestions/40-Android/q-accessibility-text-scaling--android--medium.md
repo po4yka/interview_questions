@@ -1,5 +1,5 @@
 ---
-id: 20251012-122755
+id: android-044
 title: Accessibility Text Scaling / Масштабирование текста для доступности
 aliases: [Text Scaling Accessibility, Масштабирование текста]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251016-161808
+id: android-195
 title: Background vs Foreground Service / Фоновый vs активный сервис
 aliases: ["Background vs Foreground Service", "Фоновый vs активный сервис"]
 topic: android

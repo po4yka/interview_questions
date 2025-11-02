@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271141
+id: android-398
 title: "ML Kit Text Recognition / Распознавание текста ML Kit"
 aliases: ["ML Kit Text Recognition", "Распознавание текста ML Kit", "OCR Android", "MLKit OCR"]
 topic: android

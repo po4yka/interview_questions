@@ -1,5 +1,5 @@
 ---
-id: 20251016-174842
+id: android-093
 title: "Koin Vs Hilt Comparison / Сравнение Koin и Hilt"
 aliases: ["Koin Vs Hilt Comparison", "Сравнение Koin и Hilt"]
 topic: android

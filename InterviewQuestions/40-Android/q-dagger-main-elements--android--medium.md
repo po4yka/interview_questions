@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-449
 title: Dagger Main Elements / Основные элементы Dagger
 aliases: ["Dagger Main Elements", "Основные элементы Dagger"]
 topic: android

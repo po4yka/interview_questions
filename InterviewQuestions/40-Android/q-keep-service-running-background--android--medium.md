@@ -1,5 +1,5 @@
 ---
-id: 20251016-174927
+id: android-194
 title: "Keep Service Running Background / Удержание Service в фоне"
 aliases: ["Keep Service Running Background", "Удержание Service в фоне", "Background Service", "Фоновый сервис"]
 topic: android

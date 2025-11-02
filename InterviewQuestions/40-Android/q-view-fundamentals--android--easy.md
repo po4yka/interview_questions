@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711127
+id: android-225
 title: "View Fundamentals / Основы View"
 aliases: ["View Fundamentals", "Основы View"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122753
+id: android-055
 title: Accessibility TalkBack / Доступность и TalkBack
 aliases: [TalkBack Accessibility, Доступность TalkBack]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251012-154359
+id: kotlin-161
 title: "Equals Hashcode Contracts / Контракты equals и hashCode"
 aliases: [Equals Hashcode Contracts, Контракты equals hashCode]
 topic: kotlin

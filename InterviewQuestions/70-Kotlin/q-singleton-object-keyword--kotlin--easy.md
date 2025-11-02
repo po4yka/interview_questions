@@ -1,5 +1,5 @@
 ---
-id: 20251012-154390
+id: kotlin-180
 title: "Singleton Object Keyword / Синглтон с ключевым словом object"
 aliases: [Singleton, Object Keyword, Singleton Pattern, Синглтон]
 topic: kotlin

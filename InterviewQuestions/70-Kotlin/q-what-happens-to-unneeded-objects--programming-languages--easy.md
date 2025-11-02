@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111188
+id: lang-050
 title: "What Happens To Unneeded Objects / Что происходит с ненужными объектами"
 aliases: [What Happens To Unneeded Objects, Что происходит с ненужными объектами]
 topic: programming-languages

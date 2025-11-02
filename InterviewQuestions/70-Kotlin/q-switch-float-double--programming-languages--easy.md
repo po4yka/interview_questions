@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111184
+id: lang-092
 title: "Switch Float Double / Switch с float и double"
 aliases: [Switch Float Double, Switch с float и double]
 topic: programming-languages

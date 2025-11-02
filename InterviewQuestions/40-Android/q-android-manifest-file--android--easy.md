@@ -1,5 +1,5 @@
 ---
-id: 20251015-094722
+id: android-360
 title: AndroidManifest.xml / Файл манифеста Android
 aliases: ["AndroidManifest.xml", "Файл манифеста Android"]
 topic: android

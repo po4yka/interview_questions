@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-168
 title: "TransactionTooLargeException / Исключение TransactionTooLargeException"
 aliases: ["TransactionTooLargeException", "Исключение TransactionTooLargeException"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251016-161612
+id: lang-007
 title: "Kotlin Combine Collections / Объединение коллекций Kotlin"
 aliases: []
 topic: programming-languages

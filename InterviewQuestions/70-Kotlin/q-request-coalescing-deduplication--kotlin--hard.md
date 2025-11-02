@@ -1,10 +1,18 @@
 ---
-id: 20251012-180009
+id: kotlin-200
 title: "Request coalescing and deduplication patterns / Объединение и дедупликация запросов"
+aliases: [Request Coalescing, Deduplication, Caching, Optimization, Объединение запросов]
 topic: kotlin
+subtopics: [coroutines, patterns, performance]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
+moc: moc-kotlin
+related: [q-job-vs-supervisorjob--kotlin--medium, q-kotlin-combine-collections--programming-languages--easy, q-kotlin-vs-java-class-creation--programming-languages--medium]
 created: 2025-10-15
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
@@ -14,10 +22,7 @@ tags:
   - patterns
   - deduplication
   - coalescing
-moc: moc-kotlin
-related: [q-job-vs-supervisorjob--kotlin--medium, q-kotlin-combine-collections--programming-languages--easy, q-kotlin-vs-java-class-creation--programming-languages--medium]
-subtopics:
-  - coroutines
+  - difficulty/hard
   - optimization
   - caching
   - performance

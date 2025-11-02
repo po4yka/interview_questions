@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111112
+id: cs-030
 title: "Abstract Factory Pattern / Abstract Factory Паттерн"
 aliases: ["Abstract Factory Pattern", "Паттерн Abstract Factory"]
 topic: cs

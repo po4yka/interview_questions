@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711132
+id: android-299
 title: "WebP Image Format Android / Формат изображений WebP в Android"
 aliases: [WebP Image Format, Формат WebP]
 topic: android

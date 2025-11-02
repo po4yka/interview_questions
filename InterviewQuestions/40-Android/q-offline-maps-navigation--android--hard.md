@@ -1,5 +1,5 @@
 ---
-id: 20251029-170210
+id: android-485
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
 aliases:
     [

@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111160
+id: lang-031
 title: "Launch Vs Async Error Handling / Launch против Async Error Обработка"
 aliases: [Launch Vs Async Error Handling, Launch против Async Error Обработка]
 topic: programming-languages

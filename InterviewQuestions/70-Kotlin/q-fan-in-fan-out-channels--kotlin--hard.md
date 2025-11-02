@@ -1,29 +1,21 @@
 ---
-id: "20251012-180001"
+id: kotlin-181
 title: "Fan-in and fan-out patterns with Channels / Fan-in и fan-out паттерны с каналами"
+aliases: [Fan, In, Fan, Out, Channels]
 topic: kotlin
+subtopics: []
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-15
-tags:
-  - kotlin
-  - coroutines
-  - channels
-  - patterns
-  - concurrency
-  - fan-out
-  - fan-in
-  - parallelism
-  - work-distribution
-  - aggregation
 moc: moc-kotlin
 related: [q-kotlin-nullable-string-declaration--programming-languages--easy, q-data-sealed-classes-definition--programming-languages--hard, q-delegation-by-keyword--kotlin--medium]
-subtopics:
-  - coroutines
-  - channels
-  - patterns
-  - concurrency
-  - parallelism
+created: 2025-10-15
+updated: 2025-10-31
+tags:
+  - 
+  - difficulty/hard
 ---
 # Fan-in and fan-out patterns with Channels
 

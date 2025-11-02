@@ -1,5 +1,5 @@
 ---
-id: 20251012-154393
+id: kotlin-226
 title: "Why Data Sealed Classes / Зачем нужны Data и Sealed классы"
 aliases: [Data Classes, Sealed Classes, Class Design, Классы в Kotlin]
 topic: kotlin

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-354
 title: Room Type Converters / TypeConverters в Room
 aliases: [Room Type Converters, TypeConverters в Room, Room конвертеры типов]
 

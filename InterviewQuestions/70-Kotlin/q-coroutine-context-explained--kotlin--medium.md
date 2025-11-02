@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111100
+id: kotlin-039
 title: Coroutine Context Explained / CoroutineContext объяснение
 aliases: []
 

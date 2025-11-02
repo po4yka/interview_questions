@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711177
+id: android-082
 title: "State for Initial List / Состояние для начального списка"
 aliases: [State for Initial List, Состояние для начального списка]
 topic: android

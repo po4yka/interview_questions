@@ -1,5 +1,5 @@
 ---
-id: 20251005-235008
+id: kotlin-024
 title: "lazy vs lateinit / lazy против lateinit"
 aliases: []
 

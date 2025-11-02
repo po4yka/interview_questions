@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111176
+id: lang-025
 title: "Sealed Classes Limitations / Ограничения Sealed Классов"
 aliases: [Sealed Classes Limitations, Ограничения Sealed Классов]
 topic: programming-languages

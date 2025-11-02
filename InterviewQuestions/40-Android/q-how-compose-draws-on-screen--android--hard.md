@@ -1,5 +1,5 @@
 ---
-id: 20251012-122715
+id: android-152
 title: "How Compose Draws On Screen / Как Compose рисует на экране"
 aliases: ["How Compose Draws On Screen", "Как Compose рисует на экране"]
 topic: android

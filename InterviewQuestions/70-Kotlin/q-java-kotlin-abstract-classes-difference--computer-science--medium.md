@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111108
+id: cs-001
 title: "Java Kotlin Abstract Classes Difference"
 aliases: []
 topic: computer-science

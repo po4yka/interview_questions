@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111183
+id: lang-062
 title: "Suspend Function Suspension Mechanism / Механизм приостановки suspend функции"
 aliases: [Suspend Function Suspension Mechanism, Механизм приостановки suspend функции]
 topic: programming-languages

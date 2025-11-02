@@ -1,5 +1,5 @@
 ---
-id: 20251006-000004
+id: android-022
 title: "HTTP vs Long-Polling vs WebSocket vs SSE / HTTP против Long-Polling против WebSocket против SSE"
 aliases: [HTTP Protocols Comparison, WebSocket vs HTTP, Протоколы HTTP, WebSocket против HTTP]
 

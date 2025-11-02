@@ -1,15 +1,19 @@
 ---
-id: 20251016-163742
-title: "Design Patterns Types / Design Паттерны Types"
-topic: computer-science
+id: design-patterns-008
+title: "Design Patterns Types / Типы паттернов проектирования"
+aliases: [Design Patterns Types, Типы паттернов проектирования]
+topic: design-patterns
+subtopics: [behavioral-patterns, creational-patterns, structural-patterns]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-moc: moc-cs
-related: [q-builder-pattern--design-patterns--medium, q-flow-map-operator--programming-languages--medium, q-inheritance-vs-composition--oop--medium]
+moc: moc-design-patterns
+related: [c-design-patterns, q-observer-pattern--design-patterns--medium, q-factory-method-pattern--design-patterns--medium, q-adapter-pattern--design-patterns--medium]
 created: 2025-10-15
-tags: [behavioral-patterns, creational-patterns, design-patterns, gof-patterns, software-design, structural-patterns]
-date created: Monday, October 6th 2025, 7:12:09 am
-date modified: Sunday, October 26th 2025, 11:57:31 am
+updated: 2025-10-31
+tags: [design-patterns, gof-patterns, behavioral-patterns, creational-patterns, structural-patterns, software-design, difficulty/medium]
 ---
 
 # Types of Design Patterns

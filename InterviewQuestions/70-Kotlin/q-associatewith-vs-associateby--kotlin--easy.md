@@ -1,5 +1,5 @@
 ---
-id: 20251017-150134
+id: kotlin-140
 title: "Associatewith Vs Associateby / associateWith против associateBy"
 aliases: [associateWith vs associateBy, associateWith против associateBy]
 topic: kotlin

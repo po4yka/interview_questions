@@ -1,5 +1,5 @@
 ---
-id: 20251012-122738
+id: lang-027
 title: "Flow Shopping Cart Implementation / Реализация корзины покупок с Flow"
 aliases: [Flow Shopping Cart Implementation, Реализация корзины покупок с Flow]
 topic: programming-languages

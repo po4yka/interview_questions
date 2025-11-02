@@ -1,5 +1,5 @@
 ---
-id: 20251012-160004
+id: kotlin-069
 title: "Debugging Kotlin coroutines: tools and techniques / Отладка Kotlin корутин: инструменты и техники"
 topic: kotlin
 difficulty: medium

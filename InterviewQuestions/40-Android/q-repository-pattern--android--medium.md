@@ -1,12 +1,12 @@
 ---
-id: 20251012-140800
+id: android-070
 title: "Repository Pattern in Android / Паттерн Repository в Android"
 aliases: []
 
 # Classification
 topic: android
 subtopics: [architecture-clean, architecture-mvvm]
-question_kind: pattern
+question_kind: theory
 difficulty: medium
 
 # Language & provenance
@@ -22,7 +22,7 @@ related: [q-repository-multiple-sources--android--medium, q-clean-architecture-a
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 
 tags: [android/architecture-clean, android/architecture-mvvm, en, ru, difficulty/medium]
 ---

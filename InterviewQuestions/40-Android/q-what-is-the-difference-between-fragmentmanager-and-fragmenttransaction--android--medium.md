@@ -1,5 +1,5 @@
 ---
-id: 20251029-120000
+id: android-356
 title: "What Is The Difference Between Fragmentmanager And Fragmenttransaction / В чём разница между FragmentManager и FragmentTransaction"
 aliases: ["FragmentManager vs FragmentTransaction", "Разница между FragmentManager и FragmentTransaction"]
 topic: android

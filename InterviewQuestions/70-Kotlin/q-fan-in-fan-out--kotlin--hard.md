@@ -1,5 +1,5 @@
 ---
-id: 20251012-151316
+id: kotlin-092
 title: "Fan-in Fan-out Pattern"
 aliases: []
 

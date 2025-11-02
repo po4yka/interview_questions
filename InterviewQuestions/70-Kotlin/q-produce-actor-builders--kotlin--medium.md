@@ -1,5 +1,5 @@
 ---
-id: 20251012-140009
+id: kotlin-065
 title: "produce and actor Channel Builders / Билдеры каналов produce и actor"
 aliases: []
 

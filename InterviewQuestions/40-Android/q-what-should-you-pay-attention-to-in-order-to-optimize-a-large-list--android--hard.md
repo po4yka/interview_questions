@@ -1,13 +1,19 @@
 ---
-id: 20251016-162026
-title: "What Should You Pay Attention To In Order To Optimize A Large List / На что обратить внимание для оптимизации большого списка"
+id: android-091
+title: "List Optimization / Оптимизация больших списков"
+aliases: [List Optimization, Оптимизация списков]
 topic: android
+subtopics: [ui-views, performance-memory, performance-rendering]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-13
-tags: [android/recyclerview, android/views, recyclerview, ui, viewholder, views, difficulty/hard]
 moc: moc-android
-related: [q-where-does-the-repeated-call-of-composable-function-come-from--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-anr-application-not-responding--android--medium]
+related: [c-recyclerview, c-performance, q-what-is-known-about-recyclerview--android--easy, q-what-is-diffutil-for--android--medium]
+created: 2025-10-13
+updated: 2025-10-31
+tags: [android/ui-views, android/performance-memory, android/performance-rendering, recyclerview, optimization, performance, difficulty/hard]
 ---
 
 # На что следует обращать внимание, чтобы оптимизировать большой список?

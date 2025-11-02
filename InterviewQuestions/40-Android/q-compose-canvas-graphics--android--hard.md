@@ -1,5 +1,5 @@
 ---
-id: 20251012-122802
+id: android-042
 title: Compose Canvas & Graphics / Canvas и графика в Compose
 aliases: [Canvas и графика в Compose, Compose Canvas & Graphics]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251005-235003
+id: kotlin-030
 title: "CoroutineScope vs CoroutineContext / CoroutineScope против CoroutineContext"
 aliases: []
 

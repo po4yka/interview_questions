@@ -1,23 +1,26 @@
 ---
 topic: kotlin
-id: "20251012-170009"
+id: kotlin-131
 title: "Detecting and preventing coroutine memory leaks / Обнаружение и предотвращение утечек памяти"
-subtopics:
-  - coroutines
-  - memory-leaks
-  - lifecycle
-  - android
-  - debugging
+aliases: [Coroutine Memory Leaks, Утечки памяти в корутинах]
+subtopics: [coroutines, memory-management]
+question_kind: theory
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 moc: moc-kotlin
 related: [q-object-keyword-kotlin--programming-languages--medium, q-kotlin-object-companion-object--programming-languages--easy, q-nothing-instances--programming-languages--easy]
 status: draft
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-10-31
 tags:
   - kotlin
   - coroutines
   - memory-leaks
+  - debugging
+  - android
+  - lifecycle
+  - difficulty/hard
   - android
   - lifecycle
   - debugging

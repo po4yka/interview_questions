@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227172
+id: android-188
 title: "How To Change The Number Of Columns In RecyclerView Depending On Orientation / Как изменить количество колонок в RecyclerView в зависимости от ориентации"
 aliases: [How To Change The Number Of Columns In RecyclerView Depending On Orientation, Как изменить количество колонок в RecyclerView в зависимости от ориентации]
 topic: android

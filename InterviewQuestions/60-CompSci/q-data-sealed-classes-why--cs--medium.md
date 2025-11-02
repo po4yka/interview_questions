@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111124
+id: cs-010
 title: "Why Data and Sealed Classes / Зачем Data и Sealed Classes"
 aliases: ["Why Data and Sealed Classes", "Зачем Data и Sealed Classes"]
 topic: cs

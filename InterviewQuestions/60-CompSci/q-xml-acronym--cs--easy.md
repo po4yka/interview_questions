@@ -1,5 +1,5 @@
 ---
-id: 20251016-161959
+id: cs-007
 title: "Xml Acronym / Расшифровка аббревиатуры XML"
 aliases: ["XML Acronym", "Аббревиатура XML"]
 topic: cs

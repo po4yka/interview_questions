@@ -1,5 +1,5 @@
 ---
-id: 20251016-163311
+id: lang-054
 title: "Kotlin Inline Limitations / Ограничения inline в Kotlin"
 aliases: [Kotlin Inline Limitations, Ограничения inline в Kotlin]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711144
+id: android-361
 title: "What Design Systems In Android Have You Worked With / С какими дизайн-системами Android вы работали"
 aliases: ["What Design Systems In Android Have You Worked With", "С какими дизайн-системами Android вы работали"]
 topic: android

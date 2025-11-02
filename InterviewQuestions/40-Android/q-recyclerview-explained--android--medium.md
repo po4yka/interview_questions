@@ -1,5 +1,5 @@
 ---
-id: 20251017-150715
+id: android-292
 title: "RecyclerView Explained / Объяснение RecyclerView"
 aliases: [RecyclerView Explained, Объяснение RecyclerView]
 topic: android

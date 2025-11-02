@@ -1,5 +1,5 @@
 ---
-id: 20251029-170213
+id: android-490
 title: Design Mobile Banking Auth & Transaction Signing / Проектирование аутентификации и подписания транзакций
 aliases:
     [

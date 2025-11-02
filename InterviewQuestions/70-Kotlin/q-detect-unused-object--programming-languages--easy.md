@@ -1,5 +1,5 @@
 ---
-id: 20251012-122727
+id: lang-020
 title: "Detect Unused Object / Обнаружение неиспользуемых объектов"
 aliases: [Detect Unused Object, Обнаружение неиспользуемых объектов]
 topic: programming-languages

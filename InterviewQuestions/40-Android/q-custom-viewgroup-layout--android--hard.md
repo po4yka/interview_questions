@@ -1,5 +1,5 @@
 ---
-id: 20251020-200000
+id: android-454
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
 aliases: ["Custom ViewGroup Layout", "Layout кастомных ViewGroup"]
 topic: android

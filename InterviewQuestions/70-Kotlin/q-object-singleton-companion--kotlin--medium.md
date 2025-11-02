@@ -1,5 +1,5 @@
 ---
-id: "20251012-150013"
+id: kotlin-234
 title: "Object, Companion Object, and Singleton Pattern / object, companion object и паттерн Singleton"
 aliases: ["Object Singleton Companion", "Объект Singleton Companion"]
 topic: kotlin

@@ -1,5 +1,5 @@
 ---
-id: 20251020-210000
+id: android-471
 title: "Advanced Compose UI Testing / Продвинутое тестирование Compose UI"
 aliases: ["Advanced Compose UI Testing", "Продвинутое тестирование Compose UI"]
 topic: android

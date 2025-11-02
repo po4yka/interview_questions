@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111118
+id: cs-025
 title: "Composite Pattern / Паттерн Composite"
 aliases: ["Composite Pattern", "Паттерн Composite"]
 topic: cs

@@ -1,5 +1,5 @@
 ---
-id: 20251012-144442
+id: kotlin-064
 title: "Kotlin Properties / Свойства в Kotlin"
 aliases: []
 

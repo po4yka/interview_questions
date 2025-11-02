@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-132
 title: "Main Thread Android / Главный поток Android"
 aliases: ["Main Thread Android", "Главный поток Android", "UI Thread", "Поток UI"]
 topic: android

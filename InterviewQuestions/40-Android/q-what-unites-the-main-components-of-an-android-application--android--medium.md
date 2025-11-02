@@ -1,15 +1,19 @@
 ---
-id: 20251017-105005
-title: "What Unites The Main Components Of An Android Application / Что объединяет основные компоненты Android приложения"
+id: android-206
+title: "Android Components Unity / Объединение основных компонентов"
+aliases: [Android Components Unity, Объединение компонентов]
 topic: android
+subtopics: [activity, service, fragment]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-lint-tool--android--medium, q-app-security-best-practices--security--medium, q-local-notification-exact-time--android--medium]
+related: [c-android-components, c-context, c-manifest, q-what-each-android-component-represents--android--easy, q-what-unifies-android-components--android--easy]
 created: 2025-10-15
-tags: [components, activity, service, broadcastreceiver, contentprovider, difficulty/medium]
-date created: Friday, October 17th 2025, 10:50:05 am
-date modified: Thursday, October 30th 2025, 3:18:11 pm
+updated: 2025-10-31
+tags: [android/activity, android/service, android/fragment, components, context, architecture, difficulty/medium]
 ---
 
 # What unites the main components of an Android application?

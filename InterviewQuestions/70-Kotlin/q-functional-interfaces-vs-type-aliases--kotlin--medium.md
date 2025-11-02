@@ -1,5 +1,5 @@
 ---
-id: 20251005-235007
+id: kotlin-006
 title: "Functional Interfaces vs Type Aliases / Функциональные интерфейсы vs псевдонимы типов"
 aliases: []
 

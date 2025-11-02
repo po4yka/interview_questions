@@ -1,5 +1,5 @@
 ---
-id: 20251020-211200
+id: android-467
 title: CompositionLocal Advanced / CompositionLocal — продвинутый уровень
 aliases: ["CompositionLocal Advanced", "CompositionLocal — продвинутый уровень"]
 topic: android

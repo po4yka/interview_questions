@@ -1,5 +1,5 @@
 ---
-id: 20251012-122715
+id: android-127
 title: "How Dialog Differs From Other Navigation / Чем Dialog отличается от другой навигации"
 aliases: ["How Dialog Differs From Other Navigation", "Чем Dialog отличается от другой навигации"]
 topic: android

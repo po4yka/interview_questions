@@ -1,5 +1,5 @@
 ---
-id: 20251015-000000
+id: android-139
 title: "Save Data Outside Fragment / Сохранение данных вне Fragment"
 aliases: ["Save Data Outside Fragment", "Сохранение данных вне Fragment"]
 topic: android

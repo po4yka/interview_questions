@@ -1,5 +1,5 @@
 ---
-id: 20251016-162810
+id: kotlin-053
 title: "supervisorScope vs coroutineScope / supervisorScope против coroutineScope"
 aliases: []
 

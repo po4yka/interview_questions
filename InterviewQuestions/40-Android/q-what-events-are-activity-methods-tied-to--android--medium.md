@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711152
+id: android-290
 title: "Activity Methods and Events / Методы Activity и события"
 aliases: [Activity Methods Events, Методы Activity]
 topic: android

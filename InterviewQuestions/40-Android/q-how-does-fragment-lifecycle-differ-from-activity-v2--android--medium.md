@@ -1,5 +1,5 @@
 ---
-id: 20251012-122715
+id: android-339
 title: "How Does Fragment Lifecycle Differ From Activity V2 / Чем жизненный цикл Fragment отличается от Activity v2"
 aliases: ["How Does Fragment Lifecycle Differ From Activity V2", "Чем жизненный цикл Fragment отличается от Activity v2"]
 topic: android

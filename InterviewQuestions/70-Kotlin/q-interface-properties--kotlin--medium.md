@@ -1,5 +1,5 @@
 ---
-id: 20251012-154366
+id: kotlin-203
 title: "Interface Properties / Свойства интерфейсов"
 aliases: []
 topic: kotlin

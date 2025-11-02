@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111114
+id: lang-002
 title: "Kotlin Collections Overview / Обзор коллекций Kotlin"
 aliases: []
 topic: programming-languages

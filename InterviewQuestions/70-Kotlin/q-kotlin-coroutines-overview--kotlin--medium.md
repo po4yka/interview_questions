@@ -1,5 +1,5 @@
 ---
-id: 20251012-154371
+id: kotlin-194
 title: "Kotlin Coroutines Overview / Обзор корутин Kotlin"
 aliases: []
 topic: kotlin

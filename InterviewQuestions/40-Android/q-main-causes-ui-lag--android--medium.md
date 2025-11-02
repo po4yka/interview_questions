@@ -1,5 +1,5 @@
 ---
-id: 20251028-120000
+id: android-246
 title: "Main Causes UI Lag / Основные причины тормозов UI"
 aliases: [Main Causes UI Lag, Основные причины тормозов UI, UI Performance, UI Lag]
 topic: android

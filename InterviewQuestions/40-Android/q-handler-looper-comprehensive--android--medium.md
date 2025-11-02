@@ -1,5 +1,5 @@
 ---
-id: 20251017-144926
+id: android-198
 title: "Handler Looper Comprehensive / Handler и Looper подробно"
 aliases: [Handler Looper Comprehensive, Handler и Looper подробно]
 topic: android

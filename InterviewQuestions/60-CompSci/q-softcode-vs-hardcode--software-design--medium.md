@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111180
+id: software-design-001
 title: "Softcode Vs Hardcode / Softcode против Hardcode"
 aliases: [Softcode Vs Hardcode, Softcode против Hardcode]
 topic: software-design

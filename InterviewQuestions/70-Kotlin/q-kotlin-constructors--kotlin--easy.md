@@ -1,5 +1,5 @@
 ---
-id: 20251012-144303
+id: kotlin-088
 title: "Kotlin Constructors / Конструкторы в Kotlin"
 aliases: []
 

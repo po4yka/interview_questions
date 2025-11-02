@@ -1,5 +1,5 @@
 ---
-id: 20251005-215459
+id: android-008
 title: "Android Service Component / Компонент Service в Android"
 aliases: []
 

@@ -1,5 +1,5 @@
 ---
-id: "20251013-600006"
+id: cs-037
 title: "Design Patterns Fundamentals / Фундаментальные паттерны проектирования"
 aliases: ["Design Patterns Fundamentals", "Фундаментальные паттерны проектирования"]
 topic: cs

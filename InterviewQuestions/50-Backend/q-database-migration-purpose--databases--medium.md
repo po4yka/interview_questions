@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111108
+id: db-004
 title: Database migration purpose / Цель миграции баз данных
 aliases: []
 

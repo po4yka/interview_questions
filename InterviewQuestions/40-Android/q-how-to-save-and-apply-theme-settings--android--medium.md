@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227196
+id: android-231
 title: "How to Save and Apply Theme Settings / Как сохранять и применять настройки темы"
 aliases: ["How to Save and Apply Theme Settings", "Как сохранять и применять настройки темы", "Theme Settings", "Настройки темы"]
 topic: android

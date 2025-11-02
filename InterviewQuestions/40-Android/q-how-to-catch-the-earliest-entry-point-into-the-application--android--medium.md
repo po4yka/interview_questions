@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227170
+id: android-352
 title: "How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение"
 aliases: [How To Catch The Earliest Entry Point Into The Application, Как поймать самую раннюю точку входа в приложение]
 topic: android

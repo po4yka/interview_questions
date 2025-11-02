@@ -1,5 +1,5 @@
 ---
-id: 20251012-140005
+id: kotlin-073
 title: "Virtual Time in Coroutine Testing / Виртуальное время в тестировании корутин"
 aliases: []
 

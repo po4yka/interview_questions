@@ -1,5 +1,5 @@
 ---
-id: 20251012-122773
+id: android-285
 title: Android Service Types / Типы Service в Android
 aliases: ["Android Service Types", "Типы Service в Android"]
 topic: android

@@ -1,5 +1,5 @@
 ---
-id: 20251005-235006
+id: kotlin-012
 title: "Abstract Class vs Interface / Абстрактный класс vs интерфейс"
 aliases: ["Abstract Class vs Interface", "Абстрактный класс vs интерфейс"]
 topic: kotlin

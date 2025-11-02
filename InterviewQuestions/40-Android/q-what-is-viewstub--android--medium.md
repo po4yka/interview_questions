@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711169
+id: android-228
 title: "What Is ViewStub / Что такое ViewStub"
 aliases: ["ViewStub", "ViewStub Android"]
 topic: android

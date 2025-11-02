@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111137
+id: lang-018
 title: "Kotlin Java Data Types / Типы данных Kotlin и Java"
 aliases: [Kotlin Java Data Types, Типы данных Kotlin и Java]
 topic: programming-languages

@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271153
+id: net-005
 title: "Network Request Deduplication / Дедупликация сетевых запросов"
 aliases: [Network Request Deduplication, Дедупликация сетевых запросов, Request Deduplication, Дедупликация запросов]
 topic: networking

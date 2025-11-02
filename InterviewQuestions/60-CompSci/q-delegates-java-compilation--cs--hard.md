@@ -1,5 +1,5 @@
 ---
-id: 20251012-1227111126
+id: cs-026
 title: "Delegates Java Compilation / Компиляция делегатов в Java"
 aliases: ["Delegates Java Compilation", "Компиляция делегатов в Java"]
 topic: cs

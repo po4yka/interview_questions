@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711166
+id: android-264
 title: "Measurement Units: dp vs sp / Единицы измерения: dp vs sp"
 aliases: ["Measurement Units: dp vs sp", "Единицы измерения: dp vs sp"]
 topic: android

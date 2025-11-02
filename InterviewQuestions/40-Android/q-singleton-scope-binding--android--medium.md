@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-324
 title: "Singleton Scope Binding / Привязка Singleton скоупа"
 aliases: ["Singleton Scope Binding", "Привязка Singleton скоупа"]
 topic: android

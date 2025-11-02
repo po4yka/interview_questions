@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-025
 title: "UseCase Pattern in Android / Паттерн UseCase в Android"
 aliases: ["UseCase Pattern in Android", "Паттерн UseCase в Android"]
 

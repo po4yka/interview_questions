@@ -1,5 +1,5 @@
 ---
-id: 20251015-132630
+id: android-272
 title: Android Components Besides Activity / Компоненты Android кроме Activity
 aliases: ["Android Components Besides Activity", "Компоненты Android кроме Activity"]
 topic: android

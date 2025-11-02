@@ -1,5 +1,5 @@
 ---
-id: 20251012-200007
+id: algo-004
 title: "Advanced Graph Algorithms (Dijkstra, MST, Floyd-Warshall) / Продвинутые алгоритмы на графах"
 aliases: ["Advanced Graph Algorithms", "Продвинутые алгоритмы на графах"]
 topic: algorithms

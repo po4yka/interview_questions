@@ -1,5 +1,5 @@
 ---
-id: 20251012-122711
+id: android-077
 title: "Memory Optimization in Android / Оптимизация памяти в Android"
 aliases: ["Memory Optimization in Android", "Оптимизация памяти в Android"]
 topic: android

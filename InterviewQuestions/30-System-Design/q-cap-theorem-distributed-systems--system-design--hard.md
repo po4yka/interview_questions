@@ -1,5 +1,5 @@
 ---
-id: 20251012-300004
+id: sysdes-004
 title: "CAP Theorem and Distributed Systems / CAP теорема и распределённые системы"
 aliases: ["CAP Theorem", "CAP теорема"]
 topic: system-design

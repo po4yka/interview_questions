@@ -1,5 +1,5 @@
 ---
-id: 20251012-122700
+id: android-105
 title: Анализ тормозов приложения Android / Android App Lag Analysis
 aliases: ["Android App Lag Analysis", "Анализ тормозов приложения Android"]
 topic: android

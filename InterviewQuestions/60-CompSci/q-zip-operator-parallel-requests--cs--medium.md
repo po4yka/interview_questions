@@ -1,5 +1,5 @@
 ---
-id: 20251016-162812
+id: cs-027
 title: "Zip Operator Parallel Requests / Оператор zip для параллельных запросов"
 aliases: ["Zip Operator", "Оператор zip"]
 topic: cs

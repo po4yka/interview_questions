@@ -1,19 +1,26 @@
 ---
-topic: kotlin
-id: "20251012-170005"
+id: kotlin-119
 title: "NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций"
-description: "Complete guide to using NonCancellable context for cleanup, when to use it, risks, and best practices with real examples"
+aliases: [NonCancellable, Cancellation, Cleanup, Resource Management, NonCancellable контекст]
 topic: kotlin
-subtopics: ["coroutines", "cancellation", "noncancellable", "cleanup", "finally"]
+subtopics: [coroutines, cancellation]
+question_kind: theory
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
-created: 2025-10-12
-updated: 2025-10-12
-category: "coroutines-advanced"
-tags: ["noncancellable", "cancellation", "cleanup", "finally", "resource-management"]
 moc: moc-kotlin
 related: [q-sealed-class-sealed-interface--kotlin--medium, q-kotlin-final-modifier--programming-languages--easy, q-java-kotlin-abstract-classes-difference--programming-languages--medium]
-contributors: []
+created: 2025-10-12
+updated: 2025-10-31
+tags:
+  - kotlin
+  - coroutines
+  - cancellation
+  - noncancellable
+  - cleanup
+  - resource-management
+  - difficulty/medium
 ---
 
 # NonCancellable context for critical cleanup operations / NonCancellable контекст для критических операций

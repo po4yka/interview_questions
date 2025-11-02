@@ -1,5 +1,5 @@
 ---
-id: 20251012-12271111113
+id: cs-003
 title: "Kotlin Class Initializers / Инициализаторы классов Kotlin"
 aliases: []
 topic: computer-science
