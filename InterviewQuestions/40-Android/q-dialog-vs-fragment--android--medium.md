@@ -1,9 +1,7 @@
 ---
 id: android-357
-title: "Dialog vs Fragment / Диалог против Фрагмента"
-aliases:
-  - Dialog vs Fragment
-  - Диалог против Фрагмента
+title: Dialog vs Fragment / Диалог против Фрагмента
+aliases: [Dialog vs Fragment, Диалог против Фрагмента]
 topic: android
 subtopics:
   - lifecycle
@@ -14,22 +12,17 @@ original_language: ru
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related: []
 created: 2025-10-15
 updated: 2025-11-02
-tags:
-  - android/lifecycle
-  - android/ui-views
-  - dialog
-  - difficulty/medium
-  - fragment
-  - lifecycle
-  - ui
+tags: [android/lifecycle, android/ui-views, dialog, difficulty/medium, fragment, lifecycle, ui]
 sources:
   - https://developer.android.com/develop/ui/views/components/dialogs
   - https://developer.android.com/guide/fragments
+date created: Saturday, October 25th 2025, 4:09:48 pm
+date modified: Sunday, November 2nd 2025, 8:13:08 pm
 ---
 
 # Вопрос (RU)
@@ -89,7 +82,7 @@ class ConfirmDialog : DialogFragment() {
             .setNegativeButton("Нет", null)
             .create()
     }
-    
+
     // Состояние сохраняется автоматически при rotation
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -114,18 +107,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onViewCreated(view: View, saved: Bundle?) {
         super.onViewCreated(view, saved)
-        
+
         // Использование viewLifecycleOwner для корректного lifecycle
         viewModel.profile.observe(viewLifecycleOwner) { profile ->
             bind(profile)
         }
-        
+
         // Обработка событий
         view.findViewById<Button>(R.id.editButton).setOnClickListener {
             navigateToEdit()
         }
     }
-    
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Сохранение UI состояния
@@ -168,7 +161,7 @@ fun ConfirmDialog(
 var showDialog by remember { mutableStateOf(false) }
 if (showDialog) {
     ConfirmDialog(
-        onConfirm = { 
+        onConfirm = {
             confirm()
             showDialog = false
         },
@@ -197,9 +190,79 @@ NavHost(navController, startDestination = "profile") {
 ```
 
 **Когда использовать:**
-- **Dialog**: Подтверждения, ошибки, короткий ввод данных
-- **DialogFragment**: Те же случаи + нужен lifecycle (rotation, state)
-- **Fragment**: Полноценные экраны, навигация, сложное состояние
+
+**Dialog:**
+- Простые подтверждения без необходимости сохранения состояния
+- Быстрые уведомления об ошибках
+- Короткий ввод данных (например, ввод имени файла)
+- ⚠️ Не использовать при необходимости сохранения состояния при rotation — использовать `DialogFragment`
+
+**DialogFragment:**
+- Все случаи использования `Dialog` + нужен lifecycle
+- Необходимость сохранения состояния при rotation и конфигурационных изменениях
+- Передача данных между диалогом и родительским `Fragment`/`Activity`
+- Кастомные диалоги с сложной логикой
+
+**Fragment:**
+- Полноценные экраны приложения (списки, детали, формы)
+- Навигация через Navigation Component
+- Сложное состояние с `ViewModel` и `LiveData`/`Flow`
+- Переиспользуемые модули UI (например, панель инструментов, боковое меню)
+- Многоколоночный layout на планшетах (master-detail)
+
+**Сравнение жизненных циклов:**
+
+**Dialog lifecycle:**
+1. `show()` — диалог отображается
+2. `dismiss()` — диалог закрывается (состояние теряется при rotation)
+
+**DialogFragment lifecycle:**
+1. `onCreate()` — создание фрагмента
+2. `onCreateDialog()` — создание диалога
+3. `onStart()` — диалог становится видимым
+4. `onSaveInstanceState()` — сохранение состояния при rotation
+5. `onDismiss()` — закрытие диалога
+6. `onDestroy()` — уничтожение фрагмента
+
+**Fragment lifecycle:**
+1. `onAttach()` — прикрепление к Activity
+2. `onCreate()` — создание фрагмента
+3. `onCreateView()` — создание View
+4. `onViewCreated()` — View создана, можно настраивать UI
+5. `onStart()` — фрагмент видим
+6. `onResume()` — фрагмент активен
+7. `onPause()` — фрагмент приостановлен
+8. `onStop()` — фрагмент остановлен
+9. `onDestroyView()` — View уничтожена
+10. `onDestroy()` — фрагмент уничтожен
+11. `onDetach()` — открепление от Activity
+
+**Лучшие практики и частые ошибки:**
+
+**Dialog vs DialogFragment:**
+
+-   **Используйте `Dialog`** только для простых подтверждений без необходимости сохранения состояния
+-   **Используйте `DialogFragment`** когда нужен lifecycle (rotation, state preservation) или передача данных
+-   **Частая ошибка**: использование `Dialog` вместо `DialogFragment` приводит к потере состояния при rotation
+
+**Fragment best practices:**
+
+-   **`viewLifecycleOwner`**: всегда используйте `viewLifecycleOwner` для `LiveData`/`Flow` observers вместо `this` — предотвращает утечки памяти при уничтожении View
+-   **State preservation**: переопределяйте `onSaveInstanceState()` для сохранения UI состояния (например, scroll position, input text)
+-   **Fragment Result API**: используйте Fragment Result API вместо интерфейсов для передачи данных между фрагментами (рекомендуется Google)
+
+**Compose best practices:**
+
+-   **State hoisting**: поднимайте state диалога на уровень родительского composable для правильного управления состоянием
+-   **`remember`**: используйте `remember` для сохранения state при recomposition
+-   **Navigation**: используйте Navigation Compose для навигации между экранами вместо ручного управления фрагментами
+
+**Частые ошибки:**
+
+1.   **Утечки памяти**: использование `this` вместо `viewLifecycleOwner` в `Fragment` для observers
+2.   **Потеря состояния**: использование `Dialog` вместо `DialogFragment` при необходимости сохранения состояния
+3.   **Неправильный FragmentManager**: использование `supportFragmentManager` вместо `childFragmentManager` для вложенных диалогов
+4.   **Навигация через Dialog**: попытка использовать `Dialog` как часть Navigation Component (не поддерживается)
 
 ## Answer (EN)
 
@@ -250,7 +313,7 @@ class ConfirmDialog : DialogFragment() {
             .setNegativeButton("No", null)
             .create()
     }
-    
+
     // State automatically preserved on rotation
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -275,18 +338,18 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onViewCreated(view: View, saved: Bundle?) {
         super.onViewCreated(view, saved)
-        
+
         // Use viewLifecycleOwner for correct lifecycle
         viewModel.profile.observe(viewLifecycleOwner) { profile ->
             bind(profile)
         }
-        
+
         // Handle events
         view.findViewById<Button>(R.id.editButton).setOnClickListener {
             navigateToEdit()
         }
     }
-    
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save UI state
@@ -298,63 +361,182 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 ```
 
 **Compose equivalents:**
+
+In Jetpack Compose, dialog and screen concepts are implemented via composable functions:
+
 ```kotlin
-// ✅ Dialog in Compose
+// ✅ Dialog in Compose with state management
 @Composable
-fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+fun ConfirmDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = { TextButton(onClick = onConfirm) { Text("Yes") } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("No") } },
-        title = { Text("Confirmation") }
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Yes")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("No")
+            }
+        },
+        title = { Text("Confirmation") },
+        text = { Text("Cannot be undone") }
     )
 }
 
-// ✅ Screen (Fragment equivalent)
+// Usage with state
+var showDialog by remember { mutableStateOf(false) }
+if (showDialog) {
+    ConfirmDialog(
+        onConfirm = {
+            confirm()
+            showDialog = false
+        },
+        onDismiss = { showDialog = false }
+    )
+}
+
+// ✅ Screen (Fragment equivalent) with ViewModel
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
+fun ProfileScreen(
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
     val profile by viewModel.profile.collectAsState()
 
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         ProfileHeader(profile)
         ProfileContent(profile)
     }
 }
+
+// Navigation via NavController
+NavHost(navController, startDestination = "profile") {
+    composable("profile") { ProfileScreen() }
+    composable("edit") { EditScreen() }
+}
 ```
 
 **When to use:**
-- **Dialog**: Confirmations, errors, short data input
-- **DialogFragment**: Same cases + need lifecycle (rotation, state)
-- **Fragment**: Full screens, navigation, complex state
+
+**Dialog:**
+- Simple confirmations without need for state preservation
+- Quick error notifications
+- Short data input (e.g., file name input)
+- ⚠️ Do not use when state preservation on rotation needed — use `DialogFragment`
+
+**DialogFragment:**
+- All `Dialog` use cases + need lifecycle
+- Need state preservation on rotation and configuration changes
+- Data passing between dialog and parent `Fragment`/`Activity`
+- Custom dialogs with complex logic
+
+**Fragment:**
+- Full application screens (lists, details, forms)
+- Navigation via Navigation Component
+- Complex state with `ViewModel` and `LiveData`/`Flow`
+- Reusable UI modules (e.g., toolbar, side menu)
+- Multi-column layouts on tablets (master-detail)
+
+**Lifecycle comparison:**
+
+**Dialog lifecycle:**
+1. `show()` — dialog displayed
+2. `dismiss()` — dialog closed (state lost on rotation)
+
+**DialogFragment lifecycle:**
+1. `onCreate()` — fragment creation
+2. `onCreateDialog()` — dialog creation
+3. `onStart()` — dialog becomes visible
+4. `onSaveInstanceState()` — state preservation on rotation
+5. `onDismiss()` — dialog dismissed
+6. `onDestroy()` — fragment destroyed
+
+**Fragment lifecycle:**
+1. `onAttach()` — attach to Activity
+2. `onCreate()` — fragment creation
+3. `onCreateView()` — View creation
+4. `onViewCreated()` — View created, can configure UI
+5. `onStart()` — fragment visible
+6. `onResume()` — fragment active
+7. `onPause()` — fragment paused
+8. `onStop()` — fragment stopped
+9. `onDestroyView()` — View destroyed
+10. `onDestroy()` — fragment destroyed
+11. `onDetach()` — detach from Activity
+
+**Best practices and common pitfalls:**
+
+**Dialog vs DialogFragment:**
+
+-   **Use `Dialog`** only for simple confirmations without need for state preservation
+-   **Use `DialogFragment`** when lifecycle needed (rotation, state preservation) or data passing required
+-   **Common mistake**: using `Dialog` instead of `DialogFragment` leads to state loss on rotation
+
+**Fragment best practices:**
+
+-   **`viewLifecycleOwner`**: always use `viewLifecycleOwner` for `LiveData`/`Flow` observers instead of `this` — prevents memory leaks on View destruction
+-   **State preservation**: override `onSaveInstanceState()` to save UI state (e.g., scroll position, input text)
+-   **Fragment Result API**: use Fragment Result API instead of interfaces for data passing between fragments (Google recommended)
+
+**Compose best practices:**
+
+-   **State hoisting**: hoist dialog state to parent composable level for correct state management
+-   **`remember`**: use `remember` to preserve state on recomposition
+-   **Navigation**: use Navigation Compose for navigation between screens instead of manual fragment management
+
+**Common mistakes:**
+
+1.   **Memory leaks**: using `this` instead of `viewLifecycleOwner` in `Fragment` for observers
+2.   **State loss**: using `Dialog` instead of `DialogFragment` when state preservation needed
+3.   **Wrong FragmentManager**: using `supportFragmentManager` instead of `childFragmentManager` for nested dialogs
+4.   **Navigation via Dialog**: attempting to use `Dialog` as part of Navigation Component (not supported)
 
 ---
 
 ## Follow-ups
 
-- Why use DialogFragment over regular Dialog for rotation handling?
-- How to pass data between DialogFragment and parent Fragment?
-- What happens to Dialog state during configuration changes?
-- Can Fragment handle modal behavior like Dialog?
-- How does Compose Dialog differ from Views AlertDialog?
+**Базовая теория:**
+- Почему использовать `DialogFragment` вместо обычного `Dialog` для обработки rotation?
+- Что происходит с состоянием `Dialog` во время конфигурационных изменений?
+- Может ли `Fragment` обрабатывать модальное поведение как `Dialog`?
+
+**Практические вопросы:**
+- Как передавать данные между `DialogFragment` и родительским `Fragment`?
+- Как правильно использовать `viewLifecycleOwner` в `Fragment`?
+- В чем разница между `supportFragmentManager` и `childFragmentManager`?
+
+**Compose:**
+- Чем `Dialog` в Compose отличается от `AlertDialog` в Views?
+- Как управлять состоянием диалога в Compose?
+- Как реализовать навигацию между экранами в Compose?
+
+**Архитектура:**
+- Когда использовать `Fragment Result API` вместо интерфейсов?
+- Как правильно сохранять состояние UI в `Fragment`?
+- Как избежать утечек памяти при использовании `LiveData` в `Fragment`?
 
 ## References
 
-- [[c-dialog]] - Dialog patterns
-- [[c-fragment]] - Fragment architecture
-- https://developer.android.com/guide/fragments
-- https://developer.android.com/develop/ui/views/components/dialogs
-- https://developer.android.com/develop/ui/compose/components/dialog
+- [Android Fragments Guide](https://developer.android.com/guide/fragments)
+- [Dialogs in Views](https://developer.android.com/develop/ui/views/components/dialogs)
+- [Dialogs in Compose](https://developer.android.com/develop/ui/compose/components/dialog)
+- [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [Navigation Component](https://developer.android.com/guide/navigation)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-activity-vs-fragment--android--easy]] - Activity vs Fragment basics
-- [[q-fragment-basics--android--easy]] - Fragment fundamentals
+- Fragment basics and lifecycle
+- Activity vs Fragment comparison
 
 ### Related (Same Level)
-- [[q-bottomsheet-vs-dialog--android--medium]] - BottomSheet vs Dialog
-- [[q-dialog-vs-fragment--android--medium]] - Dialog state
+- BottomSheet vs Dialog comparison
+- Dialog state management
 
 ### Advanced (Harder)
-- [[q-fragment-result-api--android--hard]] - Fragment communication
-- [[q-custom-dialog-implementation--android--hard]] - Custom dialogs
+- Fragment Result API for communication
+- Custom dialog implementation patterns

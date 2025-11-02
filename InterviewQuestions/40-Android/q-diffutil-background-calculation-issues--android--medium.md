@@ -1,22 +1,36 @@
 ---
 id: android-473
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
-aliases: [DiffUtil Background Calculation Issues, DiffUtil background issues, Проблемы DiffUtil в фоне, Проблемы фонового вычисления DiffUtil]
+aliases:
+  - DiffUtil Background Calculation Issues
+  - DiffUtil background issues
+  - Проблемы DiffUtil в фоне
+  - Проблемы фонового вычисления DiffUtil
 topic: android
-subtopics: [performance-memory, ui-views]
+subtopics:
+  - performance-memory
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+  - en
+  - ru
 status: draft
 moc: moc-android
-related: [q-android-performance-optimization--android--medium, q-main-causes-ui-lag--android--medium, q-recyclerview-optimization--android--medium]
-sources: [https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil]
+related:
+  - q-main-causes-ui-lag--android--medium
 created: 2025-10-20
-updated: 2025-10-28
-tags: [android/performance-memory, android/ui-views, difficulty/medium, diffutil, recyclerview]
-date created: Tuesday, October 28th 2025, 9:22:13 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+updated: 2025-11-02
+tags:
+  - android/performance-memory
+  - android/ui-views
+  - difficulty/medium
+  - diffutil
+  - performance
+  - recyclerview
+sources:
+  - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
 ---
 
 # Вопрос (RU)
@@ -29,7 +43,7 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-DiffUtil в фоне плохо работает при изменении данных во время расчета, тяжелых вычислениях в callback, больших списках (>1000 элементов), неправильной обработке ошибок, race conditions между потоками.
+`DiffUtil` — утилита для вычисления различий между двумя списками и применения обновлений к `RecyclerView`. При фоновом вычислении (`calculateDiff()` на фоновом потоке) возникают проблемы при изменении данных во время расчета, тяжелых вычислениях в callback, больших списках (>1000 элементов), неправильной обработке ошибок, и race conditions между потоками. Понимание этих проблем критично для оптимизации производительности `RecyclerView`.
 
 ### Основные Проблемы
 

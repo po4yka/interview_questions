@@ -126,12 +126,18 @@ SORT difficulty ASC, file.name ASC
 ### Camera & Media
 - [[q-camerax-advanced-pipeline--android--hard]] - Advanced multi-use-case pipelines
 - [[q-media3-migration-strategy--android--hard]] - Migrating ExoPlayer stacks to Media3
+- [[q-media3-transformer-workflows--android--hard]] - Editing and transcoding pipelines
+
+### AR & Spatial
+- [[q-arcore-shared-experiences--android--hard]] - Multi-user Cloud Anchors with depth occlusion
 
 ### Adaptive Layouts & Form Factors
 - [[q-jetpack-window-manager-foldables--android--hard]] - Handling foldables and large screens
+- [[q-chromeos-desktop-optimization--android--hard]] - Desktop/ChromeOS windowing and input
 
 ### Wearables & Health
 - [[q-wearos-health-connect-integration--android--hard]] - Health Services + Health Connect pipeline
+- [[q-wear-compose-ux-patterns--android--hard]] - Compose navigation and Tiles on Wear
 
 ### Monetization & Compliance
 - [[q-play-billing-v6-architecture--android--hard]] - Flexible subscriptions & server verification
@@ -142,6 +148,7 @@ SORT difficulty ASC, file.name ASC
 
 ### Widgets & Surfaces
 - [[q-glance-compose-widgets--android--medium]] - Compose-powered app widgets
+- [[q-quick-settings-tiles-architecture--android--medium]] - Quick Settings tiles and shortcuts integration
 
 ### Automotive & TV
 - [[q-android-auto-guidelines--android--hard]] - Car app templates and certification
@@ -150,10 +157,16 @@ SORT difficulty ASC, file.name ASC
 ### Enterprise & Device Management
 - [[q-android-enterprise-mdm-architecture--android--hard]] - DPC design and policy enforcement
 
+### On-device ML
+- [[q-tflite-acceleration-strategies--android--hard]] - Optimizing TensorFlow Lite pipelines
+
 ### Performance & Observability
 - [[q-perfetto-frame-timeline-analysis--android--hard]] - Trace-based jank diagnostics
 - [[q-power-profiling-battery-historian--android--medium]] - Energy audits and remediation
 - [[q-mobile-observability-otel--android--hard]] - Telemetry architecture with OpenTelemetry
+
+### Storage & Privacy
+- [[q-scoped-storage-migration-strategy--android--hard]] - Privacy-safe legacy storage migration
 
 ### Meta & Coverage
 - [[q-android-coverage-gaps--android--hard]] - High-priority topics missing in the vault
