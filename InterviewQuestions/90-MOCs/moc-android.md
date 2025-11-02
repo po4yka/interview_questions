@@ -119,6 +119,7 @@ SORT difficulty ASC, file.name ASC
 - [[q-koin-fundamentals--android--medium]] - Koin runtime DI basics
 - [[q-koin-scope-management--android--medium]] - Lifecycle-aware scopes
 - [[q-koin-testing-strategies--android--medium]] - Testing Koin modules effectively
+- [[q-koin-resolution-internals--android--hard]] - Internal resolution pipeline in detail
 - [[q-koin-vs-hilt-comparison--android--medium]] - Koin vs Hilt comparison
 
 **All DI Questions:**
