@@ -26,7 +26,7 @@ updated: 2025-10-06
 
 tags: [anonymous-classes, difficulty/medium, inline, kotlin, lambdas, object-expressions, performance]
 date created: Saturday, November 1st 2025, 12:43:05 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
+date modified: Sunday, November 2nd 2025, 12:05:11 pm
 ---
 
 # Question (EN)

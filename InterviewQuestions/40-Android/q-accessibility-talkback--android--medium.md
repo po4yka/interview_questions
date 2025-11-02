@@ -3,14 +3,22 @@ id: android-055
 title: Accessibility TalkBack / Доступность и TalkBack
 aliases: [TalkBack Accessibility, Доступность TalkBack]
 topic: android
-subtopics: [ui-accessibility, ui-navigation]
+subtopics:
+  - ui-accessibility
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-accessibility, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
+related:
+  - c-accessibility
+  - q-accessibility-compose--android--medium
+  - q-accessibility-testing--android--medium
+  - q-custom-view-accessibility--android--medium
 created: 2025-10-11
 updated: 2025-10-29
 tags: [accessibility, android/ui-accessibility, android/ui-navigation, difficulty/medium, talkback]
@@ -18,7 +26,7 @@ sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/accessibility
 date created: Wednesday, October 29th 2025, 4:18:49 pm
-date modified: Saturday, November 1st 2025, 3:59:44 pm
+date modified: Sunday, November 2nd 2025, 12:08:04 pm
 ---
 
 # Вопрос (RU)

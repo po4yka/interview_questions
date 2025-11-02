@@ -3,20 +3,29 @@ id: android-483
 title: 16kb Dex Page Size / Размер страницы DEX 16KB
 aliases: [16 КБ страница DEX, 16KB DEX Page Size]
 topic: android
-subtopics: [gradle, performance-memory]
+subtopics:
+  - gradle
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-app-bundle, c-gradle, q-android-app-bundles--android--easy, q-build-optimization-gradle--android--medium, q-proguard-r8--android--medium]
+related:
+  - c-app-bundle
+  - c-gradle
+  - q-android-app-bundles--android--easy
+  - q-build-optimization-gradle--android--medium
+  - q-proguard-r8--android--medium
 created: 2025-10-25
 updated: 2025-10-29
 sources: []
 tags: [android/gradle, android/performance-memory, difficulty/medium]
 date created: Wednesday, October 29th 2025, 4:18:15 pm
-date modified: Saturday, November 1st 2025, 3:59:39 pm
+date modified: Sunday, November 2nd 2025, 12:07:46 pm
 ---
 
 # Вопрос (RU)

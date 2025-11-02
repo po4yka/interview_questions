@@ -1,16 +1,23 @@
 ---
 id: android-050
 title: Доступность в Compose / Accessibility in Compose
-aliases: ["Accessibility in Compose", "Доступность в Compose"]
+aliases: [Accessibility in Compose, Доступность в Compose]
 topic: android
-subtopics: [ui-accessibility, ui-compose]
+subtopics:
+  - ui-accessibility
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-accessibility, c-jetpack-compose, q-accessibility-testing--android--medium]
+related:
+  - c-accessibility
+  - c-jetpack-compose
+  - q-accessibility-testing--android--medium
 created: 2025-10-11
 updated: 2025-10-29
 sources:
@@ -18,7 +25,7 @@ sources:
   - https://developer.android.com/jetpack/compose/accessibility
 tags: [accessibility, android/ui-accessibility, android/ui-compose, compose, difficulty/medium, semantics, talkback]
 date created: Wednesday, October 29th 2025, 4:19:08 pm
-date modified: Saturday, November 1st 2025, 3:59:40 pm
+date modified: Sunday, November 2nd 2025, 12:07:33 pm
 ---
 
 # Вопрос (RU)

@@ -3,20 +3,28 @@ id: android-039
 title: Accessibility Color Contrast / Контрастность цветов для доступности
 aliases: [Accessibility Color Contrast, Контрастность цветов для доступности]
 topic: android
-subtopics: [ui-accessibility, ui-theming]
+subtopics:
+  - ui-accessibility
+  - ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-accessibility, q-accessibility-compose--android--medium, q-accessibility-testing--android--medium, q-custom-view-accessibility--android--medium]
+related:
+  - c-accessibility
+  - q-accessibility-compose--android--medium
+  - q-accessibility-testing--android--medium
+  - q-custom-view-accessibility--android--medium
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 sources: []
 date created: Wednesday, October 29th 2025, 4:21:05 pm
-date modified: Saturday, November 1st 2025, 3:59:39 pm
+date modified: Sunday, November 2nd 2025, 12:07:40 pm
 ---
 
 # Вопрос (RU)

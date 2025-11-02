@@ -15,7 +15,7 @@ tags: [adaptive-layouts, difficulty/hard, jetpack-compose, kotlin/adaptive-layou
 moc: moc-kotlin
 related: [q-compose-custom-layout--kotlin--hard, q-compose-navigation-advanced--kotlin--medium, q-material3-components--kotlin--medium]
 date created: Sunday, October 19th 2025, 1:47:08 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
+date modified: Sunday, November 2nd 2025, 12:05:08 pm
 ---
 
 # Question (EN)
