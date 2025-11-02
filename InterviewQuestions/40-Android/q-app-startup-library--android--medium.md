@@ -1,14 +1,18 @@
 ---
 id: android-251
 title: App Startup Library / Библиотека App Startup
-aliases: ["App Startup Library", "Библиотека App Startup"]
+aliases: [App Startup Library, Библиотека App Startup]
 topic: android
-subtopics: [app-startup, performance-startup]
+subtopics:
+  - app-startup
+  - performance-startup
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related: []
 created: 2025-10-15
@@ -16,7 +20,7 @@ updated: 2025-10-30
 sources: []
 tags: [android/app-startup, android/performance-startup, difficulty/medium, jetpack]
 date created: Thursday, October 30th 2025, 11:43:07 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:55:37 pm
 ---
 
 # Вопрос (RU)
@@ -204,7 +208,6 @@ if (userLoggedIn) {
 ## References
 
 - [[c-content-provider]] — ContentProvider lifecycle and performance
-- [[c-app-initialization]] — Android app initialization patterns
 - https://developer.android.com/topic/libraries/app-startup
 
 ## Related Questions

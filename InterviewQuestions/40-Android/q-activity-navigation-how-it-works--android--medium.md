@@ -3,12 +3,17 @@ id: android-377
 title: Как работает навигация Activity / How Activity Navigation Works
 aliases: [Activity Back Stack, Activity Navigation, Навигация Activity, Стек активностей]
 topic: android
-subtopics: [activity, lifecycle, ui-navigation]
+subtopics:
+  - activity
+  - lifecycle
+  - ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-activity-lifecycle
@@ -22,7 +27,7 @@ sources:
   - https://developer.android.com/guide/components/activities/tasks-and-back-stack
   - https://developer.android.com/guide/navigation
 date created: Wednesday, October 29th 2025, 4:18:18 pm
-date modified: Saturday, November 1st 2025, 3:59:50 pm
+date modified: Sunday, November 2nd 2025, 12:43:25 pm
 ---
 
 # Вопрос (RU)
@@ -256,7 +261,6 @@ findNavController().navigate(R.id.action_home_to_detail, bundle)
 ## References
 
 - [[c-activity-lifecycle]] — жизненный цикл Activity
-- [[c-intent-system]] — система Intent в Android
 - https://developer.android.com/guide/components/activities/tasks-and-back-stack
 - https://developer.android.com/guide/navigation
 - https://developer.android.com/guide/components/intents-filters
@@ -269,5 +273,3 @@ findNavController().navigate(R.id.action_home_to_detail, bundle)
 
 ### Related (Same Level)
 - [[q-intent-filters-android--android--medium]] — Intent filters для implicit навигации
-
-### Advanced (Harder)

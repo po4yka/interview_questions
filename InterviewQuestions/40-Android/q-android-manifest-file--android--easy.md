@@ -1,22 +1,30 @@
 ---
 id: android-360
 title: AndroidManifest.xml / Файл манифеста Android
-aliases: ["AndroidManifest.xml", "Файл манифеста Android"]
+aliases: [AndroidManifest.xml, Файл манифеста Android]
 topic: android
-subtopics: [app-startup, intents-deeplinks, permissions]
+subtopics:
+  - app-startup
+  - intents-deeplinks
+  - permissions
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-app-components--android--easy, q-intent-filters-android--android--medium]
+related:
+  - q-android-app-components--android--easy
+  - q-intent-filters-android--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/app-startup, android/intents-deeplinks, android/permissions, difficulty/easy]
-sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
+sources:
+  - https://github.com/Kirchhoff-/Android-Interview-Questions
 date created: Thursday, October 30th 2025, 11:26:39 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:47:38 pm
 ---
 
 # Вопрос (RU)
@@ -185,7 +193,6 @@ date modified: Saturday, November 1st 2025, 5:43:37 pm
 
 ## References
 
-- [[c-android-components]] - Architecture of Android components
 - [[c-permissions]] - Permission system deep dive
 - https://developer.android.com/guide/topics/manifest/manifest-intro - Official manifest guide
 
@@ -200,5 +207,5 @@ date modified: Saturday, November 1st 2025, 5:43:37 pm
  - Runtime permissions
 
 ### Advanced
- - Manifest merge strategies
+- Manifest merge strategies
 - [[q-android-security-practices-checklist--android--medium]] - Security best practices

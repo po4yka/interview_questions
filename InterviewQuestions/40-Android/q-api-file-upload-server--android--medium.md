@@ -1,31 +1,31 @@
 ---
 id: android-161
 title: API File Upload Server / Загрузка файлов на сервер через API
-aliases: ["API File Upload Server", "Загрузка файлов на сервер через API"]
-
-# Classification
+aliases: [API File Upload Server, Загрузка файлов на сервер через API]
 topic: android
-subtopics: [background-execution, files-media, networking-http]
+subtopics:
+  - background-execution
+  - files-media
+  - networking-http
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+  - en
+  - ru
 sources: []
-
-# Workflow & relations
-status: draft
+status: reviewed
 moc: moc-android
-related: [c-multipart-form-data, c-okhttp, c-retrofit, c-workmanager]
-
-# Timestamps
+related:
+  - c-multipart-form-data
+  - c-okhttp
+  - c-retrofit
+  - c-workmanager
 created: 2025-10-15
 updated: 2025-10-30
-
 tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
 date created: Thursday, October 30th 2025, 11:43:56 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:53:12 pm
 ---
 
 # Вопрос (RU)
@@ -402,7 +402,6 @@ sealed class UploadState {
 
 - [[c-retrofit]] - Retrofit HTTP client basics
 - [[c-okhttp]] - OkHttp interceptors and customization
-- [[c-multipart-form-data]] - Multipart form data specification
 - [[c-workmanager]] - WorkManager background tasks
 - https://developer.android.com/topic/libraries/architecture/workmanager
 - https://square.github.io/retrofit/

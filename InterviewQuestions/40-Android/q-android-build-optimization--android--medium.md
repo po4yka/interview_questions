@@ -1,22 +1,29 @@
 ---
 id: android-158
 title: Android Build Optimization / Оптимизация сборки Android
-aliases: ["Android Build Optimization", "Оптимизация сборки Android"]
+aliases: [Android Build Optimization, Оптимизация сборки Android]
 topic: android
-subtopics: [build-variants, dependency-management, gradle]
+subtopics:
+  - build-variants
+  - dependency-management
+  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-gradle, c-modularization]
+related:
+  - c-gradle
+  - c-modularization
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium, gradle, performance]
 date created: Thursday, October 30th 2025, 11:26:48 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:45:30 pm
 ---
 
 # Вопрос (RU)

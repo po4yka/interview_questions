@@ -3,12 +3,17 @@ id: android-037
 title: Baseline Profiles Optimization / Оптимизация с Baseline Profiles
 aliases: [Baseline Profiles Optimization, Оптимизация с Baseline Profiles]
 topic: android
-subtopics: [gradle, performance-startup, profiling]
+subtopics:
+  - gradle
+  - performance-startup
+  - profiling
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related: []
 sources: []
@@ -16,7 +21,7 @@ created: 2025-10-11
 updated: 2025-10-30
 tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:36 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 1:02:35 pm
 ---
 
 # Вопрос (RU)
@@ -183,7 +188,6 @@ when (status.profileInstallResultCode) {
 
 - [[q-android-performance-measurement-tools--android--medium]]
 - [[q-app-startup-optimization--android--medium]]
-- [[c-android-runtime-aot-jit]]
 - https://developer.android.com/topic/performance/baselineprofiles
 - https://developer.android.com/studio/profile/baselineprofiles
 

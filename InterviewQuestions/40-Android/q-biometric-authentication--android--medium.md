@@ -1,14 +1,18 @@
 ---
 id: android-068
 title: Biometric Authentication / Биометрическая аутентификация
-aliases: ["Biometric Authentication", "Биометрическая аутентификация"]
+aliases: [Biometric Authentication, Биометрическая аутентификация]
 topic: android
-subtopics: [keystore-crypto, permissions]
+subtopics:
+  - keystore-crypto
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-biometric-authentication
@@ -17,7 +21,7 @@ created: 2025-10-12
 updated: 2025-10-30
 tags: [android/keystore-crypto, android/permissions, authentication, biometric, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:48 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 1:03:02 pm
 ---
 
 # Вопрос (RU)
@@ -265,7 +269,6 @@ fun authenticateWithCrypto(dataToEncrypt: ByteArray) {
 ## References
 
 - [[c-android-keystore]] — Cryptographic key storage fundamentals
-- [[c-android-security]] — Security architecture overview
 - https://developer.android.com/training/sign-in/biometric-auth
 - https://developer.android.com/reference/androidx/biometric/BiometricPrompt
 

@@ -1,22 +1,30 @@
 ---
 id: android-192
 title: App Startup Optimization / Оптимизация запуска приложения
-aliases: ["App Startup Optimization", "Оптимизация запуска приложения"]
+aliases: [App Startup Optimization, Оптимизация запуска приложения]
 topic: android
-subtopics: [app-startup, performance-memory, performance-startup]
+subtopics:
+  - app-startup
+  - performance-memory
+  - performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-app-startup, c-content-provider, c-lazy-initialization]
+related:
+  - c-app-startup
+  - c-content-provider
+  - c-lazy-initialization
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/app-startup, android/performance-memory, android/performance-startup, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:43:03 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:56:43 pm
 ---
 
 # Вопрос (RU)

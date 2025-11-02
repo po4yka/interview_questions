@@ -1,22 +1,27 @@
 ---
 id: android-216
 title: Android Project Parts / Части Android проекта
-aliases: ["Android Project Parts", "Части Android проекта"]
+aliases: [Android Project Parts, Части Android проекта]
 topic: android
-subtopics: [build-variants, gradle]
+subtopics:
+  - build-variants
+  - gradle
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-manifest-file--android--easy]
+related:
+  - q-android-manifest-file--android--easy
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/build-variants, android/gradle, build-system, difficulty/easy, project-structure]
 sources: []
 date created: Thursday, October 30th 2025, 11:26:32 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:48:18 pm
 ---
 
 # Вопрос (RU)
@@ -193,8 +198,6 @@ android {
 
 ## References
 
-- [[c-gradle-build-system]]
-- [[c-android-resources]]
 - https://developer.android.com/studio/projects
 - https://developer.android.com/guide/topics/resources/providing-resources
 - https://developer.android.com/build

@@ -1,22 +1,31 @@
 ---
 id: android-103
 title: Android Jetpack Overview / Обзор Android Jetpack
-aliases: ["Android Jetpack Overview", "Обзор Android Jetpack"]
+aliases: [Android Jetpack Overview, Обзор Android Jetpack]
 topic: android
-subtopics: [architecture-mvvm, lifecycle, ui-compose]
+subtopics:
+  - architecture-mvvm
+  - lifecycle
+  - ui-compose
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-room, c-viewmodel, q-room-library-definition--android--easy, q-viewmodel-pattern--android--easy]
+related:
+  - c-room
+  - c-viewmodel
+  - q-room-library-definition--android--easy
+  - q-viewmodel-pattern--android--easy
 sources: []
 created: 2025-10-13
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/lifecycle, android/ui-compose, difficulty/easy, jetpack]
 date created: Thursday, October 30th 2025, 11:26:44 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:47:07 pm
 ---
 
 # Вопрос (RU)

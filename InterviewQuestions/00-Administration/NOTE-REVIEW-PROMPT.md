@@ -38,9 +38,10 @@ If the note appears to be in the wrong folder relative to its topic, flag it in 
 
 ## YAML Standardization
 
-Ensure the frontmatter matches the controlled schema:
+Ensure the frontmatter matches the controlled schema. The `id` must follow the `<subject>-<serial>` convention (e.g., `algo-001`, `android-134`) and stay unique within the vault. Use the stable subject slug reflecting the note's domain and a zero-padded serial number:
 
 ```yaml
+id: algo-001
 topic: <matches folder mapping below>
 aliases: ["English Title", "Русский заголовок"]
 question_kind: theory | coding | android | system-design   # pick the accurate value

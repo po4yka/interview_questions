@@ -1,14 +1,19 @@
 ---
 id: android-433
 title: Android Services Purpose / Назначение Service в Android
-aliases: ["Android Services Purpose", "Назначение Service в Android"]
+aliases: [Android Services Purpose, Назначение Service в Android]
 topic: android
-subtopics: [background-execution, lifecycle, service]
+subtopics:
+  - background-execution
+  - lifecycle
+  - service
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-lifecycle
@@ -18,7 +23,7 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/lifecycle, android/service, difficulty/easy]
 date created: Saturday, November 1st 2025, 1:03:09 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:49:35 pm
 ---
 
 # Вопрос (RU)

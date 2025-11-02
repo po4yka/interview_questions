@@ -1,22 +1,29 @@
 ---
 id: android-195
 title: Background vs Foreground Service / Фоновый vs активный сервис
-aliases: ["Background vs Foreground Service", "Фоновый vs активный сервис"]
+aliases: [Background vs Foreground Service, Фоновый vs активный сервис]
 topic: android
-subtopics: [background-execution, service]
+subtopics:
+  - background-execution
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-service, c-workmanager, q-android-service-types--android--easy]
+related:
+  - c-service
+  - c-workmanager
+  - q-android-service-types--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/service, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:30 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 1:02:04 pm
 ---
 
 # Вопрос (RU)
@@ -250,6 +257,4 @@ WorkManager.getInstance(context).enqueue(workRequest)
  - Notification requirements
 
 ### Advanced (Harder)
-- [[q-workmanager-advanced--android--hard]] - Advanced WorkManager patterns
 - [[q-service-lifecycle-binding--android--hard]] - Service lifecycle edge cases
-- [[q-background-restrictions-strategies--android--hard]] - Handling background restrictions

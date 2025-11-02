@@ -1,22 +1,31 @@
 ---
 id: android-015
 title: Android App Bundle (AAB) / Android App Bundle (AAB)
-aliases: ["AAB", "Android App Bundle", "Android App Bundles", "Андроид App Bundle", "Формат AAB"]
+aliases: [AAB, Android App Bundle, Android App Bundles, Андроид App Bundle, Формат AAB]
 topic: android
-subtopics: [app-bundle, gradle]
+subtopics:
+  - app-bundle
+  - gradle
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-app-bundle, c-gradle, q-gradle-basics--android--easy, q-play-feature-delivery--android--medium]
+related:
+  - c-app-bundle
+  - c-gradle
+  - q-gradle-basics--android--easy
+  - q-play-feature-delivery--android--medium
 created: 2025-10-05
 updated: 2025-10-29
-sources: ["https://developer.android.com/guide/app-bundle"]
+sources:
+  - https://developer.android.com/guide/app-bundle
 tags: [android/app-bundle, android/gradle, difficulty/easy]
 date created: Wednesday, October 29th 2025, 4:18:34 pm
-date modified: Saturday, November 1st 2025, 3:59:52 pm
+date modified: Sunday, November 2nd 2025, 12:44:10 pm
 ---
 
 # Вопрос (RU)

@@ -1,22 +1,29 @@
 ---
 id: android-002
 title: Android Security Practices Checklist / Чек-лист практик безопасности Android
-aliases: ["Android Security Practices Checklist", "Чек-лист практик безопасности Android"]
+aliases: [Android Security Practices Checklist, Чек-лист практик безопасности Android]
 topic: android
-subtopics: [keystore-crypto, network-security-config, permissions]
+subtopics:
+  - keystore-crypto
+  - network-security-config
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-android-keystore, c-encryption]
+related:
+  - c-android-keystore
+  - c-encryption
 created: 2025-10-05
 updated: 2025-10-30
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, security]
 sources: []
 date created: Thursday, October 30th 2025, 11:36:04 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:49:07 pm
 ---
 
 # Вопрос (RU)
@@ -303,8 +310,3 @@ val promptInfo = BiometricPrompt.PromptInfo.Builder()
  - Android Keystore patterns and cryptographic key lifecycle
  - Advanced network security configurations and certificate pinning strategies
  - R8/ProGuard rules for third-party library obfuscation
-
-### Advanced (Harder)
- - Runtime threat detection, root detection, and response strategies
-- [[q-secure-multiprocess-architecture--android--hard]] - Inter-process security in modular multi-process architectures
-- [[q-hardware-key-attestation--android--hard]] - Hardware-backed key attestation and SafetyNet integration

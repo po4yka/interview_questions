@@ -1,22 +1,30 @@
 ---
 id: android-003
 title: ANR (Application Not Responding) / ANR (Приложение не отвечает)
-aliases: ["ANR (Application Not Responding)", "ANR (Приложение не отвечает)"]
+aliases: [ANR (Application Not Responding), ANR (Приложение не отвечает)]
 topic: android
-subtopics: [performance-rendering, profiling, strictmode-anr]
+subtopics:
+  - performance-rendering
+  - profiling
+  - strictmode-anr
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-coroutines, c-lifecycle, c-workmanager]
+related:
+  - c-coroutines
+  - c-lifecycle
+  - c-workmanager
 created: 2025-10-05
 updated: 2025-10-30
 sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, debugging, difficulty/medium, performance]
 date created: Thursday, October 30th 2025, 11:43:26 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:52:50 pm
 ---
 
 # Вопрос (RU)

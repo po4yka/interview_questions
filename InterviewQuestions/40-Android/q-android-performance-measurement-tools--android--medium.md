@@ -1,22 +1,30 @@
 ---
 id: android-098
 title: Android Performance Measurement Tools / Инструменты измерения производительности Android
-aliases: ["Android Performance Measurement Tools", "Инструменты измерения производительности Android"]
+aliases: [Android Performance Measurement Tools, Инструменты измерения производительности Android]
 topic: android
-subtopics: [performance-memory, profiling, testing-benchmark]
+subtopics:
+  - performance-memory
+  - profiling
+  - testing-benchmark
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-android-profiling, c-performance-optimization, q-android-app-lag-analysis--android--medium]
+related:
+  - c-android-profiling
+  - c-performance-optimization
+  - q-android-app-lag-analysis--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-10-30
 tags: [android/performance-memory, android/profiling, android/testing-benchmark, difficulty/medium, optimization, performance]
 date created: Thursday, October 30th 2025, 11:26:56 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:48:05 pm
 ---
 
 # Вопрос (RU)
@@ -229,9 +237,7 @@ val trimmedMean = times.sorted()
 
 ## References
 
-- [[c-android-profiling]]
 - [[c-performance-optimization]]
-- [[c-baseline-profiles]]
 - https://developer.android.com/topic/performance
 - https://developer.android.com/studio/profile/benchmark
 
@@ -244,7 +250,3 @@ val trimmedMean = times.sorted()
 - [[q-android-build-optimization--android--medium]] - Build and compile-time performance
  - Memory leak detection techniques
  - Rendering performance optimization
-
-### Advanced
-- [[q-android-baseline-profiles--android--hard]] - Profile-guided optimization for startup
-- [[q-android-custom-lint-rules--android--hard]] - Static analysis for performance issues

@@ -1,14 +1,19 @@
 ---
 id: android-310
 title: Baseline Profiles Android / Базовые профили Android
-aliases: ["Baseline Profiles Android", "Базовые профили Android"]
+aliases: [Baseline Profiles Android, Базовые профили Android]
 topic: android
-subtopics: [gradle, performance-startup, profiling]
+subtopics:
+  - gradle
+  - performance-startup
+  - profiling
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-jit-aot-compilation
@@ -17,7 +22,7 @@ updated: 2025-10-30
 sources: []
 tags: [android/gradle, android/performance-startup, android/profiling, aot, difficulty/medium, performance]
 date created: Thursday, October 30th 2025, 11:50:58 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 1:02:17 pm
 ---
 
 # Вопрос (RU)
@@ -226,8 +231,6 @@ when {
 
 ## References
 
-- [[c-jit-aot-compilation]] — JIT vs AOT compilation fundamentals
-- [[c-android-runtime-art]] — Android Runtime architecture and dex2oat
 - https://developer.android.com/topic/performance/baselineprofiles — Official Android baseline profiles guide
 
 ## Related Questions

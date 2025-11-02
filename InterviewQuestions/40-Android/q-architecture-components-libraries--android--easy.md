@@ -1,22 +1,30 @@
 ---
 id: android-208
 title: Architecture Components Libraries / Библиотеки Architecture Components
-aliases: ["Architecture Components Libraries", "Библиотеки Architecture Components"]
+aliases: [Architecture Components Libraries, Библиотеки Architecture Components]
 topic: android
-subtopics: [architecture-mvvm, lifecycle, room]
+subtopics:
+  - architecture-mvvm
+  - lifecycle
+  - room
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-lifecycle, c-room, c-viewmodel]
+related:
+  - c-lifecycle
+  - c-room
+  - c-viewmodel
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
 date created: Thursday, October 30th 2025, 11:43:31 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:57:11 pm
 ---
 
 # Вопрос (RU)
@@ -323,5 +331,4 @@ UI Layer (Compose / Views)
 - [[q-android-architectural-patterns--android--medium]]
 
 ### Advanced (Harder)
-
 - [[q-android-runtime-internals--android--hard]]

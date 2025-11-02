@@ -1,22 +1,29 @@
 ---
 id: android-277
 title: App Security Best Practices / Лучшие практики безопасности приложения
-aliases: ["App Security Best Practices", "Лучшие практики безопасности приложения"]
+aliases: [App Security Best Practices, Лучшие практики безопасности приложения]
 topic: android
-subtopics: [keystore-crypto, network-security-config, permissions]
+subtopics:
+  - keystore-crypto
+  - network-security-config
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-android-keystore, c-encryption]
+related:
+  - c-android-keystore
+  - c-encryption
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
 date created: Thursday, October 30th 2025, 11:43:21 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:54:53 pm
 ---
 
 # Вопрос (RU)
@@ -227,8 +234,3 @@ suspend fun findUser(email: String): User?
 ### Related
  — Permission handling patterns
  — Network security configuration
-- [[q-android-data-encryption--android--medium]] — Data encryption strategies
-
-### Advanced
-- [[q-android-safetynet-attestation--android--hard]] — Device integrity verification
-- [[q-android-reverse-engineering-prevention--android--hard]] — Advanced protection techniques

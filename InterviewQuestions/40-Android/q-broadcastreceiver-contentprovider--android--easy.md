@@ -12,7 +12,7 @@ original_language: ru
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - q-android-app-components--android--easy
@@ -25,7 +25,7 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
 date created: Thursday, October 30th 2025, 11:11:16 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 1:03:34 pm
 ---
 
 # Вопрос (RU)
@@ -224,7 +224,6 @@ val cursor = contentResolver.query(
 - Official: [Content Provider Basics](https://developer.android.com/guide/topics/providers/content-provider-basics)
 - [[c-broadcast-receiver]]
 - [[c-content-provider]]
-- [[c-ipc]]
 
 ## Related Questions
 

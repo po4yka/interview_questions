@@ -1,22 +1,28 @@
 ---
 id: android-297
 title: Android Runtime (ART) / Android Runtime (ART)
-aliases: ["Android Runtime (ART)", "АРТ"]
+aliases: [Android Runtime (ART), АРТ]
 topic: android
-subtopics: [performance-memory, processes]
+subtopics:
+  - performance-memory
+  - processes
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-app-lag-analysis--android--medium, q-android-performance-measurement-tools--android--medium]
+related:
+  - q-android-app-lag-analysis--android--medium
+  - q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-memory, android/processes, compilation, difficulty/medium, gc, runtime]
 sources: []
 date created: Thursday, October 30th 2025, 11:26:48 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:48:33 pm
 ---
 
 # Вопрос (RU)
@@ -202,7 +208,6 @@ class CriticalPath {
 ## References
 
 - [[c-memory-management]]
-- [[c-android-build-process]]
 - https://source.android.com/docs/core/runtime
 - https://developer.android.com/topic/performance/baselineprofiles
 
@@ -216,7 +221,3 @@ class CriticalPath {
 - [[q-android-app-lag-analysis--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
 - [[q-android-build-optimization--android--medium]]
-
-### Advanced
-
-

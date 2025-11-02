@@ -16,7 +16,7 @@ created: 2025-10-11
 updated: 2025-10-29
 tags: [android/build-variants, android/dependency-management, android/gradle, build-performance, difficulty/medium, gradle]
 date created: Thursday, October 30th 2025, 11:11:42 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 1:03:54 pm
 ---
 
 # Вопрос (RU)
@@ -231,11 +231,6 @@ Analyze: task timeline, cache hit rates, configuration time, dependency resoluti
 - [Gradle Performance Optimization](https://docs.gradle.org/current/userguide/performance.html)
 - [Android Build Best Practices](https://developer.android.com/build/optimize-your-build)
 
-**Related Concepts**:
-- [[c-gradle-build-cache]]
-- [[c-ksp-vs-kapt]]
-- [[c-android-modularization]]
-
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -249,6 +244,3 @@ Analyze: task timeline, cache hit rates, configuration time, dependency resoluti
 
 ### Advanced (Harder)
 - [[q-cicd-pipeline-android--android--medium]] — CI/CD setup with build caching
-- [[q-custom-gradle-plugin--tools--hard]] — Creating cacheable custom Gradle tasks
-- [[q-build-reproducibility--tools--hard]] — Ensuring deterministic builds
-

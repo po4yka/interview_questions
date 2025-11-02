@@ -3,12 +3,17 @@ id: android-190
 title: Async Operations in Android / Асинхронные операции в Android
 aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android
-subtopics: [background-execution, coroutines, threads-sync]
+subtopics:
+  - background-execution
+  - coroutines
+  - threads-sync
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-coroutines
@@ -19,7 +24,7 @@ updated: 2025-10-30
 sources: []
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:35 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:57:24 pm
 ---
 
 # Вопрос (RU)
@@ -305,4 +310,3 @@ disposables.add(
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]
-

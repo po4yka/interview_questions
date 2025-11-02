@@ -1,14 +1,19 @@
 ---
 id: android-399
 title: App Store Optimization / Оптимизация App Store
-aliases: ["App Store Optimization", "ASO", "Оптимизация App Store"]
+aliases: [App Store Optimization, ASO, Оптимизация App Store]
 topic: android
-subtopics: [ab-testing, analytics, play-console]
+subtopics:
+  - ab-testing
+  - analytics
+  - play-console
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-android-app-bundles--android--easy
@@ -17,7 +22,7 @@ updated: 2025-10-30
 sources: []
 tags: [android/ab-testing, android/analytics, android/play-console, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:43:32 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:56:52 pm
 ---
 
 # Вопрос (RU)

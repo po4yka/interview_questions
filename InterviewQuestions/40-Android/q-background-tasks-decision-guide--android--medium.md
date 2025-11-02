@@ -3,20 +3,30 @@ id: android-006
 title: Background Tasks Decision Guide / Руководство по фоновым задачам
 aliases: [Background Tasks Decision Guide, Руководство по фоновым задачам]
 topic: android
-subtopics: [background-execution, coroutines, service]
+subtopics:
+  - background-execution
+  - coroutines
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-coroutines, c-service, q-async-operations-android--android--medium, q-foreground-service-types--android--medium, q-what-is-workmanager--android--medium]
+related:
+  - c-coroutines
+  - c-service
+  - q-async-operations-android--android--medium
+  - q-foreground-service-types--android--medium
+  - q-what-is-workmanager--android--medium
 sources: []
 created: 2025-10-05
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/service, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:51:26 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 1:01:49 pm
 ---
 
 # Вопрос (RU)
@@ -34,16 +44,17 @@ date modified: Saturday, November 1st 2025, 5:43:37 pm
 **Подход**: Выбор механизма определяется тремя критериями — необходимость продолжения после закрытия UI, возможность отложенного выполнения, критичность немедленного старта.
 
 **Дерево решений**:
-```
-Нужно продолжать в фоне? → НЕТ → Coroutines (viewModelScope/lifecycleScope)
-                        ↓ ДА
-Можно отложить? → ДА → WorkManager
-                ↓ НЕТ
-Есть специализированный API? → ДА → MediaSession / Location API
-                              ↓ НЕТ
-Короткая задача (<3 мин)? → ДА → ShortService
-                          ↓ НЕТ
-                          → Regular Foreground Service
+
+```mermaid
+flowchart TD
+    Start[Нужно продолжать в фоне?] -->|НЕТ| Coroutines[Coroutines<br/>viewModelScope/lifecycleScope]
+    Start -->|ДА| Deferrable[Можно отложить?]
+    Deferrable -->|ДА| WorkManager[WorkManager]
+    Deferrable -->|НЕТ| SpecializedAPI[Есть специализированный API?]
+    SpecializedAPI -->|ДА| Specialized[MediaSession / Location API]
+    SpecializedAPI -->|НЕТ| ShortTask[Короткая задача &lt;3 мин?]
+    ShortTask -->|ДА| ShortService[ShortService]
+    ShortTask -->|НЕТ| ForegroundService[Regular Foreground Service]
 ```
 
 **Категории**:
@@ -115,16 +126,17 @@ class FileTransferService : Service() {
 **Approach**: Selection is driven by three criteria — background continuation requirement, deferability, and criticality of immediate start.
 
 **Decision tree**:
-```
-Need background continuation? → NO → Coroutines (viewModelScope/lifecycleScope)
-                             ↓ YES
-Can be deferred? → YES → WorkManager
-                 ↓ NO
-Specialized API available? → YES → MediaSession / Location API
-                            ↓ NO
-Short task (<3 min)? → YES → ShortService
-                     ↓ NO
-                     → Regular Foreground Service
+
+```mermaid
+flowchart TD
+    Start[Need background continuation?] -->|NO| Coroutines[Coroutines<br/>viewModelScope/lifecycleScope]
+    Start -->|YES| Deferrable[Can be deferred?]
+    Deferrable -->|YES| WorkManager[WorkManager]
+    Deferrable -->|NO| SpecializedAPI[Specialized API available?]
+    SpecializedAPI -->|YES| Specialized[MediaSession / Location API]
+    SpecializedAPI -->|NO| ShortTask[Short task &lt;3 min?]
+    ShortTask -->|YES| ShortService[ShortService]
+    ShortTask -->|NO| ForegroundService[Regular Foreground Service]
 ```
 
 **Categories**:

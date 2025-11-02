@@ -1,22 +1,31 @@
 ---
 id: android-121
 title: Android Lint Tool / Инструмент Android Lint
-aliases: ["Android Lint Tool", "Инструмент Android Lint"]
+aliases: [Android Lint Tool, Инструмент Android Lint]
 topic: android
-subtopics: [build-variants, gradle, static-analysis]
+subtopics:
+  - build-variants
+  - gradle
+  - static-analysis
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-testing-strategies--android--medium, q-gradle-build-system--android--medium, q-proguard-r8--android--medium]
+related:
+  - q-android-testing-strategies--android--medium
+  - q-gradle-build-system--android--medium
+  - q-proguard-r8--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/build-variants, android/gradle, android/static-analysis, code-quality, difficulty/medium, static-analysis]
-sources: [https://developer.android.com/studio/write/lint]
+sources:
+  - https://developer.android.com/studio/write/lint
 date created: Thursday, October 30th 2025, 11:26:40 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:47:19 pm
 ---
 
 # Вопрос (RU)
@@ -184,7 +193,6 @@ android {
 ## References
 
 - [[c-gradle]] — Build system fundamentals
-- [[c-static-analysis]] — Static analysis principles
 - https://developer.android.com/studio/write/lint — Official documentation
 - https://github.com/googlesamples/android-custom-lint-rules — Custom rules examples
 

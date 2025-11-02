@@ -1,22 +1,27 @@
 ---
 id: android-181
 title: Activity Lifecycle Methods / Методы жизненного цикла Activity
-aliases: ["Activity Lifecycle Methods", "Методы жизненного цикла Activity"]
+aliases: [Activity Lifecycle Methods, Методы жизненного цикла Activity]
 topic: android
-subtopics: [activity, lifecycle]
+subtopics:
+  - activity
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-lifecycle]
+related:
+  - c-lifecycle
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/activity, android/lifecycle, difficulty/medium, jetpack]
 sources: []
 date created: Wednesday, October 29th 2025, 4:18:27 pm
-date modified: Saturday, November 1st 2025, 3:59:49 pm
+date modified: Sunday, November 2nd 2025, 12:43:03 pm
 ---
 
 # Вопрос (RU)
@@ -257,10 +262,5 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - https://developer.android.com/guide/components/activities/activity-lifecycle
 
 ## Related Questions
-
-### Prerequisites (Easier)
-
 ### Related (Medium)
 - [[q-fragment-vs-activity-lifecycle--android--medium]]
-
-### Advanced (Harder)

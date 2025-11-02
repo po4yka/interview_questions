@@ -1,22 +1,27 @@
 ---
 id: android-076
 title: AnimatedVisibility vs AnimatedContent vs Crossfade / AnimatedVisibility против AnimatedContent против Crossfade
-aliases: ["AnimatedVisibility vs AnimatedContent vs Crossfade", "AnimatedVisibility против AnimatedContent против Crossfade"]
+aliases: [AnimatedVisibility vs AnimatedContent vs Crossfade, AnimatedVisibility против AnimatedContent против Crossfade]
 topic: android
-subtopics: [ui-animation, ui-compose]
+subtopics:
+  - ui-animation
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-jetpack-compose]
+related:
+  - c-jetpack-compose
 created: 2025-10-13
 updated: 2025-10-30
 tags: [android/ui-animation, android/ui-compose, animation, compose, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:36:05 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:52:08 pm
 ---
 
 # Вопрос (RU)
@@ -182,7 +187,7 @@ Crossfade(targetState = screen) { currentScreen ->
 - [[q-how-jetpack-compose-works--android--medium]] - Compose architecture
 
 ### Related (Same Level)
- - Recomposition mechanics
+- Recomposition mechanics
 - [[q-compose-remember-derived-state--android--medium]] - State management
 - [[q-compose-modifier-system--android--medium]] - Modifier API
 

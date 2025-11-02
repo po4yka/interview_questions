@@ -1,22 +1,28 @@
 ---
 id: android-154
 title: Android Architectural Patterns / Архитектурные паттерны Android
-aliases: ["Android Architectural Patterns", "Архитектурные паттерны Android"]
+aliases: [Android Architectural Patterns, Архитектурные паттерны Android]
 topic: android
-subtopics: [architecture-clean, architecture-mvi, architecture-mvvm]
+subtopics:
+  - architecture-clean
+  - architecture-mvi
+  - architecture-mvvm
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-mvvm]
+related:
+  - c-mvvm
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/architecture-clean, android/architecture-mvi, android/architecture-mvvm, difficulty/medium]
 sources: []
 date created: Wednesday, October 29th 2025, 4:47:28 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
+date modified: Sunday, November 2nd 2025, 12:45:05 pm
 ---
 
 # Вопрос (RU)
@@ -178,17 +184,8 @@ class GetUserUseCase(private val repo: UserRepository) {
 
 ## Related Questions
 
-### Prerequisites
-- [[q-viewmodel-lifecycle--android--easy]]
-- [[q-dependency-injection-basics--android--easy]]
-- [[q-observer-pattern--architecture-patterns--easy]]
-
 ### Related
 - [[q-repository-pattern--android--medium]]
-- [[q-state-management-compose--android--medium]]
-- [[q-unidirectional-data-flow--android--medium]]
 
 ### Advanced
 - [[q-kmm-architecture--android--hard]]
-- [[q-testing-clean-architecture--android--hard]]
-- [[q-shared-state-viewmodels--android--hard]]
