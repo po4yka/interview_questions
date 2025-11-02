@@ -120,7 +120,43 @@ SORT difficulty ASC, file.name ASC
 - [[q-koin-scope-management--android--medium]] - Lifecycle-aware scopes
 - [[q-koin-testing-strategies--android--medium]] - Testing Koin modules effectively
 - [[q-koin-resolution-internals--android--hard]] - Internal resolution pipeline in detail
+- [[q-koin-vs-dagger-philosophy--android--hard]] - DI philosophy trade-offs
 - [[q-koin-vs-hilt-comparison--android--medium]] - Koin vs Hilt comparison
+
+### Camera & Media
+- [[q-camerax-advanced-pipeline--android--hard]] - Advanced multi-use-case pipelines
+- [[q-media3-migration-strategy--android--hard]] - Migrating ExoPlayer stacks to Media3
+
+### Adaptive Layouts & Form Factors
+- [[q-jetpack-window-manager-foldables--android--hard]] - Handling foldables and large screens
+
+### Wearables & Health
+- [[q-wearos-health-connect-integration--android--hard]] - Health Services + Health Connect pipeline
+
+### Monetization & Compliance
+- [[q-play-billing-v6-architecture--android--hard]] - Flexible subscriptions & server verification
+- [[q-play-integrity-attestation--android--hard]] - Integrity verdicts and fraud prevention
+
+### Connectivity & Proximity
+- [[q-nearby-nfc-uwb-integration--android--hard]] - Hybrid NFC/Nearby/UWB flows
+
+### Widgets & Surfaces
+- [[q-glance-compose-widgets--android--medium]] - Compose-powered app widgets
+
+### Automotive & TV
+- [[q-android-auto-guidelines--android--hard]] - Car app templates and certification
+- [[q-android-tv-compose-leanback--android--hard]] - TV UI with Compose and Leanback
+
+### Enterprise & Device Management
+- [[q-android-enterprise-mdm-architecture--android--hard]] - DPC design and policy enforcement
+
+### Performance & Observability
+- [[q-perfetto-frame-timeline-analysis--android--hard]] - Trace-based jank diagnostics
+- [[q-power-profiling-battery-historian--android--medium]] - Energy audits and remediation
+- [[q-mobile-observability-otel--android--hard]] - Telemetry architecture with OpenTelemetry
+
+### Meta & Coverage
+- [[q-android-coverage-gaps--android--hard]] - High-priority topics missing in the vault
 
 **All DI Questions:**
 ```dataview

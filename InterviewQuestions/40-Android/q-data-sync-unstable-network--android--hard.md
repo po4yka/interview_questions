@@ -12,18 +12,19 @@ original_language: en
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - c-coroutines
   - c-workmanager
   - q-offline-first-architecture--android--hard
 created: 2025-10-20
-updated: 2025-01-27
+updated: 2025-11-02
 tags: [android/architecture-clean, android/networking-http, data-sync, difficulty/hard, networking, offline-first, workmanager]
-sources: [https://developer.android.com/guide/background/processing-data/sync]
-date created: Monday, October 27th 2025, 3:32:30 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+sources:
+  - https://developer.android.com/guide/background/processing-data/sync
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Sunday, November 2nd 2025, 7:24:21 pm
 ---
 
 # Вопрос (RU)
@@ -34,22 +35,22 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-Синхронизация данных при нестабильной сети требует offline-first архитектуры, механизмов повторных попыток и стратегий разрешения конфликтов.
+Синхронизация данных при нестабильной сети требует `offline-first` архитектуры, механизмов повторных попыток с экспоненциальной задержкой и стратегий разрешения конфликтов. Основная цель — обеспечить отзывчивость UI и надежность синхронизации независимо от состояния сети.
 
 ### Ключевые Принципы
 
 **Offline-First архитектура:**
-- Локальная база данных как единственный источник истины
-- Все операции выполняются локально первыми
-- Синхронизация происходит асинхронно в фоновом режиме
-- Пользователь всегда видит актуальные локальные данные
+- Локальная база данных (`Room`/SQLite) как единственный источник истины — всегда доступна
+- Все операции выполняются локально первыми — мгновенный отклик UI
+- Синхронизация происходит асинхронно в фоновом режиме — не блокирует пользователя
+- Пользователь всегда видит актуальные локальные данные — даже без сети
 
 **Основные компоненты:**
-- Repository Pattern для абстракции источников данных
-- [[c-workmanager]] для надежного фонового выполнения
-- [[c-coroutines]] для асинхронных операций
-- Механизмы retry с экспоненциальной задержкой
-- Стратегии разрешения конфликтов
+- `Repository Pattern` для абстракции источников данных — единый интерфейс для local/remote
+- `WorkManager` для надежного фонового выполнения — автоматические retry и constraints
+- `Coroutines` для асинхронных операций — неблокирующее выполнение
+- Механизмы retry с экспоненциальной задержкой — уменьшение нагрузки на сервер
+- Стратегии разрешения конфликтов — `Last Write Wins`, `Merge`, `Local Wins`, `Remote Wins`
 
 ### Реализация
 
@@ -61,13 +62,13 @@ class DataRepository @Inject constructor(
     private val syncManager: SyncManager
 ) {
     suspend fun saveUser(user: User): Result<User> {
-        // ✅ Save locally first for instant UI response
+        // ✅ Сохраняем локально первым для мгновенного отклика UI
         val saved = localDb.saveUser(user)
         syncManager.scheduleSync(user.id)
         return Result.success(saved)
     }
 
-    // ❌ Don't wait for network before returning data
+    // ❌ НЕ ждем сеть перед возвратом данных
     suspend fun getUser(id: String): User = localDb.getUser(id)
 }
 ```
@@ -80,7 +81,7 @@ class RetryManager {
             try {
                 return Result.success(operation())
             } catch (e: Exception) {
-                // ✅ Exponential backoff with jitter prevents thundering herd
+                // ✅ Экспоненциальная задержка с jitter предотвращает thundering herd
                 if (attempt < 2) {
                     delay(1000L * (1L shl attempt) + (0..1000).random())
                 }
@@ -96,15 +97,15 @@ class RetryManager {
 class ConflictResolver {
     fun resolve(local: User, remote: User, strategy: Strategy): User {
         return when (strategy) {
-            // ✅ Last Write Wins - простейшая стратегия
+            // ✅ Last Write Wins — простейшая стратегия (по timestamp)
             Strategy.LAST_WRITE_WINS ->
                 if (remote.lastModified > local.lastModified) remote else local
-            // ✅ Merge - объединение изменений по полям
+            // ✅ Merge — объединение изменений по полям (интеллектуальное слияние)
             Strategy.MERGE ->
                 User(local.id, remote.name, local.email,
                      maxOf(local.lastModified, remote.lastModified))
-            Strategy.LOCAL_WINS -> local
-            Strategy.REMOTE_WINS -> remote
+            Strategy.LOCAL_WINS -> local  // Локальные изменения имеют приоритет
+            Strategy.REMOTE_WINS -> remote  // Удаленные изменения имеют приоритет
         }
     }
 }
@@ -120,7 +121,7 @@ class SyncWorker(context: Context, params: WorkerParameters)
             SyncManager(applicationContext).performSync()
             Result.success()
         } catch (e: Exception) {
-            // ✅ Automatic retry on failure
+            // ✅ Автоматический retry при ошибке (до 3 попыток)
             if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
@@ -129,7 +130,7 @@ class SyncWorker(context: Context, params: WorkerParameters)
 class SyncManager @Inject constructor(private val context: Context) {
     fun scheduleSync(userId: String) {
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)  // ✅ Wait for network
+            .setRequiredNetworkType(NetworkType.CONNECTED)  // ✅ Ждем доступность сети
             .build()
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
             .setConstraints(constraints)
@@ -157,22 +158,22 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 
 ## Answer (EN)
 
-Handling data synchronization on unstable networks requires offline-first architecture, retry mechanisms, and conflict resolution strategies.
+Handling data synchronization on unstable networks requires `offline-first` architecture, retry mechanisms with exponential backoff, and conflict resolution strategies. Main goal: ensure UI responsiveness and sync reliability regardless of network state.
 
 ### Key Principles
 
 **Offline-First Architecture:**
-- Local database as single source of truth
-- All operations are performed locally first
-- Synchronization happens asynchronously in background
-- User always sees current local data
+- Local database (`Room`/SQLite) as single source of truth — always available
+- All operations performed locally first — instant UI response
+- Synchronization happens asynchronously in background — doesn't block user
+- User always sees current local data — even without network
 
 **Core Components:**
-- Repository Pattern for data source abstraction
-- [[c-workmanager]] for reliable background execution
-- [[c-coroutines]] for asynchronous operations
-- Retry mechanisms with exponential backoff
-- Conflict resolution strategies
+- `Repository Pattern` for data source abstraction — unified interface for local/remote
+- `WorkManager` for reliable background execution — automatic retry and constraints
+- `Coroutines` for asynchronous operations — non-blocking execution
+- Retry mechanisms with exponential backoff — reduce server load
+- Conflict resolution strategies — `Last Write Wins`, `Merge`, `Local Wins`, `Remote Wins`
 
 ### Implementation
 
@@ -184,13 +185,13 @@ class DataRepository @Inject constructor(
     private val syncManager: SyncManager
 ) {
     suspend fun saveUser(user: User): Result<User> {
-        // ✅ Save locally first for instant UI response
+        // ✅ Сохраняем локально первым для мгновенного отклика UI
         val saved = localDb.saveUser(user)
         syncManager.scheduleSync(user.id)
         return Result.success(saved)
     }
 
-    // ❌ Don't wait for network before returning data
+    // ❌ НЕ ждем сеть перед возвратом данных
     suspend fun getUser(id: String): User = localDb.getUser(id)
 }
 ```
@@ -219,15 +220,15 @@ class RetryManager {
 class ConflictResolver {
     fun resolve(local: User, remote: User, strategy: Strategy): User {
         return when (strategy) {
-            // ✅ Last Write Wins - simplest strategy
+            // ✅ Last Write Wins — simplest strategy (by timestamp)
             Strategy.LAST_WRITE_WINS ->
                 if (remote.lastModified > local.lastModified) remote else local
-            // ✅ Merge - combine changes by fields
+            // ✅ Merge — combine changes by fields (intelligent merging)
             Strategy.MERGE ->
                 User(local.id, remote.name, local.email,
                      maxOf(local.lastModified, remote.lastModified))
-            Strategy.LOCAL_WINS -> local
-            Strategy.REMOTE_WINS -> remote
+            Strategy.LOCAL_WINS -> local  // Local changes have priority
+            Strategy.REMOTE_WINS -> remote  // Remote changes have priority
         }
     }
 }
@@ -281,11 +282,12 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 
 ## Follow-ups
 
-- How would you implement CRDTs (Conflict-free Replicated Data Types) for automatic conflict resolution?
+- How would you implement `CRDTs` (Conflict-free Replicated Data Types) for automatic conflict resolution?
 - What are the trade-offs between optimistic and pessimistic locking in distributed sync?
 - How would you handle partial sync failures and maintain data consistency?
 - How would you implement sync batching to reduce network overhead?
 - What strategies would you use for conflict resolution when merging incompatible field changes?
+- How to implement sync priority queues for critical vs non-critical data?
 
 ## References
 
@@ -295,13 +297,17 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 
 ## Related Questions
 
-### Prerequisites
-- WorkManager basics and constraints configuration
-- Local database implementation with Room or SQLite
+### Prerequisites (Easier)
+- `WorkManager` basics and constraints configuration
+- Local database implementation with `Room` or SQLite
+- Basic understanding of `Coroutines` and `Flow`
 
-### Related
+### Related (Same Level)
 - [[q-offline-first-architecture--android--hard]]
+- `Repository Pattern` implementation
+- Network state monitoring
 
-### Advanced
+### Advanced (Harder)
 - Implementing operational transformation for real-time collaboration
 - Building distributed consensus algorithms for multi-node sync
+- `CRDTs` for automatic conflict resolution

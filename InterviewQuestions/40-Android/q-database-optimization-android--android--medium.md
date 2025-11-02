@@ -1,22 +1,30 @@
 ---
 id: android-452
 title: Database Optimization Android / Оптимизация базы данных Android
-aliases: ["Database Optimization Android", "Оптимизация базы данных Android"]
+aliases: [Database Optimization Android, Оптимизация базы данных Android]
 topic: android
-subtopics: [performance-memory, room]
+subtopics:
+  - performance-memory
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-performance-optimization-android--android--medium, q-room-library-definition--android--easy, q-room-vs-sqlite--android--medium]
+related:
+  - q-performance-optimization-android--android--medium
+  - q-room-library-definition--android--easy
+  - q-room-vs-sqlite--android--medium
 created: 2025-10-20
-updated: 2025-10-27
+updated: 2025-11-02
 tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, sql]
-sources: [https://developer.android.com/training/data-storage/room]
-date created: Monday, October 27th 2025, 10:27:30 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+sources:
+  - https://developer.android.com/training/data-storage/room
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 7:36:33 pm
 ---
 
 # Вопрос (RU)
@@ -27,11 +35,11 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-Оптимизация базы данных в Android требует комплексного подхода: правильная индексация, пакетные операции, асинхронное выполнение и кэширование.
+Оптимизация базы данных в Android требует комплексного подхода: правильная индексация, пакетные операции, асинхронное выполнение и кэширование. Основная цель — обеспечить быстрый отклик UI, минимизировать потребление памяти и предотвратить `ANR` (Application Not Responding).
 
 ### 1. Индексация
 
-Индексы ускоряют чтение, но замедляют запись. Создавайте индексы для часто запрашиваемых полей:
+Индексы ускоряют чтение (`SELECT`), но замедляют запись (`INSERT`/`UPDATE`). Создавайте индексы для часто запрашиваемых полей:
 
 ```kotlin
 @Entity(
@@ -49,7 +57,7 @@ data class User(
 )
 ```
 
-**Trade-offs:** индекс занимает дополнительную память (~10-20% размера таблицы) и замедляет INSERT/UPDATE на 15-30%.
+**Trade-offs:** индекс занимает дополнительную память (~10-20% размера таблицы) и замедляет `INSERT`/`UPDATE` на 15-30%, так как требуется обновление структуры индекса. Используйте индексы только для часто запрашиваемых колонок и избегайте избыточной индексации.
 
 ### 2. Пакетные Операции
 
@@ -75,11 +83,11 @@ users.forEach { dao.insertUser(it) }
 dao.insertUsers(users)
 ```
 
-**Производительность:** пакетная вставка 1000 записей ~50x быстрее поштучной.
+**Производительность:** пакетная вставка 1000 записей ~50x быстрее поштучной (одна транзакция вместо 1000). Это особенно важно для синхронизации данных и bulk-операций.
 
 ### 3. Асинхронность И Реактивность
 
-Используйте `suspend` функции и `Flow` для предотвращения ANR:
+Используйте `suspend` функции и `Flow` для предотвращения `ANR`:
 
 ```kotlin
 @Dao
@@ -92,7 +100,7 @@ interface UserDao {
 }
 ```
 
-Room автоматически выполняет операции на `Dispatchers.IO`.
+`Room` автоматически выполняет операции на `Dispatchers.IO`, поэтому не требуется явно переключать контекст. Для `Flow` используйте `flowOn(Dispatchers.IO)` при необходимости дополнительного контроля.
 
 ### 4. Оптимизация Запросов
 
@@ -130,15 +138,15 @@ class UserRepository @Inject constructor(
 }
 ```
 
-**Trade-off:** использует память (~10-100 KB в зависимости от размера объектов).
+**Trade-off:** использует память (~10-100 KB в зависимости от размера объектов). Регулируйте размер кэша (`maxSize`) в зависимости от доступной памяти устройства. Используйте `LruCache` для автоматического удаления наименее используемых элементов при достижении лимита.
 
 ## Answer (EN)
 
-Database optimization in Android requires a comprehensive approach: proper indexing, batch operations, asynchronous execution, and caching.
+Database optimization in Android requires a comprehensive approach: proper indexing, batch operations, asynchronous execution, and caching. Main goals: ensure fast UI responsiveness, minimize memory consumption, and prevent `ANR` (Application Not Responding).
 
 ### 1. Indexing
 
-Indexes speed up reads but slow down writes. Create indexes for frequently queried fields:
+Indexes speed up reads (`SELECT`) but slow down writes (`INSERT`/`UPDATE`). Create indexes for frequently queried fields:
 
 ```kotlin
 @Entity(
@@ -156,7 +164,7 @@ data class User(
 )
 ```
 
-**Trade-offs:** indexes consume additional memory (~10-20% of table size) and slow down INSERT/UPDATE by 15-30%.
+**Trade-offs:** indexes consume additional memory (~10-20% of table size) and slow down `INSERT`/`UPDATE` by 15-30% as index structure must be updated. Use indexes only for frequently queried columns and avoid over-indexing.
 
 ### 2. Batch Operations
 
@@ -182,11 +190,11 @@ users.forEach { dao.insertUser(it) }
 dao.insertUsers(users)
 ```
 
-**Performance:** batch insert of 1000 records is ~50x faster than individual inserts.
+**Performance:** batch insert of 1000 records is ~50x faster than individual inserts (one transaction instead of 1000). This is especially important for data synchronization and bulk operations.
 
 ### 3. Asynchronicity And Reactivity
 
-Use `suspend` functions and `Flow` to prevent ANR:
+Use `suspend` functions and `Flow` to prevent `ANR`:
 
 ```kotlin
 @Dao
@@ -199,7 +207,7 @@ interface UserDao {
 }
 ```
 
-Room automatically executes operations on `Dispatchers.IO`.
+`Room` automatically executes operations on `Dispatchers.IO`, so explicit context switching is not required. For `Flow`, use `flowOn(Dispatchers.IO)` when additional control is needed.
 
 ### 4. Query Optimization
 
@@ -237,34 +245,35 @@ class UserRepository @Inject constructor(
 }
 ```
 
-**Trade-off:** uses memory (~10-100 KB depending on object size).
+**Trade-off:** uses memory (~10-100 KB depending on object size). Adjust cache size (`maxSize`) based on available device memory. `LruCache` automatically evicts least recently used items when limit is reached.
 
 
 ## Follow-ups
 
-- How would you profile Room database performance to identify slow queries?
-- When would you choose DataStore over Room for persistence?
+- How would you profile `Room` database performance to identify slow queries?
+- When would you choose `DataStore` over `Room` for persistence?
 - How do you handle database migrations without losing user data?
-- What's the impact of FTS (Full-Text Search) on database size and performance?
-- How do you implement pagination with Room and Paging 3 library?
+- What's the impact of `FTS` (Full-Text Search) on database size and performance?
+- How do you implement pagination with `Room` and `Paging 3` library?
+- How to optimize database queries using `EXPLAIN QUERY PLAN`?
 
 ## References
 
-- [[c-database-performance]]
-- [[c-database-design]]
-- Android Room Documentation: https://developer.android.com/training/data-storage/room
-- SQLite Performance Best Practices: https://sqlite.org/performance.html
+- [Android Room Documentation](https://developer.android.com/training/data-storage/room)
+- [SQLite Performance Best Practices](https://sqlite.org/performance.html)
 
 ## Related Questions
 
-### Prerequisites
-- [[q-room-library-definition--android--easy]] - Understanding Room basics
+### Prerequisites (Easier)
+- [[q-room-library-definition--android--easy]] — Understanding `Room` basics
+- Basic knowledge of SQL and database concepts
 
 ### Related (Same Level)
-- [[q-room-vs-sqlite--android--medium]] - Room vs raw SQLite comparison
-- [[q-room-database-migrations--android--medium]] - Handling schema changes
-- [[q-performance-optimization-android--android--medium]] - General Android performance
+- [[q-room-vs-sqlite--android--medium]] — `Room` vs raw SQLite comparison
+- [[q-room-database-migrations--android--medium]] — Handling schema changes
+- [[q-performance-optimization-android--android--medium]] — General Android performance optimization
 
-### Advanced
-- [[q-room-fts-full-text-search--android--hard]] - Full-text search implementation
-- [[q-room-paging3-integration--android--medium]] - Efficient pagination patterns
+### Advanced (Harder)
+- `FTS` (Full-Text Search) implementation with `Room`
+- `Paging 3` integration for efficient pagination patterns
+- Database profiling and query optimization techniques

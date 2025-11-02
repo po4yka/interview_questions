@@ -1,22 +1,30 @@
 ---
 id: android-464
 title: Derived State Snapshot System / Derived State и система Snapshot
-aliases: ["Derived State Snapshot System", "Derived State и система Snapshot"]
+aliases: [Derived State Snapshot System, Derived State и система Snapshot]
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-compose-slot-table-recomposition--android--hard, q-compose-stability-skippability--android--hard]
+related:
+  - q-compose-performance-optimization--android--hard
+  - q-compose-slot-table-recomposition--android--hard
+  - q-compose-stability-skippability--android--hard
 created: 2025-10-20
-updated: 2025-10-27
+updated: 2025-11-02
 tags: [android/performance-memory, android/ui-compose, compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
-sources: [https://developer.android.com/jetpack/compose/state]
-date created: Monday, October 27th 2025, 10:27:49 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+sources:
+  - https://developer.android.com/jetpack/compose/state
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 7:43:20 pm
 ---
 
 # Вопрос (RU)
@@ -27,9 +35,9 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-**Snapshot System** — это механизм управления изменяемым состоянием в Compose, обеспечивающий изоляцию транзакций, thread-safety и атомарность изменений. Работает как MVCC (Multi-Version Concurrency Control) для UI state.
+**Snapshot System** — механизм управления изменяемым состоянием в `Compose`, обеспечивающий изоляцию транзакций, thread-safety и атомарность изменений. Работает как `MVCC` (Multi-Version Concurrency Control) для UI state. Каждый `Snapshot` видит изолированную версию состояния, что позволяет безопасно выполнять параллельные чтения и записи.
 
-**derivedStateOf** — оптимизирует recomposition, триггерясь только при изменении вычисленного результата, а не промежуточных зависимостей.
+**`derivedStateOf`** — оптимизирует recomposition, триггерясь только при изменении вычисленного результата (structural equality), а не промежуточных зависимостей. Это предотвращает ненужные recomposition при изменениях, не влияющих на финальный результат вычисления.
 
 ### Архитектура Snapshot System
 
@@ -58,10 +66,10 @@ class Snapshot {
 ```
 
 **Ключевые механизмы:**
-- **Isolation**: каждый snapshot видит свою версию state
-- **Tracking**: автоматическое отслеживание read/write
-- **Atomicity**: изменения применяются одновременно
-- **Conflict resolution**: handling при параллельных записях
+- **Isolation**: каждый `Snapshot` видит свою версию `state` — изменения изолированы до commit
+- **Tracking**: автоматическое отслеживание read/write — `readSet` отслеживает зависимости для invalidation
+- **Atomicity**: изменения применяются одновременно через `apply()` — all-or-nothing semantics
+- **Conflict resolution**: обработка при параллельных записях — обнаружение конфликтов и предотвращение data races
 
 ### derivedStateOf: Оптимизация Через Memoization
 
@@ -88,10 +96,10 @@ fun ListScreen(items: List<Item>) {
 ```
 
 **Механизм работы:**
-1. **Dependency tracking**: автоматическое отслеживание читаемых State
-2. **Lazy calculation**: вычисление только при изменении зависимости
-3. **Structural equality**: `equals()` сравнение старого и нового результата
-4. **Conditional invalidation**: recomposition только если результат отличается
+1. **Dependency tracking**: автоматическое отслеживание читаемых `State` объектов — `Snapshot` регистрирует все прочитанные состояния
+2. **Lazy calculation**: вычисление только при изменении зависимости — ленивое вычисление до первого обращения к `.value`
+3. **Structural equality**: `equals()` сравнение старого и нового результата — предотвращает recomposition при идентичных результатах
+4. **Conditional invalidation**: recomposition только если результат отличается — invalidation происходит только при неравенстве результатов
 
 ### Практические Паттерны
 
@@ -104,7 +112,7 @@ fun FilteredList(items: State<List<Item>>, filter: State<String>) {
             items.value.filter { it.matches(filter.value) }
         }
     }
-    // ✅ Recomposition только если отфильтрованный список изменился
+    // ✅ Recomposition только если отфильтрованный список изменился (structural equality)
 }
 ```
 
@@ -118,15 +126,16 @@ val totalPrice = remember {
 ```
 
 **Когда НЕ использовать:**
-- Простые вычисления (overhead > benefit)
-- Side effects (используйте `LaunchedEffect`)
-- Suspend функции (нет поддержки coroutines)
+- Простые вычисления — overhead `derivedStateOf` превышает выгоду для быстрых операций (например, `val sum = a + b`)
+- Side effects — используйте `LaunchedEffect` для побочных эффектов (navigation, logging, analytics)
+- Suspend функции — нет поддержки coroutines внутри `derivedStateOf` (только синхронные вычисления)
+- Изменяемые коллекции в зависимостях — используйте `ImmutableList` или `List.toImmutableList()` для корректного tracking
 
 ## Answer (EN)
 
-**Snapshot System** is Compose's mutable state management mechanism providing transaction isolation, thread-safety, and atomic changes. Works like MVCC (Multi-Version Concurrency Control) for UI state.
+**Snapshot System** is `Compose`'s mutable state management mechanism providing transaction isolation, thread-safety, and atomic changes. Works like `MVCC` (Multi-Version Concurrency Control) for UI state. Each `Snapshot` sees an isolated version of state, enabling safe concurrent reads and writes.
 
-**derivedStateOf** optimizes recomposition by triggering only when the computed result changes, not intermediate dependencies.
+**`derivedStateOf`** optimizes recomposition by triggering only when the computed result changes (structural equality), not intermediate dependencies. This prevents unnecessary recomposition when changes don't affect the final computation result.
 
 ### Snapshot System Architecture
 
@@ -155,10 +164,10 @@ class Snapshot {
 ```
 
 **Key mechanisms:**
-- **Isolation**: each snapshot sees its own state version
-- **Tracking**: automatic read/write tracking
-- **Atomicity**: changes applied simultaneously
-- **Conflict resolution**: handling concurrent writes
+- **Isolation**: each `Snapshot` sees its own `state` version — changes isolated until commit
+- **Tracking**: automatic read/write tracking — `readSet` tracks dependencies for invalidation
+- **Atomicity**: changes applied simultaneously via `apply()` — all-or-nothing semantics
+- **Conflict resolution**: handling concurrent writes — conflict detection and data race prevention
 
 ### derivedStateOf: Optimization via Memoization
 
@@ -185,10 +194,10 @@ fun ListScreen(items: List<Item>) {
 ```
 
 **How it works:**
-1. **Dependency tracking**: automatically tracks read State objects
-2. **Lazy calculation**: computes only when dependencies change
-3. **Structural equality**: `equals()` comparison of old vs new result
-4. **Conditional invalidation**: recomposition only if result differs
+1. **Dependency tracking**: automatically tracks read `State` objects — `Snapshot` registers all read states
+2. **Lazy calculation**: computes only when dependencies change — lazy evaluation until first `.value` access
+3. **Structural equality**: `equals()` comparison of old vs new result — prevents recomposition with identical results
+4. **Conditional invalidation**: recomposition only if result differs — invalidation occurs only when results are unequal
 
 ### Practical Patterns
 
@@ -201,7 +210,7 @@ fun FilteredList(items: State<List<Item>>, filter: State<String>) {
             items.value.filter { it.matches(filter.value) }
         }
     }
-    // ✅ Recomposition only if filtered list changed
+    // ✅ Recomposition only if filtered list changed (structural equality)
 }
 ```
 
@@ -215,37 +224,40 @@ val totalPrice = remember {
 ```
 
 **When NOT to use:**
-- Simple calculations (overhead > benefit)
-- Side effects (use `LaunchedEffect`)
-- Suspend functions (no coroutine support)
+- Simple calculations — `derivedStateOf` overhead exceeds benefit for fast operations (e.g., `val sum = a + b`)
+- Side effects — use `LaunchedEffect` for side effects (navigation, logging, analytics)
+- Suspend functions — no coroutine support inside `derivedStateOf` (synchronous calculations only)
+- Mutable collections in dependencies — use `ImmutableList` or `List.toImmutableList()` for correct tracking
 
 
 ## Follow-ups
 
-- How does Snapshot System handle concurrent writes from different threads?
-- What's the performance overhead of derivedStateOf vs direct computation?
-- When should you use snapshotFlow instead of derivedStateOf?
+- How does `Snapshot System` handle concurrent writes from different threads?
+- What's the performance overhead of `derivedStateOf` vs direct computation?
+- When should you use `snapshotFlow` instead of `derivedStateOf`?
 - How does structural equality check work for custom data classes?
-- What happens if derivedStateOf calculation throws an exception?
+- What happens if `derivedStateOf` calculation throws an exception?
+- How to optimize `derivedStateOf` with immutable collections?
 
 ## References
 
-- Compose state management fundamentals (MVCC pattern, transaction isolation)
-- Memoization optimization technique for expensive computations
-- Official docs: https://developer.android.com/jetpack/compose/state
-- State snapshots deep dive: https://dev.to/zachklipp/remember-mutablestateof-a-cheat-sheet-10ma
+- [Compose State Documentation](https://developer.android.com/jetpack/compose/state)
+- `MVCC` pattern and transaction isolation in UI frameworks
+- Memoization optimization techniques
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Basic Compose state management (mutableStateOf, remember)
-- Understanding State vs MutableState interfaces
+- Basic `Compose` state management (`mutableStateOf`, `remember`)
+- Understanding `State` vs `MutableState` interfaces
+- `Compose` recomposition basics
 
 ### Related (Same Level)
-- [[q-compose-stability-skippability--android--hard]] - Stability inference and skippability
-- [[q-compose-performance-optimization--android--hard]] - Performance optimization patterns
-- LaunchedEffect vs derivedStateOf trade-offs
+- [[q-compose-stability-skippability--android--hard]] — Stability inference and skippability
+- [[q-compose-performance-optimization--android--hard]] — Performance optimization patterns
+- `LaunchedEffect` vs `derivedStateOf` trade-offs
 
 ### Advanced (Harder)
-- [[q-compose-slot-table-recomposition--android--hard]] - Slot table internals
-- Compose compiler optimizations and code generation
+- [[q-compose-slot-table-recomposition--android--hard]] — Slot table internals
+- `Compose` compiler optimizations and code generation
+- `Snapshot` system internals and thread-safety implementation

@@ -3,217 +3,628 @@ id: android-441
 title: Design Instagram Stories / Проектирование Instagram Stories
 aliases: [Design Instagram Stories, Проектирование Instagram Stories]
 topic: android
-subtopics: [architecture-clean, media, service]
+subtopics:
+  - architecture-clean
+  - media
+  - service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-sources: [https://developer.android.com/guide/topics/media]
-status: draft
+language_tags:
+  - en
+  - ru
+sources:
+  - https://developer.android.com/guide/topics/media
+status: reviewed
 moc: moc-android
 related:
   - q-data-sync-unstable-network--android--hard
   - q-database-optimization-android--android--medium
 created: 2025-10-20
-updated: 2025-01-27
-tags: []
-date created: Monday, October 27th 2025, 3:37:27 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+updated: 2025-11-02
+tags: [android/architecture-clean, android/media, android/service, architecture, difficulty/hard, exoplayer, mediacodec, performance, system-design, workmanager]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Sunday, November 2nd 2025, 7:52:33 pm
 ---
 
 # Вопрос (RU)
 
 > Как спроектировать Instagram Stories для Android?
 
+## Краткая Версия
+
+Спроектируйте систему для создания, загрузки и воспроизведения Stories на Android. Система должна поддерживать быстрый захват видео, надежную загрузку в фоне, и плавное воспроизведение с автоматическим удалением через 24 часа.
+
+## Подробная Версия
+
+Спроектируйте полноценную систему Instagram Stories для Android со следующими требованиями:
+
+**Захват видео:**
+- Длительность: 15 секунд
+- Разрешение: 720p @ 30fps
+- AR-эффекты: опциональные (фильтры в реальном времени)
+- Экспорт: <3 секунды (p95) на устройстве среднего уровня (Snapdragon 7‑серии)
+
+**Воспроизведение:**
+- Старт: <150мс (p95)
+- Плавность: 60fps на современных устройствах
+- Адаптация: graceful degradation на бюджетных устройствах (30fps, низкое разрешение)
+
+**Надежность:**
+- Поддержка прерывистой сети (offline-first подход)
+- Фоновая возобновляемая загрузка (chunked upload с retry)
+
+**Детали реализации (для обсуждения):**
+- Выбор камеры: `CameraX` vs `Camera2` (обоснование выбора)
+- Рендер-пайплайн: zero-copy путь от камеры к энкодеру
+- Конфигурация кодера: codec, profile, bitrate, `GOP` (Group of Pictures)
+- Загрузка: чанковая структура, возобновление по смещению
+- Кеширование: CDN prefetch, on-device cache policy (`LRU`, eviction)
+- Воспроизведение: стратегия `ExoPlayer` (`HLS`/`DASH`, `ABR`)
+- Ресурсы: аудиофокус, меры по теплу/батарее (thermal throttling)
+- Операции: наблюдаемость (метрики), релиз/откат (staged rollout)
+- Доступность: `TalkBack`, субтитры, крупные тач-таргеты
+
 # Question (EN)
 
 > How to design Instagram Stories for Android?
 
----
+## Short Version
 
-### Upgraded Interview Prompt (RU)
+Design a system for creating, uploading, and playing Stories on Android. The system should support fast video capture, reliable background upload, and smooth playback with automatic deletion after 24 hours.
 
-Спроектируйте захват и воспроизведение Stories на Android. Захват: видео 15с @ 720p/30fps, опциональные AR‑эффекты, экспорт <3с (p95) на устройстве среднего уровня (например, Snapdragon 7‑серии). Воспроизведение: старт <150мс (p95), плавные 60fps на современных устройствах с graceful degradation на бюджетных. Поддержать прерывистую связь и фоновую возобновляемую загрузку. Покажите: выбор камеры (CameraX vs Camera2), конвейер рендеринга (zero‑copy к энкодеру), конфигурацию кодека (codec/profile/bitrate/GOP), чанковую/возобновляемую загрузку, CDN‑кеш и prefetch, политику on‑device кеша, стратегию ExoPlayer, аудиофокус, меры по теплу/батарее, наблюдаемость, релиз/откат и доступность.
+## Detailed Version
 
-### Upgraded Interview Prompt (EN)
+Design a complete Instagram Stories system for Android with the following requirements:
 
-Design Stories capture & playback on Android. Capture: 15s video @ 720p/30fps, optional AR effects, and export <3s (p95) on a mid‑tier device (e.g., Snapdragon 7‑series). Playback: startup <150ms (p95), smooth 60fps on modern devices with graceful degradation on low‑end. Support intermittent connectivity and background‑resumable upload. Show: camera stack choice (CameraX vs. Camera2), render pipeline (zero-copy to encoder), encoder config (codec/profile/bitrate/GOP), chunked/resumable upload, CDN caching & prefetch, on‑device cache policy, ExoPlayer playback strategy, audio focus, thermal/battery mitigation, observability, release/rollback, and accessibility.
+**Video capture:**
+- Duration: 15 seconds
+- Resolution: 720p @ 30fps
+- AR effects: optional (real-time filters)
+- Export: <3 seconds (p95) on mid-tier device (Snapdragon 7‑series)
+
+**Playback:**
+- Startup: <150ms (p95)
+- Smoothness: 60fps on modern devices
+- Adaptation: graceful degradation on low-end devices (30fps, lower resolution)
+
+**Reliability:**
+- Support intermittent connectivity (offline-first approach)
+- Background resumable upload (chunked upload with retry)
+
+**Implementation details (for discussion):**
+- Camera choice: `CameraX` vs `Camera2` (justify selection)
+- Render pipeline: zero-copy path from camera to encoder
+- Encoder configuration: codec, profile, bitrate, `GOP` (Group of Pictures)
+- Upload: chunked structure, resumption by offset
+- Caching: CDN prefetch, on-device cache policy (`LRU`, eviction)
+- Playback: `ExoPlayer` strategy (`HLS`/`DASH`, `ABR`)
+- Resources: audio focus, thermal/battery mitigation (thermal throttling)
+- Operations: observability (metrics), release/rollback (staged rollout)
+- Accessibility: `TalkBack`, captions, larger tap targets
 
 ## Ответ (RU)
 
-Instagram Stories — система для создания, загрузки, воспроизведения и автоматического удаления медиа через 24ч.
+`Instagram Stories` — система для создания, загрузки, воспроизведения и автоматического удаления медиа через 24 часа. Ключевые требования: быстрый захват видео (15 секунд @ 720p/30fps), оптимизированный экспорт (<3 секунды p95), плавное воспроизведение (<150ms старт), поддержка прерывистой сети, и эффективное использование ресурсов устройства (батарея, тепло, память).
 
 ### Архитектура
 
 **Android-клиент:**
 
--   [[c-clean-architecture]]: Domain (Story entity, TTL logic), Data (Repository для загрузки/кеша), Presentation (MVVM для камеры и просмотра)
--   [[c-workmanager]] для надежной загрузки с повторами и очистки истекших
--   ExoPlayer для видео, Coil для изображений
--   Многоуровневый кеш (Memory/Disk/Network)
+Архитектура следует принципам `Clean Architecture` с четким разделением слоев:
+
+-   **Domain Layer**: Содержит бизнес-логику — сущность `Story` с полями (id, userId, mediaUrl, createdAt, expiresAt), логика TTL (24 часа), правила валидации (максимальная длительность 15 секунд, разрешение до 1080p)
+-   **Data Layer**: `Repository Pattern` для абстракции источников данных — `StoryRepository` координирует локальное хранилище (`Room`), сетевые запросы (`Retrofit`), и кеш (`OkHttp` cache, `LruCache`). Обрабатывает синхронизацию при восстановлении сети
+-   **Presentation Layer**: `MVVM` для камеры и просмотра — `CameraViewModel` управляет захватом и экспортом, `StoryPlayerViewModel` управляет воспроизведением и prefetch. Использует `Coroutines` и `Flow` для реактивности
+
+**Технологический стек:**
+
+-   **`WorkManager`** для надежной фоновой загрузки с автоматическими повторами, constraints (сеть, зарядка), и интеграцией с `Doze Mode`
+-   **`ExoPlayer`** для видео — поддерживает `HLS`/`DASH`, `ABR` (Adaptive Bitrate), prefetching, и graceful degradation на слабых устройствах
+-   **`Coil`** для изображений — эффективная загрузка и кеширование с поддержкой трансформаций
+-   **Многоуровневый кеш**: `Memory Cache` (`LruCache`) → `Disk Cache` (`OkHttp` disk cache, `Room`) → `Network` (CDN с prefetch)
 
 **Backend:**
 
--   API: загрузка, транскодирование, TTL-джобы, ACL
--   Хранилище: S3/GCS + CDN; метаданные в БД
--   Realtime: WebSocket/Pub-Sub для счетчиков просмотров
+-   **API**: RESTful API для загрузки (`POST /stories/upload`), получения списка (`GET /stories/{userId}`), транскодирования (асинхронные джобы через `Kafka`/`RabbitMQ`), TTL-джобы (периодическая очистка через `Cron`), и ACL (проверка прав доступа к stories других пользователей)
+-   **Хранилище**: `S3`/`GCS` для медиафайлов с lifecycle policies для автоматического удаления через 24 часа, CDN (`CloudFront`/`Cloudflare`) для глобального распространения с edge caching, метаданные в `PostgreSQL`/`MongoDB` с индексами по `userId` и `expiresAt` для быстрой очистки
+-   **Realtime**: `WebSocket`/`Pub-Sub` (`Redis Pub/Sub`, `Kafka`) для счетчиков просмотров в реальном времени, обновления статуса загрузки, и push-уведомлений о новых stories от подписок
 
 ### Ключевые Потоки
 
 **Создание и загрузка:**
 
+Процесс создания включает захват видео через `CameraX`/`Camera2`, применение AR-эффектов через `OpenGL ES`, и кодирование через `MediaCodec`. После захвата медиафайл сжимается и загружается в фоне через `WorkManager`.
+
 ```kotlin
-// ✅ Надежная загрузка с повторами
+// ✅ Надежная загрузка с повторами и прогрессом
 class UploadStoryWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
-  override suspend fun doWork(): Result =
-    try {
+  override suspend fun doWork(): Result {
+    return try {
       val uri = inputData.getString("uri")!!
-      val compressed = compressMedia(uri) // JPEG/WEBP, H.264, ≤2Mbps
-      storyRepo.upload(compressed, expiresAt = now() + 24.hours)
+      // Сжатие: JPEG/WEBP для превью, H.264 для видео, ≤2Mbps битрейт
+      val compressed = compressMedia(uri)
+
+      // Загрузка с прогрессом через callback
+      storyRepo.upload(
+        compressed,
+        expiresAt = now() + 24.hours,
+        onProgress = { progress -> setProgress(workDataOf("progress" to progress)) }
+      )
       Result.success()
     } catch (e: Exception) {
+      // Экспоненциальный backoff: автоматический retry до 3 попыток
       if (runAttemptCount < 3) Result.retry() else Result.failure()
     }
+  }
 }
 ```
 
+**Детали реализации:**
+
+- **Сжатие**: Используйте `MediaCodec` с `H.264` кодеком (Baseline profile для совместимости, High profile для лучшего качества), битрейт 4-6 Mbps для 720p/30fps, `GOP` (Group of Pictures) = 1 секунда для быстрого старта воспроизведения
+- **Чанковая загрузка**: Разбивайте файлы на чанки 4-8MB для возобновления при обрыве сети, используйте `SHA-256` хеширование каждого чанка для проверки целостности
+- **Возобновление**: При восстановлении сети `WorkManager` автоматически возобновит загрузку с последнего успешного чанка по смещению (offset negotiation)
+
 **Просмотр:**
 
--   Предзагрузка текущей + 2 следующих stories
--   OkHttp DiskCache + память для превью
--   Пауза ExoPlayer в фоне для экономии батареи
+Воспроизведение должно начинаться быстро (<150ms p95) и быть плавным (60fps на современных устройствах). Используется стратегия prefetching для предварительной загрузки следующих stories.
 
-**TTL (24ч):**
+-   **Prefetching**: Предзагрузка текущей story + 2 следующих stories параллельно — первые сегменты загружаются в фоне пока пользователь смотрит текущую
+-   **Кеширование**: `OkHttp DiskCache` для долгосрочного хранения сегментов на диске (~250MB limit), `LruCache` в памяти для превью и первых сегментов текущей story (быстрый доступ без I/O)
+-   **Батарея**: Пауза `ExoPlayer` при переходе приложения в фон для экономии батареи, возобновление при возврате в foreground
+-   **Адаптивное качество**: `ABR` (Adaptive Bitrate) — `ExoPlayer` автоматически выбирает оптимальный битрейт на основе пропускной способности сети и производительности устройства
+-   **Graceful degradation**: На слабых устройствах — ограничение до 30fps, выбор меньших разрешений из ladder, отключение тяжелых переходов между stories
+
+**TTL (24 часа):**
+
+Stories автоматически истекают через 24 часа с момента создания. Периодическая очистка удаляет истекшие stories с устройства и из кеша.
 
 ```kotlin
-// ✅ Периодическая очистка истекших
-class CleanupExpiredWorker : CoroutineWorker(ctx, params) {
+// ✅ Периодическая очистка истекших stories
+class CleanupExpiredWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
   override suspend fun doWork(): Result {
-    storyRepo.deleteExpired(before = now())
-    cacheManager.evict { it.expiresAt < now() }
+    val now = System.currentTimeMillis()
+
+    // Удаление из локальной БД
+    storyRepo.deleteExpired(before = now)
+
+    // Очистка кеша (диск и память)
+    cacheManager.evict { story -> story.expiresAt < now }
+
+    // Инвалидация CDN кеша (через API если требуется)
+    cdnCacheManager.invalidateExpired()
+
     return Result.success()
   }
 }
 ```
 
-### Оптимизация
+**Стратегия очистки:**
 
--   **Offline:** очередь в WorkManager, локальная БД с метаданными
--   **CDN:** подписанные URL с коротким TTL
--   **Скейлинг:** партиционирование по userId, денормализация seen/unseen ring
+- **Периодичность**: Запуск `CleanupExpiredWorker` каждые 6 часов через `PeriodicWorkRequest` — баланс между частотой очистки и нагрузкой на систему
+- **Локальное хранилище**: Удаление из `Room` database с каскадным удалением связанных метаданных (превью, thumbnail)
+- **Кеш**: Эвикция из `OkHttp DiskCache` и `LruCache` по критерию `expiresAt < now()` — освобождение места для новых stories
+- **Оптимизация**: Индексы в БД по `expiresAt` для быстрого поиска истекших stories, batch deletion для эффективности
 
-### Staff-level Model Answer (RU)
+### Оптимизация Производительности
 
-Архитектура: модули feature-stories-capture, feature-stories-playback, media-core (Camera/GL/Codec), upload, cache, analytics, flags. MVVM + однонаправленный поток данных; DI (Hilt); флаги для кодеков, длины сегментов, prefetch.
+**Offline-first подход:**
 
-Захват: CameraX (широкая совместимость), при необходимости путь Camera2 для ручного контроля. Рендер через OpenGL ES, zero‑copy путь: Camera → SurfaceTexture → GL → Surface(Encoder). MediaCodec H.264 (Baseline/High; HEVC под флагом). 4–6 Mbps @720p30, GOP=1s, VBR с упором на стабильный размер. AAC 128–192 kbps. Мультиплексирование MediaMuxer в MP4. Тепло/батарея: даунскейл до 540p/понизить битрейт при троттлинге; отключать тяжёлые фильтры.
+-   **Очередь загрузки**: `WorkManager` автоматически ставит загрузки в очередь при отсутствии сети — пользователь может создавать stories офлайн, они загрузятся при восстановлении соединения
+-   **Локальная БД**: `Room` database хранит метаданные stories (id, userId, expiresAt, uploadStatus) даже при отсутствии сети — позволяет отображать локально созданные stories до загрузки
+-   **Синхронизация**: При восстановлении сети автоматическая синхронизация через `WorkManager` constraints — загрузка только при наличии Wi-Fi или зарядки (опционально)
 
-Загрузка: превью/thumbnail, perceptual hash для дедупликации. Чанки 4–8MB, SHA‑256 per‑chunk, возобновление по смещению, TLS; при политике — шифрование AES‑GCM клиента. WorkManager с ограничениями, экспоненциальный backoff, уважать Doze.
+**CDN оптимизация:**
 
-Воспроизведение: HLS/DASH с ~1s сегментами для старта <150мс; несколько битрейтов, ABR. Prefetch 2–3 сегментов следующей истории, отмена при свайпе. LRU‑кеш ~250MB, эвикция по времени/просмотру; хранить первые N сегментов для редких историй. На слабых — 30fps, меньшие разрешения, отключить тяжёлые переходы. Аудиофокус и PiP по требованиям.
+-   **Подписанные URL**: CDN выдает временные подписанные URL с коротким TTL (1-2 часа) для безопасности — предотвращает неавторизованный доступ к истекшим stories
+-   **Edge caching**: Кеширование на edge-серверах CDN ближе к пользователям — снижение latency для глобальной аудитории
+-   **Prefetch на CDN**: CDN может prefetch следующие stories для популярных пользователей — снижение задержки при переходе между stories
 
-Наблюдаемость/операции: метрики p95 старта/экспорта, rebuffer, ошибки кодека, ANR/крэши, hit‑rate кеша, ретраи загрузок. Килл‑свитчи для кодеков/размеров сегментов, staged rollout с авто‑откатом по деградации.
+**Скейлинг Backend:**
 
-Тестирование/релиз: юнит‑тесты фильтров и конфигов, интеграция ExoPlayer с throttle‑сетью, перф‑тесты на матрице устройств, golden тесты запись→воспроизведение, бета 5–10%.
+-   **Партиционирование**: Партиционирование данных по `userId` (sharding) — распределение нагрузки по нескольким БД-инстансам
+-   **Денормализация**: Хранение `seen/unseen` ring в денормализованном виде для быстрого отображения — избегание сложных JOIN-запросов
+-   **Read replicas**: Использование read replicas для снижения нагрузки на master БД — масштабирование чтений независимо от записей
 
-Последовательность: MVP (базовый захват→H.264→одношаговая загрузка→простое воспроизведение) → упрочнение (prefetch, кеш, возобновляемые загрузки, обработка ошибок) → масштаб (ABR, HEVC под флагом, термальная адаптация, эксперименты).
+### Детальная Реализация Capture Pipeline
+
+**Архитектура модулей:**
+
+Модульная структура разделяет функциональность по feature-модулям для независимой разработки и тестирования:
+
+-   **feature-stories-capture**: Модуль захвата — `CameraViewModel`, UI для камеры, обработка AR-эффектов
+-   **feature-stories-playback**: Модуль воспроизведения — `StoryPlayerViewModel`, `ExoPlayer` integration, UI для viewer
+-   **media-core**: Общий модуль для медиа — `CameraX`/`Camera2` wrappers, `OpenGL ES` рендеринг, `MediaCodec` encoding
+-   **upload**: Модуль загрузки — `WorkManager` workers, chunked upload logic, retry strategies
+-   **cache**: Модуль кеширования — многоуровневый кеш (`Memory`, `Disk`, `Network`), eviction policies
+-   **analytics**: Модуль аналитики — метрики производительности, ошибки, user engagement
+-   **flags**: Feature flags — динамическое управление кодеком (`H.264`/`HEVC`), длиной сегментов, prefetch размером
+
+**Паттерны архитектуры:**
+
+-   **MVVM + однонаправленный поток данных**: `ViewModel` содержит бизнес-логику и state, `View` (Compose/Views) только отображает состояние и отправляет события обратно в `ViewModel`. Flow обеспечивает реактивность
+-   **DI (Hilt)**: Dependency injection для управления зависимостями между модулями — легкость тестирования и поддержки
+
+**Захват видео:**
+
+Выбор камеры:
+
+-   **CameraX (рекомендуется)**: Широкая совместимость с устройствами (API 21+), упрощенный API, автоматическая обработка lifecycle. Подходит для большинства случаев
+-   **Camera2 (fallback)**: Используйте для ручного контроля (manual exposure, focus, RAW capture) или когда нужна максимальная производительность на современных устройствах
+
+Рендер-пайплайн:
+
+-   **Zero-copy путь**: `Camera` → `SurfaceTexture` → `OpenGL ES` → `Surface(Encoder)` — данные камеры напрямую попадают в `OpenGL` контекст без копирования в память, затем рендерятся на `Surface` энкодера. Это минимизирует задержку и использование памяти
+-   **AR-эффекты**: Применение фильтров через `OpenGL ES` shaders — обработка происходит на GPU параллельно с захватом, минимальный overhead
+
+Конфигурация кодера:
+
+-   **Codec**: `MediaCodec` с `H.264` кодеком (Baseline profile для максимальной совместимости, High profile для лучшего сжатия). `HEVC` (H.265) под feature flag для устройств с поддержкой — на 30-50% лучше сжатие, но требует больше CPU/GPU
+-   **Bitrate**: 4-6 Mbps @ 720p/30fps — баланс между качеством и размером файла. Используйте `CBR`-biased `VBR` (Variable Bitrate с упором на стабильность) для предсказуемого размера файла
+-   **GOP (Group of Pictures)**: GOP = 1 секунда (30 кадров при 30fps) — короткий `GOP` позволяет быстрее начинать воспроизведение, так как `I-frame` появляется чаще
+-   **Audio**: `AAC` кодек, битрейт 128-192 kbps — достаточное качество для голоса и музыки
+-   **Multiplexing**: `MediaMuxer` объединяет видео и аудио дорожки в `MP4` контейнер — стандартный формат с широкой поддержкой
+
+Тепловой и батарейный менеджмент:
+
+-   **Thermal throttling**: Мониторинг температуры через `ThermalManager` (API 31+). При перегреве — даунскейл до 540p, понижение битрейта до 2-3 Mbps, отключение тяжелых AR-фильтров
+-   **Battery optimization**: Использование `JobScheduler` constraints для загрузки только при зарядке (опционально), снижение частоты кадров до 24fps при низком заряде батареи
+
+**Загрузка (Upload Pipeline):**
+
+Pre-upload оптимизации:
+
+-   **Thumbnail/Preview**: Генерация low-resolution превью (`JPEG` 320x240) для быстрого отображения в UI до завершения загрузки основного файла
+-   **Perceptual hash**: Вычисление perceptual hash (например, `pHash`) для дедупликации — предотвращение повторной загрузки идентичного контента
+
+Чанковая загрузка:
+
+-   **Размер чанков**: 4-8MB — баланс между количеством запросов и возможностью возобновления. Меньшие чанки увеличивают количество HTTP-запросов, большие — снижают гибкость при обрыве
+-   **Интегритет**: `SHA-256` хеширование каждого чанка для проверки целостности на сервере — обнаружение повреждений при передаче
+-   **Возобновление**: Offset negotiation — сервер сообщает последний успешно загруженный байт, клиент продолжает с этого смещения. `WorkManager` автоматически сохраняет состояние загрузки и возобновляет при восстановлении сети
+-   **Безопасность**: `TLS` для транспорта, опционально клиентское шифрование `AES-GCM` для критичных данных перед загрузкой
+
+WorkManager интеграция:
+
+-   **Constraints**: Загрузка только при наличии сети (`NetworkType.CONNECTED`), опционально только на Wi-Fi или при зарядке — экономия мобильного трафика и батареи
+-   **Exponential backoff**: Автоматическая задержка между retry с экспоненциальным увеличением (1s, 2s, 4s) для предотвращения перегрузки сервера
+-   **Doze Mode**: `WorkManager` автоматически уважает `Doze Mode` и `App Standby` — загрузка откладывается до maintenance window
+
+**Воспроизведение (Playback System):**
+
+ExoPlayer конфигурация:
+
+-   **Формат**: `HLS`/`DASH` с сегментами ~1 секунды — короткие сегменты обеспечивают быстрый старт (<150ms p95), так как первый сегмент загружается быстро
+-   **ABR (Adaptive Bitrate)**: Несколько битрейтов в manifest — `ExoPlayer` автоматически выбирает оптимальный битрейт на основе текущей пропускной способности сети и производительности устройства
+-   **Bitrate ladder**: Множество вариантов качества (1080p @ 8Mbps, 720p @ 4Mbps, 480p @ 2Mbps, 360p @ 1Mbps) — плавная адаптация к условиям
+
+Prefetch стратегия:
+
+-   **Объем**: Prefetch первых 2-3 сегментов следующей story параллельно с воспроизведением текущей — пользователь не ждет загрузки при свайпе
+-   **Отмена**: При свайпе прочь от prefetched story — немедленная отмена загрузки для экономии трафика и батареи
+
+On-device кеш:
+
+-   **Размер**: `LRU` кеш ~250MB на диске — баланс между объемом и использованием места на устройстве
+-   **Eviction policy**: Удаление по времени (истекшие stories), по последнему просмотру (`LRU`), и по размеру — освобождение места для новых stories
+-   **Оптимизация**: Хранение только первых N сегментов для редких stories — экономия места, полная загрузка по требованию
+
+Graceful degradation:
+
+-   **Слабые устройства**: Ограничение до 30fps (вместо 60fps), выбор меньших разрешений из ladder (480p вместо 720p), отключение тяжелых переходов (fade, slide) — сохранение плавности воспроизведения
+
+Audio focus и PiP:
+
+-   **Audio focus**: Обработка `AUDIOFOCUS_LOSS` для паузы воспроизведения при звонке или другом аудио-приложении
+-   **PiP (Picture-in-Picture)**: Поддержка `Picture-in-Picture` режима (API 24+) для просмотра stories в маленьком окне поверх других приложений
+
+**Наблюдаемость и Операции:**
+
+Метрики производительности:
+
+-   **p95 старта**: 95-й перцентиль времени старта воспроизведения — должен быть <150ms
+-   **p95 экспорта**: 95-й перцентиль времени экспорта видео — должен быть <3 секунды на mid-tier устройствах
+-   **Rebuffer ratio**: Отношение времени rebuffering к общему времени воспроизведения — индикатор проблем с сетью или кешем
+-   **Ошибки кодека**: Частота ошибок `MediaCodec` (failure to configure, encoding errors) — индикатор проблем с совместимостью устройств
+-   **ANR/Crashes**: Мониторинг `ANR` (Application Not Responding) и крэшей — критичные для стабильности
+-   **Cache hit rate**: Процент запросов, обслуженных из кеша — индикатор эффективности кеширования
+-   **Upload retries**: Количество повторных попыток загрузки — индикатор проблем с сетью
+
+Guardrails и безопасность:
+
+-   **Kill-switches**: Feature flags для экстренного отключения кодеков (`HEVC`), размеров сегментов, prefetch — быстрое отключение проблемных фич без релиза
+-   **Staged rollout**: Постепенный запуск новых фич (1% → 5% → 25% → 100%) с мониторингом метрик на каждом этапе
+-   **Авто-откат**: Автоматический откат при деградации ключевых метрик (увеличение ANR, снижение cache hit rate) — защита от проблемных релизов
+
+**Тестирование и Релиз:**
+
+Стратегия тестирования:
+
+-   **Unit тесты**: Тесты фильтров (`OpenGL` shaders), конфигов кодера (`MediaCodec` parameters), state machines (`ViewModel` логика)
+-   **Integration тесты**: Тесты `ExoPlayer` с throttled network (эмуляция медленной сети) — проверка ABR и graceful degradation
+-   **Performance тесты**: Перф-тесты на матрице устройств (low-end, mid-tier, high-end) — проверка соответствия SLA (экспорт <3s, старт <150ms)
+-   **Golden tests**: Тесты запись→воспроизведение — проверка что записанное видео корректно воспроизводится (проверка целостности)
+-   **Beta тестирование**: Постепенный запуск на 5-10% пользователей с мониторингом метрик перед полным релизом
+
+**Последовательность разработки:**
+
+MVP → Hardening → Scale:
+
+1.   **MVP**: Базовый захват → `H.264` кодирование → одношаговая загрузка → простое воспроизведение без prefetch
+2.   **Hardening**: Добавление prefetch, многоуровневого кеша, возобновляемых загрузок, обработка ошибок сети
+3.   **Scale**: Оптимизация с `ABR`, `HEVC` под флагом, термальная адаптация, A/B тестирование для оптимизации метрик
 
 ## Answer (EN)
 
-Instagram Stories is a system for creating, uploading, playing, and auto-deleting media after 24h.
+`Instagram Stories` is a system for creating, uploading, playing, and auto-deleting media after 24 hours. Key requirements: fast video capture (15 seconds @ 720p/30fps), optimized export (<3 seconds p95), smooth playback (<150ms startup), support for intermittent connectivity, and efficient device resource usage (battery, thermal, memory).
 
 ### Architecture
 
 **Android client:**
 
--   [[c-clean-architecture]]: Domain (Story entity, TTL logic), Data (Repository for upload/cache), Presentation (MVVM for camera and viewer)
--   [[c-workmanager]] for reliable upload with retries and cleanup of expired stories
--   ExoPlayer for video, Coil for images
--   Multi-level caching (Memory/Disk/Network)
+Architecture follows `Clean Architecture` principles with clear layer separation:
+
+-   **Domain Layer**: Contains business logic — `Story` entity with fields (id, userId, mediaUrl, createdAt, expiresAt), TTL logic (24 hours), validation rules (max duration 15 seconds, resolution up to 1080p)
+-   **Data Layer**: `Repository Pattern` for data source abstraction — `StoryRepository` coordinates local storage (`Room`), network requests (`Retrofit`), and cache (`OkHttp` cache, `LruCache`). Handles synchronization on network recovery
+-   **Presentation Layer**: `MVVM` for camera and viewer — `CameraViewModel` manages capture and export, `StoryPlayerViewModel` manages playback and prefetch. Uses `Coroutines` and `Flow` for reactivity
+
+**Technology stack:**
+
+-   **`WorkManager`** for reliable background upload with automatic retries, constraints (network, charging), and `Doze Mode` integration
+-   **`ExoPlayer`** for video — supports `HLS`/`DASH`, `ABR` (Adaptive Bitrate), prefetching, and graceful degradation on low-end devices
+-   **`Coil`** for images — efficient loading and caching with transformation support
+-   **Multi-level cache**: `Memory Cache` (`LruCache`) → `Disk Cache` (`OkHttp` disk cache, `Room`) → `Network` (CDN with prefetch)
 
 **Backend:**
 
--   API: upload, transcode, TTL jobs, ACL
--   Storage: S3/GCS + CDN; metadata in DB
--   Realtime: WebSocket/Pub-Sub for view counters
+-   **API**: RESTful API for upload (`POST /stories/upload`), list retrieval (`GET /stories/{userId}`), transcoding (async jobs via `Kafka`/`RabbitMQ`), TTL jobs (periodic cleanup via `Cron`), and ACL (access control validation for other users' stories)
+-   **Storage**: `S3`/`GCS` for media files with lifecycle policies for automatic deletion after 24 hours, CDN (`CloudFront`/`Cloudflare`) for global distribution with edge caching, metadata in `PostgreSQL`/`MongoDB` with indexes on `userId` and `expiresAt` for fast cleanup
+-   **Realtime**: `WebSocket`/`Pub-Sub` (`Redis Pub/Sub`, `Kafka`) for real-time view counters, upload status updates, and push notifications for new stories from subscriptions
 
 ### Key Flows
 
 **Create and Upload:**
 
+Creation process includes video capture via `CameraX`/`Camera2`, AR effects via `OpenGL ES`, and encoding via `MediaCodec`. After capture, media is compressed and uploaded in background via `WorkManager`.
+
 ```kotlin
-// ✅ Reliable upload with retries
+// ✅ Reliable upload with retries and progress
 class UploadStoryWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
-  override suspend fun doWork(): Result =
-    try {
+  override suspend fun doWork(): Result {
+    return try {
       val uri = inputData.getString("uri")!!
-      val compressed = compressMedia(uri) // JPEG/WEBP, H.264, ≤2Mbps
-      storyRepo.upload(compressed, expiresAt = now() + 24.hours)
+      // Compression: JPEG/WEBP for preview, H.264 for video, ≤2Mbps bitrate
+      val compressed = compressMedia(uri)
+
+      // Upload with progress via callback
+      storyRepo.upload(
+        compressed,
+        expiresAt = now() + 24.hours,
+        onProgress = { progress -> setProgress(workDataOf("progress" to progress)) }
+      )
       Result.success()
     } catch (e: Exception) {
+      // Exponential backoff: automatic retry up to 3 attempts
       if (runAttemptCount < 3) Result.retry() else Result.failure()
     }
+  }
 }
 ```
 
+**Implementation details:**
+
+- **Compression**: Use `MediaCodec` with `H.264` codec (Baseline profile for compatibility, High profile for better quality), bitrate 4-6 Mbps for 720p/30fps, `GOP` (Group of Pictures) = 1 second for fast playback startup
+- **Chunked upload**: Split files into 4-8MB chunks for resumability on network interruption, use `SHA-256` hashing per chunk for integrity verification
+- **Resumability**: On network recovery, `WorkManager` automatically resumes upload from last successful chunk via offset negotiation
+
 **Playback:**
 
--   Preload current + next 2 stories
--   OkHttp DiskCache + memory for previews
--   Pause ExoPlayer in background to save battery
+Playback must start quickly (<150ms p95) and be smooth (60fps on modern devices). Prefetching strategy preloads next stories.
 
-**TTL (24h):**
+-   **Prefetching**: Preload current story + next 2 stories in parallel — first segments load in background while user watches current
+-   **Caching**: `OkHttp DiskCache` for long-term segment storage on disk (~250MB limit), `LruCache` in memory for previews and first segments of current story (fast access without I/O)
+-   **Battery**: Pause `ExoPlayer` when app goes to background to save battery, resume on foreground return
+-   **Adaptive quality**: `ABR` (Adaptive Bitrate) — `ExoPlayer` automatically selects optimal bitrate based on network bandwidth and device performance
+-   **Graceful degradation**: On low-end devices — cap at 30fps, select smaller resolutions from ladder, disable heavy transitions between stories
+
+**TTL (24 hours):**
+
+Stories automatically expire 24 hours after creation. Periodic cleanup removes expired stories from device and cache.
 
 ```kotlin
 // ✅ Periodic cleanup of expired stories
-class CleanupExpiredWorker : CoroutineWorker(ctx, params) {
+class CleanupExpiredWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
   override suspend fun doWork(): Result {
-    storyRepo.deleteExpired(before = now())
-    cacheManager.evict { it.expiresAt < now() }
+    val now = System.currentTimeMillis()
+
+    // Delete from local DB
+    storyRepo.deleteExpired(before = now)
+
+    // Clear cache (disk and memory)
+    cacheManager.evict { story -> story.expiresAt < now }
+
+    // Invalidate CDN cache (via API if required)
+    cdnCacheManager.invalidateExpired()
+
     return Result.success()
   }
 }
 ```
 
-### Optimization
+**Cleanup strategy:**
 
--   **Offline:** WorkManager queue, local DB for metadata
--   **CDN:** signed URLs with short TTL
--   **Scaling:** partition by userId, denormalize seen/unseen ring
+- **Frequency**: Run `CleanupExpiredWorker` every 6 hours via `PeriodicWorkRequest` — balance between cleanup frequency and system load
+- **Local storage**: Delete from `Room` database with cascade deletion of related metadata (previews, thumbnails)
+- **Cache**: Eviction from `OkHttp DiskCache` and `LruCache` by criteria `expiresAt < now()` — free space for new stories
+- **Optimization**: Indexes in DB on `expiresAt` for fast expired story lookup, batch deletion for efficiency
 
-### Staff-level Model Answer (EN)
+### Performance Optimization
 
-Architecture overview
+**Offline-first approach:**
 
-Modules: feature-stories-capture, feature-stories-playback, media-core (Camera/GL/Codec), upload, cache, analytics, flags, ab-testing. Patterns: MVVM + unidirectional data flow; DI via Hilt. Feature flags for codecs, segment length, prefetch size.
+-   **Upload queue**: `WorkManager` automatically queues uploads on network absence — users can create stories offline, they upload on connection recovery
+-   **Local DB**: `Room` database stores story metadata (id, userId, expiresAt, uploadStatus) even without network — enables displaying locally created stories before upload
+-   **Synchronization**: Automatic sync on network recovery via `WorkManager` constraints — upload only on Wi-Fi or charging (optional)
 
-Capture pipeline
+**CDN optimization:**
 
-Camera: Prefer CameraX; fallback to Camera2 for manual controls. Request 720p/30. Effects: OpenGL ES chain; zero‑copy path Camera → SurfaceTexture → GL → Surface(Encoder). Encoder: MediaCodec H.264 (Baseline/High), HEVC behind flag. Target 4–6 Mbps @720p30, GOP 1s, CBR‑biased VBR. Audio AAC 128–192 kbps. Mux with MediaMuxer to MP4. Export <3s p95 via HW codec and GL.
+-   **Signed URLs**: CDN issues temporary signed URLs with short TTL (1-2 hours) for security — prevents unauthorized access to expired stories
+-   **Edge caching**: Caching on CDN edge servers closer to users — reduces latency for global audience
+-   **CDN prefetch**: CDN can prefetch next stories for popular users — reduces delay when switching between stories
 
-Upload pipeline
+**Backend scaling:**
 
-Pre-upload: thumbnail + low‑res preview; perceptual hash. Chunking: 4–8MB with SHA‑256 per chunk; resumable with offset negotiation; TLS; optional AES‑GCM client-side. Background via WorkManager; respect Doze; exponential backoff with Retry‑After.
+-   **Partitioning**: Data partitioning by `userId` (sharding) — distributes load across multiple DB instances
+-   **Denormalization**: Store `seen/unseen` ring in denormalized form for fast display — avoids complex JOIN queries
+-   **Read replicas**: Use read replicas to reduce master DB load — scale reads independently from writes
 
-Playback system (ExoPlayer)
+### Detailed Implementation Capture Pipeline
 
-HLS/DASH with ~1s segments to hit <150ms start; multiple bitrates with ABR. Prefetch next 2–3 segments; cancel on swipe away. On-device LRU cache (~250MB) and evict by age/last-viewed; store only first N segments for infrequent stories. Graceful degradation on low-end (30fps cap, lower ladder). Audio focus and PiP as needed.
+**Module architecture:**
 
-Accessibility & UX resilience
+Modular structure separates functionality by feature modules for independent development and testing:
 
-TalkBack labels, captions/subtitles, larger tap targets; retry flows for drops.
+-   **feature-stories-capture**: Capture module — `CameraViewModel`, camera UI, AR effects processing
+-   **feature-stories-playback**: Playback module — `StoryPlayerViewModel`, `ExoPlayer` integration, viewer UI
+-   **media-core**: Common media module — `CameraX`/`Camera2` wrappers, `OpenGL ES` rendering, `MediaCodec` encoding
+-   **upload**: Upload module — `WorkManager` workers, chunked upload logic, retry strategies
+-   **cache**: Caching module — multi-level cache (`Memory`, `Disk`, `Network`), eviction policies
+-   **analytics**: Analytics module — performance metrics, errors, user engagement
+-   **flags**: Feature flags — dynamic control of codec (`H.264`/`HEVC`), segment length, prefetch size
 
-Observability & safety
+**Architecture patterns:**
 
-Metrics: startup p95, rebuffer ratio, export p95, encoder error rate, crash/ANR, cache hit rate, upload retries. Guardrails: health gates, kill‑switches, staged rollout with automated rollback.
+-   **MVVM + unidirectional data flow**: `ViewModel` contains business logic and state, `View` (Compose/Views) only displays state and sends events back to `ViewModel`. `Flow` provides reactivity
+-   **DI (Hilt)**: Dependency injection for managing dependencies between modules — ease of testing and maintenance
 
-Testing & release
+**Video capture:**
 
-Unit for filter graph/encoder configs/state machines. Integration for ExoPlayer with throttled networks. On‑device perf matrix. Golden record+playback tests. Beta 5–10% with monitoring.
+Camera choice:
 
-Sequencing and tradeoffs
+-   **CameraX (recommended)**: Wide device compatibility (API 21+), simplified API, automatic lifecycle handling. Suitable for most cases
+-   **Camera2 (fallback)**: Use for manual control (manual exposure, focus, RAW capture) or when maximum performance needed on modern devices
 
-MVP → Hardening → Scale. Short 1s segments reduce start latency but raise CDN overhead; HEVC reduces bitrate but risks compatibility → guard by flags and dual-mux where needed.
+Render pipeline:
+
+-   **Zero-copy path**: `Camera` → `SurfaceTexture` → `OpenGL ES` → `Surface(Encoder)` — camera data directly enters `OpenGL` context without memory copy, then rendered to encoder `Surface`. This minimizes latency and memory usage
+-   **AR effects**: Apply filters via `OpenGL ES` shaders — processing happens on GPU in parallel with capture, minimal overhead
+
+Encoder configuration:
+
+-   **Codec**: `MediaCodec` with `H.264` codec (Baseline profile for maximum compatibility, High profile for better compression). `HEVC` (H.265) behind feature flag for supported devices — 30-50% better compression, but requires more CPU/GPU
+-   **Bitrate**: 4-6 Mbps @ 720p/30fps — balance between quality and file size. Use `CBR`-biased `VBR` (Variable Bitrate with stability emphasis) for predictable file size
+-   **GOP (Group of Pictures)**: GOP = 1 second (30 frames at 30fps) — short `GOP` enables faster playback startup as `I-frame` appears more frequently
+-   **Audio**: `AAC` codec, bitrate 128-192 kbps — sufficient quality for voice and music
+-   **Multiplexing**: `MediaMuxer` combines video and audio tracks into `MP4` container — standard format with wide support
+
+Thermal and battery management:
+
+-   **Thermal throttling**: Monitor temperature via `ThermalManager` (API 31+). On overheating — downscale to 540p, reduce bitrate to 2-3 Mbps, disable heavy AR filters
+-   **Battery optimization**: Use `JobScheduler` constraints for upload only when charging (optional), reduce frame rate to 24fps at low battery
+
+**Upload pipeline:**
+
+Pre-upload optimizations:
+
+-   **Thumbnail/Preview**: Generate low-resolution preview (`JPEG` 320x240) for fast UI display before main file upload completes
+-   **Perceptual hash**: Compute perceptual hash (e.g., `pHash`) for deduplication — prevents re-uploading identical content
+
+Chunked upload:
+
+-   **Chunk size**: 4-8MB — balance between request count and resumability. Smaller chunks increase HTTP requests, larger reduce flexibility on interruption
+-   **Integrity**: `SHA-256` hashing per chunk for server-side integrity verification — detects corruption during transfer
+-   **Resumability**: Offset negotiation — server reports last successfully uploaded byte, client continues from that offset. `WorkManager` automatically saves upload state and resumes on network recovery
+-   **Security**: `TLS` for transport, optionally client-side `AES-GCM` encryption for critical data before upload
+
+WorkManager integration:
+
+-   **Constraints**: Upload only on network (`NetworkType.CONNECTED`), optionally only on Wi-Fi or charging — saves mobile data and battery
+-   **Exponential backoff**: Automatic delay between retries with exponential increase (1s, 2s, 4s) to prevent server overload
+-   **Doze Mode**: `WorkManager` automatically respects `Doze Mode` and `App Standby` — upload deferred until maintenance window
+
+**Playback system:**
+
+ExoPlayer configuration:
+
+-   **Format**: `HLS`/`DASH` with ~1 second segments — short segments enable fast startup (<150ms p95) as first segment loads quickly
+-   **ABR (Adaptive Bitrate)**: Multiple bitrates in manifest — `ExoPlayer` automatically selects optimal bitrate based on current network bandwidth and device performance
+-   **Bitrate ladder**: Multiple quality options (1080p @ 8Mbps, 720p @ 4Mbps, 480p @ 2Mbps, 360p @ 1Mbps) — smooth adaptation to conditions
+
+Prefetch strategy:
+
+-   **Volume**: Prefetch first 2-3 segments of next story in parallel with current playback — user doesn't wait on swipe
+-   **Cancellation**: On swipe away from prefetched story — immediate load cancellation to save data and battery
+
+On-device cache:
+
+-   **Size**: `LRU` cache ~250MB on disk — balance between volume and device storage usage
+-   **Eviction policy**: Removal by time (expired stories), by last viewed (`LRU`), and by size — free space for new stories
+-   **Optimization**: Store only first N segments for infrequent stories — save space, full load on demand
+
+Graceful degradation:
+
+-   **Low-end devices**: Cap at 30fps (instead of 60fps), select smaller resolutions from ladder (480p instead of 720p), disable heavy transitions (fade, slide) — preserve playback smoothness
+
+Audio focus and PiP:
+
+-   **Audio focus**: Handle `AUDIOFOCUS_LOSS` to pause playback on call or other audio app
+-   **PiP (Picture-in-Picture)**: Support `Picture-in-Picture` mode (API 24+) for viewing stories in small window over other apps
+
+**Observability and Operations:**
+
+Performance metrics:
+
+-   **Startup p95**: 95th percentile playback startup time — should be <150ms
+-   **Export p95**: 95th percentile video export time — should be <3 seconds on mid-tier devices
+-   **Rebuffer ratio**: Ratio of rebuffering time to total playback time — indicator of network or cache issues
+-   **Codec errors**: Frequency of `MediaCodec` errors (failure to configure, encoding errors) — indicator of device compatibility issues
+-   **ANR/Crashes**: Monitor `ANR` (Application Not Responding) and crashes — critical for stability
+-   **Cache hit rate**: Percentage of requests served from cache — indicator of caching effectiveness
+-   **Upload retries**: Number of upload retry attempts — indicator of network issues
+
+Guardrails and safety:
+
+-   **Kill-switches**: Feature flags for emergency disabling of codecs (`HEVC`), segment sizes, prefetch — quick disable of problematic features without release
+-   **Staged rollout**: Gradual new feature launch (1% → 5% → 25% → 100%) with metrics monitoring at each stage
+-   **Auto-rollback**: Automatic rollback on key metric degradation (ANR increase, cache hit rate decrease) — protection from problematic releases
+
+**Testing and Release:**
+
+Testing strategy:
+
+-   **Unit tests**: Tests for filters (`OpenGL` shaders), encoder configs (`MediaCodec` parameters), state machines (`ViewModel` logic)
+-   **Integration tests**: `ExoPlayer` tests with throttled network (slow network emulation) — verify ABR and graceful degradation
+-   **Performance tests**: Perf tests on device matrix (low-end, mid-tier, high-end) — verify SLA compliance (export <3s, startup <150ms)
+-   **Golden tests**: Record→playback tests — verify recorded video plays correctly (integrity check)
+-   **Beta testing**: Gradual launch to 5-10% users with metrics monitoring before full release
+
+**Development sequence:**
+
+MVP → Hardening → Scale:
+
+1.   **MVP**: Basic capture → `H.264` encoding → single-step upload → simple playback without prefetch
+2.   **Hardening**: Add prefetch, multi-level cache, resumable uploads, network error handling
+3.   **Scale**: Optimization with `ABR`, `HEVC` behind flag, thermal adaptation, A/B testing for metric optimization
+
+**Trade-offs:**
+
+-   Short 1s segments reduce start latency but raise CDN overhead (more requests). Longer segments (2-3s) reduce overhead but increase startup time
+-   `HEVC` reduces bitrate by 30-50% but risks compatibility (not all devices support). Guard by feature flags and dual-mux (both `H.264` and `HEVC`) where needed for fallback
+
+**Accessibility & UX resilience (RU):**
+
+-   **TalkBack labels**: Корректные `contentDescription` для всех интерактивных элементов (кнопки записи, свайп, переходы) — поддержка для пользователей с нарушениями зрения
+-   **Captions/Subtitles**: Автоматические или пользовательские субтитры для видео stories — поддержка для пользователей с нарушениями слуха
+-   **Larger tap targets**: Минимальный размер тач-таргетов 48dp для удобства нажатия — поддержка для пользователей с ограниченной моторикой
+-   **Retry flows**: Четкие UI-сообщения и кнопки повтора при обрыве сети или ошибках загрузки — улучшение UX при сбоях
+
+**Accessibility & UX resilience (EN):**
+
+-   **TalkBack labels**: Correct `contentDescription` for all interactive elements (record button, swipe, transitions) — support for visually impaired users
+-   **Captions/Subtitles**: Automatic or user-generated subtitles for video stories — support for hearing impaired users
+-   **Larger tap targets**: Minimum 48dp tap target size for easier tapping — support for users with limited motor skills
+-   **Retry flows**: Clear UI messages and retry buttons on network interruption or upload errors — improved UX on failures
 
 ## Follow-ups
 
@@ -221,15 +632,18 @@ MVP → Hardening → Scale. Short 1s segments reduce start latency but raise CD
 -   What caching strategy minimizes bandwidth while ensuring smooth playback?
 -   How to implement efficient preloading without draining battery?
 -   What security measures prevent unauthorized access to expired stories?
+-   How to optimize `MediaCodec` configuration for different device capabilities?
+-   What strategies improve `ExoPlayer` startup time on low-end devices?
 
 ## References
 
 -   [[c-clean-architecture]]
 -   [[c-workmanager]]
--   https://developer.android.com/guide/topics/media
--   https://developer.android.com/guide/background
--   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
--   [[ANDROID-INTERVIEWER-GUIDE]]
+-   [Android Media APIs](https://developer.android.com/guide/topics/media)
+-   [Android Background Tasks](https://developer.android.com/guide/background)
+-   [CameraX Documentation](https://developer.android.com/training/camerax)
+-   [ExoPlayer Documentation](https://developer.android.com/guide/topics/media/exoplayer)
+-   [MediaCodec API](https://developer.android.com/reference/android/media/MediaCodec)
 
 ## Related Questions
 

@@ -1,22 +1,28 @@
 ---
 id: android-470
 title: Database Encryption Android / Шифрование базы данных Android
-aliases: ["Database Encryption Android", "Шифрование базы данных Android"]
+aliases: [Database Encryption Android, Шифрование базы данных Android]
 topic: android
-subtopics: [keystore-crypto, room]
+subtopics:
+  - keystore-crypto
+  - room
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-android-keystore, c-encryption]
+related:
+  - c-encryption
 created: 2025-10-20
-updated: 2025-10-27
+updated: 2025-11-02
 tags: [android/keystore-crypto, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
-sources: [https://developer.android.com/topic/security/data]
-date created: Monday, October 27th 2025, 10:27:23 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+sources:
+  - https://developer.android.com/topic/security/data
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 7:27:40 pm
 ---
 
 # Вопрос (RU)
@@ -27,17 +33,17 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-Шифрование базы данных в Android защищает данные в покое (at rest). Основное решение — SQLCipher с Room, в сочетании с Android Keystore для управления ключами.
+Шифрование базы данных в Android защищает данные в покое (at rest). Основное решение — `SQLCipher` с `Room`, в сочетании с `Android Keystore` для управления ключами. Это обеспечивает прозрачное шифрование без изменения логики работы с базой данных.
 
 ### Архитектура Шифрования
 
 **Компоненты:**
-- **SQLCipher** — прозрачное AES-256 шифрование для SQLite
-- **Android Keystore** — аппаратное хранение ключей шифрования
-- **Room + SupportFactory** — интеграция зашифрованной БД с Room
+- **`SQLCipher`** — прозрачное `AES-256` шифрование для SQLite (совместимо с `Room`)
+- **`Android Keystore`** — аппаратное хранение ключей шифрования (hardware-backed TEE)
+- **`Room + SupportFactory`** — интеграция зашифрованной БД с `Room` (прозрачная для разработчика)
 
 **Принцип работы:**
-Данные шифруются перед записью на диск, ключи хранятся в Keystore (не извлекаемы), расшифровка происходит автоматически при чтении.
+Данные шифруются перед записью на диск (`AES-256` в режиме `CBC` или `GCM`), ключи хранятся в `Keystore` (не извлекаемы даже при root-доступе на устройствах с TEE), расшифровка происходит автоматически при чтении через `SupportFactory`.
 
 ### Реализация
 
@@ -110,35 +116,37 @@ class DatabaseProvider @Inject constructor(private val context: Context) {
 ### Компромиссы
 
 **Производительность:**
-- Накладные расходы ~10-15% на операции чтения/записи
-- Инициализация БД медленнее на ~50-100ms
-- Решение: кэширование, асинхронные операции, индексы
+- Накладные расходы ~10-15% на операции чтения/записи (шифрование/дешифрование)
+- Инициализация БД медленнее на ~50-100ms (генерация ключа, проверка целостности)
+- Решение: кэширование расшифрованных данных, асинхронные операции через `Coroutines`, оптимизация индексов
 
 **Безопасность:**
-- Keystore защищен hardware-backed TEE на современных устройствах
-- Ключи не извлекаются даже при root-доступе (на устройствах с TEE)
-- Уязвимость: если устройство скомпрометировано во время работы приложения
+- `Keystore` защищен hardware-backed TEE на современных устройствах (API 23+) — ключи хранятся в отдельном защищенном пространстве
+- Ключи не извлекаются даже при root-доступе (на устройствах с TEE/StrongBox) — физическая изоляция
+- Уязвимость: если устройство скомпрометировано во время работы приложения — расшифрованные данные доступны в памяти
+- Ограничение: legacy устройства без TEE используют software-backed хранилище (менее безопасно)
 
 ### Лучшие Практики
 
-- Используйте Android Keystore, никогда не храните ключи в SharedPreferences или коде
-- Для особо критичных данных добавьте `setUserAuthenticationRequired(true)` — требуется биометрия
-- Тестируйте миграции: SQLCipher требует re-encryption при обновлениях ключей
-- Учитывайте legacy устройства без TEE — используйте StrongBox Keystore (API 28+) где доступен
+- **Используйте `Android Keystore`** — никогда не храните ключи в `SharedPreferences`, файлах или коде
+- **Биометрическая аутентификация** — для особо критичных данных используйте `setUserAuthenticationRequired(true)` с `setUserAuthenticationValidityDurationSeconds(-1)` (требуется биометрия при каждом доступе)
+- **Тестируйте миграции** — `SQLCipher` требует re-encryption при обновлениях ключей (создайте новый ключ, перешифруйте данные старым, сохраните новым)
+- **StrongBox Keystore** — используйте на устройствах с API 28+ где доступен (`setIsStrongBoxBacked(true)`) — максимальная защита
+- **Ротация ключей** — периодически обновляйте ключи шифрования для долгосрочной безопасности
 
 ## Answer (EN)
 
-Database encryption in Android protects data at rest. The primary solution is SQLCipher with Room, combined with Android Keystore for key management.
+Database encryption in Android protects data at rest. The primary solution is `SQLCipher` with `Room`, combined with `Android Keystore` for key management. This provides transparent encryption without changing database logic.
 
 ### Encryption Architecture
 
 **Components:**
-- **SQLCipher** — transparent AES-256 encryption for SQLite
-- **Android Keystore** — hardware-backed key storage
-- **Room + SupportFactory** — integration of encrypted DB with Room
+- **`SQLCipher`** — transparent `AES-256` encryption for SQLite (compatible with `Room`)
+- **`Android Keystore`** — hardware-backed key storage (hardware-backed TEE)
+- **`Room + SupportFactory`** — integration of encrypted DB with `Room` (transparent to developer)
 
 **How it works:**
-Data is encrypted before writing to disk, keys are stored in Keystore (non-extractable), decryption happens automatically on read.
+Data encrypted before writing to disk (`AES-256` in `CBC` or `GCM` mode), keys stored in `Keystore` (non-extractable even with root access on TEE devices), decryption happens automatically on read via `SupportFactory`.
 
 ### Implementation
 
@@ -211,44 +219,52 @@ class DatabaseProvider @Inject constructor(private val context: Context) {
 ### Trade-offs
 
 **Performance:**
-- ~10-15% overhead on read/write operations
-- Database initialization slower by ~50-100ms
-- Solution: caching, async operations, indexes
+- ~10-15% overhead on read/write operations (encryption/decryption)
+- Database initialization slower by ~50-100ms (key generation, integrity check)
+- Solution: caching decrypted data, async operations via `Coroutines`, index optimization
 
 **Security:**
-- Keystore protected by hardware-backed TEE on modern devices
-- Keys not extractable even with root access (on TEE devices)
-- Vulnerability: if device is compromised while app is running
+- `Keystore` protected by hardware-backed TEE on modern devices (API 23+) — keys stored in separate secure enclave
+- Keys not extractable even with root access (on TEE/StrongBox devices) — physical isolation
+- Vulnerability: if device compromised while app is running — decrypted data accessible in memory
+- Limitation: legacy devices without TEE use software-backed storage (less secure)
 
 ### Best Practices
 
-- Use Android Keystore, never store keys in SharedPreferences or code
-- For highly sensitive data, add `setUserAuthenticationRequired(true)` — requires biometrics
-- Test migrations: SQLCipher requires re-encryption when updating keys
-- Consider legacy devices without TEE — use StrongBox Keystore (API 28+) where available
+- **Use `Android Keystore`** — never store keys in `SharedPreferences`, files, or code
+- **Biometric authentication** — for highly sensitive data use `setUserAuthenticationRequired(true)` with `setUserAuthenticationValidityDurationSeconds(-1)` (requires biometrics on each access)
+- **Test migrations** — `SQLCipher` requires re-encryption when updating keys (create new key, re-encrypt data with old, save with new)
+- **StrongBox Keystore** — use on devices with API 28+ where available (`setIsStrongBoxBacked(true)`) — maximum protection
+- **Key rotation** — periodically update encryption keys for long-term security
 
 
 ## Follow-ups
 
-- How do you migrate from unencrypted to encrypted Room database without data loss?
+- How do you migrate from unencrypted to encrypted `Room` database without data loss?
 - What happens to encrypted database when user changes device lock credentials?
 - How do you implement biometric authentication for database access?
-- What are the differences between StrongBox and regular Keystore?
+- What are the differences between `StrongBox` and regular `Keystore`?
 - How do you handle database decryption on app startup?
+- How to implement key rotation for `SQLCipher` database?
 
 ## References
 
 - [[c-encryption]]
-- [[c-android-keystore]]
-- https://developer.android.com/topic/security/data
-- https://developer.android.com/privacy-and-security/keystore
+- [Android Data Security Guide](https://developer.android.com/topic/security/data)
+- [Android Keystore Guide](https://developer.android.com/privacy-and-security/keystore)
 
 ## Related Questions
 
-### Prerequisites
-- Understanding of Android Keystore API and symmetric encryption
+### Prerequisites (Easier)
+- Understanding of `Android Keystore` API and symmetric encryption (`AES`)
+- Basic knowledge of `Room` database architecture
 
 ### Related (Same Level)
-- [[q-biometric-authentication--android--medium]] — Combining biometrics with encryption
+- Biometric authentication with `Keystore`
+- Data encryption at rest strategies
+- `SQLCipher` implementation patterns
 
-### Advanced
+### Advanced (Harder)
+- Key rotation strategies for encrypted databases
+- Multi-key encryption for different data sensitivity levels
+- Performance optimization for encrypted databases

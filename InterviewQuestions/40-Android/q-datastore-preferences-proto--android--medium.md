@@ -1,22 +1,28 @@
 ---
 id: android-455
 title: DataStore Preferences и Proto / DataStore Preferences and Proto
-aliases: ["DataStore Preferences and Proto", "DataStore Preferences и Proto"]
+aliases: [DataStore Preferences and Proto, DataStore Preferences и Proto]
 topic: android
-subtopics: [datastore]
+subtopics:
+  - datastore
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-coroutines, q-android-storage-types--android--medium]
+related:
+  - c-coroutines
+  - q-android-storage-types--android--medium
 created: 2025-10-20
-updated: 2025-10-27
+updated: 2025-11-02
 tags: [android/datastore, datastore, difficulty/medium, preferences, proto-datastore, storage]
-sources: [https://developer.android.com/topic/libraries/architecture/datastore]
-date created: Monday, October 27th 2025, 10:27:18 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+sources:
+  - https://developer.android.com/topic/libraries/architecture/datastore
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 7:38:27 pm
 ---
 
 # Вопрос (RU)
@@ -27,26 +33,27 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-DataStore — это современное решение для хранения данных в Android, заменяющее SharedPreferences. Предоставляет два варианта: **Preferences DataStore** (ключ-значение) и **Proto DataStore** (типизированные объекты с Protocol Buffers). Использует корутины и Flow для асинхронности и реактивности.
+`DataStore` — современное решение для хранения данных в Android, замена `SharedPreferences`. Предоставляет два варианта: **`Preferences DataStore`** (ключ-значение) и **`Proto DataStore`** (типизированные объекты с Protocol Buffers). Использует `Coroutines` и `Flow` для асинхронности и реактивности. Основные преимущества: асинхронный API, транзакционность, типобезопасность (`Proto DataStore`), поддержка миграций.
 
 ### Основные Концепции
 
-**Preferences DataStore** — простое хранилище ключ-значение без схемы:
+**`Preferences DataStore`** — простое хранилище ключ-значение без схемы:
 - Подходит для простых настроек (theme, language, flags)
-- Не требует определения схемы
-- Минимальная конфигурация
+- Не требует определения схемы — минимальная конфигурация
+- Типобезопасные ключи через `stringPreferencesKey()`, `intPreferencesKey()`, `booleanPreferencesKey()`
+- Транзакционные операции через `edit { }` блок
 
-**Proto DataStore** — типизированное хранилище:
-- Требует определение схемы `.proto`
-- Compile-time type safety
-- Лучшая производительность сериализации
-- Подходит для сложных структур данных
+**`Proto DataStore`** — типизированное хранилище:
+- Требует определение схемы `.proto` (Protocol Buffers)
+- Compile-time type safety — ошибки обнаруживаются на этапе компиляции
+- Лучшая производительность сериализации — бинарный формат, компактнее JSON
+- Подходит для сложных структур данных — вложенные объекты, списки, перечисления
 
-**Ключевые отличия от SharedPreferences:**
-- Асинхронный API (корутины) — не блокирует UI поток
-- Транзакционность — атомарные операции через `edit` или `updateData`
-- Безопасность типов — для Proto DataStore
-- Поддержка миграций
+**Ключевые отличия от `SharedPreferences`:**
+- Асинхронный API (`Coroutines`) — не блокирует UI поток, предотвращает `ANR`
+- Транзакционность — атомарные операции через `edit` или `updateData`, данные либо записываются полностью, либо откатываются
+- Безопасность типов — для `Proto DataStore` (compile-time проверка)
+- Поддержка миграций — встроенная миграция из `SharedPreferences` и между версиями `Proto`
 
 ### Preferences DataStore: Пример
 
@@ -137,30 +144,31 @@ val Context.dataStore by preferencesDataStore(
 | Миграция с SharedPreferences | Preferences | Встроенная поддержка миграций |
 | Большой объем данных | Не использовать | Для больших данных → Room или файлы |
 
-**Важно:** DataStore не подходит для больших объемов данных или частых синхронных чтений.
+**Важно:** `DataStore` не подходит для больших объемов данных (используйте `Room` или файлы) или частых синхронных чтений (асинхронный API по умолчанию). Максимальный размер данных — несколько сотен KB. Для больших данных или сложных запросов используйте `Room`.
 
 ## Answer (EN)
 
-DataStore is a modern data storage solution for Android, replacing SharedPreferences. It provides two variants: **Preferences DataStore** (key-value) and **Proto DataStore** (typed objects with Protocol Buffers). Uses coroutines and Flow for asynchronicity and reactivity.
+`DataStore` is a modern data storage solution for Android, replacing `SharedPreferences`. It provides two variants: **`Preferences DataStore`** (key-value) and **`Proto DataStore`** (typed objects with Protocol Buffers). Uses `Coroutines` and `Flow` for asynchronicity and reactivity. Key advantages: asynchronous API, transactional operations, type safety (`Proto DataStore`), migration support.
 
 ### Core Concepts
 
-**Preferences DataStore** — simple key-value storage without schema:
+**`Preferences DataStore`** — simple key-value storage without schema:
 - Suitable for simple settings (theme, language, flags)
-- No schema definition required
-- Minimal configuration
+- No schema definition required — minimal configuration
+- Type-safe keys via `stringPreferencesKey()`, `intPreferencesKey()`, `booleanPreferencesKey()`
+- Transactional operations via `edit { }` block
 
-**Proto DataStore** — typed storage:
-- Requires `.proto` schema definition
-- Compile-time type safety
-- Better serialization performance
-- Suitable for complex data structures
+**`Proto DataStore`** — typed storage:
+- Requires `.proto` schema definition (Protocol Buffers)
+- Compile-time type safety — errors caught at compile time
+- Better serialization performance — binary format, more compact than JSON
+- Suitable for complex data structures — nested objects, lists, enums
 
-**Key Differences from SharedPreferences:**
-- Asynchronous API (coroutines) — doesn't block UI thread
-- Transactional — atomic operations via `edit` or `updateData`
-- Type safety — for Proto DataStore
-- Migration support
+**Key Differences from `SharedPreferences`:**
+- Asynchronous API (`Coroutines`) — doesn't block UI thread, prevents `ANR`
+- Transactional — atomic operations via `edit` or `updateData`, data either fully written or rolled back
+- Type safety — for `Proto DataStore` (compile-time checking)
+- Migration support — built-in migration from `SharedPreferences` and between `Proto` versions
 
 ### Preferences DataStore: Example
 
@@ -251,32 +259,35 @@ val Context.dataStore by preferencesDataStore(
 | Migration from SharedPreferences | Preferences | Built-in migration support |
 | Large data volumes | Don't use | For large data → Room or files |
 
-**Important:** DataStore is not suitable for large data volumes or frequent synchronous reads.
+**Important:** `DataStore` is not suitable for large data volumes (use `Room` or files) or frequent synchronous reads (asynchronous API by default). Maximum data size is several hundred KB. For large data or complex queries use `Room`.
 
 
 ## Follow-ups
 
-- How do you handle DataStore exceptions (e.g., CorruptionException)?
-- What are the performance implications of using DataStore vs SharedPreferences?
-- When should you use DataStore instead of Room database?
-- How do you test DataStore in unit tests?
-- What happens if multiple processes access the same DataStore file?
+- How do you handle `DataStore` exceptions (e.g., `CorruptionException`)?
+- What are the performance implications of using `DataStore` vs `SharedPreferences`?
+- When should you use `DataStore` instead of `Room` database?
+- How do you test `DataStore` in unit tests?
+- What happens if multiple processes access the same `DataStore` file?
+- How to implement custom `Serializer` for `Proto DataStore` with error handling?
 
 ## References
 
-- [[c-coroutines]] - Kotlin coroutines and Flow fundamentals
-- Android DataStore official documentation
-- Protocol Buffers documentation (for Proto DataStore schema definition)
+- [[c-coroutines]]
+- [Android DataStore Documentation](https://developer.android.com/topic/libraries/architecture/datastore)
+- [Protocol Buffers Documentation](https://protobuf.dev/) (for `Proto DataStore` schema definition)
 
 ## Related Questions
 
-### Prerequisites
-- Understanding of Kotlin coroutines and Flow
-- Basic knowledge of Android storage options
+### Prerequisites (Easier)
+- Understanding of `Kotlin` coroutines and `Flow`
+- Basic knowledge of Android storage options (`SharedPreferences`, `Room`)
 
 ### Related (Same Level)
-- [[q-android-storage-types--android--medium]] - Overview of storage options in Android
+- [[q-android-storage-types--android--medium]] — Overview of storage options in Android
+- `Room` database for complex data structures
 
-### Advanced
-- Implementing custom Serializer for Proto DataStore with error handling
-- Multi-module DataStore configuration with dependency injection
+### Advanced (Harder)
+- Implementing custom `Serializer` for `Proto DataStore` with error handling
+- Multi-module `DataStore` configuration with dependency injection
+- `DataStore` migration strategies for complex scenarios
