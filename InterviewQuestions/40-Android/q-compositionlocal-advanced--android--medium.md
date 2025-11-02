@@ -1,22 +1,29 @@
 ---
 id: android-467
 title: CompositionLocal Advanced / CompositionLocal — продвинутый уровень
-aliases: ["CompositionLocal — продвинутый уровень", "CompositionLocal Advanced"]
+aliases: [CompositionLocal — продвинутый уровень, CompositionLocal Advanced]
 topic: android
-subtopics: [architecture-mvvm, ui-compose]
+subtopics:
+  - architecture-mvvm
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compose-semantics--android--medium]
+related:
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
+  - q-compose-semantics--android--medium
 sources: []
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:56:35 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 4:17:11 pm
 ---
 
 # Вопрос (RU)

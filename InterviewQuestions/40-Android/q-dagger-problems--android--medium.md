@@ -1,14 +1,19 @@
 ---
 id: android-453
 title: Dagger Problems / Проблемы Dagger
-aliases: ["Dagger Problems", "Проблемы Dagger"]
+aliases: [Dagger Problems, Проблемы Dagger]
 topic: android
-subtopics: [di-hilt, gradle, testing-unit]
+subtopics:
+  - di-hilt
+  - gradle
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-dependency-injection
@@ -20,7 +25,7 @@ updated: 2025-10-30
 tags: [android/di-hilt, android/gradle, android/testing-unit, challenges, dagger, difficulty/medium, hilt]
 sources: []
 date created: Thursday, October 30th 2025, 12:02:30 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 5:33:58 pm
 ---
 
 # Вопрос (RU)

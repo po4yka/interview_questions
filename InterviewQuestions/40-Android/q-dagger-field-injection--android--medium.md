@@ -1,22 +1,31 @@
 ---
 id: android-469
 title: Dagger Field Injection / Инъекция полей Dagger
-aliases: ["Dagger Field Injection", "Инъекция полей Dagger"]
+aliases: [Dagger Field Injection, Инъекция полей Dagger]
 topic: android
-subtopics: [architecture-mvvm, di-hilt]
+subtopics:
+  - architecture-mvvm
+  - di-hilt
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-dagger, c-dependency-injection, c-hilt, q-dagger-build-time-optimization--android--medium, q-hilt-components-scope--android--medium]
+related:
+  - c-dagger
+  - c-dependency-injection
+  - c-hilt
+  - q-dagger-build-time-optimization--android--medium
+  - q-hilt-components-scope--android--medium
 sources: []
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/medium]
 date created: Thursday, October 30th 2025, 12:02:28 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 5:30:57 pm
 ---
 
 # Вопрос (RU)

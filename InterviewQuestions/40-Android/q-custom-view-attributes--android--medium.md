@@ -3,20 +3,26 @@ id: android-476
 title: Custom View Attributes / Атрибуты Custom View
 aliases: [Custom View Attributes, Атрибуты Custom View]
 topic: android
-subtopics: [ui-theming, ui-views]
+subtopics:
+  - ui-theming
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-custom-views, q-custom-view-lifecycle--android--medium]
+related:
+  - c-custom-views
+  - q-custom-view-lifecycle--android--medium
 created: 2025-10-21
 updated: 2025-10-30
 tags: [android/ui-theming, android/ui-views, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:56:26 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 4:25:13 pm
 ---
 
 # Вопрос (RU)
@@ -280,7 +286,6 @@ context.obtainStyledAttributes(attrs, R.styleable.MyView, 0, 0).apply {
 ## References
 
 - [[c-custom-views]]
-- [[c-android-themes-styles]]
 - https://developer.android.com/develop/ui/views/layout/custom-views/create-view
 - https://developer.android.com/develop/ui/views/theming/themes
 

@@ -3,12 +3,15 @@ id: android-465
 title: Dagger Component Dependencies / Зависимости компонентов Dagger
 aliases: [Dagger Component Dependencies, Зависимости компонентов Dagger]
 topic: android
-subtopics: [di-hilt]
+subtopics:
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-dagger-build-time-optimization--android--medium
@@ -17,9 +20,10 @@ related:
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/di-hilt, difficulty/hard]
-sources: [https://dagger.dev/api/latest/dagger/Component.html]
+sources:
+  - https://dagger.dev/api/latest/dagger/Component.html
 date created: Thursday, October 30th 2025, 12:45:42 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 5:28:54 pm
 ---
 
 # Вопрос (RU)

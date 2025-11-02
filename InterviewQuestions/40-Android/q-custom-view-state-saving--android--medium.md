@@ -1,22 +1,28 @@
 ---
 id: android-480
 title: Custom View State Saving / Сохранение состояния Custom View
-aliases: ["Custom View State Saving", "Сохранение состояния Custom View"]
+aliases: [Custom View State Saving, Сохранение состояния Custom View]
 topic: android
-subtopics: [lifecycle, ui-views]
+subtopics:
+  - lifecycle
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-custom-view-lifecycle--android--medium]
+related:
+  - q-activity-lifecycle-methods--android--medium
+  - q-custom-view-lifecycle--android--medium
 created: 2025-10-21
 updated: 2025-10-30
 tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, state-management]
 sources: []
 date created: Thursday, October 30th 2025, 12:02:06 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 4:25:49 pm
 ---
 
 # Вопрос (RU)
@@ -290,8 +296,6 @@ class ComplexView : View {
 ## References
 
 - [[c-lifecycle]]
-- [[c-state-management]]
-- [[c-parcelable]]
 - [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
 - [Parcelable and Bundle](https://developer.android.com/reference/android/os/Parcelable)
 
@@ -306,4 +310,3 @@ class ComplexView : View {
 
 ### Advanced
 - [[q-custom-viewgroup-layout--android--hard]]
-- [[q-process-death-recovery--android--hard]]

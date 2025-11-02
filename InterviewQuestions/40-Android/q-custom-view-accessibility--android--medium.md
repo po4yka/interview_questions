@@ -1,22 +1,30 @@
 ---
 id: android-477
 title: Custom View Accessibility / Доступность Custom View
-aliases: ["Custom View Accessibility", "Доступность Custom View"]
+aliases: [Custom View Accessibility, Доступность Custom View]
 topic: android
-subtopics: [ui-accessibility, ui-views]
+subtopics:
+  - ui-accessibility
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-accessibility-compose--android--medium, q-accessibility-talkback--android--medium, q-compose-semantics--android--medium]
-sources: [https://developer.android.com/guide/topics/ui/accessibility]
+related:
+  - q-accessibility-compose--android--medium
+  - q-accessibility-talkback--android--medium
+  - q-compose-semantics--android--medium
+sources:
+  - https://developer.android.com/guide/topics/ui/accessibility
 created: 2025-10-21
-updated: 2025-10-30
+updated: 2025-11-02
 tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:56:22 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Sunday, November 2nd 2025, 4:23:00 pm
 ---
 
 # Вопрос (RU)
@@ -31,14 +39,14 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ### Ключевые Компоненты
 
-**AccessibilityNodeInfo** - главный инструмент для описания view:
+**`AccessibilityNodeInfo`** — главный инструмент для описания view:
 - Роль и тип элемента (кнопка, чекбокс, список)
 - Текстовое описание для screen reader
 - Доступные действия (клик, скролл, выбор)
-- Состояние (enabled, checked, selected)
+- Состояние (`enabled`, `checked`, `selected`)
 
 **Три обязательных шага**:
-1. Установить базовые свойства (focusable, clickable)
+1. Установить базовые свойства (`focusable`, `clickable`)
 2. Переопределить `onInitializeAccessibilityNodeInfo()`
 3. Обработать accessibility actions в `performAccessibilityAction()`
 
@@ -143,8 +151,8 @@ class ProgressView : View {
 **Что делать**:
 - Всегда устанавливайте `contentDescription` для не-текстовых элементов
 - Используйте `stateDescription` для динамического состояния (API 30+)
-- Тестируйте с TalkBack на реальном устройстве
-- Обрабатывайте `ACTION_CLICK` для совместимости с TalkBack
+- Тестируйте с `TalkBack` на реальном устройстве
+- Обрабатывайте `ACTION_CLICK` для совместимости с `TalkBack`
 - Объявляйте изменения через `announceForAccessibility()`
 
 **Чего избегать**:
@@ -157,14 +165,14 @@ class ProgressView : View {
 
 ### Key Components
 
-**AccessibilityNodeInfo** - primary tool for describing views:
+**`AccessibilityNodeInfo`** — primary tool for describing views:
 - Role and element type (button, checkbox, list)
 - Text description for screen readers
 - Available actions (click, scroll, select)
-- State (enabled, checked, selected)
+- State (`enabled`, `checked`, `selected`)
 
 **Three required steps**:
-1. Set base properties (focusable, clickable)
+1. Set base properties (`focusable`, `clickable`)
 2. Override `onInitializeAccessibilityNodeInfo()`
 3. Handle accessibility actions in `performAccessibilityAction()`
 
@@ -269,8 +277,8 @@ class ProgressView : View {
 **Do**:
 - Always set `contentDescription` for non-text elements
 - Use `stateDescription` for dynamic state (API 30+)
-- Test with TalkBack on real devices
-- Handle `ACTION_CLICK` for TalkBack compatibility
+- Test with `TalkBack` on real devices
+- Handle `ACTION_CLICK` for `TalkBack` compatibility
 - Announce changes via `announceForAccessibility()`
 
 **Don't**:
@@ -292,8 +300,6 @@ class ProgressView : View {
 ## References
 
 - [[c-accessibility]]
-- [[c-android-views]]
-- [[c-talkback]]
 - [Android Accessibility Guide](https://developer.android.com/guide/topics/ui/accessibility)
 - [AccessibilityNodeInfo API](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo)
 - [Custom View Accessibility](https://developer.android.com/guide/topics/ui/accessibility/custom-views)
@@ -301,13 +307,15 @@ class ProgressView : View {
 ## Related Questions
 
 ### Prerequisites (Easier)
+- Understanding of Android `View` system basics
+- Basic knowledge of accessibility concepts
 
 ### Related (Same Level)
-- [[q-compose-semantics--android--medium]] - Compose accessibility semantics
-- [[q-accessibility-talkback--android--medium]] - TalkBack integration patterns
-- [[q-accessibility-compose--android--medium]] - Compose accessibility implementation
+- [[q-compose-semantics--android--medium]] — Compose accessibility semantics
+- [[q-accessibility-talkback--android--medium]] — `TalkBack` integration patterns
+- [[q-accessibility-compose--android--medium]] — Compose accessibility implementation
 
 ### Advanced (Harder)
-- [[q-accessibility-testing--android--medium]] - Comprehensive accessibility testing
-- [[q-accessibility-services--android--hard]] - Building custom accessibility services
-- [[q-viewgroup-accessibility--android--hard]] - Complex ViewGroup accessibility
+- [[q-accessibility-testing--android--medium]] — Comprehensive accessibility testing
+- Building custom accessibility services
+- Complex `ViewGroup` accessibility patterns

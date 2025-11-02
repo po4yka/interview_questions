@@ -1,22 +1,30 @@
 ---
 id: android-307
 title: CompositionLocal in Compose / CompositionLocal в Compose
-aliases: ["CompositionLocal in Compose", "CompositionLocal в Compose"]
+aliases: [CompositionLocal in Compose, CompositionLocal в Compose]
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium, q-compositionlocal-advanced--android--medium]
+related:
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
+  - q-compositionlocal-advanced--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
-sources: ["https://developer.android.com/jetpack/compose/compositionlocal"]
+sources:
+  - https://developer.android.com/jetpack/compose/compositionlocal
 date created: Thursday, October 30th 2025, 11:56:59 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 4:17:20 pm
 ---
 
 # Вопрос (RU)

@@ -1,22 +1,28 @@
 ---
 id: android-478
 title: Custom Drawable Implementation / Реализация Custom Drawable
-aliases: ["Custom Drawable Implementation", "Реализация Custom Drawable"]
+aliases: [Custom Drawable Implementation, Реализация Custom Drawable]
 topic: android
-subtopics: [ui-graphics, ui-views]
+subtopics:
+  - ui-graphics
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-canvas-drawing-optimization--android--hard, q-custom-viewgroup-layout--android--hard]
+related:
+  - q-canvas-drawing-optimization--android--hard
+  - q-custom-viewgroup-layout--android--hard
 created: 2025-10-21
 updated: 2025-10-30
 tags: [android/ui-graphics, android/ui-views, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:56:29 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 4:17:54 pm
 ---
 
 # Вопрос (RU)
@@ -330,16 +336,11 @@ class PulsingDrawable : Drawable() {
 ## References
 
 - [[c-custom-views]] - Custom View implementation patterns
-- [[c-canvas-drawing]] - Canvas drawing fundamentals
 - [[c-lifecycle]] - Android component lifecycle
 - [Drawable API Reference](https://developer.android.com/reference/android/graphics/drawable/Drawable)
 - [Custom Drawables Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
 ## Related Questions
-
-### Prerequisites
-
-### Related
 
 ### Advanced
 - [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas optimization techniques

@@ -1,14 +1,19 @@
 ---
 id: android-482
 title: Context Types in Android / Типы Context в Android
-aliases: ["Context Types in Android", "Типы Context в Android"]
+aliases: [Context Types in Android, Типы Context в Android]
 topic: android
-subtopics: [activity, app-startup, lifecycle]
+subtopics:
+  - activity
+  - app-startup
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-activity-lifecycle-methods--android--medium
@@ -17,9 +22,10 @@ related:
 created: 2025-10-21
 updated: 2025-10-30
 tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
-sources: ["https://developer.android.com/reference/android/content/Context"]
+sources:
+  - https://developer.android.com/reference/android/content/Context
 date created: Thursday, October 30th 2025, 11:56:11 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 4:17:33 pm
 ---
 
 # Вопрос (RU)

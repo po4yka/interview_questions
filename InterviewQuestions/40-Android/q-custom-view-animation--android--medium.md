@@ -12,7 +12,7 @@ original_language: ru
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - c-choreographer
@@ -26,7 +26,7 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/ui-animation, android/ui-views, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:56:25 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 4:23:18 pm
 ---
 
 # Вопрос (RU)
@@ -357,9 +357,6 @@ class LifecycleAwareAnimatedView : View {
 
 ## References
 
-- [[c-value-animator]] - ValueAnimator API и принципы работы
-- [[c-choreographer]] - VSYNC и синхронизация анимаций
-- [[c-interpolator]] - Типы интерполяторов и кастомная реализация
 - [Property Animation](https://developer.android.com/guide/topics/graphics/prop-animation)
 - [Hardware Acceleration](https://developer.android.com/topic/performance/hardware-accel)
 

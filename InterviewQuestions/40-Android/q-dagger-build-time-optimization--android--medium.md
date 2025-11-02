@@ -12,7 +12,7 @@ original_language: en
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - q-android-build-optimization--android--medium
@@ -24,7 +24,7 @@ tags: [android/di-hilt, android/gradle, difficulty/medium]
 sources:
   - https://dagger.dev/hilt/
 date created: Monday, October 27th 2025, 3:27:45 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 5:28:40 pm
 ---
 
 # Вопрос (RU)

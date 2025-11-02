@@ -1,22 +1,26 @@
 ---
 id: android-442
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
-aliases: ["Dalvik vs ART Runtime", "Dalvik против ART Runtime"]
+aliases: [Dalvik vs ART Runtime, Dalvik против ART Runtime]
 topic: android
-subtopics: [performance-memory]
+subtopics:
+  - performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related: []
 created: 2025-10-20
 updated: 2025-01-27
 tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
-sources: [https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime]
+sources:
+  - https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
 date created: Monday, October 27th 2025, 3:46:58 pm
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 5:37:10 pm
 ---
 
 # Вопрос (RU)

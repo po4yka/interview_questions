@@ -114,9 +114,12 @@ SORT difficulty ASC, file.name ASC
 
 **Key Questions**:
 
-#### Hilt Basics
+#### Dependency Injection
 - [[q-what-is-hilt--android--medium]] - Introduction to Hilt
-- [[q-koin-vs-hilt-comparison--dependency-injection--medium]] - Koin vs Hilt comparison
+- [[q-koin-fundamentals--android--medium]] - Koin runtime DI basics
+- [[q-koin-scope-management--android--medium]] - Lifecycle-aware scopes
+- [[q-koin-testing-strategies--android--medium]] - Testing Koin modules effectively
+- [[q-koin-vs-hilt-comparison--android--medium]] - Koin vs Hilt comparison
 
 **All DI Questions:**
 ```dataview
