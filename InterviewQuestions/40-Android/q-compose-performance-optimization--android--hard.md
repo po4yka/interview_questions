@@ -3,12 +3,16 @@ id: android-443
 title: Compose Performance Optimization / Оптимизация производительности Compose
 aliases: [Compose Performance Optimization, Оптимизация производительности Compose]
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-compose-recomposition
@@ -23,7 +27,7 @@ sources:
   - https://developer.android.com/jetpack/compose/mental-model
   - https://developer.android.com/jetpack/compose/performance
 date created: Thursday, October 30th 2025, 11:23:16 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:41:06 pm
 ---
 
 # Вопрос (RU)
@@ -223,7 +227,6 @@ LazyColumn {
 ## References
 
 - [[c-compose-recomposition]]
-- [[c-compose-stability]]
 - [[moc-android]]
 - https://developer.android.com/jetpack/compose/performance
 - https://developer.android.com/jetpack/compose/mental-model

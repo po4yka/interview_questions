@@ -3,20 +3,27 @@ id: android-330
 title: Can a Service Communicate With the User / Может ли сервис общаться с пользователем
 aliases: [Can a Service Communicate With the User, Может ли сервис общаться с пользователем]
 topic: android
-subtopics: [notifications, service]
+subtopics:
+  - notifications
+  - service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-service, q-android-service-types--android--easy, q-background-vs-foreground-service--android--medium]
+related:
+  - c-service
+  - q-android-service-types--android--easy
+  - q-background-vs-foreground-service--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-02
 tags: [android/notifications, android/service, difficulty/medium, foreground-service, service-ui-communication]
-date created: Thursday, October 30th 2025, 11:11:11 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 1:27:11 pm
 ---
 
 # Вопрос (RU)
@@ -35,8 +42,8 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 1. **Notifications** — основной механизм для foreground-сервисов и важных событий
 2. **Bound Service callbacks** — UI привязывается к сервису, получает данные через интерфейс
-3. **Broadcast/LiveData/Flow** — сервис отправляет событие → UI-слой реагирует
-4. **Запуск Activity** — только для критичных user-initiated сценариев
+3. **Broadcast/`LiveData`/`Flow`** — сервис отправляет событие → UI-слой реагирует
+4. **Запуск `Activity`** — только для критичных user-initiated сценариев
 
 ### Foreground Service С Уведомлением
 
@@ -63,7 +70,6 @@ class MusicService : Service() {
 ```kotlin
 // Service
 class DataService : Service() {
-  private val binder = LocalBinder()
   private val listeners = mutableSetOf<DataListener>()
 
   inner class LocalBinder : Binder() {
@@ -78,17 +84,12 @@ class DataService : Service() {
     listeners.remove(listener)  // ✅ Prevent leaks
   }
 
-  private fun notifyUpdate(data: String) {
-    listeners.forEach { it.onDataChanged(data) }
-  }
-
-  override fun onBind(intent: Intent) = binder
+  override fun onBind(intent: Intent) = LocalBinder()
 }
 
 // Activity
 class MainActivity : AppCompatActivity(), DataListener {
   private var service: DataService? = null
-
   private val connection = object : ServiceConnection {
     override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
       service = (binder as DataService.LocalBinder).getService()
@@ -117,18 +118,12 @@ class MainActivity : AppCompatActivity(), DataListener {
 }
 ```
 
-### Broadcast (LocalBroadcastManager Устарел → Flow/LiveData)
+### Broadcast (`LocalBroadcastManager` Устарел → `Flow`/`LiveData`)
 
 ```kotlin
-// ❌ Legacy approach
-class OldService : Service() {
-  private fun notifyUI() {
-    LocalBroadcastManager.getInstance(this)
-      .sendBroadcast(Intent("ACTION_UPDATE"))
-  }
-}
+// ❌ Legacy: LocalBroadcastManager.getInstance(this).sendBroadcast(...)
 
-// ✅ Modern approach
+// ✅ Modern: SharedFlow
 class ModernService : Service() {
   companion object {
     private val _updates = MutableSharedFlow<String>()
@@ -150,7 +145,7 @@ lifecycleScope.launch {
 
 **Принципы**:
 - Foreground service → обязательное уведомление (Android 8.0+)
-- Не запускать Activity без явного намерения пользователя
+- Не запускать `Activity` без явного намерения пользователя
 - UI-обновления только в UI-слое, даже если данные из сервиса
 - Всегда отписываться от callbacks/bindings в `onStop()`/`onDestroy()`
 
@@ -162,8 +157,8 @@ lifecycleScope.launch {
 
 1. **Notifications** — primary mechanism for foreground services and important events
 2. **Bound Service callbacks** — UI binds to service, receives data through interface
-3. **Broadcast/LiveData/Flow** — service sends event → UI layer reacts
-4. **Start Activity** — only for critical user-initiated scenarios
+3. **Broadcast/`LiveData`/`Flow`** — service sends event → UI layer reacts
+4. **Start `Activity`** — only for critical user-initiated scenarios
 
 ### Foreground Service with Notification
 
@@ -190,7 +185,6 @@ class MusicService : Service() {
 ```kotlin
 // Service
 class DataService : Service() {
-  private val binder = LocalBinder()
   private val listeners = mutableSetOf<DataListener>()
 
   inner class LocalBinder : Binder() {
@@ -205,17 +199,12 @@ class DataService : Service() {
     listeners.remove(listener)  // ✅ Prevent leaks
   }
 
-  private fun notifyUpdate(data: String) {
-    listeners.forEach { it.onDataChanged(data) }
-  }
-
-  override fun onBind(intent: Intent) = binder
+  override fun onBind(intent: Intent) = LocalBinder()
 }
 
 // Activity
 class MainActivity : AppCompatActivity(), DataListener {
   private var service: DataService? = null
-
   private val connection = object : ServiceConnection {
     override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
       service = (binder as DataService.LocalBinder).getService()
@@ -244,18 +233,12 @@ class MainActivity : AppCompatActivity(), DataListener {
 }
 ```
 
-### Broadcast (LocalBroadcastManager Deprecated → Flow/LiveData)
+### Broadcast (`LocalBroadcastManager` Deprecated → `Flow`/`LiveData`)
 
 ```kotlin
-// ❌ Legacy approach
-class OldService : Service() {
-  private fun notifyUI() {
-    LocalBroadcastManager.getInstance(this)
-      .sendBroadcast(Intent("ACTION_UPDATE"))
-  }
-}
+// ❌ Legacy: LocalBroadcastManager.getInstance(this).sendBroadcast(...)
 
-// ✅ Modern approach
+// ✅ Modern: SharedFlow
 class ModernService : Service() {
   companion object {
     private val _updates = MutableSharedFlow<String>()
@@ -277,36 +260,30 @@ lifecycleScope.launch {
 
 **Principles**:
 - Foreground service → mandatory notification (Android 8.0+)
-- Don't launch Activities without explicit user intent
+- Don't launch `Activity` instances without explicit user intent
 - UI updates only in UI layer, even if data comes from service
 - Always unregister callbacks/bindings in `onStop()`/`onDestroy()`
 
 ## Follow-ups
 
 1. When must Android promote a background task to a foreground service?
-2. How to implement notification actions (Play/Pause/Stop) with PendingIntent safety?
+2. How to implement notification actions (Play/Pause/Stop) with `PendingIntent` safety?
 3. What are the memory leak risks with bound services and how to prevent them?
-4. How does WorkManager compare to foreground services for background work?
+4. How does `WorkManager` compare to foreground services for background work?
 5. What are the consequences of not showing a notification for a foreground service?
 
 ## References
 
 - [[c-service]]
-- [[c-foreground-service]]
-- [[c-notification]]
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/develop/background-work/services/foreground-services
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service types overview
- - Service lifecycle basics
+- [[q-android-service-types--android--easy]] — Service types overview
+- Service lifecycle basics
 
 ### Related (Same Level)
-- [[q-background-vs-foreground-service--android--medium]] - Foreground vs background services
- - When to use WorkManager vs Service
-
-### Advanced (Harder)
-- [[q-service-anr-prevention--android--hard]] - Preventing ANR in services
-- [[q-bound-service-ipc--android--hard]] - Inter-process communication with bound services
+- [[q-background-vs-foreground-service--android--medium]] — Foreground vs background services
+- When to use `WorkManager` vs `Service`

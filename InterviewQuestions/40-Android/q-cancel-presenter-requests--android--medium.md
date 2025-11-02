@@ -1,22 +1,29 @@
 ---
 id: android-273
 title: Cancel Presenter Requests / Отмена запросов презентера
-aliases: ["Cancel Presenter Requests", "Отмена запросов презентера"]
+aliases: [Cancel Presenter Requests, Отмена запросов презентера]
 topic: android
-subtopics: [architecture-clean, coroutines, lifecycle]
+subtopics:
+  - architecture-clean
+  - coroutines
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-coroutines, c-lifecycle]
+related:
+  - c-coroutines
+  - c-lifecycle
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-02
 tags: [android/architecture-clean, android/coroutines, android/lifecycle, difficulty/medium, mvp, presenter-pattern]
-date created: Thursday, October 30th 2025, 11:11:14 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 1:28:55 pm
 ---
 
 # Вопрос (RU)
@@ -30,7 +37,7 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 ## Ответ (RU)
 
 ### Ключевая Проблема
-Presenter не должен обновлять уничтоженную или detached View — это вызывает утечки памяти и крэши. Решение: привязать отмену запросов к lifecycle событиям View.
+`Presenter` не должен обновлять уничтоженную или detached `View` — это вызывает утечки памяти и крэши. Решение: привязать отмену запросов к lifecycle событиям `View`.
 
 ### Подход С Coroutines (рекомендуется)
 
@@ -106,7 +113,7 @@ fun detach() {
 ## Answer (EN)
 
 ### Core Problem
-A Presenter must not update a destroyed or detached View — this causes memory leaks and crashes. Solution: bind request cancellation to View lifecycle events.
+A `Presenter` must not update a destroyed or detached `View` — this causes memory leaks and crashes. Solution: bind request cancellation to `View` lifecycle events.
 
 ### Coroutines Approach (recommended)
 
@@ -183,31 +190,31 @@ fun detach() {
 
 1. How do `cancelChildren()` and `cancel()` differ, and when should each be used?
 2. What happens if a coroutine is cancelled while performing a suspend call?
-3. How would you test that a Presenter correctly cancels requests on `detach()`?
-4. Why prefer `Main.immediate` over `Main` dispatcher in Presenters?
-5. How can DI frameworks (Hilt, Koin) automate Presenter lifecycle scoping?
+3. How would you test that a `Presenter` correctly cancels requests on `detach()`?
+4. Why prefer `Main.immediate` over `Main` dispatcher in `Presenter` implementations?
+5. How can DI frameworks (`Hilt`, `Koin`) automate `Presenter` lifecycle scoping?
 
 ## References
 
-- [[c-coroutines]] - Kotlin coroutines fundamentals
-- [[c-lifecycle]] - Android component lifecycle
-- [[c-mvvm-pattern]] - Model-View-Presenter architecture
+- [[c-coroutines]] — Kotlin coroutines fundamentals
+- [[c-lifecycle]] — Android component lifecycle
+- [[c-mvvm-pattern]] — Model-View-Presenter architecture
 - https://developer.android.com/kotlin/coroutines/coroutines-best-practices
 - https://developer.android.com/topic/architecture/ui-layer
 
 ## Related Questions
 
-### Prerequisites
-- [[q-activity-lifecycle-methods--android--medium]] - Understanding Activity lifecycle callbacks
+### Prerequisites (Easier)
+- [[q-activity-lifecycle-methods--android--medium]] — Understanding `Activity` lifecycle callbacks
 - Understanding of MVP pattern and separation of concerns
-- Basic coroutine or RxJava knowledge
+- Basic coroutine or `RxJava` knowledge
 
-### Related
-- [[q-async-operations-android--android--medium]] - General async handling strategies
- - Alternative approach with ViewModel
- - Detecting and preventing memory leaks
+### Related (Same Level)
+- [[q-async-operations-android--android--medium]] — General async handling strategies
+- Alternative approach with `ViewModel`
+- Detecting and preventing memory leaks
 
-### Advanced
- - Building lifecycle-aware observers
- - Advanced coroutine cancellation patterns
+### Advanced (Harder)
+- Building lifecycle-aware observers
+- Advanced coroutine cancellation patterns
 - Testing cancellation behavior in instrumented tests

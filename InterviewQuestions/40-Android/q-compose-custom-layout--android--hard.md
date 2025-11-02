@@ -3,22 +3,26 @@ id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
 aliases: [Compose Custom Layout, Custom Layout Jetpack Compose, Кастомная разметка Compose, Кастомный layout в Compose]
 topic: android
-subtopics: [ui-compose, ui-graphics]
+subtopics:
+  - ui-compose
+  - ui-graphics
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-compose-canvas-graphics--android--hard
   - q-compose-compiler-plugin--android--hard
 sources: []
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-02
 tags: [android/ui-compose, android/ui-graphics, custom-layout, difficulty/hard, layout-measurement]
-date created: Thursday, October 30th 2025, 11:18:12 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Sunday, November 2nd 2025, 1:37:23 pm
 ---
 
 # Вопрос (RU)
@@ -33,14 +37,14 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ### Основные Концепции
 
-**Layout** в Compose использует `MeasurePolicy` — контракт из трех шагов:
+`Layout` в Compose использует `MeasurePolicy` — контракт из трех шагов:
 1. **Measure** — каждый дочерний элемент измеряется с переданными `Constraints` (min/max width/height)
 2. **Calculate** — layout вычисляет собственный размер на основе измеренных дочерних элементов
 3. **Place** — размещение дочерних элементов в координатах layout
 
 **Ключевые правила**:
-- Каждый measurable измеряется **ровно один раз** (иначе exception)
-- Нельзя аллоцировать объекты в measure/place (performance)
+- Каждый `Measurable` измеряется **ровно один раз** (иначе exception)
+- Нельзя аллоцировать объекты в `measure`/`place` (performance)
 - Использовать `placeRelative` для RTL-поддержки
 
 ### Минимальный Пример: TwoColumn
@@ -103,7 +107,6 @@ fun TwoColumn(
 // ✅ MeasurePolicy вне composable для переиспользования
 private val twoColumnMeasurePolicy = MeasurePolicy { measurables, constraints ->
     // Та же логика, но без capture composable-параметров
-    // ...
 }
 
 @Composable
@@ -115,7 +118,7 @@ fun TwoColumn(
 }
 ```
 
-**Ограничение**: все параметры layout (gap, spacing) должны быть внешними, так как MeasurePolicy не может capture composable state.
+**Ограничение**: все параметры layout (`gap`, `spacing`) должны быть внешними, так как `MeasurePolicy` не может capture composable state.
 
 ### Intrinsics
 
@@ -141,21 +144,21 @@ val policy = object : MeasurePolicy {
 ### Performance Tips
 
 - **Stable параметры**: `gap: Dp` вместо `gap: State<Dp>` для skip-оптимизации
-- **Избегать аллокаций**: не создавать списки в measure-блоке, переиспользовать коллекции
-- **Детерминизм**: не читать composition state внутри measure
+- **Избегать аллокаций**: не создавать списки в `measure`-блоке, переиспользовать коллекции
+- **Детерминизм**: не читать composition state внутри `measure`
 
 ## Answer (EN)
 
 ### Core Concepts
 
-**Layout** in Compose uses `MeasurePolicy` — a three-step contract:
+`Layout` in Compose uses `MeasurePolicy` — a three-step contract:
 1. **Measure** — each child is measured with provided `Constraints` (min/max width/height)
 2. **Calculate** — layout calculates its own size based on measured children
 3. **Place** — position children in layout coordinates
 
 **Key Rules**:
-- Each measurable measured **exactly once** (otherwise exception)
-- No allocations in measure/place (performance)
+- Each `Measurable` measured **exactly once** (otherwise exception)
+- No allocations in `measure`/`place` (performance)
 - Use `placeRelative` for RTL support
 
 ### Minimal Example: TwoColumn
@@ -218,7 +221,6 @@ For optimization, extract `MeasurePolicy` as top-level object:
 // ✅ MeasurePolicy outside composable for reuse
 private val twoColumnMeasurePolicy = MeasurePolicy { measurables, constraints ->
     // Same logic but without capturing composable parameters
-    // ...
 }
 
 @Composable
@@ -230,7 +232,7 @@ fun TwoColumn(
 }
 ```
 
-**Limitation**: all layout parameters (gap, spacing) must be external, as MeasurePolicy cannot capture composable state.
+**Limitation**: all layout parameters (`gap`, `spacing`) must be external, as `MeasurePolicy` cannot capture composable state.
 
 ### Intrinsics
 
@@ -263,17 +265,14 @@ val policy = object : MeasurePolicy {
 
 ## Follow-ups
 
-- Как обрабатывать случаи, когда children не помещаются в constraints? / How to handle cases when children don't fit within constraints?
-- В чем разница между `placeRelative` и `place`? / What's the difference between `placeRelative` and `place`?
-- Когда нужно реализовывать все 4 intrinsic метода (minWidth, maxWidth, minHeight, maxHeight)? / When should you implement all 4 intrinsic methods?
-- Как протестировать custom layout с разными constraints и RTL? / How to test custom layout with different constraints and RTL?
-- Какие проблемы performance возникают при многократном remeasure и как их избежать? / What performance issues arise from repeated remeasure and how to avoid them?
+- Как обрабатывать случаи, когда children не помещаются в `constraints`?
+- В чем разница между `placeRelative` и `place`?
+- Когда нужно реализовывать все 4 intrinsic метода (`minWidth`, `maxWidth`, `minHeight`, `maxHeight`)?
+- Как протестировать custom layout с разными `constraints` и RTL?
+- Какие проблемы performance возникают при многократном remeasure и как их избежать?
 
 ## References
 
-- [[c-compose-layout]]
-- [[c-compose-constraints]]
-- [[c-compose-intrinsics]]
 - [Custom layouts in Compose](https://developer.android.com/develop/ui/compose/layouts/custom)
 - [Layout basics - Constraints and measurement](https://developer.android.com/develop/ui/compose/layouts/basics)
 - [Compose performance best practices](https://developer.android.com/develop/ui/compose/performance)
@@ -287,6 +286,6 @@ val policy = object : MeasurePolicy {
 - [[q-compose-compiler-plugin--android--hard]] — How Compose compiler optimizes layouts
 
 ### Advanced (Harder)
-- Custom layouts with complex intrinsic calculations and nested constraints
+- Custom layouts with complex intrinsic calculations and nested `Constraints`
 - Building layout modifiers that affect measurement behavior
 - Optimizing layout performance in deep hierarchies with thousands of nodes

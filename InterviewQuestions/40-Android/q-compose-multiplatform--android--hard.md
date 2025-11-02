@@ -3,12 +3,17 @@ id: android-191
 title: Compose Multiplatform / Compose Multiplatform
 aliases: [Compose Multiplatform, KMP Compose, Мультиплатформенный Compose]
 topic: android
-subtopics: [compose-multiplatform, kmp, ui-compose]
+subtopics:
+  - compose-multiplatform
+  - kmp
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-jetpack-compose
@@ -17,10 +22,10 @@ related:
   - q-kmm-architecture--android--hard
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-02
 tags: [android/compose-multiplatform, android/kmp, android/ui-compose, compose, difficulty/hard, kmp, multiplatform]
-date created: Thursday, October 30th 2025, 11:23:12 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Sunday, November 2nd 2025, 1:40:36 pm
 ---
 
 # Вопрос (RU)
@@ -33,10 +38,10 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-**Compose Multiplatform (CMP)** — декларативный UI-фреймворк от JetBrains, расширяющий Jetpack Compose на Android, iOS, Desktop (JVM) и Web (Canvas/WASM). Использует Kotlin Multiplatform для шаринга UI-кода и бизнес-логики между платформами.
+**Compose Multiplatform (CMP)** — декларативный UI-фреймворк от JetBrains, расширяющий `Jetpack Compose` на Android, iOS, Desktop (`JVM`) и Web (`Canvas`/`WASM`). Использует `Kotlin Multiplatform` для шаринга UI-кода и бизнес-логики между платформами.
 
 **Основное отличие от KMM**:
-- KMM → шаринг domain/data слоя, нативный UI на каждой платформе
+- KMM → шаринг `domain`/`data` слоя, нативный UI на каждой платформе
 - CMP → единый UI-фреймворк + логика, один набор компонентов
 
 **Целевой use case**: проекты с высоким уровнем UI-переиспользования (внутренние инструменты, enterprise-приложения, MVP), где приоритет — скорость разработки над платформенной кастомизацией.
@@ -108,37 +113,37 @@ fun main() = application {
 ### Best Practices
 
 **Shared**:
-- State holders (ViewModel альтернативы)
+- State holders (`ViewModel` альтернативы)
 - Navigation logic
 - Screens, компоненты
 - Theming
 
 **Platform-specific**:
 - Gesture handling (iOS swipe-back)
-- Windowing (Desktop)
-- Resources (через expect/actual)
+- Windowing (`Desktop`)
+- Resources (через `expect`/`actual`)
 - Performance profiling per target
 
 ### Trade-offs
 
 **iOS Integration**:
 - `UIViewController` wrapper → overhead
-- Ограниченная SwiftUI interop
+- Ограниченная `SwiftUI` interop
 - Lifecycle mapping iOS ↔ Compose
 
 **Web**:
-- Canvas-based → проблемы с accessibility
+- `Canvas`-based → проблемы с accessibility
 - Bundle size (минимум ~2 MB)
 
 **Desktop**:
-- Windowing API различия (macOS/Windows/Linux)
+- Windowing API различия (`macOS`/`Windows`/`Linux`)
 
 ## Answer (EN)
 
-**Compose Multiplatform (CMP)** is a declarative UI framework by JetBrains extending Jetpack Compose to Android, iOS, Desktop (JVM), and Web (Canvas/WASM). Uses Kotlin Multiplatform to share UI code and business logic across platforms.
+**Compose Multiplatform (CMP)** is a declarative UI framework by JetBrains extending `Jetpack Compose` to Android, iOS, Desktop (`JVM`), and Web (`Canvas`/`WASM`). Uses `Kotlin Multiplatform` to share UI code and business logic across platforms.
 
 **Key difference from KMM**:
-- KMM → shares domain/data layer, native UI per platform
+- KMM → shares `domain`/`data` layer, native UI per platform
 - CMP → unified UI framework + logic, one component set
 
 **Target use case**: projects with high UI reusability (internal tools, enterprise apps, MVPs) where development speed outweighs platform customization.
@@ -210,37 +215,38 @@ fun main() = application {
 ### Best Practices
 
 **Shared**:
-- State holders (ViewModel alternatives)
+- State holders (`ViewModel` alternatives)
 - Navigation logic
 - Screens, components
 - Theming
 
 **Platform-specific**:
 - Gesture handling (iOS swipe-back)
-- Windowing (Desktop)
-- Resources (via expect/actual)
+- Windowing (`Desktop`)
+- Resources (via `expect`/`actual`)
 - Performance profiling per target
 
 ### Trade-offs
 
 **iOS Integration**:
 - `UIViewController` wrapper → overhead
-- Limited SwiftUI interop
+- Limited `SwiftUI` interop
 - Lifecycle mapping iOS ↔ Compose
 
 **Web**:
-- Canvas-based → accessibility challenges
+- `Canvas`-based → accessibility challenges
 - Bundle size (minimum ~2 MB)
 
 **Desktop**:
-- Windowing API differences (macOS/Windows/Linux)
+- Windowing API differences (`macOS`/`Windows`/`Linux`)
 
 ---
 
 ## Follow-ups
+
 - How to handle platform-specific navigation patterns (iOS back swipe) without leaking into common code?
-- What are performance implications of UIViewController wrapper on iOS vs native SwiftUI?
-- How to structure expect/actual for filesystem, haptics, and secure storage APIs?
+- What are performance implications of `UIViewController` wrapper on iOS vs native `SwiftUI`?
+- How to structure `expect`/`actual` for filesystem, haptics, and secure storage APIs?
 - When should you choose native UI over CMP for specific platform screens?
 - How to minimize Web bundle size while sharing UI code across platforms?
 

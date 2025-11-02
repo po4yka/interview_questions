@@ -3,20 +3,28 @@ id: android-355
 title: CI/CD Deployment Automation / Автоматизация деплоя в CI/CD
 aliases: [CI/CD Deployment Automation, Автоматизация деплоя в CI/CD]
 topic: android
-subtopics: [ci-cd, gradle, play-console]
+subtopics:
+  - ci-cd
+  - gradle
+  - play-console
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-lint-tool--android--medium, q-app-store-optimization--android--medium, q-build-optimization-gradle--android--medium]
+related:
+  - q-android-lint-tool--android--medium
+  - q-app-store-optimization--android--medium
+  - q-build-optimization-gradle--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/ci-cd, android/gradle, android/play-console, ci-cd, deployment, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:19:02 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:29:49 pm
 ---
 
 # Вопрос (RU)
@@ -230,7 +238,6 @@ Keep last stable AAB + mapping.txt.
 ## References
 
 - [[c-gradle]] - Gradle build system
-- [[c-ci-cd]] - CI/CD pipeline patterns
 - https://developer.android.com/studio/publish
 - https://developer.android.com/studio/publish/app-signing
 - https://github.com/Triple-T/gradle-play-publisher

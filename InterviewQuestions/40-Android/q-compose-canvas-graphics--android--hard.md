@@ -12,7 +12,7 @@ original_language: en
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - c-jetpack-compose
@@ -21,7 +21,7 @@ updated: 2025-10-30
 sources: []
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 date created: Thursday, October 30th 2025, 11:18:11 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:31:04 pm
 ---
 
 # Вопрос (RU)
@@ -182,7 +182,6 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ## References
 - [[c-compose-state]] - State management in Compose
 - [[c-compose-recomposition]] - Recomposition lifecycle
-- [[c-android-graphics-pipeline]] - Graphics rendering fundamentals
 - https://developer.android.com/develop/ui/compose/graphics/draw/overview
 - https://perfetto.dev
 - https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview

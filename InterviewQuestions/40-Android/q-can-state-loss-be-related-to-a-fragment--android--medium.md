@@ -1,22 +1,30 @@
 ---
 id: android-174
 title: Can Fragment State Loss Occur? / Бывает ли потеря состояния у Fragment
-aliases: ["Can Fragment State Loss Occur?", "Бывает ли потеря состояния у Fragment"]
+aliases: [Can Fragment State Loss Occur?, Бывает ли потеря состояния у Fragment]
 topic: android
-subtopics: [fragment, lifecycle, processes]
+subtopics:
+  - fragment
+  - lifecycle
+  - processes
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-memory-leaks, c-viewmodel, q-activity-lifecycle-methods--android--medium]
+related:
+  - c-memory-leaks
+  - c-viewmodel
+  - q-activity-lifecycle-methods--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/fragment, android/lifecycle, android/processes, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:10:50 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:27:19 pm
 ---
 
 # Вопрос (RU)

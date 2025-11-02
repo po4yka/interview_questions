@@ -1,8 +1,3 @@
----
-date created: Thursday, October 23rd 2025, 10:12:04 am
-date modified: Monday, October 27th 2025, 4:51:29 pm
----
-
 # Note Review Prompt (Automation + Senior Review)
 
 Use this playbook when an automation agent must iterate through notes, apply fixes, and hand them back for a senior-level verification.
@@ -42,26 +37,37 @@ Ensure the frontmatter matches the controlled schema. The `id` must follow the `
 
 ```yaml
 id: algo-001
+title: Example Title / Пример названия
+aliases:
+  - Example Title
+  - Пример названия
 topic: <matches folder mapping below>
-aliases: ["English Title", "Русский заголовок"]
+subtopics: [controlled values]       # see TAXONOMY.md
 question_kind: theory | coding | android | system-design   # pick the accurate value
+difficulty: easy | medium | hard
 original_language: en | ru
 language_tags: [en, ru]              # match actual languages present
-subtopics: [controlled values]       # see TAXONOMY.md
-sources: [https://example.com]       # [] if none
+sources:
+  - url: https://example.com
+    note: Official statement
+status: draft | reviewed | ready
+moc: [[moc-topic]]
+related:
+  - [[c-concept]]
+created: 2025-01-20
 updated: 2025-01-25
+tags: [leetcode, arrays, hash-map, difficulty/easy]
 ```
 
-Topic ↔ folder mapping:
+Topic ↔ folder mapping (subject folders):
 
-- `10-Concepts/` → `topic: cs`
-- `20-Algorithms/` → `topic: algorithms`
-- `30-System-Design/` → `topic: system-design`
-- `40-Android/` → `topic: android`
-- `50-Backend/` → `topic: backend`
-- `60-CompSci/` → `topic: cs`
-- `70-Kotlin/` → `topic: kotlin`
-- `80-Tools/` → `topic: tools`
+- `Algorithms/` → `topic: algorithms`
+- `Android/` → `topic: android`
+- `Behavioural/` → `topic: behavioral`
+- `CompSci/` → `topic: cs`
+- `Data Structures/` → `topic: cs`
+- `System Design/` → `topic: system-design`
+- `MOCs/` → reference maps of content; topic varies per note
 
 Remove obsolete keys (`date created`, `date modified`, legacy metadata).
 
@@ -73,14 +79,29 @@ Every note must follow the canonical template with semantically equivalent RU/EN
 
 ```
 # Вопрос (RU)
+> Русская формулировка задачи
+
 # Question (EN)
+> English version of the prompt
+
+---
 
 ## Ответ (RU)
+Подробное объяснение, при необходимости код.
+
 ## Answer (EN)
+Mirror content in English; reuse the same structure.
+
+---
 
 ## Follow-ups
+- …
+
 ## References
+- [[c-example]]
+
 ## Related Questions
+- [[q-example--algorithms--medium]]
 ```
 
 ---
@@ -97,16 +118,61 @@ Every note must follow the canonical template with semantically equivalent RU/EN
 
 - `## Follow-ups` — add meaningful follow-on questions.
 - `## References` — include concept notes or reliable sources; omit the section only if truly empty.
-- `## Related Questions`
-  ```
-  ### Prerequisites
-  - [[…]]
-  ### Related
-  - [[…]]
-  ### Advanced
-  - [[…]]
-  ```
-  Use descriptive bullets if no existing notes can be linked.
+- `## Related Questions` — include at least one forward/backward link; use descriptive placeholders if no note exists yet.
+
+---
+
+## Code Formatting Rules
+
+**CRITICAL**: All code references in regular text (outside code blocks) must be properly formatted to prevent HTML/XML interpretation and ensure correct rendering.
+
+### Required Formatting
+
+1. **Type names and class names**: Wrap all type names, class names, interface names in backticks.
+   - ✅ `String`, `Int`, `ArrayList`, `Parcelable`, `Bundle`
+   - ❌ String, Int, ArrayList, Parcelable
+
+2. **Generic types**: Generic types with angle brackets MUST be wrapped in backticks.
+   - ✅ `ArrayList<String>`, `SparseArray<Parcelable>`, `Map<String, Int>`
+   - ❌ ArrayList<String>, SparseArray<Parcelable> (will be interpreted as HTML tags)
+
+3. **Method names and API references**: Wrap method names, API references, exception names in backticks.
+   - ✅ `putString()`, `getInt()`, `put*/get*`, `TransactionTooLargeException`
+   - ✅ `Binder`, `IPC`, `ViewModel`
+   - ❌ putString(), getInt() (may render incorrectly)
+
+4. **Code blocks**: Code inside fenced code blocks (```) does NOT need escaping—backticks and angle brackets are safe inside code blocks.
+
+5. **Special characters**: Characters `<`, `>`, and backticks in regular text referring to code must be handled via backticks:
+   - ✅ `` `ArrayList<String>` `` (wrapped in backticks)
+   - ❌ `ArrayList<String>` without backticks (will break markdown or render as HTML)
+
+### Examples
+
+**In lists**:
+```markdown
+- Collections: `ArrayList<String>`, `ArrayList<Int>`, `ArrayList<Parcelable>`
+- Objects: `Parcelable`, `Serializable`
+- Special: `Bundle` (nested), `SparseArray<Parcelable>`
+```
+
+**In paragraphs**:
+```markdown
+Bundle is built on `Parcel`, uses type-safe `put*/get*` methods.
+```
+
+**In code blocks** (no changes needed):
+```kotlin
+val list: ArrayList<String> = arrayListOf()
+bundle.putParcelable("profile", Profile("1", "Alice"))
+```
+
+### Validation Checklist
+
+- [ ] All type names in lists wrapped in backticks
+- [ ] Generic types with `<` and `>` wrapped in backticks
+- [ ] Method names and API references formatted with backticks
+- [ ] No unescaped angle brackets in regular text (outside code blocks)
 
 ---
 
@@ -126,6 +192,7 @@ After automation, the human reviewer should scrutinize:
 - [ ] Pre-change validation executed; key findings noted.
 - [ ] YAML normalized to the controlled schema.
 - [ ] RU-first template satisfied; RU/EN content aligned.
+- [ ] Code formatting rules applied (backticks for types, generics, API references).
 - [ ] Content trimmed, technically verified for senior-level accuracy.
 - [ ] Follow-ups, References, Related Questions populated as required.
 - [ ] Post-change validation passes without critical errors.

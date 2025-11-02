@@ -1,22 +1,30 @@
 ---
 id: android-111
 title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочные эффекты Compose: LaunchedEffect vs DisposableEffect"
-aliases: ["Compose LaunchedEffect vs DisposableEffect", "Compose Side Effects", "DisposableEffect", "LaunchedEffect", "Побочные эффекты Compose"]
+aliases: [Compose LaunchedEffect vs DisposableEffect, Compose Side Effects, DisposableEffect, LaunchedEffect, Побочные эффекты Compose]
 topic: android
-subtopics: [lifecycle, ui-compose]
+subtopics:
+  - lifecycle
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-compose-remember-derived-state--android--medium]
+related:
+  - q-compose-performance-optimization--android--hard
+  - q-compose-remember-derived-state--android--medium
 created: 2025-10-13
 updated: 2025-10-30
 tags: [android/lifecycle, android/ui-compose, compose, difficulty/hard, side-effects]
-sources: [https://developer.android.com/jetpack/compose/lifecycle, https://developer.android.com/jetpack/compose/side-effects]
+sources:
+  - https://developer.android.com/jetpack/compose/lifecycle
+  - https://developer.android.com/jetpack/compose/side-effects
 date created: Thursday, October 30th 2025, 11:51:33 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:44:38 pm
 ---
 
 # Вопрос (RU)
@@ -234,7 +242,6 @@ DisposableEffect(Unit) {
 ## References
 
 - [[c-coroutines]]
-- [[c-compose-lifecycle]]
 - [[c-structured-concurrency]]
 - https://developer.android.com/jetpack/compose/side-effects
 - https://developer.android.com/jetpack/compose/lifecycle
@@ -248,5 +255,3 @@ DisposableEffect(Unit) {
 
 ### Related (Same Level)
 - [[q-compose-performance-optimization--android--hard]]
-
-### Advanced (Harder)

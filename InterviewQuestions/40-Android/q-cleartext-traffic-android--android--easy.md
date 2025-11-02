@@ -3,20 +3,28 @@ id: android-033
 title: What is cleartext traffic in Android? / Что такое cleartext traffic в Android?
 aliases: [Cleartext traffic, Network Security Config, Незашифрованный трафик]
 topic: android
-subtopics: [network-security-config, networking-http, permissions]
+subtopics:
+  - network-security-config
+  - networking-http
+  - permissions
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-encryption, c-https-tls]
+related:
+  - c-encryption
+  - c-https-tls
 created: 2025-10-06
 updated: 2025-10-29
 tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]
-sources: [https://developer.android.com/training/articles/security-config]
+sources:
+  - https://developer.android.com/training/articles/security-config
 date created: Thursday, October 30th 2025, 11:17:59 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:30:50 pm
 ---
 
 # Вопрос (RU)
@@ -148,7 +156,6 @@ CLEARTEXT communication not permitted by network security policy
 ## References
 
 - [[c-encryption]] — Encryption fundamentals
-- [[c-https-tls]] — HTTPS/TLS concepts
 - [Android Network Security Configuration](https://developer.android.com/training/articles/security-config)
 - [Protecting Against Unintended Data Leakage](https://developer.android.com/privacy-and-security/security-tips#UnintendedDataLeakage)
 - [[q-certificate-pinning--security--medium]] — Advanced network security
@@ -157,7 +164,6 @@ CLEARTEXT communication not permitted by network security policy
 
 ### Prerequisites (Easier)
 - [[c-encryption]] — What is encryption?
-- [[c-https-tls]] — How does HTTPS work?
 - Basic networking concepts (HTTP vs HTTPS)
 
 ### Related (Same Level)

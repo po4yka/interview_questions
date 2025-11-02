@@ -1,22 +1,29 @@
 ---
 id: android-047
 title: Clean Architecture on Android / Clean Architecture в Android
-aliases: ["Clean Architecture on Android", "Clean Architecture в Android"]
+aliases: [Clean Architecture on Android, Clean Architecture в Android]
 topic: android
-subtopics: [architecture-clean, architecture-modularization, di-hilt]
+subtopics:
+  - architecture-clean
+  - architecture-modularization
+  - di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-clean-architecture, c-dependency-injection]
+related:
+  - c-clean-architecture
+  - c-dependency-injection
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/architecture-clean, android/architecture-modularization, android/di-hilt, difficulty/hard]
 date created: Thursday, October 30th 2025, 11:18:04 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:30:35 pm
 ---
 
 # Вопрос (RU)
@@ -296,5 +303,3 @@ fun User.toUiModel() = UserUiModel(name, email)
 ### Related (Same Level)
 - [[q-android-architectural-patterns--android--medium]]
 - [[q-android-modularization--android--medium]]
-
-### Advanced (Harder)

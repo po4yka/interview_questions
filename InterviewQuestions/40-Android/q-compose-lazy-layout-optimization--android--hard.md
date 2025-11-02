@@ -3,12 +3,16 @@ id: android-381
 title: Compose Lazy Layout Optimization / Оптимизация Lazy‑layout в Compose
 aliases: [Compose Lazy Layout Optimization, LazyColumn optimization, LazyRow optimization, Оптимизация Lazy‑layout в Compose, Оптимизация LazyColumn]
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-android-performance-measurement-tools--android--medium
@@ -20,7 +24,7 @@ updated: 2025-10-30
 sources: []
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 date created: Thursday, October 30th 2025, 11:23:14 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:37:45 pm
 ---
 
 # Вопрос (RU)

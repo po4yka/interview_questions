@@ -1,22 +1,31 @@
 ---
 id: android-471
-title: "Advanced Compose UI Testing / Продвинутое тестирование Compose UI"
-aliases: ["Advanced Compose UI Testing", "Продвинутое тестирование Compose UI"]
+title: Advanced Compose UI Testing / Продвинутое тестирование Compose UI
+aliases: [Advanced Compose UI Testing, Продвинутое тестирование Compose UI]
 topic: android
-subtopics: [testing-ui, ui-compose]
+subtopics:
+  - testing-ui
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+  - en
+  - ru
 sources: []
-status: draft
-related: [c-accessibility, c-compose-semantics, c-ui-testing, q-compose-semantics--android--medium, q-compose-testing--android--medium]
+status: reviewed
+related:
+  - c-accessibility
+  - c-compose-semantics
+  - c-ui-testing
+  - q-compose-semantics--android--medium
+  - q-compose-testing--android--medium
 created: 2025-10-20
 updated: 2025-10-30
 tags: [accessibility, android/testing-ui, android/ui-compose, compose-testing, difficulty/hard, semantics]
 moc: moc-android
 date created: Thursday, October 30th 2025, 11:56:49 am
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+date modified: Sunday, November 2nd 2025, 1:53:39 pm
 ---
 
 # Вопрос (RU)
@@ -279,10 +288,8 @@ fun testAccessibility() {
 
 ## References
 
-- [[c-compose-semantics]] — Semantic tree fundamentals
 - [[c-unit-testing]] — UI testing principles
 - [[c-accessibility]] — Accessibility best practices
-- [[c-testing-pyramid]] — Testing strategy overview
 - https://developer.android.com/jetpack/compose/testing
 - https://developer.android.com/jetpack/compose/semantics
 
@@ -298,4 +305,3 @@ fun testAccessibility() {
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]] — Compiler internals and optimization
 - Screenshot testing with custom semantic properties for complex scenarios
-

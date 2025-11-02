@@ -1,14 +1,19 @@
 ---
 id: android-046
 title: CI/CD Pipeline Setup for Android / Настройка CI/CD пайплайна для Android
-aliases: ["CI/CD Pipeline Setup for Android", "Настройка CI/CD пайплайна для Android"]
+aliases: [CI/CD Pipeline Setup for Android, Настройка CI/CD пайплайна для Android]
 topic: android
-subtopics: [ci-cd, gradle, testing-unit]
+subtopics:
+  - ci-cd
+  - gradle
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related: []
 sources: []
@@ -16,7 +21,7 @@ created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ci-cd, android/gradle, android/testing-unit, automation, devops, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:18:03 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:30:26 pm
 ---
 
 # Вопрос (RU)
@@ -156,9 +161,3 @@ Save JUnit XML, lint results, code coverage (Jacoco/Kover). Annotate PRs with co
 
 ### Related
 - [[q-android-build-optimization--android--medium]]
-- [[q-testing-strategies--android--hard]]
-- [[q-docker-android-builds--tools--medium]]
-
-### Advanced
-- [[q-monorepo-ci-strategies--system-design--hard]]
-- [[q-distributed-test-execution--system-design--hard]]

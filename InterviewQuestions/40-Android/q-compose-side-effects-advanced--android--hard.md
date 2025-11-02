@@ -1,14 +1,19 @@
 ---
 id: android-254
 title: Compose Side Effects (Advanced) / Побочные эффекты Compose (продвинуто)
-aliases: ["Compose Side Effects Advanced", "Побочные эффекты Compose"]
+aliases: [Compose Side Effects Advanced, Побочные эффекты Compose]
 topic: android
-subtopics: [lifecycle, ui-compose, ui-state]
+subtopics:
+  - lifecycle
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-compose-compiler-plugin--android--hard
@@ -17,9 +22,10 @@ related:
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/lifecycle, android/ui-compose, android/ui-state, difficulty/hard]
-sources: ["https://developer.android.com/jetpack/compose/side-effects"]
+sources:
+  - https://developer.android.com/jetpack/compose/side-effects
 date created: Thursday, October 30th 2025, 11:23:25 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:44:21 pm
 ---
 
 # Вопрос (RU)
@@ -221,7 +227,6 @@ DisposableEffect(lifecycleOwner) {
 
 ## References
 - [[c-coroutines]] — coroutine fundamentals
-- [[c-compose-lifecycle]] — Compose lifecycle and recomposition
 - [[c-structured-concurrency]] — cancellation and cleanup patterns
 - https://developer.android.com/jetpack/compose/side-effects
 - https://developer.android.com/jetpack/compose/lifecycle

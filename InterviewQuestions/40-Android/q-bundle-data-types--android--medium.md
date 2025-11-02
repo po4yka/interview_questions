@@ -1,23 +1,28 @@
 ---
 id: android-387
 title: Bundle Data Types / Типы данных Bundle
-aliases: ["Bundle Data Types", "Типы данных Bundle"]
+aliases: [Bundle Data Types, Типы данных Bundle]
 topic: android
-subtopics: [intents-deeplinks, serialization]
+subtopics:
+  - intents-deeplinks
+  - serialization
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-android-app-components--android--easy
+  - q-parcelable-implementation--android--medium
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-02
 sources: []
 tags: [android/intents-deeplinks, android/serialization, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:11:26 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 1:24:06 pm
 ---
 
 # Вопрос (RU)
@@ -30,15 +35,14 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-Bundle — key-value контейнер для передачи данных между компонентами Android через IPC. Основан на Parcel, использует типизированные методы put*/get*.
+Bundle — key-value контейнер для передачи данных между компонентами Android через IPC. Основан на `Parcel`, использует типизированные методы `put*/get*`.
 
 **Поддерживаемые типы**:
-- Примитивы: Int, Long, Float, Double, Boolean, Byte, Char, Short
-- Строки: String, CharSequence
-- Массивы примитивов: IntArray, LongArray, BooleanArray
-- Коллекции: ArrayList<String>, ArrayList<Int>, ArrayList<Parcelable>
-- Parcelable/Serializable объекты
-- Bundle (вложенные), SparseArray<Parcelable>
+- Примитивы и массивы: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Byte`, `Char`, `Short` и их массивы
+- Строки: `String`, `CharSequence`
+- Коллекции: `ArrayList<String>`, `ArrayList<Int>`, `ArrayList<Parcelable>`
+- Объекты: `Parcelable`, `Serializable`
+- Специальные: `Bundle` (вложенные), `SparseArray<Parcelable>`
 
 **Базовое использование**:
 ```kotlin
@@ -81,10 +85,10 @@ bundle.putSparseParcelableArray("sparse_profiles", sparse)
 ```
 
 **Критические ограничения**:
-- Размер: ~1MB (TransactionTooLargeException при IPC через Binder)
-- Запрещено: lambda, Thread, Socket, Context, View, Handler
-- Для больших данных: URI, ViewModel, files, WorkManager, ContentProvider
-- Bundle не thread-safe без синхронизации
+- Размер: ~1MB для IPC через `Binder` (`TransactionTooLargeException`)
+- Запрещено: `lambda`, `Thread`, `Socket`, `Context`, `View`, `Handler`
+- Альтернативы для больших данных: `URI`, `ViewModel`, files, `WorkManager`, `ContentProvider`
+- Не thread-safe без явной синхронизации
 
 **Безопасность**:
 ```kotlin
@@ -100,15 +104,14 @@ val url = intent.getStringExtra("url")
 
 ## Answer (EN)
 
-Bundle is a key-value container for passing data between Android components via IPC. Built on Parcel, uses type-safe put*/get* methods.
+Bundle is a key-value container for passing data between Android components via IPC. Built on `Parcel`, uses type-safe `put*/get*` methods.
 
 **Supported types**:
-- Primitives: Int, Long, Float, Double, Boolean, Byte, Char, Short
-- Strings: String, CharSequence
-- Primitive arrays: IntArray, LongArray, BooleanArray
-- Collections: ArrayList<String>, ArrayList<Int>, ArrayList<Parcelable>
-- Parcelable/Serializable objects
-- Bundle (nested), SparseArray<Parcelable>
+- Primitives and arrays: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Byte`, `Char`, `Short` and their arrays
+- Strings: `String`, `CharSequence`
+- Collections: `ArrayList<String>`, `ArrayList<Int>`, `ArrayList<Parcelable>`
+- Objects: `Parcelable`, `Serializable`
+- Special: `Bundle` (nested), `SparseArray<Parcelable>`
 
 **Basic usage**:
 ```kotlin
@@ -151,10 +154,10 @@ bundle.putSparseParcelableArray("sparse_profiles", sparse)
 ```
 
 **Critical limitations**:
-- Size: ~1MB (TransactionTooLargeException for IPC via Binder)
-- Forbidden: lambda, Thread, Socket, Context, View, Handler
-- For large data: URI, ViewModel, files, WorkManager, ContentProvider
-- Bundle is not thread-safe without synchronization
+- Size: ~1MB for IPC via `Binder` (`TransactionTooLargeException`)
+- Forbidden: `lambda`, `Thread`, `Socket`, `Context`, `View`, `Handler`
+- Alternatives for large data: `URI`, `ViewModel`, files, `WorkManager`, `ContentProvider`
+- Not thread-safe without explicit synchronization
 
 **Security**:
 ```kotlin
@@ -178,9 +181,6 @@ val url = intent.getStringExtra("url")
 
 ## References
 
-- [[c-parcelable]]
-- [[c-serialization]]
-- [[c-ipc]]
 - https://developer.android.com/reference/android/os/Bundle
 - https://developer.android.com/reference/android/os/Parcelable
 - https://developer.android.com/guide/components/intents-filters
@@ -193,9 +193,9 @@ val url = intent.getStringExtra("url")
 
 ### Related (Same Level)
 - [[q-parcelable-implementation--android--medium]] — Custom Parcelable objects
- — Intent extras and deep linking
-- [[q-savedstate-handle--android--medium]] — ViewModel state preservation
+- Intent extras and deep linking patterns
+- ViewModel state preservation via SavedStateHandle
 
 ### Advanced (Harder)
-- [[q-transaction-too-large-exception--android--medium]] — Debugging IPC size limits
-- [[q-custom-parcelable-versioning--android--hard]] — Backward compatibility strategies
+- TransactionTooLargeException debugging and IPC size limits
+- Parcelable versioning and backward compatibility strategies

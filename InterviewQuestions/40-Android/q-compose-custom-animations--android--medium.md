@@ -3,12 +3,16 @@ id: android-073
 title: Compose Custom Animations / Кастомные анимации Compose
 aliases: [Compose Custom Animations, Кастомные анимации Compose]
 topic: android
-subtopics: [ui-animation, ui-compose]
+subtopics:
+  - ui-animation
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-animated-visibility-vs-content--android--medium
@@ -20,7 +24,7 @@ updated: 2025-10-29
 tags: [android/ui-animation, android/ui-compose, difficulty/medium]
 sources: []
 date created: Thursday, October 30th 2025, 11:18:59 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:35:01 pm
 ---
 
 # Вопрос (RU)

@@ -3,12 +3,17 @@ id: android-048
 title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
 aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android
-subtopics: [ci-cd, gradle, testing-instrumented]
+subtopics:
+  - ci-cd
+  - gradle
+  - testing-instrumented
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-build-optimization-gradle--android--medium
@@ -19,7 +24,7 @@ updated: 2025-10-29
 sources: []
 tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/medium]
 date created: Thursday, October 30th 2025, 11:18:34 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:30:12 pm
 ---
 
 # Вопрос (RU)

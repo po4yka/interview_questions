@@ -3,20 +3,26 @@ id: android-142
 title: Compose Stability Skippability / Стабильность и пропускаемость Compose
 aliases: [Compose Stability Skippability, Стабильность и пропускаемость Compose]
 topic: android
-subtopics: [performance-memory, ui-compose]
+subtopics:
+  - performance-memory
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-compose-recomposition, c-immutability, q-compose-performance-optimization--android--hard]
+related:
+  - c-compose-recomposition
+  - q-compose-performance-optimization--android--hard
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-02
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources: []
-date created: Thursday, October 30th 2025, 11:51:52 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Sunday, November 2nd 2025, 1:53:09 pm
 ---
 
 # Вопрос (RU)
@@ -36,8 +42,8 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 Composable-функция пропускаема, если:
 
 1. **Все параметры стабильны** — каждый параметр имеет стабильный тип
-2. **Функция возвращает Unit** или нерестартуема
-3. **Не помечена @NonSkippableComposable**
+2. **Функция возвращает `Unit`** или нерестартуема
+3. **Не помечена `@NonSkippableComposable`**
 
 ```kotlin
 // ✅ Пропускаема — примитивные параметры
@@ -66,13 +72,13 @@ fun UserProfile(user: User) { // Всегда перекомпонуется
 3. **Все публичные свойства также стабильны**
 
 **Автоматически стабильные:**
-- Примитивы (`Int`, `Long`, `Float`, `Boolean`)
+- Примитивы: `Int`, `Long`, `Float`, `Boolean`
 - `String`, лямбды
 - Immutable-коллекции из `kotlinx.collections.immutable`
 
 **Нестабильные:**
 - Классы с `var`-свойствами
-- Mutable-коллекции (`MutableList`, `MutableMap`)
+- Mutable-коллекции: `MutableList`, `MutableMap`
 - Интерфейсы (компилятор не может доказать стабильность)
 
 ```kotlin
@@ -86,14 +92,14 @@ data class UnstableUser(val id: Int, var name: String)
 data class UnstableList(val users: MutableList<String>)
 ```
 
-### Аннотация @Stable
+### Аннотация `@Stable`
 
-**@Stable** — обещание компилятору, что тип соблюдает контракт стабильности, даже если это невозможно доказать автоматически.
+**`@Stable`** — обещание компилятору, что тип соблюдает контракт стабильности, даже если это невозможно доказать автоматически.
 
 **Когда использовать:**
 - Интерфейсы/абстрактные классы, стабильные по контракту
 - Классы с приватным мутабельным состоянием
-- Observable-паттерны (StateFlow, LiveData), уведомляющие Compose
+- Observable-паттерны (`StateFlow`, `LiveData`), уведомляющие Compose
 
 ```kotlin
 // ✅ Указываем стабильность интерфейса
@@ -123,32 +129,15 @@ fun BuggyDisplay(user: LyingUser) {
 
 ### Отладка Стабильности
 
-Включите Compose Compiler Metrics:
-
+Включите Compose Compiler Metrics в `build.gradle.kts`:
 ```kotlin
-android {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                project.buildDir.absolutePath + "/compose_metrics"
-        )
-    }
-}
-```
-
-Отчёт покажет:
-
-```text
-restartable skippable scheme("[...]") fun Counter(
-  stable count: Int
-  stable onIncrement: Function0<Unit>
-)
-
-restartable scheme("[...]") fun UserProfile(
-  unstable user: User
+freeCompilerArgs += listOf(
+    "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+    project.buildDir.absolutePath + "/compose_metrics"
 )
 ```
+
+Отчёт показывает стабильность параметров: `stable count: Int` vs `unstable user: User`.
 
 ### Практические Решения
 
@@ -194,15 +183,9 @@ fun UserList(users: ImmutableList<User>) { // Пропускаема
 
 ### Влияние На Производительность
 
-**Без пропуска:**
-- 10 000 composable на экране
-- Изменение 1 элемента
-- Результат: все 10 000 перекомпонуются (~100 мс)
+**Без пропуска**: 10,000 composable → изменение 1 элемента → все 10,000 перекомпонуются (~100 мс)
 
-**С правильным пропуском:**
-- 10 000 composable на экране
-- Изменение 1 элемента
-- Результат: только 1 перекомпонуется (~0.1 мс)
+**С правильным пропуском**: 10,000 composable → изменение 1 элемента → только 1 перекомпонуется (~0.1 мс)
 
 **Прирост в 1000 раз.**
 
@@ -215,8 +198,8 @@ fun UserList(users: ImmutableList<User>) { // Пропускаема
 A composable is **skippable** if:
 
 1. **All parameters are stable** — every parameter must be of a stable type
-2. **Returns Unit** or is non-restartable
-3. **Not marked with @NonSkippableComposable**
+2. **Returns `Unit`** or is non-restartable
+3. **Not marked with `@NonSkippableComposable`**
 
 ```kotlin
 // ✅ Skippable — primitive parameters
@@ -245,13 +228,13 @@ A type is **stable** if the Compose compiler guarantees:
 3. **All public properties are also stable types**
 
 **Automatically stable:**
-- Primitives (`Int`, `Long`, `Float`, `Boolean`)
+- Primitives: `Int`, `Long`, `Float`, `Boolean`
 - `String`, lambdas
 - Immutable collections from `kotlinx.collections.immutable`
 
 **Unstable:**
 - Classes with `var` properties
-- Mutable collections (`MutableList`, `MutableMap`)
+- Mutable collections: `MutableList`, `MutableMap`
 - Interfaces (compiler can't prove stability)
 
 ```kotlin
@@ -265,14 +248,14 @@ data class UnstableUser(val id: Int, var name: String)
 data class UnstableList(val users: MutableList<String>)
 ```
 
-### The @Stable Annotation
+### The `@Stable` Annotation
 
-**@Stable** is a promise to the Compose compiler that a type follows the stability contract, even if the compiler can't prove it automatically.
+**`@Stable`** is a promise to the Compose compiler that a type follows the stability contract, even if the compiler can't prove it automatically.
 
 **When to use:**
 - Interfaces/abstract classes stable by contract
 - Classes with private mutable state never exposed
-- Observable patterns (StateFlow, LiveData) that notify Compose
+- Observable patterns (`StateFlow`, `LiveData`) that notify Compose
 
 ```kotlin
 // ✅ Tell compiler this interface is stable
@@ -302,32 +285,15 @@ fun BuggyDisplay(user: LyingUser) {
 
 ### Debugging Stability
 
-Enable Compose Compiler Metrics:
-
+Enable Compose Compiler Metrics in `build.gradle.kts`:
 ```kotlin
-android {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                project.buildDir.absolutePath + "/compose_metrics"
-        )
-    }
-}
-```
-
-Report shows:
-
-```text
-restartable skippable scheme("[...]") fun Counter(
-  stable count: Int
-  stable onIncrement: Function0<Unit>
-)
-
-restartable scheme("[...]") fun UserProfile(
-  unstable user: User
+freeCompilerArgs += listOf(
+    "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+    project.buildDir.absolutePath + "/compose_metrics"
 )
 ```
+
+Report shows parameter stability: `stable count: Int` vs `unstable user: User`.
 
 ### Practical Solutions
 
@@ -373,15 +339,9 @@ fun UserList(users: ImmutableList<User>) { // Skippable
 
 ### Performance Impact
 
-**Without skipping:**
-- 10,000 composables on screen
-- 1 element changes
-- Result: all 10,000 recompose (~100 ms)
+**Without skipping**: 10,000 composables → 1 element changes → all 10,000 recompose (~100 ms)
 
-**With proper skipping:**
-- 10,000 composables on screen
-- 1 element changes
-- Result: only 1 recomposes (~0.1 ms)
+**With proper skipping**: 10,000 composables → 1 element changes → only 1 recomposes (~0.1 ms)
 
 **1000x improvement.**
 
@@ -389,24 +349,27 @@ fun UserList(users: ImmutableList<User>) { // Skippable
 
 ## Follow-ups
 
-- What is the difference between @Stable and @Immutable annotations in Compose?
+- What is the difference between `@Stable` and `@Immutable` annotations in Compose?
 - How does Strong Skipping Mode change lambda stability behavior?
 - What compiler metrics help identify recomposition issues?
-- How do State and derivedStateOf interact with stability inference?
-- When should you use remember {} to improve stability?
+- How do `State` and `derivedStateOf` interact with stability inference?
+- When should you use `remember {}` to improve stability?
 
 ## References
 
 - [[c-compose-recomposition]]
-- [[c-immutability]]
 - https://developer.android.com/jetpack/compose/performance
 - https://developer.android.com/jetpack/compose/mental-model
 
 ## Related Questions
 
 ### Prerequisites (Easier)
+- Understanding of Compose recomposition basics
+- Basic knowledge of immutable data structures
 
 ### Related (Same Level)
 - [[q-compose-performance-optimization--android--hard]] — Advanced Compose performance techniques
+- Recomposition optimization strategies
 
 ### Advanced (Harder)
+- Compose compiler plugin internals and stability inference

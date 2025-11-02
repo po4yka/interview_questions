@@ -1,22 +1,32 @@
 ---
 id: android-026
 title: Semantics in Jetpack Compose / Семантика в Jetpack Compose
-aliases: ["Semantics in Jetpack Compose", "Семантика в Jetpack Compose"]
+aliases: [Semantics in Jetpack Compose, Семантика в Jetpack Compose]
 topic: android
-subtopics: [testing-ui, ui-accessibility, ui-compose]
+subtopics:
+  - testing-ui
+  - ui-accessibility
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-jetpack-compose, q-compose-modifier-system--android--medium, q-compose-testing--android--medium]
+related:
+  - c-jetpack-compose
+  - q-compose-modifier-system--android--medium
+  - q-compose-testing--android--medium
 created: 2025-10-06
 updated: 2025-10-30
 tags: [accessibility, android/testing-ui, android/ui-accessibility, android/ui-compose, compose, difficulty/medium, testing]
-sources: [https://developer.android.com/guide/topics/ui/accessibility, https://developer.android.com/jetpack/compose/semantics]
+sources:
+  - https://developer.android.com/guide/topics/ui/accessibility
+  - https://developer.android.com/jetpack/compose/semantics
 date created: Thursday, October 30th 2025, 11:23:06 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:44:07 pm
 ---
 
 # Вопрос (RU)
@@ -208,7 +218,6 @@ composeTestRule
 ## References
 
 - [[c-jetpack-compose]]
-- [[c-android-accessibility]]
 - https://developer.android.com/jetpack/compose/semantics
 - https://developer.android.com/guide/topics/ui/accessibility
 - https://developer.android.com/jetpack/compose/testing

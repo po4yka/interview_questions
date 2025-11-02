@@ -1,22 +1,29 @@
 ---
 id: android-333
 title: Compose Slot Table & Recomposition / Slot Table и рекомпозиция Compose
-aliases: ["Compose Slot Table and Recomposition", "Slot Table и рекомпозиция"]
+aliases: [Compose Slot Table and Recomposition, Slot Table и рекомпозиция]
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+  - performance-rendering
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-compose-compiler-plugin--android--hard, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard]
+related:
+  - q-compose-compiler-plugin--android--hard
+  - q-compose-performance-optimization--android--hard
+  - q-compose-stability-skippability--android--hard
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-02
 tags: [android/performance-rendering, android/ui-compose, difficulty/hard]
 sources: []
-date created: Thursday, October 30th 2025, 11:51:40 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 1:50:48 pm
 ---
 
 # Вопрос (RU)
@@ -30,19 +37,19 @@ How do Slot Table and recomposition work in Jetpack Compose? Explain the interna
 ## Ответ (RU)
 
 ### Основная Идея
-Slot Table — компактная линейная структура данных (gap buffer), хранящая UI-дерево композиции и оптимизирующая рекомпозицию через инвалидацию групп.
+`Slot Table` — компактная линейная структура данных (`gap buffer`), хранящая UI-дерево композиции и оптимизирующая рекомпозицию через инвалидацию групп.
 
 **Архитектура**:
 - **Groups (группы)** — древовидная структура с ключами, арностью и флагами для быстрого пропуска неизменённых участков
-- **Slots (слоты)** — хранилище для `remember`, state-объектов, ссылок на узлы (LayoutNode)
+- **Slots (слоты)** — хранилище для `remember`, state-объектов, ссылок на узлы (`LayoutNode`)
 - **Anchors (якоря)** — позиционная идентичность для сохранения состояния при структурных изменениях
 
 ### Механизм Рекомпозиции
 
 **Фаза инвалидации**:
-1. Запись state → snapshot mutation → invalidation scope добавляется в очередь
-2. Composer помечает затронутые группы по anchor-позициям
-3. Scheduler планирует recompose на следующий frame
+1. Запись state → `snapshot` mutation → invalidation scope добавляется в очередь
+2. `Composer` помечает затронутые группы по anchor-позициям
+3. `Scheduler` планирует recompose на следующий frame
 
 **Фаза рекомпозиции**:
 ```kotlin
@@ -59,7 +66,7 @@ fun Counter(count: Int) {  // Group start
 // 4. Обновляется slot текстового узла
 ```
 
-**Оптимизация: skippability** — компилятор генерирует `if ($changed == 0) skip`, если параметры стабильны и не изменились.
+**Оптимизация: skippability** — компилятор генерирует ``if ($changed == 0) skip``, если параметры стабильны и не изменились.
 
 ### Критичные Паттерны
 
@@ -72,7 +79,7 @@ LazyColumn {
 }
 ```
 
-**derivedStateOf для снижения инвалидаций**:
+**`derivedStateOf` для снижения инвалидаций**:
 ```kotlin
 val firstVisible by remember {
   derivedStateOf {  // ✅ Инвалидирует только при изменении результата
@@ -81,7 +88,7 @@ val firstVisible by remember {
 }
 ```
 
-**remember(deps) для контроля пересоздания**:
+**`remember(deps)` для контроля пересоздания**:
 ```kotlin
 val formatter = remember(locale) {  // ✅ Пересоздание только при смене locale
   DateTimeFormatter.ofPattern("dd MMM", locale)
@@ -96,25 +103,25 @@ val formatter = remember(locale) {  // ✅ Пересоздание только
 - Вставка/удаление группы: O(n) для gap buffer реорганизации
 
 **Сравнение с View**:
-- View hierarchy: глубокие деревья с measure/layout для всех дочерних
-- Slot Table: плоская структура, локальная рекомпозиция без полного обхода
+- `View` hierarchy: глубокие деревья с `measure`/`layout` для всех дочерних
+- `Slot Table`: плоская структура, локальная рекомпозиция без полного обхода
 
 ## Answer (EN)
 
 ### Core Idea
-Slot Table is a compact linear data structure (gap buffer) storing the composition UI tree and optimizing recomposition through group invalidation.
+`Slot Table` is a compact linear data structure (`gap buffer`) storing the composition UI tree and optimizing recomposition through group invalidation.
 
 **Architecture**:
 - **Groups** — tree structure with keys, arity, flags enabling fast skipping of unchanged regions
-- **Slots** — storage for `remember` values, state objects, node references (LayoutNode)
+- **Slots** — storage for `remember` values, state objects, node references (`LayoutNode`)
 - **Anchors** — positional identity preserving state during structural changes
 
 ### Recomposition Mechanism
 
 **Invalidation phase**:
-1. State write → snapshot mutation → invalidation scope enqueued
-2. Composer marks affected groups by anchor positions
-3. Scheduler plans recompose for next frame
+1. State write → `snapshot` mutation → invalidation scope enqueued
+2. `Composer` marks affected groups by anchor positions
+3. `Scheduler` plans recompose for next frame
 
 **Recomposition phase**:
 ```kotlin
@@ -131,7 +138,7 @@ fun Counter(count: Int) {  // Group start
 // 4. Text node slot updated
 ```
 
-**Optimization: skippability** — compiler generates `if ($changed == 0) skip` when parameters are stable and unchanged.
+**Optimization: skippability** — compiler generates ``if ($changed == 0) skip`` when parameters are stable and unchanged.
 
 ### Critical Patterns
 
@@ -144,7 +151,7 @@ LazyColumn {
 }
 ```
 
-**derivedStateOf reduces invalidations**:
+**`derivedStateOf` reduces invalidations**:
 ```kotlin
 val firstVisible by remember {
   derivedStateOf {  // ✅ Invalidates only when result changes
@@ -153,7 +160,7 @@ val firstVisible by remember {
 }
 ```
 
-**remember(deps) controls recreation**:
+**`remember(deps)` controls recreation**:
 ```kotlin
 val formatter = remember(locale) {  // ✅ Recreates only on locale change
   DateTimeFormatter.ofPattern("dd MMM", locale)
@@ -168,8 +175,8 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 - Group insert/delete: O(n) for gap buffer reorganization
 
 **Comparison with View**:
-- View hierarchy: deep trees with measure/layout for all children
-- Slot Table: flat structure, local recomposition without full traversal
+- `View` hierarchy: deep trees with `measure`/`layout` for all children
+- `Slot Table`: flat structure, local recomposition without full traversal
 
 ---
 
@@ -181,18 +188,20 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 - How does gap buffer reorganization affect performance during rapid list mutations?
 
 ## References
-- [[c-compose-remember]]
 - [[c-compose-state]]
 - [[c-compose-recomposition]]
-- [[c-compose-stability]]
 
 ## Related Questions
 
-### Prerequisites
+### Prerequisites (Easier)
+- Understanding of Compose state management basics
+- Basic knowledge of recomposition
 
-### Related
+### Related (Same Level)
 - [[q-compose-compiler-plugin--android--hard]] — How compiler generates slot table code
 - [[q-compose-stability-skippability--android--hard]] — Stability inference details
 - [[q-compose-performance-optimization--android--hard]] — Broader optimization strategies
 
-### Advanced
+### Advanced (Harder)
+- Deep dive into gap buffer implementation
+- Advanced recomposition debugging techniques

@@ -12,7 +12,7 @@ original_language: en
 language_tags:
   - en
   - ru
-status: draft
+status: reviewed
 moc: moc-android
 related:
   - c-compose-modifiers
@@ -22,7 +22,7 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-memory, android/ui-compose, compose, difficulty/medium, optimization]
 date created: Thursday, October 30th 2025, 11:23:09 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:38:02 pm
 ---
 
 # Вопрос (RU)
@@ -243,8 +243,6 @@ fun Modifier.debugBorder() = border(2.dp, Color.Red)
 
 ## References
 
-- [[c-compose-phases]]
-- [[c-compose-modifiers]]
 - [[c-compose-recomposition]]
 - https://developer.android.com/develop/ui/compose/performance
 - https://developer.android.com/develop/ui/compose/modifiers

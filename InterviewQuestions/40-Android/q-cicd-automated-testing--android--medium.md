@@ -1,22 +1,30 @@
 ---
 id: android-237
 title: CI/CD Automated Testing / Автоматизированное тестирование в CI/CD
-aliases: ["CI/CD Automated Testing", "Автоматизированное тестирование в CI/CD"]
+aliases: [CI/CD Automated Testing, Автоматизированное тестирование в CI/CD]
 topic: android
-subtopics: [ci-cd, gradle, testing-instrumented, testing-unit]
+subtopics:
+  - ci-cd
+  - gradle
+  - testing-instrumented
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-gradle-build-cache, c-test-sharding]
+related:
+  - c-gradle-build-cache
+  - c-test-sharding
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/ci-cd, android/gradle, android/testing-instrumented, android/testing-unit, ci-cd, difficulty/medium, testing]
 date created: Thursday, October 30th 2025, 11:10:59 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:29:32 pm
 ---
 
 # Вопрос (RU)
@@ -359,10 +367,6 @@ fun animationTest() {
 
 ## References
 
-- [[c-gradle-build-cache]] - Gradle build caching strategies
-- [[c-test-sharding]] - Test sharding and parallelization
-- [[c-espresso]] - Espresso UI testing framework
-- [[c-mockito]] - Mocking framework for unit tests
 - https://docs.gradle.org/current/userguide/build_cache.html - Gradle build cache
 - https://developer.android.com/studio/test - Android testing fundamentals
 - https://docs.github.com/actions - GitHub Actions documentation
@@ -376,8 +380,4 @@ fun animationTest() {
 ### Related (Same Level)
 - [[q-android-lint-tool--android--medium]] - Static analysis with Android Lint
 - [[q-build-optimization-gradle--android--medium]] - Gradle build optimization
-- [[q-test-coverage-android--android--medium]] - Code coverage measurement
 
-### Advanced (Harder)
-- [[q-distributed-testing-infrastructure--system-design--hard]] - Distributed test infrastructure
-- [[q-performance-regression-testing--android--hard]] - Performance regression detection

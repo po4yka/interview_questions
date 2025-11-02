@@ -3,12 +3,16 @@ id: android-311
 title: Compose remember/derivedStateOf / remember и derivedStateOf в Compose
 aliases: [Compose remember and derivedStateOf, remember и derivedStateOf]
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-compose-compiler-plugin--android--hard
@@ -17,10 +21,10 @@ related:
   - q-remember-vs-remembersaveable-compose--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-02
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:23:10 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Sunday, November 2nd 2025, 1:43:55 pm
 ---
 
 # Вопрос (RU)
@@ -35,11 +39,11 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ### Основные Концепции
 
-**remember** — кеширует значения в композиции; переживает рекомпозицию, но не пересоздание активити.
+**`remember`** — кеширует значения в композиции; переживает рекомпозицию, но не пересоздание активити.
 
-**rememberSaveable** — сохраняет значения через изменения конфигурации и смерть процесса (использует Bundle/Saver).
+**`rememberSaveable`** — сохраняет значения через изменения конфигурации и смерть процесса (использует `Bundle`/`Saver`).
 
-**derivedStateOf** — вычисляет производное состояние, которое инвалидируется только при изменении результата, а не зависимостей.
+**`derivedStateOf`** — вычисляет производное состояние, которое инвалидируется только при изменении результата, а не зависимостей.
 
 ### Паттерны Использования
 
@@ -67,7 +71,7 @@ val userData by remember(userId) {
 }
 ```
 
-#### rememberSaveable (персистентность)
+#### `rememberSaveable` (персистентность)
 
 Используйте для input-полей и навигационного состояния, которое должно пережить пересоздание.
 
@@ -82,7 +86,7 @@ fun Login() {
 }
 ```
 
-#### Custom Saver Для Сложных Типов
+#### Custom `Saver` Для Сложных Типов
 
 ```kotlin
 data class Form(val email: String, val agree: Boolean)
@@ -97,7 +101,7 @@ var form by rememberSaveable(stateSaver = FormSaver) {
 }
 ```
 
-#### derivedStateOf (вычисляемое состояние)
+#### `derivedStateOf` (вычисляемое состояние)
 
 Уменьшает количество рекомпозиций: перерисовка происходит только когда меняется вычисленное значение, а не зависимости.
 
@@ -108,7 +112,7 @@ val showFab by remember {
   derivedStateOf { listState.firstVisibleItemIndex > 0 }
 }
 
-// ❌ Без derivedStateOf — рекомпозиция при каждом скролле
+// ❌ Без `derivedStateOf` — рекомпозиция при каждом скролле
 val showFabWrong = listState.firstVisibleItemIndex > 0
 ```
 
@@ -124,11 +128,11 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 
 ### Core Concepts
 
-**remember** — caches values in composition; survives recomposition but not activity recreation.
+**`remember`** — caches values in composition; survives recomposition but not activity recreation.
 
-**rememberSaveable** — persists across config changes and process death (uses Bundle/Saver).
+**`rememberSaveable`** — persists across config changes and process death (uses `Bundle`/`Saver`).
 
-**derivedStateOf** — computes derived state that invalidates only when result changes, not dependencies.
+**`derivedStateOf`** — computes derived state that invalidates only when result changes, not dependencies.
 
 ### Usage Patterns
 
@@ -156,7 +160,7 @@ val userData by remember(userId) {
 }
 ```
 
-#### rememberSaveable (persistence)
+#### `rememberSaveable` (persistence)
 
 Use for input fields and navigation state that must survive recreation.
 
@@ -171,7 +175,7 @@ fun Login() {
 }
 ```
 
-#### Custom Saver for Complex Types
+#### Custom `Saver` for Complex Types
 
 ```kotlin
 data class Form(val email: String, val agree: Boolean)
@@ -186,7 +190,7 @@ var form by rememberSaveable(stateSaver = FormSaver) {
 }
 ```
 
-#### derivedStateOf (computed state)
+#### `derivedStateOf` (computed state)
 
 Reduces recompositions: redraws only when computed value changes, not dependencies.
 
@@ -197,7 +201,7 @@ val showFab by remember {
   derivedStateOf { listState.firstVisibleItemIndex > 0 }
 }
 
-// ❌ Without derivedStateOf — recomposition on every scroll
+// ❌ Without `derivedStateOf` — recomposition on every scroll
 val showFabWrong = listState.firstVisibleItemIndex > 0
 ```
 
@@ -213,11 +217,11 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 
 ## Follow-ups
 
-- How does derivedStateOf affect performance when used with fast-changing state?
-- What are the Bundle size limitations for rememberSaveable and how to handle large objects?
-- Can you nest derivedStateOf calls, and what are the implications?
-- How does remember with keys compare to LaunchedEffect for triggering side effects on parameter changes?
-- What happens if you use derivedStateOf without wrapping it in remember?
+- How does `derivedStateOf` affect performance when used with fast-changing state?
+- What are the `Bundle` size limitations for `rememberSaveable` and how to handle large objects?
+- Can you nest `derivedStateOf` calls, and what are the implications?
+- How does `remember` with keys compare to `LaunchedEffect` for triggering side effects on parameter changes?
+- What happens if you use `derivedStateOf` without wrapping it in `remember`?
 
 ## References
 
@@ -232,6 +236,8 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 - [[q-remember-vs-remembersaveable-compose--android--medium]] — Basic difference between remember variants
 
 ### Related (Same Level)
+- State management patterns in Compose
+- Recomposition optimization techniques
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] — Advanced performance optimization techniques

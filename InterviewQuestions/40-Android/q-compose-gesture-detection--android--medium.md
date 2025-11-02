@@ -3,20 +3,26 @@ id: android-038
 title: Compose Gesture Detection / Обработка жестов в Compose
 aliases: [Compose Gesture Detection, Обработка жестов в Compose]
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+  - ui-compose
+  - ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-compose-modifiers, c-compose-state]
+related:
+  - c-compose-modifiers
+  - c-compose-state
 sources: []
 created: 2025-10-11
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gestures]
 date created: Thursday, October 30th 2025, 11:23:08 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date modified: Sunday, November 2nd 2025, 1:37:35 pm
 ---
 
 # Вопрос (RU)
@@ -229,7 +235,6 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 
 ## References
 
-- [[c-compose-modifiers]]
 - [[c-compose-state]]
 - https://developer.android.com/develop/ui/compose/touch-input/pointer-input
 - https://developer.android.com/develop/ui/compose/touch-input/gestures
