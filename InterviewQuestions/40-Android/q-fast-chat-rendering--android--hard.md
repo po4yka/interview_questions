@@ -3,24 +3,31 @@ id: android-474
 title: Fast Chat Rendering / Быстрый рендеринг чата
 aliases: [Fast Chat Rendering, Быстрый рендеринг чата]
 topic: android
-subtopics: [performance-memory, ui-compose, ui-views]
+subtopics:
+  - performance-memory
+  - ui-compose
+  - ui-views
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - c-performance-optimization
   - c-recyclerview
   - q-diffutil-background-calculation-issues--android--medium
 sources:
+  - https://developer.android.com/jetpack/compose/performance
+  - https://developer.android.com/topic/libraries/architecture/paging/v3-overview
   - https://developer.android.com/topic/performance/rendering
 created: 2025-10-20
-updated: 2025-10-28
+updated: 2025-11-03
 tags: [android/performance-memory, android/ui-compose, android/ui-views, chat, difficulty/hard, diffutil, paging, performance, recyclerview]
-date created: Tuesday, October 28th 2025, 9:22:19 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:31 pm
+date modified: Monday, November 3rd 2025, 11:43:13 am
 ---
 
 # Вопрос (RU)
@@ -33,446 +40,130 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-Для быстрого рендеринга чатов оптимизируйте UI (RecyclerView/LazyColumn), загрузку данных (Paging 3), изображения (Glide/Coil) и кэш (Room).
+Цель — минимизировать лишние перерисовки и аллокации при списках сообщений. Ключевые направления: UI списков (`RecyclerView`/`LazyColumn`), загрузка данных (`Paging 3`), изображения (`Glide`/`Coil`), и кэш (`Room`).
 
-### XML Views С RecyclerView
+### XML Views: `RecyclerView` + `DiffUtil`
 
-**1. DiffUtil с Payloads**
-
-✅ Частичные обновления:
 ```kotlin
-class ChatDiffCallback : DiffUtil.ItemCallback<ChatMessage>() {
-    override fun areItemsTheSame(old: ChatMessage, new: ChatMessage) =
-        old.id == new.id
-
-    override fun getChangePayload(old: ChatMessage, new: ChatMessage): Any? {
-        return when {
-            old.status != new.status -> StatusPayload(new.status)
-            old.text != new.text -> TextPayload(new.text)
-            else -> null
-        }
-    }
-}
-
-class ChatViewHolder(private val binding: ItemChatBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(message: ChatMessage, payloads: List<Any>) {
-        if (payloads.isEmpty()) {
-            binding.messageText.text = message.text
-            binding.timestamp.text = message.formattedTime
-            updateStatus(message.status)
-        } else {
-            payloads.forEach { payload ->
-                when (payload) {
-                    is StatusPayload -> updateStatus(payload.status)
-                    is TextPayload -> binding.messageText.text = payload.text
-                }
-            }
-        }
-    }
+class ChatDiff : DiffUtil.ItemCallback<Msg>() {
+  override fun areItemsTheSame(o: Msg, n: Msg) = o.id == n.id
+  override fun getChangePayload(o: Msg, n: Msg): Any? = when {
+    o.status != n.status -> n.status
+    o.text != n.text -> n.text
+    else -> null
+  }
 }
 ```
 
-❌ Без payloads:
-```kotlin
-override fun getChangePayload(old: ChatMessage, new: ChatMessage): Any? = null
-// Полная перерисовка ViewHolder при любом изменении
-```
-
-**2. Paging 3**
+### Paging 3
 
 ```kotlin
-class ChatRepository {
-    fun getMessages(): Flow<PagingData<ChatMessage>> {
-        return Pager(
-            config = PagingConfig(pageSize = 50, prefetchDistance = 10),
-            pagingSourceFactory = { ChatPagingSource(db) }
-        ).flow
-    }
-}
-
-// Использование
-lifecycleScope.launch {
-    viewModel.messages.collectLatest { pagingData ->
-        adapter.submitData(pagingData)
-    }
-}
+fun messages(): Flow<PagingData<Msg>> = Pager(
+  PagingConfig(pageSize = 50, prefetchDistance = 10)
+) { ChatPagingSource(db) }.flow
 ```
 
-### Compose С LazyColumn
-
-**1. Стабильные ключи и remember**
-
-✅ Оптимизированный LazyColumn:
-```kotlin
-@Composable
-fun ChatScreen(viewModel: ChatViewModel) {
-    val messages by viewModel.messages.collectAsState()
-
-    LazyColumn(
-        reverseLayout = true,
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        items(
-            items = messages,
-            key = { it.id } // Стабильные ключи
-        ) { message ->
-            ChatMessageItem(message)
-        }
-    }
-}
-
-@Composable
-fun ChatMessageItem(message: ChatMessage) {
-    val formattedTime = remember(message.timestamp) {
-        formatTimestamp(message.timestamp)
-    }
-
-    Row(Modifier.fillMaxWidth().padding(8.dp)) {
-        Text(message.text)
-        Text(formattedTime)
-    }
-}
-```
-
-❌ Без оптимизации:
-```kotlin
-items(messages) { message -> // Нет ключей
-    ChatMessageItem(message)
-}
-// Ненужные recomposition при изменениях
-```
-
-**2. Paging с Compose**
+### Compose: `LazyColumn` Со Стабильными Ключами
 
 ```kotlin
 @Composable
-fun ChatScreen(viewModel: ChatViewModel) {
-    val messages = viewModel.messages.collectAsLazyPagingItems()
-
-    LazyColumn(reverseLayout = true) {
-        items(
-            count = messages.itemCount,
-            key = messages.itemKey { it.id }
-        ) { index ->
-            messages[index]?.let { ChatMessageItem(it) }
-        }
+fun Chat(messages: List<Msg>) {
+  LazyColumn(reverseLayout = true) {
+    items(items = messages, key = { it.id }) { m ->
+      MessageItem(m)
     }
+  }
 }
 ```
 
-**3. derivedStateOf для вычислений**
+### Compose: `derivedStateOf` Для Дорогих Вычислений
+
+```kotlin
+val sorted by remember(messages) { derivedStateOf { messages.sortedByDescending { it.ts } } }
+```
+
+### Изображения (Coil)
 
 ```kotlin
 @Composable
-fun ChatScreen(viewModel: ChatViewModel) {
-    val messagesState by viewModel.messages.collectAsState()
-
-    val sortedMessages by remember {
-        derivedStateOf {
-            messagesState.sortedByDescending { it.timestamp }
-        }
-    }
-
-    LazyColumn {
-        items(sortedMessages, key = { it.id }) { message ->
-            ChatMessageItem(message)
-        }
-    }
-}
+fun ChatImage(url: String) { AsyncImage(model = url, contentDescription = null) }
 ```
 
-### Оптимизация Изображений
+### Лучшие Практики
+- Частичные обновления (`DiffUtil` payloads), стабильные ключи в `LazyColumn`
+- `Paging 3` + бэк‑давление, батчинг IO
+- Кэш изображений (память/диск), ограничение размеров
+- Кэш сообщений в `Room`, индексы по `timestamp`
 
-**Glide (XML Views):**
-```kotlin
-fun loadChatImage(imageView: ImageView, url: String) {
-    Glide.with(imageView.context)
-        .load(url)
-        .override(400, 400)
-        .thumbnail(0.1f)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(imageView)
-}
-```
+### Типичные Ошибки
+- Полная перерисовка `ViewHolder` без payloads
+- Отсутствие ключей/нестабильные ключи → лишние recomposition
+- Большие изображения без ресайза, отсутствие кеша
+- Тяжелые вычисления в `@Composable` без `remember/derivedStateOf`
 
-**Coil (Compose):**
-```kotlin
-@Composable
-fun ChatImageMessage(imageUrl: String) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(imageUrl)
-            .size(400, 400)
-            .memoryCacheKey(imageUrl)
-            .diskCacheKey(imageUrl)
-            .build(),
-        contentDescription = null,
-        modifier = Modifier.size(200.dp)
-    )
-}
-```
-
-### Офлайн Кэш
-
-```kotlin
-@Entity
-data class ChatMessage(
-    @PrimaryKey val id: String,
-    val text: String,
-    val timestamp: Long,
-    val status: MessageStatus
-)
-
-@Dao
-interface ChatDao {
-    @Query("SELECT * FROM ChatMessage ORDER BY timestamp DESC")
-    fun getMessages(): Flow<List<ChatMessage>>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessage(message: ChatMessage)
-}
-```
-
-### Ключевые Принципы
-
-**RecyclerView:**
-- ViewHolder Pattern для переиспользования
-- DiffUtil + Payloads для частичных обновлений
-- Paging 3 для больших списков
-
-**Compose:**
-- Стабильные key() для идентификации
-- remember/derivedStateOf для кэширования
-- @Immutable data classes
-
-**Общие:**
-- Lazy loading изображений с ограничением размера
-- Офлайн кэш через Room
-- Фоновые потоки для загрузки данных
 
 ## Answer (EN)
 
-For fast chat rendering, optimize UI (RecyclerView/LazyColumn), data loading (Paging 3), images (Glide/Coil), and cache (Room).
+Goal — minimize redundant redraws and allocations for message lists. Focus on list UI (`RecyclerView`/`LazyColumn`), data loading (`Paging 3`), images (`Glide`/`Coil`), and cache (`Room`).
 
-### XML Views with RecyclerView
+### XML Views: `RecyclerView` + `DiffUtil`
 
-**1. DiffUtil with Payloads**
-
-✅ Partial updates:
 ```kotlin
-class ChatDiffCallback : DiffUtil.ItemCallback<ChatMessage>() {
-    override fun areItemsTheSame(old: ChatMessage, new: ChatMessage) =
-        old.id == new.id
-
-    override fun getChangePayload(old: ChatMessage, new: ChatMessage): Any? {
-        return when {
-            old.status != new.status -> StatusPayload(new.status)
-            old.text != new.text -> TextPayload(new.text)
-            else -> null
-        }
-    }
-}
-
-class ChatViewHolder(private val binding: ItemChatBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(message: ChatMessage, payloads: List<Any>) {
-        if (payloads.isEmpty()) {
-            binding.messageText.text = message.text
-            binding.timestamp.text = message.formattedTime
-            updateStatus(message.status)
-        } else {
-            payloads.forEach { payload ->
-                when (payload) {
-                    is StatusPayload -> updateStatus(payload.status)
-                    is TextPayload -> binding.messageText.text = payload.text
-                }
-            }
-        }
-    }
+class ChatDiff : DiffUtil.ItemCallback<Msg>() {
+  override fun areItemsTheSame(o: Msg, n: Msg) = o.id == n.id
+  override fun getChangePayload(o: Msg, n: Msg): Any? = when {
+    o.status != n.status -> n.status
+    o.text != n.text -> n.text
+    else -> null
+  }
 }
 ```
 
-❌ Without payloads:
-```kotlin
-override fun getChangePayload(old: ChatMessage, new: ChatMessage): Any? = null
-// Full ViewHolder redraw on any change
-```
-
-**2. Paging 3**
+### Paging 3
 
 ```kotlin
-class ChatRepository {
-    fun getMessages(): Flow<PagingData<ChatMessage>> {
-        return Pager(
-            config = PagingConfig(pageSize = 50, prefetchDistance = 10),
-            pagingSourceFactory = { ChatPagingSource(db) }
-        ).flow
-    }
-}
-
-// Usage
-lifecycleScope.launch {
-    viewModel.messages.collectLatest { pagingData ->
-        adapter.submitData(pagingData)
-    }
-}
+fun messages(): Flow<PagingData<Msg>> = Pager(
+  PagingConfig(pageSize = 50, prefetchDistance = 10)
+) { ChatPagingSource(db) }.flow
 ```
 
-### Compose with LazyColumn
-
-**1. Stable keys and remember**
-
-✅ Optimized LazyColumn:
-```kotlin
-@Composable
-fun ChatScreen(viewModel: ChatViewModel) {
-    val messages by viewModel.messages.collectAsState()
-
-    LazyColumn(
-        reverseLayout = true,
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        items(
-            items = messages,
-            key = { it.id } // Stable keys
-        ) { message ->
-            ChatMessageItem(message)
-        }
-    }
-}
-
-@Composable
-fun ChatMessageItem(message: ChatMessage) {
-    val formattedTime = remember(message.timestamp) {
-        formatTimestamp(message.timestamp)
-    }
-
-    Row(Modifier.fillMaxWidth().padding(8.dp)) {
-        Text(message.text)
-        Text(formattedTime)
-    }
-}
-```
-
-❌ Without optimization:
-```kotlin
-items(messages) { message -> // No keys
-    ChatMessageItem(message)
-}
-// Unnecessary recomposition on changes
-```
-
-**2. Paging with Compose**
+### Compose: `LazyColumn` with Stable Keys
 
 ```kotlin
 @Composable
-fun ChatScreen(viewModel: ChatViewModel) {
-    val messages = viewModel.messages.collectAsLazyPagingItems()
-
-    LazyColumn(reverseLayout = true) {
-        items(
-            count = messages.itemCount,
-            key = messages.itemKey { it.id }
-        ) { index ->
-            messages[index]?.let { ChatMessageItem(it) }
-        }
+fun Chat(messages: List<Msg>) {
+  LazyColumn(reverseLayout = true) {
+    items(items = messages, key = { it.id }) { m ->
+      MessageItem(m)
     }
+  }
 }
 ```
 
-**3. derivedStateOf for calculations**
+### Compose: `derivedStateOf` for Expensive Work
+
+```kotlin
+val sorted by remember(messages) { derivedStateOf { messages.sortedByDescending { it.ts } } }
+```
+
+### Images (Coil)
 
 ```kotlin
 @Composable
-fun ChatScreen(viewModel: ChatViewModel) {
-    val messagesState by viewModel.messages.collectAsState()
-
-    val sortedMessages by remember {
-        derivedStateOf {
-            messagesState.sortedByDescending { it.timestamp }
-        }
-    }
-
-    LazyColumn {
-        items(sortedMessages, key = { it.id }) { message ->
-            ChatMessageItem(message)
-        }
-    }
-}
+fun ChatImage(url: String) { AsyncImage(model = url, contentDescription = null) }
 ```
 
-### Image Optimization
+### Best Practices
+- Partial updates (`DiffUtil` payloads), stable keys in `LazyColumn`
+- `Paging 3` + backpressure, IO batching
+- Image caches (memory/disk), size constraints
+- Message cache in `Room`, indexes on `timestamp`
 
-**Glide (XML Views):**
-```kotlin
-fun loadChatImage(imageView: ImageView, url: String) {
-    Glide.with(imageView.context)
-        .load(url)
-        .override(400, 400)
-        .thumbnail(0.1f)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(imageView)
-}
-```
-
-**Coil (Compose):**
-```kotlin
-@Composable
-fun ChatImageMessage(imageUrl: String) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(imageUrl)
-            .size(400, 400)
-            .memoryCacheKey(imageUrl)
-            .diskCacheKey(imageUrl)
-            .build(),
-        contentDescription = null,
-        modifier = Modifier.size(200.dp)
-    )
-}
-```
-
-### Offline Cache
-
-```kotlin
-@Entity
-data class ChatMessage(
-    @PrimaryKey val id: String,
-    val text: String,
-    val timestamp: Long,
-    val status: MessageStatus
-)
-
-@Dao
-interface ChatDao {
-    @Query("SELECT * FROM ChatMessage ORDER BY timestamp DESC")
-    fun getMessages(): Flow<List<ChatMessage>>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessage(message: ChatMessage)
-}
-```
-
-### Key Principles
-
-**RecyclerView:**
-- ViewHolder Pattern for reuse
-- DiffUtil + Payloads for partial updates
-- Paging 3 for large lists
-
-**Compose:**
-- Stable key() for identification
-- remember/derivedStateOf for caching
-- @Immutable data classes
-
-**Common:**
-- Lazy image loading with size limits
-- Offline cache via Room
-- Background threads for data loading
-
+### Common Pitfalls
+- Full `ViewHolder` redraw without payloads
+- Missing/unstable keys → extra recomposition
+- Large images without resize, missing cache
+- Heavy work inside `@Composable` without `remember/derivedStateOf`
 ---
 
 ## Follow-ups
@@ -488,6 +179,14 @@ interface ChatDao {
 - [[c-performance-optimization]]
 - [[c-recyclerview]]
 - [[moc-android]]
+- [Android Performance: Rendering](https://developer.android.com/topic/performance/rendering)
+- [DiffUtil (AndroidX)](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
+- [Paging 3 Overview](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
+- [Compose Performance](https://developer.android.com/jetpack/compose/performance)
+- [Compose Lists](https://developer.android.com/jetpack/compose/lists)
+- [Coil Compose Docs](https://coil-kt.github.io/coil/compose/)
+- [Glide Docs](https://bumptech.github.io/glide/)
+- [Room Persistence Library](https://developer.android.com/training/data-storage/room)
 
 ## Related Questions
 

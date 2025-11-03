@@ -3,20 +3,26 @@ id: android-460
 title: Factory Pattern Android / Паттерн Factory в Android
 aliases: [Abstract Factory Pattern, Factory Method Pattern, Factory Pattern Android, Паттерн Factory в Android]
 topic: android
-subtopics: [architecture-clean, ui-views]
+subtopics:
+  - architecture-clean
+  - ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-sources: [https://developer.android.com/guide/topics/ui/declaring-layout]
-status: draft
+language_tags:
+  - en
+  - ru
+sources:
+  - https://developer.android.com/guide/topics/ui/declaring-layout
+status: reviewed
 moc: moc-android
-related: [c-factory-pattern]
+related:
+  - c-factory-pattern
 created: 2025-10-20
-updated: 2025-10-28
+updated: 2025-11-03
 tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
-date created: Tuesday, October 28th 2025, 9:22:07 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Monday, November 3rd 2025, 11:26:20 am
 ---
 
 # Вопрос (RU)
@@ -29,13 +35,13 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-Android фреймворк широко использует Factory паттерн. Основные примеры: **LayoutInflater** (создает Views из XML), **Fragment.instantiate()** (создает фрагменты), **Intent.createChooser()** (создает chooser dialogs), **MediaPlayer.create()** (создает pre-configured media players).
+Android фреймворк широко использует Factory паттерн. Основные примеры: **`LayoutInflater`** (создает Views из XML), **`Fragment.instantiate()`** (создает фрагменты), **`Intent.createChooser()`** (создает chooser dialogs), **`MediaPlayer.create()`** (создает pre-configured media players).
 
 ### Ключевые Примеры
 
-**1. LayoutInflater - Factory Method Pattern**
+**1. `LayoutInflater` - Factory Method Pattern**
 
-LayoutInflater создает View объекты из XML деклараций без прямых вызовов конструкторов:
+`LayoutInflater` создает View объекты из XML деклараций без прямых вызовов конструкторов:
 
 ```kotlin
 // ✅ Factory method создает Views из XML
@@ -50,25 +56,17 @@ val view = inflater.inflate(R.layout.activity_main, parent, false)
 Упрощенная реализация:
 
 ```kotlin
-class LayoutInflater {
-    fun inflate(resource: Int, parent: ViewGroup?, attachToRoot: Boolean): View {
-        val parser = resources.getLayout(resource)
-        return createViewFromTag(parser.name, context, attrs)
-    }
-
-    private fun createViewFromTag(name: String, context: Context, attrs: AttributeSet): View {
-        return when (name) {
-            "TextView" -> TextView(context, attrs)
-            "Button" -> Button(context, attrs)
-            "ImageView" -> ImageView(context, attrs)
-            else -> Class.forName(name).getConstructor(Context::class.java, AttributeSet::class.java)
-                .newInstance(context, attrs) as View
-        }
-    }
+private fun createViewFromTag(name: String, ctx: Context, attrs: AttributeSet): View = when (name) {
+    "TextView" -> TextView(ctx, attrs)
+    "Button" -> Button(ctx, attrs)
+    "ImageView" -> ImageView(ctx, attrs)
+    else -> Class.forName(name)
+        .getConstructor(Context::class.java, AttributeSet::class.java)
+        .newInstance(ctx, attrs) as View
 }
 ```
 
-**2. MediaPlayer.create() - Static Factory Method**
+**2. `MediaPlayer.create()` - Static Factory Method**
 
 Создает pre-configured MediaPlayer:
 
@@ -83,7 +81,7 @@ mediaPlayer.setDataSource(context, uri)
 mediaPlayer.prepare() // дополнительный шаг
 ```
 
-**3. Intent.createChooser() - Static Factory Method**
+**3. `Intent.createChooser()` - Static Factory Method**
 
 Создает Intent для выбора приложения:
 
@@ -123,15 +121,26 @@ class ViewHolderFactory {
 - **Инкапсуляция**: скрывает сложность создания (reflection, инициализация)
 - **Консистентность**: единообразный API для создания объектов
 
+### Лучшие Практики
+- Оборачивайте сложное создание в статические фабрики (`create()`)
+- Возвращайте интерфейсы/абстракции, а не конкретные реализации
+- Кэшируйте дорогие объекты внутри фабрик при необходимости
+- Для `Fragment` используйте аргументы через `newInstance()`
+
+### Типичные Ошибки
+- Протаскивание `Context` повсюду вместо явной зависимости
+- Отсутствие валидизации входов в фабрике
+- "Божественная" фабрика с избыточной ответственностью
+
 ## Answer (EN)
 
-Android framework extensively uses Factory pattern. Main examples: **LayoutInflater** (creates Views from XML), **Fragment.instantiate()** (creates fragments), **Intent.createChooser()** (creates chooser dialogs), **MediaPlayer.create()** (creates pre-configured media players).
+Android framework extensively uses Factory pattern. Main examples: **`LayoutInflater`** (creates Views from XML), **`Fragment.instantiate()`** (creates fragments), **`Intent.createChooser()`** (creates chooser dialogs), **`MediaPlayer.create()`** (creates pre-configured media players).
 
 ### Key Examples
 
-**1. LayoutInflater - Factory Method Pattern**
+**1. `LayoutInflater` - Factory Method Pattern**
 
-LayoutInflater creates View objects from XML declarations without direct constructor calls:
+`LayoutInflater` creates View objects from XML declarations without direct constructor calls:
 
 ```kotlin
 // ✅ Factory method creates Views from XML
@@ -146,25 +155,17 @@ val view = inflater.inflate(R.layout.activity_main, parent, false)
 Simplified implementation:
 
 ```kotlin
-class LayoutInflater {
-    fun inflate(resource: Int, parent: ViewGroup?, attachToRoot: Boolean): View {
-        val parser = resources.getLayout(resource)
-        return createViewFromTag(parser.name, context, attrs)
-    }
-
-    private fun createViewFromTag(name: String, context: Context, attrs: AttributeSet): View {
-        return when (name) {
-            "TextView" -> TextView(context, attrs)
-            "Button" -> Button(context, attrs)
-            "ImageView" -> ImageView(context, attrs)
-            else -> Class.forName(name).getConstructor(Context::class.java, AttributeSet::class.java)
-                .newInstance(context, attrs) as View
-        }
-    }
+private fun createViewFromTag(name: String, ctx: Context, attrs: AttributeSet): View = when (name) {
+    "TextView" -> TextView(ctx, attrs)
+    "Button" -> Button(ctx, attrs)
+    "ImageView" -> ImageView(ctx, attrs)
+    else -> Class.forName(name)
+        .getConstructor(Context::class.java, AttributeSet::class.java)
+        .newInstance(ctx, attrs) as View
 }
 ```
 
-**2. MediaPlayer.create() - Static Factory Method**
+**2. `MediaPlayer.create()` - Static Factory Method**
 
 Creates pre-configured MediaPlayer:
 
@@ -179,7 +180,7 @@ mediaPlayer.setDataSource(context, uri)
 mediaPlayer.prepare() // additional step
 ```
 
-**3. Intent.createChooser() - Static Factory Method**
+**3. `Intent.createChooser()` - Static Factory Method**
 
 Creates Intent for app selection:
 
@@ -219,6 +220,17 @@ class ViewHolderFactory {
 - **Encapsulation**: hides creation complexity (reflection, initialization)
 - **Consistency**: uniform API for object creation
 
+### Best Practices
+- Hide complex construction behind static factories (`create()`)
+- Return interfaces/abstractions, not concrete types
+- Cache expensive objects inside factories when appropriate
+- For `Fragment` use `newInstance()` with `arguments`
+
+### Common Pitfalls
+- Passing `Context` everywhere instead of explicit dependency
+- Missing input validation inside factory
+- "God" factory doing too much
+
 ---
 
 ## Follow-ups
@@ -230,7 +242,6 @@ class ViewHolderFactory {
 
 ## References
 
-- [[c-factory-pattern]]
 - [[c-software-design-patterns]]
 - https://developer.android.com/guide/topics/ui/declaring-layout
 - https://developer.android.com/guide/fragments/fragmentmanager#factory
@@ -241,7 +252,3 @@ class ViewHolderFactory {
 
 ### Related (Same Level)
 - [[q-usecase-pattern-android--android--medium]]
-
-### Advanced (Harder)
-- [[q-custom-view-factory--android--hard]]
-- [[q-dependency-injection-patterns--android--hard]]
