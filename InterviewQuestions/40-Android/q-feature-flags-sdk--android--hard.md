@@ -1,9 +1,7 @@
 ---
 id: android-488
 title: Design Feature Flags & Experimentation SDK / Проектирование SDK флагов и экспериментов
-aliases:
-  - Feature Flags SDK
-  - Experimentation SDK
+aliases: [Experimentation SDK, Feature Flags SDK]
 topic: android
 subtopics:
   - architecture-clean
@@ -25,14 +23,9 @@ sources:
   - https://developer.android.com/topic/architecture
 created: 2025-10-29
 updated: 2025-11-03
-tags:
-  - android/architecture-clean
-  - android/networking-http
-  - android/service
-  - difficulty/hard
-  - feature-flags
-  - experimentation
-  - sdk-design
+tags: [android/architecture-clean, android/networking-http, android/service, difficulty/hard, experimentation, feature-flags, sdk-design]
+date created: Wednesday, October 29th 2025, 5:03:10 pm
+date modified: Monday, November 3rd 2025, 3:25:55 pm
 ---
 
 # Вопрос (RU)
@@ -105,7 +98,7 @@ Design a complete feature flags & experimentation SDK for Android with the follo
 
 SDK флагов функций обеспечивает динамическое включение/выключение функций и A/B тестирование без необходимости релиза приложения.
 
-### Теоретические основы
+### Теоретические Основы
 
 **Флаги функций** — это механизм декоплинга развертывания кода от выпуска функций. Позволяет выпускать код заранее, а включать функциональность динамически через конфигурацию.
 
@@ -284,7 +277,7 @@ class SecureFlagStore(private val context: Context) : FlagStore {
 
 Key metrics for production reliability: bootstrap latency (<150ms), cache hit rate (>95%), evaluation errors (<0.1%), exposure volume, config fetch success.
 
-### Лучшие практики
+### Лучшие Практики
 
 - **Versioned evaluators** — каждый rule имеет версию для backward compatibility
 - **Contract tests** — shared test suite между client/server для rule evaluation
@@ -292,7 +285,7 @@ Key metrics for production reliability: bootstrap latency (<150ms), cache hit ra
 - **Schema migration** — protobuf для efficient serialization и versioning
 - **Fail-safe defaults** — graceful degradation при network issues
 
-### Типичные ошибки
+### Типичные Ошибки
 
 - **Non-deterministic evaluation** — приводит к inconsistent user experience
 - **PII in telemetry** — нарушает privacy regulations

@@ -1,37 +1,104 @@
 ---
 id: android-271
-title: "Fix Slow App Startup Legacy / Исправление медленного запуска приложения"
-aliases: ["Fix Slow App Startup in Legacy Project", "Исправление медленного запуска приложения в легаси-проекте"]
+title: Fix Slow App Startup Legacy / Исправление медленного запуска приложения
+aliases: [Fix Slow App Startup in Legacy Project, Исправление медленного запуска приложения в легаси-проекте]
 topic: android
-subtopics: [architecture-modularization, performance-startup, profiling]
+subtopics:
+  - architecture-modularization
+  - performance-startup
+  - profiling
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-app-startup, c-lazy-initialization, q-android-profiling-tools--android--medium, q-what-are-services-used-for--android--medium]
-sources: []
+related:
+  - c-app-startup
+  - c-lazy-initialization
+  - q-android-profiling-tools--android--medium
+  - q-what-are-services-used-for--android--medium
+sources:
+  - Android App Startup documentation
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-03
 tags: [android/architecture-modularization, android/performance-startup, android/profiling, app-startup, difficulty/hard, lazy-init, legacy-code, optimization]
-date created: Tuesday, October 28th 2025, 7:38:29 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Monday, November 3rd 2025, 3:30:51 pm
 ---
 
 # Вопрос (RU)
 
-Что делать, если нужно исправить медленный запуск приложения в legacy-проекте?
+> Что делать, если нужно исправить медленный запуск приложения в legacy-проекте?
+
+## Краткая Версия
+
+Оптимизируйте запуск legacy Android приложения: профилируйте bottleneck'ы, перенесите тяжелую инициализацию в фон, используйте lazy loading и Baseline Profiles для 15-30% улучшения производительности.
+
+## Подробная Версия
+
+Систематически оптимизируйте медленный запуск legacy Android приложения:
+
+**Профилирование:**
+- Используйте Android Profiler для выявления узких мест
+- Измерьте холодный/теплый/горячий старт с целевыми показателями <2с/<1с/<500мс
+
+**Оптимизация инициализации:**
+- Перенесите тяжелые операции из Application.onCreate() в фоновые потоки
+- Используйте Jetpack App Startup для отложенной инициализации компонентов
+- Примените lazy initialization через dependency injection
+
+**Архитектурные улучшения:**
+- Разбейте монолитную инициализацию на модули с зависимостями
+- Используйте Baseline Profiles для AOT-компиляции критических путей
+- Реализуйте постепенный rollout оптимизаций с измерением метрик
 
 # Question (EN)
 
-How would you approach fixing slow app startup in a legacy Android project?
+> How would you approach fixing slow app startup in a legacy Android project?
+
+## Short Version
+
+Optimize legacy Android app startup: profile bottlenecks, move heavy initialization to background, use lazy loading and Baseline Profiles for 15-30% performance improvement.
+
+## Detailed Version
+
+Systematically optimize slow startup in legacy Android application:
+
+**Profiling:**
+- Use Android Profiler to identify bottlenecks
+- Measure cold/warm/hot start with targets <2s/<1s/<500ms
+
+**Initialization Optimization:**
+- Move heavy operations from Application.onCreate() to background threads
+- Use Jetpack App Startup for deferred component initialization
+- Apply lazy initialization through dependency injection
+
+**Architectural Improvements:**
+- Break monolithic initialization into modules with dependencies
+- Use Baseline Profiles for AOT compilation of critical paths
+- Implement gradual rollout of optimizations with metrics measurement
 
 ---
 
 ## Ответ (RU)
 
 **Подход:** Систематическая оптимизация с измеримыми результатами через профилирование, отложенную инициализацию и архитектурные улучшения.
+
+### Теоретические Основы
+
+**Типы запуска приложения:**
+- **Холодный старт** — приложение запускается с нуля, требует полной инициализации
+- **Теплый старт** — приложение уже запущено но уничтожено процессом, данные частично кешированы
+- **Горячий старт** — приложение уже активно, перезапуск из background
+
+**Критические факторы производительности:**
+- **Application.onCreate()** — блокирует UI-поток, должен содержать только критические инициализации
+- **Lazy initialization** — отложенная загрузка компонентов при первом обращении
+- **Baseline Profiles** — AOT-компиляция критических путей для 15-30% улучшения производительности
+- **App Startup library** — управление порядком инициализации компонентов с зависимостями
 
 **1. Профилирование и анализ**
 
@@ -137,9 +204,38 @@ HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
 
 Эффект: 15-30% улучшение холодного старта через предкомпиляцию.
 
+### Лучшие Практики
+
+- **Измеряйте до и после** — устанавливайте baseline метрики перед оптимизациями
+- **Постепенные изменения** — внедряйте оптимизации поэтапно для изоляции эффектов
+- **Профилируйте на target устройствах** — тестируйте на устройствах с Android 10+ для Baseline Profiles
+- **Мониторьте в production** — отслеживайте startup метрики после релиза
+- **Используйте App Startup** — для управления зависимостями инициализации компонентов
+
+### Типичные Ошибки
+
+- **Блокировка UI-потока в onCreate()** — приводит к ANR и плохому UX
+- **Инициализация всего сразу** — монолитная загрузка всех компонентов
+- **Отсутствие baseline измерений** — невозможно оценить эффективность оптимизаций
+- **Игнорирование warm/hot стартов** — фокус только на cold start
+- **Ручная инициализация без зависимостей** — race conditions и неправильный порядок
+
 ## Answer (EN)
 
 **Approach:** Systematic optimization with measurable results through profiling, deferred initialization, and architectural improvements.
+
+### Theoretical Foundations
+
+**App startup types:**
+- **Cold start** — app launches from scratch, requires full initialization
+- **Warm start** — app was launched but process was killed, data partially cached
+- **Hot start** — app already active, restart from background
+
+**Critical performance factors:**
+- **Application.onCreate()** — blocks UI thread, should contain only critical initializations
+- **Lazy initialization** — deferred loading of components on first access
+- **Baseline Profiles** — AOT compilation of critical paths for 15-30% performance improvement
+- **App Startup library** — managing component initialization order with dependencies
 
 **1. Profiling and Analysis**
 
@@ -245,6 +341,22 @@ HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
 
 Effect: 15-30% cold start improvement through pre-compilation.
 
+### Best Practices
+
+- **Measure before and after** — establish baseline metrics before optimizations
+- **Incremental changes** — implement optimizations gradually to isolate effects
+- **Profile on target devices** — test on Android 10+ devices for Baseline Profiles
+- **Monitor in production** — track startup metrics after release
+- **Use App Startup** — for managing component initialization dependencies
+
+### Common Pitfalls
+
+- **Blocking UI thread in onCreate()** — leads to ANR and poor UX
+- **Initialize everything at once** — monolithic loading of all components
+- **No baseline measurements** — impossible to evaluate optimization effectiveness
+- **Ignoring warm/hot starts** — focus only on cold start
+- **Manual initialization without dependencies** — race conditions and wrong order
+
 ---
 
 ## Follow-ups
@@ -257,9 +369,6 @@ Effect: 15-30% cold start improvement through pre-compilation.
 
 ## References
 
-- [[c-app-startup]]
-- [[c-lazy-initialization]]
-- [[c-baseline-profiles]]
 - Android Baseline Profiles documentation
 - Macrobenchmark library guide
 
@@ -270,8 +379,3 @@ Effect: 15-30% cold start improvement through pre-compilation.
 
 ### Related
 - [[q-android-lint-tool--android--medium]] - Profiling techniques
-- [[q-optimize-memory-leaks-android--android--hard]] - Memory optimization
-
-### Advanced
-- [[q-implement-custom-classloader-android--android--hard]] - Advanced initialization control
-- [[q-android-strictmode-anr-debugging--android--hard]] - Performance monitoring

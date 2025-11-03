@@ -3,20 +3,28 @@ id: android-446
 title: FileProvider for Secure File Sharing / FileProvider для безопасного обмена файлами
 aliases: [FileProvider, FileProvider for Secure File Sharing, FileProvider для безопасного обмена файлами, Безопасный обмен файлами]
 topic: android
-subtopics: [files-media, permissions]
+subtopics:
+  - files-media
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-sources: [https://developer.android.com/reference/androidx/core/content/FileProvider]
-status: draft
+language_tags:
+  - en
+  - ru
+sources:
+  - https://developer.android.com/reference/androidx/core/content/FileProvider
+status: reviewed
 moc: moc-android
-related: [c-content-provider, q-android-storage-types--android--medium, q-runtime-permissions-best-practices--android--medium]
+related:
+  - c-content-provider
+  - q-android-storage-types--android--medium
+  - q-runtime-permissions-best-practices--android--medium
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/files-media, android/permissions, content-provider, difficulty/medium, file-sharing, security]
 date created: Tuesday, October 28th 2025, 7:39:08 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+date modified: Monday, November 3rd 2025, 3:26:09 pm
 ---
 
 # Вопрос (RU)

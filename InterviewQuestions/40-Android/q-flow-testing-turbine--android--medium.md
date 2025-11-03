@@ -1,22 +1,31 @@
 ---
 id: android-066
-title: "Flow Testing with Turbine / Тестирование Flow с Turbine"
-aliases: ["Flow Testing with Turbine", "Тестирование Flow с Turbine"]
+title: Flow Testing with Turbine / Тестирование Flow с Turbine
+aliases: [Flow Testing with Turbine, Тестирование Flow с Turbine]
 topic: android
-subtopics: [coroutines, flow, testing-unit]
+subtopics:
+  - coroutines
+  - flow
+  - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [c-turbine-testing, q-compose-testing--android--medium, q-unit-testing-coroutines-flow--android--medium]
+related:
+  - c-turbine-testing
+  - q-compose-testing--android--medium
+  - q-unit-testing-coroutines-flow--android--medium
 created: 2025-10-12
 updated: 2025-10-28
 tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, turbine, unit-testing]
-sources: [https://github.com/cashapp/turbine]
+sources:
+  - https://github.com/cashapp/turbine
 date created: Tuesday, October 28th 2025, 7:39:15 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+date modified: Monday, November 3rd 2025, 3:31:12 pm
 ---
 
 # Вопрос (RU)
@@ -362,15 +371,10 @@ stateFlow.test {
 
 ## References
 
-- [[c-kotlin-flow]] - Kotlin Flow fundamentals
-- [[c-coroutines-testing]] - Coroutines testing concepts
 - Official Turbine documentation: https://github.com/cashapp/turbine
 - kotlinx-coroutines-test guide: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
 
 ## Related Questions
-
-### Prerequisites
-- [[q-unit-testing-basics--android--easy]] - Unit testing foundations
 
 ### Related
 - [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flows

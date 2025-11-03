@@ -1,35 +1,104 @@
 ---
 id: android-252
-title: "KMM vs Flutter Comparison / Сравнение KMM и Flutter"
-aliases: ["KMM vs Flutter", "Kotlin Multiplatform Mobile vs Flutter", "Сравнение KMM и Flutter"]
+title: KMM vs Flutter Comparison / Сравнение KMM и Flutter
+aliases: [KMM vs Flutter, Kotlin Multiplatform Mobile vs Flutter, Сравнение KMM и Flutter]
 topic: android
-subtopics: [architecture-clean, kmp]
+subtopics:
+  - architecture-clean
+  - kmp
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: []
-sources: []
+related:
+  - c-cross-platform-development
+sources:
+  - https://flutter.dev/docs
+  - https://kotlinlang.org/docs/multiplatform.html
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, multiplatform]
-date created: Tuesday, October 28th 2025, 7:40:08 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+updated: 2025-11-03
+tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, flutter, multiplatform]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Monday, November 3rd 2025, 3:35:15 pm
 ---
 
 # Вопрос (RU)
 
-> Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки. Каковы архитектурные различия, характеристики производительности и trade-offs? Когда выбирать KMM вместо Flutter и наоборот?
+> Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки.
+
+## Краткая Версия
+
+KMM — shared business logic (60-70%) с native UI; Flutter — shared UI + logic (90-95%). KMM для native UX и performance, Flutter для скорости разработки и multi-platform. Trade-offs: KMM выше производительность но требует native expertise.
+
+## Подробная Версия
+
+Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки:
+
+**Архитектурные различия:**
+- KMM: Shared business logic + native UI (Jetpack Compose, SwiftUI)
+- Flutter: Shared UI + logic с platform channels для native APIs
+
+**Производительность:**
+- KMM: 100% native, startup 200-500ms, size 15-25MB
+- Flutter: 95-98% native, startup 400-800ms, size 20-35MB
+
+**Trade-offs:**
+- KMM: Лучшая производительность и UX, но требует separate UI development
+- Flutter: Быстрее разработка и code reuse, но overhead engine
+
+**Когда выбирать:**
+- KMM: Native UX критичен, существующее native app, performance-critical
+- Flutter: Быстрый MVP, custom UI, маленькая команда, multi-platform
 
 # Question (EN)
 
-> Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development. What are the architectural differences, performance characteristics, and trade-offs? When should you choose KMM over Flutter and vice versa?
+> Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development.
+
+## Short Version
+
+KMM — shared business logic (60-70%) with native UI; Flutter — shared UI + logic (90-95%). KMM for native UX and performance, Flutter for development speed and multi-platform. Trade-offs: KMM higher performance but requires native expertise.
+
+## Detailed Version
+
+Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development:
+
+**Architectural differences:**
+- KMM: Shared business logic + native UI (Jetpack Compose, SwiftUI)
+- Flutter: Shared UI + logic with platform channels for native APIs
+
+**Performance:**
+- KMM: 100% native, startup 200-500ms, size 15-25MB
+- Flutter: 95-98% native, startup 400-800ms, size 20-35MB
+
+**Trade-offs:**
+- KMM: Better performance and UX, but requires separate UI development
+- Flutter: Faster development and code reuse, but engine overhead
+
+**When to choose:**
+- KMM: Native UX critical, existing native app, performance-critical
+- Flutter: Rapid MVP, custom UI, small team, multi-platform
 
 ## Ответ (RU)
 
 KMM и Flutter представляют два фундаментально разных подхода к кросс-платформенной разработке.
+
+### Теоретические Основы
+
+**Кросс-платформенная разработка** — стратегия создания приложений для multiple платформ с максимальным code reuse. Основные подходы:
+
+**Native Development** — отдельные codebases для каждой платформы, максимальная производительность и UX, но high development cost.
+
+**Cross-platform** — shared codebase с platform-specific адаптациями. Trade-offs между производительностью, UX и development speed.
+
+**Key Considerations:**
+- **Platform fragmentation** — Android/iOS имеют разные UI patterns и system APIs
+- **Performance requirements** — games/AR vs business apps vs content apps
+- **Team composition** — native expertise vs generalist developers
+- **Time-to-market** — MVP speed vs long-term maintainability
 
 ### Архитектурные Различия
 
@@ -200,9 +269,39 @@ class LocationManager {
 **Performance Critical** → KMM
 **Small Team/Budget** → Flutter
 
+### Лучшие Практики
+
+- **Пилотный проект** — начните с small feature для оценки подхода перед full commitment
+- **Platform expertise** — сохраняйте native разработчиков для platform-specific требований
+- **Architecture alignment** — выбирайте подход соответствующий existing team skills и architecture
+- **Performance monitoring** — измеряйте реальные метрики перед/после выбора технологии
+- **Migration strategy** — планируйте gradual adoption с rollback планом
+
+### Типичные Ошибки
+
+- **Игнорирование UX differences** — Android/iOS имеют разные interaction patterns
+- **Performance assumptions** — Flutter performance достаточна для большинства apps
+- **Team composition mismatch** — native-only команда не подходит для Flutter
+- **Over-engineering** — KMM для simple CRUD apps увеличивает complexity
+- **Ignoring platform evolution** — технологии развиваются, reassess периодически
+
 ## Answer (EN)
 
 KMM and Flutter represent two fundamentally different approaches to cross-platform development.
+
+### Theoretical Foundations
+
+**Cross-platform development** — strategy for building apps across multiple platforms with maximum code reuse. Main approaches:
+
+**Native Development** — separate codebases per platform, maximum performance and UX, but high development cost.
+
+**Cross-platform** — shared codebase with platform-specific adaptations. Trade-offs between performance, UX, and development speed.
+
+**Key Considerations:**
+- **Platform fragmentation** — Android/iOS have different UI patterns and system APIs
+- **Performance requirements** — games/AR vs business apps vs content apps
+- **Team composition** — native expertise vs generalist developers
+- **Time-to-market** — MVP speed vs long-term maintainability
 
 ### Architectural Differences
 
@@ -373,34 +472,25 @@ class LocationManager {
 **Performance Critical** → KMM
 **Small Team/Budget** → Flutter
 
-## Follow-ups
+### Best Practices
 
-- How do you migrate an existing native Android app to KMM vs Flutter?
-- What are the performance implications of platform channels in Flutter?
-- How does KMM handle expect/actual declarations for platform-specific code?
-- Can you combine KMM for logic with Compose Multiplatform for UI?
-- What are the testing strategies for KMM vs Flutter?
+- **Pilot project** — start with small feature to evaluate approach before full commitment
+- **Platform expertise** — maintain native developers for platform-specific requirements
+- **Architecture alignment** — choose approach matching existing team skills and architecture
+- **Performance monitoring** — measure real metrics before/after technology choice
+- **Migration strategy** — plan gradual adoption with rollback plan
+
+### Common Pitfalls
+
+- **Ignoring UX differences** — Android/iOS have different interaction patterns
+- **Performance assumptions** — Flutter performance sufficient for most apps
+- **Team composition mismatch** — native-only team doesn't fit Flutter
+- **Over-engineering** — KMM for simple CRUD apps increases complexity
+- **Ignoring platform evolution** — technologies evolve, reassess periodically
 
 ## References
 
 - https://kotlinlang.org/docs/multiplatform.html - KMM official documentation
 - https://flutter.dev/docs - Flutter official documentation
 - https://developer.android.com/kotlin/multiplatform - Android KMM guide
-
-## Related Questions
-
-### Prerequisites
-- Native Android development fundamentals
-- Kotlin language basics
-- Cross-platform development concepts
-
-### Related
-- Compose Multiplatform for shared UI (when available)
-- Platform-specific API integration patterns
-- Mobile architecture patterns (MVVM, MVI, Clean Architecture)
-
-### Advanced
-- KMM architecture and best practices
-- Cross-platform performance optimization
-- Migration strategies from native to cross-platform
 
