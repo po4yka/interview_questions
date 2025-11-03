@@ -1,20 +1,30 @@
 ---
 id: android-448
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
-aliases: [Custom Matchers, Custom ``ViewAction`s`, Espresso Advanced Patterns, `IdlingResource`, Продвинутые паттерны Espresso]
+aliases: [Custom Matchers, Custom ViewActions, Espresso Advanced Patterns, IdlingResource, Продвинутые паттерны Espresso]
 topic: android
-subtopics: [testing-instrumented, testing-ui]
+subtopics:
+  - testing-instrumented
+  - testing-ui
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-testing-strategies--android--medium, q-android-testing-tools--testing--medium, q-ui-testing-best-practices--testing--medium]
-sources: [https://developer.android.com/training/testing/espresso]
+related:
+  - q-android-testing-strategies--android--medium
+  - q-android-testing-tools--testing--medium
+  - q-ui-testing-best-practices--testing--medium
+sources:
+  - https://developer.android.com/training/testing/espresso
 created: 2025-10-20
 updated: 2025-11-03
 tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
+date created: Saturday, October 25th 2025, 1:26:29 pm
+date modified: Monday, November 3rd 2025, 11:11:56 am
 ---
 
 # Вопрос (RU)
@@ -126,14 +136,14 @@ onView(withId(R.id.recycler))
     .check(matches(hasDescendant(withText("Item 5"))))
 ```
 
-### Лучшие практики
+### Лучшие Практики
 - Не используйте `Thread.sleep()`; применяйте `IdlingResource` или `IdlingPolicies`
 - Регистрируйте/разрегистрируйте ресурсы через `IdlingRegistry` в `@Before/@After`
 - Для корутин: инкремент/декремент при запуске/завершении
 - Сужайте matchers; избегайте хрупких `withText()` без контекста
 - Пишите полезные сообщения в `describeTo()`
 
-### Типичные ошибки
+### Типичные Ошибки
 - Забыли `unregister()` → утечки и ложные idle
 - Глобальные idlers, влияющие на другие тесты
 - `sleep()` вместо синхронизации
