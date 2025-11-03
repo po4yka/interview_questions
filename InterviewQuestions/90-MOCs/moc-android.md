@@ -160,6 +160,17 @@ SORT difficulty ASC, file.name ASC
 ### On-device ML
 - [[q-tflite-acceleration-strategies--android--hard]] - Optimizing TensorFlow Lite pipelines
 
+### Release Engineering
+- [[q-play-console-automation--android--hard]] - Automating Play Console workflows
+- [[q-play-asset-delivery-strategy--android--hard]] - Advanced Play Asset Delivery planning
+- [[q-android-release-pipeline-cicd--android--hard]] - CI/CD pipeline and rollout governance
+
+### Accessibility & Globalization
+- [[q-accessibility-testing--android--medium]] - Accessibility testing practices
+- [[q-global-localization-strategy--android--hard]] - End-to-end localization process
+- [[q-rtl-support-best-practices--android--hard]] - Robust RTL support
+- [[q-font-fallback-complex-scripts--android--hard]] - Complex script font fallback
+
 ### Performance & Observability
 - [[q-perfetto-frame-timeline-analysis--android--hard]] - Trace-based jank diagnostics
 - [[q-power-profiling-battery-historian--android--medium]] - Energy audits and remediation

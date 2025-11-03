@@ -1,22 +1,36 @@
 ---
 id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
-aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
+aliases:
+  - Encrypted File Storage
+  - Зашифрованное хранение файлов
 topic: android
-subtopics: [files-media, permissions]
+subtopics:
+  - files-media
+  - permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-android-keystore-system--security--medium, q-android-security-best-practices--android--medium, q-data-encryption-at-rest--android--medium]
+related:
+  - q-data-encryption-at-rest--android--medium
 created: 2025-10-20
-updated: 2025-10-28
-sources: [https://developer.android.com/topic/security/data]
-tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore]
-date created: Tuesday, October 28th 2025, 9:23:47 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
+updated: 2025-11-02
+tags:
+  - android/files-media
+  - android/permissions
+  - android/security
+  - difficulty/medium
+  - encryption
+  - file-storage
+  - keystore
+  - security
+sources:
+  - https://developer.android.com/topic/security/data
 ---
 
 # Вопрос (RU)
@@ -29,9 +43,11 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ## Ответ (RU)
 
-EncryptedFile API из библиотеки Security Crypto обеспечивает прозрачное шифрование файлов с автоматическим управлением ключами через Android Keystore. Использует AES-256-GCM с HKDF для деривации ключей.
+`EncryptedFile` API из библиотеки Security Crypto обеспечивает прозрачное шифрование файлов с автоматическим управлением ключами через Android Keystore. Использует `AES-256-GCM` с `HKDF` для деривации ключей. Критично для защиты чувствительных данных от несанкционированного доступа.
 
 ### Базовая Реализация
+
+`EncryptedFile` работает поверх обычных `File` операций. `MasterKey` хранится в Android Keystore (аппаратная защита через TEE/Secure Element). Каждый файл получает уникальный ключ через `HKDF`, обеспечивая изоляцию данных.
 
 ```kotlin
 class EncryptedFileManager(private val context: Context) {
@@ -39,94 +55,78 @@ class EncryptedFileManager(private val context: Context) {
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
-    // ✅ Правильно: используем use для автоматического закрытия потоков
     fun writeSecure(fileName: String, content: String) {
-        val file = File(context.filesDir, fileName)
         val encryptedFile = EncryptedFile.Builder(
-            context, file, masterKey,
+            context, File(context.filesDir, fileName), masterKey,
             EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
-
         encryptedFile.openFileOutput().use {
             it.write(content.toByteArray(Charsets.UTF_8))
         }
     }
 
-    fun readSecure(fileName: String): String {
-        val file = File(context.filesDir, fileName)
+    fun readSecure(fileName: String): Result<String> = try {
         val encryptedFile = EncryptedFile.Builder(
-            context, file, masterKey,
+            context, File(context.filesDir, fileName), masterKey,
             EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
-
-        return encryptedFile.openFileInput().use {
+        Result.success(encryptedFile.openFileInput().use {
             it.readBytes().toString(Charsets.UTF_8)
-        }
+        })
+    } catch (e: SecurityException) {
+        Result.failure(Exception("Decryption failed", e))
     }
 }
 ```
 
-### Streaming Для Больших Файлов
+### Streaming для Больших Файлов
+
+Для файлов >1MB используйте streaming во избежание `OutOfMemoryError`:
 
 ```kotlin
-// ✅ Правильно: 8KB буфер оптимален для большинства случаев
-fun copyEncrypted(source: InputStream, fileName: String) {
-    val file = File(context.filesDir, fileName)
-    val encryptedFile = buildEncryptedFile(file)
-
-    encryptedFile.openFileOutput().use { output ->
-        source.copyTo(output, bufferSize = 8192)
-    }
-}
-
-// ❌ Неправильно: загрузка всего файла в память
-fun copyWrong(source: InputStream, fileName: String) {
-    val allBytes = source.readBytes() // OOM для больших файлов
-    writeSecure(fileName, String(allBytes))
+suspend fun copyEncrypted(source: InputStream, fileName: String) = withContext(Dispatchers.IO) {
+    val encryptedFile = EncryptedFile.Builder(
+        context, File(context.filesDir, fileName), masterKey,
+        EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
+    ).build()
+    encryptedFile.openFileOutput().use { source.copyTo(it, bufferSize = 8192) }
 }
 ```
 
 ### Ключевые Концепции
 
-**AES-256-GCM:**
-- Authenticated encryption: одновременно шифрует и проверяет целостность
-- 256-битный ключ, 96-битный IV
-- GCM mode предотвращает tampering
+**AES-256-GCM**: Authenticated encryption (256-bit ключ, 96-bit IV). Одновременно шифрует и проверяет целостность данных. GCM mode предотвращает tampering.
 
-**HKDF деривация:**
-- Каждый файл получает уникальный ключ из master key
-- Компрометация одного файла не раскрывает другие
-- 4KB блоки позволяют streaming без загрузки всего файла
+**HKDF**: Создает уникальный ключ для каждого файла из `MasterKey`. Компрометация одного файла не раскрывает другие. `AES256_GCM_HKDF_4KB` для файлов <1MB, `AES256_GCM_HKDF_1MB` для больших (>10MB).
 
-**Android Keystore:**
-- Аппаратная защита ключей (TEE/Secure Element)
-- Ключи никогда не экспортируются в память приложения
-- Поддержка биометрической аутентификации
+**Android Keystore**: Аппаратная защита ключей (TEE/Secure Element). Ключи не экспортируются в память приложения. Поддержка биометрической аутентификации.
 
-### Best Practices
+```kotlin
+// MasterKey с биометрией
+val biometricKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .setUserAuthenticationRequired(true)
+    .setUserAuthenticationValidityDurationSeconds(300)
+    .build()
+```
 
-**Управление ключами:**
-- Один MasterKey на приложение
-- Избегать хранения ключей в SharedPreferences
-- Биометрия для доступа к особо чувствительным файлам
+### Лучшие Практики
 
-**Производительность:**
-- Streaming для файлов >1MB
-- Асинхронные операции (Dispatchers.IO)
-- 8KB буфер оптимален для большинства сценариев
-
-**Безопасность:**
-- Валидация путей файлов (path traversal)
-- Обработка SecurityException
-- Никогда не логировать plaintext содержимое
+- Один `MasterKey` на приложение (кэшировать, не пересоздавать)
+- Streaming для файлов >1MB, асинхронные операции на `Dispatchers.IO`
+- Валидация путей файлов (защита от path traversal)
+- Обработка `SecurityException` при шифровании/дешифровании
+- Безопасное удаление: перезапись файлов случайными данными перед удалением
 
 ---
 
 ## Answer (EN)
 
-EncryptedFile API from Security Crypto library provides transparent file encryption with automatic key management via Android Keystore. Uses AES-256-GCM with HKDF for key derivation.
+`EncryptedFile` API from Security Crypto library provides transparent file encryption with automatic key management via Android Keystore. Uses `AES-256-GCM` with `HKDF` for key derivation. Critical for protecting sensitive data from unauthorized access.
 
 ### Basic Implementation
+
+`EncryptedFile` works on top of regular `File` operations. `MasterKey` stored in Android Keystore (hardware-protected via TEE/Secure Element). Each file gets unique key through `HKDF`, ensuring data isolation.
 
 ```kotlin
 class EncryptedFileManager(private val context: Context) {
@@ -134,114 +134,98 @@ class EncryptedFileManager(private val context: Context) {
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
-    // ✅ Correct: use for automatic stream closure
     fun writeSecure(fileName: String, content: String) {
-        val file = File(context.filesDir, fileName)
         val encryptedFile = EncryptedFile.Builder(
-            context, file, masterKey,
+            context, File(context.filesDir, fileName), masterKey,
             EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
-
         encryptedFile.openFileOutput().use {
             it.write(content.toByteArray(Charsets.UTF_8))
         }
     }
 
-    fun readSecure(fileName: String): String {
-        val file = File(context.filesDir, fileName)
+    fun readSecure(fileName: String): Result<String> = try {
         val encryptedFile = EncryptedFile.Builder(
-            context, file, masterKey,
+            context, File(context.filesDir, fileName), masterKey,
             EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
-
-        return encryptedFile.openFileInput().use {
+        Result.success(encryptedFile.openFileInput().use {
             it.readBytes().toString(Charsets.UTF_8)
-        }
+        })
+    } catch (e: SecurityException) {
+        Result.failure(Exception("Decryption failed", e))
     }
 }
 ```
 
 ### Streaming for Large Files
 
+For files >1MB use streaming to avoid `OutOfMemoryError`:
+
 ```kotlin
-// ✅ Correct: 8KB buffer optimal for most cases
-fun copyEncrypted(source: InputStream, fileName: String) {
-    val file = File(context.filesDir, fileName)
-    val encryptedFile = buildEncryptedFile(file)
-
-    encryptedFile.openFileOutput().use { output ->
-        source.copyTo(output, bufferSize = 8192)
-    }
-}
-
-// ❌ Wrong: loading entire file into memory
-fun copyWrong(source: InputStream, fileName: String) {
-    val allBytes = source.readBytes() // OOM for large files
-    writeSecure(fileName, String(allBytes))
+suspend fun copyEncrypted(source: InputStream, fileName: String) = withContext(Dispatchers.IO) {
+    val encryptedFile = EncryptedFile.Builder(
+        context, File(context.filesDir, fileName), masterKey,
+        EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
+    ).build()
+    encryptedFile.openFileOutput().use { source.copyTo(it, bufferSize = 8192) }
 }
 ```
 
 ### Key Concepts
 
-**AES-256-GCM:**
-- Authenticated encryption: encrypts and verifies integrity simultaneously
-- 256-bit key, 96-bit IV
-- GCM mode prevents tampering
+**AES-256-GCM**: Authenticated encryption (256-bit key, 96-bit IV). Simultaneously encrypts and verifies data integrity. GCM mode prevents tampering.
 
-**HKDF derivation:**
-- Each file gets unique key derived from master key
-- Compromising one file doesn't reveal others
-- 4KB blocks enable streaming without loading entire file
+**HKDF**: Creates unique key for each file from `MasterKey`. Compromising one file doesn't reveal others. `AES256_GCM_HKDF_4KB` for files <1MB, `AES256_GCM_HKDF_1MB` for large (>10MB).
 
-**Android Keystore:**
-- Hardware-backed key protection (TEE/Secure Element)
-- Keys never exported to app memory
-- Biometric authentication support
+**Android Keystore**: Hardware-backed key protection (TEE/Secure Element). Keys never exported to application memory. Biometric authentication support.
+
+```kotlin
+// MasterKey with biometrics
+val biometricKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .setUserAuthenticationRequired(true)
+    .setUserAuthenticationValidityDurationSeconds(300)
+    .build()
+```
 
 ### Best Practices
 
-**Key management:**
-- Single MasterKey per application
-- Avoid storing keys in SharedPreferences
-- Biometrics for access to highly sensitive files
-
-**Performance:**
-- Streaming for files >1MB
-- Async operations (Dispatchers.IO)
-- 8KB buffer optimal for most scenarios
-
-**Security:**
-- Validate file paths (path traversal)
-- Handle SecurityException
-- Never log plaintext content
+- Single `MasterKey` per application (cache, don't recreate)
+- Streaming for files >1MB, async operations on `Dispatchers.IO`
+- Validate file paths (protection against path traversal)
+- Handle `SecurityException` during encryption/decryption
+- Secure deletion: overwrite files with random data before deletion
 
 ---
 
 ## Follow-ups
 
-- How to implement biometric authentication with EncryptedFile?
-- When to use AES256_GCM_HKDF_4KB vs AES256_GCM_HKDF_1MB schemes?
-- How to handle key rotation for encrypted files?
-- What happens to encrypted files after app reinstall?
-- How to securely delete encrypted files?
+- Как работает `AES-256-GCM` и в чем его преимущества перед другими режимами шифрования?
+- Что такое `HKDF` и как происходит деривация ключей для каждого файла?
+- Как реализовать биометрическую аутентификацию с `EncryptedFile`?
+- Когда использовать `AES256_GCM_HKDF_4KB` vs `AES256_GCM_HKDF_1MB` схемы?
+- Как обрабатывать key rotation для зашифрованных файлов?
+- Что происходит с зашифрованными файлами после переустановки приложения?
+- How does `AES-256-GCM` work and what are its advantages over other encryption modes?
+- What is `HKDF` and how does key derivation work for each file?
+- How to implement biometric authentication with `EncryptedFile`?
+- When to use `AES256_GCM_HKDF_4KB` vs `AES256_GCM_HKDF_1MB` schemes?
 
 ## References
 
-- Android Security Crypto library documentation
-- Android Keystore system architecture
-- AES-GCM authenticated encryption mode
+- [Android Security Crypto Library](https://developer.android.com/topic/security/data)
+- [Android Keystore System](https://developer.android.com/training/articles/keystore)
 
 ## Related Questions
 
-### Prerequisites
-- Basic file I/O in Android (internal/external storage)
-- Android permissions model
+### Prerequisites (Easier)
+- Basic file I/O in Android
+- Android Keystore basics
 
-### Related
-- [[q-android-keystore-system--security--medium]] - Key storage fundamentals
-- [[q-android-security-best-practices--android--medium]] - Security patterns
-- [[q-data-encryption-at-rest--android--medium]] - Encryption strategies
+### Related (Same Level)
+- [[q-data-encryption-at-rest--android--medium]]
 
-### Advanced
+### Advanced (Harder)
 - Key rotation strategies for encrypted data
 - Biometric authentication integration with secure storage
