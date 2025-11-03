@@ -171,6 +171,11 @@ SORT difficulty ASC, file.name ASC
 - [[q-rtl-support-best-practices--android--hard]] - Robust RTL support
 - [[q-font-fallback-complex-scripts--android--hard]] - Complex script font fallback
 
+### Communication Surfaces
+- [[q-conversation-notifications-bubbles--android--hard]] - Conversation notifications and bubbles
+- [[q-callstyle-foreground-service-compliance--android--hard]] - CallStyle with FGS compliance
+- [[q-advanced-share-sheet-shortcuts--android--hard]] - Advanced ShareSheet and shortcuts
+
 ### Performance & Observability
 - [[q-perfetto-frame-timeline-analysis--android--hard]] - Trace-based jank diagnostics
 - [[q-power-profiling-battery-historian--android--medium]] - Energy audits and remediation

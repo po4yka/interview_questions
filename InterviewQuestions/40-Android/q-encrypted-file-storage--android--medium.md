@@ -1,9 +1,7 @@
 ---
 id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
-aliases:
-  - Encrypted File Storage
-  - Зашифрованное хранение файлов
+aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
 topic: android
 subtopics:
   - files-media
@@ -20,17 +18,11 @@ related:
   - q-data-encryption-at-rest--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags:
-  - android/files-media
-  - android/permissions
-  - android/security
-  - difficulty/medium
-  - encryption
-  - file-storage
-  - keystore
-  - security
+tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore, security]
 sources:
   - https://developer.android.com/topic/security/data
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Monday, November 3rd 2025, 10:58:17 am
 ---
 
 # Вопрос (RU)
@@ -79,7 +71,7 @@ class EncryptedFileManager(private val context: Context) {
 }
 ```
 
-### Streaming для Больших Файлов
+### Streaming Для Больших Файлов
 
 Для файлов >1MB используйте streaming во избежание `OutOfMemoryError`:
 

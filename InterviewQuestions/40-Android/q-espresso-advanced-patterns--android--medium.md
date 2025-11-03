@@ -1,7 +1,7 @@
 ---
 id: android-448
 title: Espresso Advanced Patterns / Продвинутые паттерны Espresso
-aliases: [Custom Matchers, Custom ViewActions, Espresso Advanced Patterns, IdlingResource, Продвинутые паттерны Espresso]
+aliases: [Custom Matchers, Custom ``ViewAction`s`, Espresso Advanced Patterns, `IdlingResource`, Продвинутые паттерны Espresso]
 topic: android
 subtopics: [testing-instrumented, testing-ui]
 question_kind: android
@@ -13,17 +13,15 @@ moc: moc-android
 related: [q-android-testing-strategies--android--medium, q-android-testing-tools--testing--medium, q-ui-testing-best-practices--testing--medium]
 sources: [https://developer.android.com/training/testing/espresso]
 created: 2025-10-20
-updated: 2025-10-28
+updated: 2025-11-03
 tags: [android/testing-instrumented, android/testing-ui, difficulty/medium, espresso, idling-resource, ui-testing]
-date created: Tuesday, October 28th 2025, 9:22:14 am
-date modified: Saturday, November 1st 2025, 5:43:36 pm
 ---
 
 # Вопрос (RU)
-> Как реализовать продвинутые паттерны Espresso с IdlingResource, custom matchers и ViewActions?
+> Как реализовать продвинутые паттерны Espresso с `IdlingResource`, custom matchers и ``ViewAction`s`?
 
 # Question (EN)
-> How to implement Espresso advanced patterns with IdlingResource, custom matchers, and ViewActions?
+> How to implement Espresso advanced patterns with `IdlingResource`, custom matchers, and ``ViewAction`s`?
 
 ---
 
@@ -31,25 +29,25 @@ date modified: Saturday, November 1st 2025, 5:43:36 pm
 
 ### Ключевые Концепции
 
-**IdlingResource** - синхронизация с async операциями. Espresso ждет пока все ресурсы idle перед выполнением действий.
+**`IdlingResource`** - синхронизация с async операциями. Espresso ждет пока все ресурсы idle перед выполнением действий.
 
-**Custom Matchers** - специфичные проверки View. Наследуют TypeSafeMatcher или BoundedMatcher, реализуют matchesSafely() и describeTo().
+**Custom Matchers** - специфичные проверки View. Наследуют `TypeSafeMatcher` или `BoundedMatcher`, реализуют matchesSafely() и describeTo().
 
-**Custom ViewActions** - сложные UI взаимодействия. Реализуют perform(), getConstraints(), getDescription().
+**Custom ``ViewAction`s`** - сложные UI взаимодействия. Реализуют perform(), getConstraints(), getDescription().
 
-**RecyclerViewActions** - специальные действия для списков. Скроллинг, клики по позиции, custom assertions.
+**Recycler``ViewAction`s`** - специальные действия для списков. Скроллинг, клики по позиции, custom assertions.
 
 ### Примеры Кода
 
-**1. IdlingResource для network запросов**
+**1. `IdlingResource` для network запросов**
 
 ```kotlin
 // ✅ Корректная реализация
-class NetworkIdlingResource : IdlingResource {
+class Network`IdlingResource` : `IdlingResource` {
     @Volatile private var callback: ResourceCallback? = null
     @Volatile private var activeRequests = 0
 
-    override fun getName() = "NetworkIdlingResource"
+    override fun getName() = "Network`IdlingResource`"
     override fun isIdleNow() = activeRequests == 0
 
     override fun registerIdleTransitionCallback(callback: ResourceCallback?) {
@@ -69,7 +67,7 @@ class NetworkIdlingResource : IdlingResource {
 // Использование
 @Test
 fun testWithNetwork() {
-    val idlingResource = NetworkIdlingResource()
+    val idlingResource = Network`IdlingResource`()
     IdlingRegistry.getInstance().register(idlingResource)
     try {
         onView(withId(R.id.button)).perform(click())
@@ -85,7 +83,7 @@ fun testWithNetwork() {
 ```kotlin
 // ✅ Type-safe matcher
 fun withItemCount(count: Int): Matcher<View> {
-    return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
+    return object : `BoundedMatcher`<View, RecyclerView>(RecyclerView::class.java) {
         override fun describeTo(description: Description) {
             description.appendText("has $count items")
         }
@@ -96,19 +94,13 @@ fun withItemCount(count: Int): Matcher<View> {
     }
 }
 
-// ❌ Проблема: нет type safety
-fun badMatcher(count: Int) = object : BaseMatcher<View>() {
-    override fun matches(item: Any?) = (item as? RecyclerView)?.adapter?.itemCount == count
-    override fun describeTo(description: Description) {}
-}
-```
 
-**3. Custom ViewAction для drag**
+**3. Custom `ViewAction` для drag**
 
 ```kotlin
 // ✅ Полная реализация
-fun dragToPosition(x: Float, y: Float): ViewAction {
-    return object : ViewAction {
+fun dragToPosition(x: Float, y: Float): `ViewAction` {
+    return object : `ViewAction` {
         override fun getConstraints() = isDisplayed()
 
         override fun getDescription() = "drag to ($x, $y)"
@@ -129,33 +121,37 @@ fun dragToPosition(x: Float, y: Float): ViewAction {
 **4. RecyclerView assertions**
 
 ```kotlin
-// ✅ Проверка конкретного элемента
 onView(withId(R.id.recycler))
     .perform(scrollToPosition<ViewHolder>(5))
     .check(matches(hasDescendant(withText("Item 5"))))
-
-// ✅ Действие на элементе с matcher
-onView(withId(R.id.recycler))
-    .perform(actionOnItem<ViewHolder>(
-        hasDescendant(withText("Delete")),
-        click()
-    ))
 ```
+
+### Лучшие практики
+- Не используйте `Thread.sleep()`; применяйте `IdlingResource` или `IdlingPolicies`
+- Регистрируйте/разрегистрируйте ресурсы через `IdlingRegistry` в `@Before/@After`
+- Для корутин: инкремент/декремент при запуске/завершении
+- Сужайте matchers; избегайте хрупких `withText()` без контекста
+- Пишите полезные сообщения в `describeTo()`
+
+### Типичные ошибки
+- Забыли `unregister()` → утечки и ложные idle
+- Глобальные idlers, влияющие на другие тесты
+- `sleep()` вместо синхронизации
 
 ### Архитектура
 
 **Espresso синхронизация:**
 - Автоматически ждет UI thread idle
-- Проверяет все зарегистрированные IdlingResources
+- Проверяет все зарегистрированные `IdlingResource`s
 - Гарантирует отсутствие pending animations
 - Предотвращает race conditions
 
 **Matcher hierarchy:**
 - BaseMatcher - базовый класс, минимум type safety
-- TypeSafeMatcher - type-safe, для одного типа
-- BoundedMatcher - для View подклассов
+- `TypeSafeMatcher` - type-safe, для одного типа
+- `BoundedMatcher` - для View подклассов
 
-**ViewAction контракт:**
+**`ViewAction` контракт:**
 - getConstraints() - когда можно выполнить
 - perform() - что делать
 - getDescription() - для error messages
@@ -164,25 +160,24 @@ onView(withId(R.id.recycler))
 
 ### Key Concepts
 
-**IdlingResource** - synchronizes with async operations. Espresso waits until all resources idle before performing actions.
+`IdlingResource` — sync with async ops; `TypeSafeMatcher`/`BoundedMatcher` for safe checks; custom `ViewAction` for complex gestures; `RecyclerViewActions` for lists.
 
-**Custom Matchers** - specific View checks. Extend TypeSafeMatcher or BoundedMatcher, implement matchesSafely() and describeTo().
+### Patterns
 
-**Custom ViewActions** - complex UI interactions. Implement perform(), getConstraints(), getDescription().
+- Counting `IdlingResource` for network and coroutines
+- Type-safe matchers for `RecyclerView`
+- Minimal custom drag `ViewAction`
+- Compact assertions
 
-**RecyclerViewActions** - special actions for lists. Scrolling, position-based clicks, custom assertions.
-
-### Code Examples
-
-**1. IdlingResource for network requests**
+**1. `IdlingResource` for network requests**
 
 ```kotlin
 // ✅ Correct implementation
-class NetworkIdlingResource : IdlingResource {
+class Network`IdlingResource` : `IdlingResource` {
     @Volatile private var callback: ResourceCallback? = null
     @Volatile private var activeRequests = 0
 
-    override fun getName() = "NetworkIdlingResource"
+    override fun getName() = "Network`IdlingResource`"
     override fun isIdleNow() = activeRequests == 0
 
     override fun registerIdleTransitionCallback(callback: ResourceCallback?) {
@@ -202,7 +197,7 @@ class NetworkIdlingResource : IdlingResource {
 // Usage
 @Test
 fun testWithNetwork() {
-    val idlingResource = NetworkIdlingResource()
+    val idlingResource = Network`IdlingResource`()
     IdlingRegistry.getInstance().register(idlingResource)
     try {
         onView(withId(R.id.button)).perform(click())
@@ -218,7 +213,7 @@ fun testWithNetwork() {
 ```kotlin
 // ✅ Type-safe matcher
 fun withItemCount(count: Int): Matcher<View> {
-    return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
+    return object : `BoundedMatcher`<View, RecyclerView>(RecyclerView::class.java) {
         override fun describeTo(description: Description) {
             description.appendText("has $count items")
         }
@@ -236,12 +231,12 @@ fun badMatcher(count: Int) = object : BaseMatcher<View>() {
 }
 ```
 
-**3. Custom ViewAction for drag**
+**3. Custom `ViewAction` for drag**
 
 ```kotlin
 // ✅ Complete implementation
-fun dragToPosition(x: Float, y: Float): ViewAction {
-    return object : ViewAction {
+fun dragToPosition(x: Float, y: Float): `ViewAction` {
+    return object : `ViewAction` {
         override fun getConstraints() = isDisplayed()
 
         override fun getDescription() = "drag to ($x, $y)"
@@ -275,20 +270,32 @@ onView(withId(R.id.recycler))
     ))
 ```
 
+### Best Practices
+- Avoid `Thread.sleep()`; prefer `IdlingResource` / `IdlingPolicies`
+- Register/unregister via `IdlingRegistry` in `@Before/@After`
+- For coroutines: increment/decrement around launches
+- Narrow matchers; avoid brittle bare `withText()`
+- Add diagnostics in `describeTo()`
+
+### Common Pitfalls
+- Missing `unregister()` → leaks and false idle
+- Global idlers affecting other tests
+- Sleeping instead of synchronization
+
 ### Architecture
 
 **Espresso synchronization:**
 - Automatically waits for UI thread idle
-- Checks all registered IdlingResources
+- Checks all registered `IdlingResource`s
 - Ensures no pending animations
 - Prevents race conditions
 
 **Matcher hierarchy:**
 - BaseMatcher - base class, minimal type safety
-- TypeSafeMatcher - type-safe, single type
-- BoundedMatcher - for View subclasses
+- `TypeSafeMatcher` - type-safe, single type
+- `BoundedMatcher` - for View subclasses
 
-**ViewAction contract:**
+**`ViewAction` contract:**
 - getConstraints() - when can execute
 - perform() - what to do
 - getDescription() - for error messages
@@ -305,8 +312,6 @@ onView(withId(R.id.recycler))
 
 ## References
 
-- [[c-ui-testing]]
-- [[c-test-automation]]
 - [[q-android-testing-strategies--android--medium]]
 - https://developer.android.com/training/testing/espresso/idling-resource
 - https://developer.android.com/training/testing/espresso/recipes
@@ -317,9 +322,6 @@ onView(withId(R.id.recycler))
 
 ### Related (Same Level)
 - [[q-android-testing-strategies--android--medium]]
-- [[q-ui-testing-best-practices--testing--medium]]
-- [[q-android-testing-tools--testing--medium]]
 
 ### Advanced (Harder)
 - [[q-compose-ui-testing-advanced--android--hard]]
-- [[q-test-automation-architecture--testing--hard]]
