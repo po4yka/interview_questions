@@ -1,22 +1,27 @@
 ---
 id: android-306
-title: "FragmentManager vs FragmentTransaction / FragmentManager против FragmentTransaction"
-aliases: ["FragmentManager vs FragmentTransaction", "FragmentManager против FragmentTransaction"]
+title: FragmentManager vs FragmentTransaction / FragmentManager против FragmentTransaction
+aliases: [FragmentManager vs FragmentTransaction, FragmentManager против FragmentTransaction]
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics:
+  - fragment
+  - lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
 related: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/fragment, android/lifecycle, difficulty/medium, fragmentmanager, fragmenttransaction]
-sources: [https://developer.android.com/guide/fragments/fragmentmanager]
+sources:
+  - https://developer.android.com/guide/fragments/fragmentmanager
 date created: Tuesday, October 28th 2025, 7:38:00 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+date modified: Tuesday, November 4th 2025, 12:46:45 pm
 ---
 
 # Вопрос (RU)

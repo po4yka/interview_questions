@@ -11,29 +11,29 @@ question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - ru
   - en
-status: draft
+  - ru
+status: reviewed
 moc: moc-android
 related:
   - q-activity-lifecycle-methods--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
   - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-03
 sources:
   - https://developer.android.com/guide/fragments/lifecycle
   - https://developer.android.com/topic/libraries/architecture/lifecycle
 tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium, fragments, lifecycle]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Tuesday, November 4th 2025, 12:46:34 pm
 ---
 
 # Вопрос (RU)
-
-Чем жизненный цикл Fragment отличается от жизненного цикла Activity?
+> Чем жизненный цикл Fragment отличается от жизненного цикла Activity?
 
 # Question (EN)
-
-How does the Fragment lifecycle differ from the Activity lifecycle?
+> How does the Fragment lifecycle differ from the Activity lifecycle?
 
 ---
 

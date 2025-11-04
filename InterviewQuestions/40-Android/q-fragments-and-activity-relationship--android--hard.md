@@ -1,36 +1,46 @@
 ---
 id: android-386
-title: "Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity"
-aliases: ["Fragment Lifecycle Dependency", "Fragments And Activity Relationship", "Взаимосвязь Фрагментов И Activity", "Зависимость жизненного цикла фрагмента"]
+title: Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity
+aliases: [Fragment Lifecycle Dependency, Fragments And Activity Relationship, Взаимосвязь Фрагментов И Activity, Зависимость жизненного цикла фрагмента]
 topic: android
-subtopics: [architecture-mvvm, fragment, lifecycle]
+subtopics:
+  - architecture-mvvm
+  - fragment
+  - lifecycle
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
-status: draft
+language_tags:
+  - en
+  - ru
+status: reviewed
 moc: moc-android
-related: [q-can-a-service-communicate-with-the-user--android--medium, q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard, q-sharedpreferences-commit-vs-apply--android--easy]
+related:
+  - q-fragment-vs-activity-lifecycle--android--medium
+  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+  - q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
-updated: 2025-10-28
-tags: [android, android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/hard, fragments, ui]
-date created: Tuesday, October 28th 2025, 7:39:14 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+updated: 2025-11-04
+sources:
+  - https://developer.android.com/guide/fragments
+  - https://developer.android.com/guide/fragments/fragmentmanager
+  - https://developer.android.com/guide/fragments/lifecycle
+tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/hard, fragments, ui]
+date created: Saturday, October 25th 2025, 1:26:30 pm
+date modified: Tuesday, November 4th 2025, 12:52:10 pm
 ---
 
 # Вопрос (RU)
-
-Как существуют и к чему привязаны фрагменты в Activity?
+> Как существуют и к чему привязаны фрагменты в Activity?
 
 # Question (EN)
-
-How do fragments exist and what are they attached to in Activity?
+> How do fragments exist and what are they attached to in Activity?
 
 ---
 
 ## Ответ (RU)
 
-Фрагменты в Android существуют как модульные компоненты, привязанные к Activity через **FragmentManager**. Они размещаются в **ViewGroup контейнерах** и имеют собственный жизненный цикл, синхронизированный с Activity.
+Фрагменты в Android существуют как модульные компоненты, привязанные к Activity через **`FragmentManager`**. Они размещаются в **`ViewGroup`** контейнерах и имеют собственный жизненный цикл, синхронизированный с Activity.
 
 ### Механизм Привязки
 
@@ -38,7 +48,7 @@ How do fragments exist and what are they attached to in Activity?
 - **Контекста**: доступ через `requireContext()`, `requireActivity()`
 - **Ресурсов**: строки, drawable, системные сервисы
 - **Жизненного цикла**: синхронизация с Activity
-- **ViewGroup**: физическая точка размещения в UI
+- **`ViewGroup`**: физическая точка размещения в UI
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -122,9 +132,25 @@ class DetailFragment : Fragment() {
 3. **Динамичность**: управляются во время выполнения
 4. **Back stack**: поддержка навигации
 
+### Лучшие Практики
+
+- **Всегда используйте viewLifecycleOwner** — для подписок на LiveData/Flow в Fragment
+- **Проверяйте существование Activity** — перед доступом к `requireActivity()`
+- **Используйте Shared ViewModel** — для коммуникации между Fragment'ами
+- **Правильно управляйте back stack** — используйте теги для поиска Fragment'ов
+- **Избегайте утечек памяти** — отписывайтесь от `viewLifecycleOwner` в `onDestroyView`
+
+### Типичные Ошибки
+
+- **Неправильный LifecycleOwner** — использование Fragment вместо viewLifecycleOwner
+- **Утечка ViewModel** — неправильное использование `activityViewModels()`
+- **Потеря состояния** — забытые `addToBackStack()` при замене Fragment'ов
+- **Проблемы с контекстом** — доступ к Activity в `onDetach()`
+- **Неправильное управление транзакциями** — множественные `commit()` без оптимизации
+
 ## Answer (EN)
 
-Fragments in Android exist as modular components attached to an Activity via **FragmentManager**. They reside in **ViewGroup containers** and have their own lifecycle synchronized with the Activity.
+Fragments in Android exist as modular components attached to an Activity via **`FragmentManager`**. They reside in **`ViewGroup`** containers and have their own lifecycle synchronized with the Activity.
 
 ### Attachment Mechanism
 
@@ -132,7 +158,7 @@ Fragments depend on Activity for:
 - **Context**: accessed via `requireContext()`, `requireActivity()`
 - **Resources**: strings, drawables, system services
 - **Lifecycle**: synchronized with Activity
-- **ViewGroup**: physical placement point in UI
+- **`ViewGroup`**: physical placement point in UI
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -215,6 +241,22 @@ class DetailFragment : Fragment() {
 2. **Context-dependent**: require Activity for resources
 3. **Dynamic**: managed at runtime
 4. **Back stack**: navigation history support
+
+### Best Practices
+
+- **Always use viewLifecycleOwner** — for LiveData/Flow subscriptions in Fragment
+- **Check Activity existence** — before accessing `requireActivity()`
+- **Use Shared ViewModel** — for communication between Fragments
+- **Properly manage back stack** — use tags to find Fragments
+- **Avoid memory leaks** — unsubscribe from `viewLifecycleOwner` in `onDestroyView`
+
+### Common Pitfalls
+
+- **Wrong LifecycleOwner** — using Fragment instead of viewLifecycleOwner
+- **ViewModel leaks** — incorrect usage of `activityViewModels()`
+- **State loss** — forgotten `addToBackStack()` when replacing Fragments
+- **Context issues** — accessing Activity in `onDetach()`
+- **Transaction management** — multiple `commit()` calls without optimization
 
 ---
 

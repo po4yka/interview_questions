@@ -86,6 +86,41 @@ Every note must follow the canonical template with semantically equivalent RU/EN
 
 ---
 
+### Question Formatting Rule
+
+**CRITICAL**: All questions (both RU and EN) MUST be formatted using the blockquote syntax (`>`) to clearly distinguish the question from explanatory content.
+
+**REQUIRED FORMAT**:
+```markdown
+# Вопрос (RU)
+> Вопрос на русском языке
+
+# Question (EN)
+> Question in English
+
+---
+```
+
+**CORRECT**:
+```markdown
+# Вопрос (RU)
+> Чем жизненный цикл Fragment отличается от жизненного цикла Activity?
+
+# Question (EN)
+> How does the Fragment lifecycle differ from the Activity lifecycle?
+```
+
+**FORBIDDEN**:
+```markdown
+# Вопрос (RU)
+Чем жизненный цикл Fragment отличается от жизненного цикла Activity?
+
+# Question (EN)
+How does the Fragment lifecycle differ from the Activity lifecycle?
+```
+
+---
+
 ## Ответ (RU)
 Подробное объяснение, при необходимости код.
 
@@ -192,6 +227,7 @@ After automation, the human reviewer should scrutinize:
 - [ ] Pre-change validation executed; key findings noted.
 - [ ] YAML normalized to the controlled schema.
 - [ ] RU-first template satisfied; RU/EN content aligned.
+- [ ] Questions formatted with blockquote syntax (`>`) for both RU and EN.
 - [ ] Code formatting rules applied (backticks for types, generics, API references).
 - [ ] Content trimmed, technically verified for senior-level accuracy.
 - [ ] Follow-ups, References, Related Questions populated as required.
