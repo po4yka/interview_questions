@@ -1,7 +1,9 @@
 ---
 id: android-174
 title: Can Fragment State Loss Occur? / Бывает ли потеря состояния у Fragment
-aliases: [Can Fragment State Loss Occur?, Бывает ли потеря состояния у Fragment]
+aliases:
+  - Can Fragment State Loss Occur?
+  - Бывает ли потеря состояния у Fragment
 topic: android
 subtopics:
   - fragment
@@ -22,9 +24,11 @@ related:
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/fragment, android/lifecycle, android/processes, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:10:50 am
-date modified: Sunday, November 2nd 2025, 1:27:19 pm
+tags:
+  - android/fragment
+  - android/lifecycle
+  - android/processes
+  - difficulty/medium
 ---
 
 # Вопрос (RU)

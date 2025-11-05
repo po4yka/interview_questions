@@ -1,33 +1,36 @@
 ---
 id: android-491
 title: "Testing ViewModels with Turbine / Тестирование ViewModels с Turbine"
-aliases: [Testing ViewModels, Turbine, Turbine Library, Тестирование ViewModels]
-
-# Classification
+aliases:
+  - Testing ViewModels
+  - Turbine
+  - Turbine Library
+  - Тестирование ViewModels
 topic: android
-subtopics: [coroutines, testing-unit, viewmodel]
+subtopics:
+  - coroutines
+  - testing-unit
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source:
-source_note:
-
-# Workflow & relations
+language_tags:
+  - en
+  - ru
 status: draft
 moc: moc-android
-related: [c-flow, c-viewmodel]
-
-# Timestamps
+related:
+  - c-flow
+  - c-viewmodel
 created: 2025-10-15
 updated: 2025-11-01
-
-# Tags (EN only; no leading #)
-tags: [android/coroutines, android/testing-unit, android/viewmodel, coroutines, difficulty/medium, flow, testing, turbine]
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
+tags:
+  - android/coroutines
+  - android/testing-unit
+  - coroutines
+  - difficulty/medium
+  - flow
+  - testing
+  - turbine
 ---
 
 # Question (EN)
