@@ -1654,7 +1654,7 @@ GraphQL + Apollo отлично подходит для сложных треб�
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/training/basics/network-ops/connecting
 
 
 ## Related Questions

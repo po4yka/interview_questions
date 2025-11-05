@@ -127,7 +127,7 @@ Thread {
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/topic/performance/memory-overview
 
 
 ## Related Questions

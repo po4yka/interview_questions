@@ -1507,7 +1507,7 @@ Server-Sent Events предоставляют:
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/training/basics/network-ops/connecting
 
 
 ## Related Questions

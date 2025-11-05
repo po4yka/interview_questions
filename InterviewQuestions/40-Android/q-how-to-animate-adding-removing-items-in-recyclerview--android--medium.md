@@ -916,7 +916,7 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/develop/ui/views/animations
 
 
 ## Related Questions

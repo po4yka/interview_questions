@@ -334,7 +334,8 @@ buildTypes {
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/build/build-variants
+- https://developer.android.com/build
 
 
 ## Related Questions

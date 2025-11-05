@@ -299,7 +299,7 @@ class FullStackIntegrationTest {
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/training/testing/instrumented-tests
 
 
 ## Related Questions

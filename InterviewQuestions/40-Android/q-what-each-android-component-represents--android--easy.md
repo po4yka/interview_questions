@@ -229,7 +229,8 @@ startActivity(intent)
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/develop/background-work/services
+- https://developer.android.com/guide/components/activities
 
 
 ## Related Questions

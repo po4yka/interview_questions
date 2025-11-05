@@ -707,7 +707,7 @@ class MyService : Service() {
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/develop/background-work/services
 
 
 ## Related Questions

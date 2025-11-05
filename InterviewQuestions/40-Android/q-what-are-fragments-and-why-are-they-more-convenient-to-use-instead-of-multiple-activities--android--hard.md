@@ -333,7 +333,8 @@ Using fragments allows creating **flexible, modular, and efficient applications*
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/guide/navigation
+- https://developer.android.com/guide/components/activities
 
 
 ## Related Questions

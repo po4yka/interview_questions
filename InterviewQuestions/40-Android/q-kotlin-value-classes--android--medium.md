@@ -264,7 +264,7 @@ val id: Identifier = userId             // 4. Interfaces
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/topic/performance/memory-overview
 
 
 ## Related Questions

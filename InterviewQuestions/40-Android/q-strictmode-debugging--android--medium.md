@@ -473,7 +473,7 @@ fun getUsers(): List<User> {
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/topic/performance/rendering
 
 
 ## Related Questions

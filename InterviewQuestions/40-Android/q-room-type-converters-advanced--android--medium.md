@@ -1116,7 +1116,7 @@ class GoodConverters {
 
 ## References
 
-- https://developer.android.com/docs
+- https://developer.android.com/training/data-storage/room
 
 
 ## Related Questions

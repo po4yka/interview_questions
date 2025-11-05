@@ -36,30 +36,60 @@ def get_android_references(subtopics: List[str]) -> List[str]:
     reference_map = {
         'ui-compose': 'https://developer.android.com/develop/ui/compose',
         'ui-views': 'https://developer.android.com/develop/ui/views',
+        'ui-custom-views': 'https://developer.android.com/develop/ui/views/layout/custom-views',
+        'ui-fragments': 'https://developer.android.com/guide/fragments',
+        'ui-activities': 'https://developer.android.com/guide/components/activities',
         'lifecycle': 'https://developer.android.com/topic/libraries/architecture/lifecycle',
         'architecture-mvvm': 'https://developer.android.com/topic/architecture',
         'architecture-mvi': 'https://developer.android.com/topic/architecture',
+        'architecture-components': 'https://developer.android.com/topic/architecture',
         'data-room': 'https://developer.android.com/training/data-storage/room',
         'data-datastore': 'https://developer.android.com/topic/libraries/architecture/datastore',
+        'data-persistence': 'https://developer.android.com/training/data-storage',
         'networking': 'https://developer.android.com/training/basics/network-ops',
+        'network-security-config': 'https://developer.android.com/training/articles/security-config',
         'concurrency-coroutines': 'https://developer.android.com/kotlin/coroutines',
-        'dependency-injection-dagger': 'https://developer.android.com/training/dependency-injection/dagger-basics',
-        'dependency-injection-hilt': 'https://developer.android.com/training/dependency-injection/hilt-android',
+        'concurrency-threading': 'https://developer.android.com/guide/background/threading',
+        'di-dagger': 'https://developer.android.com/training/dependency-injection/dagger-basics',
+        'di-hilt': 'https://developer.android.com/training/dependency-injection/hilt-android',
+        'di-koin': 'https://insert-koin.io/docs/reference/introduction',
         'testing-unit': 'https://developer.android.com/training/testing/local-tests',
         'testing-ui': 'https://developer.android.com/training/testing/ui-testing',
+        'testing-integration': 'https://developer.android.com/training/testing/integration-testing',
         'background-workmanager': 'https://developer.android.com/topic/libraries/architecture/workmanager',
         'background-services': 'https://developer.android.com/develop/background-work/services',
-        'performance': 'https://developer.android.com/topic/performance',
-        'security-keystore': 'https://developer.android.com/training/articles/keystore',
+        'background-jobs': 'https://developer.android.com/topic/performance/scheduling',
+        'performance-optimization': 'https://developer.android.com/topic/performance',
+        'performance-memory': 'https://developer.android.com/topic/performance/memory-overview',
+        'performance-rendering': 'https://developer.android.com/topic/performance/rendering',
+        'keystore-crypto': 'https://developer.android.com/training/articles/keystore',
+        'security': 'https://developer.android.com/topic/security',
         'navigation': 'https://developer.android.com/guide/navigation',
         'intents-deeplinks': 'https://developer.android.com/training/app-links',
+        'notifications': 'https://developer.android.com/develop/ui/views/notifications',
+        'media': 'https://developer.android.com/media',
+        'graphics': 'https://developer.android.com/develop/ui/views/graphics',
+        'animations': 'https://developer.android.com/develop/ui/views/animations',
+        'i18n-l10n': 'https://developer.android.com/guide/topics/resources/localization',
+        'accessibility': 'https://developer.android.com/guide/topics/ui/accessibility',
+        'gradle-build': 'https://developer.android.com/build',
+        'ci-cd': 'https://developer.android.com/studio/publish',
+        'app-bundle': 'https://developer.android.com/guide/app-bundle',
+        'permissions': 'https://developer.android.com/guide/topics/permissions',
+        'sensors': 'https://developer.android.com/guide/topics/sensors',
+        'location': 'https://developer.android.com/training/location',
     }
 
-    refs = ['https://developer.android.com/docs']  # Default Android docs
+    refs = []
 
+    # Add specific docs for each subtopic
     for subtopic in subtopics:
         if subtopic in reference_map:
             refs.append(reference_map[subtopic])
+
+    # If no specific refs found, add general Android docs
+    if not refs:
+        refs.append('https://developer.android.com/docs')
 
     return list(set(refs))  # Remove duplicates
 
