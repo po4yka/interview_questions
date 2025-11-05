@@ -1,7 +1,7 @@
 ---
 id: kotlin-077
 title: "Coroutine Profiling and Debugging / Профилирование и отладка корутин"
-aliases: []
+aliases: ["Coroutine Profiling and Debugging, Профилирование и отладка корутин"]
 
 # Classification
 topic: kotlin

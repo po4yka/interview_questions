@@ -186,6 +186,16 @@ val result = when (val x = getValue()) {
 - Поддерживает диапазоны и проверки типов
 - Исчерпывающая проверка с sealed классами
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

@@ -1,11 +1,11 @@
 ---
 id: kotlin-024
 title: "lazy vs lateinit / lazy против lateinit"
-aliases: []
+aliases: ["lazy vs lateinit, lazy против lateinit"]
 
 # Classification
 topic: kotlin
-subtopics: [delegation, initialization, lateinit, lazy, properties]
+subtopics: [delegation, initialization, lateinit]
 question_kind: theory
 difficulty: medium
 
@@ -215,6 +215,12 @@ fun initialize() {
 ## References
 - [Delegated Properties - Kotlin](https://kotlinlang.org/docs/delegated-properties.html)
 - [Kotlin: lateinit vs lazy](https://rommansabbir.com/kotlin-lateinit-vs-lazy)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-lateinit--kotlin--medium]]

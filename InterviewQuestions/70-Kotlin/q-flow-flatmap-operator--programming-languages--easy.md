@@ -3,13 +3,13 @@ id: lang-081
 title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 aliases: [Flow Flatmap Operator, Оператор flatMap для Flow]
 topic: programming-languages
-subtopics: [coroutines, flow, operators, reactive-programming]
+subtopics: [coroutines, flow, operators]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -55,6 +55,16 @@ flow {
 ## Ответ (RU)
 
 Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

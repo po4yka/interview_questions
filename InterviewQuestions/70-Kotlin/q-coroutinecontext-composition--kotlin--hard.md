@@ -1,11 +1,11 @@
 ---
 id: kotlin-057
 title: "CoroutineContext Composition / Композиция CoroutineContext"
-aliases: []
+aliases: ["CoroutineContext Composition, Композиция CoroutineContext"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, composition, context, coroutines, custom-context]
+subtopics: [advanced, composition, context]
 question_kind: theory
 difficulty: hard
 
@@ -924,6 +924,12 @@ fun traceLog(message: String) {
 - [Coroutine context and dispatchers - Kotlin](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [CoroutineContext - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
 - [Custom CoroutineContext elements](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-coroutine-context-detailed--kotlin--hard]]

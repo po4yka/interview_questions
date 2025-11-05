@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-extensions, c-properties, q-extensions-concept--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -37,6 +37,16 @@ In Kotlin, you can add extension properties, but only with a custom get (getter)
 ## Ответ (RU)
 
 В Kotlin можно добавлять свойства-расширения (extension properties), но только с кастомным get (геттером). Можно добавлять val с get(). Расширяемые свойства могут быть только вычисляемыми (val), потому что нельзя создать field внутри расширения. var работает только с get() и set(), но всё равно нельзя использовать field.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

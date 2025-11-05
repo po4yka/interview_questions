@@ -1,11 +1,11 @@
 ---
 id: kotlin-036
 title: "How to implement instant search using Flow operators? / Как реализовать мгновенный поиск с помощью Flow операторов?"
-aliases: []
+aliases: ["How to implement instant search using Flow operators?, Как реализовать мгновенный поиск с помощью Flow операторов?"]
 
 # Classification
 topic: kotlin
-subtopics: [debounce, distinctuntilchanged, flow, operators, search]
+subtopics: [debounce, distinctuntilchanged, flow]
 question_kind: coding
 difficulty: medium
 
@@ -568,6 +568,12 @@ val searchResults = _searchQuery
 - Не забывайте обработку ошибок
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

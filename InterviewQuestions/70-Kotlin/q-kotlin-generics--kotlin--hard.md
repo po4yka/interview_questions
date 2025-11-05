@@ -1,11 +1,11 @@
 ---
 id: kotlin-029
 title: "Kotlin Generics / Обобщения (Generics) в Kotlin"
-aliases: []
+aliases: ["Kotlin Generics, Обобщения (Generics) в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [generics, type-erasure, types, variance]
+subtopics: [generics, type-erasure, types]
 question_kind: theory
 difficulty: hard
 
@@ -310,6 +310,12 @@ val intsDictionary: Map<String, Int> = readDictionary(intsFile) as Map<String, I
 - [Generics: in, out, where](https://kotlinlang.org/docs/generics.html)
 - [Understanding Kotlin generics](https://blog.logrocket.com/understanding-kotlin-generics/)
 - [Generics in Kotlin](https://kt.academy/article/kfde-generics)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

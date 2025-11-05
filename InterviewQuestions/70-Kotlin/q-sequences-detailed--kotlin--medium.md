@@ -1,11 +1,11 @@
 ---
 id: kotlin-013
 title: "Sequences in Kotlin / Последовательности в Kotlin"
-aliases: []
+aliases: ["Sequences in Kotlin, Последовательности в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [collections, lazy-evaluation, performance, sequences]
+subtopics: [collections, lazy-evaluation, performance]
 question_kind: theory
 difficulty: medium
 
@@ -179,6 +179,12 @@ sequenceOf("A", "B", "C")
 
 ## References
 - [Sequences - Kotlin Documentation](https://kotlinlang.org/docs/reference/sequences.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

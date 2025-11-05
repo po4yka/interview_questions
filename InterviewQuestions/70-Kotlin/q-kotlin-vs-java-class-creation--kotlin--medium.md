@@ -213,6 +213,16 @@ Kotlin's design emphasizes **conciseness**, **safety**, and **expressiveness**, 
 
 При создании классов по сравнению с Java произошли несколько значительных изменений и упрощений. Kotlin предлагает более лаконичный и выразительный синтаксис, что делает код более читаемым и удобным. Объявление классов и конструкторов в Kotlin упрощено, например: class Person(val name: String, val age: Int). Для статических членов используется companion object вместо static. Kotlin предоставляет data классы, которые автоматически генерируют методы equals(), hashCode(), toString(), copy(), и componentN(). Свойства объявляются напрямую, и методы доступа генерируются автоматически.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-inline-function-limitations--kotlin--medium]]

@@ -1,11 +1,11 @@
 ---
 id: kotlin-027
 title: "Star Projection (*) vs Any in Generics / Звездная проекция vs Any в обобщениях"
-aliases: []
+aliases: ["Star Projection (*) vs Any in Generics, Звездная проекция vs Any в обобщениях"]
 
 # Classification
 topic: kotlin
-subtopics: [generics, star-projection, type-safety, variance]
+subtopics: [generics, star-projection, type-safety]
 question_kind: theory
 difficulty: hard
 
@@ -256,6 +256,12 @@ fun useAsAny(any: Crate<Any>) {
 ## References
 - [Difference between "*" and "Any" in Kotlin generics - StackOverflow](https://stackoverflow.com/questions/40138923/difference-between-and-any-in-kotlin-generics)
 - [Generics: in, out, where - Kotlin Documentation](https://kotlinlang.org/docs/generics.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

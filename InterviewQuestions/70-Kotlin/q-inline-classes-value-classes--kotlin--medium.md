@@ -1,11 +1,11 @@
 ---
 id: kotlin-018
 title: "Inline Classes (Value Classes) / Встроенные классы (Value классы)"
-aliases: []
+aliases: ["Inline Classes (Value Classes), Встроенные классы (Value классы)"]
 
 # Classification
 topic: kotlin
-subtopics: [inline-class, optimization, performance, value-class]
+subtopics: [inline-class, optimization, performance]
 question_kind: theory
 difficulty: medium
 
@@ -256,6 +256,12 @@ Value классы имеют **нулевой runtime overhead** в больш�
 
 ## References
 - [Inline Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/inline-classes.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

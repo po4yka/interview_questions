@@ -700,6 +700,12 @@ class DataHolder {
 - [Objective-C Interop](https://kotlinlang.org/docs/native-objc-interop.html)
 - [Memory Management](https://kotlinlang.org/docs/native-memory-manager.html)
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## Related Questions
 
 - [[q-expect-actual-kotlin--kotlin--medium]]

@@ -804,6 +804,16 @@ fun handleValidation(result: ValidationResult) {
 
 **Sealed классы**: Представляют ограниченный набор типов. Ограничивают наследование одним файлом/модулем. Обеспечивают compile-time exhaustiveness checking в `when` выражениях. Идеальны для управления состоянием, Result типов, навигационных событий и представления конечных множеств состояний. Комбинируются с data классами для создания мощных type-safe API.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-immutable-collections--programming-languages--easy]]

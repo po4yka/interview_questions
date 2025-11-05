@@ -1,11 +1,11 @@
 ---
 id: kotlin-062
 title: "Testing StateFlow and SharedFlow in ViewModels / Тестирование StateFlow и SharedFlow в ViewModels"
-aliases: []
+aliases: ["Testing StateFlow and SharedFlow in ViewModels, Тестирование StateFlow и SharedFlow в ViewModels"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, sharedflow, stateflow, testing, viewmodel]
+subtopics: [coroutines, sharedflow, stateflow]
 question_kind: theory
 difficulty: medium
 

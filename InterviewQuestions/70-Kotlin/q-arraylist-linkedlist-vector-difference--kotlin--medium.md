@@ -179,6 +179,16 @@ ArrayList - динамический массив с быстрым доступ
 
 Используйте ArrayList по умолчанию, LinkedList для очередей и частых вставок/удалений, Vector не используйте (замените на Collections.synchronizedList() или CopyOnWriteArrayList).
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-enum-classes--kotlin--easy]]

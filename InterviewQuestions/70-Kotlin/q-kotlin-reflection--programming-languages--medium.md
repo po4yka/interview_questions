@@ -556,6 +556,16 @@ val name = nameProp?.get(person)
 - **Применения**: Сериализация, DI, тестирование, ORM
 - **Зависимость**: Требуется библиотека `kotlin-reflect`
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-object-companion-object--kotlin--medium]]

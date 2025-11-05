@@ -1,11 +1,11 @@
 ---
 id: kotlin-094
 title: "shareIn and stateIn Operators / Операторы shareIn и stateIn"
-aliases: []
+aliases: ["shareIn and stateIn Operators, Операторы shareIn и stateIn"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, hot-flows, sharedin, statein]
+subtopics: [coroutines, flow, hot-flows]
 question_kind: theory
 difficulty: medium
 

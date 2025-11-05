@@ -1,7 +1,7 @@
 ---
 id: kotlin-090
 title: "Coroutine Memory Leaks and Prevention / Утечки памяти в корутинах и их предотвращение"
-aliases: []
+aliases: ["Coroutine Memory Leaks and Prevention, Утечки памяти в корутинах и их предотвращение"]
 
 # Classification
 topic: kotlin

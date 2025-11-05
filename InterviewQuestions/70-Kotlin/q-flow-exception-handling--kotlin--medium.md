@@ -1,11 +1,11 @@
 ---
 id: kotlin-052
 title: "Flow Exception Handling / Обработка исключений в Flow"
-aliases: []
+aliases: ["Flow Exception Handling, Обработка исключений в Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [catch, error-handling, exceptions, flow, retry]
+subtopics: [catch, error-handling, exceptions]
 question_kind: theory
 difficulty: medium
 
@@ -970,6 +970,12 @@ fun <T> Flow<T>.withRobustErrorHandling(
 - [Exception handling - Kotlin Flow](https://kotlinlang.org/docs/flow.html#exception-handling)
 - [Flow error handling - Android Developers](https://developer.android.com/kotlin/flow#catch)
 - [Exponential backoff - Wikipedia](https://en.wikipedia.org/wiki/Exponential_backoff)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

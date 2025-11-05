@@ -9,7 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-how-to-create-suspend-function--programming-languages--medium, q-java-all-classes-inherit-from-object--programming-languages--easy, q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -624,6 +624,16 @@ suspend fun <T> func(): T
 //  Становится
 fun <T> func($completion: Continuation<T>): Any?
 ```
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

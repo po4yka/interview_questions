@@ -1,7 +1,7 @@
 ---
 id: kotlin-174
 title: "Generics Types Overview / Обзор обобщенных типов"
-aliases: []
+aliases: ["Generics Types Overview, Обзор обобщенных типов"]
 topic: kotlin
 subtopics: [class-features, functions, type-system]
 question_kind: theory
@@ -191,6 +191,16 @@ List     // Java - сырой тип (deprecated)
 | Ковариантность | Производитель | `out T` |
 | Контравариантность | Потребитель | `in T` |
 | Звездочная проекция | Неизвестный тип | `List<*>` |
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

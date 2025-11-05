@@ -1,11 +1,11 @@
 ---
 id: kotlin-032
 title: "map() vs flatMap() in Kotlin / map() против flatMap() в Kotlin"
-aliases: []
+aliases: ["map() vs flatMap() in Kotlin, map() против flatMap() в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [collections, flatmap, higher-order-functions, map, transformations]
+subtopics: [collections, flatmap, higher-order-functions]
 question_kind: theory
 difficulty: medium
 
@@ -311,6 +311,12 @@ data.flatMap { it }
 - [flatMap() - Kotlin Collections API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/flat-map.html)
 - [StackOverflow: Use case for flatMap vs map](https://stackoverflow.com/questions/52078207/what-is-the-use-case-for-flatmap-vs-map-in-kotlin)
 - [Medium: flatMap vs map in Kotlin](https://medium.com/@sachinkmr375/flatmap-vs-map-in-kotlin-aef771a4dae4)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--medium]]

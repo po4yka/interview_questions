@@ -1,7 +1,7 @@
 ---
 id: kotlin-068
 title: "Testing ViewModels with Coroutines / Тестирование ViewModel с корутинами"
-aliases: []
+aliases: ["Testing ViewModels with Coroutines, Тестирование ViewModel с корутинами"]
 
 # Classification
 topic: kotlin
@@ -635,6 +635,12 @@ flow.test {
 - [Testing Kotlin Coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
 - [Testing StateFlow](https://developer.android.com/kotlin/flow/test)
 - [Turbine Documentation](https://github.com/cashapp/turbine)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

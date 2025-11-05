@@ -1,11 +1,11 @@
 ---
 id: kotlin-055
 title: "Flow Backpressure Strategies / Стратегии противодавления Flow"
-aliases: []
+aliases: ["Flow Backpressure Strategies, Стратегии противодавления Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [backpressure, buffer, flow, operators, performance]
+subtopics: [backpressure, buffer, flow]
 question_kind: theory
 difficulty: hard
 
@@ -734,6 +734,12 @@ suspend fun processLargeFile(file: File) {
 - [Flow backpressure - Kotlin](https://kotlinlang.org/docs/flow.html#buffering)
 - [buffer operator - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html)
 - [Backpressure in Kotlin Flow](https://elizarov.medium.com/buffering-in-kotlin-flows-4b9ea4bc4bf3)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

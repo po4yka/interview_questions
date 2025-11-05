@@ -1,11 +1,11 @@
 ---
 id: kotlin-070
 title: "Catch Operator in Kotlin Flow / Оператор catch в Kotlin Flow"
-aliases: []
+aliases: ["Catch Operator in Kotlin Flow, Оператор catch в Kotlin Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [catch, coroutines, error-handling, exception-handling, flow]
+subtopics: [catch, coroutines, error-handling]
 question_kind: theory
 difficulty: medium
 
@@ -739,6 +739,12 @@ flow {
 - [Kotlin Flow Exception Transparency](https://kotlinlang.org/docs/flow.html#exception-transparency)
 - [Flow Catch Operator](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/catch.html)
 - [Exception Handling in Flow](https://developer.android.com/kotlin/flow#exceptions)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

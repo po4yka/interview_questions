@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-flow-flatmap-operator--programming-languages--easy, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -513,6 +513,16 @@ class FlowBestPractices {
 ## Ответ (RU)
 
 Это асинхронный поток данных, который работает как List, но лениво. Особенности: выдает значения последовательно – одно за другим не блокирует поток – работает с suspend-функциями поддерживает cancel() – может быть остановлен в любой момент позволяет работать с бесконечными потоками – полезно для сетевых запросов БД UI-событий
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

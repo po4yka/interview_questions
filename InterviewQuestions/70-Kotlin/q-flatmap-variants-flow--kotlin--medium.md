@@ -1,11 +1,11 @@
 ---
 id: kotlin-050
 title: "flatMapConcat vs flatMapMerge vs flatMapLatest / flatMapConcat против flatMapMerge против flatMapLatest"
-aliases: []
+aliases: ["flatMapConcat vs flatMapMerge vs flatMapLatest, flatMapConcat против flatMapMerge против flatMapLatest"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flatmap, flow, operators]
+subtopics: [coroutines, flatmap, flow]
 question_kind: theory
 difficulty: medium
 
@@ -702,6 +702,12 @@ urls.asFlow()
 ## References
 - [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flattening-flows)
 - [flatMap variants in Flow](https://elizarov.medium.com/reactive-streams-and-kotlin-flows-bfd12772cda4)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

@@ -1,7 +1,7 @@
 ---
 id: kotlin-126
 title: "Testing Coroutine Cancellation Scenarios / Тестирование сценариев отмены корутин"
-aliases: []
+aliases: ["Testing Coroutine Cancellation Scenarios, Тестирование сценариев отмены корутин"]
 
 # Classification
 topic: kotlin

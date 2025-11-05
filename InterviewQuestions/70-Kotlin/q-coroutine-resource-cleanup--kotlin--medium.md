@@ -661,6 +661,12 @@ try {
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## Related Questions
 
 - [[q-data-class-requirements--programming-languages--medium]]

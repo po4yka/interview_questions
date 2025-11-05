@@ -1,7 +1,7 @@
 ---
 id: lang-002
 title: "Kotlin Collections Overview / Обзор коллекций Kotlin"
-aliases: []
+aliases: ["Kotlin Collections Overview, Обзор коллекций Kotlin"]
 topic: programming-languages
 subtopics: [class-features, functions, java-interop]
 question_kind: theory
@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-lambdas-java-kotlin-syntax--programming-languages--medium, q-nothing-instances--programming-languages--easy, q-supervisor-scope-vs-coroutine-scope--kotlin--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -102,6 +102,16 @@ val mutableMap = mutableMapOf("key" to "value")
 
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

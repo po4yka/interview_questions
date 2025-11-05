@@ -1,11 +1,11 @@
 ---
 id: kotlin-020
 title: "Infix Functions / Инфиксные функции"
-aliases: []
+aliases: ["Infix Functions, Инфиксные функции"]
 
 # Classification
 topic: kotlin
-subtopics: [functions, infix, operators, syntax]
+subtopics: [functions, infix, operators]
 question_kind: theory
 difficulty: medium
 
@@ -202,6 +202,12 @@ if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.admin) {
 
 ## References
 - [Functions - Kotlin Documentation](https://kotlinlang.org/docs/reference/functions.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

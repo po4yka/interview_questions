@@ -707,6 +707,16 @@ testImplementation "app.cash.turbine:turbine:1.0.0" // Для тестирова
 - Используйте turbine для тестирования Flow
 - Проверяйте последовательности состояний для loading states
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

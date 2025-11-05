@@ -1,7 +1,7 @@
 ---
 id: kotlin-064
 title: "Kotlin Properties / Свойства в Kotlin"
-aliases: []
+aliases: ["Kotlin Properties, Свойства в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -918,6 +918,12 @@ val items = mutableListOf<String>()  // Плохо: внешний код мож
 - [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
 - [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
 - [Kotlin Backing Fields](https://kotlinlang.org/docs/properties.html#backing-fields)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

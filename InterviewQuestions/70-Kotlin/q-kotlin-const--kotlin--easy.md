@@ -1,7 +1,7 @@
 ---
 id: kotlin-017
 title: "Const Keyword in Kotlin / Ключевое слово const в Kotlin"
-aliases: []
+aliases: ["Const Keyword in Kotlin, Ключевое слово const в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -190,6 +190,12 @@ fun checkSize(size: Int) {
 
 ## References
 - [Properties - Kotlin Documentation](https://kotlinlang.org/docs/reference/properties.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-val-vs-var--kotlin--easy]]

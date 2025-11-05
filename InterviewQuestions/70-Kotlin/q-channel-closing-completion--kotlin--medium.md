@@ -1,11 +1,11 @@
 ---
 id: kotlin-078
 title: "Channel Closing and Completion / Закрытие и завершение каналов"
-aliases: []
+aliases: ["Channel Closing and Completion, Закрытие и завершение каналов"]
 
 # Classification
 topic: kotlin
-subtopics: [channel-closing, channels, cleanup, coroutines, exceptions]
+subtopics: [channel-closing, channels, cleanup]
 question_kind: theory
 difficulty: medium
 

@@ -243,6 +243,16 @@ MyClass.processData$module_name();  // Mangled name
 
 Код с `internal` не будет виден в других модулях, даже если класс или функция — public. Полезно для сокрытия реализации между слоями или при использовании многомодульной архитектуры.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-inheritance-open-final--kotlin--medium]]

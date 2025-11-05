@@ -38,6 +38,16 @@ Property delegates are a powerful feature that allows delegating property get/se
 
 Делегаты свойств — это мощная функциональность, позволяющая делегировать выполнение операций получения и установки значения свойства другому объекту. Основная идея заключается в том, что вместо того чтобы каждое свойство самостоятельно хранило данные или выполняло операции, оно может перенаправить эти задачи делегату. Это позволяет избежать дублирования кода и сделать более модульными и переиспользуемыми механизмы обработки свойств. Основные особенности и преимущества: Изоляция логики, Повторное использование кода, Расширяемость и Встроенная поддержка в языке.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-map-flatmap--kotlin--medium]]

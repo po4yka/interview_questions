@@ -1,11 +1,11 @@
 ---
 id: kotlin-035
 title: "Kotlin Flow Basics / Основы Flow в Kotlin"
-aliases: []
+aliases: ["Kotlin Flow Basics, Основы Flow в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [async, coroutines, flow, reactive-streams]
+subtopics: [async, coroutines, flow]
 question_kind: theory
 difficulty: medium
 
@@ -272,6 +272,12 @@ try {
 - [Flow API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
 - [Testing Kotlin flows on Android](https://developer.android.com/kotlin/flow/test)
 - [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

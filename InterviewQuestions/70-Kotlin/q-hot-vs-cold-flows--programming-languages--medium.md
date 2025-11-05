@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -314,6 +314,16 @@ class ViewModel {
 ## Ответ (RU)
 
 Холодные (cold) — начинают генерировать данные только после подписки Например Flow Observable Горячие (hot) — генерируют данные независимо от подписчиков Например SharedFlow LiveData Broadcast
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

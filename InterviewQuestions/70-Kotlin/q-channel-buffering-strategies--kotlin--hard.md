@@ -1,7 +1,7 @@
 ---
 id: kotlin-114
 title: "Channel Buffering Strategies / Стратегии буферизации каналов"
-aliases: []
+aliases: ["Channel Buffering Strategies, Стратегии буферизации каналов"]
 
 # Classification
 topic: kotlin
@@ -768,6 +768,12 @@ val latest = channel.receive() // Получит только 9
 - [Kotlin Channels](https://kotlinlang.org/docs/channels.html)
 - [Channel Capacity](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
 - [Buffering Strategies](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-buffer-overflow/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

@@ -38,6 +38,16 @@ The feature of sealed classes is restricting the inheritance hierarchy: all thei
 
 Особенность запечатанных классов заключается в ограничении иерархии наследования: все их подклассы должны быть объявлены в том же файле что и сам запечатанный класс Это делает его идеальным инструментом для создания ограниченных иерархий классов где требуется строго контролировать набор возможных подтипов особенно при моделировании состояний или результатов операций в виде дерева наследования
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-retrofit-coroutines-best-practices--kotlin--medium]]

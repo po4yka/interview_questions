@@ -215,6 +215,16 @@ setListener(object : KotlinListener {
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-extensions-overview--programming-languages--medium]]

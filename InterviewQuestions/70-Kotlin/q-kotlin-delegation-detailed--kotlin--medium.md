@@ -1,11 +1,11 @@
 ---
 id: kotlin-043
 title: "Kotlin Delegation Pattern Deep Dive / Паттерн делегирования в Kotlin - детально"
-aliases: []
+aliases: ["Kotlin Delegation Pattern Deep Dive, Паттерн делегирования в Kotlin - детально"]
 
 # Classification
 topic: kotlin
-subtopics: [by-keyword, delegates, delegation, patterns]
+subtopics: [by-keyword, delegates, delegation]
 question_kind: theory
 difficulty: medium
 
@@ -465,6 +465,12 @@ class User {
 ## References
 - [Delegation - Kotlin Documentation](https://kotlinlang.org/docs/delegation.html)
 - [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-delegation--programming-languages--easy]]

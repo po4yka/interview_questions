@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -373,6 +373,16 @@ class ErrorHandlingBestPractices {
 ## Ответ (RU)
 
 Да, ошибки (Exceptions) обрабатываются по-разному в launch и async! Ошибки в `launch` – падают сразу. Launch сразу выбрасывает исключение, и если нет try-catch, корутина завершает родительский CoroutineScope. В `async` ошибка не выбрасывается сразу, а сохраняется в Deferred<T>. Она появится только при вызове await().
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

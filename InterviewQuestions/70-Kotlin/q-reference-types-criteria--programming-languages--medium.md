@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-interface-vs-abstract-class--programming-languages--medium, q-linkedlist-arraylist-insert-behavior--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -157,6 +157,16 @@ open class BaseEntity {
 ## Ответ (RU)
 
 Ссылочные типы в Kotlin: неизменяемые, если это требуется по архитектуре; nullable или not-null — в зависимости от требований; должны реализовывать equals, hashCode и toString особенно если используются в коллекциях; быть легковесными если часто копируются; желательно final или sealed если поведение фиксировано
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

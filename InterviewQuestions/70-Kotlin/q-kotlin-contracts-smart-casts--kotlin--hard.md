@@ -622,6 +622,16 @@ fun isPositive(value: Int?): Boolean {
 
 Контракты — мощный инструмент для улучшения безопасности типов и умных приведений в Kotlin.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

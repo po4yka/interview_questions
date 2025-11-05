@@ -3,13 +3,13 @@ id: lang-064
 title: "Interface Vs Abstract Class / Интерфейс против абстрактного класса"
 aliases: [Interface Vs Abstract Class, Интерфейс против абстрактного класса]
 topic: programming-languages
-subtopics: [abstract-classes, inheritance, interfaces, oop]
+subtopics: [abstract-classes, inheritance, interfaces]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-inheritance, c-oop-concepts, q-class-composition--oop--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -278,6 +278,16 @@ class Duck : Animal(), Flyable, Swimmable {
     override fun swim() = println("Duck swimming")
 }
 ```
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

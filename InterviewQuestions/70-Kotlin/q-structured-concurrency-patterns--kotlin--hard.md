@@ -1,11 +1,11 @@
 ---
 id: kotlin-110
 title: "Structured Concurrency Patterns / Паттерны структурированной конкурентности"
-aliases: []
+aliases: ["Structured Concurrency Patterns, Паттерны структурированной конкурентности"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, coroutines, coroutinescope, structured-concurrency, supervision]
+subtopics: [advanced, coroutines, coroutinescope]
 question_kind: theory
 difficulty: hard
 

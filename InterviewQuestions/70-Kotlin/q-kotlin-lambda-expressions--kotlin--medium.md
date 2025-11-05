@@ -1,11 +1,11 @@
 ---
 id: kotlin-007
 title: "Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin"
-aliases: []
+aliases: ["Lambda Expressions in Kotlin, Лямбда-выражения в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, higher-order-functions, lambda-expressions, sam-conversion]
+subtopics: [functional-programming, higher-order-functions, lambda-expressions]
 question_kind: theory
 difficulty: medium
 
@@ -507,6 +507,12 @@ val typedFunc = fun(x: Int): String = x.toString()
 - [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
 - [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
 - [Everything about Functional interfaces in Kotlin](https://www.droidcon.com/2024/05/31/everything-you-want-to-know-about-functional-interfaces-in-kotlin/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-higher-order-functions--kotlin--medium]]

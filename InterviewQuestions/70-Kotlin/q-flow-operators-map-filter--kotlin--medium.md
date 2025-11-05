@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, filter, flow, map, operators]
+subtopics: [coroutines, filter, flow]
 question_kind: theory
 difficulty: medium
 

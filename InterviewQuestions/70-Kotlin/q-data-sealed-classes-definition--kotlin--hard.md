@@ -778,6 +778,16 @@ fun handleFormState(state: FormState) {
 
 **Комбинирование**: Очень распространён паттерн sealed класса с data подклассами для управления состояниями с данными (например, `sealed class UiState` с `data class Success(val data: T)`).
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-sam-conversions--programming-languages--medium]]

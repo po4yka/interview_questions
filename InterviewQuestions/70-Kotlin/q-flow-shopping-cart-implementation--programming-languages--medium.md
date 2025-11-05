@@ -3,13 +3,13 @@ id: lang-027
 title: "Flow Shopping Cart Implementation / Реализация корзины покупок с Flow"
 aliases: [Flow Shopping Cart Implementation, Реализация корзины покупок с Flow]
 topic: programming-languages
-subtopics: [coroutines, flow, reactive-programming, state-management]
+subtopics: [coroutines, flow, reactive-programming]
 question_kind: coding
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -459,6 +459,16 @@ class ShoppingCartManagerTest {
 ## Ответ (RU)
 
 Используйте Flow для управления состоянием корзины обновляйте данные через методы emit или stateFlow чтобы динамически отслеживать изменения Реализуйте обработку добавления удаления обновления товаров через действия которые изменяют состояние корзины
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

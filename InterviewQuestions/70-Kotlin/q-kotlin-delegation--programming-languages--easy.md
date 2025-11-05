@@ -1,7 +1,7 @@
 ---
 id: lang-005
 title: "Kotlin Delegation / Делегирование в Kotlin"
-aliases: []
+aliases: ["Kotlin Delegation, Делегирование в Kotlin"]
 topic: programming-languages
 subtopics: [class-features, functions, type-system]
 question_kind: theory
@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-circuit-breaker-coroutines--kotlin--hard, q-coroutine-timeout-withtimeout--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -40,6 +40,16 @@ Delegation allows transferring implementation of certain functions or properties
 
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

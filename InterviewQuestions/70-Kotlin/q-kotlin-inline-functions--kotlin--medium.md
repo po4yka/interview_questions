@@ -1,11 +1,11 @@
 ---
 id: kotlin-132
 title: "Kotlin Inline Functions / Inline функции в Kotlin"
-aliases: []
+aliases: ["Kotlin Inline Functions, Inline функции в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [inline-functions, lambdas, optimization, performance, reified]
+subtopics: [inline-functions, lambdas, optimization]
 question_kind: theory
 difficulty: medium
 
@@ -1474,6 +1474,12 @@ public inline fun <T> sequence(crossinline block: suspend SequenceScope<T>.() ->
 ```
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-lambda-expressions--kotlin--medium]]

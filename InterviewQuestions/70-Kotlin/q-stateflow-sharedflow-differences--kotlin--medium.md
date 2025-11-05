@@ -1,11 +1,11 @@
 ---
 id: kotlin-016
 title: "StateFlow and SharedFlow / StateFlow и SharedFlow"
-aliases: []
+aliases: ["StateFlow and SharedFlow, StateFlow и SharedFlow"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, hot-flows, sharedflow, stateflow]
+subtopics: [coroutines, flow, hot-flows]
 question_kind: theory
 difficulty: medium
 
@@ -325,6 +325,12 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 - [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Flow - Kotlin Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
 - [Introducing StateFlow and SharedFlow - JetBrains Blog](https://blog.jetbrains.com/kotlin/2020/10/kotlinx-coroutines-1-4-0-introducing-stateflow-and-sharedflow/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

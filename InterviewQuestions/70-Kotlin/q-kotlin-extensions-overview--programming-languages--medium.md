@@ -38,6 +38,16 @@ Extension functions and properties allow adding new functionality to existing cl
 
 Extension функции и свойства позволяют добавлять новую функциональность к существующим классам без их модификации или наследования. Расширения не изменяют класс, к которому они добавлены, а предоставляют способ расширить его функциональность. Extension функции позволяют добавлять новые методы к классу и объявляются с указанием типа, который они расширяют. Extension свойства позволяют добавлять новые свойства к существующим классам и объявляются аналогично функциям. Расширения не могут доступать к приватным или защищенным членам класса. Преимущества использования включают улучшение читаемости кода, удобную организацию кода и повышение гибкости.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-supervisor-scope-vs-coroutine-scope--kotlin--medium]]

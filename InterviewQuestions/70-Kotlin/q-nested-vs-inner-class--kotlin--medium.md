@@ -1,11 +1,11 @@
 ---
 id: kotlin-031
 title: "Nested Class vs Inner Class / Вложенный vs внутренний класс"
-aliases: []
+aliases: ["Nested Class vs Inner Class, Вложенный vs внутренний класс"]
 
 # Classification
 topic: kotlin
-subtopics: [classes, inner-class, nested-class, oop]
+subtopics: [classes, inner-class, nested-class]
 question_kind: theory
 difficulty: medium
 
@@ -174,6 +174,12 @@ val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 ## References
 - [Nested and Inner Classes - Kotlin](https://kotlinlang.org/docs/nested-classes.html)
 - [Understanding Nested and Inner Classes in Kotlin](https://medium.com/@sandeepkella23/understanding-nested-and-inner-classes-in-kotlin-ae1c4d699053)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

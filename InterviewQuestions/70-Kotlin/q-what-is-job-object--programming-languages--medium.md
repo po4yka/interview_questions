@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: []
 created: 2025-10-15
 updated: 2025-10-31
@@ -424,5 +424,15 @@ class JobBestPractices {
 ## Ответ (RU)
 
 Job — это элемент управления жизненным циклом корутины. С его помощью можно: отменять корутину; отслеживать завершение; объединять с другими задачами; управлять родительскими и дочерними корутинами.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions

@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [backpressure, buffer, conflate, flow, operators]
+subtopics: [backpressure, buffer, conflate]
 question_kind: theory
 difficulty: medium
 
@@ -944,6 +944,12 @@ class BackPressureBestPractices {
 - [SharedFlow and StateFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

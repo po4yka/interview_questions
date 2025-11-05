@@ -1,11 +1,11 @@
 ---
 id: kotlin-019
 title: "Kotlin lateinit Keyword / Ключевое слово lateinit в Kotlin"
-aliases: []
+aliases: ["Kotlin lateinit Keyword, Ключевое слово lateinit в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [initialization, lateinit, null-safety, properties]
+subtopics: [initialization, lateinit, null-safety]
 question_kind: theory
 difficulty: medium
 
@@ -149,6 +149,12 @@ if (foo::bar.isInitialized) {
 - [Kotlin lateinit (Late Initialization): Full Guide With Examples](https://www.tutorialsfreak.com/kotlin-tutorial/kotlin-lateinit)
 - [Kotlin Lateinit: A Complete Guide to Mastering Late Initialization in Kotlin](https://www.dhiwise.com/post/kotlin-lateinit-a-complete-guide-to-late-initialization)
 - [Lateinit and Lazy Property in Kotlin](https://medium.com/@guruprasadhegde4/lateinit-and-lazy-property-in-kotlin-8776c67878a0)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

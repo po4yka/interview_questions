@@ -164,6 +164,16 @@ val nested = listOf(1, 2, 3).flatMap { listOf(it, it * 2) }
 ---
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 ### Android Implementation

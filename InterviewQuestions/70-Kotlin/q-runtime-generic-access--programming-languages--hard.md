@@ -9,7 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -37,6 +37,16 @@ By default, no, because generics are erased (Type Erasure) during compilation. I
 ## Ответ (RU)
 
 По умолчанию нельзя, потому что дженерики стираются (Type Erasure) во время компиляции. Если используем inline fun, можно сделать дженерик "реальным" (reified). Также для получения типа в классе можно использовать KClass<T>, а для сложных дженериков (List<T>, Map<K, V>) использовать typeOf<T>() только с reified
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

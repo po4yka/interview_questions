@@ -1,11 +1,11 @@
 ---
 id: kotlin-051
 title: "Coroutine Cancellation Cooperation / Кооперативная отмена корутин"
-aliases: []
+aliases: ["Coroutine Cancellation Cooperation, Кооперативная отмена корутин"]
 
 # Classification
 topic: kotlin
-subtopics: [cancellation, cooperation, coroutines, ensureActive, yield]
+subtopics: [cancellation, cooperation, coroutines]
 question_kind: theory
 difficulty: medium
 
@@ -729,6 +729,12 @@ suspend fun startSync() = coroutineScope {
 ## References
 - [Cancellation and timeouts - Kotlin](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
 - [Cooperative cancellation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/ensure-active.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

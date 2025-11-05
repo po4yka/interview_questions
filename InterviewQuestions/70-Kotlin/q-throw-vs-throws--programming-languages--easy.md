@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -521,6 +521,16 @@ public void initDatabase() {
 4. **Не игнорируйте исключения** - всегда обрабатывайте или логируйте
 5. **Создавайте кастомные исключения** - для доменных ошибок
 6. **Документируйте исключения** - укажите когда метод может выбросить исключение
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

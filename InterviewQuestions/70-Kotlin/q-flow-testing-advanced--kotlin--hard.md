@@ -1,11 +1,11 @@
 ---
 id: kotlin-056
 title: "Advanced Flow Testing / Продвинутое тестирование Flow"
-aliases: []
+aliases: ["Advanced Flow Testing, Продвинутое тестирование Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [async, coroutines, flow, testing, testscope]
+subtopics: [async, coroutines, flow]
 question_kind: theory
 difficulty: hard
 
@@ -710,6 +710,12 @@ fun `test search debouncing`() = runTest {
 - [Testing Kotlin coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
 - [Turbine - Flow testing library](https://github.com/cashapp/turbine)
 - [Testing Flows - Android Developers](https://developer.android.com/kotlin/flow/test)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

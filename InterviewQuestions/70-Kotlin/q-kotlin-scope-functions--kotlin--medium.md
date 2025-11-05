@@ -1,7 +1,7 @@
 ---
 id: kotlin-014
 title: "Kotlin Scope Functions / Функции области видимости в Kotlin"
-aliases: []
+aliases: ["Kotlin Scope Functions, Функции области видимости в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -563,6 +563,12 @@ numbers
 
 ## References
 - [Scope functions](https://kotlinlang.org/docs/reference/scope-functions.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-extension-functions--kotlin--medium]]

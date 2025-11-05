@@ -1,11 +1,11 @@
 ---
 id: kotlin-103
 title: "Flow Operators in Kotlin / Операторы Flow в Kotlin"
-aliases: []
+aliases: ["Flow Operators in Kotlin, Операторы Flow в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [combining, filtering, flow, operators, transformation]
+subtopics: [combining, filtering, flow]
 question_kind: theory
 difficulty: medium
 
@@ -1242,6 +1242,12 @@ fun processData(input: Flow<RawData>): Flow<ProcessedData> =
 ```
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

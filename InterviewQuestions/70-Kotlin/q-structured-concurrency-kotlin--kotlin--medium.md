@@ -405,6 +405,12 @@ viewModelScope.launch {
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## Related Questions
 
 ### Hub

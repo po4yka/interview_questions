@@ -1,7 +1,7 @@
 ---
 id: kotlin-102
 title: "Coroutine Builders: launch, async, runBlocking / Билдеры корутин: launch, async, runBlocking"
-aliases: []
+aliases: ["Coroutine Builders: launch, async, runBlocking, Билдеры корутин: launch, async, runBlocking"]
 
 # Classification
 topic: kotlin

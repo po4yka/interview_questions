@@ -1,11 +1,11 @@
 ---
 id: kotlin-026
 title: "Kotlin Channels / Каналы в Kotlin"
-aliases: []
+aliases: ["Kotlin Channels, Каналы в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [channels, concurrency, coroutines, flow]
+subtopics: [channels, concurrency, coroutines]
 question_kind: theory
 difficulty: medium
 
@@ -317,6 +317,12 @@ Sending 4
 ## References
 - [Kotlin Coroutines Channels Documentation](https://kotlinlang.org/docs/reference/coroutines/channels.html)
 - [Channel API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-flow-basics--kotlin--medium]]

@@ -764,6 +764,16 @@ inline fun List<Int>.sumByCustom(selector: (Int) -> Int): Int {
 
 **Влияние на память:** Захваченные переменные в не-inlined лямбдах вызывают boxing и увеличение использования памяти.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

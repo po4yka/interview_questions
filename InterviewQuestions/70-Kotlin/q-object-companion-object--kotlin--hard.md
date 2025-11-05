@@ -509,6 +509,16 @@ val page = HtmlBuilder.html {
 
 **companion object**: Объявляет статико-подобные члены внутри класса, доступные через имя класса. Используется для фабричных методов, констант, "статических" функций. Может реализовывать интерфейсы и иметь extension-функции. Один на класс, может быть именованным.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-object-companion-object--programming-languages--easy]]

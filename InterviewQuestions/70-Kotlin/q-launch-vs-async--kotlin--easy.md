@@ -1,7 +1,7 @@
 ---
 id: kotlin-135
 title: "launch vs async: When to Use Each / launch против async: когда использовать"
-aliases: []
+aliases: ["launch vs async: When to Use Each, launch против async: когда использовать"]
 
 # Classification
 topic: kotlin

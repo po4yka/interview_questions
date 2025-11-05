@@ -1,11 +1,11 @@
 ---
 id: kotlin-054
 title: "Flow Operators Deep Dive / Глубокое погружение в операторы Flow"
-aliases: []
+aliases: ["Flow Operators Deep Dive, Глубокое погружение в операторы Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [async, flatmap, flow, operators, transformation]
+subtopics: [async, flatmap, flow]
 question_kind: theory
 difficulty: hard
 
@@ -913,6 +913,12 @@ suspend fun benchmarkFlatMapVariants() {
 - [Flow documentation - Kotlin](https://kotlinlang.org/docs/flow.html)
 - [Flow operators - Kotlin Coroutines Guide](https://kotlinlang.org/docs/flow.html#flow-operators)
 - [flatMapConcat, flatMapMerge, flatMapLatest - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

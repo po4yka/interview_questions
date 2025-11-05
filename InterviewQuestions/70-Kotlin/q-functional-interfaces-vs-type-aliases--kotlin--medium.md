@@ -1,11 +1,11 @@
 ---
 id: kotlin-006
 title: "Functional Interfaces vs Type Aliases / Функциональные интерфейсы vs псевдонимы типов"
-aliases: []
+aliases: ["Functional Interfaces vs Type Aliases, Функциональные интерфейсы vs псевдонимы типов"]
 
 # Classification
 topic: kotlin
-subtopics: [comparison, functional-interfaces, sam, type-aliases]
+subtopics: [comparison, functional-interfaces, sam]
 question_kind: theory
 difficulty: medium
 
@@ -211,6 +211,12 @@ typealias JsonMap = Map<String, Any>
 ## References
 - [Functional (SAM) Interfaces - Kotlin](https://kotlinlang.org/docs/fun-interfaces.html)
 - [Type Aliases - Kotlin](https://kotlinlang.org/docs/type-aliases.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-sam-interfaces--kotlin--medium]]

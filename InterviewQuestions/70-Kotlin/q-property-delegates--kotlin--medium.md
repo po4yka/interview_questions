@@ -288,6 +288,16 @@ Kotlin provides `by` syntax for working with delegates.
 
 Пользовательские делегаты позволяют вынести сложную логику getter/setter в отдельный класс и переиспользовать её для нескольких свойств.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-coroutine-memory-leak-detection--kotlin--hard]]

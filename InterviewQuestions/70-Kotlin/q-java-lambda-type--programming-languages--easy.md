@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-functional-programming, c-java-features, c-lambda-expressions]
 created: 2025-10-13
 updated: 2025-10-31
@@ -117,6 +117,16 @@ Lambda expressions in Java have the type of a **functional interface** - an inte
 
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

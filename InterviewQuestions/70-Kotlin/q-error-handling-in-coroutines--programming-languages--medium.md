@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-error-handling, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -203,6 +203,16 @@ class ErrorHandlingBestPractices {
 ## Ответ (RU)
 
 1. Try-catch внутри launch {} или async {} – локальная обработка ошибок.\",
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

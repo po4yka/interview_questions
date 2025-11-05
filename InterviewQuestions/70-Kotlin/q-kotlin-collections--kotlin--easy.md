@@ -1,11 +1,11 @@
 ---
 id: kotlin-011
 title: "Kotlin Collections / Коллекции в Kotlin"
-aliases: []
+aliases: ["Kotlin Collections, Коллекции в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [collections, data-structures, list, map, set]
+subtopics: [collections, data-structures, list]
 question_kind: theory
 difficulty: easy
 
@@ -88,6 +88,12 @@ Below is a diagram of the Kotlin collection interfaces:
 
 ## References
 - [Kotlin Collections Overview](https://kotlinlang.org/docs/reference/collections-overview.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

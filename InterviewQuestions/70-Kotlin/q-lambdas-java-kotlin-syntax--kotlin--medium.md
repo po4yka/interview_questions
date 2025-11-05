@@ -91,6 +91,16 @@ list.filter { it > 0 }
 
 В Java лямбды — это упрощённый синтаксис для анонимных классов, реализующих функциональный интерфейс. Синтаксис: (параметры) -> { тело }. В Kotlin лямбды представляют собой выражения, передаваемые как функции, с синтаксисом { параметры -> тело }. Kotlin более лаконичен, позволяя опускать параметры, если их можно вывести из контекста.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-immutable-collections--programming-languages--easy]]

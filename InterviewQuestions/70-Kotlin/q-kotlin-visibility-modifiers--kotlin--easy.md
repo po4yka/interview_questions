@@ -1,11 +1,11 @@
 ---
 id: kotlin-023
 title: "Kotlin Visibility Modifiers / Модификаторы видимости в Kotlin"
-aliases: []
+aliases: ["Kotlin Visibility Modifiers, Модификаторы видимости в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [access-control, encapsulation, modifiers, visibility]
+subtopics: [access-control, encapsulation, modifiers]
 question_kind: theory
 difficulty: easy
 
@@ -83,6 +83,12 @@ Kotlin позволяет контролировать видимость сим
 - [Visibility modifiers reference](https://kotlinlang.org/docs/reference/visibility-modifiers.html)
 - [Kotlin for Android Developers: Visibility Modifiers](https://medium.com/mindorks/kotlin-for-android-developers-visibility-modifiers-8d8a3b84d298)
 - [Kotlin Basics: Visibility Modifiers](https://medium.com/@HugoMatilla/kotlin-basics-visibility-modifiers-public-internal-protected-and-private-c3bf972aee11)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

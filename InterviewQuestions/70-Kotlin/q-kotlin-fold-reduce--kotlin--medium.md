@@ -1,11 +1,11 @@
 ---
 id: kotlin-003
 title: "Kotlin fold and reduce / fold и reduce в Kotlin"
-aliases: []
+aliases: ["Kotlin fold and reduce, fold и reduce в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [collections, fold, functional-programming, reduce]
+subtopics: [collections, fold, functional-programming]
 question_kind: theory
 difficulty: medium
 
@@ -152,6 +152,12 @@ val sum: Long = numbers.fold(0L, { acc, next -> acc + next.toLong() })
 
 ## References
 - [Kotlin Collections Documentation](https://kotlinlang.org/docs/reference/collections-overview.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

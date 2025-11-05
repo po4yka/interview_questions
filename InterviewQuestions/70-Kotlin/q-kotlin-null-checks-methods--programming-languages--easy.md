@@ -220,6 +220,16 @@ val validEmail = email.takeIf { it.contains("@") }
 
 **Резюме**: Kotlin предоставляет богатый набор операторов для null-безопасности: безопасный вызов `?.`, оператор Элвиса `?:`, явная проверка `if (x != null)`, `requireNotNull()` для выброса исключений, `!!` для принудительного разворачивания (используйте осторожно), `let` для выполнения блоков на non-null значениях, и `takeIf`/`takeUnless` для условной логики. Предпочитайте безопасные операторы `?.` и `?:` для идиоматичного Kotlin кода.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

@@ -406,6 +406,16 @@ p2.discount = 50.0
 println(p1 == p2)  // true! (discount не сравнивается)
 ```
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-actor-pattern--kotlin--hard]]

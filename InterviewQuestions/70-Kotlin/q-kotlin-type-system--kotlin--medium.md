@@ -1,11 +1,11 @@
 ---
 id: kotlin-028
 title: "Kotlin Type System (Any, Nothing, Unit) / Система типов Kotlin (Any, Nothing, Unit)"
-aliases: []
+aliases: ["Kotlin Type System (Any, Nothing, Unit), Система типов Kotlin (Any, Nothing, Unit)"]
 
 # Classification
 topic: kotlin
-subtopics: [any, nothing, type-system, types, unit]
+subtopics: [any, nothing, type-system]
 question_kind: theory
 difficulty: medium
 
@@ -101,6 +101,12 @@ println(address)
 - [Any API Documentation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/)
 - [Nothing API Documentation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html)
 - [Unit API Documentation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-null-safety--kotlin--medium]]

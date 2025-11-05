@@ -1,11 +1,11 @@
 ---
 id: kotlin-085
 title: "Channel vs Flow Comparison / Сравнение Channel и Flow"
-aliases: []
+aliases: ["Channel vs Flow Comparison, Сравнение Channel и Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [backpressure, channels, coroutines, flow, hot-cold-streams]
+subtopics: [backpressure, channels, coroutines]
 question_kind: theory
 difficulty: medium
 

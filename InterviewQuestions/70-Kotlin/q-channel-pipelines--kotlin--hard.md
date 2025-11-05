@@ -1,7 +1,7 @@
 ---
 id: kotlin-060
 title: "Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin"
-aliases: []
+aliases: ["Channel Pipelines in Kotlin, Конвейеры каналов в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -1340,6 +1340,12 @@ class BackpressureExample {
 3. **Блокирующие операции в конвейере**
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-channels--kotlin--medium]]

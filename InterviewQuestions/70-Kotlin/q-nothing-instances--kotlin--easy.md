@@ -441,6 +441,16 @@ Nothing имеет **ноль экземпляров**. Это необитае�
 
 Nothing? может иметь только одно значение: `null`.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-circuit-breaker-coroutines--kotlin--hard]]

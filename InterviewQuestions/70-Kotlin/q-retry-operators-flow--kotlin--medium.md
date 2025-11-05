@@ -1,11 +1,11 @@
 ---
 id: kotlin-044
 title: "Retry and RetryWhen operators in Flow / Операторы Retry и RetryWhen во Flow"
-aliases: []
+aliases: ["Retry and RetryWhen operators in Flow, Операторы Retry и RetryWhen во Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [error-handling, flow, operators, retry]
+subtopics: [error-handling, flow, operators]
 question_kind: theory
 difficulty: medium
 
@@ -676,6 +676,12 @@ class ProductViewModel : ViewModel() {
 ## References
 - [Flow Error Handling - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#exception-handling)
 - [Retry Operators](https://elizarov.medium.com/kotlin-flows-and-coroutines-256260fb3bdb)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

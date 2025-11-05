@@ -1,11 +1,11 @@
 ---
 id: kotlin-053
 title: "supervisorScope vs coroutineScope / supervisorScope против coroutineScope"
-aliases: []
+aliases: ["supervisorScope vs coroutineScope, supervisorScope против coroutineScope"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, error-handling, scopes, structured-concurrency, supervisor]
+subtopics: [coroutines, error-handling, scopes]
 question_kind: theory
 difficulty: medium
 
@@ -1068,6 +1068,12 @@ coroutineScope {
 ## References
 - [Supervision - Kotlin Coroutines Guide](https://kotlinlang.org/docs/exception-handling.html#supervision)
 - [supervisorScope - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/supervisor-scope.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]

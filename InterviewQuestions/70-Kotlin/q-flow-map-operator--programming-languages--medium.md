@@ -3,13 +3,13 @@ id: lang-065
 title: "Flow Map Operator / Оператор map для Flow"
 aliases: [Flow Map Operator, Оператор map для Flow]
 topic: programming-languages
-subtopics: [coroutines, flow, operators, reactive-programming]
+subtopics: [coroutines, flow, operators]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-flow, q-flow-flatmap-operator--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -307,6 +307,16 @@ flowOf(1, 2, 3, 4)
 - Каждый элемент обрабатывается **независимо**
 - Нет буферизации или батчинга
 - Используйте `mapLatest` если важен только последний результат
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

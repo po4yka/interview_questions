@@ -9,7 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-kotlin-features, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -465,6 +465,16 @@ if (condition) { }                    // Regular control flow
 ## Ответ (RU)
 
 Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

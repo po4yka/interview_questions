@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-compiler-optimization, c-kotlin-features, c-performance]
 created: 2025-10-15
 updated: 2025-10-31
@@ -37,6 +37,16 @@ No, not all functions can be made inline at compiler level: 1. Compiler makes de
 ## Ответ (RU)
 
 Нет, не все функции можно сделать на уровне компилятора: 1. Компилятор принимает решение на основе размера функции и оптимизации производительности. 2. Рекурсивные функции или сложные конструкции не могут быть встроены, так как это может вызвать ошибки или увеличенный размер кода. 3. Принудительное использование inline директив возможно, но это не всегда эффективно.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

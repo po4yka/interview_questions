@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-hashmap-how-it-works--programming-languages--medium, q-solid-principles--software-design--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -214,6 +214,16 @@ System.out.println(sum == 100);  // Always true
 ## Ответ (RU)
 
 Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

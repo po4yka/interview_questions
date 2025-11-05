@@ -241,6 +241,16 @@ Extension functions добавляют функциональность суще
 7. **Используйте extension properties осторожно**
 8. **Группируйте связанные extensions** в одном файле
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-crossinline-keyword--kotlin--medium]]

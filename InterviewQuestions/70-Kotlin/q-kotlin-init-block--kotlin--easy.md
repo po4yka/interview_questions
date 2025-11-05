@@ -1,11 +1,11 @@
 ---
 id: kotlin-001
 title: "Init Block in Kotlin / Блок init в Kotlin"
-aliases: []
+aliases: ["Init Block in Kotlin, Блок init в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [class-initialization, constructors, init-block, initialization]
+subtopics: [class-initialization, constructors, init-block]
 question_kind: theory
 difficulty: easy
 
@@ -333,6 +333,12 @@ class Configuration(val env: String) {
 ## References
 - [Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/classes.html)
 - [Kotlin Constructors - Programiz](https://www.programiz.com/kotlin-programming/constructors)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-constructors--kotlin--easy]]

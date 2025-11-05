@@ -1,7 +1,7 @@
 ---
 id: kotlin-066
 title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"
-aliases: []
+aliases: ["Actor Pattern with Coroutines, Паттерн Actor с корутинами"]
 
 # Classification
 topic: kotlin
@@ -1006,6 +1006,12 @@ actor.close()  // Всегда закрывайте!
 - [Actor Model](https://en.wikipedia.org/wiki/Actor_model)
 - [Kotlinx Coroutines Channels](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/)
 - [Actor Pattern Guide](https://elizarov.medium.com/shared-mutable-state-and-concurrency-in-kotlin-f0f6b8c5c5d8)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

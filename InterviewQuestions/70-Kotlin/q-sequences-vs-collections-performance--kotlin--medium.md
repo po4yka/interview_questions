@@ -177,6 +177,16 @@ val count = seq.count() // Evaluates again!
 
 Sequences оптимизируют производительность для больших данных с ленивым вычислением.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-callsuper-annotation--kotlin--medium]]

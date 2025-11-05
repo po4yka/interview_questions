@@ -5,7 +5,7 @@ aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [debounce, flow, operators, throttle]
+subtopics: [debounce, flow, operators]
 question_kind: theory
 difficulty: medium
 
@@ -786,6 +786,12 @@ fun `throttle should emit first value and ignore subsequent`() = runTest {
 ## References
 - [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
 - [Debounce and Throttle](https://medium.com/androiddevelopers/effective-state-management-for-textfield-in-compose-d6e5b070fbe5)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

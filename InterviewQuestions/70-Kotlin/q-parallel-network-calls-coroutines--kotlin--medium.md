@@ -1,11 +1,11 @@
 ---
 id: kotlin-037
 title: "How to make parallel network calls using coroutines? / Как выполнять параллельные сетевые запросы с помощью корутин?"
-aliases: []
+aliases: ["How to make parallel network calls using coroutines?, Как выполнять параллельные сетевые запросы с помощью корутин?"]
 
 # Classification
 topic: kotlin
-subtopics: [async, await, coroutines, networking, parallel]
+subtopics: [async, await, coroutines]
 question_kind: coding
 difficulty: medium
 
@@ -567,6 +567,12 @@ class ThrottledApiClient(maxConcurrent: Int = 5) {
 - **Параллельно**: ~1 секунда (макс. из трех запросов)
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

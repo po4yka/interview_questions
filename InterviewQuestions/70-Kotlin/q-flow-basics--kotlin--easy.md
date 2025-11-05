@@ -1,11 +1,11 @@
 ---
 id: kotlin-104
 title: "Flow Basics in Kotlin / Основы Flow в Kotlin"
-aliases: []
+aliases: ["Flow Basics in Kotlin, Основы Flow в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [cold-flow, coroutines, flow, reactive, streams]
+subtopics: [cold-flow, coroutines, flow]
 question_kind: theory
 difficulty: easy
 
@@ -525,6 +525,12 @@ fun calculate(x: Int): Int  // Лучше чем Flow<Int>
 - [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
 - [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
 - [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

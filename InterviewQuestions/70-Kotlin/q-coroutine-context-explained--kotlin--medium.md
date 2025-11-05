@@ -1,11 +1,11 @@
 ---
 id: kotlin-039
 title: Coroutine Context Explained / CoroutineContext объяснение
-aliases: []
+aliases: [Coroutine Context Explained, CoroutineContext объяснение]
 
 # Classification
 topic: kotlin
-subtopics: [async, concurrency, coroutine-context, coroutines]
+subtopics: [async, concurrency, coroutine-context]
 question_kind: theory
 difficulty: medium
 
@@ -570,6 +570,12 @@ class MyViewModel : ViewModel() {
 
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

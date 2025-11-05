@@ -1,11 +1,11 @@
 ---
 id: kotlin-015
 title: "Suspending vs Blocking / Приостанавливающие vs блокирующие функции"
-aliases: []
+aliases: ["Suspending vs Blocking, Приостанавливающие vs блокирующие функции"]
 
 # Classification
 topic: kotlin
-subtopics: [blocking, concurrency, coroutines, suspend, threads]
+subtopics: [blocking, concurrency, coroutines]
 question_kind: theory
 difficulty: medium
 
@@ -282,6 +282,12 @@ fun loadDataSafely() {
 
 ## References
 - [Coroutines Basics - Kotlin](https://kotlinlang.org/docs/coroutines-basics.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]

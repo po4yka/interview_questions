@@ -1,11 +1,11 @@
 ---
 id: kotlin-009
 title: "Kotlin Coroutines Introduction / Введение в корутины Kotlin"
-aliases: []
+aliases: ["Kotlin Coroutines Introduction, Введение в корутины Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [async, concurrency, coroutines, structured-concurrency]
+subtopics: [async, concurrency, coroutines]
 question_kind: theory
 difficulty: medium
 
@@ -175,6 +175,12 @@ suspend fun preparePost(): Token {
 - [Kotlin Coroutines Basics](https://kotlinlang.org/docs/reference/coroutines/basics.html)
 - [Android Coroutines Guide](https://developer.android.com/kotlin/coroutines)
 - [Async Programming](https://kotlinlang.org/docs/tutorials/coroutines/async-programming.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

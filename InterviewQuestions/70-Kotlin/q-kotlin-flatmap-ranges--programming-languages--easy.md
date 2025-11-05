@@ -38,6 +38,16 @@ The result of executing the expression will be the list [1, 2, 2, 4, 3, 6].
 
 Результат выполнения выражения будет список [1, 2, 2, 4, 3, 6].
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-inline-function-limitations--kotlin--medium]]

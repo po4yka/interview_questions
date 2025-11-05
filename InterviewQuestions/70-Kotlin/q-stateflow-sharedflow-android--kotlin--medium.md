@@ -1,11 +1,11 @@
 ---
 id: kotlin-084
 title: "StateFlow and SharedFlow in Android / StateFlow и SharedFlow в Android"
-aliases: []
+aliases: ["StateFlow and SharedFlow in Android, StateFlow и SharedFlow в Android"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, flow, sharedflow, stateflow]
+subtopics: [android, coroutines, flow]
 question_kind: theory
 difficulty: medium
 

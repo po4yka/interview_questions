@@ -1,11 +1,11 @@
 ---
 id: kotlin-130
 title: "Lifecycle-Aware Coroutines / Корутины с учетом жизненного цикла"
-aliases: []
+aliases: ["Lifecycle-Aware Coroutines, Корутины с учетом жизненного цикла"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, lifecycle, lifecyclescope, viewmodelscope]
+subtopics: [android, coroutines, lifecycle]
 question_kind: theory
 difficulty: hard
 
@@ -1231,6 +1231,12 @@ class SafeViewModel : ViewModel() {
 6. **Сохраняйте важное состояние**
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

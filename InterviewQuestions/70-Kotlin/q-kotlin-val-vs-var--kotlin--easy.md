@@ -719,6 +719,12 @@ var PI = 3.14159  // Плохо: должно быть val или const val
 - [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
 - [Effective Kotlin - Item 1: Limit mutability](https://kt.academy/article/ek-mutability)
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## Related Questions
 
 - [[q-kotlin-properties--kotlin--easy]]

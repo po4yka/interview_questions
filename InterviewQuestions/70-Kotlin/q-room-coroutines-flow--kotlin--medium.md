@@ -1,11 +1,11 @@
 ---
 id: kotlin-115
 title: "Room Database with Coroutines and Flow / Room БД с корутинами и Flow"
-aliases: []
+aliases: ["Room Database with Coroutines and Flow, Room БД с корутинами и Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, database, flow, room]
+subtopics: [android, coroutines, database]
 question_kind: theory
 difficulty: medium
 

@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -116,6 +116,16 @@ fun testGarbageCollection() {
 ## Ответ (RU)
 
 Используйте WeakReference для определения был ли объект освобожден сборщиком мусора. Также проверьте отсутствие сильных ссылок и используйте ObjectWatcher из LeakCanary для отслеживания.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

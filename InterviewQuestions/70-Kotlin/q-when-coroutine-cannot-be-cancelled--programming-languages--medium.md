@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-equals-hashcode-rules--programming-languages--medium, q-how-suspend-function-detects-suspension--programming-languages--hard, q-priorityqueue-vs-deque--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -548,6 +548,16 @@ class CancellationBestPractices {
 ## Ответ (RU)
 
 Да, есть три основных случая: 1. Блокирующий код – если внутри корутины используется блокирующая операция (Thread.sleep(), while(true) {}), она не реагирует на отмену. 2. Отмена родительской корутины не отменяет launch(NonCancellable) – если корутина запущена с NonCancellable, она игнорирует отмену. 3. Отмена не срабатывает, если корутина не проверяет isActive или yield() – долгие вычисления без точек приостановки не дадут корутине завершиться.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

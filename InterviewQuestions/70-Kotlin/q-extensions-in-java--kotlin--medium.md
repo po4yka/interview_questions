@@ -1,7 +1,7 @@
 ---
 id: kotlin-187
 title: "Extensions In Java / Расширения в Java"
-aliases: []
+aliases: ["Extensions In Java, Расширения в Java"]
 topic: kotlin
 subtopics: [access-modifiers, null-safety, type-system]
 question_kind: theory
@@ -643,6 +643,16 @@ public class Main {
     }
 }
 ```
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

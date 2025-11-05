@@ -1,7 +1,7 @@
 ---
 id: kotlin-073
 title: "Virtual Time in Coroutine Testing / Виртуальное время в тестировании корутин"
-aliases: []
+aliases: ["Virtual Time in Coroutine Testing, Виртуальное время в тестировании корутин"]
 
 # Classification
 topic: kotlin

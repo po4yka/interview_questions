@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: []
 created: 2025-10-15
 updated: 2025-10-31
@@ -115,5 +115,15 @@ val data = ByteArray(1000)
 ## Ответ (RU)
 
 Это объекты в памяти, которые больше не используются и недостижимы из корневых объектов. Сборщик мусора освобождает эти объекты, чтобы уменьшить использование памяти.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions

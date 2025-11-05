@@ -1,11 +1,11 @@
 ---
 id: kotlin-088
 title: "Kotlin Constructors / Конструкторы в Kotlin"
-aliases: []
+aliases: ["Kotlin Constructors, Конструкторы в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [constructors, init-block, initialization, primary-constructor, secondary-constructor]
+subtopics: [constructors, init-block, initialization]
 question_kind: theory
 difficulty: easy
 
@@ -714,6 +714,12 @@ class User(val name: String, val age: Int) {
 - [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
 - [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
 - [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

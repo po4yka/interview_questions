@@ -500,6 +500,16 @@ HTML builder, SQL query builder, dependency injection - все становят�
 
 Context receivers - мощный инструмент для создания выразительных DSL в Kotlin.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-infix-functions--kotlin--medium]]

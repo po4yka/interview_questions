@@ -1,11 +1,11 @@
 ---
 id: kotlin-048
 title: "CoroutineContext explained in detail / CoroutineContext детально"
-aliases: []
+aliases: ["CoroutineContext explained in detail, CoroutineContext детально"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutinecontext, coroutines, dispatchers, job]
+subtopics: [coroutinecontext, coroutines, dispatchers]
 question_kind: theory
 difficulty: hard
 
@@ -329,6 +329,12 @@ launch(parentContext) {
 ## References
 - [CoroutineContext - Kotlin Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Coroutine Context](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

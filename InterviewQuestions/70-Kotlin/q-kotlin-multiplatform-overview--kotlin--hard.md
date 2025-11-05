@@ -1,11 +1,11 @@
 ---
 id: kotlin-040
 title: "Kotlin Multiplatform - How does it work? / Kotlin Multiplatform - Как это работает?"
-aliases: []
+aliases: ["Kotlin Multiplatform - How does it work?, Kotlin Multiplatform - Как это работает?"]
 
 # Classification
 topic: kotlin
-subtopics: [cross-platform, kmp, kotlin-multiplatform, native]
+subtopics: [cross-platform, kmp, kotlin-multiplatform]
 question_kind: theory
 difficulty: hard
 
@@ -735,6 +735,12 @@ let data = try await repository.fetchData()
 - [Kotlin Multiplatform Documentation](https://kotlinlang.org/docs/multiplatform.html)
 - [Kotlin Multiplatform Mobile](https://kotlinlang.org/lp/mobile/)
 - [KMP Samples](https://github.com/JetBrains/compose-multiplatform)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-expect-actual-kotlin--kotlin--medium]]

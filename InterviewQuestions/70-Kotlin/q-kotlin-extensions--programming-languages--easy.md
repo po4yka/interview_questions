@@ -130,6 +130,16 @@ val numbers = listOf(1, 2, 3, 4, 5)
 println(numbers.average())  // 3.0
 ```
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-extensions-overview--programming-languages--medium]]

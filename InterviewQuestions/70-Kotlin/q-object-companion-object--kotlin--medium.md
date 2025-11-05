@@ -236,6 +236,16 @@ MyClass.foo()  // "foo" - обычный метод
 MyClass.bar()  // "bar" - расширение
 ```
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-java-type-differences--programming-languages--medium]]

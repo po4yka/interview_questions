@@ -42,6 +42,16 @@ StateFlow is based on the data flow concept, similar to LiveData in Android, but
 ## Ответ (RU)
 StateFlow – это специальный тип потока данных, используемый в Kotlin и библиотеке Kotlin Coroutines. Он предназначен для управления состоянием и передачи данных в реальном времени в реактивных приложениях. StateFlow основан на концепции потоков данных, аналогичной LiveData в Android, но с улучшенной поддержкой сопрограмм. Основные особенности StateFlow: Горячий поток, который всегда активен и хранит последнее значение состояния. Поддержка сопрограмм, интегрирован с Kotlin Coroutines для асинхронного кода. Изменяемое состояние через методы value или emit. StateFlow нужен для реактивного программирования, предсказуемого состояния и лучшей интеграции с Kotlin Coroutines по сравнению с LiveData.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

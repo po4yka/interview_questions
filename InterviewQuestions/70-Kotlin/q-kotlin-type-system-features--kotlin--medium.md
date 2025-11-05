@@ -86,6 +86,16 @@ These features make Kotlin code **safer, more concise, and more expressive**.
 
 Null Safety (Безопасность null), Коллекции разделение на изменяемые и неизменяемые коллекции, Data Classes автоматическое создание методов equals hashCode и toString, Smart Casts автоматическое приведение типа после проверки с помощью is, Sealed Classes упрощают обработку ограниченных иерархий классов, Выведение типов Kotlin автоматически определяет тип переменной
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

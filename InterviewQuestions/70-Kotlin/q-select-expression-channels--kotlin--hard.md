@@ -1,11 +1,11 @@
 ---
 id: kotlin-071
 title: "select Expression with Channels / Выражение select с каналами"
-aliases: []
+aliases: ["select Expression with Channels, Выражение select с каналами"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, channels, coroutines, multiplexing, select]
+subtopics: [advanced, channels, coroutines]
 question_kind: theory
 difficulty: hard
 

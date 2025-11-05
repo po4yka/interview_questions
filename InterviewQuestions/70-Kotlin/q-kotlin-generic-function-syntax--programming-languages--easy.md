@@ -104,6 +104,16 @@ val name = identity("Hello")     // T выводится как String
 - Перед именем функции: `fun <T> name()`
 - Перед extension receiver: `fun <T> T.extension()`
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

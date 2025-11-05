@@ -1,11 +1,11 @@
 ---
 id: kotlin-025
 title: "Kotlin SAM Interfaces / SAM интерфейсы в Kotlin"
-aliases: []
+aliases: ["Kotlin SAM Interfaces, SAM интерфейсы в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, interfaces, lambdas, sam]
+subtopics: [functional-programming, interfaces, lambdas]
 question_kind: theory
 difficulty: medium
 
@@ -254,6 +254,12 @@ fun main() {
 - [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
 - [Everything you want to know about Functional interfaces in Kotlin](https://www.droidcon.com/2024/05/31/everything-you-want-to-know-about-functional-interfaces-in-kotlin/)
 - [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

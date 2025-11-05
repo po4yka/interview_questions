@@ -1,11 +1,11 @@
 ---
 id: kotlin-082
 title: "Testing Flow Operators and Transformations / Тестирование операторов и трансформаций Flow"
-aliases: []
+aliases: ["Testing Flow Operators and Transformations, Тестирование операторов и трансформаций Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, operators, testing]
+subtopics: [coroutines, flow, operators]
 question_kind: theory
 difficulty: hard
 

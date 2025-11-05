@@ -1,11 +1,11 @@
 ---
 id: kotlin-008
 title: "Kotlin Null Safety / Null-безопасность в Kotlin"
-aliases: []
+aliases: ["Kotlin Null Safety, Null-безопасность в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [null-safety, nullability, safe-calls, types]
+subtopics: [null-safety, nullability, safe-calls]
 question_kind: theory
 difficulty: medium
 
@@ -358,6 +358,12 @@ newString?.let { c = it }.also { println("Logging the value: $it") }
 - [Nullability in Java and Kotlin](https://kotlinlang.org/docs/java-to-kotlin-nullability-guide.html)
 - [Null safety](https://kotlinlang.org/docs/null-safety.html)
 - [Null safety tutorial](https://kotlinlang.org/docs/tutorials/kotlin-for-py/null-safety.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-lateinit--kotlin--medium]]

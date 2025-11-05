@@ -227,6 +227,16 @@ shoppingList.remove("Молоко")
 
 **Краткое содержание**: Массивы имеют фиксированный размер и лучшую производительность для прямого доступа. Списки динамичны, предоставляют богатые функциональные операции (map, filter и т.д.) и более гибки для управления коллекциями. Массивы быстрее, но менее удобны, чем списки.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-equals-hashcode-purpose--kotlin--medium]]

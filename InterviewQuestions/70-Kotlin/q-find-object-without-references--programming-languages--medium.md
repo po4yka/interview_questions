@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-debugging, c-memory-management, q-garbage-collector-basics--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -156,6 +156,16 @@ class LeakDetector {
 ## Ответ (RU)
 
 Создайте дамп памяти в Android Studio ("Dump Java heap"). Используйте Memory Analyzer Tool (MAT) для анализа. Ищите "Unreachable objects" и "Dominators". LeakCanary автоматически обнаруживает утечки.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

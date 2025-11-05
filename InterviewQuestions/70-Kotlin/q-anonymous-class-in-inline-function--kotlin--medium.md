@@ -1,11 +1,11 @@
 ---
 id: kotlin-047
 title: Anonymous Class in Inline Function / Анонимный класс в inline функции
-aliases: []
+aliases: [Anonymous Class in Inline Function, Анонимный класс в inline функции]
 
 # Classification
 topic: kotlin
-subtopics: [anonymous-classes, inline, lambdas, optimization, performance]
+subtopics: [anonymous-classes, inline, lambdas]
 question_kind: theory
 difficulty: medium
 
@@ -521,6 +521,16 @@ inline fun process(
 
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

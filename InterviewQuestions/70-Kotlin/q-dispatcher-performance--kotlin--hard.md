@@ -1,7 +1,7 @@
 ---
 id: kotlin-112
 title: "Dispatcher Performance and Selection / Производительность и выбор диспетчеров"
-aliases: []
+aliases: ["Dispatcher Performance and Selection, Производительность и выбор диспетчеров"]
 
 # Classification
 topic: kotlin

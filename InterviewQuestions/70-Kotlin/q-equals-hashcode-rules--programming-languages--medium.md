@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
@@ -65,6 +65,16 @@ Methods `equals()` and `hashCode()` are important for correct operation of colle
 3. **Необязательное различие**: Разные объекты могут иметь одинаковый hashCode (коллизии допустимы), но лучшая производительность достигается при разных значениях
 
 **Золотое правило**: Когда вы переопределяете `equals()`, вы ДОЛЖНЫ переопределить `hashCode()`!
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

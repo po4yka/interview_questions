@@ -1,11 +1,11 @@
 ---
 id: kotlin-059
 title: "Cold vs Hot Flows / Холодные и горячие потоки"
-aliases: []
+aliases: ["Cold vs Hot Flows, Холодные и горячие потоки"]
 
 # Classification
 topic: kotlin
-subtopics: [cold-flows, flow, hot-flows, shareIn, stateIn]
+subtopics: [cold-flows, flow, hot-flows]
 question_kind: theory
 difficulty: medium
 
@@ -825,6 +825,12 @@ class SearchViewModel : ViewModel() {
 - [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Cold flows, hot flows - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flows-are-cold)
 - [shareIn and stateIn operators - Kotlin Blog](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

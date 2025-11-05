@@ -242,6 +242,16 @@ Kotlin использует реализации коллекций Java. Осн
 | Ключ-значение + порядок | LinkedHashMap |
 | Ключ-значение + сортировка | TreeMap |
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-globalscope-antipattern--kotlin--easy]]

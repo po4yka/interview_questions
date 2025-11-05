@@ -1,11 +1,11 @@
 ---
 id: kotlin-034
 title: "Destructuring Declarations / Деструктурирующие объявления"
-aliases: []
+aliases: ["Destructuring Declarations, Деструктурирующие объявления"]
 
 # Classification
 topic: kotlin
-subtopics: [componentN, data-classes, destructuring, syntax]
+subtopics: [componentN, data-classes, destructuring]
 question_kind: theory
 difficulty: medium
 
@@ -211,6 +211,12 @@ Data классы автоматически генерируют `component1()`
 ## References
 - [Destructuring Declarations - Kotlin Documentation](https://kotlinlang.org/docs/reference/multi-declarations.html)
 - [Kotlin Destructuring Declarations](https://www.kotlindevelopment.com/destructuring-declarations/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

@@ -1,7 +1,7 @@
 ---
 id: kotlin-010
 title: "Kotlin Enum Classes / Перечисления (Enum) в Kotlin"
-aliases: []
+aliases: ["Kotlin Enum Classes, Перечисления (Enum) в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -129,6 +129,12 @@ println(redColor.description()) // Вывод: Red color
 ## References
 - [Kotlin Enum Classes](https://kotlinlang.org/docs/enum-classes.html)
 - [Enums in Kotlin](https://www.baeldung.com/kotlin/enum)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

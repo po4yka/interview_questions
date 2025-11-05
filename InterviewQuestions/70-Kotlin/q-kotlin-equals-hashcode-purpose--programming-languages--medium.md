@@ -150,6 +150,16 @@ class Book(val isbn: String, val title: String) {
 
 Соблюдение контракта между `equals()` и `hashCode()` критически важно для правильной работы коллекций, основанных на хеш-таблицах.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-semaphore-rate-limiting--kotlin--medium]]

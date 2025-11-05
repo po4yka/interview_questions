@@ -1,11 +1,11 @@
 ---
 id: kotlin-041
 title: "stateIn and shareIn operators in Flow / Операторы stateIn и shareIn во Flow"
-aliases: []
+aliases: ["stateIn and shareIn operators in Flow, Операторы stateIn и shareIn во Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, hot-flow, sharein, statein]
+subtopics: [coroutines, flow, hot-flow]
 question_kind: theory
 difficulty: medium
 
@@ -654,6 +654,12 @@ class SearchViewModel : ViewModel() {
 ## References
 - [StateFlow and SharedFlow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#stateflow-and-sharedflow)
 - [SharedFlow vs StateFlow](https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

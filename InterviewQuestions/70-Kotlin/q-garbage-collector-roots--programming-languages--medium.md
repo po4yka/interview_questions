@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -209,6 +209,16 @@ object Cache {
 **Резюме:**
 
 GC Roots — это **начальные точки** для сборки мусора. Объекты, достижимые из GC Roots, **остаются живыми**. Объекты, не достижимые, являются **мусором** и будут собраны. Основные типы GC Roots: локальные переменные активных методов, статические поля загруженных классов, активные потоки и JNI ссылки. Понимание GC Roots важно для предотвращения утечек памяти и оптимизации использования памяти.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

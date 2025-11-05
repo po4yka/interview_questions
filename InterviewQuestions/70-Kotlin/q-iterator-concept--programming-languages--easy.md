@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-collections, c-design-patterns, q-iterator-order-guarantee--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -202,6 +202,16 @@ val filtered = list.filter { it % 2 != 0 }
 ## Ответ (RU)
 
 Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

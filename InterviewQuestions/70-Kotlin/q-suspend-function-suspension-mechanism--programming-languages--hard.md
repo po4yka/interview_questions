@@ -9,7 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-equals-hashcode-purpose--programming-languages--hard, q-extensions-concept--programming-languages--easy, q-list-vs-sequence--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -225,6 +225,16 @@ class DelayedContinuation(
 ## Ответ (RU)
 
 Когда выполнение suspend-функции приостанавливается состояние функции сохраняется в continuation-объекте а текущий поток освобождается Позже выполнение возобновляется с этого же места как будто ничего не происходило Это реализовано через стейт-машину и трансформацию кода компилятором Kotlin
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

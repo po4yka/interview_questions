@@ -1,11 +1,11 @@
 ---
 id: kotlin-118
 title: "repeatOnLifecycle in Android / repeatOnLifecycle в Android"
-aliases: []
+aliases: ["repeatOnLifecycle in Android, repeatOnLifecycle в Android"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, flow, lifecycle, repeatonlifecycle]
+subtopics: [android, coroutines, flow]
 question_kind: theory
 difficulty: medium
 

@@ -395,6 +395,16 @@ inline fun transaction(
 
 Используйте `noinline` чтобы исключить конкретные параметры из inlining, и `crossinline` когда нельзя делать non-local return.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-testing-stateflow-sharedflow--kotlin--medium]]

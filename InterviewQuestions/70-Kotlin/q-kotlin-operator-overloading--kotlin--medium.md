@@ -1,11 +1,11 @@
 ---
 id: kotlin-004
 title: "Kotlin Operator Overloading / Перегрузка операторов в Kotlin"
-aliases: []
+aliases: ["Kotlin Operator Overloading, Перегрузка операторов в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [conventions, language-features, operators, overloading]
+subtopics: [conventions, language-features, operators]
 question_kind: theory
 difficulty: medium
 
@@ -400,6 +400,12 @@ fun main(args: Array<String>) {
 - [Invoke Operator & Operator Overloading in Kotlin](https://stackoverflow.com/questions/45173677/invoke-operator-operator-overloading-in-kotlin)
 - [Operator overloading in Kotlin](https://kt.academy/article/kfde-operators)
 - [How Can Kotlin Operator Overloading Help You?](https://codersee.com/how-can-kotlin-operator-overloading-help-you/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

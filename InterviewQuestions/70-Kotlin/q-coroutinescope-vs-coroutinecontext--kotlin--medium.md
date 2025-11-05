@@ -1,11 +1,11 @@
 ---
 id: kotlin-030
 title: "CoroutineScope vs CoroutineContext / CoroutineScope против CoroutineContext"
-aliases: []
+aliases: ["CoroutineScope vs CoroutineContext, CoroutineScope против CoroutineContext"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutinecontext, coroutines, coroutinescope, structured-concurrency]
+subtopics: [coroutinecontext, coroutines, coroutinescope]
 question_kind: theory
 difficulty: medium
 
@@ -260,6 +260,12 @@ scope.launch { } // - Работает
 - [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Things every Kotlin Developer should know about Coroutines. Part 1: CoroutineContext](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-1-coroutinecontext)
 - [Things every Kotlin Developer should know about Coroutines. Part 2: CoroutineScope](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-2-coroutinescope)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

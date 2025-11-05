@@ -1,11 +1,11 @@
 ---
 id: kotlin-042
 title: "Coroutine Exception Handling / Обработка исключений в корутинах"
-aliases: []
+aliases: ["Coroutine Exception Handling, Обработка исключений в корутинах"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, error-handling, exceptions, supervisorscope]
+subtopics: [coroutines, error-handling, exceptions]
 question_kind: theory
 difficulty: medium
 
@@ -467,6 +467,12 @@ coroutineScope {
 ## References
 - [Coroutine Exceptions - Kotlin Documentation](https://kotlinlang.org/docs/exception-handling.html)
 - [CoroutineExceptionHandler](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-exception-handler/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

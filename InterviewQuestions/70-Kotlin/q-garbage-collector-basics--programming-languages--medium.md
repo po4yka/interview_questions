@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-garbage-collection, q-garbage-collector-definition--programming-languages--easy, q-garbage-collector-roots--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -101,6 +101,16 @@ fun createObject() {
     // ... используем obj
 }  // obj становится недостижимым здесь, подходит для GC
 ```
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

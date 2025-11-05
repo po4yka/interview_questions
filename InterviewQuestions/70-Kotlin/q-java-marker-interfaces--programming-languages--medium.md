@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-delegates-java-compilation--programming-languages--hard, q-java-all-classes-inherit-from-object--programming-languages--easy, q-template-method-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -194,6 +194,16 @@ Marker interfaces have **no methods** but provide **type information** and **beh
 
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

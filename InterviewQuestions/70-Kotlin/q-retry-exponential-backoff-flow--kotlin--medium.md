@@ -3,7 +3,7 @@ id: kotlin-191
 title: "Retry and exponential backoff patterns in Flow / Retry и exponential backoff паттерны в Flow"
 aliases: [Error Handling, Exponential Backoff, Resilience, Retry, Retry паттерны]
 topic: kotlin
-subtopics: [coroutines, error-handling, flow, patterns]
+subtopics: [coroutines, error-handling, flow]
 question_kind: theory
 difficulty: medium
 original_language: en

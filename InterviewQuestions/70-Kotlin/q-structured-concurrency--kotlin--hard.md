@@ -1,7 +1,7 @@
 ---
 id: kotlin-128
 title: "Structured Concurrency / Структурированная параллельность"
-aliases: []
+aliases: ["Structured Concurrency, Структурированная параллельность"]
 
 # Classification
 topic: kotlin
@@ -674,6 +674,12 @@ suspend fun loadUser(id: Int): User = withContext(Dispatchers.IO) {
 - [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Structured Concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency)
 - [Coroutine Exceptions](https://kotlinlang.org/docs/exception-handling.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

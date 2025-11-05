@@ -103,6 +103,16 @@ class MoreDerived : Derived() {
 
 В Kotlin для определения класса, который не может быть унаследован, используется ключевое слово 'final'. По умолчанию все классы в Kotlin являются финальными и не могут быть унаследованы без явного указания 'open'. Таким образом, чтобы определить класс который не может быть унаследован достаточно просто объявить его без ключевого слова 'open'.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-generics--kotlin--hard]]

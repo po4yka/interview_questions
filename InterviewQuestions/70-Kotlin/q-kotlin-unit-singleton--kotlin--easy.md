@@ -116,6 +116,16 @@ fun method2() { }         // То же самое (Unit выводится ав�
 
 **Эффективность памяти**: Поскольку это синглтон, нет потерь памяти от множества объектов Unit.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-channel-buffer-strategies-comparison--kotlin--hard]]

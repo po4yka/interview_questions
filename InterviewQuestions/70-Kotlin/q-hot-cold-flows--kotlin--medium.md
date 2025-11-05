@@ -1,7 +1,7 @@
 ---
 id: kotlin-076
 title: "Hot vs Cold Flows / Горячие и холодные потоки"
-aliases: []
+aliases: ["Hot vs Cold Flows, Горячие и холодные потоки"]
 
 # Classification
 topic: kotlin

@@ -241,6 +241,16 @@ Any (all types)
 
 В Java и Kotlin типы данных делятся на примитивные и ссылочные. В Java: int, double и тд как примитивы и String, классы объекты массивы интерфейсы как ссылочные типы. В Kotlin: Int Double и тд как обёртки примитивов JVM, String коллекции классы с nullable и nonnullable типами. Kotlin добавляет Unit эквивалент void но объект, и Nothing для функций которые всегда бросают исключение. Также в Kotlin все данные являются объектами
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-job-state-machine-transitions--kotlin--medium]]

@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-class-composition--oop--medium, q-what-is-coroutinescope--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -44,6 +44,16 @@ date modified: Saturday, November 1st 2025, 5:43:24 pm
 ## Ответ (RU)
 
 PriorityQueue — структура данных, где элементы обрабатываются по приоритету вместо порядка добавления. Deque (двусторонняя очередь) позволяет добавлять и удалять элементы с обеих сторон, поддерживая поведение как стека, так и очереди.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

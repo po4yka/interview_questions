@@ -219,6 +219,16 @@ val data = cache[userId] ?: fetchData(userId).also { cache[userId] = it }
 - Строите справочники, словари, кэши
 - Подсчитываете частоту элементов
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-object-companion-object--programming-languages--easy]]

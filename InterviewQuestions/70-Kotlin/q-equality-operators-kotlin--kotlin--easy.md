@@ -1,7 +1,7 @@
 ---
 id: kotlin-002
 title: "Equality Operators == vs === / Операторы равенства == vs ==="
-aliases: []
+aliases: ["Equality Operators == vs ===, Операторы равенства == vs ==="]
 
 # Classification
 topic: kotlin
@@ -127,6 +127,12 @@ println(list1 === list1)  // true - тот же объект
 
 ## References
 - [Equality - Kotlin Documentation](https://kotlinlang.org/docs/reference/equality.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

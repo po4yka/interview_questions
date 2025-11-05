@@ -176,6 +176,16 @@ val evens = range.filter { it % 2 == 0 }  // [2, 4, 6, 8, 10]
 
 **IntRange** является частью типов прогрессий Kotlin вместе с `LongRange`, `CharRange` и т.д.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-constructors--kotlin--easy]]

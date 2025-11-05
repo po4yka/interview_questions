@@ -104,6 +104,16 @@ if (::name.isInitialized) {
 
 1. lateinit используется для откладывания инициализации переменных (только для var и только ссылочных типов). 2. Поле помечается как lateinit и должно быть инициализировано до первого использования, иначе выбрасывается UninitializedPropertyAccessException. 3. Это полезно в случаях, когда инициализация зависит от внешних условий (например, DI или тестирование).
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-map-flatmap--kotlin--medium]]

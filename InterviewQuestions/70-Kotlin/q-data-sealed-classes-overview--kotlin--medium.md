@@ -499,6 +499,16 @@ when (val state = viewModel.getState()) {
 
 **В Android**: Data классы - для моделей данных, sealed классы - для управления состояниями в ViewModel. Часто комбинируются: sealed класс с data подклассами.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-job-state-machine-transitions--kotlin--medium]]

@@ -1,9 +1,9 @@
 ---
 id: kotlin-045
 title: Access Modifiers in Kotlin / Модификаторы доступа в Kotlin
-aliases: []
+aliases: [Access Modifiers in Kotlin, Модификаторы доступа в Kotlin]
 topic: kotlin
-subtopics: [access-modifiers, encapsulation, oop, visibility]
+subtopics: [access-modifiers, encapsulation, visibility]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -406,6 +406,16 @@ fun main() {
 Все примеры кода из английской версии применимы и к русской версии.
 
 ---
+
+## Follow-ups
+
+- How does `internal` modifier work across different modules?
+- What happens when you override a protected member in Kotlin?
+- Can you change access modifier when overriding a member?
+
+## References
+
+- [Kotlin Visibility Modifiers](https://kotlinlang.org/docs/visibility-modifiers.html) - Official Kotlin documentation
 
 ## Related Questions
 

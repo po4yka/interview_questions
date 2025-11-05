@@ -1,11 +1,11 @@
 ---
 id: kotlin-049
 title: "How to convert callback-based APIs to coroutines? / Как конвертировать callback-based API в корутины?"
-aliases: []
+aliases: ["How to convert callback-based APIs to coroutines?, Как конвертировать callback-based API в корутины?"]
 
 # Classification
 topic: kotlin
-subtopics: [async, callbacks, coroutines, migration, suspendcoroutine]
+subtopics: [async, callbacks, coroutines]
 question_kind: coding
 difficulty: medium
 
@@ -597,6 +597,12 @@ fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
 - **Потоки**: Корутины не создают новые потоки
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

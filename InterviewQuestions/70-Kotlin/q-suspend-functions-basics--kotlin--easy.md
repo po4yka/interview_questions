@@ -1,7 +1,7 @@
 ---
 id: kotlin-075
 title: "Suspend Functions Basics / Основы suspend функций"
-aliases: []
+aliases: ["Suspend Functions Basics, Основы suspend функций"]
 
 # Classification
 topic: kotlin

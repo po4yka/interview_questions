@@ -1,11 +1,11 @@
 ---
 id: kotlin-022
 title: "Ranges in Kotlin / Диапазоны в Kotlin"
-aliases: []
+aliases: ["Ranges in Kotlin, Диапазоны в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [downto, iteration, ranges, rangeto, step]
+subtopics: [downto, iteration, ranges]
 question_kind: theory
 difficulty: easy
 
@@ -176,6 +176,12 @@ for (i in 1 until 10) {  // i в [1, 10), 10 исключено
 
 ## References
 - [Ranges - Kotlin Documentation](https://kotlinlang.org/docs/reference/ranges.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

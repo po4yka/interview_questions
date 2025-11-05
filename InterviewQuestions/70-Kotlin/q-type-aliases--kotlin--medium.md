@@ -1,11 +1,11 @@
 ---
 id: kotlin-021
 title: "Type Aliases in Kotlin / Псевдонимы типов в Kotlin"
-aliases: []
+aliases: ["Type Aliases in Kotlin, Псевдонимы типов в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [dsl, readability, type-aliases, types]
+subtopics: [dsl, readability, type-aliases]
 question_kind: theory
 difficulty: medium
 
@@ -334,6 +334,12 @@ val phone2: PhoneNumber = email2  // - Ошибка компиляции! Реа
 ## References
 - [Type Aliases - Kotlin Documentation](https://kotlinlang.org/docs/type-aliases.html)
 - [All About Type Aliases](https://typealias.com/guides/all-about-type-aliases/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-generics--kotlin--hard]]

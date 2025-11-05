@@ -1,11 +1,11 @@
 ---
 id: kotlin-058
 title: "Channels vs Flow / Channels против Flow"
-aliases: []
+aliases: ["Channels vs Flow, Channels против Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [async, buffering, channels, coroutines, flow]
+subtopics: [async, buffering, channels]
 question_kind: theory
 difficulty: medium
 
@@ -1119,6 +1119,12 @@ val flow = flow { emit(data) }
 - [Channels - Kotlin Coroutines Guide](https://kotlinlang.org/docs/channels.html)
 - [Flow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
 - [Channel capacity - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

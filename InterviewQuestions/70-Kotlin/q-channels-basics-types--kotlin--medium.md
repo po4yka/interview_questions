@@ -1,11 +1,11 @@
 ---
 id: kotlin-124
 title: "Channels Basics and Types / Основы и типы каналов"
-aliases: []
+aliases: ["Channels Basics and Types, Основы и типы каналов"]
 
 # Classification
 topic: kotlin
-subtopics: [buffered, channel-types, channels, coroutines, rendezvous]
+subtopics: [buffered, channel-types, channels]
 question_kind: theory
 difficulty: medium
 

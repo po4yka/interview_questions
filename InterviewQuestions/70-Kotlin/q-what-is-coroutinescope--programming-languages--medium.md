@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-hot-vs-cold-flows--programming-languages--medium, q-template-method-pattern--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -387,6 +387,16 @@ class MyRepositoryTest {
 ## Ответ (RU)
 
 Это область, в которой выполняются корутины в Kotlin. Определяет жизненный цикл корутин и позволяет отменять их при завершении scope. GlobalScope – живет все время работы приложения, но редко используется. viewModelScope – в ViewModel, отменяется при уничтожении ViewModel. lifecycleScope – в Activity/Fragment, отменяется при уничтожении UI.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

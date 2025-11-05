@@ -1,11 +1,11 @@
 ---
 id: kotlin-005
 title: "Higher-Order Functions in Kotlin / Функции высшего порядка в Kotlin"
-aliases: []
+aliases: ["Higher-Order Functions in Kotlin, Функции высшего порядка в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, higher-order-functions, inline-functions, lambda-expressions]
+subtopics: [functional-programming, higher-order-functions, inline-functions]
 question_kind: theory
 difficulty: medium
 
@@ -653,6 +653,12 @@ val page = html {
 - [Inline functions - Kotlin Documentation](https://kotlinlang.org/docs/inline-functions.html)
 - [A Practical Guide to Kotlin's inline Modifier](https://maxkim.eu/a-practical-guide-to-kotlins-inline-modifier)
 - [Inline function: Kotlin](https://agrawalsuneet.medium.com/inline-function-kotlin-3f05d2ea1b59)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-lambda-expressions--kotlin--medium]]

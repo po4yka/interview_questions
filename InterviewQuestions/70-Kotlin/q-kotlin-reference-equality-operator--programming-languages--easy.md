@@ -130,6 +130,16 @@ user1 === user3  // true (одна и та же ссылка)
 - Kotlin `===` ≈ Java `==`
 - `==` в Kotlin является null-safe, `==` в Java проверяет ссылки
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-data-class-detailed--kotlin--medium]]

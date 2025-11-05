@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -37,6 +37,16 @@ Sealed class limitations: all subtypes must be defined in the same file, sealed 
 ## Ответ (RU)
 
 Ограничения sealed классов: все подтипы должны быть определены в том же файле, sealed класс не может быть интерфейсом или абстрактным классом напрямую, sealed классы и их подтипы не могут быть private, sealed классы не поддерживают наследование от других классов кроме Any и могут использоваться только для классов и объектов но не интерфейсов. Также sealed классы обеспечивают исчерпывающие выражения when, полный контроль над иерархией классов и поддержку сопоставления с образцом.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

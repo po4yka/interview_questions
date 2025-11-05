@@ -1,11 +1,11 @@
 ---
 id: kotlin-087
 title: "lifecycleScope vs viewModelScope / lifecycleScope против viewModelScope"
-aliases: []
+aliases: ["lifecycleScope vs viewModelScope, lifecycleScope против viewModelScope"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, lifecycle, scopes, viewmodel]
+subtopics: [android, coroutines, lifecycle]
 question_kind: theory
 difficulty: medium
 
@@ -527,6 +527,16 @@ viewModelScope.launch {
 - [viewModelScope](https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#viewmodelscope)
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

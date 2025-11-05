@@ -1,7 +1,7 @@
 ---
 id: kotlin-203
 title: "Interface Properties / Свойства интерфейсов"
-aliases: []
+aliases: ["Interface Properties, Свойства интерфейсов"]
 topic: kotlin
 subtopics: [access-modifiers, null-safety, type-system]
 question_kind: theory
@@ -444,6 +444,16 @@ fun main() {
 - Свойства `var` могут объявлять сеттеры, но нуждаются в реализации в классе
 - Свойства могут быть абстрактными (без реализации) или иметь реализацию по умолчанию
 - Можно переопределять свойства в реализующих классах
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

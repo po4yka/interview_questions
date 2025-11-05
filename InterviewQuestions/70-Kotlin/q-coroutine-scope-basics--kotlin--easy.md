@@ -1,7 +1,7 @@
 ---
 id: kotlin-116
 title: "CoroutineScope Basics and Usage / Основы CoroutineScope и использование"
-aliases: []
+aliases: ["CoroutineScope Basics and Usage, Основы CoroutineScope и использование"]
 
 # Classification
 topic: kotlin

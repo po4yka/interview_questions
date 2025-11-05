@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-extensions, c-kotlin-features, q-extension-properties--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -246,6 +246,16 @@ fun MyClass.tryAccess() {
 ## Ответ (RU)
 
 Термин 'Extensions' используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

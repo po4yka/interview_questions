@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-java-lambda-type--programming-languages--easy, q-proxy-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -465,6 +465,16 @@ fun demonstrateThreadBlocking() = runBlocking {
 ## Ответ (RU)
 
 1. synchronized блоки в Java/Kotlin работают на уровне потоков, а не корутин – это разные механизмы синхронизации.\", \"2. Блокировка потоков замедляет работу – Mutex работает в асинхронном стиле, не блокируя потоки.\", \"3. Глобальные synchronized блоки не учитывают отмену корутин – если корутина отменена, synchronized не освобощает ресурс
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

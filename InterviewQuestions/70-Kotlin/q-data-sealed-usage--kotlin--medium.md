@@ -733,6 +733,16 @@ fun handleValidation(result: ValidationResult) {
 
 **Лучшая практика**: Комбинировать data классы для данных и sealed классы для результатов/состояний.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-extension-functions-advanced--kotlin--hard]]

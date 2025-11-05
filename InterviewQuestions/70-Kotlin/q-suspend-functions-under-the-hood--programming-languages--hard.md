@@ -9,7 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-suspend-function-return-type-after-compilation--programming-languages--hard, q-synchronized-blocks-with-coroutines--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -739,6 +739,16 @@ suspend fun example() {
 7. **Stack Unwinding**: Приостановка разворачивает стек вызовов; возобновление восстанавливает его
 
 **Резюме**: Suspend-функции в Kotlin преобразуются компилятором в state machine с использованием Continuation-Passing Style. Каждая точка приостановки (suspend вызов) разбивает функцию на состояния. При приостановке функция возвращает COROUTINE_SUSPENDED и освобождает поток. При возобновлении continuation.resumeWith() вызывается для продолжения с места остановки. Локальные переменные сохраняются в state machine классе. Этот механизм позволяет асинхронному коду выглядеть синхронным без блокировки потоков.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

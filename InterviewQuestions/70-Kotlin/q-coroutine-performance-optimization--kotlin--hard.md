@@ -1,7 +1,7 @@
 ---
 id: kotlin-083
 title: "Coroutine Performance Optimization / Оптимизация производительности корутин"
-aliases: []
+aliases: ["Coroutine Performance Optimization, Оптимизация производительности корутин"]
 
 # Classification
 topic: kotlin

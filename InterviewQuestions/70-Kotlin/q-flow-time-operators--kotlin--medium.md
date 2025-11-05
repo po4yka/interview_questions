@@ -1,7 +1,7 @@
 ---
 id: kotlin-127
 title: "Flow Time Operators: debounce, sample, throttle / Временные операторы Flow"
-aliases: []
+aliases: ["Flow Time Operators: debounce, sample, throttle, Временные операторы Flow"]
 
 # Classification
 topic: kotlin
@@ -611,6 +611,12 @@ searchQuery
 - [Kotlin Flow debounce](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)
 - [Kotlin Flow sample](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/sample.html)
 - [Flow Time-based Operators](https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

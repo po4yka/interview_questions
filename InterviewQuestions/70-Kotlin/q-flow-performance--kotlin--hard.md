@@ -1,7 +1,7 @@
 ---
 id: kotlin-109
 title: "Flow Performance Optimization / Оптимизация производительности Flow"
-aliases: []
+aliases: ["Flow Performance Optimization, Оптимизация производительности Flow"]
 
 # Classification
 topic: kotlin

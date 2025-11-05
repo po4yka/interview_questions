@@ -98,6 +98,16 @@ val result = value as? String // Возвращает null, если приве�
 
 Null safety в Kotlin предотвращает большинство ошибок, связанных с null, во время компиляции.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]

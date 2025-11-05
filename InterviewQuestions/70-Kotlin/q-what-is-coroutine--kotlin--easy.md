@@ -1,7 +1,7 @@
 ---
 id: kotlin-072
 title: "What is a Coroutine? Basic Concepts / Что такое корутина? Основные концепции"
-aliases: []
+aliases: ["What is a Coroutine? Basic Concepts, Что такое корутина? Основные концепции"]
 
 # Classification
 topic: kotlin
@@ -146,6 +146,12 @@ fun main() = runBlocking { // Создает CoroutineScope
 ## References
 
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## Related Questions
 

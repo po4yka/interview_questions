@@ -1,11 +1,11 @@
 ---
 id: kotlin-106
 title: "Testing Coroutines with runTest and TestDispatcher / Тестирование корутин с runTest и TestDispatcher"
-aliases: []
+aliases: ["Testing Coroutines with runTest and TestDispatcher, Тестирование корутин с runTest и TestDispatcher"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, runtest, test-dispatcher, testing]
+subtopics: [coroutines, runtest, test-dispatcher]
 question_kind: theory
 difficulty: medium
 
