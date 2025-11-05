@@ -500,7 +500,7 @@ fun ItemRow(item: Item) {
 
 ---
 
-## RU (original)
+## Ответ (RU)
 В Jetpack Compose аналогом RecyclerView является LazyColumn и LazyRow.
 
 **Базовое использование LazyColumn:**

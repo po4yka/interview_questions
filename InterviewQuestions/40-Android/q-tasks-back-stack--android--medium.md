@@ -141,6 +141,12 @@ Android управляет задачами и стеком возврата, п
 - `alwaysRetainTaskState`
 - `finishOnTaskLaunch`
 
+
+## Ответ (RU)
+
+
+## Ответ (RU)
+
 ## References
 
 - [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)

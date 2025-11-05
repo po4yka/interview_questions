@@ -233,7 +233,7 @@ class CustomContainer @JvmOverloads constructor(
 4. **Layout responsibility** - ViewGroups are responsible for measuring and positioning their children
 5. **Event distribution** - ViewGroups handle touch event distribution to children
 
-## Ответ (Russian)
+## Ответ (RU)
 
 ### Что Такое ViewGroup?
 

@@ -141,7 +141,7 @@ fun `loadUser emits Error when repository fails`() = runTest {
 - Clear assertion API
 - Works with StateFlow, SharedFlow, and regular Flows
 
-## B25B (RU)
+## Ответ (RU)
 
 **>4E>4**: Turbine - MB> 181;8>B5:0 4;O B5AB8@>20=8O, :>B>@0O C?@>I05B B5AB8@>20=85 Kotlin Flow, ?@54>AB02;OO G8B05<K9 API 4;O ?@>25@:8 M<8AA89 Flow 2> 2@5<5=8.
 
