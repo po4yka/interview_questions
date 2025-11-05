@@ -36,6 +36,25 @@ class YAMLValidator(BaseValidator):
     # New ID format: <subject>-<serial> (e.g., algo-001, android-134, kotlin-042)
     ID_PATTERN = re.compile(r"^[a-z]+-\d+$")
 
+    # TAXONOMY-aware MOC mapping (from TAXONOMY.md)
+    TOPIC_TO_MOC = {
+        "algorithms": "moc-algorithms",
+        "data-structures": "moc-algorithms",
+        "system-design": "moc-system-design",
+        "distributed-systems": "moc-system-design",
+        "android": "moc-android",
+        "kotlin": "moc-kotlin",
+        "programming-languages": "moc-kotlin",
+        "databases": "moc-backend",
+        "networking": "moc-backend",
+        "os": "moc-cs",
+        "operating-systems": "moc-cs",
+        "concurrency": "moc-cs",
+        "cs": "moc-cs",
+        "tools": "moc-tools",
+        "debugging": "moc-tools",
+    }
+
     def validate(self):
         frontmatter = self.frontmatter
         if not frontmatter:
@@ -212,15 +231,30 @@ class YAMLValidator(BaseValidator):
             self.add_issue(
                 Severity.ERROR, "moc must not contain brackets", field="moc"
             )
-        expected = f"moc-{topic}" if topic else None
-        if expected and moc != expected:
-            self.add_issue(
-                Severity.WARNING,
-                f"moc should match topic: expected '{expected}'",
-                field="moc",
-            )
+            return
+
+        # TAXONOMY-aware check: use mapping instead of simple moc-{topic}
+        expected = self.TOPIC_TO_MOC.get(topic) if topic else None
+
+        if expected:
+            if moc != expected:
+                self.add_issue(
+                    Severity.WARNING,
+                    f"moc should match topic: expected '{expected}' for topic '{topic}'",
+                    field="moc",
+                )
+            else:
+                self.add_passed("moc matches topic (TAXONOMY-aware)")
         else:
-            self.add_passed("moc format valid")
+            # Topic not in mapping, just validate format
+            if moc.startswith("moc-"):
+                self.add_passed("moc format valid")
+            else:
+                self.add_issue(
+                    Severity.WARNING,
+                    f"moc format should start with 'moc-' (current: '{moc}')",
+                    field="moc",
+                )
 
     def _check_related(self, related) -> None:
         if related is None:
