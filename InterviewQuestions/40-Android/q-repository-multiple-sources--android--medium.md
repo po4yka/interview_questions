@@ -296,6 +296,14 @@ class NewsRepository(
 ## References
 - [Data layer - Android](https://developer.android.com/topic/architecture/data-layer)
 
+
+## Follow-ups
+
+- [[q-dagger-field-injection--android--medium]]
+- [[q-does-state-made-in-compose-help-avoid-race-condition--android--medium]]
+- [[q-kmm-ktor-networking--multiplatform--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

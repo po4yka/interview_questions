@@ -941,6 +941,19 @@ Services — фундаментальные Android-компоненты для 
 
 ---
 
+
+## Follow-ups
+
+- [[q-how-to-add-custom-attributes-to-custom-view--android--medium]]
+- [[q-migration-to-compose--android--medium]]
+- [[q-viewmodel-pattern--android--easy]]
+
+
+## References
+
+- [Services](https://developer.android.com/develop/background-work/services)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

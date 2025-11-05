@@ -472,7 +472,8 @@ class UserActivity : AppCompatActivity() {
 - [[c-coroutines]] - Kotlin coroutines for async operations
 - https://developer.android.com/topic/libraries/architecture/saving-states
 - https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate
-- https://developer.android.com/topic/libraries/architecture/datastore
+- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
+
 
 ## Related Questions
 

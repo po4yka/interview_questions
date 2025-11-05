@@ -122,3 +122,8 @@ val notification = NotificationCompat.Builder(context, CHANNEL_CALLS)
 - [[c-communication-surfaces]]
 - [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/develop/ui/views/notifications/callstyle
+
+## Related Questions
+
+- [[c-communication-surfaces]]
+- [[q-android-coverage-gaps--android--hard]]

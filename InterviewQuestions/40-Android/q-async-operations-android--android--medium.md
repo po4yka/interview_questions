@@ -294,8 +294,9 @@ disposables.add(
 - [[c-coroutines]]
 - [[c-lifecycle]]
 - [[c-structured-concurrency]]
-- https://developer.android.com/kotlin/coroutines
-- https://developer.android.com/topic/libraries/architecture/workmanager
+- [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines)
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+
 
 ## Related Questions
 

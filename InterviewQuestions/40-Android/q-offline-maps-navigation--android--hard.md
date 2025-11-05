@@ -138,9 +138,10 @@ Larger local graphs reduce reroute time but cost storage; tune by region popular
 
 -   [[c-lifecycle]]
 -   [[c-workmanager]]
--   https://developer.android.com/training/location
+- [Location](https://developer.android.com/training/location)
 -   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
 -   [[ANDROID-INTERVIEWER-GUIDE]]
+
 
 ## Related Questions
 

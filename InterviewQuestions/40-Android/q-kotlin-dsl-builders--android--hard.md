@@ -371,6 +371,13 @@ val layout = verticalLayout {
 - What's the performance impact of DSL builders?
 - How do you version DSL APIs?
 
+
+## References
+
+- [Android Documentation](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
+
 ## Related Questions
 
 ### Related (Same Level)

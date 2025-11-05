@@ -105,6 +105,13 @@ sources:
 - Какие метрики эффективности локализации (LQA defects, time-to-market)?
 
 ## References
+
 - [[c-globalization]]
 - [[q-android-coverage-gaps--android--hard]]
-- https://developer.android.com/guide/topics/resources/localization
+- [Localization](https://developer.android.com/guide/topics/resources/localization)
+
+
+## Related Questions
+
+- [[c-globalization]]
+- [[q-android-coverage-gaps--android--hard]]

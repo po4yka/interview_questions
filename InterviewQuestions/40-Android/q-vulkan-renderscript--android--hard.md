@@ -1093,6 +1093,19 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 
 С устареванием RenderScript, Vulkan и OpenGL ES compute шейдеры являются современными альтернативами для GPU вычислений на Android. Vulkan обеспечивает максимальный контроль но со сложностью, в то время как OpenGL ES 3.1+ предлагает вычислительные возможности с более простой интеграцией. Всегда реализуйте CPU fallback для совместимости и выбирайте подходящий API на основе возможностей устройства и требований производительности.
 
+
+## Follow-ups
+
+- [[c-gpu-rendering]]
+- [[c-performance]]
+- [[q-surfaceview-rendering--android--medium]]
+
+
+## References
+
+- [Rendering Performance](https://developer.android.com/topic/performance/rendering)
+
+
 ## Related Questions
 
 - [[q-dagger-field-injection--android--medium]]

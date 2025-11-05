@@ -1,26 +1,45 @@
 ---
 id: android-346
-title: "SurfaceView Rendering / Рендеринг SurfaceView"
-aliases: [SurfaceView Rendering, Рендеринг SurfaceView]
+title: SurfaceView Rendering / Рендеринг SurfaceView
+aliases:
+- SurfaceView Rendering
+- Рендеринг SurfaceView
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-threading, c-views, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium]
+related:
+- c-threading
+- c-views
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-methods-redraw-views--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/performance-rendering, android/ui-views, difficulty/medium, rendering, surfaceview]
+tags:
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- rendering
+- surfaceview
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# What is SurfaceView? / Что Такое SurfaceView?
+# Вопрос (RU)
+> Рендеринг SurfaceView
 
-**English**: What is SurfaceView?
+# Question (EN)
+> SurfaceView Rendering
+
+---
 
 ## Answer (EN)
 `SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` can be updated on a background thread, making it ideal for high-performance rendering scenarios.
@@ -229,6 +248,20 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 5. Рассмотрите использование `TextureView`, если нужно аппаратное ускорение и трансформации
 
 ---
+
+
+## Follow-ups
+
+- [[c-threading]]
+- [[c-views]]
+- [[q-viewgroup-vs-view-differences--android--easy]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

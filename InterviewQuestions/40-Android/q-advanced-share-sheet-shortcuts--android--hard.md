@@ -122,3 +122,8 @@ ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
 - [[c-communication-surfaces]]
 - [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/develop/ui/views/sharing/send
+
+## Related Questions
+
+- [[c-communication-surfaces]]
+- [[q-android-coverage-gaps--android--hard]]

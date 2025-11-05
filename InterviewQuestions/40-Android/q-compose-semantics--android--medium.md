@@ -219,8 +219,9 @@ composeTestRule
 
 - [[c-jetpack-compose]]
 - https://developer.android.com/jetpack/compose/semantics
-- https://developer.android.com/guide/topics/ui/accessibility
+- [Accessibility](https://developer.android.com/guide/topics/ui/accessibility)
 - https://developer.android.com/jetpack/compose/testing
+
 
 ## Related Questions
 

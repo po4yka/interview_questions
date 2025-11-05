@@ -1,26 +1,46 @@
 ---
 id: android-199
-title: "Hilt / Фреймворк Hilt"
-aliases: [Hilt, Фреймворк Hilt]
+title: Hilt / Фреймворк Hilt
+aliases:
+- Hilt
+- Фреймворк Hilt
 topic: android
-subtopics: [architecture-mvvm, di-hilt]
+subtopics:
+- architecture-mvvm
+- di-hilt
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-hilt, q-test-doubles-dependency-injection--testing--medium, q-what-is-known-about-recyclerview--android--easy]
+related:
+- c-dependency-injection
+- c-hilt
+- q-test-doubles-dependency-injection--testing--medium
+- q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/architecture-mvvm, android/di-hilt, dependency-injection, di, difficulty/medium, hilt]
+tags:
+- android/architecture-mvvm
+- android/di-hilt
+- dependency-injection
+- di
+- difficulty/medium
+- hilt
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What is Hilt?
+# Вопрос (RU)
+> Фреймворк Hilt
 
-**Russian**: Что такое Hilt и для чего он используется?
+# Question (EN)
+> Hilt
+
+---
 
 ## Answer (EN)
 **Hilt** is a dependency injection (DI) framework developed by Google specifically for Android. It's built on top of **Dagger** and designed to simplify dependency injection setup in Android applications by reducing boilerplate code and providing standardized patterns for Android components.
@@ -608,6 +628,20 @@ object DatabaseModule {
 - Требуется compile-time безопасность
 - Интеграция с Jetpack библиотеками
 - Необходима тестируемая архитектура
+
+
+## Follow-ups
+
+- [[c-dependency-injection]]
+- [[c-hilt]]
+- [[q-test-doubles-dependency-injection--testing--medium]]
+
+
+## References
+
+- [Architecture](https://developer.android.com/topic/architecture)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

@@ -209,6 +209,13 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 - What are the benefits of using adapter delegation?
 - How do you handle view type changes efficiently?
 
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -47,9 +47,20 @@ date modified: Saturday, November 1st 2025, 5:43:34 pm
 
 ---
 
+
+## Follow-ups
+
+- [[q-fragments-history-and-purpose--android--hard]]
+- [[q-recomposition-choreographer--android--hard]]
+- [[q-which-event-is-called-when-user-touches-screen--android--medium]]
+
+
 ## Related Questions
-- Related question 1
-- Related question 2
+
+- [[q-fragments-history-and-purpose--android--hard]]
+- [[q-recomposition-choreographer--android--hard]]
+- [[q-which-event-is-called-when-user-touches-screen--android--medium]]
+
 
 ## References
 - [Android Documentation](https://developer.android.com)

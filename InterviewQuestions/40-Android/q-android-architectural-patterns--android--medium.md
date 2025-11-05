@@ -180,7 +180,8 @@ class GetUserUseCase(private val repo: UserRepository) {
 - [[c-mvvm]]
 - [[c-clean-architecture]]
 - [[c-dependency-injection]]
-- https://developer.android.com/topic/architecture
+- [Architecture](https://developer.android.com/topic/architecture)
+
 
 ## Related Questions
 

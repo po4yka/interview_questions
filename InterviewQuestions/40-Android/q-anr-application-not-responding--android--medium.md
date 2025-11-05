@@ -215,8 +215,9 @@ if (BuildConfig.DEBUG) {
 - [[c-coroutines]]
 - [[c-workmanager]]
 - [[c-strictmode]]
-- https://developer.android.com/topic/performance/vitals/anr
+- [ANRs](https://developer.android.com/topic/performance/vitals/anr)
 - https://developer.android.com/topic/performance/anrs/diagnose-and-fix-anrs
+
 
 ## Related Questions
 

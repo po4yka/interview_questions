@@ -1,34 +1,40 @@
 ---
 id: android-491
-title: "Testing ViewModels with Turbine / Тестирование ViewModels с Turbine"
-aliases: [Testing ViewModels, Turbine, Turbine Library, Тестирование ViewModels]
-
-# Classification
+title: Testing ViewModels with Turbine / Тестирование ViewModels с Turbine
+aliases:
+- Testing ViewModels
+- Turbine
+- Turbine Library
+- Тестирование ViewModels
 topic: android
-subtopics: [coroutines, testing-unit, viewmodel]
+subtopics:
+- coroutines
+- testing-unit
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-source:
-source_note:
-
-# Workflow & relations
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-flow, c-viewmodel]
-
-# Timestamps
+related:
+- c-flow
+- c-viewmodel
 created: 2025-10-15
 updated: 2025-11-01
-
-# Tags (EN only; no leading #)
-tags: [android/coroutines, android/testing-unit, android/viewmodel, coroutines, difficulty/medium, flow, testing, turbine]
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
+tags:
+- android/coroutines
+- android/testing-unit
+- coroutines
+- difficulty/medium
+- flow
+- testing
+- turbine
 ---
+
+# Вопрос (RU)
+> Тестирование ViewModels с Turbine
 
 # Question (EN)
 > How do you test ViewModels that emit Flow/StateFlow using the Turbine library?
@@ -135,7 +141,7 @@ fun `loadUser emits Error when repository fails`() = runTest {
 - Clear assertion API
 - Works with StateFlow, SharedFlow, and regular Flows
 
-## B25B (RU)
+## Ответ (RU)
 
 **>4E>4**: Turbine - MB> 181;8>B5:0 4;O B5AB8@>20=8O, :>B>@0O C?@>I05B B5AB8@>20=85 Kotlin Flow, ?@54>AB02;OO G8B05<K9 API 4;O ?@>25@:8 M<8AA89 Flow 2> 2@5<5=8.
 

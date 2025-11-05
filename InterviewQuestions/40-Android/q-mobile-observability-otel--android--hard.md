@@ -128,3 +128,8 @@ OpenTelemetrySdk.builder()
 - [[q-android-coverage-gaps--android--hard]]
 - https://opentelemetry.io/docs/instrumentation/android/
 - https://developer.android.com/topic/performance/monitoring
+
+## Related Questions
+
+- [[c-mobile-observability]]
+- [[q-android-coverage-gaps--android--hard]]

@@ -1,26 +1,40 @@
 ---
 id: android-261
-title: "How To Stop Service / Остановка Service"
-aliases: [How To Stop Service, Остановка Service]
+title: How To Stop Service / Остановка Service
+aliases:
+- How To Stop Service
+- Остановка Service
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-async-operations-android--android--medium, q-derived-state-snapshot-system--jetpack-compose--hard, q-how-to-fix-a-bad-element-layout--android--easy]
+related:
+- q-async-operations-android--android--medium
+- q-derived-state-snapshot-system--jetpack-compose--hard
+- q-how-to-fix-a-bad-element-layout--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/service, difficulty/medium]
+tags:
+- android/service
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Как Остановить Сервис?
+# Вопрос (RU)
+> Остановка Service
 
-**English**: How to stop a service?
+# Question (EN)
+> How To Stop Service
+
+---
 
 ## Answer (EN)
 The method to stop a service depends on **how it was started**:
@@ -696,6 +710,19 @@ class MyService : Service() {
 
 
 ---
+
+
+## Follow-ups
+
+- [[q-async-operations-android--android--medium]]
+- [[q-derived-state-snapshot-system--jetpack-compose--hard]]
+- [[q-how-to-fix-a-bad-element-layout--android--easy]]
+
+
+## References
+
+- [Services](https://developer.android.com/develop/background-work/services)
+
 
 ## Related Questions
 

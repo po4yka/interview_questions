@@ -1,26 +1,48 @@
 ---
 id: android-091
-title: "List Optimization / Оптимизация больших списков"
-aliases: [List Optimization, Оптимизация списков]
+title: List Optimization / Оптимизация больших списков
+aliases:
+- List Optimization
+- Оптимизация списков
 topic: android
-subtopics: [performance-memory, performance-rendering, ui-views]
+subtopics:
+- performance-memory
+- performance-rendering
+- ui-views
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-performance, c-recyclerview, q-what-is-diffutil-for--android--medium, q-what-is-known-about-recyclerview--android--easy]
+related:
+- c-performance
+- c-recyclerview
+- q-what-is-diffutil-for--android--medium
+- q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/performance-memory, android/performance-rendering, android/ui-views, difficulty/hard, optimization, performance, recyclerview]
+tags:
+- android/performance-memory
+- android/performance-rendering
+- android/ui-views
+- difficulty/hard
+- optimization
+- performance
+- recyclerview
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# На Что Следует Обращать Внимание, Чтобы Оптимизировать Большой Список?
+# Вопрос (RU)
+> Оптимизация больших списков
 
-**English**: What should you pay attention to in order to optimize a large list?
+# Question (EN)
+> List Optimization
+
+---
 
 ## Answer (EN)
 Optimizing large lists in Android applications is critical for smooth scrolling and good user experience. Here are the key areas to focus on:
@@ -937,6 +959,20 @@ if (BuildConfig.DEBUG) {
 
 
 ---
+
+
+## Follow-ups
+
+- [[c-performance]]
+- [[c-recyclerview]]
+- [[q-what-is-diffutil-for--android--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

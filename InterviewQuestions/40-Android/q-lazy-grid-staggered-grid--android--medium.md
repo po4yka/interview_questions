@@ -193,6 +193,13 @@ LazyVerticalGrid(
 - What's the performance difference between LazyGrid and FlowRow?
 - How do you implement drag-and-drop in LazyGrid?
 
+
+## References
+
+- [Android Documentation](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

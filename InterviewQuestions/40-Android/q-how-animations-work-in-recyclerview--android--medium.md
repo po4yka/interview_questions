@@ -1,28 +1,42 @@
 ---
 id: android-201
-title: "How Animations Work In RecyclerView / Как работают анимации в RecyclerView"
-aliases: [How Animations Work In RecyclerView, Как работают анимации в RecyclerView]
+title: How Animations Work In RecyclerView / Как работают анимации в RecyclerView
+aliases:
+- How Animations Work In RecyclerView
+- Как работают анимации в RecyclerView
 topic: android
-subtopics: [ui-animation]
+subtopics:
+- ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-broadcastreceiver-contentprovider--android--easy, q-save-data-outside-fragment--android--medium, q-spannable-text-styling--android--medium]
+related:
+- q-broadcastreceiver-contentprovider--android--easy
+- q-save-data-outside-fragment--android--medium
+- q-spannable-text-styling--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
+tags:
+- android/ui-animation
+- animations
+- difficulty/medium
+- recyclerview
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# How Are Animations Done in RecyclerView?
+# Вопрос (RU)
+> Как работают анимации в RecyclerView
 
-**Russian**: Как в RecyclerView делаются анимации?
+# Question (EN)
+> How Animations Work In RecyclerView
 
-**English**: How are animations done in RecyclerView?
+---
 
 ## Answer (EN)
 RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
@@ -607,6 +621,19 @@ if (!isReduceMotionEnabled) {
 
 
 ---
+
+
+## Follow-ups
+
+- [[q-broadcastreceiver-contentprovider--android--easy]]
+- [[q-save-data-outside-fragment--android--medium]]
+- [[q-spannable-text-styling--android--medium]]
+
+
+## References
+
+- [Animations](https://developer.android.com/develop/ui/views/animations)
+
 
 ## Related Questions
 

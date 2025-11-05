@@ -1332,6 +1332,14 @@ fun LoadDataExample(userId: String) {
 
 ---
 
+
+## Follow-ups
+
+- [[q-compose-remember-derived-state--jetpack-compose--medium]]
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]]
+- [[q-compose-stability-skippability--jetpack-compose--hard]]
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

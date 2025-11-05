@@ -1,26 +1,48 @@
 ---
 id: android-227
 title: Tasks and Back Stack / Задачи и стек возврата
-aliases: [Tasks and Back Stack, Задачи и стек возврата]
+aliases:
+- Tasks and Back Stack
+- Задачи и стек возврата
 topic: android
-subtopics: [activity, lifecycle, ui-navigation]
+subtopics:
+- activity
+- lifecycle
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-navigation, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-activity-lifecycle
+- c-navigation
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/lifecycle, android/ui-navigation, back-stack, difficulty/medium, launch-mode, tasks]
+tags:
+- android/activity
+- android/lifecycle
+- android/ui-navigation
+- back-stack
+- difficulty/medium
+- launch-mode
+- tasks
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Tasks and Back Stack / Задачи И Стек Возврата
+# Вопрос (RU)
+> Задачи и стек возврата
 
-**English**: What do you know about tasks and the back stack?
+# Question (EN)
+> Tasks and Back Stack
+
+---
 
 **Русский**: Что вы знаете о задачах и стеке возврата?
 
@@ -119,9 +141,23 @@ Android управляет задачами и стеком возврата, п
 - `alwaysRetainTaskState`
 - `finishOnTaskLaunch`
 
+
+## Ответ (RU)
+
+
+## Ответ (RU)
+
 ## References
 
 - [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+
+
+## Follow-ups
+
+- [[c-activity-lifecycle]]
+- [[c-navigation]]
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
+
 
 ## Related Questions
 

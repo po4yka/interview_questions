@@ -207,6 +207,13 @@ recyclerView.addItemDecoration(StickyHeaderDecoration())
 - How do you optimize ItemDecoration performance?
 - How do you handle ItemDecoration with different view types?
 
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

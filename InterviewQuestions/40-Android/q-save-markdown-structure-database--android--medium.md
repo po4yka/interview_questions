@@ -1,26 +1,41 @@
 ---
 id: android-218
-title: "Save Markdown Structure To Database / Сохранение структуры Markdown в базе данных"
-aliases: [Save Markdown Structure To Database, Сохранение структуры Markdown в базе данных]
+title: Save Markdown Structure To Database / Сохранение структуры Markdown в базе
+  данных
+aliases:
+- Save Markdown Structure To Database
+- Сохранение структуры Markdown в базе данных
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-database-encryption-android--android--medium, q-fragments-vs-activity--android--medium, q-mvi-handle-one-time-events--android--hard]
+related:
+- q-database-encryption-android--android--medium
+- q-fragments-vs-activity--android--medium
+- q-mvi-handle-one-time-events--android--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/room, difficulty/medium]
+tags:
+- android/room
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Как Бы Ты Сохранил Структуру Markdown В Базу данных/на Диск?
+# Вопрос (RU)
+> Сохранение структуры Markdown в базе данных
 
-**English**: How would you save Markdown structure to a database/disk?
+# Question (EN)
+> Save Markdown Structure To Database
+
+---
 
 ## Answer (EN)
 Saving Markdown structure depends on your application's goals. There are several approaches with different trade-offs.
@@ -480,6 +495,19 @@ class MarkdownRepository(
 
 
 ---
+
+
+## Follow-ups
+
+- [[q-database-encryption-android--android--medium]]
+- [[q-fragments-vs-activity--android--medium]]
+- [[q-mvi-handle-one-time-events--android--hard]]
+
+
+## References
+
+- [Room Database](https://developer.android.com/training/data-storage/room)
+
 
 ## Related Questions
 

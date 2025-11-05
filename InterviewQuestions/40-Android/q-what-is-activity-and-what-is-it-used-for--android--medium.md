@@ -1,24 +1,46 @@
 ---
 id: android-187
-title: "Activity / Компонент Activity"
-aliases: [Activity, Компонент Activity]
+title: Activity / Компонент Activity
+aliases:
+- Activity
+- Компонент Activity
 topic: android
-subtopics: [activity, lifecycle]
+subtopics:
+- activity
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-android-components, q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium, q-what-each-android-component-represents--android--easy]
+related:
+- c-activity-lifecycle
+- c-android-components
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+- q-what-each-android-component-represents--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [activity, android/activity, android/lifecycle, components, difficulty/medium, ui]
+tags:
+- activity
+- android/activity
+- android/lifecycle
+- components
+- difficulty/medium
+- ui
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What is Activity and what is it Used For?
+# Вопрос (RU)
+> Компонент Activity
+
+# Question (EN)
+> Activity
+
+---
 
 ## Answer (EN)
 Activity is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each Activity represents a single screen with a user interface.
@@ -412,6 +434,20 @@ class PhotoViewerActivity : AppCompatActivity() {
 - Task and back stack
 
 ---
+
+
+## Follow-ups
+
+- [[c-activity-lifecycle]]
+- [[c-android-components]]
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
+
+
+## References
+
+- [Android Documentation](https://developer.android.com/docs)
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+
 
 ## Related Questions
 

@@ -171,6 +171,12 @@ splitInstallManager.startInstall(request)
 - What are the performance implications of dynamic modules?
 - How do you test dynamic feature delivery?
 
+
+## References
+
+- [Android App Bundle](https://developer.android.com/guide/app-bundle)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -223,7 +223,8 @@ class MainActivity : AppCompatActivity(), OnDataPassListener {
 - [[c-viewmodel]]
 - [[c-fragments]]
 - [[c-activity-lifecycle]]
-- https://developer.android.com/topic/libraries/architecture/viewmodel
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+
 
 ## Related Questions
 

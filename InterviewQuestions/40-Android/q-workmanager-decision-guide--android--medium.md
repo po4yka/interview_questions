@@ -489,9 +489,10 @@ Need guaranteed execution after app closes?
 
 - [[c-coroutines]]
 - [[c-structured-concurrency]]
-- https://developer.android.com/topic/libraries/architecture/workmanager
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - https://developer.android.com/develop/background-work/background-tasks
-- https://developer.android.com/develop/background-work/services/foreground-services
+- [Foreground Services](https://developer.android.com/develop/background-work/services/foreground-services)
+
 
 ## Related Questions
 

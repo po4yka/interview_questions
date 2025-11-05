@@ -1,26 +1,41 @@
 ---
 id: android-193
-title: "Home Screen Widgets / Виджеты домашнего экрана"
-aliases: [Home Screen Widgets, Виджеты домашнего экрана]
+title: Home Screen Widgets / Виджеты домашнего экрана
+aliases:
+- Home Screen Widgets
+- Виджеты домашнего экрана
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-recyclerview-viewtypes-delegation--android--medium, q-what-is-broadcastreceiver--android--easy, q-what-is-known-about-recyclerview--android--easy]
+related:
+- q-recyclerview-viewtypes-delegation--android--medium
+- q-what-is-broadcastreceiver--android--easy
+- q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/medium, widgets]
+tags:
+- android/ui-views
+- difficulty/medium
+- widgets
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# Android Home Screen Widgets / Виджеты Главного Экрана Android
+# Вопрос (RU)
+> Виджеты домашнего экрана
 
-**English**: What's a Widget?
+# Question (EN)
+> Home Screen Widgets
+
+---
 
 ## Answer (EN)
 **Home screen widgets** are broadcast receivers that provide **interactive components** primarily used on the Android home screen. They typically display some kind of data and allow the user to perform actions with them.
@@ -600,6 +615,20 @@ RemoteViews поддерживает только определённые layou
 **Резюме:**
 
 Виджеты — это интерактивные компоненты на главном экране Android. Существует четыре категории: информационные, коллекций, управления и гибридные. Для создания виджета необходимы: layout, XML метаданных, AppWidgetProvider и запись в manifest. Жизненный цикл включает onEnabled, onUpdate, onDeleted, onDisabled. RemoteViews используется для построения UI с ограниченной поддержкой view. Основные ограничения: поддержка жестов, типы view, лимит выполнения 5 секунд.
+
+
+## Follow-ups
+
+- [[q-recyclerview-viewtypes-delegation--android--medium]]
+- [[q-what-is-broadcastreceiver--android--easy]]
+- [[q-what-is-known-about-recyclerview--android--easy]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

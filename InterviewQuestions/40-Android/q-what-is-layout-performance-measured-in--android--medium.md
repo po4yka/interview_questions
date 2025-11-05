@@ -275,8 +275,9 @@ fun analyzeComplexity(view: View): Metrics {
 
 - [[c-android-profiling]] - Android profiling concepts
 - [[c-jetpack-compose]] - Compose fundamentals
-- https://developer.android.com/topic/performance/rendering
+- [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/studio/profile/inspect-traces
+
 
 ## Related Questions
 

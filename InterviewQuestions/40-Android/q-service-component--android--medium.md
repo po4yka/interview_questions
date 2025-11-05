@@ -177,6 +177,14 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 - [Android Service Tutorial](https://www.vogella.com/tutorials/AndroidServices/article.html)
 - [Android Service Tutorial](https://www.survivingwithandroid.com/android-service-tutorial-2/)
 
+
+## Follow-ups
+
+- [[q-anr-application-not-responding--android--medium]]
+- [[q-how-to-start-drawing-ui-in-android--android--easy]]
+- [[q-kmm-dependency-injection--multiplatform--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

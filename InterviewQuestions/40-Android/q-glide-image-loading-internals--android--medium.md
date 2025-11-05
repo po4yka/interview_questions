@@ -362,6 +362,14 @@ Glide.with(context) // Lifecycle-aware
 
 ---
 
+
+## Follow-ups
+
+- [[bitmap-handling]]
+- [[caching]]
+- [[glide]]
+
+
 ## Related Questions
 
 ### Related (Medium)

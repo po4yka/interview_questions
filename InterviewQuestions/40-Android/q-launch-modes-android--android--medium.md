@@ -170,6 +170,14 @@ The activity can only be running as the root activity of the task, the first act
 - [Android Activity Launch Mode](https://medium.com/android-news/android-activity-launch-mode-e0df1aa72242)
 - [Understand Android Activity's launchMode: standard, singleTop, singleTask and singleInstance](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en)
 
+
+## Follow-ups
+
+- [[q-kapt-vs-ksp--android--medium]]
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
+- [[q-which-event-is-triggered-when-user-presses-screen--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

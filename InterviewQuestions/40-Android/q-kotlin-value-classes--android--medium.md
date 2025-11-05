@@ -261,6 +261,12 @@ val id: Identifier = userId             // 4. Interfaces
 - When should you use value classes vs data classes?
 - How do value classes affect binary compatibility?
 
+
+## References
+
+- [Memory Management](https://developer.android.com/topic/performance/memory-overview)
+
+
 ## Related Questions
 
 ### Related (Same Level)

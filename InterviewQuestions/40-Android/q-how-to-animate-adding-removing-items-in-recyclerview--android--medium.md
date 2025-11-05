@@ -1,24 +1,47 @@
 ---
 id: android-419
-title: "How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление и удаление элементов в RecyclerView"
-aliases: [How To Animate Adding Removing Items In RecyclerView, Как анимировать добавление и удаление элементов в RecyclerView]
+title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление
+  и удаление элементов в RecyclerView
+aliases:
+- How To Animate Adding Removing Items In RecyclerView
+- Как анимировать добавление и удаление элементов в RecyclerView
 topic: android
-subtopics: [ui-animation]
+subtopics:
+- ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-bundle-data-types--android--medium, q-compositionlocal-advanced--jetpack-compose--medium, q-stack-heap-memory-multiple-threads--android--medium]
+related:
+- q-bundle-data-types--android--medium
+- q-compositionlocal-advanced--jetpack-compose--medium
+- q-stack-heap-memory-multiple-threads--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-animation, animations, difficulty/medium, recyclerview]
+tags:
+- android/ui-animation
+- animations
+- difficulty/medium
+- recyclerview
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# What Needs to Be Used to Animate adding/removing Items in RecyclerView?
+# Вопрос (RU)
+> Как анимировать добавление и удаление элементов в RecyclerView
+
+# Question (EN)
+> How To Animate Adding/Removing Items In RecyclerView
+
+---
+
+## Ответ (RU)
+
+## Answer (EN)
 
 ## EN (expanded)
 
@@ -906,6 +929,19 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 3. Не забывайте про `dispatchAddFinished()` в custom animators
 4. Тестируйте анимации на медленных устройствах
 5. Используйте стабильные ID для улучшения производительности
+
+## Follow-ups
+
+- [[q-bundle-data-types--android--medium]]
+- [[q-compositionlocal-advanced--jetpack-compose--medium]]
+- [[q-stack-heap-memory-multiple-threads--android--medium]]
+
+
+## References
+
+- [Animations](https://developer.android.com/develop/ui/views/animations)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

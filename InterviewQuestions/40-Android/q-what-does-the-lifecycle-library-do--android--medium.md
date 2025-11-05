@@ -299,7 +299,8 @@ class GoodActivity : AppCompatActivity() {
 
 - [[q-why-was-the-lifecycle-library-created--android--hard]]
 - [[q-what-is-viewmodel--android--medium]]
-- https://developer.android.com/topic/libraries/architecture/lifecycle
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+
 
 ## Related Questions
 

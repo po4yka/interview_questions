@@ -1,26 +1,46 @@
 ---
 id: android-384
-title: "ViewModel Pattern / Паттерн ViewModel"
-aliases: [ViewModel Pattern, Паттерн ViewModel]
+title: ViewModel Pattern / Паттерн ViewModel
+aliases:
+- ViewModel Pattern
+- Паттерн ViewModel
 topic: android
-subtopics: [architecture-mvvm, lifecycle]
+subtopics:
+- architecture-mvvm
+- lifecycle
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-architecture-patterns, c-mvvm-pattern, q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-architecture-patterns
+- c-mvvm-pattern
+- q-viewmodel-vs-onsavedinstancestate--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, difficulty/easy, mvvm, viewmodel]
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- architecture-mvvm
+- difficulty/easy
+- mvvm
+- viewmodel
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Какой Архитектурный Паттерн Реализуется Благодаря ViewModel?
+# Вопрос (RU)
+> Паттерн ViewModel
 
-**English**: What architectural pattern is implemented using ViewModel?
+# Question (EN)
+> ViewModel Pattern
+
+---
 
 ## Answer (EN)
 ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is responsible for managing data and business logic, isolating them from the View, which simplifies testing and ensures separation of concerns between layers.
@@ -154,6 +174,21 @@ ViewModel реализует паттерн MVVM, обеспечивая чет�
 
 
 ---
+
+
+## Follow-ups
+
+- [[c-architecture-patterns]]
+- [[c-mvvm-pattern]]
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
+
+
+## References
+
+- [Architecture](https://developer.android.com/topic/architecture)
+- [Android Documentation](https://developer.android.com/docs)
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+
 
 ## Related Questions
 

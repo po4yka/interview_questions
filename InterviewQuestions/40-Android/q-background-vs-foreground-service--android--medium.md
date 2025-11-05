@@ -240,10 +240,10 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - [[c-workmanager]]
 - [[c-notification]]
 - [[c-process-lifecycle]]
-- https://developer.android.com/develop/background-work/services/foreground-services
+- [Foreground Services](https://developer.android.com/develop/background-work/services/foreground-services)
 - https://developer.android.com/develop/background-work/background-tasks
-
 ---
+
 
 ## Related Questions
 

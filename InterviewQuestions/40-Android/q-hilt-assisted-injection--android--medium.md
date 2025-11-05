@@ -487,6 +487,13 @@ interface ProductViewHolderFactory {
 - What are the testing strategies for Assisted Injection?
 - When should you avoid using Assisted Injection?
 
+
+## References
+
+- [Architecture](https://developer.android.com/topic/architecture)
+- [Android Documentation](https://developer.android.com/docs)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

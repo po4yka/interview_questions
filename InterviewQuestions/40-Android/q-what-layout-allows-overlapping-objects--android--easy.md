@@ -1,24 +1,49 @@
 ---
 id: android-186
-title: "Layout Overlapping Objects / Макет для перекрывающихся объектов"
-aliases: [Overlapping Layout, Макет для перекрывания]
+title: Layout Overlapping Objects / Макет для перекрывающихся объектов
+aliases:
+- Overlapping Layout
+- Макет для перекрывания
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-layouts, c-view-positioning, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium]
+related:
+- c-layouts
+- c-view-positioning
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-methods-redraw-views--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/easy, framelayout, layouts, ui, view-positioning]
+tags:
+- android/ui-views
+- difficulty/easy
+- framelayout
+- layouts
+- ui
+- view-positioning
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What is the Layout Called where Objects Can Overlap Each Other?
+# Вопрос (RU)
+> Макет для перекрывающихся объектов
+
+# Question (EN)
+> Layout Overlapping Objects
+
+---
+
+## Ответ (RU)
+
+## Answer (EN)
 
 ## EN (expanded)
 
@@ -257,6 +282,20 @@ fun LayeringExample() {
 Как называется лейаут в котором объекты могут наслаиваться друг на друга
 
 В Android для наложения элементов используется FrameLayout или Box в Jetpack Compose. FrameLayout — контейнер, где элементы располагаются в левом верхнем углу и могут накладываться друг на друга. Box в Jetpack Compose аналогичен FrameLayout и также позволяет наложение элементов.
+
+
+## Follow-ups
+
+- [[c-layouts]]
+- [[c-view-positioning]]
+- [[q-viewgroup-vs-view-differences--android--easy]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

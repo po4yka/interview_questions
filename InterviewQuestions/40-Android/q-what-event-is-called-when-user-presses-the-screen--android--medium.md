@@ -1,30 +1,48 @@
 ---
 id: android-322
-title: "Touch Events / События касания"
-aliases: [Touch Events, События касания]
+title: Touch Events / События касания
+aliases:
+- Touch Events
+- События касания
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-event-handling, c-touch-input, q-view-methods-and-their-purpose--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-event-handling
+- c-touch-input
+- q-view-methods-and-their-purpose--android--medium
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/medium, event-handling, interaction, touch-events, ui]
+tags:
+- android/ui-views
+- difficulty/medium
+- event-handling
+- interaction
+- touch-events
+- ui
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
-
-# What Event is Called when User Presses the Screen?
 
 # Вопрос (RU)
 
 Какое событие вызывается при нажатии юзера по экрану
 
 ## Answer (EN)
+# Question (EN)
+> Touch Events
+
+---
+
 When a user presses the screen in Android, the system calls a series of touch event methods. The main events are: **dispatchTouchEvent()**, **onInterceptTouchEvent()** (for ViewGroups), **onTouchEvent()**, and if configured, **onClick()**.
 
 ### Touch Event Flow
@@ -380,6 +398,20 @@ Key points:
 ## Ответ (RU)
 
 Система вызывает: dispatchTouchEvent() — распределяет событие. onTouchEvent() — обрабатывает вью, если не перехвачено. onClick() — вызывается, если был ACTION_UP без движения.
+
+
+## Follow-ups
+
+- [[c-event-handling]]
+- [[c-touch-input]]
+- [[q-view-methods-and-their-purpose--android--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

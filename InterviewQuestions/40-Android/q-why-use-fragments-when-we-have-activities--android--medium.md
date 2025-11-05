@@ -256,8 +256,9 @@ class DetailFragment : Fragment() {
 - [[c-fragments]] - Fragment fundamentals
 - [[c-activity-lifecycle]] - Activity lifecycle concepts
 - [[c-viewmodel]] - ViewModel architecture component
-- https://developer.android.com/guide/fragments
-- https://developer.android.com/guide/navigation
+- [Fragments](https://developer.android.com/guide/fragments)
+- [Navigation](https://developer.android.com/guide/navigation)
+
 
 ## Related Questions
 

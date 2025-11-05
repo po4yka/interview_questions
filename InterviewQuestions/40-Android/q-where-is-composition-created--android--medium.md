@@ -149,6 +149,22 @@ val layout = LinearLayout(this).apply {
 
 ---
 
+
+## Follow-ups
+
+- [[c-jetpack-compose]]
+- [[q-is-layoutinflater-a-singleton-and-why--android--medium]]
+- [[q-network-error-handling-strategies--networking--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
+
 ## Related Questions
 
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]]

@@ -1,26 +1,47 @@
 ---
 id: android-396
-title: "Fragments and Multiple Activities / Фрагменты и несколько Activity"
-aliases: [Fragments and Activities, Фрагменты и Activities]
+title: Fragments and Multiple Activities / Фрагменты и несколько Activity
+aliases:
+- Fragments and Activities
+- Фрагменты и Activities
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-fragments-relationship, c-fragments, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-activity-fragments-relationship
+- c-fragments
+- q-what-are-fragments-for-if-there-is-activity--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/fragment, android/ui-navigation, difficulty/hard, fragments, ui-navigation]
+tags:
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/hard
+- fragments
+- ui-navigation
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Что Такое Фрагменты И Почему Их Удобнее Использовать Вместо Множества Activity?
+# Вопрос (RU)
+> Фрагменты и несколько Activity
 
-**English**: What are fragments and why are they more convenient to use instead of multiple activities?
+# Question (EN)
+> Fragments and Multiple Activities
+
+---
 
 ## Answer (EN)
 Fragments are modular UI components that can be embedded in Activities. They represent a portion of the user interface or behavior that can be inserted into an activity. Fragments have their own lifecycle, receive their own input events, and can be added or removed while the activity is running.
@@ -322,6 +343,20 @@ Using fragments allows creating **flexible, modular, and efficient applications*
 
 
 ---
+
+
+## Follow-ups
+
+- [[c-activity-fragments-relationship]]
+- [[c-fragments]]
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]]
+
+
+## References
+
+- [Navigation](https://developer.android.com/guide/navigation)
+- [Activities](https://developer.android.com/guide/components/activities)
+
 
 ## Related Questions
 

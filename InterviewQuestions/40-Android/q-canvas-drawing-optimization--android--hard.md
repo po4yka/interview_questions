@@ -219,10 +219,12 @@ override fun onDraw(canvas: Canvas) {
 - How do you profile custom view performance in production builds?
 
 ## References
-- https://developer.android.com/topic/performance/rendering
+
+- [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/topic/performance/inspect-gpu-rendering
 - https://developer.android.com/reference/android/graphics/Canvas
 - https://developer.android.com/training/custom-views/optimizing-view
+
 
 ## Related Questions
 

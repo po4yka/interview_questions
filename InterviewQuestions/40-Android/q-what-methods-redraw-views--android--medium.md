@@ -1,24 +1,47 @@
 ---
 id: android-214
-title: "View Redraw Methods / Методы перерисовки View"
-aliases: [View Redraw Methods, Методы перерисовки View]
+title: View Redraw Methods / Методы перерисовки View
+aliases:
+- View Redraw Methods
+- Методы перерисовки View
 topic: android
-subtopics: [lifecycle, ui-views]
+subtopics:
+- lifecycle
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-view-lifecycle, c-view-rendering, q-view-methods-and-their-purpose--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-view-lifecycle
+- c-view-rendering
+- q-view-methods-and-their-purpose--android--medium
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, invalidate, requestLayout, view-rendering]
+tags:
+- android/lifecycle
+- android/ui-views
+- difficulty/medium
+- drawing
+- invalidate
+- requestLayout
+- view-rendering
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What Methods Are Used to Redraw Views?
+# Вопрос (RU)
+> Методы перерисовки View
+
+# Question (EN)
+> View Redraw Methods
+
+---
 
 ## Answer (EN)
 Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
@@ -672,6 +695,21 @@ fun safeInvalidate() {
 | `forceLayout()` | UI поток | Помечает для layout | Принудительный пересчёт layout |
 
 ---
+
+
+## Follow-ups
+
+- [[c-view-lifecycle]]
+- [[c-view-rendering]]
+- [[q-view-methods-and-their-purpose--android--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+
 
 ## Related Questions
 

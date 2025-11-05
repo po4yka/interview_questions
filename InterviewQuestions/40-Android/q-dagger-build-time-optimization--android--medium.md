@@ -166,7 +166,8 @@ Use Android Studio Build Analyzer or `./gradlew build --scan` to profile kapt/ks
 ## References
 
 - https://dagger.dev/hilt/
-- https://developer.android.com/training/dependency-injection/hilt-android
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+
 
 ## Related Questions
 

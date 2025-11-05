@@ -235,6 +235,14 @@ android {
 ## References
 - [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
 
+
+## Follow-ups
+
+- [[q-compose-custom-animations--jetpack-compose--medium]]
+- [[q-how-does-jetpackcompose-work--android--medium]]
+- [[q-what-is-workmanager--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

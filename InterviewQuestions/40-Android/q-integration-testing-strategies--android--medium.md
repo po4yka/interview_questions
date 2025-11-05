@@ -1,28 +1,40 @@
 ---
 id: android-120
-title: "Integration Testing Strategies / Стратегии интеграционного тестирования"
-aliases: [Integration Testing Strategies, Стратегии интеграционного тестирования]
+title: Integration Testing Strategies / Стратегии интеграционного тестирования
+aliases:
+- Integration Testing Strategies
+- Стратегии интеграционного тестирования
 topic: android
-subtopics: [testing-instrumented]
+subtopics:
+- testing-instrumented
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-manifest-file--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium, q-react-native-comparison--multiplatform--medium]
+related:
+- q-android-manifest-file--android--easy
+- q-koin-vs-hilt-comparison--dependency-injection--medium
+- q-react-native-comparison--multiplatform--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/testing-instrumented, difficulty/medium]
+tags:
+- android/testing-instrumented
+- difficulty/medium
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
-# Integration Testing Strategies
+# Вопрос (RU)
+> Стратегии интеграционного тестирования
 
-**English**: Design integration testing strategy. Test ViewModel + Repository + Database layers. Mock external dependencies.
+# Question (EN)
+> Integration Testing Strategies
 
-**Russian**: Разработайте стратегию интеграционного тестирования. Тестируйте слои ViewModel + Repository + Database. Мокируйте внешние зависимости.
+---
 
 ## Answer (EN)
 
@@ -288,6 +300,19 @@ class FullStackIntegrationTest {
 7. **Балансируйте покрытие и скорость**
 
 ---
+
+
+## Follow-ups
+
+- [[q-android-manifest-file--android--easy]]
+- [[q-koin-vs-hilt-comparison--dependency-injection--medium]]
+- [[q-react-native-comparison--multiplatform--medium]]
+
+
+## References
+
+- [Instrumented Tests](https://developer.android.com/training/testing/instrumented-tests)
+
 
 ## Related Questions
 

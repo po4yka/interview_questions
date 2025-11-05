@@ -312,8 +312,9 @@ WorkManager ensures reliability through:
 - [[c-workmanager]]
 - [[q-background-tasks-decision-guide--android--medium]]
 - [[q-background-vs-foreground-service--android--medium]]
-- https://developer.android.com/topic/libraries/architecture/workmanager
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - https://developer.android.com/topic/libraries/architecture/workmanager/advanced
+
 
 ## Related Questions
 

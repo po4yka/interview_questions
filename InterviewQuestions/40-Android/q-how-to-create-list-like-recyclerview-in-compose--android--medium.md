@@ -1,26 +1,41 @@
 ---
 id: android-248
-title: "How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView в Compose"
-aliases: [How To Create List Like RecyclerView In Compose, Как создать список как RecyclerView в Compose]
+title: How To Create List Like RecyclerView In Compose / Как создать список как RecyclerView
+  в Compose
+aliases:
+- How To Create List Like RecyclerView In Compose
+- Как создать список как RecyclerView в Compose
 topic: android
-subtopics: [ui-compose]
+subtopics:
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-animated-visibility-vs-content--jetpack-compose--medium, q-compose-testing--android--medium, q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]
+related:
+- q-animated-visibility-vs-content--jetpack-compose--medium
+- q-compose-testing--android--medium
+- q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-compose, difficulty/medium]
+tags:
+- android/ui-compose
+- difficulty/medium
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# How to Create a List like RecyclerView in Jetpack Compose?
+# Вопрос (RU)
+> Как создать список как RecyclerView в Compose
 
-**Russian**: Как в Jetpack Compose создать список аналогичный RecyclerView?
+# Question (EN)
+> How To Create List Like RecyclerView In Compose
+
+---
 
 ## Answer (EN)
 In Jetpack Compose, **LazyColumn** and **LazyRow** replace RecyclerView. They efficiently create and display items on demand, similar to RecyclerView's recycling behavior.
@@ -485,7 +500,7 @@ fun ItemRow(item: Item) {
 
 ---
 
-## RU (original)
+## Ответ (RU)
 В Jetpack Compose аналогом RecyclerView является LazyColumn и LazyRow.
 
 **Базовое использование LazyColumn:**
@@ -632,6 +647,20 @@ fun RememberScrollState() {
 3. ✅ LazyRow для горизонтальных списков
 4. ✅ LazyVerticalGrid для сеток
 5. ✅ Избегайте вложенных Lazy компонентов
+
+## Follow-ups
+
+- [[q-animated-visibility-vs-content--jetpack-compose--medium]]
+- [[q-compose-testing--android--medium]]
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]]
+
+
+## References
+
+- [Android Documentation](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
+
 ## Related Questions
 
 ### Hub

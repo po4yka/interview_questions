@@ -1,28 +1,48 @@
 ---
 id: android-209
-title: "Unified Android Components / Объединение компонентов Android"
-aliases: [Unified Components, Объединение компонентов]
+title: Unified Android Components / Объединение компонентов Android
+aliases:
+- Unified Components
+- Объединение компонентов
 topic: android
-subtopics: [activity, fragment, service]
+subtopics:
+- activity
+- fragment
+- service
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-context, c-intent, c-lifecycle]
+related:
+- c-android-components
+- c-context
+- c-intent
+- c-lifecycle
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/fragment, android/service, components, context, difficulty/easy, intent]
+tags:
+- android/activity
+- android/fragment
+- android/service
+- components
+- context
+- difficulty/easy
+- intent
 date created: Saturday, November 1st 2025, 1:26:06 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What Unifies Android Components?
+# Вопрос (RU)
+> Объединение компонентов Android
 
-**Russian**: Что объединяет основные компоненты Android-приложения?
+# Question (EN)
+> Unified Android Components
 
-**English**: What unifies the main Android application components?
+---
 
 ## Answer (EN)
 Main Android components are unified by **three key aspects**:
@@ -179,6 +199,20 @@ contentResolver.query(
 
 
 ---
+
+
+## Follow-ups
+
+- [[c-android-components]]
+- [[c-context]]
+- [[c-intent]]
+
+
+## References
+
+- [Services](https://developer.android.com/develop/background-work/services)
+- [Activities](https://developer.android.com/guide/components/activities)
+
 
 ## Related Questions
 

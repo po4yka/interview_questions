@@ -1,28 +1,40 @@
 ---
 id: android-205
-title: "Service Restrictions / Ограничения Service"
-aliases: [Service Restrictions, Ограничения Service]
+title: Service Restrictions / Ограничения Service
+aliases:
+- Service Restrictions
+- Ограничения Service
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-canvas-drawing-optimization--custom-views--hard, q-what-is-data-binding--android--easy, q-workmanager-chaining--background--hard]
+related:
+- q-canvas-drawing-optimization--custom-views--hard
+- q-what-is-data-binding--android--easy
+- q-workmanager-chaining--background--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/service, difficulty/medium]
+tags:
+- android/service
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Why Are there Restrictions on Starting Services?
+# Вопрос (RU)
+> Ограничения Service
 
-**Russian**: С чем связаны ограничения на запуск сервисов?
+# Question (EN)
+> Service Restrictions
 
-**English**: Why are there restrictions on starting services?
+---
 
 ## Answer (EN)
 Service restrictions are related to **battery optimization** and **performance**:
@@ -545,6 +557,19 @@ startForegroundService(Intent(this, MyService::class.java))
 
 
 ---
+
+
+## Follow-ups
+
+- [[q-canvas-drawing-optimization--custom-views--hard]]
+- [[q-what-is-data-binding--android--easy]]
+- [[q-workmanager-chaining--background--hard]]
+
+
+## References
+
+- [Services](https://developer.android.com/develop/background-work/services)
+
 
 ## Related Questions
 

@@ -437,6 +437,20 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ---
 
+
+## Follow-ups
+
+- [[c-activity-lifecycle]]
+- [[c-layouts]]
+- [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

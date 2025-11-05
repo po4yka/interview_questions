@@ -1215,6 +1215,20 @@ searchView.onQueryTextChange { query ->
 
 ---
 
+
+## Follow-ups
+
+- [[q-compose-side-effects-advanced--jetpack-compose--hard]]
+- [[q-vector-graphics-animations--graphics--medium]]
+- [[q-what-are-services-used-for--android--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

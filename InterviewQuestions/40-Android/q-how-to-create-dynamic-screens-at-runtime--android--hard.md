@@ -1,30 +1,44 @@
 ---
 id: android-184
-title: "How To Create Dynamic Screens At Runtime / Как создавать динамические экраны во время выполнения"
-aliases: [How To Create Dynamic Screens At Runtime, Как создавать динамические экраны во время выполнения]
+title: How To Create Dynamic Screens At Runtime / Как создавать динамические экраны
+  во время выполнения
+aliases:
+- How To Create Dynamic Screens At Runtime
+- Как создавать динамические экраны во время выполнения
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-fragments-history-and-purpose--android--hard, q-how-is-navigation-implemented--android--medium, q-how-to-add-fragment-synchronously-asynchronously--android--medium]
+related:
+- q-fragments-history-and-purpose--android--hard
+- q-how-is-navigation-implemented--android--medium
+- q-how-to-add-fragment-synchronously-asynchronously--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/hard]
+tags:
+- android/ui-views
+- difficulty/hard
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
-
-# How to Create Dynamic Screens at Runtime?
 
 # Вопрос (RU)
 
 Как в runtime делать динамические экраны которые не были предусмотрены
 
 ## Answer (EN)
+# Question (EN)
+> How To Create Dynamic Screens At Runtime
+
+---
+
 To create dynamic screens at runtime in Android: Load configuration from server (JSON/XML), use Fragment/View factories, generate UI from description, or use Jetpack Compose/RecyclerView with different ViewTypes.
 
 ### 1. Server-Driven UI with JSON
@@ -689,6 +703,20 @@ class DynamicScreenActivity : AppCompatActivity() {
 - **Uber** - RIBs архитектура с динамическими модулями
 - **Instagram** - IGListKit для сложных динамических экранов
 - **Netflix** - Falcor для координации данных и UI
+
+
+## Follow-ups
+
+- [[q-fragments-history-and-purpose--android--hard]]
+- [[q-how-is-navigation-implemented--android--medium]]
+- [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

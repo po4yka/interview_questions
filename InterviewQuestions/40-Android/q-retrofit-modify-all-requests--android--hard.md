@@ -292,17 +292,16 @@ addInterceptor(HttpLoggingInterceptor().apply {
 - [[c-okhttp-architecture]] - OkHttp architecture and request lifecycle
 - [[c-dependency-injection]] - DI patterns for network layer
 - [[c-token-management]] - Token storage and refresh strategies
-
 **Official Documentation:**
 - https://square.github.io/okhttp/interceptors/
 - https://square.github.io/okhttp/features/interceptors/
 - https://square.github.io/retrofit/
-- https://developer.android.com/training/articles/security-config
-
+- [Network Security Configuration](https://developer.android.com/training/articles/security-config)
 **Related Resources:**
 - OkHttp Authenticator for 401 handling
 - HttpLoggingInterceptor levels and security
 - Certificate pinning with CertificatePinner
+
 
 ## Related Questions
 

@@ -947,6 +947,13 @@ class UserViewModel @Inject constructor(
 
 ---
 
+
+## Follow-ups
+
+- [[q-clean-architecture-android--android--hard]]
+- [[q-repository-multiple-sources--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

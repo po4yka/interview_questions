@@ -1186,6 +1186,20 @@ override fun getItemId(position: Int): Long {
 
 ---
 
+
+## Follow-ups
+
+- [[q-android-project-parts--android--easy]]
+- [[q-kmm-production-readiness--multiplatform--hard]]
+- [[q-koin-scope-management--dependency-injection--medium]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

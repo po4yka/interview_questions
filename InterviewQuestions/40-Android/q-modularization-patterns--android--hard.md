@@ -157,6 +157,14 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 ## References
 - [Common modularization patterns](https://developer.android.com/topic/modularization/patterns)
 
+
+## Follow-ups
+
+- [[q-does-state-made-in-compose-help-avoid-race-condition--android--medium]]
+- [[q-ot-kogo-nasleduyutsya-viewgroup--programming-languages--easy]]
+- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
+
+
 ## Related Questions
 
 ### Related (Hard)

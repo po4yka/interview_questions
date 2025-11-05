@@ -1,26 +1,41 @@
 ---
 id: android-394
-title: "How To Create Animations In Android / Как создавать анимации в Android"
-aliases: [How To Create Animations In Android, Как создавать анимации в Android]
+title: How To Create Animations In Android / Как создавать анимации в Android
+aliases:
+- How To Create Animations In Android
+- Как создавать анимации в Android
 topic: android
-subtopics: [ui-animation]
+subtopics:
+- ui-animation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-app-start-types-android--android--medium, q-data-sync-unstable-network--android--hard, q-stable-classes-compose--android--hard]
+related:
+- q-app-start-types-android--android--medium
+- q-data-sync-unstable-network--android--hard
+- q-stable-classes-compose--android--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-animation, animations, difficulty/medium]
+tags:
+- android/ui-animation
+- animations
+- difficulty/medium
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# Как В Android Можно Сделать Анимацию?
+# Вопрос (RU)
+> Как создавать анимации в Android
 
-**English**: How to create animations in Android?
+# Question (EN)
+> How To Create Animations In Android
+
+---
 
 ## Answer (EN)
 Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, View Animations, Drawable Animations, and MotionLayout.
@@ -336,6 +351,19 @@ override fun onDestroyView() {
 
 ## Ответ (RU)
 В Android анимации можно создавать с помощью Property Animations, View Animations, Drawable Animations и MotionLayout. Для Property Animations используйте ObjectAnimator для анимации свойств объектов. Для View Animations создайте XML-анимацию и примените её через AnimationUtils.loadAnimation. Для Drawable Animations используйте анимацию кадров в XML и запустите её через AnimationDrawable. Для MotionLayout определите анимацию в MotionScene и примените её к элементам интерфейса.
+
+
+## Follow-ups
+
+- [[q-app-start-types-android--android--medium]]
+- [[q-data-sync-unstable-network--android--hard]]
+- [[q-stable-classes-compose--android--hard]]
+
+
+## References
+
+- [Animations](https://developer.android.com/develop/ui/views/animations)
+
 
 ## Related Questions
 

@@ -672,6 +672,20 @@ MockK — предпочтительный выбор для Kotlin проект
 
 ---
 
+
+## Follow-ups
+
+- [[q-compositionlocal-compose--android--hard]]
+- [[q-mvp-pattern--android--medium]]
+- [[q-why-use-diffutil--android--medium]]
+
+
+## References
+
+- [Local Unit Tests](https://developer.android.com/training/testing/local-tests)
+- [Android Documentation](https://developer.android.com/docs)
+
+
 ## Related Questions
 
 ### Related (Medium)

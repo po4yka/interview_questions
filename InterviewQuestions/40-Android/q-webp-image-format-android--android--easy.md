@@ -1,26 +1,45 @@
 ---
 id: android-299
-title: "WebP Image Format Android / Формат изображений WebP в Android"
-aliases: [WebP Image Format, Формат WebP]
+title: WebP Image Format Android / Формат изображений WebP в Android
+aliases:
+- WebP Image Format
+- Формат WebP
 topic: android
-subtopics: [files-media, performance-memory]
+subtopics:
+- files-media
+- performance-memory
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-image-formats, c-performance, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-image-formats
+- c-performance
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/files-media, android/performance-memory, difficulty/easy, images, optimization, webp]
+tags:
+- android/files-media
+- android/performance-memory
+- difficulty/easy
+- images
+- optimization
+- webp
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# WebP - Самый Экономичный Формат Изображений
+# Вопрос (RU)
+> Формат изображений WebP в Android
 
-**English**: WebP - most efficient image format for Android
+# Question (EN)
+> WebP Image Format Android
+
+---
 
 ## Ответ (RU)
 **WebP** — это современный формат изображений, разработанный Google, который обеспечивает превосходное сжатие по сравнению с PNG и JPEG при сохранении высокого качества. WebP является стандартом де-факто для оптимизации изображений в Android-приложениях.
@@ -384,7 +403,23 @@ WebP — это оптимальный выбор для Android-приложе�
 - Проверяйте качество визуально перед релизом
 - Мониторьте размер APK до и после конвертации
 
+## Answer (EN)
+
+**WebP** is a modern image format developed by Google that provides superior compression compared to PNG and JPEG while maintaining high quality. WebP is the de-facto standard for image optimization in Android applications.
+
 **English**: WebP is the most efficient image format for Android, developed by Google. It provides 25-45% better compression than JPEG/PNG while maintaining quality. Supports both lossy and lossless compression, transparency (alpha channel), and animation. Available since Android 4.0+ (API 14). Convert images using Android Studio's built-in tool, cwebp command-line utility, or online converters. Recommended settings: lossy (q=80) for photos, lossless for logos/icons. Reduces APK size significantly without compromising visual quality.
+
+## Follow-ups
+
+- [[c-image-formats]]
+- [[c-performance]]
+- [[q-what-layout-allows-overlapping-objects--android--easy]]
+
+
+## References
+
+- [Memory Management](https://developer.android.com/topic/performance/memory-overview)
+
 
 ## Related Questions
 

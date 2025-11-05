@@ -151,10 +151,12 @@ val client = OkHttpClient.Builder()
 - How to implement stale-while-revalidate pattern for offline-first apps?
 
 ## References
+
 - https://developer.android.com/topic/performance/memory
-- https://developer.android.com/training/data-storage
+- [Data Storage](https://developer.android.com/training/data-storage)
 - https://developer.android.com/reference/androidx/collection/LruCache
 - https://square.github.io/okhttp/features/caching/
+
 
 ## Related Questions
 

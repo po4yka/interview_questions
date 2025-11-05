@@ -596,7 +596,8 @@ Activity/Fragment Created
 - [[q-how-to-save-activity-state--android--medium]] - State preservation strategies
 - [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation limits
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Comparison of state preservation techniques
-- https://developer.android.com/topic/libraries/architecture/viewmodel
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+
 
 ## Related Questions
 

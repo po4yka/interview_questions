@@ -201,6 +201,14 @@ fun Counter() {
 ## References
 - [State in Compose](https://developer.android.com/jetpack/compose/state)
 
+
+## Follow-ups
+
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+- [[q-rxjava-pagination-recyclerview--android--medium]]
+- [[q-transaction-too-large-exception--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

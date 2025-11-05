@@ -989,6 +989,13 @@ tasks.withType<KspTask> {
 - [Room with KSP](https://developer.android.com/jetpack/androidx/releases/room#ksp)
 - [Hilt with KSP](https://dagger.dev/dev-guide/ksp.html)
 
+
+## Follow-ups
+
+- [[app-startup-optimization]]
+- [[build-optimization-gradle]]
+
+
 ## Related Questions
 
 ### Related (Medium)

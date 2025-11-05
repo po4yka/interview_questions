@@ -1,26 +1,42 @@
 ---
 id: android-371
-title: "State Hoisting in Compose / Поднятие состояния в Compose"
-aliases: [State Hoisting in Compose, Поднятие состояния в Compose]
+title: State Hoisting in Compose / Поднятие состояния в Compose
+aliases:
+- State Hoisting in Compose
+- Поднятие состояния в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-separate-ui-business-logic--android--easy, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-what-is-hilt--android--medium]
+related:
+- q-separate-ui-business-logic--android--easy
+- q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
+- q-what-is-hilt--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-compose, android/ui-state, difficulty/medium]
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# State Hoisting В Jetpack Compose
+# Вопрос (RU)
+> Поднятие состояния в Compose
 
-**English**: What is state hoisting in Jetpack Compose and why is it considered a best practice for building reusable components?
+# Question (EN)
+> State Hoisting in Compose
+
+---
 
 ## Answer (EN)
 **State hoisting** (подъем состояния) — это паттерн в Compose, где состояние перемещается из компонента наверх к его caller. Компонент становится **stateless** (без состояния), получая значение и callback для изменения. Это делает компоненты переиспользуемыми, тестируемыми и предсказуемыми.
@@ -734,6 +750,20 @@ fun ProductCard(
 
 
 ---
+
+
+## Follow-ups
+
+- [[q-separate-ui-business-logic--android--easy]]
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]]
+- [[q-what-is-hilt--android--medium]]
+
+
+## References
+
+- [Android Documentation](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
 
 ## Related Questions
 

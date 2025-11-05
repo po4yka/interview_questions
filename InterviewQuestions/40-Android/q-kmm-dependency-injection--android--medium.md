@@ -303,7 +303,8 @@ actual class DatabaseDriverFactory {
 - [[c-koin]]
 - [[moc-android]]
 - https://insert-koin.io/docs/reference/koin-mp/kmp
-- https://kotlinlang.org/docs/multiplatform.html
+- [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
+
 
 ## Related Questions
 

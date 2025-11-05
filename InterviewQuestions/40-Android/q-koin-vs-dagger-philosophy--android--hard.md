@@ -173,6 +173,7 @@ sources:
 - Возможно ли построить compile-time валидацию поверх Koin (например, через codegen)?
 
 ## References
+
 - [[c-dependency-injection]]
 - [[c-dagger]]
 - [[c-hilt]]
@@ -180,5 +181,15 @@ sources:
 - [[q-koin-vs-hilt-comparison--android--medium]]
 - https://github.com/InsertKoinIO/koin/blob/master/README.md#koin-philosophy
 - https://dagger.dev/dev-guide/
-- https://developer.android.com/training/dependency-injection/hilt-android
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+
+
+## Related Questions
+
+- [[c-dependency-injection]]
+- [[c-dagger]]
+- [[c-hilt]]
+- [[q-koin-fundamentals--android--medium]]
+- [[q-dagger-framework-overview--android--hard]]
+- [[q-koin-vs-hilt-comparison--android--medium]]
 

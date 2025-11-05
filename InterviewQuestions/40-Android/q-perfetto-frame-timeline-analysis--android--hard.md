@@ -128,3 +128,8 @@ SQL
 - [[q-android-coverage-gaps--android--hard]]
 - https://perfetto.dev/docs/concepts/frame-timeline
 - https://developer.android.com/topic/performance/tracing/perfetto
+
+## Related Questions
+
+- [[c-perfetto]]
+- [[q-android-coverage-gaps--android--hard]]

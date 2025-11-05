@@ -276,7 +276,8 @@ lifecycleScope.launch {
 
 - [[c-service]]
 - https://developer.android.com/guide/components/services
-- https://developer.android.com/develop/background-work/services/foreground-services
+- [Foreground Services](https://developer.android.com/develop/background-work/services/foreground-services)
+
 
 ## Related Questions
 

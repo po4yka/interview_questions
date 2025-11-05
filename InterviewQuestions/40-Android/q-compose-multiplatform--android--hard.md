@@ -251,10 +251,12 @@ fun main() = application {
 - How to minimize Web bundle size while sharing UI code across platforms?
 
 ## References
+
 - [[c-jetpack-compose]]
-- https://www.jetbrains.com/lp/compose-multiplatform/
+- [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
 - https://github.com/JetBrains/compose-multiplatform
-- https://developer.android.com/develop/ui/compose
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
 
 ## Related Questions
 

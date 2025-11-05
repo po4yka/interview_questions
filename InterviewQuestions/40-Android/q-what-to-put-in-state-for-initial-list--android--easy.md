@@ -1,28 +1,45 @@
 ---
 id: android-082
-title: "State for Initial List / Состояние для начального списка"
-aliases: [State for Initial List, Состояние для начального списка]
+title: State for Initial List / Состояние для начального списка
+aliases:
+- State for Initial List
+- Состояние для начального списка
 topic: android
-subtopics: [architecture-mvvm, ui-state]
+subtopics:
+- architecture-mvvm
+- ui-state
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-data-loading, c-mutablestate, c-state-management]
+related:
+- c-data-loading
+- c-mutablestate
+- c-state-management
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/architecture-mvvm, android/ui-state, data-loading, difficulty/easy, state-management, ui]
+tags:
+- android/architecture-mvvm
+- android/ui-state
+- data-loading
+- difficulty/easy
+- state-management
+- ui
 date created: Saturday, November 1st 2025, 1:26:06 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What to Put in State for Initial List?
+# Вопрос (RU)
+> Состояние для начального списка
 
-**Russian**: Что положить в state для отображения первоначального списка?
+# Question (EN)
+> State for Initial List
 
-**English**: What to put in state for displaying the initial list?
+---
 
 ## Answer (EN)
 For the initial list state, you can use an **empty list** if data loads asynchronously, or a **pre-prepared static list** if data is known at app startup.
@@ -169,6 +186,20 @@ class ListViewModel : ViewModel() {
 
 
 ---
+
+
+## Follow-ups
+
+- [[c-data-loading]]
+- [[c-mutablestate]]
+- [[c-state-management]]
+
+
+## References
+
+- [Architecture](https://developer.android.com/topic/architecture)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

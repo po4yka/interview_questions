@@ -986,6 +986,14 @@ class FrameMetricsMonitor {
 - [Slow Rendering](https://developer.android.com/topic/performance/vitals/render)
 - [Systrace](https://developer.android.com/topic/performance/tracing)
 
+
+## Follow-ups
+
+- [[app-startup-optimization]]
+- [[baseline-profiles-optimization]]
+- [[macrobenchmark-startup]]
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

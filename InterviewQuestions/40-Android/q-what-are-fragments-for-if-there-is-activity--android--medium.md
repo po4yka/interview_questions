@@ -1,30 +1,50 @@
 ---
 id: android-291
-title: "Fragments vs Activity / Фрагменты vs Activity"
-aliases: [Fragments vs Activity, Фрагменты vs Activity]
+title: Fragments vs Activity / Фрагменты vs Activity
+aliases:
+- Fragments vs Activity
+- Фрагменты vs Activity
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-fragments, q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-activity-lifecycle
+- c-fragments
+- q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [activity, android/activity, android/fragment, android/ui-navigation, difficulty/medium, fragments]
+tags:
+- activity
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- fragments
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
-
-# What Are Fragments for if there is Activity?
 
 # Вопрос (RU)
 
 Для чего нужны фрагменты, если есть Activity
 
 ## Answer (EN)
+# Question (EN)
+> Fragments vs Activity
+
+---
+
 Fragments are used to create reusable UI components that can be embedded in different Activities. They allow more flexible interface management and separation into individual parts, improving app modularity. Fragments can be dynamically added or removed at runtime, simplifying interface adaptation for different devices. Unlike Activities, fragments can share resources within a single screen.
 
 ### Why Fragments When We Have Activities?
@@ -314,6 +334,20 @@ class MainActivity : AppCompatActivity() {
 Фрагменты используются для создания многоразовых компонентов пользовательского интерфейса, которые могут быть встроены в различные Activity. Они позволяют более гибко управлять интерфейсом и разделять его на отдельные части, что улучшает модульность приложения. Фрагменты могут быть динамически добавлены или удалены во время выполнения, что упрощает адаптацию интерфейса под разные устройства. В отличие от Activity, фрагменты могут совместно использовать ресурсы внутри одного экрана.
 
 ---
+
+
+## Follow-ups
+
+- [[c-activity-lifecycle]]
+- [[c-fragments]]
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]]
+
+
+## References
+
+- [Navigation](https://developer.android.com/guide/navigation)
+- [Activities](https://developer.android.com/guide/components/activities)
+
 
 ## Related Questions
 

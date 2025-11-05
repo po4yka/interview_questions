@@ -1,30 +1,48 @@
 ---
 id: android-255
-title: "ViewGroup Inheritance / Наследование ViewGroup"
-aliases: [ViewGroup Inheritance, Наследование ViewGroup]
+title: ViewGroup Inheritance / Наследование ViewGroup
+aliases:
+- ViewGroup Inheritance
+- Наследование ViewGroup
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-view-hierarchy, c-views, q-viewgroup-vs-view-differences--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-view-hierarchy
+- c-views
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/easy, inheritance, ui, viewgroup, views]
+tags:
+- android/ui-views
+- difficulty/easy
+- inheritance
+- ui
+- viewgroup
+- views
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
-
-# What Does ViewGroup Inherit From?
 
 # Вопрос (RU)
 
 От кого наследуются ViewGroup
 
 ## Answer (EN)
+# Question (EN)
+> ViewGroup Inheritance
+
+---
+
 `ViewGroup` is a subclass of the `View` class, which serves as the base for all user interface elements in Android. Understanding this inheritance hierarchy is fundamental to Android UI development.
 
 ### Inheritance Hierarchy
@@ -233,6 +251,20 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 ViewGroup является наследником класса View, который является базовым для всех элементов пользовательского интерфейса. ViewGroup выступает как контейнер для других View, предоставляя им общую структуру и управление дочерними элементами.
 
 ---
+
+
+## Follow-ups
+
+- [[c-view-hierarchy]]
+- [[c-views]]
+- [[q-viewgroup-vs-view-differences--android--easy]]
+
+
+## References
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

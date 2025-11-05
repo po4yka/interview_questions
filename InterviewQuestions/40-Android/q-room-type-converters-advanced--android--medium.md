@@ -1,26 +1,40 @@
 ---
 id: android-220
-title: "Room Advanced Type Converters / Продвинутые Type Converters в Room"
-aliases: [Room Advanced Type Converters, Продвинутые Type Converters в Room]
+title: Room Advanced Type Converters / Продвинутые Type Converters в Room
+aliases:
+- Room Advanced Type Converters
+- Продвинутые Type Converters в Room
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-animate-adding-removing-items-in-recyclerview--android--medium, q-tasks-back-stack--android--medium, q-what-is-broadcastreceiver--android--easy]
+related:
+- q-how-to-animate-adding-removing-items-in-recyclerview--android--medium
+- q-tasks-back-stack--android--medium
+- q-what-is-broadcastreceiver--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/room, difficulty/medium]
+tags:
+- android/room
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
-# Room Advanced Type Converters / Продвинутые Type Converters В Room
+# Вопрос (RU)
+> Продвинутые Type Converters в Room
 
-**English**: Implement complex type converters for custom types, enums, and collections. Handle JSON serialization with performance considerations.
+# Question (EN)
+> Room Advanced Type Converters
+
+---
 
 ## Answer (EN)
 **Advanced Type Converters** in Room enable storing complex data types like custom objects, collections, enums, and specialized types (UUID, BigDecimal, LocalDateTime) while maintaining performance and type safety.
@@ -1105,6 +1119,19 @@ class GoodConverters {
 Выбирайте стратегию сериализации на основе сложности данных, требований к производительности и ограничений размера хранилища.
 
 ---
+
+
+## Follow-ups
+
+- [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]]
+- [[q-tasks-back-stack--android--medium]]
+- [[q-what-is-broadcastreceiver--android--easy]]
+
+
+## References
+
+- [Room Database](https://developer.android.com/training/data-storage/room)
+
 
 ## Related Questions
 

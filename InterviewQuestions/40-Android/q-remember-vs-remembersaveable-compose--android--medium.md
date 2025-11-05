@@ -1,26 +1,42 @@
 ---
 id: android-295
-title: "Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose"
-aliases: [Remember vs RememberSaveable in Compose, Remember vs RememberSaveable в Compose]
+title: Remember vs RememberSaveable in Compose / Remember vs RememberSaveable в Compose
+aliases:
+- Remember vs RememberSaveable in Compose
+- Remember vs RememberSaveable в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-accessibility-testing--accessibility--medium, q-handler-looper-main-thread--android--medium, q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium]
+related:
+- q-accessibility-testing--accessibility--medium
+- q-handler-looper-main-thread--android--medium
+- q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-compose, android/ui-state, difficulty/medium]
+tags:
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Remember Vs RememberSaveable В Compose
+# Вопрос (RU)
+> Remember vs RememberSaveable в Compose
 
-**English**: What's the difference between remember and rememberSaveable in Compose for preserving state across configuration changes?
+# Question (EN)
+> Remember vs RememberSaveable in Compose
+
+---
 
 ## Answer (EN)
 `remember` сохраняет состояние **только в памяти** во время composition, теряя его при configuration changes (поворот экрана). `rememberSaveable` сохраняет состояние в **Bundle**, переживая configuration changes как `onSaveInstanceState`.
@@ -569,6 +585,20 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 
 ---
+
+
+## Follow-ups
+
+- [[q-accessibility-testing--accessibility--medium]]
+- [[q-handler-looper-main-thread--android--medium]]
+- [[q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium]]
+
+
+## References
+
+- [Android Documentation](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
+
 
 ## Related Questions
 

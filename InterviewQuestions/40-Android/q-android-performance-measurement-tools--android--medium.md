@@ -238,8 +238,9 @@ val trimmedMean = times.sorted()
 ## References
 
 - [[c-performance-optimization]]
-- https://developer.android.com/topic/performance
+- [Performance](https://developer.android.com/topic/performance)
 - https://developer.android.com/studio/profile/benchmark
+
 
 ## Related Questions
 

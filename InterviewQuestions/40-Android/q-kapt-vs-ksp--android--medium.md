@@ -208,6 +208,14 @@ dependencies {
 ## References
 - [KSP Documentation](https://kotlinlang.org/docs/ksp-overview.html)
 
+
+## Follow-ups
+
+- [[q-fix-slow-app-startup-legacy--android--hard]]
+- [[q-looper-thread-connection--android--medium]]
+- [[q-macrobenchmark-startup--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)
