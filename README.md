@@ -64,7 +64,7 @@ Keep filenames **English, kebab-case**, short and stable. Language variants are 
 ```yaml
 ---
 # Identity
-id: iv-2025-0001           # unique id (string)
+id: algo-001               # <subject>-<serial> format (e.g., algo-001, android-134)
 title: Two Sum / Два слагаемых
 aliases:                   # all common titles; EN & RU recommended
   - Two Sum
@@ -233,7 +233,7 @@ Create a template file (e.g., `_tpl-qna.md`) and bind it to a hotkey.
 
 ```markdown
 ---
-id: <% tp.date.now("YYYY") %>-<% tp.user.uid() %>
+id: <subject>-XXX              # Fill in: algo-001, android-134, kotlin-042, etc.
 title: <%- tp.file.title %>
 aliases: []
 topic: <%* /* choose: algorithms | system-design | android | cs | behavioral */ %>

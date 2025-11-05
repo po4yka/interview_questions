@@ -200,7 +200,7 @@ Suggest and add cross-references between notes.
 4. Use template: `_templates/_tpl-qna.md`
 5. Fill YAML:
    ```yaml
-   id: 20251018-120000
+   id: kotlin-001
    title: Coroutine Context / Контекст корутин
    aliases: [Coroutine Context, Контекст корутин]
    topic: kotlin
@@ -285,7 +285,7 @@ Suggest and add cross-references between notes.
 3. Use template: `_templates/_tpl-concept.md`
 4. Fill YAML:
    ```yaml
-   id: ivc-20251018-120100
+   id: concept-001
    title: MVVM Pattern / Паттерн MVVM
    aliases: [MVVM, Model-View-ViewModel, MVVM паттерн]
    summary: Architectural pattern separating UI from business logic
@@ -456,7 +456,7 @@ gradle, build-variants, dependency-management
 
 ```yaml
 ---
-id: 20251018-120000                    # YYYYMMDD-HHmmss
+id: kotlin-001                         # <subject>-<serial> (e.g., algo-001, android-134)
 title: Question Title EN / Заголовок RU
 aliases: [Title EN, Заголовок RU]
 

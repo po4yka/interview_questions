@@ -454,7 +454,7 @@ moc-algorithms, moc-android
 
 ```yaml
 ---
-id: 20251018-120000
+id: algo-001
 title: Two Sum / Два слагаемых
 aliases: [Two Sum, Два слагаемых]
 
@@ -488,7 +488,7 @@ tags: [leetcode, arrays, hash-map, difficulty/easy]
 
 ```yaml
 ---
-id: 20251018-120100
+id: android-001
 title: Jetpack Compose State / Состояние в Compose
 aliases: [Compose State, Состояние Compose]
 
@@ -523,7 +523,7 @@ tags: [android/ui-compose, android/ui-state, android/architecture-mvvm,
 
 ```yaml
 ---
-id: 20251018-120200
+id: sysdes-001
 title: Design URL Shortener / Проектирование сокращателя URL
 aliases: [URL Shortener Design, Проектирование URL Shortener]
 
@@ -559,7 +559,7 @@ tags: [system-design-primer, scalability, databases, caching,
 
 ```yaml
 ---
-id: 20251018-120300
+id: kotlin-001
 title: Kotlin Coroutines Basics / Основы корутин Kotlin
 aliases: [Coroutines Basics, Основы корутин]
 

@@ -328,7 +328,7 @@ q-binary-search-tree-structure--algorithms--medium.md  # redundant
 
 ```yaml
 ---
-id: 20251018-120000
+id: android-001
 title: What is ViewModel / Что такое ViewModel
 aliases: [ViewModel, ВьюМодель, Android ViewModel]
 
