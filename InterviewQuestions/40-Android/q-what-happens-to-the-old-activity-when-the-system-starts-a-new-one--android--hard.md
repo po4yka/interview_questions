@@ -1,37 +1,43 @@
 ---
 id: android-401
-title: "Activity Lifecycle on New Activity / Жизненный цикл при запуске новой Activity"
+title: Activity Lifecycle on New Activity / Жизненный цикл при запуске новой Activity
 aliases:
-  - Activity Lifecycle on New Activity
-  - Жизненный цикл при запуске новой Activity
+- Activity Lifecycle on New Activity
+- Жизненный цикл при запуске новой Activity
 topic: android
 subtopics:
-  - activity
-  - lifecycle
+- activity
+- lifecycle
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - c-activity-lifecycle
-  - c-task-backstack
-  - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
-  - q-what-is-activity-and-what-is-it-used-for--android--medium
+- c-activity-lifecycle
+- c-task-backstack
+- q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
 tags:
-  - android/activity
-  - android/lifecycle
-  - difficulty/hard
-  - lifecycle
-  - memory
+- android/activity
+- android/lifecycle
+- difficulty/hard
+- lifecycle
+- memory
 ---
 
-# What Happens to the Old Activity when the System Starts a New One?
+# Вопрос (RU)
+> Жизненный цикл при запуске новой Activity
+
+# Question (EN)
+> Activity Lifecycle on New Activity
+
+---
 
 ## Answer (EN)
 When the system starts a new Activity in Android, the fate of the old Activity depends on multiple factors including Intent flags, task configuration, and device memory state.

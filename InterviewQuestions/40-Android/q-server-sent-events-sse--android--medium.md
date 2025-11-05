@@ -1,26 +1,40 @@
 ---
 id: android-286
-title: "Server-Sent Events (SSE) / Server-Sent Events (SSE)"
-aliases: [Server-Sent Events, SSE]
+title: Server-Sent Events (SSE) / Server-Sent Events (SSE)
+aliases:
+- Server-Sent Events
+- SSE
 topic: android
-subtopics: [networking-http]
+subtopics:
+- networking-http
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-testing--android--medium, q-recyclerview-explained--android--medium, q-recyclerview-viewtypes-delegation--android--medium]
+related:
+- q-compose-testing--android--medium
+- q-recyclerview-explained--android--medium
+- q-recyclerview-viewtypes-delegation--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/networking-http, difficulty/medium]
+tags:
+- android/networking-http
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
-# Server-Sent Events (SSE) / Server-Sent Events (SSE)
+# Вопрос (RU)
+> Server-Sent Events (SSE)
 
-**English**: Implement Server-Sent Events (SSE) for real-time updates. Compare with WebSockets for different use cases with decision matrix.
+# Question (EN)
+> Server-Sent Events (SSE)
+
+---
 
 ## Answer (EN)
 **Server-Sent Events (SSE)** is a standard describing how servers can initiate data transmission towards clients once an initial client connection has been established. Unlike WebSockets, SSE is a one-way communication channel from server to client built on top of standard HTTP, making it simpler and more lightweight for specific use cases.

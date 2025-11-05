@@ -1,24 +1,49 @@
 ---
 id: android-206
-title: "Android Components Unity / Объединение основных компонентов"
-aliases: [Android Components Unity, Объединение компонентов]
+title: Android Components Unity / Объединение основных компонентов
+aliases:
+- Android Components Unity
+- Объединение компонентов
 topic: android
-subtopics: [activity, fragment, service]
+subtopics:
+- activity
+- fragment
+- service
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-context, c-manifest, q-what-each-android-component-represents--android--easy, q-what-unifies-android-components--android--easy]
+related:
+- c-android-components
+- c-context
+- c-manifest
+- q-what-each-android-component-represents--android--easy
+- q-what-unifies-android-components--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/fragment, android/service, architecture, components, context, difficulty/medium]
+tags:
+- android/activity
+- android/fragment
+- android/service
+- architecture
+- components
+- context
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# What Unites the Main Components of an Android Application?
+# Вопрос (RU)
+> Объединение основных компонентов
+
+# Question (EN)
+> Android Components Unity
+
+---
 
 ## Answer (EN)
 The main Android components (Activity, Service, BroadcastReceiver, ContentProvider) share several fundamental characteristics that unite them in the Android framework.

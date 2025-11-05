@@ -1,26 +1,40 @@
 ---
 id: android-270
-title: "Room vs SQLite / Room против SQLite"
-aliases: [Room vs SQLite, Room против SQLite]
+title: Room vs SQLite / Room против SQLite
+aliases:
+- Room vs SQLite
+- Room против SQLite
 topic: android
-subtopics: [room]
+subtopics:
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-runtime-art--android--medium, q-compose-navigation-advanced--jetpack-compose--medium, q-room-transactions-dao--android--medium]
+related:
+- q-android-runtime-art--android--medium
+- q-compose-navigation-advanced--jetpack-compose--medium
+- q-room-transactions-dao--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/room, difficulty/medium]
+tags:
+- android/room
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# В Чем Разница Между Room & SQLite?
+# Вопрос (RU)
+> Room против SQLite
 
-**English**: What is the difference between Room and SQLite?
+# Question (EN)
+> Room vs SQLite
+
+---
 
 ## Answer (EN)
 **SQLite** is a **low-level relational database** that requires **manual SQL queries**.

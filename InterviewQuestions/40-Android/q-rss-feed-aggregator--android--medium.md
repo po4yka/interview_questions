@@ -1,26 +1,42 @@
 ---
 id: android-348
-title: "RSS Feed Aggregator / Агрегатор RSS лент"
-aliases: [RSS Feed Aggregator, Агрегатор RSS лент]
+title: RSS Feed Aggregator / Агрегатор RSS лент
+aliases:
+- RSS Feed Aggregator
+- Агрегатор RSS лент
 topic: android
-subtopics: [networking-http, room]
+subtopics:
+- networking-http
+- room
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-databases-android--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-webp-image-format-android--android--easy]
+related:
+- q-databases-android--android--easy
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-webp-image-format-android--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/networking-http, android/room, difficulty/medium]
+tags:
+- android/networking-http
+- android/room
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Реализация RSS-агрегатора На Android
+# Вопрос (RU)
+> Агрегатор RSS лент
 
-**English**: How to implement RSS feed aggregator on Android?
+# Question (EN)
+> RSS Feed Aggregator
+
+---
 
 ## Answer (EN)
 RSS-агрегатор собирает и отображает ленты из нескольких источников. Необходимо: парсинг XML, локальное хранение, фоновое обновление, уведомления о новых постах.

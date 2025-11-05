@@ -1,26 +1,44 @@
 ---
 id: android-167
-title: "GraphQL with Apollo Android / GraphQL с Apollo Android"
-aliases: [GraphQL with Apollo Android, GraphQL с Apollo Android]
+title: GraphQL with Apollo Android / GraphQL с Apollo Android
+aliases:
+- GraphQL with Apollo Android
+- GraphQL с Apollo Android
 topic: android
-subtopics: [networking-http]
+subtopics:
+- networking-http
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium, q-play-app-signing--android--medium, q-sharedpreferences-definition--android--easy]
+related:
+- q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
+- q-play-app-signing--android--medium
+- q-sharedpreferences-definition--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/networking-http, api, apollo, caching, difficulty/medium, graphql]
+tags:
+- android/networking-http
+- api
+- apollo
+- caching
+- difficulty/medium
+- graphql
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
-# GraphQL with Apollo Android / GraphQL С Apollo Android
+# Вопрос (RU)
+> GraphQL с Apollo Android
 
-**English**: Implement a GraphQL client with Apollo Android. Explain queries, mutations, fragments, and subscriptions. Handle normalized caching.
+# Question (EN)
+> GraphQL with Apollo Android
+
+---
 
 ## Answer (EN)
 **Apollo Android** is a strongly-typed, caching GraphQL client for Android written in Kotlin. It provides excellent developer experience with compile-time type safety, automatic code generation from GraphQL schemas, and a sophisticated normalized caching system.

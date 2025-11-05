@@ -1,30 +1,50 @@
 ---
 id: android-113
-title: "UI Setup in Android Project / Настройка UI в проекте Android"
-aliases: [UI Setup, Настройка UI]
+title: UI Setup in Android Project / Настройка UI в проекте Android
+aliases:
+- UI Setup
+- Настройка UI
 topic: android
-subtopics: [activity, ui-views]
+subtopics:
+- activity
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-layouts, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-activity-lifecycle
+- c-layouts
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-13
 updated: 2025-10-31
-tags: [activity, android/activity, android/ui-views, difficulty/easy, layout, manifest, ui]
+tags:
+- activity
+- android/activity
+- android/ui-views
+- difficulty/easy
+- layout
+- manifest
+- ui
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
-
-# What Needs to Be Done in Android Project to Start Drawing UI on Screen?
 
 # Вопрос (RU)
 
 Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране
 
 ## Answer (EN)
+# Question (EN)
+> UI Setup in Android Project
+
+---
+
 To display UI on screen in Android, you need: (1) Create an Activity as entry point, (2) Set content view with XML layout or programmatic View, (3) Declare the Activity in AndroidManifest.xml as LAUNCHER. When the device launches, the system calls `onCreate()` and UI is attached to screen.
 
 ### Minimum Steps

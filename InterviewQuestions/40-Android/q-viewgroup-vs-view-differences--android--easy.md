@@ -1,26 +1,45 @@
 ---
 id: android-239
-title: "ViewGroup vs View Differences / Различия ViewGroup и View"
-aliases: [ViewGroup vs View, Различия ViewGroup и View]
+title: ViewGroup vs View Differences / Различия ViewGroup и View
+aliases:
+- ViewGroup vs View
+- Различия ViewGroup и View
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-view-hierarchy, c-views, q-viewmodel-pattern--android--easy, q-what-does-viewgroup-inherit-from--android--easy]
+related:
+- c-view-hierarchy
+- c-views
+- q-viewmodel-pattern--android--easy
+- q-what-does-viewgroup-inherit-from--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/easy, ui, view, view-hierarchy, viewgroup]
+tags:
+- android/ui-views
+- difficulty/easy
+- ui
+- view
+- view-hierarchy
+- viewgroup
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# What's ViewGroup? How Are They Different from Views?
+# Вопрос (RU)
+> Различия ViewGroup и View
 
-**Russian**: Что такое ViewGroup? Чем они отличаются от View?
+# Question (EN)
+> ViewGroup vs View Differences
+
+---
 
 ## Answer (EN)
 ### What is ViewGroup?

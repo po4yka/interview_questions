@@ -1,33 +1,46 @@
 ---
 id: android-092
 title: WebSocket Implementation / Реализация WebSocket
-aliases: [WebSocket Implementation, Реализация WebSocket]
+aliases:
+- WebSocket Implementation
+- Реализация WebSocket
 topic: android
 subtopics:
-  - networking-http
-  - performance-startup
+- networking-http
+- performance-startup
 question_kind: coding
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - c-networking
-  - c-real-time-communication
-  - q-what-are-services-for--android--easy
+- c-networking
+- c-real-time-communication
+- q-what-are-services-for--android--easy
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/networking-http, android/performance-startup, difficulty/medium, okhttp, real-time, resilience, websocket]
+tags:
+- android/networking-http
+- android/performance-startup
+- difficulty/medium
+- okhttp
+- real-time
+- resilience
+- websocket
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
-# WebSocket Implementation / Реализация WebSocket
+# Вопрос (RU)
+> Реализация WebSocket
 
-**English**: Implement WebSocket connection with OkHttp. Handle reconnection with exponential backoff, heartbeat/ping-pong, and message queue for offline messages.
+# Question (EN)
+> WebSocket Implementation
+
+---
 
 ## Answer (EN)
 **WebSocket** is a protocol providing full-duplex communication channels over a single TCP connection. Unlike HTTP, which is request-response based, WebSocket enables bidirectional, real-time communication between client and server. This makes it ideal for chat applications, live updates, gaming, and any scenario requiring low-latency, bidirectional data flow.

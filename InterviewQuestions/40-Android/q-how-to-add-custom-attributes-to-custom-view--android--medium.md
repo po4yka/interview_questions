@@ -1,24 +1,41 @@
 ---
 id: android-347
-title: "How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты к кастомным View"
-aliases: [How To Add Custom Attributes To Custom View, Как добавить кастомные атрибуты к кастомным View]
+title: How To Add Custom Attributes To Custom View / Как добавить кастомные атрибуты
+  к кастомным View
+aliases:
+- How To Add Custom Attributes To Custom View
+- Как добавить кастомные атрибуты к кастомным View
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-app-security-best-practices--security--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-performance-optimization-android--android--medium]
+related:
+- q-app-security-best-practices--security--medium
+- q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
+- q-performance-optimization-android--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/medium]
+tags:
+- android/ui-views
+- difficulty/medium
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# Как Добавить Кастомные Атрибуты У Кастомного View?
+# Вопрос (RU)
+> Как добавить кастомные атрибуты к кастомным View
+
+# Question (EN)
+> How To Add Custom Attributes To Custom View
+
+---
 
 ## Answer (EN)
 To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom View constructor, (4) use attributes in XML or Kotlin.

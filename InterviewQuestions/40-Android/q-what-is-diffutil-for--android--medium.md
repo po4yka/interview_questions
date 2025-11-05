@@ -1,30 +1,48 @@
 ---
 id: android-232
-title: "DiffUtil / Компонент DiffUtil"
-aliases: [DiffUtil, Компонент DiffUtil]
+title: DiffUtil / Компонент DiffUtil
+aliases:
+- DiffUtil
+- Компонент DiffUtil
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-list-adapter, c-recyclerview, q-what-is-known-about-recyclerview--android--easy, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-list-adapter
+- c-recyclerview
+- q-what-is-known-about-recyclerview--android--easy
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/medium, diffutil, optimization, performance, recyclerview]
+tags:
+- android/ui-views
+- difficulty/medium
+- diffutil
+- optimization
+- performance
+- recyclerview
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
-
-# What is DiffUtil For?
 
 # Вопрос (RU)
 
 Зачем нужен DiffUtil?
 
 ## Answer (EN)
+# Question (EN)
+> DiffUtil
+
+---
+
 **DiffUtil** is a utility class in Android that calculates the difference between two lists and outputs a list of update operations that convert the first list into the second one. It's primarily used with RecyclerView to efficiently update only changed items instead of refreshing the entire list.
 
 ### Why Use DiffUtil?

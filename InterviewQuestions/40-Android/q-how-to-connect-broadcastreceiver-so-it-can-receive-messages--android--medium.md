@@ -1,24 +1,41 @@
 ---
 id: android-280
-title: "How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить BroadcastReceiver для получения сообщений"
-aliases: [How To Connect BroadcastReceiver So It Can Receive Messages, Как подключить BroadcastReceiver для получения сообщений]
+title: How To Connect BroadcastReceiver So It Can Receive Messages / Как подключить
+  BroadcastReceiver для получения сообщений
+aliases:
+- How To Connect BroadcastReceiver So It Can Receive Messages
+- Как подключить BroadcastReceiver для получения сообщений
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-memory-leak-vs-oom-android--android--medium, q-state-hoisting-compose--android--medium, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- q-memory-leak-vs-oom-android--android--medium
+- q-state-hoisting-compose--android--medium
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/service, difficulty/medium]
+tags:
+- android/service
+- difficulty/medium
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# How to Connect BroadcastReceiver so it Can Receive Messages?
+# Вопрос (RU)
+> Как подключить BroadcastReceiver для получения сообщений
+
+# Question (EN)
+> How To Connect BroadcastReceiver So It Can Receive Messages
+
+---
 
 ## Answer (EN)
 BroadcastReceiver can be registered in two ways: statically in AndroidManifest.xml or dynamically in code. Each method has different use cases and lifecycle behaviors.

@@ -1,28 +1,41 @@
 ---
 id: android-198
-title: "Handler Looper Comprehensive / Handler и Looper подробно"
-aliases: [Handler Looper Comprehensive, Handler и Looper подробно]
+title: Handler Looper Comprehensive / Handler и Looper подробно
+aliases:
+- Handler Looper Comprehensive
+- Handler и Looper подробно
 topic: android
-subtopics: [threads-sync]
+subtopics:
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-cicd-multi-module--devops--medium, q-glide-image-loading-internals--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
+related:
+- q-cicd-multi-module--devops--medium
+- q-glide-image-loading-internals--android--medium
+- q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/threads-sync, concurrency, difficulty/medium]
+tags:
+- android/threads-sync
+- concurrency
+- difficulty/medium
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# Handler and Looper: Complete Guide
+# Вопрос (RU)
+> Handler и Looper подробно
 
-**Russian**: Handler и Looper: Полное руководство
+# Question (EN)
+> Handler Looper Comprehensive
 
-**English**: Handler and Looper: Complete guide to Android message threading
+---
 
 ## Answer (EN)
 

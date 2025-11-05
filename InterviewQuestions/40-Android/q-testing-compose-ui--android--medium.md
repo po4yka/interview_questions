@@ -1,26 +1,45 @@
 ---
 id: android-253
-title: "Testing Compose UI / Тестирование Compose UI"
-aliases: [Testing Compose UI, Тестирование Compose UI]
+title: Testing Compose UI / Тестирование Compose UI
+aliases:
+- Testing Compose UI
+- Тестирование Compose UI
 topic: android
-subtopics: [testing-ui, ui-compose]
+subtopics:
+- testing-ui
+- ui-compose
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-jetpack-compose, c-testing, q-what-is-diffutil-for--android--medium]
+related:
+- c-jetpack-compose
+- c-testing
+- q-what-is-diffutil-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/testing-ui, android/ui-compose, difficulty/medium, jetpack-compose, testing, ui-testing]
+tags:
+- android/testing-ui
+- android/ui-compose
+- difficulty/medium
+- jetpack-compose
+- testing
+- ui-testing
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# Testing Compose UI
+# Вопрос (RU)
+> Тестирование Compose UI
 
-**English**: How do you test Jetpack Compose UI? What are the key APIs and best practices?
+# Question (EN)
+> Testing Compose UI
+
+---
 
 ## Answer (EN)
 **Compose UI testing** использует декларативный API для поиска, взаимодействия и верификации composable функций.

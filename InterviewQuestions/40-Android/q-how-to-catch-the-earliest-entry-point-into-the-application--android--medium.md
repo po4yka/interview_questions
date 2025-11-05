@@ -1,24 +1,41 @@
 ---
 id: android-352
-title: "How To Catch The Earliest Entry Point Into The Application / Как поймать самую раннюю точку входа в приложение"
-aliases: [How To Catch The Earliest Entry Point Into The Application, Как поймать самую раннюю точку входа в приложение]
+title: How To Catch The Earliest Entry Point Into The Application / Как поймать самую
+  раннюю точку входа в приложение
+aliases:
+- How To Catch The Earliest Entry Point Into The Application
+- Как поймать самую раннюю точку входа в приложение
 topic: android
-subtopics: [lifecycle]
+subtopics:
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-jetpack-compose-lazy-column--android--easy, q-privacy-sandbox-sdk-runtime--privacy--hard, q-retrofit-modify-all-requests--android--hard]
+related:
+- q-jetpack-compose-lazy-column--android--easy
+- q-privacy-sandbox-sdk-runtime--privacy--hard
+- q-retrofit-modify-all-requests--android--hard
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/lifecycle, difficulty/medium]
+tags:
+- android/lifecycle
+- difficulty/medium
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# How to Catch the Earliest Entry point into the Application?
+# Вопрос (RU)
+> Как поймать самую раннюю точку входа в приложение
+
+# Question (EN)
+> How To Catch The Earliest Entry Point Into The Application
+
+---
 
 ## Answer (EN)
 The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any Activity, Service, or other application components are created. However, ContentProvider initialization happens even earlier.

@@ -1,29 +1,41 @@
 ---
 id: android-331
-title: "StrictMode Debugging / Отладка StrictMode"
-aliases: [StrictMode Debugging, Отладка StrictMode]
+title: StrictMode Debugging / Отладка StrictMode
+aliases:
+- StrictMode Debugging
+- Отладка StrictMode
 topic: android
-subtopics: [performance-rendering]
+subtopics:
+- performance-rendering
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-migration-to-compose--android--medium, q-real-time-updates-android--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium]
+related:
+- q-migration-to-compose--android--medium
+- q-real-time-updates-android--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/performance-rendering, difficulty/medium]
+tags:
+- android/performance-rendering
+- difficulty/medium
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
-# StrictMode in Android / StrictMode В Android
+# Вопрос (RU)
+> Отладка StrictMode
 
-**English**: What is StrictMode?
+# Question (EN)
+> StrictMode Debugging
 
-**Russian**: Что такое StrictMode?
+---
 
 ## Answer (EN)
 `StrictMode` is a developer tool which detects things you might be doing by accident and brings them to your attention so you can fix them.

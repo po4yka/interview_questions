@@ -1,26 +1,47 @@
 ---
 id: android-303
-title: "View Methods And Their Purpose / Методы View и их назначение"
-aliases: [View Methods, Методы View]
+title: View Methods And Their Purpose / Методы View и их назначение
+aliases:
+- View Methods
+- Методы View
 topic: android
-subtopics: [lifecycle, ui-views]
+subtopics:
+- lifecycle
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-view-lifecycle, c-views, q-viewgroup-vs-view-differences--android--easy, q-what-methods-redraw-views--android--medium]
+related:
+- c-view-lifecycle
+- c-views
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-methods-redraw-views--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/lifecycle, android/ui-views, difficulty/medium, drawing, lifecycle, rendering, view]
+tags:
+- android/lifecycle
+- android/ui-views
+- difficulty/medium
+- drawing
+- lifecycle
+- rendering
+- view
 date created: Saturday, November 1st 2025, 12:47:06 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Какие Методы Есть У view И Что Каждый Из Них Делает?
+# Вопрос (RU)
+> Методы View и их назначение
 
-**English**: What methods does View have and what does each do?
+# Question (EN)
+> View Methods And Their Purpose
+
+---
 
 ## Answer (EN)
 The Android **View** class provides numerous methods for controlling appearance, behavior, and lifecycle. Understanding these methods is crucial for custom view development and UI optimization.

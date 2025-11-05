@@ -1,26 +1,46 @@
 ---
 id: android-329
-title: "RecyclerView / Компонент RecyclerView"
-aliases: [RecyclerView, Компонент RecyclerView]
+title: RecyclerView / Компонент RecyclerView
+aliases:
+- RecyclerView
+- Компонент RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-list-adapter, c-recyclerview, q-what-is-diffutil-for--android--medium, q-what-layout-allows-overlapping-objects--android--easy]
+related:
+- c-list-adapter
+- c-recyclerview
+- q-what-is-diffutil-for--android--medium
+- q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/easy, layoutmanager, performance, recyclerview, ui, viewholder]
+tags:
+- android/ui-views
+- difficulty/easy
+- layoutmanager
+- performance
+- recyclerview
+- ui
+- viewholder
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Что Известно Про RecyclerView?
+# Вопрос (RU)
+> Компонент RecyclerView
 
-**English**: What is known about RecyclerView?
+# Question (EN)
+> RecyclerView
+
+---
 
 ## Answer (EN)
 RecyclerView is a powerful UI component provided by the Android Support Library (or AndroidX in newer versions), designed for displaying dynamic lists of elements. It was introduced as an improved and more flexible replacement for ListView, providing better performance and greater flexibility in creating complex list layouts.

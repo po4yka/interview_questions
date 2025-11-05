@@ -1,28 +1,45 @@
 ---
 id: android-128
-title: "Test Doubles Dependency Injection / Тестовые двойники Dependency Injection"
-aliases: [Test Doubles, Тестовые двойники]
+title: Test Doubles Dependency Injection / Тестовые двойники Dependency Injection
+aliases:
+- Test Doubles
+- Тестовые двойники
 topic: android
-subtopics: [di-hilt, testing-unit]
+subtopics:
+- di-hilt
+- testing-unit
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-testing, q-what-is-hilt--android--medium]
+related:
+- c-dependency-injection
+- c-testing
+- q-what-is-hilt--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/di-hilt, android/testing-unit, dependency-injection, difficulty/medium, hilt, test-doubles]
+tags:
+- android/di-hilt
+- android/testing-unit
+- dependency-injection
+- difficulty/medium
+- hilt
+- test-doubles
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
-# Test Doubles with Hilt
+# Вопрос (RU)
+> Тестовые двойники Dependency Injection
 
-**English**: Implement test doubles with Hilt. Use @TestInstallIn to replace production modules. Test with different configurations.
+# Question (EN)
+> Test Doubles Dependency Injection
 
-**Russian**: Реализуйте test doubles с Hilt. Используйте @TestInstallIn для замены production модулей. Тестируйте с различными конфигурациями.
+---
 
 ## Answer (EN)
 

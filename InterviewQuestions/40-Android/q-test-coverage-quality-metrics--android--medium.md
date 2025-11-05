@@ -1,28 +1,45 @@
 ---
 id: android-087
-title: "Test Coverage Quality Metrics / Метрики покрытия и качества тестов"
-aliases: [Test Coverage Quality Metrics, Метрики покрытия и качества тестов]
+title: Test Coverage Quality Metrics / Метрики покрытия и качества тестов
+aliases:
+- Test Coverage Quality Metrics
+- Метрики покрытия и качества тестов
 topic: android
-subtopics: [testing-instrumented, testing-unit]
+subtopics:
+- testing-instrumented
+- testing-unit
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-junit, c-testing, q-what-is-diffutil-for--android--medium]
+related:
+- c-junit
+- c-testing
+- q-what-is-diffutil-for--android--medium
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/testing-instrumented, android/testing-unit, coverage, difficulty/medium, jacoco, metrics]
+tags:
+- android/testing-instrumented
+- android/testing-unit
+- coverage
+- difficulty/medium
+- jacoco
+- metrics
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
-# Test Coverage and Quality Metrics
+# Вопрос (RU)
+> Метрики покрытия и качества тестов
 
-**English**: Measure and improve test coverage. Configure JaCoCo, analyze coverage reports, identify gaps. Balance coverage vs quality.
+# Question (EN)
+> Test Coverage Quality Metrics
 
-**Russian**: Измеряйте и улучшайте покрытие тестами. Настройте JaCoCo, анализируйте отчеты покрытия, выявляйте пробелы. Баланс между покрытием и качеством.
+---
 
 ## Answer (EN)
 

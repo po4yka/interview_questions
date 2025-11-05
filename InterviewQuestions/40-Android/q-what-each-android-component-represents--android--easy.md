@@ -1,26 +1,48 @@
 ---
 id: android-382
-title: "Android Components / Компоненты Android"
-aliases: [Android Components, Компоненты Android]
+title: Android Components / Компоненты Android
+aliases:
+- Android Components
+- Компоненты Android
 topic: android
-subtopics: [activity, fragment, service]
+subtopics:
+- activity
+- fragment
+- service
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-components, c-broadcast-receiver, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-is-broadcastreceiver--android--easy]
+related:
+- c-android-components
+- c-broadcast-receiver
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-what-is-broadcastreceiver--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/fragment, android/service, broadcast-receiver, components, difficulty/easy, intent]
+tags:
+- android/activity
+- android/fragment
+- android/service
+- broadcast-receiver
+- components
+- difficulty/easy
+- intent
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
-# Что Из Себя Представляет Каждый Компонент Android-приложения?
+# Вопрос (RU)
+> Компоненты Android
 
-**English**: What does each Android application component represent?
+# Question (EN)
+> Android Components
+
+---
 
 ## Answer (EN)
 Android applications are built from several **main components**, each with specific tasks and features. These components **interact with each other** and the operating system to create a functional application.

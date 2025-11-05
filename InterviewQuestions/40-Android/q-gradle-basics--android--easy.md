@@ -1,28 +1,44 @@
 ---
 id: android-236
-title: "Gradle Basics / Gradle Основы"
-aliases: [Gradle Basics, Gradle Основы]
+title: Gradle Basics / Gradle Основы
+aliases:
+- Gradle Basics
+- Gradle Основы
 topic: android
-subtopics: [build-variants, gradle]
+subtopics:
+- build-variants
+- gradle
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-runtime-art--android--medium, q-large-file-upload--android--medium, q-room-transactions-dao--android--medium]
+related:
+- q-android-runtime-art--android--medium
+- q-large-file-upload--android--medium
+- q-room-transactions-dao--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/build-variants, android/gradle, build-system, dependencies, difficulty/easy]
+tags:
+- android/build-variants
+- android/gradle
+- build-system
+- dependencies
+- difficulty/easy
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
-# Gradle Basics
+# Вопрос (RU)
+> Gradle Основы
 
-**English**: What is Gradle? Explain project vs module build.gradle files, dependencies, build variants, and common Gradle tasks.
+# Question (EN)
+> Gradle Basics
 
-**Russian**: Что такое Gradle? Объясните файлы build.gradle проекта и модуля, зависимости, варианты сборки и основные задачи Gradle.
+---
 
 ## Answer (EN)
 
