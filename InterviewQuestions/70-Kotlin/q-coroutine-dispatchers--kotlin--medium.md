@@ -21,13 +21,13 @@ source: internal
 source_note: Comprehensive guide to Kotlin Coroutine Dispatchers
 
 # Workflow & relations
-status: draft
+status: reviewed
 moc: moc-kotlin
 related: [q-coroutine-context-explained--kotlin--medium, q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-05
 
 tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, threading, unconfined]
 date created: Thursday, October 16th 2025, 4:31:25 pm
@@ -301,8 +301,11 @@ suspend fun processItems(items: List<Item>) {
     // Max 5 concurrent operations
 }
 
-// Single-threaded dispatcher
-val singleThreadDispatcher = newSingleThreadContext("MyThread")
+// Single-threaded dispatcher (modern approach)
+import java.util.concurrent.Executors
+import kotlinx.coroutines.asCoroutineDispatcher
+
+val singleThreadDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
 suspend fun sequentialOperations() = withContext(singleThreadDispatcher) {
     // All operations on single thread
@@ -310,9 +313,43 @@ suspend fun sequentialOperations() = withContext(singleThreadDispatcher) {
     operation2()
     operation3()
 }
+// IMPORTANT: Close when done to avoid thread leaks
+// singleThreadDispatcher.close()
 
-// Fixed thread pool
-val fixedThreadPool = newFixedThreadPoolContext(4, "MyPool")
+// Fixed thread pool (modern approach)
+val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+// IMPORTANT: Close when done to avoid thread leaks
+// fixedThreadPool.close()
+```
+
+**⚠️ Deprecation Note:**
+The `newSingleThreadContext()` and `newFixedThreadPoolContext()` functions were **deprecated in Kotlin Coroutines 1.6.0** (2021). Modern code should use `Executors.asCoroutineDispatcher()` as shown above.
+
+**Custom Dispatcher Lifecycle Management:**
+```kotlin
+class DataProcessor {
+    // Create custom dispatcher
+    private val processingDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+
+    suspend fun processData(items: List<Item>): List<Result> = withContext(processingDispatcher) {
+        items.map { processItem(it) }
+    }
+
+    // CRITICAL: Close dispatcher when done
+    fun cleanup() {
+        processingDispatcher.close()
+    }
+}
+
+// In Android ViewModel:
+class MyViewModel : ViewModel() {
+    private val customDispatcher = Executors.newFixedThreadPool(2).asCoroutineDispatcher()
+
+    override fun onCleared() {
+        super.onCleared()
+        customDispatcher.close() // Prevent thread leak
+    }
+}
 ```
 
 ### Dispatcher Performance
@@ -661,8 +698,11 @@ suspend fun processItems(items: List<Item>) {
     // Максимум 5 одновременных операций
 }
 
-// Однопоточный диспетчер
-val singleThreadDispatcher = newSingleThreadContext("MyThread")
+// Однопоточный диспетчер (современный подход)
+import java.util.concurrent.Executors
+import kotlinx.coroutines.asCoroutineDispatcher
+
+val singleThreadDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
 suspend fun sequentialOperations() = withContext(singleThreadDispatcher) {
     // Все операции на одном потоке
@@ -670,9 +710,43 @@ suspend fun sequentialOperations() = withContext(singleThreadDispatcher) {
     operation2()
     operation3()
 }
+// ВАЖНО: Закрыть после использования для предотвращения утечек потоков
+// singleThreadDispatcher.close()
 
-// Пул потоков фиксированного размера
-val fixedThreadPool = newFixedThreadPoolContext(4, "MyPool")
+// Пул потоков фиксированного размера (современный подход)
+val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+// ВАЖНО: Закрыть после использования для предотвращения утечек потоков
+// fixedThreadPool.close()
+```
+
+**⚠️ Примечание об устаревших API:**
+Функции `newSingleThreadContext()` и `newFixedThreadPoolContext()` были **помечены как устаревшие в Kotlin Coroutines 1.6.0** (2021). Современный код должен использовать `Executors.asCoroutineDispatcher()`, как показано выше.
+
+**Управление Жизненным Циклом Пользовательского Диспетчера:**
+```kotlin
+class DataProcessor {
+    // Создать пользовательский диспетчер
+    private val processingDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+
+    suspend fun processData(items: List<Item>): List<Result> = withContext(processingDispatcher) {
+        items.map { processItem(it) }
+    }
+
+    // КРИТИЧНО: Закрыть диспетчер после использования
+    fun cleanup() {
+        processingDispatcher.close()
+    }
+}
+
+// В Android ViewModel:
+class MyViewModel : ViewModel() {
+    private val customDispatcher = Executors.newFixedThreadPool(2).asCoroutineDispatcher()
+
+    override fun onCleared() {
+        super.onCleared()
+        customDispatcher.close() // Предотвратить утечку потоков
+    }
+}
 ```
 
 ### Производительность Диспетчеров
