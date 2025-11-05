@@ -17,16 +17,41 @@ tags: [contravariance, covariance, difficulty/hard, generics, kotlin, projection
 date created: Friday, October 31st 2025, 6:32:04 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Variance and Type Projections in Kotlin
-
-# Question (EN)
-> Explain declaration-site vs use-site variance in Kotlin. What is the difference between in, out, and star projections?
 
 # Вопрос (RU)
 > Объясните variance на месте объявления против на месте использования в Kotlin. В чем разница между in, out и star проекциями?
 
 ---
+
+# Question (EN)
+> Explain declaration-site vs use-site variance in Kotlin. What is the difference between in, out, and star projections?
+
+## Ответ (RU)
+
+**Variance** описывает, как подтипизация между generic типами соотносится с подтипизацией их параметров типов.
+
+### Ковариантность (out)
+
+Производитель - может только возвращать значения. List<out T> - пример.
+
+### Контравариантность (in)
+
+Потребитель - может только принимать значения. Comparable<in T> - пример.
+
+### Инвариантность
+
+Нет замены. MutableList<T> инвариантен.
+
+### Use-Site Variance
+
+Применение variance в месте использования: `MutableList<out T>`, `MutableList<in T>`.
+
+### Star Projection
+
+Неизвестный тип: `List<*>` означает список неизвестного типа.
+
+Variance обеспечивает type-safety при работе с generic типами в Kotlin.
 
 ## Answer (EN)
 
@@ -148,31 +173,15 @@ fun printList(list: List<*>) {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Variance** описывает, как подтипизация между generic типами соотносится с подтипизацией их параметров типов.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### Ковариантность (out)
+## References
 
-Производитель - может только возвращать значения. List<out T> - пример.
-
-### Контравариантность (in)
-
-Потребитель - может только принимать значения. Comparable<in T> - пример.
-
-### Инвариантность
-
-Нет замены. MutableList<T> инвариантен.
-
-### Use-Site Variance
-
-Применение variance в месте использования: `MutableList<out T>`, `MutableList<in T>`.
-
-### Star Projection
-
-Неизвестный тип: `List<*>` означает список неизвестного типа.
-
-Variance обеспечивает type-safety при работе с generic типами в Kotlin.
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

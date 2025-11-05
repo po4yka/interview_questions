@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-data-class-component-functions--programming-languages--easy, q-iterator-order-guarantee--programming-languages--medium, q-iterator-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -17,14 +17,20 @@ tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequ
 date created: Friday, October 3rd 2025, 4:14:02 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # В Чем Разница Между Работой С List И Работой С Sequence
+
+# Вопрос (RU)
+> В чем разница между работой с list и работой с sequence
+
+---
 
 # Question (EN)
 > What is the difference between working with list and sequence?
 
-# Вопрос (RU)
-> В чем разница между работой с list и работой с sequence
+## Ответ (RU)
+
+List является жадной коллекцией, где все операции выполняются немедленно и целиком над всеми элементами сразу. Sequence является ленивой коллекцией, где операции обрабатывают элементы по мере необходимости через цепочку. List подходит для небольших коллекций и может использовать больше памяти из-за промежуточных коллекций. Sequence эффективен для больших коллекций и уменьшает использование памяти.
+
 
 ---
 
@@ -34,12 +40,15 @@ List is an eager collection where all operations are executed immediately and en
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-List является жадной коллекцией, где все операции выполняются немедленно и целиком над всеми элементами сразу. Sequence является ленивой коллекцией, где операции обрабатывают элементы по мере необходимости через цепочку. List подходит для небольших коллекций и может использовать больше памяти из-за промежуточных коллекций. Sequence эффективен для больших коллекций и уменьшает использование памяти.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
+## References
 
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

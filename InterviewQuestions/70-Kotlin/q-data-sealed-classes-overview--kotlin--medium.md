@@ -17,16 +17,225 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 date created: Friday, October 31st 2025, 6:33:15 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # What is Known about Data Classes and Sealed Classes?
-
-# Question (EN)
-> What is known about data classes and sealed classes in Kotlin? What are their characteristics and use cases?
 
 # Вопрос (RU)
 > Что известно о data классах и sealed классах в Kotlin? Каковы их характеристики и применения?
 
 ---
+
+# Question (EN)
+> What is known about data classes and sealed classes in Kotlin? What are their characteristics and use cases?
+
+## Ответ (RU)
+
+### Data Классы
+
+**Data классы** предназначены для хранения данных и автоматически генерируют несколько полезных методов:
+- `equals()` - для сравнения по содержимому
+- `hashCode()` - для использования в hash-коллекциях
+- `toString()` - для строкового представления
+- `copy()` - для создания копий с изменёнными свойствами
+- `componentN()` - компонентные функции для деструктуризации
+
+**Применение:**
+- Модели данных в приложениях
+- DTO (Data Transfer Objects)
+- POJO (Plain Old Java Objects)
+- API response models
+
+**Пример:**
+```kotlin
+data class User(
+    val id: Int,
+    val name: String,
+    val email: String,
+    val age: Int
+)
+
+val user1 = User(1, "Alice", "alice@example.com", 30)
+val user2 = User(1, "Alice", "alice@example.com", 30)
+
+// Автоматический equals()
+println(user1 == user2)  // true (одинаковое содержимое)
+
+// Автоматический toString()
+println(user1)  // User(id=1, name=Alice, email=alice@example.com, age=30)
+
+// copy() функция
+val olderUser = user1.copy(age = 31)
+
+// Деструктуризация с componentN()
+val (id, name, email, age) = user1
+println("$name is $age years old")
+```
+
+### Sealed Классы
+
+**Sealed классы** ограничивают создание подклассов тем же файлом (или модулем в Kotlin 1.5+) и используются для создания типобезопасных иерархий:
+- Все возможные подклассы известны на этапе компиляции
+- Идеальны для представления ограниченных иерархий классов
+- Отлично работают с `when` выражениями (exhaustive checking)
+- Часто используются для управления состояниями в архитектурных компонентах
+
+**Применение:**
+- Управление UI состояниями (Loading, Success, Error)
+- Result/Response типы для сетевых запросов
+- Навигационные события
+- Sealed иерархии команд или действий
+
+**Пример UI состояния:**
+```kotlin
+sealed class UiState {
+    object Loading : UiState()
+    data class Success(val data: List<String>) : UiState()
+    data class Error(val message: String, val code: Int) : UiState()
+    object Empty : UiState()
+}
+
+fun renderUi(state: UiState) {
+    when (state) {
+        is UiState.Loading -> println("Показываем загрузку...")
+        is UiState.Success -> println("Отображаем данные: ${state.data}")
+        is UiState.Error -> println("Ошибка ${state.code}: ${state.message}")
+        is UiState.Empty -> println("Нет данных")
+        // else не нужен - компилятор знает все варианты
+    }
+}
+```
+
+**Пример сетевого результата:**
+```kotlin
+sealed class NetworkResult<out T> {
+    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Error(val exception: Exception) : NetworkResult<Nothing>()
+    object Loading : NetworkResult<Nothing>()
+}
+
+data class Product(val id: Int, val name: String, val price: Double)
+
+fun fetchProducts(): NetworkResult<List<Product>> {
+    return try {
+        val products = listOf(
+            Product(1, "Laptop", 999.99),
+            Product(2, "Mouse", 29.99)
+        )
+        NetworkResult.Success(products)
+    } catch (e: Exception) {
+        NetworkResult.Error(e)
+    }
+}
+
+fun handleResult(result: NetworkResult<List<Product>>) {
+    when (result) {
+        is NetworkResult.Success -> {
+            println("Загружено ${result.data.size} товаров:")
+            result.data.forEach { product ->
+                println("  ${product.name}: $${product.price}")
+            }
+        }
+        is NetworkResult.Error -> {
+            println("Ошибка: ${result.exception.message}")
+        }
+        NetworkResult.Loading -> {
+            println("Загрузка товаров...")
+        }
+    }
+}
+```
+
+### Комбинирование Data И Sealed Классов
+
+**Очень распространённый паттерн - sealed класс с data подклассами:**
+```kotlin
+sealed class Result {
+    data class Success(val value: Int) : Result()
+    data class Failure(val error: String) : Result()
+}
+
+fun divide(a: Int, b: Int): Result {
+    return if (b != 0) {
+        Result.Success(a / b)
+    } else {
+        Result.Failure("Деление на ноль")
+    }
+}
+
+val result1 = divide(10, 2)
+when (result1) {
+    is Result.Success -> println("Результат: ${result1.value}")
+    is Result.Failure -> println("Ошибка: ${result1.error}")
+}
+```
+
+### Android MVVM Пример
+
+**Типичное использование в Android с ViewModel:**
+```kotlin
+// Data класс для данных профиля
+data class UserProfile(
+    val name: String,
+    val email: String,
+    val avatarUrl: String
+)
+
+// Sealed класс для состояний
+sealed class ProfileState {
+    object Initial : ProfileState()
+    object Loading : ProfileState()
+    data class Success(val profile: UserProfile) : ProfileState()
+    data class Error(val message: String) : ProfileState()
+}
+
+class ProfileViewModel {
+    private var state: ProfileState = ProfileState.Initial
+
+    fun loadProfile() {
+        state = ProfileState.Loading
+        // Симуляция загрузки
+        state = ProfileState.Success(
+            UserProfile(
+                name = "Alice",
+                email = "alice@example.com",
+                avatarUrl = "https://example.com/avatar.jpg"
+            )
+        )
+    }
+
+    fun getState() = state
+}
+
+// В Activity/Fragment
+when (val state = viewModel.getState()) {
+    is ProfileState.Initial -> println("Ещё не загружено")
+    is ProfileState.Loading -> println("Загрузка...")
+    is ProfileState.Success -> {
+        // Деструктуризация data класса
+        val (name, email, avatarUrl) = state.profile
+        println("Пользователь: $name, Email: $email")
+    }
+    is ProfileState.Error -> println("Ошибка: ${state.message}")
+}
+```
+
+### Ключевые Различия
+
+| Характеристика | Data класс | Sealed класс |
+|----------------|-----------|--------------|
+| **Назначение** | Хранение данных | Ограниченная иерархия типов |
+| **Автогенерация** | equals, hashCode, toString, copy, componentN | Нет |
+| **Наследование** | Может быть final или open | Всегда open для подклассов |
+| **Подклассы** | Не ограничены | Ограничены файлом/модулем |
+| **Применение** | Модели, DTOs | Состояния, результаты, события |
+| **When exhaustive** | Нет | Да |
+
+### Краткий Ответ
+
+**Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Используются для моделей данных, DTOs, API responses.
+
+**Sealed классы**: Ограничивают подклассы одним файлом/модулем. Создают типобезопасные иерархии с exhaustive when-проверками. Используются для UI состояний (Loading/Success/Error), Result типов, навигационных событий.
+
+**В Android**: Data классы - для моделей данных, sealed классы - для управления состояниями в ViewModel. Часто комбинируются: sealed класс с data подклассами.
 
 ## Answer (EN)
 
@@ -289,215 +498,15 @@ fun main() {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-### Data Классы
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-**Data классы** предназначены для хранения данных и автоматически генерируют несколько полезных методов:
-- `equals()` - для сравнения по содержимому
-- `hashCode()` - для использования в hash-коллекциях
-- `toString()` - для строкового представления
-- `copy()` - для создания копий с изменёнными свойствами
-- `componentN()` - компонентные функции для деструктуризации
+## References
 
-**Применение:**
-- Модели данных в приложениях
-- DTO (Data Transfer Objects)
-- POJO (Plain Old Java Objects)
-- API response models
-
-**Пример:**
-```kotlin
-data class User(
-    val id: Int,
-    val name: String,
-    val email: String,
-    val age: Int
-)
-
-val user1 = User(1, "Alice", "alice@example.com", 30)
-val user2 = User(1, "Alice", "alice@example.com", 30)
-
-// Автоматический equals()
-println(user1 == user2)  // true (одинаковое содержимое)
-
-// Автоматический toString()
-println(user1)  // User(id=1, name=Alice, email=alice@example.com, age=30)
-
-// copy() функция
-val olderUser = user1.copy(age = 31)
-
-// Деструктуризация с componentN()
-val (id, name, email, age) = user1
-println("$name is $age years old")
-```
-
-### Sealed Классы
-
-**Sealed классы** ограничивают создание подклассов тем же файлом (или модулем в Kotlin 1.5+) и используются для создания типобезопасных иерархий:
-- Все возможные подклассы известны на этапе компиляции
-- Идеальны для представления ограниченных иерархий классов
-- Отлично работают с `when` выражениями (exhaustive checking)
-- Часто используются для управления состояниями в архитектурных компонентах
-
-**Применение:**
-- Управление UI состояниями (Loading, Success, Error)
-- Result/Response типы для сетевых запросов
-- Навигационные события
-- Sealed иерархии команд или действий
-
-**Пример UI состояния:**
-```kotlin
-sealed class UiState {
-    object Loading : UiState()
-    data class Success(val data: List<String>) : UiState()
-    data class Error(val message: String, val code: Int) : UiState()
-    object Empty : UiState()
-}
-
-fun renderUi(state: UiState) {
-    when (state) {
-        is UiState.Loading -> println("Показываем загрузку...")
-        is UiState.Success -> println("Отображаем данные: ${state.data}")
-        is UiState.Error -> println("Ошибка ${state.code}: ${state.message}")
-        is UiState.Empty -> println("Нет данных")
-        // else не нужен - компилятор знает все варианты
-    }
-}
-```
-
-**Пример сетевого результата:**
-```kotlin
-sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T) : NetworkResult<T>()
-    data class Error(val exception: Exception) : NetworkResult<Nothing>()
-    object Loading : NetworkResult<Nothing>()
-}
-
-data class Product(val id: Int, val name: String, val price: Double)
-
-fun fetchProducts(): NetworkResult<List<Product>> {
-    return try {
-        val products = listOf(
-            Product(1, "Laptop", 999.99),
-            Product(2, "Mouse", 29.99)
-        )
-        NetworkResult.Success(products)
-    } catch (e: Exception) {
-        NetworkResult.Error(e)
-    }
-}
-
-fun handleResult(result: NetworkResult<List<Product>>) {
-    when (result) {
-        is NetworkResult.Success -> {
-            println("Загружено ${result.data.size} товаров:")
-            result.data.forEach { product ->
-                println("  ${product.name}: $${product.price}")
-            }
-        }
-        is NetworkResult.Error -> {
-            println("Ошибка: ${result.exception.message}")
-        }
-        NetworkResult.Loading -> {
-            println("Загрузка товаров...")
-        }
-    }
-}
-```
-
-### Комбинирование Data И Sealed Классов
-
-**Очень распространённый паттерн - sealed класс с data подклассами:**
-```kotlin
-sealed class Result {
-    data class Success(val value: Int) : Result()
-    data class Failure(val error: String) : Result()
-}
-
-fun divide(a: Int, b: Int): Result {
-    return if (b != 0) {
-        Result.Success(a / b)
-    } else {
-        Result.Failure("Деление на ноль")
-    }
-}
-
-val result1 = divide(10, 2)
-when (result1) {
-    is Result.Success -> println("Результат: ${result1.value}")
-    is Result.Failure -> println("Ошибка: ${result1.error}")
-}
-```
-
-### Android MVVM Пример
-
-**Типичное использование в Android с ViewModel:**
-```kotlin
-// Data класс для данных профиля
-data class UserProfile(
-    val name: String,
-    val email: String,
-    val avatarUrl: String
-)
-
-// Sealed класс для состояний
-sealed class ProfileState {
-    object Initial : ProfileState()
-    object Loading : ProfileState()
-    data class Success(val profile: UserProfile) : ProfileState()
-    data class Error(val message: String) : ProfileState()
-}
-
-class ProfileViewModel {
-    private var state: ProfileState = ProfileState.Initial
-
-    fun loadProfile() {
-        state = ProfileState.Loading
-        // Симуляция загрузки
-        state = ProfileState.Success(
-            UserProfile(
-                name = "Alice",
-                email = "alice@example.com",
-                avatarUrl = "https://example.com/avatar.jpg"
-            )
-        )
-    }
-
-    fun getState() = state
-}
-
-// В Activity/Fragment
-when (val state = viewModel.getState()) {
-    is ProfileState.Initial -> println("Ещё не загружено")
-    is ProfileState.Loading -> println("Загрузка...")
-    is ProfileState.Success -> {
-        // Деструктуризация data класса
-        val (name, email, avatarUrl) = state.profile
-        println("Пользователь: $name, Email: $email")
-    }
-    is ProfileState.Error -> println("Ошибка: ${state.message}")
-}
-```
-
-### Ключевые Различия
-
-| Характеристика | Data класс | Sealed класс |
-|----------------|-----------|--------------|
-| **Назначение** | Хранение данных | Ограниченная иерархия типов |
-| **Автогенерация** | equals, hashCode, toString, copy, componentN | Нет |
-| **Наследование** | Может быть final или open | Всегда open для подклассов |
-| **Подклассы** | Не ограничены | Ограничены файлом/модулем |
-| **Применение** | Модели, DTOs | Состояния, результаты, события |
-| **When exhaustive** | Нет | Да |
-
-### Краткий Ответ
-
-**Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Используются для моделей данных, DTOs, API responses.
-
-**Sealed классы**: Ограничивают подклассы одним файлом/модулем. Создают типобезопасные иерархии с exhaustive when-проверками. Используются для UI состояний (Loading/Success/Error), Result типов, навигационных событий.
-
-**В Android**: Data классы - для моделей данных, sealed классы - для управления состояниями в ViewModel. Часто комбинируются: sealed класс с data подклассами.
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

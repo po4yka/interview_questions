@@ -1,11 +1,11 @@
 ---
 id: kotlin-018
 title: "Inline Classes (Value Classes) / Встроенные классы (Value классы)"
-aliases: []
+aliases: ["Inline Classes (Value Classes), Встроенные классы (Value классы)"]
 
 # Classification
 topic: kotlin
-subtopics: [inline-class, optimization, performance, value-class]
+subtopics: [inline-class, optimization, performance]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,54 @@ tags: [difficulty/medium, inline-class, kotlin, optimization, performance, value
 date created: Saturday, November 1st 2025, 12:43:05 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое встроенные классы (value классы) в Kotlin?
+
+---
 
 # Question (EN)
 > What are inline classes (value classes) in Kotlin?
-# Вопрос (RU)
-> Что такое встроенные классы (value классы) в Kotlin?
+## Ответ (RU)
+
+Встроенные классы (теперь называются **value классы**) — это специальный вид классов, которые оборачивают другой тип без добавления overhead во время выполнения через дополнительные выделения памяти в куче.
+
+### Проблема Которую Решают
+
+Иногда бизнес-логика требует обертывания типа, но это вводит overhead из-за выделений в куче, особенно для примитивов.
+
+### Решение: Value Классы
+
+```kotlin
+// Value класс - НЕТ выделения в куче во время выполнения!
+@JvmInline
+value class UserId(val value: String)
+
+// Во время выполнения это просто String
+val id = UserId("12345")  // Нет дополнительного выделения!
+```
+
+### Ограничения
+
+- **Должен иметь ровно одно свойство** в первичном конструкторе
+- **Не может иметь init блоки**
+- **Свойства не могут иметь backing fields** (только вычисляемые)
+- **Не может расширять другие классы** (должен быть final)
+- **Может реализовывать интерфейсы**
+
+### Value Классы Vs Псевдонимы Типов
+
+| Функция | Value класс | Псевдоним типа |
+|---------|-------------|----------------|
+| **Создает новый тип** | - Да | - Нет |
+| **Типобезопасность** | - Сильная | - Слабая |
+| **Runtime overhead** | - Нет | - Нет |
+| **Может иметь члены** | - Да | - Нет |
+
+### Производительность
+
+Value классы имеют **нулевой runtime overhead** в большинстве случаев.
+
+**Краткое содержание**: Value классы оборачивают типы без runtime overhead, обеспечивая типобезопасность без стоимости производительности. Должны иметь одно свойство в первичном конструкторе. Не могут иметь backing fields, init блоки или расширять классы. В отличие от псевдонимов типов которые просто имена, value классы создают реальные отдельные типы. Используйте для типобезопасных ID, единиц измерения и валидированных оберток. Нулевое выделение во время выполнения.
 
 ---
 
@@ -210,49 +253,11 @@ fun hashPassword(password: String): String {
 
 **English Summary**: Value classes (inline classes) wrap types without runtime overhead, providing type safety without performance cost. Must have single property in primary constructor. Cannot have backing fields, init blocks, or extend classes. Unlike type aliases which are just names, value classes create real distinct types. Use for type-safe IDs, units of measurement, and validated wrappers. Zero allocation at runtime.
 
-## Ответ (RU)
+## Follow-ups
 
-Встроенные классы (теперь называются **value классы**) — это специальный вид классов, которые оборачивают другой тип без добавления overhead во время выполнения через дополнительные выделения памяти в куче.
-
-### Проблема Которую Решают
-
-Иногда бизнес-логика требует обертывания типа, но это вводит overhead из-за выделений в куче, особенно для примитивов.
-
-### Решение: Value Классы
-
-```kotlin
-// Value класс - НЕТ выделения в куче во время выполнения!
-@JvmInline
-value class UserId(val value: String)
-
-// Во время выполнения это просто String
-val id = UserId("12345")  // Нет дополнительного выделения!
-```
-
-### Ограничения
-
-- **Должен иметь ровно одно свойство** в первичном конструкторе
-- **Не может иметь init блоки**
-- **Свойства не могут иметь backing fields** (только вычисляемые)
-- **Не может расширять другие классы** (должен быть final)
-- **Может реализовывать интерфейсы**
-
-### Value Классы Vs Псевдонимы Типов
-
-| Функция | Value класс | Псевдоним типа |
-|---------|-------------|----------------|
-| **Создает новый тип** | - Да | - Нет |
-| **Типобезопасность** | - Сильная | - Слабая |
-| **Runtime overhead** | - Нет | - Нет |
-| **Может иметь члены** | - Да | - Нет |
-
-### Производительность
-
-Value классы имеют **нулевой runtime overhead** в большинстве случаев.
-
-**Краткое содержание**: Value классы оборачивают типы без runtime overhead, обеспечивая типобезопасность без стоимости производительности. Должны иметь одно свойство в первичном конструкторе. Не могут иметь backing fields, init блоки или расширять классы. В отличие от псевдонимов типов которые просто имена, value классы создают реальные отдельные типы. Используйте для типобезопасных ID, единиц измерения и валидированных оберток. Нулевое выделение во время выполнения.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Inline Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/inline-classes.html)

@@ -17,35 +17,15 @@ tags: [collections, difficulty/easy, kotlin, list, map, set]
 date created: Friday, October 31st 2025, 6:29:30 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # Рассказать Отличия И В Каких Случаях Их Использовать List Set Map
-
-# Question (EN)
-> Explain the differences between List, Set, and Map. When should you use each?
 
 # Вопрос (RU)
 > Расскажите отличия между List, Set и Map. Когда использовать каждый из них?
 
 ---
 
-## Answer (EN)
-
-Kotlin has three main collection types with distinct characteristics:
-
-**List**: Ordered collection that allows duplicates. Elements accessed by index (0-based). Use for: ordered data, when duplicates are allowed, when you need indexed access.
-
-**Set**: Unordered collection of unique elements. No duplicates allowed. Use for: ensuring uniqueness, membership testing, removing duplicates.
-
-**Map**: Collection of key-value pairs. Each key is unique and maps to exactly one value. Use for: associating data (lookups), storing configurations, caching.
-
-**Example:**
-```kotlin
-val numbers = listOf(1, 2, 2, 3)       // [1, 2, 2, 3] - duplicates allowed
-val uniqueNumbers = setOf(1, 2, 2, 3)  // [1, 2, 3] - duplicates removed
-val ages = mapOf("Alice" to 25, "Bob" to 30) // key-value pairs
-```
-
----
+# Question (EN)
+> Explain the differences between List, Set, and Map. When should you use each?
 
 ## Ответ (RU)
 
@@ -218,6 +198,35 @@ val data = cache[userId] ?: fetchData(userId).also { cache[userId] = it }
 - Часто ищете данные по ключу
 - Строите справочники, словари, кэши
 - Подсчитываете частоту элементов
+
+## Answer (EN)
+
+Kotlin has three main collection types with distinct characteristics:
+
+**List**: Ordered collection that allows duplicates. Elements accessed by index (0-based). Use for: ordered data, when duplicates are allowed, when you need indexed access.
+
+**Set**: Unordered collection of unique elements. No duplicates allowed. Use for: ensuring uniqueness, membership testing, removing duplicates.
+
+**Map**: Collection of key-value pairs. Each key is unique and maps to exactly one value. Use for: associating data (lookups), storing configurations, caching.
+
+**Example:**
+```kotlin
+val numbers = listOf(1, 2, 2, 3)       // [1, 2, 2, 3] - duplicates allowed
+val uniqueNumbers = setOf(1, 2, 2, 3)  // [1, 2, 3] - duplicates removed
+val ages = mapOf("Alice" to 25, "Bob" to 30) // key-value pairs
+```
+
+---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

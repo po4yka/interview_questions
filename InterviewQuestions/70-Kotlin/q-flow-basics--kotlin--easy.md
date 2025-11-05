@@ -1,11 +1,11 @@
 ---
 id: kotlin-104
 title: "Flow Basics in Kotlin / Основы Flow в Kotlin"
-aliases: []
+aliases: ["Flow Basics in Kotlin, Основы Flow в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [cold-flow, coroutines, flow, reactive, streams]
+subtopics: [cold-flow, coroutines, flow]
 question_kind: theory
 difficulty: easy
 
@@ -28,12 +28,179 @@ tags: [cold-flow, coroutines, difficulty/easy, flow, kotlin, reactive, streams]
 date created: Sunday, October 12th 2025, 2:53:50 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Что такое Kotlin Flow? Объясните холодные vs горячие потоки, базовые операторы и когда использовать Flow.
+
+---
 
 # Question (EN)
 > What is Kotlin Flow? Explain cold streams vs hot streams, basic operators, and when to use Flow.
 
-# Вопрос (RU)
-> Что такое Kotlin Flow? Объясните холодные vs горячие потоки, базовые операторы и когда использовать Flow.
+## Ответ (RU)
+
+**Flow** — библиотека асинхронных потоков Kotlin, представляющая холодный асинхронный поток данных. Он излучает множество значений последовательно во времени и построен поверх корутин.
+
+### Что Такое Flow?
+
+```kotlin
+// Простой пример Flow
+fun simple(): Flow<Int> = flow {
+    println("Flow запущен")
+    for (i in 1..3) {
+        delay(100)
+        emit(i)
+        println("Излучено $i")
+    }
+}
+
+fun main() = runBlocking {
+    println("Вызов simple()")
+    val flow = simple()
+    println("Перед collect")
+    flow.collect { value ->
+        println("Собрано $value")
+    }
+}
+```
+
+**Ключевые характеристики**:
+1. **Асинхронный**: Работает с корутинами
+2. **Последовательный**: Излучает значения по одному
+3. **Холодный**: Не запускается пока не собран
+4. **Suspending**: Может использовать suspend функции
+
+### Холодные Vs Горячие Потоки
+
+#### Холодные Потоки (Flow)
+
+```kotlin
+val coldFlow = flow {
+    println("Flow запущен")
+    emit(1)
+    emit(2)
+    emit(3)
+}
+
+// Ничего не происходит...
+
+coldFlow.collect { println(it) }  // Запускает выполнение
+// Вывод: Flow запущен, 1, 2, 3
+
+coldFlow.collect { println(it) }  // Запускает снова
+// Вывод: Flow запущен, 1, 2, 3 (выполняется с начала)
+```
+
+**Характеристики холодного потока**:
+- Запускается при сборке
+- Каждый коллектор получает независимое выполнение
+- Значения вычисляются по требованию
+- Как `Sequence`, но асинхронный
+
+### Билдеры Flow
+
+```kotlin
+// 1. Билдер flow { }
+val flow1 = flow {
+    emit(1)
+    emit(2)
+}
+
+// 2. flowOf - фиксированный набор значений
+val flow2 = flowOf(1, 2, 3, 4, 5)
+
+// 3. asFlow - конвертировать коллекцию/последовательность
+val flow3 = (1..5).asFlow()
+val flow4 = listOf(1, 2, 3).asFlow()
+```
+
+### Базовые Операторы
+
+#### Терминальные Операторы (Запускают сборку)
+
+```kotlin
+// collect - обработать каждое значение
+flow.collect { value ->
+    println(value)
+}
+
+// toList - собрать в список
+val list = flow.toList()
+
+// first - получить первое значение
+val first = flow.first()
+
+// reduce - комбинировать значения
+val sum = flow.reduce { acc, value ->
+    acc + value
+}
+```
+
+#### Промежуточные Операторы (Трансформируют Flow)
+
+```kotlin
+// map - трансформировать значения
+flow { emit(1); emit(2) }
+    .map { it * 2 }
+    .collect { println(it) }  // 2, 4
+
+// filter - фильтровать значения
+(1..10).asFlow()
+    .filter { it % 2 == 0 }
+    .collect { println(it) }  // 2, 4, 6, 8, 10
+
+// take - ограничить эмиссии
+(1..100).asFlow()
+    .take(5)
+    .collect { println(it) }  // 1, 2, 3, 4, 5
+```
+
+### Реальные Примеры
+
+#### Паттерн Repository
+
+```kotlin
+class UserRepository(private val api: ApiService) {
+    fun getUsers(): Flow<List<User>> = flow {
+        val users = api.fetchUsers()
+        emit(users)
+    }
+
+    fun observeUsers(): Flow<List<User>> = flow {
+        while (true) {
+            val users = api.fetchUsers()
+            emit(users)
+            delay(30_000) // Обновлять каждые 30 секунд
+        }
+    }
+}
+```
+
+### Когда Использовать Flow
+
+#### Использовать Flow Для:
+
+```kotlin
+// 1. Потоковые данные
+fun observeDatabase(): Flow<List<Item>> = database.observeItems()
+
+// 2. Множественные значения во времени
+fun countDown(from: Int): Flow<Int> = flow {
+    for (i in from downTo 0) {
+        emit(i)
+        delay(1000)
+    }
+}
+```
+
+#### Не Использовать Flow Для:
+
+```kotlin
+// Одно значение - использовать suspend функцию
+suspend fun getUser(id: Int): User  // Лучше чем Flow<User>
+
+// Немедленные значения - использовать обычную функцию
+fun calculate(x: Int): Int  // Лучше чем Flow<Int>
+```
 
 ---
 
@@ -352,173 +519,11 @@ suspend fun getUser(): User  //  Better
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Flow** — библиотека асинхронных потоков Kotlin, представляющая холодный асинхронный поток данных. Он излучает множество значений последовательно во времени и построен поверх корутин.
-
-### Что Такое Flow?
-
-```kotlin
-// Простой пример Flow
-fun simple(): Flow<Int> = flow {
-    println("Flow запущен")
-    for (i in 1..3) {
-        delay(100)
-        emit(i)
-        println("Излучено $i")
-    }
-}
-
-fun main() = runBlocking {
-    println("Вызов simple()")
-    val flow = simple()
-    println("Перед collect")
-    flow.collect { value ->
-        println("Собрано $value")
-    }
-}
-```
-
-**Ключевые характеристики**:
-1. **Асинхронный**: Работает с корутинами
-2. **Последовательный**: Излучает значения по одному
-3. **Холодный**: Не запускается пока не собран
-4. **Suspending**: Может использовать suspend функции
-
-### Холодные Vs Горячие Потоки
-
-#### Холодные Потоки (Flow)
-
-```kotlin
-val coldFlow = flow {
-    println("Flow запущен")
-    emit(1)
-    emit(2)
-    emit(3)
-}
-
-// Ничего не происходит...
-
-coldFlow.collect { println(it) }  // Запускает выполнение
-// Вывод: Flow запущен, 1, 2, 3
-
-coldFlow.collect { println(it) }  // Запускает снова
-// Вывод: Flow запущен, 1, 2, 3 (выполняется с начала)
-```
-
-**Характеристики холодного потока**:
-- Запускается при сборке
-- Каждый коллектор получает независимое выполнение
-- Значения вычисляются по требованию
-- Как `Sequence`, но асинхронный
-
-### Билдеры Flow
-
-```kotlin
-// 1. Билдер flow { }
-val flow1 = flow {
-    emit(1)
-    emit(2)
-}
-
-// 2. flowOf - фиксированный набор значений
-val flow2 = flowOf(1, 2, 3, 4, 5)
-
-// 3. asFlow - конвертировать коллекцию/последовательность
-val flow3 = (1..5).asFlow()
-val flow4 = listOf(1, 2, 3).asFlow()
-```
-
-### Базовые Операторы
-
-#### Терминальные Операторы (Запускают сборку)
-
-```kotlin
-// collect - обработать каждое значение
-flow.collect { value ->
-    println(value)
-}
-
-// toList - собрать в список
-val list = flow.toList()
-
-// first - получить первое значение
-val first = flow.first()
-
-// reduce - комбинировать значения
-val sum = flow.reduce { acc, value ->
-    acc + value
-}
-```
-
-#### Промежуточные Операторы (Трансформируют Flow)
-
-```kotlin
-// map - трансформировать значения
-flow { emit(1); emit(2) }
-    .map { it * 2 }
-    .collect { println(it) }  // 2, 4
-
-// filter - фильтровать значения
-(1..10).asFlow()
-    .filter { it % 2 == 0 }
-    .collect { println(it) }  // 2, 4, 6, 8, 10
-
-// take - ограничить эмиссии
-(1..100).asFlow()
-    .take(5)
-    .collect { println(it) }  // 1, 2, 3, 4, 5
-```
-
-### Реальные Примеры
-
-#### Паттерн Repository
-
-```kotlin
-class UserRepository(private val api: ApiService) {
-    fun getUsers(): Flow<List<User>> = flow {
-        val users = api.fetchUsers()
-        emit(users)
-    }
-
-    fun observeUsers(): Flow<List<User>> = flow {
-        while (true) {
-            val users = api.fetchUsers()
-            emit(users)
-            delay(30_000) // Обновлять каждые 30 секунд
-        }
-    }
-}
-```
-
-### Когда Использовать Flow
-
-#### Использовать Flow Для:
-
-```kotlin
-// 1. Потоковые данные
-fun observeDatabase(): Flow<List<Item>> = database.observeItems()
-
-// 2. Множественные значения во времени
-fun countDown(from: Int): Flow<Int> = flow {
-    for (i in from downTo 0) {
-        emit(i)
-        delay(1000)
-    }
-}
-```
-
-#### Не Использовать Flow Для:
-
-```kotlin
-// Одно значение - использовать suspend функцию
-suspend fun getUser(id: Int): User  // Лучше чем Flow<User>
-
-// Немедленные значения - использовать обычную функцию
-fun calculate(x: Int): Int  // Лучше чем Flow<Int>
-```
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

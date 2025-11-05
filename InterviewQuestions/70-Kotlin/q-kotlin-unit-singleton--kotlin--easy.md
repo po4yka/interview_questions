@@ -17,16 +17,58 @@ tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
 date created: Friday, October 31st 2025, 6:28:54 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Сколько Инстансов Unit На Одно Приложение
-
-# Question (EN)
-> How many Unit instances per application?
 
 # Вопрос (RU)
 > Сколько инстансов Unit на одно приложение
 
 ---
+
+# Question (EN)
+> How many Unit instances per application?
+
+## Ответ (RU)
+
+**Unit является синглтоном** в Kotlin, то есть существует **только один экземпляр Unit** на всё приложение.
+
+**Ключевые характеристики:**
+
+- **Синглтон**: Существует только один экземпляр
+- **Встроенный тип**: Часть стандартной библиотеки Kotlin
+- **Обозначает отсутствие**: Используется для указания отсутствия значимого значения
+- **Похож на void**: Но в отличие от `void`, Unit - это реальный объект
+
+**Почему синглтон?**
+
+Поскольку Unit представляет "отсутствие значимого значения", нет необходимости в нескольких экземплярах. Все функции, возвращающие Unit, возвращают один и тот же экземпляр синглтона.
+
+**Пример:**
+```kotlin
+fun printHello(): Unit {
+    println("Hello")
+}  // Неявно возвращает синглтон Unit
+
+fun doSomething() {  // Тип возврата Unit выводится автоматически
+    println("Doing something")
+}
+
+// Обе функции возвращают один и тот же экземпляр Unit
+val u1 = printHello()
+val u2 = doSomething()
+println(u1 === u2)  // true - один и тот же экземпляр!
+```
+
+**Сравнение с Java:**
+```java
+// Java
+public void method() { }  // Ничего не возвращает (void)
+
+// Kotlin
+fun method(): Unit { }    // Возвращает синглтон Unit
+fun method2() { }         // То же самое (Unit выводится автоматически)
+```
+
+**Эффективность памяти**: Поскольку это синглтон, нет потерь памяти от множества объектов Unit.
 
 ## Answer (EN)
 
@@ -73,48 +115,15 @@ fun method2() { }         // Same as above (Unit inferred)
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Unit является синглтоном** в Kotlin, то есть существует **только один экземпляр Unit** на всё приложение.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-**Ключевые характеристики:**
+## References
 
-- **Синглтон**: Существует только один экземпляр
-- **Встроенный тип**: Часть стандартной библиотеки Kotlin
-- **Обозначает отсутствие**: Используется для указания отсутствия значимого значения
-- **Похож на void**: Но в отличие от `void`, Unit - это реальный объект
-
-**Почему синглтон?**
-
-Поскольку Unit представляет "отсутствие значимого значения", нет необходимости в нескольких экземплярах. Все функции, возвращающие Unit, возвращают один и тот же экземпляр синглтона.
-
-**Пример:**
-```kotlin
-fun printHello(): Unit {
-    println("Hello")
-}  // Неявно возвращает синглтон Unit
-
-fun doSomething() {  // Тип возврата Unit выводится автоматически
-    println("Doing something")
-}
-
-// Обе функции возвращают один и тот же экземпляр Unit
-val u1 = printHello()
-val u2 = doSomething()
-println(u1 === u2)  // true - один и тот же экземпляр!
-```
-
-**Сравнение с Java:**
-```java
-// Java
-public void method() { }  // Ничего не возвращает (void)
-
-// Kotlin
-fun method(): Unit { }    // Возвращает синглтон Unit
-fun method2() { }         // То же самое (Unit выводится автоматически)
-```
-
-**Эффективность памяти**: Поскольку это синглтон, нет потерь памяти от множества объектов Unit.
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

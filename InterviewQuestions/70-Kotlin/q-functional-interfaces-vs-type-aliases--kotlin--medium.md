@@ -1,11 +1,11 @@
 ---
 id: kotlin-006
 title: "Functional Interfaces vs Type Aliases / Функциональные интерфейсы vs псевдонимы типов"
-aliases: []
+aliases: ["Functional Interfaces vs Type Aliases, Функциональные интерфейсы vs псевдонимы типов"]
 
 # Classification
 topic: kotlin
-subtopics: [comparison, functional-interfaces, sam, type-aliases]
+subtopics: [comparison, functional-interfaces, sam]
 question_kind: theory
 difficulty: medium
 
@@ -28,87 +28,13 @@ tags: [difficulty/medium, functional-interfaces, kotlin, sam, type-aliases]
 date created: Thursday, October 16th 2025, 4:43:56 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
-# Question (EN)
-> What is the difference between functional interfaces and type aliases in Kotlin?
 # Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?
 
 ---
 
-## Answer (EN)
-
-### Functional Interface (SAM)
-
-An interface with **only one abstract method**. Declared with `fun` modifier.
-
-```kotlin
-fun interface KRunnable {
-   fun invoke()
-}
-```
-
-### Type Alias
-
-Alternative name for an **existing type**. Doesn't create new type.
-
-```kotlin
-typealias MyHandler = (Int, String, Any) -> Unit
-typealias Predicate<T> = (T) -> Boolean
-```
-
-### Key Differences
-
-| Feature | Functional Interface | Type Alias |
-|---------|---------------------|------------|
-| **Creates new type** | Yes | No |
-| **Members** | Multiple non-abstract + one abstract | One member only |
-| **Extensions** | Can add interface-specific extensions | Extensions apply to underlying type |
-| **Implements/Extends** | Can implement and extend other interfaces | Just a name |
-| **Type safety** | Stronger (distinct type) | Weaker (same as underlying) |
-
-### When to Use Each
-
-**Functional Interface** when:
-- API needs more than just a function (contracts, operations)
-- Need type-specific extensions
-- Want distinct type for type safety
-
-**Type Alias** when:
-- API accepts simple function with specific signature
-- Want shorter name for complex type
-- Don't need additional operations
-
-### Example Comparison
-
-```kotlin
-// Type alias - simple renaming
-typealias ClickHandler = (View) -> Unit
-
-fun setClickListener(handler: ClickHandler) {
-    // handler is just (View) -> Unit
-}
-
-// Functional interface - new type
-fun interface ClickListener {
-    fun onClick(view: View)
-}
-
-// Can add extensions specific to ClickListener
-fun ClickListener.withLogging(): ClickListener = ClickListener { view ->
-    println("Clicked: $view")
-    onClick(view)
-}
-
-// Type alias extensions affect ALL functions of that type
-fun ClickHandler.withLogging(): ClickHandler = { view ->
-    println("Clicked: $view")
-    this(view)  // Affects all (View) -> Unit functions!
-}
-```
-
-**English Summary**: Functional interfaces create new distinct types, can have multiple non-abstract members, and support interface-specific extensions. Type aliases just rename existing types for readability. Choose functional interfaces for complex contracts; type aliases for simple function type renaming.
-
+# Question (EN)
+> What is the difference between functional interfaces and type aliases in Kotlin?
 ## Ответ (RU)
 
 ### Функциональный Интерфейс (SAM)
@@ -207,6 +133,85 @@ typealias JsonMap = Map<String, Any>
 ```
 
 ---
+
+## Answer (EN)
+
+### Functional Interface (SAM)
+
+An interface with **only one abstract method**. Declared with `fun` modifier.
+
+```kotlin
+fun interface KRunnable {
+   fun invoke()
+}
+```
+
+### Type Alias
+
+Alternative name for an **existing type**. Doesn't create new type.
+
+```kotlin
+typealias MyHandler = (Int, String, Any) -> Unit
+typealias Predicate<T> = (T) -> Boolean
+```
+
+### Key Differences
+
+| Feature | Functional Interface | Type Alias |
+|---------|---------------------|------------|
+| **Creates new type** | Yes | No |
+| **Members** | Multiple non-abstract + one abstract | One member only |
+| **Extensions** | Can add interface-specific extensions | Extensions apply to underlying type |
+| **Implements/Extends** | Can implement and extend other interfaces | Just a name |
+| **Type safety** | Stronger (distinct type) | Weaker (same as underlying) |
+
+### When to Use Each
+
+**Functional Interface** when:
+- API needs more than just a function (contracts, operations)
+- Need type-specific extensions
+- Want distinct type for type safety
+
+**Type Alias** when:
+- API accepts simple function with specific signature
+- Want shorter name for complex type
+- Don't need additional operations
+
+### Example Comparison
+
+```kotlin
+// Type alias - simple renaming
+typealias ClickHandler = (View) -> Unit
+
+fun setClickListener(handler: ClickHandler) {
+    // handler is just (View) -> Unit
+}
+
+// Functional interface - new type
+fun interface ClickListener {
+    fun onClick(view: View)
+}
+
+// Can add extensions specific to ClickListener
+fun ClickListener.withLogging(): ClickListener = ClickListener { view ->
+    println("Clicked: $view")
+    onClick(view)
+}
+
+// Type alias extensions affect ALL functions of that type
+fun ClickHandler.withLogging(): ClickHandler = { view ->
+    println("Clicked: $view")
+    this(view)  // Affects all (View) -> Unit functions!
+}
+```
+
+**English Summary**: Functional interfaces create new distinct types, can have multiple non-abstract members, and support interface-specific extensions. Type aliases just rename existing types for readability. Choose functional interfaces for complex contracts; type aliases for simple function type renaming.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Functional (SAM) Interfaces - Kotlin](https://kotlinlang.org/docs/fun-interfaces.html)

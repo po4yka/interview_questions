@@ -17,33 +17,15 @@ tags: [difficulty/hard]
 date created: Thursday, October 16th 2025, 12:35:35 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Heap Pollution (Загрязнение кучи)
-
-# Question (EN)
-> What is heap pollution in Kotlin/Java generics? How does it occur and how can you prevent it?
 
 # Вопрос (RU)
 > Что такое heap pollution (загрязнение кучи) в дженериках Kotlin/Java? Как это происходит и как можно предотвратить?
 
 ---
 
-## Answer (EN)
-
-**Heap pollution** occurs when an object of incorrect type appears in memory due to improper generics usage and type erasure in Java/Kotlin. It causes `ClassCastException` at runtime despite successful compilation.
-
-**Causes**: Mixing raw types with generic types, using unchecked casts, or creating generic arrays without `reified`. Type information is lost at runtime due to type erasure.
-
-**Prevention strategies**:
-- Use `inline` + `reified` to preserve type information
-- Prefer `List<T>` over `Array<T>`
-- Avoid raw types (types without generics)
-- Use sealed classes for heterogeneous data
-- Don't suppress compiler warnings without understanding risks
-- Use immutable collections when possible
-- Pass `KClass<T>` for creating typed arrays
-
----
+# Question (EN)
+> What is heap pollution in Kotlin/Java generics? How does it occur and how can you prevent it?
 
 ## Ответ (RU)
 
@@ -453,6 +435,33 @@ fun test() {
 5. Не подавляйте предупреждения компилятора без понимания
 6. Используйте неизменяемые коллекции
 7. Передавайте `KClass<T>` для создания типизированных массивов
+
+## Answer (EN)
+
+**Heap pollution** occurs when an object of incorrect type appears in memory due to improper generics usage and type erasure in Java/Kotlin. It causes `ClassCastException` at runtime despite successful compilation.
+
+**Causes**: Mixing raw types with generic types, using unchecked casts, or creating generic arrays without `reified`. Type information is lost at runtime due to type erasure.
+
+**Prevention strategies**:
+- Use `inline` + `reified` to preserve type information
+- Prefer `List<T>` over `Array<T>`
+- Avoid raw types (types without generics)
+- Use sealed classes for heterogeneous data
+- Don't suppress compiler warnings without understanding risks
+- Use immutable collections when possible
+- Pass `KClass<T>` for creating typed arrays
+
+---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

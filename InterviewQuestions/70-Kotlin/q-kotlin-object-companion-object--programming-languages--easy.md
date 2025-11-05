@@ -17,16 +17,23 @@ tags: [companion-object, difficulty/easy, object, programming-languages, singlet
 date created: Friday, October 31st 2025, 6:30:57 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Такое Object / Companion Object?
-
-# Question (EN)
-> What is object / companion object?
 
 # Вопрос (RU)
 > Что такое object / companion object?
 
 ---
+
+# Question (EN)
+> What is object / companion object?
+
+## Ответ (RU)
+
+**object** и **companion object** используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
+
+**object** используется для создания одиночного экземпляра класса (реализации паттерна singleton).
+
+**companion object** используется внутри класса и служит для объявления членов класса, доступных без создания экземпляра этого класса (аналогично статическим членам).
 
 ## Answer (EN)
 
@@ -200,13 +207,15 @@ Database.connect()  // Access via class name
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**object** и **companion object** используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-**object** используется для создания одиночного экземпляра класса (реализации паттерна singleton).
+## References
 
-**companion object** используется внутри класса и служит для объявления членов класса, доступных без создания экземпляра этого класса (аналогично статическим членам).
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

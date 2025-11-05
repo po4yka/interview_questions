@@ -1,7 +1,7 @@
 ---
 id: kotlin-090
 title: "Coroutine Memory Leaks and Prevention / Утечки памяти в корутинах и их предотвращение"
-aliases: []
+aliases: ["Coroutine Memory Leaks and Prevention, Утечки памяти в корутинах и их предотвращение"]
 
 # Classification
 topic: kotlin
@@ -28,13 +28,74 @@ tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 3:39:12 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140024
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140024
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140024
+## Ответ (RU)
 
+
+Утечки памяти в корутинах обычно происходят когда корутины не отменяются должным образом, приводя к удержанию ссылок и расходу ресурсов.
+
+### Распространенные Причины Утечек
+
+**1. Не отменяются Scopes**
+```kotlin
+class ViewModel {
+    private val scope = CoroutineScope(Dispatchers.Main)
+    
+    fun loadData() {
+        scope.launch { /* work */ }
+    }
+    
+    // Утечка памяти если не вызван!
+    fun onCleared() {
+        scope.cancel()
+    }
+}
+```
+
+**2. Использование GlobalScope**
+```kotlin
+// Утечка: Живет вечно
+GlobalScope.launch {
+    // Это выполняется даже после уничтожения Activity
+}
+
+// Исправление: Использовать lifecycleScope
+lifecycleScope.launch {
+    // Автоматически отменяется
+}
+```
+
+**3. Захват ссылок на Activity/Fragment**
+```kotlin
+// Утечка
+class MyActivity : Activity() {
+    fun startWork() {
+        GlobalScope.launch {
+            updateUI()  // Захватывает this@MyActivity
+        }
+    }
+}
+```
+
+### Инструменты Обнаружения
+- LeakCanary для Android
+- Memory Profiler в Android Studio
+- Анализ heap dumps
+
+### Предотвращение
+1. Всегда используйте структурированную конкурентность
+2. Отменяйте scopes в методах жизненного цикла
+3. Используйте viewModelScope, lifecycleScope
+4. Избегайте GlobalScope кроме операций уровня приложения
+
+---
 ---
 
 ## Answer (EN)
@@ -95,68 +156,6 @@ class MyActivity : Activity() {
 2. Cancel scopes in lifecycle methods
 3. Use viewModelScope, lifecycleScope
 4. Avoid GlobalScope except for app-level operations
-
----
----
-
-## Ответ (RU)
-
-
-Утечки памяти в корутинах обычно происходят когда корутины не отменяются должным образом, приводя к удержанию ссылок и расходу ресурсов.
-
-### Распространенные Причины Утечек
-
-**1. Не отменяются Scopes**
-```kotlin
-class ViewModel {
-    private val scope = CoroutineScope(Dispatchers.Main)
-    
-    fun loadData() {
-        scope.launch { /* work */ }
-    }
-    
-    // Утечка памяти если не вызван!
-    fun onCleared() {
-        scope.cancel()
-    }
-}
-```
-
-**2. Использование GlobalScope**
-```kotlin
-// Утечка: Живет вечно
-GlobalScope.launch {
-    // Это выполняется даже после уничтожения Activity
-}
-
-// Исправление: Использовать lifecycleScope
-lifecycleScope.launch {
-    // Автоматически отменяется
-}
-```
-
-**3. Захват ссылок на Activity/Fragment**
-```kotlin
-// Утечка
-class MyActivity : Activity() {
-    fun startWork() {
-        GlobalScope.launch {
-            updateUI()  // Захватывает this@MyActivity
-        }
-    }
-}
-```
-
-### Инструменты Обнаружения
-- LeakCanary для Android
-- Memory Profiler в Android Studio
-- Анализ heap dumps
-
-### Предотвращение
-1. Всегда используйте структурированную конкурентность
-2. Отменяйте scopes в методах жизненного цикла
-3. Используйте viewModelScope, lifecycleScope
-4. Избегайте GlobalScope кроме операций уровня приложения
 
 ---
 ---

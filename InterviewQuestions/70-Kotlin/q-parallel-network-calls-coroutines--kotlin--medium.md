@@ -1,11 +1,11 @@
 ---
 id: kotlin-037
 title: "How to make parallel network calls using coroutines? / Как выполнять параллельные сетевые запросы с помощью корутин?"
-aliases: []
+aliases: ["How to make parallel network calls using coroutines?, Как выполнять параллельные сетевые запросы с помощью корутин?"]
 
 # Classification
 topic: kotlin
-subtopics: [async, await, coroutines, networking, parallel]
+subtopics: [async, await, coroutines]
 question_kind: coding
 difficulty: medium
 
@@ -28,11 +28,95 @@ tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, perfo
 date created: Saturday, November 1st 2025, 9:25:31 am
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Как выполнить несколько сетевых запросов параллельно с помощью Kotlin корутин?
+
+---
 
 # Question (EN)
 > How do you make multiple network calls in parallel using Kotlin coroutines?
-# Вопрос (RU)
-> Как выполнить несколько сетевых запросов параллельно с помощью Kotlin корутин?
+## Ответ (RU)
+
+Выполнение параллельных сетевых запросов - распространенное требование в Android приложениях для улучшения производительности и сокращения времени загрузки.
+
+### 1. Использование `async` И `await`
+
+```kotlin
+suspend fun fetchUserData(userId: String): UserData = coroutineScope {
+    // Запускаем все запросы параллельно
+    val userDeferred = async { apiService.getUser(userId) }
+    val postsDeferred = async { apiService.getPosts(userId) }
+    val commentsDeferred = async { apiService.getComments("post1") }
+
+    // Ожидаем все результаты
+    UserData(
+        user = userDeferred.await(),
+        posts = postsDeferred.await(),
+        comments = commentsDeferred.await()
+    )
+}
+```
+
+### 2. Обработка Частичных Ошибок
+
+```kotlin
+suspend fun fetchUserDataWithErrorHandling(userId: String) = coroutineScope {
+    val userDeferred = async {
+        runCatching { apiService.getUser(userId) }
+            .fold(
+                onSuccess = { ParallelResult(data = it) },
+                onFailure = { ParallelResult(error = it as? Exception) }
+            )
+    }
+    // Продолжаем даже если один запрос упал
+}
+```
+
+### 3. Использование `awaitAll` Для Коллекций
+
+```kotlin
+suspend fun fetchMultipleUsers(userIds: List<String>): List<User> = coroutineScope {
+    userIds.map { userId ->
+        async { apiService.getUser(userId) }
+    }.awaitAll()
+}
+```
+
+### 4. Ограничение Параллельных Запросов
+
+```kotlin
+class ThrottledApiClient(maxConcurrent: Int = 5) {
+    private val semaphore = Semaphore(maxConcurrent)
+
+    suspend fun <T> throttled(block: suspend () -> T): T {
+        semaphore.acquire()
+        try {
+            return block()
+        } finally {
+            semaphore.release()
+        }
+    }
+}
+```
+
+### Лучшие Практики
+
+#### - ДЕЛАЙТЕ:
+
+- Используйте `coroutineScope` для структурированной конкурентности
+- Обрабатывайте ошибки должным образом
+- Используйте `supervisorScope` когда сбои независимы
+
+#### - НЕ ДЕЛАЙТЕ:
+
+- Не используйте GlobalScope
+- Не игнорируйте отмену
+- Не await в неправильном порядке
+
+### Сравнение Производительности
+
+- **Последовательно**: ~3 секунды (1s + 1s + 1s)
+- **Параллельно**: ~1 секунда (макс. из трех запросов)
 
 ---
 
@@ -483,91 +567,15 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Выполнение параллельных сетевых запросов - распространенное требование в Android приложениях для улучшения производительности и сокращения времени загрузки.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### 1. Использование `async` И `await`
-
-```kotlin
-suspend fun fetchUserData(userId: String): UserData = coroutineScope {
-    // Запускаем все запросы параллельно
-    val userDeferred = async { apiService.getUser(userId) }
-    val postsDeferred = async { apiService.getPosts(userId) }
-    val commentsDeferred = async { apiService.getComments("post1") }
-
-    // Ожидаем все результаты
-    UserData(
-        user = userDeferred.await(),
-        posts = postsDeferred.await(),
-        comments = commentsDeferred.await()
-    )
-}
-```
-
-### 2. Обработка Частичных Ошибок
-
-```kotlin
-suspend fun fetchUserDataWithErrorHandling(userId: String) = coroutineScope {
-    val userDeferred = async {
-        runCatching { apiService.getUser(userId) }
-            .fold(
-                onSuccess = { ParallelResult(data = it) },
-                onFailure = { ParallelResult(error = it as? Exception) }
-            )
-    }
-    // Продолжаем даже если один запрос упал
-}
-```
-
-### 3. Использование `awaitAll` Для Коллекций
-
-```kotlin
-suspend fun fetchMultipleUsers(userIds: List<String>): List<User> = coroutineScope {
-    userIds.map { userId ->
-        async { apiService.getUser(userId) }
-    }.awaitAll()
-}
-```
-
-### 4. Ограничение Параллельных Запросов
-
-```kotlin
-class ThrottledApiClient(maxConcurrent: Int = 5) {
-    private val semaphore = Semaphore(maxConcurrent)
-
-    suspend fun <T> throttled(block: suspend () -> T): T {
-        semaphore.acquire()
-        try {
-            return block()
-        } finally {
-            semaphore.release()
-        }
-    }
-}
-```
-
-### Лучшие Практики
-
-#### - ДЕЛАЙТЕ:
-
-- Используйте `coroutineScope` для структурированной конкурентности
-- Обрабатывайте ошибки должным образом
-- Используйте `supervisorScope` когда сбои независимы
-
-#### - НЕ ДЕЛАЙТЕ:
-
-- Не используйте GlobalScope
-- Не игнорируйте отмену
-- Не await в неправильном порядке
-
-### Сравнение Производительности
-
-- **Последовательно**: ~3 секунды (1s + 1s + 1s)
-- **Параллельно**: ~1 секунда (макс. из трех запросов)
-
----
-
+## References
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [async Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)
 ## Related Questions
 
 ### Related (Medium)
@@ -582,6 +590,3 @@ class ThrottledApiClient(maxConcurrent: Int = 5) {
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 
-## References
-- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
-- [async Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)

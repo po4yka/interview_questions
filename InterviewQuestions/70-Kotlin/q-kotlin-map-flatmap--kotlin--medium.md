@@ -1,11 +1,11 @@
 ---
 id: kotlin-032
 title: "map() vs flatMap() in Kotlin / map() против flatMap() в Kotlin"
-aliases: []
+aliases: ["map() vs flatMap() in Kotlin, map() против flatMap() в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [collections, flatmap, higher-order-functions, map, transformations]
+subtopics: [collections, flatmap, higher-order-functions]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,146 @@ tags: [collections, difficulty/medium, flatmap, higher-order-functions, kotlin, 
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> В чем разница между map() и flatMap() в Kotlin?
+
+---
 
 # Question (EN)
 > What is the difference between map() and flatMap() in Kotlin?
-# Вопрос (RU)
-> В чем разница между map() и flatMap() в Kotlin?
+## Ответ (RU)
+
+### map()
+
+`map()` возвращает список, содержащий результаты применения заданной функции преобразования к каждому элементу в исходном массиве.
+
+```kotlin
+val numbers = listOf(1, 2, 3)
+println(numbers.map { it * it })
+// Вывод: [1, 4, 9]
+```
+
+### flatMap()
+
+`flatMap()` возвращает единый список всех элементов, полученных из результатов вызова функции преобразования для каждого элемента исходного массива.
+
+```kotlin
+val list = listOf("123", "45")
+println(list.flatMap { it.toList() })
+// Вывод: [1, 2, 3, 4, 5]
+```
+
+### Ключевое Различие: Выравнивание Вложенных Коллекций
+
+Основное различие становится ясным при работе с вложенными коллекциями. `flatMap()` объединяет вложенные коллекции в один плоский список, в то время как `map()` сохраняет вложенную структуру.
+
+#### Подробный Пример
+
+Рассмотрим этот пример с командами и игроками:
+
+```kotlin
+// Создаём класс Player
+data class Player(val name: String)
+
+// Создаём класс Team со списком игроков
+data class Team(val players: List<Player>)
+
+fun main() {
+    val tournament = listOf(
+        Team(listOf(
+            Player("Team1 first player"),
+            Player("Team1 second player")
+        )),
+        Team(listOf(
+            Player("Team2 first player"),
+            Player("Team2 second player")
+        ))
+    )
+
+    // flatMap - выравнивает вложенную структуру
+    val flatMapResult = tournament.flatMap { it.players }
+    println(flatMapResult)
+
+    // map - сохраняет вложенную структуру
+    val mapResult = tournament.map { it.players }
+    println(mapResult)
+}
+```
+
+**Вывод:**
+
+```kotlin
+// Результат flatMap - один плоский список всех игроков
+[Player(name=Team1 first player), Player(name=Team1 second player),
+ Player(name=Team2 first player), Player(name=Team2 second player)]
+
+// Результат map - список списков (вложенная структура сохранена)
+[[Player(name=Team1 first player), Player(name=Team1 second player)],
+ [Player(name=Team2 first player), Player(name=Team2 second player)]]
+```
+
+### Когда Использовать Каждую Функцию
+
+#### Используйте map() Когда:
+- Вы хотите преобразовать каждый элемент, но сохранить ту же структуру
+- Каждый элемент преобразуется ровно в один результат
+- Вам не нужно выравнивать вложенные коллекции
+
+```kotlin
+val prices = listOf(100, 200, 300)
+val withTax = prices.map { it * 1.2 }
+// [120.0, 240.0, 360.0]
+
+val users = listOf("alice", "bob", "charlie")
+val emails = users.map { "$it@example.com" }
+// [alice@example.com, bob@example.com, charlie@example.com]
+```
+
+#### Используйте flatMap() Когда:
+- Ваше преобразование возвращает коллекцию для каждого элемента
+- Вы хотите выровнять вложенные коллекции в один список
+- Вам нужно "расширить" элементы (один элемент становится несколькими)
+
+```kotlin
+// Каждое слово становится списком символов, затем выравнивается
+val words = listOf("hi", "bye")
+val chars = words.flatMap { it.toList() }
+// [h, i, b, y, e]
+
+// Каждый диапазон расширяется до нескольких чисел
+val ranges = listOf(1..3, 5..7)
+val numbers = ranges.flatMap { it.toList() }
+// [1, 2, 3, 5, 6, 7]
+
+// Получить все теги из всех постов (выровненные)
+data class Post(val tags: List<String>)
+val posts = listOf(
+    Post(listOf("kotlin", "android")),
+    Post(listOf("java", "kotlin"))
+)
+val allTags = posts.flatMap { it.tags }
+// [kotlin, android, java, kotlin]
+```
+
+### Визуальное Сравнение
+
+```kotlin
+val data = listOf(listOf(1, 2), listOf(3, 4))
+
+// map - преобразует, но сохраняет структуру
+data.map { it }
+// Результат: [[1, 2], [3, 4]] - всё ещё вложенный
+
+// flatMap - преобразует И выравнивает
+data.flatMap { it }
+// Результат: [1, 2, 3, 4] - выровнен в один список
+```
+
+### Соображения Производительности
+
+`flatMap()` имеет немного больше накладных расходов, чем `map()`, потому что ему нужно выравнивать результаты. Используйте его только тогда, когда вам действительно нужно поведение выравнивания.
+
+**Краткое содержание**: `map()` преобразует каждый элемент один-к-одному и сохраняет структуру коллекции. `flatMap()` преобразует каждый элемент в коллекцию, а затем выравнивает все результаты в один список. Используйте `map()` для простых преобразований, `flatMap()` когда нужно выровнять вложенные коллекции или расширить элементы.
 
 ---
 
@@ -170,141 +305,11 @@ data.flatMap { it }
 
 **English Summary**: `map()` transforms each element one-to-one and preserves collection structure. `flatMap()` transforms each element to a collection and then flattens all results into a single list. Use `map()` for simple transformations, `flatMap()` when you need to flatten nested collections or expand elements.
 
-## Ответ (RU)
+## Follow-ups
 
-### map()
-
-`map()` возвращает список, содержащий результаты применения заданной функции преобразования к каждому элементу в исходном массиве.
-
-```kotlin
-val numbers = listOf(1, 2, 3)
-println(numbers.map { it * it })
-// Вывод: [1, 4, 9]
-```
-
-### flatMap()
-
-`flatMap()` возвращает единый список всех элементов, полученных из результатов вызова функции преобразования для каждого элемента исходного массива.
-
-```kotlin
-val list = listOf("123", "45")
-println(list.flatMap { it.toList() })
-// Вывод: [1, 2, 3, 4, 5]
-```
-
-### Ключевое Различие: Выравнивание Вложенных Коллекций
-
-Основное различие становится ясным при работе с вложенными коллекциями. `flatMap()` объединяет вложенные коллекции в один плоский список, в то время как `map()` сохраняет вложенную структуру.
-
-#### Подробный Пример
-
-Рассмотрим этот пример с командами и игроками:
-
-```kotlin
-// Создаём класс Player
-data class Player(val name: String)
-
-// Создаём класс Team со списком игроков
-data class Team(val players: List<Player>)
-
-fun main() {
-    val tournament = listOf(
-        Team(listOf(
-            Player("Team1 first player"),
-            Player("Team1 second player")
-        )),
-        Team(listOf(
-            Player("Team2 first player"),
-            Player("Team2 second player")
-        ))
-    )
-
-    // flatMap - выравнивает вложенную структуру
-    val flatMapResult = tournament.flatMap { it.players }
-    println(flatMapResult)
-
-    // map - сохраняет вложенную структуру
-    val mapResult = tournament.map { it.players }
-    println(mapResult)
-}
-```
-
-**Вывод:**
-
-```kotlin
-// Результат flatMap - один плоский список всех игроков
-[Player(name=Team1 first player), Player(name=Team1 second player),
- Player(name=Team2 first player), Player(name=Team2 second player)]
-
-// Результат map - список списков (вложенная структура сохранена)
-[[Player(name=Team1 first player), Player(name=Team1 second player)],
- [Player(name=Team2 first player), Player(name=Team2 second player)]]
-```
-
-### Когда Использовать Каждую Функцию
-
-#### Используйте map() Когда:
-- Вы хотите преобразовать каждый элемент, но сохранить ту же структуру
-- Каждый элемент преобразуется ровно в один результат
-- Вам не нужно выравнивать вложенные коллекции
-
-```kotlin
-val prices = listOf(100, 200, 300)
-val withTax = prices.map { it * 1.2 }
-// [120.0, 240.0, 360.0]
-
-val users = listOf("alice", "bob", "charlie")
-val emails = users.map { "$it@example.com" }
-// [alice@example.com, bob@example.com, charlie@example.com]
-```
-
-#### Используйте flatMap() Когда:
-- Ваше преобразование возвращает коллекцию для каждого элемента
-- Вы хотите выровнять вложенные коллекции в один список
-- Вам нужно "расширить" элементы (один элемент становится несколькими)
-
-```kotlin
-// Каждое слово становится списком символов, затем выравнивается
-val words = listOf("hi", "bye")
-val chars = words.flatMap { it.toList() }
-// [h, i, b, y, e]
-
-// Каждый диапазон расширяется до нескольких чисел
-val ranges = listOf(1..3, 5..7)
-val numbers = ranges.flatMap { it.toList() }
-// [1, 2, 3, 5, 6, 7]
-
-// Получить все теги из всех постов (выровненные)
-data class Post(val tags: List<String>)
-val posts = listOf(
-    Post(listOf("kotlin", "android")),
-    Post(listOf("java", "kotlin"))
-)
-val allTags = posts.flatMap { it.tags }
-// [kotlin, android, java, kotlin]
-```
-
-### Визуальное Сравнение
-
-```kotlin
-val data = listOf(listOf(1, 2), listOf(3, 4))
-
-// map - преобразует, но сохраняет структуру
-data.map { it }
-// Результат: [[1, 2], [3, 4]] - всё ещё вложенный
-
-// flatMap - преобразует И выравнивает
-data.flatMap { it }
-// Результат: [1, 2, 3, 4] - выровнен в один список
-```
-
-### Соображения Производительности
-
-`flatMap()` имеет немного больше накладных расходов, чем `map()`, потому что ему нужно выравнивать результаты. Используйте его только тогда, когда вам действительно нужно поведение выравнивания.
-
-**Краткое содержание**: `map()` преобразует каждый элемент один-к-одному и сохраняет структуру коллекции. `flatMap()` преобразует каждый элемент в коллекцию, а затем выравнивает все результаты в один список. Используйте `map()` для простых преобразований, `flatMap()` когда нужно выровнять вложенные коллекции или расширить элементы.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [map() - Kotlin Collections API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html)

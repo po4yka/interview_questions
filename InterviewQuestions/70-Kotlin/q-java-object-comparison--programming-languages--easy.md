@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-flow-map-operator--programming-languages--medium, q-observer-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -17,14 +17,20 @@ tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, pro
 date created: Saturday, October 4th 2025, 3:02:36 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Как Сравниваются Объекты В Java?
+
+# Вопрос (RU)
+> Как сравниваются объекты в Java?
+
+---
 
 # Question (EN)
 > How are objects compared in Java?
 
-# Вопрос (RU)
-> Как сравниваются объекты в Java?
+## Ответ (RU)
+
+По умолчанию через `==` — сравнение ссылок (адресов). Через `.equals()` — логическое сравнение содержимого. При переопределении `.equals()` рекомендуется также переопределить `.hashCode()`.
+
 
 ---
 
@@ -169,12 +175,15 @@ class Bad {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-По умолчанию через `==` — сравнение ссылок (адресов). Через `.equals()` — логическое сравнение содержимого. При переопределении `.equals()` рекомендуется также переопределить `.hashCode()`.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
+## References
 
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

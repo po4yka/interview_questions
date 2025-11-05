@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-what-is-flow--programming-languages--medium, q-what-is-job-object--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed
 date created: Friday, October 3rd 2025, 4:39:28 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Какие Есть Ограничения У Sealed Классов?
-
-# Question (EN)
-> What are the limitations of sealed classes?
 
 # Вопрос (RU)
 > Какие есть ограничения у sealed классов?
 
 ---
+
+# Question (EN)
+> What are the limitations of sealed classes?
+
+## Ответ (RU)
+
+Ограничения sealed классов: все подтипы должны быть определены в том же файле, sealed класс не может быть интерфейсом или абстрактным классом напрямую, sealed классы и их подтипы не могут быть private, sealed классы не поддерживают наследование от других классов кроме Any и могут использоваться только для классов и объектов но не интерфейсов. Также sealed классы обеспечивают исчерпывающие выражения when, полный контроль над иерархией классов и поддержку сопоставления с образцом.
 
 ## Answer (EN)
 
@@ -34,9 +37,15 @@ Sealed class limitations: all subtypes must be defined in the same file, sealed 
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Ограничения sealed классов: все подтипы должны быть определены в том же файле, sealed класс не может быть интерфейсом или абстрактным классом напрямую, sealed классы и их подтипы не могут быть private, sealed классы не поддерживают наследование от других классов кроме Any и могут использоваться только для классов и объектов но не интерфейсов. Также sealed классы обеспечивают исчерпывающие выражения when, полный контроль над иерархией классов и поддержку сопоставления с образцом.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

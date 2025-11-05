@@ -1,7 +1,7 @@
 ---
 id: kotlin-116
 title: "CoroutineScope Basics and Usage / Основы CoroutineScope и использование"
-aliases: []
+aliases: ["CoroutineScope Basics and Usage, Основы CoroutineScope и использование"]
 
 # Classification
 topic: kotlin
@@ -28,13 +28,57 @@ tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 3:39:12 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140030
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140030
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140030
+## Ответ (RU)
 
+
+CoroutineScope определяет жизненный цикл и контекст для корутин. Каждая корутина выполняется внутри scope.
+
+### Создание Scopes
+```kotlin
+// Кастомный scope
+val scope = CoroutineScope(Dispatchers.Main)
+
+// Android lifecycle scopes
+lifecycleScope.launch { }
+viewModelScope.launch { }
+
+// Временный scope
+coroutineScope {
+    // Структурированная конкурентность
+}
+```
+
+### Отмена Scope
+```kotlin
+val scope = CoroutineScope(Job())
+scope.launch { /* работа */ }
+scope.cancel()  // Отменяет все дочерние корутины
+```
+
+### Структурированная Конкурентность
+```kotlin
+suspend fun fetchData() = coroutineScope {
+    val data1 = async { fetch1() }
+    val data2 = async { fetch2() }
+    combine(data1.await(), data2.await())
+}  // Ждет все дочерние
+```
+
+### Лучшие Практики
+1. Используйте lifecycle-aware scopes в Android
+2. Всегда отменяйте кастомные scopes
+3. Предпочитайте `coroutineScope` вместо `GlobalScope`
+4. Используйте `supervisorScope` когда дочерние должны быть независимы
+
+---
 ---
 
 ## Answer (EN)
@@ -78,51 +122,6 @@ suspend fun fetchData() = coroutineScope {
 2. Always cancel custom scopes
 3. Prefer `coroutineScope` over `GlobalScope`
 4. Use `supervisorScope` when children should be independent
-
----
----
-
-## Ответ (RU)
-
-
-CoroutineScope определяет жизненный цикл и контекст для корутин. Каждая корутина выполняется внутри scope.
-
-### Создание Scopes
-```kotlin
-// Кастомный scope
-val scope = CoroutineScope(Dispatchers.Main)
-
-// Android lifecycle scopes
-lifecycleScope.launch { }
-viewModelScope.launch { }
-
-// Временный scope
-coroutineScope {
-    // Структурированная конкурентность
-}
-```
-
-### Отмена Scope
-```kotlin
-val scope = CoroutineScope(Job())
-scope.launch { /* работа */ }
-scope.cancel()  // Отменяет все дочерние корутины
-```
-
-### Структурированная Конкурентность
-```kotlin
-suspend fun fetchData() = coroutineScope {
-    val data1 = async { fetch1() }
-    val data2 = async { fetch2() }
-    combine(data1.await(), data2.await())
-}  // Ждет все дочерние
-```
-
-### Лучшие Практики
-1. Используйте lifecycle-aware scopes в Android
-2. Всегда отменяйте кастомные scopes
-3. Предпочитайте `coroutineScope` вместо `GlobalScope`
-4. Используйте `supervisorScope` когда дочерние должны быть независимы
 
 ---
 ---

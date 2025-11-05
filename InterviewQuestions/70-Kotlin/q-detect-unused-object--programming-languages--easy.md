@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-how-system-knows-weakreference-can-be-cleared--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -18,13 +18,19 @@ date created: Friday, October 31st 2025, 6:29:22 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
-# Как По Объекту Понять Что Он Не Используется?
+# Вопрос (RU)
+> Как по объекту понять что он не используется?
 
 # Question (EN)
 > How to detect that an object is no longer used?
 
-# Вопрос (RU)
-> Как по объекту понять что он не используется?
+---
+
+## Ответ (RU)
+
+Используйте WeakReference для определения был ли объект освобожден сборщиком мусора. Также проверьте отсутствие сильных ссылок и используйте ObjectWatcher из LeakCanary для отслеживания.
+
+Все примеры кода из английской версии применимы и к русской версии.
 
 ---
 
@@ -75,10 +81,10 @@ class MyFragment : Fragment() {
 **3. Check for Strong References**
 
 Object is unused when:
-- - No local variables reference it
-- - No static fields reference it
-- - No other objects reference it
-- - Only WeakReferences exist
+- No local variables reference it
+- No static fields reference it
+- No other objects reference it
+- Only WeakReferences exist
 
 **Example:**
 
@@ -111,11 +117,15 @@ fun testGarbageCollection() {
 - Use **LeakCanary** for automatic leak detection in Android
 - Ensure **no strong references** exist for object to be collected
 
----
+## Follow-ups
 
-## Ответ (RU)
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-Используйте WeakReference для определения был ли объект освобожден сборщиком мусора. Также проверьте отсутствие сильных ссылок и используйте ObjectWatcher из LeakCanary для отслеживания.
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

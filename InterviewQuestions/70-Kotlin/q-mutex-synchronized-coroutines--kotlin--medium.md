@@ -17,12 +17,329 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:12 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
+
+---
 
 # Question (EN)
 > What is the difference between `Mutex` and `synchronized` in Kotlin coroutines, and when should you use each?
 
-# Вопрос (RU)
-> В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?
+## Ответ (RU)
+
+При работе с общим изменяемым состоянием в Kotlin корутинах необходимы потокобезопасные механизмы синхронизации. Традиционные Java блоки `synchronized` и Kotlin аннотация `@Synchronized` блокируют потоки, что неэффективно в мире корутин. **Mutex** предоставляет альтернативу на основе приостановки, которая не блокирует потоки.
+
+
+
+### Что Такое Mutex?
+
+**Mutex** (Взаимное исключение) - это примитив синхронизации из `kotlinx.coroutines.sync`, который обеспечивает взаимное исключение без блокировки потоков. Вместо блокировки он **приостанавливает** корутину, пока блокировка не станет доступной.
+
+```kotlin
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+val mutex = Mutex()
+var counter = 0
+
+suspend fun incrementCounter() {
+    mutex.withLock {
+        counter++
+    }
+}
+```
+
+### Mutex Vs Synchronized: Ключевые Различия
+
+| Характеристика | Mutex | synchronized |
+|----------------|-------|--------------|
+| **Блокировка** | Приостанавливает корутину (неблокирующая) | Блокирует поток |
+| **Использование** | Только `suspend` функции | Любая функция |
+| **Эффективность потоков** | Высокая (не блокирует потоки) | Низкая (блокирует потоки) |
+| **Реентерабельность** |  НЕТ (будет deadlock) |  ДА |
+| **Справедливость** | Опционально (по умолчанию: несправедливый) | Зависит от JVM |
+| **Отмена** | Поддерживает отмену корутины | Нет поддержки отмены |
+| **Try lock** | Доступен `tryLock()` | `synchronized` не поддерживает |
+| **Производительность** | Лучше при высокой конкуренции | Лучше при очень низкой конкуренции |
+
+### Базовое Использование Mutex
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+class BankAccount {
+    private val mutex = Mutex()
+    private var balance = 0
+
+    suspend fun deposit(amount: Int) {
+        mutex.withLock {
+            val current = balance
+            delay(10) // Имитация обработки
+            balance = current + amount
+        }
+    }
+
+    suspend fun withdraw(amount: Int): Boolean {
+        return mutex.withLock {
+            if (balance >= amount) {
+                val current = balance
+                delay(10) // Имитация обработки
+                balance = current - amount
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    suspend fun getBalance(): Int {
+        return mutex.withLock { balance }
+    }
+}
+
+// Использование
+suspend fun main() = coroutineScope {
+    val account = BankAccount()
+
+    // Запускаем 100 конкурентных депозитов
+    val jobs = List(100) { i ->
+        launch {
+            account.deposit(10)
+        }
+    }
+
+    jobs.joinAll()
+    println("Итоговый баланс: ${account.getBalance()}") // Всегда 1000
+}
+```
+
+### Почему Mutex НЕ Реентерабельный (Критично!)
+
+**Реентерабельность** означает, что один и тот же поток может захватить блокировку несколько раз. Mutex **НЕ реентерабельный** и приведет к deadlock:
+
+```kotlin
+val mutex = Mutex()
+
+suspend fun outer() {
+    mutex.withLock {
+        println("Outer захватил блокировку")
+        inner() // DEADLOCK! Попытка захватить ту же блокировку
+    }
+}
+
+suspend fun inner() {
+    mutex.withLock { // Это приостановится навсегда
+        println("Inner захватил блокировку")
+    }
+}
+
+// НЕ ДЕЛАЙТЕ ТАК - Будет deadlock!
+// outer()
+```
+
+**Решение:** Не вкладывайте вызовы `withLock` на одном и том же mutex. Рефакторите код:
+
+```kotlin
+val mutex = Mutex()
+private var data = 0
+
+suspend fun outer() {
+    mutex.withLock {
+        data++
+    }
+    innerWithoutLock() // Вызываем версию без блокировки
+}
+
+private fun innerWithoutLock() {
+    // Работаем с данными без блокировки
+    // Вызывающая сторона отвечает за синхронизацию
+}
+```
+
+### Mutex Vs AtomicInteger/AtomicReference
+
+Для простых операций типа увеличения счетчика используйте **атомарные типы** вместо Mutex:
+
+```kotlin
+import java.util.concurrent.atomic.AtomicInteger
+
+//  ХОРОШО: Используйте atomic для простого счетчика
+val atomicCounter = AtomicInteger(0)
+
+suspend fun increment() {
+    atomicCounter.incrementAndGet()
+}
+
+//  ПЛОХО: Mutex излишен для простых операций
+val mutex = Mutex()
+var counter = 0
+
+suspend fun incrementWithMutex() {
+    mutex.withLock {
+        counter++
+    }
+}
+```
+
+**Когда использовать Mutex вместо Atomic:**
+- Несколько операций должны быть атомарными вместе
+- Сложные трансформации состояния
+- Состояние зависит от нескольких переменных
+
+```kotlin
+class UserSession {
+    private val mutex = Mutex()
+    private var userId: String? = null
+    private var sessionToken: String? = null
+    private var lastActivity: Long = 0
+
+    // Все три должны обновляться атомарно
+    suspend fun login(id: String, token: String) {
+        mutex.withLock {
+            userId = id
+            sessionToken = token
+            lastActivity = System.currentTimeMillis()
+        }
+    }
+
+    suspend fun getSession(): Triple<String?, String?, Long> {
+        return mutex.withLock {
+            Triple(userId, sessionToken, lastActivity)
+        }
+    }
+}
+```
+
+### Производительность
+
+**Производительность Mutex:**
+- Низкая конкуренция: ~10-20нс накладные расходы на блокировку (очень быстро)
+- Высокая конкуренция: Корутины приостанавливаются, потоки остаются свободными
+- Масштабируемость: Отличная (1000и корутин конкурируют за блокировку)
+
+**Производительность synchronized:**
+- Низкая конкуренция: ~5-10нс накладные расходы (самый быстрый)
+- Высокая конкуренция: Потоки блокируются, тратя ресурсы ОС
+- Масштабируемость: Плохая (100и потоков конкурируют за блокировку)
+
+### Общие Паттерны
+
+**Паттерн 1: Общий счетчик**
+
+```kotlin
+class RequestCounter {
+    private val mutex = Mutex()
+    private var count = 0
+
+    suspend fun increment(): Int {
+        return mutex.withLock {
+            ++count
+        }
+    }
+
+    suspend fun get(): Int {
+        return mutex.withLock { count }
+    }
+}
+```
+
+**Паттерн 2: Потокобезопасный кеш**
+
+```kotlin
+class CacheWithMutex<K, V> {
+    private val mutex = Mutex()
+    private val cache = mutableMapOf<K, V>()
+
+    suspend fun get(key: K): V? {
+        return mutex.withLock {
+            cache[key]
+        }
+    }
+
+    suspend fun put(key: K, value: V) {
+        mutex.withLock {
+            cache[key] = value
+        }
+    }
+
+    suspend fun getOrPut(key: K, defaultValue: suspend () -> V): V {
+        // Сначала проверяем без долгого удержания блокировки
+        mutex.withLock {
+            cache[key]?.let { return it }
+        }
+
+        // Вычисляем вне блокировки (если дорого)
+        val computed = defaultValue()
+
+        // Сохраняем результат
+        mutex.withLock {
+            cache.getOrPut(key) { computed }
+        }
+    }
+}
+```
+
+### Реальный Пример Android ViewModel
+
+```kotlin
+class UserProfileViewModel : ViewModel() {
+    private val mutex = Mutex()
+
+    private val _profileState = MutableStateFlow<ProfileState>(ProfileState.Loading)
+    val profileState: StateFlow<ProfileState> = _profileState.asStateFlow()
+
+    private var cachedProfile: UserProfile? = null
+    private var lastFetchTime = 0L
+
+    fun loadProfile(userId: String, forceRefresh: Boolean = false) {
+        viewModelScope.launch {
+            mutex.withLock {
+                val now = System.currentTimeMillis()
+                val cacheValid = (now - lastFetchTime) < 5.minutes.inWholeMilliseconds
+
+                // Возвращаем кешированное, если валидно и не форсируем обновление
+                if (!forceRefresh && cacheValid && cachedProfile != null) {
+                    _profileState.value = ProfileState.Success(cachedProfile!!)
+                    return@launch
+                }
+
+                // Загружаем свежие данные
+                _profileState.value = ProfileState.Loading
+            }
+
+            // Сетевой вызов вне блокировки
+            try {
+                val profile = fetchProfileFromNetwork(userId)
+
+                mutex.withLock {
+                    cachedProfile = profile
+                    lastFetchTime = System.currentTimeMillis()
+                    _profileState.value = ProfileState.Success(profile)
+                }
+            } catch (e: Exception) {
+                _profileState.value = ProfileState.Error(e.message ?: "Неизвестная ошибка")
+            }
+        }
+    }
+
+    private suspend fun fetchProfileFromNetwork(userId: String): UserProfile {
+        delay(1000) // Имитация сетевого вызова
+        return UserProfile(userId, "John Doe", "john@example.com")
+    }
+}
+```
+
+### Ключевые Выводы
+
+1. **Mutex приостанавливает, synchronized блокирует** - Mutex эффективнее для корутин
+2. **Mutex НЕ реентерабельный** - Избегайте вложенных блокировок
+3. **Используйте `withLock`** - Обрабатывает отмену и гарантирует разблокировку
+4. **Держите критические секции маленькими** - Выполняйте дорогую работу вне блокировки
+5. **Предпочитайте атомарные типы для простых операций** - Mutex избыточен для счетчиков
+6. **Тестируйте конкурентный доступ** - Состояния гонки тонкие
+7. **Документируйте зависимости блокировок** - Предотвращайте deadlock
 
 ---
 
@@ -703,324 +1020,6 @@ class BankAccountTest {
 5. **Prefer atomic types for simple operations** - Mutex is overkill for counters
 6. **Test concurrent access** - Race conditions are subtle
 7. **Document lock dependencies** - Prevent deadlocks
-
----
-
-## Ответ (RU)
-
-При работе с общим изменяемым состоянием в Kotlin корутинах необходимы потокобезопасные механизмы синхронизации. Традиционные Java блоки `synchronized` и Kotlin аннотация `@Synchronized` блокируют потоки, что неэффективно в мире корутин. **Mutex** предоставляет альтернативу на основе приостановки, которая не блокирует потоки.
-
-
-
-### Что Такое Mutex?
-
-**Mutex** (Взаимное исключение) - это примитив синхронизации из `kotlinx.coroutines.sync`, который обеспечивает взаимное исключение без блокировки потоков. Вместо блокировки он **приостанавливает** корутину, пока блокировка не станет доступной.
-
-```kotlin
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-
-val mutex = Mutex()
-var counter = 0
-
-suspend fun incrementCounter() {
-    mutex.withLock {
-        counter++
-    }
-}
-```
-
-### Mutex Vs Synchronized: Ключевые Различия
-
-| Характеристика | Mutex | synchronized |
-|----------------|-------|--------------|
-| **Блокировка** | Приостанавливает корутину (неблокирующая) | Блокирует поток |
-| **Использование** | Только `suspend` функции | Любая функция |
-| **Эффективность потоков** | Высокая (не блокирует потоки) | Низкая (блокирует потоки) |
-| **Реентерабельность** |  НЕТ (будет deadlock) |  ДА |
-| **Справедливость** | Опционально (по умолчанию: несправедливый) | Зависит от JVM |
-| **Отмена** | Поддерживает отмену корутины | Нет поддержки отмены |
-| **Try lock** | Доступен `tryLock()` | `synchronized` не поддерживает |
-| **Производительность** | Лучше при высокой конкуренции | Лучше при очень низкой конкуренции |
-
-### Базовое Использование Mutex
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-
-class BankAccount {
-    private val mutex = Mutex()
-    private var balance = 0
-
-    suspend fun deposit(amount: Int) {
-        mutex.withLock {
-            val current = balance
-            delay(10) // Имитация обработки
-            balance = current + amount
-        }
-    }
-
-    suspend fun withdraw(amount: Int): Boolean {
-        return mutex.withLock {
-            if (balance >= amount) {
-                val current = balance
-                delay(10) // Имитация обработки
-                balance = current - amount
-                true
-            } else {
-                false
-            }
-        }
-    }
-
-    suspend fun getBalance(): Int {
-        return mutex.withLock { balance }
-    }
-}
-
-// Использование
-suspend fun main() = coroutineScope {
-    val account = BankAccount()
-
-    // Запускаем 100 конкурентных депозитов
-    val jobs = List(100) { i ->
-        launch {
-            account.deposit(10)
-        }
-    }
-
-    jobs.joinAll()
-    println("Итоговый баланс: ${account.getBalance()}") // Всегда 1000
-}
-```
-
-### Почему Mutex НЕ Реентерабельный (Критично!)
-
-**Реентерабельность** означает, что один и тот же поток может захватить блокировку несколько раз. Mutex **НЕ реентерабельный** и приведет к deadlock:
-
-```kotlin
-val mutex = Mutex()
-
-suspend fun outer() {
-    mutex.withLock {
-        println("Outer захватил блокировку")
-        inner() // DEADLOCK! Попытка захватить ту же блокировку
-    }
-}
-
-suspend fun inner() {
-    mutex.withLock { // Это приостановится навсегда
-        println("Inner захватил блокировку")
-    }
-}
-
-// НЕ ДЕЛАЙТЕ ТАК - Будет deadlock!
-// outer()
-```
-
-**Решение:** Не вкладывайте вызовы `withLock` на одном и том же mutex. Рефакторите код:
-
-```kotlin
-val mutex = Mutex()
-private var data = 0
-
-suspend fun outer() {
-    mutex.withLock {
-        data++
-    }
-    innerWithoutLock() // Вызываем версию без блокировки
-}
-
-private fun innerWithoutLock() {
-    // Работаем с данными без блокировки
-    // Вызывающая сторона отвечает за синхронизацию
-}
-```
-
-### Mutex Vs AtomicInteger/AtomicReference
-
-Для простых операций типа увеличения счетчика используйте **атомарные типы** вместо Mutex:
-
-```kotlin
-import java.util.concurrent.atomic.AtomicInteger
-
-//  ХОРОШО: Используйте atomic для простого счетчика
-val atomicCounter = AtomicInteger(0)
-
-suspend fun increment() {
-    atomicCounter.incrementAndGet()
-}
-
-//  ПЛОХО: Mutex излишен для простых операций
-val mutex = Mutex()
-var counter = 0
-
-suspend fun incrementWithMutex() {
-    mutex.withLock {
-        counter++
-    }
-}
-```
-
-**Когда использовать Mutex вместо Atomic:**
-- Несколько операций должны быть атомарными вместе
-- Сложные трансформации состояния
-- Состояние зависит от нескольких переменных
-
-```kotlin
-class UserSession {
-    private val mutex = Mutex()
-    private var userId: String? = null
-    private var sessionToken: String? = null
-    private var lastActivity: Long = 0
-
-    // Все три должны обновляться атомарно
-    suspend fun login(id: String, token: String) {
-        mutex.withLock {
-            userId = id
-            sessionToken = token
-            lastActivity = System.currentTimeMillis()
-        }
-    }
-
-    suspend fun getSession(): Triple<String?, String?, Long> {
-        return mutex.withLock {
-            Triple(userId, sessionToken, lastActivity)
-        }
-    }
-}
-```
-
-### Производительность
-
-**Производительность Mutex:**
-- Низкая конкуренция: ~10-20нс накладные расходы на блокировку (очень быстро)
-- Высокая конкуренция: Корутины приостанавливаются, потоки остаются свободными
-- Масштабируемость: Отличная (1000и корутин конкурируют за блокировку)
-
-**Производительность synchronized:**
-- Низкая конкуренция: ~5-10нс накладные расходы (самый быстрый)
-- Высокая конкуренция: Потоки блокируются, тратя ресурсы ОС
-- Масштабируемость: Плохая (100и потоков конкурируют за блокировку)
-
-### Общие Паттерны
-
-**Паттерн 1: Общий счетчик**
-
-```kotlin
-class RequestCounter {
-    private val mutex = Mutex()
-    private var count = 0
-
-    suspend fun increment(): Int {
-        return mutex.withLock {
-            ++count
-        }
-    }
-
-    suspend fun get(): Int {
-        return mutex.withLock { count }
-    }
-}
-```
-
-**Паттерн 2: Потокобезопасный кеш**
-
-```kotlin
-class CacheWithMutex<K, V> {
-    private val mutex = Mutex()
-    private val cache = mutableMapOf<K, V>()
-
-    suspend fun get(key: K): V? {
-        return mutex.withLock {
-            cache[key]
-        }
-    }
-
-    suspend fun put(key: K, value: V) {
-        mutex.withLock {
-            cache[key] = value
-        }
-    }
-
-    suspend fun getOrPut(key: K, defaultValue: suspend () -> V): V {
-        // Сначала проверяем без долгого удержания блокировки
-        mutex.withLock {
-            cache[key]?.let { return it }
-        }
-
-        // Вычисляем вне блокировки (если дорого)
-        val computed = defaultValue()
-
-        // Сохраняем результат
-        mutex.withLock {
-            cache.getOrPut(key) { computed }
-        }
-    }
-}
-```
-
-### Реальный Пример Android ViewModel
-
-```kotlin
-class UserProfileViewModel : ViewModel() {
-    private val mutex = Mutex()
-
-    private val _profileState = MutableStateFlow<ProfileState>(ProfileState.Loading)
-    val profileState: StateFlow<ProfileState> = _profileState.asStateFlow()
-
-    private var cachedProfile: UserProfile? = null
-    private var lastFetchTime = 0L
-
-    fun loadProfile(userId: String, forceRefresh: Boolean = false) {
-        viewModelScope.launch {
-            mutex.withLock {
-                val now = System.currentTimeMillis()
-                val cacheValid = (now - lastFetchTime) < 5.minutes.inWholeMilliseconds
-
-                // Возвращаем кешированное, если валидно и не форсируем обновление
-                if (!forceRefresh && cacheValid && cachedProfile != null) {
-                    _profileState.value = ProfileState.Success(cachedProfile!!)
-                    return@launch
-                }
-
-                // Загружаем свежие данные
-                _profileState.value = ProfileState.Loading
-            }
-
-            // Сетевой вызов вне блокировки
-            try {
-                val profile = fetchProfileFromNetwork(userId)
-
-                mutex.withLock {
-                    cachedProfile = profile
-                    lastFetchTime = System.currentTimeMillis()
-                    _profileState.value = ProfileState.Success(profile)
-                }
-            } catch (e: Exception) {
-                _profileState.value = ProfileState.Error(e.message ?: "Неизвестная ошибка")
-            }
-        }
-    }
-
-    private suspend fun fetchProfileFromNetwork(userId: String): UserProfile {
-        delay(1000) // Имитация сетевого вызова
-        return UserProfile(userId, "John Doe", "john@example.com")
-    }
-}
-```
-
-### Ключевые Выводы
-
-1. **Mutex приостанавливает, synchronized блокирует** - Mutex эффективнее для корутин
-2. **Mutex НЕ реентерабельный** - Избегайте вложенных блокировок
-3. **Используйте `withLock`** - Обрабатывает отмену и гарантирует разблокировку
-4. **Держите критические секции маленькими** - Выполняйте дорогую работу вне блокировки
-5. **Предпочитайте атомарные типы для простых операций** - Mutex избыточен для счетчиков
-6. **Тестируйте конкурентный доступ** - Состояния гонки тонкие
-7. **Документируйте зависимости блокировок** - Предотвращайте deadlock
 
 ---
 

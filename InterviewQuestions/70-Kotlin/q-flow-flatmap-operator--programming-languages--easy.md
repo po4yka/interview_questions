@@ -3,13 +3,13 @@ id: lang-081
 title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 aliases: [Flow Flatmap Operator, Оператор flatMap для Flow]
 topic: programming-languages
-subtopics: [coroutines, flow, operators, reactive-programming]
+subtopics: [coroutines, flow, operators]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languag
 date created: Friday, October 31st 2025, 6:30:45 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Чем Воспользоваться Если Нужно Преобразовать Один Поток Данных В Другой Поток Данных
-
-# Question (EN)
-> What to use if you need to transform one data stream into another data stream?
 
 # Вопрос (RU)
 > Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных?
 
 ---
+
+# Question (EN)
+> What to use if you need to transform one data stream into another data stream?
+
+## Ответ (RU)
+
+Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
 
 ## Answer (EN)
 
@@ -52,9 +55,15 @@ flow {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

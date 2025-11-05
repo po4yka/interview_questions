@@ -17,38 +17,15 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
 date created: Friday, October 31st 2025, 6:29:12 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # viewModelScope Vs lifecycleScope
-
-# Question (EN)
-> What's the difference between viewModelScope and lifecycleScope? When should you use each?
 
 # Вопрос (RU)
 > В чём разница между viewModelScope и lifecycleScope? Когда использовать каждый из них?
 
 ---
 
-## Answer (EN)
-
-**viewModelScope** and **lifecycleScope** are lifecycle-aware coroutine scopes that auto-cancel coroutines when their owner is destroyed:
-
-**viewModelScope**: Bound to ViewModel, cancelled on `onCleared()`. **Survives configuration changes** (rotation). Use for: business logic, data loading, Flow collections, long-running tasks. Requires `lifecycle-viewmodel-ktx`.
-
-**lifecycleScope**: Bound to Activity/Fragment, cancelled on `ON_DESTROY`. **Does NOT survive rotation**. Use for: UI updates, one-time events, animations. Requires `lifecycle-runtime-ktx`.
-
-**Key difference**: On screen rotation, viewModelScope continues running (same ViewModel instance), lifecycleScope cancels and restarts (new Activity/Fragment).
-
-**Best practices**:
-- Use viewModelScope for data/logic
-- Use lifecycleScope with `repeatOnLifecycle(STARTED)` for UI updates
-- In Fragments, always use `viewLifecycleOwner.lifecycleScope` not `lifecycleScope`
-- Never use GlobalScope (creates leaks)
-- Create custom scope for Services
-- Handle exceptions with try-catch or CoroutineExceptionHandler
-
-**repeatOnLifecycle**: Stops collection in onStop(), resumes in onStart(). Prevents crashes from updating UI in background. Essential for Fragments to avoid view lifecycle issues.
-
----
+# Question (EN)
+> What's the difference between viewModelScope and lifecycleScope? When should you use each?
 
 ## Ответ (RU)
 
@@ -709,6 +686,38 @@ class BadViewModel : ViewModel() {
     }
 }
 ```
+
+## Answer (EN)
+
+**viewModelScope** and **lifecycleScope** are lifecycle-aware coroutine scopes that auto-cancel coroutines when their owner is destroyed:
+
+**viewModelScope**: Bound to ViewModel, cancelled on `onCleared()`. **Survives configuration changes** (rotation). Use for: business logic, data loading, Flow collections, long-running tasks. Requires `lifecycle-viewmodel-ktx`.
+
+**lifecycleScope**: Bound to Activity/Fragment, cancelled on `ON_DESTROY`. **Does NOT survive rotation**. Use for: UI updates, one-time events, animations. Requires `lifecycle-runtime-ktx`.
+
+**Key difference**: On screen rotation, viewModelScope continues running (same ViewModel instance), lifecycleScope cancels and restarts (new Activity/Fragment).
+
+**Best practices**:
+- Use viewModelScope for data/logic
+- Use lifecycleScope with `repeatOnLifecycle(STARTED)` for UI updates
+- In Fragments, always use `viewLifecycleOwner.lifecycleScope` not `lifecycleScope`
+- Never use GlobalScope (creates leaks)
+- Create custom scope for Services
+- Handle exceptions with try-catch or CoroutineExceptionHandler
+
+**repeatOnLifecycle**: Stops collection in onStop(), resumes in onStart(). Prevents crashes from updating UI in background. Essential for Fragments to avoid view lifecycle issues.
+
+---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

@@ -1,11 +1,11 @@
 ---
 id: kotlin-115
 title: "Room Database with Coroutines and Flow / Room БД с корутинами и Flow"
-aliases: []
+aliases: ["Room Database with Coroutines and Flow, Room БД с корутинами и Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, database, flow, room]
+subtopics: [android, coroutines, database]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,39 @@ tags: [android, coroutines, database, difficulty/medium, flow, kotlin, room]
 date created: Sunday, October 12th 2025, 3:39:19 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как использовать Room БД с корутинами и Flow? Объясните suspend функции в DAO, Flow для реактивных запросов, обработку транзакций и лучшие практики.
+
+---
 
 # Question (EN)
 > How to use Room database with coroutines and Flow? Explain suspend functions in DAO, Flow for reactive queries, transaction handling, and best practices.
 
-# Вопрос (RU)
-> Как использовать Room БД с корутинами и Flow? Объясните suspend функции в DAO, Flow для реактивных запросов, обработку транзакций и лучшие практики.
+## Ответ (RU)
+
+Room предоставляет первоклассную поддержку корутин и Flow для работы с БД.
+
+### Основные Возможности
+
+- **Suspend функции**: Для одноразовых операций
+- **Flow**: Для реактивных запросов (автообновление)
+- **Транзакции**: @Transaction или withTransaction
+- **Диспетчеры**: Room автоматически использует IO dispatcher
+
+### Пример
+
+```kotlin
+@Dao
+interface UserDao {
+    // Flow - автоматическое обновление
+    @Query("SELECT * FROM users")
+    fun observeUsers(): Flow<List<User>>
+    
+    // Suspend - одноразовая операция
+    @Insert
+    suspend fun insert(user: User)
+}
+```
 
 ---
 
@@ -258,34 +285,6 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
             )
         }
     }
-}
-```
-
----
-
-## Ответ (RU)
-
-Room предоставляет первоклассную поддержку корутин и Flow для работы с БД.
-
-### Основные Возможности
-
-- **Suspend функции**: Для одноразовых операций
-- **Flow**: Для реактивных запросов (автообновление)
-- **Транзакции**: @Transaction или withTransaction
-- **Диспетчеры**: Room автоматически использует IO dispatcher
-
-### Пример
-
-```kotlin
-@Dao
-interface UserDao {
-    // Flow - автоматическое обновление
-    @Query("SELECT * FROM users")
-    fun observeUsers(): Flow<List<User>>
-    
-    // Suspend - одноразовая операция
-    @Insert
-    suspend fun insert(user: User)
 }
 ```
 

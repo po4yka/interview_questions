@@ -1,11 +1,11 @@
 ---
 id: kotlin-059
 title: "Cold vs Hot Flows / Холодные и горячие потоки"
-aliases: []
+aliases: ["Cold vs Hot Flows, Холодные и горячие потоки"]
 
 # Classification
 topic: kotlin
-subtopics: [cold-flows, flow, hot-flows, shareIn, stateIn]
+subtopics: [cold-flows, flow, hot-flows]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,261 @@ tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Объясните холодные и горячие потоки. Как shareIn и stateIn конвертируют холодные в горячие? Правильно настройте параметры replay и started.
+
+---
 
 # Question (EN)
 > Explain cold vs hot flows. How do shareIn and stateIn convert cold to hot? Configure replay and started parameters properly.
 
-# Вопрос (RU)
-> Объясните холодные и горячие потоки. Как shareIn и stateIn конвертируют холодные в горячие? Правильно настройте параметры replay и started.
+## Ответ (RU)
+
+Понимание холодных и горячих потоков фундаментально для построения эффективных реактивных приложений с Kotlin Flow.
+
+### Холодные Потоки
+
+**Холодные потоки** активируются при сборе. Каждый коллектор независимо запускает код билдера потока.
+
+#### Ключевые Характеристики
+
+1. **Ленивые** - Начинают выполнение только при сборе
+2. **Unicast** - Каждый коллектор получает свой независимый поток
+3. **Нет общего состояния** - Множественные коллекторы не делят данные
+4. **Свежие данные** - Каждый коллектор запускает новое выполнение
+
+#### Пример: Поведение Холодного Потока
+
+```kotlin
+fun createColdFlow(): Flow<Int> = flow {
+    println("Поток запущен")
+    repeat(3) { i ->
+        delay(1000)
+        emit(i)
+        println("Испущено: $i")
+    }
+    println("Поток завершен")
+}
+
+// Каждый коллектор запускает независимое выполнение
+coldFlow.collect { println("Коллектор 1: $it") }
+coldFlow.collect { println("Коллектор 2: $it") }
+// Код билдера выполняется дважды!
+```
+
+#### Реальные Примеры Холодных Потоков
+
+```kotlin
+// Запрос к БД - каждый коллектор выполняет запрос
+fun getUserFlow(userId: Int): Flow<User> = flow {
+    val user = database.getUser(userId) // Свежий запрос каждый раз
+    emit(user)
+}
+
+// Сетевой запрос - каждый коллектор делает новый запрос
+fun fetchArticles(): Flow<List<Article>> = flow {
+    val response = api.getArticles() // Новый сетевой вызов каждый раз
+    emit(response)
+}
+```
+
+### Горячие Потоки
+
+**Горячие потоки** всегда активны и испускают значения независимо от наличия коллекторов.
+
+#### Ключевые Характеристики
+
+1. **Активные** - Работают даже без коллекторов
+2. **Multicast** - Все коллекторы получают одинаковые испускания
+3. **Общее состояние** - Единое выполнение для всех
+4. **Могут пропустить значения** - Коллекторы получают только значения после подписки
+
+### Конвертация Холодного В Горячий: shareIn()
+
+Оператор `shareIn` конвертирует холодный поток в горячий SharedFlow.
+
+```kotlin
+fun <T> Flow<T>.shareIn(
+    scope: CoroutineScope,
+    started: SharingStarted,
+    replay: Int = 0
+): SharedFlow<T>
+```
+
+#### Объяснение Параметров
+
+**1. scope** - CoroutineScope, контролирующий время жизни
+
+**2. replay** - Количество значений для повтора новым подписчикам
+- `0` - Нет повтора, новые коллекторы получают только будущие значения
+- `1` - Повтор последнего значения (как StateFlow)
+- `n` - Повтор последних n значений
+
+**3. started** - Когда запускать/останавливать поток
+
+| Стратегия | Поведение | Применение |
+|-----------|-----------|------------|
+| **Eagerly** | Запускается сразу, никогда не останавливается | Фоновые сервисы |
+| **Lazily** | Запускается при первом подписчике | Кешированные данные |
+| **WhileSubscribed** | Запуск/остановка по подписчикам | Наиболее частый, эффективный |
+
+#### Примеры shareIn
+
+```kotlin
+// Пример: Данные температурного датчика
+class TemperatureSensor(scope: CoroutineScope) {
+    private val temperatureReadings = flow {
+        while (true) {
+            val temp = readTemperature() // Дорогое чтение датчика
+            emit(temp)
+            delay(1000)
+        }
+    }
+
+    // Разделение показаний датчика - запуск немедленный
+    val temperature: SharedFlow<Float> = temperatureReadings
+        .shareIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            replay = 1 // Новые подписчики получают последнюю температуру
+        )
+}
+
+// Использование - множественные коллекторы разделяют чтения датчика
+// Датчик читается только раз в секунду для всех!
+```
+
+```kotlin
+// Пример: Сетевые данные с WhileSubscribed
+class NewsRepository(private val scope: CoroutineScope) {
+    val latestNews: SharedFlow<List<Article>> = flow {
+        while (true) {
+            val news = fetchNewsFromNetwork()
+            emit(news)
+            delay(60_000)
+        }
+    }
+    .shareIn(
+        scope = scope,
+        started = SharingStarted.WhileSubscribed(5000), // Остановка через 5с
+        replay = 1
+    )
+}
+```
+
+#### Конфигурация WhileSubscribed
+
+```kotlin
+SharingStarted.WhileSubscribed(
+    stopTimeoutMillis: Long = 0,
+    replayExpirationMillis: Long = Long.MAX_VALUE
+)
+```
+
+**stopTimeoutMillis** - Как долго держать поток активным после последнего подписчика
+- `0` - Остановить сразу
+- `5000` - 5 секунд (хорошо для поворота экрана)
+
+### Конвертация Холодного В Горячий: stateIn()
+
+Оператор `stateIn` конвертирует холодный поток в горячий StateFlow.
+
+```kotlin
+fun <T> Flow<T>.stateIn(
+    scope: CoroutineScope,
+    started: SharingStarted,
+    initialValue: T
+): StateFlow<T>
+```
+
+#### Примеры stateIn
+
+```kotlin
+// Пример: Состояние аутентификации
+class AuthRepository(private val scope: CoroutineScope) {
+    val isAuthenticated: StateFlow<Boolean> = authChanges
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = false // Состояние по умолчанию
+        )
+}
+
+// Использование - всегда имеет текущее состояние
+println("Текущее состояние: ${auth.isAuthenticated.value}") // Немедленный доступ
+```
+
+```kotlin
+// Пример: Результаты поиска
+class SearchViewModel : ViewModel() {
+    val searchResults: StateFlow<List<SearchResult>> = _searchQuery
+        .debounce(300)
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            searchRepository.search(query)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+}
+```
+
+### Таблица Сравнения
+
+| Аспект | Холодный поток | Горячий поток |
+|--------|----------------|---------------|
+| **Активация** | При сборе | Всегда/Условно |
+| **Выполнение** | На коллектор | Общее выполнение |
+| **Источник данных** | Свежий для каждого | Общий источник |
+| **Использование ресурсов** | Множественные выполнения | Единое выполнение |
+| **Пропуск значений** | Нет | Да |
+
+### Лучшие Практики
+
+1. **Используйте холодные потоки для**:
+   - Одноразовых операций
+   - Свежих данных для каждого подписчика
+   - Простых трансформаций
+
+2. **Используйте горячие потоки для**:
+   - Дорогих операций (сеть, датчики)
+   - Множественных подписчиков
+   - Управления состоянием UI
+   - Кеширования
+
+3. **Выбирайте стратегию started**:
+   ```kotlin
+   // Фоновый сервис
+   .shareIn(scope, SharingStarted.Eagerly, replay = 1)
+
+   // UI обновления
+   .stateIn(scope, SharingStarted.WhileSubscribed(5000), initialValue)
+   ```
+
+### Распространенные Ошибки
+
+1. **Не использование горячих потоков для дорогих операций**:
+   ```kotlin
+   //  Каждый поворот - новый сетевой вызов
+   val data = flow { emit(api.fetchData()) }
+
+   //  Сетевой вызов переживает поворот
+   val data = flow { emit(api.fetchData()) }
+       .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
+   ```
+
+2. **Утечки памяти с неправильным scope**:
+   ```kotlin
+   //  Поток никогда не останавливается
+   .shareIn(GlobalScope, SharingStarted.Eagerly, 1)
+
+   //  Жизненный цикл привязан к ViewModel
+   .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+   ```
+
+**Краткое содержание**: Холодные потоки выполняются независимо для каждого коллектора, горячие потоки разделяют единое выполнение между множественными коллекторами. Используйте shareIn() для конвертации в SharedFlow с настраиваемым replay и стратегиями запуска. Используйте stateIn() для конвертации в StateFlow когда нужен держатель состояния с текущим значением. Выбирайте WhileSubscribed для UI, Lazily для одноразовой инициализации, Eagerly для всегда активных сервисов.
 
 ---
 
@@ -571,255 +820,11 @@ val users2 = repository.users // No extra call
 
 **English Summary**: Cold flows execute independently for each collector, while hot flows share a single execution among multiple collectors. Use shareIn() to convert cold to hot SharedFlow with configurable replay and started strategies. Use stateIn() to convert to StateFlow when you need a state holder with a current value. Choose WhileSubscribed for UI, Lazily for one-time initialization, and Eagerly for always-on services. Hot flows are essential for sharing expensive operations like network calls and sensor data.
 
-## Ответ (RU)
+## Follow-ups
 
-Понимание холодных и горячих потоков фундаментально для построения эффективных реактивных приложений с Kotlin Flow.
-
-### Холодные Потоки
-
-**Холодные потоки** активируются при сборе. Каждый коллектор независимо запускает код билдера потока.
-
-#### Ключевые Характеристики
-
-1. **Ленивые** - Начинают выполнение только при сборе
-2. **Unicast** - Каждый коллектор получает свой независимый поток
-3. **Нет общего состояния** - Множественные коллекторы не делят данные
-4. **Свежие данные** - Каждый коллектор запускает новое выполнение
-
-#### Пример: Поведение Холодного Потока
-
-```kotlin
-fun createColdFlow(): Flow<Int> = flow {
-    println("Поток запущен")
-    repeat(3) { i ->
-        delay(1000)
-        emit(i)
-        println("Испущено: $i")
-    }
-    println("Поток завершен")
-}
-
-// Каждый коллектор запускает независимое выполнение
-coldFlow.collect { println("Коллектор 1: $it") }
-coldFlow.collect { println("Коллектор 2: $it") }
-// Код билдера выполняется дважды!
-```
-
-#### Реальные Примеры Холодных Потоков
-
-```kotlin
-// Запрос к БД - каждый коллектор выполняет запрос
-fun getUserFlow(userId: Int): Flow<User> = flow {
-    val user = database.getUser(userId) // Свежий запрос каждый раз
-    emit(user)
-}
-
-// Сетевой запрос - каждый коллектор делает новый запрос
-fun fetchArticles(): Flow<List<Article>> = flow {
-    val response = api.getArticles() // Новый сетевой вызов каждый раз
-    emit(response)
-}
-```
-
-### Горячие Потоки
-
-**Горячие потоки** всегда активны и испускают значения независимо от наличия коллекторов.
-
-#### Ключевые Характеристики
-
-1. **Активные** - Работают даже без коллекторов
-2. **Multicast** - Все коллекторы получают одинаковые испускания
-3. **Общее состояние** - Единое выполнение для всех
-4. **Могут пропустить значения** - Коллекторы получают только значения после подписки
-
-### Конвертация Холодного В Горячий: shareIn()
-
-Оператор `shareIn` конвертирует холодный поток в горячий SharedFlow.
-
-```kotlin
-fun <T> Flow<T>.shareIn(
-    scope: CoroutineScope,
-    started: SharingStarted,
-    replay: Int = 0
-): SharedFlow<T>
-```
-
-#### Объяснение Параметров
-
-**1. scope** - CoroutineScope, контролирующий время жизни
-
-**2. replay** - Количество значений для повтора новым подписчикам
-- `0` - Нет повтора, новые коллекторы получают только будущие значения
-- `1` - Повтор последнего значения (как StateFlow)
-- `n` - Повтор последних n значений
-
-**3. started** - Когда запускать/останавливать поток
-
-| Стратегия | Поведение | Применение |
-|-----------|-----------|------------|
-| **Eagerly** | Запускается сразу, никогда не останавливается | Фоновые сервисы |
-| **Lazily** | Запускается при первом подписчике | Кешированные данные |
-| **WhileSubscribed** | Запуск/остановка по подписчикам | Наиболее частый, эффективный |
-
-#### Примеры shareIn
-
-```kotlin
-// Пример: Данные температурного датчика
-class TemperatureSensor(scope: CoroutineScope) {
-    private val temperatureReadings = flow {
-        while (true) {
-            val temp = readTemperature() // Дорогое чтение датчика
-            emit(temp)
-            delay(1000)
-        }
-    }
-
-    // Разделение показаний датчика - запуск немедленный
-    val temperature: SharedFlow<Float> = temperatureReadings
-        .shareIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            replay = 1 // Новые подписчики получают последнюю температуру
-        )
-}
-
-// Использование - множественные коллекторы разделяют чтения датчика
-// Датчик читается только раз в секунду для всех!
-```
-
-```kotlin
-// Пример: Сетевые данные с WhileSubscribed
-class NewsRepository(private val scope: CoroutineScope) {
-    val latestNews: SharedFlow<List<Article>> = flow {
-        while (true) {
-            val news = fetchNewsFromNetwork()
-            emit(news)
-            delay(60_000)
-        }
-    }
-    .shareIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000), // Остановка через 5с
-        replay = 1
-    )
-}
-```
-
-#### Конфигурация WhileSubscribed
-
-```kotlin
-SharingStarted.WhileSubscribed(
-    stopTimeoutMillis: Long = 0,
-    replayExpirationMillis: Long = Long.MAX_VALUE
-)
-```
-
-**stopTimeoutMillis** - Как долго держать поток активным после последнего подписчика
-- `0` - Остановить сразу
-- `5000` - 5 секунд (хорошо для поворота экрана)
-
-### Конвертация Холодного В Горячий: stateIn()
-
-Оператор `stateIn` конвертирует холодный поток в горячий StateFlow.
-
-```kotlin
-fun <T> Flow<T>.stateIn(
-    scope: CoroutineScope,
-    started: SharingStarted,
-    initialValue: T
-): StateFlow<T>
-```
-
-#### Примеры stateIn
-
-```kotlin
-// Пример: Состояние аутентификации
-class AuthRepository(private val scope: CoroutineScope) {
-    val isAuthenticated: StateFlow<Boolean> = authChanges
-        .stateIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            initialValue = false // Состояние по умолчанию
-        )
-}
-
-// Использование - всегда имеет текущее состояние
-println("Текущее состояние: ${auth.isAuthenticated.value}") // Немедленный доступ
-```
-
-```kotlin
-// Пример: Результаты поиска
-class SearchViewModel : ViewModel() {
-    val searchResults: StateFlow<List<SearchResult>> = _searchQuery
-        .debounce(300)
-        .distinctUntilChanged()
-        .flatMapLatest { query ->
-            searchRepository.search(query)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-}
-```
-
-### Таблица Сравнения
-
-| Аспект | Холодный поток | Горячий поток |
-|--------|----------------|---------------|
-| **Активация** | При сборе | Всегда/Условно |
-| **Выполнение** | На коллектор | Общее выполнение |
-| **Источник данных** | Свежий для каждого | Общий источник |
-| **Использование ресурсов** | Множественные выполнения | Единое выполнение |
-| **Пропуск значений** | Нет | Да |
-
-### Лучшие Практики
-
-1. **Используйте холодные потоки для**:
-   - Одноразовых операций
-   - Свежих данных для каждого подписчика
-   - Простых трансформаций
-
-2. **Используйте горячие потоки для**:
-   - Дорогих операций (сеть, датчики)
-   - Множественных подписчиков
-   - Управления состоянием UI
-   - Кеширования
-
-3. **Выбирайте стратегию started**:
-   ```kotlin
-   // Фоновый сервис
-   .shareIn(scope, SharingStarted.Eagerly, replay = 1)
-
-   // UI обновления
-   .stateIn(scope, SharingStarted.WhileSubscribed(5000), initialValue)
-   ```
-
-### Распространенные Ошибки
-
-1. **Не использование горячих потоков для дорогих операций**:
-   ```kotlin
-   //  Каждый поворот - новый сетевой вызов
-   val data = flow { emit(api.fetchData()) }
-
-   //  Сетевой вызов переживает поворот
-   val data = flow { emit(api.fetchData()) }
-       .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
-   ```
-
-2. **Утечки памяти с неправильным scope**:
-   ```kotlin
-   //  Поток никогда не останавливается
-   .shareIn(GlobalScope, SharingStarted.Eagerly, 1)
-
-   //  Жизненный цикл привязан к ViewModel
-   .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
-   ```
-
-**Краткое содержание**: Холодные потоки выполняются независимо для каждого коллектора, горячие потоки разделяют единое выполнение между множественными коллекторами. Используйте shareIn() для конвертации в SharedFlow с настраиваемым replay и стратегиями запуска. Используйте stateIn() для конвертации в StateFlow когда нужен держатель состояния с текущим значением. Выбирайте WhileSubscribed для UI, Lazily для одноразовой инициализации, Eagerly для всегда активных сервисов.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)

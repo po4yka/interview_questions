@@ -1,11 +1,11 @@
 ---
 id: kotlin-034
 title: "Destructuring Declarations / Деструктурирующие объявления"
-aliases: []
+aliases: ["Destructuring Declarations, Деструктурирующие объявления"]
 
 # Classification
 topic: kotlin
-subtopics: [componentN, data-classes, destructuring, syntax]
+subtopics: [componentN, data-classes, destructuring]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,78 @@ tags: [componentN, data-classes, destructuring, difficulty/medium, kotlin]
 date created: Saturday, October 18th 2025, 3:06:33 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Что такое деструктурирующие объявления в Kotlin?
+
+---
 
 # Question (EN)
 > What are destructuring declarations in Kotlin?
-# Вопрос (RU)
-> Что такое деструктурирующие объявления в Kotlin?
+## Ответ (RU)
+
+Деструктурирующие объявления — это техника распаковки экземпляра класса в отдельные переменные. Можно взять объект и создать отдельные переменные из его свойств одной строкой кода.
+
+### Базовый Пример
+
+```kotlin
+data class Book(val author: String, val title: String, val year: Int)
+
+val book = Book("Roberto Bolano", "2666", 2004)
+val (author, title, year) = book  // Деструктуризация
+
+if (year > 2016) {
+    println("$title by $author")
+}
+```
+
+### Возврат Нескольких Значений
+
+```kotlin
+data class Result(val result: Int, val status: Status)
+
+fun function(...): Result {
+    return Result(result, status)
+}
+
+val (result, status) = function(...)
+```
+
+### Обход Map
+
+```kotlin
+for ((key, value) in map) {
+   // действия с ключом и значением
+}
+```
+
+### Подчеркивание Для Неиспользуемых Переменных
+
+```kotlin
+val (_, status) = getResult()  // Игнорируем первый компонент
+```
+
+### Как Это Работает: Функции componentN
+
+```kotlin
+data class Person(val name: String, val age: Int)
+
+val (name, age) = Person("Alice", 25)
+
+// Компилируется в:
+val name = person.component1()
+val age = person.component2()
+```
+
+Data классы автоматически генерируют `component1()`, `component2()` и т.д. для всех свойств.
+
+### Случаи Использования
+
+1. **Возврат нескольких значений из функций**
+2. **Итерация по коллекциям со структурированными данными**
+3. **Работа с Pair и Triple**
+4. **Извлечение значений из data классов**
+
+**Краткое содержание**: Деструктурирующие объявления позволяют распаковывать объекты в отдельные переменные одной строкой. Работает с data классами, Pair/Triple и любым классом с операторными функциями componentN(). Можно использовать в объявлениях переменных, циклах for и параметрах лямбд. Используйте подчеркивание для пропуска ненужных компонентов.
 
 ---
 
@@ -140,73 +207,11 @@ val (a, b) = MyClass("test", 42)  // Works!
 
 **English Summary**: Destructuring declarations allow unpacking objects into separate variables in one line. Works with data classes, Pair/Triple, and any class with componentN() operator functions. Can be used in variable declarations, for loops, and lambda parameters. Use underscore to skip unwanted components.
 
-## Ответ (RU)
+## Follow-ups
 
-Деструктурирующие объявления — это техника распаковки экземпляра класса в отдельные переменные. Можно взять объект и создать отдельные переменные из его свойств одной строкой кода.
-
-### Базовый Пример
-
-```kotlin
-data class Book(val author: String, val title: String, val year: Int)
-
-val book = Book("Roberto Bolano", "2666", 2004)
-val (author, title, year) = book  // Деструктуризация
-
-if (year > 2016) {
-    println("$title by $author")
-}
-```
-
-### Возврат Нескольких Значений
-
-```kotlin
-data class Result(val result: Int, val status: Status)
-
-fun function(...): Result {
-    return Result(result, status)
-}
-
-val (result, status) = function(...)
-```
-
-### Обход Map
-
-```kotlin
-for ((key, value) in map) {
-   // действия с ключом и значением
-}
-```
-
-### Подчеркивание Для Неиспользуемых Переменных
-
-```kotlin
-val (_, status) = getResult()  // Игнорируем первый компонент
-```
-
-### Как Это Работает: Функции componentN
-
-```kotlin
-data class Person(val name: String, val age: Int)
-
-val (name, age) = Person("Alice", 25)
-
-// Компилируется в:
-val name = person.component1()
-val age = person.component2()
-```
-
-Data классы автоматически генерируют `component1()`, `component2()` и т.д. для всех свойств.
-
-### Случаи Использования
-
-1. **Возврат нескольких значений из функций**
-2. **Итерация по коллекциям со структурированными данными**
-3. **Работа с Pair и Triple**
-4. **Извлечение значений из data классов**
-
-**Краткое содержание**: Деструктурирующие объявления позволяют распаковывать объекты в отдельные переменные одной строкой. Работает с data классами, Pair/Triple и любым классом с операторными функциями componentN(). Можно использовать в объявлениях переменных, циклах for и параметрах лямбд. Используйте подчеркивание для пропуска ненужных компонентов.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Destructuring Declarations - Kotlin Documentation](https://kotlinlang.org/docs/reference/multi-declarations.html)

@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-hashmap-how-it-works--programming-languages--medium, q-solid-principles--software-design--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [difficulty/easy, double, float, floating-point, java, kotlin, programming
 date created: Friday, October 3rd 2025, 7:03:57 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Работает Ли switch() С double/float?
-
-# Question (EN)
-> Does switch() work with double/float?
 
 # Вопрос (RU)
 > Работает ли switch() с double/float?
 
 ---
+
+# Question (EN)
+> Does switch() work with double/float?
+
+## Ответ (RU)
+
+Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
 
 ## Answer (EN)
 
@@ -211,9 +214,15 @@ System.out.println(sum == 100);  // Always true
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

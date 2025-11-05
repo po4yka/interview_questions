@@ -1,7 +1,7 @@
 ---
 id: kotlin-112
 title: "Dispatcher Performance and Selection / Производительность и выбор диспетчеров"
-aliases: []
+aliases: ["Dispatcher Performance and Selection, Производительность и выбор диспетчеров"]
 
 # Classification
 topic: kotlin
@@ -28,13 +28,75 @@ tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 3:39:12 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140022
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140022
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140022
+## Ответ (RU)
 
+
+Производительность Dispatcher включает выбор правильного dispatcher для задачи и соответствующую настройку пулов потоков.
+
+### Типы Dispatcher
+
+**Dispatchers.Default**
+- CPU-интенсивная работа
+- Размер пула потоков = ядра CPU
+```kotlin
+withContext(Dispatchers.Default) {
+    computeIntensiveOperation()
+}
+```
+
+**Dispatchers.IO**
+- I/O операции (сеть, файлы)
+- Пул потоков: 64 потока (настраиваемо)
+```kotlin
+withContext(Dispatchers.IO) {
+    downloadFile()
+}
+```
+
+**Dispatchers.Main**
+- Обновления UI
+- Один поток
+```kotlin
+withContext(Dispatchers.Main) {
+    updateUI()
+}
+```
+
+### Паттерны Производительности
+
+**1. Ограниченный параллелизм**
+```kotlin
+val limited = Dispatchers.IO.limitedParallelism(4)
+```
+
+**2. Кастомные Dispatchers**
+```kotlin
+val custom = Executors.newFixedThreadPool(8)
+    .asCoroutineDispatcher()
+```
+
+**3. Избегать чрезмерного переключения**
+```kotlin
+// Плохо
+withContext(Dispatchers.IO) { op1() }
+withContext(Dispatchers.IO) { op2() }
+
+// Хорошо
+withContext(Dispatchers.IO) {
+    op1()
+    op2()
+}
+```
+
+---
 ---
 
 ## Answer (EN)
@@ -91,69 +153,6 @@ withContext(Dispatchers.IO) { op1() }
 withContext(Dispatchers.IO) { op2() }
 
 // Good
-withContext(Dispatchers.IO) {
-    op1()
-    op2()
-}
-```
-
----
----
-
-## Ответ (RU)
-
-
-Производительность Dispatcher включает выбор правильного dispatcher для задачи и соответствующую настройку пулов потоков.
-
-### Типы Dispatcher
-
-**Dispatchers.Default**
-- CPU-интенсивная работа
-- Размер пула потоков = ядра CPU
-```kotlin
-withContext(Dispatchers.Default) {
-    computeIntensiveOperation()
-}
-```
-
-**Dispatchers.IO**
-- I/O операции (сеть, файлы)
-- Пул потоков: 64 потока (настраиваемо)
-```kotlin
-withContext(Dispatchers.IO) {
-    downloadFile()
-}
-```
-
-**Dispatchers.Main**
-- Обновления UI
-- Один поток
-```kotlin
-withContext(Dispatchers.Main) {
-    updateUI()
-}
-```
-
-### Паттерны Производительности
-
-**1. Ограниченный параллелизм**
-```kotlin
-val limited = Dispatchers.IO.limitedParallelism(4)
-```
-
-**2. Кастомные Dispatchers**
-```kotlin
-val custom = Executors.newFixedThreadPool(8)
-    .asCoroutineDispatcher()
-```
-
-**3. Избегать чрезмерного переключения**
-```kotlin
-// Плохо
-withContext(Dispatchers.IO) { op1() }
-withContext(Dispatchers.IO) { op2() }
-
-// Хорошо
 withContext(Dispatchers.IO) {
     op1()
     op2()

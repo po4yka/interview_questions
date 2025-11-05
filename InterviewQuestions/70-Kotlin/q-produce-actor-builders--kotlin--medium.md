@@ -1,11 +1,11 @@
 ---
 id: kotlin-065
 title: "produce and actor Channel Builders / Билдеры каналов produce и actor"
-aliases: []
+aliases: ["produce and actor Channel Builders, Билдеры каналов produce и actor"]
 
 # Classification
 topic: kotlin
-subtopics: [actor, channel-builders, channels, coroutines, produce]
+subtopics: [actor, channel-builders, channels]
 question_kind: theory
 difficulty: medium
 

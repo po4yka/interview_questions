@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-equality, q-equals-hashcode-purpose--programming-languages--hard, q-java-equals-default-behavior--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [collections, contracts, difficulty/medium, equality, object-methods, prog
 date created: Friday, October 31st 2025, 6:29:22 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Расскажи О Контрактах Equals И hashCode
-
-# Question (EN)
-> Tell me about equals and hashCode contracts
 
 # Вопрос (RU)
 > Расскажи о контрактах equals и hashCode
 
 ---
+
+# Question (EN)
+> Tell me about equals and hashCode contracts
+
+## Ответ (RU)
+
+Методы equals() и hashCode() используются для сравнения объектов и их корректной работы в коллекциях (Set, Map). Контракт `equals()` должен: Рефлексивность: a.equals(a) → true (объект равен самому себе). Симметричность: a.equals(b) == b.equals(a). Транзитивность: если a == b и b == c, то a == c. Согласованность: если a == b, то a.equals(b) всегда возвращает одно и же, пока объект не изменится. Сравнение с null всегда даёт false: a.equals(null) == false. Контракт hashCode(): если a.equals(b) то a.hashCode() == b.hashCode().
 
 ## Answer (EN)
 
@@ -255,9 +258,15 @@ override fun hashCode() = Objects.hash(property1, property2, property3)
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Методы equals() и hashCode() используются для сравнения объектов и их корректной работы в коллекциях (Set, Map). Контракт `equals()` должен: Рефлексивность: a.equals(a) → true (объект равен самому себе). Симметричность: a.equals(b) == b.equals(a). Транзитивность: если a == b и b == c, то a == c. Согласованность: если a == b, то a.equals(b) всегда возвращает одно и же, пока объект не изменится. Сравнение с null всегда даёт false: a.equals(null) == false. Контракт hashCode(): если a.equals(b) то a.hashCode() == b.hashCode().
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

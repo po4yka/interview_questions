@@ -17,16 +17,41 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, optimization, pe
 date created: Friday, October 31st 2025, 6:30:53 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Sequences Vs Collections Performance
-
-# Question (EN)
-> When should you use Sequences over Collections? Explain intermediate vs terminal operations and performance implications.
 
 # Вопрос (RU)
 > Когда следует использовать Sequences вместо Collections? Объясните промежуточные против терминальных операций и влияние на производительность.
 
 ---
+
+# Question (EN)
+> When should you use Sequences over Collections? Explain intermediate vs terminal operations and performance implications.
+
+## Ответ (RU)
+
+**Sequences** используют ленивое вычисление, в то время как **Collections** используют энергичное вычисление.
+
+### Collections (Энергичные)
+
+Создают промежуточные коллекции на каждом шаге. Быстрее для малых данных.
+
+### Sequences (Ленивые)
+
+Не создают промежуточные коллекции. Эффективнее для больших данных и цепочек операций.
+
+### Когда Использовать Sequences
+
+- Большие наборы данных
+- Множество цепных операций
+- Ранняя терминация (firstOrNull, take)
+
+### Когда Использовать Collections
+
+- Малые наборы данных
+- Одна операция
+- Множество терминальных операций
+
+Sequences оптимизируют производительность для больших данных с ленивым вычислением.
 
 ## Answer (EN)
 
@@ -151,31 +176,15 @@ val count = seq.count() // Evaluates again!
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Sequences** используют ленивое вычисление, в то время как **Collections** используют энергичное вычисление.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### Collections (Энергичные)
+## References
 
-Создают промежуточные коллекции на каждом шаге. Быстрее для малых данных.
-
-### Sequences (Ленивые)
-
-Не создают промежуточные коллекции. Эффективнее для больших данных и цепочек операций.
-
-### Когда Использовать Sequences
-
-- Большие наборы данных
-- Множество цепных операций
-- Ранняя терминация (firstOrNull, take)
-
-### Когда Использовать Collections
-
-- Малые наборы данных
-- Одна операция
-- Множество терминальных операций
-
-Sequences оптимизируют производительность для больших данных с ленивым вычислением.
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

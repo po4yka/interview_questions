@@ -1,7 +1,7 @@
 ---
 id: kotlin-123
 title: "Flow Backpressure / Противодавление в Flow"
-aliases: []
+aliases: ["Flow Backpressure, Противодавление в Flow"]
 
 # Classification
 topic: kotlin
@@ -33,12 +33,65 @@ tags: [backpressure, buffer, collectlatest, conflate, difficulty/hard, flow, kot
 date created: Sunday, October 12th 2025, 3:14:51 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Что такое противодавление в Kotlin Flow? Объясните операторы buffer(), conflate() и collectLatest() и когда использовать каждую стратегию.
+
+---
 
 # Question (EN)
 > What is backpressure in Kotlin Flow? Explain buffer(), conflate(), and collectLatest() operators and when to use each strategy.
 
-# Вопрос (RU)
-> Что такое противодавление в Kotlin Flow? Объясните операторы buffer(), conflate() и collectLatest() и когда использовать каждую стратегию.
+## Ответ (RU)
+
+**Противодавление** (backpressure) возникает когда производитель создаёт значения быстрее, чем потребитель может их обработать. Kotlin Flow предоставляет несколько операторов для работы с противодавлением.
+
+### buffer() - Параллельная Обработка
+
+```kotlin
+flow {
+    repeat(3) {
+        delay(100) // Производитель: 100мс
+        emit(it)
+    }
+}
+.buffer() // Производитель и потребитель работают параллельно
+.collect {
+    delay(300) // Потребитель: 300мс
+}
+// Время: ~1000мс вместо 1200мс
+```
+
+### conflate() - Только Последнее Значение
+
+```kotlin
+flow {
+    repeat(10) {
+        emit(it)
+        delay(100)
+    }
+}
+.conflate() // Пропускает промежуточные значения
+.collect {
+    delay(300) // Медленный потребитель
+}
+// Собирает только: 0, 3, 6, 9
+```
+
+### collectLatest() - Отмена И Перезапуск
+
+```kotlin
+searchQuery.collectLatest { query ->
+    searchApi(query) // Отменяется если приходит новый query
+}
+```
+
+### Выбор Стратегии
+
+| Случай | Стратегия | Причина |
+|--------|-----------|---------|
+| Все значения важны | `buffer()` | Обработать каждое значение |
+| Важно только последнее | `conflate()` | Обновления UI, сенсоры |
+| Отменить предыдущую работу | `collectLatest()` | Поиск, автодополнение |
 
 ---
 
@@ -578,59 +631,11 @@ fastSensor
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Противодавление** (backpressure) возникает когда производитель создаёт значения быстрее, чем потребитель может их обработать. Kotlin Flow предоставляет несколько операторов для работы с противодавлением.
-
-### buffer() - Параллельная Обработка
-
-```kotlin
-flow {
-    repeat(3) {
-        delay(100) // Производитель: 100мс
-        emit(it)
-    }
-}
-.buffer() // Производитель и потребитель работают параллельно
-.collect {
-    delay(300) // Потребитель: 300мс
-}
-// Время: ~1000мс вместо 1200мс
-```
-
-### conflate() - Только Последнее Значение
-
-```kotlin
-flow {
-    repeat(10) {
-        emit(it)
-        delay(100)
-    }
-}
-.conflate() // Пропускает промежуточные значения
-.collect {
-    delay(300) // Медленный потребитель
-}
-// Собирает только: 0, 3, 6, 9
-```
-
-### collectLatest() - Отмена И Перезапуск
-
-```kotlin
-searchQuery.collectLatest { query ->
-    searchApi(query) // Отменяется если приходит новый query
-}
-```
-
-### Выбор Стратегии
-
-| Случай | Стратегия | Причина |
-|--------|-----------|---------|
-| Все значения важны | `buffer()` | Обработать каждое значение |
-| Важно только последнее | `conflate()` | Обновления UI, сенсоры |
-| Отменить предыдущую работу | `collectLatest()` | Поиск, автодополнение |
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

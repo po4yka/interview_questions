@@ -28,6 +28,16 @@ In Kotlin, immutable collections are created using a mechanism based on interfac
 ## Ответ (RU)
 В Kotlin для создания иммутабельных коллекций используется механизм, основанный на использовании интерфейсов из пакета kotlin.collections. В частности, для создания неизменяемых коллекций применяются функции-фабрики, такие как listOf(), setOf() и mapOf(). Эти функции возвращают коллекции, реализующие интерфейсы List, Set и Map соответственно. При этом, коллекции, созданные с помощью этих функций, являются неизменяемыми (иммутабельными), то есть после их создания нельзя добавить или удалить элементы. Например, при использовании listOf() создается неизменяемый список.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-kotlin-val-vs-var--kotlin--easy]]

@@ -17,15 +17,65 @@ tags: [also, apply, difficulty/easy, let, programming-languages, run, scope-func
 date created: Friday, October 31st 2025, 6:32:17 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Какой Оператор В Kotlin Исполняет Блок Кода И Возвращает Его Значение?
-
-# Question (EN)
-> Which operator in Kotlin executes a block of code and returns its value?
 
 # Вопрос (RU)
 > Какой оператор в Kotlin исполняет блок кода и возвращает его значение?
 
+---
+
+# Question (EN)
+> Which operator in Kotlin executes a block of code and returns its value?
+
+## Ответ (RU)
+
+
+Функция `run` - это scope function которая выполняет блок кода и возвращает результат. Полезна для выполнения нескольких операций над объектом.
+
+### Базовое Использование
+```kotlin
+val result = "Hello".run {
+    println(length)  // Доступ к свойствам через 'this'
+    uppercase()       // Возвращает трансформацию
+}
+println(result)  // "HELLO"
+```
+
+### Распространенные Паттерны
+
+**1. Конфигурация объекта**
+```kotlin
+val person = Person().run {
+    name = "Alice"
+    age = 25
+    address = "123 Main St"
+    this  // Вернуть сконфигурированный объект
+}
+```
+
+**2. Null безопасность**
+```kotlin
+val result = value?.run {
+    transform()
+} ?: defaultValue
+```
+
+**3. Вычисления в scope**
+```kotlin
+val formatted = run {
+    val first = getName()
+    val last = getLastName()
+    "$first $last"
+}
+```
+
+**vs let, apply, also:**
+- `run`: Имеет `this`, возвращает результат лямбды
+- `let`: Имеет `it`, возвращает результат лямбды
+- `apply`: Имеет `this`, возвращает receiver
+- `also`: Имеет `it`, возвращает receiver
+
+---
 ---
 
 ## Answer (EN)
@@ -75,57 +125,6 @@ val formatted = run {
 - `let`: Has `it`, returns lambda result
 - `apply`: Has `this`, returns receiver
 - `also`: Has `it`, returns receiver
-
----
----
-
-## Ответ (RU)
-
-
-Функция `run` - это scope function которая выполняет блок кода и возвращает результат. Полезна для выполнения нескольких операций над объектом.
-
-### Базовое Использование
-```kotlin
-val result = "Hello".run {
-    println(length)  // Доступ к свойствам через 'this'
-    uppercase()       // Возвращает трансформацию
-}
-println(result)  // "HELLO"
-```
-
-### Распространенные Паттерны
-
-**1. Конфигурация объекта**
-```kotlin
-val person = Person().run {
-    name = "Alice"
-    age = 25
-    address = "123 Main St"
-    this  // Вернуть сконфигурированный объект
-}
-```
-
-**2. Null безопасность**
-```kotlin
-val result = value?.run {
-    transform()
-} ?: defaultValue
-```
-
-**3. Вычисления в scope**
-```kotlin
-val formatted = run {
-    val first = getName()
-    val last = getLastName()
-    "$first $last"
-}
-```
-
-**vs let, apply, also:**
-- `run`: Имеет `this`, возвращает результат лямбды
-- `let`: Имеет `it`, возвращает результат лямбды
-- `apply`: Имеет `this`, возвращает receiver
-- `also`: Имеет `it`, возвращает receiver
 
 ---
 ---
@@ -450,6 +449,16 @@ val request = HttpRequest().run {
 - `apply`: Возвращает объект, использует `this`
 - `also`: Возвращает объект, использует `it`
 - `with`: Возвращает результат, использует `this` (не extension)
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

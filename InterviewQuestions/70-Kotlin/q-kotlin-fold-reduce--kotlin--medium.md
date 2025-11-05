@@ -1,11 +1,11 @@
 ---
 id: kotlin-003
 title: "Kotlin fold and reduce / fold и reduce в Kotlin"
-aliases: []
+aliases: ["Kotlin fold and reduce, fold и reduce в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [collections, fold, functional-programming, reduce]
+subtopics: [collections, fold, functional-programming]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,68 @@ tags: [collections, difficulty/medium, fold, functional-programming, kotlin, red
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Какая разница между fold и reduce в Kotlin?
+
+---
 
 # Question (EN)
 > What is the difference between fold and reduce in Kotlin?
-# Вопрос (RU)
-> Какая разница между fold и reduce в Kotlin?
+## Ответ (RU)
+
+### Reduce
+
+- Метод `reduce` преобразует данную коллекцию в единый результат. Он принимает лямбда-оператор для объединения пары элементов в накопленное значение.
+- Затем он проходит по коллекции слева направо и пошагово объединяет накопленное значение со следующим элементом.
+
+```kotlin
+val numbers: List<Int> = listOf(1, 2, 3)
+val sum = numbers.reduce { acc, next -> next + acc }
+```
+
+- Метод `reduce` выбросит `RuntimeException`, если он работает с пустым списком.
+
+- Сигнатура метода `reduce`:
+
+```kotlin
+inline fun <S, T:S> Iterable<T>.reduce(operation: (acc:S, T) -> S): S
+```
+
+Функция определяет обобщенный тип S и подтип T типа S, в конечном итоге reduce возвращает одно значение типа S.
+
+- В следующем примере сумма превысит диапазон `Int`, из-за этого тип данных результата изменяется на Long. Поэтому будет выброшена ошибка компиляции (Type argument is not within its bounds):
+
+```kotlin
+val sum: Long = numbers.reduce<Long, Int> { acc, next -> acc.toLong() + next.toLong() }
+```
+
+- Чтобы исправить ошибку компиляции, нам придется изменить тип `Long` на `Number`, так как `Number` является надмножеством `Int`. Таким образом **это не решает проблему изменения типа результата**
+
+### Fold
+
+Чтобы решить проблемы, созданные `reduce`, мы можем использовать `fold`:
+
+```kotlin
+val numbers: List<Int> = listOf(1, 2, 3)
+val sum = numbers.fold(0, { acc, next -> next + acc })
+```
+
+Здесь первый аргумент — начальное значение. Если список пуст, возвращается начальное значение.
+
+Сигнатура:
+```kotlin
+inline fun <T, R> Iterable<T>.fold(initial:R, (acc:R, T) -> R): R
+```
+
+В отличие от `reduce()`, она указывает два произвольных обобщенных типа **T** и **R**.
+
+- Мы можем изменить тип результата на **Long** в следующем примере:
+
+```kotlin
+val sum: Long = numbers.fold(0L, { acc, next -> acc + next.toLong() })
+```
+
+- `fold` **предоставляет возможность изменить тип результата**.
 
 ---
 
@@ -92,63 +149,11 @@ val sum: Long = numbers.fold(0L, { acc, next -> acc + next.toLong() })
 
 - `fold` **provides the ability to change the result type**.
 
-## Ответ (RU)
+## Follow-ups
 
-### Reduce
-
-- Метод `reduce` преобразует данную коллекцию в единый результат. Он принимает лямбда-оператор для объединения пары элементов в накопленное значение.
-- Затем он проходит по коллекции слева направо и пошагово объединяет накопленное значение со следующим элементом.
-
-```kotlin
-val numbers: List<Int> = listOf(1, 2, 3)
-val sum = numbers.reduce { acc, next -> next + acc }
-```
-
-- Метод `reduce` выбросит `RuntimeException`, если он работает с пустым списком.
-
-- Сигнатура метода `reduce`:
-
-```kotlin
-inline fun <S, T:S> Iterable<T>.reduce(operation: (acc:S, T) -> S): S
-```
-
-Функция определяет обобщенный тип S и подтип T типа S, в конечном итоге reduce возвращает одно значение типа S.
-
-- В следующем примере сумма превысит диапазон `Int`, из-за этого тип данных результата изменяется на Long. Поэтому будет выброшена ошибка компиляции (Type argument is not within its bounds):
-
-```kotlin
-val sum: Long = numbers.reduce<Long, Int> { acc, next -> acc.toLong() + next.toLong() }
-```
-
-- Чтобы исправить ошибку компиляции, нам придется изменить тип `Long` на `Number`, так как `Number` является надмножеством `Int`. Таким образом **это не решает проблему изменения типа результата**
-
-### Fold
-
-Чтобы решить проблемы, созданные `reduce`, мы можем использовать `fold`:
-
-```kotlin
-val numbers: List<Int> = listOf(1, 2, 3)
-val sum = numbers.fold(0, { acc, next -> next + acc })
-```
-
-Здесь первый аргумент — начальное значение. Если список пуст, возвращается начальное значение.
-
-Сигнатура:
-```kotlin
-inline fun <T, R> Iterable<T>.fold(initial:R, (acc:R, T) -> R): R
-```
-
-В отличие от `reduce()`, она указывает два произвольных обобщенных типа **T** и **R**.
-
-- Мы можем изменить тип результата на **Long** в следующем примере:
-
-```kotlin
-val sum: Long = numbers.fold(0L, { acc, next -> acc + next.toLong() })
-```
-
-- `fold` **предоставляет возможность изменить тип результата**.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Kotlin Collections Documentation](https://kotlinlang.org/docs/reference/collections-overview.html)

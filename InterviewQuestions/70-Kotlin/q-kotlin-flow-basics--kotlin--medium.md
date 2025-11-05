@@ -1,11 +1,11 @@
 ---
 id: kotlin-035
 title: "Kotlin Flow Basics / Основы Flow в Kotlin"
-aliases: []
+aliases: ["Kotlin Flow Basics, Основы Flow в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [async, coroutines, flow, reactive-streams]
+subtopics: [async, coroutines, flow]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,126 @@ tags: [async, coroutines, difficulty/medium, flow, kotlin, reactive-streams]
 date created: Sunday, October 5th 2025, 10:32:28 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что вы знаете о Flow в Kotlin?
+
+---
 
 # Question (EN)
 > What do you know about Flow in Kotlin?
-# Вопрос (RU)
-> Что вы знаете о Flow в Kotlin?
+## Ответ (RU)
+
+В корутинах *flow* — это тип, который может последовательно выдавать несколько значений, в отличие от *suspend функций*, которые возвращают только одно значение. Например, вы можете использовать flow для получения живых обновлений из базы данных.
+
+Flow построены поверх корутин и могут предоставлять несколько значений. Flow концептуально является *потоком данных*, который может вычисляться асинхронно. Чтобы представить поток значений, которые вычисляются асинхронно, мы можем использовать тип `Flow<Int>`:
+
+```kotlin
+fun simple(): Flow<Int> = flow { // билдер flow
+    for (i in 1..3) {
+        delay(100) // делаем вид, что здесь делаем что-то полезное
+        emit(i) // выдаем следующее значение
+    }
+}
+
+fun main() = runBlocking<Unit> {
+    // Запускаем параллельную корутину чтобы проверить не блокируется ли главный поток
+    launch {
+        for (k in 1..3) {
+            println("I'm not blocked $k")
+            delay(100)
+        }
+    }
+    // Собираем flow
+    simple().collect { value -> println(value) }
+}
+```
+
+Этот код ждет 100мс перед выводом каждого числа без блокировки главного потока. Это проверяется выводом "I'm not blocked" каждые 100мс из отдельной корутины, которая работает в главном потоке:
+
+```
+I'm not blocked 1
+1
+I'm not blocked 2
+2
+I'm not blocked 3
+3
+```
+
+Flow очень похож на `Iterator`, который производит последовательность значений, но он использует suspend функции для асинхронного производства и потребления значений. Это означает, например, что flow может безопасно сделать сетевой запрос для производства следующего значения без блокировки главного потока.
+
+В потоках данных участвуют три сущности:
+- **Производитель** производит данные, которые добавляются в поток. Благодаря корутинам, flow также могут производить данные асинхронно;
+- **(Опционально) Посредники** могут модифицировать каждое значение, выдаваемое в поток, или сам поток;
+- **Потребитель** потребляет значения из потока.
+
+В Android *источник данных* или *репозиторий* обычно является производителем UI данных, где `View` является потребителем, который в конечном итоге отображает данные. В другие времена слой `View` является производителем событий пользовательского ввода, а другие слои иерархии их потребляют. Слои между производителем и потребителем обычно действуют как посредники, которые модифицируют поток данных для адаптации к требованиям следующего слоя.
+
+### Билдеры Flow
+
+Существуют следующие основные способы создания flow:
+- Функции [`flowOf(…)`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-of.html) для создания flow из фиксированного набора значений;
+- Функции-расширения [`asFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/kotlin.-function0/as-flow.html) для различных типов для конвертации их в flow;
+- Билдер-функция [`flow { … }`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/#) для построения произвольных flow из последовательных вызовов функции `emit`;
+- Билдер-функция [`channelFlow { … }`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html) для построения произвольных flow из потенциально параллельных вызовов функции `send`.
+- [`MutableStateFlow`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-state-flow/index.html) и [`MutableSharedFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/index.html) определяют соответствующие функции-конструкторы для создания *горячего* flow, который может быть непосредственно обновлен.
+
+### Flow Являются Холодными
+
+Flow являются *холодными потоками*, похожими на последовательности — код внутри билдера flow не выполняется до тех пор, пока flow не будет собран. Это становится ясно из следующего примера:
+
+```kotlin
+fun simple(): Flow<Int> = flow {
+    println("Flow started")
+    for (i in 1..3) {
+        delay(100)
+        emit(i)
+    }
+}
+
+fun main() = runBlocking<Unit> {
+    println("Calling simple function...")
+    val flow = simple()
+    println("Calling collect...")
+    flow.collect { value -> println(value) }
+    println("Calling collect again...")
+    flow.collect { value -> println(value) }
+}
+```
+
+Что выводит:
+```
+Calling simple function...
+Calling collect...
+Flow started
+1
+2
+3
+Calling collect again...
+Flow started
+1
+2
+3
+```
+
+Это ключевая причина, по которой функция `simple` (которая возвращает flow) не помечена модификатором `suspend`. Сам по себе вызов `simple()` возвращается быстро и ничего не ждет. Flow запускается каждый раз, когда он собирается, поэтому мы видим "Flow started" когда вызываем `collect` снова.
+
+*Промежуточные операторы* на flow, такие как `map`, `filter`, `take`, `zip` и т.д., являются функциями, которые применяются к *upstream* flow или flows и возвращают *downstream* flow, к которому могут быть применены дальнейшие операторы. Промежуточные операции не выполняют никакого кода в flow и не являются suspend функциями. Они только настраивают цепочку операций для будущего выполнения и быстро возвращаются. Это известно как свойство *холодного flow*.
+
+### Сбор Из Flow
+
+Используйте *терминальный оператор* для запуска flow и начала прослушивания значений. Терминальные операторы на flow являются либо suspend функциями, такими как `collect`, `single`, `reduce`, `toList` и т.д., либо оператором `launchIn`, который запускает сбор flow в заданной области видимости. Они применяются к upstream flow и запускают выполнение всех операций. Выполнение flow также называется *сбором flow* и всегда выполняется приостанавливающим образом без фактической блокировки. Терминальные операторы завершаются нормально или исключительно в зависимости от успешного или неудачного выполнения всех операций flow в upstream. Самым базовым терминальным оператором является collect, например:
+
+```kotlin
+try {
+    flow.collect { value ->
+        println("Received $value")
+    }
+} catch (e: Exception) {
+    println("The flow has thrown an exception: $e")
+}
+```
+
+По умолчанию flow являются *последовательными*, и все операции flow выполняются последовательно в одной корутине, за исключением нескольких операций, специально разработанных для внесения параллелизма в выполнение flow, таких как [buffer](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html) и [flatMapMerge](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flat-map-merge.html).
 
 ---
 
@@ -150,121 +265,11 @@ try {
 
 By default, flows are *sequential* and all flow operations are executed sequentially in the same coroutine, with an exception for a few operations specifically designed to introduce concurrency into flow execution such as [buffer](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html) and [flatMapMerge](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flat-map-merge.html).
 
-## Ответ (RU)
+## Follow-ups
 
-В корутинах *flow* — это тип, который может последовательно выдавать несколько значений, в отличие от *suspend функций*, которые возвращают только одно значение. Например, вы можете использовать flow для получения живых обновлений из базы данных.
-
-Flow построены поверх корутин и могут предоставлять несколько значений. Flow концептуально является *потоком данных*, который может вычисляться асинхронно. Чтобы представить поток значений, которые вычисляются асинхронно, мы можем использовать тип `Flow<Int>`:
-
-```kotlin
-fun simple(): Flow<Int> = flow { // билдер flow
-    for (i in 1..3) {
-        delay(100) // делаем вид, что здесь делаем что-то полезное
-        emit(i) // выдаем следующее значение
-    }
-}
-
-fun main() = runBlocking<Unit> {
-    // Запускаем параллельную корутину чтобы проверить не блокируется ли главный поток
-    launch {
-        for (k in 1..3) {
-            println("I'm not blocked $k")
-            delay(100)
-        }
-    }
-    // Собираем flow
-    simple().collect { value -> println(value) }
-}
-```
-
-Этот код ждет 100мс перед выводом каждого числа без блокировки главного потока. Это проверяется выводом "I'm not blocked" каждые 100мс из отдельной корутины, которая работает в главном потоке:
-
-```
-I'm not blocked 1
-1
-I'm not blocked 2
-2
-I'm not blocked 3
-3
-```
-
-Flow очень похож на `Iterator`, который производит последовательность значений, но он использует suspend функции для асинхронного производства и потребления значений. Это означает, например, что flow может безопасно сделать сетевой запрос для производства следующего значения без блокировки главного потока.
-
-В потоках данных участвуют три сущности:
-- **Производитель** производит данные, которые добавляются в поток. Благодаря корутинам, flow также могут производить данные асинхронно;
-- **(Опционально) Посредники** могут модифицировать каждое значение, выдаваемое в поток, или сам поток;
-- **Потребитель** потребляет значения из потока.
-
-В Android *источник данных* или *репозиторий* обычно является производителем UI данных, где `View` является потребителем, который в конечном итоге отображает данные. В другие времена слой `View` является производителем событий пользовательского ввода, а другие слои иерархии их потребляют. Слои между производителем и потребителем обычно действуют как посредники, которые модифицируют поток данных для адаптации к требованиям следующего слоя.
-
-### Билдеры Flow
-
-Существуют следующие основные способы создания flow:
-- Функции [`flowOf(…)`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-of.html) для создания flow из фиксированного набора значений;
-- Функции-расширения [`asFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/kotlin.-function0/as-flow.html) для различных типов для конвертации их в flow;
-- Билдер-функция [`flow { … }`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/#) для построения произвольных flow из последовательных вызовов функции `emit`;
-- Билдер-функция [`channelFlow { … }`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html) для построения произвольных flow из потенциально параллельных вызовов функции `send`.
-- [`MutableStateFlow`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-state-flow/index.html) и [`MutableSharedFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/index.html) определяют соответствующие функции-конструкторы для создания *горячего* flow, который может быть непосредственно обновлен.
-
-### Flow Являются Холодными
-
-Flow являются *холодными потоками*, похожими на последовательности — код внутри билдера flow не выполняется до тех пор, пока flow не будет собран. Это становится ясно из следующего примера:
-
-```kotlin
-fun simple(): Flow<Int> = flow {
-    println("Flow started")
-    for (i in 1..3) {
-        delay(100)
-        emit(i)
-    }
-}
-
-fun main() = runBlocking<Unit> {
-    println("Calling simple function...")
-    val flow = simple()
-    println("Calling collect...")
-    flow.collect { value -> println(value) }
-    println("Calling collect again...")
-    flow.collect { value -> println(value) }
-}
-```
-
-Что выводит:
-```
-Calling simple function...
-Calling collect...
-Flow started
-1
-2
-3
-Calling collect again...
-Flow started
-1
-2
-3
-```
-
-Это ключевая причина, по которой функция `simple` (которая возвращает flow) не помечена модификатором `suspend`. Сам по себе вызов `simple()` возвращается быстро и ничего не ждет. Flow запускается каждый раз, когда он собирается, поэтому мы видим "Flow started" когда вызываем `collect` снова.
-
-*Промежуточные операторы* на flow, такие как `map`, `filter`, `take`, `zip` и т.д., являются функциями, которые применяются к *upstream* flow или flows и возвращают *downstream* flow, к которому могут быть применены дальнейшие операторы. Промежуточные операции не выполняют никакого кода в flow и не являются suspend функциями. Они только настраивают цепочку операций для будущего выполнения и быстро возвращаются. Это известно как свойство *холодного flow*.
-
-### Сбор Из Flow
-
-Используйте *терминальный оператор* для запуска flow и начала прослушивания значений. Терминальные операторы на flow являются либо suspend функциями, такими как `collect`, `single`, `reduce`, `toList` и т.д., либо оператором `launchIn`, который запускает сбор flow в заданной области видимости. Они применяются к upstream flow и запускают выполнение всех операций. Выполнение flow также называется *сбором flow* и всегда выполняется приостанавливающим образом без фактической блокировки. Терминальные операторы завершаются нормально или исключительно в зависимости от успешного или неудачного выполнения всех операций flow в upstream. Самым базовым терминальным оператором является collect, например:
-
-```kotlin
-try {
-    flow.collect { value ->
-        println("Received $value")
-    }
-} catch (e: Exception) {
-    println("The flow has thrown an exception: $e")
-}
-```
-
-По умолчанию flow являются *последовательными*, и все операции flow выполняются последовательно в одной корутине, за исключением нескольких операций, специально разработанных для внесения параллелизма в выполнение flow, таких как [buffer](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html) и [flatMapMerge](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flat-map-merge.html).
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Kotlin Flow Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)

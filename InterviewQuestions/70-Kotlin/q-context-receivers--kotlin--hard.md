@@ -17,16 +17,44 @@ tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, sco
 date created: Saturday, November 1st 2025, 5:30:55 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-
 # Context Receivers in Kotlin
-
-# Question (EN)
-> Explain context receivers in Kotlin. How do they differ from extension receivers? Provide DSL examples.
 
 # Вопрос (RU)
 > Объясните context receivers в Kotlin. Чем они отличаются от extension receivers? Приведите примеры DSL.
 
 ---
+
+# Question (EN)
+> Explain context receivers in Kotlin. How do they differ from extension receivers? Provide DSL examples.
+
+## Ответ (RU)
+
+**Context Receivers** — это экспериментальная функция Kotlin, которая позволяет функциям и свойствам требовать несколько типов получателей одновременно, обеспечивая более выразительные DSL и более чистое внедрение зависимостей.
+
+### Extension Receivers (Традиционные)
+
+Позволяют только ОДИН тип получателя. Ограничение в выразительности для сложных случаев.
+
+### Context Receivers (Новые)
+
+Позволяют несколько типов получателей одновременно, используя синтаксис `context(Type1, Type2)`.
+
+### Сравнение
+
+Extension receivers: ровно 1, стабильны.
+Context receivers: множество, экспериментальны.
+
+### Примеры DSL
+
+HTML builder, SQL query builder, dependency injection - все становятся чище с context receivers.
+
+### Лучшие Практики
+
+1. Используйте @DslMarker для предотвращения утечки области видимости
+2. Предоставляйте convenience функции
+3. Не злоупотребляйте - слишком много контекстов усложняет код
+
+Context receivers - мощный инструмент для создания выразительных DSL в Kotlin.
 
 ## Answer (EN)
 
@@ -471,34 +499,15 @@ fun betterFunction() {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Context Receivers** — это экспериментальная функция Kotlin, которая позволяет функциям и свойствам требовать несколько типов получателей одновременно, обеспечивая более выразительные DSL и более чистое внедрение зависимостей.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### Extension Receivers (Традиционные)
+## References
 
-Позволяют только ОДИН тип получателя. Ограничение в выразительности для сложных случаев.
-
-### Context Receivers (Новые)
-
-Позволяют несколько типов получателей одновременно, используя синтаксис `context(Type1, Type2)`.
-
-### Сравнение
-
-Extension receivers: ровно 1, стабильны.
-Context receivers: множество, экспериментальны.
-
-### Примеры DSL
-
-HTML builder, SQL query builder, dependency injection - все становятся чище с context receivers.
-
-### Лучшие Практики
-
-1. Используйте @DslMarker для предотвращения утечки области видимости
-2. Предоставляйте convenience функции
-3. Не злоупотребляйте - слишком много контекстов усложняет код
-
-Context receivers - мощный инструмент для создания выразительных DSL в Kotlin.
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

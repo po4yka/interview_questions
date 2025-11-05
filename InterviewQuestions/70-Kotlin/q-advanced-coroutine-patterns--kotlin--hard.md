@@ -1,7 +1,7 @@
 ---
 id: kotlin-133
 title: "Advanced Coroutine Patterns / Продвинутые паттерны корутин"
-aliases: []
+aliases: ["Advanced Coroutine Patterns, Продвинутые паттерны корутин"]
 
 # Classification
 topic: kotlin
@@ -33,12 +33,109 @@ tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-
 date created: Sunday, October 12th 2025, 3:06:29 pm
 date modified: Sunday, November 2nd 2025, 12:05:10 pm
 ---
+# Вопрос (RU)
+> Что такое продвинутые паттерны корутин в Kotlin? Объясните паттерн pipeline, producer-consumer с несколькими стадиями, пулинг ресурсов с Mutex/Semaphore, кастомные scope builders и паттерны rate limiting.
+
+---
 
 # Question (EN)
 > What are advanced coroutine patterns in Kotlin? Explain pipeline pattern, producer-consumer with multiple stages, resource pooling with Mutex/Semaphore, custom scope builders, and rate limiting patterns.
 
-# Вопрос (RU)
-> Что такое продвинутые паттерны корутин в Kotlin? Объясните паттерн pipeline, producer-consumer с несколькими стадиями, пулинг ресурсов с Mutex/Semaphore, кастомные scope builders и паттерны rate limiting.
+## Ответ (RU)
+
+Продвинутые паттерны корутин позволяют решать сложные задачи параллельного программирования, сохраняя при этом чистоту и безопасность кода.
+
+### Паттерн Pipeline
+
+Паттерн pipeline связывает несколько стадий обработки, где каждая стадия потребляет из предыдущей и производит для следующей.
+
+```kotlin
+// Pipeline: числа -> квадраты -> строки
+fun CoroutineScope.produceNumbers() = produce {
+    var x = 1
+    while (true) {
+        send(x++)
+        delay(100)
+    }
+}
+
+fun CoroutineScope.square(numbers: ReceiveChannel<Int>) = produce {
+    for (x in numbers) {
+        send(x * x)
+    }
+}
+```
+
+### Пулинг Ресурсов С Semaphore
+
+```kotlin
+class ConnectionPool(private val size: Int) {
+    private val connections = List(size) { DatabaseConnection(it) }
+    private val semaphore = Semaphore(size)
+
+    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T {
+        semaphore.acquire()
+        val connection = getConnection()
+
+        return try {
+            block(connection)
+        } finally {
+            releaseConnection(connection)
+            semaphore.release()
+        }
+    }
+}
+```
+
+### Rate Limiting
+
+```kotlin
+class RateLimiter(
+    private val maxRequests: Int,
+    private val window: Duration
+) {
+    private val semaphore = Semaphore(maxRequests)
+
+    suspend fun <T> execute(block: suspend () -> T): T {
+        semaphore.acquire()
+
+        CoroutineScope(Dispatchers.Default).launch {
+            delay(window)
+            semaphore.release()
+        }
+
+        return block()
+    }
+}
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+
+```kotlin
+// Использовать pipeline для последовательных стадий
+val stage1 = produceData()
+val stage2 = transformData(stage1)
+
+// Использовать semaphore для ограничения ресурсов
+val semaphore = Semaphore(10)
+
+// Использовать кастомные скоупы для переиспользуемых паттернов
+suspend fun <T> retryScope(times: Int, block: suspend () -> T): T
+```
+
+#### НЕ ДЕЛАТЬ:
+
+```kotlin
+// Не создавать неограниченные каналы
+val channel = Channel<Int>(Channel.UNLIMITED)  // Может вызвать OOM
+
+// Не блокировать в корутинах
+GlobalScope.launch {
+    Thread.sleep(1000)  // Плохо! Используйте delay()
+}
+```
 
 ---
 
@@ -847,103 +944,11 @@ GlobalScope.launch {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Продвинутые паттерны корутин позволяют решать сложные задачи параллельного программирования, сохраняя при этом чистоту и безопасность кода.
-
-### Паттерн Pipeline
-
-Паттерн pipeline связывает несколько стадий обработки, где каждая стадия потребляет из предыдущей и производит для следующей.
-
-```kotlin
-// Pipeline: числа -> квадраты -> строки
-fun CoroutineScope.produceNumbers() = produce {
-    var x = 1
-    while (true) {
-        send(x++)
-        delay(100)
-    }
-}
-
-fun CoroutineScope.square(numbers: ReceiveChannel<Int>) = produce {
-    for (x in numbers) {
-        send(x * x)
-    }
-}
-```
-
-### Пулинг Ресурсов С Semaphore
-
-```kotlin
-class ConnectionPool(private val size: Int) {
-    private val connections = List(size) { DatabaseConnection(it) }
-    private val semaphore = Semaphore(size)
-
-    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T {
-        semaphore.acquire()
-        val connection = getConnection()
-
-        return try {
-            block(connection)
-        } finally {
-            releaseConnection(connection)
-            semaphore.release()
-        }
-    }
-}
-```
-
-### Rate Limiting
-
-```kotlin
-class RateLimiter(
-    private val maxRequests: Int,
-    private val window: Duration
-) {
-    private val semaphore = Semaphore(maxRequests)
-
-    suspend fun <T> execute(block: suspend () -> T): T {
-        semaphore.acquire()
-
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(window)
-            semaphore.release()
-        }
-
-        return block()
-    }
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-
-```kotlin
-// Использовать pipeline для последовательных стадий
-val stage1 = produceData()
-val stage2 = transformData(stage1)
-
-// Использовать semaphore для ограничения ресурсов
-val semaphore = Semaphore(10)
-
-// Использовать кастомные скоупы для переиспользуемых паттернов
-suspend fun <T> retryScope(times: Int, block: suspend () -> T): T
-```
-
-#### НЕ ДЕЛАТЬ:
-
-```kotlin
-// Не создавать неограниченные каналы
-val channel = Channel<Int>(Channel.UNLIMITED)  // Может вызвать OOM
-
-// Не блокировать в корутинах
-GlobalScope.launch {
-    Thread.sleep(1000)  // Плохо! Используйте delay()
-}
-```
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

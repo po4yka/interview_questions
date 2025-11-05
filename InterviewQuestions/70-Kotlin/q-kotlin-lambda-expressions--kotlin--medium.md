@@ -1,11 +1,11 @@
 ---
 id: kotlin-007
 title: "Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin"
-aliases: []
+aliases: ["Lambda Expressions in Kotlin, Лямбда-выражения в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, higher-order-functions, lambda-expressions, sam-conversion]
+subtopics: [functional-programming, higher-order-functions, lambda-expressions]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,244 @@ tags: [difficulty/medium, functional-programming, kotlin, lambda-expressions, sa
 date created: Saturday, October 18th 2025, 3:12:53 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое лямбда-выражения в Kotlin и как они работают?
+
+---
 
 # Question (EN)
 > What are lambda expressions in Kotlin and how do they work?
-# Вопрос (RU)
-> Что такое лямбда-выражения в Kotlin и как они работают?
+## Ответ (RU)
+
+Лямбда-выражения (или лямбда-функции) — это анонимные функции, которые можно использовать для создания функциональных литералов. Они предоставляют лаконичный способ представления блока кода, который можно передавать и выполнять позже.
+
+### Базовый Синтаксис
+
+```kotlin
+// Синтаксис лямбды: { параметры -> тело }
+val sum = { a: Int, b: Int -> a + b }
+println(sum(3, 5))  // Вывод: 8
+
+// Лямбда без параметров
+val greet = { println("Hello!") }
+greet()  // Вывод: Hello!
+
+// Лямбда с одним параметром (можно использовать 'it')
+val double = { x: Int -> x * 2 }
+val doubleSimplified = { it: Int -> it * 2 }
+```
+
+### Вывод Типов
+
+Kotlin часто может вывести типы параметров лямбды:
+
+```kotlin
+// Тип явно указан
+val numbers = listOf(1, 2, 3, 4, 5)
+val doubled = numbers.map { x: Int -> x * 2 }
+
+// Тип выведен из контекста
+val doubledInferred = numbers.map { x -> x * 2 }
+
+// Использование 'it' для одного параметра
+val doubledIt = numbers.map { it * 2 }
+```
+
+### Лямбда Как Параметр Функции
+
+Лямбды обычно передаются как аргументы функциям высшего порядка:
+
+```kotlin
+// Функция, принимающая лямбду
+fun performOperation(a: Int, b: Int, operation: (Int, Int) -> Int): Int {
+    return operation(a, b)
+}
+
+// Использование лямбды
+val result1 = performOperation(5, 3) { x, y -> x + y }  // 8
+val result2 = performOperation(5, 3) { x, y -> x * y }  // 15
+
+// Больше примеров
+fun processString(str: String, processor: (String) -> String): String {
+    return processor(str)
+}
+
+val uppercase = processString("hello") { it.uppercase() }  // "HELLO"
+val reversed = processString("hello") { it.reversed() }   // "olleh"
+```
+
+### SAM-преобразование (Single Abstract Method)
+
+Для функциональных интерфейсов (интерфейсов с одним абстрактным методом) можно использовать SAM-преобразования, которые помогают сделать код более лаконичным, используя лямбда-выражения.
+
+Вместо создания класса, который реализует функциональный интерфейс вручную, можно использовать лямбда-выражение:
+
+```kotlin
+fun interface IntPredicate {
+    fun accept(i: Int): Boolean
+}
+
+// Без SAM-преобразования - многословно
+val isEven1 = object : IntPredicate {
+    override fun accept(i: Int): Boolean {
+        return i % 2 == 0
+    }
+}
+
+// С SAM-преобразованием - лаконичная лямбда
+val isEven2 = IntPredicate { it % 2 == 0 }
+
+// Использование
+println("Is 7 even? - ${isEven2.accept(7)}")  // false
+println("Is 8 even? - ${isEven2.accept(8)}")  // true
+```
+
+### Синтаксис Замыкающей Лямбды
+
+Если лямбда является последним параметром функции, её можно вынести за скобки:
+
+```kotlin
+// Последний параметр - лямбда - можно вынести за скобки
+val numbers = listOf(1, 2, 3, 4, 5)
+val evens = numbers.filter { it % 2 == 0 }
+
+// Если лямбда - единственный параметр, скобки можно опустить
+repeat(3) {
+    println("Hello")
+}
+
+// Несколько параметров с замыкающей лямбдой
+fun calculate(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
+    return operation(x, y)
+}
+
+val sum = calculate(5, 3) { a, b -> a + b }
+```
+
+### Лямбда С Получателем
+
+Лямбды можно определять с типом-получателем, что позволяет вызывать методы объекта без квалификации:
+
+```kotlin
+// Лямбда с получателем
+fun buildString(builderAction: StringBuilder.() -> Unit): String {
+    val sb = StringBuilder()
+    sb.builderAction()  // Вызывает лямбду с sb как получателем
+    return sb.toString()
+}
+
+val result = buildString {
+    append("Hello")  // 'this' - это StringBuilder
+    append(" ")
+    append("World")
+}
+println(result)  // "Hello World"
+```
+
+### Захват Переменных (Замыкания)
+
+Лямбды могут обращаться к переменным из окружающей области видимости и изменять их:
+
+```kotlin
+var sum = 0
+val numbers = listOf(1, 2, 3, 4, 5)
+numbers.forEach {
+    sum += it  // Захватывает и изменяет 'sum' из внешней области видимости
+}
+println(sum)  // 15
+
+// Захват неизменяемых значений
+val prefix = "Number: "
+numbers.map { "$prefix$it" }  // [Number: 1, Number: 2, ...]
+```
+
+### Возврат Из Лямбды
+
+По умолчанию `return` в лямбде возвращает управление из охватывающей функции:
+
+```kotlin
+// Нелокальный возврат (возвращает из охватывающей функции)
+fun processNumbers(numbers: List<Int>): Int {
+    numbers.forEach {
+        if (it < 0) return -1  // Возвращает из processNumbers, не forEach
+    }
+    return 0
+}
+
+// Метка для возврата только из лямбды
+fun processNumbersLabeled(numbers: List<Int>): Int {
+    numbers.forEach {
+        if (it < 0) return@forEach  // Возвращает из лямбды, продолжает forEach
+    }
+    return 0
+}
+
+// Пользовательская метка
+fun processNumbersCustomLabel(numbers: List<Int>): Int {
+    numbers.forEach loop@{
+        if (it < 0) return@loop  // Возвращает из лямбды с пользовательской меткой
+    }
+    return 0
+}
+```
+
+### Общие Случаи Использования
+
+#### 1. Операции С Коллекциями
+
+```kotlin
+val numbers = listOf(1, 2, 3, 4, 5)
+
+val doubled = numbers.map { it * 2 }           // [2, 4, 6, 8, 10]
+val evens = numbers.filter { it % 2 == 0 }     // [2, 4]
+val sum = numbers.reduce { acc, n -> acc + n } // 15
+```
+
+#### 2. Обработчики Событий
+
+```kotlin
+button.setOnClickListener { view ->
+    Toast.makeText(context, "Clicked!", Toast.LENGTH_SHORT).show()
+}
+```
+
+#### 3. Асинхронные Операции
+
+```kotlin
+GlobalScope.launch {
+    val result = async { heavyComputation() }
+    updateUI(result.await())
+}
+```
+
+#### 4. Построение DSL
+
+```kotlin
+html {
+    body {
+        div {
+            +"Hello, World!"
+        }
+    }
+}
+```
+
+### Лямбда Vs Анонимная Функция
+
+```kotlin
+// Лямбда
+val lambda = { x: Int -> x * 2 }
+
+// Анонимная функция (похожа, но разное поведение return)
+val anonymousFunc = fun(x: Int): Int {
+    return x * 2
+}
+
+// Анонимная функция позволяет явно указать тип возврата
+val typedFunc = fun(x: Int): String = x.toString()
+```
+
+**Краткое содержание**: Лямбда-выражения — это анонимные функции с лаконичным синтаксисом `{ параметры -> тело }`. Они поддерживают вывод типов, могут захватывать переменные из окружающей области видимости (замыкания), работают с SAM-преобразованием для функциональных интерфейсов и поддерживают синтаксис замыкающей лямбды. Часто используются в операциях с коллекциями, обработчиках событий и паттернах функционального программирования.
 
 ---
 
@@ -268,239 +501,11 @@ val typedFunc = fun(x: Int): String = x.toString()
 
 **English Summary**: Lambda expressions are anonymous functions with concise syntax `{ parameters -> body }`. They support type inference, can capture variables from enclosing scope (closures), work with SAM conversion for functional interfaces, and support trailing lambda syntax. Common in collection operations, event handlers, and functional programming patterns.
 
-## Ответ (RU)
+## Follow-ups
 
-Лямбда-выражения (или лямбда-функции) — это анонимные функции, которые можно использовать для создания функциональных литералов. Они предоставляют лаконичный способ представления блока кода, который можно передавать и выполнять позже.
-
-### Базовый Синтаксис
-
-```kotlin
-// Синтаксис лямбды: { параметры -> тело }
-val sum = { a: Int, b: Int -> a + b }
-println(sum(3, 5))  // Вывод: 8
-
-// Лямбда без параметров
-val greet = { println("Hello!") }
-greet()  // Вывод: Hello!
-
-// Лямбда с одним параметром (можно использовать 'it')
-val double = { x: Int -> x * 2 }
-val doubleSimplified = { it: Int -> it * 2 }
-```
-
-### Вывод Типов
-
-Kotlin часто может вывести типы параметров лямбды:
-
-```kotlin
-// Тип явно указан
-val numbers = listOf(1, 2, 3, 4, 5)
-val doubled = numbers.map { x: Int -> x * 2 }
-
-// Тип выведен из контекста
-val doubledInferred = numbers.map { x -> x * 2 }
-
-// Использование 'it' для одного параметра
-val doubledIt = numbers.map { it * 2 }
-```
-
-### Лямбда Как Параметр Функции
-
-Лямбды обычно передаются как аргументы функциям высшего порядка:
-
-```kotlin
-// Функция, принимающая лямбду
-fun performOperation(a: Int, b: Int, operation: (Int, Int) -> Int): Int {
-    return operation(a, b)
-}
-
-// Использование лямбды
-val result1 = performOperation(5, 3) { x, y -> x + y }  // 8
-val result2 = performOperation(5, 3) { x, y -> x * y }  // 15
-
-// Больше примеров
-fun processString(str: String, processor: (String) -> String): String {
-    return processor(str)
-}
-
-val uppercase = processString("hello") { it.uppercase() }  // "HELLO"
-val reversed = processString("hello") { it.reversed() }   // "olleh"
-```
-
-### SAM-преобразование (Single Abstract Method)
-
-Для функциональных интерфейсов (интерфейсов с одним абстрактным методом) можно использовать SAM-преобразования, которые помогают сделать код более лаконичным, используя лямбда-выражения.
-
-Вместо создания класса, который реализует функциональный интерфейс вручную, можно использовать лямбда-выражение:
-
-```kotlin
-fun interface IntPredicate {
-    fun accept(i: Int): Boolean
-}
-
-// Без SAM-преобразования - многословно
-val isEven1 = object : IntPredicate {
-    override fun accept(i: Int): Boolean {
-        return i % 2 == 0
-    }
-}
-
-// С SAM-преобразованием - лаконичная лямбда
-val isEven2 = IntPredicate { it % 2 == 0 }
-
-// Использование
-println("Is 7 even? - ${isEven2.accept(7)}")  // false
-println("Is 8 even? - ${isEven2.accept(8)}")  // true
-```
-
-### Синтаксис Замыкающей Лямбды
-
-Если лямбда является последним параметром функции, её можно вынести за скобки:
-
-```kotlin
-// Последний параметр - лямбда - можно вынести за скобки
-val numbers = listOf(1, 2, 3, 4, 5)
-val evens = numbers.filter { it % 2 == 0 }
-
-// Если лямбда - единственный параметр, скобки можно опустить
-repeat(3) {
-    println("Hello")
-}
-
-// Несколько параметров с замыкающей лямбдой
-fun calculate(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
-    return operation(x, y)
-}
-
-val sum = calculate(5, 3) { a, b -> a + b }
-```
-
-### Лямбда С Получателем
-
-Лямбды можно определять с типом-получателем, что позволяет вызывать методы объекта без квалификации:
-
-```kotlin
-// Лямбда с получателем
-fun buildString(builderAction: StringBuilder.() -> Unit): String {
-    val sb = StringBuilder()
-    sb.builderAction()  // Вызывает лямбду с sb как получателем
-    return sb.toString()
-}
-
-val result = buildString {
-    append("Hello")  // 'this' - это StringBuilder
-    append(" ")
-    append("World")
-}
-println(result)  // "Hello World"
-```
-
-### Захват Переменных (Замыкания)
-
-Лямбды могут обращаться к переменным из окружающей области видимости и изменять их:
-
-```kotlin
-var sum = 0
-val numbers = listOf(1, 2, 3, 4, 5)
-numbers.forEach {
-    sum += it  // Захватывает и изменяет 'sum' из внешней области видимости
-}
-println(sum)  // 15
-
-// Захват неизменяемых значений
-val prefix = "Number: "
-numbers.map { "$prefix$it" }  // [Number: 1, Number: 2, ...]
-```
-
-### Возврат Из Лямбды
-
-По умолчанию `return` в лямбде возвращает управление из охватывающей функции:
-
-```kotlin
-// Нелокальный возврат (возвращает из охватывающей функции)
-fun processNumbers(numbers: List<Int>): Int {
-    numbers.forEach {
-        if (it < 0) return -1  // Возвращает из processNumbers, не forEach
-    }
-    return 0
-}
-
-// Метка для возврата только из лямбды
-fun processNumbersLabeled(numbers: List<Int>): Int {
-    numbers.forEach {
-        if (it < 0) return@forEach  // Возвращает из лямбды, продолжает forEach
-    }
-    return 0
-}
-
-// Пользовательская метка
-fun processNumbersCustomLabel(numbers: List<Int>): Int {
-    numbers.forEach loop@{
-        if (it < 0) return@loop  // Возвращает из лямбды с пользовательской меткой
-    }
-    return 0
-}
-```
-
-### Общие Случаи Использования
-
-#### 1. Операции С Коллекциями
-
-```kotlin
-val numbers = listOf(1, 2, 3, 4, 5)
-
-val doubled = numbers.map { it * 2 }           // [2, 4, 6, 8, 10]
-val evens = numbers.filter { it % 2 == 0 }     // [2, 4]
-val sum = numbers.reduce { acc, n -> acc + n } // 15
-```
-
-#### 2. Обработчики Событий
-
-```kotlin
-button.setOnClickListener { view ->
-    Toast.makeText(context, "Clicked!", Toast.LENGTH_SHORT).show()
-}
-```
-
-#### 3. Асинхронные Операции
-
-```kotlin
-GlobalScope.launch {
-    val result = async { heavyComputation() }
-    updateUI(result.await())
-}
-```
-
-#### 4. Построение DSL
-
-```kotlin
-html {
-    body {
-        div {
-            +"Hello, World!"
-        }
-    }
-}
-```
-
-### Лямбда Vs Анонимная Функция
-
-```kotlin
-// Лямбда
-val lambda = { x: Int -> x * 2 }
-
-// Анонимная функция (похожа, но разное поведение return)
-val anonymousFunc = fun(x: Int): Int {
-    return x * 2
-}
-
-// Анонимная функция позволяет явно указать тип возврата
-val typedFunc = fun(x: Int): String = x.toString()
-```
-
-**Краткое содержание**: Лямбда-выражения — это анонимные функции с лаконичным синтаксисом `{ параметры -> тело }`. Они поддерживают вывод типов, могут захватывать переменные из окружающей области видимости (замыкания), работают с SAM-преобразованием для функциональных интерфейсов и поддерживают синтаксис замыкающей лямбды. Часто используются в операциях с коллекциями, обработчиках событий и паттернах функционального программирования.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Lambdas - Kotlin Documentation](https://kotlinlang.org/docs/lambdas.html)

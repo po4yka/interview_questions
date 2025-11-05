@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-collections, c-design-patterns, q-iterator-order-guarantee--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [collections, design-patterns, difficulty/easy, iterator, kotlin, programm
 date created: Friday, October 31st 2025, 6:32:07 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Такое Итератор?
-
-# Question (EN)
-> What is an iterator?
 
 # Вопрос (RU)
 > Что такое итератор?
 
 ---
+
+# Question (EN)
+> What is an iterator?
+
+## Ответ (RU)
+
+Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
 
 ## Answer (EN)
 
@@ -199,9 +202,15 @@ val filtered = list.filter { it % 2 != 0 }
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

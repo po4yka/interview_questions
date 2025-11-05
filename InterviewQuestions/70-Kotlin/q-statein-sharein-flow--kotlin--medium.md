@@ -1,11 +1,11 @@
 ---
 id: kotlin-041
 title: "stateIn and shareIn operators in Flow / Операторы stateIn и shareIn во Flow"
-aliases: []
+aliases: ["stateIn and shareIn operators in Flow, Операторы stateIn и shareIn во Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flow, hot-flow, sharein, statein]
+subtopics: [coroutines, flow, hot-flow]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,207 @@ tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharein, statein]
 date created: Tuesday, October 14th 2025, 8:56:38 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Что такое операторы stateIn и shareIn в Kotlin Flow? Когда использовать каждый?
+
+---
 
 # Question (EN)
 > What are stateIn and shareIn operators in Kotlin Flow? When to use each?
-# Вопрос (RU)
-> Что такое операторы stateIn и shareIn в Kotlin Flow? Когда использовать каждый?
+## Ответ (RU)
+
+**`stateIn` и `shareIn`** — операторы, которые конвертируют **холодный Flow** в **горячий Flow** (StateFlow/SharedFlow), позволяя нескольким коллекторам делить один upstream flow.
+
+### Cold Flow Vs Hot Flow
+
+**Cold Flow**: Каждый коллектор запускает независимое выполнение
+
+```kotlin
+val coldFlow = flow {
+    println("Cold flow started")
+    emit(1)
+    emit(2)
+}
+
+// Каждый collect запускает новое выполнение
+coldFlow.collect { println("Collector 1: $it") }  // Печатает "Cold flow started"
+coldFlow.collect { println("Collector 2: $it") }  // Печатает "Cold flow started" снова
+```
+
+**Hot Flow**: Одно выполнение разделяется между коллекторами
+
+```kotlin
+val hotFlow = flow {
+    println("Hot flow started")
+    emit(1)
+    emit(2)
+}.shareIn(scope, SharingStarted.Lazily)
+
+// Одно выполнение, оба коллектора его разделяют
+hotFlow.collect { println("Collector 1: $it") }
+hotFlow.collect { println("Collector 2: $it") }  // "Hot flow started" печатается только раз
+```
+
+### stateIn - Конвертация В StateFlow
+
+**`stateIn`** создаёт **StateFlow**, который всегда имеет текущее значение и воспроизводит последнее значение новым коллекторам.
+
+```kotlin
+class UserViewModel : ViewModel() {
+    // Cold flow из репозитория
+    private val userFlow: Flow<User> = repository.getUserFlow()
+
+    // Конвертация в StateFlow с начальным значением
+    val user: StateFlow<User> = userFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = User.Empty
+        )
+}
+```
+
+**Параметры:**
+
+1. **`scope`**: CoroutineScope для flow
+2. **`started`**: Когда запускать/останавливать upstream flow
+3. **`initialValue`**: Начальное значение до первой эмиссии
+
+### shareIn - Конвертация В SharedFlow
+
+**`shareIn`** создаёт **SharedFlow**, который может воспроизводить несколько значений и не требует начального значения.
+
+```kotlin
+class EventViewModel : ViewModel() {
+    private val eventsFlow: Flow<Event> = repository.getEvents()
+
+    // Конвертация в SharedFlow
+    val events: SharedFlow<Event> = eventsFlow
+        .shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 0  // Нет воспроизведения
+        )
+}
+```
+
+### Сравнение: stateIn Vs shareIn
+
+| Функция | stateIn (StateFlow) | shareIn (SharedFlow) |
+|---------|-------------------|---------------------|
+| **Начальное значение** | Обязательно | Не требуется |
+| **Текущее значение** | Всегда есть `.value` | Нет `.value` |
+| **Воспроизведение** | Всегда 1 (последнее) | Настраиваемое (0, 1, n) |
+| **Конфляция** | Конфлирует значения | Может буферизовать или отбрасывать |
+| **Применение** | Текущее состояние/данные | События, множественные значения |
+
+### Когда Использовать stateIn
+
+**1. Представление текущего состояния**
+
+```kotlin
+class ProductViewModel : ViewModel() {
+    val product: StateFlow<Product> = repository
+        .getProductFlow(productId)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = Product.Loading
+        )
+}
+```
+
+**2. Кэширование результатов сети/БД**
+
+```kotlin
+class UserRepository {
+    val currentUser: StateFlow<User?> = flow {
+        // Эмитим кэшированное значение сначала
+        userDao.getUser()?.let { emit(it) }
+
+        // Загружаем свежие данные
+        val freshUser = userApi.getCurrentUser()
+        userDao.saveUser(freshUser)
+        emit(freshUser)
+    }
+    .stateIn(
+        scope = repositoryScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = null
+    )
+}
+```
+
+### Когда Использовать shareIn
+
+**1. Одноразовые события**
+
+```kotlin
+class OrderViewModel : ViewModel() {
+    private val _orderEvents = MutableSharedFlow<OrderEvent>()
+
+    val orderEvents: SharedFlow<OrderEvent> = _orderEvents
+        .shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 0  // События не должны воспроизводиться
+        )
+}
+```
+
+**2. Несколько недавних значений**
+
+```kotlin
+class ChatViewModel : ViewModel() {
+    val recentMessages: SharedFlow<Message> = repository
+        .getMessagesFlow()
+        .shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 10  // Показать последние 10 сообщений новым подписчикам
+        )
+}
+```
+
+### Стратегии SharingStarted
+
+**1. WhileSubscribed(stopTimeoutMillis)** - Останавливается через N мс после ухода последнего коллектора
+
+**2. Eagerly** - Запускается немедленно при создании, никогда не останавливается
+
+**3. Lazily** - Запускается при первом подписчике, никогда не останавливается
+
+### Пример: Экран Поиска
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    private val searchQuery = MutableStateFlow("")
+
+    // Используем stateIn для результатов поиска (состояние)
+    val searchResults: StateFlow<List<Product>> = searchQuery
+        .debounce(300)
+        .filter { it.length >= 2 }
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            repository.search(query)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    // Используем shareIn для событий поиска (одноразовые события)
+    private val _searchEvents = MutableSharedFlow<SearchEvent>()
+    val searchEvents: SharedFlow<SearchEvent> = _searchEvents.asSharedFlow()
+
+    fun updateQuery(query: String) {
+        searchQuery.value = query
+    }
+}
+```
+
+**Краткое содержание**: `stateIn` конвертирует холодный Flow в StateFlow (всегда имеет текущее значение, воспроизводит последнее новым коллекторам). `shareIn` конвертирует в SharedFlow (настраиваемое воспроизведение, не требует начального значения). Используйте `stateIn` для: состояния/данных с текущим значением, кэширования, комбинирования источников. Используйте `shareIn` для: событий, нескольких недавних значений, вещания. Стратегии SharingStarted: `WhileSubscribed` (останавливается после таймаута), `Eagerly` (никогда не останавливается), `Lazily` (запускается на первом подписчике).
 
 ---
 
@@ -454,202 +650,11 @@ class ViewModel : ViewModel() {
 
 **English Summary**: `stateIn` converts cold Flow to StateFlow (always has current value, replays latest to new collectors). `shareIn` converts to SharedFlow (configurable replay, no initial value required). Use `stateIn` for: state/data that has current value, caching, combining sources. Use `shareIn` for: events, multiple recent values, broadcasting. SharingStarted strategies: `WhileSubscribed` (stops after timeout), `Eagerly` (never stops), `Lazily` (starts on first subscriber). StateFlow conflates, SharedFlow can buffer.
 
-## Ответ (RU)
+## Follow-ups
 
-**`stateIn` и `shareIn`** — операторы, которые конвертируют **холодный Flow** в **горячий Flow** (StateFlow/SharedFlow), позволяя нескольким коллекторам делить один upstream flow.
-
-### Cold Flow Vs Hot Flow
-
-**Cold Flow**: Каждый коллектор запускает независимое выполнение
-
-```kotlin
-val coldFlow = flow {
-    println("Cold flow started")
-    emit(1)
-    emit(2)
-}
-
-// Каждый collect запускает новое выполнение
-coldFlow.collect { println("Collector 1: $it") }  // Печатает "Cold flow started"
-coldFlow.collect { println("Collector 2: $it") }  // Печатает "Cold flow started" снова
-```
-
-**Hot Flow**: Одно выполнение разделяется между коллекторами
-
-```kotlin
-val hotFlow = flow {
-    println("Hot flow started")
-    emit(1)
-    emit(2)
-}.shareIn(scope, SharingStarted.Lazily)
-
-// Одно выполнение, оба коллектора его разделяют
-hotFlow.collect { println("Collector 1: $it") }
-hotFlow.collect { println("Collector 2: $it") }  // "Hot flow started" печатается только раз
-```
-
-### stateIn - Конвертация В StateFlow
-
-**`stateIn`** создаёт **StateFlow**, который всегда имеет текущее значение и воспроизводит последнее значение новым коллекторам.
-
-```kotlin
-class UserViewModel : ViewModel() {
-    // Cold flow из репозитория
-    private val userFlow: Flow<User> = repository.getUserFlow()
-
-    // Конвертация в StateFlow с начальным значением
-    val user: StateFlow<User> = userFlow
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = User.Empty
-        )
-}
-```
-
-**Параметры:**
-
-1. **`scope`**: CoroutineScope для flow
-2. **`started`**: Когда запускать/останавливать upstream flow
-3. **`initialValue`**: Начальное значение до первой эмиссии
-
-### shareIn - Конвертация В SharedFlow
-
-**`shareIn`** создаёт **SharedFlow**, который может воспроизводить несколько значений и не требует начального значения.
-
-```kotlin
-class EventViewModel : ViewModel() {
-    private val eventsFlow: Flow<Event> = repository.getEvents()
-
-    // Конвертация в SharedFlow
-    val events: SharedFlow<Event> = eventsFlow
-        .shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            replay = 0  // Нет воспроизведения
-        )
-}
-```
-
-### Сравнение: stateIn Vs shareIn
-
-| Функция | stateIn (StateFlow) | shareIn (SharedFlow) |
-|---------|-------------------|---------------------|
-| **Начальное значение** | Обязательно | Не требуется |
-| **Текущее значение** | Всегда есть `.value` | Нет `.value` |
-| **Воспроизведение** | Всегда 1 (последнее) | Настраиваемое (0, 1, n) |
-| **Конфляция** | Конфлирует значения | Может буферизовать или отбрасывать |
-| **Применение** | Текущее состояние/данные | События, множественные значения |
-
-### Когда Использовать stateIn
-
-**1. Представление текущего состояния**
-
-```kotlin
-class ProductViewModel : ViewModel() {
-    val product: StateFlow<Product> = repository
-        .getProductFlow(productId)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = Product.Loading
-        )
-}
-```
-
-**2. Кэширование результатов сети/БД**
-
-```kotlin
-class UserRepository {
-    val currentUser: StateFlow<User?> = flow {
-        // Эмитим кэшированное значение сначала
-        userDao.getUser()?.let { emit(it) }
-
-        // Загружаем свежие данные
-        val freshUser = userApi.getCurrentUser()
-        userDao.saveUser(freshUser)
-        emit(freshUser)
-    }
-    .stateIn(
-        scope = repositoryScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
-}
-```
-
-### Когда Использовать shareIn
-
-**1. Одноразовые события**
-
-```kotlin
-class OrderViewModel : ViewModel() {
-    private val _orderEvents = MutableSharedFlow<OrderEvent>()
-
-    val orderEvents: SharedFlow<OrderEvent> = _orderEvents
-        .shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            replay = 0  // События не должны воспроизводиться
-        )
-}
-```
-
-**2. Несколько недавних значений**
-
-```kotlin
-class ChatViewModel : ViewModel() {
-    val recentMessages: SharedFlow<Message> = repository
-        .getMessagesFlow()
-        .shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            replay = 10  // Показать последние 10 сообщений новым подписчикам
-        )
-}
-```
-
-### Стратегии SharingStarted
-
-**1. WhileSubscribed(stopTimeoutMillis)** - Останавливается через N мс после ухода последнего коллектора
-
-**2. Eagerly** - Запускается немедленно при создании, никогда не останавливается
-
-**3. Lazily** - Запускается при первом подписчике, никогда не останавливается
-
-### Пример: Экран Поиска
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    private val searchQuery = MutableStateFlow("")
-
-    // Используем stateIn для результатов поиска (состояние)
-    val searchResults: StateFlow<List<Product>> = searchQuery
-        .debounce(300)
-        .filter { it.length >= 2 }
-        .distinctUntilChanged()
-        .flatMapLatest { query ->
-            repository.search(query)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-
-    // Используем shareIn для событий поиска (одноразовые события)
-    private val _searchEvents = MutableSharedFlow<SearchEvent>()
-    val searchEvents: SharedFlow<SearchEvent> = _searchEvents.asSharedFlow()
-
-    fun updateQuery(query: String) {
-        searchQuery.value = query
-    }
-}
-```
-
-**Краткое содержание**: `stateIn` конвертирует холодный Flow в StateFlow (всегда имеет текущее значение, воспроизводит последнее новым коллекторам). `shareIn` конвертирует в SharedFlow (настраиваемое воспроизведение, не требует начального значения). Используйте `stateIn` для: состояния/данных с текущим значением, кэширования, комбинирования источников. Используйте `shareIn` для: событий, нескольких недавних значений, вещания. Стратегии SharingStarted: `WhileSubscribed` (останавливается после таймаута), `Eagerly` (никогда не останавливается), `Lazily` (запускается на первом подписчике).
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [StateFlow and SharedFlow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#stateflow-and-sharedflow)

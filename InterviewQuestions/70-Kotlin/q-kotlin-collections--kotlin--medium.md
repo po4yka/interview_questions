@@ -1,7 +1,7 @@
 ---
 id: kotlin-100
 title: "Kotlin Collections / Коллекции в Kotlin"
-aliases: []
+aliases: ["Kotlin Collections, Коллекции в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -33,12 +33,141 @@ tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, opera
 date created: Sunday, October 12th 2025, 3:02:56 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое коллекции в Kotlin? Объясните List, Set, Map, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.
+
+---
 
 # Question (EN)
 > What are Kotlin collections? Explain List, Set, Map, their mutable variants, collection operators, and the difference between Collections and Sequences.
 
-# Вопрос (RU)
-> Что такое коллекции в Kotlin? Объясните List, Set, Map, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.
+## Ответ (RU)
+
+Kotlin предоставляет богатый набор типов коллекций и операций, которые делают манипуляцию данными элегантной и лаконичной. Коллекции в Kotlin разделены на **неизменяемые** (read-only) и **изменяемые** варианты.
+
+### Обзор Типов Коллекций
+
+**List**: Упорядоченная коллекция только для чтения с индексным доступом
+**MutableList**: Изменяемый вариант, позволяющий модификации
+**Set**: Коллекция уникальных элементов только для чтения
+**MutableSet**: Изменяемый набор
+**Map**: Коллекция пар ключ-значение только для чтения
+**MutableMap**: Изменяемая карта
+
+### Операторы Коллекций
+
+#### Map - Преобразовать Каждый Элемент:
+
+```kotlin
+val numbers = listOf(1, 2, 3, 4, 5)
+val doubled = numbers.map { it * 2 }
+// [2, 4, 6, 8, 10]
+```
+
+#### Filter - Выбрать Элементы По Условию:
+
+```kotlin
+val numbers = listOf(1, 2, 3, 4, 5, 6)
+val even = numbers.filter { it % 2 == 0 }
+// [2, 4, 6]
+```
+
+#### flatMap - Преобразовать И Сгладить:
+
+```kotlin
+val lists = listOf(listOf(1, 2), listOf(3, 4))
+val flattened = lists.flatten()
+// [1, 2, 3, 4]
+```
+
+#### groupBy - Группировать Элементы По Ключу:
+
+```kotlin
+val words = listOf("apple", "banana", "apricot")
+val byFirstLetter = words.groupBy { it.first() }
+// {a=[apple, apricot], b=[banana]}
+```
+
+### Коллекции Vs Последовательности
+
+**Коллекции** оцениваются немедленно (eagerly):
+- Каждая операция создаёт промежуточную коллекцию
+- Все элементы обрабатываются сразу
+- Хороши для небольших наборов данных
+
+**Последовательности** оцениваются лениво (lazily):
+- Не создают промежуточные коллекции
+- Обрабатывают элементы по требованию
+- Хороши для больших наборов данных
+- Поддерживают досрочное завершение
+
+```kotlin
+// Использовать последовательности для больших датасетов
+val largeList = (1..1_000_000).toList()
+
+val result = largeList.asSequence()
+    .filter { it % 2 == 0 }
+    .map { it * 2 }
+    .take(10)
+    .toList()
+```
+
+### Реальные Примеры
+
+```kotlin
+data class User(val name: String, val age: Int)
+
+val users = listOf(
+    User("Alice", 25),
+    User("Bob", 30),
+    User("Charlie", 25)
+)
+
+// Группировка по возрасту
+val byAge = users.groupBy { it.age }
+// {25=[User(Alice, 25), User(Charlie, 25)], 30=[User(Bob, 30)]}
+
+// Получить имена взрослых пользователей
+val adultNames = users
+    .filter { it.age >= 18 }
+    .map { it.name }
+    .sorted()
+// [Alice, Bob, Charlie]
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+
+```kotlin
+// Использовать неизменяемые коллекции по умолчанию
+val numbers = listOf(1, 2, 3)
+
+// Цепочки операций для читаемости
+val result = users
+    .filter { it.age >= 18 }
+    .map { it.name }
+    .sorted()
+
+// Использовать последовательности для больших датасетов
+val result = largeList.asSequence()
+    .filter { /* ... */ }
+    .map { /* ... */ }
+    .toList()
+```
+
+#### НЕ ДЕЛАТЬ:
+
+```kotlin
+// Не использовать изменяемые коллекции когда работают неизменяемые
+val numbers = mutableListOf(1, 2, 3)  // Лишнее
+
+// Не создавать лишние промежуточные коллекции
+val result = list
+    .filter { /* ... */ }
+    .toList()  // Лишнее
+    .map { /* ... */ }
+```
 
 ---
 
@@ -810,135 +939,11 @@ val result = small.asSequence()  // Overhead not worth it
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Kotlin предоставляет богатый набор типов коллекций и операций, которые делают манипуляцию данными элегантной и лаконичной. Коллекции в Kotlin разделены на **неизменяемые** (read-only) и **изменяемые** варианты.
-
-### Обзор Типов Коллекций
-
-**List**: Упорядоченная коллекция только для чтения с индексным доступом
-**MutableList**: Изменяемый вариант, позволяющий модификации
-**Set**: Коллекция уникальных элементов только для чтения
-**MutableSet**: Изменяемый набор
-**Map**: Коллекция пар ключ-значение только для чтения
-**MutableMap**: Изменяемая карта
-
-### Операторы Коллекций
-
-#### Map - Преобразовать Каждый Элемент:
-
-```kotlin
-val numbers = listOf(1, 2, 3, 4, 5)
-val doubled = numbers.map { it * 2 }
-// [2, 4, 6, 8, 10]
-```
-
-#### Filter - Выбрать Элементы По Условию:
-
-```kotlin
-val numbers = listOf(1, 2, 3, 4, 5, 6)
-val even = numbers.filter { it % 2 == 0 }
-// [2, 4, 6]
-```
-
-#### flatMap - Преобразовать И Сгладить:
-
-```kotlin
-val lists = listOf(listOf(1, 2), listOf(3, 4))
-val flattened = lists.flatten()
-// [1, 2, 3, 4]
-```
-
-#### groupBy - Группировать Элементы По Ключу:
-
-```kotlin
-val words = listOf("apple", "banana", "apricot")
-val byFirstLetter = words.groupBy { it.first() }
-// {a=[apple, apricot], b=[banana]}
-```
-
-### Коллекции Vs Последовательности
-
-**Коллекции** оцениваются немедленно (eagerly):
-- Каждая операция создаёт промежуточную коллекцию
-- Все элементы обрабатываются сразу
-- Хороши для небольших наборов данных
-
-**Последовательности** оцениваются лениво (lazily):
-- Не создают промежуточные коллекции
-- Обрабатывают элементы по требованию
-- Хороши для больших наборов данных
-- Поддерживают досрочное завершение
-
-```kotlin
-// Использовать последовательности для больших датасетов
-val largeList = (1..1_000_000).toList()
-
-val result = largeList.asSequence()
-    .filter { it % 2 == 0 }
-    .map { it * 2 }
-    .take(10)
-    .toList()
-```
-
-### Реальные Примеры
-
-```kotlin
-data class User(val name: String, val age: Int)
-
-val users = listOf(
-    User("Alice", 25),
-    User("Bob", 30),
-    User("Charlie", 25)
-)
-
-// Группировка по возрасту
-val byAge = users.groupBy { it.age }
-// {25=[User(Alice, 25), User(Charlie, 25)], 30=[User(Bob, 30)]}
-
-// Получить имена взрослых пользователей
-val adultNames = users
-    .filter { it.age >= 18 }
-    .map { it.name }
-    .sorted()
-// [Alice, Bob, Charlie]
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-
-```kotlin
-// Использовать неизменяемые коллекции по умолчанию
-val numbers = listOf(1, 2, 3)
-
-// Цепочки операций для читаемости
-val result = users
-    .filter { it.age >= 18 }
-    .map { it.name }
-    .sorted()
-
-// Использовать последовательности для больших датасетов
-val result = largeList.asSequence()
-    .filter { /* ... */ }
-    .map { /* ... */ }
-    .toList()
-```
-
-#### НЕ ДЕЛАТЬ:
-
-```kotlin
-// Не использовать изменяемые коллекции когда работают неизменяемые
-val numbers = mutableListOf(1, 2, 3)  // Лишнее
-
-// Не создавать лишние промежуточные коллекции
-val result = list
-    .filter { /* ... */ }
-    .toList()  // Лишнее
-    .map { /* ... */ }
-```
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

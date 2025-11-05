@@ -17,16 +17,65 @@ tags: [difficulty/easy, equality, operators, programming-languages, reference-eq
 date created: Friday, October 31st 2025, 6:32:17 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Какой Оператор Используется Для Проверки Равенства Ссылок В Kotlin?
-
-# Question (EN)
-> Which operator is used to check reference equality in Kotlin?
 
 # Вопрос (RU)
 > Какой оператор используется для проверки равенства ссылок в Kotlin?
 
 ---
+
+# Question (EN)
+> Which operator is used to check reference equality in Kotlin?
+
+## Ответ (RU)
+
+В Kotlin для проверки **ссылочного равенства** используется оператор **`===`** (также называемого референтным равенством). Он проверяет, указывают ли две переменные на один и тот же объект в памяти.
+
+**Сравнение: `==` vs `===`**
+
+```kotlin
+val a = "Hello"
+val b = "Hello"
+val c = a
+
+// Структурное равенство (==) - проверяет содержимое
+a == b   // true (одинаковое содержимое)
+
+// Референтное равенство (===) - проверяет, один ли это объект
+a === b  // true (string pool - один объект)
+a === c  // true (c ссылается на a)
+
+val d = String(charArrayOf('H', 'e', 'l', 'l', 'o'))
+a == d   // true (одинаковое содержимое)
+a === d  // false (разные объекты в памяти)
+```
+
+**С пользовательскими объектами:**
+```kotlin
+data class User(val name: String)
+
+val user1 = User("John")
+val user2 = User("John")
+val user3 = user1
+
+user1 == user2   // true (data class equals проверяет содержимое)
+user1 === user2  // false (разные объекты)
+user1 === user3  // true (одна и та же ссылка)
+```
+
+**Ключевые различия:**
+
+| Оператор | Назначение | Null-safe |
+|----------|---------|-----------|
+| `==` | Структурное равенство (вызывает `equals()`) | Да |
+| `===` | Референтное равенство (один объект) | Да |
+| `!=` | Структурное неравенство | Да |
+| `!==` | Референтное неравенство | Да |
+
+**Kotlin vs Java:**
+- Kotlin `==` ≈ Java `.equals()`
+- Kotlin `===` ≈ Java `==`
+- `==` в Kotlin является null-safe, `==` в Java проверяет ссылки
 
 ## Answer (EN)
 
@@ -80,55 +129,15 @@ user1 === user3  // true (same reference)
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-В Kotlin для проверки **ссылочного равенства** используется оператор **`===`** (также называемого референтным равенством). Он проверяет, указывают ли две переменные на один и тот же объект в памяти.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-**Сравнение: `==` vs `===`**
+## References
 
-```kotlin
-val a = "Hello"
-val b = "Hello"
-val c = a
-
-// Структурное равенство (==) - проверяет содержимое
-a == b   // true (одинаковое содержимое)
-
-// Референтное равенство (===) - проверяет, один ли это объект
-a === b  // true (string pool - один объект)
-a === c  // true (c ссылается на a)
-
-val d = String(charArrayOf('H', 'e', 'l', 'l', 'o'))
-a == d   // true (одинаковое содержимое)
-a === d  // false (разные объекты в памяти)
-```
-
-**С пользовательскими объектами:**
-```kotlin
-data class User(val name: String)
-
-val user1 = User("John")
-val user2 = User("John")
-val user3 = user1
-
-user1 == user2   // true (data class equals проверяет содержимое)
-user1 === user2  // false (разные объекты)
-user1 === user3  // true (одна и та же ссылка)
-```
-
-**Ключевые различия:**
-
-| Оператор | Назначение | Null-safe |
-|----------|---------|-----------|
-| `==` | Структурное равенство (вызывает `equals()`) | Да |
-| `===` | Референтное равенство (один объект) | Да |
-| `!=` | Структурное неравенство | Да |
-| `!==` | Референтное неравенство | Да |
-
-**Kotlin vs Java:**
-- Kotlin `==` ≈ Java `.equals()`
-- Kotlin `===` ≈ Java `==`
-- `==` в Kotlin является null-safe, `==` в Java проверяет ссылки
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

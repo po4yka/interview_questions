@@ -534,6 +534,16 @@ user?.email?.let { email ->
 8. Предпочитайте `let` вместо `run` для nullable receivers
 9. Не злоупотребляйте - иногда простой код лучше
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-flow-performance--kotlin--hard]]

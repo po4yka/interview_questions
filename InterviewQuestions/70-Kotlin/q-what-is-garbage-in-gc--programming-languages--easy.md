@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: []
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, prog
 date created: Saturday, October 4th 2025, 1:21:00 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # О Каком Мусоре Идет Речь В Сборщике Мусора?
-
-# Question (EN)
-> What is "garbage" in garbage collector?
 
 # Вопрос (RU)
 > О каком мусоре идет речь в сборщике мусора?
 
 ---
+
+# Question (EN)
+> What is "garbage" in garbage collector?
+
+## Ответ (RU)
+
+Это объекты в памяти, которые больше не используются и недостижимы из корневых объектов. Сборщик мусора освобождает эти объекты, чтобы уменьшить использование памяти.
 
 ## Answer (EN)
 
@@ -112,8 +115,14 @@ val data = ByteArray(1000)
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Это объекты в памяти, которые больше не используются и недостижимы из корневых объектов. Сборщик мусора освобождает эти объекты, чтобы уменьшить использование памяти.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions

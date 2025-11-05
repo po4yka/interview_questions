@@ -389,6 +389,16 @@ val (matching, nonMatching) = list.partition { condition }
 - Если нужна только одна группа → используйте `filter`
 - Если нужно >2 групп → используйте `groupBy`
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

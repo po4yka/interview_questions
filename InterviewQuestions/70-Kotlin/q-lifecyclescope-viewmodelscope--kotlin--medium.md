@@ -1,11 +1,11 @@
 ---
 id: kotlin-087
 title: "lifecycleScope vs viewModelScope / lifecycleScope против viewModelScope"
-aliases: []
+aliases: ["lifecycleScope vs viewModelScope, lifecycleScope против viewModelScope"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, lifecycle, scopes, viewmodel]
+subtopics: [android, coroutines, lifecycle]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,51 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
 date created: Sunday, October 12th 2025, 3:43:53 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> В чем разница между lifecycleScope и viewModelScope? Когда использовать каждый, как они обрабатывают события жизненного цикла и лучшие практики для Android coroutine scopes.
+
+---
 
 # Question (EN)
 > What's the difference between lifecycleScope and viewModelScope? When to use each, how they handle lifecycle events, and best practices for Android coroutine scopes.
 
-# Вопрос (RU)
-> В чем разница между lifecycleScope и viewModelScope? Когда использовать каждый, как они обрабатывают события жизненного цикла и лучшие практики для Android coroutine scopes.
+## Ответ (RU)
+
+`lifecycleScope` и `viewModelScope` - это CoroutineScope с поддержкой жизненного цикла Android.
+
+### Ключевые Различия
+
+- **lifecycleScope**: Привязан к Activity/Fragment, отменяется при onDestroy(), НЕ переживает поворот экрана
+- **viewModelScope**: Привязан к ViewModel, отменяется при onCleared(), ПЕРЕЖИВАЕТ поворот экрана
+
+### Когда Использовать
+
+**lifecycleScope**:
+- UI операции (анимации, обновления)
+- Подписка на Flow/StateFlow
+- Одноразовые UI события
+
+**viewModelScope**:
+- Бизнес-логика
+- Загрузка данных
+- Работа с репозиториями
+
+### Лучшая Практика
+
+```kotlin
+// Fragment: UI с lifecycleScope + repeatOnLifecycle
+viewLifecycleOwner.lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.state.collect { updateUI(it) }
+    }
+}
+
+// ViewModel: Логика с viewModelScope
+viewModelScope.launch {
+    val data = repository.fetch()
+    _state.value = data
+}
+```
 
 ---
 
@@ -469,46 +508,6 @@ class ProductFragment : Fragment() {
 
 ---
 
-## Ответ (RU)
-
-`lifecycleScope` и `viewModelScope` - это CoroutineScope с поддержкой жизненного цикла Android.
-
-### Ключевые Различия
-
-- **lifecycleScope**: Привязан к Activity/Fragment, отменяется при onDestroy(), НЕ переживает поворот экрана
-- **viewModelScope**: Привязан к ViewModel, отменяется при onCleared(), ПЕРЕЖИВАЕТ поворот экрана
-
-### Когда Использовать
-
-**lifecycleScope**:
-- UI операции (анимации, обновления)
-- Подписка на Flow/StateFlow
-- Одноразовые UI события
-
-**viewModelScope**:
-- Бизнес-логика
-- Загрузка данных
-- Работа с репозиториями
-
-### Лучшая Практика
-
-```kotlin
-// Fragment: UI с lifecycleScope + repeatOnLifecycle
-viewLifecycleOwner.lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.state.collect { updateUI(it) }
-    }
-}
-
-// ViewModel: Логика с viewModelScope
-viewModelScope.launch {
-    val data = repository.fetch()
-    _state.value = data
-}
-```
-
----
-
 ## Follow-up Questions (Следующие вопросы)
 
 1. **What is repeatOnLifecycle and why is it important?**
@@ -519,14 +518,22 @@ viewModelScope.launch {
 
 ---
 
-## References (Ссылки)
-
-### Official Documentation
+**Official Documentation:**
 - [Lifecycle-aware coroutines](https://developer.android.com/topic/libraries/architecture/coroutines)
 - [lifecycleScope](https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#lifecyclescope)
 - [viewModelScope](https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#viewmodelscope)
 
 ---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

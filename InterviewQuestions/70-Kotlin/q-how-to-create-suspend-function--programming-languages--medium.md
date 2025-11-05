@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-kotlin-features, q-how-suspend-function-detects-suspension--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, functions, kotlin, programming-languages]
 date created: Friday, October 31st 2025, 6:31:28 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # How to Create a Suspend Function?
-
-# Question (EN)
-> How to create a suspend function?
 
 # Вопрос (RU)
 > Как создать suspend функцию?
 
 ---
+
+# Question (EN)
+> How to create a suspend function?
+
+## Ответ (RU)
+
+Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин.
 
 ## Answer (EN)
 
@@ -427,9 +430,15 @@ suspend fun longRunningTask() {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

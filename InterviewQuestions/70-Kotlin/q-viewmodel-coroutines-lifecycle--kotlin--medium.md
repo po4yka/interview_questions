@@ -1,11 +1,11 @@
 ---
 id: kotlin-121
 title: "ViewModel Coroutines and Lifecycle / Корутины в ViewModel и жизненный цикл"
-aliases: []
+aliases: ["ViewModel Coroutines and Lifecycle, Корутины в ViewModel и жизненный цикл"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, lifecycle, viewmodel, viewmodelscope]
+subtopics: [android, coroutines, lifecycle]
 question_kind: theory
 difficulty: medium
 

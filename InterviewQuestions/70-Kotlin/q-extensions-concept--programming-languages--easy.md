@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-extensions, c-kotlin-features, q-extension-properties--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [difficulty/easy, extension-functions, extensions, kotlin, programming-lan
 date created: Friday, October 31st 2025, 6:30:12 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Что Такое Extensions?
-
-# Question (EN)
-> What are Extensions?
 
 # Вопрос (RU)
 > Что такое Extensions?
 
 ---
+
+# Question (EN)
+> What are Extensions?
+
+## Ответ (RU)
+
+Термин 'Extensions' используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
 
 ## Answer (EN)
 
@@ -243,9 +246,15 @@ fun MyClass.tryAccess() {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Термин 'Extensions' используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

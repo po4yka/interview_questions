@@ -55,7 +55,7 @@ date modified: Saturday, November 1st 2025, 5:43:39 pm
 
 ```yaml
 # REQUIRED: Identification
-- [ ] id: YYYYMMDD-HHmmss (e.g., 20251018-143500)
+- [ ] id: <subject>-<serial> (e.g., algo-001, android-134)
 - [ ] title: "EN Title / RU Заголовок" (both languages)
 - [ ] aliases: [EN Title, RU Заголовок] (array with both)
 
@@ -467,7 +467,7 @@ moc-tools             # For tools, debugging
 
 ```yaml
 ---
-id: 20251018-120000
+id: algo-001
 title: Two Sum / Два слагаемых
 aliases: [Two Sum, Два слагаемых]
 topic: algorithms
@@ -489,7 +489,7 @@ tags: [leetcode, arrays, hash-map, difficulty/easy]
 
 ```yaml
 ---
-id: 20251018-120100
+id: android-001
 title: Compose State / Состояние Compose
 aliases: [Compose State, Состояние Compose]
 topic: android

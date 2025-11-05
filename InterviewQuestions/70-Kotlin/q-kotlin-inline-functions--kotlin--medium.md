@@ -1,11 +1,11 @@
 ---
 id: kotlin-132
 title: "Kotlin Inline Functions / Inline функции в Kotlin"
-aliases: []
+aliases: ["Kotlin Inline Functions, Inline функции в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [inline-functions, lambdas, optimization, performance, reified]
+subtopics: [inline-functions, lambdas, optimization]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,545 @@ tags: [difficulty/medium, inline-functions, kotlin, lambdas, optimization, perfo
 date created: Sunday, October 12th 2025, 2:02:58 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое inline функции в Kotlin? Объясните их назначение, преимущества, модификаторы (noinline, crossinline), ограничения и приведите практические примеры с анализом производительности.
+
+---
 
 # Question (EN)
 > What are inline functions in Kotlin? Explain their purpose, benefits, modifiers (noinline, crossinline), limitations, and provide practical examples with performance analysis.
 
-# Вопрос (RU)
-> Что такое inline функции в Kotlin? Объясните их назначение, преимущества, модификаторы (noinline, crossinline), ограничения и приведите практические примеры с анализом производительности.
+## Ответ (RU)
+
+Inline функции - это мощная возможность Kotlin, которая инструктирует компилятор вставлять байт-код функции непосредственно в место вызова вместо создания отдельного вызова функции. Это устраняет накладные расходы на вызов функции и позволяет использовать продвинутые возможности, такие как реифицированные параметры типов.
+
+### Зачем Нужны Inline Функции
+
+В Kotlin лямбда-выражения обычно компилируются в экземпляры анонимных классов (Function0, Function1 и т.д.). Каждая лямбда создает объект, который:
+1. Выделяет память в куче
+2. Создает давление на сборщик мусора
+3. Добавляет косвенность через накладные расходы вызова функции
+
+**Проблема без inline**:
+```kotlin
+// Обычная функция высшего порядка
+fun repeat(times: Int, action: () -> Unit) {
+    for (i in 0 until times) {
+        action()  // Косвенный вызов через объект Function
+    }
+}
+
+// Использование
+repeat(5) {
+    println("Привет")
+}
+
+// Компилируется примерно в:
+Function0 action = new Function0() {
+    public void invoke() {
+        System.out.println("Привет");
+    }
+};
+for (int i = 0; i < 5; i++) {
+    action.invoke();  // Выделение объекта + косвенный вызов
+}
+```
+
+**Решение с inline**:
+```kotlin
+inline fun repeat(times: Int, action: () -> Unit) {
+    for (i in 0 until times) {
+        action()  // Тело лямбды встраивается напрямую
+    }
+}
+
+// То же использование
+repeat(5) {
+    println("Привет")
+}
+
+// Компилируется в:
+for (int i = 0; i < 5; i++) {
+    System.out.println("Привет");  // Прямой код, без выделения памяти!
+}
+```
+
+### Как Работают Inline Функции
+
+Компилятор выполняет **копирование-вставку** как тела функции, так и тел лямбд в место вызова:
+
+```kotlin
+inline fun measureTime(block: () -> Unit): Long {
+    val start = System.nanoTime()
+    block()
+    val end = System.nanoTime()
+    return end - start
+}
+
+// Место вызова
+val time = measureTime {
+    println("Выполняю работу")
+    Thread.sleep(100)
+}
+
+// После встраивания (концептуально):
+val start = System.nanoTime()
+println("Выполняю работу")
+Thread.sleep(100)
+val end = System.nanoTime()
+val time = end - start
+```
+
+### Преимущества Inline Функций
+
+#### 1. Устраняет Накладные Расходы На Вызов Функций
+
+```kotlin
+// Бенчмарк производительности
+inline fun inlined(operation: () -> Int): Int {
+    return operation()
+}
+
+fun notInlined(operation: () -> Int): Int {
+    return operation()
+}
+
+fun benchmark() {
+    val iterations = 100_000_000
+
+    // С inline - ~200мс
+    var result = 0
+    val start1 = System.currentTimeMillis()
+    repeat(iterations) {
+        result += inlined { 1 }
+    }
+    println("Inline: ${System.currentTimeMillis() - start1}мс")
+
+    // Без inline - ~600мс (в 3 раза медленнее!)
+    result = 0
+    val start2 = System.currentTimeMillis()
+    repeat(iterations) {
+        result += notInlined { 1 }
+    }
+    println("Не inline: ${System.currentTimeMillis() - start2}мс")
+}
+```
+
+#### 2. Избегает Выделения Объектов Для Лямбд
+
+```kotlin
+// Сравнение выделения памяти
+class MemoryTest {
+    // Без inline - создает объект Function при каждом вызове
+    fun processItems(items: List<String>, transform: (String) -> String): List<String> {
+        return items.map(transform)  // Выделяется объект Function
+    }
+
+    // С inline - нет выделения
+    inline fun processItemsInline(items: List<String>, transform: (String) -> String): List<String> {
+        return items.map(transform)  // Код лямбды встраивается
+    }
+}
+
+// Вызов 1000 раз:
+// processItems: Выделяет 1000 объектов Function → давление на GC
+// processItemsInline: Ноль выделений → Нет влияния на GC
+```
+
+#### 3. Позволяет Использовать Реифицированные Параметры Типов
+
+Только inline функции могут использовать `reified`, что дает доступ к информации о типе во время выполнения:
+
+```kotlin
+// Без reified - не работает
+fun <T> isInstanceOf(value: Any): Boolean {
+    return value is T  //  Ошибка: Невозможно проверить стертый тип
+}
+
+// С inline + reified - работает!
+inline fun <reified T> isInstanceOf(value: Any): Boolean {
+    return value is T  //  Проверка типа работает!
+}
+
+// Практические примеры
+inline fun <reified T> List<*>.filterIsInstance(): List<T> {
+    return this.filter { it is T }.map { it as T }
+}
+
+val mixed: List<Any> = listOf("привет", 42, "мир", 3.14)
+val strings: List<String> = mixed.filterIsInstance<String>()
+// Результат: ["привет", "мир"]
+
+inline fun <reified T> Gson.fromJson(json: String): T {
+    return fromJson(json, T::class.java)
+}
+
+val user: User = gson.fromJson<User>(jsonString)
+```
+
+#### 4. Разрешает Нелокальные Возвраты
+
+В inline функциях лямбда может использовать `return` для выхода из охватывающей функции:
+
+```kotlin
+// Пример нелокального возврата
+fun findFirstNegative(numbers: List<Int>): Int? {
+    numbers.forEach { number ->  // forEach является inline
+        if (number < 0) {
+            return number  // Возвращается из findFirstNegative, не из лямбды
+        }
+    }
+    return null
+}
+
+val result = findFirstNegative(listOf(1, 2, -3, 4))
+// Возвращает -3 и выходит из всей функции
+```
+
+### Полные Практические Примеры
+
+#### Пример 1: Реализация Синхронизированного Блока
+
+```kotlin
+// Реализация из стандартной библиотеки
+inline fun <R> synchronized(lock: Any, block: () -> R): R {
+    @Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
+    kotlin.jvm.internal.Intrinsics.monitor.enter(lock)
+    try {
+        return block()
+    } finally {
+        kotlin.jvm.internal.Intrinsics.monitor.exit(lock)
+    }
+}
+
+// Использование
+class Counter {
+    private val lock = Any()
+    private var count = 0
+
+    fun increment() {
+        synchronized(lock) {
+            count++
+        }
+    }
+
+    fun get(): Int = synchronized(lock) { count }
+}
+```
+
+#### Пример 2: Паттерн Use-Resource (try-with-resources)
+
+```kotlin
+inline fun <T : Closeable, R> T.use(block: (T) -> R): R {
+    var exception: Throwable? = null
+    try {
+        return block(this)
+    } catch (e: Throwable) {
+        exception = e
+        throw e
+    } finally {
+        when {
+            exception == null -> close()
+            else -> try {
+                close()
+            } catch (closeException: Throwable) {
+                exception.addSuppressed(closeException)
+            }
+        }
+    }
+}
+
+// Использование
+fun readFirstLine(path: String): String {
+    BufferedReader(FileReader(path)).use { reader ->
+        return reader.readLine()  // Нелокальный возврат работает!
+    }
+    // Файл автоматически закрыт
+}
+```
+
+#### Пример 3: Измерение И Профилирование
+
+```kotlin
+inline fun <T> measureTimeMillis(block: () -> T): Pair<T, Long> {
+    val start = System.currentTimeMillis()
+    val result = block()
+    val time = System.currentTimeMillis() - start
+    return result to time
+}
+
+// Использование
+fun complexOperation(): List<Int> {
+    val (result, timeMs) = measureTimeMillis {
+        (1..1000000).filter { it % 2 == 0 }.map { it * it }
+    }
+    println("Операция заняла ${timeMs}мс")
+    return result
+}
+
+// Профилирование памяти
+inline fun <T> measureMemory(block: () -> T): Pair<T, Long> {
+    System.gc()
+    val runtime = Runtime.getRuntime()
+    val before = runtime.totalMemory() - runtime.freeMemory()
+    val result = block()
+    System.gc()
+    val after = runtime.totalMemory() - runtime.freeMemory()
+    return result to (after - before)
+}
+```
+
+### Модификатор Noinline
+
+Иногда нужно предотвратить встраивание конкретных параметров-лямбд:
+
+```kotlin
+inline fun performOperation(
+    inlinedAction: () -> Unit,
+    noinline notInlinedAction: () -> Unit
+) {
+    inlinedAction()  //  Встраивается в место вызова
+    notInlinedAction()  //  Не встраивается, обрабатывается как обычная лямбда
+}
+```
+
+**Когда использовать noinline**:
+
+#### 1. Сохранение Лямбды Для Последующего Использования
+
+```kotlin
+class EventBus {
+    private val listeners = mutableListOf<() -> Unit>()
+
+    // Не можем встроить, потому что сохраняем лямбду
+    inline fun register(noinline listener: () -> Unit) {
+        listeners.add(listener)  // Нужен реальный объект Function для сохранения
+    }
+
+    fun notify() {
+        listeners.forEach { it() }
+    }
+}
+```
+
+#### 2. Передача Лямбды В Не-inline Функцию
+
+```kotlin
+inline fun processAsync(
+    data: String,
+    noinline onComplete: (Result<String>) -> Unit
+) {
+    // Не можем встроить, потому что launch корутины нужен объект Function
+    GlobalScope.launch {
+        delay(1000)
+        onComplete(Result.success(data))
+    }
+}
+```
+
+### Модификатор Crossinline
+
+`crossinline` предотвращает нелокальные возвраты в лямбдах, которые вызываются в другом контексте:
+
+```kotlin
+inline fun runInThread(crossinline block: () -> Unit) {
+    Thread {
+        block()  // Вызывается в другом контексте (новый поток)
+    }.start()
+}
+
+fun test() {
+    runInThread {
+        println("В потоке")
+        // return  //  Ошибка компилятора: 'return' здесь не разрешен
+    }
+    println("После runInThread")  // Всегда выполняется
+}
+```
+
+### Ограничения И Соображения
+
+#### 1. Увеличение Размера Кода
+
+Встраивание копирует код в каждое место вызова, увеличивая размер байт-кода:
+
+```kotlin
+inline fun largeFunction(block: () -> Unit) {
+    // 100 строк кода
+    println("Начало операции")
+    println("Шаг 1")
+    // ... много строк ...
+    block()
+    // ... еще много строк ...
+    println("Операция завершена")
+}
+
+// Вызывается 50 раз в вашем коде
+// → 50 копий тела largeFunction в байт-коде
+// → Значительно больший APK/JAR
+```
+
+**Рекомендация**: Встраивайте только маленькие функции (обычно 1-3 строки) или функции с параметрами-лямбдами.
+
+#### 2. Не Может Быть Виртуальной (open, Override, abstract)
+
+```kotlin
+open class Base {
+    //  Ошибка: inline функции не могут быть open
+    open inline fun operation(block: () -> Unit) {
+        block()
+    }
+}
+```
+
+**Причина**: Встраивание происходит во время компиляции, но виртуальная диспетчеризация - во время выполнения.
+
+### Анализ Производительности
+
+#### Бенчмарк: Накладные Расходы Функций Высшего Порядка
+
+```kotlin
+fun benchmarkInlinePerformance() {
+    val iterations = 10_000_000
+
+    // Тест 1: Прямой код
+    var result = 0
+    var start = System.nanoTime()
+    repeat(iterations) {
+        result += 1
+    }
+    val directTime = System.nanoTime() - start
+    println("Прямой: ${directTime / 1_000_000}мс")
+
+    // Тест 2: Inline функция
+    result = 0
+    start = System.nanoTime()
+    inline fun inlineAdd(n: Int, operation: (Int) -> Int): Int {
+        return operation(n)
+    }
+    repeat(iterations) {
+        result = inlineAdd(result) { it + 1 }
+    }
+    val inlineTime = System.nanoTime() - start
+    println("Inline: ${inlineTime / 1_000_000}мс")
+
+    // Тест 3: Обычная функция
+    result = 0
+    start = System.nanoTime()
+    fun regularAdd(n: Int, operation: (Int) -> Int): Int {
+        return operation(n)
+    }
+    repeat(iterations) {
+        result = regularAdd(result) { it + 1 }
+    }
+    val regularTime = System.nanoTime() - start
+    println("Обычная: ${regularTime / 1_000_000}мс")
+
+    // Результаты на типичном железе:
+    // Прямой:  ~10мс   (базовый уровень)
+    // Inline:  ~12мс   (20% накладных расходов от сложности встраивания)
+    // Обычная: ~150мс  (в 15 раз медленнее из-за выделения лямбд)
+}
+```
+
+### Когда Использовать Inline Функции
+
+ **ИСПОЛЬЗУЙТЕ inline для**:
+- Функций высшего порядка с параметрами-лямбдами
+- Функций, нуждающихся в реифицированных параметрах типов
+- Маленьких утилитарных функций (1-3 строки)
+- Критичных по производительности горячих путей
+- DSL построителей
+- Управления ресурсами (use, synchronized)
+
+ **НЕ используйте inline для**:
+- Больших функций (увеличивает размер кода)
+- Виртуальных функций (open, override, abstract)
+- Рекурсивных функций
+- Функций, где выделение лямбды незначительно
+- Функций публичного API (нельзя изменить сигнатуру позже)
+
+### Лучшие Практики
+
+1. **Встраивайте маленькие, часто вызываемые функции**
+2. **Используйте noinline когда лямбду нужно сохранить**
+3. **Используйте crossinline для асинхронных контекстов**
+4. **Предпочитайте inline для DSL построителей**
+5. **Будьте осторожны с публичным API**
+
+### Распространенные Ошибки
+
+#### 1. Избыточное Встраивание
+
+```kotlin
+//  Плохо - большая функция, редко вызывается
+inline fun generateReport(data: List<Data>, formatter: (Data) -> String): String {
+    // 200 строк сложной логики
+}
+
+//  Хорошо - маленькая, часто вызывается
+inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
+    var sum = 0L
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
+}
+```
+
+#### 2. Забытый Noinline
+
+```kotlin
+//  Не компилируется
+inline fun registerHandler(handler: () -> Unit) {
+    handlers.add(handler)  // Ошибка: нельзя сохранить встроенную лямбду
+}
+
+//  Правильно
+inline fun registerHandler(noinline handler: () -> Unit) {
+    handlers.add(handler)
+}
+```
+
+#### 3. Ненужный Crossinline
+
+```kotlin
+//  Ненужный - лямбда не используется в другом контексте
+inline fun simpleOperation(crossinline block: () -> Unit) {
+    block()  // Вызывается напрямую, crossinline не нужен
+}
+
+//  Правильно
+inline fun simpleOperation(block: () -> Unit) {
+    block()
+}
+```
+
+### Примеры Из Реального Мира
+
+#### Примеры Из Стандартной Библиотеки
+
+```kotlin
+// 1. Операции с коллекциями
+public inline fun <T> Iterable<T>.forEach(action: (T) -> Unit) {
+    for (element in this) action(element)
+}
+
+// 2. Функции области видимости
+public inline fun <T, R> T.let(block: (T) -> R): R = block(this)
+public inline fun <T> T.apply(block: T.() -> Unit): T {
+    block()
+    return this
+}
+
+// 3. Ленивая делегация
+public inline fun <T> lazy(crossinline initializer: () -> T): Lazy<T> =
+    SynchronizedLazyImpl(initializer)
+
+// 4. Последовательности
+public inline fun <T> sequence(crossinline block: suspend SequenceScope<T>.() -> Unit): Sequence<T> =
+    Sequence { iterator(block) }
+```
 
 ---
 
@@ -941,540 +1474,16 @@ inline fun <T> retry(
 
 ---
 
-## Ответ (RU)
-
-Inline функции - это мощная возможность Kotlin, которая инструктирует компилятор вставлять байт-код функции непосредственно в место вызова вместо создания отдельного вызова функции. Это устраняет накладные расходы на вызов функции и позволяет использовать продвинутые возможности, такие как реифицированные параметры типов.
-
-### Зачем Нужны Inline Функции
-
-В Kotlin лямбда-выражения обычно компилируются в экземпляры анонимных классов (Function0, Function1 и т.д.). Каждая лямбда создает объект, который:
-1. Выделяет память в куче
-2. Создает давление на сборщик мусора
-3. Добавляет косвенность через накладные расходы вызова функции
-
-**Проблема без inline**:
-```kotlin
-// Обычная функция высшего порядка
-fun repeat(times: Int, action: () -> Unit) {
-    for (i in 0 until times) {
-        action()  // Косвенный вызов через объект Function
-    }
-}
-
-// Использование
-repeat(5) {
-    println("Привет")
-}
-
-// Компилируется примерно в:
-Function0 action = new Function0() {
-    public void invoke() {
-        System.out.println("Привет");
-    }
-};
-for (int i = 0; i < 5; i++) {
-    action.invoke();  // Выделение объекта + косвенный вызов
-}
-```
-
-**Решение с inline**:
-```kotlin
-inline fun repeat(times: Int, action: () -> Unit) {
-    for (i in 0 until times) {
-        action()  // Тело лямбды встраивается напрямую
-    }
-}
-
-// То же использование
-repeat(5) {
-    println("Привет")
-}
-
-// Компилируется в:
-for (int i = 0; i < 5; i++) {
-    System.out.println("Привет");  // Прямой код, без выделения памяти!
-}
-```
-
-### Как Работают Inline Функции
-
-Компилятор выполняет **копирование-вставку** как тела функции, так и тел лямбд в место вызова:
-
-```kotlin
-inline fun measureTime(block: () -> Unit): Long {
-    val start = System.nanoTime()
-    block()
-    val end = System.nanoTime()
-    return end - start
-}
-
-// Место вызова
-val time = measureTime {
-    println("Выполняю работу")
-    Thread.sleep(100)
-}
-
-// После встраивания (концептуально):
-val start = System.nanoTime()
-println("Выполняю работу")
-Thread.sleep(100)
-val end = System.nanoTime()
-val time = end - start
-```
-
-### Преимущества Inline Функций
-
-#### 1. Устраняет Накладные Расходы На Вызов Функций
-
-```kotlin
-// Бенчмарк производительности
-inline fun inlined(operation: () -> Int): Int {
-    return operation()
-}
-
-fun notInlined(operation: () -> Int): Int {
-    return operation()
-}
-
-fun benchmark() {
-    val iterations = 100_000_000
-
-    // С inline - ~200мс
-    var result = 0
-    val start1 = System.currentTimeMillis()
-    repeat(iterations) {
-        result += inlined { 1 }
-    }
-    println("Inline: ${System.currentTimeMillis() - start1}мс")
-
-    // Без inline - ~600мс (в 3 раза медленнее!)
-    result = 0
-    val start2 = System.currentTimeMillis()
-    repeat(iterations) {
-        result += notInlined { 1 }
-    }
-    println("Не inline: ${System.currentTimeMillis() - start2}мс")
-}
-```
-
-#### 2. Избегает Выделения Объектов Для Лямбд
-
-```kotlin
-// Сравнение выделения памяти
-class MemoryTest {
-    // Без inline - создает объект Function при каждом вызове
-    fun processItems(items: List<String>, transform: (String) -> String): List<String> {
-        return items.map(transform)  // Выделяется объект Function
-    }
-
-    // С inline - нет выделения
-    inline fun processItemsInline(items: List<String>, transform: (String) -> String): List<String> {
-        return items.map(transform)  // Код лямбды встраивается
-    }
-}
-
-// Вызов 1000 раз:
-// processItems: Выделяет 1000 объектов Function → давление на GC
-// processItemsInline: Ноль выделений → Нет влияния на GC
-```
-
-#### 3. Позволяет Использовать Реифицированные Параметры Типов
-
-Только inline функции могут использовать `reified`, что дает доступ к информации о типе во время выполнения:
-
-```kotlin
-// Без reified - не работает
-fun <T> isInstanceOf(value: Any): Boolean {
-    return value is T  //  Ошибка: Невозможно проверить стертый тип
-}
-
-// С inline + reified - работает!
-inline fun <reified T> isInstanceOf(value: Any): Boolean {
-    return value is T  //  Проверка типа работает!
-}
-
-// Практические примеры
-inline fun <reified T> List<*>.filterIsInstance(): List<T> {
-    return this.filter { it is T }.map { it as T }
-}
-
-val mixed: List<Any> = listOf("привет", 42, "мир", 3.14)
-val strings: List<String> = mixed.filterIsInstance<String>()
-// Результат: ["привет", "мир"]
-
-inline fun <reified T> Gson.fromJson(json: String): T {
-    return fromJson(json, T::class.java)
-}
-
-val user: User = gson.fromJson<User>(jsonString)
-```
-
-#### 4. Разрешает Нелокальные Возвраты
-
-В inline функциях лямбда может использовать `return` для выхода из охватывающей функции:
-
-```kotlin
-// Пример нелокального возврата
-fun findFirstNegative(numbers: List<Int>): Int? {
-    numbers.forEach { number ->  // forEach является inline
-        if (number < 0) {
-            return number  // Возвращается из findFirstNegative, не из лямбды
-        }
-    }
-    return null
-}
-
-val result = findFirstNegative(listOf(1, 2, -3, 4))
-// Возвращает -3 и выходит из всей функции
-```
-
-### Полные Практические Примеры
-
-#### Пример 1: Реализация Синхронизированного Блока
-
-```kotlin
-// Реализация из стандартной библиотеки
-inline fun <R> synchronized(lock: Any, block: () -> R): R {
-    @Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
-    kotlin.jvm.internal.Intrinsics.monitor.enter(lock)
-    try {
-        return block()
-    } finally {
-        kotlin.jvm.internal.Intrinsics.monitor.exit(lock)
-    }
-}
-
-// Использование
-class Counter {
-    private val lock = Any()
-    private var count = 0
-
-    fun increment() {
-        synchronized(lock) {
-            count++
-        }
-    }
-
-    fun get(): Int = synchronized(lock) { count }
-}
-```
-
-#### Пример 2: Паттерн Use-Resource (try-with-resources)
-
-```kotlin
-inline fun <T : Closeable, R> T.use(block: (T) -> R): R {
-    var exception: Throwable? = null
-    try {
-        return block(this)
-    } catch (e: Throwable) {
-        exception = e
-        throw e
-    } finally {
-        when {
-            exception == null -> close()
-            else -> try {
-                close()
-            } catch (closeException: Throwable) {
-                exception.addSuppressed(closeException)
-            }
-        }
-    }
-}
-
-// Использование
-fun readFirstLine(path: String): String {
-    BufferedReader(FileReader(path)).use { reader ->
-        return reader.readLine()  // Нелокальный возврат работает!
-    }
-    // Файл автоматически закрыт
-}
-```
-
-#### Пример 3: Измерение И Профилирование
-
-```kotlin
-inline fun <T> measureTimeMillis(block: () -> T): Pair<T, Long> {
-    val start = System.currentTimeMillis()
-    val result = block()
-    val time = System.currentTimeMillis() - start
-    return result to time
-}
-
-// Использование
-fun complexOperation(): List<Int> {
-    val (result, timeMs) = measureTimeMillis {
-        (1..1000000).filter { it % 2 == 0 }.map { it * it }
-    }
-    println("Операция заняла ${timeMs}мс")
-    return result
-}
-
-// Профилирование памяти
-inline fun <T> measureMemory(block: () -> T): Pair<T, Long> {
-    System.gc()
-    val runtime = Runtime.getRuntime()
-    val before = runtime.totalMemory() - runtime.freeMemory()
-    val result = block()
-    System.gc()
-    val after = runtime.totalMemory() - runtime.freeMemory()
-    return result to (after - before)
-}
-```
-
-### Модификатор Noinline
-
-Иногда нужно предотвратить встраивание конкретных параметров-лямбд:
-
-```kotlin
-inline fun performOperation(
-    inlinedAction: () -> Unit,
-    noinline notInlinedAction: () -> Unit
-) {
-    inlinedAction()  //  Встраивается в место вызова
-    notInlinedAction()  //  Не встраивается, обрабатывается как обычная лямбда
-}
-```
-
-**Когда использовать noinline**:
-
-#### 1. Сохранение Лямбды Для Последующего Использования
-
-```kotlin
-class EventBus {
-    private val listeners = mutableListOf<() -> Unit>()
-
-    // Не можем встроить, потому что сохраняем лямбду
-    inline fun register(noinline listener: () -> Unit) {
-        listeners.add(listener)  // Нужен реальный объект Function для сохранения
-    }
-
-    fun notify() {
-        listeners.forEach { it() }
-    }
-}
-```
-
-#### 2. Передача Лямбды В Не-inline Функцию
-
-```kotlin
-inline fun processAsync(
-    data: String,
-    noinline onComplete: (Result<String>) -> Unit
-) {
-    // Не можем встроить, потому что launch корутины нужен объект Function
-    GlobalScope.launch {
-        delay(1000)
-        onComplete(Result.success(data))
-    }
-}
-```
-
-### Модификатор Crossinline
-
-`crossinline` предотвращает нелокальные возвраты в лямбдах, которые вызываются в другом контексте:
-
-```kotlin
-inline fun runInThread(crossinline block: () -> Unit) {
-    Thread {
-        block()  // Вызывается в другом контексте (новый поток)
-    }.start()
-}
-
-fun test() {
-    runInThread {
-        println("В потоке")
-        // return  //  Ошибка компилятора: 'return' здесь не разрешен
-    }
-    println("После runInThread")  // Всегда выполняется
-}
-```
-
-### Ограничения И Соображения
-
-#### 1. Увеличение Размера Кода
-
-Встраивание копирует код в каждое место вызова, увеличивая размер байт-кода:
-
-```kotlin
-inline fun largeFunction(block: () -> Unit) {
-    // 100 строк кода
-    println("Начало операции")
-    println("Шаг 1")
-    // ... много строк ...
-    block()
-    // ... еще много строк ...
-    println("Операция завершена")
-}
-
-// Вызывается 50 раз в вашем коде
-// → 50 копий тела largeFunction в байт-коде
-// → Значительно больший APK/JAR
-```
-
-**Рекомендация**: Встраивайте только маленькие функции (обычно 1-3 строки) или функции с параметрами-лямбдами.
-
-#### 2. Не Может Быть Виртуальной (open, Override, abstract)
-
-```kotlin
-open class Base {
-    //  Ошибка: inline функции не могут быть open
-    open inline fun operation(block: () -> Unit) {
-        block()
-    }
-}
-```
-
-**Причина**: Встраивание происходит во время компиляции, но виртуальная диспетчеризация - во время выполнения.
-
-### Анализ Производительности
-
-#### Бенчмарк: Накладные Расходы Функций Высшего Порядка
-
-```kotlin
-fun benchmarkInlinePerformance() {
-    val iterations = 10_000_000
-
-    // Тест 1: Прямой код
-    var result = 0
-    var start = System.nanoTime()
-    repeat(iterations) {
-        result += 1
-    }
-    val directTime = System.nanoTime() - start
-    println("Прямой: ${directTime / 1_000_000}мс")
-
-    // Тест 2: Inline функция
-    result = 0
-    start = System.nanoTime()
-    inline fun inlineAdd(n: Int, operation: (Int) -> Int): Int {
-        return operation(n)
-    }
-    repeat(iterations) {
-        result = inlineAdd(result) { it + 1 }
-    }
-    val inlineTime = System.nanoTime() - start
-    println("Inline: ${inlineTime / 1_000_000}мс")
-
-    // Тест 3: Обычная функция
-    result = 0
-    start = System.nanoTime()
-    fun regularAdd(n: Int, operation: (Int) -> Int): Int {
-        return operation(n)
-    }
-    repeat(iterations) {
-        result = regularAdd(result) { it + 1 }
-    }
-    val regularTime = System.nanoTime() - start
-    println("Обычная: ${regularTime / 1_000_000}мс")
-
-    // Результаты на типичном железе:
-    // Прямой:  ~10мс   (базовый уровень)
-    // Inline:  ~12мс   (20% накладных расходов от сложности встраивания)
-    // Обычная: ~150мс  (в 15 раз медленнее из-за выделения лямбд)
-}
-```
-
-### Когда Использовать Inline Функции
-
- **ИСПОЛЬЗУЙТЕ inline для**:
-- Функций высшего порядка с параметрами-лямбдами
-- Функций, нуждающихся в реифицированных параметрах типов
-- Маленьких утилитарных функций (1-3 строки)
-- Критичных по производительности горячих путей
-- DSL построителей
-- Управления ресурсами (use, synchronized)
-
- **НЕ используйте inline для**:
-- Больших функций (увеличивает размер кода)
-- Виртуальных функций (open, override, abstract)
-- Рекурсивных функций
-- Функций, где выделение лямбды незначительно
-- Функций публичного API (нельзя изменить сигнатуру позже)
-
-### Лучшие Практики
-
-1. **Встраивайте маленькие, часто вызываемые функции**
-2. **Используйте noinline когда лямбду нужно сохранить**
-3. **Используйте crossinline для асинхронных контекстов**
-4. **Предпочитайте inline для DSL построителей**
-5. **Будьте осторожны с публичным API**
-
-### Распространенные Ошибки
-
-#### 1. Избыточное Встраивание
-
-```kotlin
-//  Плохо - большая функция, редко вызывается
-inline fun generateReport(data: List<Data>, formatter: (Data) -> String): String {
-    // 200 строк сложной логики
-}
-
-//  Хорошо - маленькая, часто вызывается
-inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
-    var sum = 0L
-    for (element in this) {
-        sum += selector(element)
-    }
-    return sum
-}
-```
-
-#### 2. Забытый Noinline
-
-```kotlin
-//  Не компилируется
-inline fun registerHandler(handler: () -> Unit) {
-    handlers.add(handler)  // Ошибка: нельзя сохранить встроенную лямбду
-}
-
-//  Правильно
-inline fun registerHandler(noinline handler: () -> Unit) {
-    handlers.add(handler)
-}
-```
-
-#### 3. Ненужный Crossinline
-
-```kotlin
-//  Ненужный - лямбда не используется в другом контексте
-inline fun simpleOperation(crossinline block: () -> Unit) {
-    block()  // Вызывается напрямую, crossinline не нужен
-}
-
-//  Правильно
-inline fun simpleOperation(block: () -> Unit) {
-    block()
-}
-```
-
-### Примеры Из Реального Мира
-
-#### Примеры Из Стандартной Библиотеки
-
-```kotlin
-// 1. Операции с коллекциями
-public inline fun <T> Iterable<T>.forEach(action: (T) -> Unit) {
-    for (element in this) action(element)
-}
-
-// 2. Функции области видимости
-public inline fun <T, R> T.let(block: (T) -> R): R = block(this)
-public inline fun <T> T.apply(block: T.() -> Unit): T {
-    block()
-    return this
-}
-
-// 3. Ленивая делегация
-public inline fun <T> lazy(crossinline initializer: () -> T): Lazy<T> =
-    SynchronizedLazyImpl(initializer)
-
-// 4. Последовательности
-public inline fun <T> sequence(crossinline block: suspend SequenceScope<T>.() -> Unit): Sequence<T> =
-    Sequence { iterator(block) }
-```
-
----
-
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+- [Kotlin Documentation: Inline Functions](https://kotlinlang.org/docs/inline-functions.html)
+- [Kotlin Inline Functions - Official Guide](https://kotlinlang.org/docs/inline-functions.html#noinline)
+- [Performance: Inline Functions](https://kotlinlang.org/docs/inline-functions.html#inline-properties)
 ## Related Questions
 - [[q-kotlin-lambda-expressions--kotlin--medium]]
 - [[q-kotlin-higher-order-functions--kotlin--medium]]
@@ -1483,7 +1492,3 @@ public inline fun <T> sequence(crossinline block: suspend SequenceScope<T>.() ->
 - [[q-inline-function-limitations--kotlin--medium]]
 - [[q-inline-value-classes-performance--kotlin--medium]]
 
-## References
-- [Kotlin Documentation: Inline Functions](https://kotlinlang.org/docs/inline-functions.html)
-- [Kotlin Inline Functions - Official Guide](https://kotlinlang.org/docs/inline-functions.html#noinline)
-- [Performance: Inline Functions](https://kotlinlang.org/docs/inline-functions.html#inline-properties)

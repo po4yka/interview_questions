@@ -1,11 +1,11 @@
 ---
 id: kotlin-049
 title: "How to convert callback-based APIs to coroutines? / Как конвертировать callback-based API в корутины?"
-aliases: []
+aliases: ["How to convert callback-based APIs to coroutines?, Как конвертировать callback-based API в корутины?"]
 
 # Classification
 topic: kotlin
-subtopics: [async, callbacks, coroutines, migration, suspendcoroutine]
+subtopics: [async, callbacks, coroutines]
 question_kind: coding
 difficulty: medium
 
@@ -28,11 +28,175 @@ tags: [async, callbacks, coroutines, difficulty/medium, kotlin, migration, suspe
 date created: Saturday, November 1st 2025, 9:25:30 am
 date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
+# Вопрос (RU)
+> Как конвертировать callback-based API в корутины в Kotlin?
+
+---
 
 # Question (EN)
 > How do you convert callback-based APIs to coroutines in Kotlin?
-# Вопрос (RU)
-> Как конвертировать callback-based API в корутины в Kotlin?
+## Ответ (RU)
+
+Конвертация callback-based API в корутины - распространенная задача при работе с легаси кодом или сторонними библиотеками. Kotlin предоставляет несколько механизмов для связи между callbacks и suspend-функциями.
+
+### 1. Использование `suspendCoroutine`
+
+Базовый подход - использование `suspendCoroutine` для оборачивания callback-based API:
+
+```kotlin
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+
+// Легаси API с колбэками
+interface UserCallback {
+    fun onSuccess(user: User)
+    fun onError(error: Exception)
+}
+
+class UserApi {
+    fun fetchUser(userId: String, callback: UserCallback) {
+        Thread {
+            Thread.sleep(1000)
+            if (userId.isNotEmpty()) {
+                callback.onSuccess(User(userId, "John Doe"))
+            } else {
+                callback.onError(IllegalArgumentException("Invalid user ID"))
+            }
+        }.start()
+    }
+}
+
+// Обертка для корутин
+suspend fun fetchUserSuspend(userId: String): User = suspendCoroutine { continuation ->
+    val api = UserApi()
+    api.fetchUser(userId, object : UserCallback {
+        override fun onSuccess(user: User) {
+            continuation.resume(user)
+        }
+
+        override fun onError(error: Exception) {
+            continuation.resumeWithException(error)
+        }
+    })
+}
+
+// Использование
+suspend fun example() {
+    try {
+        val user = fetchUserSuspend("123")
+        println("User: ${user.name}")
+    } catch (e: Exception) {
+        println("Error: ${e.message}")
+    }
+}
+```
+
+### 2. Использование `suspendCancellableCoroutine` (Рекомендуется)
+
+Для production кода используйте `suspendCancellableCoroutine` с поддержкой отмены:
+
+```kotlin
+import kotlinx.coroutines.suspendCancellableCoroutine
+
+suspend fun downloadFileSuspend(
+    url: String,
+    onProgress: (Int) -> Unit = {}
+): File = suspendCancellableCoroutine { continuation ->
+    val manager = DownloadManager()
+
+    val token = manager.downloadFile(url, object : DownloadListener {
+        override fun onProgress(progress: Int) {
+            onProgress(progress)
+        }
+
+        override fun onComplete(file: File) {
+            continuation.resume(file) {
+                println("Загрузка завершена, но корутина отменена")
+            }
+        }
+
+        override fun onError(error: Exception) {
+            continuation.resumeWithException(error)
+        }
+    })
+
+    // Обработка отмены корутины
+    continuation.invokeOnCancellation {
+        token.cancel()
+        println("Загрузка отменена")
+    }
+}
+```
+
+### 3. Преобразование Простых Колбэков
+
+```kotlin
+suspend fun calculate(a: Int, b: Int): Int = suspendCoroutine { continuation ->
+    calculateAsync(a, b) { result ->
+        continuation.resume(result)
+    }
+}
+```
+
+### 4. Использование Flow Для Потоковых Данных
+
+```kotlin
+fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
+    val uploader = FileUploader()
+
+    uploader.upload(file, object : UploadCallback {
+        override fun onProgress(percent: Int) {
+            trySend(UploadResult.Progress(percent))
+        }
+
+        override fun onSuccess(url: String) {
+            trySend(UploadResult.Success(url))
+            close()
+        }
+
+        override fun onError(error: Exception) {
+            close(error)
+        }
+    })
+
+    awaitClose {
+        uploader.cancel()
+    }
+}
+```
+
+### Лучшие Практики
+
+#### - ДЕЛАЙТЕ:
+
+- Используйте `suspendCancellableCoroutine` для отменяемых операций
+- Обрабатывайте edge cases (множественные вызовы resume)
+- Используйте Flow для потоковых данных
+- Всегда реализуйте `awaitClose` в `callbackFlow`
+
+#### - НЕ ДЕЛАЙТЕ:
+
+- Не используйте `suspendCoroutine` для отменяемых операций
+- Не вызывайте resume несколько раз
+- Не игнорируйте очистку ресурсов
+- Не забывайте про обработку отмены
+
+### Таблица Паттернов
+
+| Паттерн колбэка | Решение с корутинами | Случай использования |
+|-----------------|---------------------|---------------------|
+| Простой success/error | `suspendCoroutine` | Простые async операции |
+| Отменяемая операция | `suspendCancellableCoroutine` | Сетевые запросы, загрузки |
+| Множественные значения | `callbackFlow` | Потоковые данные, слушатели |
+| Одиночное значение | `flow { emit() }` | Преобразование колбэков |
+
+### Производительность
+
+- **Накладные расходы**: Минимальные
+- **Память**: Меньше чем у колбэков
+- **Отмена**: Предотвращает утечки ресурсов
+- **Потоки**: Корутины не создают новые потоки
 
 ---
 
@@ -433,171 +597,16 @@ fun testCancellation() = runTest {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Конвертация callback-based API в корутины - распространенная задача при работе с легаси кодом или сторонними библиотеками. Kotlin предоставляет несколько механизмов для связи между callbacks и suspend-функциями.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### 1. Использование `suspendCoroutine`
-
-Базовый подход - использование `suspendCoroutine` для оборачивания callback-based API:
-
-```kotlin
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
-
-// Легаси API с колбэками
-interface UserCallback {
-    fun onSuccess(user: User)
-    fun onError(error: Exception)
-}
-
-class UserApi {
-    fun fetchUser(userId: String, callback: UserCallback) {
-        Thread {
-            Thread.sleep(1000)
-            if (userId.isNotEmpty()) {
-                callback.onSuccess(User(userId, "John Doe"))
-            } else {
-                callback.onError(IllegalArgumentException("Invalid user ID"))
-            }
-        }.start()
-    }
-}
-
-// Обертка для корутин
-suspend fun fetchUserSuspend(userId: String): User = suspendCoroutine { continuation ->
-    val api = UserApi()
-    api.fetchUser(userId, object : UserCallback {
-        override fun onSuccess(user: User) {
-            continuation.resume(user)
-        }
-
-        override fun onError(error: Exception) {
-            continuation.resumeWithException(error)
-        }
-    })
-}
-
-// Использование
-suspend fun example() {
-    try {
-        val user = fetchUserSuspend("123")
-        println("User: ${user.name}")
-    } catch (e: Exception) {
-        println("Error: ${e.message}")
-    }
-}
-```
-
-### 2. Использование `suspendCancellableCoroutine` (Рекомендуется)
-
-Для production кода используйте `suspendCancellableCoroutine` с поддержкой отмены:
-
-```kotlin
-import kotlinx.coroutines.suspendCancellableCoroutine
-
-suspend fun downloadFileSuspend(
-    url: String,
-    onProgress: (Int) -> Unit = {}
-): File = suspendCancellableCoroutine { continuation ->
-    val manager = DownloadManager()
-
-    val token = manager.downloadFile(url, object : DownloadListener {
-        override fun onProgress(progress: Int) {
-            onProgress(progress)
-        }
-
-        override fun onComplete(file: File) {
-            continuation.resume(file) {
-                println("Загрузка завершена, но корутина отменена")
-            }
-        }
-
-        override fun onError(error: Exception) {
-            continuation.resumeWithException(error)
-        }
-    })
-
-    // Обработка отмены корутины
-    continuation.invokeOnCancellation {
-        token.cancel()
-        println("Загрузка отменена")
-    }
-}
-```
-
-### 3. Преобразование Простых Колбэков
-
-```kotlin
-suspend fun calculate(a: Int, b: Int): Int = suspendCoroutine { continuation ->
-    calculateAsync(a, b) { result ->
-        continuation.resume(result)
-    }
-}
-```
-
-### 4. Использование Flow Для Потоковых Данных
-
-```kotlin
-fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
-    val uploader = FileUploader()
-
-    uploader.upload(file, object : UploadCallback {
-        override fun onProgress(percent: Int) {
-            trySend(UploadResult.Progress(percent))
-        }
-
-        override fun onSuccess(url: String) {
-            trySend(UploadResult.Success(url))
-            close()
-        }
-
-        override fun onError(error: Exception) {
-            close(error)
-        }
-    })
-
-    awaitClose {
-        uploader.cancel()
-    }
-}
-```
-
-### Лучшие Практики
-
-#### - ДЕЛАЙТЕ:
-
-- Используйте `suspendCancellableCoroutine` для отменяемых операций
-- Обрабатывайте edge cases (множественные вызовы resume)
-- Используйте Flow для потоковых данных
-- Всегда реализуйте `awaitClose` в `callbackFlow`
-
-#### - НЕ ДЕЛАЙТЕ:
-
-- Не используйте `suspendCoroutine` для отменяемых операций
-- Не вызывайте resume несколько раз
-- Не игнорируйте очистку ресурсов
-- Не забывайте про обработку отмены
-
-### Таблица Паттернов
-
-| Паттерн колбэка | Решение с корутинами | Случай использования |
-|-----------------|---------------------|---------------------|
-| Простой success/error | `suspendCoroutine` | Простые async операции |
-| Отменяемая операция | `suspendCancellableCoroutine` | Сетевые запросы, загрузки |
-| Множественные значения | `callbackFlow` | Потоковые данные, слушатели |
-| Одиночное значение | `flow { emit() }` | Преобразование колбэков |
-
-### Производительность
-
-- **Накладные расходы**: Минимальные
-- **Память**: Меньше чем у колбэков
-- **Отмена**: Предотвращает утечки ресурсов
-- **Потоки**: Корутины не создают новые потоки
-
----
-
+## References
+- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [suspendCoroutine API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/suspend-coroutine.html)
+- [callbackFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/callback-flow.html)
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -611,7 +620,3 @@ fun uploadFileFlow(file: File): Flow<UploadResult> = callbackFlow {
 
 ### Advanced (Harder)
 - [[q-flow-testing-advanced--kotlin--hard]] - Flow
-## References
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
-- [suspendCoroutine API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/suspend-coroutine.html)
-- [callbackFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/callback-flow.html)

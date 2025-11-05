@@ -1,11 +1,11 @@
 ---
 id: kotlin-106
 title: "Testing Coroutines with runTest and TestDispatcher / Тестирование корутин с runTest и TestDispatcher"
-aliases: []
+aliases: ["Testing Coroutines with runTest and TestDispatcher, Тестирование корутин с runTest и TestDispatcher"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, runtest, test-dispatcher, testing]
+subtopics: [coroutines, runtest, test-dispatcher]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,246 @@ tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 date created: Sunday, October 12th 2025, 1:18:39 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как тестировать корутины с runTest и TestDispatcher? Объясните виртуальное время, StandardTestDispatcher vs UnconfinedTestDispatcher и практические паттерны тестирования для ViewModels.
+
+---
 
 # Question (EN)
 > How to test coroutines with runTest and TestDispatcher? Explain virtual time, StandardTestDispatcher vs UnconfinedTestDispatcher, and practical testing patterns for ViewModels.
 
-# Вопрос (RU)
-> Как тестировать корутины с runTest и TestDispatcher? Объясните виртуальное время, StandardTestDispatcher vs UnconfinedTestDispatcher и практические паттерны тестирования для ViewModels.
+## Ответ (RU)
+
+Тестирование корутин требует специальной инфраструктуры для контроля времени выполнения, обработки задержек без реального ожидания и обеспечения детерминированных результатов. Библиотека `kotlinx-coroutines-test` предоставляет мощные инструменты для этого.
+
+### Проблема: Почему Обычные Тесты Не Работают
+
+```kotlin
+// Продакшн код
+class UserRepository {
+    suspend fun fetchUser(id: Int): User {
+        delay(1000) // Имитация сетевого запроса
+        return User(id, "User $id")
+    }
+}
+
+class UserViewModel(private val repository: UserRepository) {
+    private val _user = MutableStateFlow<User?>(null)
+    val user: StateFlow<User?> = _user.asStateFlow()
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch {
+            val result = repository.fetchUser(id)
+            _user.value = result
+        }
+    }
+}
+
+//  НЕПРАВИЛЬНО: Тест провалится или зависнет
+@Test
+fun `load user - неправильный подход`() {
+    val repository = UserRepository()
+    val viewModel = UserViewModel(repository)
+
+    viewModel.loadUser(1)
+
+    // ПРОВАЛ: Корутина еще не завершилась!
+    assertEquals(User(1, "User 1"), viewModel.user.value)
+}
+```
+
+**Проблемы**:
+1. Корутины асинхронные - тест завершается до корутины
+2. delay(1000) реально ждет 1 секунду - тесты медленные
+3. Нет контроля над порядком выполнения
+4. Нестабильные тесты из-за проблем с таймингом
+
+### Решение: runTest И Виртуальное Время
+
+```kotlin
+//  ПРАВИЛЬНО: Использование runTest
+@Test
+fun `load user - правильный подход`() = runTest {
+    val repository = FakeUserRepository()
+    val viewModel = UserViewModel(repository)
+
+    viewModel.loadUser(1)
+
+    // runTest автоматически:
+    // 1. Ждет завершения всех корутин
+    // 2. Пропускает задержки (виртуальное время)
+    // 3. Обеспечивает детерминированное выполнение
+
+    assertEquals(User(1, "User 1"), viewModel.user.value)
+}
+```
+
+### Возможности runTest
+
+**runTest** предоставляет:
+
+1. **TestScope**: Специальный scope для тестирования
+2. **Виртуальное время**: Задержки не ждут реально
+3. **Автоматическое ожидание**: Тест ждет завершения корутин
+4. **Контроль времени**: Ручное продвижение через `advanceTimeBy()`
+5. **TestDispatcher**: Специальный диспетчер для детерминированного выполнения
+
+### Типы TestDispatcher
+
+#### 1. StandardTestDispatcher
+
+Ставит корутины в очередь, требует явного продвижения времени.
+
+```kotlin
+@Test
+fun `StandardTestDispatcher - очередь корутин`() = runTest {
+    val dispatcher = StandardTestDispatcher(testScheduler)
+
+    var executed = false
+
+    launch(dispatcher) {
+        executed = true
+    }
+
+    // Корутина в очереди, еще не выполнена
+    assertFalse(executed)
+
+    // Нужно явно продвинуть время
+    advanceUntilIdle()
+
+    // Теперь выполнилась
+    assertTrue(executed)
+}
+```
+
+**Характеристики StandardTestDispatcher**:
+- Корутины в очереди, не выполняются сразу
+- Требует явного продвижения времени
+- Предсказуемое, детерминированное выполнение
+- Лучше для тестирования кода, зависящего от времени
+- Больше контроля над порядком выполнения
+
+#### 2. UnconfinedTestDispatcher
+
+Выполняет корутины немедленно до первой точки приостановки.
+
+```kotlin
+@Test
+fun `UnconfinedTestDispatcher - немедленное выполнение`() = runTest {
+    val dispatcher = UnconfinedTestDispatcher(testScheduler)
+
+    var executed = false
+
+    launch(dispatcher) {
+        executed = true
+    }
+
+    // Уже выполнилась! Не нужен advanceUntilIdle()
+    assertTrue(executed)
+}
+```
+
+**Характеристики UnconfinedTestDispatcher**:
+- Выполняется немедленно до точки приостановки
+- Меньше явного продвижения времени
+- Проще для тестов без зависимостей от времени
+- Быстрее выполнение тестов
+- Меньше контроля над таймингом
+
+### Функции Контроля Виртуального Времени
+
+#### advanceUntilIdle()
+
+Выполняет все ожидающие корутины до тех пор, пока не останется запланированных задач.
+
+```kotlin
+@Test
+fun `advanceUntilIdle - выполняет всё`() = runTest {
+    val events = mutableListOf<String>()
+
+    launch {
+        delay(1000)
+        events.add("1 секунда")
+        delay(2000)
+        events.add("3 секунды всего")
+    }
+
+    advanceUntilIdle()
+
+    assertEquals(3, events.size)
+    assertEquals(3000, currentTime)
+}
+```
+
+#### advanceTimeBy(milliseconds)
+
+Продвигает виртуальное время на указанное количество, выполняет корутины, запланированные в этом времени.
+
+```kotlin
+@Test
+fun `advanceTimeBy - точный контроль`() = runTest {
+    val events = mutableListOf<String>()
+
+    launch {
+        delay(100)
+        events.add("100ms")
+    }
+
+    launch {
+        delay(200)
+        events.add("200ms")
+    }
+
+    advanceTimeBy(150)
+    assertEquals(listOf("100ms"), events)
+
+    advanceTimeBy(100)
+    assertEquals(listOf("100ms", "200ms"), events)
+}
+```
+
+### Тестирование ViewModel
+
+```kotlin
+@OptIn(ExperimentalCoroutinesApi::class)
+class MainDispatcherRule(
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+) : TestWatcher() {
+    override fun starting(description: Description) {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    override fun finished(description: Description) {
+        Dispatchers.resetMain()
+    }
+}
+
+class UserViewModelTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    @Test
+    fun `loadUser обновляет состояние`() = runTest {
+        val repository = FakeUserRepository()
+        val viewModel = UserViewModel(repository)
+
+        viewModel.loadUser(1)
+
+        assertEquals(User(1, "User 1"), viewModel.user.value)
+    }
+}
+```
+
+### Лучшие Практики
+
+1. **Всегда используйте runTest** для тестов с корутинами
+2. **Используйте MainDispatcherRule** для тестирования ViewModel
+3. **Используйте Fake репозитории**, не моки или реальные
+4. **Явно продвигайте время** с StandardTestDispatcher
+5. **Отменяйте job'ы коллекции** для предотвращения зависания
+6. **Тестируйте последовательности состояний**, не реализацию
+7. **Используйте currentTime** для проверки таймингов
 
 ---
 
@@ -975,241 +1209,6 @@ dependencies {
 - **MainDispatcherRule**: replaces Dispatchers.Main for ViewModel testing
 - Use fake repositories, not mocks or real implementations
 - Always cancel collection jobs to prevent test hangs
-
----
-
-## Ответ (RU)
-
-Тестирование корутин требует специальной инфраструктуры для контроля времени выполнения, обработки задержек без реального ожидания и обеспечения детерминированных результатов. Библиотека `kotlinx-coroutines-test` предоставляет мощные инструменты для этого.
-
-### Проблема: Почему Обычные Тесты Не Работают
-
-```kotlin
-// Продакшн код
-class UserRepository {
-    suspend fun fetchUser(id: Int): User {
-        delay(1000) // Имитация сетевого запроса
-        return User(id, "User $id")
-    }
-}
-
-class UserViewModel(private val repository: UserRepository) {
-    private val _user = MutableStateFlow<User?>(null)
-    val user: StateFlow<User?> = _user.asStateFlow()
-
-    fun loadUser(id: Int) {
-        viewModelScope.launch {
-            val result = repository.fetchUser(id)
-            _user.value = result
-        }
-    }
-}
-
-//  НЕПРАВИЛЬНО: Тест провалится или зависнет
-@Test
-fun `load user - неправильный подход`() {
-    val repository = UserRepository()
-    val viewModel = UserViewModel(repository)
-
-    viewModel.loadUser(1)
-
-    // ПРОВАЛ: Корутина еще не завершилась!
-    assertEquals(User(1, "User 1"), viewModel.user.value)
-}
-```
-
-**Проблемы**:
-1. Корутины асинхронные - тест завершается до корутины
-2. delay(1000) реально ждет 1 секунду - тесты медленные
-3. Нет контроля над порядком выполнения
-4. Нестабильные тесты из-за проблем с таймингом
-
-### Решение: runTest И Виртуальное Время
-
-```kotlin
-//  ПРАВИЛЬНО: Использование runTest
-@Test
-fun `load user - правильный подход`() = runTest {
-    val repository = FakeUserRepository()
-    val viewModel = UserViewModel(repository)
-
-    viewModel.loadUser(1)
-
-    // runTest автоматически:
-    // 1. Ждет завершения всех корутин
-    // 2. Пропускает задержки (виртуальное время)
-    // 3. Обеспечивает детерминированное выполнение
-
-    assertEquals(User(1, "User 1"), viewModel.user.value)
-}
-```
-
-### Возможности runTest
-
-**runTest** предоставляет:
-
-1. **TestScope**: Специальный scope для тестирования
-2. **Виртуальное время**: Задержки не ждут реально
-3. **Автоматическое ожидание**: Тест ждет завершения корутин
-4. **Контроль времени**: Ручное продвижение через `advanceTimeBy()`
-5. **TestDispatcher**: Специальный диспетчер для детерминированного выполнения
-
-### Типы TestDispatcher
-
-#### 1. StandardTestDispatcher
-
-Ставит корутины в очередь, требует явного продвижения времени.
-
-```kotlin
-@Test
-fun `StandardTestDispatcher - очередь корутин`() = runTest {
-    val dispatcher = StandardTestDispatcher(testScheduler)
-
-    var executed = false
-
-    launch(dispatcher) {
-        executed = true
-    }
-
-    // Корутина в очереди, еще не выполнена
-    assertFalse(executed)
-
-    // Нужно явно продвинуть время
-    advanceUntilIdle()
-
-    // Теперь выполнилась
-    assertTrue(executed)
-}
-```
-
-**Характеристики StandardTestDispatcher**:
-- Корутины в очереди, не выполняются сразу
-- Требует явного продвижения времени
-- Предсказуемое, детерминированное выполнение
-- Лучше для тестирования кода, зависящего от времени
-- Больше контроля над порядком выполнения
-
-#### 2. UnconfinedTestDispatcher
-
-Выполняет корутины немедленно до первой точки приостановки.
-
-```kotlin
-@Test
-fun `UnconfinedTestDispatcher - немедленное выполнение`() = runTest {
-    val dispatcher = UnconfinedTestDispatcher(testScheduler)
-
-    var executed = false
-
-    launch(dispatcher) {
-        executed = true
-    }
-
-    // Уже выполнилась! Не нужен advanceUntilIdle()
-    assertTrue(executed)
-}
-```
-
-**Характеристики UnconfinedTestDispatcher**:
-- Выполняется немедленно до точки приостановки
-- Меньше явного продвижения времени
-- Проще для тестов без зависимостей от времени
-- Быстрее выполнение тестов
-- Меньше контроля над таймингом
-
-### Функции Контроля Виртуального Времени
-
-#### advanceUntilIdle()
-
-Выполняет все ожидающие корутины до тех пор, пока не останется запланированных задач.
-
-```kotlin
-@Test
-fun `advanceUntilIdle - выполняет всё`() = runTest {
-    val events = mutableListOf<String>()
-
-    launch {
-        delay(1000)
-        events.add("1 секунда")
-        delay(2000)
-        events.add("3 секунды всего")
-    }
-
-    advanceUntilIdle()
-
-    assertEquals(3, events.size)
-    assertEquals(3000, currentTime)
-}
-```
-
-#### advanceTimeBy(milliseconds)
-
-Продвигает виртуальное время на указанное количество, выполняет корутины, запланированные в этом времени.
-
-```kotlin
-@Test
-fun `advanceTimeBy - точный контроль`() = runTest {
-    val events = mutableListOf<String>()
-
-    launch {
-        delay(100)
-        events.add("100ms")
-    }
-
-    launch {
-        delay(200)
-        events.add("200ms")
-    }
-
-    advanceTimeBy(150)
-    assertEquals(listOf("100ms"), events)
-
-    advanceTimeBy(100)
-    assertEquals(listOf("100ms", "200ms"), events)
-}
-```
-
-### Тестирование ViewModel
-
-```kotlin
-@OptIn(ExperimentalCoroutinesApi::class)
-class MainDispatcherRule(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-) : TestWatcher() {
-    override fun starting(description: Description) {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    override fun finished(description: Description) {
-        Dispatchers.resetMain()
-    }
-}
-
-class UserViewModelTest {
-
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    @Test
-    fun `loadUser обновляет состояние`() = runTest {
-        val repository = FakeUserRepository()
-        val viewModel = UserViewModel(repository)
-
-        viewModel.loadUser(1)
-
-        assertEquals(User(1, "User 1"), viewModel.user.value)
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Всегда используйте runTest** для тестов с корутинами
-2. **Используйте MainDispatcherRule** для тестирования ViewModel
-3. **Используйте Fake репозитории**, не моки или реальные
-4. **Явно продвигайте время** с StandardTestDispatcher
-5. **Отменяйте job'ы коллекции** для предотвращения зависания
-6. **Тестируйте последовательности состояний**, не реализацию
-7. **Используйте currentTime** для проверки таймингов
 
 ---
 

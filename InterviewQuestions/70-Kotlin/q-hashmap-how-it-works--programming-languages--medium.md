@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-collections, c-hash-tables, q-equals-hashcode-contracts--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, ko
 date created: Friday, October 31st 2025, 6:31:04 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Как Работает HashMap?
-
-# Question (EN)
-> How does HashMap work?
 
 # Вопрос (RU)
 > Как работает HashMap?
 
 ---
+
+# Question (EN)
+> How does HashMap work?
+
+## Ответ (RU)
+
+HashMap в Kotlin хранит пары ключ-значение и использует хеширование для быстрого поиска и вставки элементов. Каждый ключ хешируется, и результат хеш-функции определяет где в таблице будет храниться соответствующее значение. В случае коллизий HashMap использует цепочки или другие методы для хранения нескольких значений в одной корзине. Это обеспечивает доступ к элементам за среднее время O(1).
 
 ## Answer (EN)
 
@@ -34,9 +37,15 @@ HashMap in Kotlin stores key-value pairs and uses hashing for fast element looku
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-HashMap в Kotlin хранит пары ключ-значение и использует хеширование для быстрого поиска и вставки элементов. Каждый ключ хешируется, и результат хеш-функции определяет где в таблице будет храниться соответствующее значение. В случае коллизий HashMap использует цепочки или другие методы для хранения нескольких значений в одной корзине. Это обеспечивает доступ к элементам за среднее время O(1).
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

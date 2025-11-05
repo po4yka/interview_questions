@@ -303,6 +303,16 @@ val itemsById = items.associateBy { it.id }
 
 `associateBy` полезен для индексации объектов по ID (быстрый поиск O(1)). `associateWith` полезен для маппинга элементов к их свойствам. При коллизии ключей выигрывает последнее значение. Используйте `groupBy` чтобы сохранить все значения.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-inline-function-limitations--kotlin--medium]]

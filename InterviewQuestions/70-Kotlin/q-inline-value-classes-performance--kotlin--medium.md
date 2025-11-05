@@ -17,16 +17,37 @@ tags: [difficulty/medium]
 date created: Sunday, October 12th 2025, 3:43:41 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Inline Value Classes and Performance
-
-# Question (EN)
-> How do inline value classes work? When should you use them for performance? What are the limitations?
 
 # Вопрос (RU)
 > Как работают inline value классы? Когда следует использовать их для производительности? Каковы ограничения?
 
 ---
+
+# Question (EN)
+> How do inline value classes work? When should you use them for performance? What are the limitations?
+
+## Ответ (RU)
+
+**Inline value классы** - это обертки без затрат, обеспечивающие безопасность типов без runtime накладных расходов путем инлайнинга во время компиляции.
+
+### Преимущество Производительности
+
+Нет аллокации объектов - значение передается как примитив.
+
+### Когда Использовать
+
+- Безопасные по типам примитивы (метры, секунды)
+- API ключи, ID
+- Обертки для улучшения читаемости
+
+### Ограничения
+
+1. Только одно свойство
+2. Нет идентичности объекта
+3. Boxing в некоторых сценариях (generics, nullable, Any)
+
+Value классы обеспечивают type-safety без performance overhead.
 
 ## Answer (EN)
 
@@ -162,27 +183,15 @@ val any: Any = UserId(1) // Boxed
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Inline value классы** - это обертки без затрат, обеспечивающие безопасность типов без runtime накладных расходов путем инлайнинга во время компиляции.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### Преимущество Производительности
+## References
 
-Нет аллокации объектов - значение передается как примитив.
-
-### Когда Использовать
-
-- Безопасные по типам примитивы (метры, секунды)
-- API ключи, ID
-- Обертки для улучшения читаемости
-
-### Ограничения
-
-1. Только одно свойство
-2. Нет идентичности объекта
-3. Boxing в некоторых сценариях (generics, nullable, Any)
-
-Value классы обеспечивают type-safety без performance overhead.
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

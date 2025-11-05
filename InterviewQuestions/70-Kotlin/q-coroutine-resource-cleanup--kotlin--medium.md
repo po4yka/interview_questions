@@ -29,10 +29,180 @@ subtopics:
   - cancellation
   - cleanup
 ---
-# Question (EN)
-> How do you ensure proper resource cleanup when a coroutine is cancelled?
 # Вопрос (RU)
 > Как обеспечить правильную очистку ресурсов при отмене корутины?
+
+---
+
+# Question (EN)
+> How do you ensure proper resource cleanup when a coroutine is cancelled?
+## Ответ (RU)
+
+**Очистка ресурсов в корутинах** требует тщательной обработки, потому что отмена является кооперативной и асинхронной. Паттерн `try-finally` и контекст `NonCancellable` - ключевые инструменты для обеспечения правильного освобождения ресурсов.
+
+### Проблема: Ресурсы и Отмена
+
+```kotlin
+// - ПРОБЛЕМА: Утечка ресурсов при отмене
+val job = lifecycleScope.launch {
+    val file = File("data.txt").outputStream()
+
+    // Если отменено здесь, файл никогда не закроется!
+    repeat(1000) { i ->
+        file.write("Line $i\n".toByteArray())
+        delay(100)
+    }
+
+    file.close() // Никогда не достигается при отмене!
+}
+
+delay(500)
+job.cancel() // Файл остается открытым → утечка ресурсов!
+```
+
+**Проблемы**:
+- Файловый дескриптор не закрыт
+- Утечка памяти
+- Исчерпание ресурсов ОС
+- Возможное повреждение данных
+
+### Решение 1: Паттерн try-finally (Обязательно)
+
+**Базовый Паттерн**: Используйте `try-finally` для гарантированной очистки.
+
+```kotlin
+// - ХОРОШО: Гарантированная очистка
+val job = lifecycleScope.launch {
+    val file = File("data.txt").outputStream()
+
+    try {
+        repeat(1000) { i ->
+            file.write("Line $i\n".toByteArray())
+            delay(100) // Отмена может произойти здесь
+        }
+    } finally {
+        // ВСЕГДА выполняется, даже при отмене
+        file.close()
+        println("Файл закрыт")
+    }
+}
+
+delay(500)
+job.cancel() // Файл корректно закрыт!
+job.join()   // Ждем завершения очистки
+```
+
+**Как Это Работает**:
+1. Корутина начинает запись в файл
+2. Вызывается `cancel()`
+3. В следующей точке приостановки (`delay(100)`) обнаруживается отмена
+4. Выбрасывается `CancellationException`
+5. Выполняется блок `finally` → файл закрыт
+6. Корутина завершается
+
+### Решение 2: Расширение use() (Автоматическая Очистка)
+
+**use() из Kotlin**: Автоматически закрывает `Closeable` ресурсы.
+
+```kotlin
+// - ЛУЧШЕ ВСЕГО: Автоматическое управление ресурсами
+val job = lifecycleScope.launch {
+    File("data.txt").outputStream().use { file ->
+        repeat(1000) { i ->
+            file.write("Line $i\n".toByteArray())
+            delay(100)
+        }
+    } // Автоматически закрывается здесь, даже при отмене
+}
+
+delay(500)
+job.cancel()
+job.join()
+```
+
+**Преимущества**:
+- Лаконичный, идиоматичный Kotlin
+- Обрабатывает исключения автоматически
+- Работает с любым `Closeable` ресурсом
+- Эквивалентно try-finally, но чище
+
+### Решение 3: Контекст NonCancellable (Очистка Должна Завершиться)
+
+**Проблема**: Код очистки, который приостанавливается, может быть отменен.
+
+```kotlin
+// - ПРОБЛЕМА: Сама очистка может быть отменена
+val job = lifecycleScope.launch {
+    val connection = openDatabaseConnection()
+
+    try {
+        performDatabaseOperations()
+    } finally {
+        // Если очистка занимает время и отменяется...
+        delay(1000) // Очистка прервана! Соединение не закрыто
+        connection.close()
+    }
+}
+
+job.cancel()
+```
+
+**Решение**: Используйте контекст `NonCancellable` для очистки.
+
+```kotlin
+// - ХОРОШО: Очистка не может быть отменена
+val job = lifecycleScope.launch {
+    val connection = openDatabaseConnection()
+
+    try {
+        performDatabaseOperations()
+    } finally {
+        withContext(NonCancellable) {
+            // Этот блок НЕ МОЖЕТ быть отменен
+            delay(1000) // Выполняется до конца
+            connection.close()
+            println("Очистка завершена")
+        }
+    }
+}
+
+job.cancel()
+job.join() // Ждет завершения блока NonCancellable
+```
+
+**Когда Использовать NonCancellable**:
+- Очистка требует приостанавливающих функций
+- Необходимо отправить логи краша
+- Необходимо сохранить критическое состояние
+- Транзакции базы данных должны завершиться
+
+### Резюме
+
+**Очистка Ресурсов в Корутинах**:
+- - **try-finally**: Гарантированная очистка при отмене
+- - **use()**: Автоматическая очистка для `Closeable` ресурсов
+- - **NonCancellable**: Очистка, которую нельзя прервать
+- - **job.join()**: Ждать завершения очистки после отмены
+- - **Вложенная очистка**: Корректно обрабатывать несколько ресурсов
+- - **Перебрасывать CancellationException**: Не проглатывать его
+
+**Ключевой Паттерн**:
+```kotlin
+coroutine.launch {
+    resource.use { res ->
+        // Работа с ресурсом
+    }
+} // Всегда очищено
+
+// Или с try-finally:
+try {
+    work()
+} finally {
+    withContext(NonCancellable) {
+        cleanup() // Не может быть отменено
+    }
+}
+```
 
 ---
 
@@ -481,175 +651,11 @@ try {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Очистка ресурсов в корутинах** требует тщательной обработки, потому что отмена является кооперативной и асинхронной. Паттерн `try-finally` и контекст `NonCancellable` - ключевые инструменты для обеспечения правильного освобождения ресурсов.
-
-### Проблема: Ресурсы и Отмена
-
-```kotlin
-// - ПРОБЛЕМА: Утечка ресурсов при отмене
-val job = lifecycleScope.launch {
-    val file = File("data.txt").outputStream()
-
-    // Если отменено здесь, файл никогда не закроется!
-    repeat(1000) { i ->
-        file.write("Line $i\n".toByteArray())
-        delay(100)
-    }
-
-    file.close() // Никогда не достигается при отмене!
-}
-
-delay(500)
-job.cancel() // Файл остается открытым → утечка ресурсов!
-```
-
-**Проблемы**:
-- Файловый дескриптор не закрыт
-- Утечка памяти
-- Исчерпание ресурсов ОС
-- Возможное повреждение данных
-
-### Решение 1: Паттерн try-finally (Обязательно)
-
-**Базовый Паттерн**: Используйте `try-finally` для гарантированной очистки.
-
-```kotlin
-// - ХОРОШО: Гарантированная очистка
-val job = lifecycleScope.launch {
-    val file = File("data.txt").outputStream()
-
-    try {
-        repeat(1000) { i ->
-            file.write("Line $i\n".toByteArray())
-            delay(100) // Отмена может произойти здесь
-        }
-    } finally {
-        // ВСЕГДА выполняется, даже при отмене
-        file.close()
-        println("Файл закрыт")
-    }
-}
-
-delay(500)
-job.cancel() // Файл корректно закрыт!
-job.join()   // Ждем завершения очистки
-```
-
-**Как Это Работает**:
-1. Корутина начинает запись в файл
-2. Вызывается `cancel()`
-3. В следующей точке приостановки (`delay(100)`) обнаруживается отмена
-4. Выбрасывается `CancellationException`
-5. Выполняется блок `finally` → файл закрыт
-6. Корутина завершается
-
-### Решение 2: Расширение use() (Автоматическая Очистка)
-
-**use() из Kotlin**: Автоматически закрывает `Closeable` ресурсы.
-
-```kotlin
-// - ЛУЧШЕ ВСЕГО: Автоматическое управление ресурсами
-val job = lifecycleScope.launch {
-    File("data.txt").outputStream().use { file ->
-        repeat(1000) { i ->
-            file.write("Line $i\n".toByteArray())
-            delay(100)
-        }
-    } // Автоматически закрывается здесь, даже при отмене
-}
-
-delay(500)
-job.cancel()
-job.join()
-```
-
-**Преимущества**:
-- Лаконичный, идиоматичный Kotlin
-- Обрабатывает исключения автоматически
-- Работает с любым `Closeable` ресурсом
-- Эквивалентно try-finally, но чище
-
-### Решение 3: Контекст NonCancellable (Очистка Должна Завершиться)
-
-**Проблема**: Код очистки, который приостанавливается, может быть отменен.
-
-```kotlin
-// - ПРОБЛЕМА: Сама очистка может быть отменена
-val job = lifecycleScope.launch {
-    val connection = openDatabaseConnection()
-
-    try {
-        performDatabaseOperations()
-    } finally {
-        // Если очистка занимает время и отменяется...
-        delay(1000) // Очистка прервана! Соединение не закрыто
-        connection.close()
-    }
-}
-
-job.cancel()
-```
-
-**Решение**: Используйте контекст `NonCancellable` для очистки.
-
-```kotlin
-// - ХОРОШО: Очистка не может быть отменена
-val job = lifecycleScope.launch {
-    val connection = openDatabaseConnection()
-
-    try {
-        performDatabaseOperations()
-    } finally {
-        withContext(NonCancellable) {
-            // Этот блок НЕ МОЖЕТ быть отменен
-            delay(1000) // Выполняется до конца
-            connection.close()
-            println("Очистка завершена")
-        }
-    }
-}
-
-job.cancel()
-job.join() // Ждет завершения блока NonCancellable
-```
-
-**Когда Использовать NonCancellable**:
-- Очистка требует приостанавливающих функций
-- Необходимо отправить логи краша
-- Необходимо сохранить критическое состояние
-- Транзакции базы данных должны завершиться
-
-### Резюме
-
-**Очистка Ресурсов в Корутинах**:
-- - **try-finally**: Гарантированная очистка при отмене
-- - **use()**: Автоматическая очистка для `Closeable` ресурсов
-- - **NonCancellable**: Очистка, которую нельзя прервать
-- - **job.join()**: Ждать завершения очистки после отмены
-- - **Вложенная очистка**: Корректно обрабатывать несколько ресурсов
-- - **Перебрасывать CancellationException**: Не проглатывать его
-
-**Ключевой Паттерн**:
-```kotlin
-coroutine.launch {
-    resource.use { res ->
-        // Работа с ресурсом
-    }
-} // Всегда очищено
-
-// Или с try-finally:
-try {
-    work()
-} finally {
-    withContext(NonCancellable) {
-        cleanup() // Не может быть отменено
-    }
-}
-```
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

@@ -19,16 +19,512 @@ related: [q-kotlin-sealed-classes-purpose--programming-languages--medium, q-life
 date created: Friday, October 31st 2025, 6:33:46 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Deferred and Async Patterns Deep Dive / Deferred И Async Паттерны Подробно
+
+# Вопрос (RU)
+
+> Что такое `Deferred<T>` в корутинах Kotlin? Чем он отличается от `Job`? Объясните билдер `async`, функцию `await()` и различные паттерны параллельного выполнения с реальными примерами.
+
+---
 
 # Question (EN)
 
 > What is `Deferred<T>` in Kotlin coroutines? How does it differ from `Job`? Explain the `async` builder, `await()` function, and various patterns for parallel execution with real-world examples.
 
-# Вопрос (RU)
+## Ответ (RU)
 
-> Что такое `Deferred<T>` в корутинах Kotlin? Чем он отличается от `Job`? Объясните билдер `async`, функцию `await()` и различные паттерны параллельного выполнения с реальными примерами.
+*(Краткое содержание основных пунктов из английской версии)*
+
+#### Что Такое Deferred<T>?
+
+`Deferred<T>` - это неблокирующее отменяемое будущее (future), представляющее обещание будущего значения результата типа `T`. Он расширяет интерфейс `Job` и добавляет возможность возвращать результат при завершении вычисления.
+
+```kotlin
+public interface Deferred<out T> : Job {
+    public suspend fun await(): T
+    public val isCompleted: Boolean
+    public fun getCompleted(): T
+    public fun getCompletionExceptionOrNull(): Throwable?
+}
+```
+
+**Ключевые характеристики:**
+- **Расширяет Job**: Наследует все свойства и функции Job
+- **Возвращает значение**: В отличие от Job, Deferred может вернуть результат
+- **Одно значение**: Возвращает ровно одно значение при завершении
+- **Неблокирующий**: await() - приостанавливающая функция, не блокирует потоки
+- **Отменяемый**: Можно отменить как любой Job
+
+#### Сравнение Deferred И Job
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateDeferredVsJob() = runBlocking {
+    // Job - нет возвращаемого значения
+    val job: Job = launch {
+        delay(1000)
+        println("Job завершён")
+    }
+    job.join() // Ждём завершения, но нет результата
+
+    // Deferred - возвращает значение
+    val deferred: Deferred<String> = async {
+        delay(1000)
+        "Результат Deferred"
+    }
+    val result: String = deferred.await() // Ждём и получаем результат
+    println(result)
+}
+```
+
+**Таблица сравнения:**
+
+| Характеристика | Job | Deferred<T> |
+|----------------|-----|-------------|
+| Возвращаемое значение | Нет | Да (тип T) |
+| Функция ожидания | join() | await() |
+| Получение результата | Н/Д | await() или getCompleted() |
+| Случай использования | Запустить и забыть | Вычислить и вернуть |
+| Создаётся через | launch | async |
+| Обработка исключений | Пробрасывается родителю | Хранится до await() |
+
+#### Билдер Async
+
+`async` - это билдер корутин, который запускает корутину и возвращает объект `Deferred`:
+
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun fetchUserData(userId: Int): String {
+    delay(100) // Имитация сетевого запроса
+    return "Пользователь$userId"
+}
+
+suspend fun fetchUserOrders(userId: Int): List<String> {
+    delay(150)
+    return listOf("Заказ1", "Заказ2")
+}
+
+// Базовое использование async
+suspend fun loadUserProfile(userId: Int): Pair<String, List<String>> = coroutineScope {
+    // Запускаем обе операции одновременно
+    val userDeferred = async { fetchUserData(userId) }
+    val ordersDeferred = async { fetchUserOrders(userId) }
+
+    // Ждём оба результата
+    val user = userDeferred.await()
+    val orders = ordersDeferred.await()
+
+    user to orders
+}
+
+// Использование
+fun main() = runBlocking {
+    val (user, orders) = loadUserProfile(1)
+    println("Пользователь: $user, Заказы: $orders")
+}
+```
+
+#### Состояния Deferred
+
+Deferred проходит через несколько состояний в течение жизненного цикла:
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateDeferredStates() = runBlocking {
+    // Состояние 1: New (только для ленивых корутин)
+    val lazyDeferred = async(start = CoroutineStart.LAZY) {
+        delay(100)
+        "Результат"
+    }
+    println("Ленивый - Активен: ${lazyDeferred.isActive}, Завершён: ${lazyDeferred.isCompleted}")
+
+    // Состояние 2: Active
+    val activeDeferred = async {
+        delay(100)
+        "Результат"
+    }
+    println("Активный - Активен: ${activeDeferred.isActive}, Завершён: ${activeDeferred.isCompleted}")
+
+    // Состояние 3: Completed (успех)
+    activeDeferred.await()
+    println("Завершён - Активен: ${activeDeferred.isActive}, Завершён: ${activeDeferred.isCompleted}")
+}
+```
+
+#### Функция await() И Распространение Исключений
+
+`await()` приостанавливает корутину до завершения Deferred и возвращает результат. Если Deferred завершается с ошибкой, `await()` выбрасывает исключение:
+
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun demonstrateAwaitExceptions() = coroutineScope {
+    // Успешный случай
+    val successDeferred = async {
+        delay(100)
+        42
+    }
+    println("Результат: ${successDeferred.await()}")
+
+    // Случай с исключением - await() выбрасывает исключение
+    val failedDeferred = async {
+        delay(100)
+        throw IllegalArgumentException("Некорректные данные")
+    }
+
+    try {
+        failedDeferred.await() // Здесь выбросится исключение
+    } catch (e: IllegalArgumentException) {
+        println("Поймано исключение: ${e.message}")
+    }
+
+    // Исключение сохраняется и выбрасывается при каждом вызове await()
+    try {
+        failedDeferred.await() // Можно await снова, то же исключение
+    } catch (e: IllegalArgumentException) {
+        println("Снова поймано то же исключение: ${e.message}")
+    }
+}
+```
+
+**Важное поведение:**
+- Исключение **сохраняется** в Deferred до вызова await()
+- await() **перевыбрасывает** сохранённое исключение
+- Можно вызывать await() несколько раз - каждый раз то же исключение
+- Если никогда не вызвать await(), исключение **теряется** (с обычным Job)
+- С SupervisorJob исключения дочерних корутин не отменяют родителя
+
+#### Объединение Нескольких Deferred С awaitAll()
+
+```kotlin
+import kotlinx.coroutines.*
+
+data class ApiResponse(val id: Int, val data: String)
+
+suspend fun fetchFromApi(id: Int): ApiResponse {
+    delay(100)
+    return ApiResponse(id, "Данные$id")
+}
+
+// Паттерн 1: awaitAll() на списке Deferred
+suspend fun fetchAllApis(): List<ApiResponse> = coroutineScope {
+    val deferreds = (1..5).map { id ->
+        async { fetchFromApi(id) }
+    }
+    deferreds.awaitAll() // Приостанавливается до завершения всех
+}
+
+// Паттерн 2: Поведение fail-fast
+suspend fun fetchAllApisFailFast() = coroutineScope {
+    val deferreds = (1..5).map { id ->
+        async {
+            if (id == 3) throw IllegalStateException("API $id упал")
+            fetchFromApi(id)
+        }
+    }
+
+    try {
+        deferreds.awaitAll() // Падает как только любой async упадёт
+    } catch (e: Exception) {
+        println("Один API упал: ${e.message}")
+        // Все остальные корутины отменяются автоматически
+    }
+}
+```
+
+**Характеристики awaitAll():**
+- Приостанавливается до завершения **всех** Deferred
+- Возвращает результаты в **том же порядке** что и входные данные
+- **Fail-fast**: отменяет все при первой ошибке
+- Типобезопасный: `List<Deferred<T>>` → `List<T>`
+
+#### Паттерны Параллельного Выполнения
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
+
+data class UserProfile(val name: String, val email: String)
+data class UserSettings(val theme: String, val notifications: Boolean)
+data class UserStats(val loginCount: Int, val lastLogin: Long)
+
+suspend fun fetchProfile(userId: Int): UserProfile {
+    delay(200)
+    return UserProfile("Пользователь$userId", "user$userId@example.com")
+}
+
+suspend fun fetchSettings(userId: Int): UserSettings {
+    delay(150)
+    return UserSettings("dark", true)
+}
+
+suspend fun fetchStats(userId: Int): UserStats {
+    delay(100)
+    return UserStats(42, System.currentTimeMillis())
+}
+
+// Паттерн 1: Последовательный (медленный)
+suspend fun loadUserDataSequential(userId: Int): Triple<UserProfile, UserSettings, UserStats> {
+    val profile = fetchProfile(userId)    // 200ms
+    val settings = fetchSettings(userId)   // 150ms
+    val stats = fetchStats(userId)         // 100ms
+    return Triple(profile, settings, stats) // Всего: 450ms
+}
+
+// Паттерн 2: Параллельный с async (быстрый)
+suspend fun loadUserDataParallel(userId: Int): Triple<UserProfile, UserSettings, UserStats> = coroutineScope {
+    val profileDeferred = async { fetchProfile(userId) }
+    val settingsDeferred = async { fetchSettings(userId) }
+    val statsDeferred = async { fetchStats(userId) }
+
+    Triple(
+        profileDeferred.await(),
+        settingsDeferred.await(),
+        statsDeferred.await()
+    ) // Всего: 200ms (самая длинная операция)
+}
+
+fun main() = runBlocking {
+    val sequential = measureTimeMillis {
+        loadUserDataSequential(1)
+    }
+    println("Последовательно: ${sequential}ms")
+
+    val parallel = measureTimeMillis {
+        loadUserDataParallel(1)
+    }
+    println("Параллельно: ${parallel}ms")
+}
+```
+
+#### Ленивый Async С CoroutineStart.LAZY
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Ленивый async - не запускается пока явно не запросят
+suspend fun demonstrateLazyAsync() = coroutineScope {
+    val lazyDeferred = async(start = CoroutineStart.LAZY) {
+        println("Вычисление дорогого значения...")
+        delay(1000)
+        42
+    }
+
+    println("Deferred создан, но вычисление не началось")
+    delay(500)
+    println("Всё ещё не началось...")
+
+    // Запускаем вычисление вызовом await() или start()
+    println("Запускаем сейчас...")
+    val result = lazyDeferred.await() // Запускает вычисление
+    println("Результат: $result")
+}
+```
+
+#### CompletableDeferred Для Ручного Завершения
+
+```kotlin
+import kotlinx.coroutines.*
+
+// CompletableDeferred - вручную завершаемое будущее
+class AsyncCache<K, V> {
+    private val cache = mutableMapOf<K, CompletableDeferred<V>>()
+
+    suspend fun get(key: K, loader: suspend () -> V): V {
+        val deferred = cache.getOrPut(key) {
+            CompletableDeferred<V>().also { deferred ->
+                // Загружаем значение асинхронно
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val value = loader()
+                        deferred.complete(value) // Вручную завершаем
+                    } catch (e: Exception) {
+                        deferred.completeExceptionally(e)
+                    }
+                }
+            }
+        }
+        return deferred.await()
+    }
+}
+```
+
+#### Реальный Пример: Параллельные API Вызовы
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
+
+data class User(val id: Int, val name: String)
+data class Posts(val userId: Int, val posts: List<String>)
+data class Comments(val userId: Int, val comments: List<String>)
+data class Friends(val userId: Int, val friends: List<Int>)
+
+suspend fun fetchUser(userId: Int): User {
+    delay(200)
+    return User(userId, "Пользователь$userId")
+}
+
+suspend fun fetchPosts(userId: Int): Posts {
+    delay(300)
+    return Posts(userId, listOf("Пост1", "Пост2"))
+}
+
+suspend fun fetchComments(userId: Int): Comments {
+    delay(150)
+    return Comments(userId, listOf("Комментарий1", "Комментарий2"))
+}
+
+suspend fun fetchFriends(userId: Int): Friends {
+    delay(250)
+    return Friends(userId, listOf(2, 3, 4))
+}
+
+data class CompleteProfile(
+    val user: User,
+    val posts: Posts,
+    val comments: Comments,
+    val friends: Friends
+)
+
+// Параллельная загрузка (быстро)
+suspend fun loadProfileParallel(userId: Int): CompleteProfile = coroutineScope {
+    val userDeferred = async { fetchUser(userId) }
+    val postsDeferred = async { fetchPosts(userId) }
+    val commentsDeferred = async { fetchComments(userId) }
+    val friendsDeferred = async { fetchFriends(userId) }
+
+    CompleteProfile(
+        user = userDeferred.await(),
+        posts = postsDeferred.await(),
+        comments = commentsDeferred.await(),
+        friends = friendsDeferred.await()
+    )
+}
+
+fun main() = runBlocking {
+    val parallelTime = measureTimeMillis {
+        loadProfileParallel(1)
+    }
+    println("Параллельно: ${parallelTime}ms") // ~300ms
+}
+```
+
+**Улучшение производительности**: в 3 раза быстрее с параллельным выполнением
+
+#### Обработка Ошибок В async/await
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Паттерн 1: Try-catch вокруг await()
+suspend fun errorHandlingPattern1() = coroutineScope {
+    val deferred1 = async { "Успех" }
+    val deferred2 = async<String> { throw Exception("Ошибка") }
+
+    val result1 = deferred1.await() // OK
+
+    val result2 = try {
+        deferred2.await() // Здесь выбрасывается
+    } catch (e: Exception) {
+        "Запасной вариант"
+    }
+
+    println("Результаты: $result1, $result2")
+}
+
+// Паттерн 2: SupervisorJob для независимых ошибок
+suspend fun errorHandlingPattern2() = coroutineScope {
+    val supervisor = SupervisorJob()
+
+    val deferred1 = async(supervisor) { "Успех" }
+    val deferred2 = async(supervisor) { throw Exception("Ошибка") }
+    val deferred3 = async(supervisor) { "Тоже успех" }
+
+    val result1 = deferred1.await()
+    val result2 = try {
+        deferred2.await()
+    } catch (e: Exception) {
+        "Запасной вариант"
+    }
+    val result3 = deferred3.await()
+
+    println("Результаты: $result1, $result2, $result3")
+}
+```
+
+#### Когда Использовать Async Vs Launch
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Используйте async когда нужен результат
+suspend fun useAsync(): String = coroutineScope {
+    val result = async {
+        delay(100)
+        "Вычисленное значение"
+    }.await()
+
+    result
+}
+
+// Используйте launch когда результат не нужен
+suspend fun useLaunch() = coroutineScope {
+    launch {
+        delay(100)
+        println("Только побочный эффект")
+    }
+}
+```
+
+**Руководство по выбору:**
+
+| Критерий | Использовать async | Использовать launch |
+|----------|-------------------|---------------------|
+| Нужен результат? | Да | Нет |
+| Ждать завершения? | Да (await) | Опционально (join) |
+| Тип возврата | Deferred<T> | Job |
+| Обработка ошибок | Исключение в await() | Исключение родителю |
+| Случай использования | Вычисление | Побочный эффект |
+
+#### Тестирование Async Кода
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
+import org.junit.Test
+import kotlin.test.assertEquals
+
+class AsyncTests {
+    @Test
+    fun testParallelExecution() = runTest {
+        val start = currentTime
+
+        val results = listOf(
+            async { delay(100); "A" },
+            async { delay(200); "B" },
+            async { delay(150); "C" }
+        ).awaitAll()
+
+        val duration = currentTime - start
+
+        assertEquals(listOf("A", "B", "C"), results)
+        assertEquals(200, duration) // Макс задержка, не сумма
+    }
+}
+```
+
+### Резюме
+
+**Deferred<T>** - это Job, который возвращает результат. Используйте **async** для создания Deferred для параллельных вычислений, **await()** для получения результатов, и **awaitAll()** для нескольких Deferred. Ключевые паттерны:
+- **Параллельное выполнение**: Запустить несколько async, ждать всех
+- **Ленивый async**: Вычислять только если нужно
+- **CompletableDeferred**: Ручное завершение
+- **Обработка ошибок**: Try-catch вокруг await()
+- **Выбирайте мудро**: async для результатов, launch для побочных эффектов
 
 ---
 
@@ -985,503 +1481,6 @@ suspend fun loadDataGood() = coroutineScope {
 - **CompletableDeferred**: Manual completion
 - **Error handling**: Try-catch around await()
 - **Choose wisely**: async for results, launch for side effects
-
----
-
-## Ответ (RU)
-
-*(Краткое содержание основных пунктов из английской версии)*
-
-#### Что Такое Deferred<T>?
-
-`Deferred<T>` - это неблокирующее отменяемое будущее (future), представляющее обещание будущего значения результата типа `T`. Он расширяет интерфейс `Job` и добавляет возможность возвращать результат при завершении вычисления.
-
-```kotlin
-public interface Deferred<out T> : Job {
-    public suspend fun await(): T
-    public val isCompleted: Boolean
-    public fun getCompleted(): T
-    public fun getCompletionExceptionOrNull(): Throwable?
-}
-```
-
-**Ключевые характеристики:**
-- **Расширяет Job**: Наследует все свойства и функции Job
-- **Возвращает значение**: В отличие от Job, Deferred может вернуть результат
-- **Одно значение**: Возвращает ровно одно значение при завершении
-- **Неблокирующий**: await() - приостанавливающая функция, не блокирует потоки
-- **Отменяемый**: Можно отменить как любой Job
-
-#### Сравнение Deferred И Job
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun demonstrateDeferredVsJob() = runBlocking {
-    // Job - нет возвращаемого значения
-    val job: Job = launch {
-        delay(1000)
-        println("Job завершён")
-    }
-    job.join() // Ждём завершения, но нет результата
-
-    // Deferred - возвращает значение
-    val deferred: Deferred<String> = async {
-        delay(1000)
-        "Результат Deferred"
-    }
-    val result: String = deferred.await() // Ждём и получаем результат
-    println(result)
-}
-```
-
-**Таблица сравнения:**
-
-| Характеристика | Job | Deferred<T> |
-|----------------|-----|-------------|
-| Возвращаемое значение | Нет | Да (тип T) |
-| Функция ожидания | join() | await() |
-| Получение результата | Н/Д | await() или getCompleted() |
-| Случай использования | Запустить и забыть | Вычислить и вернуть |
-| Создаётся через | launch | async |
-| Обработка исключений | Пробрасывается родителю | Хранится до await() |
-
-#### Билдер Async
-
-`async` - это билдер корутин, который запускает корутину и возвращает объект `Deferred`:
-
-```kotlin
-import kotlinx.coroutines.*
-
-suspend fun fetchUserData(userId: Int): String {
-    delay(100) // Имитация сетевого запроса
-    return "Пользователь$userId"
-}
-
-suspend fun fetchUserOrders(userId: Int): List<String> {
-    delay(150)
-    return listOf("Заказ1", "Заказ2")
-}
-
-// Базовое использование async
-suspend fun loadUserProfile(userId: Int): Pair<String, List<String>> = coroutineScope {
-    // Запускаем обе операции одновременно
-    val userDeferred = async { fetchUserData(userId) }
-    val ordersDeferred = async { fetchUserOrders(userId) }
-
-    // Ждём оба результата
-    val user = userDeferred.await()
-    val orders = ordersDeferred.await()
-
-    user to orders
-}
-
-// Использование
-fun main() = runBlocking {
-    val (user, orders) = loadUserProfile(1)
-    println("Пользователь: $user, Заказы: $orders")
-}
-```
-
-#### Состояния Deferred
-
-Deferred проходит через несколько состояний в течение жизненного цикла:
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun demonstrateDeferredStates() = runBlocking {
-    // Состояние 1: New (только для ленивых корутин)
-    val lazyDeferred = async(start = CoroutineStart.LAZY) {
-        delay(100)
-        "Результат"
-    }
-    println("Ленивый - Активен: ${lazyDeferred.isActive}, Завершён: ${lazyDeferred.isCompleted}")
-
-    // Состояние 2: Active
-    val activeDeferred = async {
-        delay(100)
-        "Результат"
-    }
-    println("Активный - Активен: ${activeDeferred.isActive}, Завершён: ${activeDeferred.isCompleted}")
-
-    // Состояние 3: Completed (успех)
-    activeDeferred.await()
-    println("Завершён - Активен: ${activeDeferred.isActive}, Завершён: ${activeDeferred.isCompleted}")
-}
-```
-
-#### Функция await() И Распространение Исключений
-
-`await()` приостанавливает корутину до завершения Deferred и возвращает результат. Если Deferred завершается с ошибкой, `await()` выбрасывает исключение:
-
-```kotlin
-import kotlinx.coroutines.*
-
-suspend fun demonstrateAwaitExceptions() = coroutineScope {
-    // Успешный случай
-    val successDeferred = async {
-        delay(100)
-        42
-    }
-    println("Результат: ${successDeferred.await()}")
-
-    // Случай с исключением - await() выбрасывает исключение
-    val failedDeferred = async {
-        delay(100)
-        throw IllegalArgumentException("Некорректные данные")
-    }
-
-    try {
-        failedDeferred.await() // Здесь выбросится исключение
-    } catch (e: IllegalArgumentException) {
-        println("Поймано исключение: ${e.message}")
-    }
-
-    // Исключение сохраняется и выбрасывается при каждом вызове await()
-    try {
-        failedDeferred.await() // Можно await снова, то же исключение
-    } catch (e: IllegalArgumentException) {
-        println("Снова поймано то же исключение: ${e.message}")
-    }
-}
-```
-
-**Важное поведение:**
-- Исключение **сохраняется** в Deferred до вызова await()
-- await() **перевыбрасывает** сохранённое исключение
-- Можно вызывать await() несколько раз - каждый раз то же исключение
-- Если никогда не вызвать await(), исключение **теряется** (с обычным Job)
-- С SupervisorJob исключения дочерних корутин не отменяют родителя
-
-#### Объединение Нескольких Deferred С awaitAll()
-
-```kotlin
-import kotlinx.coroutines.*
-
-data class ApiResponse(val id: Int, val data: String)
-
-suspend fun fetchFromApi(id: Int): ApiResponse {
-    delay(100)
-    return ApiResponse(id, "Данные$id")
-}
-
-// Паттерн 1: awaitAll() на списке Deferred
-suspend fun fetchAllApis(): List<ApiResponse> = coroutineScope {
-    val deferreds = (1..5).map { id ->
-        async { fetchFromApi(id) }
-    }
-    deferreds.awaitAll() // Приостанавливается до завершения всех
-}
-
-// Паттерн 2: Поведение fail-fast
-suspend fun fetchAllApisFailFast() = coroutineScope {
-    val deferreds = (1..5).map { id ->
-        async {
-            if (id == 3) throw IllegalStateException("API $id упал")
-            fetchFromApi(id)
-        }
-    }
-
-    try {
-        deferreds.awaitAll() // Падает как только любой async упадёт
-    } catch (e: Exception) {
-        println("Один API упал: ${e.message}")
-        // Все остальные корутины отменяются автоматически
-    }
-}
-```
-
-**Характеристики awaitAll():**
-- Приостанавливается до завершения **всех** Deferred
-- Возвращает результаты в **том же порядке** что и входные данные
-- **Fail-fast**: отменяет все при первой ошибке
-- Типобезопасный: `List<Deferred<T>>` → `List<T>`
-
-#### Паттерны Параллельного Выполнения
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlin.system.measureTimeMillis
-
-data class UserProfile(val name: String, val email: String)
-data class UserSettings(val theme: String, val notifications: Boolean)
-data class UserStats(val loginCount: Int, val lastLogin: Long)
-
-suspend fun fetchProfile(userId: Int): UserProfile {
-    delay(200)
-    return UserProfile("Пользователь$userId", "user$userId@example.com")
-}
-
-suspend fun fetchSettings(userId: Int): UserSettings {
-    delay(150)
-    return UserSettings("dark", true)
-}
-
-suspend fun fetchStats(userId: Int): UserStats {
-    delay(100)
-    return UserStats(42, System.currentTimeMillis())
-}
-
-// Паттерн 1: Последовательный (медленный)
-suspend fun loadUserDataSequential(userId: Int): Triple<UserProfile, UserSettings, UserStats> {
-    val profile = fetchProfile(userId)    // 200ms
-    val settings = fetchSettings(userId)   // 150ms
-    val stats = fetchStats(userId)         // 100ms
-    return Triple(profile, settings, stats) // Всего: 450ms
-}
-
-// Паттерн 2: Параллельный с async (быстрый)
-suspend fun loadUserDataParallel(userId: Int): Triple<UserProfile, UserSettings, UserStats> = coroutineScope {
-    val profileDeferred = async { fetchProfile(userId) }
-    val settingsDeferred = async { fetchSettings(userId) }
-    val statsDeferred = async { fetchStats(userId) }
-
-    Triple(
-        profileDeferred.await(),
-        settingsDeferred.await(),
-        statsDeferred.await()
-    ) // Всего: 200ms (самая длинная операция)
-}
-
-fun main() = runBlocking {
-    val sequential = measureTimeMillis {
-        loadUserDataSequential(1)
-    }
-    println("Последовательно: ${sequential}ms")
-
-    val parallel = measureTimeMillis {
-        loadUserDataParallel(1)
-    }
-    println("Параллельно: ${parallel}ms")
-}
-```
-
-#### Ленивый Async С CoroutineStart.LAZY
-
-```kotlin
-import kotlinx.coroutines.*
-
-// Ленивый async - не запускается пока явно не запросят
-suspend fun demonstrateLazyAsync() = coroutineScope {
-    val lazyDeferred = async(start = CoroutineStart.LAZY) {
-        println("Вычисление дорогого значения...")
-        delay(1000)
-        42
-    }
-
-    println("Deferred создан, но вычисление не началось")
-    delay(500)
-    println("Всё ещё не началось...")
-
-    // Запускаем вычисление вызовом await() или start()
-    println("Запускаем сейчас...")
-    val result = lazyDeferred.await() // Запускает вычисление
-    println("Результат: $result")
-}
-```
-
-#### CompletableDeferred Для Ручного Завершения
-
-```kotlin
-import kotlinx.coroutines.*
-
-// CompletableDeferred - вручную завершаемое будущее
-class AsyncCache<K, V> {
-    private val cache = mutableMapOf<K, CompletableDeferred<V>>()
-
-    suspend fun get(key: K, loader: suspend () -> V): V {
-        val deferred = cache.getOrPut(key) {
-            CompletableDeferred<V>().also { deferred ->
-                // Загружаем значение асинхронно
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val value = loader()
-                        deferred.complete(value) // Вручную завершаем
-                    } catch (e: Exception) {
-                        deferred.completeExceptionally(e)
-                    }
-                }
-            }
-        }
-        return deferred.await()
-    }
-}
-```
-
-#### Реальный Пример: Параллельные API Вызовы
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlin.system.measureTimeMillis
-
-data class User(val id: Int, val name: String)
-data class Posts(val userId: Int, val posts: List<String>)
-data class Comments(val userId: Int, val comments: List<String>)
-data class Friends(val userId: Int, val friends: List<Int>)
-
-suspend fun fetchUser(userId: Int): User {
-    delay(200)
-    return User(userId, "Пользователь$userId")
-}
-
-suspend fun fetchPosts(userId: Int): Posts {
-    delay(300)
-    return Posts(userId, listOf("Пост1", "Пост2"))
-}
-
-suspend fun fetchComments(userId: Int): Comments {
-    delay(150)
-    return Comments(userId, listOf("Комментарий1", "Комментарий2"))
-}
-
-suspend fun fetchFriends(userId: Int): Friends {
-    delay(250)
-    return Friends(userId, listOf(2, 3, 4))
-}
-
-data class CompleteProfile(
-    val user: User,
-    val posts: Posts,
-    val comments: Comments,
-    val friends: Friends
-)
-
-// Параллельная загрузка (быстро)
-suspend fun loadProfileParallel(userId: Int): CompleteProfile = coroutineScope {
-    val userDeferred = async { fetchUser(userId) }
-    val postsDeferred = async { fetchPosts(userId) }
-    val commentsDeferred = async { fetchComments(userId) }
-    val friendsDeferred = async { fetchFriends(userId) }
-
-    CompleteProfile(
-        user = userDeferred.await(),
-        posts = postsDeferred.await(),
-        comments = commentsDeferred.await(),
-        friends = friendsDeferred.await()
-    )
-}
-
-fun main() = runBlocking {
-    val parallelTime = measureTimeMillis {
-        loadProfileParallel(1)
-    }
-    println("Параллельно: ${parallelTime}ms") // ~300ms
-}
-```
-
-**Улучшение производительности**: в 3 раза быстрее с параллельным выполнением
-
-#### Обработка Ошибок В async/await
-
-```kotlin
-import kotlinx.coroutines.*
-
-// Паттерн 1: Try-catch вокруг await()
-suspend fun errorHandlingPattern1() = coroutineScope {
-    val deferred1 = async { "Успех" }
-    val deferred2 = async<String> { throw Exception("Ошибка") }
-
-    val result1 = deferred1.await() // OK
-
-    val result2 = try {
-        deferred2.await() // Здесь выбрасывается
-    } catch (e: Exception) {
-        "Запасной вариант"
-    }
-
-    println("Результаты: $result1, $result2")
-}
-
-// Паттерн 2: SupervisorJob для независимых ошибок
-suspend fun errorHandlingPattern2() = coroutineScope {
-    val supervisor = SupervisorJob()
-
-    val deferred1 = async(supervisor) { "Успех" }
-    val deferred2 = async(supervisor) { throw Exception("Ошибка") }
-    val deferred3 = async(supervisor) { "Тоже успех" }
-
-    val result1 = deferred1.await()
-    val result2 = try {
-        deferred2.await()
-    } catch (e: Exception) {
-        "Запасной вариант"
-    }
-    val result3 = deferred3.await()
-
-    println("Результаты: $result1, $result2, $result3")
-}
-```
-
-#### Когда Использовать Async Vs Launch
-
-```kotlin
-import kotlinx.coroutines.*
-
-// Используйте async когда нужен результат
-suspend fun useAsync(): String = coroutineScope {
-    val result = async {
-        delay(100)
-        "Вычисленное значение"
-    }.await()
-
-    result
-}
-
-// Используйте launch когда результат не нужен
-suspend fun useLaunch() = coroutineScope {
-    launch {
-        delay(100)
-        println("Только побочный эффект")
-    }
-}
-```
-
-**Руководство по выбору:**
-
-| Критерий | Использовать async | Использовать launch |
-|----------|-------------------|---------------------|
-| Нужен результат? | Да | Нет |
-| Ждать завершения? | Да (await) | Опционально (join) |
-| Тип возврата | Deferred<T> | Job |
-| Обработка ошибок | Исключение в await() | Исключение родителю |
-| Случай использования | Вычисление | Побочный эффект |
-
-#### Тестирование Async Кода
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
-import org.junit.Test
-import kotlin.test.assertEquals
-
-class AsyncTests {
-    @Test
-    fun testParallelExecution() = runTest {
-        val start = currentTime
-
-        val results = listOf(
-            async { delay(100); "A" },
-            async { delay(200); "B" },
-            async { delay(150); "C" }
-        ).awaitAll()
-
-        val duration = currentTime - start
-
-        assertEquals(listOf("A", "B", "C"), results)
-        assertEquals(200, duration) // Макс задержка, не сумма
-    }
-}
-```
-
-### Резюме
-
-**Deferred<T>** - это Job, который возвращает результат. Используйте **async** для создания Deferred для параллельных вычислений, **await()** для получения результатов, и **awaitAll()** для нескольких Deferred. Ключевые паттерны:
-- **Параллельное выполнение**: Запустить несколько async, ждать всех
-- **Ленивый async**: Вычислять только если нужно
-- **CompletableDeferred**: Ручное завершение
-- **Обработка ошибок**: Try-catch вокруг await()
-- **Выбирайте мудро**: async для результатов, launch для побочных эффектов
 
 ---
 

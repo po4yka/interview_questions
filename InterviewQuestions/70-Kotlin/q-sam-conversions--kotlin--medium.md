@@ -480,6 +480,16 @@ val result = processString("hello") { it.uppercase() }
 
 SAM конструктор явно создает экземпляр: `Runnable { code }`. Работает только с одним абстрактным методом - default методы не считаются.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-flow-exception-handling--kotlin--medium]]

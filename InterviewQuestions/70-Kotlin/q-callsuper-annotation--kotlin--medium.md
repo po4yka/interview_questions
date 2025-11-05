@@ -17,22 +17,15 @@ tags: [android, annotations, best-practices, difficulty/medium, kotlin, lifecycl
 date created: Saturday, November 1st 2025, 1:27:05 pm
 date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
-
 # Аннотация @CallSuper
-
-# Question (EN)
-> What is the @CallSuper annotation and when should you use it?
 
 # Вопрос (RU)
 > Что такое аннотация @CallSuper и когда её следует использовать?
 
 ---
 
-## Answer (EN)
-
-The `@CallSuper` annotation indicates that when overriding a method in a subclass, the superclass method must be called. This is especially useful for Android lifecycle methods (onCreate, onStart, onDestroy) where missing super calls can lead to serious problems: memory leaks, incorrect component behavior, or app crashes. Android Studio shows lint warnings when super calls are missing.
-
-**English**: The @CallSuper annotation enforces that subclasses must call the superclass method when overriding. This is critical for lifecycle methods (onCreate, onDestroy) in Android where forgetting super calls leads to memory leaks and crashes. Android Studio shows warnings for missing super calls. Use @CallSuper in base classes for initialization, cleanup, and lifecycle methods. Call super first in onCreate and last in onDestroy. Template Method pattern is an alternative that prevents forgetting super calls entirely.
+# Question (EN)
+> What is the @CallSuper annotation and when should you use it?
 
 ## Ответ (RU)
 
@@ -843,6 +836,22 @@ class MyActivity : AppCompatActivity() {
     }
 }
 ```
+
+## Answer (EN)
+
+The `@CallSuper` annotation indicates that when overriding a method in a subclass, the superclass method must be called. This is especially useful for Android lifecycle methods (onCreate, onStart, onDestroy) where missing super calls can lead to serious problems: memory leaks, incorrect component behavior, or app crashes. Android Studio shows lint warnings when super calls are missing.
+
+**English**: The @CallSuper annotation enforces that subclasses must call the superclass method when overriding. This is critical for lifecycle methods (onCreate, onDestroy) in Android where forgetting super calls leads to memory leaks and crashes. Android Studio shows warnings for missing super calls. Use @CallSuper in base classes for initialization, cleanup, and lifecycle methods. Call super first in onCreate and last in onDestroy. Template Method pattern is an alternative that prevents forgetting super calls entirely.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

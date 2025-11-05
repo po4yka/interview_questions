@@ -1,11 +1,11 @@
 ---
 id: kotlin-031
 title: "Nested Class vs Inner Class / Вложенный vs внутренний класс"
-aliases: []
+aliases: ["Nested Class vs Inner Class, Вложенный vs внутренний класс"]
 
 # Classification
 topic: kotlin
-subtopics: [classes, inner-class, nested-class, oop]
+subtopics: [classes, inner-class, nested-class]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,57 @@ tags: [classes, difficulty/medium, inner-class, kotlin, nested-class, oop]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?
+
+---
 
 # Question (EN)
 > What is the difference between nested class and inner class in Kotlin?
-# Вопрос (RU)
-> В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?
+## Ответ (RU)
+
+### Вложенный Класс (Nested)
+
+Класс, объявленный внутри другого класса. **Не может получить доступ к членам внешнего класса**. Не требует экземпляра внешнего класса.
+
+```kotlin
+class Outer {
+    private val bar: Int = 1
+
+    class Nested {
+        fun foo() = 2
+    }
+}
+
+val demo = Outer.Nested().foo()  // Не нужен экземпляр Outer!
+```
+
+### Внутренний Класс (Inner)
+
+Вложенный класс с ключевым словом `inner`. **Может получить доступ ко всем членам** внешнего класса. Требует экземпляр внешнего класса.
+
+```kotlin
+class Outer {
+    private val bar: Int = 1
+
+    inner class Inner {
+        fun foo() = bar  // - Доступ к private членам
+    }
+}
+
+val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
+```
+
+### Ключевые Отличия
+
+| Функция | Nested | Inner |
+|---------|--------|-------|
+| **Ключевое слово** | Нет (по умолчанию) | `inner` |
+| **Доступ к внешнему** | - Нет | - Да |
+| **Создание** | `Outer.Nested()` | `outerInstance.Inner()` |
+| **Java эквивалент** | Static nested class | Non-static nested |
+
+**Краткое содержание**: Вложенные классы (по умолчанию в Kotlin) как Java static nested - нет доступа к внешнему, не нужен экземпляр внешнего. Внутренние классы (с `inner`) как Java non-static nested - могут обращаться к членам внешнего, нужен экземпляр. Используйте вложенные для независимости, внутренние для тесной связи.
 
 ---
 
@@ -124,52 +170,11 @@ class Activity {
 
 **English Summary**: Nested classes (default in Kotlin) are like Java static nested classes - no access to outer class, no outer instance needed. Inner classes (with `inner` keyword) are like Java non-static nested - can access outer members, need outer instance. Use nested for independence, inner for tight coupling. Nested classes avoid memory leaks from holding outer references.
 
-## Ответ (RU)
+## Follow-ups
 
-### Вложенный Класс (Nested)
-
-Класс, объявленный внутри другого класса. **Не может получить доступ к членам внешнего класса**. Не требует экземпляра внешнего класса.
-
-```kotlin
-class Outer {
-    private val bar: Int = 1
-
-    class Nested {
-        fun foo() = 2
-    }
-}
-
-val demo = Outer.Nested().foo()  // Не нужен экземпляр Outer!
-```
-
-### Внутренний Класс (Inner)
-
-Вложенный класс с ключевым словом `inner`. **Может получить доступ ко всем членам** внешнего класса. Требует экземпляр внешнего класса.
-
-```kotlin
-class Outer {
-    private val bar: Int = 1
-
-    inner class Inner {
-        fun foo() = bar  // - Доступ к private членам
-    }
-}
-
-val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
-```
-
-### Ключевые Отличия
-
-| Функция | Nested | Inner |
-|---------|--------|-------|
-| **Ключевое слово** | Нет (по умолчанию) | `inner` |
-| **Доступ к внешнему** | - Нет | - Да |
-| **Создание** | `Outer.Nested()` | `outerInstance.Inner()` |
-| **Java эквивалент** | Static nested class | Non-static nested |
-
-**Краткое содержание**: Вложенные классы (по умолчанию в Kotlin) как Java static nested - нет доступа к внешнему, не нужен экземпляр внешнего. Внутренние классы (с `inner`) как Java non-static nested - могут обращаться к членам внешнего, нужен экземпляр. Используйте вложенные для независимости, внутренние для тесной связи.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Nested and Inner Classes - Kotlin](https://kotlinlang.org/docs/nested-classes.html)

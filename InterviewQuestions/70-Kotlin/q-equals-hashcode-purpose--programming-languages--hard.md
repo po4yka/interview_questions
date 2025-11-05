@@ -9,7 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-java-equals-default-behavior--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,18 @@ tags: [collections, contracts, difficulty/hard, equality, object-methods, progra
 date created: Friday, October 31st 2025, 6:29:51 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Why Are Equals and Hashcode Methods Needed?
-
-# Question (EN)
-> Why are equals and hashcode methods needed in Kotlin and Java?
 
 # Вопрос (RU)
 > Зачем нужны методы equals и hashcode в Kotlin и Java?
 
 ---
+
+# Question (EN)
+> Why are equals and hashcode methods needed in Kotlin and Java?
+
+## Ответ (RU)
+Методы equals() и hashCode() играют центральную роль в сравнении объектов и управлении ими в коллекциях. Метод equals(Object obj) определяет равенство объектов по содержимому вместо сравнения ссылок. Метод hashCode() возвращает хеш-код объекта для использования в хеш-таблицах. Соблюдение контракта между equals() и hashCode() критически важно для правильной работы коллекций, основанных на хеш-таблицах.
 
 ## Answer (EN)
 
@@ -135,8 +137,15 @@ fun main() {
 
 ---
 
-## Ответ (RU)
-Методы equals() и hashCode() играют центральную роль в сравнении объектов и управлении ими в коллекциях. Метод equals(Object obj) определяет равенство объектов по содержимому вместо сравнения ссылок. Метод hashCode() возвращает хеш-код объекта для использования в хеш-таблицах. Соблюдение контракта между equals() и hashCode() критически важно для правильной работы коллекций, основанных на хеш-таблицах.
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

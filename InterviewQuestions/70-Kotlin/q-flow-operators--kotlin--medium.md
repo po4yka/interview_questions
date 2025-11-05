@@ -1,11 +1,11 @@
 ---
 id: kotlin-103
 title: "Flow Operators in Kotlin / Операторы Flow в Kotlin"
-aliases: []
+aliases: ["Flow Operators in Kotlin, Операторы Flow в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [combining, filtering, flow, operators, transformation]
+subtopics: [combining, filtering, flow]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,337 @@ tags: [combining, difficulty/medium, filtering, flow, kotlin, operators, transfo
 date created: Sunday, October 12th 2025, 2:10:07 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Что такое операторы Flow в Kotlin? Объясните категории: трансформация (map, flatMap), фильтрация (filter, distinctUntilChanged), комбинирование (zip, combine) и коллекция (collect, toList). Приведите практические примеры.
+
+---
 
 # Question (EN)
 > What are Flow operators in Kotlin? Explain categories: transformation (map, flatMap), filtering (filter, distinctUntilChanged), combining (zip, combine), and collection (collect, toList). Provide practical examples.
 
-# Вопрос (RU)
-> Что такое операторы Flow в Kotlin? Объясните категории: трансформация (map, flatMap), фильтрация (filter, distinctUntilChanged), комбинирование (zip, combine) и коллекция (collect, toList). Приведите практические примеры.
+## Ответ (RU)
+
+Операторы Flow - это функции расширения, которые трансформируют, фильтруют, комбинируют или собирают потоки Flow. Они позволяют строить сложные реактивные конвейеры данных декларативным способом.
+
+### Обзор Категорий Операторов
+
+```kotlin
+// Пример конвейера Flow
+flow {
+    emit(1)
+    emit(2)
+    emit(3)
+}
+    .map { it * 2 }           // Трансформация
+    .filter { it > 2 }        // Фильтрация
+    .collect { println(it) }  // Терминальный оператор
+```
+
+### 1. Операторы Трансформации
+
+#### Map - Трансформация Каждого Элемента
+
+```kotlin
+flow {
+    emit(1)
+    emit(2)
+    emit(3)
+}.map { value ->
+    value * 2
+}.collect { println(it) }
+// Вывод: 2, 4, 6
+
+// Практический пример: Трансформация ответа API
+data class User(val id: Int, val name: String)
+data class UserUI(val displayName: String, val initial: Char)
+
+fun displayUsers() = runBlocking {
+    getUsersFlow()
+        .map { user ->
+            UserUI(
+                displayName = user.name,
+                initial = user.name.first()
+            )
+        }
+        .collect { userUI ->
+            println("${userUI.initial}: ${userUI.displayName}")
+        }
+}
+```
+
+#### flatMapConcat - Последовательное Выравнивание
+
+```kotlin
+// Базовый пример
+flow {
+    emit(1)
+    emit(2)
+}.flatMapConcat { value ->
+    flow {
+        emit("$value-a")
+        emit("$value-b")
+    }
+}.collect { println(it) }
+// Вывод: 1-a, 1-b, 2-a, 2-b (последовательно)
+```
+
+#### flatMapLatest - Отмена Предыдущего При Новой Эмиссии
+
+```kotlin
+// Практический пример: Поиск с автодополнением
+flow {
+    emit("kot")
+    delay(100)
+    emit("kotlin")
+    delay(500)
+}.flatMapLatest { query ->
+    flow {
+        delay(200)
+        emit("Результат поиска: $query")
+    }
+}.collect { println(it) }
+// Вывод: "Результат поиска: kotlin" (только последний завершается)
+```
+
+### 2. Операторы Фильтрации
+
+#### Filter - Оставить Элементы По Условию
+
+```kotlin
+flow {
+    (1..10).forEach { emit(it) }
+}.filter { value ->
+    value % 2 == 0  // Оставить четные числа
+}.collect { println(it) }
+// Вывод: 2, 4, 6, 8, 10
+```
+
+#### distinctUntilChanged - Исключить Последовательные Дубликаты
+
+```kotlin
+flow {
+    emit(1)
+    emit(1)
+    emit(2)
+    emit(2)
+    emit(1)
+}.distinctUntilChanged()
+    .collect { println(it) }
+// Вывод: 1, 2, 1
+
+// Практический пример: Избежать избыточных обновлений UI
+class LocationViewModel : ViewModel() {
+    val location: StateFlow<Location?> = _location
+        .distinctUntilChanged { old, new ->
+            // Считать локации одинаковыми если в пределах 10 метров
+            old?.distanceTo(new) ?: Float.MAX_VALUE < 10f
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+}
+```
+
+#### Debounce - Эмиссия Только После Периода Тишины
+
+```kotlin
+// Практический пример: Debouncing ввода поиска
+class SearchViewModel : ViewModel() {
+    private val _searchQuery = MutableStateFlow("")
+
+    val searchResults: StateFlow<List<Result>> = _searchQuery
+        .debounce(300)  // Ждать 300мс после того как пользователь перестал печатать
+        .filter { it.length >= 3 }
+        .flatMapLatest { query ->
+            searchRepository.search(query)
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+}
+```
+
+### 3. Операторы Комбинирования
+
+#### Zip - Комбинировать Соответствующие Элементы
+
+```kotlin
+val numbers = flowOf(1, 2, 3)
+val letters = flowOf("A", "B", "C")
+
+numbers.zip(letters) { num, letter ->
+    "$num$letter"
+}.collect { println(it) }
+// Вывод: 1A, 2B, 3C
+```
+
+#### Combine - Комбинировать Последние Значения
+
+```kotlin
+// Практический пример: Валидация формы
+class FormViewModel : ViewModel() {
+    private val _email = MutableStateFlow("")
+    private val _password = MutableStateFlow("")
+
+    val isFormValid: StateFlow<Boolean> = combine(
+        _email,
+        _password
+    ) { email, password ->
+        email.contains("@") && password.length >= 8
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+}
+```
+
+### 4. Обработка Исключений
+
+#### Catch - Обработка Исключений
+
+```kotlin
+flow {
+    emit(1)
+    throw RuntimeException("Ошибка!")
+    emit(2)
+}.catch { exception ->
+    println("Поймано: ${exception.message}")
+    emit(-1)  // Эмиссия резервного значения
+}.collect { println("Получено: $it") }
+
+// Практический пример: Обработка ошибок API
+fun fetchDataSafely(): Flow<Data> =
+    flow {
+        val result = api.fetchData()
+        emit(result)
+    }.catch { exception ->
+        when (exception) {
+            is IOException -> emit(cache.getData())
+            else -> throw exception
+        }
+    }
+```
+
+#### Retry - Повтор При Ошибке
+
+```kotlin
+flow {
+    emit(api.fetchData())
+}.retry(3) { exception ->
+    exception is IOException
+}.collect { data ->
+    updateUI(data)
+}
+```
+
+### 5. Утилитарные Операторы
+
+#### onEach - Выполнить Действие На Каждом Элементе
+
+```kotlin
+flow {
+    emit(1)
+    emit(2)
+}.onEach { value ->
+    println("Обработка: $value")
+}.collect { value ->
+    println("Собрано: $value")
+}
+```
+
+#### onStart - Выполнить Перед Началом Потока
+
+```kotlin
+// Практический пример: Показать состояние загрузки
+fun loadDataWithLoading(): Flow<UiState> =
+    flow {
+        val data = fetchData()
+        emit(UiState.Success(data))
+    }
+    .onStart {
+        emit(UiState.Loading)
+    }
+```
+
+### 6. Терминальные Операторы
+
+#### Collect - Потребление Потока
+
+```kotlin
+flow {
+    emit(1)
+    emit(2)
+}.collect { value ->
+    println(value)
+}
+```
+
+#### toList - Собрать В Список
+
+```kotlin
+val list = flow {
+    emit(1)
+    emit(2)
+    emit(3)
+}.toList()
+
+println(list)  // [1, 2, 3]
+```
+
+#### First - Получить Первый Элемент
+
+```kotlin
+val first = flow {
+    emit(1)
+    emit(2)
+}.first()
+
+println(first)  // 1
+```
+
+### Реальный Пример: Поиск Со Всеми Операторами
+
+```kotlin
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
+
+    private val _searchQuery = MutableStateFlow("")
+
+    val searchResults: StateFlow<SearchUiState> = _searchQuery
+        .debounce(300)  // Ждать остановки печати
+        .distinctUntilChanged()  // Избежать дубликатов
+        .filter { it.length >= 3 }  // Минимум 3 символа
+        .flatMapLatest { query ->
+            searchRepository.search(query)
+                .map { results -> SearchUiState.Success(results) as SearchUiState }
+                .onStart { emit(SearchUiState.Loading) }
+                .catch { exception ->
+                    emit(SearchUiState.Error(exception.message ?: "Неизвестная ошибка"))
+                }
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            SearchUiState.Empty
+        )
+
+    fun updateQuery(query: String) {
+        _searchQuery.value = query
+    }
+}
+```
+
+### Лучшие Практики
+
+```kotlin
+//  Хорошо: Ясный, читаемый конвейер
+fun processData(input: Flow<RawData>): Flow<ProcessedData> =
+    input
+        .filter { it.isValid() }
+        .map { it.normalize() }
+        .distinctUntilChanged()
+        .catch { emit(ProcessedData.empty()) }
+
+//  Плохо: Слишком сложно, трудно тестировать
+fun processData(input: Flow<RawData>): Flow<ProcessedData> =
+    input.filter { data ->
+        data.value > 0 && data.timestamp > System.currentTimeMillis() - 1000
+    }.map { /* сложная логика */ }
+```
 
 ---
 
@@ -917,332 +1242,16 @@ fun fetchDataOfflineFirst(): Flow<Data> = flow {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Операторы Flow - это функции расширения, которые трансформируют, фильтруют, комбинируют или собирают потоки Flow. Они позволяют строить сложные реактивные конвейеры данных декларативным способом.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### Обзор Категорий Операторов
-
-```kotlin
-// Пример конвейера Flow
-flow {
-    emit(1)
-    emit(2)
-    emit(3)
-}
-    .map { it * 2 }           // Трансформация
-    .filter { it > 2 }        // Фильтрация
-    .collect { println(it) }  // Терминальный оператор
-```
-
-### 1. Операторы Трансформации
-
-#### Map - Трансформация Каждого Элемента
-
-```kotlin
-flow {
-    emit(1)
-    emit(2)
-    emit(3)
-}.map { value ->
-    value * 2
-}.collect { println(it) }
-// Вывод: 2, 4, 6
-
-// Практический пример: Трансформация ответа API
-data class User(val id: Int, val name: String)
-data class UserUI(val displayName: String, val initial: Char)
-
-fun displayUsers() = runBlocking {
-    getUsersFlow()
-        .map { user ->
-            UserUI(
-                displayName = user.name,
-                initial = user.name.first()
-            )
-        }
-        .collect { userUI ->
-            println("${userUI.initial}: ${userUI.displayName}")
-        }
-}
-```
-
-#### flatMapConcat - Последовательное Выравнивание
-
-```kotlin
-// Базовый пример
-flow {
-    emit(1)
-    emit(2)
-}.flatMapConcat { value ->
-    flow {
-        emit("$value-a")
-        emit("$value-b")
-    }
-}.collect { println(it) }
-// Вывод: 1-a, 1-b, 2-a, 2-b (последовательно)
-```
-
-#### flatMapLatest - Отмена Предыдущего При Новой Эмиссии
-
-```kotlin
-// Практический пример: Поиск с автодополнением
-flow {
-    emit("kot")
-    delay(100)
-    emit("kotlin")
-    delay(500)
-}.flatMapLatest { query ->
-    flow {
-        delay(200)
-        emit("Результат поиска: $query")
-    }
-}.collect { println(it) }
-// Вывод: "Результат поиска: kotlin" (только последний завершается)
-```
-
-### 2. Операторы Фильтрации
-
-#### Filter - Оставить Элементы По Условию
-
-```kotlin
-flow {
-    (1..10).forEach { emit(it) }
-}.filter { value ->
-    value % 2 == 0  // Оставить четные числа
-}.collect { println(it) }
-// Вывод: 2, 4, 6, 8, 10
-```
-
-#### distinctUntilChanged - Исключить Последовательные Дубликаты
-
-```kotlin
-flow {
-    emit(1)
-    emit(1)
-    emit(2)
-    emit(2)
-    emit(1)
-}.distinctUntilChanged()
-    .collect { println(it) }
-// Вывод: 1, 2, 1
-
-// Практический пример: Избежать избыточных обновлений UI
-class LocationViewModel : ViewModel() {
-    val location: StateFlow<Location?> = _location
-        .distinctUntilChanged { old, new ->
-            // Считать локации одинаковыми если в пределах 10 метров
-            old?.distanceTo(new) ?: Float.MAX_VALUE < 10f
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
-}
-```
-
-#### Debounce - Эмиссия Только После Периода Тишины
-
-```kotlin
-// Практический пример: Debouncing ввода поиска
-class SearchViewModel : ViewModel() {
-    private val _searchQuery = MutableStateFlow("")
-
-    val searchResults: StateFlow<List<Result>> = _searchQuery
-        .debounce(300)  // Ждать 300мс после того как пользователь перестал печатать
-        .filter { it.length >= 3 }
-        .flatMapLatest { query ->
-            searchRepository.search(query)
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-}
-```
-
-### 3. Операторы Комбинирования
-
-#### Zip - Комбинировать Соответствующие Элементы
-
-```kotlin
-val numbers = flowOf(1, 2, 3)
-val letters = flowOf("A", "B", "C")
-
-numbers.zip(letters) { num, letter ->
-    "$num$letter"
-}.collect { println(it) }
-// Вывод: 1A, 2B, 3C
-```
-
-#### Combine - Комбинировать Последние Значения
-
-```kotlin
-// Практический пример: Валидация формы
-class FormViewModel : ViewModel() {
-    private val _email = MutableStateFlow("")
-    private val _password = MutableStateFlow("")
-
-    val isFormValid: StateFlow<Boolean> = combine(
-        _email,
-        _password
-    ) { email, password ->
-        email.contains("@") && password.length >= 8
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-}
-```
-
-### 4. Обработка Исключений
-
-#### Catch - Обработка Исключений
-
-```kotlin
-flow {
-    emit(1)
-    throw RuntimeException("Ошибка!")
-    emit(2)
-}.catch { exception ->
-    println("Поймано: ${exception.message}")
-    emit(-1)  // Эмиссия резервного значения
-}.collect { println("Получено: $it") }
-
-// Практический пример: Обработка ошибок API
-fun fetchDataSafely(): Flow<Data> =
-    flow {
-        val result = api.fetchData()
-        emit(result)
-    }.catch { exception ->
-        when (exception) {
-            is IOException -> emit(cache.getData())
-            else -> throw exception
-        }
-    }
-```
-
-#### Retry - Повтор При Ошибке
-
-```kotlin
-flow {
-    emit(api.fetchData())
-}.retry(3) { exception ->
-    exception is IOException
-}.collect { data ->
-    updateUI(data)
-}
-```
-
-### 5. Утилитарные Операторы
-
-#### onEach - Выполнить Действие На Каждом Элементе
-
-```kotlin
-flow {
-    emit(1)
-    emit(2)
-}.onEach { value ->
-    println("Обработка: $value")
-}.collect { value ->
-    println("Собрано: $value")
-}
-```
-
-#### onStart - Выполнить Перед Началом Потока
-
-```kotlin
-// Практический пример: Показать состояние загрузки
-fun loadDataWithLoading(): Flow<UiState> =
-    flow {
-        val data = fetchData()
-        emit(UiState.Success(data))
-    }
-    .onStart {
-        emit(UiState.Loading)
-    }
-```
-
-### 6. Терминальные Операторы
-
-#### Collect - Потребление Потока
-
-```kotlin
-flow {
-    emit(1)
-    emit(2)
-}.collect { value ->
-    println(value)
-}
-```
-
-#### toList - Собрать В Список
-
-```kotlin
-val list = flow {
-    emit(1)
-    emit(2)
-    emit(3)
-}.toList()
-
-println(list)  // [1, 2, 3]
-```
-
-#### First - Получить Первый Элемент
-
-```kotlin
-val first = flow {
-    emit(1)
-    emit(2)
-}.first()
-
-println(first)  // 1
-```
-
-### Реальный Пример: Поиск Со Всеми Операторами
-
-```kotlin
-class SearchViewModel(
-    private val searchRepository: SearchRepository
-) : ViewModel() {
-
-    private val _searchQuery = MutableStateFlow("")
-
-    val searchResults: StateFlow<SearchUiState> = _searchQuery
-        .debounce(300)  // Ждать остановки печати
-        .distinctUntilChanged()  // Избежать дубликатов
-        .filter { it.length >= 3 }  // Минимум 3 символа
-        .flatMapLatest { query ->
-            searchRepository.search(query)
-                .map { results -> SearchUiState.Success(results) as SearchUiState }
-                .onStart { emit(SearchUiState.Loading) }
-                .catch { exception ->
-                    emit(SearchUiState.Error(exception.message ?: "Неизвестная ошибка"))
-                }
-        }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            SearchUiState.Empty
-        )
-
-    fun updateQuery(query: String) {
-        _searchQuery.value = query
-    }
-}
-```
-
-### Лучшие Практики
-
-```kotlin
-//  Хорошо: Ясный, читаемый конвейер
-fun processData(input: Flow<RawData>): Flow<ProcessedData> =
-    input
-        .filter { it.isValid() }
-        .map { it.normalize() }
-        .distinctUntilChanged()
-        .catch { emit(ProcessedData.empty()) }
-
-//  Плохо: Слишком сложно, трудно тестировать
-fun processData(input: Flow<RawData>): Flow<ProcessedData> =
-    input.filter { data ->
-        data.value > 0 && data.timestamp > System.currentTimeMillis() - 1000
-    }.map { /* сложная логика */ }
-```
-
----
-
+## References
+- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flow-operators)
+- [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
 ## Related Questions
 
 ### Related (Medium)
@@ -1259,7 +1268,3 @@ fun processData(input: Flow<RawData>): Flow<ProcessedData> =
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-## References
-- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flow-operators)
-- [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)

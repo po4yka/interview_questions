@@ -17,26 +17,15 @@ tags: [coroutines, difficulty/medium, error-handling, kotlin, scope, structured-
 date created: Friday, October 31st 2025, 6:32:26 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-
 # coroutineScope Vs supervisorScope: Обработка Ошибок
-
-# Question (EN)
-> What is the difference between coroutineScope and supervisorScope in Kotlin coroutines?
 
 # Вопрос (RU)
 > В чём разница между coroutineScope и supervisorScope в корутинах Kotlin?
 
 ---
 
-## Answer (EN)
-
-`coroutineScope` and `supervisorScope` are builder functions for creating nested coroutine scopes. The main difference is **error handling**: in `coroutineScope`, if one child coroutine fails, all others are cancelled (fail-fast). In `supervisorScope`, other children continue executing (fail-tolerant).
-
-**Use cases:**
-- **coroutineScope**: All-or-nothing operations - transactions, critical data loading where all pieces are required
-- **supervisorScope**: Independent tasks - dashboard widgets, metrics collection where partial success is acceptable
-
-**Key difference**: In `coroutineScope`, one try-catch wraps the entire block. In `supervisorScope`, you need try-catch on each `await()` call. Note that `SupervisorJob` doesn't work properly with `async` - use `supervisorScope` instead.
+# Question (EN)
+> What is the difference between coroutineScope and supervisorScope in Kotlin coroutines?
 
 ## Ответ (RU)
 
@@ -445,6 +434,26 @@ suspend fun mixed() = supervisorScope {
     }
 }
 ```
+
+## Answer (EN)
+
+`coroutineScope` and `supervisorScope` are builder functions for creating nested coroutine scopes. The main difference is **error handling**: in `coroutineScope`, if one child coroutine fails, all others are cancelled (fail-fast). In `supervisorScope`, other children continue executing (fail-tolerant).
+
+**Use cases:**
+- **coroutineScope**: All-or-nothing operations - transactions, critical data loading where all pieces are required
+- **supervisorScope**: Independent tasks - dashboard widgets, metrics collection where partial success is acceptable
+
+**Key difference**: In `coroutineScope`, one try-catch wraps the entire block. In `supervisorScope`, you need try-catch on each `await()` call. Note that `SupervisorJob` doesn't work properly with `async` - use `supervisorScope` instead.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-roots--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, prog
 date created: Friday, October 31st 2025, 6:31:27 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Как Сборщик Мусора Понимает Что Объект Можно Уничтожить?
-
-# Question (EN)
-> How does garbage collector know that an object can be destroyed?
 
 # Вопрос (RU)
 > Как сборщик мусора понимает что объект можно уничтожить?
 
 ---
+
+# Question (EN)
+> How does garbage collector know that an object can be destroyed?
+
+## Ответ (RU)
+
+Сборщик мусора использует анализ ссылок. Объект считается 'мёртвым', если на него нет доступных ссылок из корневых объектов. GC обходит все достижимые объекты, начиная с корневых. Недостижимые объекты считаются мусором и удаляются.
 
 ## Answer (EN)
 
@@ -138,9 +141,15 @@ GC uses **reachability analysis from GC Roots**. If an object cannot be reached 
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Сборщик мусора использует анализ ссылок. Объект считается 'мёртвым', если на него нет доступных ссылок из корневых объектов. GC обходит все достижимые объекты, начиная с корневых. Недостижимые объекты считаются мусором и удаляются.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

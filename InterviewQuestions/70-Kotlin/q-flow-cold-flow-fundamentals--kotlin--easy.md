@@ -3,7 +3,7 @@ id: kotlin-089
 title: "What makes Flow a cold stream?"
 aliases: [Cold, Flow, Fundamentals]
 topic: kotlin
-subtopics: ["basics", "cold-streams", "coroutines", "flow"]
+subtopics: ["basics", "cold-streams", "coroutines"]
 question_kind: theory
 difficulty: easy
 original_language: en

@@ -1,11 +1,11 @@
 ---
 id: kotlin-005
 title: "Higher-Order Functions in Kotlin / Функции высшего порядка в Kotlin"
-aliases: []
+aliases: ["Higher-Order Functions in Kotlin, Функции высшего порядка в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, higher-order-functions, inline-functions, lambda-expressions]
+subtopics: [functional-programming, higher-order-functions, inline-functions]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,317 @@ tags: [difficulty/medium, functional-programming, higher-order-functions, kotlin
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое функции высшего порядка в Kotlin?
+
+---
 
 # Question (EN)
 > What are higher-order functions in Kotlin?
-# Вопрос (RU)
-> Что такое функции высшего порядка в Kotlin?
+## Ответ (RU)
+
+**Функция высшего порядка** — это функция, которая принимает одну или несколько функций в качестве параметров, или возвращает функцию в качестве результата. Это обеспечивает паттерны функционального программирования и делает код более переиспользуемым и выразительным.
+
+### Базовая Концепция
+
+```kotlin
+// Функция высшего порядка: принимает функцию как параметр
+fun calculate(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
+    return operation(x, y)
+}
+
+// Использование функции высшего порядка
+val sum = calculate(5, 3) { a, b -> a + b }        // 8
+val product = calculate(5, 3) { a, b -> a * b }    // 15
+val max = calculate(5, 3) { a, b -> if (a > b) a else b }  // 5
+```
+
+### Типы Функций
+
+В Kotlin типы функций указываются с помощью синтаксиса: `(ТипыПараметров) -> ТипВозврата`
+
+```kotlin
+// Примеры типов функций
+val noParams: () -> Unit = { println("Без параметров") }
+val oneParam: (Int) -> Int = { it * 2 }
+val twoParams: (Int, Int) -> Int = { a, b -> a + b }
+val returnsString: (Int) -> String = { "Number: $it" }
+
+// Nullable тип функции
+val nullableFunc: ((Int) -> Int)? = null
+
+// Тип функции с получателем
+val withReceiver: String.() -> Int = { this.length }
+```
+
+### Общие Паттерны
+
+#### 1. Функция Как Параметр
+
+```kotlin
+// Функция filter - принимает функцию-предикат
+fun filter(numbers: List<Int>, predicate: (Int) -> Boolean): List<Int> {
+    val result = mutableListOf<Int>()
+    for (number in numbers) {
+        if (predicate(number)) {
+            result.add(number)
+        }
+    }
+    return result
+}
+
+val numbers = listOf(1, 2, 3, 4, 5, 6)
+val evens = filter(numbers) { it % 2 == 0 }  // [2, 4, 6]
+val greaterThanThree = filter(numbers) { it > 3 }  // [4, 5, 6]
+```
+
+#### 2. Функция Как Возвращаемое Значение
+
+```kotlin
+// Возвращает функцию
+fun multiplyBy(factor: Int): (Int) -> Int {
+    return { number -> number * factor }
+}
+
+val double = multiplyBy(2)
+val triple = multiplyBy(3)
+
+println(double(5))  // 10
+println(triple(5))  // 15
+
+// Более сложный пример
+fun getPriceCalculator(discount: Double): (Double) -> Double {
+    return { price -> price * (1 - discount) }
+}
+
+val studentDiscount = getPriceCalculator(0.2)  // скидка 20%
+val seniorDiscount = getPriceCalculator(0.3)   // скидка 30%
+
+println(studentDiscount(100.0))  // 80.0
+println(seniorDiscount(100.0))   // 70.0
+```
+
+#### 3. Несколько Функциональных Параметров
+
+```kotlin
+fun doubleAction(
+    action1: () -> Unit,
+    action2: () -> Unit
+) {
+    println("Starting actions...")
+    action1()
+    action2()
+    println("Actions completed")
+}
+
+doubleAction(
+    { println("First action") },
+    { println("Second action") }
+)
+```
+
+### Примеры Из Стандартной Библиотеки
+
+Стандартная библиотека Kotlin активно использует функции высшего порядка:
+
+```kotlin
+val numbers = listOf(1, 2, 3, 4, 5)
+
+// map: преобразует каждый элемент
+val doubled = numbers.map { it * 2 }  // [2, 4, 6, 8, 10]
+
+// filter: выбирает элементы, соответствующие предикату
+val evens = numbers.filter { it % 2 == 0 }  // [2, 4]
+
+// reduce: объединяет элементы в одно значение
+val sum = numbers.reduce { acc, n -> acc + n }  // 15
+
+// forEach: выполняет действие для каждого элемента
+numbers.forEach { println(it) }
+
+// any: проверяет, соответствует ли хотя бы один элемент предикату
+val hasEvens = numbers.any { it % 2 == 0 }  // true
+
+// all: проверяет, соответствуют ли все элементы предикату
+val allPositive = numbers.all { it > 0 }  // true
+
+// groupBy: группирует элементы по ключу
+val grouped = numbers.groupBy { it % 2 }
+// {1=[1, 3, 5], 0=[2, 4]}
+```
+
+### Соображения Производительности
+
+Использование функций высшего порядка создаёт определённые накладные расходы времени выполнения: каждая функция — это объект, и она захватывает замыкание (переменные, к которым обращается в теле функции). Выделение памяти (как для функциональных объектов, так и для классов) и виртуальные вызовы создают накладные расходы времени выполнения.
+
+#### Ключевое Слово Inline
+
+Чтобы устранить эти накладные расходы, вы можете пометить функции высшего порядка модификатором `inline`. Компилятор затем скопирует код функции в место вызова:
+
+```kotlin
+// Без inline - создаётся объект функции
+fun repeat(times: Int, action: () -> Unit) {
+    for (i in 0 until times) {
+        action()  // Вызов через объект
+    }
+}
+
+// С inline - код встраивается
+inline fun repeatInlined(times: Int, action: () -> Unit) {
+    for (i in 0 until times) {
+        action()  // Код лямбды встроен напрямую
+    }
+}
+```
+
+**Пример с inline:**
+
+```kotlin
+inline fun <T> lock(lock: Lock, body: () -> T): T {
+    lock.lock()
+    try {
+        return body()
+    } finally {
+        lock.unlock()
+    }
+}
+
+// Использование
+lock(myLock) {
+    // критическая секция
+    performOperation()
+}
+
+// После компиляции становится:
+myLock.lock()
+try {
+    performOperation()  // Встроено!
+} finally {
+    myLock.unlock()
+}
+```
+
+### Примеры Из Реальной Практики
+
+#### 1. Управление Ресурсами
+
+```kotlin
+inline fun <T : Closeable, R> T.use(block: (T) -> R): R {
+    var exception: Throwable? = null
+    try {
+        return block(this)
+    } catch (e: Throwable) {
+        exception = e
+        throw e
+    } finally {
+        when {
+            exception == null -> close()
+            else -> try {
+                close()
+            } catch (closeException: Throwable) {
+                exception.addSuppressed(closeException)
+            }
+        }
+    }
+}
+
+// Использование
+FileInputStream("file.txt").use { input ->
+    // Чтение из файла
+    // Автоматически закрывается по завершении
+}
+```
+
+#### 2. Логика транзакций/повторов
+
+```kotlin
+fun <T> retry(
+    times: Int = 3,
+    delayMs: Long = 1000,
+    operation: () -> T
+): T {
+    repeat(times - 1) { attempt ->
+        try {
+            return operation()
+        } catch (e: Exception) {
+            println("Attempt ${attempt + 1} failed: ${e.message}")
+            Thread.sleep(delayMs)
+        }
+    }
+    return operation()  // Последняя попытка без перехвата
+}
+
+// Использование
+val result = retry(times = 3) {
+    fetchDataFromAPI()
+}
+```
+
+#### 3. Измерение Времени Выполнения
+
+```kotlin
+inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
+    val start = System.currentTimeMillis()
+    val result = block()
+    val duration = System.currentTimeMillis() - start
+    return result to duration
+}
+
+// Использование
+val (data, time) = measureTime {
+    loadLargeDataset()
+}
+println("Loaded in ${time}ms")
+```
+
+#### 4. Построение DSL
+
+```kotlin
+class HTML {
+    fun body(init: Body.() -> Unit): Body {
+        val body = Body()
+        body.init()
+        return body
+    }
+}
+
+class Body {
+    fun div(init: Div.() -> Unit): Div {
+        val div = Div()
+        div.init()
+        return div
+    }
+}
+
+class Div {
+    var text: String = ""
+}
+
+// Использование
+fun html(init: HTML.() -> Unit): HTML {
+    val html = HTML()
+    html.init()
+    return html
+}
+
+val page = html {
+    body {
+        div {
+            text = "Hello, World!"
+        }
+    }
+}
+```
+
+### Преимущества Функций Высшего Порядка
+
+1. **Переиспользуемость кода** - Пишите универсальные алгоритмы, которые работают с разным поведением
+2. **Абстракция** - Разделяйте "что делать" от "как делать"
+3. **Композируемость** - Объединяйте маленькие функции в большие операции
+4. **Читаемость** - Выражайте намерение ясно и лаконично
+5. **Гибкость** - Изменяйте поведение без изменения структуры функции
+
+**Краткое содержание**: Функции высшего порядка принимают функции как параметры или возвращают функции как результаты. Они обеспечивают паттерны функционального программирования, переиспользуемость кода и абстракцию. Стандартная библиотека Kotlin (map, filter, reduce) активно их использует. Ключевое слово `inline` устраняет накладные расходы производительности, встраивая код лямбды во время компиляции.
 
 ---
 
@@ -341,312 +647,11 @@ val page = html {
 
 **English Summary**: Higher-order functions take functions as parameters or return functions as results. They enable functional programming patterns, code reusability, and abstraction. Kotlin's standard library (map, filter, reduce) extensively uses them. The `inline` keyword eliminates performance overhead by inlining lambda code at compile time.
 
-## Ответ (RU)
+## Follow-ups
 
-**Функция высшего порядка** — это функция, которая принимает одну или несколько функций в качестве параметров, или возвращает функцию в качестве результата. Это обеспечивает паттерны функционального программирования и делает код более переиспользуемым и выразительным.
-
-### Базовая Концепция
-
-```kotlin
-// Функция высшего порядка: принимает функцию как параметр
-fun calculate(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
-    return operation(x, y)
-}
-
-// Использование функции высшего порядка
-val sum = calculate(5, 3) { a, b -> a + b }        // 8
-val product = calculate(5, 3) { a, b -> a * b }    // 15
-val max = calculate(5, 3) { a, b -> if (a > b) a else b }  // 5
-```
-
-### Типы Функций
-
-В Kotlin типы функций указываются с помощью синтаксиса: `(ТипыПараметров) -> ТипВозврата`
-
-```kotlin
-// Примеры типов функций
-val noParams: () -> Unit = { println("Без параметров") }
-val oneParam: (Int) -> Int = { it * 2 }
-val twoParams: (Int, Int) -> Int = { a, b -> a + b }
-val returnsString: (Int) -> String = { "Number: $it" }
-
-// Nullable тип функции
-val nullableFunc: ((Int) -> Int)? = null
-
-// Тип функции с получателем
-val withReceiver: String.() -> Int = { this.length }
-```
-
-### Общие Паттерны
-
-#### 1. Функция Как Параметр
-
-```kotlin
-// Функция filter - принимает функцию-предикат
-fun filter(numbers: List<Int>, predicate: (Int) -> Boolean): List<Int> {
-    val result = mutableListOf<Int>()
-    for (number in numbers) {
-        if (predicate(number)) {
-            result.add(number)
-        }
-    }
-    return result
-}
-
-val numbers = listOf(1, 2, 3, 4, 5, 6)
-val evens = filter(numbers) { it % 2 == 0 }  // [2, 4, 6]
-val greaterThanThree = filter(numbers) { it > 3 }  // [4, 5, 6]
-```
-
-#### 2. Функция Как Возвращаемое Значение
-
-```kotlin
-// Возвращает функцию
-fun multiplyBy(factor: Int): (Int) -> Int {
-    return { number -> number * factor }
-}
-
-val double = multiplyBy(2)
-val triple = multiplyBy(3)
-
-println(double(5))  // 10
-println(triple(5))  // 15
-
-// Более сложный пример
-fun getPriceCalculator(discount: Double): (Double) -> Double {
-    return { price -> price * (1 - discount) }
-}
-
-val studentDiscount = getPriceCalculator(0.2)  // скидка 20%
-val seniorDiscount = getPriceCalculator(0.3)   // скидка 30%
-
-println(studentDiscount(100.0))  // 80.0
-println(seniorDiscount(100.0))   // 70.0
-```
-
-#### 3. Несколько Функциональных Параметров
-
-```kotlin
-fun doubleAction(
-    action1: () -> Unit,
-    action2: () -> Unit
-) {
-    println("Starting actions...")
-    action1()
-    action2()
-    println("Actions completed")
-}
-
-doubleAction(
-    { println("First action") },
-    { println("Second action") }
-)
-```
-
-### Примеры Из Стандартной Библиотеки
-
-Стандартная библиотека Kotlin активно использует функции высшего порядка:
-
-```kotlin
-val numbers = listOf(1, 2, 3, 4, 5)
-
-// map: преобразует каждый элемент
-val doubled = numbers.map { it * 2 }  // [2, 4, 6, 8, 10]
-
-// filter: выбирает элементы, соответствующие предикату
-val evens = numbers.filter { it % 2 == 0 }  // [2, 4]
-
-// reduce: объединяет элементы в одно значение
-val sum = numbers.reduce { acc, n -> acc + n }  // 15
-
-// forEach: выполняет действие для каждого элемента
-numbers.forEach { println(it) }
-
-// any: проверяет, соответствует ли хотя бы один элемент предикату
-val hasEvens = numbers.any { it % 2 == 0 }  // true
-
-// all: проверяет, соответствуют ли все элементы предикату
-val allPositive = numbers.all { it > 0 }  // true
-
-// groupBy: группирует элементы по ключу
-val grouped = numbers.groupBy { it % 2 }
-// {1=[1, 3, 5], 0=[2, 4]}
-```
-
-### Соображения Производительности
-
-Использование функций высшего порядка создаёт определённые накладные расходы времени выполнения: каждая функция — это объект, и она захватывает замыкание (переменные, к которым обращается в теле функции). Выделение памяти (как для функциональных объектов, так и для классов) и виртуальные вызовы создают накладные расходы времени выполнения.
-
-#### Ключевое Слово Inline
-
-Чтобы устранить эти накладные расходы, вы можете пометить функции высшего порядка модификатором `inline`. Компилятор затем скопирует код функции в место вызова:
-
-```kotlin
-// Без inline - создаётся объект функции
-fun repeat(times: Int, action: () -> Unit) {
-    for (i in 0 until times) {
-        action()  // Вызов через объект
-    }
-}
-
-// С inline - код встраивается
-inline fun repeatInlined(times: Int, action: () -> Unit) {
-    for (i in 0 until times) {
-        action()  // Код лямбды встроен напрямую
-    }
-}
-```
-
-**Пример с inline:**
-
-```kotlin
-inline fun <T> lock(lock: Lock, body: () -> T): T {
-    lock.lock()
-    try {
-        return body()
-    } finally {
-        lock.unlock()
-    }
-}
-
-// Использование
-lock(myLock) {
-    // критическая секция
-    performOperation()
-}
-
-// После компиляции становится:
-myLock.lock()
-try {
-    performOperation()  // Встроено!
-} finally {
-    myLock.unlock()
-}
-```
-
-### Примеры Из Реальной Практики
-
-#### 1. Управление Ресурсами
-
-```kotlin
-inline fun <T : Closeable, R> T.use(block: (T) -> R): R {
-    var exception: Throwable? = null
-    try {
-        return block(this)
-    } catch (e: Throwable) {
-        exception = e
-        throw e
-    } finally {
-        when {
-            exception == null -> close()
-            else -> try {
-                close()
-            } catch (closeException: Throwable) {
-                exception.addSuppressed(closeException)
-            }
-        }
-    }
-}
-
-// Использование
-FileInputStream("file.txt").use { input ->
-    // Чтение из файла
-    // Автоматически закрывается по завершении
-}
-```
-
-#### 2. Логика транзакций/повторов
-
-```kotlin
-fun <T> retry(
-    times: Int = 3,
-    delayMs: Long = 1000,
-    operation: () -> T
-): T {
-    repeat(times - 1) { attempt ->
-        try {
-            return operation()
-        } catch (e: Exception) {
-            println("Attempt ${attempt + 1} failed: ${e.message}")
-            Thread.sleep(delayMs)
-        }
-    }
-    return operation()  // Последняя попытка без перехвата
-}
-
-// Использование
-val result = retry(times = 3) {
-    fetchDataFromAPI()
-}
-```
-
-#### 3. Измерение Времени Выполнения
-
-```kotlin
-inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
-    val start = System.currentTimeMillis()
-    val result = block()
-    val duration = System.currentTimeMillis() - start
-    return result to duration
-}
-
-// Использование
-val (data, time) = measureTime {
-    loadLargeDataset()
-}
-println("Loaded in ${time}ms")
-```
-
-#### 4. Построение DSL
-
-```kotlin
-class HTML {
-    fun body(init: Body.() -> Unit): Body {
-        val body = Body()
-        body.init()
-        return body
-    }
-}
-
-class Body {
-    fun div(init: Div.() -> Unit): Div {
-        val div = Div()
-        div.init()
-        return div
-    }
-}
-
-class Div {
-    var text: String = ""
-}
-
-// Использование
-fun html(init: HTML.() -> Unit): HTML {
-    val html = HTML()
-    html.init()
-    return html
-}
-
-val page = html {
-    body {
-        div {
-            text = "Hello, World!"
-        }
-    }
-}
-```
-
-### Преимущества Функций Высшего Порядка
-
-1. **Переиспользуемость кода** - Пишите универсальные алгоритмы, которые работают с разным поведением
-2. **Абстракция** - Разделяйте "что делать" от "как делать"
-3. **Композируемость** - Объединяйте маленькие функции в большие операции
-4. **Читаемость** - Выражайте намерение ясно и лаконично
-5. **Гибкость** - Изменяйте поведение без изменения структуры функции
-
-**Краткое содержание**: Функции высшего порядка принимают функции как параметры или возвращают функции как результаты. Они обеспечивают паттерны функционального программирования, переиспользуемость кода и абстракцию. Стандартная библиотека Kotlin (map, filter, reduce) активно их использует. Ключевое слово `inline` устраняет накладные расходы производительности, встраивая код лямбды во время компиляции.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Higher-Order Functions and Lambdas - Kotlin Documentation](https://kotlinlang.org/docs/lambdas.html)

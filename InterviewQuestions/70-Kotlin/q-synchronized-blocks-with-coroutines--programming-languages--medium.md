@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-java-lambda-type--programming-languages--easy, q-proxy-pattern--design-patterns--medium, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, kotlin, programming-languages, synchroniza
 date created: Saturday, October 4th 2025, 10:53:02 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Why Not Use Synchronized Blocks with Coroutines?
-
-# Question (EN)
-> Why should you not use synchronized blocks with coroutines?
 
 # Вопрос (RU)
 > Почему не следует использовать synchronized блоки с корутинами?
 
 ---
+
+# Question (EN)
+> Why should you not use synchronized blocks with coroutines?
+
+## Ответ (RU)
+
+1. synchronized блоки в Java/Kotlin работают на уровне потоков, а не корутин – это разные механизмы синхронизации.\", \"2. Блокировка потоков замедляет работу – Mutex работает в асинхронном стиле, не блокируя потоки.\", \"3. Глобальные synchronized блоки не учитывают отмену корутин – если корутина отменена, synchronized не освобощает ресурс
 
 ## Answer (EN)
 
@@ -462,9 +465,15 @@ fun demonstrateThreadBlocking() = runBlocking {
 ---
 
 
-## Ответ (RU)
+## Follow-ups
 
-1. synchronized блоки в Java/Kotlin работают на уровне потоков, а не корутин – это разные механизмы синхронизации.\", \"2. Блокировка потоков замедляет работу – Mutex работает в асинхронном стиле, не блокируя потоки.\", \"3. Глобальные synchronized блоки не учитывают отмену корутин – если корутина отменена, synchronized не освобощает ресурс
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

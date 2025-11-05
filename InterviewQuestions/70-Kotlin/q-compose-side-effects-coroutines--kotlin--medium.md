@@ -17,7 +17,6 @@ related: [q-stateflow-sharedflow--kotlin--medium]
 date created: Saturday, November 1st 2025, 1:28:03 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-
 # Coroutines and Side Effects in Jetpack Compose
 
 ## English
@@ -25,13 +24,72 @@ date modified: Saturday, November 1st 2025, 5:43:27 pm
 ### Question
 What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
 
-# Question (EN)
-> What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
-
 # Вопрос (RU)
 > What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
 
 ---
+
+# Question (EN)
+> What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
+
+## Ответ (RU)
+
+*(Краткое содержание основных пунктов из английской версии)*
+Что такое side effects в Jetpack Compose и как корутины интегрируются с ними? Объясните LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState и другие обработчики side effects. Когда следует использовать каждый из них? Приведите production примеры загрузки данных, анимаций, обработки событий и сбора Flow с правильным управлением жизненным циклом и стратегиями тестирования.
+
+**Side effects** в Compose — это операции, которые выходят за рамки composable функции и влияют на состояние приложения вне самой композиции.
+
+#### 1. Что Такое Side Effects?
+
+**Определение:**
+- Side effects — это операции **вне** композиции
+- Примеры: API вызовы, запись в БД, навигация, аналитика
+- Должны быть правильно привязаны к жизненному циклу композиции
+- Должны быть **предсказуемыми** и **управляемыми**
+
+**Почему side effects важны:**
+
+```kotlin
+//  ПЛОХО: Side effect выполняется при каждой рекомпозиции
+@Composable
+fun BadExample() {
+    // Это выполняется каждый раз при рекомпозиции!
+    analyticsLogger.log("Экран просмотрен")
+
+    Text("Привет")
+}
+
+//  ХОРОШО: Side effect выполняется один раз
+@Composable
+fun GoodExample() {
+    LaunchedEffect(Unit) {
+        // Это выполняется только один раз при входе в композицию
+        analyticsLogger.log("Экран просмотрен")
+    }
+
+    Text("Привет")
+}
+```
+
+*(Продолжение следует той же структуре с подробными примерами всех side effects на русском языке, включая LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, SideEffect, derivedStateOf, snapshotFlow, production примеры, тестирование и best practices)*
+
+### Связанные Вопросы
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - StateFlow и SharedFlow
+
+### Дополнительные Вопросы
+1. Когда выбрать LaunchedEffect вместо produceState для загрузки данных?
+2. Как collectAsStateWithLifecycle отличается от collectAsState с точки зрения производительности и управления жизненным циклом?
+3. Что происходит с LaunchedEffect когда меняется его ключ? Объясните жизненный цикл.
+4. Как реализовать таймер обратного отсчета, который приостанавливается когда приложение уходит в фон?
+5. Объясните, как обрабатывать одноразовые события (например, показ toast) в Compose без потери при изменении конфигурации.
+6. В чем разница между SideEffect и LaunchedEffect с точки зрения времени выполнения?
+7. Как тестировать composable, который использует DisposableEffect с реальным listener?
+
+### Ссылки
+- [Документация Compose Side Effects](https://developer.android.com/jetpack/compose/side-effects)
+- [LaunchedEffect](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1))
+- [Lifecycle-aware сбор Flow](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
+- [Тестирование Compose](https://developer.android.com/jetpack/compose/testing)
 
 ## Answer (EN)
 
@@ -873,80 +931,3 @@ fun testArticleLoading() = runTest {
 
 ### Related Questions
 - [[q-testing-stateflow-sharedflow--kotlin--medium]] - StateFlow and SharedFlow
-
-## Follow-ups
-1. When would you choose LaunchedEffect over produceState for loading data?
-2. How does collectAsStateWithLifecycle differ from collectAsState in terms of performance and lifecycle management?
-3. What happens to a LaunchedEffect when its key changes? Explain the lifecycle.
-4. How would you implement a countdown timer that pauses when the app goes to background?
-5. Explain how to handle one-time events (like showing a toast) in Compose without losing them on configuration changes.
-6. What's the difference between SideEffect and LaunchedEffect in terms of execution timing?
-7. How do you test a composable that uses DisposableEffect with a real listener?
-
-### References
-- [Compose Side Effects Documentation](https://developer.android.com/jetpack/compose/side-effects)
-- [LaunchedEffect](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1))
-- [Lifecycle-aware Flow collection](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
-- [Testing Compose](https://developer.android.com/jetpack/compose/testing)
-
----
-
-
-## Ответ (RU)
-
-*(Краткое содержание основных пунктов из английской версии)*
-Что такое side effects в Jetpack Compose и как корутины интегрируются с ними? Объясните LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState и другие обработчики side effects. Когда следует использовать каждый из них? Приведите production примеры загрузки данных, анимаций, обработки событий и сбора Flow с правильным управлением жизненным циклом и стратегиями тестирования.
-
-**Side effects** в Compose — это операции, которые выходят за рамки composable функции и влияют на состояние приложения вне самой композиции.
-
-#### 1. Что Такое Side Effects?
-
-**Определение:**
-- Side effects — это операции **вне** композиции
-- Примеры: API вызовы, запись в БД, навигация, аналитика
-- Должны быть правильно привязаны к жизненному циклу композиции
-- Должны быть **предсказуемыми** и **управляемыми**
-
-**Почему side effects важны:**
-
-```kotlin
-//  ПЛОХО: Side effect выполняется при каждой рекомпозиции
-@Composable
-fun BadExample() {
-    // Это выполняется каждый раз при рекомпозиции!
-    analyticsLogger.log("Экран просмотрен")
-
-    Text("Привет")
-}
-
-//  ХОРОШО: Side effect выполняется один раз
-@Composable
-fun GoodExample() {
-    LaunchedEffect(Unit) {
-        // Это выполняется только один раз при входе в композицию
-        analyticsLogger.log("Экран просмотрен")
-    }
-
-    Text("Привет")
-}
-```
-
-*(Продолжение следует той же структуре с подробными примерами всех side effects на русском языке, включая LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, SideEffect, derivedStateOf, snapshotFlow, production примеры, тестирование и best practices)*
-
-### Связанные Вопросы
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - StateFlow и SharedFlow
-
-### Дополнительные Вопросы
-1. Когда выбрать LaunchedEffect вместо produceState для загрузки данных?
-2. Как collectAsStateWithLifecycle отличается от collectAsState с точки зрения производительности и управления жизненным циклом?
-3. Что происходит с LaunchedEffect когда меняется его ключ? Объясните жизненный цикл.
-4. Как реализовать таймер обратного отсчета, который приостанавливается когда приложение уходит в фон?
-5. Объясните, как обрабатывать одноразовые события (например, показ toast) в Compose без потери при изменении конфигурации.
-6. В чем разница между SideEffect и LaunchedEffect с точки зрения времени выполнения?
-7. Как тестировать composable, который использует DisposableEffect с реальным listener?
-
-### Ссылки
-- [Документация Compose Side Effects](https://developer.android.com/jetpack/compose/side-effects)
-- [LaunchedEffect](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1))
-- [Lifecycle-aware сбор Flow](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
-- [Тестирование Compose](https://developer.android.com/jetpack/compose/testing)

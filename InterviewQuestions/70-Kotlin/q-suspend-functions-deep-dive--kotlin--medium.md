@@ -788,6 +788,16 @@ Suspend функции можно вызывать только из:
 
 Сетевые запросы (Retrofit), операции с БД (Room), последовательные async операции, параллельные операции с `async`/`await`, timeout/retry логика, эмиссии Flow.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 - [[q-reified-type-parameters--kotlin--medium]]

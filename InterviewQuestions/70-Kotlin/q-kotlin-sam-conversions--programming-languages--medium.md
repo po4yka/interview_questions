@@ -17,14 +17,106 @@ tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]
 date created: Friday, October 31st 2025, 6:32:39 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Как Работают SAM (Single Abstract Method)?
+
+# Вопрос (RU)
+> Как работают SAM (Single Abstract Method)?
+
+---
 
 # Question (EN)
 > How do SAM (Single Abstract Method) conversions work?
 
-# Вопрос (RU)
-> Как работают SAM (Single Abstract Method)?
+## Ответ (RU)
+
+
+SAM (Single Abstract Method) конверсии позволяют использовать Kotlin лямбды там где ожидаются Java функциональные интерфейсы.
+
+### Java Функциональный Интерфейс
+```java
+// Java
+public interface Clickable {
+    void onClick(View view);
+}
+
+public void setListener(Clickable listener) {
+    // ...
+}
+```
+
+### Kotlin SAM Конверсия
+```kotlin
+// Вместо:
+setListener(object : Clickable {
+    override fun onClick(view: View) {
+        // Обработать клик
+    }
+})
+
+// SAM конверсия позволяет:
+setListener { view ->
+    // Обработать клик
+}
+```
+
+### Требования Для SAM Конверсии
+
+1. **Java интерфейс** (не Kotlin интерфейс)
+2. **Ровно один абстрактный метод**
+3. **Параметры метода соответствуют параметрам лямбды**
+
+### Примеры
+
+**1. Event Listeners**
+```kotlin
+button.setOnClickListener { view ->
+    Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
+}
+```
+
+**2. Runnable**
+```kotlin
+// Java: Runnable interface
+Thread {
+    println("Running in thread")
+}.start()
+```
+
+**3. Comparator**
+```kotlin
+val sorted = list.sortedWith { a, b ->
+    a.length - b.length
+}
+```
+
+### Kotlin Fun Interfaces
+
+Kotlin 1.4+ поддерживает `fun interface`:
+```kotlin
+fun interface Transformer {
+    fun transform(input: String): String
+}
+
+// SAM конверсия работает:
+fun process(transformer: Transformer) {
+    // ...
+}
+
+process { it.uppercase() }
+```
+
+### Когда SAM Не Работает
+```kotlin
+// Kotlin интерфейс - Нет SAM конверсии
+interface KotlinListener {
+    fun onEvent()
+}
+
+// Нужно использовать object expression:
+setListener(object : KotlinListener {
+    override fun onEvent() { }
+})
+```
 
 ---
 
@@ -122,98 +214,15 @@ setListener(object : KotlinListener {
 ---
 ---
 
-## Ответ (RU)
+## Follow-ups
 
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-SAM (Single Abstract Method) конверсии позволяют использовать Kotlin лямбды там где ожидаются Java функциональные интерфейсы.
+## References
 
-### Java Функциональный Интерфейс
-```java
-// Java
-public interface Clickable {
-    void onClick(View view);
-}
-
-public void setListener(Clickable listener) {
-    // ...
-}
-```
-
-### Kotlin SAM Конверсия
-```kotlin
-// Вместо:
-setListener(object : Clickable {
-    override fun onClick(view: View) {
-        // Обработать клик
-    }
-})
-
-// SAM конверсия позволяет:
-setListener { view ->
-    // Обработать клик
-}
-```
-
-### Требования Для SAM Конверсии
-
-1. **Java интерфейс** (не Kotlin интерфейс)
-2. **Ровно один абстрактный метод**
-3. **Параметры метода соответствуют параметрам лямбды**
-
-### Примеры
-
-**1. Event Listeners**
-```kotlin
-button.setOnClickListener { view ->
-    Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
-}
-```
-
-**2. Runnable**
-```kotlin
-// Java: Runnable interface
-Thread {
-    println("Running in thread")
-}.start()
-```
-
-**3. Comparator**
-```kotlin
-val sorted = list.sortedWith { a, b ->
-    a.length - b.length
-}
-```
-
-### Kotlin Fun Interfaces
-
-Kotlin 1.4+ поддерживает `fun interface`:
-```kotlin
-fun interface Transformer {
-    fun transform(input: String): String
-}
-
-// SAM конверсия работает:
-fun process(transformer: Transformer) {
-    // ...
-}
-
-process { it.uppercase() }
-```
-
-### Когда SAM Не Работает
-```kotlin
-// Kotlin интерфейс - Нет SAM конверсии
-interface KotlinListener {
-    fun onEvent()
-}
-
-// Нужно использовать object expression:
-setListener(object : KotlinListener {
-    override fun onEvent() { }
-})
-```
-
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

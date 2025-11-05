@@ -1,11 +1,11 @@
 ---
 id: kotlin-052
 title: "Flow Exception Handling / Обработка исключений в Flow"
-aliases: []
+aliases: ["Flow Exception Handling, Обработка исключений в Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [catch, error-handling, exceptions, flow, retry]
+subtopics: [catch, error-handling, exceptions]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,342 @@ tags: [catch, difficulty/medium, error-handling, exceptions, flow, kotlin, retry
 date created: Saturday, October 18th 2025, 3:12:22 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Как обрабатывать исключения в Flow? Объясните операторы catch, retry, retryWhen. Реализуйте стратегию повтора с экспоненциальной задержкой.
+
+---
 
 # Question (EN)
 > How do you handle exceptions in Flows? Explain catch, retry, retryWhen operators. Implement exponential backoff retry strategy.
 
-# Вопрос (RU)
-> Как обрабатывать исключения в Flow? Объясните операторы catch, retry, retryWhen. Реализуйте стратегию повтора с экспоненциальной задержкой.
+## Ответ (RU)
+
+Обработка исключений в Flow критична для построения надежных приложений. Kotlin Flow предоставляет несколько операторов для изящной обработки ошибок.
+
+### Принцип Прозрачности Исключений
+
+Flow следует принципу **прозрачности исключений**: исключения можно поймать только ниже по потоку, а не выше места их возникновения.
+
+```kotlin
+//  Неправильно: catch не может обработать исключения выше по потоку
+flow {
+    emit(1)
+    throw Exception("Ошибка")
+}
+.catch { /* Это ловит исключение */ }
+.map { it * 2 } // Если исключение здесь, catch выше не обработает
+
+//  Правильно
+flow { emit(1) }
+.map { it * 2 }
+.catch { /* Это ловит исключения из flow и map */ }
+```
+
+### Оператор Catch
+
+Оператор `catch` перехватывает исключения из upstream и позволяет их обработать.
+
+#### Базовое Использование
+
+```kotlin
+fun fetchUser(id: Int): Flow<User> = flow {
+    if (id <= 0) {
+        throw IllegalArgumentException("Неверный ID")
+    }
+    val user = api.getUser(id)
+    emit(user)
+}
+
+// Обработка исключения с дефолтным значением
+fetchUser(-1)
+    .catch { exception ->
+        println("Ошибка: ${exception.message}")
+        emit(User.DEFAULT) // Испустить дефолтное значение
+    }
+    .collect { user ->
+        println("Пользователь: $user")
+    }
+```
+
+### Реальный Пример: Сетевой Запрос С Fallback
+
+```kotlin
+class ArticleRepository(
+    private val api: ArticleApi,
+    private val cache: ArticleCache
+) {
+    fun getArticle(id: Int): Flow<Article> = flow {
+        // Попытка загрузки из сети
+        val article = api.fetchArticle(id)
+        emit(article)
+    }
+    .catch { exception ->
+        println("Сеть недоступна: ${exception.message}, проверяю кеш...")
+
+        // Fallback на кеш
+        val cachedArticle = cache.get(id)
+        if (cachedArticle != null) {
+            emit(cachedArticle.copy(cached = true))
+        } else {
+            throw ArticleNotFoundException("Статья $id не найдена")
+        }
+    }
+}
+```
+
+### Оператор Retry
+
+Оператор `retry` автоматически повторяет поток при возникновении исключения.
+
+#### Простой Retry
+
+```kotlin
+// Повтор до 3 раз при любом исключении
+flow {
+    println("Попытка запроса...")
+    val result = unstableNetworkCall()
+    emit(result)
+}
+.retry(3)
+.collect { println("Успех: $it") }
+```
+
+#### Условный Retry
+
+```kotlin
+// Повтор только для конкретных исключений
+flow {
+    val result = api.fetchData()
+    emit(result)
+}
+.retry(3) { exception ->
+    // Повтор только при сетевых ошибках
+    exception is IOException
+}
+.collect { data -> println("Данные: $data") }
+```
+
+### Оператор retryWhen
+
+Оператор `retryWhen` предоставляет больше контроля с доступом к номеру попытки и исключению.
+
+```kotlin
+// Повтор с увеличивающейся задержкой
+flow {
+    println("Попытка")
+    val result = unstableOperation()
+    emit(result)
+}
+.retryWhen { cause, attempt ->
+    if (attempt < 3 && cause is IOException) {
+        delay(1000 * (attempt + 1)) // 1с, 2с, 3с
+        println("Повтор через ${1000 * (attempt + 1)}мс")
+        true
+    } else {
+        false
+    }
+}
+.collect { println("Успех: $it") }
+```
+
+### Реализация Экспоненциальной Задержки
+
+Экспоненциальная задержка - стандартная стратегия обработки ошибок, где задержки повтора растут экспоненциально.
+
+```kotlin
+/**
+ * Повтор с экспоненциальной задержкой.
+ *
+ * @param maxRetries Максимальное количество повторов
+ * @param initialDelayMs Начальная задержка в миллисекундах
+ * @param maxDelayMs Максимальная задержка
+ * @param factor Экспоненциальный коэффициент (обычно 2.0)
+ * @param jitter Добавить случайность для предотвращения одновременных запросов
+ */
+fun <T> Flow<T>.retryWithExponentialBackoff(
+    maxRetries: Int = 3,
+    initialDelayMs: Long = 1000,
+    maxDelayMs: Long = 32000,
+    factor: Double = 2.0,
+    jitter: Double = 0.1,
+    predicate: (Throwable) -> Boolean = { true }
+): Flow<T> = retryWhen { cause, attempt ->
+    if (attempt >= maxRetries || !predicate(cause)) {
+        false
+    } else {
+        val exponentialDelay = (initialDelayMs * factor.pow(attempt.toInt())).toLong()
+        val cappedDelay = exponentialDelay.coerceAtMost(maxDelayMs)
+
+        // Добавить jitter
+        val jitterMs = (cappedDelay * jitter * Random.nextDouble()).toLong()
+        val finalDelay = cappedDelay + jitterMs
+
+        println("Повтор ${attempt + 1}/$maxRetries через ${finalDelay}мс")
+        delay(finalDelay)
+        true
+    }
+}
+
+// Использование
+fetchDataFlow()
+    .retryWithExponentialBackoff(
+        maxRetries = 5,
+        initialDelayMs = 1000,
+        predicate = { it is IOException }
+    )
+    .collect { result -> println("Результат: $result") }
+```
+
+#### Зачем Нужен Jitter?
+
+Jitter предотвращает проблему "стада", когда все клиенты повторяют запросы одновременно:
+
+```kotlin
+// Без jitter - все клиенты повторяют одновременно
+// Клиент 1: повтор в 1000мс, 2000мс, 4000мс
+// Клиент 2: повтор в 1000мс, 2000мс, 4000мс
+// Сервер получает шквал одновременных запросов!
+
+// С jitter - повторы распределены
+// Клиент 1: повтор в 1050мс, 2150мс, 4200мс
+// Клиент 2: повтор в 1100мс, 1900мс, 3800мс
+// Нагрузка распределена во времени
+```
+
+### Продвинутый Паттерн: Circuit Breaker
+
+```kotlin
+class CircuitBreaker(
+    private val failureThreshold: Int = 5,
+    private val resetTimeoutMs: Long = 60000
+) {
+    private var failureCount = 0
+    private var state = State.CLOSED
+
+    enum class State { CLOSED, OPEN, HALF_OPEN }
+
+    suspend fun <T> execute(block: suspend () -> T): T {
+        when (state) {
+            State.OPEN -> {
+                if (System.currentTimeMillis() - lastFailureTime > resetTimeoutMs) {
+                    state = State.HALF_OPEN
+                } else {
+                    throw CircuitBreakerOpenException("Circuit breaker открыт")
+                }
+            }
+            else -> { /* Разрешить запрос */ }
+        }
+
+        return try {
+            val result = block()
+            onSuccess()
+            result
+        } catch (e: Exception) {
+            onFailure()
+            throw e
+        }
+    }
+}
+```
+
+### Комбинирование Стратегий Обработки Ошибок
+
+```kotlin
+// Комплексная обработка ошибок
+fun <T> Flow<T>.withRobustErrorHandling(
+    maxRetries: Int = 3,
+    timeout: Duration = 30.seconds,
+    fallback: T? = null
+): Flow<T> = this
+    .timeout(timeout) // Предотвратить зависание
+    .retryWithExponentialBackoff(
+        maxRetries = maxRetries,
+        predicate = {
+            it is IOException || it is TimeoutCancellationException
+        }
+    )
+    .catch { exception ->
+        when (exception) {
+            is TimeoutCancellationException -> {
+                fallback?.let { emit(it) }
+            }
+            is IOException -> {
+                fallback?.let { emit(it) }
+            }
+            else -> throw exception
+        }
+    }
+```
+
+### Лучшие Практики
+
+1. **Всегда используйте catch для критичных потоков**:
+   ```kotlin
+   //  Необработанное исключение крашит приложение
+   flow { emit(api.getData()) }.collect()
+
+   //  Изящная обработка ошибок
+   flow { emit(api.getData()) }
+       .catch { emit(defaultData) }
+       .collect()
+   ```
+
+2. **Размещайте catch после всех трансформаций**:
+   ```kotlin
+   flow { }
+       .map { }
+       .filter { }
+       .catch { } // Обрабатывает все выше
+       .collect()
+   ```
+
+3. **Используйте retry только для временных ошибок**:
+   ```kotlin
+   .retry { exception ->
+       exception is IOException || exception is TimeoutException
+   }
+   ```
+
+4. **Комбинируйте с timeout**:
+   ```kotlin
+   .timeout(30.seconds)
+   .retryWithExponentialBackoff()
+   .catch { }
+   ```
+
+### Распространенные Ошибки
+
+1. **Ловля исключений в collect**:
+   ```kotlin
+   //  catch не обработает это
+   .catch { emit(default) }
+   .collect { throw Exception() }
+
+   //  Используйте onEach
+   .onEach { if (error) throw Exception() }
+   .catch { emit(default) }
+   .collect()
+   ```
+
+2. **Бесконечный retry**:
+   ```kotlin
+   //  Будет повторять вечно
+   .retry { true }
+
+   //  Ограничьте повторы
+   .retry(3) { it is IOException }
+   ```
+
+3. **Отсутствие timeout**:
+   ```kotlin
+   //  Может зависнуть навсегда
+   .retry(3)
+
+   //  Добавьте timeout
+   .timeout(30.seconds).retry(3)
+   ```
+
+**Краткое содержание**: Обработка исключений в Flow использует catch для обработки upstream исключений, retry для автоматических повторов, и retryWhen для условной логики повтора. Экспоненциальная задержка с jitter - стандартная стратегия повтора. Оператор catch обрабатывает только исключения из upstream, не из блока collect. Комбинируйте стратегии обработки ошибок с timeout и circuit breaker для надежных приложений.
 
 ---
 
@@ -635,336 +965,11 @@ class UserViewModel : ViewModel() {
 
 **English Summary**: Flow exception handling uses catch for handling upstream exceptions, retry for automatic retries, and retryWhen for conditional retry logic. Exponential backoff with jitter is the standard retry strategy. The catch operator only handles exceptions from upstream, not from the collect block. Combine error handling strategies with timeout and circuit breaker patterns for robust applications. Always provide fallback values or error states for UI flows.
 
-## Ответ (RU)
+## Follow-ups
 
-Обработка исключений в Flow критична для построения надежных приложений. Kotlin Flow предоставляет несколько операторов для изящной обработки ошибок.
-
-### Принцип Прозрачности Исключений
-
-Flow следует принципу **прозрачности исключений**: исключения можно поймать только ниже по потоку, а не выше места их возникновения.
-
-```kotlin
-//  Неправильно: catch не может обработать исключения выше по потоку
-flow {
-    emit(1)
-    throw Exception("Ошибка")
-}
-.catch { /* Это ловит исключение */ }
-.map { it * 2 } // Если исключение здесь, catch выше не обработает
-
-//  Правильно
-flow { emit(1) }
-.map { it * 2 }
-.catch { /* Это ловит исключения из flow и map */ }
-```
-
-### Оператор Catch
-
-Оператор `catch` перехватывает исключения из upstream и позволяет их обработать.
-
-#### Базовое Использование
-
-```kotlin
-fun fetchUser(id: Int): Flow<User> = flow {
-    if (id <= 0) {
-        throw IllegalArgumentException("Неверный ID")
-    }
-    val user = api.getUser(id)
-    emit(user)
-}
-
-// Обработка исключения с дефолтным значением
-fetchUser(-1)
-    .catch { exception ->
-        println("Ошибка: ${exception.message}")
-        emit(User.DEFAULT) // Испустить дефолтное значение
-    }
-    .collect { user ->
-        println("Пользователь: $user")
-    }
-```
-
-### Реальный Пример: Сетевой Запрос С Fallback
-
-```kotlin
-class ArticleRepository(
-    private val api: ArticleApi,
-    private val cache: ArticleCache
-) {
-    fun getArticle(id: Int): Flow<Article> = flow {
-        // Попытка загрузки из сети
-        val article = api.fetchArticle(id)
-        emit(article)
-    }
-    .catch { exception ->
-        println("Сеть недоступна: ${exception.message}, проверяю кеш...")
-
-        // Fallback на кеш
-        val cachedArticle = cache.get(id)
-        if (cachedArticle != null) {
-            emit(cachedArticle.copy(cached = true))
-        } else {
-            throw ArticleNotFoundException("Статья $id не найдена")
-        }
-    }
-}
-```
-
-### Оператор Retry
-
-Оператор `retry` автоматически повторяет поток при возникновении исключения.
-
-#### Простой Retry
-
-```kotlin
-// Повтор до 3 раз при любом исключении
-flow {
-    println("Попытка запроса...")
-    val result = unstableNetworkCall()
-    emit(result)
-}
-.retry(3)
-.collect { println("Успех: $it") }
-```
-
-#### Условный Retry
-
-```kotlin
-// Повтор только для конкретных исключений
-flow {
-    val result = api.fetchData()
-    emit(result)
-}
-.retry(3) { exception ->
-    // Повтор только при сетевых ошибках
-    exception is IOException
-}
-.collect { data -> println("Данные: $data") }
-```
-
-### Оператор retryWhen
-
-Оператор `retryWhen` предоставляет больше контроля с доступом к номеру попытки и исключению.
-
-```kotlin
-// Повтор с увеличивающейся задержкой
-flow {
-    println("Попытка")
-    val result = unstableOperation()
-    emit(result)
-}
-.retryWhen { cause, attempt ->
-    if (attempt < 3 && cause is IOException) {
-        delay(1000 * (attempt + 1)) // 1с, 2с, 3с
-        println("Повтор через ${1000 * (attempt + 1)}мс")
-        true
-    } else {
-        false
-    }
-}
-.collect { println("Успех: $it") }
-```
-
-### Реализация Экспоненциальной Задержки
-
-Экспоненциальная задержка - стандартная стратегия обработки ошибок, где задержки повтора растут экспоненциально.
-
-```kotlin
-/**
- * Повтор с экспоненциальной задержкой.
- *
- * @param maxRetries Максимальное количество повторов
- * @param initialDelayMs Начальная задержка в миллисекундах
- * @param maxDelayMs Максимальная задержка
- * @param factor Экспоненциальный коэффициент (обычно 2.0)
- * @param jitter Добавить случайность для предотвращения одновременных запросов
- */
-fun <T> Flow<T>.retryWithExponentialBackoff(
-    maxRetries: Int = 3,
-    initialDelayMs: Long = 1000,
-    maxDelayMs: Long = 32000,
-    factor: Double = 2.0,
-    jitter: Double = 0.1,
-    predicate: (Throwable) -> Boolean = { true }
-): Flow<T> = retryWhen { cause, attempt ->
-    if (attempt >= maxRetries || !predicate(cause)) {
-        false
-    } else {
-        val exponentialDelay = (initialDelayMs * factor.pow(attempt.toInt())).toLong()
-        val cappedDelay = exponentialDelay.coerceAtMost(maxDelayMs)
-
-        // Добавить jitter
-        val jitterMs = (cappedDelay * jitter * Random.nextDouble()).toLong()
-        val finalDelay = cappedDelay + jitterMs
-
-        println("Повтор ${attempt + 1}/$maxRetries через ${finalDelay}мс")
-        delay(finalDelay)
-        true
-    }
-}
-
-// Использование
-fetchDataFlow()
-    .retryWithExponentialBackoff(
-        maxRetries = 5,
-        initialDelayMs = 1000,
-        predicate = { it is IOException }
-    )
-    .collect { result -> println("Результат: $result") }
-```
-
-#### Зачем Нужен Jitter?
-
-Jitter предотвращает проблему "стада", когда все клиенты повторяют запросы одновременно:
-
-```kotlin
-// Без jitter - все клиенты повторяют одновременно
-// Клиент 1: повтор в 1000мс, 2000мс, 4000мс
-// Клиент 2: повтор в 1000мс, 2000мс, 4000мс
-// Сервер получает шквал одновременных запросов!
-
-// С jitter - повторы распределены
-// Клиент 1: повтор в 1050мс, 2150мс, 4200мс
-// Клиент 2: повтор в 1100мс, 1900мс, 3800мс
-// Нагрузка распределена во времени
-```
-
-### Продвинутый Паттерн: Circuit Breaker
-
-```kotlin
-class CircuitBreaker(
-    private val failureThreshold: Int = 5,
-    private val resetTimeoutMs: Long = 60000
-) {
-    private var failureCount = 0
-    private var state = State.CLOSED
-
-    enum class State { CLOSED, OPEN, HALF_OPEN }
-
-    suspend fun <T> execute(block: suspend () -> T): T {
-        when (state) {
-            State.OPEN -> {
-                if (System.currentTimeMillis() - lastFailureTime > resetTimeoutMs) {
-                    state = State.HALF_OPEN
-                } else {
-                    throw CircuitBreakerOpenException("Circuit breaker открыт")
-                }
-            }
-            else -> { /* Разрешить запрос */ }
-        }
-
-        return try {
-            val result = block()
-            onSuccess()
-            result
-        } catch (e: Exception) {
-            onFailure()
-            throw e
-        }
-    }
-}
-```
-
-### Комбинирование Стратегий Обработки Ошибок
-
-```kotlin
-// Комплексная обработка ошибок
-fun <T> Flow<T>.withRobustErrorHandling(
-    maxRetries: Int = 3,
-    timeout: Duration = 30.seconds,
-    fallback: T? = null
-): Flow<T> = this
-    .timeout(timeout) // Предотвратить зависание
-    .retryWithExponentialBackoff(
-        maxRetries = maxRetries,
-        predicate = {
-            it is IOException || it is TimeoutCancellationException
-        }
-    )
-    .catch { exception ->
-        when (exception) {
-            is TimeoutCancellationException -> {
-                fallback?.let { emit(it) }
-            }
-            is IOException -> {
-                fallback?.let { emit(it) }
-            }
-            else -> throw exception
-        }
-    }
-```
-
-### Лучшие Практики
-
-1. **Всегда используйте catch для критичных потоков**:
-   ```kotlin
-   //  Необработанное исключение крашит приложение
-   flow { emit(api.getData()) }.collect()
-
-   //  Изящная обработка ошибок
-   flow { emit(api.getData()) }
-       .catch { emit(defaultData) }
-       .collect()
-   ```
-
-2. **Размещайте catch после всех трансформаций**:
-   ```kotlin
-   flow { }
-       .map { }
-       .filter { }
-       .catch { } // Обрабатывает все выше
-       .collect()
-   ```
-
-3. **Используйте retry только для временных ошибок**:
-   ```kotlin
-   .retry { exception ->
-       exception is IOException || exception is TimeoutException
-   }
-   ```
-
-4. **Комбинируйте с timeout**:
-   ```kotlin
-   .timeout(30.seconds)
-   .retryWithExponentialBackoff()
-   .catch { }
-   ```
-
-### Распространенные Ошибки
-
-1. **Ловля исключений в collect**:
-   ```kotlin
-   //  catch не обработает это
-   .catch { emit(default) }
-   .collect { throw Exception() }
-
-   //  Используйте onEach
-   .onEach { if (error) throw Exception() }
-   .catch { emit(default) }
-   .collect()
-   ```
-
-2. **Бесконечный retry**:
-   ```kotlin
-   //  Будет повторять вечно
-   .retry { true }
-
-   //  Ограничьте повторы
-   .retry(3) { it is IOException }
-   ```
-
-3. **Отсутствие timeout**:
-   ```kotlin
-   //  Может зависнуть навсегда
-   .retry(3)
-
-   //  Добавьте timeout
-   .timeout(30.seconds).retry(3)
-   ```
-
-**Краткое содержание**: Обработка исключений в Flow использует catch для обработки upstream исключений, retry для автоматических повторов, и retryWhen для условной логики повтора. Экспоненциальная задержка с jitter - стандартная стратегия повтора. Оператор catch обрабатывает только исключения из upstream, не из блока collect. Комбинируйте стратегии обработки ошибок с timeout и circuit breaker для надежных приложений.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Exception handling - Kotlin Flow](https://kotlinlang.org/docs/flow.html#exception-handling)

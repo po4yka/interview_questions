@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-java-lambda-type--programming-languages--easy, q-suspend-function-return-type-after-compilation--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memor
 date created: Saturday, October 4th 2025, 1:23:34 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Что Происходит С Объектами, Которые Больше Не Нужны?
-
-# Question (EN)
-> What happens to objects that are no longer needed?
 
 # Вопрос (RU)
 > Что происходит с объектами, которые больше не нужны?
 
 ---
+
+# Question (EN)
+> What happens to objects that are no longer needed?
+
+## Ответ (RU)
+
+Объекты, которые больше не имеют активных ссылок, считаются мусором. Такие объекты автоматически удаляются сборщиком мусора, освобождая память для новых объектов. Это происходит в фоновом режиме и не требует прямого вмешательства разработчика.
 
 ## Answer (EN)
 
@@ -175,9 +178,15 @@ This is automatic memory management in Kotlin/Java!
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Объекты, которые больше не имеют активных ссылок, считаются мусором. Такие объекты автоматически удаляются сборщиком мусора, освобождая память для новых объектов. Это происходит в фоновом режиме и не требует прямого вмешательства разработчика.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

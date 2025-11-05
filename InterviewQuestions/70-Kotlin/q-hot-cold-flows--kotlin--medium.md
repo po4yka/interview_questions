@@ -1,7 +1,7 @@
 ---
 id: kotlin-076
 title: "Hot vs Cold Flows / Горячие и холодные потоки"
-aliases: []
+aliases: ["Hot vs Cold Flows, Горячие и холодные потоки"]
 
 # Classification
 topic: kotlin
@@ -33,12 +33,40 @@ tags: [cold-flows, coroutines, difficulty/medium, flow, hot-flows, kotlin]
 date created: Saturday, October 18th 2025, 9:34:33 am
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> В чем разница между горячими и холодными потоками? Объясните Flow (холодный), SharedFlow, StateFlow (горячие), когда использовать каждый и как конвертировать между ними.
+
+---
 
 # Question (EN)
 > What's the difference between hot and cold Flows? Explain Flow (cold), SharedFlow, StateFlow (hot), when to use each, and how to convert between them.
 
-# Вопрос (RU)
-> В чем разница между горячими и холодными потоками? Объясните Flow (холодный), SharedFlow, StateFlow (горячие), когда использовать каждый и как конвертировать между ними.
+## Ответ (RU)
+
+Flow можно категоризировать как "холодные" или "горячие" в зависимости от того, когда они начинают производить значения.
+
+### Холодный Flow
+
+```kotlin
+val coldFlow = flow {
+    println("Started")
+    emit(1)
+}
+// Запускается при collect(), независим для каждого подписчика
+```
+
+### Горячий Flow
+
+```kotlin
+val hotFlow = MutableSharedFlow<Int>()
+// Всегда активен, общий для всех подписчиков
+```
+
+### Когда Использовать
+
+- **Flow (холодный)**: Запросы к базе данных, API вызовы
+- **SharedFlow (горячий)**: События, широковещание
+- **StateFlow (горячий)**: Состояние UI
 
 ---
 
@@ -68,35 +96,6 @@ val hotFlow = MutableSharedFlow<Int>()
 - **Flow (cold)**: Database queries, API calls
 - **SharedFlow (hot)**: Events, broadcasts
 - **StateFlow (hot)**: UI state
-
----
-
-## Ответ (RU)
-
-Flow можно категоризировать как "холодные" или "горячие" в зависимости от того, когда они начинают производить значения.
-
-### Холодный Flow
-
-```kotlin
-val coldFlow = flow {
-    println("Started")
-    emit(1)
-}
-// Запускается при collect(), независим для каждого подписчика
-```
-
-### Горячий Flow
-
-```kotlin
-val hotFlow = MutableSharedFlow<Int>()
-// Всегда активен, общий для всех подписчиков
-```
-
-### Когда Использовать
-
-- **Flow (холодный)**: Запросы к базе данных, API вызовы
-- **SharedFlow (горячий)**: События, широковещание
-- **StateFlow (горячий)**: Состояние UI
 
 ---
 

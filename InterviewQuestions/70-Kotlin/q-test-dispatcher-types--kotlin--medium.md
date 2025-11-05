@@ -16,12 +16,34 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:13 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
+
+---
 
 # Question (EN)
 > What's the difference between StandardTestDispatcher and UnconfinedTestDispatcher? When should you use each?
 
-# Вопрос (RU)
-> В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?
+## Ответ (RU)
+
+Тестирование корутин требует специальных тестовых диспетчеров, которые контролируют время и порядок выполнения. Kotlin предоставляет `StandardTestDispatcher` и `UnconfinedTestDispatcher`, каждый с разным поведением. Выбор неправильного может привести к нестабильным тестам, проблемам с временем или неверным результатам тестов.
+
+
+
+[Полный русский перевод следует той же структуре]
+
+### Ключевые Выводы
+
+1. **StandardTestDispatcher по умолчанию** - Ставит корутины в очередь
+2. **UnconfinedTestDispatcher выполняется немедленно** - До первой приостановки
+3. **advanceUntilIdle() критичен** - С StandardTestDispatcher
+4. **Виртуальное время** - Тесты выполняются мгновенно
+5. **runTest** - Предпочтительнее runBlocking для тестов
+6. **backgroundScope** - Для коллекторов которые не должны блокировать
+7. **Контроль порядка выполнения** - StandardTestDispatcher дает полный контроль
+8. **Тестирование обновлений StateFlow** - Собирайте в backgroundScope
+9. **Миграция** - Старый API устарел, используйте новые тестовые диспетчеры
+10. **Выбирайте по потребностям** - Standard для контроля, Unconfined для немедленности
 
 ---
 
@@ -719,29 +741,6 @@ fun goodTest() = runTest {
 8. **Test StateFlow updates** - Collect in backgroundScope
 9. **Migration** - Old API deprecated, use new test dispatchers
 10. **Choose based on needs** - Standard for control, Unconfined for immediacy
-
----
-
-## Ответ (RU)
-
-Тестирование корутин требует специальных тестовых диспетчеров, которые контролируют время и порядок выполнения. Kotlin предоставляет `StandardTestDispatcher` и `UnconfinedTestDispatcher`, каждый с разным поведением. Выбор неправильного может привести к нестабильным тестам, проблемам с временем или неверным результатам тестов.
-
-
-
-[Полный русский перевод следует той же структуре]
-
-### Ключевые Выводы
-
-1. **StandardTestDispatcher по умолчанию** - Ставит корутины в очередь
-2. **UnconfinedTestDispatcher выполняется немедленно** - До первой приостановки
-3. **advanceUntilIdle() критичен** - С StandardTestDispatcher
-4. **Виртуальное время** - Тесты выполняются мгновенно
-5. **runTest** - Предпочтительнее runBlocking для тестов
-6. **backgroundScope** - Для коллекторов которые не должны блокировать
-7. **Контроль порядка выполнения** - StandardTestDispatcher дает полный контроль
-8. **Тестирование обновлений StateFlow** - Собирайте в backgroundScope
-9. **Миграция** - Старый API устарел, используйте новые тестовые диспетчеры
-10. **Выбирайте по потребностям** - Standard для контроля, Unconfined для немедленности
 
 ---
 

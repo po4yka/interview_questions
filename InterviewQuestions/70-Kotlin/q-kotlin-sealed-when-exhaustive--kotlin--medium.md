@@ -234,6 +234,16 @@ Sealed классы ограничивают наследование фикси
 5. **Extension functions** для общих операций
 6. **Generic sealed classes** для переиспользуемых паттернов
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

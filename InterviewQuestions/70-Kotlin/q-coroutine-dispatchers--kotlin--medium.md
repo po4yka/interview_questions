@@ -1,7 +1,7 @@
 ---
 id: kotlin-096
 title: "Coroutine Dispatchers / Диспетчеры корутин"
-aliases: []
+aliases: ["Coroutine Dispatchers, Диспетчеры корутин"]
 
 # Classification
 topic: kotlin
@@ -33,411 +33,13 @@ tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, th
 date created: Thursday, October 16th 2025, 4:31:25 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-
-# Question (EN)
-> What are coroutine dispatchers in Kotlin? Explain Main, IO, Default, and Unconfined dispatchers and when to use each.
-
 # Вопрос (RU)
 > Что такое диспетчеры корутин в Kotlin? Объясните диспетчеры Main, IO, Default и Unconfined и когда использовать каждый.
 
 ---
 
-## Answer (EN)
-
-Coroutine dispatchers determine which thread or thread pool executes a coroutine. Kotlin provides four main dispatchers, each optimized for specific workloads.
-
-### Dispatcher Overview
-
-| Dispatcher | Thread Pool | Use Case | Examples |
-|------------|-------------|----------|----------|
-| **Dispatchers.Main** | UI thread | UI updates, user interaction | Update TextView, show Dialog |
-| **Dispatchers.IO** | Shared pool (64+ threads) | I/O operations, blocking calls | Network, Database, File I/O |
-| **Dispatchers.Default** | CPU-bound pool (CPU cores) | CPU-intensive work | Parsing, sorting, calculations |
-| **Dispatchers.Unconfined** | No specific thread | Testing, special cases | Unit tests, advanced scenarios |
-
-### Dispatchers.Main
-
-Executes coroutines on the UI thread (Android main thread):
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch(Dispatchers.Main) {
-            // Runs on UI thread
-            textView.text = "Loading..."
-
-            val data = withContext(Dispatchers.IO) {
-                // Switch to IO thread
-                fetchData()
-            }
-
-            // Back on UI thread automatically
-            textView.text = data
-        }
-    }
-}
-```
-
-**Characteristics**:
-- Single-threaded (UI thread)
-- Required for UI updates
-- Default for `lifecycleScope` and `viewModelScope`
-- Non-blocking: uses event loop
-
-**Use for**:
-- Updating UI elements
-- Showing dialogs/toasts
-- Navigation
-- Starting other coroutines
-
-### Dispatchers.IO
-
-Optimized for I/O operations with a large thread pool:
-
-```kotlin
-class UserRepository(private val api: ApiService, private val db: UserDao) {
-    suspend fun getUser(id: Int): User = withContext(Dispatchers.IO) {
-        // Network call
-        val user = api.fetchUser(id)
-
-        // Database write
-        db.insert(user)
-
-        user
-    }
-
-    suspend fun saveToFile(data: String) = withContext(Dispatchers.IO) {
-        // File I/O
-        File("data.txt").writeText(data)
-    }
-}
-```
-
-**Characteristics**:
-- Large thread pool (default 64 threads, configurable)
-- Designed for blocking I/O
-- Threads can be blocked without affecting performance
-- Shares threads efficiently
-
-**Use for**:
-- Network requests (Retrofit, Ktor)
-- Database operations (Room, SQLite)
-- File I/O (reading/writing files)
-- Blocking I/O operations
-
-### Dispatchers.Default
-
-Optimized for CPU-intensive work:
-
-```kotlin
-class DataProcessor {
-    suspend fun processLargeDataset(data: List<Item>): Result = withContext(Dispatchers.Default) {
-        // CPU-intensive processing
-        data.map { item ->
-            complexCalculation(item)
-        }.reduce { acc, value ->
-            acc + value
-        }
-    }
-
-    suspend fun sortLargeList(list: List<Int>): List<Int> = withContext(Dispatchers.Default) {
-        list.sorted()
-    }
-
-    suspend fun parseJson(json: String): Data = withContext(Dispatchers.Default) {
-        Json.decodeFromString<Data>(json)
-    }
-}
-```
-
-**Characteristics**:
-- Thread pool size = number of CPU cores (min 2)
-- Optimized for computational work
-- Should not be used for blocking I/O
-- Good for parallel processing
-
-**Use for**:
-- Heavy computations
-- Data parsing (JSON, XML)
-- Image/video processing
-- Sorting/filtering large collections
-- Cryptographic operations
-
-### Dispatchers.Unconfined
-
-Starts in caller's context, resumes in arbitrary thread:
-
-```kotlin
-fun main() = runBlocking {
-    launch(Dispatchers.Unconfined) {
-        println("Unconfined 1: ${Thread.currentThread().name}")
-        delay(100)
-        println("Unconfined 2: ${Thread.currentThread().name}") // Different thread!
-    }
-
-    launch {
-        println("Main: ${Thread.currentThread().name}")
-        delay(100)
-        println("Main: ${Thread.currentThread().name}") // Same thread
-    }
-}
-
-// Output:
-// Unconfined 1: main
-// Main: main
-// Unconfined 2: kotlinx.coroutines.DefaultExecutor
-// Main: main
-```
-
-**Characteristics**:
-- No thread affinity
-- Resumes in whatever thread the suspending function resumed in
-- Unpredictable thread behavior
-- Very low overhead
-
-**Use for**:
-- Testing
-- Performance-critical code (advanced)
-- When thread doesn't matter
-- Generally **not recommended** for production
-
-### Switching Dispatchers with withContext
-
-```kotlin
-class UserViewModel : ViewModel() {
-    fun loadUser(id: Int) {
-        viewModelScope.launch(Dispatchers.Main) {
-            // Start on Main thread
-            showLoading()
-
-            val user = withContext(Dispatchers.IO) {
-                // Switch to IO for network
-                api.getUser(id)
-            }
-            // Automatically back to Main
-
-            val processed = withContext(Dispatchers.Default) {
-                // Switch to Default for CPU work
-                processUserData(user)
-            }
-            // Automatically back to Main
-
-            updateUI(processed)
-        }
-    }
-}
-```
-
-### Real-World Example: Complete Flow
-
-```kotlin
-class MovieRepository(
-    private val api: MovieApiService,
-    private val database: MovieDatabase,
-    private val imageProcessor: ImageProcessor
-) {
-    suspend fun getMovieDetails(id: Int): Movie = withContext(Dispatchers.IO) {
-        // 1. Network call on IO dispatcher
-        val movieDto = api.fetchMovie(id)
-
-        // 2. CPU-intensive parsing on Default dispatcher
-        val movie = withContext(Dispatchers.Default) {
-            parseMovieDto(movieDto)
-        }
-
-        // 3. Download and process poster image (back on IO)
-        val posterUrl = movie.posterUrl
-        val posterBytes = api.downloadPoster(posterUrl)
-
-        // 4. Process image on Default dispatcher
-        val processedPoster = withContext(Dispatchers.Default) {
-            imageProcessor.optimize(posterBytes)
-        }
-
-        // 5. Save to database (back on IO)
-        database.movieDao().insert(movie.copy(poster = processedPoster))
-
-        movie
-    }
-}
-
-class MovieViewModel : ViewModel() {
-    private val _movie = MutableStateFlow<UiState<Movie>>(UiState.Loading)
-    val movie: StateFlow<UiState<Movie>> = _movie
-
-    fun loadMovie(id: Int) {
-        // Launch on Main dispatcher
-        viewModelScope.launch(Dispatchers.Main) {
-            _movie.value = UiState.Loading
-
-            try {
-                // Repository handles dispatcher switching internally
-                val movie = repository.getMovieDetails(id)
-
-                // Update UI on Main dispatcher (automatically)
-                _movie.value = UiState.Success(movie)
-            } catch (e: Exception) {
-                _movie.value = UiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
-}
-```
-
-### Custom Dispatchers
-
-```kotlin
-// Limited parallelism dispatcher
-val customDispatcher = Dispatchers.IO.limitedParallelism(5)
-
-suspend fun processItems(items: List<Item>) {
-    items.map { item ->
-        async(customDispatcher) {
-            processItem(item)
-        }
-    }.awaitAll()
-    // Max 5 concurrent operations
-}
-
-// Single-threaded dispatcher (modern approach)
-import java.util.concurrent.Executors
-import kotlinx.coroutines.asCoroutineDispatcher
-
-val singleThreadDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-
-suspend fun sequentialOperations() = withContext(singleThreadDispatcher) {
-    // All operations on single thread
-    operation1()
-    operation2()
-    operation3()
-}
-// IMPORTANT: Close when done to avoid thread leaks
-// singleThreadDispatcher.close()
-
-// Fixed thread pool (modern approach)
-val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
-// IMPORTANT: Close when done to avoid thread leaks
-// fixedThreadPool.close()
-```
-
-**⚠️ Deprecation Note:**
-The `newSingleThreadContext()` and `newFixedThreadPoolContext()` functions were **deprecated in Kotlin Coroutines 1.6.0** (2021). Modern code should use `Executors.asCoroutineDispatcher()` as shown above.
-
-**Custom Dispatcher Lifecycle Management:**
-```kotlin
-class DataProcessor {
-    // Create custom dispatcher
-    private val processingDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
-
-    suspend fun processData(items: List<Item>): List<Result> = withContext(processingDispatcher) {
-        items.map { processItem(it) }
-    }
-
-    // CRITICAL: Close dispatcher when done
-    fun cleanup() {
-        processingDispatcher.close()
-    }
-}
-
-// In Android ViewModel:
-class MyViewModel : ViewModel() {
-    private val customDispatcher = Executors.newFixedThreadPool(2).asCoroutineDispatcher()
-
-    override fun onCleared() {
-        super.onCleared()
-        customDispatcher.close() // Prevent thread leak
-    }
-}
-```
-
-### Dispatcher Performance
-
-```kotlin
-// BAD: Using wrong dispatcher
-suspend fun loadData() = withContext(Dispatchers.Default) {
-    // Blocking I/O on CPU-bound dispatcher
-    api.fetchData() // Wastes CPU thread!
-}
-
-// GOOD: Using correct dispatcher
-suspend fun loadData() = withContext(Dispatchers.IO) {
-    api.fetchData()
-}
-
-// BAD: Unnecessary switching
-suspend fun simpleCalculation() = withContext(Dispatchers.Main) {
-    val result = withContext(Dispatchers.Default) {
-        2 + 2 // Too simple to justify switch
-    }
-    result
-}
-
-// GOOD: Direct calculation
-suspend fun simpleCalculation(): Int {
-    return 2 + 2
-}
-```
-
-### Best Practices
-
-#### DO:
-```kotlin
-// Use IO for blocking I/O
-suspend fun readFile() = withContext(Dispatchers.IO) {
-    File("data.txt").readText()
-}
-
-// Use Default for CPU work
-suspend fun sortData(data: List<Int>) = withContext(Dispatchers.Default) {
-    data.sorted()
-}
-
-// Use Main for UI updates
-lifecycleScope.launch(Dispatchers.Main) {
-    textView.text = "Updated"
-}
-
-// Let viewModelScope default to Main
-viewModelScope.launch {
-    // Already on Main
-    updateUI()
-}
-
-// Switch contexts appropriately
-viewModelScope.launch {
-    val data = withContext(Dispatchers.IO) {
-        fetchData()
-    }
-    updateUI(data)
-}
-```
-
-#### DON'T:
-```kotlin
-// Don't use Default for I/O
-withContext(Dispatchers.Default) {
-    api.fetchData() // Wrong dispatcher!
-}
-
-// Don't use IO for CPU work
-withContext(Dispatchers.IO) {
-    heavyCalculation() // Wastes I/O threads
-}
-
-// Don't update UI off Main thread
-withContext(Dispatchers.IO) {
-    textView.text = "Error" // Crash!
-}
-
-// Don't use Unconfined in production
-launch(Dispatchers.Unconfined) {
-    // Unpredictable behavior
-}
-```
-
----
+# Question (EN)
+> What are coroutine dispatchers in Kotlin? Explain Main, IO, Default, and Unconfined dispatchers and when to use each.
 
 ## Ответ (RU)
 
@@ -856,6 +458,409 @@ launch(Dispatchers.Unconfined) {
 ```
 
 ---
+
+## Answer (EN)
+
+Coroutine dispatchers determine which thread or thread pool executes a coroutine. Kotlin provides four main dispatchers, each optimized for specific workloads.
+
+### Dispatcher Overview
+
+| Dispatcher | Thread Pool | Use Case | Examples |
+|------------|-------------|----------|----------|
+| **Dispatchers.Main** | UI thread | UI updates, user interaction | Update TextView, show Dialog |
+| **Dispatchers.IO** | Shared pool (64+ threads) | I/O operations, blocking calls | Network, Database, File I/O |
+| **Dispatchers.Default** | CPU-bound pool (CPU cores) | CPU-intensive work | Parsing, sorting, calculations |
+| **Dispatchers.Unconfined** | No specific thread | Testing, special cases | Unit tests, advanced scenarios |
+
+### Dispatchers.Main
+
+Executes coroutines on the UI thread (Android main thread):
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            // Runs on UI thread
+            textView.text = "Loading..."
+
+            val data = withContext(Dispatchers.IO) {
+                // Switch to IO thread
+                fetchData()
+            }
+
+            // Back on UI thread automatically
+            textView.text = data
+        }
+    }
+}
+```
+
+**Characteristics**:
+- Single-threaded (UI thread)
+- Required for UI updates
+- Default for `lifecycleScope` and `viewModelScope`
+- Non-blocking: uses event loop
+
+**Use for**:
+- Updating UI elements
+- Showing dialogs/toasts
+- Navigation
+- Starting other coroutines
+
+### Dispatchers.IO
+
+Optimized for I/O operations with a large thread pool:
+
+```kotlin
+class UserRepository(private val api: ApiService, private val db: UserDao) {
+    suspend fun getUser(id: Int): User = withContext(Dispatchers.IO) {
+        // Network call
+        val user = api.fetchUser(id)
+
+        // Database write
+        db.insert(user)
+
+        user
+    }
+
+    suspend fun saveToFile(data: String) = withContext(Dispatchers.IO) {
+        // File I/O
+        File("data.txt").writeText(data)
+    }
+}
+```
+
+**Characteristics**:
+- Large thread pool (default 64 threads, configurable)
+- Designed for blocking I/O
+- Threads can be blocked without affecting performance
+- Shares threads efficiently
+
+**Use for**:
+- Network requests (Retrofit, Ktor)
+- Database operations (Room, SQLite)
+- File I/O (reading/writing files)
+- Blocking I/O operations
+
+### Dispatchers.Default
+
+Optimized for CPU-intensive work:
+
+```kotlin
+class DataProcessor {
+    suspend fun processLargeDataset(data: List<Item>): Result = withContext(Dispatchers.Default) {
+        // CPU-intensive processing
+        data.map { item ->
+            complexCalculation(item)
+        }.reduce { acc, value ->
+            acc + value
+        }
+    }
+
+    suspend fun sortLargeList(list: List<Int>): List<Int> = withContext(Dispatchers.Default) {
+        list.sorted()
+    }
+
+    suspend fun parseJson(json: String): Data = withContext(Dispatchers.Default) {
+        Json.decodeFromString<Data>(json)
+    }
+}
+```
+
+**Characteristics**:
+- Thread pool size = number of CPU cores (min 2)
+- Optimized for computational work
+- Should not be used for blocking I/O
+- Good for parallel processing
+
+**Use for**:
+- Heavy computations
+- Data parsing (JSON, XML)
+- Image/video processing
+- Sorting/filtering large collections
+- Cryptographic operations
+
+### Dispatchers.Unconfined
+
+Starts in caller's context, resumes in arbitrary thread:
+
+```kotlin
+fun main() = runBlocking {
+    launch(Dispatchers.Unconfined) {
+        println("Unconfined 1: ${Thread.currentThread().name}")
+        delay(100)
+        println("Unconfined 2: ${Thread.currentThread().name}") // Different thread!
+    }
+
+    launch {
+        println("Main: ${Thread.currentThread().name}")
+        delay(100)
+        println("Main: ${Thread.currentThread().name}") // Same thread
+    }
+}
+
+// Output:
+// Unconfined 1: main
+// Main: main
+// Unconfined 2: kotlinx.coroutines.DefaultExecutor
+// Main: main
+```
+
+**Characteristics**:
+- No thread affinity
+- Resumes in whatever thread the suspending function resumed in
+- Unpredictable thread behavior
+- Very low overhead
+
+**Use for**:
+- Testing
+- Performance-critical code (advanced)
+- When thread doesn't matter
+- Generally **not recommended** for production
+
+### Switching Dispatchers with withContext
+
+```kotlin
+class UserViewModel : ViewModel() {
+    fun loadUser(id: Int) {
+        viewModelScope.launch(Dispatchers.Main) {
+            // Start on Main thread
+            showLoading()
+
+            val user = withContext(Dispatchers.IO) {
+                // Switch to IO for network
+                api.getUser(id)
+            }
+            // Automatically back to Main
+
+            val processed = withContext(Dispatchers.Default) {
+                // Switch to Default for CPU work
+                processUserData(user)
+            }
+            // Automatically back to Main
+
+            updateUI(processed)
+        }
+    }
+}
+```
+
+### Real-World Example: Complete Flow
+
+```kotlin
+class MovieRepository(
+    private val api: MovieApiService,
+    private val database: MovieDatabase,
+    private val imageProcessor: ImageProcessor
+) {
+    suspend fun getMovieDetails(id: Int): Movie = withContext(Dispatchers.IO) {
+        // 1. Network call on IO dispatcher
+        val movieDto = api.fetchMovie(id)
+
+        // 2. CPU-intensive parsing on Default dispatcher
+        val movie = withContext(Dispatchers.Default) {
+            parseMovieDto(movieDto)
+        }
+
+        // 3. Download and process poster image (back on IO)
+        val posterUrl = movie.posterUrl
+        val posterBytes = api.downloadPoster(posterUrl)
+
+        // 4. Process image on Default dispatcher
+        val processedPoster = withContext(Dispatchers.Default) {
+            imageProcessor.optimize(posterBytes)
+        }
+
+        // 5. Save to database (back on IO)
+        database.movieDao().insert(movie.copy(poster = processedPoster))
+
+        movie
+    }
+}
+
+class MovieViewModel : ViewModel() {
+    private val _movie = MutableStateFlow<UiState<Movie>>(UiState.Loading)
+    val movie: StateFlow<UiState<Movie>> = _movie
+
+    fun loadMovie(id: Int) {
+        // Launch on Main dispatcher
+        viewModelScope.launch(Dispatchers.Main) {
+            _movie.value = UiState.Loading
+
+            try {
+                // Repository handles dispatcher switching internally
+                val movie = repository.getMovieDetails(id)
+
+                // Update UI on Main dispatcher (automatically)
+                _movie.value = UiState.Success(movie)
+            } catch (e: Exception) {
+                _movie.value = UiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+}
+```
+
+### Custom Dispatchers
+
+```kotlin
+// Limited parallelism dispatcher
+val customDispatcher = Dispatchers.IO.limitedParallelism(5)
+
+suspend fun processItems(items: List<Item>) {
+    items.map { item ->
+        async(customDispatcher) {
+            processItem(item)
+        }
+    }.awaitAll()
+    // Max 5 concurrent operations
+}
+
+// Single-threaded dispatcher (modern approach)
+import java.util.concurrent.Executors
+import kotlinx.coroutines.asCoroutineDispatcher
+
+val singleThreadDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+
+suspend fun sequentialOperations() = withContext(singleThreadDispatcher) {
+    // All operations on single thread
+    operation1()
+    operation2()
+    operation3()
+}
+// IMPORTANT: Close when done to avoid thread leaks
+// singleThreadDispatcher.close()
+
+// Fixed thread pool (modern approach)
+val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+// IMPORTANT: Close when done to avoid thread leaks
+// fixedThreadPool.close()
+```
+
+**⚠️ Deprecation Note:**
+The `newSingleThreadContext()` and `newFixedThreadPoolContext()` functions were **deprecated in Kotlin Coroutines 1.6.0** (2021). Modern code should use `Executors.asCoroutineDispatcher()` as shown above.
+
+**Custom Dispatcher Lifecycle Management:**
+```kotlin
+class DataProcessor {
+    // Create custom dispatcher
+    private val processingDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+
+    suspend fun processData(items: List<Item>): List<Result> = withContext(processingDispatcher) {
+        items.map { processItem(it) }
+    }
+
+    // CRITICAL: Close dispatcher when done
+    fun cleanup() {
+        processingDispatcher.close()
+    }
+}
+
+// In Android ViewModel:
+class MyViewModel : ViewModel() {
+    private val customDispatcher = Executors.newFixedThreadPool(2).asCoroutineDispatcher()
+
+    override fun onCleared() {
+        super.onCleared()
+        customDispatcher.close() // Prevent thread leak
+    }
+}
+```
+
+### Dispatcher Performance
+
+```kotlin
+// BAD: Using wrong dispatcher
+suspend fun loadData() = withContext(Dispatchers.Default) {
+    // Blocking I/O on CPU-bound dispatcher
+    api.fetchData() // Wastes CPU thread!
+}
+
+// GOOD: Using correct dispatcher
+suspend fun loadData() = withContext(Dispatchers.IO) {
+    api.fetchData()
+}
+
+// BAD: Unnecessary switching
+suspend fun simpleCalculation() = withContext(Dispatchers.Main) {
+    val result = withContext(Dispatchers.Default) {
+        2 + 2 // Too simple to justify switch
+    }
+    result
+}
+
+// GOOD: Direct calculation
+suspend fun simpleCalculation(): Int {
+    return 2 + 2
+}
+```
+
+### Best Practices
+
+#### DO:
+```kotlin
+// Use IO for blocking I/O
+suspend fun readFile() = withContext(Dispatchers.IO) {
+    File("data.txt").readText()
+}
+
+// Use Default for CPU work
+suspend fun sortData(data: List<Int>) = withContext(Dispatchers.Default) {
+    data.sorted()
+}
+
+// Use Main for UI updates
+lifecycleScope.launch(Dispatchers.Main) {
+    textView.text = "Updated"
+}
+
+// Let viewModelScope default to Main
+viewModelScope.launch {
+    // Already on Main
+    updateUI()
+}
+
+// Switch contexts appropriately
+viewModelScope.launch {
+    val data = withContext(Dispatchers.IO) {
+        fetchData()
+    }
+    updateUI(data)
+}
+```
+
+#### DON'T:
+```kotlin
+// Don't use Default for I/O
+withContext(Dispatchers.Default) {
+    api.fetchData() // Wrong dispatcher!
+}
+
+// Don't use IO for CPU work
+withContext(Dispatchers.IO) {
+    heavyCalculation() // Wastes I/O threads
+}
+
+// Don't update UI off Main thread
+withContext(Dispatchers.IO) {
+    textView.text = "Error" // Crash!
+}
+
+// Don't use Unconfined in production
+launch(Dispatchers.Unconfined) {
+    // Unpredictable behavior
+}
+```
+
+---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

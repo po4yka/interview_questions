@@ -17,16 +17,111 @@ tags: [difficulty/easy, elvis, null-checks, null-safety, operators, programming-
 date created: Friday, October 31st 2025, 6:30:56 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Каким Образом Осуществлять Проверки На Null?
-
-# Question (EN)
-> How to perform null checks?
 
 # Вопрос (RU)
 > Каким образом осуществлять проверки на null?
 
 ---
+
+# Question (EN)
+> How to perform null checks?
+
+## Ответ (RU)
+
+Kotlin предлагает несколько операторов и методов для проверки на null:
+
+### 1. Оператор Безопасного Вызова `?.`
+
+Возвращает null если объект null, иначе вызывает метод/свойство:
+
+```kotlin
+val length: Int? = name?.length  // Возвращает null если name null
+
+val upper: String? = text?.uppercase()?.trim()  // Цепочка безопасных вызовов
+```
+
+### 2. Оператор Элвиса `?:`
+
+Предоставляет значение по умолчанию если выражение null:
+
+```kotlin
+val length = name?.length ?: 0  // Возвращает 0 если name null
+
+val text = nullableText ?: "по умолчанию"
+
+// Может выбрасывать исключение как значение по умолчанию
+val nonNull = value ?: throw IllegalArgumentException("Значение обязательно")
+```
+
+### 3. Явная Проверка С `if`
+
+Традиционная проверка на null:
+
+```kotlin
+if (name != null) {
+    // Smart cast: name это String здесь, не String?
+    println(name.length)
+}
+
+val length = if (name != null) name.length else 0
+```
+
+### 4. `requireNotNull()`
+
+Выбрасывает исключение если null:
+
+```kotlin
+val nonNull: String = requireNotNull(nullable) {
+    "Значение не может быть null"
+}
+
+requireNotNull(user) // Выбрасывает IllegalArgumentException если null
+```
+
+### 5. Двойной Восклицательный Знак `!!`
+
+Гарантирует не-null, выбрасывает NPE если null:
+
+```kotlin
+val length: Int = name!!.length  // NPE если name null
+
+// Используйте осторожно, только когда на 100% уверены что значение не null
+```
+
+### 6. `let` С Безопасным Вызовом
+
+Выполняет блок только если не null:
+
+```kotlin
+name?.let {
+    // 'it' это non-null String здесь
+    println("Имя: $it")
+}
+
+// С кастомным именем параметра
+user?.let { u ->
+    println("Пользователь: ${u.name}")
+}
+```
+
+### 7. `takeIf` / `takeUnless`
+
+Условное возвращение:
+
+```kotlin
+val positiveNumber = number.takeIf { it > 0 }  // null если <= 0
+
+val validEmail = email.takeIf { it.contains("@") }
+```
+
+**Лучшие практики:**
+- Предпочитайте безопасный вызов `?.` и Элвиса `?:` вместо `!!`
+- Используйте `!!` только когда вы абсолютно уверены что значение не null
+- Используйте `requireNotNull()` для проверок предусловий
+- Комбинируйте операторы для лаконичной обработки null
+
+**Резюме**: Kotlin предоставляет богатый набор операторов для null-безопасности: безопасный вызов `?.`, оператор Элвиса `?:`, явная проверка `if (x != null)`, `requireNotNull()` для выброса исключений, `!!` для принудительного разворачивания (используйте осторожно), `let` для выполнения блоков на non-null значениях, и `takeIf`/`takeUnless` для условной логики. Предпочитайте безопасные операторы `?.` и `?:` для идиоматичного Kotlin кода.
 
 ## Answer (EN)
 
@@ -124,101 +219,15 @@ val validEmail = email.takeIf { it.contains("@") }
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Kotlin предлагает несколько операторов и методов для проверки на null:
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### 1. Оператор Безопасного Вызова `?.`
+## References
 
-Возвращает null если объект null, иначе вызывает метод/свойство:
-
-```kotlin
-val length: Int? = name?.length  // Возвращает null если name null
-
-val upper: String? = text?.uppercase()?.trim()  // Цепочка безопасных вызовов
-```
-
-### 2. Оператор Элвиса `?:`
-
-Предоставляет значение по умолчанию если выражение null:
-
-```kotlin
-val length = name?.length ?: 0  // Возвращает 0 если name null
-
-val text = nullableText ?: "по умолчанию"
-
-// Может выбрасывать исключение как значение по умолчанию
-val nonNull = value ?: throw IllegalArgumentException("Значение обязательно")
-```
-
-### 3. Явная Проверка С `if`
-
-Традиционная проверка на null:
-
-```kotlin
-if (name != null) {
-    // Smart cast: name это String здесь, не String?
-    println(name.length)
-}
-
-val length = if (name != null) name.length else 0
-```
-
-### 4. `requireNotNull()`
-
-Выбрасывает исключение если null:
-
-```kotlin
-val nonNull: String = requireNotNull(nullable) {
-    "Значение не может быть null"
-}
-
-requireNotNull(user) // Выбрасывает IllegalArgumentException если null
-```
-
-### 5. Двойной Восклицательный Знак `!!`
-
-Гарантирует не-null, выбрасывает NPE если null:
-
-```kotlin
-val length: Int = name!!.length  // NPE если name null
-
-// Используйте осторожно, только когда на 100% уверены что значение не null
-```
-
-### 6. `let` С Безопасным Вызовом
-
-Выполняет блок только если не null:
-
-```kotlin
-name?.let {
-    // 'it' это non-null String здесь
-    println("Имя: $it")
-}
-
-// С кастомным именем параметра
-user?.let { u ->
-    println("Пользователь: ${u.name}")
-}
-```
-
-### 7. `takeIf` / `takeUnless`
-
-Условное возвращение:
-
-```kotlin
-val positiveNumber = number.takeIf { it > 0 }  // null если <= 0
-
-val validEmail = email.takeIf { it.contains("@") }
-```
-
-**Лучшие практики:**
-- Предпочитайте безопасный вызов `?.` и Элвиса `?:` вместо `!!`
-- Используйте `!!` только когда вы абсолютно уверены что значение не null
-- Используйте `requireNotNull()` для проверок предусловий
-- Комбинируйте операторы для лаконичной обработки null
-
-**Резюме**: Kotlin предоставляет богатый набор операторов для null-безопасности: безопасный вызов `?.`, оператор Элвиса `?:`, явная проверка `if (x != null)`, `requireNotNull()` для выброса исключений, `!!` для принудительного разворачивания (используйте осторожно), `let` для выполнения блоков на non-null значениях, и `takeIf`/`takeUnless` для условной логики. Предпочитайте безопасные операторы `?.` и `?:` для идиоматичного Kotlin кода.
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

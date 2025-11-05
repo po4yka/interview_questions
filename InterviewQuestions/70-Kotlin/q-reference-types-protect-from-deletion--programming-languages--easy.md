@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-detect-unused-object--programming-languages--easy, q-java-marker-interfaces--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, phan
 date created: Saturday, October 4th 2025, 1:22:21 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Все Ли Виды Ссылок Защищают Объект От Удаления?
-
-# Question (EN)
-> Do all types of references protect an object from deletion?
 
 # Вопрос (RU)
 > Все ли виды ссылок защищают объект от удаления?
 
 ---
+
+# Question (EN)
+> Do all types of references protect an object from deletion?
+
+## Ответ (RU)
+
+Нет, не все ссылки защищают объект от удаления. Strong Reference защищает объект, Weak Reference не защищает и позволяет удалить объект. Soft Reference удаляет объект только при нехватке памяти, а Phantom Reference используется для действий после удаления.
 
 ## Answer (EN)
 
@@ -152,9 +155,15 @@ fun example() {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Нет, не все ссылки защищают объект от удаления. Strong Reference защищает объект, Weak Reference не защищает и позволяет удалить объект. Soft Reference удаляет объект только при нехватке памяти, а Phantom Reference используется для действий после удаления.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

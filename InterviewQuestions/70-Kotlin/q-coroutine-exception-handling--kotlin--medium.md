@@ -1,11 +1,11 @@
 ---
 id: kotlin-042
 title: "Coroutine Exception Handling / Обработка исключений в корутинах"
-aliases: []
+aliases: ["Coroutine Exception Handling, Обработка исключений в корутинах"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, error-handling, exceptions, supervisorscope]
+subtopics: [coroutines, error-handling, exceptions]
 question_kind: theory
 difficulty: medium
 
@@ -28,11 +28,186 @@ tags: [coroutines, difficulty/medium, error-handling, exceptions, kotlin, superv
 date created: Sunday, October 12th 2025, 1:56:16 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?
+
+---
 
 # Question (EN)
 > How does exception handling work in Kotlin Coroutines? What is the difference between coroutineScope and supervisorScope?
-# Вопрос (RU)
-> Как работает обработка исключений в Kotlin корутинах? В чем разница между coroutineScope и supervisorScope?
+## Ответ (RU)
+
+Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа.
+
+### Правила Распространения Исключений
+
+**1. launch - Распространяет немедленно к родителю**
+
+```kotlin
+viewModelScope.launch {
+    launch {
+        throw Exception("Child failed")  // Крашит родителя немедленно
+    }
+
+    delay(1000)
+    println("Это никогда не выполнится")  // Никогда не достигается
+}
+```
+
+**2. async - Хранит исключение до await()**
+
+```kotlin
+viewModelScope.launch {
+    val deferred = async {
+        throw Exception("Async failed")  // Исключение сохранено
+    }
+
+    delay(1000)
+    println("Это выполнится")  // Все еще выполняется
+
+    deferred.await()  // Исключение выброшено здесь
+}
+```
+
+### Try-catch В Корутинах
+
+**Работает для прямого кода:**
+
+```kotlin
+viewModelScope.launch {
+    try {
+        val result = suspendingFunction()  // - Поймано
+    } catch (e: Exception) {
+        handleError(e)
+    }
+}
+```
+
+**НЕ работает для дочерних корутин:**
+
+```kotlin
+viewModelScope.launch {
+    try {
+        launch {
+            throw Exception("Failed")  // - НЕ поймано
+        }
+    } catch (e: Exception) {
+        // Никогда не достигается!
+    }
+}
+```
+
+### coroutineScope Vs supervisorScope
+
+**coroutineScope - Отменяет всех братьев при сбое**
+
+```kotlin
+viewModelScope.launch {
+    try {
+        coroutineScope {
+            launch {
+                delay(1000)
+                println("Task 1 complete")  // Никогда не печатает
+            }
+
+            launch {
+                throw Exception("Task 2 failed")  // Отменяет Task 1
+            }
+        }
+    } catch (e: Exception) {
+        println("Caught: ${e.message}")  // Caught: Task 2 failed
+    }
+}
+```
+
+**supervisorScope - Братья продолжают при сбое**
+
+```kotlin
+viewModelScope.launch {
+    supervisorScope {
+        launch {
+            delay(1000)
+            println("Task 1 complete")  // Все еще печатает!
+        }
+
+        launch {
+            throw Exception("Task 2 failed")  // Не влияет на Task 1
+        }
+    }
+}
+```
+
+### Примеры Из Реальной Практики
+
+**Пример 1: Параллельные запросы с supervisorScope**
+
+```kotlin
+class ProductViewModel : ViewModel() {
+    fun loadData() {
+        viewModelScope.launch {
+            supervisorScope {
+                launch {
+                    try {
+                        val products = repository.getProducts()
+                        _products.value = products
+                    } catch (e: Exception) {
+                        _productsError.value = e
+                    }
+                }
+
+                launch {
+                    try {
+                        val categories = repository.getCategories()
+                        _categories.value = categories
+                    } catch (e: Exception) {
+                        _categoriesError.value = e
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+**Пример 2: Последовательные операции с coroutineScope**
+
+```kotlin
+suspend fun processOrder(order: Order) = coroutineScope {
+    // Все шаги должны успешно выполниться
+    val validated = validateOrder(order)
+    val processed = processPayment(validated)
+    val confirmed = confirmOrder(processed)
+
+    // Если любой шаг падает, все отменяются
+    confirmed
+}
+```
+
+### Лучшие Практики
+
+**1. Используйте supervisorScope для независимых параллельных задач**
+
+```kotlin
+// - ХОРОШО - Независимые задачи
+supervisorScope {
+    launch { loadProducts() }
+    launch { loadCategories() }
+    launch { loadBanners() }
+}
+```
+
+**2. Используйте coroutineScope для зависимых последовательных задач**
+
+```kotlin
+// - ХОРОШО - Последовательные шаги
+coroutineScope {
+    val user = getUser()
+    val profile = getProfile(user.id)
+    val settings = getSettings(user.id)
+}
+```
+
+**Краткое содержание**: Исключения в корутинах: `launch` распространяет немедленно, `async` хранит до `await()`. `try-catch` работает для прямого кода, не для дочерних корутин. `coroutineScope` отменяет всех братьев при сбое. `supervisorScope` позволяет братьям продолжить. `CoroutineExceptionHandler` для глобальной обработки (только launch). Используйте `supervisorScope` для независимых параллельных задач, `coroutineScope` для зависимых последовательных задач.
 
 ---
 
@@ -288,181 +463,11 @@ viewModelScope.launch {
 
 **English Summary**: Exceptions in coroutines: `launch` propagates immediately, `async` stores until `await()`. `try-catch` works for direct code, not child coroutines. `coroutineScope` cancels all siblings on failure. `supervisorScope` lets siblings continue. `CoroutineExceptionHandler` for global handling (launch only). Use `supervisorScope` for independent parallel tasks, `coroutineScope` for dependent sequential tasks.
 
-## Ответ (RU)
+## Follow-ups
 
-Обработка исключений в корутинах следует специфичным правилам в зависимости от используемого билдера и скоупа.
-
-### Правила Распространения Исключений
-
-**1. launch - Распространяет немедленно к родителю**
-
-```kotlin
-viewModelScope.launch {
-    launch {
-        throw Exception("Child failed")  // Крашит родителя немедленно
-    }
-
-    delay(1000)
-    println("Это никогда не выполнится")  // Никогда не достигается
-}
-```
-
-**2. async - Хранит исключение до await()**
-
-```kotlin
-viewModelScope.launch {
-    val deferred = async {
-        throw Exception("Async failed")  // Исключение сохранено
-    }
-
-    delay(1000)
-    println("Это выполнится")  // Все еще выполняется
-
-    deferred.await()  // Исключение выброшено здесь
-}
-```
-
-### Try-catch В Корутинах
-
-**Работает для прямого кода:**
-
-```kotlin
-viewModelScope.launch {
-    try {
-        val result = suspendingFunction()  // - Поймано
-    } catch (e: Exception) {
-        handleError(e)
-    }
-}
-```
-
-**НЕ работает для дочерних корутин:**
-
-```kotlin
-viewModelScope.launch {
-    try {
-        launch {
-            throw Exception("Failed")  // - НЕ поймано
-        }
-    } catch (e: Exception) {
-        // Никогда не достигается!
-    }
-}
-```
-
-### coroutineScope Vs supervisorScope
-
-**coroutineScope - Отменяет всех братьев при сбое**
-
-```kotlin
-viewModelScope.launch {
-    try {
-        coroutineScope {
-            launch {
-                delay(1000)
-                println("Task 1 complete")  // Никогда не печатает
-            }
-
-            launch {
-                throw Exception("Task 2 failed")  // Отменяет Task 1
-            }
-        }
-    } catch (e: Exception) {
-        println("Caught: ${e.message}")  // Caught: Task 2 failed
-    }
-}
-```
-
-**supervisorScope - Братья продолжают при сбое**
-
-```kotlin
-viewModelScope.launch {
-    supervisorScope {
-        launch {
-            delay(1000)
-            println("Task 1 complete")  // Все еще печатает!
-        }
-
-        launch {
-            throw Exception("Task 2 failed")  // Не влияет на Task 1
-        }
-    }
-}
-```
-
-### Примеры Из Реальной Практики
-
-**Пример 1: Параллельные запросы с supervisorScope**
-
-```kotlin
-class ProductViewModel : ViewModel() {
-    fun loadData() {
-        viewModelScope.launch {
-            supervisorScope {
-                launch {
-                    try {
-                        val products = repository.getProducts()
-                        _products.value = products
-                    } catch (e: Exception) {
-                        _productsError.value = e
-                    }
-                }
-
-                launch {
-                    try {
-                        val categories = repository.getCategories()
-                        _categories.value = categories
-                    } catch (e: Exception) {
-                        _categoriesError.value = e
-                    }
-                }
-            }
-        }
-    }
-}
-```
-
-**Пример 2: Последовательные операции с coroutineScope**
-
-```kotlin
-suspend fun processOrder(order: Order) = coroutineScope {
-    // Все шаги должны успешно выполниться
-    val validated = validateOrder(order)
-    val processed = processPayment(validated)
-    val confirmed = confirmOrder(processed)
-
-    // Если любой шаг падает, все отменяются
-    confirmed
-}
-```
-
-### Лучшие Практики
-
-**1. Используйте supervisorScope для независимых параллельных задач**
-
-```kotlin
-// - ХОРОШО - Независимые задачи
-supervisorScope {
-    launch { loadProducts() }
-    launch { loadCategories() }
-    launch { loadBanners() }
-}
-```
-
-**2. Используйте coroutineScope для зависимых последовательных задач**
-
-```kotlin
-// - ХОРОШО - Последовательные шаги
-coroutineScope {
-    val user = getUser()
-    val profile = getProfile(user.id)
-    val settings = getSettings(user.id)
-}
-```
-
-**Краткое содержание**: Исключения в корутинах: `launch` распространяет немедленно, `async` хранит до `await()`. `try-catch` работает для прямого кода, не для дочерних корутин. `coroutineScope` отменяет всех братьев при сбое. `supervisorScope` позволяет братьям продолжить. `CoroutineExceptionHandler` для глобальной обработки (только launch). Используйте `supervisorScope` для независимых параллельных задач, `coroutineScope` для зависимых последовательных задач.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Coroutine Exceptions - Kotlin Documentation](https://kotlinlang.org/docs/exception-handling.html)

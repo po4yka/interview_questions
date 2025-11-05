@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-flow-map-operator--programming-languages--medium, q-iterator-pattern--design-patterns--medium, q-what-is-flow--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -17,14 +17,20 @@ tags: [arraylist, collections, data-structures, difficulty/medium, kotlin, linke
 date created: Friday, October 3rd 2025, 4:14:01 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Как Будут Вести Себя Linked List И Array List, Если Вставить В Них Элемент?
+
+# Вопрос (RU)
+> Как будут вести себя linked list и array list, если вставить в них элемент?
+
+---
 
 # Question (EN)
 > How will LinkedList and ArrayList behave when inserting an element?
 
-# Вопрос (RU)
-> Как будут вести себя linked list и array list, если вставить в них элемент?
+## Ответ (RU)
+
+LinkedList и ArrayList представляют собой две разные реализации интерфейса List, и каждая из них имеет свои особенности поведения при вставке элементов. ArrayList основан на динамическом массиве и добавление элемента в конец списка выполняется за время O(1), но может потребовать расширения массива, что занимает O(n). Добавление элемента в середину списка имеет временную сложность O(n - index). LinkedList реализует структуру данных двунаправленного связного списка и добавление элемента в конец или начало списка выполняется за время O(1). Добавление элемента в середину списка имеет временную сложность O(n) из-за необходимости найти узел.
+
 
 ---
 
@@ -34,12 +40,15 @@ LinkedList and ArrayList are two different implementations of the List interface
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-LinkedList и ArrayList представляют собой две разные реализации интерфейса List, и каждая из них имеет свои особенности поведения при вставке элементов. ArrayList основан на динамическом массиве и добавление элемента в конец списка выполняется за время O(1), но может потребовать расширения массива, что занимает O(n). Добавление элемента в середину списка имеет временную сложность O(n - index). LinkedList реализует структуру данных двунаправленного связного списка и добавление элемента в конец или начало списка выполняется за время O(1). Добавление элемента в середину списка имеет временную сложность O(n) из-за необходимости найти узел.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
+## References
 
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

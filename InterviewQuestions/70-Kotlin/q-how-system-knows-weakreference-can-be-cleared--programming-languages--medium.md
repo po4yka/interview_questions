@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-garbage-collection, c-references, q-garbage-collector-basics--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [difficulty/medium, garbage-collection, kotlin, memory-management, program
 date created: Friday, October 31st 2025, 6:31:28 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Как Система Понимает, Что WeakReference Можно Очистить?
-
-# Question (EN)
-> How does the system know that WeakReference can be cleared?
 
 # Вопрос (RU)
 > Как система понимает, что WeakReference можно очистить?
 
 ---
+
+# Question (EN)
+> How does the system know that WeakReference can be cleared?
+
+## Ответ (RU)
+
+Система определяет, что WeakReference можно очистить, используя механизм сборщика мусора. Если объект достижим только через слабые ссылки (нет сильных ссылок), GC очищает WeakReference.
 
 ## Answer (EN)
 
@@ -187,9 +190,15 @@ The GC determines WeakReference can be cleared when:
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Система определяет, что WeakReference можно очистить, используя механизм сборщика мусора. Если объект достижим только через слабые ссылки (нет сильных ссылок), GC очищает WeakReference.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

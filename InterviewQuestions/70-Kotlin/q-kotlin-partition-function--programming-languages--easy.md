@@ -17,14 +17,71 @@ tags: [collections, difficulty/easy, functions, programming-languages]
 date created: Friday, October 31st 2025, 6:32:16 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Что Делает Функция Коллекций partition()?
+
+# Вопрос (RU)
+> Что делает функция коллекций partition()?
+
+---
 
 # Question (EN)
 > What does the collection function partition() do?
 
-# Вопрос (RU)
-> Что делает функция коллекций partition()?
+## Ответ (RU)
+
+
+Функция `partition` разделяет коллекцию на два списка на основе предиката: один для элементов соответствующих предикату, один для несоответствующих.
+
+### Синтаксис
+```kotlin
+val (matching, notMatching) = collection.partition { predicate }
+```
+
+### Примеры
+
+**1. Разделить числа**
+```kotlin
+val numbers = listOf(1, 2, 3, 4, 5, 6)
+val (even, odd) = numbers.partition { it % 2 == 0 }
+
+println(even)  // [2, 4, 6]
+println(odd)   // [1, 3, 5]
+```
+
+**2. Фильтровать пользователей**
+```kotlin
+data class User(val name: String, val age: Int)
+
+val users = listOf(
+    User("Alice", 17),
+    User("Bob", 25),
+    User("Charlie", 16)
+)
+
+val (adults, minors) = users.partition { it.age >= 18 }
+// adults: [User("Bob", 25)]
+// minors: [User("Alice", 17), User("Charlie", 16)]
+```
+
+**3. Валидация ввода**
+```kotlin
+val inputs = listOf("abc", "123", "def", "456")
+val (letters, numbers) = inputs.partition {
+    it.all { char -> char.isLetter() }
+}
+```
+
+### Тип Возврата
+```kotlin
+fun <T> Iterable<T>.partition(
+    predicate: (T) -> Boolean
+): Pair<List<T>, List<T>>
+```
+
+### Производительность
+- O(n) временная сложность
+- Создает два новых списка
+- Вычисляет предикат один раз на элемент
 
 ---
 
@@ -87,63 +144,15 @@ fun <T> Iterable<T>.partition(
 ---
 ---
 
-## Ответ (RU)
+## Follow-ups
 
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-Функция `partition` разделяет коллекцию на два списка на основе предиката: один для элементов соответствующих предикату, один для несоответствующих.
+## References
 
-### Синтаксис
-```kotlin
-val (matching, notMatching) = collection.partition { predicate }
-```
-
-### Примеры
-
-**1. Разделить числа**
-```kotlin
-val numbers = listOf(1, 2, 3, 4, 5, 6)
-val (even, odd) = numbers.partition { it % 2 == 0 }
-
-println(even)  // [2, 4, 6]
-println(odd)   // [1, 3, 5]
-```
-
-**2. Фильтровать пользователей**
-```kotlin
-data class User(val name: String, val age: Int)
-
-val users = listOf(
-    User("Alice", 17),
-    User("Bob", 25),
-    User("Charlie", 16)
-)
-
-val (adults, minors) = users.partition { it.age >= 18 }
-// adults: [User("Bob", 25)]
-// minors: [User("Alice", 17), User("Charlie", 16)]
-```
-
-**3. Валидация ввода**
-```kotlin
-val inputs = listOf("abc", "123", "def", "456")
-val (letters, numbers) = inputs.partition {
-    it.all { char -> char.isLetter() }
-}
-```
-
-### Тип Возврата
-```kotlin
-fun <T> Iterable<T>.partition(
-    predicate: (T) -> Boolean
-): Pair<List<T>, List<T>>
-```
-
-### Производительность
-- O(n) временная сложность
-- Создает два новых списка
-- Вычисляет предикат один раз на элемент
-
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

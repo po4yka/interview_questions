@@ -3,13 +3,13 @@ id: lang-064
 title: "Interface Vs Abstract Class / Интерфейс против абстрактного класса"
 aliases: [Interface Vs Abstract Class, Интерфейс против абстрактного класса]
 topic: programming-languages
-subtopics: [abstract-classes, inheritance, interfaces, oop]
+subtopics: [abstract-classes, inheritance, interfaces]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-inheritance, c-oop-concepts, q-class-composition--oop--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,51 +17,15 @@ tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, oop
 date created: Friday, October 31st 2025, 6:31:49 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Такое Interface И Чем Он Отличается От Абстрактного Класса?
-
-# Question (EN)
-> What is an interface and how does it differ from abstract class?
 
 # Вопрос (RU)
 > Что такое interface и чем он отличается от абстрактного класса?
 
 ---
 
-## Answer (EN)
-
-**Interface** defines a set of abstract methods that a class must implement. Interfaces can contain default method implementations (in Kotlin).
-
-**Abstract class** cannot be instantiated itself and can contain both abstract methods and methods with implementation.
-
-**Main differences:**
-
-| Aspect | Interface | Abstract Class |
-|--------|-----------|----------------|
-| **Multiple inheritance** | Class can implement multiple interfaces | Class can inherit only one abstract class |
-| **Method implementation** | Can have default implementations | Can contain full method implementations |
-| **Fields/state** | Cannot contain state (only properties with custom getters) | Can contain fields and state |
-| **Constructors** | Cannot have constructors | Can have constructors |
-| **When to use** | Define behavior contract | Share code among related classes |
-
-**Example:**
-```kotlin
-interface Animal {
-    fun eat()
-}
-
-abstract class Mammal {
-    abstract fun breathe()
-    fun sleep() = println("Sleeping")
-}
-
-class Dog : Mammal(), Animal {
-    override fun eat() = println("Dog eating")
-    override fun breathe() = println("Dog breathing")
-}
-```
-
----
+# Question (EN)
+> What is an interface and how does it differ from abstract class?
 
 ## Ответ (RU)
 
@@ -278,6 +242,51 @@ class Duck : Animal(), Flyable, Swimmable {
     override fun swim() = println("Duck swimming")
 }
 ```
+
+## Answer (EN)
+
+**Interface** defines a set of abstract methods that a class must implement. Interfaces can contain default method implementations (in Kotlin).
+
+**Abstract class** cannot be instantiated itself and can contain both abstract methods and methods with implementation.
+
+**Main differences:**
+
+| Aspect | Interface | Abstract Class |
+|--------|-----------|----------------|
+| **Multiple inheritance** | Class can implement multiple interfaces | Class can inherit only one abstract class |
+| **Method implementation** | Can have default implementations | Can contain full method implementations |
+| **Fields/state** | Cannot contain state (only properties with custom getters) | Can contain fields and state |
+| **Constructors** | Cannot have constructors | Can have constructors |
+| **When to use** | Define behavior contract | Share code among related classes |
+
+**Example:**
+```kotlin
+interface Animal {
+    fun eat()
+}
+
+abstract class Mammal {
+    abstract fun breathe()
+    fun sleep() = println("Sleeping")
+}
+
+class Dog : Mammal(), Animal {
+    override fun eat() = println("Dog eating")
+    override fun breathe() = println("Dog breathing")
+}
+```
+
+---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

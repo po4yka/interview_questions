@@ -77,7 +77,7 @@ Use **English**, **kebab-case**, short, stable. Add Russian/English titles to `a
 1. **Choose folder** based on topic (20-Algorithms, 30-System-Design, 40-Android, etc.)
 2. **Use template**: Copy from `_templates/_tpl-qna.md`
 3. **Fill YAML**:
-    - `id`: Use format `YYYYMMDD-HHmmss` (e.g., `20251003-143022`)
+    - `id`: Use format `<subject>-<serial>` (e.g., `algo-001`, `android-134`)
     - `title`: "Question Title EN / Заголовок RU"
     - `topic`: Pick **one** from TAXONOMY.md
     - `subtopics`: Pick 1–3 (Android: use Android subtopics list)
@@ -129,7 +129,7 @@ Use **English**, **kebab-case**, short, stable. Add Russian/English titles to `a
 
 1. **Use template**: `_templates/_tpl-concept.md`
 2. **Fill YAML**:
-    - `id`: `ivc-YYYYMMDD-HHmmss`
+    - `id`: `concept-<serial>` (e.g., `concept-001`, `concept-042`)
     - `title`: "Concept Name EN / Название RU"
     - `aliases`: Include both languages
     - `summary`: 1-2 sentence TL;DR
@@ -144,7 +144,7 @@ Use **English**, **kebab-case**, short, stable. Add Russian/English titles to `a
 
 1. **Use template**: `_templates/_tpl-moc.md`
 2. **Fill YAML**:
-    - `id`: `ivm-YYYYMMDD-HHmmss`
+    - `id`: `moc-<subject>` (e.g., `moc-algorithms`, `moc-android`)
     - `title`: "<Topic> — MOC"
     - `tags`: `[moc, topic/<topic-name>]`
 3. **Write content**:
@@ -322,7 +322,7 @@ SORT updated DESC
 4. Use `_templates/_tpl-qna.md` template
 5. Fill YAML:
     ```yaml
-    id: 20251003-143500
+    id: algo-001
     title: Two Sum / Два слагаемых
     aliases: [Two Sum, Два слагаемых]
     topic: algorithms

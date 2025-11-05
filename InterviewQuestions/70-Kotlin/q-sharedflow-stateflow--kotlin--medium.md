@@ -1,7 +1,7 @@
 ---
 id: kotlin-111
 title: "SharedFlow vs StateFlow / SharedFlow против StateFlow"
-aliases: []
+aliases: ["SharedFlow vs StateFlow, SharedFlow против StateFlow"]
 
 # Classification
 topic: kotlin
@@ -33,12 +33,223 @@ tags: [coroutines, difficulty/medium, flow, hot-flow, kotlin, sharedflow, state-
 date created: Saturday, November 1st 2025, 9:25:31 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> В чём разница между SharedFlow и StateFlow? Когда использовать каждый из них?
+
+---
 
 # Question (EN)
 > What's the difference between SharedFlow and StateFlow? When should you use each?
 
-# Вопрос (RU)
-> В чём разница между SharedFlow и StateFlow? Когда использовать каждый из них?
+## Ответ (RU)
+
+**SharedFlow** и **StateFlow** — горячие реализации Flow, предназначенные для разделения состояния и событий между несколькими коллекторами. Хотя оба являются горячими потоками, излучающими значения всем активным коллекторам, они служат разным целям и имеют разные характеристики.
+
+### Ключевые Различия
+
+| Аспект | StateFlow | SharedFlow |
+|--------|-----------|------------|
+| **Назначение** | Хранитель состояния | Вещатель событий |
+| **Начальное значение** | Обязательно | Опционально |
+| **Replay** | Всегда 1 | Настраиваемый (0+) |
+| **Conflation** | Всегда conflated | Настраиваемый |
+| **Различные значения** | Только различные | Все значения |
+| **Случай использования** | UI состояние, конфигурация | События, уведомления |
+
+### StateFlow: Хранитель Состояния
+
+StateFlow специально разработан для представления состояния, которое всегда имеет значение:
+
+```kotlin
+interface StateFlow<out T> : SharedFlow<T> {
+    val value: T  // Всегда имеет текущее значение
+}
+
+// Создание StateFlow
+val _state = MutableStateFlow<Int>(0)  // Начальное значение обязательно
+val state: StateFlow<Int> = _state.asStateFlow()
+
+// Чтение текущего значения
+println(_state.value)  // Прямой доступ
+
+// Обновление значения
+_state.value = 1
+_state.update { it + 1 }  // Атомарное обновление
+```
+
+**Характеристики StateFlow**:
+1. **Всегда имеет значение** - Необходимо предоставить начальное значение
+2. **Replay = 1** - Новые коллекторы сразу получают текущее значение
+3. **Conflated** - Важно только последнее значение
+4. **Только различные значения** - Не излучает если новое значение равно текущему
+5. **Никогда не завершается** - Остаётся активным пока scope не отменён
+
+### SharedFlow: Вещатель Событий
+
+SharedFlow — универсальный горячий поток для вещания значений:
+
+```kotlin
+// Создание SharedFlow
+val _events = MutableSharedFlow<Event>()  // Начальное значение не нужно
+val events: SharedFlow<Event> = _events.asSharedFlow()
+
+// Излучение значений
+_events.emit(Event.UserLoggedIn)
+_events.tryEmit(Event.DataLoaded)  // Не suspend
+
+// Настраиваемый SharedFlow
+val _results = MutableSharedFlow<Result>(
+    replay = 2,        // Кешировать последние 2 значения
+    extraBufferCapacity = 5,  // Дополнительный буфер
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+)
+```
+
+**Характеристики SharedFlow**:
+1. **Начальное значение не требуется** - Может быть пустым
+2. **Настраиваемый replay** - От 0 до безлимит
+3. **Без conflation по умолчанию** - Излучаются все значения
+4. **Излучает все значения** - Включая дубликаты
+5. **Может завершиться** - Через операторы flow
+
+### Реальный Пример: ViewModel
+
+```kotlin
+class UserViewModel : ViewModel() {
+    // StateFlow для состояния
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    // SharedFlow для событий
+    private val _events = MutableSharedFlow<Event>()
+    val events: SharedFlow<Event> = _events.asSharedFlow()
+
+    fun loadUser(id: Int) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+
+            try {
+                val user = repository.getUser(id)
+                _uiState.value = UiState.Success(user)
+                _events.emit(Event.ShowToast("Пользователь загружен"))
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message)
+                _events.emit(Event.ShowError(e.message))
+            }
+        }
+    }
+}
+```
+
+### Когда Использовать StateFlow
+
+#### Использовать StateFlow Для:
+
+```kotlin
+// 1. Состояние UI
+class ProductsViewModel : ViewModel() {
+    private val _products = MutableStateFlow<List<Product>>(emptyList())
+    val products: StateFlow<List<Product>> = _products.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+}
+
+// 2. Конфигурация
+class AppConfig {
+    private val _theme = MutableStateFlow(Theme.LIGHT)
+    val theme: StateFlow<Theme> = _theme.asStateFlow()
+}
+
+// 3. Пользовательская сессия
+class SessionManager {
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
+}
+```
+
+### Когда Использовать SharedFlow
+
+#### Использовать SharedFlow Для:
+
+```kotlin
+// 1. Одноразовые события
+class LoginViewModel : ViewModel() {
+    private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
+    val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
+
+    fun onLoginSuccess() {
+        viewModelScope.launch {
+            _navigationEvents.emit(NavigationEvent.NavigateToHome)
+        }
+    }
+}
+
+// 2. Уведомления
+class NotificationManager {
+    private val _notifications = MutableSharedFlow<Notification>(replay = 5)
+    val notifications: SharedFlow<Notification> = _notifications.asSharedFlow()
+
+    suspend fun notify(message: String) {
+        _notifications.emit(Notification(message, System.currentTimeMillis()))
+    }
+}
+
+// 3. Event Bus
+class EventBus {
+    private val _events = MutableSharedFlow<AppEvent>(
+        replay = 10,
+        extraBufferCapacity = 20,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val events: SharedFlow<AppEvent> = _events.asSharedFlow()
+
+    suspend fun post(event: AppEvent) {
+        _events.emit(event)
+    }
+}
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+```kotlin
+// Использовать StateFlow для состояния
+class GoodViewModel : ViewModel() {
+    private val _state = MutableStateFlow<UiState>(UiState.Initial)
+    val state: StateFlow<UiState> = _state.asStateFlow()
+}
+
+// Использовать SharedFlow для событий
+class GoodViewModel : ViewModel() {
+    private val _events = MutableSharedFlow<Event>()
+    val events: SharedFlow<Event> = _events.asSharedFlow()
+}
+
+// Выставлять read-only версии
+class GoodViewModel : ViewModel() {
+    private val _data = MutableStateFlow<Data?>(null)
+    val data: StateFlow<Data?> = _data.asStateFlow()  // Только для чтения
+}
+```
+
+#### НЕ ДЕЛАТЬ:
+```kotlin
+// Не выставлять изменяемые версии
+class BadViewModel : ViewModel() {
+    val state = MutableStateFlow<UiState>(UiState.Initial)  //  Плохо
+}
+
+// Не использовать SharedFlow для состояния
+class BadViewModel : ViewModel() {
+    private val _isLoading = MutableSharedFlow<Boolean>()  //  Использовать StateFlow
+}
+
+// Не использовать StateFlow для событий
+class BadViewModel : ViewModel() {
+    private val _events = MutableStateFlow<Event?>(null)  //  Использовать SharedFlow
+}
+```
 
 ---
 
@@ -618,217 +829,11 @@ repeat(1000) {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**SharedFlow** и **StateFlow** — горячие реализации Flow, предназначенные для разделения состояния и событий между несколькими коллекторами. Хотя оба являются горячими потоками, излучающими значения всем активным коллекторам, они служат разным целям и имеют разные характеристики.
-
-### Ключевые Различия
-
-| Аспект | StateFlow | SharedFlow |
-|--------|-----------|------------|
-| **Назначение** | Хранитель состояния | Вещатель событий |
-| **Начальное значение** | Обязательно | Опционально |
-| **Replay** | Всегда 1 | Настраиваемый (0+) |
-| **Conflation** | Всегда conflated | Настраиваемый |
-| **Различные значения** | Только различные | Все значения |
-| **Случай использования** | UI состояние, конфигурация | События, уведомления |
-
-### StateFlow: Хранитель Состояния
-
-StateFlow специально разработан для представления состояния, которое всегда имеет значение:
-
-```kotlin
-interface StateFlow<out T> : SharedFlow<T> {
-    val value: T  // Всегда имеет текущее значение
-}
-
-// Создание StateFlow
-val _state = MutableStateFlow<Int>(0)  // Начальное значение обязательно
-val state: StateFlow<Int> = _state.asStateFlow()
-
-// Чтение текущего значения
-println(_state.value)  // Прямой доступ
-
-// Обновление значения
-_state.value = 1
-_state.update { it + 1 }  // Атомарное обновление
-```
-
-**Характеристики StateFlow**:
-1. **Всегда имеет значение** - Необходимо предоставить начальное значение
-2. **Replay = 1** - Новые коллекторы сразу получают текущее значение
-3. **Conflated** - Важно только последнее значение
-4. **Только различные значения** - Не излучает если новое значение равно текущему
-5. **Никогда не завершается** - Остаётся активным пока scope не отменён
-
-### SharedFlow: Вещатель Событий
-
-SharedFlow — универсальный горячий поток для вещания значений:
-
-```kotlin
-// Создание SharedFlow
-val _events = MutableSharedFlow<Event>()  // Начальное значение не нужно
-val events: SharedFlow<Event> = _events.asSharedFlow()
-
-// Излучение значений
-_events.emit(Event.UserLoggedIn)
-_events.tryEmit(Event.DataLoaded)  // Не suspend
-
-// Настраиваемый SharedFlow
-val _results = MutableSharedFlow<Result>(
-    replay = 2,        // Кешировать последние 2 значения
-    extraBufferCapacity = 5,  // Дополнительный буфер
-    onBufferOverflow = BufferOverflow.DROP_OLDEST
-)
-```
-
-**Характеристики SharedFlow**:
-1. **Начальное значение не требуется** - Может быть пустым
-2. **Настраиваемый replay** - От 0 до безлимит
-3. **Без conflation по умолчанию** - Излучаются все значения
-4. **Излучает все значения** - Включая дубликаты
-5. **Может завершиться** - Через операторы flow
-
-### Реальный Пример: ViewModel
-
-```kotlin
-class UserViewModel : ViewModel() {
-    // StateFlow для состояния
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    // SharedFlow для событий
-    private val _events = MutableSharedFlow<Event>()
-    val events: SharedFlow<Event> = _events.asSharedFlow()
-
-    fun loadUser(id: Int) {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-
-            try {
-                val user = repository.getUser(id)
-                _uiState.value = UiState.Success(user)
-                _events.emit(Event.ShowToast("Пользователь загружен"))
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message)
-                _events.emit(Event.ShowError(e.message))
-            }
-        }
-    }
-}
-```
-
-### Когда Использовать StateFlow
-
-#### Использовать StateFlow Для:
-
-```kotlin
-// 1. Состояние UI
-class ProductsViewModel : ViewModel() {
-    private val _products = MutableStateFlow<List<Product>>(emptyList())
-    val products: StateFlow<List<Product>> = _products.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-}
-
-// 2. Конфигурация
-class AppConfig {
-    private val _theme = MutableStateFlow(Theme.LIGHT)
-    val theme: StateFlow<Theme> = _theme.asStateFlow()
-}
-
-// 3. Пользовательская сессия
-class SessionManager {
-    private val _currentUser = MutableStateFlow<User?>(null)
-    val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
-}
-```
-
-### Когда Использовать SharedFlow
-
-#### Использовать SharedFlow Для:
-
-```kotlin
-// 1. Одноразовые события
-class LoginViewModel : ViewModel() {
-    private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
-    val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
-
-    fun onLoginSuccess() {
-        viewModelScope.launch {
-            _navigationEvents.emit(NavigationEvent.NavigateToHome)
-        }
-    }
-}
-
-// 2. Уведомления
-class NotificationManager {
-    private val _notifications = MutableSharedFlow<Notification>(replay = 5)
-    val notifications: SharedFlow<Notification> = _notifications.asSharedFlow()
-
-    suspend fun notify(message: String) {
-        _notifications.emit(Notification(message, System.currentTimeMillis()))
-    }
-}
-
-// 3. Event Bus
-class EventBus {
-    private val _events = MutableSharedFlow<AppEvent>(
-        replay = 10,
-        extraBufferCapacity = 20,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val events: SharedFlow<AppEvent> = _events.asSharedFlow()
-
-    suspend fun post(event: AppEvent) {
-        _events.emit(event)
-    }
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-```kotlin
-// Использовать StateFlow для состояния
-class GoodViewModel : ViewModel() {
-    private val _state = MutableStateFlow<UiState>(UiState.Initial)
-    val state: StateFlow<UiState> = _state.asStateFlow()
-}
-
-// Использовать SharedFlow для событий
-class GoodViewModel : ViewModel() {
-    private val _events = MutableSharedFlow<Event>()
-    val events: SharedFlow<Event> = _events.asSharedFlow()
-}
-
-// Выставлять read-only версии
-class GoodViewModel : ViewModel() {
-    private val _data = MutableStateFlow<Data?>(null)
-    val data: StateFlow<Data?> = _data.asStateFlow()  // Только для чтения
-}
-```
-
-#### НЕ ДЕЛАТЬ:
-```kotlin
-// Не выставлять изменяемые версии
-class BadViewModel : ViewModel() {
-    val state = MutableStateFlow<UiState>(UiState.Initial)  //  Плохо
-}
-
-// Не использовать SharedFlow для состояния
-class BadViewModel : ViewModel() {
-    private val _isLoading = MutableSharedFlow<Boolean>()  //  Использовать StateFlow
-}
-
-// Не использовать StateFlow для событий
-class BadViewModel : ViewModel() {
-    private val _events = MutableStateFlow<Event?>(null)  //  Использовать SharedFlow
-}
-```
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

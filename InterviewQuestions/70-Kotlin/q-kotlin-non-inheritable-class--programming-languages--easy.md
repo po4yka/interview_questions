@@ -17,16 +17,19 @@ tags: [class-design, classes, difficulty/easy, final, inheritance, keywords, ope
 date created: Friday, October 31st 2025, 6:30:56 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Как В Kotlin Определить Класс, Который Не Может Быть Унаследован?
-
-# Question (EN)
-> How to define a class in Kotlin that cannot be inherited?
 
 # Вопрос (RU)
 > Как в Kotlin определить класс, который не может быть унаследован?
 
 ---
+
+# Question (EN)
+> How to define a class in Kotlin that cannot be inherited?
+
+## Ответ (RU)
+
+В Kotlin для определения класса, который не может быть унаследован, используется ключевое слово 'final'. По умолчанию все классы в Kotlin являются финальными и не могут быть унаследованы без явного указания 'open'. Таким образом, чтобы определить класс который не может быть унаследован достаточно просто объявить его без ключевого слова 'open'.
 
 ## Answer (EN)
 
@@ -99,9 +102,15 @@ class MoreDerived : Derived() {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-В Kotlin для определения класса, который не может быть унаследован, используется ключевое слово 'final'. По умолчанию все классы в Kotlin являются финальными и не могут быть унаследованы без явного указания 'open'. Таким образом, чтобы определить класс который не может быть унаследован достаточно просто объявить его без ключевого слова 'open'.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

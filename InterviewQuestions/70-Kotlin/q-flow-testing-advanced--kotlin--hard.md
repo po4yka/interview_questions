@@ -1,11 +1,11 @@
 ---
 id: kotlin-056
 title: "Advanced Flow Testing / Продвинутое тестирование Flow"
-aliases: []
+aliases: ["Advanced Flow Testing, Продвинутое тестирование Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [async, coroutines, flow, testing, testscope]
+subtopics: [async, coroutines, flow]
 question_kind: theory
 difficulty: hard
 
@@ -28,12 +28,150 @@ tags: [async, difficulty/hard, flow, kotlin, testing, testscope]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Протестируйте сложные цепочки Flow с задержками, ошибками и множественными испусканиями. Используйте TestScope, TestDispatcher и виртуальное время для детерминистического тестирования.
+
+---
 
 # Question (EN)
 > Test complex Flow chains with delays, errors, and multiple emissions. Use TestScope, TestDispatcher, and virtual time for deterministic testing.
 
-# Вопрос (RU)
-> Протестируйте сложные цепочки Flow с задержками, ошибками и множественными испусканиями. Используйте TestScope, TestDispatcher и виртуальное время для детерминистического тестирования.
+## Ответ (RU)
+
+Тестирование Flow требует специальных инструментов для обработки асинхронного поведения детерминистично.
+
+### TestScope И TestDispatcher
+
+```kotlin
+@Test
+fun `test flow with delays`() = runTest {
+    val flow = flow {
+        emit(1)
+        delay(1000) // Виртуальная задержка
+        emit(2)
+    }
+
+    flow.test {
+        assertEquals(1, awaitItem())
+        advanceTimeBy(1000) // Продвинуть виртуальное время
+        assertEquals(2, awaitItem())
+        awaitComplete()
+    }
+    // Тест завершается мгновенно несмотря на задержки!
+}
+```
+
+### Тестирование С Turbine
+
+```kotlin
+@Test
+fun `test flow emissions`() = runTest {
+    val flow = flowOf(1, 2, 3)
+
+    flow.test {
+        assertEquals(1, awaitItem())
+        assertEquals(2, awaitItem())
+        assertEquals(3, awaitItem())
+        awaitComplete()
+    }
+}
+```
+
+### Тестирование Обработки Ошибок
+
+```kotlin
+@Test
+fun `test flow error handling`() = runTest {
+    val flow = flow {
+        emit(1)
+        throw IOException("Error")
+    }
+    .catch { emit(-1) }
+
+    flow.test {
+        assertEquals(1, awaitItem())
+        assertEquals(-1, awaitItem())
+        awaitComplete()
+    }
+}
+```
+
+### Тестирование StateFlow
+
+```kotlin
+@Test
+fun `test stateflow updates`() = runTest {
+    val viewModel = CounterViewModel()
+
+    viewModel.count.test {
+        assertEquals(0, awaitItem()) // Начальное значение
+
+        viewModel.increment()
+        assertEquals(1, awaitItem())
+
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+```
+
+### Тестирование Сложных Сценариев
+
+```kotlin
+@Test
+fun `test search debouncing`() = runTest {
+    val viewModel = SearchViewModel(mockRepo)
+
+    viewModel.searchResults.test {
+        awaitItem() // Начальное
+
+        viewModel.onSearchQueryChanged("kotlin")
+        advanceTimeBy(300) // Пройти debounce
+        advanceTimeBy(100) // Задержка репозитория
+
+        val results = awaitItem()
+        assertEquals("kotlin", results[0].query)
+
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+```
+
+### Лучшие Практики
+
+1. **Используйте runTest**:
+   ```kotlin
+   @Test
+   fun myTest() = runTest {
+       // Виртуальное время доступно
+   }
+   ```
+
+2. **Используйте Turbine для чистых тестов**:
+   ```kotlin
+   flow.test {
+       assertEquals(1, awaitItem())
+       awaitComplete()
+   }
+   ```
+
+3. **Тестируйте все испускания**:
+   ```kotlin
+   flow.test {
+       assertEquals(1, awaitItem())
+       awaitComplete() // Убедиться что завершен
+   }
+   ```
+
+4. **Используйте виртуальное время**:
+   ```kotlin
+   @Test
+   fun test() = runTest {
+       delay(1000) // Мгновенно!
+       advanceTimeBy(1000)
+   }
+   ```
+
+**Краткое содержание**: Тестирование Flow использует TestScope и TestDispatcher для контроля виртуального времени, делая тесты детерминистическими и быстрыми. Библиотека Turbine предоставляет чистый API. Тестируйте все аспекты: испускания, ошибки, завершение, задержки, противодавление, отмену. Используйте runTest для автоматического TestScope, advanceTimeBy для контроля времени, всегда проверяйте завершение с awaitComplete().
 
 ---
 
@@ -567,144 +705,11 @@ fun `test conflate drops intermediate values`() = runTest {
 
 **English Summary**: Flow testing uses TestScope and TestDispatcher for virtual time control, making tests deterministic and fast. Turbine library provides clean API for testing emissions. Test all aspects: emissions, errors, completion, delays, backpressure, and cancellation. Use runTest for automatic TestScope, advanceTimeBy/advanceUntilIdle for time control, and always verify flow completion with awaitComplete().
 
-## Ответ (RU)
+## Follow-ups
 
-Тестирование Flow требует специальных инструментов для обработки асинхронного поведения детерминистично.
-
-### TestScope И TestDispatcher
-
-```kotlin
-@Test
-fun `test flow with delays`() = runTest {
-    val flow = flow {
-        emit(1)
-        delay(1000) // Виртуальная задержка
-        emit(2)
-    }
-
-    flow.test {
-        assertEquals(1, awaitItem())
-        advanceTimeBy(1000) // Продвинуть виртуальное время
-        assertEquals(2, awaitItem())
-        awaitComplete()
-    }
-    // Тест завершается мгновенно несмотря на задержки!
-}
-```
-
-### Тестирование С Turbine
-
-```kotlin
-@Test
-fun `test flow emissions`() = runTest {
-    val flow = flowOf(1, 2, 3)
-
-    flow.test {
-        assertEquals(1, awaitItem())
-        assertEquals(2, awaitItem())
-        assertEquals(3, awaitItem())
-        awaitComplete()
-    }
-}
-```
-
-### Тестирование Обработки Ошибок
-
-```kotlin
-@Test
-fun `test flow error handling`() = runTest {
-    val flow = flow {
-        emit(1)
-        throw IOException("Error")
-    }
-    .catch { emit(-1) }
-
-    flow.test {
-        assertEquals(1, awaitItem())
-        assertEquals(-1, awaitItem())
-        awaitComplete()
-    }
-}
-```
-
-### Тестирование StateFlow
-
-```kotlin
-@Test
-fun `test stateflow updates`() = runTest {
-    val viewModel = CounterViewModel()
-
-    viewModel.count.test {
-        assertEquals(0, awaitItem()) // Начальное значение
-
-        viewModel.increment()
-        assertEquals(1, awaitItem())
-
-        cancelAndIgnoreRemainingEvents()
-    }
-}
-```
-
-### Тестирование Сложных Сценариев
-
-```kotlin
-@Test
-fun `test search debouncing`() = runTest {
-    val viewModel = SearchViewModel(mockRepo)
-
-    viewModel.searchResults.test {
-        awaitItem() // Начальное
-
-        viewModel.onSearchQueryChanged("kotlin")
-        advanceTimeBy(300) // Пройти debounce
-        advanceTimeBy(100) // Задержка репозитория
-
-        val results = awaitItem()
-        assertEquals("kotlin", results[0].query)
-
-        cancelAndIgnoreRemainingEvents()
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте runTest**:
-   ```kotlin
-   @Test
-   fun myTest() = runTest {
-       // Виртуальное время доступно
-   }
-   ```
-
-2. **Используйте Turbine для чистых тестов**:
-   ```kotlin
-   flow.test {
-       assertEquals(1, awaitItem())
-       awaitComplete()
-   }
-   ```
-
-3. **Тестируйте все испускания**:
-   ```kotlin
-   flow.test {
-       assertEquals(1, awaitItem())
-       awaitComplete() // Убедиться что завершен
-   }
-   ```
-
-4. **Используйте виртуальное время**:
-   ```kotlin
-   @Test
-   fun test() = runTest {
-       delay(1000) // Мгновенно!
-       advanceTimeBy(1000)
-   }
-   ```
-
-**Краткое содержание**: Тестирование Flow использует TestScope и TestDispatcher для контроля виртуального времени, делая тесты детерминистическими и быстрыми. Библиотека Turbine предоставляет чистый API. Тестируйте все аспекты: испускания, ошибки, завершение, задержки, противодавление, отмену. Используйте runTest для автоматического TestScope, advanceTimeBy для контроля времени, всегда проверяйте завершение с awaitComplete().
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Testing Kotlin coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)

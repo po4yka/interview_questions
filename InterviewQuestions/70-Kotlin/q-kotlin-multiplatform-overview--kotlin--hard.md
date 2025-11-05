@@ -1,11 +1,11 @@
 ---
 id: kotlin-040
 title: "Kotlin Multiplatform - How does it work? / Kotlin Multiplatform - Как это работает?"
-aliases: []
+aliases: ["Kotlin Multiplatform - How does it work?, Kotlin Multiplatform - Как это работает?"]
 
 # Classification
 topic: kotlin
-subtopics: [cross-platform, kmp, kotlin-multiplatform, native]
+subtopics: [cross-platform, kmp, kotlin-multiplatform]
 question_kind: theory
 difficulty: hard
 
@@ -28,11 +28,233 @@ tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, nativ
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Kotlin Multiplatform - Как это работает?
+
+---
 
 # Question (EN)
 > Kotlin Multiplatform - How does it work?
-# Вопрос (RU)
-> Kotlin Multiplatform - Как это работает?
+## Ответ (RU)
+
+**Kotlin Multiplatform (KMP)** — это технология, позволяющая использовать общий код на разных платформах (Android, iOS, web, desktop, backend), сохраняя возможность доступа к платформо-специфичным API.
+
+### Основная Концепция
+
+KMP использует **механизм "expect/actual"** для определения платформо-агностического кода в общих модулях и платформо-специфичных реализаций.
+
+### Архитектура Слоев
+
+**1. Общий код (shared code)**
+
+```kotlin
+// commonMain/kotlin/data/UserRepository.kt
+class UserRepository(
+    private val api: ApiClient,
+    private val database: Database
+) {
+    suspend fun getUser(id: String): Result<User> {
+        return try {
+            val user = api.fetchUser(id)
+            database.saveUser(user)
+            Result.success(user)
+        } catch (e: Exception) {
+            database.getUser(id)?.let {
+                Result.success(it)
+            } ?: Result.failure(e)
+        }
+    }
+}
+```
+
+**2. Платформо-специфичный код**
+
+```kotlin
+// expect/actual для платформенных API
+// commonMain
+expect class DatabaseDriver {
+    fun createDatabase(): SqlDriver
+}
+
+// androidMain
+actual class DatabaseDriver {
+    actual fun createDatabase(): SqlDriver {
+        return AndroidSqliteDriver(
+            schema = Database.Schema,
+            context = ApplicationContext,
+            name = "app.db"
+        )
+    }
+}
+
+// iosMain
+actual class DatabaseDriver {
+    actual fun createDatabase(): SqlDriver {
+        return NativeSqliteDriver(
+            schema = Database.Schema,
+            name = "app.db"
+        )
+    }
+}
+```
+
+### Как Это Работает Внутри
+
+**Процесс компиляции:**
+
+```
+Общий код (Kotlin)
+        ↓
+   Компилятор
+        ↓
+Kotlin IR (Промежуточное представление)
+        ↓
+
+
+Android Backend        iOS/Native Backend
+(JVM bytecode)         (LLVM IR → native)
+
+        ↓                       ↓
+    .dex/.jar              .framework/.klib
+```
+
+### Ключевые Технологии
+
+**Популярные KMP библиотеки:**
+- **Ktor** - Сеть (HTTP клиент)
+- **SQLDelight** - База данных
+- **Kotlinx.serialization** - Парсинг JSON
+- **Kotlinx.coroutines** - Асинхронные операции
+- **Kotlinx.datetime** - Работа с датой/временем
+
+### Конфигурация Gradle
+
+```kotlin
+// shared/build.gradle.kts
+kotlin {
+    androidTarget()
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+                implementation("io.ktor:ktor-client-core:2.3.5")
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-android:2.3.5")
+            }
+        }
+
+        val iosMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-darwin:2.3.5")
+            }
+        }
+    }
+}
+```
+
+### Стратегии Использования
+
+**Делиться всем (кроме UI):**
+
+```
+
+   Платформенный UI            ← Android: Jetpack Compose
+   (Android/iOS)               ← iOS: SwiftUI
+
+   Общий Presentation          ← ViewModels, States
+
+   Общая бизнес-логика         ← Use Cases, Repositories
+
+   Общий Data Layer            ← Network, Database, Models
+
+```
+
+### Интеграция С iOS
+
+**Генерация iOS Framework:**
+
+```bash
+./gradlew :shared:assembleXCFramework
+```
+
+**Использование в Swift:**
+
+```swift
+import shared
+
+class ViewController: UIViewController {
+    private let viewModel = LoginViewModel()
+
+    func login() {
+        viewModel.login(
+            username: "user@example.com",
+            password: "password"
+        ) { result, error in
+            if let result = result {
+                // Обработка успеха
+            }
+        }
+    }
+}
+```
+
+### Модель Потоков
+
+**Корутины работают по-разному на iOS:**
+
+```kotlin
+// Общий код
+class DataRepository {
+    suspend fun fetchData(): Data {
+        return withContext(Dispatchers.IO) {
+            api.getData()
+        }
+    }
+}
+
+// iOS: Suspend функции экспонируются как async callbacks
+// Swift:
+repository.fetchData { data, error in
+    // Обработка результата
+}
+
+// Или с async/await (Swift 5.5+):
+let data = try await repository.fetchData()
+```
+
+### Преимущества
+
+1. **Переиспользование кода**: Разделяйте 60-90% кода
+2. **Типобезопасность**: Проверка на этапе компиляции
+3. **Производительность**: Нативная производительность на всех платформах
+4. **Постепенное внедрение**: Можно внедрять инкрементально
+5. **Экосистема Kotlin**: Используйте библиотеки Kotlin везде
+
+### Ограничения
+
+1. **Размер iOS Framework**: Может быть больше нативного
+2. **Кривая обучения**: Нужно понимать обе платформы
+3. **Отладка**: Более сложная кросс-платформенная отладка
+4. **Поддержка библиотек**: Не все библиотеки поддерживают KMP
+5. **Разделение UI**: Всё ещё нужен платформо-специфичный UI
+
+**Краткое содержание**: Kotlin Multiplatform позволяет разделять код между платформами используя механизм expect/actual. Общий код компилируется в платформо-специфичные таргеты (JVM для Android, Native для iOS). Делитесь бизнес-логикой, data layer, моделями, сохраняя UI платформо-специфичным. Использует Kotlin/Native для iOS, Kotlin/JVM для Android. Популярные библиотеки: Ktor, SQLDelight, kotlinx.serialization. Переиспользование кода: 60-90%. Поддерживает постепенное внедрение и нативную производительность.
 
 ---
 
@@ -508,228 +730,11 @@ actual class TokenStorage {
 
 **English Summary**: Kotlin Multiplatform enables code sharing across platforms using expect/actual mechanism. Common code compiles to platform-specific targets (JVM for Android, Native for iOS). Share business logic, data layer, models while keeping UI platform-specific. Uses Kotlin/Native for iOS (generates frameworks), Kotlin/JVM for Android. Popular libraries: Ktor, SQLDelight, kotlinx.serialization. Code reuse: 60-90%. Supports gradual adoption and maintains native performance.
 
-## Ответ (RU)
+## Follow-ups
 
-**Kotlin Multiplatform (KMP)** — это технология, позволяющая использовать общий код на разных платформах (Android, iOS, web, desktop, backend), сохраняя возможность доступа к платформо-специфичным API.
-
-### Основная Концепция
-
-KMP использует **механизм "expect/actual"** для определения платформо-агностического кода в общих модулях и платформо-специфичных реализаций.
-
-### Архитектура Слоев
-
-**1. Общий код (shared code)**
-
-```kotlin
-// commonMain/kotlin/data/UserRepository.kt
-class UserRepository(
-    private val api: ApiClient,
-    private val database: Database
-) {
-    suspend fun getUser(id: String): Result<User> {
-        return try {
-            val user = api.fetchUser(id)
-            database.saveUser(user)
-            Result.success(user)
-        } catch (e: Exception) {
-            database.getUser(id)?.let {
-                Result.success(it)
-            } ?: Result.failure(e)
-        }
-    }
-}
-```
-
-**2. Платформо-специфичный код**
-
-```kotlin
-// expect/actual для платформенных API
-// commonMain
-expect class DatabaseDriver {
-    fun createDatabase(): SqlDriver
-}
-
-// androidMain
-actual class DatabaseDriver {
-    actual fun createDatabase(): SqlDriver {
-        return AndroidSqliteDriver(
-            schema = Database.Schema,
-            context = ApplicationContext,
-            name = "app.db"
-        )
-    }
-}
-
-// iosMain
-actual class DatabaseDriver {
-    actual fun createDatabase(): SqlDriver {
-        return NativeSqliteDriver(
-            schema = Database.Schema,
-            name = "app.db"
-        )
-    }
-}
-```
-
-### Как Это Работает Внутри
-
-**Процесс компиляции:**
-
-```
-Общий код (Kotlin)
-        ↓
-   Компилятор
-        ↓
-Kotlin IR (Промежуточное представление)
-        ↓
-
-
-Android Backend        iOS/Native Backend
-(JVM bytecode)         (LLVM IR → native)
-
-        ↓                       ↓
-    .dex/.jar              .framework/.klib
-```
-
-### Ключевые Технологии
-
-**Популярные KMP библиотеки:**
-- **Ktor** - Сеть (HTTP клиент)
-- **SQLDelight** - База данных
-- **Kotlinx.serialization** - Парсинг JSON
-- **Kotlinx.coroutines** - Асинхронные операции
-- **Kotlinx.datetime** - Работа с датой/временем
-
-### Конфигурация Gradle
-
-```kotlin
-// shared/build.gradle.kts
-kotlin {
-    androidTarget()
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
-
-    sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-                implementation("io.ktor:ktor-client-core:2.3.5")
-            }
-        }
-
-        val androidMain by getting {
-            dependencies {
-                implementation("io.ktor:ktor-client-android:2.3.5")
-            }
-        }
-
-        val iosMain by getting {
-            dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.5")
-            }
-        }
-    }
-}
-```
-
-### Стратегии Использования
-
-**Делиться всем (кроме UI):**
-
-```
-
-   Платформенный UI            ← Android: Jetpack Compose
-   (Android/iOS)               ← iOS: SwiftUI
-
-   Общий Presentation          ← ViewModels, States
-
-   Общая бизнес-логика         ← Use Cases, Repositories
-
-   Общий Data Layer            ← Network, Database, Models
-
-```
-
-### Интеграция С iOS
-
-**Генерация iOS Framework:**
-
-```bash
-./gradlew :shared:assembleXCFramework
-```
-
-**Использование в Swift:**
-
-```swift
-import shared
-
-class ViewController: UIViewController {
-    private let viewModel = LoginViewModel()
-
-    func login() {
-        viewModel.login(
-            username: "user@example.com",
-            password: "password"
-        ) { result, error in
-            if let result = result {
-                // Обработка успеха
-            }
-        }
-    }
-}
-```
-
-### Модель Потоков
-
-**Корутины работают по-разному на iOS:**
-
-```kotlin
-// Общий код
-class DataRepository {
-    suspend fun fetchData(): Data {
-        return withContext(Dispatchers.IO) {
-            api.getData()
-        }
-    }
-}
-
-// iOS: Suspend функции экспонируются как async callbacks
-// Swift:
-repository.fetchData { data, error in
-    // Обработка результата
-}
-
-// Или с async/await (Swift 5.5+):
-let data = try await repository.fetchData()
-```
-
-### Преимущества
-
-1. **Переиспользование кода**: Разделяйте 60-90% кода
-2. **Типобезопасность**: Проверка на этапе компиляции
-3. **Производительность**: Нативная производительность на всех платформах
-4. **Постепенное внедрение**: Можно внедрять инкрементально
-5. **Экосистема Kotlin**: Используйте библиотеки Kotlin везде
-
-### Ограничения
-
-1. **Размер iOS Framework**: Может быть больше нативного
-2. **Кривая обучения**: Нужно понимать обе платформы
-3. **Отладка**: Более сложная кросс-платформенная отладка
-4. **Поддержка библиотек**: Не все библиотеки поддерживают KMP
-5. **Разделение UI**: Всё ещё нужен платформо-специфичный UI
-
-**Краткое содержание**: Kotlin Multiplatform позволяет разделять код между платформами используя механизм expect/actual. Общий код компилируется в платформо-специфичные таргеты (JVM для Android, Native для iOS). Делитесь бизнес-логикой, data layer, моделями, сохраняя UI платформо-специфичным. Использует Kotlin/Native для iOS, Kotlin/JVM для Android. Популярные библиотеки: Ktor, SQLDelight, kotlinx.serialization. Переиспользование кода: 60-90%. Поддерживает постепенное внедрение и нативную производительность.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Kotlin Multiplatform Documentation](https://kotlinlang.org/docs/multiplatform.html)

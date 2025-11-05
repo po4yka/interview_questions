@@ -1,11 +1,11 @@
 ---
 id: kotlin-055
 title: "Flow Backpressure Strategies / Стратегии противодавления Flow"
-aliases: []
+aliases: ["Flow Backpressure Strategies, Стратегии противодавления Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [backpressure, buffer, flow, operators, performance]
+subtopics: [backpressure, buffer, flow]
 question_kind: theory
 difficulty: hard
 
@@ -28,12 +28,178 @@ tags: [backpressure, buffer, difficulty/hard, flow, kotlin, performance]
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Реализуйте обработку противодавления в Flow. Сравните стратегии buffer, conflate и collectLatest с производительными бенчмарками.
+
+---
 
 # Question (EN)
 > Implement backpressure handling in Flow. Compare buffer, conflate, and collectLatest strategies with performance benchmarks.
 
-# Вопрос (RU)
-> Реализуйте обработку противодавления в Flow. Сравните стратегии buffer, conflate и collectLatest с производительными бенчмарками.
+## Ответ (RU)
+
+Противодавление возникает когда producer испускает значения быстрее чем consumer может их обработать. Flow предоставляет несколько стратегий для обработки этого.
+
+### Стратегия 1: buffer() - Буферизованная Обработка
+
+```kotlin
+// Без буфера - последовательно
+flow {
+    repeat(3) {
+        delay(100)
+        emit(it)
+    }
+}.collect {
+    delay(300)
+    println(it)
+}
+// Всего: 3 * (100 + 300) = 1200мс
+
+// С буфером - конкурентно
+flow {
+    repeat(3) {
+        delay(100)
+        emit(it)
+    }
+}
+.buffer()
+.collect {
+    delay(300)
+    println(it)
+}
+// Всего: ~900мс (на 25% быстрее!)
+```
+
+### Стратегия 2: conflate() - Только Последнее
+
+```kotlin
+flow {
+    repeat(10) {
+        emit(it)
+        delay(100)
+    }
+}
+.conflate() // Сохранить только последнее
+.collect { value ->
+    delay(500) // Медленный consumer
+    println("Collected $value")
+}
+// Вывод: 0, 4, 8 (промежуточные пропущены!)
+```
+
+### Стратегия 3: collectLatest() - Отмена Предыдущей Коллекции
+
+```kotlin
+flow {
+    repeat(5) {
+        emit(it)
+        delay(200)
+    }
+}
+.collectLatest { value ->
+    println("Collecting $value")
+    delay(500)
+    println("Completed $value")
+}
+// Только последнее значение завершается!
+```
+
+### Таблица Сравнения
+
+| Стратегия | Конкурентность | Потерянные значения | Применение | Производительность |
+|-----------|----------------|---------------------|------------|-------------------|
+| **Без стратегии** | Нет | Нет | Все значения важны | Медленно |
+| **buffer()** | Да | Нет | Обработать все, параллельно | Быстро |
+| **conflate()** | Да | Промежуточные | Важно только последнее | Очень быстро |
+| **collectLatest()** | Да | Все кроме последнего | Отменить устаревшую работу | Быстрейшее |
+
+### Реальные Примеры
+
+#### Поиск С collectLatest
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    val searchResults = _searchQuery
+        .debounce(300)
+        .collectLatest { query ->
+            // Отменить предыдущий поиск если новый запрос
+            val results = searchRepository.search(query)
+            emit(results)
+        }
+}
+```
+
+#### Данные Датчика С Conflate
+
+```kotlin
+fun temperatureUpdates(): Flow<Temperature> = flow {
+    while (true) {
+        emit(readSensor())
+        delay(100)
+    }
+}
+.conflate() // UI нужна только последняя температура
+```
+
+#### Обработка Файла С Buffer
+
+```kotlin
+suspend fun processLargeFile(file: File) {
+    file.readLines().asFlow()
+        .buffer(capacity = 1000) // Буфер 1000 строк
+        .map { line -> parseLine(line) }
+        .filter { it.isValid }
+        .collect { process(it) }
+}
+```
+
+### Лучшие Практики
+
+1. **Выбирайте стратегию на основе требований**:
+   ```kotlin
+   // Все значения важны → buffer()
+   dataStream().buffer(100).collect { processAll(it) }
+
+   // Важно только последнее → conflate()
+   stateUpdates().conflate().collect { updateUI(it) }
+
+   // Отменить устаревшую работу → collectLatest()
+   searchQuery().collectLatest { search(it) }
+   ```
+
+2. **Настройте размер буфера правильно**:
+   ```kotlin
+   //  Слишком мал
+   .buffer(1)
+
+   //  Слишком велик
+   .buffer(100000)
+
+   //  Разумный размер
+   .buffer(100)
+   ```
+
+### Распространенные Ошибки
+
+1. **Использование conflate когда нужны все значения**:
+   ```kotlin
+   //  Банковские транзакции - нельзя пропускать!
+   transactions().conflate().collect { process(it) }
+
+   //  Используйте buffer
+   transactions().buffer(100).collect { process(it) }
+   ```
+
+2. **collectLatest с важными побочными эффектами**:
+   ```kotlin
+   //  Сохранения в файл могут быть отменены
+   updates().collectLatest { saveToFile(it) }
+
+   //  Используйте обычный collect
+   updates().collect { saveToFile(it) }
+   ```
+
+**Краткое содержание**: Обработка противодавления в Flow использует buffer() для конкурентной обработки без потери значений, conflate() для сохранения только последнего значения, collectLatest() для отмены предыдущей коллекции при новых значениях. buffer() лучше для обработки всех значений параллельно, conflate() для обновлений состояния где важно только последнее, collectLatest() для отмены устаревшей работы как поиски. Выбирайте на основе того могут ли значения быть отброшены и должна ли предыдущая работа быть отменена.
 
 ---
 
@@ -563,172 +729,11 @@ highFrequencyData()
 
 **English Summary**: Backpressure handling in Flow uses buffer() for concurrent processing without losing values, conflate() to keep only the latest value, and collectLatest() to cancel previous collection on new values. buffer() is best for processing all values in parallel, conflate() for state updates where only latest matters, collectLatest() for cancelling outdated work like searches. Choose based on whether values can be dropped and if previous work should be cancelled. Monitor performance and configure buffer sizes appropriately.
 
-## Ответ (RU)
+## Follow-ups
 
-Противодавление возникает когда producer испускает значения быстрее чем consumer может их обработать. Flow предоставляет несколько стратегий для обработки этого.
-
-### Стратегия 1: buffer() - Буферизованная Обработка
-
-```kotlin
-// Без буфера - последовательно
-flow {
-    repeat(3) {
-        delay(100)
-        emit(it)
-    }
-}.collect {
-    delay(300)
-    println(it)
-}
-// Всего: 3 * (100 + 300) = 1200мс
-
-// С буфером - конкурентно
-flow {
-    repeat(3) {
-        delay(100)
-        emit(it)
-    }
-}
-.buffer()
-.collect {
-    delay(300)
-    println(it)
-}
-// Всего: ~900мс (на 25% быстрее!)
-```
-
-### Стратегия 2: conflate() - Только Последнее
-
-```kotlin
-flow {
-    repeat(10) {
-        emit(it)
-        delay(100)
-    }
-}
-.conflate() // Сохранить только последнее
-.collect { value ->
-    delay(500) // Медленный consumer
-    println("Collected $value")
-}
-// Вывод: 0, 4, 8 (промежуточные пропущены!)
-```
-
-### Стратегия 3: collectLatest() - Отмена Предыдущей Коллекции
-
-```kotlin
-flow {
-    repeat(5) {
-        emit(it)
-        delay(200)
-    }
-}
-.collectLatest { value ->
-    println("Collecting $value")
-    delay(500)
-    println("Completed $value")
-}
-// Только последнее значение завершается!
-```
-
-### Таблица Сравнения
-
-| Стратегия | Конкурентность | Потерянные значения | Применение | Производительность |
-|-----------|----------------|---------------------|------------|-------------------|
-| **Без стратегии** | Нет | Нет | Все значения важны | Медленно |
-| **buffer()** | Да | Нет | Обработать все, параллельно | Быстро |
-| **conflate()** | Да | Промежуточные | Важно только последнее | Очень быстро |
-| **collectLatest()** | Да | Все кроме последнего | Отменить устаревшую работу | Быстрейшее |
-
-### Реальные Примеры
-
-#### Поиск С collectLatest
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    val searchResults = _searchQuery
-        .debounce(300)
-        .collectLatest { query ->
-            // Отменить предыдущий поиск если новый запрос
-            val results = searchRepository.search(query)
-            emit(results)
-        }
-}
-```
-
-#### Данные Датчика С Conflate
-
-```kotlin
-fun temperatureUpdates(): Flow<Temperature> = flow {
-    while (true) {
-        emit(readSensor())
-        delay(100)
-    }
-}
-.conflate() // UI нужна только последняя температура
-```
-
-#### Обработка Файла С Buffer
-
-```kotlin
-suspend fun processLargeFile(file: File) {
-    file.readLines().asFlow()
-        .buffer(capacity = 1000) // Буфер 1000 строк
-        .map { line -> parseLine(line) }
-        .filter { it.isValid }
-        .collect { process(it) }
-}
-```
-
-### Лучшие Практики
-
-1. **Выбирайте стратегию на основе требований**:
-   ```kotlin
-   // Все значения важны → buffer()
-   dataStream().buffer(100).collect { processAll(it) }
-
-   // Важно только последнее → conflate()
-   stateUpdates().conflate().collect { updateUI(it) }
-
-   // Отменить устаревшую работу → collectLatest()
-   searchQuery().collectLatest { search(it) }
-   ```
-
-2. **Настройте размер буфера правильно**:
-   ```kotlin
-   //  Слишком мал
-   .buffer(1)
-
-   //  Слишком велик
-   .buffer(100000)
-
-   //  Разумный размер
-   .buffer(100)
-   ```
-
-### Распространенные Ошибки
-
-1. **Использование conflate когда нужны все значения**:
-   ```kotlin
-   //  Банковские транзакции - нельзя пропускать!
-   transactions().conflate().collect { process(it) }
-
-   //  Используйте buffer
-   transactions().buffer(100).collect { process(it) }
-   ```
-
-2. **collectLatest с важными побочными эффектами**:
-   ```kotlin
-   //  Сохранения в файл могут быть отменены
-   updates().collectLatest { saveToFile(it) }
-
-   //  Используйте обычный collect
-   updates().collect { saveToFile(it) }
-   ```
-
-**Краткое содержание**: Обработка противодавления в Flow использует buffer() для конкурентной обработки без потери значений, conflate() для сохранения только последнего значения, collectLatest() для отмены предыдущей коллекции при новых значениях. buffer() лучше для обработки всех значений параллельно, conflate() для обновлений состояния где важно только последнее, collectLatest() для отмены устаревшей работы как поиски. Выбирайте на основе того могут ли значения быть отброшены и должна ли предыдущая работа быть отменена.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Flow backpressure - Kotlin](https://kotlinlang.org/docs/flow.html#buffering)

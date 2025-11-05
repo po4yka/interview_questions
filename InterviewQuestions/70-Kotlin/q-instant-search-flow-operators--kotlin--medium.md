@@ -1,11 +1,11 @@
 ---
 id: kotlin-036
 title: "How to implement instant search using Flow operators? / Как реализовать мгновенный поиск с помощью Flow операторов?"
-aliases: []
+aliases: ["How to implement instant search using Flow operators?, Как реализовать мгновенный поиск с помощью Flow операторов?"]
 
 # Classification
 topic: kotlin
-subtopics: [debounce, distinctuntilchanged, flow, operators, search]
+subtopics: [debounce, distinctuntilchanged, flow]
 question_kind: coding
 difficulty: medium
 
@@ -28,11 +28,85 @@ tags: [debounce, difficulty/medium, flow, kotlin, operators, performance, search
 date created: Saturday, November 1st 2025, 9:25:30 am
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin Flow?
+
+---
 
 # Question (EN)
 > How do you implement instant/real-time search functionality using Kotlin Flow operators?
-# Вопрос (RU)
-> Как реализовать функциональность мгновенного/реального поиска с помощью операторов Kotlin Flow?
+## Ответ (RU)
+
+Мгновенный поиск - распространенный UX паттерн, требующий эффективной обработки пользовательского ввода, дебаунсинга и API вызовов.
+
+### 1. Базовая Реализация
+
+```kotlin
+@OptIn(FlowPreview::class)
+val searchResults = searchQuery
+    .debounce(300) // Ждем 300мс после остановки ввода
+    .distinctUntilChanged() // Только при изменении запроса
+    .filter { it.length >= 2 } // Минимум 2 символа
+    .mapLatest { query ->
+        searchRepository.search(query)
+    }
+    .catch { emit(emptyList()) }
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+```
+
+### 2. С Состояниями Загрузки И Ошибок
+
+```kotlin
+val searchState = _searchQuery
+    .debounce(300)
+    .distinctUntilChanged()
+    .mapLatest { query ->
+        try {
+            SearchUiState.Success(repository.search(query))
+        } catch (e: Exception) {
+            SearchUiState.Error(e.message ?: "Unknown error")
+        }
+    }
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SearchUiState.Idle)
+```
+
+### 3. Гибридный Поиск (локальный + удаленный)
+
+```kotlin
+val searchResults = _searchQuery
+    .flatMapLatest { query ->
+        combine(
+            localRepository.search(query),
+            remoteRepository.search(query)
+        ) { local, remote ->
+            SearchResults(local, remote)
+        }
+    }
+```
+
+### Таблица Операторов
+
+| Оператор | Назначение | Типичное значение |
+|----------|-----------|-------------------|
+| `debounce` | Ожидание остановки ввода | 300-500мс |
+| `distinctUntilChanged` | Избежание дубликатов | Всегда |
+| `filter` | Минимальная длина | 2-3 символа |
+| `mapLatest` | Отмена предыдущих запросов | Для API |
+
+### Лучшие Практики
+
+#### - ДЕЛАЙТЕ:
+
+- Используйте debounce для сокращения API вызовов
+- Добавляйте фильтр минимальной длины
+- Отменяйте предыдущие поиски через mapLatest
+- Обрабатывайте пустые/ошибочные состояния
+
+#### - НЕ ДЕЛАЙТЕ:
+
+- Не ищите при каждом нажатии клавиши
+- Не игнорируйте отмену
+- Не забывайте обработку ошибок
 
 ---
 
@@ -494,81 +568,15 @@ fun `search debounces user input`() = runTest {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Мгновенный поиск - распространенный UX паттерн, требующий эффективной обработки пользовательского ввода, дебаунсинга и API вызовов.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-### 1. Базовая Реализация
-
-```kotlin
-@OptIn(FlowPreview::class)
-val searchResults = searchQuery
-    .debounce(300) // Ждем 300мс после остановки ввода
-    .distinctUntilChanged() // Только при изменении запроса
-    .filter { it.length >= 2 } // Минимум 2 символа
-    .mapLatest { query ->
-        searchRepository.search(query)
-    }
-    .catch { emit(emptyList()) }
-    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-```
-
-### 2. С Состояниями Загрузки И Ошибок
-
-```kotlin
-val searchState = _searchQuery
-    .debounce(300)
-    .distinctUntilChanged()
-    .mapLatest { query ->
-        try {
-            SearchUiState.Success(repository.search(query))
-        } catch (e: Exception) {
-            SearchUiState.Error(e.message ?: "Unknown error")
-        }
-    }
-    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), SearchUiState.Idle)
-```
-
-### 3. Гибридный Поиск (локальный + удаленный)
-
-```kotlin
-val searchResults = _searchQuery
-    .flatMapLatest { query ->
-        combine(
-            localRepository.search(query),
-            remoteRepository.search(query)
-        ) { local, remote ->
-            SearchResults(local, remote)
-        }
-    }
-```
-
-### Таблица Операторов
-
-| Оператор | Назначение | Типичное значение |
-|----------|-----------|-------------------|
-| `debounce` | Ожидание остановки ввода | 300-500мс |
-| `distinctUntilChanged` | Избежание дубликатов | Всегда |
-| `filter` | Минимальная длина | 2-3 символа |
-| `mapLatest` | Отмена предыдущих запросов | Для API |
-
-### Лучшие Практики
-
-#### - ДЕЛАЙТЕ:
-
-- Используйте debounce для сокращения API вызовов
-- Добавляйте фильтр минимальной длины
-- Отменяйте предыдущие поиски через mapLatest
-- Обрабатывайте пустые/ошибочные состояния
-
-#### - НЕ ДЕЛАЙТЕ:
-
-- Не ищите при каждом нажатии клавиши
-- Не игнорируйте отмену
-- Не забывайте обработку ошибок
-
----
-
+## References
+- [Flow Operators Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+- [debounce Operator](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)
 ## Related Questions
 
 ### Related (Medium)
@@ -585,6 +593,3 @@ val searchResults = _searchQuery
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-## References
-- [Flow Operators Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-- [debounce Operator](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)

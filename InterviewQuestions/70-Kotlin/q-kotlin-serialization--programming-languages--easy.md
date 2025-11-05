@@ -17,16 +17,190 @@ tags: [data-persistence, difficulty/easy, json, programming-languages, serializa
 date created: Friday, October 31st 2025, 6:32:56 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Что Такое Сериализация?
-
-# Question (EN)
-> What is serialization?
 
 # Вопрос (RU)
 > Что такое сериализация?
 
 ---
+
+# Question (EN)
+> What is serialization?
+
+## Ответ (RU)
+
+**Сериализация** — это процесс преобразования объекта в поток байтов для сохранения его состояния или передачи его через сеть.
+
+Это нужно, чтобы можно было хранить объекты в файлы, базы данных или передавать их между разными компонентами приложения или даже разными приложениями.
+
+**Зачем сериализация:**
+
+- **Сохранение состояния** в файлы или базу данных
+- **Передача по сети** между клиентом и сервером
+- **Кеширование** объектов для быстрого доступа
+- **Глубокое копирование** объектов
+- **Пауза/Возобновление** состояния приложения
+
+**Распространённые форматы:**
+
+**1. JSON** (самый распространённый для API):
+```kotlin
+@Serializable
+data class User(val id: Int, val name: String, val email: String)
+
+val user = User(1, "Алиса", "alice@example.com")
+
+// Сериализация в JSON
+val json = Json.encodeToString(user)
+// {"id":1,"name":"Алиса","email":"alice@example.com"}
+
+// Десериализация из JSON
+val userFromJson = Json.decodeFromString<User>(json)
+```
+
+**2. Binary** (Java Serializable):
+```kotlin
+import java.io.*
+
+data class Person(val name: String, val age: Int) : Serializable
+
+// Сериализация
+val person = Person("Боб", 30)
+val fileOut = FileOutputStream("person.ser")
+val objectOut = ObjectOutputStream(fileOut)
+objectOut.writeObject(person)
+objectOut.close()
+
+// Десериализация
+val fileIn = FileInputStream("person.ser")
+val objectIn = ObjectInputStream(fileIn)
+val loadedPerson = objectIn.readObject() as Person
+objectIn.close()
+```
+
+**3. Kotlin Serialization** (рекомендуется):
+```kotlin
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
+
+@Serializable
+data class Product(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val inStock: Boolean
+)
+
+val product = Product(101, "Ноутбук", 999.99, true)
+
+// В JSON
+val jsonString = Json.encodeToString(product)
+
+// Из JSON
+val decodedProduct = Json.decodeFromString<Product>(jsonString)
+```
+
+**4. Parcelable** (Android):
+```kotlin
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class Message(
+    val id: String,
+    val text: String,
+    val timestamp: Long
+) : Parcelable
+
+// Передача между Activities/Fragments
+intent.putExtra("message", message)
+```
+
+**Случаи использования:**
+
+**Сохранение в файл:**
+```kotlin
+@Serializable
+data class AppSettings(
+    val theme: String,
+    val fontSize: Int,
+    val notifications: Boolean
+)
+
+// Сохранение
+val settings = AppSettings("dark", 14, true)
+File("settings.json").writeText(Json.encodeToString(settings))
+
+// Загрузка
+val loadedSettings = Json.decodeFromString<AppSettings>(
+    File("settings.json").readText()
+)
+```
+
+**Сетевой запрос:**
+```kotlin
+@Serializable
+data class LoginRequest(val username: String, val password: String)
+
+@Serializable
+data class LoginResponse(val token: String, val userId: Int)
+
+// Сериализация запроса
+val request = LoginRequest("alice", "secret123")
+val requestBody = Json.encodeToString(request)
+
+// Отправка на сервер и десериализация ответа
+val responseJson = sendHttpPost("/api/login", requestBody)
+val response = Json.decodeFromString<LoginResponse>(responseJson)
+```
+
+**Кеширование:**
+```kotlin
+object UserCache {
+    private val cacheFile = File("user_cache.json")
+
+    fun saveUser(user: User) {
+        cacheFile.writeText(Json.encodeToString(user))
+    }
+
+    fun loadUser(): User? {
+        return if (cacheFile.exists()) {
+            Json.decodeFromString(cacheFile.readText())
+        } else null
+    }
+}
+```
+
+**Сравнение методов сериализации:**
+
+| Метод | Формат | Скорость | Размер | Применение |
+|-------|--------|----------|--------|------------|
+| **JSON** | Текст | Средняя | Большой | API, конфиг файлы |
+| **Kotlin Serialization** | Различные | Быстро | Оптимизированный | Современные Kotlin приложения |
+| **Java Serializable** | Бинарный | Медленно | Большой | Устаревшие Java приложения |
+| **Parcelable** | Бинарный | Быстро | Маленький | Android IPC |
+| **Protocol Buffers** | Бинарный | Очень быстро | Очень маленький | Высокая производительность |
+
+**Настройка Kotlin Serialization:**
+
+```kotlin
+// build.gradle.kts
+plugins {
+    kotlin("plugin.serialization") version "1.9.0"
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+}
+```
+
+**Резюме:**
+
+- **Сериализация**: Объект → Поток байтов
+- **Десериализация**: Поток байтов → Объект
+- **Назначение**: Сохранение, передача, кеширование объектов
+- **Распространённые форматы**: JSON, Binary, Parcelable
+- **Kotlin**: Используйте аннотацию `@Serializable`
 
 ## Answer (EN)
 
@@ -205,180 +379,15 @@ dependencies {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Сериализация** — это процесс преобразования объекта в поток байтов для сохранения его состояния или передачи его через сеть.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-Это нужно, чтобы можно было хранить объекты в файлы, базы данных или передавать их между разными компонентами приложения или даже разными приложениями.
+## References
 
-**Зачем сериализация:**
-
-- **Сохранение состояния** в файлы или базу данных
-- **Передача по сети** между клиентом и сервером
-- **Кеширование** объектов для быстрого доступа
-- **Глубокое копирование** объектов
-- **Пауза/Возобновление** состояния приложения
-
-**Распространённые форматы:**
-
-**1. JSON** (самый распространённый для API):
-```kotlin
-@Serializable
-data class User(val id: Int, val name: String, val email: String)
-
-val user = User(1, "Алиса", "alice@example.com")
-
-// Сериализация в JSON
-val json = Json.encodeToString(user)
-// {"id":1,"name":"Алиса","email":"alice@example.com"}
-
-// Десериализация из JSON
-val userFromJson = Json.decodeFromString<User>(json)
-```
-
-**2. Binary** (Java Serializable):
-```kotlin
-import java.io.*
-
-data class Person(val name: String, val age: Int) : Serializable
-
-// Сериализация
-val person = Person("Боб", 30)
-val fileOut = FileOutputStream("person.ser")
-val objectOut = ObjectOutputStream(fileOut)
-objectOut.writeObject(person)
-objectOut.close()
-
-// Десериализация
-val fileIn = FileInputStream("person.ser")
-val objectIn = ObjectInputStream(fileIn)
-val loadedPerson = objectIn.readObject() as Person
-objectIn.close()
-```
-
-**3. Kotlin Serialization** (рекомендуется):
-```kotlin
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-
-@Serializable
-data class Product(
-    val id: Int,
-    val name: String,
-    val price: Double,
-    val inStock: Boolean
-)
-
-val product = Product(101, "Ноутбук", 999.99, true)
-
-// В JSON
-val jsonString = Json.encodeToString(product)
-
-// Из JSON
-val decodedProduct = Json.decodeFromString<Product>(jsonString)
-```
-
-**4. Parcelable** (Android):
-```kotlin
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class Message(
-    val id: String,
-    val text: String,
-    val timestamp: Long
-) : Parcelable
-
-// Передача между Activities/Fragments
-intent.putExtra("message", message)
-```
-
-**Случаи использования:**
-
-**Сохранение в файл:**
-```kotlin
-@Serializable
-data class AppSettings(
-    val theme: String,
-    val fontSize: Int,
-    val notifications: Boolean
-)
-
-// Сохранение
-val settings = AppSettings("dark", 14, true)
-File("settings.json").writeText(Json.encodeToString(settings))
-
-// Загрузка
-val loadedSettings = Json.decodeFromString<AppSettings>(
-    File("settings.json").readText()
-)
-```
-
-**Сетевой запрос:**
-```kotlin
-@Serializable
-data class LoginRequest(val username: String, val password: String)
-
-@Serializable
-data class LoginResponse(val token: String, val userId: Int)
-
-// Сериализация запроса
-val request = LoginRequest("alice", "secret123")
-val requestBody = Json.encodeToString(request)
-
-// Отправка на сервер и десериализация ответа
-val responseJson = sendHttpPost("/api/login", requestBody)
-val response = Json.decodeFromString<LoginResponse>(responseJson)
-```
-
-**Кеширование:**
-```kotlin
-object UserCache {
-    private val cacheFile = File("user_cache.json")
-
-    fun saveUser(user: User) {
-        cacheFile.writeText(Json.encodeToString(user))
-    }
-
-    fun loadUser(): User? {
-        return if (cacheFile.exists()) {
-            Json.decodeFromString(cacheFile.readText())
-        } else null
-    }
-}
-```
-
-**Сравнение методов сериализации:**
-
-| Метод | Формат | Скорость | Размер | Применение |
-|-------|--------|----------|--------|------------|
-| **JSON** | Текст | Средняя | Большой | API, конфиг файлы |
-| **Kotlin Serialization** | Различные | Быстро | Оптимизированный | Современные Kotlin приложения |
-| **Java Serializable** | Бинарный | Медленно | Большой | Устаревшие Java приложения |
-| **Parcelable** | Бинарный | Быстро | Маленький | Android IPC |
-| **Protocol Buffers** | Бинарный | Очень быстро | Очень маленький | Высокая производительность |
-
-**Настройка Kotlin Serialization:**
-
-```kotlin
-// build.gradle.kts
-plugins {
-    kotlin("plugin.serialization") version "1.9.0"
-}
-
-dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-}
-```
-
-**Резюме:**
-
-- **Сериализация**: Объект → Поток байтов
-- **Десериализация**: Поток байтов → Объект
-- **Назначение**: Сохранение, передача, кеширование объектов
-- **Распространённые форматы**: JSON, Binary, Parcelable
-- **Kotlin**: Используйте аннотацию `@Serializable`
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

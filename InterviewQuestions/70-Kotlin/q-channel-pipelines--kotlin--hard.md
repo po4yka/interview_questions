@@ -1,7 +1,7 @@
 ---
 id: kotlin-060
 title: "Channel Pipelines in Kotlin / Конвейеры каналов в Kotlin"
-aliases: []
+aliases: ["Channel Pipelines in Kotlin, Конвейеры каналов в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -33,12 +33,347 @@ tags: [backpressure, channels, coroutines, difficulty/hard, fan-in, fan-out, kot
 date created: Sunday, October 12th 2025, 2:05:38 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Объясните конвейеры каналов в корутинах Kotlin. Как реализовать паттерны производитель-потребитель, fan-out, fan-in и стратегии буферизации? Приведите примеры реальных архитектур конвейеров.
+
+---
 
 # Question (EN)
 > Explain channel pipelines in Kotlin coroutines. How do you implement producer-consumer patterns, fan-out, fan-in, and buffering strategies? Provide examples of real-world pipeline architectures.
 
-# Вопрос (RU)
-> Объясните конвейеры каналов в корутинах Kotlin. Как реализовать паттерны производитель-потребитель, fan-out, fan-in и стратегии буферизации? Приведите примеры реальных архитектур конвейеров.
+## Ответ (RU)
+
+Конвейеры каналов - это мощный паттерн для построения систем конкурентной обработки данных, где корутины производят, трансформируют и потребляют данные через серию соединенных каналов.
+
+### Основные Концепции
+
+Конвейер состоит из:
+- **Производителей**: Корутины, генерирующие данные и отправляющие в каналы
+- **Процессоров**: Корутины, получающие данные, трансформирующие и отправляющие на следующий этап
+- **Потребителей**: Корутины, получающие и обрабатывающие финальные данные
+- **Каналов**: Примитивы коммуникации, соединяющие этапы
+
+### Простой Пример Конвейера
+
+```kotlin
+// Этап 1: Производитель - генерирует числа
+fun CoroutineScope.produceNumbers(): ReceiveChannel<Int> = produce {
+    var x = 1
+    while (true) {
+        send(x++)  // Бесконечный поток
+        delay(100)
+    }
+}
+
+// Этап 2: Процессор - возводит числа в квадрат
+fun CoroutineScope.squareNumbers(numbers: ReceiveChannel<Int>): ReceiveChannel<Int> = produce {
+    for (x in numbers) {
+        send(x * x)
+    }
+}
+
+// Этап 3: Потребитель - выводит результаты
+suspend fun consumeNumbers(squares: ReceiveChannel<Int>) {
+    for (square in squares) {
+        println("Результат: $square")
+    }
+}
+
+// Построение и запуск конвейера
+fun main() = runBlocking {
+    val numbers = produceNumbers()
+    val squares = squareNumbers(numbers)
+
+    repeat(10) {
+        println(squares.receive())
+    }
+
+    coroutineContext.cancelChildren()
+}
+```
+
+### Fan-Out: Множественные Потребители
+
+Fan-out распределяет работу от одного производителя нескольким потребителям для параллельной обработки.
+
+```kotlin
+class FanOutProcessor {
+
+    fun CoroutineScope.produceJobs(): ReceiveChannel<Int> = produce(capacity = 100) {
+        repeat(100) { jobId ->
+            send(jobId)
+        }
+        close()
+    }
+
+    suspend fun worker(id: Int, jobs: ReceiveChannel<Int>) {
+        for (job in jobs) {
+            println("Работник $id обрабатывает задачу $job")
+            delay(100)
+            println("Работник $id завершил задачу $job")
+        }
+        println("Работник $id закончил")
+    }
+
+    fun runFanOut() = runBlocking {
+        val jobs = produceJobs()
+
+        // Запуск нескольких работников, использующих один канал
+        val workers = List(5) { workerId ->
+            launch { worker(workerId, jobs) }
+        }
+
+        workers.forEach { it.join() }
+        println("Вся работа завершена")
+    }
+}
+```
+
+### Fan-In: Множественные Производители
+
+Fan-in объединяет вывод от нескольких производителей в один канал.
+
+```kotlin
+class FanInProcessor {
+
+    fun CoroutineScope.dataSource(
+        id: Int,
+        output: SendChannel<String>
+    ) = launch {
+        repeat(5) { index ->
+            delay(100 * id)  // Разная скорость
+            output.send("Источник-$id: Сообщение-$index")
+        }
+    }
+
+    fun runFanIn() = runBlocking {
+        val channel = Channel<String>(capacity = 20)
+
+        // Запуск нескольких производителей
+        val producers = List(3) { sourceId ->
+            dataSource(sourceId, channel)
+        }
+
+        producers.forEach { it.join() }
+        channel.close()
+
+        // Потребление объединенного потока
+        for (message in channel) {
+            println("Получено: $message")
+        }
+    }
+}
+```
+
+### Стратегии Буферизации
+
+Различные конфигурации буфера влияют на поведение и производительность конвейера:
+
+```kotlin
+class BufferingStrategies {
+
+    // 1. Rendezvous (без буфера) - строгая синхронизация
+    fun rendezvousChannel() = runBlocking {
+        val channel = Channel<Int>(capacity = Channel.RENDEZVOUS)
+
+        launch {
+            repeat(5) { i ->
+                println("Отправка $i")
+                channel.send(i)  // Приостанавливается пока получатель не готов
+                println("Отправлено $i")
+            }
+            channel.close()
+        }
+
+        delay(1000)
+        for (value in channel) {
+            println("Получено $value")
+            delay(300)
+        }
+    }
+
+    // 2. Буферизованный канал - позволяет асинхронное производство
+    fun bufferedChannel() = runBlocking {
+        val channel = Channel<Int>(capacity = 5)
+
+        launch {
+            repeat(10) { i ->
+                println("Отправка $i")
+                channel.send(i)  // Приостанавливается только когда буфер полон
+                println("Отправлено $i")
+            }
+            channel.close()
+        }
+
+        delay(1000)  // Первые 5 отправлены сразу
+        for (value in channel) {
+            println("Получено $value")
+            delay(300)
+        }
+    }
+
+    // 3. Неограниченный буфер - отправитель никогда не приостанавливается
+    fun unlimitedChannel() = runBlocking {
+        val channel = Channel<Int>(capacity = Channel.UNLIMITED)
+
+        launch {
+            repeat(1000) { i ->
+                channel.send(i)  // Никогда не приостанавливается (использует память!)
+            }
+            channel.close()
+        }
+
+        delay(100)
+        var count = 0
+        for (value in channel) {
+            count++
+        }
+        println("Получено $count элементов")
+    }
+}
+```
+
+### Реальный Пример: Обработка Изображений
+
+```kotlin
+class ImageProcessingPipeline(private val scope: CoroutineScope) {
+
+    data class ImageTask(val file: File)
+    data class LoadedImage(val file: File, val image: BufferedImage)
+    data class ProcessedImage(val file: File, val image: BufferedImage)
+
+    // Этап 1: Сканирование директории
+    private fun scanImages(directory: File): ReceiveChannel<ImageTask> = scope.produce {
+        directory.listFiles { file ->
+            file.extension.lowercase() in listOf("jpg", "jpeg", "png")
+        }?.forEach { file ->
+            send(ImageTask(file))
+        }
+    }
+
+    // Этап 2: Загрузка изображений (I/O bound - можно распараллелить)
+    private fun loadImages(
+        tasks: ReceiveChannel<ImageTask>,
+        parallelism: Int
+    ): ReceiveChannel<LoadedImage> {
+        val output = Channel<LoadedImage>(capacity = 10)
+
+        repeat(parallelism) { workerId ->
+            scope.launch {
+                for (task in tasks) {
+                    try {
+                        val image = ImageIO.read(task.file)
+                        output.send(LoadedImage(task.file, image))
+                        println("Работник $workerId загрузил ${task.file.name}")
+                    } catch (e: Exception) {
+                        println("Не удалось загрузить ${task.file.name}: ${e.message}")
+                    }
+                }
+            }
+        }
+
+        return output
+    }
+
+    // Этап 3: Применение фильтров (CPU bound - ограничить параллелизм)
+    private fun applyFilters(
+        images: ReceiveChannel<LoadedImage>,
+        parallelism: Int
+    ): ReceiveChannel<ProcessedImage> {
+        val output = Channel<ProcessedImage>(capacity = 5)
+
+        repeat(parallelism) { workerId ->
+            scope.launch {
+                for (loaded in images) {
+                    val processed = applyGrayscaleFilter(loaded.image)
+                    output.send(ProcessedImage(loaded.file, processed))
+                    println("Работник $workerId обработал ${loaded.file.name}")
+                }
+            }
+        }
+
+        return output
+    }
+
+    // Построение и выполнение конвейера
+    suspend fun process(inputDir: File, outputDir: File) {
+        outputDir.mkdirs()
+
+        val tasks = scanImages(inputDir)
+        val loaded = loadImages(tasks, parallelism = 4)  // I/O bound
+        val processed = applyFilters(loaded, parallelism = 2)  // CPU bound
+
+        saveImages(processed, outputDir, parallelism = 2).join()
+        println("Конвейер завершен")
+    }
+}
+```
+
+### Управление Противодавлением (Backpressure)
+
+```kotlin
+class BackpressureExample {
+
+    // Стратегия 1: Ограниченный буфер с приостановкой
+    fun boundedBufferStrategy() = runBlocking {
+        val channel = Channel<Int>(capacity = 10)
+
+        val producer = launch {
+            repeat(100) { i ->
+                channel.send(i)  // Приостанавливается когда буфер полон
+            }
+            channel.close()
+        }
+
+        val consumer = launch {
+            for (value in channel) {
+                delay(100)  // Медленный потребитель
+            }
+        }
+
+        joinAll(producer, consumer)
+    }
+
+    // Стратегия 2: Удаление самого старого
+    fun dropOldestStrategy() = runBlocking {
+        val channel = Channel<Int>(
+            capacity = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
+
+        val producer = launch {
+            repeat(100) { i ->
+                channel.send(i)  // Никогда не приостанавливается
+                delay(10)
+            }
+            channel.close()
+        }
+
+        val consumer = launch {
+            for (value in channel) {
+                println("Получено: $value")  // Пропускает много значений
+                delay(100)
+            }
+        }
+
+        joinAll(producer, consumer)
+    }
+}
+```
+
+### Лучшие Практики
+
+1. **Выбирайте подходящие размеры буфера**
+2. **Правильно обрабатывайте отмену**
+3. **Используйте структурированную конкурентность**
+4. **Мониторьте емкость каналов**
+5. **Реализуйте правильную обработку ошибок**
+
+### Распространенные Ошибки
+
+1. **Неограниченные каналы, вызывающие OOM**
+2. **Незакрытые каналы**
+3. **Блокирующие операции в конвейере**
 
 ---
 
@@ -1005,342 +1340,16 @@ suspend fun processAsync(item: Int): Int {
 
 ---
 
-## Ответ (RU)
-
-Конвейеры каналов - это мощный паттерн для построения систем конкурентной обработки данных, где корутины производят, трансформируют и потребляют данные через серию соединенных каналов.
-
-### Основные Концепции
-
-Конвейер состоит из:
-- **Производителей**: Корутины, генерирующие данные и отправляющие в каналы
-- **Процессоров**: Корутины, получающие данные, трансформирующие и отправляющие на следующий этап
-- **Потребителей**: Корутины, получающие и обрабатывающие финальные данные
-- **Каналов**: Примитивы коммуникации, соединяющие этапы
-
-### Простой Пример Конвейера
-
-```kotlin
-// Этап 1: Производитель - генерирует числа
-fun CoroutineScope.produceNumbers(): ReceiveChannel<Int> = produce {
-    var x = 1
-    while (true) {
-        send(x++)  // Бесконечный поток
-        delay(100)
-    }
-}
-
-// Этап 2: Процессор - возводит числа в квадрат
-fun CoroutineScope.squareNumbers(numbers: ReceiveChannel<Int>): ReceiveChannel<Int> = produce {
-    for (x in numbers) {
-        send(x * x)
-    }
-}
-
-// Этап 3: Потребитель - выводит результаты
-suspend fun consumeNumbers(squares: ReceiveChannel<Int>) {
-    for (square in squares) {
-        println("Результат: $square")
-    }
-}
-
-// Построение и запуск конвейера
-fun main() = runBlocking {
-    val numbers = produceNumbers()
-    val squares = squareNumbers(numbers)
-
-    repeat(10) {
-        println(squares.receive())
-    }
-
-    coroutineContext.cancelChildren()
-}
-```
-
-### Fan-Out: Множественные Потребители
-
-Fan-out распределяет работу от одного производителя нескольким потребителям для параллельной обработки.
-
-```kotlin
-class FanOutProcessor {
-
-    fun CoroutineScope.produceJobs(): ReceiveChannel<Int> = produce(capacity = 100) {
-        repeat(100) { jobId ->
-            send(jobId)
-        }
-        close()
-    }
-
-    suspend fun worker(id: Int, jobs: ReceiveChannel<Int>) {
-        for (job in jobs) {
-            println("Работник $id обрабатывает задачу $job")
-            delay(100)
-            println("Работник $id завершил задачу $job")
-        }
-        println("Работник $id закончил")
-    }
-
-    fun runFanOut() = runBlocking {
-        val jobs = produceJobs()
-
-        // Запуск нескольких работников, использующих один канал
-        val workers = List(5) { workerId ->
-            launch { worker(workerId, jobs) }
-        }
-
-        workers.forEach { it.join() }
-        println("Вся работа завершена")
-    }
-}
-```
-
-### Fan-In: Множественные Производители
-
-Fan-in объединяет вывод от нескольких производителей в один канал.
-
-```kotlin
-class FanInProcessor {
-
-    fun CoroutineScope.dataSource(
-        id: Int,
-        output: SendChannel<String>
-    ) = launch {
-        repeat(5) { index ->
-            delay(100 * id)  // Разная скорость
-            output.send("Источник-$id: Сообщение-$index")
-        }
-    }
-
-    fun runFanIn() = runBlocking {
-        val channel = Channel<String>(capacity = 20)
-
-        // Запуск нескольких производителей
-        val producers = List(3) { sourceId ->
-            dataSource(sourceId, channel)
-        }
-
-        producers.forEach { it.join() }
-        channel.close()
-
-        // Потребление объединенного потока
-        for (message in channel) {
-            println("Получено: $message")
-        }
-    }
-}
-```
-
-### Стратегии Буферизации
-
-Различные конфигурации буфера влияют на поведение и производительность конвейера:
-
-```kotlin
-class BufferingStrategies {
-
-    // 1. Rendezvous (без буфера) - строгая синхронизация
-    fun rendezvousChannel() = runBlocking {
-        val channel = Channel<Int>(capacity = Channel.RENDEZVOUS)
-
-        launch {
-            repeat(5) { i ->
-                println("Отправка $i")
-                channel.send(i)  // Приостанавливается пока получатель не готов
-                println("Отправлено $i")
-            }
-            channel.close()
-        }
-
-        delay(1000)
-        for (value in channel) {
-            println("Получено $value")
-            delay(300)
-        }
-    }
-
-    // 2. Буферизованный канал - позволяет асинхронное производство
-    fun bufferedChannel() = runBlocking {
-        val channel = Channel<Int>(capacity = 5)
-
-        launch {
-            repeat(10) { i ->
-                println("Отправка $i")
-                channel.send(i)  // Приостанавливается только когда буфер полон
-                println("Отправлено $i")
-            }
-            channel.close()
-        }
-
-        delay(1000)  // Первые 5 отправлены сразу
-        for (value in channel) {
-            println("Получено $value")
-            delay(300)
-        }
-    }
-
-    // 3. Неограниченный буфер - отправитель никогда не приостанавливается
-    fun unlimitedChannel() = runBlocking {
-        val channel = Channel<Int>(capacity = Channel.UNLIMITED)
-
-        launch {
-            repeat(1000) { i ->
-                channel.send(i)  // Никогда не приостанавливается (использует память!)
-            }
-            channel.close()
-        }
-
-        delay(100)
-        var count = 0
-        for (value in channel) {
-            count++
-        }
-        println("Получено $count элементов")
-    }
-}
-```
-
-### Реальный Пример: Обработка Изображений
-
-```kotlin
-class ImageProcessingPipeline(private val scope: CoroutineScope) {
-
-    data class ImageTask(val file: File)
-    data class LoadedImage(val file: File, val image: BufferedImage)
-    data class ProcessedImage(val file: File, val image: BufferedImage)
-
-    // Этап 1: Сканирование директории
-    private fun scanImages(directory: File): ReceiveChannel<ImageTask> = scope.produce {
-        directory.listFiles { file ->
-            file.extension.lowercase() in listOf("jpg", "jpeg", "png")
-        }?.forEach { file ->
-            send(ImageTask(file))
-        }
-    }
-
-    // Этап 2: Загрузка изображений (I/O bound - можно распараллелить)
-    private fun loadImages(
-        tasks: ReceiveChannel<ImageTask>,
-        parallelism: Int
-    ): ReceiveChannel<LoadedImage> {
-        val output = Channel<LoadedImage>(capacity = 10)
-
-        repeat(parallelism) { workerId ->
-            scope.launch {
-                for (task in tasks) {
-                    try {
-                        val image = ImageIO.read(task.file)
-                        output.send(LoadedImage(task.file, image))
-                        println("Работник $workerId загрузил ${task.file.name}")
-                    } catch (e: Exception) {
-                        println("Не удалось загрузить ${task.file.name}: ${e.message}")
-                    }
-                }
-            }
-        }
-
-        return output
-    }
-
-    // Этап 3: Применение фильтров (CPU bound - ограничить параллелизм)
-    private fun applyFilters(
-        images: ReceiveChannel<LoadedImage>,
-        parallelism: Int
-    ): ReceiveChannel<ProcessedImage> {
-        val output = Channel<ProcessedImage>(capacity = 5)
-
-        repeat(parallelism) { workerId ->
-            scope.launch {
-                for (loaded in images) {
-                    val processed = applyGrayscaleFilter(loaded.image)
-                    output.send(ProcessedImage(loaded.file, processed))
-                    println("Работник $workerId обработал ${loaded.file.name}")
-                }
-            }
-        }
-
-        return output
-    }
-
-    // Построение и выполнение конвейера
-    suspend fun process(inputDir: File, outputDir: File) {
-        outputDir.mkdirs()
-
-        val tasks = scanImages(inputDir)
-        val loaded = loadImages(tasks, parallelism = 4)  // I/O bound
-        val processed = applyFilters(loaded, parallelism = 2)  // CPU bound
-
-        saveImages(processed, outputDir, parallelism = 2).join()
-        println("Конвейер завершен")
-    }
-}
-```
-
-### Управление Противодавлением (Backpressure)
-
-```kotlin
-class BackpressureExample {
-
-    // Стратегия 1: Ограниченный буфер с приостановкой
-    fun boundedBufferStrategy() = runBlocking {
-        val channel = Channel<Int>(capacity = 10)
-
-        val producer = launch {
-            repeat(100) { i ->
-                channel.send(i)  // Приостанавливается когда буфер полон
-            }
-            channel.close()
-        }
-
-        val consumer = launch {
-            for (value in channel) {
-                delay(100)  // Медленный потребитель
-            }
-        }
-
-        joinAll(producer, consumer)
-    }
-
-    // Стратегия 2: Удаление самого старого
-    fun dropOldestStrategy() = runBlocking {
-        val channel = Channel<Int>(
-            capacity = 1,
-            onBufferOverflow = BufferOverflow.DROP_OLDEST
-        )
-
-        val producer = launch {
-            repeat(100) { i ->
-                channel.send(i)  // Никогда не приостанавливается
-                delay(10)
-            }
-            channel.close()
-        }
-
-        val consumer = launch {
-            for (value in channel) {
-                println("Получено: $value")  // Пропускает много значений
-                delay(100)
-            }
-        }
-
-        joinAll(producer, consumer)
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Выбирайте подходящие размеры буфера**
-2. **Правильно обрабатывайте отмену**
-3. **Используйте структурированную конкурентность**
-4. **Мониторьте емкость каналов**
-5. **Реализуйте правильную обработку ошибок**
-
-### Распространенные Ошибки
-
-1. **Неограниченные каналы, вызывающие OOM**
-2. **Незакрытые каналы**
-3. **Блокирующие операции в конвейере**
-
----
-
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+- [Kotlin Coroutines: Channels](https://kotlinlang.org/docs/channels.html)
+- [Channel Pipelines](https://kotlinlang.org/docs/channels.html#pipelines)
+- [Fan-out and Fan-in](https://kotlinlang.org/docs/channels.html#fan-out)
 ## Related Questions
 - [[q-kotlin-channels--kotlin--medium]]
 - [[q-produce-actor-builders--kotlin--medium]]
@@ -1348,7 +1357,3 @@ class BackpressureExample {
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]
 
-## References
-- [Kotlin Coroutines: Channels](https://kotlinlang.org/docs/channels.html)
-- [Channel Pipelines](https://kotlinlang.org/docs/channels.html#pipelines)
-- [Fan-out and Fan-in](https://kotlinlang.org/docs/channels.html#fan-out)

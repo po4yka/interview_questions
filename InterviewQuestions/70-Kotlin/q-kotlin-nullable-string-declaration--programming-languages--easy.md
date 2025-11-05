@@ -17,16 +17,40 @@ tags: [difficulty/easy, null-safety, nullable, programming-languages, string, sy
 date created: Friday, October 31st 2025, 6:30:57 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Как Правильно Объявить Переменную Типа Nullable String В Kotlin?
-
-# Question (EN)
-> How to correctly declare a nullable String variable in Kotlin?
 
 # Вопрос (RU)
 > Как правильно объявить переменную типа nullable String в Kotlin?
 
 ---
+
+# Question (EN)
+> How to correctly declare a nullable String variable in Kotlin?
+
+## Ответ (RU)
+
+В Kotlin для объявления переменной типа nullable String используется **оператор `?`** после типа данных.
+
+**Синтаксис:**
+```kotlin
+var name: String? = null
+```
+
+**Ключевые моменты:**
+- `String` - ненулевой тип (не может быть null)
+- `String?` - nullable тип (может быть null)
+- Без `?` компилятор не позволит присвоить null
+
+**Примеры:**
+```kotlin
+// Nullable переменные
+var nullable: String? = "Hello"
+nullable = null  // OK
+
+// Ненулевые переменные
+var nonNullable: String = "Hello"
+nonNullable = null  // Ошибка компиляции!
+```
 
 ## Answer (EN)
 
@@ -55,30 +79,15 @@ nonNullable = null  // Compilation error!
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-В Kotlin для объявления переменной типа nullable String используется **оператор `?`** после типа данных.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-**Синтаксис:**
-```kotlin
-var name: String? = null
-```
+## References
 
-**Ключевые моменты:**
-- `String` - ненулевой тип (не может быть null)
-- `String?` - nullable тип (может быть null)
-- Без `?` компилятор не позволит присвоить null
-
-**Примеры:**
-```kotlin
-// Nullable переменные
-var nullable: String? = "Hello"
-nullable = null  // OK
-
-// Ненулевые переменные
-var nonNullable: String = "Hello"
-nonNullable = null  // Ошибка компиляции!
-```
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

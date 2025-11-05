@@ -17,168 +17,13 @@ related: [q-compose-custom-layout--kotlin--hard, q-compose-navigation-advanced--
 date created: Sunday, October 19th 2025, 1:47:08 pm
 date modified: Sunday, November 2nd 2025, 12:05:08 pm
 ---
-
-# Question (EN)
-> How do you build adaptive layouts in Compose? What are window size classes? How do you handle phones, tablets, and foldables?
-
 # Вопрос (RU)
 > Как создавать адаптивные layouts в Compose? Что такое window size классы? Как обрабатывать телефоны, планшеты и складные устройства?
 
 ---
 
-## Answer (EN)
-
-Adaptive layouts adjust UI based on screen size, orientation, and form factor. Material 3 provides window size classes and adaptive components for responsive UIs.
-
-**Window Size Classes:**
-
-```kotlin
-@Composable
-fun AdaptiveScreen() {
-    val windowSizeClass = calculateWindowSizeClass(LocalContext.current as Activity)
-
-    when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> CompactLayout()    // < 600dp
-        WindowWidthSizeClass.Medium -> MediumLayout()     // 600-840dp
-        WindowWidthSizeClass.Expanded -> ExpandedLayout() // >= 840dp
-    }
-}
-```
-
-**Breakpoints:**
-- Compact: < 600dp (phone portrait)
-- Medium: 600-840dp (tablet portrait, phone landscape)
-- Expanded: >= 840dp (tablet landscape, desktop)
-
-**Adaptive Navigation:**
-
-```kotlin
-when (windowSizeClass.widthSizeClass) {
-    WindowWidthSizeClass.Compact -> {
-        // Bottom navigation for phones
-        Scaffold(bottomBar = { NavigationBar { ... } })
-    }
-    WindowWidthSizeClass.Medium -> {
-        // Navigation rail for tablets
-        Row {
-            NavigationRail { ... }
-            NavHost(...)
-        }
-    }
-    WindowWidthSizeClass.Expanded -> {
-        // Permanent drawer for desktop
-        PermanentNavigationDrawer { ... }
-    }
-}
-```
-
-**List-Detail Pattern:**
-
-```kotlin
-when (windowSizeClass.widthSizeClass) {
-    WindowWidthSizeClass.Compact -> {
-        // Single pane: navigate between list and detail
-        if (selectedItem == null) ItemList() else ItemDetail()
-    }
-    else -> {
-        // Two pane: list and detail side by side
-        Row {
-            ItemList(modifier = Modifier.weight(0.4f))
-            ItemDetail(modifier = Modifier.weight(0.6f))
-        }
-    }
-}
-```
-
-**Responsive Grid:**
-
-```kotlin
-val columns = when (windowSizeClass.widthSizeClass) {
-    WindowWidthSizeClass.Compact -> 2
-    WindowWidthSizeClass.Medium -> 3
-    WindowWidthSizeClass.Expanded -> 4
-    else -> 2
-}
-
-LazyVerticalGrid(columns = GridCells.Fixed(columns)) { ... }
-```
-
-**BoxWithConstraints for Fine Control:**
-
-```kotlin
-@Composable
-fun AdaptiveContent() {
-    BoxWithConstraints {
-        if (maxWidth < 600.dp) {
-            Column { Header(); Content(); Footer() }
-        } else {
-            Row {
-                Sidebar(modifier = Modifier.weight(0.3f))
-                Column(modifier = Modifier.weight(0.7f)) { ... }
-            }
-        }
-    }
-}
-```
-
-**Orientation Handling:**
-
-```kotlin
-val configuration = LocalConfiguration.current
-val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-if (isLandscape) {
-    Row {
-        VideoPlayer(modifier = Modifier.weight(0.6f))
-        Comments(modifier = Modifier.weight(0.4f))
-    }
-} else {
-    Column {
-        VideoPlayer(modifier = Modifier.fillMaxWidth())
-        Comments(modifier = Modifier.weight(1f))
-    }
-}
-```
-
-**Foldable Support:**
-
-```kotlin
-@Composable
-fun FoldableAwareLayout() {
-    val windowLayoutInfo = remember { mutableStateOf<WindowLayoutInfo?>(null) }
-
-    LaunchedEffect(Unit) {
-        WindowInfoTracker.getOrCreate(LocalContext.current as Activity)
-            .windowLayoutInfo(LocalContext.current as Activity)
-            .collect { windowLayoutInfo.value = it }
-    }
-
-    val foldingFeature = windowLayoutInfo.value?.displayFeatures
-        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
-
-    when {
-        foldingFeature?.state == FoldingFeature.State.HALF_OPENED -> FoldedLayout()
-        else -> NormalLayout()
-    }
-}
-```
-
-**Material 3 Adaptive Components:**
-
-```kotlin
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
-@Composable
-fun Material3AdaptiveNav() {
-    val navigator = rememberListDetailPaneScaffoldNavigator<String>()
-
-    ListDetailPaneScaffold(
-        directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
-        listPane = { AnimatedPane { ItemList() } },
-        detailPane = { AnimatedPane { ItemDetail() } }
-    )
-}
-```
+# Question (EN)
+> How do you build adaptive layouts in Compose? What are window size classes? How do you handle phones, tablets, and foldables?
 
 ## Ответ (RU)
 
@@ -335,6 +180,160 @@ fun Material3AdaptiveNav() {
 ```
 
 ---
+
+## Answer (EN)
+
+Adaptive layouts adjust UI based on screen size, orientation, and form factor. Material 3 provides window size classes and adaptive components for responsive UIs.
+
+**Window Size Classes:**
+
+```kotlin
+@Composable
+fun AdaptiveScreen() {
+    val windowSizeClass = calculateWindowSizeClass(LocalContext.current as Activity)
+
+    when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> CompactLayout()    // < 600dp
+        WindowWidthSizeClass.Medium -> MediumLayout()     // 600-840dp
+        WindowWidthSizeClass.Expanded -> ExpandedLayout() // >= 840dp
+    }
+}
+```
+
+**Breakpoints:**
+- Compact: < 600dp (phone portrait)
+- Medium: 600-840dp (tablet portrait, phone landscape)
+- Expanded: >= 840dp (tablet landscape, desktop)
+
+**Adaptive Navigation:**
+
+```kotlin
+when (windowSizeClass.widthSizeClass) {
+    WindowWidthSizeClass.Compact -> {
+        // Bottom navigation for phones
+        Scaffold(bottomBar = { NavigationBar { ... } })
+    }
+    WindowWidthSizeClass.Medium -> {
+        // Navigation rail for tablets
+        Row {
+            NavigationRail { ... }
+            NavHost(...)
+        }
+    }
+    WindowWidthSizeClass.Expanded -> {
+        // Permanent drawer for desktop
+        PermanentNavigationDrawer { ... }
+    }
+}
+```
+
+**List-Detail Pattern:**
+
+```kotlin
+when (windowSizeClass.widthSizeClass) {
+    WindowWidthSizeClass.Compact -> {
+        // Single pane: navigate between list and detail
+        if (selectedItem == null) ItemList() else ItemDetail()
+    }
+    else -> {
+        // Two pane: list and detail side by side
+        Row {
+            ItemList(modifier = Modifier.weight(0.4f))
+            ItemDetail(modifier = Modifier.weight(0.6f))
+        }
+    }
+}
+```
+
+**Responsive Grid:**
+
+```kotlin
+val columns = when (windowSizeClass.widthSizeClass) {
+    WindowWidthSizeClass.Compact -> 2
+    WindowWidthSizeClass.Medium -> 3
+    WindowWidthSizeClass.Expanded -> 4
+    else -> 2
+}
+
+LazyVerticalGrid(columns = GridCells.Fixed(columns)) { ... }
+```
+
+**BoxWithConstraints for Fine Control:**
+
+```kotlin
+@Composable
+fun AdaptiveContent() {
+    BoxWithConstraints {
+        if (maxWidth < 600.dp) {
+            Column { Header(); Content(); Footer() }
+        } else {
+            Row {
+                Sidebar(modifier = Modifier.weight(0.3f))
+                Column(modifier = Modifier.weight(0.7f)) { ... }
+            }
+        }
+    }
+}
+```
+
+**Orientation Handling:**
+
+```kotlin
+val configuration = LocalConfiguration.current
+val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+if (isLandscape) {
+    Row {
+        VideoPlayer(modifier = Modifier.weight(0.6f))
+        Comments(modifier = Modifier.weight(0.4f))
+    }
+} else {
+    Column {
+        VideoPlayer(modifier = Modifier.fillMaxWidth())
+        Comments(modifier = Modifier.weight(1f))
+    }
+}
+```
+
+**Foldable Support:**
+
+```kotlin
+@Composable
+fun FoldableAwareLayout() {
+    val windowLayoutInfo = remember { mutableStateOf<WindowLayoutInfo?>(null) }
+
+    LaunchedEffect(Unit) {
+        WindowInfoTracker.getOrCreate(LocalContext.current as Activity)
+            .windowLayoutInfo(LocalContext.current as Activity)
+            .collect { windowLayoutInfo.value = it }
+    }
+
+    val foldingFeature = windowLayoutInfo.value?.displayFeatures
+        ?.filterIsInstance<FoldingFeature>()?.firstOrNull()
+
+    when {
+        foldingFeature?.state == FoldingFeature.State.HALF_OPENED -> FoldedLayout()
+        else -> NormalLayout()
+    }
+}
+```
+
+**Material 3 Adaptive Components:**
+
+```kotlin
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+fun Material3AdaptiveNav() {
+    val navigator = rememberListDetailPaneScaffoldNavigator<String>()
+
+    ListDetailPaneScaffold(
+        directive = navigator.scaffoldDirective,
+        value = navigator.scaffoldValue,
+        listPane = { AnimatedPane { ItemList() } },
+        detailPane = { AnimatedPane { ItemDetail() } }
+    )
+}
+```
 
 ## Follow-ups
 

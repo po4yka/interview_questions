@@ -17,16 +17,79 @@ tags: [data-classes, difficulty/medium, programming-languages]
 date created: Friday, October 31st 2025, 6:33:00 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # What Are the Requirements when Creating a Data Class?
-
-# Question (EN)
-> What are the requirements when creating a data class in Kotlin?
 
 # Вопрос (RU)
 > Какие требования при создании data class в Kotlin?
 
 ---
+
+# Question (EN)
+> What are the requirements when creating a data class in Kotlin?
+
+## Ответ (RU)
+
+**Требования к data class:**
+
+1. **Первичный конструктор должен иметь хотя бы один параметр**
+2. **Все параметры первичного конструктора должны быть помечены `val` или `var`** чтобы стать свойствами
+3. **Не может быть abstract, open, sealed или inner**
+4. **Может наследоваться от других классов и реализовывать интерфейсы** (с ограничениями)
+5. **Kotlin автоматически генерирует**: `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()` функции для каждого свойства в порядке объявления
+
+**Дополнительные правила:**
+- Только свойства, объявленные в первичном конструкторе, участвуют в автоматически генерируемых функциях
+- Свойства, объявленные в теле класса, не включаются в `equals()`, `hashCode()`, `toString()` или компонентные функции
+- Можно иметь вторичные конструкторы, но они должны делегировать к первичному конструктору
+- Можно переопределить автоматически генерируемые функции вручную
+
+### Примеры
+
+**Валидный data class:**
+```kotlin
+// Минимальный валидный data class
+data class Person(val name: String)
+
+// Полный data class с несколькими свойствами
+data class User(
+    val id: Int,
+    val name: String,
+    var email: String,  // var разрешен
+    val isActive: Boolean = true  // значения по умолчанию разрешены
+)
+```
+
+**Невалидные примеры:**
+```kotlin
+//  ОШИБКА: Нет параметров в первичном конструкторе
+// data class Empty()
+
+//  ОШИБКА: Параметр не помечен как val или var
+// data class Invalid(name: String)
+
+//  ОШИБКА: Не может быть abstract, open, sealed, inner
+// abstract data class AbstractData(val value: Int)
+// open data class OpenData(val value: Int)
+// sealed data class SealedData(val value: Int)
+```
+
+**Свойства в теле vs конструкторе:**
+```kotlin
+data class Product(
+    val id: Int,
+    val name: String
+) {
+    var discount: Double = 0.0  // НЕ участвует в equals, hashCode, toString, copy
+}
+
+val p1 = Product(1, "Laptop")
+p1.discount = 100.0
+
+val p2 = Product(1, "Laptop")
+p2.discount = 50.0
+
+println(p1 == p2)  // true! (discount не сравнивается)
+```
 
 ## Answer (EN)
 
@@ -342,69 +405,15 @@ fun main() {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Требования к data class:**
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-1. **Первичный конструктор должен иметь хотя бы один параметр**
-2. **Все параметры первичного конструктора должны быть помечены `val` или `var`** чтобы стать свойствами
-3. **Не может быть abstract, open, sealed или inner**
-4. **Может наследоваться от других классов и реализовывать интерфейсы** (с ограничениями)
-5. **Kotlin автоматически генерирует**: `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()` функции для каждого свойства в порядке объявления
+## References
 
-**Дополнительные правила:**
-- Только свойства, объявленные в первичном конструкторе, участвуют в автоматически генерируемых функциях
-- Свойства, объявленные в теле класса, не включаются в `equals()`, `hashCode()`, `toString()` или компонентные функции
-- Можно иметь вторичные конструкторы, но они должны делегировать к первичному конструктору
-- Можно переопределить автоматически генерируемые функции вручную
-
-### Примеры
-
-**Валидный data class:**
-```kotlin
-// Минимальный валидный data class
-data class Person(val name: String)
-
-// Полный data class с несколькими свойствами
-data class User(
-    val id: Int,
-    val name: String,
-    var email: String,  // var разрешен
-    val isActive: Boolean = true  // значения по умолчанию разрешены
-)
-```
-
-**Невалидные примеры:**
-```kotlin
-//  ОШИБКА: Нет параметров в первичном конструкторе
-// data class Empty()
-
-//  ОШИБКА: Параметр не помечен как val или var
-// data class Invalid(name: String)
-
-//  ОШИБКА: Не может быть abstract, open, sealed, inner
-// abstract data class AbstractData(val value: Int)
-// open data class OpenData(val value: Int)
-// sealed data class SealedData(val value: Int)
-```
-
-**Свойства в теле vs конструкторе:**
-```kotlin
-data class Product(
-    val id: Int,
-    val name: String
-) {
-    var discount: Double = 0.0  // НЕ участвует в equals, hashCode, toString, copy
-}
-
-val p1 = Product(1, "Laptop")
-p1.discount = 100.0
-
-val p2 = Product(1, "Laptop")
-p2.discount = 50.0
-
-println(p1 == p2)  // true! (discount не сравнивается)
-```
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

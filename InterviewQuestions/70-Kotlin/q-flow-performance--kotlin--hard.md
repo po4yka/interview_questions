@@ -1,7 +1,7 @@
 ---
 id: kotlin-109
 title: "Flow Performance Optimization / Оптимизация производительности Flow"
-aliases: []
+aliases: ["Flow Performance Optimization, Оптимизация производительности Flow"]
 
 # Classification
 topic: kotlin
@@ -28,13 +28,74 @@ tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 3:39:12 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140023
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140023
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140023
+## Ответ (RU)
 
+
+Оптимизация производительности Flow фокусируется на эффективной обработке данных, правильной буферизации и избежании ненужных операций.
+
+### Ключевые Техники Производительности
+
+**1. Буферизация**
+```kotlin
+flow {
+    repeat(100) {
+        emit(it)
+        delay(100)  // Медленный производитель
+    }
+}.buffer()  // Буферизация испусканий
+ .collect {
+     delay(300)  // Медленный коллектор
+ }
+```
+
+**2. Conflation**
+```kotlin
+flow {
+    repeat(100) { emit(it) }
+}.conflate()  // Отбрасывать промежуточные значения
+ .collect { /* только последнее */ }
+```
+
+**3. collectLatest**
+```kotlin
+flow.collectLatest { value ->
+    // Отменить предыдущее, обработать только последнее
+    processValue(value)
+}
+```
+
+**4. Параллельная обработка**
+```kotlin
+flow.map { item ->
+    withContext(Dispatchers.Default) {
+        processItem(item)
+    }
+}.collect()
+```
+
+**5. Буферы каналов**
+```kotlin
+flow.buffer(capacity = 64)
+flow.buffer(Channel.UNLIMITED)
+flow.buffer(Channel.CONFLATED)
+```
+
+### Бенчмаркинг
+```kotlin
+measureTimeMillis {
+    flow.collect { /* process */ }
+}.also { println("Took ${it}ms") }
+```
+
+---
 ---
 
 ## Answer (EN)
@@ -90,68 +151,6 @@ flow.buffer(Channel.CONFLATED)
 ```
 
 ### Benchmarking
-```kotlin
-measureTimeMillis {
-    flow.collect { /* process */ }
-}.also { println("Took ${it}ms") }
-```
-
----
----
-
-## Ответ (RU)
-
-
-Оптимизация производительности Flow фокусируется на эффективной обработке данных, правильной буферизации и избежании ненужных операций.
-
-### Ключевые Техники Производительности
-
-**1. Буферизация**
-```kotlin
-flow {
-    repeat(100) {
-        emit(it)
-        delay(100)  // Медленный производитель
-    }
-}.buffer()  // Буферизация испусканий
- .collect {
-     delay(300)  // Медленный коллектор
- }
-```
-
-**2. Conflation**
-```kotlin
-flow {
-    repeat(100) { emit(it) }
-}.conflate()  // Отбрасывать промежуточные значения
- .collect { /* только последнее */ }
-```
-
-**3. collectLatest**
-```kotlin
-flow.collectLatest { value ->
-    // Отменить предыдущее, обработать только последнее
-    processValue(value)
-}
-```
-
-**4. Параллельная обработка**
-```kotlin
-flow.map { item ->
-    withContext(Dispatchers.Default) {
-        processItem(item)
-    }
-}.collect()
-```
-
-**5. Буферы каналов**
-```kotlin
-flow.buffer(capacity = 64)
-flow.buffer(Channel.UNLIMITED)
-flow.buffer(Channel.CONFLATED)
-```
-
-### Бенчмаркинг
 ```kotlin
 measureTimeMillis {
     flow.collect { /* process */ }

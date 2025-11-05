@@ -1,7 +1,7 @@
 ---
 id: lang-007
 title: "Kotlin Combine Collections / Объединение коллекций Kotlin"
-aliases: []
+aliases: ["Kotlin Combine Collections, Объединение коллекций Kotlin"]
 topic: programming-languages
 subtopics: [class-features, java-interop, operators]
 question_kind: theory
@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-channels-vs-flow--kotlin--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-vs-java-class-creation--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -17,22 +17,15 @@ tags: [difficulty/easy]
 date created: Thursday, October 16th 2025, 4:16:12 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Какая Функция Kotlin Используется Для Объединения Двух Коллекций?
-
-# Question (EN)
-> What Kotlin function is used to combine two collections?
 
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?
 
 ---
 
-## Answer (EN)
-
-The + operator (plus function)
-
----
+# Question (EN)
+> What Kotlin function is used to combine two collections?
 
 ## Ответ (RU)
 
@@ -89,6 +82,22 @@ mutableList.addAll(listOf(4, 5, 6))
 
 
 ---
+
+## Answer (EN)
+
+The + operator (plus function)
+
+---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

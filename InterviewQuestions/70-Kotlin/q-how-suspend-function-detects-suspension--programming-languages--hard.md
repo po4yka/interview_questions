@@ -9,7 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-coroutines, c-kotlin-features, q-how-to-create-suspend-function--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
@@ -17,16 +17,19 @@ tags: [concurrency, coroutines, difficulty/hard, kotlin, programming-languages, 
 date created: Friday, October 31st 2025, 6:31:27 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # How Suspend Function Detects Suspension?
-
-# Question (EN)
-> How does a suspend function detect suspension?
 
 # Вопрос (RU)
 > Как suspend функция определяет приостановку?
 
 ---
+
+# Question (EN)
+> How does a suspend function detect suspension?
+
+## Ответ (RU)
+
+Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено
 
 ## Answer (EN)
 
@@ -462,9 +465,15 @@ if (condition) { }                    // Regular control flow
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

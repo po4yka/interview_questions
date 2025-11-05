@@ -725,6 +725,16 @@ data class Address(
 
 **Резюме**: Kotlin предоставляет три способа создания типовых абстракций с различными компромиссами. Type aliases предоставляют нулевой overhead но без type safety. Inline classes обеспечивают strong type safety без runtime overhead. Wrapper classes предоставляют полный OOP функционал с runtime overhead. Выбирайте type aliases для сложных типов, inline classes для безопасных оберток без overhead, и wrapper classes когда нужно несколько свойств или наследование.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## Related Questions
 
 -

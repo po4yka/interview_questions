@@ -33,12 +33,92 @@ tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplat
 date created: Sunday, October 12th 2025, 3:21:04 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое Kotlin/Native? Объясните нативную компиляцию, interop с C библиотеками и Objective-C/Swift, различия в модели памяти и случаи использования для iOS разработки.
+
+---
 
 # Question (EN)
 > What is Kotlin/Native? Explain native compilation, interop with C libraries and Objective-C/Swift, memory model differences, and use cases for iOS development.
 
-# Вопрос (RU)
-> Что такое Kotlin/Native? Объясните нативную компиляцию, interop с C библиотеками и Objective-C/Swift, различия в модели памяти и случаи использования для iOS разработки.
+## Ответ (RU)
+
+**Kotlin/Native** - это технология для компиляции Kotlin кода в нативные бинарные файлы, которые могут работать без виртуальной машины. Позволяет Kotlin таргетировать платформы как iOS, macOS, Linux, Windows и встроенные системы.
+
+### Ключевые Возможности
+
+1. **Нативная компиляция**: Компилируется в платформо-специфичный машинный код
+2. **Не требует JVM**: Автономные исполняемые файлы
+3. **C Interop**: Прямая интеграция с C библиотеками
+4. **Objective-C/Swift Interop**: iOS/macOS разработка
+5. **Мультиплатформа**: Разделение кода между платформами
+6. **Управление памятью**: Автоматическое управление без GC
+
+### C Interop
+
+```kotlin
+import kotlinx.cinterop.*
+import curl.*
+
+fun httpGet(url: String): String? {
+    val curl = curl_easy_init()
+
+    if (curl != null) {
+        curl_easy_setopt(curl, CURLOPT_URL, url)
+        val result = curl_easy_perform(curl)
+        curl_easy_cleanup(curl)
+
+        if (result == CURLE_OK) {
+            return "Success"
+        }
+    }
+
+    return null
+}
+```
+
+### Objective-C/Swift Interop
+
+```kotlin
+// Kotlin
+fun useObjCClass() {
+    val obj = MyClass()
+    val greeting = obj.greet("World")
+    println(greeting) // Hello, World!
+}
+```
+
+```swift
+// Swift
+import Shared
+
+class ViewModel {
+    func loadUsers() {
+        SharedKt.iosGetUsers { users in
+            print(users)
+        }
+    }
+}
+```
+
+### Модель Памяти
+
+**Новая модель памяти (1.7.20+):**
+
+```kotlin
+// Конкурентная изменяемость как JVM/JS
+class DataHolder {
+    var data = "Hello" // Может быть изменено из любого потока
+}
+```
+
+### Случаи Использования
+
+1. **iOS разработка** - Разделение бизнес-логики
+2. **Кросс-платформенные библиотеки** - Один код, множество платформ
+3. **Встроенные системы** - IoT устройства
+4. **Нативные CLI инструменты** - Утилиты командной строки
+5. **Разработка игр** - Разделённая игровая логика
 
 ---
 
@@ -612,86 +692,11 @@ suspend fun getData(): List<User>
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-**Kotlin/Native** - это технология для компиляции Kotlin кода в нативные бинарные файлы, которые могут работать без виртуальной машины. Позволяет Kotlin таргетировать платформы как iOS, macOS, Linux, Windows и встроенные системы.
-
-### Ключевые Возможности
-
-1. **Нативная компиляция**: Компилируется в платформо-специфичный машинный код
-2. **Не требует JVM**: Автономные исполняемые файлы
-3. **C Interop**: Прямая интеграция с C библиотеками
-4. **Objective-C/Swift Interop**: iOS/macOS разработка
-5. **Мультиплатформа**: Разделение кода между платформами
-6. **Управление памятью**: Автоматическое управление без GC
-
-### C Interop
-
-```kotlin
-import kotlinx.cinterop.*
-import curl.*
-
-fun httpGet(url: String): String? {
-    val curl = curl_easy_init()
-
-    if (curl != null) {
-        curl_easy_setopt(curl, CURLOPT_URL, url)
-        val result = curl_easy_perform(curl)
-        curl_easy_cleanup(curl)
-
-        if (result == CURLE_OK) {
-            return "Success"
-        }
-    }
-
-    return null
-}
-```
-
-### Objective-C/Swift Interop
-
-```kotlin
-// Kotlin
-fun useObjCClass() {
-    val obj = MyClass()
-    val greeting = obj.greet("World")
-    println(greeting) // Hello, World!
-}
-```
-
-```swift
-// Swift
-import Shared
-
-class ViewModel {
-    func loadUsers() {
-        SharedKt.iosGetUsers { users in
-            print(users)
-        }
-    }
-}
-```
-
-### Модель Памяти
-
-**Новая модель памяти (1.7.20+):**
-
-```kotlin
-// Конкурентная изменяемость как JVM/JS
-class DataHolder {
-    var data = "Hello" // Может быть изменено из любого потока
-}
-```
-
-### Случаи Использования
-
-1. **iOS разработка** - Разделение бизнес-логики
-2. **Кросс-платформенные библиотеки** - Один код, множество платформ
-3. **Встроенные системы** - IoT устройства
-4. **Нативные CLI инструменты** - Утилиты командной строки
-5. **Разработка игр** - Разделённая игровая логика
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

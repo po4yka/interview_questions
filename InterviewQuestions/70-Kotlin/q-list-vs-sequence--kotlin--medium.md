@@ -17,65 +17,15 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, seq
 date created: Friday, October 31st 2025, 6:29:31 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # List Vs Sequence: Жадные И Ленивые Коллекции
-
-# Question (EN)
-> What is the difference between List and Sequence in Kotlin?
 
 # Вопрос (RU)
 > В чём разница между List и Sequence в Kotlin?
 
 ---
 
-## Answer (EN)
-
-**List** is an eager collection where operations execute immediately on all elements, creating intermediate collections. **Sequence** is a lazy collection where operations execute per-element through the entire chain without intermediate collections.
-
-**Key differences:**
-
-| Aspect | List | Sequence |
-|--------|------|----------|
-| **Execution** | Eager (immediate) | Lazy (on-demand) |
-| **Intermediate collections** | Created | Not created |
-| **Memory** | More | Less |
-| **Small data (<100)** | Faster | Slower (overhead) |
-| **Large data (>1000)** | Slower | Faster |
-| **Operation chains (3+)** | Slower | Faster |
-| **Early termination** | Processes all | Stops early |
-
-**Use List for:**
-- Small collections (<100 elements)
-- Single operations
-- Need intermediate results
-- Require size/indexing
-
-**Use Sequence for:**
-- Large collections (>1000 elements)
-- Operation chains (3+ operations)
-- Early termination (first, take, any)
-- File processing
-- Infinite data (generateSequence)
-
-**Performance example:**
-```kotlin
-// List - processes ALL 1M elements
-(1..1_000_000)
-    .map { it * 2 }      // 1M operations
-    .filter { it > 1000 } // 1M operations
-    .take(10)
-
-// Sequence - processes only ~500 elements
-(1..1_000_000).asSequence()
-    .map { it * 2 }
-    .filter { it > 1000 }
-    .take(10)             // Stops after finding 10
-    .toList()
-```
-
-Sequence is ~30-40x faster for large data with early stops. Terminal operations (toList, first, sum) trigger execution. Avoid converting Sequence to List mid-chain.
-
----
+# Question (EN)
+> What is the difference between List and Sequence in Kotlin?
 
 ## Ответ (RU)
 
@@ -556,6 +506,65 @@ val result = largeDataset.asSequence()
 // - ПРАВИЛЬНО - простой map без цепочки
 val names = users.map { it.name }
 ```
+
+## Answer (EN)
+
+**List** is an eager collection where operations execute immediately on all elements, creating intermediate collections. **Sequence** is a lazy collection where operations execute per-element through the entire chain without intermediate collections.
+
+**Key differences:**
+
+| Aspect | List | Sequence |
+|--------|------|----------|
+| **Execution** | Eager (immediate) | Lazy (on-demand) |
+| **Intermediate collections** | Created | Not created |
+| **Memory** | More | Less |
+| **Small data (<100)** | Faster | Slower (overhead) |
+| **Large data (>1000)** | Slower | Faster |
+| **Operation chains (3+)** | Slower | Faster |
+| **Early termination** | Processes all | Stops early |
+
+**Use List for:**
+- Small collections (<100 elements)
+- Single operations
+- Need intermediate results
+- Require size/indexing
+
+**Use Sequence for:**
+- Large collections (>1000 elements)
+- Operation chains (3+ operations)
+- Early termination (first, take, any)
+- File processing
+- Infinite data (generateSequence)
+
+**Performance example:**
+```kotlin
+// List - processes ALL 1M elements
+(1..1_000_000)
+    .map { it * 2 }      // 1M operations
+    .filter { it > 1000 } // 1M operations
+    .take(10)
+
+// Sequence - processes only ~500 elements
+(1..1_000_000).asSequence()
+    .map { it * 2 }
+    .filter { it > 1000 }
+    .take(10)             // Stops after finding 10
+    .toList()
+```
+
+Sequence is ~30-40x faster for large data with early stops. Terminal operations (toList, first, sum) trigger execution. Avoid converting Sequence to List mid-chain.
+
+---
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

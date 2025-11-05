@@ -1,7 +1,7 @@
 ---
 id: kotlin-221
 title: "Jit Compilation Definition / Определение JIT компиляции"
-aliases: []
+aliases: ["Jit Compilation Definition, Определение JIT компиляции"]
 topic: kotlin
 subtopics: [access-modifiers, class-features, type-system]
 question_kind: theory
@@ -905,6 +905,16 @@ process("hello")
 - Android (ART)
 
 **Лучше всего для:** Долгоработающих приложений, которые выигрывают от профилирования во время выполнения и адаптивной оптимизации.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

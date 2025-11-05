@@ -9,7 +9,7 @@ difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-equality, c-java-features, q-equals-hashcode-contracts--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -17,14 +17,20 @@ tags: [difficulty/easy, equality, java, object-methods, programming-languages, r
 date created: Friday, October 31st 2025, 6:32:22 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Как В Оригинальном Java Equals Работает, Что Он Сравнивает?
+
+# Вопрос (RU)
+> Как в оригинальном Java equals работает, что он сравнивает?
+
+---
 
 # Question (EN)
 > How does the original Java equals work, what does it compare?
 
-# Вопрос (RU)
-> Как в оригинальном Java equals работает, что он сравнивает?
+## Ответ (RU)
+
+В оригинальном Java метод `equals` класса Object по умолчанию сравнивает **ссылки на объекты** (ссылочное равенство). Для пользовательских классов метод `equals` переопределяют, чтобы сравнивать содержимое объектов.
+
 
 ---
 
@@ -162,12 +168,15 @@ box1 == box2;       // false - different references
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-В оригинальном Java метод `equals` класса Object по умолчанию сравнивает **ссылки на объекты** (ссылочное равенство). Для пользовательских классов метод `equals` переопределяют, чтобы сравнивать содержимое объектов.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
+## References
 
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

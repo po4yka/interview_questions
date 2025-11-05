@@ -155,7 +155,7 @@ If you don't use Templater:
 ### Required Fields (Q&A Template)
 
 ```yaml
-id: 20251006-143022            # Unique timestamp ID
+id: kotlin-001                 # <subject>-<serial> format (e.g., algo-001, android-134)
 title: "Question Title"        # Bilingual or EN title
 topic: kotlin                  # From TAXONOMY.md
 difficulty: medium             # easy | medium | hard
@@ -252,7 +252,7 @@ For Android questions, choose 1-3 subtopics from TAXONOMY.md:
 **Frontmatter**:
 ```yaml
 ---
-id: 20251006-143022
+id: kotlin-001
 title: Kotlin Scope Functions / Функции Области Видимости Kotlin
 topic: kotlin
 subtopics:
@@ -305,7 +305,7 @@ Kotlin предоставляет пять функций области вид�
 **Frontmatter**:
 ```yaml
 ---
-id: 20251006-144530
+id: android-001
 title: Remember in Jetpack Compose / Remember в Jetpack Compose
 topic: android
 subtopics:

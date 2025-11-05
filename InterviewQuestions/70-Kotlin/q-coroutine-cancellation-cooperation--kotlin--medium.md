@@ -1,11 +1,11 @@
 ---
 id: kotlin-051
 title: "Coroutine Cancellation Cooperation / Кооперативная отмена корутин"
-aliases: []
+aliases: ["Coroutine Cancellation Cooperation, Кооперативная отмена корутин"]
 
 # Classification
 topic: kotlin
-subtopics: [cancellation, cooperation, coroutines, ensureActive, yield]
+subtopics: [cancellation, cooperation, coroutines]
 question_kind: theory
 difficulty: medium
 
@@ -28,12 +28,213 @@ tags: [cancellation, cooperation, coroutines, difficulty/medium, ensureActive, k
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Реализуйте долгоиграющие операции с поддержкой отмены. Правильно используйте yield(), ensureActive() и isActive. Корректно обрабатывайте CancellationException.
+
+---
 
 # Question (EN)
 > Implement cancellation-aware long-running operations. Use yield(), ensureActive(), and isActive properly. Handle CancellationException correctly.
 
-# Вопрос (RU)
-> Реализуйте долгоиграющие операции с поддержкой отмены. Правильно используйте yield(), ensureActive() и isActive. Корректно обрабатывайте CancellationException.
+## Ответ (RU)
+
+Отмена корутин **кооперативная** - корутины должны проверять отмену и реагировать соответственно.
+
+### Методы Проверки Отмены
+
+#### 1. ensureActive()
+
+Бросает `CancellationException` сразу если корутина отменена.
+
+```kotlin
+suspend fun processData(items: List<Item>) {
+    for (item in items) {
+        ensureActive() // Бросает если отменено
+        processItem(item)
+    }
+}
+```
+
+#### 2. yield()
+
+Приостанавливает и проверяет отмену, дает другим корутинам шанс выполниться.
+
+```kotlin
+suspend fun heavyComputation(data: List<Int>): Int {
+    var result = 0
+    for (value in data) {
+        yield() // Кооперативная отмена + многозадачность
+        result += calculate(value)
+    }
+    return result
+}
+```
+
+#### 3. isActive Свойство
+
+```kotlin
+launch {
+    while (isActive) {
+        val data = fetchData()
+        processData(data)
+        delay(1000)
+    }
+}
+```
+
+### Обработка CancellationException
+
+```kotlin
+//  Правильно - перебросить CancellationException
+try {
+    doWork()
+} catch (e: CancellationException) {
+    cleanup()
+    throw e // ОБЯЗАТЕЛЬНО перебросить!
+} catch (e: Exception) {
+    handleError(e)
+}
+
+//  Неправильно - проглатывает отмену
+try {
+    doWork()
+} catch (e: Exception) { // Ловит CancellationException!
+    log(e)
+}
+```
+
+### NonCancellable Context
+
+```kotlin
+try {
+    doWork()
+} finally {
+    withContext(NonCancellable) {
+        // Можем вызывать suspend функции
+        closeConnection()
+        saveState()
+    }
+}
+```
+
+### Реальные Примеры
+
+#### Обработка Изображений
+
+```kotlin
+suspend fun processImages(images: List<Image>): List<ProcessedImage> {
+    val results = mutableListOf<ProcessedImage>()
+
+    for ((index, image) in images.withIndex()) {
+        ensureActive() // Проверка отмены
+
+        if (index % 10 == 0) {
+            yield() // Дать другим корутинам поработать
+        }
+
+        val processed = processImage(image)
+        results.add(processed)
+    }
+
+    return results
+}
+```
+
+#### Сетевой Запрос С Очисткой
+
+```kotlin
+suspend fun fetchData(endpoint: String): Data {
+    val connection = openConnection(endpoint)
+
+    try {
+        return connection.read()
+    } catch (e: CancellationException) {
+        println("Запрос отменен")
+        throw e
+    } finally {
+        withContext(NonCancellable) {
+            connection.close()
+        }
+    }
+}
+```
+
+#### Фоновая Синхронизация
+
+```kotlin
+suspend fun startSync() = coroutineScope {
+    while (isActive) {
+        try {
+            syncData()
+        } catch (e: CancellationException) {
+            println("Синхронизация отменена")
+            throw e
+        }
+
+        delay(60_000)
+    }
+}
+```
+
+### Лучшие Практики
+
+1. **Всегда проверяйте отмену в циклах**:
+   ```kotlin
+   while (isActive) {
+       doWork()
+   }
+   ```
+
+2. **Используйте yield() в CPU-intensive коде**:
+   ```kotlin
+   repeat(1000000) {
+       yield()
+       calculate()
+   }
+   ```
+
+3. **Всегда перебрасывайте CancellationException**:
+   ```kotlin
+   catch (e: CancellationException) {
+       cleanup()
+       throw e
+   }
+   ```
+
+4. **Используйте NonCancellable для критичной очистки**:
+   ```kotlin
+   finally {
+       withContext(NonCancellable) {
+           saveState()
+       }
+   }
+   ```
+
+### Распространенные Ошибки
+
+1. **Не проверка отмены**:
+   ```kotlin
+   //  Нельзя отменить
+   while (true) { doWork() }
+
+   //  Можно отменить
+   while (isActive) { doWork() }
+   ```
+
+2. **Проглатывание CancellationException**:
+   ```kotlin
+   //  Ломает отмену
+   try { doWork() }
+   catch (e: Exception) { log(e) }
+
+   //  Сохранить отмену
+   catch (e: Exception) {
+       if (e is CancellationException) throw e
+       log(e)
+   }
+   ```
+
+**Краткое содержание**: Отмена корутин кооперативная - корутины должны проверять отмену используя ensureActive(), yield() или isActive. Используйте ensureActive() для быстрых проверок, yield() для CPU-intensive циклов, isActive в while условиях. Всегда перебрасывайте CancellationException после очистки. Используйте NonCancellable для критичных операций очистки. Проверяйте отмену периодически в долгоиграющих операциях.
 
 ---
 
@@ -524,207 +725,11 @@ onPause {
 
 **English Summary**: Coroutine cancellation is cooperative - coroutines must check for cancellation using ensureActive(), yield(), or isActive. Use ensureActive() for quick checks, yield() for CPU-intensive loops, isActive in while conditions. Always re-throw CancellationException after cleanup. Use NonCancellable context for critical cleanup operations that must complete. Check cancellation periodically in long-running operations, especially in loops.
 
-## Ответ (RU)
+## Follow-ups
 
-Отмена корутин **кооперативная** - корутины должны проверять отмену и реагировать соответственно.
-
-### Методы Проверки Отмены
-
-#### 1. ensureActive()
-
-Бросает `CancellationException` сразу если корутина отменена.
-
-```kotlin
-suspend fun processData(items: List<Item>) {
-    for (item in items) {
-        ensureActive() // Бросает если отменено
-        processItem(item)
-    }
-}
-```
-
-#### 2. yield()
-
-Приостанавливает и проверяет отмену, дает другим корутинам шанс выполниться.
-
-```kotlin
-suspend fun heavyComputation(data: List<Int>): Int {
-    var result = 0
-    for (value in data) {
-        yield() // Кооперативная отмена + многозадачность
-        result += calculate(value)
-    }
-    return result
-}
-```
-
-#### 3. isActive Свойство
-
-```kotlin
-launch {
-    while (isActive) {
-        val data = fetchData()
-        processData(data)
-        delay(1000)
-    }
-}
-```
-
-### Обработка CancellationException
-
-```kotlin
-//  Правильно - перебросить CancellationException
-try {
-    doWork()
-} catch (e: CancellationException) {
-    cleanup()
-    throw e // ОБЯЗАТЕЛЬНО перебросить!
-} catch (e: Exception) {
-    handleError(e)
-}
-
-//  Неправильно - проглатывает отмену
-try {
-    doWork()
-} catch (e: Exception) { // Ловит CancellationException!
-    log(e)
-}
-```
-
-### NonCancellable Context
-
-```kotlin
-try {
-    doWork()
-} finally {
-    withContext(NonCancellable) {
-        // Можем вызывать suspend функции
-        closeConnection()
-        saveState()
-    }
-}
-```
-
-### Реальные Примеры
-
-#### Обработка Изображений
-
-```kotlin
-suspend fun processImages(images: List<Image>): List<ProcessedImage> {
-    val results = mutableListOf<ProcessedImage>()
-
-    for ((index, image) in images.withIndex()) {
-        ensureActive() // Проверка отмены
-
-        if (index % 10 == 0) {
-            yield() // Дать другим корутинам поработать
-        }
-
-        val processed = processImage(image)
-        results.add(processed)
-    }
-
-    return results
-}
-```
-
-#### Сетевой Запрос С Очисткой
-
-```kotlin
-suspend fun fetchData(endpoint: String): Data {
-    val connection = openConnection(endpoint)
-
-    try {
-        return connection.read()
-    } catch (e: CancellationException) {
-        println("Запрос отменен")
-        throw e
-    } finally {
-        withContext(NonCancellable) {
-            connection.close()
-        }
-    }
-}
-```
-
-#### Фоновая Синхронизация
-
-```kotlin
-suspend fun startSync() = coroutineScope {
-    while (isActive) {
-        try {
-            syncData()
-        } catch (e: CancellationException) {
-            println("Синхронизация отменена")
-            throw e
-        }
-
-        delay(60_000)
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Всегда проверяйте отмену в циклах**:
-   ```kotlin
-   while (isActive) {
-       doWork()
-   }
-   ```
-
-2. **Используйте yield() в CPU-intensive коде**:
-   ```kotlin
-   repeat(1000000) {
-       yield()
-       calculate()
-   }
-   ```
-
-3. **Всегда перебрасывайте CancellationException**:
-   ```kotlin
-   catch (e: CancellationException) {
-       cleanup()
-       throw e
-   }
-   ```
-
-4. **Используйте NonCancellable для критичной очистки**:
-   ```kotlin
-   finally {
-       withContext(NonCancellable) {
-           saveState()
-       }
-   }
-   ```
-
-### Распространенные Ошибки
-
-1. **Не проверка отмены**:
-   ```kotlin
-   //  Нельзя отменить
-   while (true) { doWork() }
-
-   //  Можно отменить
-   while (isActive) { doWork() }
-   ```
-
-2. **Проглатывание CancellationException**:
-   ```kotlin
-   //  Ломает отмену
-   try { doWork() }
-   catch (e: Exception) { log(e) }
-
-   //  Сохранить отмену
-   catch (e: Exception) {
-       if (e is CancellationException) throw e
-       log(e)
-   }
-   ```
-
-**Краткое содержание**: Отмена корутин кооперативная - корутины должны проверять отмену используя ensureActive(), yield() или isActive. Используйте ensureActive() для быстрых проверок, yield() для CPU-intensive циклов, isActive в while условиях. Всегда перебрасывайте CancellationException после очистки. Используйте NonCancellable для критичных операций очистки. Проверяйте отмену периодически в долгоиграющих операциях.
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 - [Cancellation and timeouts - Kotlin](https://kotlinlang.org/docs/cancellation-and-timeouts.html)

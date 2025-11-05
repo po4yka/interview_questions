@@ -1,7 +1,7 @@
 ---
 id: kotlin-189
 title: "Job Vs Supervisorjob / Job против Supervisorjob"
-aliases: []
+aliases: ["Job Vs Supervisorjob, Job против Supervisorjob"]
 topic: kotlin
 subtopics: [access-modifiers]
 question_kind: theory
@@ -36,6 +36,16 @@ Job and SupervisorJob are key concepts related to managing the lifecycle of coro
 
 ## Ответ (RU)
 Job и SupervisorJob являются ключевыми понятиями, связанными с управлением жизненным циклом сопрограмм (корутин). Job представляет собой базовый строительный блок управления жизненным циклом корутины и позволяет отменять задачи. Основная особенность Job заключается в том, что ошибка в одной из дочерних корутин приведет к отмене всех остальных корутин в этой иерархии. SupervisorJob работает аналогично Job, но с ключевым отличием в обработке исключений. SupervisorJob позволяет дочерним корутинам завершаться независимо, так что сбой в одной корутине не приведет к отмене всей иерархии. Ключевые отличия: обработка исключений, использование и применение.
+
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

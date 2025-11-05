@@ -1,7 +1,7 @@
 ---
 id: kotlin-066
 title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"
-aliases: []
+aliases: ["Actor Pattern with Coroutines, Паттерн Actor с корутинами"]
 
 # Classification
 topic: kotlin
@@ -33,12 +33,223 @@ tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, messag
 date created: Sunday, October 12th 2025, 3:04:52 pm
 date modified: Sunday, November 2nd 2025, 12:05:07 pm
 ---
+# Вопрос (RU)
+> Что такое паттерн Actor в корутинах Kotlin? Объясните передачу сообщений через каналы, инкапсуляцию состояния и приведите реальные примеры акторов.
+
+---
 
 # Question (EN)
 > What is the Actor pattern in Kotlin coroutines? Explain message passing with channels, state encapsulation, and provide real-world examples of actors.
 
-# Вопрос (RU)
-> Что такое паттерн Actor в корутинах Kotlin? Объясните передачу сообщений через каналы, инкапсуляцию состояния и приведите реальные примеры акторов.
+## Ответ (RU)
+
+Паттерн **Actor** - это модель параллелизма, где акторы являются изолированными единицами, которые обрабатывают сообщения последовательно, устраняя необходимость в блокировках и синхронизации. В Kotlin акторы реализуются с использованием корутин и каналов.
+
+### Ключевые Концепции
+
+1. **Actor**: Независимая сущность с приватным состоянием
+2. **Передача сообщений**: Коммуникация через каналы
+3. **Последовательная обработка**: Сообщения обрабатываются по одному
+4. **Инкапсуляция состояния**: Нет общего изменяемого состояния
+5. **Потокобезопасность**: Нет гонки условий по дизайну
+6. **Почтовый ящик**: Очередь сообщений (реализована как Channel)
+
+### Базовая Реализация Актора
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Типы сообщений
+sealed class CounterMsg
+object IncCounter : CounterMsg()
+object DecCounter : CounterMsg()
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
+
+// Функция актора
+fun CoroutineScope.counterActor() = actor<CounterMsg> {
+    var counter = 0  // Приватное состояние
+
+    for (msg in channel) {  // Обработка сообщений последовательно
+        when (msg) {
+            is IncCounter -> counter++
+            is DecCounter -> counter--
+            is GetCounter -> msg.response.complete(counter)
+        }
+    }
+}
+
+// Использование
+suspend fun main() = coroutineScope {
+    val counter = counterActor()
+
+    // Отправка сообщений
+    counter.send(IncCounter)
+    counter.send(IncCounter)
+    counter.send(IncCounter)
+
+    // Получение текущего значения
+    val response = CompletableDeferred<Int>()
+    counter.send(GetCounter(response))
+    println("Счётчик: ${response.await()}")  // Счётчик: 3
+
+    counter.close()
+}
+```
+
+### Реальный Пример: Банковский Счёт Актор
+
+```kotlin
+sealed class AccountMsg
+class Deposit(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
+class Withdraw(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
+class GetBalance(val response: CompletableDeferred<Double>) : AccountMsg()
+
+class BankAccount(
+    scope: CoroutineScope,
+    private val accountId: String,
+    initialBalance: Double = 0.0
+) {
+    private val actor = scope.actor<AccountMsg> {
+        var balance = initialBalance
+
+        for (msg in channel) {
+            when (msg) {
+                is Deposit -> {
+                    if (msg.amount <= 0) {
+                        msg.response.complete(Result.Error("Неверная сумма"))
+                    } else {
+                        balance += msg.amount
+                        println("[$accountId] Пополнение ${msg.amount}, Баланс: $balance")
+                        msg.response.complete(Result.Success(Unit))
+                    }
+                }
+
+                is Withdraw -> {
+                    when {
+                        msg.amount <= 0 -> {
+                            msg.response.complete(Result.Error("Неверная сумма"))
+                        }
+                        balance < msg.amount -> {
+                            msg.response.complete(Result.Error("Недостаточно средств"))
+                        }
+                        else -> {
+                            balance -= msg.amount
+                            println("[$accountId] Снятие ${msg.amount}, Баланс: $balance")
+                            msg.response.complete(Result.Success(Unit))
+                        }
+                    }
+                }
+
+                is GetBalance -> {
+                    msg.response.complete(balance)
+                }
+            }
+        }
+    }
+
+    suspend fun deposit(amount: Double): Result<Unit> {
+        val response = CompletableDeferred<Result<Unit>>()
+        actor.send(Deposit(amount, response))
+        return response.await()
+    }
+
+    suspend fun withdraw(amount: Double): Result<Unit> {
+        val response = CompletableDeferred<Result<Unit>>()
+        actor.send(Withdraw(amount, response))
+        return response.await()
+    }
+
+    suspend fun getBalance(): Double {
+        val response = CompletableDeferred<Double>()
+        actor.send(GetBalance(response))
+        return response.await()
+    }
+
+    fun close() = actor.close()
+}
+```
+
+### Actor Vs Mutex
+
+```kotlin
+// Используя Mutex (традиционный подход)
+class MutexCounter {
+    private var counter = 0
+    private val mutex = Mutex()
+
+    suspend fun increment() {
+        mutex.withLock {
+            counter++
+        }
+    }
+}
+
+// Используя Actor (передача сообщений)
+class ActorCounter(scope: CoroutineScope) {
+    private val actor = scope.actor<CounterMsg> {
+        var counter = 0
+        for (msg in channel) {
+            when (msg) {
+                is IncCounter -> counter++
+            }
+        }
+    }
+
+    suspend fun increment() = actor.send(IncCounter)
+}
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+
+```kotlin
+// Держать состояние актора приватным
+class GoodActor(scope: CoroutineScope) {
+    private var state = 0  // Приватное, инкапсулированное
+    private val actor = scope.actor<Msg> { /* ... */ }
+}
+
+// Использовать sealed классы для сообщений
+sealed class Msg
+object Increment : Msg()
+class GetValue(val response: CompletableDeferred<Int>) : Msg()
+
+// Предоставлять чистый API
+suspend fun increment() = actor.send(Increment)
+```
+
+#### НЕ ДЕЛАТЬ:
+
+```kotlin
+// Не выставлять изменяемое состояние наружу
+class BadActor(scope: CoroutineScope) {
+    var state = 0  // Плохо: публичное изменяемое состояние!
+}
+
+// Не использовать акторы для простых задач
+// Используйте Mutex для простой синхронизации
+
+// Не забывать закрывать акторы
+val actor = actor<Msg> { /* ... */ }
+actor.close()  // Всегда закрывайте!
+```
+
+### Когда Использовать Акторы
+
+**Используйте акторы когда:**
+- Нужно управлять изменяемым состоянием с конкурентным доступом
+- Обновления состояния сложные и требуют нескольких шагов
+- Нужно сохранять порядок операций
+- Хотите избежать явных блокировок
+- Строите событийно-ориентированные системы
+
+**Не используйте акторы когда:**
+- Простые атомарные операции (используйте AtomicInteger)
+- Операции в основном на чтение (используйте StateFlow)
+- Нужны немедленные ответы (акторы имеют накладные расходы)
+- Состояние неизменяемо (используйте обычные функции)
 
 ---
 
@@ -788,217 +999,11 @@ private val actor = scope.actor<Msg> {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Паттерн **Actor** - это модель параллелизма, где акторы являются изолированными единицами, которые обрабатывают сообщения последовательно, устраняя необходимость в блокировках и синхронизации. В Kotlin акторы реализуются с использованием корутин и каналов.
-
-### Ключевые Концепции
-
-1. **Actor**: Независимая сущность с приватным состоянием
-2. **Передача сообщений**: Коммуникация через каналы
-3. **Последовательная обработка**: Сообщения обрабатываются по одному
-4. **Инкапсуляция состояния**: Нет общего изменяемого состояния
-5. **Потокобезопасность**: Нет гонки условий по дизайну
-6. **Почтовый ящик**: Очередь сообщений (реализована как Channel)
-
-### Базовая Реализация Актора
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
-
-// Типы сообщений
-sealed class CounterMsg
-object IncCounter : CounterMsg()
-object DecCounter : CounterMsg()
-class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
-
-// Функция актора
-fun CoroutineScope.counterActor() = actor<CounterMsg> {
-    var counter = 0  // Приватное состояние
-
-    for (msg in channel) {  // Обработка сообщений последовательно
-        when (msg) {
-            is IncCounter -> counter++
-            is DecCounter -> counter--
-            is GetCounter -> msg.response.complete(counter)
-        }
-    }
-}
-
-// Использование
-suspend fun main() = coroutineScope {
-    val counter = counterActor()
-
-    // Отправка сообщений
-    counter.send(IncCounter)
-    counter.send(IncCounter)
-    counter.send(IncCounter)
-
-    // Получение текущего значения
-    val response = CompletableDeferred<Int>()
-    counter.send(GetCounter(response))
-    println("Счётчик: ${response.await()}")  // Счётчик: 3
-
-    counter.close()
-}
-```
-
-### Реальный Пример: Банковский Счёт Актор
-
-```kotlin
-sealed class AccountMsg
-class Deposit(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
-class Withdraw(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
-class GetBalance(val response: CompletableDeferred<Double>) : AccountMsg()
-
-class BankAccount(
-    scope: CoroutineScope,
-    private val accountId: String,
-    initialBalance: Double = 0.0
-) {
-    private val actor = scope.actor<AccountMsg> {
-        var balance = initialBalance
-
-        for (msg in channel) {
-            when (msg) {
-                is Deposit -> {
-                    if (msg.amount <= 0) {
-                        msg.response.complete(Result.Error("Неверная сумма"))
-                    } else {
-                        balance += msg.amount
-                        println("[$accountId] Пополнение ${msg.amount}, Баланс: $balance")
-                        msg.response.complete(Result.Success(Unit))
-                    }
-                }
-
-                is Withdraw -> {
-                    when {
-                        msg.amount <= 0 -> {
-                            msg.response.complete(Result.Error("Неверная сумма"))
-                        }
-                        balance < msg.amount -> {
-                            msg.response.complete(Result.Error("Недостаточно средств"))
-                        }
-                        else -> {
-                            balance -= msg.amount
-                            println("[$accountId] Снятие ${msg.amount}, Баланс: $balance")
-                            msg.response.complete(Result.Success(Unit))
-                        }
-                    }
-                }
-
-                is GetBalance -> {
-                    msg.response.complete(balance)
-                }
-            }
-        }
-    }
-
-    suspend fun deposit(amount: Double): Result<Unit> {
-        val response = CompletableDeferred<Result<Unit>>()
-        actor.send(Deposit(amount, response))
-        return response.await()
-    }
-
-    suspend fun withdraw(amount: Double): Result<Unit> {
-        val response = CompletableDeferred<Result<Unit>>()
-        actor.send(Withdraw(amount, response))
-        return response.await()
-    }
-
-    suspend fun getBalance(): Double {
-        val response = CompletableDeferred<Double>()
-        actor.send(GetBalance(response))
-        return response.await()
-    }
-
-    fun close() = actor.close()
-}
-```
-
-### Actor Vs Mutex
-
-```kotlin
-// Используя Mutex (традиционный подход)
-class MutexCounter {
-    private var counter = 0
-    private val mutex = Mutex()
-
-    suspend fun increment() {
-        mutex.withLock {
-            counter++
-        }
-    }
-}
-
-// Используя Actor (передача сообщений)
-class ActorCounter(scope: CoroutineScope) {
-    private val actor = scope.actor<CounterMsg> {
-        var counter = 0
-        for (msg in channel) {
-            when (msg) {
-                is IncCounter -> counter++
-            }
-        }
-    }
-
-    suspend fun increment() = actor.send(IncCounter)
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-
-```kotlin
-// Держать состояние актора приватным
-class GoodActor(scope: CoroutineScope) {
-    private var state = 0  // Приватное, инкапсулированное
-    private val actor = scope.actor<Msg> { /* ... */ }
-}
-
-// Использовать sealed классы для сообщений
-sealed class Msg
-object Increment : Msg()
-class GetValue(val response: CompletableDeferred<Int>) : Msg()
-
-// Предоставлять чистый API
-suspend fun increment() = actor.send(Increment)
-```
-
-#### НЕ ДЕЛАТЬ:
-
-```kotlin
-// Не выставлять изменяемое состояние наружу
-class BadActor(scope: CoroutineScope) {
-    var state = 0  // Плохо: публичное изменяемое состояние!
-}
-
-// Не использовать акторы для простых задач
-// Используйте Mutex для простой синхронизации
-
-// Не забывать закрывать акторы
-val actor = actor<Msg> { /* ... */ }
-actor.close()  // Всегда закрывайте!
-```
-
-### Когда Использовать Акторы
-
-**Используйте акторы когда:**
-- Нужно управлять изменяемым состоянием с конкурентным доступом
-- Обновления состояния сложные и требуют нескольких шагов
-- Нужно сохранять порядок операций
-- Хотите избежать явных блокировок
-- Строите событийно-ориентированные системы
-
-**Не используйте акторы когда:**
-- Простые атомарные операции (используйте AtomicInteger)
-- Операции в основном на чтение (используйте StateFlow)
-- Нужны немедленные ответы (акторы имеют накладные расходы)
-- Состояние неизменяемо (используйте обычные функции)
-
----
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
 ## References
 

@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [c-java-features, c-oop-concepts, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -17,14 +17,28 @@ tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programmin
 date created: Friday, October 31st 2025, 6:32:07 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Как Лучше Всего Использовать Модификаторы Доступа В Java?
+
+# Вопрос (RU)
+> Как лучше всего использовать модификаторы доступа в Java?
+
+---
 
 # Question (EN)
 > How to best use access modifiers in Java?
 
-# Вопрос (RU)
-> Как лучше всего использовать модификаторы доступа в Java?
+## Ответ (RU)
+
+В Java есть четыре модификатора доступа: `private`, package-private (без модификатора), `protected` и `public`.
+
+**Лучшие практики:**
+- **private** — для инкапсуляции данных внутри класса
+- **protected** — только в abstract классах для методов (не полей!)
+- **public** — для API, доступного извне
+- **package-private** — для доступа внутри одного пакета
+
+Лучше всего **ограничивать доступ** настолько, насколько это возможно.
+
 
 ---
 
@@ -255,20 +269,15 @@ class TransactionLogger {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-В Java есть четыре модификатора доступа: `private`, package-private (без модификатора), `protected` и `public`.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-**Лучшие практики:**
-- **private** — для инкапсуляции данных внутри класса
-- **protected** — только в abstract классах для методов (не полей!)
-- **public** — для API, доступного извне
-- **package-private** — для доступа внутри одного пакета
+## References
 
-Лучше всего **ограничивать доступ** настолько, насколько это возможно.
-
-
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

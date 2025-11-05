@@ -9,7 +9,7 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
-moc: moc-programming-languages
+moc: moc-kotlin
 related: [q-delegates-java-compilation--programming-languages--hard, q-java-all-classes-inherit-from-object--programming-languages--easy, q-template-method-pattern--design-patterns--medium]
 created: 2025-10-13
 updated: 2025-10-31
@@ -17,14 +17,26 @@ tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, program
 date created: Saturday, October 4th 2025, 3:02:36 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Перечислите Маркерные Интерфейсы
+
+# Вопрос (RU)
+> Перечислите маркерные интерфейсы
+
+---
 
 # Question (EN)
 > List marker interfaces in Java
 
-# Вопрос (RU)
-> Перечислите маркерные интерфейсы
+## Ответ (RU)
+
+Маркерные интерфейсы не содержат методов, но обозначают поведение объекта.
+
+**Примеры в Java:**
+- **Serializable** — объект можно сериализовать
+- **Cloneable** — объект можно клонировать
+- **Remote** — используется для удалённых вызовов
+- **RandomAccess** — для коллекций с быстрым доступом по индексу
+
 
 ---
 
@@ -182,18 +194,15 @@ Marker interfaces have **no methods** but provide **type information** and **beh
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Маркерные интерфейсы не содержат методов, но обозначают поведение объекта.
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
 
-**Примеры в Java:**
-- **Serializable** — объект можно сериализовать
-- **Cloneable** — объект можно клонировать
-- **Remote** — используется для удалённых вызовов
-- **RandomAccess** — для коллекций с быстрым доступом по индексу
+## References
 
-
----
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 

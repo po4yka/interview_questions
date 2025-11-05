@@ -357,7 +357,7 @@ coroutines, flow, room, testing-unit, gradle, performance-startup
 
 ```yaml
 ---
-id: 20251003-143500                    # YYYYMMDD-HHmmss
+id: algo-001                           # <subject>-<serial> (e.g., algo-001, android-134)
 title: Question Title EN / Заголовок RU
 aliases: [Title EN, Заголовок RU]
 

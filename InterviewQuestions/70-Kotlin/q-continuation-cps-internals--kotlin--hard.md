@@ -17,12 +17,69 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:31 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?
+
+---
 
 # Question (EN)
 > How does Kotlin transform suspend functions internally? What is Continuation, CPS transformation, and how do state machines work?
 
-# Вопрос (RU)
-> Как Kotlin трансформирует suspend функции внутри? Что такое Continuation, CPS трансформация, и как работают конечные автоматы?
+## Ответ (RU)
+
+Понимание того, как `suspend` функции работают внутри, критично для продвинутого использования корутин, оптимизации производительности и отладки. Kotlin компилирует suspend функции используя **Continuation Passing Style (CPS)** и **конечные автоматы (state machines)** под капотом. Эта трансформация прозрачна для разработчиков, но её понимание открывает глубокие знания.
+
+
+
+### Что Такое Continuation?
+
+**Continuation** представляет "остаток вычисления" - что должно произойти после возобновления точки приостановки.
+
+```kotlin
+public interface Continuation<in T> {
+    public val context: CoroutineContext
+    public fun resumeWith(result: Result<T>)
+}
+```
+
+**Ключевая концепция:** Когда suspend функция приостанавливается, она передает Continuation приостанавливающей операции. Эта операция позже вызывает `resumeWith()` для продолжения выполнения.
+
+### Continuation Passing Style (CPS)
+
+**CPS трансформация:** Компилятор преобразует каждую suspend функцию, добавляя дополнительный параметр `Continuation`.
+
+**До (исходный код):**
+
+```kotlin
+suspend fun getUserName(userId: String): String {
+    val user = fetchUser(userId)
+    return user.name
+}
+```
+
+**После CPS трансформации (концептуально):**
+
+```kotlin
+fun getUserName(userId: String, continuation: Continuation<String>): Any? {
+    // Преобразовано в конечный автомат (см. ниже)
+    val user = fetchUser(userId, continuation)
+    if (user == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
+    return user.name
+}
+```
+
+### Ключевые Выводы
+
+1. **Continuation = "остаток вычисления"** - Что происходит после приостановки
+2. **CPS трансформация** - Компилятор добавляет параметр Continuation
+3. **Конечные автоматы** - Каждая точка приостановки = состояние (label)
+4. **Никакого callback hell** - Конечный автомат управляет потоком
+5. **Эффективность** - Нет стека потока на корутину
+6. **ContinuationInterceptor** - Как диспетчеры переключают потоки
+7. **suspendCoroutine/suspendCancellableCoroutine** - Создание пользовательских приостанавливающих операций
+8. **Локальные переменные → поля** - Выживают приостановку
+9. **Нельзя вызвать из обычных функций** - Нужен контекст continuation
+10. **Производительность** - Небольшие накладные расходы на конечный автомат, огромная выгода от неблокирования
 
 ---
 
@@ -682,64 +739,6 @@ Complete
 8. **Local variables → fields** - Survive suspension
 9. **Can't call from regular functions** - Need continuation context
 10. **Performance** - Small overhead for state machine, huge gain from not blocking
-
----
-
-## Ответ (RU)
-
-Понимание того, как `suspend` функции работают внутри, критично для продвинутого использования корутин, оптимизации производительности и отладки. Kotlin компилирует suspend функции используя **Continuation Passing Style (CPS)** и **конечные автоматы (state machines)** под капотом. Эта трансформация прозрачна для разработчиков, но её понимание открывает глубокие знания.
-
-
-
-### Что Такое Continuation?
-
-**Continuation** представляет "остаток вычисления" - что должно произойти после возобновления точки приостановки.
-
-```kotlin
-public interface Continuation<in T> {
-    public val context: CoroutineContext
-    public fun resumeWith(result: Result<T>)
-}
-```
-
-**Ключевая концепция:** Когда suspend функция приостанавливается, она передает Continuation приостанавливающей операции. Эта операция позже вызывает `resumeWith()` для продолжения выполнения.
-
-### Continuation Passing Style (CPS)
-
-**CPS трансформация:** Компилятор преобразует каждую suspend функцию, добавляя дополнительный параметр `Continuation`.
-
-**До (исходный код):**
-
-```kotlin
-suspend fun getUserName(userId: String): String {
-    val user = fetchUser(userId)
-    return user.name
-}
-```
-
-**После CPS трансформации (концептуально):**
-
-```kotlin
-fun getUserName(userId: String, continuation: Continuation<String>): Any? {
-    // Преобразовано в конечный автомат (см. ниже)
-    val user = fetchUser(userId, continuation)
-    if (user == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-    return user.name
-}
-```
-
-### Ключевые Выводы
-
-1. **Continuation = "остаток вычисления"** - Что происходит после приостановки
-2. **CPS трансформация** - Компилятор добавляет параметр Continuation
-3. **Конечные автоматы** - Каждая точка приостановки = состояние (label)
-4. **Никакого callback hell** - Конечный автомат управляет потоком
-5. **Эффективность** - Нет стека потока на корутину
-6. **ContinuationInterceptor** - Как диспетчеры переключают потоки
-7. **suspendCoroutine/suspendCancellableCoroutine** - Создание пользовательских приостанавливающих операций
-8. **Локальные переменные → поля** - Выживают приостановку
-9. **Нельзя вызвать из обычных функций** - Нужен контекст continuation
-10. **Производительность** - Небольшие накладные расходы на конечный автомат, огромная выгода от неблокирования
 
 ---
 

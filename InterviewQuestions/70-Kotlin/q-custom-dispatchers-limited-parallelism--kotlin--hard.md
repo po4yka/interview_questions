@@ -19,16 +19,393 @@ related: [q-kotlin-map-collection--programming-languages--easy, q-supervisor-sco
 date created: Friday, October 31st 2025, 6:32:38 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-
 # Creating Custom CoroutineDispatchers with limitedParallelism / Создание Кастомных Диспетчеров
+
+# Вопрос (RU)
+
+> Когда и как следует создавать кастомные CoroutineDispatchers в Kotlin? Объясните API `limitedParallelism()`, интеграцию с ExecutorService, стратегии размера пула потоков и реальные сценарии для диспетчеров специфических ресурсов.
+
+---
 
 # Question (EN)
 
 > When and how should you create custom CoroutineDispatchers in Kotlin? Explain the `limitedParallelism()` API, ExecutorService integration, thread pool sizing strategies, and real-world scenarios for resource-specific dispatchers.
 
-# Вопрос (RU)
+## Ответ (RU)
 
-> Когда и как следует создавать кастомные CoroutineDispatchers в Kotlin? Объясните API `limitedParallelism()`, интеграцию с ExecutorService, стратегии размера пула потоков и реальные сценарии для диспетчеров специфических ресурсов.
+*(Краткое содержание основных пунктов из английской версии)*
+
+#### Когда Создавать Кастомные Диспетчеры
+
+Кастомные диспетчеры нужны когда:
+
+1. **Защита ресурсов**: Ограничение конкурентного доступа к общим ресурсам (база данных, камера, файловая система)
+2. **Ограничение скорости**: Контроль частоты API вызовов
+3. **Настройка пула потоков**: Специфические характеристики пула потоков для вашей нагрузки
+4. **Приоритетное выполнение**: Разные уровни приоритета для задач
+5. **Интеграция с legacy**: Мост между существующим ExecutorService и корутинами
+6. **Тестирование**: Контролируемая среда выполнения
+
+**Стандартные диспетчеры обычно достаточны:**
+- `Dispatchers.Default`: CPU-зависимая работа (параллелизм = ядра CPU)
+- `Dispatchers.IO`: I/O операции (параллелизм = 64 по умолчанию)
+- `Dispatchers.Main`: UI поток (Android/Desktop)
+- `Dispatchers.Unconfined`: Только для продвинутых случаев
+
+#### API limitedParallelism() (Kotlin 1.6+)
+
+`limitedParallelism()` создаёт представление диспетчера с ограниченным параллелизмом:
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateLimitedParallelism() = runBlocking {
+    // Создаём диспетчер с параллелизмом 2
+    val limitedDispatcher = Dispatchers.IO.limitedParallelism(2)
+
+    // Запускаем 5 корутин
+    val jobs = (1..5).map { id ->
+        launch(limitedDispatcher) {
+            println("[$id] Запущен на ${Thread.currentThread().name}")
+            delay(1000)
+            println("[$id] Завершён")
+        }
+    }
+
+    jobs.joinAll()
+}
+
+// Вывод показывает только 2 корутины выполняются одновременно
+```
+
+**Ключевые характеристики:**
+- Создаёт **представление** родительского диспетчера
+- Не создаёт новые потоки
+- Использует пул потоков родительского диспетчера
+- Контролирует **конкурентность**, а не какие потоки
+- Несколько представлений могут использовать одного родителя
+- Лёгкий и эффективный
+
+**Сравнение со старыми API:**
+
+```kotlin
+// Старый способ (устарел) - создаёт выделенные потоки
+@Deprecated("Используйте Dispatchers.IO.limitedParallelism(1)")
+val oldSingleThread = newSingleThreadContext("MyThread")
+
+@Deprecated("Используйте Dispatchers.IO.limitedParallelism(n)")
+val oldFixedPool = newFixedThreadPoolContext(4, "MyPool")
+
+// Новый способ (рекомендуется) - использует общий пул потоков
+val newSingleThread = Dispatchers.IO.limitedParallelism(1)
+val newLimitedPool = Dispatchers.IO.limitedParallelism(4)
+```
+
+#### Почему Старые API Устарели
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Проблема с newSingleThreadContext: Утечка ресурсов если не закрыть
+fun problemWithOldAPI() = runBlocking {
+    val dispatcher = newSingleThreadContext("MyThread")
+
+    launch(dispatcher) {
+        println("Выполняется на ${Thread.currentThread().name}")
+    }
+
+    // ДОЛЖНЫ вызвать close() или поток утечёт!
+    dispatcher.close()
+}
+
+// limitedParallelism не создаёт потоки, поэтому нет утечки
+fun newWaySafe() = runBlocking {
+    val dispatcher = Dispatchers.IO.limitedParallelism(1)
+
+    launch(dispatcher) {
+        println("Выполняется на ${Thread.currentThread().name}")
+    }
+
+    // close() не нужен!
+}
+```
+
+#### Создание Диспетчера Из ExecutorService
+
+При интеграции с legacy кодом или кастомными пулами потоков:
+
+```kotlin
+import kotlinx.coroutines.*
+import java.util.concurrent.*
+
+fun createFromExecutor() = runBlocking {
+    // Создаём кастомный executor
+    val executor = Executors.newFixedThreadPool(4) { runnable ->
+        Thread(runnable, "CustomThread").apply {
+            isDaemon = true
+            priority = Thread.MAX_PRIORITY
+        }
+    }
+
+    // Конвертируем в CoroutineDispatcher
+    val dispatcher = executor.asCoroutineDispatcher()
+
+    try {
+        launch(dispatcher) {
+            println("Выполняется на ${Thread.currentThread().name}")
+            println("Приоритет: ${Thread.currentThread().priority}")
+        }.join()
+    } finally {
+        // ДОЛЖНЫ закрыть и диспетчер и executor
+        dispatcher.close()
+        executor.shutdown()
+    }
+}
+```
+
+#### Стратегии Размера Пула Потоков
+
+**CPU-зависимые задачи:**
+
+```kotlin
+// Формула: Количество ядер CPU
+val cpuBoundDispatcher = Dispatchers.Default.limitedParallelism(
+    Runtime.getRuntime().availableProcessors()
+)
+```
+
+**I/O-зависимые задачи:**
+
+```kotlin
+// Формула: Значительно больше чем ядра CPU
+// Эмпирическое правило: ядра * (1 + время_ожидания / время_вычисления)
+
+val cores = Runtime.getRuntime().availableProcessors()
+val ioDispatcher = Dispatchers.IO.limitedParallelism(cores * 10)
+```
+
+**Таблица решений по размеру:**
+
+| Тип нагрузки | Параллелизм | Обоснование |
+|--------------|-------------|-------------|
+| Чистый CPU | # ядер | Минимизация переключения контекста |
+| Чистый I/O | 64+ | Потоки в основном ждут |
+| Запись в БД | 1 | Сериализация записей |
+| Чтение из БД | 4-8 | Разрешить конкурентное чтение |
+| API вызовы (с лимитом) | Лимит rate | Соблюдать ограничения API |
+| Файловый I/O | 4-8 | Ограничение конкурентности диска |
+
+#### Кастомный Диспетчер Для Специфических Ресурсов
+
+**Пример 1: Диспетчер базы данных (один писатель)**
+
+```kotlin
+import kotlinx.coroutines.*
+
+class DatabaseDispatcher {
+    // Один поток для записей (требование SQLite)
+    private val writeDispatcher = Dispatchers.IO.limitedParallelism(1)
+
+    // Несколько потоков для чтений
+    private val readDispatcher = Dispatchers.IO.limitedParallelism(4)
+
+    suspend fun <T> read(block: suspend () -> T): T =
+        withContext(readDispatcher) {
+            block()
+        }
+
+    suspend fun <T> write(block: suspend () -> T): T =
+        withContext(writeDispatcher) {
+            block()
+        }
+}
+
+// Использование
+class UserRepository(private val db: DatabaseDispatcher) {
+    suspend fun getUser(id: Int): User = db.read {
+        // Запрос чтения (может выполняться параллельно с другими чтениями)
+        delay(50)
+        User(id, "Имя")
+    }
+
+    suspend fun saveUser(user: User) = db.write {
+        // Запрос записи (сериализуется с другими записями)
+        delay(100)
+    }
+}
+
+data class User(val id: Int, val name: String)
+```
+
+**Пример 2: API диспетчер с ограничением скорости**
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
+
+class RateLimitedDispatcher(
+    private val maxConcurrent: Int,
+    private val requestsPerSecond: Int
+) {
+    private val semaphore = Semaphore(maxConcurrent)
+    private val dispatcher = Dispatchers.IO.limitedParallelism(maxConcurrent)
+
+    suspend fun <T> execute(block: suspend () -> T): T {
+        semaphore.withPermit {
+            return withContext(dispatcher) {
+                block()
+            }
+        }
+    }
+}
+
+// Использование: API клиент с ограничением скорости
+class ApiClient {
+    // Макс 5 одновременных запросов, 10 запросов в секунду
+    private val rateLimiter = RateLimitedDispatcher(
+        maxConcurrent = 5,
+        requestsPerSecond = 10
+    )
+
+    suspend fun fetchData(endpoint: String): String =
+        rateLimiter.execute {
+            println("Загрузка $endpoint")
+            delay(100) // Имитация API вызова
+            "Данные из $endpoint"
+        }
+}
+```
+
+**Пример 3: Диспетчер камеры (эксклюзивный доступ)**
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.*
+
+class CameraDispatcher {
+    // Только одна корутина может использовать камеру одновременно
+    private val mutex = Mutex()
+    private val dispatcher = Dispatchers.IO.limitedParallelism(1)
+
+    suspend fun <T> useCamera(block: suspend () -> T): T =
+        mutex.withLock {
+            withContext(dispatcher) {
+                block()
+            }
+        }
+}
+
+class CameraManager(private val cameraDispatcher: CameraDispatcher) {
+    suspend fun takePicture(): ByteArray = cameraDispatcher.useCamera {
+        println("Открытие камеры...")
+        delay(100)
+        println("Захват изображения...")
+        delay(500)
+        println("Закрытие камеры...")
+        ByteArray(0)
+    }
+}
+```
+
+#### Dispatcher.IO.limitedParallelism(1) Для Последовательного Выполнения
+
+```kotlin
+import kotlinx.coroutines.*
+
+class SerialExecutionExamples {
+    // Случай использования 1: Запись в файл (избежать повреждения)
+    private val fileWriteDispatcher = Dispatchers.IO.limitedParallelism(1)
+
+    suspend fun appendToFile(data: String) = withContext(fileWriteDispatcher) {
+        // Гарантированное последовательное выполнение
+        println("Запись: $data")
+        delay(100)
+    }
+
+    // Случай использования 2: Модификация общего ресурса
+    private val sharedResourceDispatcher = Dispatchers.IO.limitedParallelism(1)
+    private var counter = 0
+
+    suspend fun incrementCounter() = withContext(sharedResourceDispatcher) {
+        // Нет гонок - последовательное выполнение
+        val current = counter
+        delay(10)
+        counter = current + 1
+    }
+}
+```
+
+#### Управление Жизненным Циклом
+
+```kotlin
+import kotlinx.coroutines.*
+import java.util.concurrent.Executors
+
+class ManagedDispatcher : AutoCloseable {
+    private val executor = Executors.newFixedThreadPool(4)
+    val dispatcher = executor.asCoroutineDispatcher()
+
+    override fun close() {
+        println("Закрытие диспетчера...")
+        dispatcher.close()
+        executor.shutdown()
+        if (!executor.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
+            executor.shutdownNow()
+        }
+    }
+}
+
+// Использование с use() для автоматической очистки
+suspend fun safeDispatcherUsage() {
+    ManagedDispatcher().use { managed ->
+        withContext(managed.dispatcher) {
+            println("Выполнение работы...")
+            delay(1000)
+        }
+    } // Автоматически закрыт
+}
+```
+
+### Типичные Ошибки
+
+1. **Забыть закрыть ExecutorCoroutineDispatcher**
+```kotlin
+// Плохо - утечка потоков
+fun leakyCode() = runBlocking {
+    val executor = Executors.newFixedThreadPool(4)
+    val dispatcher = executor.asCoroutineDispatcher()
+
+    launch(dispatcher) {
+        // работа
+    }
+    // Отсутствует: dispatcher.close() и executor.shutdown()
+}
+```
+
+2. **Использование неправильного диспетчера для нагрузки**
+```kotlin
+// Плохо - CPU работа на IO диспетчере
+suspend fun badChoice() = withContext(Dispatchers.IO) {
+    // CPU-интенсивная работа (неправильный диспетчер!)
+    (1..1_000_000).sum()
+}
+
+// Хорошо - CPU работа на Default диспетчере
+suspend fun goodChoice() = withContext(Dispatchers.Default) {
+    // CPU-интенсивная работа
+    (1..1_000_000).sum()
+}
+```
+
+### Резюме
+
+**Кастомные диспетчеры** создаются используя `limitedParallelism()` (предпочтительно) или `asCoroutineDispatcher()` (для ExecutorService). Ключевые принципы:
+
+- **limitedParallelism()**: Лёгкий, не создаёт новые потоки, рекомендуется
+- **Размер пула потоков**: Ядра CPU для CPU работы, выше для I/O работы
+- **Защита ресурсов**: Используйте ограниченный параллелизм (часто 1) для эксклюзивных ресурсов
+- **Жизненный цикл**: Закрывайте ExecutorCoroutineDispatchers чтобы избежать утечек
+- **Тестирование**: Используйте TestDispatcher для контролируемого выполнения
 
 ---
 
@@ -947,384 +1324,6 @@ val appropriateLimit = Dispatchers.IO.limitedParallelism(10)
 - **Testing**: Use TestDispatcher for controlled execution
 
 Choose the right dispatcher for your workload to maximize performance and resource efficiency.
-
----
-
-## Ответ (RU)
-
-*(Краткое содержание основных пунктов из английской версии)*
-
-#### Когда Создавать Кастомные Диспетчеры
-
-Кастомные диспетчеры нужны когда:
-
-1. **Защита ресурсов**: Ограничение конкурентного доступа к общим ресурсам (база данных, камера, файловая система)
-2. **Ограничение скорости**: Контроль частоты API вызовов
-3. **Настройка пула потоков**: Специфические характеристики пула потоков для вашей нагрузки
-4. **Приоритетное выполнение**: Разные уровни приоритета для задач
-5. **Интеграция с legacy**: Мост между существующим ExecutorService и корутинами
-6. **Тестирование**: Контролируемая среда выполнения
-
-**Стандартные диспетчеры обычно достаточны:**
-- `Dispatchers.Default`: CPU-зависимая работа (параллелизм = ядра CPU)
-- `Dispatchers.IO`: I/O операции (параллелизм = 64 по умолчанию)
-- `Dispatchers.Main`: UI поток (Android/Desktop)
-- `Dispatchers.Unconfined`: Только для продвинутых случаев
-
-#### API limitedParallelism() (Kotlin 1.6+)
-
-`limitedParallelism()` создаёт представление диспетчера с ограниченным параллелизмом:
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun demonstrateLimitedParallelism() = runBlocking {
-    // Создаём диспетчер с параллелизмом 2
-    val limitedDispatcher = Dispatchers.IO.limitedParallelism(2)
-
-    // Запускаем 5 корутин
-    val jobs = (1..5).map { id ->
-        launch(limitedDispatcher) {
-            println("[$id] Запущен на ${Thread.currentThread().name}")
-            delay(1000)
-            println("[$id] Завершён")
-        }
-    }
-
-    jobs.joinAll()
-}
-
-// Вывод показывает только 2 корутины выполняются одновременно
-```
-
-**Ключевые характеристики:**
-- Создаёт **представление** родительского диспетчера
-- Не создаёт новые потоки
-- Использует пул потоков родительского диспетчера
-- Контролирует **конкурентность**, а не какие потоки
-- Несколько представлений могут использовать одного родителя
-- Лёгкий и эффективный
-
-**Сравнение со старыми API:**
-
-```kotlin
-// Старый способ (устарел) - создаёт выделенные потоки
-@Deprecated("Используйте Dispatchers.IO.limitedParallelism(1)")
-val oldSingleThread = newSingleThreadContext("MyThread")
-
-@Deprecated("Используйте Dispatchers.IO.limitedParallelism(n)")
-val oldFixedPool = newFixedThreadPoolContext(4, "MyPool")
-
-// Новый способ (рекомендуется) - использует общий пул потоков
-val newSingleThread = Dispatchers.IO.limitedParallelism(1)
-val newLimitedPool = Dispatchers.IO.limitedParallelism(4)
-```
-
-#### Почему Старые API Устарели
-
-```kotlin
-import kotlinx.coroutines.*
-
-// Проблема с newSingleThreadContext: Утечка ресурсов если не закрыть
-fun problemWithOldAPI() = runBlocking {
-    val dispatcher = newSingleThreadContext("MyThread")
-
-    launch(dispatcher) {
-        println("Выполняется на ${Thread.currentThread().name}")
-    }
-
-    // ДОЛЖНЫ вызвать close() или поток утечёт!
-    dispatcher.close()
-}
-
-// limitedParallelism не создаёт потоки, поэтому нет утечки
-fun newWaySafe() = runBlocking {
-    val dispatcher = Dispatchers.IO.limitedParallelism(1)
-
-    launch(dispatcher) {
-        println("Выполняется на ${Thread.currentThread().name}")
-    }
-
-    // close() не нужен!
-}
-```
-
-#### Создание Диспетчера Из ExecutorService
-
-При интеграции с legacy кодом или кастомными пулами потоков:
-
-```kotlin
-import kotlinx.coroutines.*
-import java.util.concurrent.*
-
-fun createFromExecutor() = runBlocking {
-    // Создаём кастомный executor
-    val executor = Executors.newFixedThreadPool(4) { runnable ->
-        Thread(runnable, "CustomThread").apply {
-            isDaemon = true
-            priority = Thread.MAX_PRIORITY
-        }
-    }
-
-    // Конвертируем в CoroutineDispatcher
-    val dispatcher = executor.asCoroutineDispatcher()
-
-    try {
-        launch(dispatcher) {
-            println("Выполняется на ${Thread.currentThread().name}")
-            println("Приоритет: ${Thread.currentThread().priority}")
-        }.join()
-    } finally {
-        // ДОЛЖНЫ закрыть и диспетчер и executor
-        dispatcher.close()
-        executor.shutdown()
-    }
-}
-```
-
-#### Стратегии Размера Пула Потоков
-
-**CPU-зависимые задачи:**
-
-```kotlin
-// Формула: Количество ядер CPU
-val cpuBoundDispatcher = Dispatchers.Default.limitedParallelism(
-    Runtime.getRuntime().availableProcessors()
-)
-```
-
-**I/O-зависимые задачи:**
-
-```kotlin
-// Формула: Значительно больше чем ядра CPU
-// Эмпирическое правило: ядра * (1 + время_ожидания / время_вычисления)
-
-val cores = Runtime.getRuntime().availableProcessors()
-val ioDispatcher = Dispatchers.IO.limitedParallelism(cores * 10)
-```
-
-**Таблица решений по размеру:**
-
-| Тип нагрузки | Параллелизм | Обоснование |
-|--------------|-------------|-------------|
-| Чистый CPU | # ядер | Минимизация переключения контекста |
-| Чистый I/O | 64+ | Потоки в основном ждут |
-| Запись в БД | 1 | Сериализация записей |
-| Чтение из БД | 4-8 | Разрешить конкурентное чтение |
-| API вызовы (с лимитом) | Лимит rate | Соблюдать ограничения API |
-| Файловый I/O | 4-8 | Ограничение конкурентности диска |
-
-#### Кастомный Диспетчер Для Специфических Ресурсов
-
-**Пример 1: Диспетчер базы данных (один писатель)**
-
-```kotlin
-import kotlinx.coroutines.*
-
-class DatabaseDispatcher {
-    // Один поток для записей (требование SQLite)
-    private val writeDispatcher = Dispatchers.IO.limitedParallelism(1)
-
-    // Несколько потоков для чтений
-    private val readDispatcher = Dispatchers.IO.limitedParallelism(4)
-
-    suspend fun <T> read(block: suspend () -> T): T =
-        withContext(readDispatcher) {
-            block()
-        }
-
-    suspend fun <T> write(block: suspend () -> T): T =
-        withContext(writeDispatcher) {
-            block()
-        }
-}
-
-// Использование
-class UserRepository(private val db: DatabaseDispatcher) {
-    suspend fun getUser(id: Int): User = db.read {
-        // Запрос чтения (может выполняться параллельно с другими чтениями)
-        delay(50)
-        User(id, "Имя")
-    }
-
-    suspend fun saveUser(user: User) = db.write {
-        // Запрос записи (сериализуется с другими записями)
-        delay(100)
-    }
-}
-
-data class User(val id: Int, val name: String)
-```
-
-**Пример 2: API диспетчер с ограничением скорости**
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.*
-
-class RateLimitedDispatcher(
-    private val maxConcurrent: Int,
-    private val requestsPerSecond: Int
-) {
-    private val semaphore = Semaphore(maxConcurrent)
-    private val dispatcher = Dispatchers.IO.limitedParallelism(maxConcurrent)
-
-    suspend fun <T> execute(block: suspend () -> T): T {
-        semaphore.withPermit {
-            return withContext(dispatcher) {
-                block()
-            }
-        }
-    }
-}
-
-// Использование: API клиент с ограничением скорости
-class ApiClient {
-    // Макс 5 одновременных запросов, 10 запросов в секунду
-    private val rateLimiter = RateLimitedDispatcher(
-        maxConcurrent = 5,
-        requestsPerSecond = 10
-    )
-
-    suspend fun fetchData(endpoint: String): String =
-        rateLimiter.execute {
-            println("Загрузка $endpoint")
-            delay(100) // Имитация API вызова
-            "Данные из $endpoint"
-        }
-}
-```
-
-**Пример 3: Диспетчер камеры (эксклюзивный доступ)**
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.*
-
-class CameraDispatcher {
-    // Только одна корутина может использовать камеру одновременно
-    private val mutex = Mutex()
-    private val dispatcher = Dispatchers.IO.limitedParallelism(1)
-
-    suspend fun <T> useCamera(block: suspend () -> T): T =
-        mutex.withLock {
-            withContext(dispatcher) {
-                block()
-            }
-        }
-}
-
-class CameraManager(private val cameraDispatcher: CameraDispatcher) {
-    suspend fun takePicture(): ByteArray = cameraDispatcher.useCamera {
-        println("Открытие камеры...")
-        delay(100)
-        println("Захват изображения...")
-        delay(500)
-        println("Закрытие камеры...")
-        ByteArray(0)
-    }
-}
-```
-
-#### Dispatcher.IO.limitedParallelism(1) Для Последовательного Выполнения
-
-```kotlin
-import kotlinx.coroutines.*
-
-class SerialExecutionExamples {
-    // Случай использования 1: Запись в файл (избежать повреждения)
-    private val fileWriteDispatcher = Dispatchers.IO.limitedParallelism(1)
-
-    suspend fun appendToFile(data: String) = withContext(fileWriteDispatcher) {
-        // Гарантированное последовательное выполнение
-        println("Запись: $data")
-        delay(100)
-    }
-
-    // Случай использования 2: Модификация общего ресурса
-    private val sharedResourceDispatcher = Dispatchers.IO.limitedParallelism(1)
-    private var counter = 0
-
-    suspend fun incrementCounter() = withContext(sharedResourceDispatcher) {
-        // Нет гонок - последовательное выполнение
-        val current = counter
-        delay(10)
-        counter = current + 1
-    }
-}
-```
-
-#### Управление Жизненным Циклом
-
-```kotlin
-import kotlinx.coroutines.*
-import java.util.concurrent.Executors
-
-class ManagedDispatcher : AutoCloseable {
-    private val executor = Executors.newFixedThreadPool(4)
-    val dispatcher = executor.asCoroutineDispatcher()
-
-    override fun close() {
-        println("Закрытие диспетчера...")
-        dispatcher.close()
-        executor.shutdown()
-        if (!executor.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
-            executor.shutdownNow()
-        }
-    }
-}
-
-// Использование с use() для автоматической очистки
-suspend fun safeDispatcherUsage() {
-    ManagedDispatcher().use { managed ->
-        withContext(managed.dispatcher) {
-            println("Выполнение работы...")
-            delay(1000)
-        }
-    } // Автоматически закрыт
-}
-```
-
-### Типичные Ошибки
-
-1. **Забыть закрыть ExecutorCoroutineDispatcher**
-```kotlin
-// Плохо - утечка потоков
-fun leakyCode() = runBlocking {
-    val executor = Executors.newFixedThreadPool(4)
-    val dispatcher = executor.asCoroutineDispatcher()
-
-    launch(dispatcher) {
-        // работа
-    }
-    // Отсутствует: dispatcher.close() и executor.shutdown()
-}
-```
-
-2. **Использование неправильного диспетчера для нагрузки**
-```kotlin
-// Плохо - CPU работа на IO диспетчере
-suspend fun badChoice() = withContext(Dispatchers.IO) {
-    // CPU-интенсивная работа (неправильный диспетчер!)
-    (1..1_000_000).sum()
-}
-
-// Хорошо - CPU работа на Default диспетчере
-suspend fun goodChoice() = withContext(Dispatchers.Default) {
-    // CPU-интенсивная работа
-    (1..1_000_000).sum()
-}
-```
-
-### Резюме
-
-**Кастомные диспетчеры** создаются используя `limitedParallelism()` (предпочтительно) или `asCoroutineDispatcher()` (для ExecutorService). Ключевые принципы:
-
-- **limitedParallelism()**: Лёгкий, не создаёт новые потоки, рекомендуется
-- **Размер пула потоков**: Ядра CPU для CPU работы, выше для I/O работы
-- **Защита ресурсов**: Используйте ограниченный параллелизм (часто 1) для эксклюзивных ресурсов
-- **Жизненный цикл**: Закрывайте ExecutorCoroutineDispatchers чтобы избежать утечек
-- **Тестирование**: Используйте TestDispatcher для контролируемого выполнения
 
 ---
 
