@@ -29,6 +29,271 @@ uv run --project utils python -m utils.validate_note <relative-path>
 
 If the note appears to be in the wrong folder relative to its topic, flag it in the report but do **not** move the file automatically.
 
+### Validator Output Guide
+
+The validator produces structured output. Learn to interpret results and fix common issues.
+
+#### Successful Validation
+
+```
+✓ YAML frontmatter valid
+✓ All required fields present
+✓ Topic value valid: 'android'
+✓ Subtopics valid: ['ui-compose', 'lifecycle']
+✓ ID format valid: 'android-134'
+✓ Questions use blockquote syntax (>) in both RU and EN
+✓ Code formatting: all types wrapped in backticks
+✓ No broken wikilinks found
+✓ File in correct folder: 40-Android/ matches topic 'android'
+
+VALIDATION PASSED (0 errors, 0 warnings)
+```
+
+#### Common Validation Errors
+
+**Error 1: Missing Required Field**
+```
+✗ ERROR: Missing required field 'moc' in YAML frontmatter
+```
+**Fix**: Add `moc: moc-<topic>` to frontmatter (e.g., `moc: moc-algorithms`)
+
+**Error 2: Invalid Topic Value**
+```
+✗ ERROR: Invalid topic 'programming'. Must be one of: algorithms, android, kotlin, ...
+```
+**Fix**: Check TAXONOMY.md for valid topics. Replace with correct value.
+
+**Error 3: Question Missing Blockquote**
+```
+✗ ERROR: Question not formatted with blockquote syntax
+  Line 15: # Вопрос (RU)
+  Line 16: Что такое ViewModel?
+  Expected: > Что такое ViewModel?
+```
+**Fix**: Add `>` before question text:
+```markdown
+# Вопрос (RU)
+> Что такое ViewModel?
+```
+
+**Error 4: Code Formatting - Unescaped Generics**
+```
+✗ ERROR: Generic type not wrapped in backticks
+  Line 45: ArrayList<String> will be interpreted as HTML
+```
+**Fix**: Wrap in backticks: `` `ArrayList<String>` ``
+
+**Error 5: Broken Wikilink**
+```
+✗ ERROR: Broken wikilink [[c-hash-map]] - target file not found
+```
+**Fix**: Either create `c-hash-map.md` or remove the link
+
+**Error 6: File in Wrong Folder**
+```
+⚠ WARNING: File location mismatch
+  Current: 40-Android/q-coroutines-basics--kotlin--easy.md
+  Expected: 70-Kotlin/ (topic is 'kotlin')
+```
+**Fix**: Flag for human review; do NOT move automatically
+
+**Error 7: Invalid Subtopic**
+```
+✗ ERROR: Invalid Android subtopic 'compose'
+  Valid options: ui-compose, ui-state, ui-navigation, ...
+```
+**Fix**: Check TAXONOMY.md Android subtopics list. Use `ui-compose` not `compose`.
+
+**Error 8: Missing Difficulty Tag**
+```
+✗ ERROR: Tags missing required 'difficulty/<level>' tag
+  Current tags: [android, viewmodel, lifecycle]
+```
+**Fix**: Add difficulty tag: `tags: [android, viewmodel, lifecycle, difficulty/medium]`
+
+**Error 9: Brackets in YAML Links**
+```
+✗ ERROR: YAML field 'moc' contains brackets: [[moc-algorithms]]
+```
+**Fix**: Remove brackets: `moc: moc-algorithms`
+
+#### Validation Warnings
+
+Warnings indicate issues that should be fixed but won't block progress:
+
+```
+⚠ WARNING: Note is 650 lines (target: 200-400)
+⚠ WARNING: Code snippet on line 125 is 28 lines (target: 5-15)
+⚠ WARNING: Only 1 related link found (recommended: 2-5)
+⚠ WARNING: 'References' section empty; consider removing or populating
+```
+
+### Error Recovery Workflow
+
+When validation fails or issues arise, follow these decision trees:
+
+#### Scenario 1: Validation Fails After Edits
+
+**Decision Tree**:
+```
+Validation failed?
+├─ Yes → Review validator output
+│   ├─ Missing required field?
+│   │   └─ Add field from TAXONOMY.md → Re-run validation
+│   ├─ Invalid value?
+│   │   └─ Check TAXONOMY.md → Use valid value → Re-run validation
+│   ├─ Syntax error?
+│   │   └─ Fix YAML syntax (no tabs, proper spacing) → Re-run validation
+│   ├─ Formatting error?
+│   │   └─ Apply formatting rules (blockquotes, backticks) → Re-run validation
+│   └─ Still failing after 3 attempts?
+│       └─ Flag for human review with error details
+└─ No → Continue to next step
+```
+
+**Example Recovery**:
+```markdown
+1. Run validation: `uv run --project utils python -m utils.validate_note 40-Android/q-compose-state--android--medium.md`
+2. Error: Missing required field 'moc'
+3. Fix: Add `moc: moc-android` to frontmatter
+4. Re-run validation: PASSED
+5. Continue with edits
+```
+
+#### Scenario 2: Note in Wrong Folder
+
+**Decision Tree**:
+```
+Validator warns: File in wrong folder?
+├─ Confirm mismatch:
+│   ├─ Current: 40-Android/q-coroutines--kotlin--easy.md
+│   └─ Topic: kotlin → Should be in 70-Kotlin/
+├─ Document in report:
+│   ├─ "NOTE: File location mismatch detected"
+│   ├─ "Current location: 40-Android/"
+│   ├─ "Topic in YAML: kotlin"
+│   ├─ "Recommended location: 70-Kotlin/"
+│   └─ "Action: Flagged for human review (DO NOT MOVE)"
+└─ Continue validation and editing
+    └─ Do NOT move file automatically
+```
+
+**Why not move automatically?**
+- File may have legitimate reason to be where it is
+- Wikilinks from other notes would break
+- Human should decide and update links accordingly
+
+#### Scenario 3: Broken Wikilinks
+
+**Decision Tree**:
+```
+Validator reports broken links?
+├─ Identify broken link: [[c-hash-map]]
+├─ Check if file should exist:
+│   ├─ Is it a core concept? (c-hash-map, c-binary-tree, etc.)
+│   │   ├─ Yes → Add to "needs creation" list in report
+│   │   └─ No → Consider removing link
+│   ├─ Is filename misspelled?
+│   │   └─ Search vault: find c-hashmap.md (different spelling)
+│   │       └─ Fix: [[c-hashmap]] or [[c-hash-map|hash map]]
+│   └─ Is link outdated?
+│       └─ File was moved/renamed → Update to correct name
+└─ Document decision in report
+```
+
+**Recovery Actions**:
+1. **Minor typo** → Fix immediately and re-validate
+2. **Missing concept note** → Document in report: "Suggests creating [[c-hash-map]]"
+3. **File renamed** → Update link to new name
+4. **Link unnecessary** → Remove and re-validate
+
+#### Scenario 4: Content Too Long/Short
+
+**Decision Tree**:
+```
+Note exceeds target length (200-400 lines)?
+├─ Current length: 650 lines
+├─ Analyze content:
+│   ├─ Excessive explanation?
+│   │   └─ Trim to essential points (aim for 40-70% reduction)
+│   ├─ Too many code examples? (>5)
+│   │   └─ Keep 3-5 most illustrative examples
+│   ├─ Too many follow-ups? (>8)
+│   │   └─ Keep 3-5 most relevant follow-ups
+│   └─ Redundant sections?
+│       └─ Remove or consolidate
+├─ Target: 200-400 lines total
+└─ If still too long after trimming:
+    └─ Flag for human review: "Content very dense, may need split"
+
+Note too short (<150 lines)?
+├─ Check if answer is complete:
+│   ├─ Missing complexity analysis? → Add
+│   ├─ Missing trade-offs? → Add
+│   ├─ Missing code examples? → Add 1-2 examples
+│   └─ Missing follow-ups? → Add 3-5 questions
+└─ If genuinely simple topic:
+    └─ Accept shorter length if complete
+```
+
+#### Scenario 5: Translation Mismatch
+
+**Decision Tree**:
+```
+RU and EN sections don't match semantically?
+├─ Identify which is more complete:
+│   ├─ RU more detailed? → Expand EN to match
+│   └─ EN more detailed? → Expand RU to match
+├─ Check specific mismatches:
+│   ├─ Code examples different?
+│   │   └─ Use identical code in both sections
+│   ├─ Different number of points?
+│   │   └─ Ensure same structure and point count
+│   └─ One has complexity analysis, other doesn't?
+│       └─ Add to both sections
+└─ After fixing: Flag for human review of translation quality
+```
+
+#### Scenario 6: Multiple Errors (>5)
+
+**Decision Tree**:
+```
+Validator reports >5 errors?
+├─ Triage by severity:
+│   ├─ Critical (blocks validation):
+│   │   ├─ Missing required fields
+│   │   ├─ Invalid topic/subtopic values
+│   │   └─ YAML syntax errors
+│   │       → Fix these FIRST, then re-run validation
+│   ├─ High (formatting):
+│   │   ├─ Missing blockquotes
+│   │   ├─ Unescaped generics
+│   │   └─ Broken wikilinks
+│   │       → Fix after critical issues
+│   └─ Medium (quality):
+│       ├─ Length issues
+│       ├─ Missing tags
+│       └─ Few related links
+│           → Fix after high-priority issues
+├─ Fix in priority order
+├─ Re-run validation after each group
+└─ If >3 validation cycles needed:
+    └─ Flag for human review: "Note needs significant rework"
+```
+
+#### Recovery Success Checklist
+
+After error recovery, verify:
+- [ ] Validation passes without critical errors
+- [ ] All required YAML fields present and valid
+- [ ] Questions use blockquote syntax (both RU and EN)
+- [ ] Code formatting correct (backticks for types/generics)
+- [ ] No broken wikilinks (or documented for creation)
+- [ ] File location matches topic (or flagged if mismatch)
+- [ ] Length within acceptable range (200-400 lines ideal)
+- [ ] RU and EN sections semantically equivalent
+- [ ] Changes documented in progress tracker
+
 ---
 
 ## YAML Standardization
