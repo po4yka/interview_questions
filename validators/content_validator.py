@@ -86,7 +86,7 @@ class ContentValidator(BaseValidator):
         if ordered != sorted(ordered):
             self.add_issue(
                 Severity.ERROR,
-                "Headings appear out of expected order (RU before EN)",
+                "Headings appear out of expected order (should be: RU question → EN question → RU answer → EN answer)",
             )
         else:
             self.add_passed("Heading order valid")

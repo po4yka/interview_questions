@@ -18,13 +18,19 @@ date created: Friday, October 31st 2025, 6:29:22 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
-# Как По Объекту Понять Что Он Не Используется?
+# Вопрос (RU)
+> Как по объекту понять что он не используется?
 
 # Question (EN)
 > How to detect that an object is no longer used?
 
-# Вопрос (RU)
-> Как по объекту понять что он не используется?
+---
+
+## Ответ (RU)
+
+Используйте WeakReference для определения был ли объект освобожден сборщиком мусора. Также проверьте отсутствие сильных ссылок и используйте ObjectWatcher из LeakCanary для отслеживания.
+
+Все примеры кода из английской версии применимы и к русской версии.
 
 ---
 
@@ -75,10 +81,10 @@ class MyFragment : Fragment() {
 **3. Check for Strong References**
 
 Object is unused when:
-- - No local variables reference it
-- - No static fields reference it
-- - No other objects reference it
-- - Only WeakReferences exist
+- No local variables reference it
+- No static fields reference it
+- No other objects reference it
+- Only WeakReferences exist
 
 **Example:**
 
@@ -110,12 +116,6 @@ fun testGarbageCollection() {
 - Use **WeakReference** to check if GC collected object
 - Use **LeakCanary** for automatic leak detection in Android
 - Ensure **no strong references** exist for object to be collected
-
----
-
-## Ответ (RU)
-
-Используйте WeakReference для определения был ли объект освобожден сборщиком мусора. Также проверьте отсутствие сильных ссылок и используйте ObjectWatcher из LeakCanary для отслеживания.
 
 ## Follow-ups
 
