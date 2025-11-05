@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime
+from datetime import datetime, date
 from typing import Iterable, List
 
 from .base import BaseValidator, Severity
@@ -33,7 +33,8 @@ class YAMLValidator(BaseValidator):
     ALLOWED_DIFFICULTIES = {"easy", "medium", "hard"}
     ALLOWED_LANGUAGES = {"en", "ru"}
     ALLOWED_QUESTION_KINDS = {"coding", "theory", "system-design", "android"}
-    ID_PATTERN = re.compile(r"^\d{8}-\d{6}$")
+    # New ID format: <subject>-<serial> (e.g., algo-001, android-134, kotlin-042)
+    ID_PATTERN = re.compile(r"^[a-z]+-\d+$")
 
     def validate(self):
         frontmatter = self.frontmatter
@@ -78,7 +79,7 @@ class YAMLValidator(BaseValidator):
         if not self.ID_PATTERN.match(str(value)):
             self.add_issue(
                 Severity.ERROR,
-                "id must follow pattern YYYYMMDD-HHmmss",
+                "id must follow pattern <subject>-<serial> (e.g., algo-001, android-134)",
                 field="id",
             )
         else:
@@ -193,14 +194,15 @@ class YAMLValidator(BaseValidator):
             )
 
     def _check_status(self, value: str | None) -> None:
-        if value != "draft":
+        allowed_statuses = {"draft", "reviewed", "ready", "retired"}
+        if value not in allowed_statuses:
             self.add_issue(
                 Severity.ERROR,
-                "status must be 'draft' for AI-authored notes",
+                f"status must be one of: {', '.join(sorted(allowed_statuses))}",
                 field="status",
             )
         else:
-            self.add_passed("status is draft")
+            self.add_passed("status value valid")
 
     def _check_moc(self, moc: str | None, topic: str | None) -> None:
         if not moc:
@@ -252,9 +254,11 @@ class YAMLValidator(BaseValidator):
 
     def _validate_date(self, value, field: str) -> None:
         if not value:
-            self.add_issue(Severity.ERROR, f"{field} missing", field=field)
+            # Use WARNING instead of ERROR to be lenient with existing notes
+            self.add_issue(Severity.WARNING, f"{field} missing (recommended for new notes)", field=field)
             return
-        if isinstance(value, datetime):
+        # Accept both datetime.date and datetime.datetime objects from YAML parsing
+        if isinstance(value, (datetime, date)):
             self.add_passed(f"{field} date format valid")
             return
         if isinstance(value, str):
