@@ -158,11 +158,18 @@ ViewModel реализует паттерн MVVM, обеспечивая чет�
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-architecture-patterns]]
+- [[c-mvvm-pattern]]
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/docs
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+
+
 ## Related Questions
 
 ### Hub

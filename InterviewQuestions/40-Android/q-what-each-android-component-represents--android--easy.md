@@ -222,11 +222,16 @@ startActivity(intent)
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-android-components]]
+- [[c-broadcast-receiver]]
+- [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-rss-feed-aggregator--android--medium]]

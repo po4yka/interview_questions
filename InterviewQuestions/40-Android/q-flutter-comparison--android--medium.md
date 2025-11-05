@@ -497,7 +497,9 @@ class LocationManager {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-cross-platform-development]]
+
+
 ## Related Questions
 
 - [[c-cross-platform-development]]

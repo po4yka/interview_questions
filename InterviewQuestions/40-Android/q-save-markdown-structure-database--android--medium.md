@@ -484,11 +484,16 @@ class MarkdownRepository(
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-database-encryption-android--android--medium]]
+- [[q-fragments-vs-activity--android--medium]]
+- [[q-mvi-handle-one-time-events--android--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

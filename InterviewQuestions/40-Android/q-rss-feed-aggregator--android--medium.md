@@ -485,11 +485,16 @@ fun RssItemCard(
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-databases-android--android--easy]]
+- [[q-how-to-choose-layout-for-fragment--android--easy]]
+- [[q-webp-image-format-android--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-how-to-choose-layout-for-fragment--android--easy]]

@@ -989,7 +989,11 @@ class FrameMetricsMonitor {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[app-startup-optimization]]
+- [[baseline-profiles-optimization]]
+- [[macrobenchmark-startup]]
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

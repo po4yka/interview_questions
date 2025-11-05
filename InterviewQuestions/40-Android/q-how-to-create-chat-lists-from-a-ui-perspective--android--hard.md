@@ -487,11 +487,17 @@ class ChatListViewModel : ViewModel() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-network-error-handling-strategies--networking--medium]]
+- [[q-what-are-px-dp-sp--android--easy]]
+- [[q-what-is-known-about-recyclerview--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

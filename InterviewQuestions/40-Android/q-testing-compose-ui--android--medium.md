@@ -748,11 +748,18 @@ debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-jetpack-compose]]
+- [[c-testing]]
+- [[q-what-is-diffutil-for--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/training/testing/ui-testing
+- https://developer.android.com/docs
+- https://developer.android.com/develop/ui/compose
+
+
 ## Related Questions
 
 ### Hub

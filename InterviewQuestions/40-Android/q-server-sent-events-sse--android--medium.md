@@ -1500,11 +1500,16 @@ Server-Sent Events предоставляют:
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-compose-testing--android--medium]]
+- [[q-recyclerview-explained--android--medium]]
+- [[q-recyclerview-viewtypes-delegation--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

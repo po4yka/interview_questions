@@ -340,11 +340,16 @@ override fun onDestroyView() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-app-start-types-android--android--medium]]
+- [[q-data-sync-unstable-network--android--hard]]
+- [[q-stable-classes-compose--android--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-stable-classes-compose--android--hard]]

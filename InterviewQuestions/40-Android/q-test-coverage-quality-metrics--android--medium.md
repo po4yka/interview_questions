@@ -427,11 +427,17 @@ class CoverageReporter {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-junit]]
+- [[c-testing]]
+- [[q-what-is-diffutil-for--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/training/testing/local-tests
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Medium)

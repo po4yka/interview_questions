@@ -374,7 +374,10 @@ val layout = verticalLayout {
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+- https://developer.android.com/develop/ui/compose
+
+
 ## Related Questions
 
 ### Related (Same Level)

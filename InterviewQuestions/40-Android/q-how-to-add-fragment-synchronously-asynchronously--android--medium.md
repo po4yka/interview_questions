@@ -452,11 +452,16 @@ if (!isStateSaved) {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-how-does-jetpackcompose-work--android--medium]]
+- [[q-play-app-signing--android--medium]]
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

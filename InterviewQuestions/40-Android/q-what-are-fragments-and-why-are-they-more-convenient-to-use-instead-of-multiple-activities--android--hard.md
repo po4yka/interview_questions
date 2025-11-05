@@ -326,11 +326,16 @@ Using fragments allows creating **flexible, modular, and efficient applications*
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-activity-fragments-relationship]]
+- [[c-fragments]]
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

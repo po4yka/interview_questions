@@ -950,7 +950,10 @@ class UserViewModel @Inject constructor(
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-clean-architecture-android--android--hard]]
+- [[q-repository-multiple-sources--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

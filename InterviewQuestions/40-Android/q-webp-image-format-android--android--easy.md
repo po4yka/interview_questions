@@ -389,11 +389,16 @@ WebP — это оптимальный выбор для Android-приложе�
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-image-formats]]
+- [[c-performance]]
+- [[q-what-layout-allows-overlapping-objects--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-what-are-services-for--android--easy]]

@@ -888,11 +888,16 @@ class MusicPlayerService : Service() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-android-components]]
+- [[c-context]]
+- [[c-manifest]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

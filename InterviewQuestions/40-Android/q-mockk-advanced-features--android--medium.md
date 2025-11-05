@@ -675,11 +675,17 @@ MockK — предпочтительный выбор для Kotlin проект
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-compositionlocal-compose--android--hard]]
+- [[q-mvp-pattern--android--medium]]
+- [[q-why-use-diffutil--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/training/testing/local-tests
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Medium)

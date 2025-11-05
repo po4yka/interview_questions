@@ -700,11 +700,16 @@ class MyService : Service() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-async-operations-android--android--medium]]
+- [[q-derived-state-snapshot-system--jetpack-compose--hard]]
+- [[q-how-to-fix-a-bad-element-layout--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

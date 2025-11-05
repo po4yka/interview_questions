@@ -543,11 +543,16 @@ object AppModule {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-android-security-best-practices--android--medium]]
+- [[q-cicd-pipeline-setup--devops--medium]]
+- [[q-room-library-definition--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

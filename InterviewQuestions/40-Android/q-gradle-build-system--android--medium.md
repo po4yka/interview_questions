@@ -807,7 +807,11 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-cache-implementation-strategies--android--medium]]
+- [[q-kapt-vs-ksp--android--medium]]
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

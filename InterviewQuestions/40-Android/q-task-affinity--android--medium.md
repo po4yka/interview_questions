@@ -122,7 +122,9 @@ Activity can move to a task with the same affinity when it comes to foreground.
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

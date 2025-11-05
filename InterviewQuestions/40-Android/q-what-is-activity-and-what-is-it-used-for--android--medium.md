@@ -416,11 +416,17 @@ class PhotoViewerActivity : AppCompatActivity() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-activity-lifecycle]]
+- [[c-android-components]]
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

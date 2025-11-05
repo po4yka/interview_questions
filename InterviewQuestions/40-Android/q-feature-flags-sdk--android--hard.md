@@ -505,7 +505,11 @@ Key metrics for production reliability: bootstrap latency (<150ms), cache hit ra
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-clean-architecture]]
+- [[c-dependency-injection]]
+- [[c-workmanager]]
+
+
 ## Related Questions
 
 - [[c-clean-architecture]]

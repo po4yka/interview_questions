@@ -817,11 +817,17 @@ class CustomButton @JvmOverloads constructor(
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-app-security-best-practices--security--medium]]
+- [[q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]]
+- [[q-performance-optimization-android--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

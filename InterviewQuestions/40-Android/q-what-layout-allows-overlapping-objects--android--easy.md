@@ -261,11 +261,17 @@ fun LayeringExample() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-layouts]]
+- [[c-view-positioning]]
+- [[q-viewgroup-vs-view-differences--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-room-database-migrations--android--medium]]

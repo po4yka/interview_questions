@@ -126,7 +126,11 @@ Android управляет задачами и стеком возврата, п
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-activity-lifecycle]]
+- [[c-navigation]]
+- [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
+
+
 ## Related Questions
 
 - [[q-recyclerview-itemdecoration-advanced--android--medium]]

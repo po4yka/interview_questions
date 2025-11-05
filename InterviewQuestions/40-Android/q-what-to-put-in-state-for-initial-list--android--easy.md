@@ -173,11 +173,17 @@ class ListViewModel : ViewModel() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-data-loading]]
+- [[c-mutablestate]]
+- [[c-state-management]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Computer Science Fundamentals

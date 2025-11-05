@@ -941,11 +941,17 @@ if (BuildConfig.DEBUG) {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-performance]]
+- [[c-recyclerview]]
+- [[q-what-is-diffutil-for--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Computer Science Fundamentals

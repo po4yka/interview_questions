@@ -327,11 +327,16 @@ buildTypes {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-android-runtime-art--android--medium]]
+- [[q-large-file-upload--android--medium]]
+- [[q-room-transactions-dao--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Advanced (Harder)

@@ -857,11 +857,18 @@ override fun onDetachedFromWindow() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-view-lifecycle]]
+- [[c-views]]
+- [[q-viewgroup-vs-view-differences--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -483,11 +483,16 @@ class EventBus {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-memory-leak-vs-oom-android--android--medium]]
+- [[q-state-hoisting-compose--android--medium]]
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

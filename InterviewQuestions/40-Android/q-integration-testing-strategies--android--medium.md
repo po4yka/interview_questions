@@ -292,11 +292,16 @@ class FullStackIntegrationTest {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-android-manifest-file--android--easy]]
+- [[q-koin-vs-hilt-comparison--dependency-injection--medium]]
+- [[q-react-native-comparison--multiplatform--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Medium)

@@ -490,7 +490,10 @@ interface ProductViewHolderFactory {
 
 ## References
 
-- References to be populated
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

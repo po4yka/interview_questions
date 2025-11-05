@@ -635,11 +635,17 @@ fun RememberScrollState() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-animated-visibility-vs-content--jetpack-compose--medium]]
+- [[q-compose-testing--android--medium]]
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+- https://developer.android.com/develop/ui/compose
+
+
 ## Related Questions
 
 ### Hub

@@ -318,11 +318,16 @@ class MainActivity : AppCompatActivity() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-activity-lifecycle]]
+- [[c-fragments]]
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Medium)

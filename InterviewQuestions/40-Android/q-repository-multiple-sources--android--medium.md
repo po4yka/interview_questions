@@ -299,7 +299,11 @@ class NewsRepository(
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-dagger-field-injection--android--medium]]
+- [[q-does-state-made-in-compose-help-avoid-race-condition--android--medium]]
+- [[q-kmm-ktor-networking--multiplatform--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

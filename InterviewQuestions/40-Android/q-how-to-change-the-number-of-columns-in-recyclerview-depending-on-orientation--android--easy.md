@@ -152,11 +152,17 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-broadcastreceiver-contentprovider--android--easy]]
+- [[q-compose-ui-testing-advanced--android--hard]]
+- [[q-play-store-publishing--distribution--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Medium)

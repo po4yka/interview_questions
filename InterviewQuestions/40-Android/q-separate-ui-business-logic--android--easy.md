@@ -690,11 +690,17 @@ ViewModel переживает изменения конфигурации (по
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-how-to-draw-ui-without-xml--android--easy]]
+- [[q-proguard-r8--android--medium]]
+- [[q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Easy)

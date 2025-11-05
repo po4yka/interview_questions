@@ -722,11 +722,16 @@ class UserRepository(private val userDao: UserDao) {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-android-runtime-art--android--medium]]
+- [[q-compose-navigation-advanced--jetpack-compose--medium]]
+- [[q-room-transactions-dao--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

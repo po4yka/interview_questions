@@ -693,11 +693,17 @@ class DynamicScreenActivity : AppCompatActivity() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-fragments-history-and-purpose--android--hard]]
+- [[q-how-is-navigation-implemented--android--medium]]
+- [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-fragments-history-and-purpose--android--hard]]

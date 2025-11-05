@@ -612,11 +612,17 @@ object DatabaseModule {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-dependency-injection]]
+- [[c-hilt]]
+- [[q-test-doubles-dependency-injection--testing--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-android-app-components--android--easy]]

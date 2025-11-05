@@ -421,11 +421,18 @@ ViewModel и onSaveInstanceState служат для сохранения дан
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-activity-lifecycle]]
+- [[c-viewmodel]]
+- [[q-viewmodel-pattern--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/docs
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+
+
 ## Related Questions
 
 ### Hub

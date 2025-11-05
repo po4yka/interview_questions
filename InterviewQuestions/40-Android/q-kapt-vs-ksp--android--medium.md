@@ -211,7 +211,11 @@ dependencies {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-fix-slow-app-startup-legacy--android--hard]]
+- [[q-looper-thread-connection--android--medium]]
+- [[q-macrobenchmark-startup--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

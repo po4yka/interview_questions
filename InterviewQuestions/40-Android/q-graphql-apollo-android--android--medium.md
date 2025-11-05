@@ -1647,11 +1647,16 @@ GraphQL + Apollo отлично подходит для сложных треб�
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]]
+- [[q-play-app-signing--android--medium]]
+- [[q-sharedpreferences-definition--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

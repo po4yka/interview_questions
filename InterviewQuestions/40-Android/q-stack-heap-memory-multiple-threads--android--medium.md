@@ -121,11 +121,15 @@ Thread {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-coroutines]]
+- [[c-memory-management]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Kotlin Language Features

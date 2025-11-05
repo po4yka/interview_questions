@@ -466,11 +466,16 @@ fun getUsers(): List<User> {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-migration-to-compose--android--medium]]
+- [[q-real-time-updates-android--android--medium]]
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-real-time-updates-android--android--medium]]

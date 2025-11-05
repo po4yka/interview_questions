@@ -738,11 +738,17 @@ fun ProductCard(
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-separate-ui-business-logic--android--easy]]
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]]
+- [[q-what-is-hilt--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+- https://developer.android.com/develop/ui/compose
+
+
 ## Related Questions
 
 ### Hub

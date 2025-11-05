@@ -611,11 +611,16 @@ if (!isReduceMotionEnabled) {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-broadcastreceiver-contentprovider--android--easy]]
+- [[q-save-data-outside-fragment--android--medium]]
+- [[q-spannable-text-styling--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

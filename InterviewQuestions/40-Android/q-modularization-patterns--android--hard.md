@@ -160,7 +160,11 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-does-state-made-in-compose-help-avoid-race-condition--android--medium]]
+- [[q-ot-kogo-nasleduyutsya-viewgroup--programming-languages--easy]]
+- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
+
+
 ## Related Questions
 
 ### Related (Hard)

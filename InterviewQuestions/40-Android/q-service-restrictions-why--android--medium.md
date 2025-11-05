@@ -549,11 +549,16 @@ startForegroundService(Intent(this, MyService::class.java))
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-canvas-drawing-optimization--custom-views--hard]]
+- [[q-what-is-data-binding--android--easy]]
+- [[q-workmanager-chaining--background--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

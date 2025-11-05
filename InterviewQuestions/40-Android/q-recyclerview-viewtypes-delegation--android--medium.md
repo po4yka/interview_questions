@@ -212,7 +212,10 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

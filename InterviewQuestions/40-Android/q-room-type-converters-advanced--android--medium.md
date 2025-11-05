@@ -1109,11 +1109,16 @@ class GoodConverters {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]]
+- [[q-tasks-back-stack--android--medium]]
+- [[q-what-is-broadcastreceiver--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -358,11 +358,17 @@ RecyclerView - это мощный, гибкий UI компонент для о
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-kmm-dependency-injection--multiplatform--medium]]
+- [[q-what-does-itemdecoration-do--android--medium]]
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

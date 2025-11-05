@@ -333,11 +333,17 @@ class MyApplication : Application() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-jetpack-compose-lazy-column--android--easy]]
+- [[q-privacy-sandbox-sdk-runtime--privacy--hard]]
+- [[q-retrofit-modify-all-requests--android--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

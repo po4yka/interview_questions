@@ -944,11 +944,16 @@ Services — фундаментальные Android-компоненты для 
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-how-to-add-custom-attributes-to-custom-view--android--medium]]
+- [[q-migration-to-compose--android--medium]]
+- [[q-viewmodel-pattern--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

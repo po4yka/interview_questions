@@ -139,7 +139,9 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

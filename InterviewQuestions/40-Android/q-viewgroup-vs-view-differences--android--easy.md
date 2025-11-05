@@ -276,11 +276,17 @@ ViewGroup наследуется от View и добавляет возможн�
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-view-hierarchy]]
+- [[c-views]]
+- [[q-viewmodel-pattern--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Easy)

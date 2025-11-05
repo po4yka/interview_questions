@@ -992,7 +992,10 @@ tasks.withType<KspTask> {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[app-startup-optimization]]
+- [[build-optimization-gradle]]
+
+
 ## Related Questions
 
 ### Related (Medium)

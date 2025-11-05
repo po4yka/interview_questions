@@ -573,11 +573,17 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-accessibility-testing--accessibility--medium]]
+- [[q-handler-looper-main-thread--android--medium]]
+- [[q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+- https://developer.android.com/develop/ui/compose
+
+
 ## Related Questions
 
 ### Hub

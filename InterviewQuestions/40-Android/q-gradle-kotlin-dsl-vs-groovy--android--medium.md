@@ -238,7 +238,11 @@ android {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-compose-custom-animations--jetpack-compose--medium]]
+- [[q-how-does-jetpackcompose-work--android--medium]]
+- [[q-what-is-workmanager--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

@@ -329,11 +329,17 @@ Fake - это рабочая реализация с упрощенным пов
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-dependency-injection]]
+- [[c-testing]]
+- [[q-what-is-hilt--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/training/testing/local-tests
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Medium)

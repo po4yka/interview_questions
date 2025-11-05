@@ -183,11 +183,16 @@ contentResolver.query(
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-android-components]]
+- [[c-context]]
+- [[c-intent]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Related (Easy)

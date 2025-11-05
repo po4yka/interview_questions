@@ -633,11 +633,16 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-cicd-multi-module--devops--medium]]
+- [[q-glide-image-loading-internals--android--medium]]
+- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-glide-image-loading-internals--android--medium]]

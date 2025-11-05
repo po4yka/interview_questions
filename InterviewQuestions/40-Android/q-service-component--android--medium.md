@@ -180,7 +180,11 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-anr-application-not-responding--android--medium]]
+- [[q-how-to-start-drawing-ui-in-android--android--easy]]
+- [[q-kmm-dependency-injection--multiplatform--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

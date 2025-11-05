@@ -173,7 +173,11 @@ The activity can only be running as the root activity of the task, the first act
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-kapt-vs-ksp--android--medium]]
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
+- [[q-which-event-is-triggered-when-user-presses-screen--android--medium]]
+
+
 ## Related Questions
 
 ### Related (Medium)

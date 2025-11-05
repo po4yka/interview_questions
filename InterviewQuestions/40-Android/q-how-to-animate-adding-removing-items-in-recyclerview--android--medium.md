@@ -909,11 +909,16 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[q-bundle-data-types--android--medium]]
+- [[q-compositionlocal-advanced--jetpack-compose--medium]]
+- [[q-stack-heap-memory-multiple-threads--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)

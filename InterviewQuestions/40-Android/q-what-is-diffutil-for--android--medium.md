@@ -932,11 +932,17 @@ class UsersFragment : Fragment() {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-list-adapter]]
+- [[c-recyclerview]]
+- [[q-what-is-known-about-recyclerview--android--easy]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/develop/ui/views
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-how-animations-work-in-recyclerview--android--medium]]

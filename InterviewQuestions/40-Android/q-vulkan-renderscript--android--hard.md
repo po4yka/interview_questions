@@ -1096,11 +1096,16 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-gpu-rendering]]
+- [[c-performance]]
+- [[q-surfaceview-rendering--android--medium]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+
+
 ## Related Questions
 
 - [[q-dagger-field-injection--android--medium]]

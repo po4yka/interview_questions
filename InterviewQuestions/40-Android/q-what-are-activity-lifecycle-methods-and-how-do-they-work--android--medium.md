@@ -553,11 +553,17 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 ## Follow-ups
 
-- Follow-up questions to be populated
+- [[c-activity-lifecycle]]
+- [[c-fragment-lifecycle]]
+- [[q-what-happens-to-the-old-activity-when-the-system-starts-a-new-one--android--hard]]
+
 
 ## References
 
-- References to be populated
+- https://developer.android.com/docs
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+
+
 ## Related Questions
 
 ### Prerequisites (Easier)
