@@ -77,17 +77,17 @@ If you don't supply a visibility modifier, you get the default visibility level,
 - An Outer class does not see **private** members of its inner class in Kotlin.
 - If you override a **protected** member and do not specify the visibility explicitly, the overriding member will also have **protected** visibility. In Java the visibility is according to the modifier and the default is still **public**.
 
-## References
-- [Visibility modifiers](https://kotlinlang.org/docs/tutorials/kotlin-for-py/visibility-modifiers.html)
-- [Visibility modifiers reference](https://kotlinlang.org/docs/reference/visibility-modifiers.html)
-- [Kotlin for Android Developers: Visibility Modifiers](https://medium.com/mindorks/kotlin-for-android-developers-visibility-modifiers-8d8a3b84d298)
-- [Kotlin Basics: Visibility Modifiers](https://medium.com/@HugoMatilla/kotlin-basics-visibility-modifiers-public-internal-protected-and-private-c3bf972aee11)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Visibility modifiers](https://kotlinlang.org/docs/tutorials/kotlin-for-py/visibility-modifiers.html)
+- [Visibility modifiers reference](https://kotlinlang.org/docs/reference/visibility-modifiers.html)
+- [Kotlin for Android Developers: Visibility Modifiers](https://medium.com/mindorks/kotlin-for-android-developers-visibility-modifiers-8d8a3b84d298)
+- [Kotlin Basics: Visibility Modifiers](https://medium.com/@HugoMatilla/kotlin-basics-visibility-modifiers-public-internal-protected-and-private-c3bf972aee11)
 
 ## Related Questions
 

@@ -249,16 +249,16 @@ Functional interfaces in Kotlin are interfaces with a single abstract method, de
 - Default Methods: Provides additional functionality without breaking the single abstract method constraint;
 - Higher-Order Functions: Supports passing functional interfaces as parameters for flexible and reusable code.
 
-## References
-- [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
-- [Everything you want to know about Functional interfaces in Kotlin](https://www.droidcon.com/2024/05/31/everything-you-want-to-know-about-functional-interfaces-in-kotlin/)
-- [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
+- [Everything you want to know about Functional interfaces in Kotlin](https://www.droidcon.com/2024/05/31/everything-you-want-to-know-about-functional-interfaces-in-kotlin/)
+- [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
 
 ## Related Questions
 

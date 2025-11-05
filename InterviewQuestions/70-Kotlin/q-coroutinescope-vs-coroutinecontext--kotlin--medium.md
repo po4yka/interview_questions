@@ -255,16 +255,16 @@ scope.launch { } // - Works
 
 **English Summary**: CoroutineContext is a map-like collection of coroutine elements (Job, Dispatcher, Name, ExceptionHandler). CoroutineScope is a wrapper around CoroutineContext that provides lifecycle management, structured concurrency, and utility functions (launch, async, cancel). Think of context as the configuration data and scope as the manager that uses that configuration.
 
-## References
-- [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [Things every Kotlin Developer should know about Coroutines. Part 1: CoroutineContext](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-1-coroutinecontext)
-- [Things every Kotlin Developer should know about Coroutines. Part 2: CoroutineScope](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-2-coroutinescope)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Things every Kotlin Developer should know about Coroutines. Part 1: CoroutineContext](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-1-coroutinecontext)
+- [Things every Kotlin Developer should know about Coroutines. Part 2: CoroutineScope](https://maxkim.eu/things-every-kotlin-developer-should-know-about-coroutines-part-2-coroutinescope)
 
 ## Related Questions
 

@@ -142,15 +142,15 @@ In this example, `delay()` is a `suspend` function. When the coroutine calls `de
 
 ---
 
-## References
-
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ## Related Questions
 

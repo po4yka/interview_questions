@@ -928,6 +928,12 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 
 - [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
@@ -940,12 +946,6 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 
 ---
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

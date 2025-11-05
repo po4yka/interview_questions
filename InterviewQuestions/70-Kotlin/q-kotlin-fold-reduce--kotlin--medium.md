@@ -149,14 +149,14 @@ val sum: Long = numbers.fold(0L, { acc, next -> acc + next.toLong() })
 
 - `fold` **provides the ability to change the result type**.
 
-## References
-- [Kotlin Collections Documentation](https://kotlinlang.org/docs/reference/collections-overview.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Kotlin Collections Documentation](https://kotlinlang.org/docs/reference/collections-overview.html)
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

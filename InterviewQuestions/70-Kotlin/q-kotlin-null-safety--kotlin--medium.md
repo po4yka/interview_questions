@@ -353,16 +353,16 @@ var newString: String? = "Kotlin from Android"
 newString?.let { c = it }.also { println("Logging the value: $it") }
 ```
 
-## References
-- [Nullability in Java and Kotlin](https://kotlinlang.org/docs/java-to-kotlin-nullability-guide.html)
-- [Null safety](https://kotlinlang.org/docs/null-safety.html)
-- [Null safety tutorial](https://kotlinlang.org/docs/tutorials/kotlin-for-py/null-safety.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Nullability in Java and Kotlin](https://kotlinlang.org/docs/java-to-kotlin-nullability-guide.html)
+- [Null safety](https://kotlinlang.org/docs/null-safety.html)
+- [Null safety tutorial](https://kotlinlang.org/docs/tutorials/kotlin-for-py/null-safety.html)
 
 ## Related Questions
 - [[q-kotlin-lateinit--kotlin--medium]]

@@ -936,6 +936,12 @@ class BackPressureBestPractices {
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 
 - [Flow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
@@ -943,12 +949,6 @@ class BackPressureBestPractices {
 - [SharedFlow and StateFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 
 ---
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

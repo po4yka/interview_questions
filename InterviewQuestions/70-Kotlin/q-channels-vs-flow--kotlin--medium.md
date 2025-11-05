@@ -1114,16 +1114,16 @@ val flow = flow { emit(data) }
 
 **English Summary**: Channels are hot, stateful communication primitives for producer-consumer patterns, while Flows are cold, functional reactive streams for data transformations. Channels support buffering with strategies: RENDEZVOUS (no buffer), BUFFERED (fixed size), UNLIMITED (unbounded), and CONFLATED (latest only). Use Channels for event buses and worker pools, Flows for reactive data streams. Always close channels to prevent leaks. Choose based on hot vs cold requirements and whether you need shared state.
 
-## References
-- [Channels - Kotlin Coroutines Guide](https://kotlinlang.org/docs/channels.html)
-- [Flow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
-- [Channel capacity - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Channels - Kotlin Coroutines Guide](https://kotlinlang.org/docs/channels.html)
+- [Flow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
+- [Channel capacity - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
 
 ## Related Questions
 

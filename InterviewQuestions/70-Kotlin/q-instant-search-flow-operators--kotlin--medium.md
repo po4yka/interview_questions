@@ -574,6 +574,9 @@ fun `search debounces user input`() = runTest {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## References
+- [Flow Operators Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+- [debounce Operator](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)
 ## Related Questions
 
 ### Related (Medium)
@@ -590,6 +593,3 @@ fun `search debounces user input`() = runTest {
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-## References
-- [Flow Operators Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-- [debounce Operator](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)

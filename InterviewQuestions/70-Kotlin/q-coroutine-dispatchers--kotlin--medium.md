@@ -856,17 +856,17 @@ launch(Dispatchers.Unconfined) {
 
 ---
 
-## References
-
-- [Kotlin Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [Dispatchers Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/)
-- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Dispatchers Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/)
+- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
 ## Related Questions
 

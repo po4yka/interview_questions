@@ -999,18 +999,18 @@ private val actor = scope.actor<Msg> {
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 
 - [Kotlin Coroutines Actors](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#actors)
 - [Actor Model](https://en.wikipedia.org/wiki/Actor_model)
 - [Kotlinx Coroutines Channels](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/)
 - [Actor Pattern Guide](https://elizarov.medium.com/shared-mutable-state-and-concurrency-in-kotlin-f0f6b8c5c5d8)
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

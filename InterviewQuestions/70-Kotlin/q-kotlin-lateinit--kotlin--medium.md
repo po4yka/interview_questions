@@ -143,17 +143,17 @@ This check is only available for properties that are lexically accessible when d
 - **Data Fetching and Asynchronous Operations**. When working with data that is fetched asynchronously, such as from a network request, you might not have the data available at object creation. `lateinit` can be used to hold the data until it's fetched and then assigned;
 - **Custom Initialization Logic**. Some properties may require custom initialization logic that cannot be performed in the constructor. By using `lateinit`, you can define your own initialization methods and call them when the property is ready to be set.
 
-## References
-- [Late-initialized properties and variables](https://kotlinlang.org/docs/properties.html#late-initialized-properties-and-variables)
-- [Kotlin lateinit (Late Initialization): Full Guide With Examples](https://www.tutorialsfreak.com/kotlin-tutorial/kotlin-lateinit)
-- [Kotlin Lateinit: A Complete Guide to Mastering Late Initialization in Kotlin](https://www.dhiwise.com/post/kotlin-lateinit-a-complete-guide-to-late-initialization)
-- [Lateinit and Lazy Property in Kotlin](https://medium.com/@guruprasadhegde4/lateinit-and-lazy-property-in-kotlin-8776c67878a0)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Late-initialized properties and variables](https://kotlinlang.org/docs/properties.html#late-initialized-properties-and-variables)
+- [Kotlin lateinit (Late Initialization): Full Guide With Examples](https://www.tutorialsfreak.com/kotlin-tutorial/kotlin-lateinit)
+- [Kotlin Lateinit: A Complete Guide to Mastering Late Initialization in Kotlin](https://www.dhiwise.com/post/kotlin-lateinit-a-complete-guide-to-late-initialization)
+- [Lateinit and Lazy Property in Kotlin](https://medium.com/@guruprasadhegde4/lateinit-and-lazy-property-in-kotlin-8776c67878a0)
 
 ## Related Questions
 

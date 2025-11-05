@@ -501,17 +501,17 @@ val typedFunc = fun(x: Int): String = x.toString()
 
 **English Summary**: Lambda expressions are anonymous functions with concise syntax `{ parameters -> body }`. They support type inference, can capture variables from enclosing scope (closures), work with SAM conversion for functional interfaces, and support trailing lambda syntax. Common in collection operations, event handlers, and functional programming patterns.
 
-## References
-- [Lambdas - Kotlin Documentation](https://kotlinlang.org/docs/lambdas.html)
-- [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
-- [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
-- [Everything about Functional interfaces in Kotlin](https://www.droidcon.com/2024/05/31/everything-you-want-to-know-about-functional-interfaces-in-kotlin/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Lambdas - Kotlin Documentation](https://kotlinlang.org/docs/lambdas.html)
+- [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
+- [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
+- [Everything about Functional interfaces in Kotlin](https://www.droidcon.com/2024/05/31/everything-you-want-to-know-about-functional-interfaces-in-kotlin/)
 
 ## Related Questions
 - [[q-kotlin-higher-order-functions--kotlin--medium]]

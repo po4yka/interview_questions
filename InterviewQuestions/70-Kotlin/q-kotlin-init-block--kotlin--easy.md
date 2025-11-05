@@ -329,15 +329,15 @@ class Configuration(val env: String) {
 
 **English Summary**: Init blocks are special code blocks prefixed with the `init` keyword that execute during object initialization. They run in the order they appear in the class body, become part of the primary constructor, and execute before secondary constructor bodies. They're useful for validation, complex initialization logic, and computed properties.
 
-## References
-- [Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/classes.html)
-- [Kotlin Constructors - Programiz](https://www.programiz.com/kotlin-programming/constructors)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/classes.html)
+- [Kotlin Constructors - Programiz](https://www.programiz.com/kotlin-programming/constructors)
 
 ## Related Questions
 - [[q-kotlin-constructors--kotlin--easy]]

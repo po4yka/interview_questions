@@ -729,16 +729,16 @@ highFrequencyData()
 
 **English Summary**: Backpressure handling in Flow uses buffer() for concurrent processing without losing values, conflate() to keep only the latest value, and collectLatest() to cancel previous collection on new values. buffer() is best for processing all values in parallel, conflate() for state updates where only latest matters, collectLatest() for cancelling outdated work like searches. Choose based on whether values can be dropped and if previous work should be cancelled. Monitor performance and configure buffer sizes appropriately.
 
-## References
-- [Flow backpressure - Kotlin](https://kotlinlang.org/docs/flow.html#buffering)
-- [buffer operator - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html)
-- [Backpressure in Kotlin Flow](https://elizarov.medium.com/buffering-in-kotlin-flows-4b9ea4bc4bf3)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Flow backpressure - Kotlin](https://kotlinlang.org/docs/flow.html#buffering)
+- [buffer operator - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html)
+- [Backpressure in Kotlin Flow](https://elizarov.medium.com/buffering-in-kotlin-flows-4b9ea4bc4bf3)
 
 ## Related Questions
 

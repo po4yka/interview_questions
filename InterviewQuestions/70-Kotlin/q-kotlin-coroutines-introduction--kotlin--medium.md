@@ -169,17 +169,17 @@ There is still something to be desired for practical usage of coroutines. When w
 
 There is a better solution. We can use structured concurrency in our code. Instead of launching coroutines in the `GlobalScope`, just like we usually do with threads (threads are always global), we can launch coroutines in the specific scope of the operation we are performing.
 
-## References
-- [Kotlin Coroutines Overview](https://kotlinlang.org/docs/reference/coroutines-overview.html)
-- [Kotlin Coroutines Basics](https://kotlinlang.org/docs/reference/coroutines/basics.html)
-- [Android Coroutines Guide](https://developer.android.com/kotlin/coroutines)
-- [Async Programming](https://kotlinlang.org/docs/tutorials/coroutines/async-programming.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Kotlin Coroutines Overview](https://kotlinlang.org/docs/reference/coroutines-overview.html)
+- [Kotlin Coroutines Basics](https://kotlinlang.org/docs/reference/coroutines/basics.html)
+- [Android Coroutines Guide](https://developer.android.com/kotlin/coroutines)
+- [Async Programming](https://kotlinlang.org/docs/tutorials/coroutines/async-programming.html)
 
 ## Related Questions
 

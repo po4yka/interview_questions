@@ -211,15 +211,15 @@ fun initialize() {
 
 **English Summary**: lazy is for val properties, thread-safe, supports primitives/nullables, initialized on first access. lateinit is for var properties, not thread-safe, non-null non-primitives only, manually initialized. lazy guarantees one-time initialization; lateinit allows checking initialization state and reinitializing.
 
-## References
-- [Delegated Properties - Kotlin](https://kotlinlang.org/docs/delegated-properties.html)
-- [Kotlin: lateinit vs lazy](https://rommansabbir.com/kotlin-lateinit-vs-lazy)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Delegated Properties - Kotlin](https://kotlinlang.org/docs/delegated-properties.html)
+- [Kotlin: lateinit vs lazy](https://rommansabbir.com/kotlin-lateinit-vs-lazy)
 
 ## Related Questions
 - [[q-kotlin-lateinit--kotlin--medium]]

@@ -599,6 +599,12 @@ class MyViewModel : ViewModel() {
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 
 - [GlobalScope Documentation - Kotlin](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/)
@@ -608,12 +614,6 @@ class MyViewModel : ViewModel() {
 ---
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

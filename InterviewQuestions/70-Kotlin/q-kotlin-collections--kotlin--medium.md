@@ -939,18 +939,18 @@ val result = small.asSequence()  // Overhead not worth it
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 
 - [Kotlin Collections Overview](https://kotlinlang.org/docs/collections-overview.html)
 - [Collection Operations](https://kotlinlang.org/docs/collection-operations.html)
 - [Sequences](https://kotlinlang.org/docs/sequences.html)
 - [List Operations](https://kotlinlang.org/docs/list-operations.html)
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

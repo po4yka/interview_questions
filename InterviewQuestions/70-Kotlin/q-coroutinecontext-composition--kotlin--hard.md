@@ -919,16 +919,16 @@ suspend fun logInfo(message: String) {
 
 **English Summary**: CoroutineContext is an indexed set of elements that combine using the + operator. Child coroutines inherit parent context but can override specific elements. Jobs are always replaced to maintain hierarchy. Custom context elements extend AbstractCoroutineContextElement and must provide a companion Key. Common uses include request tracking, multi-tenant isolation, and distributed tracing. Context elements should be immutable, well-named, and handle missing values gracefully.
 
-## References
-- [Coroutine context and dispatchers - Kotlin](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [CoroutineContext - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
-- [Custom CoroutineContext elements](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Coroutine context and dispatchers - Kotlin](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [CoroutineContext - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
+- [Custom CoroutineContext elements](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/)
 
 ## Related Questions
 - [[q-coroutine-context-detailed--kotlin--hard]]

@@ -252,15 +252,15 @@ List<Any>  // Can read Any, can write Any
 
 **English Summary**: `List<*>` (star projection) represents an unknown but specific type - can read as `Any?` but can't write. `List<Any>` represents a truly mixed collection - can read and write any type. Star projection preserves type safety by preventing writes; Any allows heterogeneous collections but loses type information.
 
-## References
-- [Difference between "*" and "Any" in Kotlin generics - StackOverflow](https://stackoverflow.com/questions/40138923/difference-between-and-any-in-kotlin-generics)
-- [Generics: in, out, where - Kotlin Documentation](https://kotlinlang.org/docs/generics.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Difference between "*" and "Any" in Kotlin generics - StackOverflow](https://stackoverflow.com/questions/40138923/difference-between-and-any-in-kotlin-generics)
+- [Generics: in, out, where - Kotlin Documentation](https://kotlinlang.org/docs/generics.html)
 
 ## Related Questions
 

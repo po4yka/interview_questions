@@ -305,16 +305,16 @@ A warning appears for the cast in the last line. The compiler can't fully check 
 
 To avoid unchecked casts, you can redesign the program structure. In the example above, you could use the `DictionaryReader<T>` and `DictionaryWriter<T>` interfaces with type-safe implementations for different types. You can introduce reasonable abstractions to move unchecked casts from the call site to the implementation details.
 
-## References
-- [Generics: in, out, where](https://kotlinlang.org/docs/generics.html)
-- [Understanding Kotlin generics](https://blog.logrocket.com/understanding-kotlin-generics/)
-- [Generics in Kotlin](https://kt.academy/article/kfde-generics)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Generics: in, out, where](https://kotlinlang.org/docs/generics.html)
+- [Understanding Kotlin generics](https://blog.logrocket.com/understanding-kotlin-generics/)
+- [Generics in Kotlin](https://kt.academy/article/kfde-generics)
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

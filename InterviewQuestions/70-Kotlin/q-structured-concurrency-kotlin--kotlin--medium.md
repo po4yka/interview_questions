@@ -392,6 +392,12 @@ In Android, this means using `viewModelScope`, `lifecycleScope`, or custom scope
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 
 - [Structured Concurrency - Kotlin Docs](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency)
@@ -404,12 +410,6 @@ In Android, this means using `viewModelScope`, `lifecycleScope`, or custom scope
 
 
 ---
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

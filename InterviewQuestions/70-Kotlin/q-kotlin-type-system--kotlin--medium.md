@@ -93,6 +93,12 @@ In Java if we want that a function does return nothing we use `void`, `Unit` is 
 - Only one value of this type exists.
 - It is returned implicitly. No need of a `return` statement.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 - [Kotlin Basics: Types Any, Unit and Nothing](https://itnext.io/kotlin-basics-types-any-unit-and-nothing-674cc858035)
 - [Kotlin's Nothing Type](https://proandroiddev.com/kotlins-nothing-type-946de7d464fb)
@@ -100,12 +106,6 @@ In Java if we want that a function does return nothing we use `void`, `Unit` is 
 - [Any API Documentation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/)
 - [Nothing API Documentation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html)
 - [Unit API Documentation](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/)
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 - [[q-kotlin-null-safety--kotlin--medium]]

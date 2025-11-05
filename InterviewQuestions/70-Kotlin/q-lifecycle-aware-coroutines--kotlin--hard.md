@@ -1237,6 +1237,11 @@ class MyViewModel(
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## References
+- [Lifecycle-aware coroutines](https://developer.android.com/topic/libraries/architecture/coroutines)
+- [viewModelScope](https://developer.android.com/topic/libraries/architecture/viewmodel#coroutines)
+- [lifecycleScope](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
+- [repeatOnLifecycle](https://developer.android.com/topic/libraries/architecture/coroutines#repeatonlifecycle)
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -1252,8 +1257,3 @@ class MyViewModel(
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
 - [[q-coroutine-profiling--kotlin--hard]] - Profiling and debugging
 
-## References
-- [Lifecycle-aware coroutines](https://developer.android.com/topic/libraries/architecture/coroutines)
-- [viewModelScope](https://developer.android.com/topic/libraries/architecture/viewmodel#coroutines)
-- [lifecycleScope](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
-- [repeatOnLifecycle](https://developer.android.com/topic/libraries/architecture/coroutines#repeatonlifecycle)

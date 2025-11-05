@@ -330,15 +330,15 @@ val phone2: PhoneNumber = email2  // - Compilation error! Real type safety
 
 **English Summary**: Type aliases provide alternative names for existing types, improving code readability without creating new types. They're useful for shortening long generic types, naming function types, and creating DSLs. However, they don't provide type safety - for that, use value classes. The compiler always expands type aliases to their underlying types.
 
-## References
-- [Type Aliases - Kotlin Documentation](https://kotlinlang.org/docs/type-aliases.html)
-- [All About Type Aliases](https://typealias.com/guides/all-about-type-aliases/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Type Aliases - Kotlin Documentation](https://kotlinlang.org/docs/type-aliases.html)
+- [All About Type Aliases](https://typealias.com/guides/all-about-type-aliases/)
 
 ## Related Questions
 - [[q-kotlin-generics--kotlin--hard]]

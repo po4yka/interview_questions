@@ -313,15 +313,15 @@ Buffered channels can be configured with an additional `onBufferOverflow` parame
 - `DROP_OLDEST` — do not suspend the `send`, add the latest value to the buffer, drop the oldest one from the buffer. A channel with `capacity = 1` and `onBufferOverflow = DROP_OLDEST` is a **conflated** channel.
 - `DROP_LATEST` — do not suspend the `send`, drop the value that is being sent, keep the buffer contents intact.
 
-## References
-- [Kotlin Coroutines Channels Documentation](https://kotlinlang.org/docs/reference/coroutines/channels.html)
-- [Channel API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Kotlin Coroutines Channels Documentation](https://kotlinlang.org/docs/reference/coroutines/channels.html)
+- [Channel API Reference](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html)
 
 ## Related Questions
 - [[q-kotlin-flow-basics--kotlin--medium]]

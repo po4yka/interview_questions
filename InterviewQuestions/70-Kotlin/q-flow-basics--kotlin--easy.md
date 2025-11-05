@@ -519,17 +519,17 @@ suspend fun getUser(): User  //  Better
 
 ---
 
-## References
-
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
-- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
-- [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
+- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
+- [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)
 
 ## Related Questions
 

@@ -173,14 +173,14 @@ All support iteration in for loops.
 
 **English Summary**: Ranges represent sequences of values with start, stop (both inclusive), and step. Create with `..`, `rangeTo()`, or `downTo()`. Use `step` for custom increments, `until` to exclude end. Support iteration in for loops. Common for: iteration, membership checks (in), validation.
 
-## References
-- [Ranges - Kotlin Documentation](https://kotlinlang.org/docs/reference/ranges.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Ranges - Kotlin Documentation](https://kotlinlang.org/docs/reference/ranges.html)
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

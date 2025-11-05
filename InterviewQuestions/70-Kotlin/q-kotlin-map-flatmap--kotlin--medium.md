@@ -305,17 +305,17 @@ data.flatMap { it }
 
 **English Summary**: `map()` transforms each element one-to-one and preserves collection structure. `flatMap()` transforms each element to a collection and then flattens all results into a single list. Use `map()` for simple transformations, `flatMap()` when you need to flatten nested collections or expand elements.
 
-## References
-- [map() - Kotlin Collections API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html)
-- [flatMap() - Kotlin Collections API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/flat-map.html)
-- [StackOverflow: Use case for flatMap vs map](https://stackoverflow.com/questions/52078207/what-is-the-use-case-for-flatmap-vs-map-in-kotlin)
-- [Medium: flatMap vs map in Kotlin](https://medium.com/@sachinkmr375/flatmap-vs-map-in-kotlin-aef771a4dae4)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [map() - Kotlin Collections API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html)
+- [flatMap() - Kotlin Collections API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/flat-map.html)
+- [StackOverflow: Use case for flatMap vs map](https://stackoverflow.com/questions/52078207/what-is-the-use-case-for-flatmap-vs-map-in-kotlin)
+- [Medium: flatMap vs map in Kotlin](https://medium.com/@sachinkmr375/flatmap-vs-map-in-kotlin-aef771a4dae4)
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--medium]]

@@ -1346,6 +1346,10 @@ suspend fun processAsync(item: Int): Int {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## References
+- [Kotlin Coroutines: Channels](https://kotlinlang.org/docs/channels.html)
+- [Channel Pipelines](https://kotlinlang.org/docs/channels.html#pipelines)
+- [Fan-out and Fan-in](https://kotlinlang.org/docs/channels.html#fan-out)
 ## Related Questions
 - [[q-kotlin-channels--kotlin--medium]]
 - [[q-produce-actor-builders--kotlin--medium]]
@@ -1353,7 +1357,3 @@ suspend fun processAsync(item: Int): Int {
 - [[q-structured-concurrency-kotlin--kotlin--medium]]
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]
 
-## References
-- [Kotlin Coroutines: Channels](https://kotlinlang.org/docs/channels.html)
-- [Channel Pipelines](https://kotlinlang.org/docs/channels.html#pipelines)
-- [Fan-out and Fan-in](https://kotlinlang.org/docs/channels.html#fan-out)

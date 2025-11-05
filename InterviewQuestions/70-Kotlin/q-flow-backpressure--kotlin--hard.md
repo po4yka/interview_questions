@@ -631,17 +631,17 @@ fastSensor
 
 ---
 
-## References
-
-- [Kotlin Flow Backpressure](https://kotlinlang.org/docs/flow.html#buffering)
-- [Flow Buffer](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html)
-- [Flow Conflate](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/conflate.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Flow Backpressure](https://kotlinlang.org/docs/flow.html#buffering)
+- [Flow Buffer](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/buffer.html)
+- [Flow Conflate](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/conflate.html)
 
 ## Related Questions
 

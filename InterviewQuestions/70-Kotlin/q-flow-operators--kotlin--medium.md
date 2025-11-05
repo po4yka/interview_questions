@@ -1248,6 +1248,10 @@ fun fetchDataOfflineFirst(): Flow<Data> = flow {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## References
+- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flow-operators)
+- [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)
 ## Related Questions
 
 ### Related (Medium)
@@ -1264,7 +1268,3 @@ fun fetchDataOfflineFirst(): Flow<Data> = flow {
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
-## References
-- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flow-operators)
-- [Flow API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-- [Kotlin Flow Guide](https://developer.android.com/kotlin/flow)

@@ -725,15 +725,15 @@ onPause {
 
 **English Summary**: Coroutine cancellation is cooperative - coroutines must check for cancellation using ensureActive(), yield(), or isActive. Use ensureActive() for quick checks, yield() for CPU-intensive loops, isActive in while conditions. Always re-throw CancellationException after cleanup. Use NonCancellable context for critical cleanup operations that must complete. Check cancellation periodically in long-running operations, especially in loops.
 
-## References
-- [Cancellation and timeouts - Kotlin](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
-- [Cooperative cancellation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/ensure-active.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Cancellation and timeouts - Kotlin](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
+- [Cooperative cancellation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/ensure-active.html)
 
 ## Related Questions
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

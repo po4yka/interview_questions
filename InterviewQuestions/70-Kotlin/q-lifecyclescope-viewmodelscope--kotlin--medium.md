@@ -518,9 +518,7 @@ class ProductFragment : Fragment() {
 
 ---
 
-## References (Ссылки)
-
-### Official Documentation
+**Official Documentation:**
 - [Lifecycle-aware coroutines](https://developer.android.com/topic/libraries/architecture/coroutines)
 - [lifecycleScope](https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#lifecyclescope)
 - [viewModelScope](https://developer.android.com/reference/kotlin/androidx/lifecycle/package-summary#viewmodelscope)

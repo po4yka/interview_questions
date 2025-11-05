@@ -708,17 +708,17 @@ val request = HttpRequest.Builder()
 
 ---
 
-## References
-
-- [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
-- [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
-- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
+- [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
+- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
 
 ## Related Questions
 

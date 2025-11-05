@@ -85,14 +85,14 @@ Below is a diagram of the Kotlin collection interfaces:
 
 ![Kotlin Collections Diagram](https://raw.githubusercontent.com/swayangjit/Android-Interview-Questions/master/Kotlin/res/collections-diagram.png)
 
-## References
-- [Kotlin Collections Overview](https://kotlinlang.org/docs/reference/collections-overview.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Kotlin Collections Overview](https://kotlinlang.org/docs/reference/collections-overview.html)
 
 ## Related Questions
 

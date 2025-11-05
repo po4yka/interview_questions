@@ -125,15 +125,15 @@ println(redColor.description()) // Output: Red color
 
 Enums in Kotlin can be useful in various scenarios, such as representing days of the week, menu options, status codes, and more. They provide a type-safe and concise way to define a fixed set of values.
 
-## References
-- [Kotlin Enum Classes](https://kotlinlang.org/docs/enum-classes.html)
-- [Enums in Kotlin](https://www.baeldung.com/kotlin/enum)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Kotlin Enum Classes](https://kotlinlang.org/docs/enum-classes.html)
+- [Enums in Kotlin](https://www.baeldung.com/kotlin/enum)
 
 ## Related Questions
 

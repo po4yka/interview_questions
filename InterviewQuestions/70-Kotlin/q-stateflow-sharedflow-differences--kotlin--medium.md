@@ -320,16 +320,16 @@ sharedFlow.resetReplayCache()
 
 **English Summary**: StateFlow is a state-holder hot flow that always has a current value and conflates updates. SharedFlow is a more general hot flow for broadcasting events with configurable replay and buffer behavior. Use StateFlow for UI state, SharedFlow for events.
 
-## References
-- [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
-- [Flow - Kotlin Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
-- [Introducing StateFlow and SharedFlow - JetBrains Blog](https://blog.jetbrains.com/kotlin/2020/10/kotlinx-coroutines-1-4-0-introducing-stateflow-and-sharedflow/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Flow - Kotlin Documentation](https://kotlinlang.org/docs/reference/coroutines/flow.html)
+- [Introducing StateFlow and SharedFlow - JetBrains Blog](https://blog.jetbrains.com/kotlin/2020/10/kotlinx-coroutines-1-4-0-introducing-stateflow-and-sharedflow/)
 
 ## Related Questions
 

@@ -560,14 +560,14 @@ Here is a short guide for choosing scope functions depending on the intended pur
 - Additional effects: `also`
 - Grouping function calls on an object: `with`
 
-## References
-- [Scope functions](https://kotlinlang.org/docs/reference/scope-functions.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Scope functions](https://kotlinlang.org/docs/reference/scope-functions.html)
 
 ## Related Questions
 - [[q-kotlin-extension-functions--kotlin--medium]]

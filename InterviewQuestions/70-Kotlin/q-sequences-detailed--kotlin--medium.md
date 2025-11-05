@@ -176,14 +176,14 @@ However, lazy nature adds overhead for small collections or simple computations.
 
 **English Summary**: Sequences use lazy evaluation - operations execute element-by-element only when terminal operation is called. Iterables use eager evaluation - each step processes entire collection. Sequences avoid intermediate collections, improving performance for large datasets and chained operations. Use sequences for large collections with multiple transformations; iterables for small collections and simple operations.
 
-## References
-- [Sequences - Kotlin Documentation](https://kotlinlang.org/docs/reference/sequences.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Sequences - Kotlin Documentation](https://kotlinlang.org/docs/reference/sequences.html)
 
 ## Related Questions
 - [[q-kotlin-collections--kotlin--easy]]

@@ -573,6 +573,9 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## References
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [async Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)
 ## Related Questions
 
 ### Related (Medium)
@@ -587,6 +590,3 @@ suspend fun parallelFetch(): ProfileData = coroutineScope {
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 
-## References
-- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
-- [async Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/async.html)

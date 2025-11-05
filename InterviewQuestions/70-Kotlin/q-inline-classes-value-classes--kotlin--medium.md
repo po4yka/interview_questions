@@ -253,14 +253,14 @@ fun hashPassword(password: String): String {
 
 **English Summary**: Value classes (inline classes) wrap types without runtime overhead, providing type safety without performance cost. Must have single property in primary constructor. Cannot have backing fields, init blocks, or extend classes. Unlike type aliases which are just names, value classes create real distinct types. Use for type-safe IDs, units of measurement, and validated wrappers. Zero allocation at runtime.
 
-## References
-- [Inline Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/inline-classes.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Inline Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/inline-classes.html)
 
 ## Related Questions
 

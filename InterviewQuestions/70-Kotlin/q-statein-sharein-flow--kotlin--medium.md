@@ -650,15 +650,15 @@ class ViewModel : ViewModel() {
 
 **English Summary**: `stateIn` converts cold Flow to StateFlow (always has current value, replays latest to new collectors). `shareIn` converts to SharedFlow (configurable replay, no initial value required). Use `stateIn` for: state/data that has current value, caching, combining sources. Use `shareIn` for: events, multiple recent values, broadcasting. SharingStarted strategies: `WhileSubscribed` (stops after timeout), `Eagerly` (never stops), `Lazily` (starts on first subscriber). StateFlow conflates, SharedFlow can buffer.
 
-## References
-- [StateFlow and SharedFlow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#stateflow-and-sharedflow)
-- [SharedFlow vs StateFlow](https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [StateFlow and SharedFlow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#stateflow-and-sharedflow)
+- [SharedFlow vs StateFlow](https://elizarov.medium.com/shared-flows-broadcast-channels-899b675e805c)
 
 ## Related Questions
 

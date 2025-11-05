@@ -603,6 +603,10 @@ fun testCancellation() = runTest {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## References
+- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [suspendCoroutine API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/suspend-coroutine.html)
+- [callbackFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/callback-flow.html)
 ## Related Questions
 
 ### Prerequisites (Easier)
@@ -616,7 +620,3 @@ fun testCancellation() = runTest {
 
 ### Advanced (Harder)
 - [[q-flow-testing-advanced--kotlin--hard]] - Flow
-## References
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
-- [suspendCoroutine API](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines/suspend-coroutine.html)
-- [callbackFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/callback-flow.html)

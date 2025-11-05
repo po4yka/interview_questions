@@ -965,16 +965,16 @@ class UserViewModel : ViewModel() {
 
 **English Summary**: Flow exception handling uses catch for handling upstream exceptions, retry for automatic retries, and retryWhen for conditional retry logic. Exponential backoff with jitter is the standard retry strategy. The catch operator only handles exceptions from upstream, not from the collect block. Combine error handling strategies with timeout and circuit breaker patterns for robust applications. Always provide fallback values or error states for UI flows.
 
-## References
-- [Exception handling - Kotlin Flow](https://kotlinlang.org/docs/flow.html#exception-handling)
-- [Flow error handling - Android Developers](https://developer.android.com/kotlin/flow#catch)
-- [Exponential backoff - Wikipedia](https://en.wikipedia.org/wiki/Exponential_backoff)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Exception handling - Kotlin Flow](https://kotlinlang.org/docs/flow.html#exception-handling)
+- [Flow error handling - Android Developers](https://developer.android.com/kotlin/flow#catch)
+- [Exponential backoff - Wikipedia](https://en.wikipedia.org/wiki/Exponential_backoff)
 
 ## Related Questions
 

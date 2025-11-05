@@ -712,17 +712,17 @@ class AppConfig {
 
 ---
 
-## References
-
-- [Kotlin Basic Types](https://kotlinlang.org/docs/basic-types.html)
-- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
-- [Effective Kotlin - Item 1: Limit mutability](https://kt.academy/article/ek-mutability)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Basic Types](https://kotlinlang.org/docs/basic-types.html)
+- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
+- [Effective Kotlin - Item 1: Limit mutability](https://kt.academy/article/ek-mutability)
 
 ## Related Questions
 

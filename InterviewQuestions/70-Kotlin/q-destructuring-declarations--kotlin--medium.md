@@ -207,15 +207,15 @@ val (a, b) = MyClass("test", 42)  // Works!
 
 **English Summary**: Destructuring declarations allow unpacking objects into separate variables in one line. Works with data classes, Pair/Triple, and any class with componentN() operator functions. Can be used in variable declarations, for loops, and lambda parameters. Use underscore to skip unwanted components.
 
-## References
-- [Destructuring Declarations - Kotlin Documentation](https://kotlinlang.org/docs/reference/multi-declarations.html)
-- [Kotlin Destructuring Declarations](https://www.kotlindevelopment.com/destructuring-declarations/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Destructuring Declarations - Kotlin Documentation](https://kotlinlang.org/docs/reference/multi-declarations.html)
+- [Kotlin Destructuring Declarations](https://www.kotlindevelopment.com/destructuring-declarations/)
 
 ## Related Questions
 

@@ -733,17 +733,17 @@ class DataService(
 
 ---
 
-## References
-
-- [Kotlin Flow Exception Transparency](https://kotlinlang.org/docs/flow.html#exception-transparency)
-- [Flow Catch Operator](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/catch.html)
-- [Exception Handling in Flow](https://developer.android.com/kotlin/flow#exceptions)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Flow Exception Transparency](https://kotlinlang.org/docs/flow.html#exception-transparency)
+- [Flow Catch Operator](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/catch.html)
+- [Exception Handling in Flow](https://developer.android.com/kotlin/flow#exceptions)
 
 ## Related Questions
 

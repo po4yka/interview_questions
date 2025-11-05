@@ -705,16 +705,16 @@ fun `test conflate drops intermediate values`() = runTest {
 
 **English Summary**: Flow testing uses TestScope and TestDispatcher for virtual time control, making tests deterministic and fast. Turbine library provides clean API for testing emissions. Test all aspects: emissions, errors, completion, delays, backpressure, and cancellation. Use runTest for automatic TestScope, advanceTimeBy/advanceUntilIdle for time control, and always verify flow completion with awaitComplete().
 
-## References
-- [Testing Kotlin coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
-- [Turbine - Flow testing library](https://github.com/cashapp/turbine)
-- [Testing Flows - Android Developers](https://developer.android.com/kotlin/flow/test)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Testing Kotlin coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
+- [Turbine - Flow testing library](https://github.com/cashapp/turbine)
+- [Testing Flows - Android Developers](https://developer.android.com/kotlin/flow/test)
 
 ## Related Questions
 

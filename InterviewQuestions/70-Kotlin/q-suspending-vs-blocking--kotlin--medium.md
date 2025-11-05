@@ -279,14 +279,14 @@ fun loadDataSafely() {
 
 **English Summary**: Blocking locks the thread until completion, wasting resources and freezing UI in Android. Suspending releases the thread when waiting, allowing other work, keeping UI responsive. Blocking uses Thread.sleep(), suspending uses delay(). Suspending is cooperative multitasking (coroutines), blocking is thread-based. In Android, always use suspend functions for I/O and long operations to avoid ANR.
 
-## References
-- [Coroutines Basics - Kotlin](https://kotlinlang.org/docs/coroutines-basics.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Coroutines Basics - Kotlin](https://kotlinlang.org/docs/coroutines-basics.html)
 
 ## Related Questions
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]

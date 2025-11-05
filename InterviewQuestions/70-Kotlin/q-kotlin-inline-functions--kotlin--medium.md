@@ -1480,6 +1480,10 @@ inline fun <T> retry(
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## References
+- [Kotlin Documentation: Inline Functions](https://kotlinlang.org/docs/inline-functions.html)
+- [Kotlin Inline Functions - Official Guide](https://kotlinlang.org/docs/inline-functions.html#noinline)
+- [Performance: Inline Functions](https://kotlinlang.org/docs/inline-functions.html#inline-properties)
 ## Related Questions
 - [[q-kotlin-lambda-expressions--kotlin--medium]]
 - [[q-kotlin-higher-order-functions--kotlin--medium]]
@@ -1488,7 +1492,3 @@ inline fun <T> retry(
 - [[q-inline-function-limitations--kotlin--medium]]
 - [[q-inline-value-classes-performance--kotlin--medium]]
 
-## References
-- [Kotlin Documentation: Inline Functions](https://kotlinlang.org/docs/inline-functions.html)
-- [Kotlin Inline Functions - Official Guide](https://kotlinlang.org/docs/inline-functions.html#noinline)
-- [Performance: Inline Functions](https://kotlinlang.org/docs/inline-functions.html#inline-properties)

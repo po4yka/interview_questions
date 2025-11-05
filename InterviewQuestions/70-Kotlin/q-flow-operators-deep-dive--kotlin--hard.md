@@ -908,16 +908,16 @@ suspend fun benchmarkFlatMapVariants() {
 
 **English Summary**: Flow operators transform flows in different ways. flatMapConcat processes sequentially preserving order, flatMapMerge processes concurrently with configurable concurrency for maximum throughput, and flatMapLatest cancels previous flows keeping only the latest. Custom operators can be created by combining existing operators. Choose based on ordering requirements, performance needs, and resource constraints.
 
-## References
-- [Flow documentation - Kotlin](https://kotlinlang.org/docs/flow.html)
-- [Flow operators - Kotlin Coroutines Guide](https://kotlinlang.org/docs/flow.html#flow-operators)
-- [flatMapConcat, flatMapMerge, flatMapLatest - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Flow documentation - Kotlin](https://kotlinlang.org/docs/flow.html)
+- [Flow operators - Kotlin Coroutines Guide](https://kotlinlang.org/docs/flow.html#flow-operators)
+- [flatMapConcat, flatMapMerge, flatMapLatest - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
 
 ## Related Questions
 

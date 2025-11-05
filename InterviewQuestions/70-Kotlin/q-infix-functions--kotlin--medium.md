@@ -199,14 +199,14 @@ val distance = p1 distanceTo p2  // 5.0
 
 **English Summary**: Infix functions allow calling functions without dots and parentheses for more readable code. Must be member/extension functions with exactly one parameter. Common examples: `to` for pairs, bitwise operators (`and`, `or`, `shl`), `matches` for regex. Have specific precedence rules relative to other operators.
 
-## References
-- [Functions - Kotlin Documentation](https://kotlinlang.org/docs/reference/functions.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Functions - Kotlin Documentation](https://kotlinlang.org/docs/reference/functions.html)
 
 ## Related Questions
 

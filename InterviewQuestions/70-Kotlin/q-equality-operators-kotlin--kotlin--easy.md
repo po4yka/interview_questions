@@ -124,14 +124,14 @@ println(person1 === person3)  // true - same reference
 
 **English Summary**: `==` checks structural equality (equal values/content), calls `equals()`. `===` checks referential equality (same object reference). Use `==` for comparing values, `===` for checking if two variables point to the same object.
 
-## References
-- [Equality - Kotlin Documentation](https://kotlinlang.org/docs/reference/equality.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Equality - Kotlin Documentation](https://kotlinlang.org/docs/reference/equality.html)
 
 ## Related Questions
 

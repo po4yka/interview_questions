@@ -1066,18 +1066,18 @@ myproject/
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 
 - [Kotlin Multiplatform expect/actual](https://kotlinlang.org/docs/multiplatform-connect-to-apis.html)
 - [KMP Platform-specific declarations](https://kotlinlang.org/docs/multiplatform-expect-actual.html)
 - [Kotlin Multiplatform Mobile](https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html)
 - [expect/actual Tutorial](https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-expect-actual.html)
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

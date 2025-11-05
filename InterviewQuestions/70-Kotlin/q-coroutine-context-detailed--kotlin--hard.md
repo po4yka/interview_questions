@@ -325,15 +325,15 @@ launch(parentContext) {
 
 **English Summary**: CoroutineContext is indexed set of elements defining coroutine behavior. Key elements: Job (lifecycle), CoroutineDispatcher (threading), CoroutineName (debugging), CoroutineExceptionHandler (errors). Contexts combine with `+`, same-type elements replace. Children inherit parent context but can override. Job is special: child gets new Job with parent as parent. Use for: controlling threads, naming for debugging, exception handling, lifecycle management.
 
-## References
-- [CoroutineContext - Kotlin Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [Coroutine Context](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [CoroutineContext - Kotlin Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Coroutine Context](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
 
 ## Related Questions
 

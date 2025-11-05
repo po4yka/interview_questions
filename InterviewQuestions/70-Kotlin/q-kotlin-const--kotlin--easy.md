@@ -187,14 +187,14 @@ fun checkSize(size: Int) {
 
 **English Summary**: The `const` modifier marks a property as a compile-time constant. It can only be used with primitive types or String, must be top-level or in an object/companion object, and cannot have a custom getter. The value is inlined at compile time for better performance.
 
-## References
-- [Properties - Kotlin Documentation](https://kotlinlang.org/docs/reference/properties.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Properties - Kotlin Documentation](https://kotlinlang.org/docs/reference/properties.html)
 
 ## Related Questions
 - [[q-kotlin-val-vs-var--kotlin--easy]]

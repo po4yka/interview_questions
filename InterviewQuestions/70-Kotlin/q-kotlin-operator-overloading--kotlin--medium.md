@@ -393,18 +393,18 @@ These operators only work with the function `equals(other: Any?): Boolean`, whic
 
 All comparisons are translated into calls to `compareTo`, that is required to return `Int`.
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 - [Operator overloading](https://kotlinlang.org/docs/operator-overloading.html)
 - [Kotlin Operator Overloading](https://www.programiz.com/kotlin-programming/operator-overloading)
 - [Invoke Operator & Operator Overloading in Kotlin](https://stackoverflow.com/questions/45173677/invoke-operator-operator-overloading-in-kotlin)
 - [Operator overloading in Kotlin](https://kt.academy/article/kfde-operators)
 - [How Can Kotlin Operator Overloading Help You?](https://codersee.com/how-can-kotlin-operator-overloading-help-you/)
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 

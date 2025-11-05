@@ -730,16 +730,16 @@ actual class TokenStorage {
 
 **English Summary**: Kotlin Multiplatform enables code sharing across platforms using expect/actual mechanism. Common code compiles to platform-specific targets (JVM for Android, Native for iOS). Share business logic, data layer, models while keeping UI platform-specific. Uses Kotlin/Native for iOS (generates frameworks), Kotlin/JVM for Android. Popular libraries: Ktor, SQLDelight, kotlinx.serialization. Code reuse: 60-90%. Supports gradual adoption and maintains native performance.
 
-## References
-- [Kotlin Multiplatform Documentation](https://kotlinlang.org/docs/multiplatform.html)
-- [Kotlin Multiplatform Mobile](https://kotlinlang.org/lp/mobile/)
-- [KMP Samples](https://github.com/JetBrains/compose-multiplatform)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Kotlin Multiplatform Documentation](https://kotlinlang.org/docs/multiplatform.html)
+- [Kotlin Multiplatform Mobile](https://kotlinlang.org/lp/mobile/)
+- [KMP Samples](https://github.com/JetBrains/compose-multiplatform)
 
 ## Related Questions
 - [[q-expect-actual-kotlin--kotlin--medium]]

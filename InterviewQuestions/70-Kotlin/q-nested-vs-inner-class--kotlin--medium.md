@@ -170,15 +170,15 @@ class Activity {
 
 **English Summary**: Nested classes (default in Kotlin) are like Java static nested classes - no access to outer class, no outer instance needed. Inner classes (with `inner` keyword) are like Java non-static nested - can access outer members, need outer instance. Use nested for independence, inner for tight coupling. Nested classes avoid memory leaks from holding outer references.
 
-## References
-- [Nested and Inner Classes - Kotlin](https://kotlinlang.org/docs/nested-classes.html)
-- [Understanding Nested and Inner Classes in Kotlin](https://medium.com/@sandeepkella23/understanding-nested-and-inner-classes-in-kotlin-ae1c4d699053)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Nested and Inner Classes - Kotlin](https://kotlinlang.org/docs/nested-classes.html)
+- [Understanding Nested and Inner Classes in Kotlin](https://medium.com/@sandeepkella23/understanding-nested-and-inner-classes-in-kotlin-ae1c4d699053)
 
 ## Related Questions
 

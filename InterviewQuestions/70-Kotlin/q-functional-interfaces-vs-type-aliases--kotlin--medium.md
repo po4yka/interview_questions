@@ -207,15 +207,15 @@ fun ClickHandler.withLogging(): ClickHandler = { view ->
 
 **English Summary**: Functional interfaces create new distinct types, can have multiple non-abstract members, and support interface-specific extensions. Type aliases just rename existing types for readability. Choose functional interfaces for complex contracts; type aliases for simple function type renaming.
 
-## References
-- [Functional (SAM) Interfaces - Kotlin](https://kotlinlang.org/docs/fun-interfaces.html)
-- [Type Aliases - Kotlin](https://kotlinlang.org/docs/type-aliases.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Functional (SAM) Interfaces - Kotlin](https://kotlinlang.org/docs/fun-interfaces.html)
+- [Type Aliases - Kotlin](https://kotlinlang.org/docs/type-aliases.html)
 
 ## Related Questions
 - [[q-kotlin-sam-interfaces--kotlin--medium]]

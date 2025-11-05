@@ -672,15 +672,15 @@ fun `retryWhen should apply exponential backoff`() = runTest {
 
 **English Summary**: `retry` immediately retries flow on exception (fixed count, predicate filter). `retryWhen` provides advanced control (access to attempt number, custom delays, exponential backoff). Use `retry` for simple retry logic. Use `retryWhen` for exponential backoff, different strategies per error type, progress updates. Always filter exceptions, implement delays, set max attempts. Common patterns: exponential backoff, linear backoff with jitter, retry with timeout/fallback.
 
-## References
-- [Flow Error Handling - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#exception-handling)
-- [Retry Operators](https://elizarov.medium.com/kotlin-flows-and-coroutines-256260fb3bdb)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Flow Error Handling - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#exception-handling)
+- [Retry Operators](https://elizarov.medium.com/kotlin-flows-and-coroutines-256260fb3bdb)
 
 ## Related Questions
 

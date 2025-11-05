@@ -647,17 +647,17 @@ val page = html {
 
 **English Summary**: Higher-order functions take functions as parameters or return functions as results. They enable functional programming patterns, code reusability, and abstraction. Kotlin's standard library (map, filter, reduce) extensively uses them. The `inline` keyword eliminates performance overhead by inlining lambda code at compile time.
 
-## References
-- [Higher-Order Functions and Lambdas - Kotlin Documentation](https://kotlinlang.org/docs/lambdas.html)
-- [Inline functions - Kotlin Documentation](https://kotlinlang.org/docs/inline-functions.html)
-- [A Practical Guide to Kotlin's inline Modifier](https://maxkim.eu/a-practical-guide-to-kotlins-inline-modifier)
-- [Inline function: Kotlin](https://agrawalsuneet.medium.com/inline-function-kotlin-3f05d2ea1b59)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Higher-Order Functions and Lambdas - Kotlin Documentation](https://kotlinlang.org/docs/lambdas.html)
+- [Inline functions - Kotlin Documentation](https://kotlinlang.org/docs/inline-functions.html)
+- [A Practical Guide to Kotlin's inline Modifier](https://maxkim.eu/a-practical-guide-to-kotlins-inline-modifier)
+- [Inline function: Kotlin](https://agrawalsuneet.medium.com/inline-function-kotlin-3f05d2ea1b59)
 
 ## Related Questions
 - [[q-kotlin-lambda-expressions--kotlin--medium]]

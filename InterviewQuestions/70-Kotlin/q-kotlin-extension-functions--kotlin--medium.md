@@ -281,17 +281,17 @@ Extensions utilize the same visibility modifiers as regular functions declared i
 - An extension declared at the top level of a file has access to the other `private` top-level declarations in the same file;
 - If an extension is declared outside its receiver type, it cannot access the receiver's `private` or `protected` members.
 
-## References
-- [Extensions](https://kotlinlang.org/docs/extensions.html)
-- [Extension Functions in Kotlin](https://www.baeldung.com/kotlin/extension-methods)
-- [Writing clean models using extensions](https://okkotlin.com/clean-models/)
-- [Bad Kotlin Extensions](https://krossovochkin.com/posts/2021_01_25_bad_kotlin_extensions/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Extensions](https://kotlinlang.org/docs/extensions.html)
+- [Extension Functions in Kotlin](https://www.baeldung.com/kotlin/extension-methods)
+- [Writing clean models using extensions](https://okkotlin.com/clean-models/)
+- [Bad Kotlin Extensions](https://krossovochkin.com/posts/2021_01_25_bad_kotlin_extensions/)
 
 ## Related Questions
 

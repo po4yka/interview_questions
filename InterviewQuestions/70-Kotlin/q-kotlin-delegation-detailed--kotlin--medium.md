@@ -461,15 +461,15 @@ class User {
 
 **English Summary**: Kotlin delegation: **Class delegation** (`by` keyword) - delegates interface implementation to object, eliminates boilerplate. **Property delegation** - delegates getter/setter logic. Built-in: `lazy` (lazy init), `observable` (observe changes), `vetoable` (veto changes), `notNull` (late init). Custom delegates: implement ReadWriteProperty. Use cases: SharedPreferences, validation, caching, composition over inheritance.
 
-## References
-- [Delegation - Kotlin Documentation](https://kotlinlang.org/docs/delegation.html)
-- [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Delegation - Kotlin Documentation](https://kotlinlang.org/docs/delegation.html)
+- [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
 
 ## Related Questions
 - [[q-kotlin-delegation--programming-languages--easy]]

@@ -605,17 +605,17 @@ input
 
 ---
 
-## References
-
-- [Kotlin Flow debounce](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)
-- [Kotlin Flow sample](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/sample.html)
-- [Flow Time-based Operators](https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Flow debounce](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/debounce.html)
+- [Kotlin Flow sample](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/sample.html)
+- [Flow Time-based Operators](https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf)
 
 ## Related Questions
 

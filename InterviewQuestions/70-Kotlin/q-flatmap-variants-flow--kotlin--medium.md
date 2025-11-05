@@ -698,15 +698,15 @@ urls.asFlow()
 
 **English Summary**: `flatMapConcat` executes inner flows sequentially (preserves order, slower). `flatMapMerge` executes concurrently (faster, order not preserved, configurable concurrency). `flatMapLatest` cancels previous inner flow when new value arrives (only latest completes). Use `flatMapConcat` for: ordered processing, sequential operations. Use `flatMapMerge` for: parallel downloads, concurrent requests. Use `flatMapLatest` for: search, autocomplete, refresh (only latest matters).
 
-## References
-- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flattening-flows)
-- [flatMap variants in Flow](https://elizarov.medium.com/reactive-streams-and-kotlin-flows-bfd12772cda4)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flattening-flows)
+- [flatMap variants in Flow](https://elizarov.medium.com/reactive-streams-and-kotlin-flows-bfd12772cda4)
 
 ## Related Questions
 

@@ -1064,15 +1064,15 @@ Do all operations need to succeed?
 
 **English Summary**: coroutineScope provides fail-fast behavior - any child failure cancels all siblings. supervisorScope allows independent failures - only the failed child is cancelled. Use coroutineScope for all-or-nothing operations where dependencies exist. Use supervisorScope for independent tasks where partial success is acceptable. Always explicitly handle exceptions in supervisorScope children. CoroutineExceptionHandler only works with supervisorScope.
 
-## References
-- [Supervision - Kotlin Coroutines Guide](https://kotlinlang.org/docs/exception-handling.html#supervision)
-- [supervisorScope - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/supervisor-scope.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Supervision - Kotlin Coroutines Guide](https://kotlinlang.org/docs/exception-handling.html#supervision)
+- [supervisorScope - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/supervisor-scope.html)
 
 ## Related Questions
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]

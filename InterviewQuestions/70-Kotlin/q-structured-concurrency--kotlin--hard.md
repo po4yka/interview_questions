@@ -668,17 +668,17 @@ fun testExceptionPropagation() = runTest {
 
 ---
 
-## References
-
-- [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [Structured Concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency)
-- [Coroutine Exceptions](https://kotlinlang.org/docs/exception-handling.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Structured Concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency)
+- [Coroutine Exceptions](https://kotlinlang.org/docs/exception-handling.html)
 
 ## Related Questions
 

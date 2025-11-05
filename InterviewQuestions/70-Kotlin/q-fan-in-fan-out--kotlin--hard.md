@@ -655,17 +655,17 @@ launch {
 
 ---
 
-## References
-
-- [Kotlin Channels Documentation](https://kotlinlang.org/docs/channels.html)
-- [Fan-in Fan-out Pattern](https://kotlinlang.org/docs/channels.html#fan-out)
-- [Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+
+- [Kotlin Channels Documentation](https://kotlinlang.org/docs/channels.html)
+- [Fan-in Fan-out Pattern](https://kotlinlang.org/docs/channels.html#fan-out)
+- [Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 
 ## Related Questions
 

@@ -820,16 +820,16 @@ val users2 = repository.users // No extra call
 
 **English Summary**: Cold flows execute independently for each collector, while hot flows share a single execution among multiple collectors. Use shareIn() to convert cold to hot SharedFlow with configurable replay and started strategies. Use stateIn() to convert to StateFlow when you need a state holder with a current value. Choose WhileSubscribed for UI, Lazily for one-time initialization, and Eagerly for always-on services. Hot flows are essential for sharing expensive operations like network calls and sensor data.
 
-## References
-- [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
-- [Cold flows, hot flows - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flows-are-cold)
-- [shareIn and stateIn operators - Kotlin Blog](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Cold flows, hot flows - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flows-are-cold)
+- [shareIn and stateIn operators - Kotlin Blog](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
 
 ## Related Questions
 

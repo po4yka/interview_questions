@@ -782,15 +782,15 @@ searchQuery
 
 **English Summary**: `debounce` waits for quiet period after last emission (resets timer on each value). `throttle` emits first value, then ignores for fixed window. Use `debounce` for: search, form validation, auto-save (wait for user to finish). Use `throttle` for: button clicks, location updates, scroll events (rate limiting). debounce keeps latest value, throttle keeps first. Typical timeouts: search 300ms, auto-save 2s, button 1s.
 
-## References
-- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
-- [Debounce and Throttle](https://medium.com/androiddevelopers/effective-state-management-for-textfield-in-compose-d6e5b070fbe5)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
+- [Debounce and Throttle](https://medium.com/androiddevelopers/effective-state-management-for-textfield-in-compose-d6e5b070fbe5)
 
 ## Related Questions
 

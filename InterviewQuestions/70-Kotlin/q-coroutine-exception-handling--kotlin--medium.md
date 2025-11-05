@@ -463,15 +463,15 @@ viewModelScope.launch {
 
 **English Summary**: Exceptions in coroutines: `launch` propagates immediately, `async` stores until `await()`. `try-catch` works for direct code, not child coroutines. `coroutineScope` cancels all siblings on failure. `supervisorScope` lets siblings continue. `CoroutineExceptionHandler` for global handling (launch only). Use `supervisorScope` for independent parallel tasks, `coroutineScope` for dependent sequential tasks.
 
-## References
-- [Coroutine Exceptions - Kotlin Documentation](https://kotlinlang.org/docs/exception-handling.html)
-- [CoroutineExceptionHandler](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-exception-handler/)
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## References
+- [Coroutine Exceptions - Kotlin Documentation](https://kotlinlang.org/docs/exception-handling.html)
+- [CoroutineExceptionHandler](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-exception-handler/)
 
 ## Related Questions
 

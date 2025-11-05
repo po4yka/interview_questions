@@ -563,18 +563,18 @@ val newContext = context.minusKey(CoroutineName)
 
 ---
 
+## Follow-ups
+
+- What are the key differences between this and Java?
+- When would you use this in practice?
+- What are common pitfalls to avoid?
+
 ## References
 - [Kotlin Coroutines Guide - Coroutine Context](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [CoroutineContext API](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
 
 
 ---
-
-## Follow-ups
-
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
 
 ## Related Questions
 
