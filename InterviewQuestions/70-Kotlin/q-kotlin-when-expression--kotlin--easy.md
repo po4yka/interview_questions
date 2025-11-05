@@ -17,16 +17,93 @@ tags: [control-flow, difficulty/easy, kotlin, pattern-matching, syntax, when]
 date created: Friday, October 31st 2025, 6:29:12 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Как Использовать when В Kotlin Вместо Switch?
-
-# Question (EN)
-> How to use when in Kotlin instead of switch?
 
 # Вопрос (RU)
 > Как использовать when в Kotlin вместо switch?
 
 ---
+
+# Question (EN)
+> How to use when in Kotlin instead of switch?
+
+## Ответ (RU)
+
+`when` в Kotlin заменяет `switch` из Java и является **намного более мощным**.
+
+**Базовый синтаксис:**
+```kotlin
+fun getDayName(day: Int): String {
+    return when (day) {
+        1 -> "Понедельник"
+        2 -> "Вторник"
+        3 -> "Среда"
+        4 -> "Четверг"
+        5 -> "Пятница"
+        6 -> "Суббота"
+        7 -> "Воскресенье"
+        else -> "Неверный день"
+    }
+}
+```
+
+**Несколько значений на ветку:**
+```kotlin
+when (x) {
+    1, 2 -> println("x это 1 или 2")
+    in 3..10 -> println("x между 3 и 10")
+    !in 10..20 -> println("x вне диапазона 10-20")
+    else -> println("Иначе")
+}
+```
+
+**Без аргумента (заменяет цепочки if-else):**
+```kotlin
+when {
+    x < 0 -> println("Отрицательное")
+    x == 0 -> println("Ноль")
+    x > 0 -> println("Положительное")
+}
+```
+
+**Проверка типа:**
+```kotlin
+fun describe(obj: Any): String = when (obj) {
+    is String -> "String длиной ${obj.length}"
+    is Int -> "Int со значением $obj"
+    is List<*> -> "List размера ${obj.size}"
+    else -> "Неизвестный тип"
+}
+```
+
+**Sealed классы (исчерпывающая проверка):**
+```kotlin
+sealed class Result
+class Success(val data: String) : Result()
+class Error(val message: String) : Result()
+
+fun handle(result: Result) = when (result) {
+    is Success -> println(result.data)
+    is Error -> println(result.message)
+    // 'else' не нужен - компилятор знает все случаи!
+}
+```
+
+**Как выражение:**
+```kotlin
+val result = when (val x = getValue()) {
+    1 -> "Один"
+    2 -> "Два"
+    else -> "Другое: $x"
+}
+```
+
+**Преимущества над switch:**
+- Может использоваться как выражение
+- Нет fall-through (`break` не нужен)
+- Может проверять любое условие, не только константы
+- Поддерживает диапазоны и проверки типов
+- Исчерпывающая проверка с sealed классами
 
 ## Answer (EN)
 
@@ -107,84 +184,6 @@ val result = when (val x = getValue()) {
 - Exhaustive checking with sealed classes
 
 ---
-
-## Ответ (RU)
-
-`when` в Kotlin заменяет `switch` из Java и является **намного более мощным**.
-
-**Базовый синтаксис:**
-```kotlin
-fun getDayName(day: Int): String {
-    return when (day) {
-        1 -> "Понедельник"
-        2 -> "Вторник"
-        3 -> "Среда"
-        4 -> "Четверг"
-        5 -> "Пятница"
-        6 -> "Суббота"
-        7 -> "Воскресенье"
-        else -> "Неверный день"
-    }
-}
-```
-
-**Несколько значений на ветку:**
-```kotlin
-when (x) {
-    1, 2 -> println("x это 1 или 2")
-    in 3..10 -> println("x между 3 и 10")
-    !in 10..20 -> println("x вне диапазона 10-20")
-    else -> println("Иначе")
-}
-```
-
-**Без аргумента (заменяет цепочки if-else):**
-```kotlin
-when {
-    x < 0 -> println("Отрицательное")
-    x == 0 -> println("Ноль")
-    x > 0 -> println("Положительное")
-}
-```
-
-**Проверка типа:**
-```kotlin
-fun describe(obj: Any): String = when (obj) {
-    is String -> "String длиной ${obj.length}"
-    is Int -> "Int со значением $obj"
-    is List<*> -> "List размера ${obj.size}"
-    else -> "Неизвестный тип"
-}
-```
-
-**Sealed классы (исчерпывающая проверка):**
-```kotlin
-sealed class Result
-class Success(val data: String) : Result()
-class Error(val message: String) : Result()
-
-fun handle(result: Result) = when (result) {
-    is Success -> println(result.data)
-    is Error -> println(result.message)
-    // 'else' не нужен - компилятор знает все случаи!
-}
-```
-
-**Как выражение:**
-```kotlin
-val result = when (val x = getValue()) {
-    1 -> "Один"
-    2 -> "Два"
-    else -> "Другое: $x"
-}
-```
-
-**Преимущества над switch:**
-- Может использоваться как выражение
-- Нет fall-through (`break` не нужен)
-- Может проверять любое условие, не только константы
-- Поддерживает диапазоны и проверки типов
-- Исчерпывающая проверка с sealed классами
 
 ## Follow-ups
 

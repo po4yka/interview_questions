@@ -28,12 +28,142 @@ tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
 date created: Saturday, October 18th 2025, 12:37:51 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140028
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140028
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140028
+## Ответ (RU)
+
+Suspend-функции являются основой корутин в Kotlin. Это специальные функции, которые могут быть приостановлены и возобновлены без блокировки потока, обеспечивая эффективное асинхронное программирование.
+
+### Базовый Синтаксис
+
+Suspend-функция объявляется с модификатором `suspend`:
+
+```kotlin
+suspend fun fetchData(): String {
+    delay(1000)  // Приостанавливает корутину на 1 секунду
+    return "Data loaded"
+}
+```
+
+### Ключевые Характеристики
+
+1. **Могут вызываться только из корутин или других suspend-функций**:
+```kotlin
+suspend fun loadUser(): User {
+    // Можно вызывать другие suspend-функции
+    val data = fetchData()
+    return parseUser(data)
+}
+
+// Ошибка: suspend-функцию нельзя вызвать вне корутины
+// fun main() {
+//     loadUser()  // Ошибка компиляции!
+// }
+
+// Правильно: вызов из корутины
+fun main() = runBlocking {
+    val user = loadUser()  // OK
+}
+```
+
+2. **Неблокирующая приостановка**: Функция может приостановиться без блокировки потока:
+```kotlin
+suspend fun processData() {
+    println("Starting on ${Thread.currentThread().name}")
+    delay(1000)  // Приостанавливается, поток свободен для другой работы
+    println("Resumed on ${Thread.currentThread().name}")
+}
+```
+
+3. **Основаны на continuation**: Под капотом suspend-функции используют continuation:
+```kotlin
+// Что вы пишете:
+suspend fun example(): String {
+    return "Hello"
+}
+
+// Что генерирует компилятор (упрощенно):
+fun example(continuation: Continuation<String>): Any {
+    // Реализация state machine
+}
+```
+
+### Распространенные Suspend-функции
+
+**Из стандартной библиотеки**:
+- `delay(ms)` - Приостанавливает на указанное время
+- `yield()` - Передает выполнение другим корутинам
+- `withContext(dispatcher)` - Переключает контекст корутины
+
+**Из внешних API**:
+```kotlin
+suspend fun fetchFromApi(): ApiResponse {
+    return apiClient.get("/endpoint")  // Suspend-функция из библиотеки
+}
+```
+
+### Практические Примеры
+
+**Пример 1: Последовательное выполнение**:
+```kotlin
+suspend fun loadUserData(userId: String): UserData {
+    val profile = fetchUserProfile(userId)  // Приостанавливается
+    val settings = fetchUserSettings(userId)  // Приостанавливается после profile
+    return UserData(profile, settings)
+}
+```
+
+**Пример 2: Параллельное выполнение с async**:
+```kotlin
+suspend fun loadUserDataParallel(userId: String): UserData = coroutineScope {
+    val profileDeferred = async { fetchUserProfile(userId) }
+    val settingsDeferred = async { fetchUserSettings(userId) }
+
+    UserData(profileDeferred.await(), settingsDeferred.await())
+}
+```
+
+**Пример 3: Обработка ошибок**:
+```kotlin
+suspend fun safeLoadData(): Result<String> {
+    return try {
+        val data = fetchData()
+        Result.success(data)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+}
+```
+
+### Важные Правила
+
+1. **Suspend-функции не создают корутины** - они должны вызываться из существующей
+2. **Они сохраняют структурированную конкурентность** - отмена распространяется корректно
+3. **Могут использоваться как функции высшего порядка**:
+```kotlin
+suspend fun <T> retry(
+    times: Int,
+    block: suspend () -> T
+): T {
+    repeat(times - 1) {
+        try {
+            return block()
+        } catch (e: Exception) {
+            // Продолжаем следующую попытку
+        }
+    }
+    return block()  // Последняя попытка
+}
+
+// Использование
+val data = retry(3) { fetchData() }
+```
 
 ---
 
@@ -163,137 +293,6 @@ suspend fun <T> retry(
 }
 
 // Usage
-val data = retry(3) { fetchData() }
-```
-
----
-
-## Ответ (RU)
-
-Suspend-функции являются основой корутин в Kotlin. Это специальные функции, которые могут быть приостановлены и возобновлены без блокировки потока, обеспечивая эффективное асинхронное программирование.
-
-### Базовый Синтаксис
-
-Suspend-функция объявляется с модификатором `suspend`:
-
-```kotlin
-suspend fun fetchData(): String {
-    delay(1000)  // Приостанавливает корутину на 1 секунду
-    return "Data loaded"
-}
-```
-
-### Ключевые Характеристики
-
-1. **Могут вызываться только из корутин или других suspend-функций**:
-```kotlin
-suspend fun loadUser(): User {
-    // Можно вызывать другие suspend-функции
-    val data = fetchData()
-    return parseUser(data)
-}
-
-// Ошибка: suspend-функцию нельзя вызвать вне корутины
-// fun main() {
-//     loadUser()  // Ошибка компиляции!
-// }
-
-// Правильно: вызов из корутины
-fun main() = runBlocking {
-    val user = loadUser()  // OK
-}
-```
-
-2. **Неблокирующая приостановка**: Функция может приостановиться без блокировки потока:
-```kotlin
-suspend fun processData() {
-    println("Starting on ${Thread.currentThread().name}")
-    delay(1000)  // Приостанавливается, поток свободен для другой работы
-    println("Resumed on ${Thread.currentThread().name}")
-}
-```
-
-3. **Основаны на continuation**: Под капотом suspend-функции используют continuation:
-```kotlin
-// Что вы пишете:
-suspend fun example(): String {
-    return "Hello"
-}
-
-// Что генерирует компилятор (упрощенно):
-fun example(continuation: Continuation<String>): Any {
-    // Реализация state machine
-}
-```
-
-### Распространенные Suspend-функции
-
-**Из стандартной библиотеки**:
-- `delay(ms)` - Приостанавливает на указанное время
-- `yield()` - Передает выполнение другим корутинам
-- `withContext(dispatcher)` - Переключает контекст корутины
-
-**Из внешних API**:
-```kotlin
-suspend fun fetchFromApi(): ApiResponse {
-    return apiClient.get("/endpoint")  // Suspend-функция из библиотеки
-}
-```
-
-### Практические Примеры
-
-**Пример 1: Последовательное выполнение**:
-```kotlin
-suspend fun loadUserData(userId: String): UserData {
-    val profile = fetchUserProfile(userId)  // Приостанавливается
-    val settings = fetchUserSettings(userId)  // Приостанавливается после profile
-    return UserData(profile, settings)
-}
-```
-
-**Пример 2: Параллельное выполнение с async**:
-```kotlin
-suspend fun loadUserDataParallel(userId: String): UserData = coroutineScope {
-    val profileDeferred = async { fetchUserProfile(userId) }
-    val settingsDeferred = async { fetchUserSettings(userId) }
-
-    UserData(profileDeferred.await(), settingsDeferred.await())
-}
-```
-
-**Пример 3: Обработка ошибок**:
-```kotlin
-suspend fun safeLoadData(): Result<String> {
-    return try {
-        val data = fetchData()
-        Result.success(data)
-    } catch (e: Exception) {
-        Result.failure(e)
-    }
-}
-```
-
-### Важные Правила
-
-1. **Suspend-функции не создают корутины** - они должны вызываться из существующей
-2. **Они сохраняют структурированную конкурентность** - отмена распространяется корректно
-3. **Могут использоваться как функции высшего порядка**:
-```kotlin
-suspend fun <T> retry(
-    times: Int,
-    block: suspend () -> T
-): T {
-    repeat(times - 1) {
-        try {
-            return block()
-        } catch (e: Exception) {
-            // Продолжаем следующую попытку
-        }
-    }
-    return block()  // Последняя попытка
-}
-
-// Использование
 val data = retry(3) { fetchData() }
 ```
 

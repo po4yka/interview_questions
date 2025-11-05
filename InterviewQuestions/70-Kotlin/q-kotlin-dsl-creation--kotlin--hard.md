@@ -17,16 +17,43 @@ tags: [difficulty/hard]
 date created: Sunday, October 12th 2025, 3:43:42 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Creating Type-Safe DSLs in Kotlin
-
-# Question (EN)
-> Design and implement a type-safe DSL for building UI components. Use scope control, extension lambdas, and @DslMarker.
 
 # Вопрос (RU)
 > Разработайте и реализуйте типобезопасный DSL для построения UI компонентов. Используйте контроль области видимости, extension лямбды и @DslMarker.
 
 ---
+
+# Question (EN)
+> Design and implement a type-safe DSL for building UI components. Use scope control, extension lambdas, and @DslMarker.
+
+## Ответ (RU)
+
+**DSL (Domain-Specific Language)** в Kotlin использует возможности языка, такие как лямбды с получателями, extension функции и перегрузку операторов для создания выразительных, типобезопасных API.
+
+### Базовая Структура DSL
+
+Использует лямбды с получателями: `block: HtmlTag.() -> Unit`.
+
+### @DslMarker Для Контроля Области
+
+Предотвращает утечку области видимости неявных получателей.
+
+### Полный Типобезопасный UI DSL
+
+Включает Container, Component, и функции построения как `button`, `text`, `column`.
+
+### Продвинутый DSL: SQL Query Builder
+
+Использует infix функции для SQL операторов: `"age" gt 18`.
+
+### Лучшие Практики
+
+1. Используйте @DslMarker
+2. Extension лямбды с получателями
+3. Типобезопасные builders
+
+DSL в Kotlin обеспечивают выразительные, типобезопасные API для специфических доменов.
 
 ## Answer (EN)
 
@@ -298,34 +325,6 @@ fun Container.add(component: Any)
 ```
 
 ---
-
-## Ответ (RU)
-
-**DSL (Domain-Specific Language)** в Kotlin использует возможности языка, такие как лямбды с получателями, extension функции и перегрузку операторов для создания выразительных, типобезопасных API.
-
-### Базовая Структура DSL
-
-Использует лямбды с получателями: `block: HtmlTag.() -> Unit`.
-
-### @DslMarker Для Контроля Области
-
-Предотвращает утечку области видимости неявных получателей.
-
-### Полный Типобезопасный UI DSL
-
-Включает Container, Component, и функции построения как `button`, `text`, `column`.
-
-### Продвинутый DSL: SQL Query Builder
-
-Использует infix функции для SQL операторов: `"age" gt 18`.
-
-### Лучшие Практики
-
-1. Используйте @DslMarker
-2. Extension лямбды с получателями
-3. Типобезопасные builders
-
-DSL в Kotlin обеспечивают выразительные, типобезопасные API для специфических доменов.
 
 ## Follow-ups
 

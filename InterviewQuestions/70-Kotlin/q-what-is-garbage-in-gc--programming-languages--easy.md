@@ -17,16 +17,19 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, prog
 date created: Saturday, October 4th 2025, 1:21:00 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # О Каком Мусоре Идет Речь В Сборщике Мусора?
-
-# Question (EN)
-> What is "garbage" in garbage collector?
 
 # Вопрос (RU)
 > О каком мусоре идет речь в сборщике мусора?
 
 ---
+
+# Question (EN)
+> What is "garbage" in garbage collector?
+
+## Ответ (RU)
+
+Это объекты в памяти, которые больше не используются и недостижимы из корневых объектов. Сборщик мусора освобождает эти объекты, чтобы уменьшить использование памяти.
 
 ## Answer (EN)
 
@@ -111,10 +114,6 @@ val data = ByteArray(1000)
 **Garbage** = objects in memory that are **no longer needed** and **unreachable** from GC Roots. GC automatically frees this memory.
 
 ---
-
-## Ответ (RU)
-
-Это объекты в памяти, которые больше не используются и недостижимы из корневых объектов. Сборщик мусора освобождает эти объекты, чтобы уменьшить использование памяти.
 
 ## Follow-ups
 

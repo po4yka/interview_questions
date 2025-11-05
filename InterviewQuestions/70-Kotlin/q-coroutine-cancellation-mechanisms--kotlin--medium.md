@@ -28,10 +28,205 @@ subtopics:
   - cancellation
   - cooperative-cancellation
 ---
-# Question (EN)
-> How does coroutine cancellation work, and how is it different from canceling a Thread?
 # Вопрос (RU)
 > Как работает отмена корутин и чем она отличается от отмены потока?
+
+---
+
+# Question (EN)
+> How does coroutine cancellation work, and how is it different from canceling a Thread?
+## Ответ (RU)
+
+**Отмена корутин является кооперативной**, то есть корутина должна сотрудничать, проверяя отмену в точках приостановки или вручную. Это фундаментально отличается от прерывания потоков.
+
+### Кооперативная Отмена
+
+**Ключевой Принцип**: Корутины не отменяются немедленно - они проверяют отмену в определенных точках.
+
+**Точки Отмены**:
+```kotlin
+// Корутина проверяет отмену в этих точках:
+delay(1000)           // - Проверяет отмену
+yield()               // - Проверяет отмену
+withContext(IO) { }   // - Проверяет отмену
+// Любая приостанавливающая функция из kotlinx.coroutines
+```
+
+### Как Работает Отмена
+
+**Базовый Пример**:
+```kotlin
+val job = lifecycleScope.launch {
+    repeat(1000) { i ->
+        println("Job: Работаю $i...")
+        delay(500) // Здесь происходит проверка отмены
+    }
+}
+
+delay(1300)
+println("Отменяю job...")
+job.cancel() // Запрос на отмену
+job.join()   // Ожидание завершения отмены
+println("Job отменен")
+
+// Вывод:
+// Job: Работаю 0...
+// Job: Работаю 1...
+// Job: Работаю 2...
+// Отменяю job...
+// Job отменен
+```
+
+**Что Происходит При Отмене**:
+1. Вызывается `job.cancel()`
+2. Job помечается как отменяющийся
+3. В следующей точке приостановки (`delay()`) корутина проверяет статус
+4. Выбрасывается `CancellationException`
+5. Корутина завершается
+
+### Ручные Проверки Отмены
+
+**Проблема - CPU-интенсивный цикл**:
+```kotlin
+// - ПЛОХО: Не отменится быстро
+val job = launch {
+    var nextPrintTime = System.currentTimeMillis()
+    var i = 0
+    while (i < 5) { // Нет точек приостановки!
+        if (System.currentTimeMillis() >= nextPrintTime) {
+            println("Вычисляю $i...")
+            nextPrintTime += 500
+            i++
+        }
+    }
+}
+
+delay(1000)
+job.cancel() // Отмена не сработает сразу!
+```
+
+**Решение 1 - Проверка isActive**:
+```kotlin
+// - ХОРОШО: Ручная проверка отмены
+val job = launch {
+    var nextPrintTime = System.currentTimeMillis()
+    var i = 0
+    while (i < 5 && isActive) { // Проверяем isActive
+        if (System.currentTimeMillis() >= nextPrintTime) {
+            println("Вычисляю $i...")
+            nextPrintTime += 500
+            i++
+        }
+    }
+    println("Вычисления отменены!")
+}
+
+delay(1000)
+job.cancel()
+```
+
+**Решение 2 - Использование yield()**:
+```kotlin
+// - ХОРОШО: Периодический yield() для отмены
+val job = launch {
+    repeat(1000) { i ->
+        // Тяжелые вычисления
+        performHeavyComputation()
+        yield() // Даем шанс отмениться
+    }
+}
+
+delay(100)
+job.cancel()
+```
+
+### CancellationException
+
+**Перехват Отмены**:
+```kotlin
+val job = launch {
+    try {
+        repeat(1000) { i ->
+            println("Работаю $i...")
+            delay(500)
+        }
+    } catch (e: CancellationException) {
+        println("Корутина отменена: ${e.message}")
+        // Не проглатывайте! Перебросьте или дайте распространиться
+        throw e
+    } finally {
+        println("Код очистки выполняется здесь")
+    }
+}
+
+delay(1300)
+job.cancel()
+```
+
+**Важно**: `CancellationException` - особенное исключение, его нужно перебрасывать, а не проглатывать.
+
+### Очистка Ресурсов
+
+**Паттерн Try-Finally**:
+```kotlin
+val job = launch {
+    val resource = acquireResource()
+    try {
+        repeat(1000) { i ->
+            println("Использую ресурс $i")
+            delay(500)
+        }
+    } finally {
+        // Всегда выполняется, даже при отмене
+        resource.close()
+        println("Ресурс закрыт")
+    }
+}
+
+delay(1300)
+job.cancel()
+job.join()
+```
+
+### Отмена Родитель-Потомок
+
+**Автоматическая Отмена Потомков**:
+```kotlin
+val parent = launch {
+    val child1 = launch {
+        repeat(1000) { i ->
+            println("Потомок 1: $i")
+            delay(500)
+        }
+    }
+
+    val child2 = launch {
+        repeat(1000) { i ->
+            println("Потомок 2: $i")
+            delay(500)
+        }
+    }
+
+    delay(2000)
+}
+
+delay(1000)
+parent.cancel() // Отменяет родителя И обоих потомков
+parent.join()
+```
+
+### Резюме
+
+**Отмена корутин**:
+- - **Кооперативная** - требует проверки корутиной
+- - **Безопасная** - предсказуемая, не повреждает состояние
+- - **Структурированная** - родитель отменяет всех потомков
+- - **Чистая** - finally блоки всегда выполняются
+- - **Явная** - использует `isActive`, `yield()`, точки приостановки
+
+**Отличия от потоков**:
+- Потоки: Преемптивная, рискованная, немедленная
+- Корутины: Кооперативная, безопасная, в точках отмены
 
 ---
 
@@ -337,201 +532,6 @@ catch (e: CancellationException) {
 **Different from threads**:
 - Threads: Preemptive, risky, immediate
 - Coroutines: Cooperative, safe, at cancellation points
-
----
-
-## Ответ (RU)
-
-**Отмена корутин является кооперативной**, то есть корутина должна сотрудничать, проверяя отмену в точках приостановки или вручную. Это фундаментально отличается от прерывания потоков.
-
-### Кооперативная Отмена
-
-**Ключевой Принцип**: Корутины не отменяются немедленно - они проверяют отмену в определенных точках.
-
-**Точки Отмены**:
-```kotlin
-// Корутина проверяет отмену в этих точках:
-delay(1000)           // - Проверяет отмену
-yield()               // - Проверяет отмену
-withContext(IO) { }   // - Проверяет отмену
-// Любая приостанавливающая функция из kotlinx.coroutines
-```
-
-### Как Работает Отмена
-
-**Базовый Пример**:
-```kotlin
-val job = lifecycleScope.launch {
-    repeat(1000) { i ->
-        println("Job: Работаю $i...")
-        delay(500) // Здесь происходит проверка отмены
-    }
-}
-
-delay(1300)
-println("Отменяю job...")
-job.cancel() // Запрос на отмену
-job.join()   // Ожидание завершения отмены
-println("Job отменен")
-
-// Вывод:
-// Job: Работаю 0...
-// Job: Работаю 1...
-// Job: Работаю 2...
-// Отменяю job...
-// Job отменен
-```
-
-**Что Происходит При Отмене**:
-1. Вызывается `job.cancel()`
-2. Job помечается как отменяющийся
-3. В следующей точке приостановки (`delay()`) корутина проверяет статус
-4. Выбрасывается `CancellationException`
-5. Корутина завершается
-
-### Ручные Проверки Отмены
-
-**Проблема - CPU-интенсивный цикл**:
-```kotlin
-// - ПЛОХО: Не отменится быстро
-val job = launch {
-    var nextPrintTime = System.currentTimeMillis()
-    var i = 0
-    while (i < 5) { // Нет точек приостановки!
-        if (System.currentTimeMillis() >= nextPrintTime) {
-            println("Вычисляю $i...")
-            nextPrintTime += 500
-            i++
-        }
-    }
-}
-
-delay(1000)
-job.cancel() // Отмена не сработает сразу!
-```
-
-**Решение 1 - Проверка isActive**:
-```kotlin
-// - ХОРОШО: Ручная проверка отмены
-val job = launch {
-    var nextPrintTime = System.currentTimeMillis()
-    var i = 0
-    while (i < 5 && isActive) { // Проверяем isActive
-        if (System.currentTimeMillis() >= nextPrintTime) {
-            println("Вычисляю $i...")
-            nextPrintTime += 500
-            i++
-        }
-    }
-    println("Вычисления отменены!")
-}
-
-delay(1000)
-job.cancel()
-```
-
-**Решение 2 - Использование yield()**:
-```kotlin
-// - ХОРОШО: Периодический yield() для отмены
-val job = launch {
-    repeat(1000) { i ->
-        // Тяжелые вычисления
-        performHeavyComputation()
-        yield() // Даем шанс отмениться
-    }
-}
-
-delay(100)
-job.cancel()
-```
-
-### CancellationException
-
-**Перехват Отмены**:
-```kotlin
-val job = launch {
-    try {
-        repeat(1000) { i ->
-            println("Работаю $i...")
-            delay(500)
-        }
-    } catch (e: CancellationException) {
-        println("Корутина отменена: ${e.message}")
-        // Не проглатывайте! Перебросьте или дайте распространиться
-        throw e
-    } finally {
-        println("Код очистки выполняется здесь")
-    }
-}
-
-delay(1300)
-job.cancel()
-```
-
-**Важно**: `CancellationException` - особенное исключение, его нужно перебрасывать, а не проглатывать.
-
-### Очистка Ресурсов
-
-**Паттерн Try-Finally**:
-```kotlin
-val job = launch {
-    val resource = acquireResource()
-    try {
-        repeat(1000) { i ->
-            println("Использую ресурс $i")
-            delay(500)
-        }
-    } finally {
-        // Всегда выполняется, даже при отмене
-        resource.close()
-        println("Ресурс закрыт")
-    }
-}
-
-delay(1300)
-job.cancel()
-job.join()
-```
-
-### Отмена Родитель-Потомок
-
-**Автоматическая Отмена Потомков**:
-```kotlin
-val parent = launch {
-    val child1 = launch {
-        repeat(1000) { i ->
-            println("Потомок 1: $i")
-            delay(500)
-        }
-    }
-
-    val child2 = launch {
-        repeat(1000) { i ->
-            println("Потомок 2: $i")
-            delay(500)
-        }
-    }
-
-    delay(2000)
-}
-
-delay(1000)
-parent.cancel() // Отменяет родителя И обоих потомков
-parent.join()
-```
-
-### Резюме
-
-**Отмена корутин**:
-- - **Кооперативная** - требует проверки корутиной
-- - **Безопасная** - предсказуемая, не повреждает состояние
-- - **Структурированная** - родитель отменяет всех потомков
-- - **Чистая** - finally блоки всегда выполняются
-- - **Явная** - использует `isActive`, `yield()`, точки приостановки
-
-**Отличия от потоков**:
-- Потоки: Преемптивная, рискованная, немедленная
-- Корутины: Кооперативная, безопасная, в точках отмены
 
 ---
 

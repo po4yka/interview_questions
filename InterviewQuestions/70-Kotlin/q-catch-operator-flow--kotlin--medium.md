@@ -28,12 +28,227 @@ tags: [catch, coroutines, difficulty/medium, error-handling, exception-handling,
 date created: Sunday, October 12th 2025, 2:49:28 pm
 date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
+# Вопрос (RU)
+> Как работает оператор catch в Kotlin Flow? Что такое прозрачность исключений и где размещать catch?
+
+---
 
 # Question (EN)
 > How does the catch operator work in Kotlin Flow? What is exception transparency and where should catch be placed?
 
-# Вопрос (RU)
-> Как работает оператор catch в Kotlin Flow? Что такое прозрачность исключений и где размещать catch?
+## Ответ (RU)
+
+Оператор `catch` в Kotlin Flow — декларативный способ обработки исключений, возникающих выше по цепочке flow. Он реализует принцип **прозрачности исключений**, означающий, что исключения текут вниз по потоку так же, как обычные значения.
+
+### Базовое Использование Catch
+
+```kotlin
+flow {
+    emit(1)
+    emit(2)
+    throw RuntimeException("Ошибка!")
+    emit(3)  // Никогда не достигается
+}.catch { exception ->
+    println("Поймано: ${exception.message}")
+    emit(-1)  // Излучить значение восстановления
+}.collect { value ->
+    println("Собрано: $value")
+}
+
+// Вывод:
+// Собрано: 1
+// Собрано: 2
+// Поймано: Ошибка!
+// Собрано: -1
+```
+
+### Прозрачность Исключений
+
+Прозрачность исключений — ключевой принцип: исключения обрабатываются как данные и текут вниз:
+
+```kotlin
+// Без catch: исключение распространяется на коллектор
+flow {
+    emit(1)
+    throw RuntimeException("Ошибка")
+}.collect { value ->  // Исключение выбрасывается здесь
+    println(value)
+}
+
+// С catch: исключение поймано и обработано
+flow {
+    emit(1)
+    throw RuntimeException("Ошибка")
+}.catch { e ->
+    println("Обработано: ${e.message}")
+}.collect { value ->
+    println(value)
+}
+```
+
+### Catch Ловит Только upstream Исключения
+
+Это критически важно: `catch` ловит только исключения из операторов выше по потоку, НЕ из нижестоящих:
+
+```kotlin
+// Catch ЛОВИТ это (upstream)
+flow {
+    throw RuntimeException("Ошибка upstream")
+}.catch { e ->
+    println("Поймано: ${e.message}")  //  Ловит это
+}.collect { value ->
+    println(value)
+}
+
+// Catch НЕ ЛОВИТ это (downstream)
+flow {
+    emit(1)
+}.catch { e ->
+    println("Поймано: ${e.message}")  //  НЕ ловит это
+}.collect { value ->
+    throw RuntimeException("Ошибка downstream")  // Распространяется на вызывающего
+}
+```
+
+### Где Размещать Catch
+
+```kotlin
+class UserRepository {
+    fun getUsers(): Flow<List<User>> = flow {
+        val users = api.fetchUsers()  // Может выбросить исключение
+        emit(users)
+    }.catch { e ->
+        // Ловить сетевые/API ошибки
+        logger.error("Не удалось загрузить пользователей", e)
+        emit(emptyList())  // Излучить пустой список как fallback
+    }
+}
+
+// В ViewModel
+class UserViewModel : ViewModel() {
+    val users: StateFlow<Result<List<User>>> = repository.getUsers()
+        .map { users -> Result.Success(users) }
+        .catch { e ->
+            // Ловить ошибки mapping
+            emit(Result.Error(e.message ?: "Неизвестная ошибка"))
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = Result.Loading
+        )
+}
+```
+
+### Catch И Emit
+
+Вы можете излучать значения восстановления в блоке catch:
+
+```kotlin
+fun loadData(): Flow<Data> = flow {
+    val data = fetchDataFromNetwork()
+    emit(data)
+}.catch { exception ->
+    when (exception) {
+        is IOException -> {
+            // Сетевая ошибка: излучить кешированные данные
+            val cached = loadFromCache()
+            if (cached != null) {
+                emit(cached)
+            } else {
+                throw exception  // Перевыбросить если нет кеша
+            }
+        }
+        is HttpException -> {
+            // Ошибка сервера: излучить данные по умолчанию
+            emit(Data.default())
+        }
+        else -> throw exception  // Перевыбросить неизвестные исключения
+    }
+}
+```
+
+### Catch Vs Try-Catch
+
+```kotlin
+// Try-catch в билдере flow (императивный)
+flow {
+    try {
+        val data = api.fetchData()
+        emit(data)
+    } catch (e: Exception) {
+        emit(Data.default())
+    }
+}
+
+// Оператор Catch (декларативный, предпочтительный)
+flow {
+    val data = api.fetchData()
+    emit(data)
+}.catch { e ->
+    emit(Data.default())
+}
+```
+
+**Различия**:
+1. **Область**: try-catch локальный, оператор catch влияет на всю upstream цепочку
+2. **Композируемость**: оператор catch может быть скомпонован с другими операторами
+3. **Ясность**: оператор catch делает обработку ошибок явной в pipeline
+4. **Прозрачность исключений**: оператор catch следует принципу прозрачности исключений Flow
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+```kotlin
+// Использовать catch для upstream ошибок
+flow {
+    emit(fetchData())
+}.catch { e ->
+    emit(defaultData())
+}.collect { data ->
+    process(data)
+}
+
+// Размещать catch после операций которые могут выбросить исключение
+flow {
+    emit(1)
+}.map { value ->
+    riskyOperation(value)
+}.catch { e ->
+    emit(fallbackValue())
+}
+
+// Логировать ошибки в catch
+.catch { exception ->
+    logger.error("Операция не удалась", exception)
+    emit(fallback())
+}
+
+// Комбинировать catch с retry
+flow {
+    emit(fetchData())
+}.retry(3) { it is IOException }
+.catch { e ->
+    emit(cachedData())
+}
+```
+
+#### НЕ ДЕЛАТЬ:
+```kotlin
+// Не использовать catch для downstream ошибок
+flow {
+    emit(1)
+}.catch { e ->
+    // Не поймает ошибки в collect!
+}.collect { value ->
+    throw Exception()  // Не поймано
+}
+
+// Не глотать исключения молча
+.catch { e ->
+    // Молчаливый провал - плохая практика
+}
+```
 
 ---
 
@@ -513,222 +728,6 @@ class DataService(
             throw exception  // Re-throw original exception
         }
     }.flowOn(Dispatchers.IO)
-}
-```
-
----
-
-## Ответ (RU)
-
-Оператор `catch` в Kotlin Flow — декларативный способ обработки исключений, возникающих выше по цепочке flow. Он реализует принцип **прозрачности исключений**, означающий, что исключения текут вниз по потоку так же, как обычные значения.
-
-### Базовое Использование Catch
-
-```kotlin
-flow {
-    emit(1)
-    emit(2)
-    throw RuntimeException("Ошибка!")
-    emit(3)  // Никогда не достигается
-}.catch { exception ->
-    println("Поймано: ${exception.message}")
-    emit(-1)  // Излучить значение восстановления
-}.collect { value ->
-    println("Собрано: $value")
-}
-
-// Вывод:
-// Собрано: 1
-// Собрано: 2
-// Поймано: Ошибка!
-// Собрано: -1
-```
-
-### Прозрачность Исключений
-
-Прозрачность исключений — ключевой принцип: исключения обрабатываются как данные и текут вниз:
-
-```kotlin
-// Без catch: исключение распространяется на коллектор
-flow {
-    emit(1)
-    throw RuntimeException("Ошибка")
-}.collect { value ->  // Исключение выбрасывается здесь
-    println(value)
-}
-
-// С catch: исключение поймано и обработано
-flow {
-    emit(1)
-    throw RuntimeException("Ошибка")
-}.catch { e ->
-    println("Обработано: ${e.message}")
-}.collect { value ->
-    println(value)
-}
-```
-
-### Catch Ловит Только upstream Исключения
-
-Это критически важно: `catch` ловит только исключения из операторов выше по потоку, НЕ из нижестоящих:
-
-```kotlin
-// Catch ЛОВИТ это (upstream)
-flow {
-    throw RuntimeException("Ошибка upstream")
-}.catch { e ->
-    println("Поймано: ${e.message}")  //  Ловит это
-}.collect { value ->
-    println(value)
-}
-
-// Catch НЕ ЛОВИТ это (downstream)
-flow {
-    emit(1)
-}.catch { e ->
-    println("Поймано: ${e.message}")  //  НЕ ловит это
-}.collect { value ->
-    throw RuntimeException("Ошибка downstream")  // Распространяется на вызывающего
-}
-```
-
-### Где Размещать Catch
-
-```kotlin
-class UserRepository {
-    fun getUsers(): Flow<List<User>> = flow {
-        val users = api.fetchUsers()  // Может выбросить исключение
-        emit(users)
-    }.catch { e ->
-        // Ловить сетевые/API ошибки
-        logger.error("Не удалось загрузить пользователей", e)
-        emit(emptyList())  // Излучить пустой список как fallback
-    }
-}
-
-// В ViewModel
-class UserViewModel : ViewModel() {
-    val users: StateFlow<Result<List<User>>> = repository.getUsers()
-        .map { users -> Result.Success(users) }
-        .catch { e ->
-            // Ловить ошибки mapping
-            emit(Result.Error(e.message ?: "Неизвестная ошибка"))
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = Result.Loading
-        )
-}
-```
-
-### Catch И Emit
-
-Вы можете излучать значения восстановления в блоке catch:
-
-```kotlin
-fun loadData(): Flow<Data> = flow {
-    val data = fetchDataFromNetwork()
-    emit(data)
-}.catch { exception ->
-    when (exception) {
-        is IOException -> {
-            // Сетевая ошибка: излучить кешированные данные
-            val cached = loadFromCache()
-            if (cached != null) {
-                emit(cached)
-            } else {
-                throw exception  // Перевыбросить если нет кеша
-            }
-        }
-        is HttpException -> {
-            // Ошибка сервера: излучить данные по умолчанию
-            emit(Data.default())
-        }
-        else -> throw exception  // Перевыбросить неизвестные исключения
-    }
-}
-```
-
-### Catch Vs Try-Catch
-
-```kotlin
-// Try-catch в билдере flow (императивный)
-flow {
-    try {
-        val data = api.fetchData()
-        emit(data)
-    } catch (e: Exception) {
-        emit(Data.default())
-    }
-}
-
-// Оператор Catch (декларативный, предпочтительный)
-flow {
-    val data = api.fetchData()
-    emit(data)
-}.catch { e ->
-    emit(Data.default())
-}
-```
-
-**Различия**:
-1. **Область**: try-catch локальный, оператор catch влияет на всю upstream цепочку
-2. **Композируемость**: оператор catch может быть скомпонован с другими операторами
-3. **Ясность**: оператор catch делает обработку ошибок явной в pipeline
-4. **Прозрачность исключений**: оператор catch следует принципу прозрачности исключений Flow
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-```kotlin
-// Использовать catch для upstream ошибок
-flow {
-    emit(fetchData())
-}.catch { e ->
-    emit(defaultData())
-}.collect { data ->
-    process(data)
-}
-
-// Размещать catch после операций которые могут выбросить исключение
-flow {
-    emit(1)
-}.map { value ->
-    riskyOperation(value)
-}.catch { e ->
-    emit(fallbackValue())
-}
-
-// Логировать ошибки в catch
-.catch { exception ->
-    logger.error("Операция не удалась", exception)
-    emit(fallback())
-}
-
-// Комбинировать catch с retry
-flow {
-    emit(fetchData())
-}.retry(3) { it is IOException }
-.catch { e ->
-    emit(cachedData())
-}
-```
-
-#### НЕ ДЕЛАТЬ:
-```kotlin
-// Не использовать catch для downstream ошибок
-flow {
-    emit(1)
-}.catch { e ->
-    // Не поймает ошибки в collect!
-}.collect { value ->
-    throw Exception()  // Не поймано
-}
-
-// Не глотать исключения молча
-.catch { e ->
-    // Молчаливый провал - плохая практика
 }
 ```
 

@@ -28,11 +28,40 @@ tags: [any, difficulty/medium, kotlin, nothing, type-system, types, unit]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Что вы знаете о типах Any, Nothing, Unit в Kotlin?
+
+---
 
 # Question (EN)
 > What do you know about Any, Nothing, Unit types in Kotlin?
-# Вопрос (RU)
-> Что вы знаете о типах Any, Nothing, Unit в Kotlin?
+## Ответ (RU)
+
+### Any
+
+`Any` — это корень иерархии классов Kotlin. `Any` является супертипом всех non-nullable типов. `Any` не может содержать значение `null`, для хранения значения `null` вы можете использовать `Any?`. Компилятор Kotlin обрабатывает `kotlin.Any` и `java.lang.Object` как два разных типа, но во время выполнения они представлены одним и тем же классом `java.lang.Object`.
+
+### Nothing
+
+`Nothing` не имеет экземпляров. Вы можете использовать Nothing для представления "значения, которое никогда не существует": например, если функция имеет тип возврата Nothing, это означает, что она никогда не возвращается (всегда выбрасывает исключение). `Nothing` неявно расширяет любой существующий объект.
+
+```kotlin
+fun fail(message: String): Nothing {
+    throw IllegalStateException(message)
+}
+
+val address = employee.address ?: fail("${employee.name} has no address defined")
+println(address)
+
+// > java.lang.IllegalStateException: John has no address defined
+```
+
+### Unit
+
+В Java, если мы хотим, чтобы функция ничего не возвращала, мы используем `void`, `Unit` — это эквивалент в Kotlin. Основные характеристики `Unit` по сравнению с `void` в Java:
+- `Unit` является типом и поэтому может использоваться как аргумент типа.
+- Существует только одно значение этого типа.
+- Оно возвращается неявно. Не требуется оператор `return`.
 
 ---
 
@@ -63,36 +92,6 @@ In Java if we want that a function does return nothing we use `void`, `Unit` is 
 - `Unit` is a type and therefore can be used as a type argument.
 - Only one value of this type exists.
 - It is returned implicitly. No need of a `return` statement.
-
-## Ответ (RU)
-
-### Any
-
-`Any` — это корень иерархии классов Kotlin. `Any` является супертипом всех non-nullable типов. `Any` не может содержать значение `null`, для хранения значения `null` вы можете использовать `Any?`. Компилятор Kotlin обрабатывает `kotlin.Any` и `java.lang.Object` как два разных типа, но во время выполнения они представлены одним и тем же классом `java.lang.Object`.
-
-### Nothing
-
-`Nothing` не имеет экземпляров. Вы можете использовать Nothing для представления "значения, которое никогда не существует": например, если функция имеет тип возврата Nothing, это означает, что она никогда не возвращается (всегда выбрасывает исключение). `Nothing` неявно расширяет любой существующий объект.
-
-```kotlin
-fun fail(message: String): Nothing {
-    throw IllegalStateException(message)
-}
-
-val address = employee.address ?: fail("${employee.name} has no address defined")
-println(address)
-
-// > java.lang.IllegalStateException: John has no address defined
-```
-
-### Unit
-
-В Java, если мы хотим, чтобы функция ничего не возвращала, мы используем `void`, `Unit` — это эквивалент в Kotlin. Основные характеристики `Unit` по сравнению с `void` в Java:
-- `Unit` является типом и поэтому может использоваться как аргумент типа.
-- Существует только одно значение этого типа.
-- Оно возвращается неявно. Не требуется оператор `return`.
-
----
 
 ## References
 - [Kotlin Basics: Types Any, Unit and Nothing](https://itnext.io/kotlin-basics-types-any-unit-and-nothing-674cc858035)

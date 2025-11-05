@@ -17,16 +17,19 @@ tags: [concurrency, coroutines, difficulty/hard, kotlin, programming-languages, 
 date created: Friday, October 31st 2025, 6:31:27 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # How Suspend Function Detects Suspension?
-
-# Question (EN)
-> How does a suspend function detect suspension?
 
 # Вопрос (RU)
 > Как suspend функция определяет приостановку?
 
 ---
+
+# Question (EN)
+> How does a suspend function detect suspension?
+
+## Ответ (RU)
+
+Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено
 
 ## Answer (EN)
 
@@ -461,10 +464,6 @@ if (condition) { }                    // Regular control flow
 ```
 
 ---
-
-## Ответ (RU)
-
-Функция "узнает" о приостановке через: - Фрейм Continuation если вызвана другая suspend-функция текущая приостанавливает свое выполнение - Корутинный диспетчер приостановка возможна если выполнение ушло в другой поток withContext - Возвращение специального маркера COROUTINE_SUSPENDED сигнализирует Kotlin Runtime что выполнение отложено
 
 ## Follow-ups
 

@@ -17,16 +17,19 @@ tags: [classes, data-classes, difficulty/medium, java, kotlin, syntax]
 date created: Friday, October 31st 2025, 6:28:54 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Что При Создании Классов В Kotlin Изменились По Сравнению С Java?
-
-# Question (EN)
-> What changed when creating classes in Kotlin compared to Java?
 
 # Вопрос (RU)
 > Что при создании классов в Kotlin изменились по сравнению с Java?
 
 ---
+
+# Question (EN)
+> What changed when creating classes in Kotlin compared to Java?
+
+## Ответ (RU)
+
+При создании классов по сравнению с Java произошли несколько значительных изменений и упрощений. Kotlin предлагает более лаконичный и выразительный синтаксис, что делает код более читаемым и удобным. Объявление классов и конструкторов в Kotlin упрощено, например: class Person(val name: String, val age: Int). Для статических членов используется companion object вместо static. Kotlin предоставляет data классы, которые автоматически генерируют методы equals(), hashCode(), toString(), copy(), и componentN(). Свойства объявляются напрямую, и методы доступа генерируются автоматически.
 
 ## Answer (EN)
 
@@ -208,10 +211,6 @@ class Error(val message: String) : Result()
 Kotlin's design emphasizes **conciseness**, **safety**, and **expressiveness**, reducing boilerplate while maintaining readability.
 
 ---
-
-## Ответ (RU)
-
-При создании классов по сравнению с Java произошли несколько значительных изменений и упрощений. Kotlin предлагает более лаконичный и выразительный синтаксис, что делает код более читаемым и удобным. Объявление классов и конструкторов в Kotlin упрощено, например: class Person(val name: String, val age: Int). Для статических членов используется companion object вместо static. Kotlin предоставляет data классы, которые автоматически генерируют методы equals(), hashCode(), toString(), copy(), и componentN(). Свойства объявляются напрямую, и методы доступа генерируются автоматически.
 
 ## Follow-ups
 

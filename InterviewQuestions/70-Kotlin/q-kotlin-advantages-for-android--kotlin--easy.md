@@ -17,40 +17,15 @@ tags: [difficulty/easy]
 date created: Sunday, October 12th 2025, 3:43:42 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # В Чем Преимущество Kotlin Для Разработки Под Android
-
-# Question (EN)
-> What are the advantages of Kotlin for Android development?
 
 # Вопрос (RU)
 > В чём преимущества Kotlin для разработки под Android?
 
 ---
 
-## Answer (EN)
-
-Kotlin is a statically-typed language fully compatible with Java and optimized for Android development.
-
-**Key advantages:**
-1. **Concise syntax** - less boilerplate code (data classes, property access)
-2. **Null safety** - nullable/non-nullable types prevent NullPointerException at compile time
-3. **Extension functions** - add methods to existing classes without inheritance
-4. **Functional programming** - lambdas, higher-order functions, immutable collections
-5. **Full Java interoperability** - use all Java libraries, mix Kotlin and Java code
-6. **Excellent tooling** - first-class Android Studio support
-7. **Coroutines** - simplify async programming without callback hell
-8. **Official Google support** - officially supported since 2017
-
-**Example of conciseness:**
-```kotlin
-// Kotlin - 1 line
-data class User(val name: String, val age: Int)
-
-// Java equivalent - 20+ lines
-```
-
----
+# Question (EN)
+> What are the advantages of Kotlin for Android development?
 
 ## Ответ (RU)
 
@@ -123,6 +98,30 @@ lifecycleScope.launch {
 **8. Официальная поддержка Google**
 
 С 2017 года Kotlin является официально поддерживаемым языком для разработки Android.
+
+## Answer (EN)
+
+Kotlin is a statically-typed language fully compatible with Java and optimized for Android development.
+
+**Key advantages:**
+1. **Concise syntax** - less boilerplate code (data classes, property access)
+2. **Null safety** - nullable/non-nullable types prevent NullPointerException at compile time
+3. **Extension functions** - add methods to existing classes without inheritance
+4. **Functional programming** - lambdas, higher-order functions, immutable collections
+5. **Full Java interoperability** - use all Java libraries, mix Kotlin and Java code
+6. **Excellent tooling** - first-class Android Studio support
+7. **Coroutines** - simplify async programming without callback hell
+8. **Official Google support** - officially supported since 2017
+
+**Example of conciseness:**
+```kotlin
+// Kotlin - 1 line
+data class User(val name: String, val age: Int)
+
+// Java equivalent - 20+ lines
+```
+
+---
 
 ## Follow-ups
 

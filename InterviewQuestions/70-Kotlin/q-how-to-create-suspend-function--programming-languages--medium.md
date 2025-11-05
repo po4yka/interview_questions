@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, functions, kotlin, programming-languages]
 date created: Friday, October 31st 2025, 6:31:28 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # How to Create a Suspend Function?
-
-# Question (EN)
-> How to create a suspend function?
 
 # Вопрос (RU)
 > Как создать suspend функцию?
 
 ---
+
+# Question (EN)
+> How to create a suspend function?
+
+## Ответ (RU)
+
+Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин.
 
 ## Answer (EN)
 
@@ -426,10 +429,6 @@ suspend fun longRunningTask() {
 5. - Automatically receives `Continuation` parameter (compiler adds it)
 
 ---
-
-## Ответ (RU)
-
-Создать suspend-функцию можно, добавив suspend перед fun. Suspend функции нельзя вызывать напрямую из обычных функций, только из корутин.
 
 ## Follow-ups
 

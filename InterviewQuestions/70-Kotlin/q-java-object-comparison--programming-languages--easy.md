@@ -17,14 +17,20 @@ tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, pro
 date created: Saturday, October 4th 2025, 3:02:36 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Как Сравниваются Объекты В Java?
+
+# Вопрос (RU)
+> Как сравниваются объекты в Java?
+
+---
 
 # Question (EN)
 > How are objects compared in Java?
 
-# Вопрос (RU)
-> Как сравниваются объекты в Java?
+## Ответ (RU)
+
+По умолчанию через `==` — сравнение ссылок (адресов). Через `.equals()` — логическое сравнение содержимого. При переопределении `.equals()` рекомендуется также переопределить `.hashCode()`.
+
 
 ---
 
@@ -166,13 +172,6 @@ class Bad {
 - **`.equals()`** compares **logical content**
 - When overriding `.equals()`, **always override `.hashCode()`**
 - Follow the equals/hashCode **contract** for correct behavior
-
----
-
-## Ответ (RU)
-
-По умолчанию через `==` — сравнение ссылок (адресов). Через `.equals()` — логическое сравнение содержимого. При переопределении `.equals()` рекомендуется также переопределить `.hashCode()`.
-
 
 ---
 

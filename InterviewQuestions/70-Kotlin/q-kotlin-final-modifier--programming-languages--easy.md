@@ -17,16 +17,44 @@ tags: [class-modifiers, classes, difficulty/easy, final, inheritance, open, prog
 date created: Friday, October 31st 2025, 6:29:33 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Какой Модификатор В Kotlin Делает Класс Нерасширяемым?
-
-# Question (EN)
-> Which modifier makes a class non-extendable in Kotlin?
 
 # Вопрос (RU)
 > Какой модификатор в Kotlin делает класс нерасширяемым?
 
 ---
+
+# Question (EN)
+> Which modifier makes a class non-extendable in Kotlin?
+
+## Ответ (RU)
+
+В Kotlin модификатор `final` делает класс нерасширяемым. Однако **все классы в Kotlin являются `final` по умолчанию**. Чтобы сделать класс расширяемым, необходимо явно использовать ключевое слово `open`.
+
+**Пример:**
+```kotlin
+// Final класс (по умолчанию) - не может быть унаследован
+class FinalClass {
+    // ...
+}
+
+// Open класс - может быть унаследован
+open class OpenClass {
+    // ...
+}
+
+// Это скомпилируется:
+class Derived : OpenClass()
+
+// Это НЕ скомпилируется:
+// class Derived : FinalClass()  // Ошибка: класс final
+```
+
+**Ключевые моменты:**
+- В отличие от Java, где классы открыты по умолчанию, в Kotlin классы `final` по умолчанию
+- Используйте ключевое слово `open` для разрешения наследования
+- Этот дизайн поощряет композицию над наследованием
+- Sealed классы — это другой способ контроля иерархии наследования
 
 ## Answer (EN)
 
@@ -58,35 +86,6 @@ class Derived : OpenClass()
 - Sealed classes are another way to control inheritance hierarchy
 
 ---
-
-## Ответ (RU)
-
-В Kotlin модификатор `final` делает класс нерасширяемым. Однако **все классы в Kotlin являются `final` по умолчанию**. Чтобы сделать класс расширяемым, необходимо явно использовать ключевое слово `open`.
-
-**Пример:**
-```kotlin
-// Final класс (по умолчанию) - не может быть унаследован
-class FinalClass {
-    // ...
-}
-
-// Open класс - может быть унаследован
-open class OpenClass {
-    // ...
-}
-
-// Это скомпилируется:
-class Derived : OpenClass()
-
-// Это НЕ скомпилируется:
-// class Derived : FinalClass()  // Ошибка: класс final
-```
-
-**Ключевые моменты:**
-- В отличие от Java, где классы открыты по умолчанию, в Kotlin классы `final` по умолчанию
-- Используйте ключевое слово `open` для разрешения наследования
-- Этот дизайн поощряет композицию над наследованием
-- Sealed классы — это другой способ контроля иерархии наследования
 
 ## Follow-ups
 

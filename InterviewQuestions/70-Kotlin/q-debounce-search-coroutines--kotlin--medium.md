@@ -31,10 +31,204 @@ subtopics:
   - search
   - job-cancellation
 ---
-# Question (EN)
-> How would you implement a search-as-you-type feature with debouncing using Kotlin coroutines?
 # Вопрос (RU)
 > Как реализовать функцию поиска при вводе с отложенным выполнением (debouncing) используя Kotlin корутины?
+
+---
+
+# Question (EN)
+> How would you implement a search-as-you-type feature with debouncing using Kotlin coroutines?
+## Ответ (RU)
+
+**Debouncing (отложенное выполнение)** - это техника задержки выполнения до тех пор, пока пользователь не прекратит печатать, предотвращающая избыточные вызовы API или дорогие операции на каждое нажатие клавиши.
+
+### Проблема Без Debouncing
+
+```kotlin
+// ПЛОХО: Вызов API на каждое нажатие клавиши
+searchEditText.addTextChangedListener { text ->
+    // Пользователь печатает "android" → 7 вызовов API!
+    // "a", "an", "and", "andr", "andro", "androi", "android"
+    performSearch(text.toString())
+}
+```
+
+**Проблемы**:
+- Избыточные сетевые запросы (один на символ)
+- Потраченный трафик и батарея
+- Перегрузка бэкенда
+- Плохой UX (мерцающие результаты)
+- Возможные ограничения по частоте запросов
+
+### Решение 1: Базовый Debouncing с Отменой Job
+
+**Паттерн**: Отменять предыдущую задачу поиска при новом вводе.
+
+```kotlin
+class SearchActivity : AppCompatActivity() {
+    private var searchJob: Job? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        searchEditText.addTextChangedListener { text ->
+            // Отменить предыдущий поиск
+            searchJob?.cancel()
+
+            // Запустить новый поиск с задержкой
+            searchJob = lifecycleScope.launch {
+                delay(300) // Ждать 300мс
+
+                // Если пользователь продолжает печатать, эта строка не выполнится
+                // (job отменен следующим нажатием)
+                performSearch(text.toString())
+            }
+        }
+    }
+
+    private suspend fun performSearch(query: String) {
+        if (query.isBlank()) return
+
+        val results = withContext(Dispatchers.IO) {
+            searchRepository.search(query)
+        }
+
+        displayResults(results)
+    }
+}
+```
+
+**Как Это Работает**:
+1. Пользователь печатает "a" → Job1 стартует, delay(300мс)
+2. Пользователь печатает "n" (через 150мс) → Job1 отменен, Job2 стартует
+3. Пользователь печатает "d" (через 150мс) → Job2 отменен, Job3 стартует
+4. Пользователь прекращает печатать → Job3 завершается через 300мс
+5. Вызов API сделан только один раз с "and"
+
+**Преимущества**:
+- Только 1 вызов API вместо 3
+- Автоматически отменяет устаревшие поиски
+- Простая реализация
+- Учитывает жизненный цикл с lifecycleScope
+
+### Решение 2: Реализация в ViewModel
+
+**Лучшая Архитектура**: Переместить логику в ViewModel для тестируемости и независимости от жизненного цикла.
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    private var searchJob: Job? = null
+
+    private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
+    val searchResults: StateFlow<List<SearchResult>> = _searchResults
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    fun onSearchQueryChanged(query: String) {
+        // Отменить предыдущий поиск
+        searchJob?.cancel()
+
+        if (query.isBlank()) {
+            _searchResults.value = emptyList()
+            return
+        }
+
+        searchJob = viewModelScope.launch {
+            delay(300) // Задержка debounce
+
+            _isLoading.value = true
+
+            try {
+                val results = searchRepository.search(query)
+                _searchResults.value = results
+            } catch (e: CancellationException) {
+                // Игнорировать отмену - ожидаемое поведение
+                throw e
+            } catch (e: Exception) {
+                // Обработать другие ошибки
+                _searchResults.value = emptyList()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+}
+```
+
+**Преимущества**:
+- Переживает изменения конфигурации (поворот)
+- Тестируется с TestDispatcher
+- Разделение ответственности
+- Управление состоянием загрузки
+
+### Решение 3: Debouncing на Основе Flow (Наиболее Элегантное)
+
+**Использование операторов Flow** для декларативного debouncing.
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    private val searchQuery = MutableStateFlow("")
+
+    val searchResults: StateFlow<List<SearchResult>> = searchQuery
+        .debounce(300) // Ждать 300мс после последнего ввода
+        .filter { it.isNotBlank() } // Игнорировать пустые запросы
+        .distinctUntilChanged() // Игнорировать повторяющиеся запросы
+        .flatMapLatest { query ->
+            // Отменить предыдущий поиск автоматически
+            flow {
+                emit(searchRepository.search(query))
+            }.catch { e ->
+                // Обработать ошибки
+                emit(emptyList())
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    fun onSearchQueryChanged(query: String) {
+        searchQuery.value = query
+    }
+}
+```
+
+**Объяснение Операторов Flow**:
+- `debounce(300)`: Ждет 300мс без активности перед отправкой
+- `filter { it.isNotBlank() }`: Пропускает пустые запросы
+- `distinctUntilChanged()`: Предотвращает дублирующиеся поиски
+- `flatMapLatest`: Отменяет предыдущий поиск при новом запросе
+- `stateIn`: Конвертирует Flow в StateFlow для наблюдения из UI
+
+**Преимущества**:
+- Декларативный, читаемый код
+- Автоматическая отмена
+- Встроенная обработка ошибок
+- Нет ручного управления Job
+- Композируемые операторы
+
+### Резюме
+
+**Debouncing с Корутинами**:
+- **Отмена Job**: Простой паттерн, отмена предыдущего поиска при новом вводе
+- **delay(300)**: Стандартное время debounce для поиска
+- **Flow.debounce()**: Декларативный подход на основе операторов
+- **flatMapLatest**: Автоматическая отмена предыдущего поиска
+- **distinctUntilChanged()**: Предотвращает дублирующиеся поиски
+- **Тестируемость**: Используйте TestDispatcher и advanceTimeBy()
+
+**Ключевой Паттерн**:
+```kotlin
+searchQuery
+    .debounce(300)           // Ждать паузы в печати
+    .filter { it.length >= 3 } // Минимальная длина запроса
+    .distinctUntilChanged()   // Пропустить дубликаты
+    .flatMapLatest { query -> // Отменить предыдущий поиск
+        performSearch(query)
+    }
+```
 
 ---
 
@@ -422,200 +616,6 @@ searchQuery
     .filter { it.length >= 3 } // Minimum query length
     .distinctUntilChanged()   // Skip duplicates
     .flatMapLatest { query -> // Cancel previous search
-        performSearch(query)
-    }
-```
-
----
-
-## Ответ (RU)
-
-**Debouncing (отложенное выполнение)** - это техника задержки выполнения до тех пор, пока пользователь не прекратит печатать, предотвращающая избыточные вызовы API или дорогие операции на каждое нажатие клавиши.
-
-### Проблема Без Debouncing
-
-```kotlin
-// ПЛОХО: Вызов API на каждое нажатие клавиши
-searchEditText.addTextChangedListener { text ->
-    // Пользователь печатает "android" → 7 вызовов API!
-    // "a", "an", "and", "andr", "andro", "androi", "android"
-    performSearch(text.toString())
-}
-```
-
-**Проблемы**:
-- Избыточные сетевые запросы (один на символ)
-- Потраченный трафик и батарея
-- Перегрузка бэкенда
-- Плохой UX (мерцающие результаты)
-- Возможные ограничения по частоте запросов
-
-### Решение 1: Базовый Debouncing с Отменой Job
-
-**Паттерн**: Отменять предыдущую задачу поиска при новом вводе.
-
-```kotlin
-class SearchActivity : AppCompatActivity() {
-    private var searchJob: Job? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        searchEditText.addTextChangedListener { text ->
-            // Отменить предыдущий поиск
-            searchJob?.cancel()
-
-            // Запустить новый поиск с задержкой
-            searchJob = lifecycleScope.launch {
-                delay(300) // Ждать 300мс
-
-                // Если пользователь продолжает печатать, эта строка не выполнится
-                // (job отменен следующим нажатием)
-                performSearch(text.toString())
-            }
-        }
-    }
-
-    private suspend fun performSearch(query: String) {
-        if (query.isBlank()) return
-
-        val results = withContext(Dispatchers.IO) {
-            searchRepository.search(query)
-        }
-
-        displayResults(results)
-    }
-}
-```
-
-**Как Это Работает**:
-1. Пользователь печатает "a" → Job1 стартует, delay(300мс)
-2. Пользователь печатает "n" (через 150мс) → Job1 отменен, Job2 стартует
-3. Пользователь печатает "d" (через 150мс) → Job2 отменен, Job3 стартует
-4. Пользователь прекращает печатать → Job3 завершается через 300мс
-5. Вызов API сделан только один раз с "and"
-
-**Преимущества**:
-- Только 1 вызов API вместо 3
-- Автоматически отменяет устаревшие поиски
-- Простая реализация
-- Учитывает жизненный цикл с lifecycleScope
-
-### Решение 2: Реализация в ViewModel
-
-**Лучшая Архитектура**: Переместить логику в ViewModel для тестируемости и независимости от жизненного цикла.
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    private var searchJob: Job? = null
-
-    private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
-    val searchResults: StateFlow<List<SearchResult>> = _searchResults
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
-    fun onSearchQueryChanged(query: String) {
-        // Отменить предыдущий поиск
-        searchJob?.cancel()
-
-        if (query.isBlank()) {
-            _searchResults.value = emptyList()
-            return
-        }
-
-        searchJob = viewModelScope.launch {
-            delay(300) // Задержка debounce
-
-            _isLoading.value = true
-
-            try {
-                val results = searchRepository.search(query)
-                _searchResults.value = results
-            } catch (e: CancellationException) {
-                // Игнорировать отмену - ожидаемое поведение
-                throw e
-            } catch (e: Exception) {
-                // Обработать другие ошибки
-                _searchResults.value = emptyList()
-            } finally {
-                _isLoading.value = false
-            }
-        }
-    }
-}
-```
-
-**Преимущества**:
-- Переживает изменения конфигурации (поворот)
-- Тестируется с TestDispatcher
-- Разделение ответственности
-- Управление состоянием загрузки
-
-### Решение 3: Debouncing на Основе Flow (Наиболее Элегантное)
-
-**Использование операторов Flow** для декларативного debouncing.
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    private val searchQuery = MutableStateFlow("")
-
-    val searchResults: StateFlow<List<SearchResult>> = searchQuery
-        .debounce(300) // Ждать 300мс после последнего ввода
-        .filter { it.isNotBlank() } // Игнорировать пустые запросы
-        .distinctUntilChanged() // Игнорировать повторяющиеся запросы
-        .flatMapLatest { query ->
-            // Отменить предыдущий поиск автоматически
-            flow {
-                emit(searchRepository.search(query))
-            }.catch { e ->
-                // Обработать ошибки
-                emit(emptyList())
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-
-    fun onSearchQueryChanged(query: String) {
-        searchQuery.value = query
-    }
-}
-```
-
-**Объяснение Операторов Flow**:
-- `debounce(300)`: Ждет 300мс без активности перед отправкой
-- `filter { it.isNotBlank() }`: Пропускает пустые запросы
-- `distinctUntilChanged()`: Предотвращает дублирующиеся поиски
-- `flatMapLatest`: Отменяет предыдущий поиск при новом запросе
-- `stateIn`: Конвертирует Flow в StateFlow для наблюдения из UI
-
-**Преимущества**:
-- Декларативный, читаемый код
-- Автоматическая отмена
-- Встроенная обработка ошибок
-- Нет ручного управления Job
-- Композируемые операторы
-
-### Резюме
-
-**Debouncing с Корутинами**:
-- **Отмена Job**: Простой паттерн, отмена предыдущего поиска при новом вводе
-- **delay(300)**: Стандартное время debounce для поиска
-- **Flow.debounce()**: Декларативный подход на основе операторов
-- **flatMapLatest**: Автоматическая отмена предыдущего поиска
-- **distinctUntilChanged()**: Предотвращает дублирующиеся поиски
-- **Тестируемость**: Используйте TestDispatcher и advanceTimeBy()
-
-**Ключевой Паттерн**:
-```kotlin
-searchQuery
-    .debounce(300)           // Ждать паузы в печати
-    .filter { it.length >= 3 } // Минимальная длина запроса
-    .distinctUntilChanged()   // Пропустить дубликаты
-    .flatMapLatest { query -> // Отменить предыдущий поиск
         performSearch(query)
     }
 ```

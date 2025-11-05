@@ -19,9 +19,32 @@ tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibili
 date created: Sunday, October 5th 2025, 6:51:27 pm
 date modified: Sunday, November 2nd 2025, 12:05:05 pm
 ---
+# Вопрос (RU)
+> Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?
 
 # Question (EN)
 > What are access modifiers in Kotlin and how do they differ from Java?
+
+## Ответ (RU)
+
+Модификаторы доступа — это ключевые слова, которые определяют, кто может видеть и использовать класс, переменную или метод. Они помогают инкапсулировать данные и защищать код от неправильного использования.
+
+**Модификаторы доступа в Kotlin:**
+
+1. **private** - виден только внутри того же файла или класса
+2. **protected** - виден в классе и его подклассах
+3. **internal** - виден внутри того же модуля
+4. **public** - виден везде (по умолчанию)
+
+**Ключевые отличия от Java:**
+- В Kotlin **public по умолчанию** (в Java package-private)
+- **internal** модификатор есть только в Kotlin (видимость на уровне модуля)
+- **protected** члены не видны в пакете (в Java видны)
+- На верхнем уровне нельзя использовать **protected**
+
+Все примеры кода из английской версии применимы и к русской версии.
+
+---
 
 ## Answer (EN)
 Access modifiers are keywords that define who can see and use a class, variable, or method. They help encapsulate data and protect code from improper use.
@@ -380,30 +403,6 @@ fun main() {
     // repo.validateUser(User(3, "Charlie", "charlie@example.com"))  // ERROR - private
 }
 ```
-
----
-
-# Вопрос (RU)
-> Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?
-
-## Ответ (RU)
-
-Модификаторы доступа — это ключевые слова, которые определяют, кто может видеть и использовать класс, переменную или метод. Они помогают инкапсулировать данные и защищать код от неправильного использования.
-
-**Модификаторы доступа в Kotlin:**
-
-1. **private** - виден только внутри того же файла или класса
-2. **protected** - виден в классе и его подклассах
-3. **internal** - виден внутри того же модуля
-4. **public** - виден везде (по умолчанию)
-
-**Ключевые отличия от Java:**
-- В Kotlin **public по умолчанию** (в Java package-private)
-- **internal** модификатор есть только в Kotlin (видимость на уровне модуля)
-- **protected** члены не видны в пакете (в Java видны)
-- На верхнем уровне нельзя использовать **protected**
-
-Все примеры кода из английской версии применимы и к русской версии.
 
 ---
 

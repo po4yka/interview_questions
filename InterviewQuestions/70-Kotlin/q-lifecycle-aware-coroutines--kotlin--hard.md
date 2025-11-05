@@ -28,12 +28,288 @@ tags: [android, coroutines, difficulty/hard, kotlin, lifecycle, lifecyclescope, 
 date created: Sunday, October 12th 2025, 2:12:24 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Объясните корутины с учетом жизненного цикла в Android. Как работают viewModelScope, lifecycleScope и repeatOnLifecycle? Каковы лучшие практики для обработки изменений конфигурации, process death и утечек памяти? Приведите подробные примеры.
+
+---
 
 # Question (EN)
 > Explain lifecycle-aware coroutines in Android. How do viewModelScope, lifecycleScope, and repeatOnLifecycle work? What are best practices for handling configuration changes, process death, and memory leaks? Provide comprehensive examples.
 
-# Вопрос (RU)
-> Объясните корутины с учетом жизненного цикла в Android. Как работают viewModelScope, lifecycleScope и repeatOnLifecycle? Каковы лучшие практики для обработки изменений конфигурации, process death и утечек памяти? Приведите подробные примеры.
+## Ответ (RU)
+
+Корутины с учетом жизненного цикла автоматически управляют отменой корутин на основе событий жизненного цикла Android, предотвращая утечки памяти и уменьшая шаблонный код.
+
+### Проблема Без Учета Жизненного Цикла
+
+```kotlin
+//  ПЛОХО: Ручное управление жизненным циклом
+class OldFragment : Fragment() {
+    private var job: Job? = null
+
+    override fun onStart() {
+        super.onStart()
+        job = GlobalScope.launch {
+            loadData()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        job?.cancel()  // Легко забыть!
+    }
+}
+
+// Проблемы:
+// 1. Легко забыть отмену
+// 2. Шаблонный код
+// 3. GlobalScope не учитывает жизненный цикл
+// 4. Риск утечек памяти
+```
+
+### Области Видимости Корутин С Учетом Жизненного Цикла
+
+Android предоставляет три основные области видимости:
+
+| Область | Жизненный цикл | Применение | Отмена |
+|---------|----------------|------------|--------|
+| **viewModelScope** | ViewModel очищена | Вызовы репозитория, бизнес-логика | Когда ViewModel очищена |
+| **lifecycleScope** | Lifecycle уничтожен | Обновления UI, одноразовые операции | Когда lifecycle уничтожен |
+| **repeatOnLifecycle** | Конкретное состояние | Сбор Flow, непрерывные обновления | При выходе из состояния |
+
+### 1. viewModelScope - Жизненный Цикл ViewModel
+
+```kotlin
+class UserViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
+    private val _userData = MutableStateFlow<UserData?>(null)
+    val userData: StateFlow<UserData?> = _userData.asStateFlow()
+
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            try {
+                _userData.value = repository.getUser(userId)
+            } catch (e: Exception) {
+                // Обработка ошибки
+            }
+        }
+    }
+
+    // Автоматически отменяется когда ViewModel очищена
+    // Ручная очистка не нужна!
+}
+```
+
+#### Лучшие Практики viewModelScope
+
+```kotlin
+class ProductViewModel(
+    private val repository: ProductRepository
+) : ViewModel() {
+
+    //  Хорошо: Использовать StateFlow для состояния UI
+    private val _products = MutableStateFlow<List<Product>>(emptyList())
+    val products: StateFlow<List<Product>> = _products.asStateFlow()
+
+    //  Хорошо: Использовать SharedFlow для одноразовых событий
+    private val _events = MutableSharedFlow<ProductEvent>()
+    val events: SharedFlow<ProductEvent> = _events.asSharedFlow()
+
+    //  Хорошо: Запускать корутины в viewModelScope
+    fun loadProducts() {
+        viewModelScope.launch {
+            try {
+                val result = repository.fetchProducts()
+                _products.value = result
+            } catch (e: Exception) {
+                _events.emit(ProductEvent.Error(e.message))
+            }
+        }
+    }
+}
+```
+
+### 2. lifecycleScope - Область Владельца Жизненного Цикла
+
+```kotlin
+class ProfileFragment : Fragment() {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //  Отменяется когда Fragment уничтожен
+        viewLifecycleOwner.lifecycleScope.launch {
+            val userData = loadUserData()
+            updateUI(userData)
+        }
+    }
+
+    //  ПЛОХО: Использование lifecycleScope Fragment
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            // Это переживает уничтожение view!
+        }
+    }
+}
+```
+
+### 3. repeatOnLifecycle - Сбор С Учетом Состояния
+
+```kotlin
+class NewsFragment : Fragment() {
+
+    private val viewModel: NewsViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //  ЛУЧШАЯ ПРАКТИКА: Использовать repeatOnLifecycle для сбора Flow
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Этот блок выполняется когда STARTED
+                // и отменяется когда STOPPED
+                viewModel.newsFlow.collect { news ->
+                    updateUI(news)
+                }
+            }
+        }
+    }
+}
+```
+
+**Почему repeatOnLifecycle важен**:
+
+```kotlin
+//  ПЛОХО: Без repeatOnLifecycle
+class BadFragment : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.dataFlow.collect { data ->
+                updateUI(data)  //  Выполняется даже когда приложение в фоне!
+            }
+        }
+    }
+}
+
+//  ХОРОШО: С repeatOnLifecycle
+class GoodFragment : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.dataFlow.collect { data ->
+                    updateUI(data)  //  Выполняется только когда видимо
+                }
+            }
+        }
+    }
+}
+```
+
+### Изменения Конфигурации И Process Death
+
+#### Переживание Изменений Конфигурации
+
+```kotlin
+//  ViewModel переживает изменения конфигурации
+class DataViewModel(
+    private val repository: DataRepository
+) : ViewModel() {
+
+    private val _data = MutableStateFlow<Data?>(null)
+    val data: StateFlow<Data?> = _data.asStateFlow()
+
+    fun loadData() {
+        viewModelScope.launch {
+            _data.value = repository.fetchData()
+        }
+    }
+}
+
+// Fragment пересоздается при вращении, но ViewModel сохраняется
+class DataFragment : Fragment() {
+    private val viewModel: DataViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Загрузить только один раз, даже после вращения
+        if (savedInstanceState == null) {
+            viewModel.loadData()
+        }
+
+        // Всегда наблюдать
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.data.collect { data ->
+                    updateUI(data)
+                }
+            }
+        }
+    }
+}
+```
+
+#### Восстановление После Process Death
+
+```kotlin
+class CheckoutViewModel(
+    private val savedStateHandle: SavedStateHandle,
+    private val orderRepository: OrderRepository
+) : ViewModel() {
+
+    //  Переживает process death
+    private val cartItems: MutableStateFlow<List<CartItem>> =
+        savedStateHandle.getStateFlow("cart_items", emptyList())
+
+    fun addToCart(item: CartItem) {
+        val currentItems = cartItems.value
+        val updatedItems = currentItems + item
+        savedStateHandle["cart_items"] = updatedItems
+        cartItems.value = updatedItems
+    }
+}
+```
+
+### Предотвращение Утечек Памяти
+
+```kotlin
+//  ПЛОХО: GlobalScope создает утечки
+class LeakyViewModel : ViewModel() {
+    fun loadData() {
+        GlobalScope.launch {
+            // Никогда не отменяется - утечка памяти!
+            val data = repository.fetchData()
+        }
+    }
+}
+
+//  ХОРОШО: viewModelScope
+class SafeViewModel : ViewModel() {
+    fun loadData() {
+        viewModelScope.launch {
+            // Автоматически отменяется
+            val data = repository.fetchData()
+        }
+    }
+}
+```
+
+### Лучшие Практики
+
+1. **Используйте viewModelScope для бизнес-логики**
+2. **Используйте viewLifecycleOwner.lifecycleScope во Fragments**
+3. **Используйте repeatOnLifecycle для сбора Flow**
+4. **Никогда не используйте GlobalScope**
+5. **Обрабатывайте изменения конфигурации с ViewModel**
+6. **Сохраняйте важное состояние**
 
 ---
 
@@ -952,283 +1228,6 @@ class MyViewModel(
     val data: StateFlow<Data> = savedStateHandle.getStateFlow("key", initialValue)
 }
 ```
-
----
-
-## Ответ (RU)
-
-Корутины с учетом жизненного цикла автоматически управляют отменой корутин на основе событий жизненного цикла Android, предотвращая утечки памяти и уменьшая шаблонный код.
-
-### Проблема Без Учета Жизненного Цикла
-
-```kotlin
-//  ПЛОХО: Ручное управление жизненным циклом
-class OldFragment : Fragment() {
-    private var job: Job? = null
-
-    override fun onStart() {
-        super.onStart()
-        job = GlobalScope.launch {
-            loadData()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        job?.cancel()  // Легко забыть!
-    }
-}
-
-// Проблемы:
-// 1. Легко забыть отмену
-// 2. Шаблонный код
-// 3. GlobalScope не учитывает жизненный цикл
-// 4. Риск утечек памяти
-```
-
-### Области Видимости Корутин С Учетом Жизненного Цикла
-
-Android предоставляет три основные области видимости:
-
-| Область | Жизненный цикл | Применение | Отмена |
-|---------|----------------|------------|--------|
-| **viewModelScope** | ViewModel очищена | Вызовы репозитория, бизнес-логика | Когда ViewModel очищена |
-| **lifecycleScope** | Lifecycle уничтожен | Обновления UI, одноразовые операции | Когда lifecycle уничтожен |
-| **repeatOnLifecycle** | Конкретное состояние | Сбор Flow, непрерывные обновления | При выходе из состояния |
-
-### 1. viewModelScope - Жизненный Цикл ViewModel
-
-```kotlin
-class UserViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-
-    private val _userData = MutableStateFlow<UserData?>(null)
-    val userData: StateFlow<UserData?> = _userData.asStateFlow()
-
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            try {
-                _userData.value = repository.getUser(userId)
-            } catch (e: Exception) {
-                // Обработка ошибки
-            }
-        }
-    }
-
-    // Автоматически отменяется когда ViewModel очищена
-    // Ручная очистка не нужна!
-}
-```
-
-#### Лучшие Практики viewModelScope
-
-```kotlin
-class ProductViewModel(
-    private val repository: ProductRepository
-) : ViewModel() {
-
-    //  Хорошо: Использовать StateFlow для состояния UI
-    private val _products = MutableStateFlow<List<Product>>(emptyList())
-    val products: StateFlow<List<Product>> = _products.asStateFlow()
-
-    //  Хорошо: Использовать SharedFlow для одноразовых событий
-    private val _events = MutableSharedFlow<ProductEvent>()
-    val events: SharedFlow<ProductEvent> = _events.asSharedFlow()
-
-    //  Хорошо: Запускать корутины в viewModelScope
-    fun loadProducts() {
-        viewModelScope.launch {
-            try {
-                val result = repository.fetchProducts()
-                _products.value = result
-            } catch (e: Exception) {
-                _events.emit(ProductEvent.Error(e.message))
-            }
-        }
-    }
-}
-```
-
-### 2. lifecycleScope - Область Владельца Жизненного Цикла
-
-```kotlin
-class ProfileFragment : Fragment() {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        //  Отменяется когда Fragment уничтожен
-        viewLifecycleOwner.lifecycleScope.launch {
-            val userData = loadUserData()
-            updateUI(userData)
-        }
-    }
-
-    //  ПЛОХО: Использование lifecycleScope Fragment
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            // Это переживает уничтожение view!
-        }
-    }
-}
-```
-
-### 3. repeatOnLifecycle - Сбор С Учетом Состояния
-
-```kotlin
-class NewsFragment : Fragment() {
-
-    private val viewModel: NewsViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        //  ЛУЧШАЯ ПРАКТИКА: Использовать repeatOnLifecycle для сбора Flow
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Этот блок выполняется когда STARTED
-                // и отменяется когда STOPPED
-                viewModel.newsFlow.collect { news ->
-                    updateUI(news)
-                }
-            }
-        }
-    }
-}
-```
-
-**Почему repeatOnLifecycle важен**:
-
-```kotlin
-//  ПЛОХО: Без repeatOnLifecycle
-class BadFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.dataFlow.collect { data ->
-                updateUI(data)  //  Выполняется даже когда приложение в фоне!
-            }
-        }
-    }
-}
-
-//  ХОРОШО: С repeatOnLifecycle
-class GoodFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.dataFlow.collect { data ->
-                    updateUI(data)  //  Выполняется только когда видимо
-                }
-            }
-        }
-    }
-}
-```
-
-### Изменения Конфигурации И Process Death
-
-#### Переживание Изменений Конфигурации
-
-```kotlin
-//  ViewModel переживает изменения конфигурации
-class DataViewModel(
-    private val repository: DataRepository
-) : ViewModel() {
-
-    private val _data = MutableStateFlow<Data?>(null)
-    val data: StateFlow<Data?> = _data.asStateFlow()
-
-    fun loadData() {
-        viewModelScope.launch {
-            _data.value = repository.fetchData()
-        }
-    }
-}
-
-// Fragment пересоздается при вращении, но ViewModel сохраняется
-class DataFragment : Fragment() {
-    private val viewModel: DataViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Загрузить только один раз, даже после вращения
-        if (savedInstanceState == null) {
-            viewModel.loadData()
-        }
-
-        // Всегда наблюдать
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.data.collect { data ->
-                    updateUI(data)
-                }
-            }
-        }
-    }
-}
-```
-
-#### Восстановление После Process Death
-
-```kotlin
-class CheckoutViewModel(
-    private val savedStateHandle: SavedStateHandle,
-    private val orderRepository: OrderRepository
-) : ViewModel() {
-
-    //  Переживает process death
-    private val cartItems: MutableStateFlow<List<CartItem>> =
-        savedStateHandle.getStateFlow("cart_items", emptyList())
-
-    fun addToCart(item: CartItem) {
-        val currentItems = cartItems.value
-        val updatedItems = currentItems + item
-        savedStateHandle["cart_items"] = updatedItems
-        cartItems.value = updatedItems
-    }
-}
-```
-
-### Предотвращение Утечек Памяти
-
-```kotlin
-//  ПЛОХО: GlobalScope создает утечки
-class LeakyViewModel : ViewModel() {
-    fun loadData() {
-        GlobalScope.launch {
-            // Никогда не отменяется - утечка памяти!
-            val data = repository.fetchData()
-        }
-    }
-}
-
-//  ХОРОШО: viewModelScope
-class SafeViewModel : ViewModel() {
-    fun loadData() {
-        viewModelScope.launch {
-            // Автоматически отменяется
-            val data = repository.fetchData()
-        }
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте viewModelScope для бизнес-логики**
-2. **Используйте viewLifecycleOwner.lifecycleScope во Fragments**
-3. **Используйте repeatOnLifecycle для сбора Flow**
-4. **Никогда не используйте GlobalScope**
-5. **Обрабатывайте изменения конфигурации с ViewModel**
-6. **Сохраняйте важное состояние**
 
 ---
 

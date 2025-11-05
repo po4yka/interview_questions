@@ -33,12 +33,327 @@ tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, la
 date created: Sunday, October 12th 2025, 2:44:42 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Что такое свойства в Kotlin? Объясните val vs var, пользовательские геттеры и сеттеры, backing fields, lateinit и основы делегирования свойств.
+
+---
 
 # Question (EN)
 > What are properties in Kotlin? Explain val vs var, custom getters and setters, backing fields, lateinit, and property delegation basics.
 
-# Вопрос (RU)
-> Что такое свойства в Kotlin? Объясните val vs var, пользовательские геттеры и сеттеры, backing fields, lateinit и основы делегирования свойств.
+## Ответ (RU)
+
+Свойства в Kotlin — это первоклассные языковые конструкции, заменяющие паттерн Java с полем + getter/setter. Они обеспечивают компактный синтаксис, сохраняя инкапсуляцию и позволяя настраивать поведение.
+
+### Ключевые Концепции
+
+1. **Val vs Var**: Неизменяемые vs изменяемые свойства
+2. **Пользовательские Getters/Setters**: Добавление логики при доступе/изменении
+3. **Backing Fields**: Хранение значений с помощью ключевого слова `field`
+4. **Backing Properties**: Ручное хранение с приватными полями
+5. **Lateinit**: Отложенная инициализация для non-null свойств
+6. **Lazy**: Инициализация при первом обращении
+7. **Делегированные свойства**: Делегирование поведения другому объекту
+
+### Val Vs Var Свойства
+
+```kotlin
+class Person {
+    val name: String = "Alice"  // Только для чтения (неизменяемая ссылка)
+    var age: Int = 25           // Изменяемое
+}
+
+val person = Person()
+println(person.name)      // OK
+// person.name = "Bob"    // Ошибка: Val нельзя переназначить
+
+person.age = 26           // OK
+println(person.age)
+```
+
+**Важно**: `val` означает, что ссылка неизменяема, а не сам объект:
+
+```kotlin
+val list = mutableListOf(1, 2, 3)
+// list = mutableListOf(4, 5, 6)  // Ошибка: нельзя переназначить
+list.add(4)                        // OK: можно изменить содержимое
+```
+
+### Пользовательские Getters
+
+```kotlin
+class Rectangle(val width: Int, val height: Int) {
+    // Вычисляемое свойство (без backing field)
+    val area: Int
+        get() = width * height
+
+    // Альтернативный синтаксис
+    val perimeter: Int get() = 2 * (width + height)
+
+    val isSquare: Boolean
+        get() = width == height
+}
+
+val rect = Rectangle(10, 20)
+println(rect.area)       // 200 (вычисляется каждый раз)
+println(rect.perimeter)  // 60
+println(rect.isSquare)   // false
+```
+
+### Пользовательские Setters
+
+```kotlin
+class User {
+    var name: String = ""
+        set(value) {
+            println("Установка имени: $value")
+            field = value.trim().capitalize()
+        }
+
+    var age: Int = 0
+        set(value) {
+            require(value >= 0) { "Возраст не может быть отрицательным" }
+            field = value
+        }
+}
+
+val user = User()
+user.name = "  alice  "  // Выводит: Установка имени:   alice
+println(user.name)        // Alice (обрезано и с заглавной)
+
+user.age = 25             // OK
+// user.age = -5          // Выбрасывает исключение
+```
+
+### Backing Fields
+
+Ключевое слово `field` ссылается на backing field, который хранит значение свойства:
+
+```kotlin
+class Counter {
+    var count: Int = 0
+        get() = field
+        set(value) {
+            if (value >= 0) {
+                field = value
+            }
+        }
+}
+
+// Свойство без backing field (вычисляемое)
+class Circle(val radius: Double) {
+    val area: Double
+        get() = Math.PI * radius * radius
+    // 'field' не используется - area вычисляется, не хранится
+}
+```
+
+### Backing Properties
+
+Когда нужен больший контроль, используйте приватное backing свойство:
+
+```kotlin
+class StringRepository {
+    private val _strings = mutableListOf<String>()
+
+    // Публичный доступ только для чтения
+    val strings: List<String>
+        get() = _strings
+
+    fun addString(s: String) {
+        _strings.add(s)
+    }
+}
+
+val repo = StringRepository()
+repo.addString("Hello")
+println(repo.strings)        // [Hello]
+// repo.strings.add("World") // Ошибка: List только для чтения
+```
+
+### Late-Initialized Свойства (lateinit)
+
+Используйте `lateinit` для non-null свойств, которые нельзя инициализировать в конструкторе:
+
+```kotlin
+class MyTest {
+    lateinit var subject: TestSubject
+
+    @Before
+    fun setup() {
+        subject = TestSubject()
+    }
+
+    @Test
+    fun test() {
+        subject.doSomething()  // Безопасно использовать
+    }
+}
+
+// Android пример
+class MyActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+}
+```
+
+**Требования lateinit**:
+- Должно быть `var` (не `val`)
+- Должно быть non-null типом
+- Не может быть примитивным типом (Int, Boolean и т.д.)
+- Не может иметь пользовательский getter/setter
+
+**Проверка инициализации lateinit**:
+
+```kotlin
+class Example {
+    lateinit var text: String
+
+    fun doSomething() {
+        if (::text.isInitialized) {
+            println(text)
+        } else {
+            println("Ещё не инициализировано")
+        }
+    }
+}
+```
+
+### Lazy Свойства
+
+Используйте `lazy` для свойств, которые должны инициализироваться при первом обращении:
+
+```kotlin
+class ExpensiveResource {
+    // Инициализируется только при первом обращении
+    val data: String by lazy {
+        println("Вычисление данных...")
+        // Дорогостоящее вычисление
+        "Вычисленный результат"
+    }
+}
+
+val resource = ExpensiveResource()
+println("Перед доступом к data")
+println(resource.data)  // Выводит: Вычисление данных... \n Вычисленный результат
+println(resource.data)  // Выводит: Вычисленный результат (не пересчитывается)
+```
+
+**Характеристики lazy**:
+- Thread-safe по умолчанию
+- Инициализируется только один раз
+- Должно быть `val` (не `var`)
+- Блок инициализации выполняется при первом обращении
+
+### Делегированные Свойства
+
+Kotlin позволяет делегировать реализацию свойства другому объекту:
+
+```kotlin
+import kotlin.properties.Delegates
+
+class User {
+    // Наблюдаемое свойство
+    var name: String by Delegates.observable("Initial") { property, oldValue, newValue ->
+        println("${property.name} изменено с $oldValue на $newValue")
+    }
+
+    // Свойство с проверкой
+    var age: Int by Delegates.vetoable(0) { property, oldValue, newValue ->
+        newValue >= 0  // Разрешать только неотрицательные значения
+    }
+}
+
+val user = User()
+user.name = "Alice"  // Выводит: name изменено с Initial на Alice
+user.name = "Bob"    // Выводит: name изменено с Alice на Bob
+
+user.age = 25        // OK
+user.age = -5        // Тихо отклоняется (age остаётся 25)
+println(user.age)    // 25
+```
+
+### Видимость Свойств
+
+```kotlin
+class User {
+    // Публичное свойство
+    var name: String = ""
+
+    // Приватное свойство
+    private var password: String = ""
+
+    // Публичный getter, приватный setter
+    var email: String = ""
+        private set
+
+    // Internal свойство
+    internal var internalId: Int = 0
+
+    fun updateEmail(newEmail: String) {
+        if (newEmail.contains("@")) {
+            email = newEmail
+        }
+    }
+}
+
+val user = User()
+user.name = "Alice"           // OK
+// user.password = "secret"   // Ошибка: приватное
+user.email                     // OK: можно читать
+// user.email = "new@test"    // Ошибка: setter приватный
+user.updateEmail("new@test")  // OK
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+```kotlin
+// Использовать val для неизменяемых свойств
+class Person(val name: String, val birthYear: Int)
+
+// Использовать backing properties для изменяемых коллекций
+class DataStore {
+    private val _items = mutableListOf<String>()
+    val items: List<String> get() = _items
+}
+
+// Использовать lateinit для dependency injection
+class Repository {
+    @Inject
+    lateinit var api: ApiService
+}
+
+// Валидировать в setters
+class User {
+    var age: Int = 0
+        set(value) {
+            require(value >= 0) { "Возраст должен быть неотрицательным" }
+            field = value
+        }
+}
+```
+
+#### НЕ ДЕЛАТЬ:
+```kotlin
+// Не использовать var когда подходит val
+class Point(var x: Int, var y: Int)  // Плохо если координаты не меняются
+class Point(val x: Int, val y: Int)  // Лучше
+
+// Не вычислять дорогостоящие операции в getters повторно
+val data: List<String>
+    get() = database.query()  // Плохо: запрос к БД каждый раз
+// Использовать lazy или кеширование
+
+// Не выставлять изменяемые коллекции напрямую
+val items = mutableListOf<String>()  // Плохо: внешний код может изменить
+// Использовать паттерн backing property
+```
 
 ---
 
@@ -593,322 +908,6 @@ class PreferenceDelegate<T>(
         // Write to SharedPreferences
     }
 }
-```
-
----
-
-## Ответ (RU)
-
-Свойства в Kotlin — это первоклассные языковые конструкции, заменяющие паттерн Java с полем + getter/setter. Они обеспечивают компактный синтаксис, сохраняя инкапсуляцию и позволяя настраивать поведение.
-
-### Ключевые Концепции
-
-1. **Val vs Var**: Неизменяемые vs изменяемые свойства
-2. **Пользовательские Getters/Setters**: Добавление логики при доступе/изменении
-3. **Backing Fields**: Хранение значений с помощью ключевого слова `field`
-4. **Backing Properties**: Ручное хранение с приватными полями
-5. **Lateinit**: Отложенная инициализация для non-null свойств
-6. **Lazy**: Инициализация при первом обращении
-7. **Делегированные свойства**: Делегирование поведения другому объекту
-
-### Val Vs Var Свойства
-
-```kotlin
-class Person {
-    val name: String = "Alice"  // Только для чтения (неизменяемая ссылка)
-    var age: Int = 25           // Изменяемое
-}
-
-val person = Person()
-println(person.name)      // OK
-// person.name = "Bob"    // Ошибка: Val нельзя переназначить
-
-person.age = 26           // OK
-println(person.age)
-```
-
-**Важно**: `val` означает, что ссылка неизменяема, а не сам объект:
-
-```kotlin
-val list = mutableListOf(1, 2, 3)
-// list = mutableListOf(4, 5, 6)  // Ошибка: нельзя переназначить
-list.add(4)                        // OK: можно изменить содержимое
-```
-
-### Пользовательские Getters
-
-```kotlin
-class Rectangle(val width: Int, val height: Int) {
-    // Вычисляемое свойство (без backing field)
-    val area: Int
-        get() = width * height
-
-    // Альтернативный синтаксис
-    val perimeter: Int get() = 2 * (width + height)
-
-    val isSquare: Boolean
-        get() = width == height
-}
-
-val rect = Rectangle(10, 20)
-println(rect.area)       // 200 (вычисляется каждый раз)
-println(rect.perimeter)  // 60
-println(rect.isSquare)   // false
-```
-
-### Пользовательские Setters
-
-```kotlin
-class User {
-    var name: String = ""
-        set(value) {
-            println("Установка имени: $value")
-            field = value.trim().capitalize()
-        }
-
-    var age: Int = 0
-        set(value) {
-            require(value >= 0) { "Возраст не может быть отрицательным" }
-            field = value
-        }
-}
-
-val user = User()
-user.name = "  alice  "  // Выводит: Установка имени:   alice
-println(user.name)        // Alice (обрезано и с заглавной)
-
-user.age = 25             // OK
-// user.age = -5          // Выбрасывает исключение
-```
-
-### Backing Fields
-
-Ключевое слово `field` ссылается на backing field, который хранит значение свойства:
-
-```kotlin
-class Counter {
-    var count: Int = 0
-        get() = field
-        set(value) {
-            if (value >= 0) {
-                field = value
-            }
-        }
-}
-
-// Свойство без backing field (вычисляемое)
-class Circle(val radius: Double) {
-    val area: Double
-        get() = Math.PI * radius * radius
-    // 'field' не используется - area вычисляется, не хранится
-}
-```
-
-### Backing Properties
-
-Когда нужен больший контроль, используйте приватное backing свойство:
-
-```kotlin
-class StringRepository {
-    private val _strings = mutableListOf<String>()
-
-    // Публичный доступ только для чтения
-    val strings: List<String>
-        get() = _strings
-
-    fun addString(s: String) {
-        _strings.add(s)
-    }
-}
-
-val repo = StringRepository()
-repo.addString("Hello")
-println(repo.strings)        // [Hello]
-// repo.strings.add("World") // Ошибка: List только для чтения
-```
-
-### Late-Initialized Свойства (lateinit)
-
-Используйте `lateinit` для non-null свойств, которые нельзя инициализировать в конструкторе:
-
-```kotlin
-class MyTest {
-    lateinit var subject: TestSubject
-
-    @Before
-    fun setup() {
-        subject = TestSubject()
-    }
-
-    @Test
-    fun test() {
-        subject.doSomething()  // Безопасно использовать
-    }
-}
-
-// Android пример
-class MyActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-    }
-}
-```
-
-**Требования lateinit**:
-- Должно быть `var` (не `val`)
-- Должно быть non-null типом
-- Не может быть примитивным типом (Int, Boolean и т.д.)
-- Не может иметь пользовательский getter/setter
-
-**Проверка инициализации lateinit**:
-
-```kotlin
-class Example {
-    lateinit var text: String
-
-    fun doSomething() {
-        if (::text.isInitialized) {
-            println(text)
-        } else {
-            println("Ещё не инициализировано")
-        }
-    }
-}
-```
-
-### Lazy Свойства
-
-Используйте `lazy` для свойств, которые должны инициализироваться при первом обращении:
-
-```kotlin
-class ExpensiveResource {
-    // Инициализируется только при первом обращении
-    val data: String by lazy {
-        println("Вычисление данных...")
-        // Дорогостоящее вычисление
-        "Вычисленный результат"
-    }
-}
-
-val resource = ExpensiveResource()
-println("Перед доступом к data")
-println(resource.data)  // Выводит: Вычисление данных... \n Вычисленный результат
-println(resource.data)  // Выводит: Вычисленный результат (не пересчитывается)
-```
-
-**Характеристики lazy**:
-- Thread-safe по умолчанию
-- Инициализируется только один раз
-- Должно быть `val` (не `var`)
-- Блок инициализации выполняется при первом обращении
-
-### Делегированные Свойства
-
-Kotlin позволяет делегировать реализацию свойства другому объекту:
-
-```kotlin
-import kotlin.properties.Delegates
-
-class User {
-    // Наблюдаемое свойство
-    var name: String by Delegates.observable("Initial") { property, oldValue, newValue ->
-        println("${property.name} изменено с $oldValue на $newValue")
-    }
-
-    // Свойство с проверкой
-    var age: Int by Delegates.vetoable(0) { property, oldValue, newValue ->
-        newValue >= 0  // Разрешать только неотрицательные значения
-    }
-}
-
-val user = User()
-user.name = "Alice"  // Выводит: name изменено с Initial на Alice
-user.name = "Bob"    // Выводит: name изменено с Alice на Bob
-
-user.age = 25        // OK
-user.age = -5        // Тихо отклоняется (age остаётся 25)
-println(user.age)    // 25
-```
-
-### Видимость Свойств
-
-```kotlin
-class User {
-    // Публичное свойство
-    var name: String = ""
-
-    // Приватное свойство
-    private var password: String = ""
-
-    // Публичный getter, приватный setter
-    var email: String = ""
-        private set
-
-    // Internal свойство
-    internal var internalId: Int = 0
-
-    fun updateEmail(newEmail: String) {
-        if (newEmail.contains("@")) {
-            email = newEmail
-        }
-    }
-}
-
-val user = User()
-user.name = "Alice"           // OK
-// user.password = "secret"   // Ошибка: приватное
-user.email                     // OK: можно читать
-// user.email = "new@test"    // Ошибка: setter приватный
-user.updateEmail("new@test")  // OK
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-```kotlin
-// Использовать val для неизменяемых свойств
-class Person(val name: String, val birthYear: Int)
-
-// Использовать backing properties для изменяемых коллекций
-class DataStore {
-    private val _items = mutableListOf<String>()
-    val items: List<String> get() = _items
-}
-
-// Использовать lateinit для dependency injection
-class Repository {
-    @Inject
-    lateinit var api: ApiService
-}
-
-// Валидировать в setters
-class User {
-    var age: Int = 0
-        set(value) {
-            require(value >= 0) { "Возраст должен быть неотрицательным" }
-            field = value
-        }
-}
-```
-
-#### НЕ ДЕЛАТЬ:
-```kotlin
-// Не использовать var когда подходит val
-class Point(var x: Int, var y: Int)  // Плохо если координаты не меняются
-class Point(val x: Int, val y: Int)  // Лучше
-
-// Не вычислять дорогостоящие операции в getters повторно
-val data: List<String>
-    get() = database.query()  // Плохо: запрос к БД каждый раз
-// Использовать lazy или кеширование
-
-// Не выставлять изменяемые коллекции напрямую
-val items = mutableListOf<String>()  // Плохо: внешний код может изменить
-// Использовать паттерн backing property
 ```
 
 ---

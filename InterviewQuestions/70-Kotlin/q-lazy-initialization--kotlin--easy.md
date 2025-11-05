@@ -17,16 +17,61 @@ tags: [delegates, difficulty/easy, initialization, kotlin, lazy, performance]
 date created: Friday, October 31st 2025, 6:29:12 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # What Function in Kotlin is Used for Lazy Property Initialization?
-
-# Question (EN)
-> What function in Kotlin is used for lazy property initialization?
 
 # Вопрос (RU)
 > Какая функция в Kotlin используется для ленивой инициализации свойства?
 
 ---
+
+# Question (EN)
+> What function in Kotlin is used for lazy property initialization?
+
+## Ответ (RU)
+
+Функция `lazy` используется для ленивой инициализации свойств в Kotlin.
+
+**Ключевые характеристики:**
+- Свойство инициализируется только при первом обращении
+- Значение вычисляется и кэшируется при первом доступе
+- Потокобезопасна по умолчанию (можно настроить)
+- Должна использоваться с `val` (read-only свойством)
+- Возвращает делегат, реализующий ленивую инициализацию
+- Снижает потребление памяти и улучшает производительность при запуске
+
+**Синтаксис:**
+```kotlin
+val propertyName: Type by lazy {
+    // Код инициализации
+    value
+}
+```
+
+**Пример:**
+```kotlin
+class User {
+    val profile: String by lazy {
+        println("Вычисление профиля...")
+        "Профиль пользователя"
+    }
+}
+
+val user = User()
+println("Пользователь создан")
+// profile ещё не вычислен
+
+println(user.profile)  // Вычисление профиля... Профиль пользователя
+println(user.profile)  // Профиль пользователя (без вычисления)
+```
+
+**Режимы потокобезопасности:**
+- `LazyThreadSafetyMode.SYNCHRONIZED` (по умолчанию) - потокобезопасный
+- `LazyThreadSafetyMode.PUBLICATION` - множественное вычисление, но одно значение
+- `LazyThreadSafetyMode.NONE` - не потокобезопасный, самый быстрый
+
+**lazy vs lateinit:**
+- `lazy`: используется с `val`, инициализация при первом доступе, с инициализатором
+- `lateinit`: используется с `var`, должна быть инициализирована до использования, без инициализатора
 
 ## Answer (EN)
 
@@ -305,52 +350,6 @@ fun main() {
 ```
 
 ---
-
-## Ответ (RU)
-
-Функция `lazy` используется для ленивой инициализации свойств в Kotlin.
-
-**Ключевые характеристики:**
-- Свойство инициализируется только при первом обращении
-- Значение вычисляется и кэшируется при первом доступе
-- Потокобезопасна по умолчанию (можно настроить)
-- Должна использоваться с `val` (read-only свойством)
-- Возвращает делегат, реализующий ленивую инициализацию
-- Снижает потребление памяти и улучшает производительность при запуске
-
-**Синтаксис:**
-```kotlin
-val propertyName: Type by lazy {
-    // Код инициализации
-    value
-}
-```
-
-**Пример:**
-```kotlin
-class User {
-    val profile: String by lazy {
-        println("Вычисление профиля...")
-        "Профиль пользователя"
-    }
-}
-
-val user = User()
-println("Пользователь создан")
-// profile ещё не вычислен
-
-println(user.profile)  // Вычисление профиля... Профиль пользователя
-println(user.profile)  // Профиль пользователя (без вычисления)
-```
-
-**Режимы потокобезопасности:**
-- `LazyThreadSafetyMode.SYNCHRONIZED` (по умолчанию) - потокобезопасный
-- `LazyThreadSafetyMode.PUBLICATION` - множественное вычисление, но одно значение
-- `LazyThreadSafetyMode.NONE` - не потокобезопасный, самый быстрый
-
-**lazy vs lateinit:**
-- `lazy`: используется с `val`, инициализация при первом доступе, с инициализатором
-- `lateinit`: используется с `var`, должна быть инициализирована до использования, без инициализатора
 
 ## Follow-ups
 

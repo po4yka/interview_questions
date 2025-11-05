@@ -28,11 +28,87 @@ tags: [difficulty/hard, generics, kotlin, star-projection, type-safety, variance
 date created: Saturday, October 18th 2025, 3:06:33 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> В чем разница между `*` (звездная проекция) и `Any` в обобщениях Kotlin?
+
+---
 
 # Question (EN)
 > What is the difference between `*` (star projection) and `Any` in Kotlin generics?
-# Вопрос (RU)
-> В чем разница между `*` (звездная проекция) и `Any` в обобщениях Kotlin?
+## Ответ (RU)
+
+### Краткое Изложение
+
+`MutableList<*>` представляет список **чего-то неизвестного** - нельзя добавлять, но можно читать как `Any?`.
+
+`MutableList<Any>` представляет список, который может содержать **любые типы вместе** - можно добавлять любой объект и читать как `Any`.
+
+### Звездная Проекция (`*`)
+
+Тип `MutableList<*>` представляет список чего-то (точно не знаете чего). Поскольку тип неизвестен:
+- **Нельзя добавлять** ничего (кроме null) - компилятор не может проверить типобезопасность
+- **Можно читать** только как `Any?` - все объекты наследуются от `Any`
+
+`List<*>` может содержать объекты **любого типа, но только этого одного типа**.
+
+### Any В Обобщениях
+
+`List<Any>` может содержать **разные типы вместе** - String, Int и что угодно еще, все в одном списке.
+
+### Детальный Пример
+
+```kotlin
+class Crate<T> {
+    private val items = mutableListOf<T>()
+    fun produce(): T = items.last()
+    fun consume(item: T) = items.add(item)
+    fun size(): Int = items.size
+}
+```
+
+#### Звездная Проекция: Не Производитель, Не Потребитель
+
+```kotlin
+fun useAsStar(star: Crate<*>) {
+    // T неизвестен, производит Any?
+    val anyNullable = star.produce()  // Тип Any?
+
+    // Нельзя потреблять
+    // star.consume(Fruit())  // - Ошибка
+
+    // Только T-независимые функции
+    star.size()  // - OK
+}
+```
+
+#### Any: Может Производить И Потреблять
+
+```kotlin
+fun useAsAny(any: Crate<Any>) {
+    // T известен как Any - может производить
+    val anyNonNull = any.produce()  // - Тип Any
+
+    // T известен как Any - может потреблять
+    any.consume(Fruit())  // - OK
+    any.consume("String")  // - OK
+    any.consume(42)  // - OK
+
+    any.size()  // - OK
+}
+```
+
+### Когда Что Использовать
+
+**Используйте `List<*>` когда**:
+- Не знаете или не важен точный тип
+- Нужны только методы независимые от типа (size, isEmpty и т.д.)
+- Хотите предотвратить случайные модификации
+
+**Используйте `List<Any>` когда**:
+- Действительно нужна гетерогенная коллекция
+- Хотите хранить разные типы вместе
+
+**Краткое содержание**: `List<*>` (звездная проекция) представляет неизвестный но конкретный тип - можно читать как `Any?`, но нельзя писать. `List<Any>` представляет действительно смешанную коллекцию - можно читать и писать любой тип. Звездная проекция сохраняет типобезопасность предотвращая запись; Any позволяет гетерогенные коллекции но теряет информацию о типе.
 
 ---
 
@@ -175,83 +251,6 @@ List<Any>  // Can read Any, can write Any
 ```
 
 **English Summary**: `List<*>` (star projection) represents an unknown but specific type - can read as `Any?` but can't write. `List<Any>` represents a truly mixed collection - can read and write any type. Star projection preserves type safety by preventing writes; Any allows heterogeneous collections but loses type information.
-
-## Ответ (RU)
-
-### Краткое Изложение
-
-`MutableList<*>` представляет список **чего-то неизвестного** - нельзя добавлять, но можно читать как `Any?`.
-
-`MutableList<Any>` представляет список, который может содержать **любые типы вместе** - можно добавлять любой объект и читать как `Any`.
-
-### Звездная Проекция (`*`)
-
-Тип `MutableList<*>` представляет список чего-то (точно не знаете чего). Поскольку тип неизвестен:
-- **Нельзя добавлять** ничего (кроме null) - компилятор не может проверить типобезопасность
-- **Можно читать** только как `Any?` - все объекты наследуются от `Any`
-
-`List<*>` может содержать объекты **любого типа, но только этого одного типа**.
-
-### Any В Обобщениях
-
-`List<Any>` может содержать **разные типы вместе** - String, Int и что угодно еще, все в одном списке.
-
-### Детальный Пример
-
-```kotlin
-class Crate<T> {
-    private val items = mutableListOf<T>()
-    fun produce(): T = items.last()
-    fun consume(item: T) = items.add(item)
-    fun size(): Int = items.size
-}
-```
-
-#### Звездная Проекция: Не Производитель, Не Потребитель
-
-```kotlin
-fun useAsStar(star: Crate<*>) {
-    // T неизвестен, производит Any?
-    val anyNullable = star.produce()  // Тип Any?
-
-    // Нельзя потреблять
-    // star.consume(Fruit())  // - Ошибка
-
-    // Только T-независимые функции
-    star.size()  // - OK
-}
-```
-
-#### Any: Может Производить И Потреблять
-
-```kotlin
-fun useAsAny(any: Crate<Any>) {
-    // T известен как Any - может производить
-    val anyNonNull = any.produce()  // - Тип Any
-
-    // T известен как Any - может потреблять
-    any.consume(Fruit())  // - OK
-    any.consume("String")  // - OK
-    any.consume(42)  // - OK
-
-    any.size()  // - OK
-}
-```
-
-### Когда Что Использовать
-
-**Используйте `List<*>` когда**:
-- Не знаете или не важен точный тип
-- Нужны только методы независимые от типа (size, isEmpty и т.д.)
-- Хотите предотвратить случайные модификации
-
-**Используйте `List<Any>` когда**:
-- Действительно нужна гетерогенная коллекция
-- Хотите хранить разные типы вместе
-
-**Краткое содержание**: `List<*>` (звездная проекция) представляет неизвестный но конкретный тип - можно читать как `Any?`, но нельзя писать. `List<Any>` представляет действительно смешанную коллекцию - можно читать и писать любой тип. Звездная проекция сохраняет типобезопасность предотвращая запись; Any позволяет гетерогенные коллекции но теряет информацию о типе.
-
----
 
 ## References
 - [Difference between "*" and "Any" in Kotlin generics - StackOverflow](https://stackoverflow.com/questions/40138923/difference-between-and-any-in-kotlin-generics)

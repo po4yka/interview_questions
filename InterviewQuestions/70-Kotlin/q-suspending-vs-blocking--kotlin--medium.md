@@ -28,11 +28,133 @@ tags: [blocking, concurrency, coroutines, difficulty/medium, kotlin, suspend]
 date created: Friday, October 17th 2025, 9:47:58 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> В чем разница между приостанавливающими (suspending) и блокирующими (blocking) функциями в Kotlin?
+
+---
 
 # Question (EN)
 > What is the difference between suspending and blocking in Kotlin?
-# Вопрос (RU)
-> В чем разница между приостанавливающими (suspending) и блокирующими (blocking) функциями в Kotlin?
+## Ответ (RU)
+
+### Блокирующие (Blocking)
+
+Функция A должна завершиться перед тем, как продолжится функция B. **Поток заблокирован** для выполнения функции A.
+
+```kotlin
+fun main(args: Array<String>) {
+    println("Начало выполнения Main")
+    threadFunction(1, 200)
+    threadFunction(2, 500)
+    Thread.sleep(1000)  // Main поток ЗАБЛОКИРОВАН
+    println("Завершение выполнения Main")
+}
+
+fun threadFunction(counter: Int, delay: Long) {
+    thread {
+        println("Функция ${counter} началась в ${Thread.currentThread().name}")
+        Thread.sleep(delay)  // Поток ЗАБЛОКИРОВАН
+        println("Функция ${counter} завершилась в ${Thread.currentThread().name}")
+    }
+}
+
+// Вывод:
+// Начало выполнения Main
+// Функция 1 началась в Thread-0
+// Функция 2 началась в Thread-1
+// Функция 1 завершилась в Thread-0
+// Функция 2 завершилась в Thread-1
+// Завершение выполнения Main
+```
+
+**Проблема**: Главный поток ничего не делает, просто ждёт. Занимает CPU ненужным ожиданием. **В Android приложении это заморозит UI**, так как главный поток заблокирован.
+
+### Приостанавливающие (Suspending)
+
+Функция A может быть приостановлена, пока выполняется функция B. Функция A может быть возобновлена позже. **Поток НЕ заблокирован** функцией A.
+
+```kotlin
+fun main(args: Array<String>) = runBlocking {
+    println("Начало выполнения Main")
+    joinAll(
+        async { suspendFunction(1, 200) },
+        async { suspendFunction(2, 500) },
+        async {
+            println("Другая задача работает в ${Thread.currentThread().name}")
+            delay(100)
+        }
+    )
+    println("Завершение выполнения Main")
+}
+
+suspend fun suspendFunction(counter: Int, delay: Long) {
+    println("Корутина ${counter} начала работу в ${Thread.currentThread().name}")
+    delay(delay)  // Корутина ПРИОСТАНОВЛЕНА (не заблокирована)
+    println("Функция ${counter} завершилась в ${Thread.currentThread().name}")
+}
+
+// Вывод:
+// Начало выполнения Main
+// Корутина 1 начала работу в main
+// Корутина 2 начала работу в main
+// Другая задача работает в main
+// Корутина 1 завершилась в main
+// Корутина 2 завершилась в main
+// Завершение выполнения Main
+```
+
+**Преимущество**: Пока корутины приостановлены, главный поток может выполнять другие задачи. **Главный метод НЕ заблокирован**, поэтому он может выполнять другую работу.
+
+### Ключевые Отличия
+
+| Аспект | Blocking | Suspending |
+|--------|----------|------------|
+| **Поток** | Заблокирован | Свободен для другой работы |
+| **Выполнение** | Последовательное (должен ждать) | Параллельное (может чередоваться) |
+| **Использование ресурсов** | Тратит время потока | Эффективное использование потока |
+| **Android UI** | Замораживает UI | Сохраняет отзывчивость UI |
+| **Стоимость** | Дорого (больше потоков) | Дёшево (меньше потоков) |
+| **Тип функции** | Обычная функция | `suspend` функция |
+| **Вызов из** | Откуда угодно | Только из корутины или suspend функции |
+
+### Визуальное Сравнение
+
+**Blocking:**
+```
+Поток: [====Функция A====][====Функция B====]
+        ^ Заблокирован      ^ Заблокирован
+```
+
+**Suspending:**
+```
+Поток: [==A=][=Другое=][==A==][==B=][=Другое=][==B==]
+        ^приостановка ^    ^возобновление
+```
+
+### Практический Пример
+
+```kotlin
+// - Blocking - замораживает UI
+fun loadData() {
+    val data = networkCall()  // UI поток ЗАБЛОКИРОВАН
+    updateUI(data)
+}
+
+// - Suspending - UI остаётся отзывчивым
+suspend fun loadData() {
+    val data = networkCall()  // Корутина ПРИОСТАНОВЛЕНА, UI поток СВОБОДЕН
+    updateUI(data)
+}
+
+// В ViewModel
+fun loadDataSafely() {
+    viewModelScope.launch {
+        loadData()  // UI никогда не блокируется
+    }
+}
+```
+
+**Краткое содержание**: Blocking блокирует поток до завершения, тратит ресурсы и замораживает UI в Android. Suspending освобождает поток при ожидании, позволяя другой работе, сохраняя отзывчивость UI. Blocking использует Thread.sleep(), suspending использует delay(). Suspending — это кооперативная многозадачность (корутины), blocking — это многозадачность на основе потоков. В Android всегда используйте suspend функции для I/O и длительных операций, чтобы избежать ANR.
 
 ---
 
@@ -156,129 +278,6 @@ fun loadDataSafely() {
 ```
 
 **English Summary**: Blocking locks the thread until completion, wasting resources and freezing UI in Android. Suspending releases the thread when waiting, allowing other work, keeping UI responsive. Blocking uses Thread.sleep(), suspending uses delay(). Suspending is cooperative multitasking (coroutines), blocking is thread-based. In Android, always use suspend functions for I/O and long operations to avoid ANR.
-
-## Ответ (RU)
-
-### Блокирующие (Blocking)
-
-Функция A должна завершиться перед тем, как продолжится функция B. **Поток заблокирован** для выполнения функции A.
-
-```kotlin
-fun main(args: Array<String>) {
-    println("Начало выполнения Main")
-    threadFunction(1, 200)
-    threadFunction(2, 500)
-    Thread.sleep(1000)  // Main поток ЗАБЛОКИРОВАН
-    println("Завершение выполнения Main")
-}
-
-fun threadFunction(counter: Int, delay: Long) {
-    thread {
-        println("Функция ${counter} началась в ${Thread.currentThread().name}")
-        Thread.sleep(delay)  // Поток ЗАБЛОКИРОВАН
-        println("Функция ${counter} завершилась в ${Thread.currentThread().name}")
-    }
-}
-
-// Вывод:
-// Начало выполнения Main
-// Функция 1 началась в Thread-0
-// Функция 2 началась в Thread-1
-// Функция 1 завершилась в Thread-0
-// Функция 2 завершилась в Thread-1
-// Завершение выполнения Main
-```
-
-**Проблема**: Главный поток ничего не делает, просто ждёт. Занимает CPU ненужным ожиданием. **В Android приложении это заморозит UI**, так как главный поток заблокирован.
-
-### Приостанавливающие (Suspending)
-
-Функция A может быть приостановлена, пока выполняется функция B. Функция A может быть возобновлена позже. **Поток НЕ заблокирован** функцией A.
-
-```kotlin
-fun main(args: Array<String>) = runBlocking {
-    println("Начало выполнения Main")
-    joinAll(
-        async { suspendFunction(1, 200) },
-        async { suspendFunction(2, 500) },
-        async {
-            println("Другая задача работает в ${Thread.currentThread().name}")
-            delay(100)
-        }
-    )
-    println("Завершение выполнения Main")
-}
-
-suspend fun suspendFunction(counter: Int, delay: Long) {
-    println("Корутина ${counter} начала работу в ${Thread.currentThread().name}")
-    delay(delay)  // Корутина ПРИОСТАНОВЛЕНА (не заблокирована)
-    println("Функция ${counter} завершилась в ${Thread.currentThread().name}")
-}
-
-// Вывод:
-// Начало выполнения Main
-// Корутина 1 начала работу в main
-// Корутина 2 начала работу в main
-// Другая задача работает в main
-// Корутина 1 завершилась в main
-// Корутина 2 завершилась в main
-// Завершение выполнения Main
-```
-
-**Преимущество**: Пока корутины приостановлены, главный поток может выполнять другие задачи. **Главный метод НЕ заблокирован**, поэтому он может выполнять другую работу.
-
-### Ключевые Отличия
-
-| Аспект | Blocking | Suspending |
-|--------|----------|------------|
-| **Поток** | Заблокирован | Свободен для другой работы |
-| **Выполнение** | Последовательное (должен ждать) | Параллельное (может чередоваться) |
-| **Использование ресурсов** | Тратит время потока | Эффективное использование потока |
-| **Android UI** | Замораживает UI | Сохраняет отзывчивость UI |
-| **Стоимость** | Дорого (больше потоков) | Дёшево (меньше потоков) |
-| **Тип функции** | Обычная функция | `suspend` функция |
-| **Вызов из** | Откуда угодно | Только из корутины или suspend функции |
-
-### Визуальное Сравнение
-
-**Blocking:**
-```
-Поток: [====Функция A====][====Функция B====]
-        ^ Заблокирован      ^ Заблокирован
-```
-
-**Suspending:**
-```
-Поток: [==A=][=Другое=][==A==][==B=][=Другое=][==B==]
-        ^приостановка ^    ^возобновление
-```
-
-### Практический Пример
-
-```kotlin
-// - Blocking - замораживает UI
-fun loadData() {
-    val data = networkCall()  // UI поток ЗАБЛОКИРОВАН
-    updateUI(data)
-}
-
-// - Suspending - UI остаётся отзывчивым
-suspend fun loadData() {
-    val data = networkCall()  // Корутина ПРИОСТАНОВЛЕНА, UI поток СВОБОДЕН
-    updateUI(data)
-}
-
-// В ViewModel
-fun loadDataSafely() {
-    viewModelScope.launch {
-        loadData()  // UI никогда не блокируется
-    }
-}
-```
-
-**Краткое содержание**: Blocking блокирует поток до завершения, тратит ресурсы и замораживает UI в Android. Suspending освобождает поток при ожидании, позволяя другой работе, сохраняя отзывчивость UI. Blocking использует Thread.sleep(), suspending использует delay(). Suspending — это кооперативная многозадачность (корутины), blocking — это многозадачность на основе потоков. В Android всегда используйте suspend функции для I/O и длительных операций, чтобы избежать ANR.
-
----
 
 ## References
 - [Coroutines Basics - Kotlin](https://kotlinlang.org/docs/coroutines-basics.html)

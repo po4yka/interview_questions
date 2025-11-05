@@ -28,13 +28,84 @@ tags: [coroutines, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 3:39:19 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140019
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140019
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140019
+## Ответ (RU)
 
+
+Операторы `shareIn` и `stateIn` преобразуют холодные Flow в горячие Flow, которые можно разделять между несколькими коллекторами.
+
+### shareIn
+
+Делит Flow между несколькими коллекторами:
+```kotlin
+val sharedFlow = flow {
+    repeat(5) {
+        emit(it)
+        delay(100)
+    }
+}.shareIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(),
+    replay = 0
+)
+```
+
+**Стратегии SharingStarted**:
+- `Eagerly` - Запуск немедленно
+- `Lazily` - Запуск при первом подписчике
+- `WhileSubscribed()` - Запуск/остановка на основе подписчиков
+
+### stateIn
+
+Создает StateFlow представляющий состояние:
+```kotlin
+val stateFlow = dataFlow
+    .map { it.toUiModel() }
+    .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = UiState.Loading
+    )
+```
+
+### Ключевые Отличия
+
+| Функция | shareIn | stateIn |
+|---------|---------|---------|
+| Тип возврата | SharedFlow | StateFlow |
+| Начальное значение | Нет | Требуется |
+| Replay | Настраиваемый | Всегда 1 |
+| Применение | События | Состояние |
+
+### Практический Пример
+```kotlin
+class ViewModel : ViewModel() {
+    // Состояние - используйте stateIn
+    val uiState = repository.getData()
+        .map { UiState.Success(it) }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            UiState.Loading
+        )
+    
+    // События - используйте shareIn
+    val events = eventFlow.shareIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        replay = 0
+    )
+}
+```
+
+---
 ---
 
 ## Answer (EN)
@@ -98,78 +169,6 @@ class ViewModel : ViewModel() {
         )
     
     // Events - use shareIn
-    val events = eventFlow.shareIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        replay = 0
-    )
-}
-```
-
----
----
-
-## Ответ (RU)
-
-
-Операторы `shareIn` и `stateIn` преобразуют холодные Flow в горячие Flow, которые можно разделять между несколькими коллекторами.
-
-### shareIn
-
-Делит Flow между несколькими коллекторами:
-```kotlin
-val sharedFlow = flow {
-    repeat(5) {
-        emit(it)
-        delay(100)
-    }
-}.shareIn(
-    scope = viewModelScope,
-    started = SharingStarted.WhileSubscribed(),
-    replay = 0
-)
-```
-
-**Стратегии SharingStarted**:
-- `Eagerly` - Запуск немедленно
-- `Lazily` - Запуск при первом подписчике
-- `WhileSubscribed()` - Запуск/остановка на основе подписчиков
-
-### stateIn
-
-Создает StateFlow представляющий состояние:
-```kotlin
-val stateFlow = dataFlow
-    .map { it.toUiModel() }
-    .stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = UiState.Loading
-    )
-```
-
-### Ключевые Отличия
-
-| Функция | shareIn | stateIn |
-|---------|---------|---------|
-| Тип возврата | SharedFlow | StateFlow |
-| Начальное значение | Нет | Требуется |
-| Replay | Настраиваемый | Всегда 1 |
-| Применение | События | Состояние |
-
-### Практический Пример
-```kotlin
-class ViewModel : ViewModel() {
-    // Состояние - используйте stateIn
-    val uiState = repository.getData()
-        .map { UiState.Success(it) }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            UiState.Loading
-        )
-    
-    // События - используйте shareIn
     val events = eventFlow.shareIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(),

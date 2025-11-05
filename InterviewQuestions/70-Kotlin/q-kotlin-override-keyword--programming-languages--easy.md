@@ -17,16 +17,69 @@ tags: [abstract, difficulty/easy, inheritance, keywords, open, override, polymor
 date created: Friday, October 31st 2025, 6:30:57 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Какое Ключевое Слово Используется Для Определения Метода, Который Должен Быть Переопределен В Подклассе?
-
-# Question (EN)
-> Which keyword is used to define a method that must be overridden in a subclass?
 
 # Вопрос (RU)
 > Какое ключевое слово используется для определения метода, который должен быть переопределен в подклассе?
 
 ---
+
+# Question (EN)
+> Which keyword is used to define a method that must be overridden in a subclass?
+
+## Ответ (RU)
+
+В Kotlin ключевое слово **`override`** используется для переопределения метода из родительского класса. Однако, чтобы метод можно было переопределить, метод родительского класса должен быть помечен как **`open`**.
+
+**Для абстрактных методов (обязательно должны быть переопределены):**
+```kotlin
+abstract class Animal {
+    abstract fun makeSound()  // Должен быть переопределён
+}
+
+class Dog : Animal() {
+    override fun makeSound() {
+        println("Woof!")
+    }
+}
+```
+
+**Для открытых методов (могут быть переопределены):**
+```kotlin
+open class Vehicle {
+    open fun start() {  // Может быть переопределён (но не обязательно)
+        println("Vehicle starting")
+    }
+}
+
+class Car : Vehicle() {
+    override fun start() {  // требуется ключевое слово override
+        println("Car starting")
+    }
+}
+```
+
+**Ключевые моменты:**
+- Используйте `abstract` для объявления метода, который **обязательно** должен быть переопределён
+- Используйте `open` для объявления метода, который **может** быть переопределён
+- Используйте `override` в подклассе для переопределения метода
+- В отличие от Java, Kotlin требует явного ключевого слова `override` (предотвращает случайные переопределения)
+
+**Предотвращение дальнейших переопределений:**
+```kotlin
+open class Base {
+    open fun foo() {}
+}
+
+class Derived : Base() {
+    final override fun foo() {}  // Нельзя переопределить дальше
+}
+```
+
+**Сравнение с Java:**
+- Java: `@Override` необязателен (аннотация)
+- Kotlin: `override` обязателен (ключевое слово)
+- Kotlin требует, чтобы родительские методы были `open` или `abstract`
 
 ## Answer (EN)
 
@@ -83,60 +136,6 @@ class Derived : Base() {
 - Kotlin requires parent methods to be `open` or `abstract`
 
 ---
-
-## Ответ (RU)
-
-В Kotlin ключевое слово **`override`** используется для переопределения метода из родительского класса. Однако, чтобы метод можно было переопределить, метод родительского класса должен быть помечен как **`open`**.
-
-**Для абстрактных методов (обязательно должны быть переопределены):**
-```kotlin
-abstract class Animal {
-    abstract fun makeSound()  // Должен быть переопределён
-}
-
-class Dog : Animal() {
-    override fun makeSound() {
-        println("Woof!")
-    }
-}
-```
-
-**Для открытых методов (могут быть переопределены):**
-```kotlin
-open class Vehicle {
-    open fun start() {  // Может быть переопределён (но не обязательно)
-        println("Vehicle starting")
-    }
-}
-
-class Car : Vehicle() {
-    override fun start() {  // требуется ключевое слово override
-        println("Car starting")
-    }
-}
-```
-
-**Ключевые моменты:**
-- Используйте `abstract` для объявления метода, который **обязательно** должен быть переопределён
-- Используйте `open` для объявления метода, который **может** быть переопределён
-- Используйте `override` в подклассе для переопределения метода
-- В отличие от Java, Kotlin требует явного ключевого слова `override` (предотвращает случайные переопределения)
-
-**Предотвращение дальнейших переопределений:**
-```kotlin
-open class Base {
-    open fun foo() {}
-}
-
-class Derived : Base() {
-    final override fun foo() {}  // Нельзя переопределить дальше
-}
-```
-
-**Сравнение с Java:**
-- Java: `@Override` необязателен (аннотация)
-- Kotlin: `override` обязателен (ключевое слово)
-- Kotlin требует, чтобы родительские методы были `open` или `abstract`
 
 ## Follow-ups
 

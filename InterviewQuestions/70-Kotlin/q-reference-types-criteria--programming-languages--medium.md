@@ -17,16 +17,19 @@ tags: [best-practices, design, difficulty/medium, immutability, kotlin, programm
 date created: Friday, October 3rd 2025, 6:48:06 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Каким Критериям Должны Соответствовать Ссылочные Типы?
-
-# Question (EN)
-> What criteria should reference types meet?
 
 # Вопрос (RU)
 > Каким критериям должны соответствовать ссылочные типы?
 
 ---
+
+# Question (EN)
+> What criteria should reference types meet?
+
+## Ответ (RU)
+
+Ссылочные типы в Kotlin: неизменяемые, если это требуется по архитектуре; nullable или not-null — в зависимости от требований; должны реализовывать equals, hashCode и toString особенно если используются в коллекциях; быть легковесными если часто копируются; желательно final или sealed если поведение фиксировано
 
 ## Answer (EN)
 
@@ -153,10 +156,6 @@ open class BaseEntity {
 | **Inheritance** | Prefer final/sealed | Prevent unwanted subclassing |
 
 ---
-
-## Ответ (RU)
-
-Ссылочные типы в Kotlin: неизменяемые, если это требуется по архитектуре; nullable или not-null — в зависимости от требований; должны реализовывать equals, hashCode и toString особенно если используются в коллекциях; быть легковесными если часто копируются; желательно final или sealed если поведение фиксировано
 
 ## Follow-ups
 

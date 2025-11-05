@@ -28,12 +28,410 @@ tags: [async, difficulty/hard, flow, kotlin, operators, transformation]
 date created: Friday, October 17th 2025, 11:26:31 am
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Реализуйте пользовательские операторы Flow. Объясните flatMapConcat vs flatMapMerge vs flatMapLatest с практическими примерами и характеристиками производительности.
+
+---
 
 # Question (EN)
 > Implement custom Flow operators. Explain flatMapConcat vs flatMapMerge vs flatMapLatest with practical examples and performance characteristics.
 
-# Вопрос (RU)
-> Реализуйте пользовательские операторы Flow. Объясните flatMapConcat vs flatMapMerge vs flatMapLatest с практическими примерами и характеристиками производительности.
+## Ответ (RU)
+
+Операторы Flow — это функции, которые трансформируют потоки различными способами. Понимание различий между вариантами flatMap критически важно для построения эффективных асинхронных конвейеров данных.
+
+### Обзор Вариантов FlatMap
+
+Три оператора flatMap различаются по обработке конкурентного выполнения и порядка:
+
+| Оператор | Конкурентность | Порядок | Отмена | Применение |
+|----------|----------------|---------|--------|------------|
+| **flatMapConcat** | Последовательно (по 1) | Сохраняется | Ждет завершения | Требуется последовательность |
+| **flatMapMerge** | Конкурентно (настраивается) | Не сохраняется | Независимые потоки | Параллельная обработка |
+| **flatMapLatest** | Только последний | Не сохраняется | Отменяет предыдущие | Поиск, только последние данные |
+
+### 1. flatMapConcat - Последовательная Обработка
+
+**Поведение**: Обрабатывает по одному внутреннему потоку за раз, ожидая завершения каждого перед началом следующего.
+
+```kotlin
+fun <T, R> Flow<T>.flatMapConcat(transform: suspend (T) -> Flow<R>): Flow<R> =
+    map(transform).flattenConcat()
+
+// Пример: Последовательные API вызовы
+suspend fun fetchUserDetails(userId: Int): Flow<UserDetails> = flow {
+    delay(200) // Симуляция сетевого вызова
+    emit(UserDetails(userId, "user$userId@example.com", "555-000$userId"))
+    println("Получены данные пользователя $userId")
+}
+
+// Использование - обработка последовательно
+getUserIds()
+    .flatMapConcat { userId ->
+        fetchUserDetails(userId)
+    }
+    .collect { details ->
+        println("Получено: $details")
+    }
+```
+
+**Когда использовать**:
+- Порядок должен быть сохранен
+- Каждая операция зависит от завершения предыдущей
+- Последовательная загрузка страниц
+- Обработка транзакций
+
+### 2. flatMapMerge - Конкурентная Обработка
+
+**Поведение**: Обрабатывает несколько внутренних потоков одновременно с настраиваемым лимитом конкурентности.
+
+```kotlin
+fun <T, R> Flow<T>.flatMapMerge(
+    concurrency: Int = DEFAULT_CONCURRENCY,
+    transform: suspend (T) -> Flow<R>
+): Flow<R>
+
+// Пример: Параллельные API вызовы
+fun main() = runBlocking {
+    val startTime = System.currentTimeMillis()
+
+    getUserIds()
+        .flatMapMerge(concurrency = 2) { userId ->
+            fetchUserDetails(userId)
+        }
+        .collect { details ->
+            println("Получено: $details (прошло: ${System.currentTimeMillis() - startTime}ms)")
+        }
+}
+
+/*
+Вывод (конкурентно с concurrency=2):
+Получены данные пользователя 1 в 300ms
+Получены данные пользователя 2 в 300ms  // Запущен параллельно
+Получено: UserDetails(1, ...) (прошло: 300ms)
+Получено: UserDetails(2, ...) (прошло: 300ms)
+Получены данные пользователя 3 в 500ms  // Запущен после освобождения слота
+Получено: UserDetails(3, ...) (прошло: 500ms)
+Всего: ~500ms (на 40% быстрее!)
+*/
+```
+
+**Практический пример с обработкой ошибок**:
+
+```kotlin
+// Пакетная обработка с контролем конкурентности
+data class ImageUploadTask(val id: String, val imageData: ByteArray)
+data class UploadResult(val id: String, val url: String, val success: Boolean)
+
+fun uploadImages(tasks: List<ImageUploadTask>): Flow<UploadResult> =
+    tasks.asFlow()
+        .flatMapMerge(concurrency = 5) { task ->
+            flow {
+                try {
+                    val url = uploadImage(task.imageData)
+                    emit(UploadResult(task.id, url, true))
+                } catch (e: Exception) {
+                    emit(UploadResult(task.id, "", false))
+                }
+            }
+        }
+
+suspend fun uploadImage(data: ByteArray): String {
+    delay(100) // Симуляция загрузки
+    return "https://cdn.example.com/${UUID.randomUUID()}"
+}
+```
+
+**Когда использовать**:
+- Независимые операции, которые могут выполняться параллельно
+- Пакетная обработка
+- Множественные API вызовы
+- I/O операции
+- Нужна максимальная пропускная способность
+
+### 3. flatMapLatest - Только Последнее Значение
+
+**Поведение**: Отменяет предыдущий внутренний поток при поступлении нового значения, обрабатывает только последнее.
+
+```kotlin
+fun <T, R> Flow<T>.flatMapLatest(transform: suspend (T) -> Flow<R>): Flow<R> =
+    transformLatest { value ->
+        emitAll(transform(value))
+    }
+
+// Пример: Поисковый запрос с отменой
+data class SearchResult(val query: String, val results: List<String>)
+
+fun searchFlow(query: String): Flow<SearchResult> = flow {
+    println("Начало поиска: $query")
+    delay(300) // Симуляция API вызова
+    emit(SearchResult(
+        query,
+        listOf("$query результат 1", "$query результат 2")
+    ))
+    println("Поиск завершен: $query")
+}
+
+fun main() = runBlocking {
+    val searchQueries = flow {
+        emit("kot")
+        delay(100)
+        emit("kotl")  // Отменяет поиск "kot"
+        delay(100)
+        emit("kotli") // Отменяет поиск "kotl"
+        delay(500)    // Ждем завершения
+    }
+
+    searchQueries
+        .flatMapLatest { query ->
+            searchFlow(query)
+        }
+        .collect { result ->
+            println("Отображение результатов для: ${result.query}")
+        }
+}
+
+/*
+Вывод:
+Начало поиска: kot
+Начало поиска: kotl      // Отменяет "kot"
+Начало поиска: kotli     // Отменяет "kotl"
+Поиск завершен: kotli
+Отображение результатов для: kotli
+Завершается только последний поиск!
+*/
+```
+
+**Реальная реализация - Поиск с debounce**:
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    private val _searchQuery = MutableStateFlow("")
+
+    val searchResults: StateFlow<List<SearchResult>> = _searchQuery
+        .debounce(300) // Ждем, пока пользователь закончит печатать
+        .filter { it.length >= 3 } // Минимальная длина запроса
+        .distinctUntilChanged() // Поиск только если запрос изменился
+        .flatMapLatest { query ->
+            searchRepository.search(query)
+                .catch { emit(emptyList()) }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+}
+```
+
+**Когда использовать**:
+- Поиск/автодополнение
+- Фильтрация в реальном времени
+- Обновления локации
+- Важно только последнее значение
+- Отмена устаревших запросов
+
+### Создание Пользовательских Операторов Flow
+
+#### Пример 1: Повтор С Экспоненциальной Задержкой
+
+```kotlin
+fun <T> Flow<T>.retryWithExponentialBackoff(
+    maxRetries: Int = 3,
+    initialDelayMs: Long = 1000,
+    maxDelayMs: Long = 10000,
+    factor: Double = 2.0
+): Flow<T> = flow {
+    var currentDelay = initialDelayMs
+    var retryCount = 0
+
+    retry(maxRetries.toLong()) { cause ->
+        if (retryCount >= maxRetries) {
+            return@retry false
+        }
+
+        retryCount++
+        delay(currentDelay)
+        currentDelay = (currentDelay * factor).toLong().coerceAtMost(maxDelayMs)
+        true
+    }
+}
+```
+
+#### Пример 2: Оператор Окна
+
+```kotlin
+fun <T> Flow<T>.window(
+    windowSize: Int,
+    windowSlide: Int = windowSize
+): Flow<List<T>> = flow {
+    val buffer = ArrayDeque<T>(windowSize)
+
+    collect { value ->
+        buffer.add(value)
+
+        if (buffer.size > windowSize) {
+            repeat(windowSlide) {
+                if (buffer.isNotEmpty()) buffer.removeFirst()
+            }
+        }
+
+        if (buffer.size == windowSize) {
+            emit(buffer.toList())
+        }
+    }
+}
+
+// Использование: Скользящее среднее
+flowOf(1, 2, 3, 4, 5, 6, 7, 8)
+    .window(windowSize = 3, windowSlide = 1)
+    .map { window -> window.average() }
+    .collect { avg -> println("Скользящее среднее: $avg") }
+```
+
+#### Пример 3: Ограничение Частоты
+
+```kotlin
+fun <T> Flow<T>.rateLimit(
+    count: Int,
+    duration: Duration
+): Flow<T> = flow {
+    val timestamps = ArrayDeque<Long>(count)
+
+    collect { value ->
+        val now = System.currentTimeMillis()
+
+        // Удаляем устаревшие метки времени
+        while (timestamps.isNotEmpty() &&
+               now - timestamps.first() > duration.inWholeMilliseconds) {
+            timestamps.removeFirst()
+        }
+
+        // Проверяем лимит
+        if (timestamps.size >= count) {
+            val oldestTimestamp = timestamps.first()
+            val delayTime = duration.inWholeMilliseconds - (now - oldestTimestamp)
+            if (delayTime > 0) {
+                delay(delayTime)
+            }
+            timestamps.removeFirst()
+        }
+
+        timestamps.add(System.currentTimeMillis())
+        emit(value)
+    }
+}
+```
+
+### Сравнение Производительности
+
+```kotlin
+// Бенчмарк различных вариантов flatMap
+suspend fun benchmarkFlatMapVariants() {
+    val itemCount = 100
+    val processingTime = 10L // мс на элемент
+
+    // flatMapConcat
+    var startTime = System.currentTimeMillis()
+    (1..itemCount).asFlow()
+        .flatMapConcat { flowOf(it).onEach { delay(processingTime) } }
+        .collect()
+    println("flatMapConcat: ${System.currentTimeMillis() - startTime}ms") // ~1000ms
+
+    // flatMapMerge с concurrency=10
+    startTime = System.currentTimeMillis()
+    (1..itemCount).asFlow()
+        .flatMapMerge(10) { flowOf(it).onEach { delay(processingTime) } }
+        .collect()
+    println("flatMapMerge(10): ${System.currentTimeMillis() - startTime}ms") // ~100ms
+
+    // flatMapLatest (завершается только последний)
+    startTime = System.currentTimeMillis()
+    (1..itemCount).asFlow()
+        .flatMapLatest { flowOf(it).onEach { delay(processingTime) } }
+        .collect()
+    println("flatMapLatest: ${System.currentTimeMillis() - startTime}ms") // ~10ms
+}
+```
+
+### Лучшие Практики
+
+1. **Выбирайте правильный оператор**:
+   - Нужен порядок? → `flatMapConcat`
+   - Нужна скорость? → `flatMapMerge`
+   - Важно только последнее? → `flatMapLatest`
+
+2. **Контролируйте конкурентность**:
+   ```kotlin
+   // Избегайте неограниченной конкурентности
+   .flatMapMerge(concurrency = Int.MAX_VALUE) //  Опасно
+   .flatMapMerge(concurrency = 10) //  Контролируемо
+   ```
+
+3. **Учитывайте ограничения ресурсов**:
+   ```kotlin
+   // Ограничение конкурентных сетевых запросов
+   val maxConcurrentRequests = 5
+   requests.flatMapMerge(maxConcurrentRequests) { makeRequest(it) }
+   ```
+
+4. **Обрабатывайте ошибки правильно**:
+   ```kotlin
+   .flatMapMerge { item ->
+       flow { emit(process(item)) }
+           .catch { e -> emit(defaultValue) }
+   }
+   ```
+
+5. **Учитывайте память**:
+   - `flatMapMerge` держит несколько потоков в памяти
+   - `flatMapLatest` наиболее эффективен по памяти (только один активный)
+   - `flatMapConcat` умеренное использование памяти
+
+### Распространенные Ошибки
+
+1. **Использование flatMapConcat вместо flatMapMerge**:
+   ```kotlin
+   //  Медленно: обработка 1000 элементов последовательно
+   (1..1000).asFlow().flatMapConcat { fetchData(it) }
+
+   //  Быстро: обработка 10 одновременно
+   (1..1000).asFlow().flatMapMerge(10) { fetchData(it) }
+   ```
+
+2. **Забывание об отмене с flatMapLatest**:
+   ```kotlin
+   //  Утечка ресурсов если не учитывается отмена
+   searchQuery.flatMapLatest { query ->
+       flow {
+           val connection = openConnection() // Не отменяется!
+           // ...
+       }
+   }
+
+   //  Правильная отмена
+   searchQuery.flatMapLatest { query ->
+       flow {
+           val connection = openConnection()
+           try {
+               // ...
+           } finally {
+               connection.close()
+           }
+       }
+   }
+   ```
+
+3. **Не настройка конкурентности**:
+   ```kotlin
+   //  Конкурентность по умолчанию может быть слишком большой
+   .flatMapMerge { ... }
+
+   //  Явно установлено в зависимости от случая
+   .flatMapMerge(concurrency = 3) { ... }
+   ```
+
+**Краткое содержание**: Операторы Flow трансформируют потоки разными способами. flatMapConcat обрабатывает последовательно сохраняя порядок, flatMapMerge обрабатывает конкурентно с настраиваемой конкурентностью для максимальной пропускной способности, а flatMapLatest отменяет предыдущие потоки оставляя только последний. Пользовательские операторы создаются комбинированием существующих. Выбор зависит от требований к порядку, производительности и ограничений ресурсов.
 
 ---
 
@@ -509,405 +907,6 @@ suspend fun benchmarkFlatMapVariants() {
    ```
 
 **English Summary**: Flow operators transform flows in different ways. flatMapConcat processes sequentially preserving order, flatMapMerge processes concurrently with configurable concurrency for maximum throughput, and flatMapLatest cancels previous flows keeping only the latest. Custom operators can be created by combining existing operators. Choose based on ordering requirements, performance needs, and resource constraints.
-
-## Ответ (RU)
-
-Операторы Flow — это функции, которые трансформируют потоки различными способами. Понимание различий между вариантами flatMap критически важно для построения эффективных асинхронных конвейеров данных.
-
-### Обзор Вариантов FlatMap
-
-Три оператора flatMap различаются по обработке конкурентного выполнения и порядка:
-
-| Оператор | Конкурентность | Порядок | Отмена | Применение |
-|----------|----------------|---------|--------|------------|
-| **flatMapConcat** | Последовательно (по 1) | Сохраняется | Ждет завершения | Требуется последовательность |
-| **flatMapMerge** | Конкурентно (настраивается) | Не сохраняется | Независимые потоки | Параллельная обработка |
-| **flatMapLatest** | Только последний | Не сохраняется | Отменяет предыдущие | Поиск, только последние данные |
-
-### 1. flatMapConcat - Последовательная Обработка
-
-**Поведение**: Обрабатывает по одному внутреннему потоку за раз, ожидая завершения каждого перед началом следующего.
-
-```kotlin
-fun <T, R> Flow<T>.flatMapConcat(transform: suspend (T) -> Flow<R>): Flow<R> =
-    map(transform).flattenConcat()
-
-// Пример: Последовательные API вызовы
-suspend fun fetchUserDetails(userId: Int): Flow<UserDetails> = flow {
-    delay(200) // Симуляция сетевого вызова
-    emit(UserDetails(userId, "user$userId@example.com", "555-000$userId"))
-    println("Получены данные пользователя $userId")
-}
-
-// Использование - обработка последовательно
-getUserIds()
-    .flatMapConcat { userId ->
-        fetchUserDetails(userId)
-    }
-    .collect { details ->
-        println("Получено: $details")
-    }
-```
-
-**Когда использовать**:
-- Порядок должен быть сохранен
-- Каждая операция зависит от завершения предыдущей
-- Последовательная загрузка страниц
-- Обработка транзакций
-
-### 2. flatMapMerge - Конкурентная Обработка
-
-**Поведение**: Обрабатывает несколько внутренних потоков одновременно с настраиваемым лимитом конкурентности.
-
-```kotlin
-fun <T, R> Flow<T>.flatMapMerge(
-    concurrency: Int = DEFAULT_CONCURRENCY,
-    transform: suspend (T) -> Flow<R>
-): Flow<R>
-
-// Пример: Параллельные API вызовы
-fun main() = runBlocking {
-    val startTime = System.currentTimeMillis()
-
-    getUserIds()
-        .flatMapMerge(concurrency = 2) { userId ->
-            fetchUserDetails(userId)
-        }
-        .collect { details ->
-            println("Получено: $details (прошло: ${System.currentTimeMillis() - startTime}ms)")
-        }
-}
-
-/*
-Вывод (конкурентно с concurrency=2):
-Получены данные пользователя 1 в 300ms
-Получены данные пользователя 2 в 300ms  // Запущен параллельно
-Получено: UserDetails(1, ...) (прошло: 300ms)
-Получено: UserDetails(2, ...) (прошло: 300ms)
-Получены данные пользователя 3 в 500ms  // Запущен после освобождения слота
-Получено: UserDetails(3, ...) (прошло: 500ms)
-Всего: ~500ms (на 40% быстрее!)
-*/
-```
-
-**Практический пример с обработкой ошибок**:
-
-```kotlin
-// Пакетная обработка с контролем конкурентности
-data class ImageUploadTask(val id: String, val imageData: ByteArray)
-data class UploadResult(val id: String, val url: String, val success: Boolean)
-
-fun uploadImages(tasks: List<ImageUploadTask>): Flow<UploadResult> =
-    tasks.asFlow()
-        .flatMapMerge(concurrency = 5) { task ->
-            flow {
-                try {
-                    val url = uploadImage(task.imageData)
-                    emit(UploadResult(task.id, url, true))
-                } catch (e: Exception) {
-                    emit(UploadResult(task.id, "", false))
-                }
-            }
-        }
-
-suspend fun uploadImage(data: ByteArray): String {
-    delay(100) // Симуляция загрузки
-    return "https://cdn.example.com/${UUID.randomUUID()}"
-}
-```
-
-**Когда использовать**:
-- Независимые операции, которые могут выполняться параллельно
-- Пакетная обработка
-- Множественные API вызовы
-- I/O операции
-- Нужна максимальная пропускная способность
-
-### 3. flatMapLatest - Только Последнее Значение
-
-**Поведение**: Отменяет предыдущий внутренний поток при поступлении нового значения, обрабатывает только последнее.
-
-```kotlin
-fun <T, R> Flow<T>.flatMapLatest(transform: suspend (T) -> Flow<R>): Flow<R> =
-    transformLatest { value ->
-        emitAll(transform(value))
-    }
-
-// Пример: Поисковый запрос с отменой
-data class SearchResult(val query: String, val results: List<String>)
-
-fun searchFlow(query: String): Flow<SearchResult> = flow {
-    println("Начало поиска: $query")
-    delay(300) // Симуляция API вызова
-    emit(SearchResult(
-        query,
-        listOf("$query результат 1", "$query результат 2")
-    ))
-    println("Поиск завершен: $query")
-}
-
-fun main() = runBlocking {
-    val searchQueries = flow {
-        emit("kot")
-        delay(100)
-        emit("kotl")  // Отменяет поиск "kot"
-        delay(100)
-        emit("kotli") // Отменяет поиск "kotl"
-        delay(500)    // Ждем завершения
-    }
-
-    searchQueries
-        .flatMapLatest { query ->
-            searchFlow(query)
-        }
-        .collect { result ->
-            println("Отображение результатов для: ${result.query}")
-        }
-}
-
-/*
-Вывод:
-Начало поиска: kot
-Начало поиска: kotl      // Отменяет "kot"
-Начало поиска: kotli     // Отменяет "kotl"
-Поиск завершен: kotli
-Отображение результатов для: kotli
-Завершается только последний поиск!
-*/
-```
-
-**Реальная реализация - Поиск с debounce**:
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    private val _searchQuery = MutableStateFlow("")
-
-    val searchResults: StateFlow<List<SearchResult>> = _searchQuery
-        .debounce(300) // Ждем, пока пользователь закончит печатать
-        .filter { it.length >= 3 } // Минимальная длина запроса
-        .distinctUntilChanged() // Поиск только если запрос изменился
-        .flatMapLatest { query ->
-            searchRepository.search(query)
-                .catch { emit(emptyList()) }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-}
-```
-
-**Когда использовать**:
-- Поиск/автодополнение
-- Фильтрация в реальном времени
-- Обновления локации
-- Важно только последнее значение
-- Отмена устаревших запросов
-
-### Создание Пользовательских Операторов Flow
-
-#### Пример 1: Повтор С Экспоненциальной Задержкой
-
-```kotlin
-fun <T> Flow<T>.retryWithExponentialBackoff(
-    maxRetries: Int = 3,
-    initialDelayMs: Long = 1000,
-    maxDelayMs: Long = 10000,
-    factor: Double = 2.0
-): Flow<T> = flow {
-    var currentDelay = initialDelayMs
-    var retryCount = 0
-
-    retry(maxRetries.toLong()) { cause ->
-        if (retryCount >= maxRetries) {
-            return@retry false
-        }
-
-        retryCount++
-        delay(currentDelay)
-        currentDelay = (currentDelay * factor).toLong().coerceAtMost(maxDelayMs)
-        true
-    }
-}
-```
-
-#### Пример 2: Оператор Окна
-
-```kotlin
-fun <T> Flow<T>.window(
-    windowSize: Int,
-    windowSlide: Int = windowSize
-): Flow<List<T>> = flow {
-    val buffer = ArrayDeque<T>(windowSize)
-
-    collect { value ->
-        buffer.add(value)
-
-        if (buffer.size > windowSize) {
-            repeat(windowSlide) {
-                if (buffer.isNotEmpty()) buffer.removeFirst()
-            }
-        }
-
-        if (buffer.size == windowSize) {
-            emit(buffer.toList())
-        }
-    }
-}
-
-// Использование: Скользящее среднее
-flowOf(1, 2, 3, 4, 5, 6, 7, 8)
-    .window(windowSize = 3, windowSlide = 1)
-    .map { window -> window.average() }
-    .collect { avg -> println("Скользящее среднее: $avg") }
-```
-
-#### Пример 3: Ограничение Частоты
-
-```kotlin
-fun <T> Flow<T>.rateLimit(
-    count: Int,
-    duration: Duration
-): Flow<T> = flow {
-    val timestamps = ArrayDeque<Long>(count)
-
-    collect { value ->
-        val now = System.currentTimeMillis()
-
-        // Удаляем устаревшие метки времени
-        while (timestamps.isNotEmpty() &&
-               now - timestamps.first() > duration.inWholeMilliseconds) {
-            timestamps.removeFirst()
-        }
-
-        // Проверяем лимит
-        if (timestamps.size >= count) {
-            val oldestTimestamp = timestamps.first()
-            val delayTime = duration.inWholeMilliseconds - (now - oldestTimestamp)
-            if (delayTime > 0) {
-                delay(delayTime)
-            }
-            timestamps.removeFirst()
-        }
-
-        timestamps.add(System.currentTimeMillis())
-        emit(value)
-    }
-}
-```
-
-### Сравнение Производительности
-
-```kotlin
-// Бенчмарк различных вариантов flatMap
-suspend fun benchmarkFlatMapVariants() {
-    val itemCount = 100
-    val processingTime = 10L // мс на элемент
-
-    // flatMapConcat
-    var startTime = System.currentTimeMillis()
-    (1..itemCount).asFlow()
-        .flatMapConcat { flowOf(it).onEach { delay(processingTime) } }
-        .collect()
-    println("flatMapConcat: ${System.currentTimeMillis() - startTime}ms") // ~1000ms
-
-    // flatMapMerge с concurrency=10
-    startTime = System.currentTimeMillis()
-    (1..itemCount).asFlow()
-        .flatMapMerge(10) { flowOf(it).onEach { delay(processingTime) } }
-        .collect()
-    println("flatMapMerge(10): ${System.currentTimeMillis() - startTime}ms") // ~100ms
-
-    // flatMapLatest (завершается только последний)
-    startTime = System.currentTimeMillis()
-    (1..itemCount).asFlow()
-        .flatMapLatest { flowOf(it).onEach { delay(processingTime) } }
-        .collect()
-    println("flatMapLatest: ${System.currentTimeMillis() - startTime}ms") // ~10ms
-}
-```
-
-### Лучшие Практики
-
-1. **Выбирайте правильный оператор**:
-   - Нужен порядок? → `flatMapConcat`
-   - Нужна скорость? → `flatMapMerge`
-   - Важно только последнее? → `flatMapLatest`
-
-2. **Контролируйте конкурентность**:
-   ```kotlin
-   // Избегайте неограниченной конкурентности
-   .flatMapMerge(concurrency = Int.MAX_VALUE) //  Опасно
-   .flatMapMerge(concurrency = 10) //  Контролируемо
-   ```
-
-3. **Учитывайте ограничения ресурсов**:
-   ```kotlin
-   // Ограничение конкурентных сетевых запросов
-   val maxConcurrentRequests = 5
-   requests.flatMapMerge(maxConcurrentRequests) { makeRequest(it) }
-   ```
-
-4. **Обрабатывайте ошибки правильно**:
-   ```kotlin
-   .flatMapMerge { item ->
-       flow { emit(process(item)) }
-           .catch { e -> emit(defaultValue) }
-   }
-   ```
-
-5. **Учитывайте память**:
-   - `flatMapMerge` держит несколько потоков в памяти
-   - `flatMapLatest` наиболее эффективен по памяти (только один активный)
-   - `flatMapConcat` умеренное использование памяти
-
-### Распространенные Ошибки
-
-1. **Использование flatMapConcat вместо flatMapMerge**:
-   ```kotlin
-   //  Медленно: обработка 1000 элементов последовательно
-   (1..1000).asFlow().flatMapConcat { fetchData(it) }
-
-   //  Быстро: обработка 10 одновременно
-   (1..1000).asFlow().flatMapMerge(10) { fetchData(it) }
-   ```
-
-2. **Забывание об отмене с flatMapLatest**:
-   ```kotlin
-   //  Утечка ресурсов если не учитывается отмена
-   searchQuery.flatMapLatest { query ->
-       flow {
-           val connection = openConnection() // Не отменяется!
-           // ...
-       }
-   }
-
-   //  Правильная отмена
-   searchQuery.flatMapLatest { query ->
-       flow {
-           val connection = openConnection()
-           try {
-               // ...
-           } finally {
-               connection.close()
-           }
-       }
-   }
-   ```
-
-3. **Не настройка конкурентности**:
-   ```kotlin
-   //  Конкурентность по умолчанию может быть слишком большой
-   .flatMapMerge { ... }
-
-   //  Явно установлено в зависимости от случая
-   .flatMapMerge(concurrency = 3) { ... }
-   ```
-
-**Краткое содержание**: Операторы Flow трансформируют потоки разными способами. flatMapConcat обрабатывает последовательно сохраняя порядок, flatMapMerge обрабатывает конкурентно с настраиваемой конкурентностью для максимальной пропускной способности, а flatMapLatest отменяет предыдущие потоки оставляя только последний. Пользовательские операторы создаются комбинированием существующих. Выбор зависит от требований к порядку, производительности и ограничений ресурсов.
-
----
 
 ## References
 - [Flow documentation - Kotlin](https://kotlinlang.org/docs/flow.html)

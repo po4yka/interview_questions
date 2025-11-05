@@ -28,11 +28,158 @@ tags: [constructors, difficulty/easy, init-block, initialization, kotlin]
 date created: Saturday, October 18th 2025, 3:12:23 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое блок init в Kotlin?
+
+---
 
 # Question (EN)
 > What is an init block in Kotlin?
-# Вопрос (RU)
-> Что такое блок init в Kotlin?
+## Ответ (RU)
+
+Класс в Kotlin может иметь **первичный конструктор** и один или несколько **вторичных конструкторов**. Первичный конструктор не может содержать никакого кода. Код инициализации можно поместить в **блоки инициализации**, которые обозначаются ключевым словом `init`.
+
+### Ключевые Моменты
+
+1. **Код в блоках инициализации фактически становится частью первичного конструктора** - Блок init выполняется как часть инициализации объекта
+2. **Делегирование к первичному конструктору происходит как первый оператор** - Даже во вторичных конструкторах блоки init выполняются первыми
+3. **Блоки инициализации выполняются в том порядке, в котором они появляются** - Вы можете иметь несколько блоков init
+4. **Блоки init выполняются, даже если нет первичного конструктора** - Делегирование происходит неявно
+
+### Базовый Пример
+
+```kotlin
+class Person(val name: String, val age: Int) {
+    init {
+        println("Person created: $name, age $age")
+        require(age >= 0) { "Age cannot be negative" }
+    }
+}
+
+val person = Person("Alice", 25)
+// Вывод: Person created: Alice, age 25
+```
+
+### Несколько Блоков Init
+
+```kotlin
+class User(val username: String) {
+    val createdAt: Long
+
+    init {
+        println("First init block")
+        createdAt = System.currentTimeMillis()
+    }
+
+    val id = generateId()  // Инициализатор свойства
+
+    init {
+        println("Second init block")
+        println("User $username created at $createdAt with id $id")
+    }
+
+    private fun generateId(): String = java.util.UUID.randomUUID().toString()
+}
+
+// Порядок выполнения:
+// 1. Первый блок init
+// 2. Инициализатор свойства (id = generateId())
+// 3. Второй блок init
+```
+
+### Блок Init Со Вторичным Конструктором
+
+```kotlin
+class Rectangle(val width: Int, val height: Int) {
+    val area: Int
+
+    init {
+        println("Primary constructor - calculating area")
+        area = width * height
+    }
+
+    // Вторичный конструктор
+    constructor(side: Int) : this(side, side) {
+        println("Secondary constructor - creating square")
+    }
+}
+
+val square = Rectangle(5)
+// Вывод:
+// Primary constructor - calculating area
+// Secondary constructor - creating square
+```
+
+### Общие Случаи Использования
+
+#### 1. Валидация
+
+```kotlin
+class Email(val address: String) {
+    init {
+        require(address.contains("@")) {
+            "Invalid email format"
+        }
+    }
+}
+```
+
+#### 2. Вычисляемые Свойства
+
+```kotlin
+class Circle(val radius: Double) {
+    val area: Double
+    val circumference: Double
+
+    init {
+        area = Math.PI * radius * radius
+        circumference = 2 * Math.PI * radius
+    }
+}
+```
+
+#### 3. Логирование И Отладка
+
+```kotlin
+class DatabaseConnection(val url: String) {
+    init {
+        println("Connecting to database at $url")
+        // Логика подключения здесь
+    }
+}
+```
+
+#### 4. Сложная Логика Инициализации
+
+```kotlin
+class Configuration(val env: String) {
+    val apiEndpoint: String
+    val timeout: Int
+    val retries: Int
+
+    init {
+        when (env) {
+            "production" -> {
+                apiEndpoint = "https://api.prod.com"
+                timeout = 30000
+                retries = 3
+            }
+            "staging" -> {
+                apiEndpoint = "https://api.staging.com"
+                timeout = 60000
+                retries = 5
+            }
+            else -> {
+                apiEndpoint = "http://localhost:8080"
+                timeout = 120000
+                retries = 10
+            }
+        }
+    }
+}
+```
+
+**Краткое содержание**: Блоки init — это специальные блоки кода с ключевым словом `init`, которые выполняются во время инициализации объекта. Они выполняются в порядке появления в теле класса, становятся частью первичного конструктора и выполняются перед телами вторичных конструкторов. Они полезны для валидации, сложной логики инициализации и вычисляемых свойств.
 
 ---
 
@@ -181,154 +328,6 @@ class Configuration(val env: String) {
 ```
 
 **English Summary**: Init blocks are special code blocks prefixed with the `init` keyword that execute during object initialization. They run in the order they appear in the class body, become part of the primary constructor, and execute before secondary constructor bodies. They're useful for validation, complex initialization logic, and computed properties.
-
-## Ответ (RU)
-
-Класс в Kotlin может иметь **первичный конструктор** и один или несколько **вторичных конструкторов**. Первичный конструктор не может содержать никакого кода. Код инициализации можно поместить в **блоки инициализации**, которые обозначаются ключевым словом `init`.
-
-### Ключевые Моменты
-
-1. **Код в блоках инициализации фактически становится частью первичного конструктора** - Блок init выполняется как часть инициализации объекта
-2. **Делегирование к первичному конструктору происходит как первый оператор** - Даже во вторичных конструкторах блоки init выполняются первыми
-3. **Блоки инициализации выполняются в том порядке, в котором они появляются** - Вы можете иметь несколько блоков init
-4. **Блоки init выполняются, даже если нет первичного конструктора** - Делегирование происходит неявно
-
-### Базовый Пример
-
-```kotlin
-class Person(val name: String, val age: Int) {
-    init {
-        println("Person created: $name, age $age")
-        require(age >= 0) { "Age cannot be negative" }
-    }
-}
-
-val person = Person("Alice", 25)
-// Вывод: Person created: Alice, age 25
-```
-
-### Несколько Блоков Init
-
-```kotlin
-class User(val username: String) {
-    val createdAt: Long
-
-    init {
-        println("First init block")
-        createdAt = System.currentTimeMillis()
-    }
-
-    val id = generateId()  // Инициализатор свойства
-
-    init {
-        println("Second init block")
-        println("User $username created at $createdAt with id $id")
-    }
-
-    private fun generateId(): String = java.util.UUID.randomUUID().toString()
-}
-
-// Порядок выполнения:
-// 1. Первый блок init
-// 2. Инициализатор свойства (id = generateId())
-// 3. Второй блок init
-```
-
-### Блок Init Со Вторичным Конструктором
-
-```kotlin
-class Rectangle(val width: Int, val height: Int) {
-    val area: Int
-
-    init {
-        println("Primary constructor - calculating area")
-        area = width * height
-    }
-
-    // Вторичный конструктор
-    constructor(side: Int) : this(side, side) {
-        println("Secondary constructor - creating square")
-    }
-}
-
-val square = Rectangle(5)
-// Вывод:
-// Primary constructor - calculating area
-// Secondary constructor - creating square
-```
-
-### Общие Случаи Использования
-
-#### 1. Валидация
-
-```kotlin
-class Email(val address: String) {
-    init {
-        require(address.contains("@")) {
-            "Invalid email format"
-        }
-    }
-}
-```
-
-#### 2. Вычисляемые Свойства
-
-```kotlin
-class Circle(val radius: Double) {
-    val area: Double
-    val circumference: Double
-
-    init {
-        area = Math.PI * radius * radius
-        circumference = 2 * Math.PI * radius
-    }
-}
-```
-
-#### 3. Логирование И Отладка
-
-```kotlin
-class DatabaseConnection(val url: String) {
-    init {
-        println("Connecting to database at $url")
-        // Логика подключения здесь
-    }
-}
-```
-
-#### 4. Сложная Логика Инициализации
-
-```kotlin
-class Configuration(val env: String) {
-    val apiEndpoint: String
-    val timeout: Int
-    val retries: Int
-
-    init {
-        when (env) {
-            "production" -> {
-                apiEndpoint = "https://api.prod.com"
-                timeout = 30000
-                retries = 3
-            }
-            "staging" -> {
-                apiEndpoint = "https://api.staging.com"
-                timeout = 60000
-                retries = 5
-            }
-            else -> {
-                apiEndpoint = "http://localhost:8080"
-                timeout = 120000
-                retries = 10
-            }
-        }
-    }
-}
-```
-
-**Краткое содержание**: Блоки init — это специальные блоки кода с ключевым словом `init`, которые выполняются во время инициализации объекта. Они выполняются в порядке появления в теле класса, становятся частью первичного конструктора и выполняются перед телами вторичных конструкторов. Они полезны для валидации, сложной логики инициализации и вычисляемых свойств.
-
----
 
 ## References
 - [Classes - Kotlin Documentation](https://kotlinlang.org/docs/reference/classes.html)

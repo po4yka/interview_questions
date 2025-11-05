@@ -17,16 +17,50 @@ tags: [difficulty/medium, oop, programming-languages, sealed-classes, type-hiera
 date created: Friday, October 31st 2025, 6:32:40 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Что Такое Sealed Классы И Зачем Они Нужны?
-
-# Question (EN)
-> What are sealed classes and why are they needed?
 
 # Вопрос (RU)
 > Что такое sealed классы и зачем они нужны?
 
 ---
+
+# Question (EN)
+> What are sealed classes and why are they needed?
+
+## Ответ (RU)
+
+Sealed классы в Kotlin позволяют **ограничить набор подклассов**, которые могут быть созданы для класса, обеспечивая строгую, закрытую иерархию.
+
+**Зачем они нужны:**
+
+1. **Конечный набор состояний**: Идеально подходят для данных, которые могут иметь ограниченное число состояний
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+```
+
+2. **Исчерпывающие when-выражения**: Компилятор проверяет, что все случаи охвачены
+```kotlin
+when (result) {
+    is Result.Success -> showData(result.data)
+    is Result.Error -> showError(result.message)
+    Result.Loading -> showLoading()
+    // 'else' не нужен - компилятор знает все случаи!
+}
+```
+
+3. **Типобезопасность**: Все возможные типы известны во время компиляции
+
+4. **Лучше, чем enum**: Могут иметь разные свойства и методы для каждого подкласса
+
+**Преимущества:**
+- Код более безопасен и понятен
+- Компилятор помогает отловить пропущенные случаи
+- Лучше, чем использовать несколько nullable полей
+- Идеально для конечных автоматов, ответов API, навигации
 
 ## Answer (EN)
 
@@ -64,41 +98,6 @@ when (result) {
 - Perfect for state machines, API responses, navigation
 
 ---
-
-## Ответ (RU)
-
-Sealed классы в Kotlin позволяют **ограничить набор подклассов**, которые могут быть созданы для класса, обеспечивая строгую, закрытую иерархию.
-
-**Зачем они нужны:**
-
-1. **Конечный набор состояний**: Идеально подходят для данных, которые могут иметь ограниченное число состояний
-```kotlin
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val message: String) : Result<Nothing>()
-    object Loading : Result<Nothing>()
-}
-```
-
-2. **Исчерпывающие when-выражения**: Компилятор проверяет, что все случаи охвачены
-```kotlin
-when (result) {
-    is Result.Success -> showData(result.data)
-    is Result.Error -> showError(result.message)
-    Result.Loading -> showLoading()
-    // 'else' не нужен - компилятор знает все случаи!
-}
-```
-
-3. **Типобезопасность**: Все возможные типы известны во время компиляции
-
-4. **Лучше, чем enum**: Могут иметь разные свойства и методы для каждого подкласса
-
-**Преимущества:**
-- Код более безопасен и понятен
-- Компилятор помогает отловить пропущенные случаи
-- Лучше, чем использовать несколько nullable полей
-- Идеально для конечных автоматов, ответов API, навигации
 
 ## Follow-ups
 

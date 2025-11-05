@@ -17,12 +17,171 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:12 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?
+
+---
 
 # Question (EN)
 > How do you use Semaphore in Kotlin coroutines for rate limiting and resource pooling? What's the difference between Semaphore and Mutex?
 
-# Вопрос (RU)
-> Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?
+## Ответ (RU)
+
+В продакшн-системах часто нужно ограничивать конкурентный доступ к ресурсам: ограничить количество одновременных API вызовов, управлять пулами подключений или контролировать параллельные загрузки. **Semaphore** из `kotlinx.coroutines.sync` предоставляет механизм на основе приостановки для ограничения конкурентного доступа без блокировки потоков.
+
+
+
+### Что Такое Semaphore?
+
+**Semaphore** - это примитив синхронизации, который поддерживает набор **разрешений (permits)**. Корутины получают разрешения для продолжения и освобождают их после завершения. В отличие от Mutex (который по сути является Semaphore с 1 разрешением), Semaphore может иметь несколько разрешений, позволяя контролируемый конкурентный доступ.
+
+```kotlin
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+
+// Разрешить максимум 3 одновременные операции
+val semaphore = Semaphore(permits = 3)
+
+suspend fun limitedOperation() {
+    semaphore.withPermit {
+        // Только 3 корутины могут быть здесь одновременно
+        performExpensiveOperation()
+    }
+}
+```
+
+### Ключевые Концепции
+
+**Разрешения (Permits):**
+- Количество корутин, которые могут войти в критическую секцию одновременно
+- `Semaphore(1)` = Mutex (взаимное исключение)
+- `Semaphore(N)` = N одновременных операций разрешено
+
+**Операции:**
+- `acquire()` - Получить разрешение, приостановить если недоступно
+- `release()` - Освободить разрешение
+- `withPermit { }` - Получить, выполнить, освободить (рекомендуется)
+- `tryAcquire()` - Попытаться получить без приостановки
+- `availablePermits` - Количество доступных разрешений
+
+### Паттерн 1: Ограничение Скорости API Вызовов
+
+```kotlin
+class RateLimitedApiClient(maxConcurrent: Int = 5) {
+    private val semaphore = Semaphore(maxConcurrent)
+
+    suspend fun makeRequest(url: String): Result<String> {
+        return semaphore.withPermit {
+            try {
+                val response = performNetworkRequest(url)
+                Result.success(response)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    private suspend fun performNetworkRequest(url: String): String {
+        delay(500) // Имитация сетевого вызова
+        return "Ответ от $url"
+    }
+}
+```
+
+### Паттерн 2: Реальный Пример Android Retrofit
+
+```kotlin
+class ImageDownloadRepository(
+    private val api: ImageApi,
+    maxConcurrentDownloads: Int = 3
+) {
+    private val downloadSemaphore = Semaphore(maxConcurrentDownloads)
+
+    suspend fun downloadImages(urls: List<String>): List<Result<Bitmap>> {
+        return coroutineScope {
+            urls.map { url ->
+                async {
+                    downloadImage(url)
+                }
+            }.awaitAll()
+        }
+    }
+
+    private suspend fun downloadImage(url: String): Result<Bitmap> {
+        return downloadSemaphore.withPermit {
+            try {
+                Log.d("Download", "Начало загрузки: $url")
+                val response = api.downloadImage(url)
+                val bitmap = response.byteStream().use { stream ->
+                    BitmapFactory.decodeStream(stream)
+                }
+                Log.d("Download", "Завершена загрузка: $url")
+                Result.success(bitmap)
+            } catch (e: Exception) {
+                Log.e("Download", "Ошибка загрузки: $url", e)
+                Result.failure(e)
+            }
+        }
+    }
+}
+```
+
+### Паттерн 3: Пул Подключений К Базе Данных
+
+```kotlin
+class DatabaseConnectionPool(
+    private val maxConnections: Int = 10
+) {
+    private val semaphore = Semaphore(maxConnections)
+    private val connections = mutableListOf<DatabaseConnection>()
+    private val mutex = Mutex() // Защита списка подключений
+
+    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T {
+        // Получаем разрешение (ждем если пул исчерпан)
+        semaphore.withPermit {
+            val connection = mutex.withLock {
+                // Пытаемся переиспользовать существующее подключение
+                connections.removeFirstOrNull() ?: createConnection()
+            }
+
+            try {
+                return block(connection)
+            } finally {
+                // Возвращаем подключение в пул
+                mutex.withLock {
+                    if (connection.isValid()) {
+                        connections.add(connection)
+                    } else {
+                        connection.close()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createConnection(): DatabaseConnection {
+        println("Создание нового подключения к БД")
+        return DatabaseConnection()
+    }
+
+    suspend fun close() {
+        mutex.withLock {
+            connections.forEach { it.close() }
+            connections.clear()
+        }
+    }
+}
+```
+
+### Ключевые Выводы
+
+1. **Semaphore = обобщенный Mutex** - Разрешает N одновременных доступов
+2. **Идеален для ограничения скорости** - Контролирует конкурентные API вызовы
+3. **Используйте `withPermit`** - Обеспечивает правильную очистку при исключениях
+4. **Правильно подбирайте количество разрешений** - На основе ограничений ресурсов
+5. **Комбинируйте с другими ограничителями** - Конкурентность + временное ограничение
+6. **Мониторьте производительность** - Корректируйте разрешения на основе поведения системы
+7. **Тестируйте конкурентные сценарии** - Проверяйте соблюдение лимитов
 
 ---
 
@@ -775,166 +934,6 @@ class SemaphoreTest {
 5. **Combine with other limiters** - Concurrency + time-based rate limiting
 6. **Monitor performance** - Adjust permits based on system behavior
 7. **Test concurrent scenarios** - Verify limits are respected
-
----
-
-## Ответ (RU)
-
-В продакшн-системах часто нужно ограничивать конкурентный доступ к ресурсам: ограничить количество одновременных API вызовов, управлять пулами подключений или контролировать параллельные загрузки. **Semaphore** из `kotlinx.coroutines.sync` предоставляет механизм на основе приостановки для ограничения конкурентного доступа без блокировки потоков.
-
-
-
-### Что Такое Semaphore?
-
-**Semaphore** - это примитив синхронизации, который поддерживает набор **разрешений (permits)**. Корутины получают разрешения для продолжения и освобождают их после завершения. В отличие от Mutex (который по сути является Semaphore с 1 разрешением), Semaphore может иметь несколько разрешений, позволяя контролируемый конкурентный доступ.
-
-```kotlin
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
-
-// Разрешить максимум 3 одновременные операции
-val semaphore = Semaphore(permits = 3)
-
-suspend fun limitedOperation() {
-    semaphore.withPermit {
-        // Только 3 корутины могут быть здесь одновременно
-        performExpensiveOperation()
-    }
-}
-```
-
-### Ключевые Концепции
-
-**Разрешения (Permits):**
-- Количество корутин, которые могут войти в критическую секцию одновременно
-- `Semaphore(1)` = Mutex (взаимное исключение)
-- `Semaphore(N)` = N одновременных операций разрешено
-
-**Операции:**
-- `acquire()` - Получить разрешение, приостановить если недоступно
-- `release()` - Освободить разрешение
-- `withPermit { }` - Получить, выполнить, освободить (рекомендуется)
-- `tryAcquire()` - Попытаться получить без приостановки
-- `availablePermits` - Количество доступных разрешений
-
-### Паттерн 1: Ограничение Скорости API Вызовов
-
-```kotlin
-class RateLimitedApiClient(maxConcurrent: Int = 5) {
-    private val semaphore = Semaphore(maxConcurrent)
-
-    suspend fun makeRequest(url: String): Result<String> {
-        return semaphore.withPermit {
-            try {
-                val response = performNetworkRequest(url)
-                Result.success(response)
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
-        }
-    }
-
-    private suspend fun performNetworkRequest(url: String): String {
-        delay(500) // Имитация сетевого вызова
-        return "Ответ от $url"
-    }
-}
-```
-
-### Паттерн 2: Реальный Пример Android Retrofit
-
-```kotlin
-class ImageDownloadRepository(
-    private val api: ImageApi,
-    maxConcurrentDownloads: Int = 3
-) {
-    private val downloadSemaphore = Semaphore(maxConcurrentDownloads)
-
-    suspend fun downloadImages(urls: List<String>): List<Result<Bitmap>> {
-        return coroutineScope {
-            urls.map { url ->
-                async {
-                    downloadImage(url)
-                }
-            }.awaitAll()
-        }
-    }
-
-    private suspend fun downloadImage(url: String): Result<Bitmap> {
-        return downloadSemaphore.withPermit {
-            try {
-                Log.d("Download", "Начало загрузки: $url")
-                val response = api.downloadImage(url)
-                val bitmap = response.byteStream().use { stream ->
-                    BitmapFactory.decodeStream(stream)
-                }
-                Log.d("Download", "Завершена загрузка: $url")
-                Result.success(bitmap)
-            } catch (e: Exception) {
-                Log.e("Download", "Ошибка загрузки: $url", e)
-                Result.failure(e)
-            }
-        }
-    }
-}
-```
-
-### Паттерн 3: Пул Подключений К Базе Данных
-
-```kotlin
-class DatabaseConnectionPool(
-    private val maxConnections: Int = 10
-) {
-    private val semaphore = Semaphore(maxConnections)
-    private val connections = mutableListOf<DatabaseConnection>()
-    private val mutex = Mutex() // Защита списка подключений
-
-    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T {
-        // Получаем разрешение (ждем если пул исчерпан)
-        semaphore.withPermit {
-            val connection = mutex.withLock {
-                // Пытаемся переиспользовать существующее подключение
-                connections.removeFirstOrNull() ?: createConnection()
-            }
-
-            try {
-                return block(connection)
-            } finally {
-                // Возвращаем подключение в пул
-                mutex.withLock {
-                    if (connection.isValid()) {
-                        connections.add(connection)
-                    } else {
-                        connection.close()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun createConnection(): DatabaseConnection {
-        println("Создание нового подключения к БД")
-        return DatabaseConnection()
-    }
-
-    suspend fun close() {
-        mutex.withLock {
-            connections.forEach { it.close() }
-            connections.clear()
-        }
-    }
-}
-```
-
-### Ключевые Выводы
-
-1. **Semaphore = обобщенный Mutex** - Разрешает N одновременных доступов
-2. **Идеален для ограничения скорости** - Контролирует конкурентные API вызовы
-3. **Используйте `withPermit`** - Обеспечивает правильную очистку при исключениях
-4. **Правильно подбирайте количество разрешений** - На основе ограничений ресурсов
-5. **Комбинируйте с другими ограничителями** - Конкурентность + временное ограничение
-6. **Мониторьте производительность** - Корректируйте разрешения на основе поведения системы
-7. **Тестируйте конкурентные сценарии** - Проверяйте соблюдение лимитов
 
 ---
 

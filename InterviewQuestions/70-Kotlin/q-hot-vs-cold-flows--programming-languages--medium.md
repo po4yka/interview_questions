@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages, react
 date created: Friday, October 31st 2025, 6:31:05 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Hot Vs Cold Flows
-
-# Question (EN)
-> What is the difference between Hot and Cold Flows?
 
 # Вопрос (RU)
 > В чем разница между Hot и Cold Flows?
 
 ---
+
+# Question (EN)
+> What is the difference between Hot and Cold Flows?
+
+## Ответ (RU)
+
+Холодные (cold) — начинают генерировать данные только после подписки Например Flow Observable Горячие (hot) — генерируют данные независимо от подписчиков Например SharedFlow LiveData Broadcast
 
 ## Answer (EN)
 
@@ -310,10 +313,6 @@ class ViewModel {
 | **Resource usage** | New execution per collector | Single execution shared |
 
 ---
-
-## Ответ (RU)
-
-Холодные (cold) — начинают генерировать данные только после подписки Например Flow Observable Горячие (hot) — генерируют данные независимо от подписчиков Например SharedFlow LiveData Broadcast
 
 ## Follow-ups
 

@@ -17,26 +17,25 @@ tags: [collections, difficulty/easy, flatMap, programming-languages, ranges]
 date created: Friday, October 31st 2025, 6:29:33 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Какой Результат Выполнения Выражения Val Result = (1..3).flatMap { listOf(it, it * 2) }?
-
-# Question (EN)
-> What is the result of executing val result = (1..3).flatMap { listOf(it, it * 2) }?
 
 # Вопрос (RU)
 > Какой результат выполнения выражения val result = (1..3).flatMap { listOf(it, it * 2) }?
 
 ---
 
+# Question (EN)
+> What is the result of executing val result = (1..3).flatMap { listOf(it, it * 2) }?
+
+## Ответ (RU)
+
+Результат выполнения выражения будет список [1, 2, 2, 4, 3, 6].
+
 ## Answer (EN)
 
 The result of executing the expression will be the list [1, 2, 2, 4, 3, 6].
 
 ---
-
-## Ответ (RU)
-
-Результат выполнения выражения будет список [1, 2, 2, 4, 3, 6].
 
 ## Follow-ups
 

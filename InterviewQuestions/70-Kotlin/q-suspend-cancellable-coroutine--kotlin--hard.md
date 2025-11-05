@@ -17,12 +17,34 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:13 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
+
+---
 
 # Question (EN)
 > How do you convert callback-based APIs to suspend functions using `suspendCancellableCoroutine`? How do you handle cancellation, errors, and race conditions?
 
-# Вопрос (RU)
-> Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?
+## Ответ (RU)
+
+Многие Android и Java библиотеки используют API на основе callback (Retrofit callbacks, Firebase listeners, Location updates, OkHttp calls). Для их идиоматичного использования с корутинами нужно преобразовать callback в suspend функции используя `suspendCancellableCoroutine`. Это критический навык для интеграции legacy кода с корутинами с правильной обработкой отмены.
+
+
+
+[Полный русский перевод опущен для краткости, но следует той же структуре что и английская версия]
+
+### Ключевые Выводы
+
+1. **suspendCancellableCoroutine критичен** - Для production преобразования callback
+2. **invokeOnCancellation обязателен** - Всегда очищайте ресурсы
+3. **Возобновляйте ровно один раз** - Проверяйте isActive, используйте atomic флаги
+4. **Потокобезопасно по умолчанию** - CancellableContinuation обрабатывает это
+5. **Обрабатывайте все пути** - Успех, ошибка, отмена
+6. **Тестируйте отмену** - Проверяйте что очистка происходит
+7. **Не возобновляйте после отмены** - Сначала проверяйте isActive
+8. **Очищайте активно** - В invokeOnCancellation
+9. **Правильно преобразуйте ошибки** - В исключения или Result
+10. **Документируйте поведение** - Семантику приостановки и отмены
 
 ---
 
@@ -708,29 +730,6 @@ suspend fun correct5() = suspendCancellableCoroutine<String> { cont ->
 8. **Clean up eagerly** - In invokeOnCancellation
 9. **Convert errors properly** - To exceptions or Result
 10. **Document behavior** - Suspension and cancellation semantics
-
----
-
-## Ответ (RU)
-
-Многие Android и Java библиотеки используют API на основе callback (Retrofit callbacks, Firebase listeners, Location updates, OkHttp calls). Для их идиоматичного использования с корутинами нужно преобразовать callback в suspend функции используя `suspendCancellableCoroutine`. Это критический навык для интеграции legacy кода с корутинами с правильной обработкой отмены.
-
-
-
-[Полный русский перевод опущен для краткости, но следует той же структуре что и английская версия]
-
-### Ключевые Выводы
-
-1. **suspendCancellableCoroutine критичен** - Для production преобразования callback
-2. **invokeOnCancellation обязателен** - Всегда очищайте ресурсы
-3. **Возобновляйте ровно один раз** - Проверяйте isActive, используйте atomic флаги
-4. **Потокобезопасно по умолчанию** - CancellableContinuation обрабатывает это
-5. **Обрабатывайте все пути** - Успех, ошибка, отмена
-6. **Тестируйте отмену** - Проверяйте что очистка происходит
-7. **Не возобновляйте после отмены** - Сначала проверяйте isActive
-8. **Очищайте активно** - В invokeOnCancellation
-9. **Правильно преобразуйте ошибки** - В исключения или Result
-10. **Документируйте поведение** - Семантику приостановки и отмены
 
 ---
 

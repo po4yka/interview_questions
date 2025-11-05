@@ -17,16 +17,53 @@ tags: [by-keyword, delegation, difficulty/easy, programming-languages]
 date created: Saturday, November 1st 2025, 1:26:53 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # Can You Call a Function or Constructor after by
-
-# Question (EN)
-> Can you call a function or constructor after the `by` keyword in Kotlin?
 
 # Вопрос (RU)
 > Можно ли вызывать функцию или конструктор после ключевого слова `by` в Kotlin?
 
 ---
+
+# Question (EN)
+> Can you call a function or constructor after the `by` keyword in Kotlin?
+
+## Ответ (RU)
+
+Да, после `by` можно вызывать конструкторы. Ключевое слово `by` ожидает выражение, которое возвращает объект-делегат, а значит можно вызывать конструкторы, функции или использовать любое выражение, возвращающее подходящий делегат.
+
+**Важно:**
+- `by` требует выражение, которое возвращает объект-делегат
+- Можно вызывать конструкторы, возвращающие экземпляры делегатов (наиболее частый случай)
+- Можно вызывать функции, возвращающие делегаты
+- Можно использовать свойства, параметры или любое выражение, возвращающее подходящий делегат
+- Ключевое требование: выражение должно возвращать объект с правильным контрактом делегирования
+
+### Что Работает С `by`
+
+```kotlin
+//  РАБОТАЕТ: Вызов функции, возвращающей делегат
+val value1: String by lazy { "value" }
+
+//  РАБОТАЕТ: Ссылка на свойство
+private val backingList = mutableListOf<String>()
+val list: List<String> by backingList
+
+//  РАБОТАЕТ: Вызов функции со встроенной фабрикой делегатов
+var observed: String by Delegates.observable("") { _, _, _ -> }
+
+//  РАБОТАЕТ: Вызов конструктора, возвращающего делегат
+var logged: String by LoggingDelegate("initial")
+
+//  РАБОТАЕТ: Вызов функции, возвращающей делегат
+private fun getDelegate() = lazy { "value" }
+val value2: String by getDelegate()
+
+//  НЕ РАБОТАЕТ: Вызов функции, не возвращающей делегат
+// val value3: String by someFunction()  // ОШИБКА, если someFunction() возвращает String
+
+//  НЕ РАБОТАЕТ: Выражение, не возвращающее делегат
+// val value4: String by "string".uppercase()  // ОШИБКА - String не является делегатом
+```
 
 ## Answer (EN)
 
@@ -339,44 +376,6 @@ class DelegationSummary {
 ```
 
 ---
-
-## Ответ (RU)
-
-Да, после `by` можно вызывать конструкторы. Ключевое слово `by` ожидает выражение, которое возвращает объект-делегат, а значит можно вызывать конструкторы, функции или использовать любое выражение, возвращающее подходящий делегат.
-
-**Важно:**
-- `by` требует выражение, которое возвращает объект-делегат
-- Можно вызывать конструкторы, возвращающие экземпляры делегатов (наиболее частый случай)
-- Можно вызывать функции, возвращающие делегаты
-- Можно использовать свойства, параметры или любое выражение, возвращающее подходящий делегат
-- Ключевое требование: выражение должно возвращать объект с правильным контрактом делегирования
-
-### Что Работает С `by`
-
-```kotlin
-//  РАБОТАЕТ: Вызов функции, возвращающей делегат
-val value1: String by lazy { "value" }
-
-//  РАБОТАЕТ: Ссылка на свойство
-private val backingList = mutableListOf<String>()
-val list: List<String> by backingList
-
-//  РАБОТАЕТ: Вызов функции со встроенной фабрикой делегатов
-var observed: String by Delegates.observable("") { _, _, _ -> }
-
-//  РАБОТАЕТ: Вызов конструктора, возвращающего делегат
-var logged: String by LoggingDelegate("initial")
-
-//  РАБОТАЕТ: Вызов функции, возвращающей делегат
-private fun getDelegate() = lazy { "value" }
-val value2: String by getDelegate()
-
-//  НЕ РАБОТАЕТ: Вызов функции, не возвращающей делегат
-// val value3: String by someFunction()  // ОШИБКА, если someFunction() возвращает String
-
-//  НЕ РАБОТАЕТ: Выражение, не возвращающее делегат
-// val value4: String by "string".uppercase()  // ОШИБКА - String не является делегатом
-```
 
 ## Follow-ups
 

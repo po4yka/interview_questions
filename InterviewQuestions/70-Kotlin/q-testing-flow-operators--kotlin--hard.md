@@ -28,12 +28,65 @@ tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
 date created: Sunday, October 12th 2025, 1:23:06 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как тестировать операторы и трансформации Flow такие как flatMap, debounce, retry и combine? Покрыть тестирование виртуального времени, использование turbine и стратегии тестирования сложных цепочек flow.
+
+---
 
 # Question (EN)
 > How to test Flow operators and transformations like flatMap, debounce, retry, and combine? Cover virtual time testing, turbine usage, and complex flow chain testing strategies.
 
-# Вопрос (RU)
-> Как тестировать операторы и трансформации Flow такие как flatMap, debounce, retry и combine? Покрыть тестирование виртуального времени, использование turbine и стратегии тестирования сложных цепочек flow.
+## Ответ (RU)
+
+Тестирование операторов Flow требует понимания времени выполнения, отмены, обработки ошибок и того, как операторы трансформируют поток данных.
+
+### Тестирование Базовых Трансформаций
+
+```kotlin
+@Test
+fun `map и filter трансформируют данные правильно`() = runTest {
+    val input = flowOf(-1, 0, 1, 2, 3)
+
+    input
+        .filter { it > 0 }
+        .map { "Number: $it" }
+        .test {
+            assertEquals("Number: 1", awaitItem())
+            assertEquals("Number: 2", awaitItem())
+            assertEquals("Number: 3", awaitItem())
+            awaitComplete()
+        }
+}
+```
+
+### Тестирование Операторов Времени
+
+```kotlin
+@Test
+fun `debounce эмитит только после тихого периода`() = runTest {
+    val queries = flow {
+        emit("a")
+        delay(100)
+        emit("ab")
+        delay(100)
+        emit("abc")
+        delay(400) // Дольше, чем debounce timeout
+    }
+
+    queries.debounce(300).test {
+        assertEquals("abc", awaitItem())
+        awaitComplete()
+    }
+}
+```
+
+### Лучшие Практики
+
+1. **Используйте turbine** для тестирования Flow
+2. **Используйте виртуальное время** для контроля таймингов
+3. **Тестируйте цепочки операторов** вместе
+4. **Тестируйте обработку ошибок** с catch и retry
+5. **Используйте fake реализации**, не моки
 
 ---
 
@@ -1197,60 +1250,6 @@ fun goodTest() = runTest {
 - Latest value processing with flatMapLatest
 - Retry with exponential backoff
 - Combined state from multiple flows
-
----
-
-## Ответ (RU)
-
-Тестирование операторов Flow требует понимания времени выполнения, отмены, обработки ошибок и того, как операторы трансформируют поток данных.
-
-### Тестирование Базовых Трансформаций
-
-```kotlin
-@Test
-fun `map и filter трансформируют данные правильно`() = runTest {
-    val input = flowOf(-1, 0, 1, 2, 3)
-
-    input
-        .filter { it > 0 }
-        .map { "Number: $it" }
-        .test {
-            assertEquals("Number: 1", awaitItem())
-            assertEquals("Number: 2", awaitItem())
-            assertEquals("Number: 3", awaitItem())
-            awaitComplete()
-        }
-}
-```
-
-### Тестирование Операторов Времени
-
-```kotlin
-@Test
-fun `debounce эмитит только после тихого периода`() = runTest {
-    val queries = flow {
-        emit("a")
-        delay(100)
-        emit("ab")
-        delay(100)
-        emit("abc")
-        delay(400) // Дольше, чем debounce timeout
-    }
-
-    queries.debounce(300).test {
-        assertEquals("abc", awaitItem())
-        awaitComplete()
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте turbine** для тестирования Flow
-2. **Используйте виртуальное время** для контроля таймингов
-3. **Тестируйте цепочки операторов** вместе
-4. **Тестируйте обработку ошибок** с catch и retry
-5. **Используйте fake реализации**, не моки
 
 ---
 

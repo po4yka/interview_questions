@@ -17,27 +17,26 @@ tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequ
 date created: Friday, October 3rd 2025, 4:14:02 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # В Чем Разница Между Работой С List И Работой С Sequence
-
-# Question (EN)
-> What is the difference between working with list and sequence?
 
 # Вопрос (RU)
 > В чем разница между работой с list и работой с sequence
 
 ---
 
-## Answer (EN)
-
-List is an eager collection where all operations are executed immediately and entirely on all elements at once. Sequence is a lazy collection where operations process elements as needed through a chain. List is suitable for small collections and may use more memory due to intermediate collections. Sequence is efficient for large collections and reduces memory usage.
-
----
+# Question (EN)
+> What is the difference between working with list and sequence?
 
 ## Ответ (RU)
 
 List является жадной коллекцией, где все операции выполняются немедленно и целиком над всеми элементами сразу. Sequence является ленивой коллекцией, где операции обрабатывают элементы по мере необходимости через цепочку. List подходит для небольших коллекций и может использовать больше памяти из-за промежуточных коллекций. Sequence эффективен для больших коллекций и уменьшает использование памяти.
 
+
+---
+
+## Answer (EN)
+
+List is an eager collection where all operations are executed immediately and entirely on all elements at once. Sequence is a lazy collection where operations process elements as needed through a chain. List is suitable for small collections and may use more memory due to intermediate collections. Sequence is efficient for large collections and reduces memory usage.
 
 ---
 

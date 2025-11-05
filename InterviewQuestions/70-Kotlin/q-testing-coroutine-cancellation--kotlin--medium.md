@@ -28,12 +28,67 @@ tags: [cancellation, coroutines, difficulty/medium, kotlin, testing]
 date created: Sunday, October 12th 2025, 1:24:38 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как тестировать сценарии отмены корутин? Покрыть тестирование кооперативной отмены, timeout, ensureActive, CancellationException и очистки ресурсов с NonCancellable.
+
+---
 
 # Question (EN)
 > How to test coroutine cancellation scenarios? Cover testing cooperative cancellation, timeout, ensureActive, CancellationException, and resource cleanup with NonCancellable.
 
-# Вопрос (RU)
-> Как тестировать сценарии отмены корутин? Покрыть тестирование кооперативной отмены, timeout, ensureActive, CancellationException и очистки ресурсов с NonCancellable.
+## Ответ (RU)
+
+Тестирование отмены критически важно для обеспечения правильной очистки ресурсов и ответа на запросы отмены.
+
+### Базовое Тестирование Отмены
+
+```kotlin
+@Test
+fun `корутина может быть отменена`() = runTest {
+    val job = launch {
+        repeat(1000) {
+            delay(100)
+        }
+    }
+
+    advanceTimeBy(250)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(job.isCancelled)
+}
+```
+
+### Тестирование Кооперативной Отмены
+
+```kotlin
+@Test
+fun `ensureActive выбрасывает исключение при отмене`() = runTest {
+    val job = launch {
+        try {
+            repeat(1000000) {
+                ensureActive()
+                // Обработка
+            }
+        } catch (e: CancellationException) {
+            // Ожидается
+        }
+    }
+
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(job.isCancelled)
+}
+```
+
+### Лучшие Практики
+
+1. **Используйте ensureActive** для CPU-интенсивной работы
+2. **Пробрасывайте CancellationException** после очистки
+3. **Используйте NonCancellable** для критичной очистки
+4. **Тестируйте очистку ресурсов** при отмене
+5. **Используйте use()** для автоматической очистки
 
 ---
 
@@ -900,62 +955,6 @@ fun test() = runTest {
 - Catching and suppressing CancellationException
 - Not using NonCancellable for critical cleanup
 - Forgetting to test resource cleanup on cancellation
-
----
-
-## Ответ (RU)
-
-Тестирование отмены критически важно для обеспечения правильной очистки ресурсов и ответа на запросы отмены.
-
-### Базовое Тестирование Отмены
-
-```kotlin
-@Test
-fun `корутина может быть отменена`() = runTest {
-    val job = launch {
-        repeat(1000) {
-            delay(100)
-        }
-    }
-
-    advanceTimeBy(250)
-    job.cancel()
-    advanceUntilIdle()
-
-    assertTrue(job.isCancelled)
-}
-```
-
-### Тестирование Кооперативной Отмены
-
-```kotlin
-@Test
-fun `ensureActive выбрасывает исключение при отмене`() = runTest {
-    val job = launch {
-        try {
-            repeat(1000000) {
-                ensureActive()
-                // Обработка
-            }
-        } catch (e: CancellationException) {
-            // Ожидается
-        }
-    }
-
-    job.cancel()
-    advanceUntilIdle()
-
-    assertTrue(job.isCancelled)
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте ensureActive** для CPU-интенсивной работы
-2. **Пробрасывайте CancellationException** после очистки
-3. **Используйте NonCancellable** для критичной очистки
-4. **Тестируйте очистку ресурсов** при отмене
-5. **Используйте use()** для автоматической очистки
 
 ---
 

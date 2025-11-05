@@ -17,16 +17,49 @@ tags: [difficulty/medium, elvis, null-safety, nullable, operators, programming-l
 date created: Friday, October 31st 2025, 6:30:57 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Такое Null Safety И Как Это Пишется?
-
-# Question (EN)
-> What is null safety and how is it written?
 
 # Вопрос (RU)
 > Что такое null safety и как это пишется?
 
 ---
+
+# Question (EN)
+> What is null safety and how is it written?
+
+## Ответ (RU)
+
+Null safety, или безопасность относительно null, — это концепция, направленная на предотвращение ошибок времени выполнения, которые возникают из-за неожиданного использования null значений (как NullPointerException в Java).
+
+**Возможности null safety в Kotlin:**
+
+1. **Nullable типы**: Типы переменных по умолчанию не допускают null. Используйте `?` чтобы сделать тип nullable:
+```kotlin
+var name: String = "John"     // Не может быть null
+var nullable: String? = null  // Может быть null
+```
+
+2. **Оператор безопасного вызова** `?.`: Безопасный доступ к методам/свойствам:
+```kotlin
+val length = nullable?.length // Возвращает null, если nullable равен null
+```
+
+3. **Оператор Элвис** `?:`: Предоставляет значение по умолчанию:
+```kotlin
+val length = nullable?.length ?: 0 // Возвращает 0, если null
+```
+
+4. **Утверждение not-null** `!!`: Принудительно вызывает NPE (не рекомендуется):
+```kotlin
+val length = nullable!!.length // Выбрасывает NPE, если null
+```
+
+5. **Безопасные приведения** `as?`: Безопасное приведение типов без исключения:
+```kotlin
+val result = value as? String // Возвращает null, если приведение не удалось
+```
+
+Null safety в Kotlin предотвращает большинство ошибок, связанных с null, во время компиляции.
 
 ## Answer (EN)
 
@@ -63,40 +96,6 @@ val result = value as? String // Returns null if cast fails
 Kotlin's null safety prevents most null-related crashes at compile time.
 
 ---
-
-## Ответ (RU)
-
-Null safety, или безопасность относительно null, — это концепция, направленная на предотвращение ошибок времени выполнения, которые возникают из-за неожиданного использования null значений (как NullPointerException в Java).
-
-**Возможности null safety в Kotlin:**
-
-1. **Nullable типы**: Типы переменных по умолчанию не допускают null. Используйте `?` чтобы сделать тип nullable:
-```kotlin
-var name: String = "John"     // Не может быть null
-var nullable: String? = null  // Может быть null
-```
-
-2. **Оператор безопасного вызова** `?.`: Безопасный доступ к методам/свойствам:
-```kotlin
-val length = nullable?.length // Возвращает null, если nullable равен null
-```
-
-3. **Оператор Элвис** `?:`: Предоставляет значение по умолчанию:
-```kotlin
-val length = nullable?.length ?: 0 // Возвращает 0, если null
-```
-
-4. **Утверждение not-null** `!!`: Принудительно вызывает NPE (не рекомендуется):
-```kotlin
-val length = nullable!!.length // Выбрасывает NPE, если null
-```
-
-5. **Безопасные приведения** `as?`: Безопасное приведение типов без исключения:
-```kotlin
-val result = value as? String // Возвращает null, если приведение не удалось
-```
-
-Null safety в Kotlin предотвращает большинство ошибок, связанных с null, во время компиляции.
 
 ## Follow-ups
 

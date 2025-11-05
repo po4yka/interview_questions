@@ -17,16 +17,25 @@ tags: [collections, difficulty/medium, equals, hashcode, object-comparison, prog
 date created: Friday, October 31st 2025, 6:28:52 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Зачем Нужны Методы Equals И Hashcode?
-
-# Question (EN)
-> Why do we need equals and hashCode methods?
 
 # Вопрос (RU)
 > Зачем нужны методы equals и hashcode?
 
 ---
+
+# Question (EN)
+> Why do we need equals and hashCode methods?
+
+## Ответ (RU)
+
+Методы `equals()` и `hashCode()` играют центральную роль в сравнении объектов и управлении ими в коллекциях.
+
+**equals()** определяет равенство объектов по содержимому вместо сравнения ссылок.
+
+**hashCode()** возвращает хеш-код объекта для использования в хеш-таблицах.
+
+Соблюдение контракта между `equals()` и `hashCode()` критически важно для правильной работы коллекций, основанных на хеш-таблицах.
 
 ## Answer (EN)
 
@@ -139,16 +148,6 @@ class Book(val isbn: String, val title: String) {
 - **data class**: Auto-generates both methods
 
 ---
-
-## Ответ (RU)
-
-Методы `equals()` и `hashCode()` играют центральную роль в сравнении объектов и управлении ими в коллекциях.
-
-**equals()** определяет равенство объектов по содержимому вместо сравнения ссылок.
-
-**hashCode()** возвращает хеш-код объекта для использования в хеш-таблицах.
-
-Соблюдение контракта между `equals()` и `hashCode()` критически важно для правильной работы коллекций, основанных на хеш-таблицах.
 
 ## Follow-ups
 

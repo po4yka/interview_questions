@@ -17,16 +17,19 @@ tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memor
 date created: Saturday, October 4th 2025, 1:23:34 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Что Происходит С Объектами, Которые Больше Не Нужны?
-
-# Question (EN)
-> What happens to objects that are no longer needed?
 
 # Вопрос (RU)
 > Что происходит с объектами, которые больше не нужны?
 
 ---
+
+# Question (EN)
+> What happens to objects that are no longer needed?
+
+## Ответ (RU)
+
+Объекты, которые больше не имеют активных ссылок, считаются мусором. Такие объекты автоматически удаляются сборщиком мусора, освобождая память для новых объектов. Это происходит в фоновом режиме и не требует прямого вмешательства разработчика.
 
 ## Answer (EN)
 
@@ -174,10 +177,6 @@ Unneeded objects (no active references) are:
 This is automatic memory management in Kotlin/Java!
 
 ---
-
-## Ответ (RU)
-
-Объекты, которые больше не имеют активных ссылок, считаются мусором. Такие объекты автоматически удаляются сборщиком мусора, освобождая память для новых объектов. Это происходит в фоновом режиме и не требует прямого вмешательства разработчика.
 
 ## Follow-ups
 

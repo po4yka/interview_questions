@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages, react
 date created: Friday, October 31st 2025, 6:30:46 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Implementing Flow for Shopping Cart Management
-
-# Question (EN)
-> How to implement Flow in an application when you need to manage the entire shopping cart on the phone?
 
 # Вопрос (RU)
 > Как реализовать работу Flow в приложении, когда самому нужно менеджерить всю корзину на телефоне?
 
 ---
+
+# Question (EN)
+> How to implement Flow in an application when you need to manage the entire shopping cart on the phone?
+
+## Ответ (RU)
+
+Используйте Flow для управления состоянием корзины обновляйте данные через методы emit или stateFlow чтобы динамически отслеживать изменения Реализуйте обработку добавления удаления обновления товаров через действия которые изменяют состояние корзины
 
 ## Answer (EN)
 
@@ -455,10 +458,6 @@ class ShoppingCartManagerTest {
 ```
 
 ---
-
-## Ответ (RU)
-
-Используйте Flow для управления состоянием корзины обновляйте данные через методы emit или stateFlow чтобы динамически отслеживать изменения Реализуйте обработку добавления удаления обновления товаров через действия которые изменяют состояние корзины
 
 ## Follow-ups
 

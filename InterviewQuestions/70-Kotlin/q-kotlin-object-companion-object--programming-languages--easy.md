@@ -17,16 +17,23 @@ tags: [companion-object, difficulty/easy, object, programming-languages, singlet
 date created: Friday, October 31st 2025, 6:30:57 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Такое Object / Companion Object?
-
-# Question (EN)
-> What is object / companion object?
 
 # Вопрос (RU)
 > Что такое object / companion object?
 
 ---
+
+# Question (EN)
+> What is object / companion object?
+
+## Ответ (RU)
+
+**object** и **companion object** используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
+
+**object** используется для создания одиночного экземпляра класса (реализации паттерна singleton).
+
+**companion object** используется внутри класса и служит для объявления членов класса, доступных без создания экземпляра этого класса (аналогично статическим членам).
 
 ## Answer (EN)
 
@@ -199,14 +206,6 @@ Database.connect()  // Access via class name
 - Both eliminate need for explicit instantiation
 
 ---
-
-## Ответ (RU)
-
-**object** и **companion object** используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
-
-**object** используется для создания одиночного экземпляра класса (реализации паттерна singleton).
-
-**companion object** используется внутри класса и служит для объявления членов класса, доступных без создания экземпляра этого класса (аналогично статическим членам).
 
 ## Follow-ups
 

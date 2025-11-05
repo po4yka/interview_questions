@@ -17,16 +17,92 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 date created: Friday, October 31st 2025, 6:33:20 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # What is the Difference between Data Classes and Sealed Classes?
-
-# Question (EN)
-> What is the difference between data classes and sealed classes in Kotlin?
 
 # Вопрос (RU)
 > В чём разница между data class и sealed class в Kotlin?
 
 ---
+
+# Question (EN)
+> What is the difference between data classes and sealed classes in Kotlin?
+
+## Ответ (RU)
+
+**data class** — класс для хранения данных с автогенерацией `equals()`, `hashCode()`, `copy()`, `toString()`.
+
+**sealed class** — ограниченная иерархия классов, используется с `when` выражениями для exhaustive проверок.
+
+**Ключевые отличия:**
+
+| Аспект | data class | sealed class |
+|--------|-----------|--------------|
+| **Назначение** | Хранение данных | Представление типов/состояний |
+| **Автогенерация** | equals, hashCode, toString, copy, componentN | Ничего |
+| **Наследование** | Не может быть abstract/open/sealed | Абстрактный по умолчанию |
+| **Подклассы** | Нет подклассов | Фиксированный набор подклассов |
+| **Use case** | DTO, модели, значения | Состояния, результаты, when |
+
+### Примеры
+
+**data class - для данных:**
+```kotlin
+data class User(val id: Int, val name: String, val email: String)
+
+val user1 = User(1, "Alice", "alice@example.com")
+val user2 = user1.copy(email = "new@example.com")
+println(user1 == user2)  // false (auto-generated equals)
+println(user1)           // auto-generated toString
+```
+
+**sealed class - для иерархий:**
+```kotlin
+sealed class Result {
+    data class Success(val value: Int) : Result()
+    data class Error(val message: String) : Result()
+    object Loading : Result()
+}
+
+fun handle(result: Result) = when (result) {
+    is Result.Success -> "Value: ${result.value}"
+    is Result.Error -> "Error: ${result.message}"
+    Result.Loading -> "Loading..."
+    // Не нужен else - компилятор знает все типы!
+}
+```
+
+**Когда что использовать:**
+
+**data class:**
+- API ответы и запросы
+- Модели базы данных
+- Конфигурация
+- Value objects
+
+**sealed class:**
+- UI состояния (Loading, Success, Error)
+- Навигация между экранами
+- Результаты операций
+- Конечные наборы типов
+
+**Комбинация:**
+```kotlin
+sealed class PaymentMethod {
+    data class CreditCard(val number: String) : PaymentMethod()
+    data class PayPal(val email: String) : PaymentMethod()
+    object Cash : PaymentMethod()
+}
+
+fun process(method: PaymentMethod) = when (method) {
+    is PaymentMethod.CreditCard -> "Card: ${method.number}"  // data class benefits
+    is PaymentMethod.PayPal -> "PayPal: ${method.email}"
+    PaymentMethod.Cash -> "Cash"
+}
+```
+
+**Ключевое отличие:**
+- data class = "Какие данные здесь хранятся?"
+- sealed class = "Какие возможны варианты/типы?"
 
 ## Answer (EN)
 
@@ -311,83 +387,6 @@ KEY DIFFERENCE:
 ```
 
 ---
-
-## Ответ (RU)
-
-**data class** — класс для хранения данных с автогенерацией `equals()`, `hashCode()`, `copy()`, `toString()`.
-
-**sealed class** — ограниченная иерархия классов, используется с `when` выражениями для exhaustive проверок.
-
-**Ключевые отличия:**
-
-| Аспект | data class | sealed class |
-|--------|-----------|--------------|
-| **Назначение** | Хранение данных | Представление типов/состояний |
-| **Автогенерация** | equals, hashCode, toString, copy, componentN | Ничего |
-| **Наследование** | Не может быть abstract/open/sealed | Абстрактный по умолчанию |
-| **Подклассы** | Нет подклассов | Фиксированный набор подклассов |
-| **Use case** | DTO, модели, значения | Состояния, результаты, when |
-
-### Примеры
-
-**data class - для данных:**
-```kotlin
-data class User(val id: Int, val name: String, val email: String)
-
-val user1 = User(1, "Alice", "alice@example.com")
-val user2 = user1.copy(email = "new@example.com")
-println(user1 == user2)  // false (auto-generated equals)
-println(user1)           // auto-generated toString
-```
-
-**sealed class - для иерархий:**
-```kotlin
-sealed class Result {
-    data class Success(val value: Int) : Result()
-    data class Error(val message: String) : Result()
-    object Loading : Result()
-}
-
-fun handle(result: Result) = when (result) {
-    is Result.Success -> "Value: ${result.value}"
-    is Result.Error -> "Error: ${result.message}"
-    Result.Loading -> "Loading..."
-    // Не нужен else - компилятор знает все типы!
-}
-```
-
-**Когда что использовать:**
-
-**data class:**
-- API ответы и запросы
-- Модели базы данных
-- Конфигурация
-- Value objects
-
-**sealed class:**
-- UI состояния (Loading, Success, Error)
-- Навигация между экранами
-- Результаты операций
-- Конечные наборы типов
-
-**Комбинация:**
-```kotlin
-sealed class PaymentMethod {
-    data class CreditCard(val number: String) : PaymentMethod()
-    data class PayPal(val email: String) : PaymentMethod()
-    object Cash : PaymentMethod()
-}
-
-fun process(method: PaymentMethod) = when (method) {
-    is PaymentMethod.CreditCard -> "Card: ${method.number}"  // data class benefits
-    is PaymentMethod.PayPal -> "PayPal: ${method.email}"
-    PaymentMethod.Cash -> "Cash"
-}
-```
-
-**Ключевое отличие:**
-- data class = "Какие данные здесь хранятся?"
-- sealed class = "Какие возможны варианты/типы?"
 
 ## Follow-ups
 

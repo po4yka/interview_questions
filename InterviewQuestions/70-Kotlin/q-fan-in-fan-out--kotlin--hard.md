@@ -33,12 +33,109 @@ tags: [channels, coroutines, difficulty/hard, fan-in, fan-out, kotlin, load-bala
 date created: Sunday, October 12th 2025, 3:13:16 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Что такое паттерны Fan-in и Fan-out в корутинах Kotlin? Объясните как распределять работу между несколькими воркерами и агрегировать результаты из множества источников.
+
+---
 
 # Question (EN)
 > What are Fan-in and Fan-out patterns in Kotlin coroutines? Explain how to distribute work to multiple workers and aggregate results from multiple sources.
 
-# Вопрос (RU)
-> Что такое паттерны Fan-in и Fan-out в корутинах Kotlin? Объясните как распределять работу между несколькими воркерами и агрегировать результаты из множества источников.
+## Ответ (RU)
+
+**Fan-out** распределяет работу от одного источника к нескольким потребителям (воркерам). **Fan-in** агрегирует результаты от множества производителей в одного потребителя.
+
+### Паттерн Fan-out
+
+Распределение работы между несколькими воркерами для параллельной обработки:
+
+```kotlin
+fun CoroutineScope.produceNumbers() = produce {
+    var x = 1
+    while (x <= 100) {
+        send(x++)
+        delay(10)
+    }
+}
+
+suspend fun main() = coroutineScope {
+    val numbers = produceNumbers()
+    
+    // Fan-out: 5 воркеров потребляют из одного канала
+    repeat(5) { workerId ->
+        launch {
+            for (number in numbers) {
+                println("Воркер $workerId обрабатывает $number")
+                delay(100)
+            }
+        }
+    }
+}
+```
+
+### Паттерн Fan-in
+
+Агрегация результатов от множества производителей:
+
+```kotlin
+fun CoroutineScope.fanIn(
+    channels: List<ReceiveChannel<Int>>
+): ReceiveChannel<Int> = produce {
+    channels.forEach { channel ->
+        launch {
+            for (value in channel) {
+                send(value)
+            }
+        }
+    }
+}
+```
+
+### Комбинированный Fan-out И Fan-in
+
+```kotlin
+class ImageProcessingPipeline(
+    private val scope: CoroutineScope,
+    private val processorCount: Int = 4
+) {
+    private val taskChannel = Channel<ImageTask>(capacity = 50)
+    private val resultChannel = Channel<ProcessedImage>(capacity = 50)
+    
+    init {
+        // Fan-out: Запуск нескольких процессоров
+        repeat(processorCount) { processorId ->
+            scope.launch {
+                imageProcessor(processorId)
+            }
+        }
+    }
+}
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+
+```kotlin
+// Использовать fan-out для параллельной обработки
+val workers = List(5) { processChannel(workerId = it, input) }
+
+// Использовать fan-in для агрегации результатов
+val merged = merge(channel1, channel2, channel3)
+
+// Правильно закрывать каналы
+channel.close()
+```
+
+#### НЕ ДЕЛАТЬ:
+
+```kotlin
+// Не создавать слишком много воркеров
+repeat(1000) { /* воркер */ } // Слишком много!
+
+// Не забывать о capacity канала
+val channel = Channel<Int>() // Rendezvous может блокировать
+```
 
 ---
 
@@ -554,104 +651,6 @@ launch {
         process(task) // Can throw!
     }
 }
-```
-
----
-
-## Ответ (RU)
-
-**Fan-out** распределяет работу от одного источника к нескольким потребителям (воркерам). **Fan-in** агрегирует результаты от множества производителей в одного потребителя.
-
-### Паттерн Fan-out
-
-Распределение работы между несколькими воркерами для параллельной обработки:
-
-```kotlin
-fun CoroutineScope.produceNumbers() = produce {
-    var x = 1
-    while (x <= 100) {
-        send(x++)
-        delay(10)
-    }
-}
-
-suspend fun main() = coroutineScope {
-    val numbers = produceNumbers()
-    
-    // Fan-out: 5 воркеров потребляют из одного канала
-    repeat(5) { workerId ->
-        launch {
-            for (number in numbers) {
-                println("Воркер $workerId обрабатывает $number")
-                delay(100)
-            }
-        }
-    }
-}
-```
-
-### Паттерн Fan-in
-
-Агрегация результатов от множества производителей:
-
-```kotlin
-fun CoroutineScope.fanIn(
-    channels: List<ReceiveChannel<Int>>
-): ReceiveChannel<Int> = produce {
-    channels.forEach { channel ->
-        launch {
-            for (value in channel) {
-                send(value)
-            }
-        }
-    }
-}
-```
-
-### Комбинированный Fan-out И Fan-in
-
-```kotlin
-class ImageProcessingPipeline(
-    private val scope: CoroutineScope,
-    private val processorCount: Int = 4
-) {
-    private val taskChannel = Channel<ImageTask>(capacity = 50)
-    private val resultChannel = Channel<ProcessedImage>(capacity = 50)
-    
-    init {
-        // Fan-out: Запуск нескольких процессоров
-        repeat(processorCount) { processorId ->
-            scope.launch {
-                imageProcessor(processorId)
-            }
-        }
-    }
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-
-```kotlin
-// Использовать fan-out для параллельной обработки
-val workers = List(5) { processChannel(workerId = it, input) }
-
-// Использовать fan-in для агрегации результатов
-val merged = merge(channel1, channel2, channel3)
-
-// Правильно закрывать каналы
-channel.close()
-```
-
-#### НЕ ДЕЛАТЬ:
-
-```kotlin
-// Не создавать слишком много воркеров
-repeat(1000) { /* воркер */ } // Слишком много!
-
-// Не забывать о capacity канала
-val channel = Channel<Int>() // Rendezvous может блокировать
 ```
 
 ---

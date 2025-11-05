@@ -33,12 +33,193 @@ tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, 
 date created: Saturday, November 1st 2025, 9:25:30 am
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> В чём разница между val и var в Kotlin? Когда использовать каждый из них?
+
+---
 
 # Question (EN)
 > What's the difference between val and var in Kotlin? When should you use each?
 
-# Вопрос (RU)
-> В чём разница между val и var в Kotlin? Когда использовать каждый из них?
+## Ответ (RU)
+
+`val` и `var` — ключевые слова для объявления переменных/свойств в Kotlin. Понимание когда использовать каждое из них фундаментально для написания идиоматичного, безопасного Kotlin кода.
+
+### Основное Различие
+
+```kotlin
+val name = "Alice"      // Только для чтения (неизменяемая ссылка)
+var age = 25            // Изменяемая
+
+// name = "Bob"         // Ошибка: Val нельзя переназначить
+age = 26                // OK: Var можно переназначить
+```
+
+**val** = **value** = ссылка только для чтения (как `final` в Java)
+**var** = **variable** = изменяемая ссылка
+
+### Val: Ссылка Только Для Чтения
+
+```kotlin
+val x = 10
+// x = 20  // Ошибка компиляции
+
+val list = mutableListOf(1, 2, 3)
+list.add(4)                // OK: содержимое может меняться
+// list = mutableListOf()  // Ошибка: ссылка не может меняться
+```
+
+**Ключевые моменты о val**:
+1. Ссылку нельзя переназначить
+2. Должна быть инициализирована при объявлении или в init блоке
+3. Может быть присвоена только один раз
+4. НЕ означает, что объект неизменяем
+5. Предпочтительна в Kotlin (подход immutability-first)
+
+### Var: Изменяемая Ссылка
+
+```kotlin
+var counter = 0
+counter = 1      // OK
+counter = 2      // OK
+counter += 10    // OK
+```
+
+**Ключевые моменты о var**:
+1. Ссылку можно переназначить
+2. Можно изменять после инициализации
+3. Использовать когда значение нужно менять со временем
+4. Менее предпочтительна чем val
+
+### Val Это Не Глубокая Неизменяемость
+
+```kotlin
+// Val означает что ссылка только для чтения, НЕ объект
+val person = Person("Alice", 25)
+// person = Person("Bob", 30)    // Ошибка: нельзя переназначить ссылку
+person.age = 26                  // OK если age это var
+
+val numbers = mutableListOf(1, 2, 3)
+// numbers = mutableListOf(4, 5) // Ошибка: нельзя переназначить ссылку
+numbers.add(4)                   // OK: можно изменять содержимое
+numbers.clear()                  // OK: можно изменять содержимое
+
+// Для истинной неизменяемости используйте неизменяемые типы
+val immutableNumbers = listOf(1, 2, 3)
+// immutableNumbers.add(4)       // Ошибка: List<T> неизменяем
+```
+
+### Когда Использовать Val
+
+#### ИСПОЛЬЗОВАТЬ Val Когда:
+
+```kotlin
+// 1. Значение не нужно менять
+val pi = 3.14159
+val appName = "MyApp"
+
+// 2. Параметры конструктора
+class User(val id: Int, val name: String)
+
+// 3. Параметры функции (неявно val)
+fun greet(name: String) {  // name это val по умолчанию
+    // name = "Bob"  // Ошибка
+    println("Hello, $name")
+}
+
+// 4. Локальные переменные которые не меняются
+fun calculateTotal(items: List<Item>): Double {
+    val subtotal = items.sumOf { it.price }
+    val tax = subtotal * 0.1
+    val total = subtotal + tax
+    return total
+}
+
+// 5. Предоставление коллекций только для чтения
+class DataStore {
+    private val _items = mutableListOf<String>()
+    val items: List<String> = _items  // Открыто только для чтения
+}
+```
+
+### Когда Использовать Var
+
+#### ИСПОЛЬЗОВАТЬ Var Когда:
+
+```kotlin
+// 1. Значение нужно менять со временем
+var counter = 0
+counter++
+
+// 2. Накопление результатов в циклах
+var sum = 0
+for (i in 1..10) {
+    sum += i
+}
+
+// 3. Состояние которое меняется
+class Game {
+    var score: Int = 0
+    var isRunning: Boolean = false
+}
+
+// 4. Изменяемое состояние UI
+class ViewModel {
+    var isLoading: Boolean = false
+    var errorMessage: String? = null
+}
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+```kotlin
+// Предпочитать val вместо var (immutability first)
+val name = "Alice"
+val age = 25
+
+// Использовать var только когда необходимо
+var counter = 0
+counter++
+
+// Использовать val для параметров конструктора
+class User(val id: Int, val name: String)
+
+// Использовать паттерн backing property для изменяемого состояния
+class ViewModel {
+    private val _state = MutableStateFlow<State>(State.Initial)
+    val state: StateFlow<State> = _state.asStateFlow()
+}
+```
+
+#### НЕ ДЕЛАТЬ:
+```kotlin
+// Не использовать var когда достаточно val
+var name = "Alice"  // Плохо если name никогда не меняется
+val name = "Alice"  // Лучше
+
+// Не открывать изменяемое состояние напрямую
+class BadViewModel {
+    var state = State.Initial  // Плохо: внешний код может изменить
+}
+
+// Не использовать var для констант
+var PI = 3.14159  // Плохо: должно быть val или const val
+```
+
+### Резюме
+
+| Аспект | val | var |
+|--------|-----|-----|
+| **Изменяемость** | Только для чтения | Изменяемая |
+| **Переназначение** | Нельзя переназначить | Можно переназначить |
+| **Инициализация** | Один раз | Многократно |
+| **Предпочтение** | Предпочтительна (выбор по умолчанию) | Использовать когда необходимо |
+| **Потокобезопасность** | Безопаснее (ссылка не изменится) | Менее безопасна |
+| **Smart Casts** | Работает надёжно | Может не работать |
+| **Java Эквивалент** | final | non-final |
+
+**Общее правило**: Начинайте с `val`, меняйте на `var` только если нужна изменяемость.
 
 ---
 
@@ -528,188 +709,6 @@ class AppConfig {
 | **Java Equivalent** | final | non-final |
 
 **General Rule**: Start with `val`, change to `var` only if you need mutability.
-
----
-
-## Ответ (RU)
-
-`val` и `var` — ключевые слова для объявления переменных/свойств в Kotlin. Понимание когда использовать каждое из них фундаментально для написания идиоматичного, безопасного Kotlin кода.
-
-### Основное Различие
-
-```kotlin
-val name = "Alice"      // Только для чтения (неизменяемая ссылка)
-var age = 25            // Изменяемая
-
-// name = "Bob"         // Ошибка: Val нельзя переназначить
-age = 26                // OK: Var можно переназначить
-```
-
-**val** = **value** = ссылка только для чтения (как `final` в Java)
-**var** = **variable** = изменяемая ссылка
-
-### Val: Ссылка Только Для Чтения
-
-```kotlin
-val x = 10
-// x = 20  // Ошибка компиляции
-
-val list = mutableListOf(1, 2, 3)
-list.add(4)                // OK: содержимое может меняться
-// list = mutableListOf()  // Ошибка: ссылка не может меняться
-```
-
-**Ключевые моменты о val**:
-1. Ссылку нельзя переназначить
-2. Должна быть инициализирована при объявлении или в init блоке
-3. Может быть присвоена только один раз
-4. НЕ означает, что объект неизменяем
-5. Предпочтительна в Kotlin (подход immutability-first)
-
-### Var: Изменяемая Ссылка
-
-```kotlin
-var counter = 0
-counter = 1      // OK
-counter = 2      // OK
-counter += 10    // OK
-```
-
-**Ключевые моменты о var**:
-1. Ссылку можно переназначить
-2. Можно изменять после инициализации
-3. Использовать когда значение нужно менять со временем
-4. Менее предпочтительна чем val
-
-### Val Это Не Глубокая Неизменяемость
-
-```kotlin
-// Val означает что ссылка только для чтения, НЕ объект
-val person = Person("Alice", 25)
-// person = Person("Bob", 30)    // Ошибка: нельзя переназначить ссылку
-person.age = 26                  // OK если age это var
-
-val numbers = mutableListOf(1, 2, 3)
-// numbers = mutableListOf(4, 5) // Ошибка: нельзя переназначить ссылку
-numbers.add(4)                   // OK: можно изменять содержимое
-numbers.clear()                  // OK: можно изменять содержимое
-
-// Для истинной неизменяемости используйте неизменяемые типы
-val immutableNumbers = listOf(1, 2, 3)
-// immutableNumbers.add(4)       // Ошибка: List<T> неизменяем
-```
-
-### Когда Использовать Val
-
-#### ИСПОЛЬЗОВАТЬ Val Когда:
-
-```kotlin
-// 1. Значение не нужно менять
-val pi = 3.14159
-val appName = "MyApp"
-
-// 2. Параметры конструктора
-class User(val id: Int, val name: String)
-
-// 3. Параметры функции (неявно val)
-fun greet(name: String) {  // name это val по умолчанию
-    // name = "Bob"  // Ошибка
-    println("Hello, $name")
-}
-
-// 4. Локальные переменные которые не меняются
-fun calculateTotal(items: List<Item>): Double {
-    val subtotal = items.sumOf { it.price }
-    val tax = subtotal * 0.1
-    val total = subtotal + tax
-    return total
-}
-
-// 5. Предоставление коллекций только для чтения
-class DataStore {
-    private val _items = mutableListOf<String>()
-    val items: List<String> = _items  // Открыто только для чтения
-}
-```
-
-### Когда Использовать Var
-
-#### ИСПОЛЬЗОВАТЬ Var Когда:
-
-```kotlin
-// 1. Значение нужно менять со временем
-var counter = 0
-counter++
-
-// 2. Накопление результатов в циклах
-var sum = 0
-for (i in 1..10) {
-    sum += i
-}
-
-// 3. Состояние которое меняется
-class Game {
-    var score: Int = 0
-    var isRunning: Boolean = false
-}
-
-// 4. Изменяемое состояние UI
-class ViewModel {
-    var isLoading: Boolean = false
-    var errorMessage: String? = null
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-```kotlin
-// Предпочитать val вместо var (immutability first)
-val name = "Alice"
-val age = 25
-
-// Использовать var только когда необходимо
-var counter = 0
-counter++
-
-// Использовать val для параметров конструктора
-class User(val id: Int, val name: String)
-
-// Использовать паттерн backing property для изменяемого состояния
-class ViewModel {
-    private val _state = MutableStateFlow<State>(State.Initial)
-    val state: StateFlow<State> = _state.asStateFlow()
-}
-```
-
-#### НЕ ДЕЛАТЬ:
-```kotlin
-// Не использовать var когда достаточно val
-var name = "Alice"  // Плохо если name никогда не меняется
-val name = "Alice"  // Лучше
-
-// Не открывать изменяемое состояние напрямую
-class BadViewModel {
-    var state = State.Initial  // Плохо: внешний код может изменить
-}
-
-// Не использовать var для констант
-var PI = 3.14159  // Плохо: должно быть val или const val
-```
-
-### Резюме
-
-| Аспект | val | var |
-|--------|-----|-----|
-| **Изменяемость** | Только для чтения | Изменяемая |
-| **Переназначение** | Нельзя переназначить | Можно переназначить |
-| **Инициализация** | Один раз | Многократно |
-| **Предпочтение** | Предпочтительна (выбор по умолчанию) | Использовать когда необходимо |
-| **Потокобезопасность** | Безопаснее (ссылка не изменится) | Менее безопасна |
-| **Smart Casts** | Работает надёжно | Может не работать |
-| **Java Эквивалент** | final | non-final |
-
-**Общее правило**: Начинайте с `val`, меняйте на `var` только если нужна изменяемость.
 
 ---
 

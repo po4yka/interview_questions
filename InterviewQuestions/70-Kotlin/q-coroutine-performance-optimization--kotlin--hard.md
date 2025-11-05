@@ -28,12 +28,131 @@ tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
 date created: Saturday, October 18th 2025, 12:40:07 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140021
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140021
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140021
+## Ответ (RU)
+
+Оптимизация производительности корутин включает понимание выбора диспетчеров, минимизацию переключения контекста, эффективное использование ресурсов и избежание распространенных проблем производительности.
+
+### Ключевые Принципы Производительности
+
+**1. Выбор правильного Dispatcher**
+```kotlin
+// CPU-интенсивная работа
+withContext(Dispatchers.Default) {
+    processLargeDataset()
+}
+
+// I/O операции
+withContext(Dispatchers.IO) {
+    downloadFile()
+}
+
+// Обновления UI
+withContext(Dispatchers.Main) {
+    updateUI()
+}
+```
+
+**2. Минимизация переключения контекста**
+```kotlin
+// Плохо: Множественные переключения контекста
+suspend fun inefficient() {
+    withContext(Dispatchers.IO) { operation1() }
+    withContext(Dispatchers.IO) { operation2() }
+    withContext(Dispatchers.IO) { operation3() }
+}
+
+// Хорошо: Единственное переключение контекста
+suspend fun efficient() {
+    withContext(Dispatchers.IO) {
+        operation1()
+        operation2()
+        operation3()
+    }
+}
+```
+
+**3. Использование параллельного выполнения**
+```kotlin
+suspend fun loadDataParallel() = coroutineScope {
+    val user = async { fetchUser() }
+    val settings = async { fetchSettings() }
+    val preferences = async { fetchPreferences() }
+
+    UserData(user.await(), settings.await(), preferences.await())
+}
+```
+
+**4. Избегайте создания слишком многих корутин**
+```kotlin
+// Плохо: Создает 1 миллион корутин
+launch {
+    (1..1_000_000).forEach {
+        launch { process(it) }
+    }
+}
+
+// Хорошо: Используйте разбиение на части
+launch {
+    (1..1_000_000).chunked(1000).forEach { chunk ->
+        launch {
+            chunk.forEach { process(it) }
+        }
+    }
+}
+```
+
+**5. Конфигурация размеров пулов Dispatcher**
+```kotlin
+// Кастомный dispatcher с ограниченным параллелизмом
+val customDispatcher = Dispatchers.IO.limitedParallelism(4)
+
+launch(customDispatcher) {
+    // Только 4 одновременные операции
+}
+```
+
+**6. Используйте Flow для потоковых данных**
+```kotlin
+// Лучше чем собирать в список
+flow {
+    repeat(1_000_000) {
+        emit(it)
+    }
+}.map { process(it) }
+ .collect { save(it) }
+```
+
+### Мониторинг Производительности
+
+```kotlin
+suspend fun measurePerformance() {
+    val duration = measureTimeMillis {
+        coroutineScope {
+            repeat(10_000) {
+                launch { /* work */ }
+            }
+        }
+    }
+    println("Completed in ${duration}ms")
+}
+```
+
+### Лучшие Практики
+
+1. **Переиспользуйте CoroutineScope** вместо создания новых
+2. **Используйте структурированную конкурентность** чтобы избежать утечек
+3. **Профилируйте перед оптимизацией** - измеряйте реальные узкие места
+4. **Используйте подходящие размеры буферов** в каналах и потоках
+5. **Рассмотрите использование sequences** для CPU-bound трансформаций
+6. **Избегайте блокирующих операций** в корутинах
 
 ---
 
@@ -154,126 +273,6 @@ suspend fun measurePerformance() {
 4. **Use appropriate buffer sizes** in channels and flows
 5. **Consider using sequences** for CPU-bound transformations
 6. **Avoid blocking operations** in coroutines
-
----
-
-## Ответ (RU)
-
-Оптимизация производительности корутин включает понимание выбора диспетчеров, минимизацию переключения контекста, эффективное использование ресурсов и избежание распространенных проблем производительности.
-
-### Ключевые Принципы Производительности
-
-**1. Выбор правильного Dispatcher**
-```kotlin
-// CPU-интенсивная работа
-withContext(Dispatchers.Default) {
-    processLargeDataset()
-}
-
-// I/O операции
-withContext(Dispatchers.IO) {
-    downloadFile()
-}
-
-// Обновления UI
-withContext(Dispatchers.Main) {
-    updateUI()
-}
-```
-
-**2. Минимизация переключения контекста**
-```kotlin
-// Плохо: Множественные переключения контекста
-suspend fun inefficient() {
-    withContext(Dispatchers.IO) { operation1() }
-    withContext(Dispatchers.IO) { operation2() }
-    withContext(Dispatchers.IO) { operation3() }
-}
-
-// Хорошо: Единственное переключение контекста
-suspend fun efficient() {
-    withContext(Dispatchers.IO) {
-        operation1()
-        operation2()
-        operation3()
-    }
-}
-```
-
-**3. Использование параллельного выполнения**
-```kotlin
-suspend fun loadDataParallel() = coroutineScope {
-    val user = async { fetchUser() }
-    val settings = async { fetchSettings() }
-    val preferences = async { fetchPreferences() }
-
-    UserData(user.await(), settings.await(), preferences.await())
-}
-```
-
-**4. Избегайте создания слишком многих корутин**
-```kotlin
-// Плохо: Создает 1 миллион корутин
-launch {
-    (1..1_000_000).forEach {
-        launch { process(it) }
-    }
-}
-
-// Хорошо: Используйте разбиение на части
-launch {
-    (1..1_000_000).chunked(1000).forEach { chunk ->
-        launch {
-            chunk.forEach { process(it) }
-        }
-    }
-}
-```
-
-**5. Конфигурация размеров пулов Dispatcher**
-```kotlin
-// Кастомный dispatcher с ограниченным параллелизмом
-val customDispatcher = Dispatchers.IO.limitedParallelism(4)
-
-launch(customDispatcher) {
-    // Только 4 одновременные операции
-}
-```
-
-**6. Используйте Flow для потоковых данных**
-```kotlin
-// Лучше чем собирать в список
-flow {
-    repeat(1_000_000) {
-        emit(it)
-    }
-}.map { process(it) }
- .collect { save(it) }
-```
-
-### Мониторинг Производительности
-
-```kotlin
-suspend fun measurePerformance() {
-    val duration = measureTimeMillis {
-        coroutineScope {
-            repeat(10_000) {
-                launch { /* work */ }
-            }
-        }
-    }
-    println("Completed in ${duration}ms")
-}
-```
-
-### Лучшие Практики
-
-1. **Переиспользуйте CoroutineScope** вместо создания новых
-2. **Используйте структурированную конкурентность** чтобы избежать утечек
-3. **Профилируйте перед оптимизацией** - измеряйте реальные узкие места
-4. **Используйте подходящие размеры буферов** в каналах и потоках
-5. **Рассмотрите использование sequences** для CPU-bound трансформаций
-6. **Избегайте блокирующих операций** в корутинах
 
 ---
 

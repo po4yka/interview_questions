@@ -17,14 +17,20 @@ tags: [difficulty/easy, functional-interface, functional-programming, java, lamb
 date created: Friday, October 31st 2025, 6:32:22 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Какой Тип У Лямбды В Java?
+
+# Вопрос (RU)
+> Какой тип у лямбды в Java?
+
+---
 
 # Question (EN)
 > What type does a lambda have in Java?
 
-# Вопрос (RU)
-> Какой тип у лямбды в Java?
+## Ответ (RU)
+
+В Java лямбда-выражения имеют тип, который называется **функциональным интерфейсом**. Функциональный интерфейс — это интерфейс, который содержит только один абстрактный метод. Этот интерфейс может также содержать статические и по умолчанию (default) методы, но он должен иметь только один абстрактный метод, который определяет тип лямбда-выражения.
+
 
 ---
 
@@ -108,13 +114,6 @@ boolean isValid = emailValidator.validate("test@example.com");  // true
 **Summary:**
 
 Lambda expressions in Java have the type of a **functional interface** - an interface with exactly one abstract method that the lambda implements.
-
----
-
-## Ответ (RU)
-
-В Java лямбда-выражения имеют тип, который называется **функциональным интерфейсом**. Функциональный интерфейс — это интерфейс, который содержит только один абстрактный метод. Этот интерфейс может также содержать статические и по умолчанию (default) методы, но он должен иметь только один абстрактный метод, который определяет тип лямбда-выражения.
-
 
 ---
 

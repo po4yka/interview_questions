@@ -33,12 +33,206 @@ tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, 
 date created: Saturday, November 1st 2025, 9:25:30 am
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Что такое операторы debounce, sample и throttle в Kotlin Flow? В чём различия и случаи использования?
+
+---
 
 # Question (EN)
 > What are debounce, sample, and throttle operators in Kotlin Flow? What are the differences and use cases?
 
-# Вопрос (RU)
-> Что такое операторы debounce, sample и throttle в Kotlin Flow? В чём различия и случаи использования?
+## Ответ (RU)
+
+Временные операторы в Kotlin Flow контролируют частоту эмиссий на основе временных интервалов. Три основных оператора—**debounce**, **sample** и **throttleFirst**—служат разным целям для обработки быстрых эмиссий.
+
+### Быстрое Сравнение
+
+| Оператор | Назначение | Когда излучает | Случай использования |
+|----------|---------|------------|----------|
+| **debounce** | Ждать паузы | После таймаута с последней эмиссии | Поиск, валидация формы |
+| **sample** | Периодическая выборка | В фиксированные интервалы | Real-time данные, сенсоры |
+| **throttleFirst** | Ограничение частоты | Первое в временном окне | Клики кнопки, быстрые события |
+
+### Debounce: Ждать Тишины
+
+**debounce** ждёт паузу в эмиссиях перед излучением последнего значения:
+
+```kotlin
+searchQuery
+    .debounce(300) // Ждать 300мс после последней эмиссии
+    .collect { query ->
+        performSearch(query)
+    }
+
+// Таймлайн:
+// Вход:    A--B--C--------D---------E--F--G--------
+// Выход:   ---------C---------D---------G--------
+//          (ждёт 300мс после каждого ввода)
+```
+
+**Как работает**:
+1. Получает значение
+2. Запускает таймер (300мс)
+3. Если приходит другое значение, сбрасывает таймер
+4. Когда таймер завершается, излучает последнее значение
+
+**Пример: Поисковый ввод**
+
+```kotlin
+class SearchViewModel : ViewModel() {
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
+
+    val searchResults: StateFlow<List<Result>> = _searchQuery
+        .debounce(300) // Ждать 300мс после окончания набора
+        .filter { it.length >= 3 } // Минимум 3 символа
+        .distinctUntilChanged() // Избегать дублирующих поисков
+        .flatMapLatest { query ->
+            searchRepository.search(query)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+    }
+}
+```
+
+### Sample: Периодическая Выборка
+
+**sample** излучает самое недавнее значение через фиксированные временные интервалы:
+
+```kotlin
+locationUpdates
+    .sample(1000) // Выборка каждую секунду
+    .collect { location ->
+        updateMapPosition(location)
+    }
+
+// Таймлайн:
+// Вход:    A-B-C-D-E-F-G-H-I-J-K-L-M-N-O-P
+// Sample:  ----D-------H-------L-------P---
+//          (каждые 1000мс, берём последнее значение)
+```
+
+### ThrottleFirst: Ограничение Частоты
+
+**throttleFirst** излучает первое значение, затем игнорирует последующие значения в течение временного окна:
+
+```kotlin
+buttonClicks
+    .throttleFirst(1000) // Игнорировать клики на 1с после каждого клика
+    .collect {
+        performAction()
+    }
+
+// Таймлайн:
+// Вход:    A-B-C--------D-E-F--------G-H-I-J
+// Выход:   A------------D------------G-------
+//          (взять первое, игнорировать 1000мс)
+```
+
+### Реальные Примеры
+
+#### 1. Мгновенный Поиск
+
+```kotlin
+class SearchActivity : AppCompatActivity() {
+    private val viewModel: SearchViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding.searchInput.textChanges()
+            .debounce(300) // Ждать пока пользователь перестанет печатать
+            .filter { it.length >= 2 } // Минимальная длина
+            .distinctUntilChanged() // Пропускать дубликаты
+            .onEach { query ->
+                viewModel.search(query.toString())
+            }
+            .launchIn(lifecycleScope)
+    }
+}
+```
+
+#### 2. Отслеживание Местоположения
+
+```kotlin
+class MapViewModel : ViewModel() {
+    val userLocation: StateFlow<Location?> = locationProvider
+        .getLocationUpdates()
+        .sample(2000) // Обновлять карту каждые 2 секунды
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = null
+        )
+}
+```
+
+#### 3. Защита От Двойных Кликов
+
+```kotlin
+class FormViewModel : ViewModel() {
+    private val submitClicks = MutableSharedFlow<Unit>()
+
+    init {
+        submitClicks
+            .throttleFirst(2000) // Предотвращать быстрые отправки
+            .onEach {
+                submitForm()
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun onSubmitClick() {
+        viewModelScope.launch {
+            submitClicks.emit(Unit)
+        }
+    }
+
+    private suspend fun submitForm() {
+        // API вызов
+    }
+}
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+```kotlin
+// Использовать debounce для пользовательского ввода
+searchQuery
+    .debounce(300)
+    .collect { performSearch(it) }
+
+// Использовать sample для высокочастотных обновлений
+sensorData
+    .sample(100)
+    .collect { updateUI(it) }
+
+// Использовать throttleFirst для предотвращения кликов
+clicks
+    .throttleFirst(1000)
+    .collect { performAction() }
+```
+
+#### НЕ ДЕЛАТЬ:
+```kotlin
+// Не использовать неправильный оператор
+clicks
+    .debounce(1000) // Неправильно: ждёт после всех кликов
+    // Использовать throttleFirst
+
+// Не использовать sample для пользовательского ввода
+searchQuery
+    .sample(300) // Неправильно: может пропустить финальный ввод
+    // Использовать debounce
+```
 
 ---
 
@@ -407,201 +601,6 @@ searchQuery
 input
     .debounce(300) // What if user types and immediately submits?
     .collect { search(it) }
-```
-
----
-
-## Ответ (RU)
-
-Временные операторы в Kotlin Flow контролируют частоту эмиссий на основе временных интервалов. Три основных оператора—**debounce**, **sample** и **throttleFirst**—служат разным целям для обработки быстрых эмиссий.
-
-### Быстрое Сравнение
-
-| Оператор | Назначение | Когда излучает | Случай использования |
-|----------|---------|------------|----------|
-| **debounce** | Ждать паузы | После таймаута с последней эмиссии | Поиск, валидация формы |
-| **sample** | Периодическая выборка | В фиксированные интервалы | Real-time данные, сенсоры |
-| **throttleFirst** | Ограничение частоты | Первое в временном окне | Клики кнопки, быстрые события |
-
-### Debounce: Ждать Тишины
-
-**debounce** ждёт паузу в эмиссиях перед излучением последнего значения:
-
-```kotlin
-searchQuery
-    .debounce(300) // Ждать 300мс после последней эмиссии
-    .collect { query ->
-        performSearch(query)
-    }
-
-// Таймлайн:
-// Вход:    A--B--C--------D---------E--F--G--------
-// Выход:   ---------C---------D---------G--------
-//          (ждёт 300мс после каждого ввода)
-```
-
-**Как работает**:
-1. Получает значение
-2. Запускает таймер (300мс)
-3. Если приходит другое значение, сбрасывает таймер
-4. Когда таймер завершается, излучает последнее значение
-
-**Пример: Поисковый ввод**
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery
-
-    val searchResults: StateFlow<List<Result>> = _searchQuery
-        .debounce(300) // Ждать 300мс после окончания набора
-        .filter { it.length >= 3 } // Минимум 3 символа
-        .distinctUntilChanged() // Избегать дублирующих поисков
-        .flatMapLatest { query ->
-            searchRepository.search(query)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-
-    fun onSearchQueryChanged(query: String) {
-        _searchQuery.value = query
-    }
-}
-```
-
-### Sample: Периодическая Выборка
-
-**sample** излучает самое недавнее значение через фиксированные временные интервалы:
-
-```kotlin
-locationUpdates
-    .sample(1000) // Выборка каждую секунду
-    .collect { location ->
-        updateMapPosition(location)
-    }
-
-// Таймлайн:
-// Вход:    A-B-C-D-E-F-G-H-I-J-K-L-M-N-O-P
-// Sample:  ----D-------H-------L-------P---
-//          (каждые 1000мс, берём последнее значение)
-```
-
-### ThrottleFirst: Ограничение Частоты
-
-**throttleFirst** излучает первое значение, затем игнорирует последующие значения в течение временного окна:
-
-```kotlin
-buttonClicks
-    .throttleFirst(1000) // Игнорировать клики на 1с после каждого клика
-    .collect {
-        performAction()
-    }
-
-// Таймлайн:
-// Вход:    A-B-C--------D-E-F--------G-H-I-J
-// Выход:   A------------D------------G-------
-//          (взять первое, игнорировать 1000мс)
-```
-
-### Реальные Примеры
-
-#### 1. Мгновенный Поиск
-
-```kotlin
-class SearchActivity : AppCompatActivity() {
-    private val viewModel: SearchViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding.searchInput.textChanges()
-            .debounce(300) // Ждать пока пользователь перестанет печатать
-            .filter { it.length >= 2 } // Минимальная длина
-            .distinctUntilChanged() // Пропускать дубликаты
-            .onEach { query ->
-                viewModel.search(query.toString())
-            }
-            .launchIn(lifecycleScope)
-    }
-}
-```
-
-#### 2. Отслеживание Местоположения
-
-```kotlin
-class MapViewModel : ViewModel() {
-    val userLocation: StateFlow<Location?> = locationProvider
-        .getLocationUpdates()
-        .sample(2000) // Обновлять карту каждые 2 секунды
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = null
-        )
-}
-```
-
-#### 3. Защита От Двойных Кликов
-
-```kotlin
-class FormViewModel : ViewModel() {
-    private val submitClicks = MutableSharedFlow<Unit>()
-
-    init {
-        submitClicks
-            .throttleFirst(2000) // Предотвращать быстрые отправки
-            .onEach {
-                submitForm()
-            }
-            .launchIn(viewModelScope)
-    }
-
-    fun onSubmitClick() {
-        viewModelScope.launch {
-            submitClicks.emit(Unit)
-        }
-    }
-
-    private suspend fun submitForm() {
-        // API вызов
-    }
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-```kotlin
-// Использовать debounce для пользовательского ввода
-searchQuery
-    .debounce(300)
-    .collect { performSearch(it) }
-
-// Использовать sample для высокочастотных обновлений
-sensorData
-    .sample(100)
-    .collect { updateUI(it) }
-
-// Использовать throttleFirst для предотвращения кликов
-clicks
-    .throttleFirst(1000)
-    .collect { performAction() }
-```
-
-#### НЕ ДЕЛАТЬ:
-```kotlin
-// Не использовать неправильный оператор
-clicks
-    .debounce(1000) // Неправильно: ждёт после всех кликов
-    // Использовать throttleFirst
-
-// Не использовать sample для пользовательского ввода
-searchQuery
-    .sample(300) // Неправильно: может пропустить финальный ввод
-    // Использовать debounce
 ```
 
 ---

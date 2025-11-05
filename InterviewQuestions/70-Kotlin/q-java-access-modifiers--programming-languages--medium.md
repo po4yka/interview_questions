@@ -17,14 +17,28 @@ tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programmin
 date created: Friday, October 31st 2025, 6:32:07 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Как Лучше Всего Использовать Модификаторы Доступа В Java?
+
+# Вопрос (RU)
+> Как лучше всего использовать модификаторы доступа в Java?
+
+---
 
 # Question (EN)
 > How to best use access modifiers in Java?
 
-# Вопрос (RU)
-> Как лучше всего использовать модификаторы доступа в Java?
+## Ответ (RU)
+
+В Java есть четыре модификатора доступа: `private`, package-private (без модификатора), `protected` и `public`.
+
+**Лучшие практики:**
+- **private** — для инкапсуляции данных внутри класса
+- **protected** — только в abstract классах для методов (не полей!)
+- **public** — для API, доступного извне
+- **package-private** — для доступа внутри одного пакета
+
+Лучше всего **ограничивать доступ** настолько, насколько это возможно.
+
 
 ---
 
@@ -252,21 +266,6 @@ class TransactionLogger {
   - **public** for public API
 - **Principle**: **Most restrictive** access possible
 - **Encapsulation**: Never expose fields directly (use getters/setters with validation)
-
----
-
-## Ответ (RU)
-
-В Java есть четыре модификатора доступа: `private`, package-private (без модификатора), `protected` и `public`.
-
-**Лучшие практики:**
-- **private** — для инкапсуляции данных внутри класса
-- **protected** — только в abstract классах для методов (не полей!)
-- **public** — для API, доступного извне
-- **package-private** — для доступа внутри одного пакета
-
-Лучше всего **ограничивать доступ** настолько, насколько это возможно.
-
 
 ---
 

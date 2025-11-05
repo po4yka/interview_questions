@@ -28,11 +28,58 @@ tags: [difficulty/easy, downto, iteration, kotlin, ranges, rangeto, step]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Что такое диапазоны в Kotlin и как их использовать?
+
+---
 
 # Question (EN)
 > What are ranges in Kotlin and how do you use them?
-# Вопрос (RU)
-> Что такое диапазоны в Kotlin и как их использовать?
+## Ответ (RU)
+
+Диапазон — это коллекция конечных значений, определенная конечными точками. Состоит из начала, конца и шага. Начало и конец включительны, шаг по умолчанию 1.
+
+### Базовое Использование
+
+```kotlin
+if (i in 1..4) {  // эквивалентно 1 <= i && i <= 4
+    print(i)
+}
+```
+
+### Итерация
+
+```kotlin
+for (i in 1..4) print(i)  // Печатает: 1234
+```
+
+### Обратная Итерация С downTo
+
+```kotlin
+for (i in 4 downTo 1) print(i)  // Печатает: 4321
+```
+
+### Пользовательский Шаг
+
+```kotlin
+for (i in 1..8 step 2) print(i)  // Печатает: 1357
+```
+
+### Исключение Конца С until
+
+```kotlin
+for (i in 1 until 10) {  // i в [1, 10), 10 исключено
+    print(i)  // Печатает: 123456789
+}
+```
+
+### Три Способа Создания Диапазонов
+
+1. **Оператор `..`**
+2. **Функция `rangeTo()`**
+3. **Функция `downTo()`**
+
+**Краткое содержание**: Диапазоны представляют последовательности значений с началом, концом (оба включительно) и шагом. Создаются с `..`, `rangeTo()` или `downTo()`. Используйте `step` для пользовательских приращений, `until` для исключения конца. Поддерживают итерацию в циклах for.
 
 ---
 
@@ -125,54 +172,6 @@ println((11..20 step 5).step)   // 5
 All support iteration in for loops.
 
 **English Summary**: Ranges represent sequences of values with start, stop (both inclusive), and step. Create with `..`, `rangeTo()`, or `downTo()`. Use `step` for custom increments, `until` to exclude end. Support iteration in for loops. Common for: iteration, membership checks (in), validation.
-
-## Ответ (RU)
-
-Диапазон — это коллекция конечных значений, определенная конечными точками. Состоит из начала, конца и шага. Начало и конец включительны, шаг по умолчанию 1.
-
-### Базовое Использование
-
-```kotlin
-if (i in 1..4) {  // эквивалентно 1 <= i && i <= 4
-    print(i)
-}
-```
-
-### Итерация
-
-```kotlin
-for (i in 1..4) print(i)  // Печатает: 1234
-```
-
-### Обратная Итерация С downTo
-
-```kotlin
-for (i in 4 downTo 1) print(i)  // Печатает: 4321
-```
-
-### Пользовательский Шаг
-
-```kotlin
-for (i in 1..8 step 2) print(i)  // Печатает: 1357
-```
-
-### Исключение Конца С until
-
-```kotlin
-for (i in 1 until 10) {  // i в [1, 10), 10 исключено
-    print(i)  // Печатает: 123456789
-}
-```
-
-### Три Способа Создания Диапазонов
-
-1. **Оператор `..`**
-2. **Функция `rangeTo()`**
-3. **Функция `downTo()`**
-
-**Краткое содержание**: Диапазоны представляют последовательности значений с началом, концом (оба включительно) и шагом. Создаются с `..`, `rangeTo()` или `downTo()`. Используйте `step` для пользовательских приращений, `until` для исключения конца. Поддерживают итерацию в циклах for.
-
----
 
 ## References
 - [Ranges - Kotlin Documentation](https://kotlinlang.org/docs/reference/ranges.html)

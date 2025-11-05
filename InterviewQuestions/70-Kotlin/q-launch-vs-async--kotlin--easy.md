@@ -28,13 +28,67 @@ tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 3:39:12 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Продвинутая тема корутин Kotlin 140027
+
+---
 
 # Question (EN)
 > Kotlin Coroutines advanced topic 140027
 
-# Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140027
+## Ответ (RU)
 
+
+`launch` и `async` оба являются coroutine builders но различаются способом возврата результатов.
+
+### Launch
+Стиль запустить-и-забыть, возвращает Job:
+```kotlin
+val job = launch {
+    delay(1000)
+    println("Task completed")
+}
+job.join()  // Ждать завершения
+```
+
+### Async
+Возвращает Deferred с результатом:
+```kotlin
+val deferred = async {
+    delay(1000)
+    "Result"
+}
+val result = deferred.await()  // Получить результат
+println(result)  // "Result"
+```
+
+### Ключевые Отличия
+| Функция | launch | async |
+|---------|--------|-------|
+| Возвращает | Job | Deferred<T> |
+| Результат | Unit | T |
+| Использование | Побочные эффекты | Вычислить значение |
+| Исключение | Выброшено сразу | При await() |
+
+### Выбор Между Ними
+```kotlin
+// Используйте launch для побочных эффектов
+launch {
+    saveToDatabase(data)
+}
+
+// Используйте async для результатов
+val result = async {
+    fetchFromApi()
+}.await()
+
+// Параллельный async
+val r1 = async { fetch1() }
+val r2 = async { fetch2() }
+combine(r1.await(), r2.await())
+```
+
+---
 ---
 
 ## Answer (EN)
@@ -84,61 +138,6 @@ val result = async {
 }.await()
 
 // Parallel async
-val r1 = async { fetch1() }
-val r2 = async { fetch2() }
-combine(r1.await(), r2.await())
-```
-
----
----
-
-## Ответ (RU)
-
-
-`launch` и `async` оба являются coroutine builders но различаются способом возврата результатов.
-
-### Launch
-Стиль запустить-и-забыть, возвращает Job:
-```kotlin
-val job = launch {
-    delay(1000)
-    println("Task completed")
-}
-job.join()  // Ждать завершения
-```
-
-### Async
-Возвращает Deferred с результатом:
-```kotlin
-val deferred = async {
-    delay(1000)
-    "Result"
-}
-val result = deferred.await()  // Получить результат
-println(result)  // "Result"
-```
-
-### Ключевые Отличия
-| Функция | launch | async |
-|---------|--------|-------|
-| Возвращает | Job | Deferred<T> |
-| Результат | Unit | T |
-| Использование | Побочные эффекты | Вычислить значение |
-| Исключение | Выброшено сразу | При await() |
-
-### Выбор Между Ними
-```kotlin
-// Используйте launch для побочных эффектов
-launch {
-    saveToDatabase(data)
-}
-
-// Используйте async для результатов
-val result = async {
-    fetchFromApi()
-}.await()
-
-// Параллельный async
 val r1 = async { fetch1() }
 val r2 = async { fetch2() }
 combine(r1.await(), r2.await())

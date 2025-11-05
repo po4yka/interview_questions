@@ -28,11 +28,56 @@ tags: [classes, difficulty/easy, enum, kotlin, types]
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что такое Enum в Kotlin?
+
+---
 
 # Question (EN)
 > What is an Enum in Kotlin?
-# Вопрос (RU)
-> Что такое Enum в Kotlin?
+## Ответ (RU)
+
+`Enum` в Kotlin — это специальный тип, который представляет группу связанных констант. Он позволяет определить фиксированный набор значений для переменной. Константы enum обычно используются для представления закрытого набора опций или выборов.
+
+Чтобы определить `enum` в Kotlin, вы используете ключевые слова `enum class`, за которыми следует имя перечисления и список значений констант в фигурных скобках. Например:
+
+```kotlin
+enum class Color {
+    RED, GREEN, BLUE
+}
+```
+
+В приведенном выше примере перечисление `Color` имеет три константы: `RED`, `GREEN` и `BLUE`.
+
+Перечисления в Kotlin также могут иметь свойства и методы, подобно классам. Каждая константа enum может иметь свои собственные значения для этих свойств. Например:
+
+```kotlin
+enum class Color(val rgb: Int) {
+    RED(0xFF0000),
+    GREEN(0x00FF00),
+    BLUE(0x0000FF)
+
+    fun description(): String {
+        return when (this) {
+            RED -> "Red color"
+            GREEN -> "Green color"
+            BLUE -> "Blue color"
+        }
+    }
+}
+```
+
+В приведенном выше примере перечисление `Color` имеет дополнительное свойство `rgb`, связанное с каждой константой. Оно также имеет метод `description()`, который предоставляет текстовое описание каждого цвета.
+
+Чтобы получить доступ к свойствам и методам константы enum, вы просто используете точечную нотацию. Например:
+
+```kotlin
+val redColor = Color.RED
+println(redColor.rgb)           // Вывод: 16711680
+println(redColor.description()) // Вывод: Red color
+```
+
+Перечисления в Kotlin могут быть полезны в различных сценариях, таких как представление дней недели, опций меню, кодов состояния и многого другого. Они обеспечивают типобезопасный и лаконичный способ определения фиксированного набора значений.
 
 ---
 
@@ -79,52 +124,6 @@ println(redColor.description()) // Output: Red color
 ```
 
 Enums in Kotlin can be useful in various scenarios, such as representing days of the week, menu options, status codes, and more. They provide a type-safe and concise way to define a fixed set of values.
-
-## Ответ (RU)
-
-`Enum` в Kotlin — это специальный тип, который представляет группу связанных констант. Он позволяет определить фиксированный набор значений для переменной. Константы enum обычно используются для представления закрытого набора опций или выборов.
-
-Чтобы определить `enum` в Kotlin, вы используете ключевые слова `enum class`, за которыми следует имя перечисления и список значений констант в фигурных скобках. Например:
-
-```kotlin
-enum class Color {
-    RED, GREEN, BLUE
-}
-```
-
-В приведенном выше примере перечисление `Color` имеет три константы: `RED`, `GREEN` и `BLUE`.
-
-Перечисления в Kotlin также могут иметь свойства и методы, подобно классам. Каждая константа enum может иметь свои собственные значения для этих свойств. Например:
-
-```kotlin
-enum class Color(val rgb: Int) {
-    RED(0xFF0000),
-    GREEN(0x00FF00),
-    BLUE(0x0000FF)
-
-    fun description(): String {
-        return when (this) {
-            RED -> "Red color"
-            GREEN -> "Green color"
-            BLUE -> "Blue color"
-        }
-    }
-}
-```
-
-В приведенном выше примере перечисление `Color` имеет дополнительное свойство `rgb`, связанное с каждой константой. Оно также имеет метод `description()`, который предоставляет текстовое описание каждого цвета.
-
-Чтобы получить доступ к свойствам и методам константы enum, вы просто используете точечную нотацию. Например:
-
-```kotlin
-val redColor = Color.RED
-println(redColor.rgb)           // Вывод: 16711680
-println(redColor.description()) // Вывод: Red color
-```
-
-Перечисления в Kotlin могут быть полезны в различных сценариях, таких как представление дней недели, опций меню, кодов состояния и многого другого. Они обеспечивают типобезопасный и лаконичный способ определения фиксированного набора значений.
-
----
 
 ## References
 - [Kotlin Enum Classes](https://kotlinlang.org/docs/enum-classes.html)

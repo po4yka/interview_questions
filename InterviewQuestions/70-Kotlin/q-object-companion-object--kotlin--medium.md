@@ -17,49 +17,15 @@ tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, sin
 date created: Friday, October 31st 2025, 6:29:55 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Что Такое Object / Companion Object?
-
-# Question (EN)
-> What are `object` and `companion object` in Kotlin? What are their differences and use cases?
 
 # Вопрос (RU)
 > Что такое `object` и `companion object` в Kotlin? В чём их различия и когда их использовать?
 
 ---
 
-## Answer (EN)
-
-`object` and `companion object` are Kotlin features for implementing various patterns without explicit instantiation:
-
-**object**: Creates a singleton (single instance). Accessed by name. Thread-safe lazy initialization. Use for: singletons, utility classes, constants.
-
-**companion object**: Declares static-like members inside a class. Accessed via class name. Use for: factory methods, constants, static utility functions within a class context.
-
-**Key differences:**
-- **object**: Standalone entity, accessed by its own name
-- **companion object**: Lives inside a class, accessed via class name
-- **object**: One per declaration
-- **companion object**: One per class (optional)
-
-**Example:**
-```kotlin
-// object - singleton
-object DatabaseManager {
-    fun executeQuery(sql: String) { }
-}
-DatabaseManager.executeQuery("SELECT *")
-
-// companion object - factory pattern
-class User private constructor(val name: String) {
-    companion object {
-        fun create(name: String) = User(name)
-    }
-}
-val user = User.create("Alice")
-```
-
----
+# Question (EN)
+> What are `object` and `companion object` in Kotlin? What are their differences and use cases?
 
 ## Ответ (RU)
 
@@ -235,6 +201,39 @@ fun MyClass.Companion.bar() = "bar"
 MyClass.foo()  // "foo" - обычный метод
 MyClass.bar()  // "bar" - расширение
 ```
+
+## Answer (EN)
+
+`object` and `companion object` are Kotlin features for implementing various patterns without explicit instantiation:
+
+**object**: Creates a singleton (single instance). Accessed by name. Thread-safe lazy initialization. Use for: singletons, utility classes, constants.
+
+**companion object**: Declares static-like members inside a class. Accessed via class name. Use for: factory methods, constants, static utility functions within a class context.
+
+**Key differences:**
+- **object**: Standalone entity, accessed by its own name
+- **companion object**: Lives inside a class, accessed via class name
+- **object**: One per declaration
+- **companion object**: One per class (optional)
+
+**Example:**
+```kotlin
+// object - singleton
+object DatabaseManager {
+    fun executeQuery(sql: String) { }
+}
+DatabaseManager.executeQuery("SELECT *")
+
+// companion object - factory pattern
+class User private constructor(val name: String) {
+    companion object {
+        fun create(name: String) = User(name)
+    }
+}
+val user = User.create("Alice")
+```
+
+---
 
 ## Follow-ups
 

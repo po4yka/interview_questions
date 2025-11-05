@@ -28,12 +28,41 @@ tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeaton
 date created: Sunday, October 12th 2025, 3:39:19 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Что такое repeatOnLifecycle и почему это важно? Объясните как он предотвращает утечки памяти при подписке на Flow, сравнение с launchWhenStarted и лучшие практики.
+
+---
 
 # Question (EN)
 > What is repeatOnLifecycle and why is it important? Explain how it prevents memory leaks when collecting Flows, comparison with launchWhenStarted, and best practices.
 
-# Вопрос (RU)
-> Что такое repeatOnLifecycle и почему это важно? Объясните как он предотвращает утечки памяти при подписке на Flow, сравнение с launchWhenStarted и лучшие практики.
+## Ответ (RU)
+
+`repeatOnLifecycle` - API для безопасной подписки на Flow с учетом жизненного цикла Android.
+
+### Проблема
+
+Обычная подписка на Flow продолжает работать даже когда Fragment/Activity не виден, что приводит к:
+- Утечкам памяти
+- Ненужной работе в фоне
+- Потенциальным крашам
+
+### Решение
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        flow.collect { /* Безопасно */ }
+    }
+}
+```
+
+### Преимущества
+
+- Автоматическая отмена при onStop
+- Автоматический перезапуск при onStart
+- Предотвращение утечек памяти
+- Безопасное обновление UI
 
 ---
 
@@ -412,36 +441,6 @@ class ProductDetailFragment : Fragment() {
     private fun showSuccessMessage() {}
 }
 ```
-
----
-
-## Ответ (RU)
-
-`repeatOnLifecycle` - API для безопасной подписки на Flow с учетом жизненного цикла Android.
-
-### Проблема
-
-Обычная подписка на Flow продолжает работать даже когда Fragment/Activity не виден, что приводит к:
-- Утечкам памяти
-- Ненужной работе в фоне
-- Потенциальным крашам
-
-### Решение
-
-```kotlin
-viewLifecycleOwner.lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) {
-        flow.collect { /* Безопасно */ }
-    }
-}
-```
-
-### Преимущества
-
-- Автоматическая отмена при onStop
-- Автоматический перезапуск при onStart
-- Предотвращение утечек памяти
-- Безопасное обновление UI
 
 ---
 

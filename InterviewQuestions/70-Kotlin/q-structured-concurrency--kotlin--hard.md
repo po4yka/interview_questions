@@ -33,12 +33,75 @@ tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, sc
 date created: Sunday, October 12th 2025, 3:22:19 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Что такое структурированная параллельность в Kotlin? Объясните иерархию родитель-потомок корутин, распространение отмены, распространение исключений и разницу между coroutineScope, supervisorScope и withContext.
+
+---
 
 # Question (EN)
 > What is structured concurrency in Kotlin? Explain parent-child coroutine hierarchy, cancellation propagation, exception propagation, and differences between coroutineScope, supervisorScope, and withContext.
 
-# Вопрос (RU)
-> Что такое структурированная параллельность в Kotlin? Объясните иерархию родитель-потомок корутин, распространение отмены, распространение исключений и разницу между coroutineScope, supervisorScope и withContext.
+## Ответ (RU)
+
+**Структурированная параллельность** гарантирует, что корутины следуют чёткой иерархии родитель-потомок, обеспечивая автоматическое распространение отмены, обработку исключений и очистку ресурсов.
+
+### Основные Принципы
+
+1. **Иерархия**: Корутины формируют отношения родитель-потомок
+2. **Время жизни**: Время жизни потомка привязано к родителю
+3. **Отмена**: Распространяется от родителя к потомкам
+4. **Исключения**: Исключения потомка распространяются к родителю
+5. **Завершение**: Родитель ждёт всех потомков
+
+### coroutineScope
+
+Создаёт новый скоуп, который ждёт всех потомков:
+
+```kotlin
+suspend fun processData() = coroutineScope {
+    val deferred1 = async { loadData1() }
+    val deferred2 = async { loadData2() }
+    
+    deferred1.await() + deferred2.await()
+    // coroutineScope ждёт завершения обоих
+}
+```
+
+### supervisorScope
+
+Создаёт скоуп где сбои не отменяют соседей:
+
+```kotlin
+suspend fun withSupervisor() = supervisorScope {
+    launch {
+        throw Exception("Сбой задачи 1")
+    }
+    
+    launch {
+        println("Задача 2 выполняется") // Всё равно выполнится!
+    }
+}
+```
+
+### withContext
+
+Переключает контекст без создания нового скоупа:
+
+```kotlin
+suspend fun loadUser(id: Int): User = withContext(Dispatchers.IO) {
+    // Переключается на IO диспетчер
+    database.getUser(id)
+}
+```
+
+### Таблица Сравнения
+
+| Функция | coroutineScope | supervisorScope | withContext |
+|---------|---------------|-----------------|-------------|
+| Создаёт новый Job | Да | Да (SupervisorJob) | Нет |
+| Распространение исключений | К родителю | Останавливается | К родителю |
+| Ждёт потомков | Да | Да | Нет потомков |
+| Меняет диспетчер | Нет | Нет | Да (опционально) |
 
 ---
 
@@ -602,70 +665,6 @@ fun testExceptionPropagation() = runTest {
     }
 }
 ```
-
----
-
-## Ответ (RU)
-
-**Структурированная параллельность** гарантирует, что корутины следуют чёткой иерархии родитель-потомок, обеспечивая автоматическое распространение отмены, обработку исключений и очистку ресурсов.
-
-### Основные Принципы
-
-1. **Иерархия**: Корутины формируют отношения родитель-потомок
-2. **Время жизни**: Время жизни потомка привязано к родителю
-3. **Отмена**: Распространяется от родителя к потомкам
-4. **Исключения**: Исключения потомка распространяются к родителю
-5. **Завершение**: Родитель ждёт всех потомков
-
-### coroutineScope
-
-Создаёт новый скоуп, который ждёт всех потомков:
-
-```kotlin
-suspend fun processData() = coroutineScope {
-    val deferred1 = async { loadData1() }
-    val deferred2 = async { loadData2() }
-    
-    deferred1.await() + deferred2.await()
-    // coroutineScope ждёт завершения обоих
-}
-```
-
-### supervisorScope
-
-Создаёт скоуп где сбои не отменяют соседей:
-
-```kotlin
-suspend fun withSupervisor() = supervisorScope {
-    launch {
-        throw Exception("Сбой задачи 1")
-    }
-    
-    launch {
-        println("Задача 2 выполняется") // Всё равно выполнится!
-    }
-}
-```
-
-### withContext
-
-Переключает контекст без создания нового скоупа:
-
-```kotlin
-suspend fun loadUser(id: Int): User = withContext(Dispatchers.IO) {
-    // Переключается на IO диспетчер
-    database.getUser(id)
-}
-```
-
-### Таблица Сравнения
-
-| Функция | coroutineScope | supervisorScope | withContext |
-|---------|---------------|-----------------|-------------|
-| Создаёт новый Job | Да | Да (SupervisorJob) | Нет |
-| Распространение исключений | К родителю | Останавливается | К родителю |
-| Ждёт потомков | Да | Да | Нет потомков |
-| Меняет диспетчер | Нет | Нет | Да (опционально) |
 
 ---
 

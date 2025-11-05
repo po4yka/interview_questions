@@ -28,12 +28,127 @@ tags: [async-programming, concurrency, coroutine-context, coroutines, difficulty
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Что такое CoroutineContext и какие у него основные элементы?
+
+---
 
 # Question (EN)
 > What is CoroutineContext and what are its main elements?
 
-# Вопрос (RU)
-> Что такое CoroutineContext и какие у него основные элементы?
+## Ответ (RU)
+
+**CoroutineContext** — это индексированный набор элементов `Element`, который определяет поведение и окружение корутины. Это фундаментальная концепция в Kotlin coroutines, определяющая как, где и при каких условиях выполняется корутина.
+
+### Основная Концепция
+
+CoroutineContext — это **неизменяемый индексированный набор**, где каждый элемент имеет уникальный `Key`. Можно представить как `Map<Key, Element>`, где элементы можно комбинировать и получать по ключам.
+
+### Основные Элементы Контекста
+
+**1. Job** - Управляет жизненным циклом корутины. Позволяет отменять корутину и отслеживать её состояние.
+
+```kotlin
+val job = Job()
+val scope = CoroutineScope(job)
+
+scope.launch {
+    // Работа корутины
+}
+
+job.cancel()  // Отмена всех корутин в scope
+```
+
+**2. Dispatcher** - Определяет, на каком потоке будет выполняться корутина.
+
+```kotlin
+launch(Dispatchers.Main) {
+    // Выполняется в главном потоке (UI)
+}
+
+launch(Dispatchers.IO) {
+    // Выполняется в пуле потоков для I/O операций
+}
+
+launch(Dispatchers.Default) {
+    // Выполняется в пуле потоков для CPU-интенсивных операций
+}
+```
+
+**3. CoroutineExceptionHandler** - Обрабатывает исключения, возникающие в корутинах.
+
+```kotlin
+val handler = CoroutineExceptionHandler { _, exception ->
+    println("Caught $exception")
+}
+
+val scope = CoroutineScope(Job() + handler)
+scope.launch {
+    throw Exception("Error!")
+}
+```
+
+**4. CoroutineName** - Назначает имя корутине для отладки.
+
+```kotlin
+launch(CoroutineName("MyCoroutine")) {
+    println(coroutineContext[CoroutineName]?.name)  // "MyCoroutine"
+}
+```
+
+### Композиция Контекста
+
+Элементы контекста можно комбинировать с помощью оператора `+`:
+
+```kotlin
+val context = Dispatchers.IO + Job() + CoroutineName("DataLoader")
+
+launch(context) {
+    // Корутина с объединённым контекстом
+}
+```
+
+### Наследование Контекста
+
+Дочерние корутины наследуют контекст родителя, но могут переопределять элементы:
+
+```kotlin
+val parentContext = Dispatchers.Main + CoroutineName("Parent")
+
+launch(parentContext) {
+    launch(Dispatchers.IO) {  // Переопределяем dispatcher
+        // Выполняется на IO потоке, но имя остается "Parent"
+    }
+}
+```
+
+### Пример Для Android
+
+```kotlin
+class MyViewModel : ViewModel() {
+    private val exceptionHandler = CoroutineExceptionHandler { _, e ->
+        _error.value = e.message
+    }
+
+    fun loadData() {
+        viewModelScope.launch(exceptionHandler) {
+            val data = withContext(Dispatchers.IO) {
+                repository.getData()
+            }
+            _uiState.value = UiState.Success(data)
+        }
+    }
+}
+```
+
+### Ключевые Моменты
+
+1. **CoroutineContext неизменяем** - операции возвращают новые контексты
+2. **Элементы индексируются по Key** - уникальный на тип элемента
+3. **Композиция через +** - поздние элементы переопределяют ранние
+4. **Наследование от родителя** - с созданием нового Job
+5. **Четыре основных элемента**: Job, Dispatcher, ExceptionHandler, Name
+6. **Структурированная конкурентность** - через иерархию Job
 
 ---
 
@@ -445,122 +560,6 @@ val newContext = context.minusKey(CoroutineName)
 4. **Inheritance from parent** - With new Job created
 5. **Four main elements**: Job, Dispatcher, ExceptionHandler, Name
 6. **Structured concurrency** - Enforced through Job hierarchy
-
----
-
-## Ответ (RU)
-
-**CoroutineContext** — это индексированный набор элементов `Element`, который определяет поведение и окружение корутины. Это фундаментальная концепция в Kotlin coroutines, определяющая как, где и при каких условиях выполняется корутина.
-
-### Основная Концепция
-
-CoroutineContext — это **неизменяемый индексированный набор**, где каждый элемент имеет уникальный `Key`. Можно представить как `Map<Key, Element>`, где элементы можно комбинировать и получать по ключам.
-
-### Основные Элементы Контекста
-
-**1. Job** - Управляет жизненным циклом корутины. Позволяет отменять корутину и отслеживать её состояние.
-
-```kotlin
-val job = Job()
-val scope = CoroutineScope(job)
-
-scope.launch {
-    // Работа корутины
-}
-
-job.cancel()  // Отмена всех корутин в scope
-```
-
-**2. Dispatcher** - Определяет, на каком потоке будет выполняться корутина.
-
-```kotlin
-launch(Dispatchers.Main) {
-    // Выполняется в главном потоке (UI)
-}
-
-launch(Dispatchers.IO) {
-    // Выполняется в пуле потоков для I/O операций
-}
-
-launch(Dispatchers.Default) {
-    // Выполняется в пуле потоков для CPU-интенсивных операций
-}
-```
-
-**3. CoroutineExceptionHandler** - Обрабатывает исключения, возникающие в корутинах.
-
-```kotlin
-val handler = CoroutineExceptionHandler { _, exception ->
-    println("Caught $exception")
-}
-
-val scope = CoroutineScope(Job() + handler)
-scope.launch {
-    throw Exception("Error!")
-}
-```
-
-**4. CoroutineName** - Назначает имя корутине для отладки.
-
-```kotlin
-launch(CoroutineName("MyCoroutine")) {
-    println(coroutineContext[CoroutineName]?.name)  // "MyCoroutine"
-}
-```
-
-### Композиция Контекста
-
-Элементы контекста можно комбинировать с помощью оператора `+`:
-
-```kotlin
-val context = Dispatchers.IO + Job() + CoroutineName("DataLoader")
-
-launch(context) {
-    // Корутина с объединённым контекстом
-}
-```
-
-### Наследование Контекста
-
-Дочерние корутины наследуют контекст родителя, но могут переопределять элементы:
-
-```kotlin
-val parentContext = Dispatchers.Main + CoroutineName("Parent")
-
-launch(parentContext) {
-    launch(Dispatchers.IO) {  // Переопределяем dispatcher
-        // Выполняется на IO потоке, но имя остается "Parent"
-    }
-}
-```
-
-### Пример Для Android
-
-```kotlin
-class MyViewModel : ViewModel() {
-    private val exceptionHandler = CoroutineExceptionHandler { _, e ->
-        _error.value = e.message
-    }
-
-    fun loadData() {
-        viewModelScope.launch(exceptionHandler) {
-            val data = withContext(Dispatchers.IO) {
-                repository.getData()
-            }
-            _uiState.value = UiState.Success(data)
-        }
-    }
-}
-```
-
-### Ключевые Моменты
-
-1. **CoroutineContext неизменяем** - операции возвращают новые контексты
-2. **Элементы индексируются по Key** - уникальный на тип элемента
-3. **Композиция через +** - поздние элементы переопределяют ранние
-4. **Наследование от родителя** - с созданием нового Job
-5. **Четыре основных элемента**: Job, Dispatcher, ExceptionHandler, Name
-6. **Структурированная конкурентность** - через иерархию Job
 
 ---
 

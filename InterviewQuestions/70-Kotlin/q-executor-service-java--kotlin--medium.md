@@ -17,30 +17,15 @@ tags: [difficulty/medium]
 date created: Sunday, October 12th 2025, 3:43:41 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # Как Работают Executor И ExecutorService?
-
-# Question (EN)
-> How does Executor and ExecutorService work in Java?
 
 # Вопрос (RU)
 > Как работают Executor и ExecutorService в Java?
 
 ---
 
-## Answer (EN)
-
-**Executor** is a basic interface with `execute(Runnable)` method for task execution. **ExecutorService** extends it with lifecycle management (`shutdown()`, `awaitTermination()`) and result-returning methods (`submit(Callable)`, `invokeAll()`, `invokeAny()`).
-
-**Types:**
-- **FixedThreadPool**: Fixed number of threads for controlled parallelism
-- **CachedThreadPool**: Dynamic thread creation, reuses idle threads
-- **SingleThreadExecutor**: One thread for sequential execution
-- **ScheduledThreadPool**: Delayed and periodic task execution
-
-**Future** represents async result with `get()`, `cancel()`, `isDone()`. **ThreadPoolExecutor** allows custom configuration (core/max pool size, queue, rejection policies). Always call `shutdown()` and handle exceptions in tasks.
-
----
+# Question (EN)
+> How does Executor and ExecutorService work in Java?
 
 ## Ответ (RU)
 
@@ -484,6 +469,20 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(
     executor
 ).thenApply(s -> s + " World");
 ```
+
+## Answer (EN)
+
+**Executor** is a basic interface with `execute(Runnable)` method for task execution. **ExecutorService** extends it with lifecycle management (`shutdown()`, `awaitTermination()`) and result-returning methods (`submit(Callable)`, `invokeAll()`, `invokeAny()`).
+
+**Types:**
+- **FixedThreadPool**: Fixed number of threads for controlled parallelism
+- **CachedThreadPool**: Dynamic thread creation, reuses idle threads
+- **SingleThreadExecutor**: One thread for sequential execution
+- **ScheduledThreadPool**: Delayed and periodic task execution
+
+**Future** represents async result with `get()`, `cancel()`, `isDone()`. **ThreadPoolExecutor** allows custom configuration (core/max pool size, queue, rejection policies). Always call `shutdown()` and handle exceptions in tasks.
+
+---
 
 ## Follow-ups
 

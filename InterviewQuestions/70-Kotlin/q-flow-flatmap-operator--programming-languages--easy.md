@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languag
 date created: Friday, October 31st 2025, 6:30:45 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Чем Воспользоваться Если Нужно Преобразовать Один Поток Данных В Другой Поток Данных
-
-# Question (EN)
-> What to use if you need to transform one data stream into another data stream?
 
 # Вопрос (RU)
 > Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных?
 
 ---
+
+# Question (EN)
+> What to use if you need to transform one data stream into another data stream?
+
+## Ответ (RU)
+
+Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
 
 ## Answer (EN)
 
@@ -51,10 +54,6 @@ flow {
 - `flatMapLatest` - cancel previous when new arrives
 
 ---
-
-## Ответ (RU)
-
-Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
 
 ## Follow-ups
 

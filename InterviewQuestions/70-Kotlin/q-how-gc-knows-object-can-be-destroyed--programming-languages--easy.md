@@ -17,16 +17,19 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, prog
 date created: Friday, October 31st 2025, 6:31:27 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Как Сборщик Мусора Понимает Что Объект Можно Уничтожить?
-
-# Question (EN)
-> How does garbage collector know that an object can be destroyed?
 
 # Вопрос (RU)
 > Как сборщик мусора понимает что объект можно уничтожить?
 
 ---
+
+# Question (EN)
+> How does garbage collector know that an object can be destroyed?
+
+## Ответ (RU)
+
+Сборщик мусора использует анализ ссылок. Объект считается 'мёртвым', если на него нет доступных ссылок из корневых объектов. GC обходит все достижимые объекты, начиная с корневых. Недостижимые объекты считаются мусором и удаляются.
 
 ## Answer (EN)
 
@@ -137,10 +140,6 @@ fun circularExample() {
 GC uses **reachability analysis from GC Roots**. If an object cannot be reached through any chain of references from a GC Root, it's considered **dead** and will be destroyed.
 
 ---
-
-## Ответ (RU)
-
-Сборщик мусора использует анализ ссылок. Объект считается 'мёртвым', если на него нет доступных ссылок из корневых объектов. GC обходит все достижимые объекты, начиная с корневых. Недостижимые объекты считаются мусором и удаляются.
 
 ## Follow-ups
 

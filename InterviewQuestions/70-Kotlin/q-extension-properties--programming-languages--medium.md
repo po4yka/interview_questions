@@ -17,26 +17,25 @@ tags: [difficulty/medium, extensions, kotlin, programming-languages, properties]
 date created: Friday, October 31st 2025, 6:29:51 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Свойства Какого Вида Можно Добавить Как Расширение
-
-# Question (EN)
-> What kind of properties can be added as extensions?
 
 # Вопрос (RU)
 > Свойства какого вида можно добавить как расширение?
 
 ---
 
+# Question (EN)
+> What kind of properties can be added as extensions?
+
+## Ответ (RU)
+
+В Kotlin можно добавлять свойства-расширения (extension properties), но только с кастомным get (геттером). Можно добавлять val с get(). Расширяемые свойства могут быть только вычисляемыми (val), потому что нельзя создать field внутри расширения. var работает только с get() и set(), но всё равно нельзя использовать field.
+
 ## Answer (EN)
 
 In Kotlin, you can add extension properties, but only with a custom get (getter). You can add val with get(). Extension properties can only be computed (val) because you cannot create a field inside an extension. var works only with get() and set(), but you still cannot use a field.
 
 ---
-
-## Ответ (RU)
-
-В Kotlin можно добавлять свойства-расширения (extension properties), но только с кастомным get (геттером). Можно добавлять val с get(). Расширяемые свойства могут быть только вычисляемыми (val), потому что нельзя создать field внутри расширения. var работает только с get() и set(), но всё равно нельзя использовать field.
 
 ## Follow-ups
 

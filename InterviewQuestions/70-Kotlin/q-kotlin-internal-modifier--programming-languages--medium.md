@@ -17,16 +17,21 @@ tags: [access-modifiers, difficulty/medium, internal, module, programming-langua
 date created: Friday, October 31st 2025, 6:29:59 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Известно Про Internal?
-
-# Question (EN)
-> What is known about internal?
 
 # Вопрос (RU)
 > Что известно про internal?
 
 ---
+
+# Question (EN)
+> What is known about internal?
+
+## Ответ (RU)
+
+`internal` — это уровень доступа для всего модуля. Модуль — это обычно компиляционная единица: одна сборка Gradle, Maven или IntelliJ.
+
+Код с `internal` не будет виден в других модулях, даже если класс или функция — public. Полезно для сокрытия реализации между слоями или при использовании многомодульной архитектуры.
 
 ## Answer (EN)
 
@@ -236,12 +241,6 @@ MyClass.processData$module_name();  // Mangled name
 - **Encapsulates** implementation details
 
 ---
-
-## Ответ (RU)
-
-`internal` — это уровень доступа для всего модуля. Модуль — это обычно компиляционная единица: одна сборка Gradle, Maven или IntelliJ.
-
-Код с `internal` не будет виден в других модулях, даже если класс или функция — public. Полезно для сокрытия реализации между слоями или при использовании многомодульной архитектуры.
 
 ## Follow-ups
 

@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, kotlin, programming-languages, synchroniza
 date created: Saturday, October 4th 2025, 10:53:02 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Why Not Use Synchronized Blocks with Coroutines?
-
-# Question (EN)
-> Why should you not use synchronized blocks with coroutines?
 
 # Вопрос (RU)
 > Почему не следует использовать synchronized блоки с корутинами?
 
 ---
+
+# Question (EN)
+> Why should you not use synchronized blocks with coroutines?
+
+## Ответ (RU)
+
+1. synchronized блоки в Java/Kotlin работают на уровне потоков, а не корутин – это разные механизмы синхронизации.\", \"2. Блокировка потоков замедляет работу – Mutex работает в асинхронном стиле, не блокируя потоки.\", \"3. Глобальные synchronized блоки не учитывают отмену корутин – если корутина отменена, synchronized не освобощает ресурс
 
 ## Answer (EN)
 
@@ -461,10 +464,6 @@ fun demonstrateThreadBlocking() = runBlocking {
 
 ---
 
-
-## Ответ (RU)
-
-1. synchronized блоки в Java/Kotlin работают на уровне потоков, а не корутин – это разные механизмы синхронизации.\", \"2. Блокировка потоков замедляет работу – Mutex работает в асинхронном стиле, не блокируя потоки.\", \"3. Глобальные synchronized блоки не учитывают отмену корутин – если корутина отменена, synchronized не освобощает ресурс
 
 ## Follow-ups
 

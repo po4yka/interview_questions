@@ -17,47 +17,15 @@ tags: [difficulty/medium]
 date created: Sunday, October 12th 2025, 3:43:41 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Такое Inline Функции?
-
-# Question (EN)
-> What are inline functions in Kotlin and why use them?
 
 # Вопрос (RU)
 > Что такое inline функции в Kotlin и зачем они нужны?
 
 ---
 
-## Answer (EN)
-
-Inline functions insert their code directly at the call site during compilation instead of creating a new call stack.
-
-**Benefits:**
-1. **Reduces overhead** - no function call stack, better performance
-2. **Avoids lambda object allocation** - lambdas are inlined, reducing GC pressure
-3. **Enables reified type parameters** - runtime type checking with `reified`
-
-**Example:**
-```kotlin
-inline fun measureTime(block: () -> Unit) {
-    val start = System.currentTimeMillis()
-    block()
-    val end = System.currentTimeMillis()
-    println("Time: ${end - start}ms")
-}
-
-// After compilation, becomes:
-val start = System.currentTimeMillis()
-performOperation()  // code inlined directly!
-val end = System.currentTimeMillis()
-println("Time: ${end - start}ms")
-```
-
-**Use cases:** Higher-order functions with lambda parameters (filter, map), reified generics, performance-critical code.
-
-**Modifiers:** `noinline` (disables inlining for specific parameter), `crossinline` (prevents non-local returns).
-
----
+# Question (EN)
+> What are inline functions in Kotlin and why use them?
 
 ## Ответ (RU)
 
@@ -179,6 +147,37 @@ inline fun runInThread(crossinline block: () -> Unit) {
     }.start()
 }
 ```
+
+## Answer (EN)
+
+Inline functions insert their code directly at the call site during compilation instead of creating a new call stack.
+
+**Benefits:**
+1. **Reduces overhead** - no function call stack, better performance
+2. **Avoids lambda object allocation** - lambdas are inlined, reducing GC pressure
+3. **Enables reified type parameters** - runtime type checking with `reified`
+
+**Example:**
+```kotlin
+inline fun measureTime(block: () -> Unit) {
+    val start = System.currentTimeMillis()
+    block()
+    val end = System.currentTimeMillis()
+    println("Time: ${end - start}ms")
+}
+
+// After compilation, becomes:
+val start = System.currentTimeMillis()
+performOperation()  // code inlined directly!
+val end = System.currentTimeMillis()
+println("Time: ${end - start}ms")
+```
+
+**Use cases:** Higher-order functions with lambda parameters (filter, map), reified generics, performance-critical code.
+
+**Modifiers:** `noinline` (disables inlining for specific parameter), `crossinline` (prevents non-local returns).
+
+---
 
 ## Follow-ups
 

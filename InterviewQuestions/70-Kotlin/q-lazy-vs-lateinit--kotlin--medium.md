@@ -28,11 +28,99 @@ tags: [delegation, difficulty/medium, initialization, kotlin, lateinit, lazy]
 date created: Friday, October 17th 2025, 9:48:25 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> В чем разница между lazy и lateinit в Kotlin?
+
+---
 
 # Question (EN)
 > What is the difference between lazy and lateinit in Kotlin?
-# Вопрос (RU)
-> В чем разница между lazy и lateinit в Kotlin?
+## Ответ (RU)
+
+### lazy()
+
+Функция, которая принимает лямбду и возвращает экземпляр `Lazy<T>` для реализации ленивых свойств. Первый вызов выполняет лямбду и запоминает результат. Последующие вызовы возвращают запомненный результат.
+
+```kotlin
+val lazyValue: String by lazy {
+    println("computed!")
+    "Hello"
+}
+
+fun main() {
+    println(lazyValue)  // Печатает: computed! \n Hello
+    println(lazyValue)  // Печатает: Hello (кешировано)
+}
+```
+
+### Lateinit
+
+Ключевое слово, которое позволяет объявлять ненулевые свойства без немедленной инициализации. Должно быть инициализировано перед доступом, иначе выбрасывает `UninitializedPropertyAccessException`.
+
+```kotlin
+class DemoClass {
+    lateinit var userAge: UserAge
+
+    fun init() {
+        userAge = UserAge(27)
+    }
+
+    fun printAge() {
+        if (::userAge.isInitialized) {
+            println("Age is : ${userAge.age}")
+        } else {
+            println("Age not initialized")
+        }
+    }
+}
+```
+
+### Ключевые Отличия
+
+| Функция | lazy | lateinit |
+|---------|------|----------|
+| **Тип свойства** | Только `val` | Только `var` |
+| **Примитивные типы** | - Можно использовать | - Нельзя использовать |
+| **Nullable** | - Можно использовать | - Нельзя использовать |
+| **Потокобезопасность** | - Потокобезопасен по умолчанию | - Не потокобезопасен |
+| **Инициализация** | Только из лямбды-инициализатора | Откуда угодно |
+| **Проверка инициализации** | N/A (всегда инициализирован) | `::property.isInitialized` |
+| **Когда инициализируется** | При первом доступе | Вручную перед использованием |
+
+### Потокобезопасность
+
+```kotlin
+// lazy - потокобезопасен по умолчанию
+val threadSafeValue by lazy {
+    // Гарантированно выполнится только один раз
+    expensiveComputation()
+}
+
+// lateinit - нужна ручная синхронизация
+lateinit var threadUnsafeValue: String
+
+fun initialize() {
+    synchronized(this) {
+        threadUnsafeValue = computeValue()
+    }
+}
+```
+
+### Случаи Использования
+
+**Используйте lazy когда**:
+- Свойство `val` (неизменяемое)
+- Инициализация дорогая и может не понадобиться
+- Работа с nullable или примитивными типами
+- Нужна потокобезопасность
+
+**Используйте lateinit когда**:
+- Свойство `var` (изменяемое)
+- Инициализация зависит от внешнего контекста (DI, lifecycle)
+- Свойство должно быть не-null и не-примитивным
+- Нужно переинициализировать свойство
+
+**Краткое содержание**: lazy для val свойств, потокобезопасный, поддерживает примитивы/nullable, инициализируется при первом доступе. lateinit для var свойств, не потокобезопасный, только не-null не-примитивы, инициализируется вручную. lazy гарантирует однократную инициализацию; lateinit позволяет проверять состояние инициализации и переинициализировать.
 
 ---
 
@@ -122,95 +210,6 @@ fun initialize() {
 - Need to reinitialize the property
 
 **English Summary**: lazy is for val properties, thread-safe, supports primitives/nullables, initialized on first access. lateinit is for var properties, not thread-safe, non-null non-primitives only, manually initialized. lazy guarantees one-time initialization; lateinit allows checking initialization state and reinitializing.
-
-## Ответ (RU)
-
-### lazy()
-
-Функция, которая принимает лямбду и возвращает экземпляр `Lazy<T>` для реализации ленивых свойств. Первый вызов выполняет лямбду и запоминает результат. Последующие вызовы возвращают запомненный результат.
-
-```kotlin
-val lazyValue: String by lazy {
-    println("computed!")
-    "Hello"
-}
-
-fun main() {
-    println(lazyValue)  // Печатает: computed! \n Hello
-    println(lazyValue)  // Печатает: Hello (кешировано)
-}
-```
-
-### Lateinit
-
-Ключевое слово, которое позволяет объявлять ненулевые свойства без немедленной инициализации. Должно быть инициализировано перед доступом, иначе выбрасывает `UninitializedPropertyAccessException`.
-
-```kotlin
-class DemoClass {
-    lateinit var userAge: UserAge
-
-    fun init() {
-        userAge = UserAge(27)
-    }
-
-    fun printAge() {
-        if (::userAge.isInitialized) {
-            println("Age is : ${userAge.age}")
-        } else {
-            println("Age not initialized")
-        }
-    }
-}
-```
-
-### Ключевые Отличия
-
-| Функция | lazy | lateinit |
-|---------|------|----------|
-| **Тип свойства** | Только `val` | Только `var` |
-| **Примитивные типы** | - Можно использовать | - Нельзя использовать |
-| **Nullable** | - Можно использовать | - Нельзя использовать |
-| **Потокобезопасность** | - Потокобезопасен по умолчанию | - Не потокобезопасен |
-| **Инициализация** | Только из лямбды-инициализатора | Откуда угодно |
-| **Проверка инициализации** | N/A (всегда инициализирован) | `::property.isInitialized` |
-| **Когда инициализируется** | При первом доступе | Вручную перед использованием |
-
-### Потокобезопасность
-
-```kotlin
-// lazy - потокобезопасен по умолчанию
-val threadSafeValue by lazy {
-    // Гарантированно выполнится только один раз
-    expensiveComputation()
-}
-
-// lateinit - нужна ручная синхронизация
-lateinit var threadUnsafeValue: String
-
-fun initialize() {
-    synchronized(this) {
-        threadUnsafeValue = computeValue()
-    }
-}
-```
-
-### Случаи Использования
-
-**Используйте lazy когда**:
-- Свойство `val` (неизменяемое)
-- Инициализация дорогая и может не понадобиться
-- Работа с nullable или примитивными типами
-- Нужна потокобезопасность
-
-**Используйте lateinit когда**:
-- Свойство `var` (изменяемое)
-- Инициализация зависит от внешнего контекста (DI, lifecycle)
-- Свойство должно быть не-null и не-примитивным
-- Нужно переинициализировать свойство
-
-**Краткое содержание**: lazy для val свойств, потокобезопасный, поддерживает примитивы/nullable, инициализируется при первом доступе. lateinit для var свойств, не потокобезопасный, только не-null не-примитивы, инициализируется вручную. lazy гарантирует однократную инициализацию; lateinit позволяет проверять состояние инициализации и переинициализировать.
-
----
 
 ## References
 - [Delegated Properties - Kotlin](https://kotlinlang.org/docs/delegated-properties.html)

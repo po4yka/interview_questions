@@ -17,50 +17,15 @@ tags: [difficulty/easy, let, null-safety, programming-languages, scope-functions
 date created: Friday, October 31st 2025, 6:30:30 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Для Чего Нужен Let?
-
-# Question (EN)
-> What is the `let` function used for in Kotlin?
 
 # Вопрос (RU)
 > Для чего нужна функция `let` в Kotlin?
 
 ---
 
-## Answer (EN)
-
-`let` is one of several scope functions in Kotlin standard library that provide more convenient value management, especially when working with potentially null values.
-
-**Main purposes:**
-
-1. **Handling nullable values**: Safe work with variables that may be null
-```kotlin
-nullable?.let {
-    // This block executes only if nullable is not null
-    println(it.length)
-}
-```
-
-2. **Reducing scope**: Limiting variable scope to temporary values
-```kotlin
-val result = computeValue().let { value ->
-    // Use value only in this scope
-    transformValue(value)
-}
-```
-
-3. **Call chaining**: Creating method call chains
-```kotlin
-value
-    .let { it.trim() }
-    .let { it.uppercase() }
-    .let { println(it) }
-```
-
-`let` receives the object as `it` parameter and returns the result of lambda.
-
----
+# Question (EN)
+> What is the `let` function used for in Kotlin?
 
 ## Ответ (RU)
 
@@ -111,6 +76,40 @@ user?.let {
     println(it.name)
 }
 ```
+
+## Answer (EN)
+
+`let` is one of several scope functions in Kotlin standard library that provide more convenient value management, especially when working with potentially null values.
+
+**Main purposes:**
+
+1. **Handling nullable values**: Safe work with variables that may be null
+```kotlin
+nullable?.let {
+    // This block executes only if nullable is not null
+    println(it.length)
+}
+```
+
+2. **Reducing scope**: Limiting variable scope to temporary values
+```kotlin
+val result = computeValue().let { value ->
+    // Use value only in this scope
+    transformValue(value)
+}
+```
+
+3. **Call chaining**: Creating method call chains
+```kotlin
+value
+    .let { it.trim() }
+    .let { it.uppercase() }
+    .let { println(it) }
+```
+
+`let` receives the object as `it` parameter and returns the result of lambda.
+
+---
 
 ## Follow-ups
 

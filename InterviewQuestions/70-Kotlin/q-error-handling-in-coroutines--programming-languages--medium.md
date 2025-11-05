@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, error-handling, exception-handling, kotlin
 date created: Friday, October 31st 2025, 6:29:51 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Error Handling Methods in Coroutines
-
-# Question (EN)
-> What methods are known for error handling in coroutines?
 
 # Вопрос (RU)
 > Какие известны способы обработки ошибок в корутинах?
 
 ---
+
+# Question (EN)
+> What methods are known for error handling in coroutines?
+
+## Ответ (RU)
+
+1. Try-catch внутри launch {} или async {} – локальная обработка ошибок.\",
 
 ## Answer (EN)
 
@@ -199,10 +202,6 @@ class ErrorHandlingBestPractices {
 ```
 
 ---
-
-## Ответ (RU)
-
-1. Try-catch внутри launch {} или async {} – локальная обработка ошибок.\",
 
 ## Follow-ups
 

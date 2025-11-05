@@ -17,54 +17,15 @@ tags: [comparison, concurrency, coroutines, difficulty/medium, java, kotlin, pro
 date created: Friday, October 31st 2025, 6:32:12 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # В Чем Концептуальное Отличие Корутинов От Потоков В Java
-
-# Question (EN)
-> What is the conceptual difference between coroutines and Java threads?
 
 # Вопрос (RU)
 > В чём концептуальное отличие корутин от потоков в Java?
 
 ---
 
-## Answer (EN)
-
-**Coroutines** are lightweight and managed at the language level, unlike threads which are heavyweight and OS-managed.
-
-**Key differences:**
-
-| Aspect | Coroutines | Threads |
-|--------|-----------|---------|
-| **Weight** | Lightweight (thousands possible) | Heavyweight (limited by OS) |
-| **Management** | Language-level (Kotlin runtime) | OS-level |
-| **Cost** | Low memory/CPU overhead | High memory/CPU overhead |
-| **Context switching** | Cheap (user space) | Expensive (kernel space) |
-| **Blocking** | Suspending (non-blocking) | Blocking |
-| **Creation cost** | ~100 bytes | ~1 MB per thread |
-| **Scalability** | Can have 100,000+ coroutines | Limited to ~thousands of threads |
-
-**Why coroutines are better for I/O:**
-- Threads block while waiting → waste resources
-- Coroutines suspend → free the thread for other work
-- Code remains sequential and readable with `suspend` functions
-
-**Example:**
-```kotlin
-// Coroutine - can handle 100,000 concurrent operations
-launch {
-    val result = api.fetchData() // Suspends, doesn't block
-    updateUI(result)
-}
-
-// Thread - blocks, limited to ~10,000 concurrent operations
-thread {
-    val result = api.fetchData() // Blocks the thread
-    updateUI(result)
-}
-```
-
----
+# Question (EN)
+> What is the conceptual difference between coroutines and Java threads?
 
 ## Ответ (RU)
 
@@ -103,6 +64,44 @@ thread {
 ```
 
 **Основное преимущество:** корутины позволяют писать асинхронный код так, как будто он синхронный, без callback hell и с меньшими затратами ресурсов.
+
+## Answer (EN)
+
+**Coroutines** are lightweight and managed at the language level, unlike threads which are heavyweight and OS-managed.
+
+**Key differences:**
+
+| Aspect | Coroutines | Threads |
+|--------|-----------|---------|
+| **Weight** | Lightweight (thousands possible) | Heavyweight (limited by OS) |
+| **Management** | Language-level (Kotlin runtime) | OS-level |
+| **Cost** | Low memory/CPU overhead | High memory/CPU overhead |
+| **Context switching** | Cheap (user space) | Expensive (kernel space) |
+| **Blocking** | Suspending (non-blocking) | Blocking |
+| **Creation cost** | ~100 bytes | ~1 MB per thread |
+| **Scalability** | Can have 100,000+ coroutines | Limited to ~thousands of threads |
+
+**Why coroutines are better for I/O:**
+- Threads block while waiting → waste resources
+- Coroutines suspend → free the thread for other work
+- Code remains sequential and readable with `suspend` functions
+
+**Example:**
+```kotlin
+// Coroutine - can handle 100,000 concurrent operations
+launch {
+    val result = api.fetchData() // Suspends, doesn't block
+    updateUI(result)
+}
+
+// Thread - blocks, limited to ~10,000 concurrent operations
+thread {
+    val result = api.fetchData() // Blocks the thread
+    updateUI(result)
+}
+```
+
+---
 
 ## Follow-ups
 

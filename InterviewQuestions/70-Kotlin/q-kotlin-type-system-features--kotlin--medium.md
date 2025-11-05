@@ -17,16 +17,19 @@ tags: [data-classes, difficulty/medium, kotlin, null-safety, sealed-classes, typ
 date created: Friday, October 31st 2025, 6:28:53 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # Какие Знаешь Особенности Системы Типов В Kotlin?
-
-# Question (EN)
-> What Kotlin type system features do you know?
 
 # Вопрос (RU)
 > Какие знаешь особенности системы типов в Kotlin?
 
 ---
+
+# Question (EN)
+> What Kotlin type system features do you know?
+
+## Ответ (RU)
+
+Null Safety (Безопасность null), Коллекции разделение на изменяемые и неизменяемые коллекции, Data Classes автоматическое создание методов equals hashCode и toString, Smart Casts автоматическое приведение типа после проверки с помощью is, Sealed Classes упрощают обработку ограниченных иерархий классов, Выведение типов Kotlin автоматически определяет тип переменной
 
 ## Answer (EN)
 
@@ -81,10 +84,6 @@ val name = "John" // Type inferred as String
 These features make Kotlin code **safer, more concise, and more expressive**.
 
 ---
-
-## Ответ (RU)
-
-Null Safety (Безопасность null), Коллекции разделение на изменяемые и неизменяемые коллекции, Data Classes автоматическое создание методов equals hashCode и toString, Smart Casts автоматическое приведение типа после проверки с помощью is, Sealed Classes упрощают обработку ограниченных иерархий классов, Выведение типов Kotlin автоматически определяет тип переменной
 
 ## Follow-ups
 

@@ -17,16 +17,19 @@ tags: [dependency-injection, difficulty/medium, initialization, lateinit, progra
 date created: Friday, October 31st 2025, 6:30:30 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Известно О Lateinit?
-
-# Question (EN)
-> What do you know about lateinit?
 
 # Вопрос (RU)
 > Что известно о lateinit?
 
 ---
+
+# Question (EN)
+> What do you know about lateinit?
+
+## Ответ (RU)
+
+1. lateinit используется для откладывания инициализации переменных (только для var и только ссылочных типов). 2. Поле помечается как lateinit и должно быть инициализировано до первого использования, иначе выбрасывается UninitializedPropertyAccessException. 3. Это полезно в случаях, когда инициализация зависит от внешних условий (например, DI или тестирование).
 
 ## Answer (EN)
 
@@ -99,10 +102,6 @@ if (::name.isInitialized) {
 - Cannot be used with primitive types
 
 ---
-
-## Ответ (RU)
-
-1. lateinit используется для откладывания инициализации переменных (только для var и только ссылочных типов). 2. Поле помечается как lateinit и должно быть инициализировано до первого использования, иначе выбрасывается UninitializedPropertyAccessException. 3. Это полезно в случаях, когда инициализация зависит от внешних условий (например, DI или тестирование).
 
 ## Follow-ups
 

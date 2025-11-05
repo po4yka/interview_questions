@@ -17,42 +17,15 @@ tags: [difficulty/medium, equality, hashmap, kotlin, object-comparison]
 date created: Friday, October 31st 2025, 6:29:04 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Зачем Нужны Методы Equals И Hashcode?
-
-# Question (EN)
-> Why are equals() and hashCode() methods needed in Kotlin/Java?
 
 # Вопрос (RU)
 > Зачем нужны методы equals() и hashCode() в Kotlin/Java?
 
 ---
 
-## Answer (EN)
-
-`equals()` and `hashCode()` are fundamental methods for object comparison and collection management.
-
-**equals()**: Defines object equality by content instead of reference comparison. Without it, `==` compares only references (memory addresses).
-
-**hashCode()**: Returns a hash code for use in hash-based collections (HashMap, HashSet). Enables fast lookups in O(1) time.
-
-**Critical contract**: If `a.equals(b)` is true, then `a.hashCode()` must equal `b.hashCode()`. Violating this breaks hash-based collections.
-
-**Example of broken implementation:**
-```kotlin
-class User(val name: String) {
-    override fun equals(other: Any?) = (other as? User)?.name == name
-    // Missing hashCode()! HashMap won't work correctly
-}
-
-val map = hashMapOf<User, String>()
-map[User("Alice")] = "Engineer"
-println(map[User("Alice")])  // null - broken!
-```
-
-**Correct solution**: Use data classes - they auto-generate both methods correctly.
-
----
+# Question (EN)
+> Why are equals() and hashCode() methods needed in Kotlin/Java?
 
 ## Ответ (RU)
 
@@ -179,6 +152,32 @@ val userRoles = hashMapOf<User, String>()
 userRoles[User("Alice", 30)] = "Engineer"
 println(userRoles[User("Alice", 30)])  // "Engineer"
 ```
+
+## Answer (EN)
+
+`equals()` and `hashCode()` are fundamental methods for object comparison and collection management.
+
+**equals()**: Defines object equality by content instead of reference comparison. Without it, `==` compares only references (memory addresses).
+
+**hashCode()**: Returns a hash code for use in hash-based collections (HashMap, HashSet). Enables fast lookups in O(1) time.
+
+**Critical contract**: If `a.equals(b)` is true, then `a.hashCode()` must equal `b.hashCode()`. Violating this breaks hash-based collections.
+
+**Example of broken implementation:**
+```kotlin
+class User(val name: String) {
+    override fun equals(other: Any?) = (other as? User)?.name == name
+    // Missing hashCode()! HashMap won't work correctly
+}
+
+val map = hashMapOf<User, String>()
+map[User("Alice")] = "Engineer"
+println(map[User("Alice")])  // null - broken!
+```
+
+**Correct solution**: Use data classes - they auto-generate both methods correctly.
+
+---
 
 ## Follow-ups
 

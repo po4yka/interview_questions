@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, kotlin, programming-languages, scope]
 date created: Saturday, October 4th 2025, 10:52:06 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # What is CoroutineScope?
-
-# Question (EN)
-> What is CoroutineScope?
 
 # Вопрос (RU)
 > Что такое CoroutineScope?
 
 ---
+
+# Question (EN)
+> What is CoroutineScope?
+
+## Ответ (RU)
+
+Это область, в которой выполняются корутины в Kotlin. Определяет жизненный цикл корутин и позволяет отменять их при завершении scope. GlobalScope – живет все время работы приложения, но редко используется. viewModelScope – в ViewModel, отменяется при уничтожении ViewModel. lifecycleScope – в Activity/Fragment, отменяется при уничтожении UI.
 
 ## Answer (EN)
 
@@ -383,10 +386,6 @@ class MyRepositoryTest {
 
 ---
 
-
-## Ответ (RU)
-
-Это область, в которой выполняются корутины в Kotlin. Определяет жизненный цикл корутин и позволяет отменять их при завершении scope. GlobalScope – живет все время работы приложения, но редко используется. viewModelScope – в ViewModel, отменяется при уничтожении ViewModel. lifecycleScope – в Activity/Fragment, отменяется при уничтожении UI.
 
 ## Follow-ups
 

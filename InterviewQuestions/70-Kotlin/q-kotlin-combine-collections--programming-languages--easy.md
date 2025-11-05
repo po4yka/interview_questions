@@ -17,22 +17,15 @@ tags: [difficulty/easy]
 date created: Thursday, October 16th 2025, 4:16:12 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Какая Функция Kotlin Используется Для Объединения Двух Коллекций?
-
-# Question (EN)
-> What Kotlin function is used to combine two collections?
 
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?
 
 ---
 
-## Answer (EN)
-
-The + operator (plus function)
-
----
+# Question (EN)
+> What Kotlin function is used to combine two collections?
 
 ## Ответ (RU)
 
@@ -87,6 +80,12 @@ mutableList.addAll(listOf(4, 5, 6))
 - Для Set дубликаты автоматически удаляются
 - Для Map при совпадении ключей значение из второй коллекции перезаписывает значение из первой
 
+
+---
+
+## Answer (EN)
+
+The + operator (plus function)
 
 ---
 

@@ -28,12 +28,66 @@ tags: [coroutines, difficulty/medium, kotlin, sharedflow, stateflow, testing, vi
 date created: Sunday, October 12th 2025, 1:20:44 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как тестировать StateFlow и SharedFlow в ViewModels? Покрыть стратегии коллекции, библиотеку turbine, TestScope, утверждения и граничные случаи вроде replay cache и conflation.
+
+---
 
 # Question (EN)
 > How to test StateFlow and SharedFlow in ViewModels? Cover collection strategies, turbine library, TestScope, assertions, and edge cases like replay cache and conflation.
 
-# Вопрос (RU)
-> Как тестировать StateFlow и SharedFlow в ViewModels? Покрыть стратегии коллекции, библиотеку turbine, TestScope, утверждения и граничные случаи вроде replay cache и conflation.
+## Ответ (RU)
+
+Тестирование StateFlow и SharedFlow требует понимания их уникальных характеристик: StateFlow поддерживает текущее состояние и объединяет значения, в то время как SharedFlow может воспроизводить эмиссии и не имеет объединения по умолчанию.
+
+### Основы StateFlow
+
+StateFlow - это горячий Flow, который всегда имеет значение и эмитит самое последнее значение новым коллекторам.
+
+```kotlin
+class CounterViewModel : ViewModel() {
+    private val _counter = MutableStateFlow(0)
+    val counter: StateFlow<Int> = _counter.asStateFlow()
+
+    fun increment() {
+        _counter.value++
+    }
+}
+
+@Test
+fun `начальное состояние равно 0`() {
+    assertEquals(0, viewModel.counter.value)
+}
+```
+
+### Использование Библиотеки Turbine
+
+Turbine делает тестирование Flow намного чище и читабельнее.
+
+```kotlin
+@Test
+fun `поиск обновляет результаты - с turbine`() = runTest {
+    viewModel.searchResults.test {
+        assertEquals(emptyList(), awaitItem())
+
+        viewModel.search("query")
+
+        val results = awaitItem()
+        assertEquals(2, results.size)
+
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+```
+
+### Лучшие Практики
+
+1. **Используйте turbine** для более чистых тестов
+2. **Тестируйте текущее значение StateFlow** напрямую
+3. **Используйте fake репозитории**, не моки
+4. **Отменяйте collection jobs** с помощью `cancelAndIgnoreRemainingEvents()`
+5. **Используйте UnconfinedTestDispatcher** для простых тестов
+6. **Тестируйте последовательности состояний** для сложных потоков
 
 ---
 
@@ -1111,61 +1165,6 @@ class FakeRepository : Repository {
 - Use fake repositories
 - Test state sequences for complex flows
 - Test current value for simple state checks
-
----
-
-## Ответ (RU)
-
-Тестирование StateFlow и SharedFlow требует понимания их уникальных характеристик: StateFlow поддерживает текущее состояние и объединяет значения, в то время как SharedFlow может воспроизводить эмиссии и не имеет объединения по умолчанию.
-
-### Основы StateFlow
-
-StateFlow - это горячий Flow, который всегда имеет значение и эмитит самое последнее значение новым коллекторам.
-
-```kotlin
-class CounterViewModel : ViewModel() {
-    private val _counter = MutableStateFlow(0)
-    val counter: StateFlow<Int> = _counter.asStateFlow()
-
-    fun increment() {
-        _counter.value++
-    }
-}
-
-@Test
-fun `начальное состояние равно 0`() {
-    assertEquals(0, viewModel.counter.value)
-}
-```
-
-### Использование Библиотеки Turbine
-
-Turbine делает тестирование Flow намного чище и читабельнее.
-
-```kotlin
-@Test
-fun `поиск обновляет результаты - с turbine`() = runTest {
-    viewModel.searchResults.test {
-        assertEquals(emptyList(), awaitItem())
-
-        viewModel.search("query")
-
-        val results = awaitItem()
-        assertEquals(2, results.size)
-
-        cancelAndIgnoreRemainingEvents()
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте turbine** для более чистых тестов
-2. **Тестируйте текущее значение StateFlow** напрямую
-3. **Используйте fake репозитории**, не моки
-4. **Отменяйте collection jobs** с помощью `cancelAndIgnoreRemainingEvents()`
-5. **Используйте UnconfinedTestDispatcher** для простых тестов
-6. **Тестируйте последовательности состояний** для сложных потоков
 
 ---
 

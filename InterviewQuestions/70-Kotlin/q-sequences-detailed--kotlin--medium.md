@@ -28,11 +28,58 @@ tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, seq
 date created: Sunday, October 12th 2025, 12:27:46 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Что такое последовательности в Kotlin и чем они отличаются от Iterable?
+
+---
 
 # Question (EN)
 > What are sequences in Kotlin and how do they differ from Iterables?
-# Вопрос (RU)
-> Что такое последовательности в Kotlin и чем они отличаются от Iterable?
+## Ответ (RU)
+
+Последовательности предлагают те же функции что и Iterable, но реализуют другой подход к многоэтапной обработке коллекций через **ленивое вычисление**.
+
+### Жадное Vs Ленивое Вычисление
+
+**Iterable (жадное)**: Каждый этап обработки завершается полностью и возвращает промежуточную коллекцию.
+
+**Sequence (ленивое)**: Этапы обработки выполняются только когда запрошен результат.
+
+### Пример
+
+```kotlin
+sequenceOf("A", "B", "C")
+    .filter {
+        println("filter: $it")
+        true
+    }
+    .forEach {
+        println("forEach: $it")
+    }
+
+// Вывод (элемент за элементом):
+// filter:  A
+// forEach: A
+// filter:  B
+// forEach: B
+// filter:  C
+// forEach: C
+```
+
+### Когда Использовать
+
+**Используйте Sequence когда**:
+- Обработка больших коллекций
+- Множественные этапы трансформации
+- Не все элементы нужно обрабатывать
+- Дорогостоящие операции
+
+**Используйте Iterable когда**:
+- Маленькие коллекции
+- Простые операции
+- Нужны все результаты сразу
+
+**Краткое содержание**: Последовательности используют ленивое вычисление - операции выполняются элемент за элементом только при вызове терминальной операции. Iterable используют жадное вычисление - каждый этап обрабатывает всю коллекцию. Последовательности избегают промежуточных коллекций, улучшая производительность для больших наборов данных.
 
 ---
 
@@ -128,54 +175,6 @@ However, lazy nature adds overhead for small collections or simple computations.
 - Need all results immediately
 
 **English Summary**: Sequences use lazy evaluation - operations execute element-by-element only when terminal operation is called. Iterables use eager evaluation - each step processes entire collection. Sequences avoid intermediate collections, improving performance for large datasets and chained operations. Use sequences for large collections with multiple transformations; iterables for small collections and simple operations.
-
-## Ответ (RU)
-
-Последовательности предлагают те же функции что и Iterable, но реализуют другой подход к многоэтапной обработке коллекций через **ленивое вычисление**.
-
-### Жадное Vs Ленивое Вычисление
-
-**Iterable (жадное)**: Каждый этап обработки завершается полностью и возвращает промежуточную коллекцию.
-
-**Sequence (ленивое)**: Этапы обработки выполняются только когда запрошен результат.
-
-### Пример
-
-```kotlin
-sequenceOf("A", "B", "C")
-    .filter {
-        println("filter: $it")
-        true
-    }
-    .forEach {
-        println("forEach: $it")
-    }
-
-// Вывод (элемент за элементом):
-// filter:  A
-// forEach: A
-// filter:  B
-// forEach: B
-// filter:  C
-// forEach: C
-```
-
-### Когда Использовать
-
-**Используйте Sequence когда**:
-- Обработка больших коллекций
-- Множественные этапы трансформации
-- Не все элементы нужно обрабатывать
-- Дорогостоящие операции
-
-**Используйте Iterable когда**:
-- Маленькие коллекции
-- Простые операции
-- Нужны все результаты сразу
-
-**Краткое содержание**: Последовательности используют ленивое вычисление - операции выполняются элемент за элементом только при вызове терминальной операции. Iterable используют жадное вычисление - каждый этап обрабатывает всю коллекцию. Последовательности избегают промежуточных коллекций, улучшая производительность для больших наборов данных.
-
----
 
 ## References
 - [Sequences - Kotlin Documentation](https://kotlinlang.org/docs/reference/sequences.html)

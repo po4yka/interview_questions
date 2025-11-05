@@ -17,14 +17,158 @@ tags: [difficulty/easy, inheritance, java, object-class, oop, programming-langua
 date created: Saturday, November 1st 2025, 12:43:06 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # От Какого Объекта Наследуются Все Классы В Java?
+
+# Вопрос (RU)
+> От какого объекта наследуются все классы в Java?
+
+---
 
 # Question (EN)
 > From which object do all classes in Java inherit?
 
-# Вопрос (RU)
-> От какого объекта наследуются все классы в Java?
+## Ответ (RU)
+
+В Java все классы неявно наследуются от класса **Object**, если явно не указано другое наследование.
+
+**Методы класса Object:**
+
+Каждый класс автоматически получает эти методы:
+
+```java
+public class MyClass {
+    // Автоматически наследуется от Object
+}
+
+// Эквивалентно:
+public class MyClass extends Object {
+    // ...
+}
+```
+
+**Ключевые методы Object:**
+
+**1. toString()** - строковое представление
+
+```java
+class Person {
+    String name;
+
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "'}";
+    }
+}
+
+Person person = new Person();
+person.name = "John";
+System.out.println(person.toString());  // Person{name='John'}
+```
+
+**2. equals()** - сравнение объектов
+
+```java
+@Override
+public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Person person = (Person) obj;
+    return name.equals(person.name);
+}
+```
+
+**3. hashCode()** - хэш-значение
+
+```java
+@Override
+public int hashCode() {
+    return Objects.hash(name);
+}
+```
+
+**4. getClass()** - информация о классе во время выполнения
+
+```java
+Class<?> clazz = person.getClass();
+System.out.println(clazz.getName());  // Person
+```
+
+**5. clone()** - копирование объекта
+
+```java
+class Person implements Cloneable {
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+```
+
+**6. finalize()** - очистка (устарел)
+
+```java
+@Override
+protected void finalize() throws Throwable {
+    // Код очистки (устарел в Java 9+)
+}
+```
+
+**7. wait(), notify(), notifyAll()** - синхронизация потоков
+
+```java
+synchronized (obj) {
+    obj.wait();    // Ожидание уведомления
+    obj.notify();  // Разбудить один ожидающий поток
+}
+```
+
+**Все методы Object:**
+
+| Метод | Назначение | Переопределять? |
+|--------|---------|-----------|
+| toString() | Строковое представление | Рекомендуется |
+| equals() | Логическое равенство | Часто нужно |
+| hashCode() | Хэш-значение | Вместе с equals() |
+| clone() | Копировать объект | Если Cloneable |
+| getClass() | Тип во время выполнения | Final |
+| wait() | Ожидание потока | Final |
+| notify() | Разбудить поток | Final |
+| finalize() | Очистка | Устарел |
+
+**Пример:**
+
+```java
+class User {
+    private String username;
+
+    // Автоматически наследуется от Object
+
+    @Override
+    public String toString() {
+        return "User: " + username;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User)) return false;
+        User other = (User) obj;
+        return username.equals(other.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
+}
+```
+
+**Резюме:**
+
+- **Все Java классы** наследуются от Object
+- **Неявное наследование** если не указано
+- **Общие методы** доступны всем объектам
+- **Переопределяйте** toString(), equals(), hashCode() по необходимости
+
 
 ---
 
@@ -169,151 +313,6 @@ class User {
 - **Implicit inheritance** if not specified
 - **Common methods** available to all objects
 - **Override** toString(), equals(), hashCode() as needed
-
----
-
-## Ответ (RU)
-
-В Java все классы неявно наследуются от класса **Object**, если явно не указано другое наследование.
-
-**Методы класса Object:**
-
-Каждый класс автоматически получает эти методы:
-
-```java
-public class MyClass {
-    // Автоматически наследуется от Object
-}
-
-// Эквивалентно:
-public class MyClass extends Object {
-    // ...
-}
-```
-
-**Ключевые методы Object:**
-
-**1. toString()** - строковое представление
-
-```java
-class Person {
-    String name;
-
-    @Override
-    public String toString() {
-        return "Person{name='" + name + "'}";
-    }
-}
-
-Person person = new Person();
-person.name = "John";
-System.out.println(person.toString());  // Person{name='John'}
-```
-
-**2. equals()** - сравнение объектов
-
-```java
-@Override
-public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null || getClass() != obj.getClass()) return false;
-    Person person = (Person) obj;
-    return name.equals(person.name);
-}
-```
-
-**3. hashCode()** - хэш-значение
-
-```java
-@Override
-public int hashCode() {
-    return Objects.hash(name);
-}
-```
-
-**4. getClass()** - информация о классе во время выполнения
-
-```java
-Class<?> clazz = person.getClass();
-System.out.println(clazz.getName());  // Person
-```
-
-**5. clone()** - копирование объекта
-
-```java
-class Person implements Cloneable {
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-}
-```
-
-**6. finalize()** - очистка (устарел)
-
-```java
-@Override
-protected void finalize() throws Throwable {
-    // Код очистки (устарел в Java 9+)
-}
-```
-
-**7. wait(), notify(), notifyAll()** - синхронизация потоков
-
-```java
-synchronized (obj) {
-    obj.wait();    // Ожидание уведомления
-    obj.notify();  // Разбудить один ожидающий поток
-}
-```
-
-**Все методы Object:**
-
-| Метод | Назначение | Переопределять? |
-|--------|---------|-----------|
-| toString() | Строковое представление | Рекомендуется |
-| equals() | Логическое равенство | Часто нужно |
-| hashCode() | Хэш-значение | Вместе с equals() |
-| clone() | Копировать объект | Если Cloneable |
-| getClass() | Тип во время выполнения | Final |
-| wait() | Ожидание потока | Final |
-| notify() | Разбудить поток | Final |
-| finalize() | Очистка | Устарел |
-
-**Пример:**
-
-```java
-class User {
-    private String username;
-
-    // Автоматически наследуется от Object
-
-    @Override
-    public String toString() {
-        return "User: " + username;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof User)) return false;
-        User other = (User) obj;
-        return username.equals(other.username);
-    }
-
-    @Override
-    public int hashCode() {
-        return username.hashCode();
-    }
-}
-```
-
-**Резюме:**
-
-- **Все Java классы** наследуются от Object
-- **Неявное наследование** если не указано
-- **Общие методы** доступны всем объектам
-- **Переопределяйте** toString(), equals(), hashCode() по необходимости
-
 
 ---
 

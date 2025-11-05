@@ -17,29 +17,15 @@ tags: [difficulty/medium, inline-functions, kotlin, lambda, non-local-returns]
 date created: Saturday, November 1st 2025, 1:07:52 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
-
 # Зачем Нужен Crossinline?
-
-# Question (EN)
-> What is the `crossinline` keyword for in Kotlin inline functions?
 
 # Вопрос (RU)
 > Для чего нужно ключевое слово `crossinline` в inline-функциях Kotlin?
 
 ---
 
-## Answer (EN)
-
-`crossinline` is a modifier for lambda parameters in inline functions that disallows non-local returns. It's necessary when the lambda is executed in a different context (another thread, nested function, or callback).
-
-**Without crossinline**: Lambda can `return` from the outer function, causing unexpected early exits.
-**With crossinline**: Only labeled returns are allowed (`return@label`), preventing bugs.
-
-**Use crossinline when lambda is:**
-1. Called from another thread
-2. Called from a nested function
-3. Stored for deferred execution
-4. Passed to a non-inline function
+# Question (EN)
+> What is the `crossinline` keyword for in Kotlin inline functions?
 
 ## Ответ (RU)
 
@@ -352,6 +338,19 @@ fun test() {
 | (обычная лямбда) | - Да | - Нет | - Нет | - Нет |
 | `crossinline` | - Нет | - Нет | - Нет | - Да |
 | `noinline` | - Нет | - Да | - Да | - Да |
+
+## Answer (EN)
+
+`crossinline` is a modifier for lambda parameters in inline functions that disallows non-local returns. It's necessary when the lambda is executed in a different context (another thread, nested function, or callback).
+
+**Without crossinline**: Lambda can `return` from the outer function, causing unexpected early exits.
+**With crossinline**: Only labeled returns are allowed (`return@label`), preventing bugs.
+
+**Use crossinline when lambda is:**
+1. Called from another thread
+2. Called from a nested function
+3. Stored for deferred execution
+4. Passed to a non-inline function
 
 ## Follow-ups
 

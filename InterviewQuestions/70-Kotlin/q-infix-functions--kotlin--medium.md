@@ -28,11 +28,62 @@ tags: [difficulty/medium, functions, infix, kotlin, operators, syntax]
 date created: Saturday, October 18th 2025, 3:06:33 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
+# Вопрос (RU)
+> Что такое инфиксные функции в Kotlin?
+
+---
 
 # Question (EN)
 > What are infix functions in Kotlin?
-# Вопрос (RU)
-> Что такое инфиксные функции в Kotlin?
+## Ответ (RU)
+
+Инфиксные функции можно вызывать без точки и скобок, что делает код похожим на естественный язык.
+
+### Требования
+
+Должны удовлетворять ВСЕМ из них:
+- Должна быть **функцией-членом** или **функцией-расширением**
+- Должна иметь ровно **один параметр**
+- Параметр **не должен принимать переменное количество аргументов** (нет `vararg`)
+- Параметр должен **не иметь значения по умолчанию**
+
+### Синтаксис
+
+```kotlin
+infix fun Int.shl(x: Int): Int { ... }
+
+// Вызов с инфиксной нотацией
+1 shl 2
+
+// То же что и обычный вызов
+1.shl(2)
+```
+
+### Частые Примеры
+
+#### 1. Создание Пар С `to`
+
+```kotlin
+val pair = 1 to "apple"  // Инфиксный
+val pair = 1.to("apple")  // Обычный
+```
+
+#### 2. Побитовые Операции
+
+```kotlin
+val color = 0x123456
+val red = (color and 0xff0000) shr 16
+```
+
+#### 3. Булевы Операции
+
+```kotlin
+if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.admin) {
+    // Действие
+}
+```
+
+**Краткое содержание**: Инфиксные функции позволяют вызывать функции без точек и скобок для более читаемого кода. Должны быть функциями-членами/расширениями с ровно одним параметром. Частые примеры: `to` для пар, побитовые операторы, `matches` для regex. Имеют специфические правила приоритета.
 
 ---
 
@@ -147,58 +198,6 @@ val distance = p1 distanceTo p2  // 5.0
 ```
 
 **English Summary**: Infix functions allow calling functions without dots and parentheses for more readable code. Must be member/extension functions with exactly one parameter. Common examples: `to` for pairs, bitwise operators (`and`, `or`, `shl`), `matches` for regex. Have specific precedence rules relative to other operators.
-
-## Ответ (RU)
-
-Инфиксные функции можно вызывать без точки и скобок, что делает код похожим на естественный язык.
-
-### Требования
-
-Должны удовлетворять ВСЕМ из них:
-- Должна быть **функцией-членом** или **функцией-расширением**
-- Должна иметь ровно **один параметр**
-- Параметр **не должен принимать переменное количество аргументов** (нет `vararg`)
-- Параметр должен **не иметь значения по умолчанию**
-
-### Синтаксис
-
-```kotlin
-infix fun Int.shl(x: Int): Int { ... }
-
-// Вызов с инфиксной нотацией
-1 shl 2
-
-// То же что и обычный вызов
-1.shl(2)
-```
-
-### Частые Примеры
-
-#### 1. Создание Пар С `to`
-
-```kotlin
-val pair = 1 to "apple"  // Инфиксный
-val pair = 1.to("apple")  // Обычный
-```
-
-#### 2. Побитовые Операции
-
-```kotlin
-val color = 0x123456
-val red = (color and 0xff0000) shr 16
-```
-
-#### 3. Булевы Операции
-
-```kotlin
-if ((targetUser.isEnabled and !targetUser.isBlocked) or currentUser.admin) {
-    // Действие
-}
-```
-
-**Краткое содержание**: Инфиксные функции позволяют вызывать функции без точек и скобок для более читаемого кода. Должны быть функциями-членами/расширениями с ровно одним параметром. Частые примеры: `to` для пар, побитовые операторы, `matches` для regex. Имеют специфические правила приоритета.
-
----
 
 ## References
 - [Functions - Kotlin Documentation](https://kotlinlang.org/docs/reference/functions.html)

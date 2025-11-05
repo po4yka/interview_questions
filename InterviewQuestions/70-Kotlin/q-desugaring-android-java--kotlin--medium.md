@@ -17,46 +17,15 @@ tags: [android, backward-compatibility, compilation, difficulty/medium, java, ko
 date created: Friday, October 31st 2025, 6:34:09 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Desugaring В Android
-
-# Question (EN)
-> What is desugaring in Android and how does it work?
 
 # Вопрос (RU)
 > Что такое desugaring в Android и как он работает?
 
 ---
 
-## Answer (EN)
-
-Desugaring is the process of transforming modern language syntax into simpler code compatible with older platform versions. In Android, this means converting new Java and Kotlin features into code that works on legacy Android Runtime versions.
-
-**What it enables:**
-- Java 8+ features (lambdas, method references, default interface methods)
-- Modern APIs (java.time, Stream API, Optional) on Android 5.0+ (API 21+)
-- Writing modern code while maintaining backward compatibility
-
-**How to enable:**
-```gradle
-android {
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-    }
-}
-dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-}
-```
-
-**Trade-offs:**
-- Adds 100-300 KB to APK size
-- Slight performance overhead
-- Minimum Android 5.0 (API 21)
-
-**When to use:** Need java.time or Stream API on devices below Android 8.0, acceptable APK size increase.
-
----
+# Question (EN)
+> What is desugaring in Android and how does it work?
 
 ## Ответ (RU)
 
@@ -422,6 +391,36 @@ Desugaring — это мощный инструмент, который позв
 - Если minSdkVersion уже 26+ (тогда desugaring не нужен)
 - Если критичен размер APK
 - Если используете альтернативные библиотеки (ThreeTenABP)
+
+## Answer (EN)
+
+Desugaring is the process of transforming modern language syntax into simpler code compatible with older platform versions. In Android, this means converting new Java and Kotlin features into code that works on legacy Android Runtime versions.
+
+**What it enables:**
+- Java 8+ features (lambdas, method references, default interface methods)
+- Modern APIs (java.time, Stream API, Optional) on Android 5.0+ (API 21+)
+- Writing modern code while maintaining backward compatibility
+
+**How to enable:**
+```gradle
+android {
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+}
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+}
+```
+
+**Trade-offs:**
+- Adds 100-300 KB to APK size
+- Slight performance overhead
+- Minimum Android 5.0 (API 21)
+
+**When to use:** Need java.time or Stream API on devices below Android 8.0, acceptable APK size increase.
+
+---
 
 ## Follow-ups
 

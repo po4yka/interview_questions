@@ -28,11 +28,229 @@ tags: [difficulty/medium, error-handling, flow, kotlin, operators, retry]
 date created: Sunday, October 12th 2025, 2:24:09 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Что такое операторы Retry и RetryWhen в Kotlin Flow? Как они работают?
+
+---
 
 # Question (EN)
 > What are Retry and RetryWhen operators in Kotlin Flow? How do they work?
-# Вопрос (RU)
-> Что такое операторы Retry и RetryWhen в Kotlin Flow? Как они работают?
+## Ответ (RU)
+
+**`retry` и `retryWhen`** — операторы Flow, которые автоматически пере-выполняют flow при возникновении исключения, реализуя устойчивую обработку ошибок.
+
+### Retry - Простая Логика Повтора
+
+**Базовый retry с подсчетом:**
+
+```kotlin
+flow {
+    emit(fetchDataFromNetwork())
+}
+.retry(retries = 3) { cause ->
+    cause is IOException  // Повторять только при сетевых ошибках
+}
+.collect { data ->
+    println("Data: $data")
+}
+```
+
+**Характеристики:**
+- **Повторяет немедленно** после сбоя
+- **Фиксированное количество повторов** (или бесконечно если не указано)
+- **Предикат** определяет какие исключения повторять
+- **Просто** - хорошо для базовой логики повтора
+
+### retryWhen - Продвинутая Логика Повтора
+
+**`retryWhen` предоставляет контроль над временем и поведением повтора.**
+
+**Пример 1: Экспоненциальная задержка**
+
+```kotlin
+class ApiRepository {
+    fun fetchData(): Flow<Data> = flow {
+        emit(api.getData())
+    }
+    .retryWhen { cause, attempt ->
+        if (cause is IOException && attempt < 5) {
+            val delayMs = 1000 * (2.0.pow(attempt.toInt())).toLong()  // 1s, 2s, 4s, 8s, 16s
+            delay(delayMs)
+            true  // Повторить
+        } else {
+            false  // Не повторять
+        }
+    }
+}
+```
+
+**Пример 2: Линейная задержка с jitter**
+
+```kotlin
+fun loadUserData(): Flow<User> = flow {
+    emit(api.getUser())
+}
+.retryWhen { cause, attempt ->
+    when {
+        cause !is IOException -> false  // Не повторять не-сетевые ошибки
+        attempt >= 3 -> false  // Максимум 3 повтора
+        else -> {
+            // Линейная задержка: 1s, 2s, 3s + случайный jitter
+            val baseDelay = (attempt + 1) * 1000
+            val jitter = Random.nextInt(0, 500)
+            delay(baseDelay + jitter)
+            true
+        }
+    }
+}
+```
+
+**Пример 3: Повтор с разными стратегиями по типу ошибки**
+
+```kotlin
+fun syncData(): Flow<SyncResult> = flow {
+    emit(api.sync())
+}
+.retryWhen { cause, attempt ->
+    when (cause) {
+        is RateLimitException -> {
+            // Ждать сброса rate limit
+            delay(cause.retryAfterMs)
+            attempt < 10
+        }
+        is ServerErrorException -> {
+            // Экспоненциальная задержка для ошибок сервера
+            delay(1000 * (2.0.pow(attempt.toInt())).toLong())
+            attempt < 5
+        }
+        is NetworkException -> {
+            // Быстрый повтор для сетевых ошибок
+            delay(500)
+            attempt < 3
+        }
+        else -> false  // Не повторять другие ошибки
+    }
+}
+```
+
+### Сравнение: Retry Vs retryWhen
+
+| Функция | retry | retryWhen |
+|---------|-------|-----------|
+| **Задержка** | Нет задержки (немедленно) | Кастомная задержка (экспоненциальная задержка и т.д.) |
+| **Счетчик попыток** | Недоступен | Доступен как параметр |
+| **Сложность** | Простой | Более гибкий |
+| **Применение** | Базовый повтор | Продвинутые стратегии повтора |
+
+### Продвинутые Паттерны
+
+**Паттерн 1: Повтор с таймаутом**
+
+```kotlin
+fun loadData(): Flow<Data> = flow {
+    emit(api.getData())
+}
+.timeout(10.seconds)  // Таймаут для каждой попытки
+.retryWhen { cause, attempt ->
+    if (attempt < 3 && (cause is IOException || cause is TimeoutCancellationException)) {
+        delay(2000)
+        true
+    } else {
+        false
+    }
+}
+```
+
+**Паттерн 2: Повтор с fallback**
+
+```kotlin
+fun getUserData(): Flow<User> = flow {
+    // Пробуем удаленный сначала
+    emit(remoteApi.getUser())
+}
+.retryWhen { cause, attempt ->
+    if (attempt < 2 && cause is IOException) {
+        delay(1000)
+        true
+    } else {
+        false
+    }
+}
+.catch { exception ->
+    // Fallback к кэшированным данным
+    localCache.getUser()?.let { emit(it) } ?: throw exception
+}
+```
+
+### Интеграция С ViewModel
+
+```kotlin
+class ProductViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    init {
+        loadProducts()
+    }
+
+    private fun loadProducts() {
+        viewModelScope.launch {
+            repository.getProducts()
+                .retryWhen { cause, attempt ->
+                    if (cause is IOException && attempt < 3) {
+                        _uiState.value = UiState.Retrying(attempt.toInt() + 1)
+                        delay(1000 * (attempt + 1))
+                        true
+                    } else {
+                        false
+                    }
+                }
+                .catch { exception ->
+                    _uiState.value = UiState.Error(exception.message ?: "Unknown error")
+                }
+                .collect { products ->
+                    _uiState.value = UiState.Success(products)
+                }
+        }
+    }
+}
+```
+
+### Лучшие Практики
+
+**1. Всегда используйте предикат для фильтрации исключений**
+
+```kotlin
+// - ХОРОШО - Только сетевые ошибки
+.retry(3) { it is IOException }
+
+// - ПЛОХО - Повторяет все исключения
+.retry(3)
+```
+
+**2. Реализуйте экспоненциальную задержку для retryWhen**
+
+```kotlin
+// - ХОРОШО - Экспоненциальная задержка
+.retryWhen { cause, attempt ->
+    if (attempt < 5) {
+        delay(1000 * (2.0.pow(attempt.toInt())).toLong())
+        true
+    } else false
+}
+```
+
+**3. Устанавливайте максимальное количество попыток**
+
+```kotlin
+// - ХОРОШО - Ограниченные повторы
+.retry(3) { it is IOException }
+
+// - ПЛОХО - Бесконечные повторы могут вызвать проблемы
+.retry { it is IOException }
+```
+
+**Краткое содержание**: `retry` немедленно повторяет flow при исключении (фиксированное количество, фильтр предиката). `retryWhen` предоставляет продвинутый контроль (доступ к номеру попытки, кастомные задержки, экспоненциальная задержка). Используйте `retry` для простой логики повтора. Используйте `retryWhen` для экспоненциальной задержки, разных стратегий по типу ошибки, обновлений прогресса. Всегда фильтруйте исключения, реализуйте задержки, устанавливайте макс. попытки.
 
 ---
 
@@ -453,225 +671,6 @@ fun `retryWhen should apply exponential backoff`() = runTest {
 ```
 
 **English Summary**: `retry` immediately retries flow on exception (fixed count, predicate filter). `retryWhen` provides advanced control (access to attempt number, custom delays, exponential backoff). Use `retry` for simple retry logic. Use `retryWhen` for exponential backoff, different strategies per error type, progress updates. Always filter exceptions, implement delays, set max attempts. Common patterns: exponential backoff, linear backoff with jitter, retry with timeout/fallback.
-
-## Ответ (RU)
-
-**`retry` и `retryWhen`** — операторы Flow, которые автоматически пере-выполняют flow при возникновении исключения, реализуя устойчивую обработку ошибок.
-
-### Retry - Простая Логика Повтора
-
-**Базовый retry с подсчетом:**
-
-```kotlin
-flow {
-    emit(fetchDataFromNetwork())
-}
-.retry(retries = 3) { cause ->
-    cause is IOException  // Повторять только при сетевых ошибках
-}
-.collect { data ->
-    println("Data: $data")
-}
-```
-
-**Характеристики:**
-- **Повторяет немедленно** после сбоя
-- **Фиксированное количество повторов** (или бесконечно если не указано)
-- **Предикат** определяет какие исключения повторять
-- **Просто** - хорошо для базовой логики повтора
-
-### retryWhen - Продвинутая Логика Повтора
-
-**`retryWhen` предоставляет контроль над временем и поведением повтора.**
-
-**Пример 1: Экспоненциальная задержка**
-
-```kotlin
-class ApiRepository {
-    fun fetchData(): Flow<Data> = flow {
-        emit(api.getData())
-    }
-    .retryWhen { cause, attempt ->
-        if (cause is IOException && attempt < 5) {
-            val delayMs = 1000 * (2.0.pow(attempt.toInt())).toLong()  // 1s, 2s, 4s, 8s, 16s
-            delay(delayMs)
-            true  // Повторить
-        } else {
-            false  // Не повторять
-        }
-    }
-}
-```
-
-**Пример 2: Линейная задержка с jitter**
-
-```kotlin
-fun loadUserData(): Flow<User> = flow {
-    emit(api.getUser())
-}
-.retryWhen { cause, attempt ->
-    when {
-        cause !is IOException -> false  // Не повторять не-сетевые ошибки
-        attempt >= 3 -> false  // Максимум 3 повтора
-        else -> {
-            // Линейная задержка: 1s, 2s, 3s + случайный jitter
-            val baseDelay = (attempt + 1) * 1000
-            val jitter = Random.nextInt(0, 500)
-            delay(baseDelay + jitter)
-            true
-        }
-    }
-}
-```
-
-**Пример 3: Повтор с разными стратегиями по типу ошибки**
-
-```kotlin
-fun syncData(): Flow<SyncResult> = flow {
-    emit(api.sync())
-}
-.retryWhen { cause, attempt ->
-    when (cause) {
-        is RateLimitException -> {
-            // Ждать сброса rate limit
-            delay(cause.retryAfterMs)
-            attempt < 10
-        }
-        is ServerErrorException -> {
-            // Экспоненциальная задержка для ошибок сервера
-            delay(1000 * (2.0.pow(attempt.toInt())).toLong())
-            attempt < 5
-        }
-        is NetworkException -> {
-            // Быстрый повтор для сетевых ошибок
-            delay(500)
-            attempt < 3
-        }
-        else -> false  // Не повторять другие ошибки
-    }
-}
-```
-
-### Сравнение: Retry Vs retryWhen
-
-| Функция | retry | retryWhen |
-|---------|-------|-----------|
-| **Задержка** | Нет задержки (немедленно) | Кастомная задержка (экспоненциальная задержка и т.д.) |
-| **Счетчик попыток** | Недоступен | Доступен как параметр |
-| **Сложность** | Простой | Более гибкий |
-| **Применение** | Базовый повтор | Продвинутые стратегии повтора |
-
-### Продвинутые Паттерны
-
-**Паттерн 1: Повтор с таймаутом**
-
-```kotlin
-fun loadData(): Flow<Data> = flow {
-    emit(api.getData())
-}
-.timeout(10.seconds)  // Таймаут для каждой попытки
-.retryWhen { cause, attempt ->
-    if (attempt < 3 && (cause is IOException || cause is TimeoutCancellationException)) {
-        delay(2000)
-        true
-    } else {
-        false
-    }
-}
-```
-
-**Паттерн 2: Повтор с fallback**
-
-```kotlin
-fun getUserData(): Flow<User> = flow {
-    // Пробуем удаленный сначала
-    emit(remoteApi.getUser())
-}
-.retryWhen { cause, attempt ->
-    if (attempt < 2 && cause is IOException) {
-        delay(1000)
-        true
-    } else {
-        false
-    }
-}
-.catch { exception ->
-    // Fallback к кэшированным данным
-    localCache.getUser()?.let { emit(it) } ?: throw exception
-}
-```
-
-### Интеграция С ViewModel
-
-```kotlin
-class ProductViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    init {
-        loadProducts()
-    }
-
-    private fun loadProducts() {
-        viewModelScope.launch {
-            repository.getProducts()
-                .retryWhen { cause, attempt ->
-                    if (cause is IOException && attempt < 3) {
-                        _uiState.value = UiState.Retrying(attempt.toInt() + 1)
-                        delay(1000 * (attempt + 1))
-                        true
-                    } else {
-                        false
-                    }
-                }
-                .catch { exception ->
-                    _uiState.value = UiState.Error(exception.message ?: "Unknown error")
-                }
-                .collect { products ->
-                    _uiState.value = UiState.Success(products)
-                }
-        }
-    }
-}
-```
-
-### Лучшие Практики
-
-**1. Всегда используйте предикат для фильтрации исключений**
-
-```kotlin
-// - ХОРОШО - Только сетевые ошибки
-.retry(3) { it is IOException }
-
-// - ПЛОХО - Повторяет все исключения
-.retry(3)
-```
-
-**2. Реализуйте экспоненциальную задержку для retryWhen**
-
-```kotlin
-// - ХОРОШО - Экспоненциальная задержка
-.retryWhen { cause, attempt ->
-    if (attempt < 5) {
-        delay(1000 * (2.0.pow(attempt.toInt())).toLong())
-        true
-    } else false
-}
-```
-
-**3. Устанавливайте максимальное количество попыток**
-
-```kotlin
-// - ХОРОШО - Ограниченные повторы
-.retry(3) { it is IOException }
-
-// - ПЛОХО - Бесконечные повторы могут вызвать проблемы
-.retry { it is IOException }
-```
-
-**Краткое содержание**: `retry` немедленно повторяет flow при исключении (фиксированное количество, фильтр предиката). `retryWhen` предоставляет продвинутый контроль (доступ к номеру попытки, кастомные задержки, экспоненциальная задержка). Используйте `retry` для простой логики повтора. Используйте `retryWhen` для экспоненциальной задержки, разных стратегий по типу ошибки, обновлений прогресса. Всегда фильтруйте исключения, реализуйте задержки, устанавливайте макс. попытки.
-
----
 
 ## References
 - [Flow Error Handling - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#exception-handling)

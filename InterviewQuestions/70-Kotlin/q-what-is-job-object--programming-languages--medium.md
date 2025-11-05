@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/medium, job, kotlin, programming-languages]
 date created: Saturday, October 4th 2025, 10:55:52 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # What is the Job Object For?
-
-# Question (EN)
-> What is the Job Object for?
 
 # Вопрос (RU)
 > Для чего нужен объект Job?
 
 ---
+
+# Question (EN)
+> What is the Job Object for?
+
+## Ответ (RU)
+
+Job — это элемент управления жизненным циклом корутины. С его помощью можно: отменять корутину; отслеживать завершение; объединять с другими задачами; управлять родительскими и дочерними корутинами.
 
 ## Answer (EN)
 
@@ -420,10 +423,6 @@ class JobBestPractices {
 - `job.invokeOnCompletion {}`: Add callback
 
 ---
-
-## Ответ (RU)
-
-Job — это элемент управления жизненным циклом корутины. С его помощью можно: отменять корутину; отслеживать завершение; объединять с другими задачами; управлять родительскими и дочерними корутинами.
 
 ## Follow-ups
 

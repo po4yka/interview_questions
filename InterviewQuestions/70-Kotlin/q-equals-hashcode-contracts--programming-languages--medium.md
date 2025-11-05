@@ -17,16 +17,19 @@ tags: [collections, contracts, difficulty/medium, equality, object-methods, prog
 date created: Friday, October 31st 2025, 6:29:22 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Расскажи О Контрактах Equals И hashCode
-
-# Question (EN)
-> Tell me about equals and hashCode contracts
 
 # Вопрос (RU)
 > Расскажи о контрактах equals и hashCode
 
 ---
+
+# Question (EN)
+> Tell me about equals and hashCode contracts
+
+## Ответ (RU)
+
+Методы equals() и hashCode() используются для сравнения объектов и их корректной работы в коллекциях (Set, Map). Контракт `equals()` должен: Рефлексивность: a.equals(a) → true (объект равен самому себе). Симметричность: a.equals(b) == b.equals(a). Транзитивность: если a == b и b == c, то a == c. Согласованность: если a == b, то a.equals(b) всегда возвращает одно и же, пока объект не изменится. Сравнение с null всегда даёт false: a.equals(null) == false. Контракт hashCode(): если a.equals(b) то a.hashCode() == b.hashCode().
 
 ## Answer (EN)
 
@@ -254,10 +257,6 @@ override fun hashCode() = Objects.hash(property1, property2, property3)
 | Hash → equality | `hash(a)==hash(b) !=> a==b` | **Not required** |
 
 ---
-
-## Ответ (RU)
-
-Методы equals() и hashCode() используются для сравнения объектов и их корректной работы в коллекциях (Set, Map). Контракт `equals()` должен: Рефлексивность: a.equals(a) → true (объект равен самому себе). Симметричность: a.equals(b) == b.equals(a). Транзитивность: если a == b и b == c, то a == c. Согласованность: если a == b, то a.equals(b) всегда возвращает одно и же, пока объект не изменится. Сравнение с null всегда даёт false: a.equals(null) == false. Контракт hashCode(): если a.equals(b) то a.hashCode() == b.hashCode().
 
 ## Follow-ups
 

@@ -17,16 +17,52 @@ tags: [difficulty/easy, functions, generics, programming-languages, syntax, type
 date created: Friday, October 31st 2025, 6:29:34 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Какой Синтаксис Используется Для Объявления Обобщенной Функции В Kotlin?
-
-# Question (EN)
-> What syntax is used to declare a generic function in Kotlin?
 
 # Вопрос (RU)
 > Какой синтаксис используется для объявления обобщенной функции в Kotlin?
 
 ---
+
+# Question (EN)
+> What syntax is used to declare a generic function in Kotlin?
+
+## Ответ (RU)
+
+Для объявления обобщенной функции в Kotlin используются угловые скобки `<T>` перед именем функции:
+
+**Синтаксис:**
+```kotlin
+fun <T> functionName(parameter: T): T {
+    // тело функции
+}
+```
+
+**Примеры:**
+```kotlin
+// Простая обобщенная функция
+fun <T> identity(value: T): T {
+    return value
+}
+
+// Несколько параметров типа
+fun <K, V> mapOf(key: K, value: V): Map<K, V> {
+    return mapOf(key to value)
+}
+
+// С ограничениями типа
+fun <T : Comparable<T>> max(a: T, b: T): T {
+    return if (a > b) a else b
+}
+
+// Использование
+val result = identity(42)        // T выводится как Int
+val name = identity("Hello")     // T выводится как String
+```
+
+**Размещение параметра типа:**
+- Перед именем функции: `fun <T> name()`
+- Перед extension receiver: `fun <T> T.extension()`
 
 ## Answer (EN)
 
@@ -66,43 +102,6 @@ val name = identity("Hello")     // T inferred as String
 - Before extension receiver: `fun <T> T.extension()`
 
 ---
-
-## Ответ (RU)
-
-Для объявления обобщенной функции в Kotlin используются угловые скобки `<T>` перед именем функции:
-
-**Синтаксис:**
-```kotlin
-fun <T> functionName(parameter: T): T {
-    // тело функции
-}
-```
-
-**Примеры:**
-```kotlin
-// Простая обобщенная функция
-fun <T> identity(value: T): T {
-    return value
-}
-
-// Несколько параметров типа
-fun <K, V> mapOf(key: K, value: V): Map<K, V> {
-    return mapOf(key to value)
-}
-
-// С ограничениями типа
-fun <T : Comparable<T>> max(a: T, b: T): T {
-    return if (a > b) a else b
-}
-
-// Использование
-val result = identity(42)        // T выводится как Int
-val name = identity("Hello")     // T выводится как String
-```
-
-**Размещение параметра типа:**
-- Перед именем функции: `fun <T> name()`
-- Перед extension receiver: `fun <T> T.extension()`
 
 ## Follow-ups
 

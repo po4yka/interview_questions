@@ -17,16 +17,19 @@ tags: [collections, data-structures, deque, difficulty/easy, kotlin, priority-qu
 date created: Friday, October 3rd 2025, 4:43:42 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Какова Разница Между PriorityQueue И Deque?
-
-# Question (EN)
-> What is the difference between PriorityQueue and Deque?
 
 # Вопрос (RU)
 > Какова разница между PriorityQueue и Deque?
 
 ---
+
+# Question (EN)
+> What is the difference between PriorityQueue and Deque?
+
+## Ответ (RU)
+
+PriorityQueue — структура данных, где элементы обрабатываются по приоритету вместо порядка добавления. Deque (двусторонняя очередь) позволяет добавлять и удалять элементы с обеих сторон, поддерживая поведение как стека, так и очереди.
 
 ## Answer (EN)
 
@@ -40,10 +43,6 @@ date modified: Saturday, November 1st 2025, 5:43:24 pm
 - **Use cases**: PriorityQueue for task scheduling, event processing; Deque for implementing stacks, queues, or sliding window algorithms
 
 ---
-
-## Ответ (RU)
-
-PriorityQueue — структура данных, где элементы обрабатываются по приоритету вместо порядка добавления. Deque (двусторонняя очередь) позволяет добавлять и удалять элементы с обеих сторон, поддерживая поведение как стека, так и очереди.
 
 ## Follow-ups
 

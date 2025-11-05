@@ -17,16 +17,19 @@ tags: [difficulty/easy, double, float, floating-point, java, kotlin, programming
 date created: Friday, October 3rd 2025, 7:03:57 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Работает Ли switch() С double/float?
-
-# Question (EN)
-> Does switch() work with double/float?
 
 # Вопрос (RU)
 > Работает ли switch() с double/float?
 
 ---
+
+# Question (EN)
+> Does switch() work with double/float?
+
+## Ответ (RU)
+
+Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
 
 ## Answer (EN)
 
@@ -210,10 +213,6 @@ System.out.println(sum == 100);  // Always true
 **Key point:** `switch` requires **exact equality matching**, which is unreliable for floating-point numbers due to rounding errors.
 
 ---
-
-## Ответ (RU)
-
-Нет, в Java switch не работает с float и double, так как они подвержены проблемам сравнения с плавающей точкой. switch работает с int, byte, short, char, enum, String, а также с их обёрточными типами.
 
 ## Follow-ups
 

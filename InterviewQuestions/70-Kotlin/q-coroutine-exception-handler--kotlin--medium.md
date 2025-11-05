@@ -16,12 +16,128 @@ subtopics:
 date created: Saturday, November 1st 2025, 12:10:38 pm
 date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
+# Вопрос (RU)
+> Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
+
+---
 
 # Question (EN)
 > What is CoroutineExceptionHandler, where can it be installed, and how does it work with different coroutine builders (launch vs async)?
 
-# Вопрос (RU)
-> Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?
+## Ответ (RU)
+
+Необработанные исключения в корутинах могут приводить к краху приложения или незаметному сбою, затрудняя отладку. **CoroutineExceptionHandler (CEH)** предоставляет механизм последней инстанции для перехвата необработанных исключений в корутинах. Однако он работает не везде и имеет специфические правила установки.
+
+
+
+### Что Такое CoroutineExceptionHandler?
+
+**CoroutineExceptionHandler** - это `CoroutineContext.Element`, который обрабатывает необработанные исключения в корутинах. Он действует как **обработчик последней инстанции** - аналогично `Thread.UncaughtExceptionHandler` для потоков.
+
+### Ключевые Принципы
+
+**CEH работает ТОЛЬКО на:**
+1.  **Корневых корутинах** (прямых потомках CoroutineScope)
+2.  **launch** (корутины "запустить и забыть")
+3.  **actor** (акторы на основе каналов)
+
+**CEH НЕ работает на:**
+1.  **async** (исключения обрабатываются через await())
+2.  **Дочерних корутинах** (исключения распространяются к родителю)
+3.  **runBlocking** (исключения выбрасываются напрямую)
+4.  **Потомках supervisorScope** (нужен собственный CEH)
+
+### CEH С Launch (Работает)
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("CEH поймал: ${exception.message}")
+    }
+
+    //  РАБОТАЕТ: launch с CEH
+    val job = launch(handler) {
+        throw RuntimeException("Исключение в launch")
+    }
+
+    job.join()
+    println("Программа продолжается")
+}
+
+// Вывод:
+// CEH поймал: Исключение в launch
+// Программа продолжается
+```
+
+### CEH С Async (НЕ работает)
+
+```kotlin
+fun main() = runBlocking {
+    val handler = CoroutineExceptionHandler { _, exception ->
+        println("CEH поймал: ${exception.message}")
+    }
+
+    //  НЕ РАБОТАЕТ: async с CEH
+    val deferred = async(handler) {
+        throw RuntimeException("Исключение в async")
+    }
+
+    try {
+        deferred.await() // Исключение выбрасывается ЗДЕСЬ
+    } catch (e: Exception) {
+        println("Поймано в try-catch: ${e.message}")
+    }
+}
+
+// Вывод:
+// Поймано в try-catch: Исключение в async
+// CEH НЕ вызывается!
+```
+
+**Почему?** `async` предоставляет исключения через свой результат `Deferred`. Вы должны вызвать `await()` и обработать исключение там. CEH обходится.
+
+### Реальный Пример Android ViewModel
+
+```kotlin
+class UserViewModel : ViewModel() {
+    private val handler = CoroutineExceptionHandler { _, exception ->
+        Log.e("UserViewModel", "Ошибка", exception)
+        _errorState.value = exception.toUserFriendlyMessage()
+    }
+
+    private val vmScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.Main + handler
+    )
+
+    private val _errorState = MutableStateFlow<String?>(null)
+    val errorState: StateFlow<String?> = _errorState.asStateFlow()
+
+    fun loadUser(userId: String) {
+        vmScope.launch {
+            val user = userRepository.getUser(userId) // Может выбросить исключение
+            _userState.value = user
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        vmScope.cancel()
+    }
+}
+```
+
+### Ключевые Выводы
+
+1. **CEH - обработчик последней инстанции** - Не замена try-catch
+2. **Работает только на корневых корутинах** - И только с launch/actor
+3. **Не работает с async** - Исключения предоставляются через await()
+4. **Устанавливайте на CoroutineScope** - Для обработки ошибок во всей области
+5. **Комбинируйте с SupervisorJob** - Для независимого сбоя потомков
+6. **Именуйте корутины** - Упрощает отладку
+7. **Используйте для логирования/аналитики** - Отправляйте необработанные исключения в crash reporting
+8. **Не игнорируйте ожидаемые ошибки** - Используйте явную обработку ошибок
 
 ---
 
@@ -695,123 +811,6 @@ launch(handler) {
 6. **Name coroutines** - Makes debugging easier
 7. **Use for logging/analytics** - Send uncaught exceptions to crash reporting
 8. **Don't ignore expected errors** - Use explicit error handling
-
----
-
-## Ответ (RU)
-
-Необработанные исключения в корутинах могут приводить к краху приложения или незаметному сбою, затрудняя отладку. **CoroutineExceptionHandler (CEH)** предоставляет механизм последней инстанции для перехвата необработанных исключений в корутинах. Однако он работает не везде и имеет специфические правила установки.
-
-
-
-### Что Такое CoroutineExceptionHandler?
-
-**CoroutineExceptionHandler** - это `CoroutineContext.Element`, который обрабатывает необработанные исключения в корутинах. Он действует как **обработчик последней инстанции** - аналогично `Thread.UncaughtExceptionHandler` для потоков.
-
-### Ключевые Принципы
-
-**CEH работает ТОЛЬКО на:**
-1.  **Корневых корутинах** (прямых потомках CoroutineScope)
-2.  **launch** (корутины "запустить и забыть")
-3.  **actor** (акторы на основе каналов)
-
-**CEH НЕ работает на:**
-1.  **async** (исключения обрабатываются через await())
-2.  **Дочерних корутинах** (исключения распространяются к родителю)
-3.  **runBlocking** (исключения выбрасываются напрямую)
-4.  **Потомках supervisorScope** (нужен собственный CEH)
-
-### CEH С Launch (Работает)
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun main() = runBlocking {
-    val handler = CoroutineExceptionHandler { _, exception ->
-        println("CEH поймал: ${exception.message}")
-    }
-
-    //  РАБОТАЕТ: launch с CEH
-    val job = launch(handler) {
-        throw RuntimeException("Исключение в launch")
-    }
-
-    job.join()
-    println("Программа продолжается")
-}
-
-// Вывод:
-// CEH поймал: Исключение в launch
-// Программа продолжается
-```
-
-### CEH С Async (НЕ работает)
-
-```kotlin
-fun main() = runBlocking {
-    val handler = CoroutineExceptionHandler { _, exception ->
-        println("CEH поймал: ${exception.message}")
-    }
-
-    //  НЕ РАБОТАЕТ: async с CEH
-    val deferred = async(handler) {
-        throw RuntimeException("Исключение в async")
-    }
-
-    try {
-        deferred.await() // Исключение выбрасывается ЗДЕСЬ
-    } catch (e: Exception) {
-        println("Поймано в try-catch: ${e.message}")
-    }
-}
-
-// Вывод:
-// Поймано в try-catch: Исключение в async
-// CEH НЕ вызывается!
-```
-
-**Почему?** `async` предоставляет исключения через свой результат `Deferred`. Вы должны вызвать `await()` и обработать исключение там. CEH обходится.
-
-### Реальный Пример Android ViewModel
-
-```kotlin
-class UserViewModel : ViewModel() {
-    private val handler = CoroutineExceptionHandler { _, exception ->
-        Log.e("UserViewModel", "Ошибка", exception)
-        _errorState.value = exception.toUserFriendlyMessage()
-    }
-
-    private val vmScope = CoroutineScope(
-        SupervisorJob() + Dispatchers.Main + handler
-    )
-
-    private val _errorState = MutableStateFlow<String?>(null)
-    val errorState: StateFlow<String?> = _errorState.asStateFlow()
-
-    fun loadUser(userId: String) {
-        vmScope.launch {
-            val user = userRepository.getUser(userId) // Может выбросить исключение
-            _userState.value = user
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        vmScope.cancel()
-    }
-}
-```
-
-### Ключевые Выводы
-
-1. **CEH - обработчик последней инстанции** - Не замена try-catch
-2. **Работает только на корневых корутинах** - И только с launch/actor
-3. **Не работает с async** - Исключения предоставляются через await()
-4. **Устанавливайте на CoroutineScope** - Для обработки ошибок во всей области
-5. **Комбинируйте с SupervisorJob** - Для независимого сбоя потомков
-6. **Именуйте корутины** - Упрощает отладку
-7. **Используйте для логирования/аналитики** - Отправляйте необработанные исключения в crash reporting
-8. **Не игнорируйте ожидаемые ошибки** - Используйте явную обработку ошибок
 
 ---
 

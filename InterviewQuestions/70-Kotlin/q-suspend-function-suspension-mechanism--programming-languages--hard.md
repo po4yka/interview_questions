@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/hard, kotlin, programming-languages, suspension]
 date created: Saturday, October 4th 2025, 10:56:46 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # Suspend Function Suspension Mechanism
-
-# Question (EN)
-> How does the suspension mechanism work in suspend functions?
 
 # Вопрос (RU)
 > Как работает механизм приостановки в suspend-функциях?
 
 ---
+
+# Question (EN)
+> How does the suspension mechanism work in suspend functions?
+
+## Ответ (RU)
+
+Когда выполнение suspend-функции приостанавливается состояние функции сохраняется в continuation-объекте а текущий поток освобождается Позже выполнение возобновляется с этого же места как будто ничего не происходило Это реализовано через стейт-машину и трансформацию кода компилятором Kotlin
 
 ## Answer (EN)
 
@@ -221,10 +224,6 @@ class DelayedContinuation(
 
 ---
 
-
-## Ответ (RU)
-
-Когда выполнение suspend-функции приостанавливается состояние функции сохраняется в continuation-объекте а текущий поток освобождается Позже выполнение возобновляется с этого же места как будто ничего не происходило Это реализовано через стейт-машину и трансформацию кода компилятором Kotlin
 
 ## Follow-ups
 

@@ -28,11 +28,32 @@ tags: [access-control, difficulty/easy, encapsulation, kotlin, modifiers, visibi
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> Что такое модификаторы видимости в Kotlin?
+
+---
 
 # Question (EN)
 > What are visibility modifiers in Kotlin?
-# Вопрос (RU)
-> Что такое модификаторы видимости в Kotlin?
+## Ответ (RU)
+
+Kotlin позволяет контролировать видимость символов с помощью *модификаторов видимости*, которые могут быть размещены в объявлениях символов.
+
+В Kotlin существует четыре модификатора видимости: **private**, **protected**, **internal** и **public**.
+
+- **public**: объявления видны везде.
+- **private**: означает видимый только внутри этого класса (включая все его члены)
+- **protected**: означает видимый внутри этого класса (включая все его члены) + видимый в подклассах тоже
+- **internal**: модификатор видим везде в том же модуле.
+
+Если вы не указываете модификатор видимости, вы получаете уровень видимости по умолчанию, которым является **public**.
+
+### Java Vs Kotlin
+
+- В Java модификатор по умолчанию — **package private**, в Kotlin — **public**.
+- **package private** в Java не имеет эквивалента в Kotlin, ближайшим является **internal**.
+- Внешний класс не видит **private** члены своего внутреннего класса в Kotlin.
+- Если вы переопределяете **protected** член и не указываете видимость явно, переопределяющий член также будет иметь видимость **protected**. В Java видимость согласно модификатору, и по умолчанию все еще **public**.
 
 ---
 
@@ -55,28 +76,6 @@ If you don't supply a visibility modifier, you get the default visibility level,
 - Java's **package private** doesn't have an equivalent in Kotlin, the closest is **internal**.
 - An Outer class does not see **private** members of its inner class in Kotlin.
 - If you override a **protected** member and do not specify the visibility explicitly, the overriding member will also have **protected** visibility. In Java the visibility is according to the modifier and the default is still **public**.
-
-## Ответ (RU)
-
-Kotlin позволяет контролировать видимость символов с помощью *модификаторов видимости*, которые могут быть размещены в объявлениях символов.
-
-В Kotlin существует четыре модификатора видимости: **private**, **protected**, **internal** и **public**.
-
-- **public**: объявления видны везде.
-- **private**: означает видимый только внутри этого класса (включая все его члены)
-- **protected**: означает видимый внутри этого класса (включая все его члены) + видимый в подклассах тоже
-- **internal**: модификатор видим везде в том же модуле.
-
-Если вы не указываете модификатор видимости, вы получаете уровень видимости по умолчанию, которым является **public**.
-
-### Java Vs Kotlin
-
-- В Java модификатор по умолчанию — **package private**, в Kotlin — **public**.
-- **package private** в Java не имеет эквивалента в Kotlin, ближайшим является **internal**.
-- Внешний класс не видит **private** члены своего внутреннего класса в Kotlin.
-- Если вы переопределяете **protected** член и не указываете видимость явно, переопределяющий член также будет иметь видимость **protected**. В Java видимость согласно модификатору, и по умолчанию все еще **public**.
-
----
 
 ## References
 - [Visibility modifiers](https://kotlinlang.org/docs/tutorials/kotlin-for-py/visibility-modifiers.html)

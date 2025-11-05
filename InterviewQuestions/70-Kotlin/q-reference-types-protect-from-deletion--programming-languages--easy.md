@@ -17,16 +17,19 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, phan
 date created: Saturday, October 4th 2025, 1:22:21 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Все Ли Виды Ссылок Защищают Объект От Удаления?
-
-# Question (EN)
-> Do all types of references protect an object from deletion?
 
 # Вопрос (RU)
 > Все ли виды ссылок защищают объект от удаления?
 
 ---
+
+# Question (EN)
+> Do all types of references protect an object from deletion?
+
+## Ответ (RU)
+
+Нет, не все ссылки защищают объект от удаления. Strong Reference защищает объект, Weak Reference не защищает и позволяет удалить объект. Soft Reference удаляет объект только при нехватке памяти, а Phantom Reference используется для действий после удаления.
 
 ## Answer (EN)
 
@@ -151,10 +154,6 @@ fun example() {
 - **Phantom Reference**: Does NOT protect (for post-GC cleanup)
 
 ---
-
-## Ответ (RU)
-
-Нет, не все ссылки защищают объект от удаления. Strong Reference защищает объект, Weak Reference не защищает и позволяет удалить объект. Soft Reference удаляет объект только при нехватке памяти, а Phantom Reference используется для действий после удаления.
 
 ## Follow-ups
 

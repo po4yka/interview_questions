@@ -17,16 +17,61 @@ tags: [companion-objects, difficulty/easy, initialization, programming-languages
 date created: Saturday, November 1st 2025, 1:27:44 pm
 date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
-
 # When is Companion Object Initialized?
-
-# Question (EN)
-> When is a companion object initialized in Kotlin?
 
 # Вопрос (RU)
 > Когда инициализируется companion object в Kotlin?
 
 ---
+
+# Question (EN)
+> When is a companion object initialized in Kotlin?
+
+## Ответ (RU)
+
+Companion object инициализируется **лениво при первом доступе**. Он инициализируется при первом обращении к любому из его членов (свойствам или функциям), включая случаи, когда происходит обращение к самому companion object.
+
+**Ключевые моменты:**
+- Инициализация при первом доступе (ленивая инициализация)
+- Потокобезопасна по умолчанию
+- Инициализируется только один раз за весь жизненный цикл приложения
+- Инициализация происходит до первого использования любого члена companion
+- Аналогично статическим блокам инициализации в Java
+
+**НЕ инициализируется когда:**
+- Просто создается экземпляр содержащего класса (если члены companion не используются)
+- Класс загружен, но члены companion object не используются
+
+### Пример Базовой Инициализации
+
+```kotlin
+class MyClass {
+    companion object {
+        init {
+            println("Companion object initialized!")
+        }
+        val value = "Hello"
+    }
+
+    init {
+        println("MyClass instance created!")
+    }
+}
+
+fun main() {
+    val instance = MyClass()  // Выведет: "MyClass instance created!"
+    println(MyClass.value)     // Выведет: "Companion object initialized!" затем "Hello"
+    println(MyClass.value)     // Выведет только: "Hello" (уже инициализирован)
+}
+```
+
+### Важные Особенности
+
+1. **Один companion на все экземпляры** - companion object инициализируется один раз, независимо от количества созданных экземпляров класса
+
+2. **Ленивая загрузка** - если companion object содержит дорогостоящие операции, они не выполнятся, пока не понадобятся
+
+3. **Потокобезопасность** - инициализация гарантированно произойдет только один раз, даже при многопоточном доступе
 
 ## Answer (EN)
 
@@ -382,52 +427,6 @@ fun main() {
 ```
 
 ---
-
-## Ответ (RU)
-
-Companion object инициализируется **лениво при первом доступе**. Он инициализируется при первом обращении к любому из его членов (свойствам или функциям), включая случаи, когда происходит обращение к самому companion object.
-
-**Ключевые моменты:**
-- Инициализация при первом доступе (ленивая инициализация)
-- Потокобезопасна по умолчанию
-- Инициализируется только один раз за весь жизненный цикл приложения
-- Инициализация происходит до первого использования любого члена companion
-- Аналогично статическим блокам инициализации в Java
-
-**НЕ инициализируется когда:**
-- Просто создается экземпляр содержащего класса (если члены companion не используются)
-- Класс загружен, но члены companion object не используются
-
-### Пример Базовой Инициализации
-
-```kotlin
-class MyClass {
-    companion object {
-        init {
-            println("Companion object initialized!")
-        }
-        val value = "Hello"
-    }
-
-    init {
-        println("MyClass instance created!")
-    }
-}
-
-fun main() {
-    val instance = MyClass()  // Выведет: "MyClass instance created!"
-    println(MyClass.value)     // Выведет: "Companion object initialized!" затем "Hello"
-    println(MyClass.value)     // Выведет только: "Hello" (уже инициализирован)
-}
-```
-
-### Важные Особенности
-
-1. **Один companion на все экземпляры** - companion object инициализируется один раз, независимо от количества созданных экземпляров класса
-
-2. **Ленивая загрузка** - если companion object содержит дорогостоящие операции, они не выполнятся, пока не понадобятся
-
-3. **Потокобезопасность** - инициализация гарантированно произойдет только один раз, даже при многопоточном доступе
 
 ## Follow-ups
 

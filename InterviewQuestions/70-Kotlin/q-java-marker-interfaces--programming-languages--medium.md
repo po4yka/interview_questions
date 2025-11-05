@@ -17,14 +17,26 @@ tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, program
 date created: Saturday, October 4th 2025, 3:02:36 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Перечислите Маркерные Интерфейсы
+
+# Вопрос (RU)
+> Перечислите маркерные интерфейсы
+
+---
 
 # Question (EN)
 > List marker interfaces in Java
 
-# Вопрос (RU)
-> Перечислите маркерные интерфейсы
+## Ответ (RU)
+
+Маркерные интерфейсы не содержат методов, но обозначают поведение объекта.
+
+**Примеры в Java:**
+- **Serializable** — объект можно сериализовать
+- **Cloneable** — объект можно клонировать
+- **Remote** — используется для удалённых вызовов
+- **RandomAccess** — для коллекций с быстрым доступом по индексу
+
 
 ---
 
@@ -179,19 +191,6 @@ class Transaction {
 - **RandomAccess**: Fast indexed access for collections
 
 Marker interfaces have **no methods** but provide **type information** and **behavioral capability indicators**.
-
----
-
-## Ответ (RU)
-
-Маркерные интерфейсы не содержат методов, но обозначают поведение объекта.
-
-**Примеры в Java:**
-- **Serializable** — объект можно сериализовать
-- **Cloneable** — объект можно клонировать
-- **Remote** — используется для удалённых вызовов
-- **RandomAccess** — для коллекций с быстрым доступом по индексу
-
 
 ---
 

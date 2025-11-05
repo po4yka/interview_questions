@@ -28,12 +28,51 @@ tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope
 date created: Sunday, October 12th 2025, 3:43:53 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
+# Вопрос (RU)
+> В чем разница между lifecycleScope и viewModelScope? Когда использовать каждый, как они обрабатывают события жизненного цикла и лучшие практики для Android coroutine scopes.
+
+---
 
 # Question (EN)
 > What's the difference between lifecycleScope and viewModelScope? When to use each, how they handle lifecycle events, and best practices for Android coroutine scopes.
 
-# Вопрос (RU)
-> В чем разница между lifecycleScope и viewModelScope? Когда использовать каждый, как они обрабатывают события жизненного цикла и лучшие практики для Android coroutine scopes.
+## Ответ (RU)
+
+`lifecycleScope` и `viewModelScope` - это CoroutineScope с поддержкой жизненного цикла Android.
+
+### Ключевые Различия
+
+- **lifecycleScope**: Привязан к Activity/Fragment, отменяется при onDestroy(), НЕ переживает поворот экрана
+- **viewModelScope**: Привязан к ViewModel, отменяется при onCleared(), ПЕРЕЖИВАЕТ поворот экрана
+
+### Когда Использовать
+
+**lifecycleScope**:
+- UI операции (анимации, обновления)
+- Подписка на Flow/StateFlow
+- Одноразовые UI события
+
+**viewModelScope**:
+- Бизнес-логика
+- Загрузка данных
+- Работа с репозиториями
+
+### Лучшая Практика
+
+```kotlin
+// Fragment: UI с lifecycleScope + repeatOnLifecycle
+viewLifecycleOwner.lifecycleScope.launch {
+    repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.state.collect { updateUI(it) }
+    }
+}
+
+// ViewModel: Логика с viewModelScope
+viewModelScope.launch {
+    val data = repository.fetch()
+    _state.value = data
+}
+```
 
 ---
 
@@ -464,46 +503,6 @@ class ProductFragment : Fragment() {
             }
         }
     }
-}
-```
-
----
-
-## Ответ (RU)
-
-`lifecycleScope` и `viewModelScope` - это CoroutineScope с поддержкой жизненного цикла Android.
-
-### Ключевые Различия
-
-- **lifecycleScope**: Привязан к Activity/Fragment, отменяется при onDestroy(), НЕ переживает поворот экрана
-- **viewModelScope**: Привязан к ViewModel, отменяется при onCleared(), ПЕРЕЖИВАЕТ поворот экрана
-
-### Когда Использовать
-
-**lifecycleScope**:
-- UI операции (анимации, обновления)
-- Подписка на Flow/StateFlow
-- Одноразовые UI события
-
-**viewModelScope**:
-- Бизнес-логика
-- Загрузка данных
-- Работа с репозиториями
-
-### Лучшая Практика
-
-```kotlin
-// Fragment: UI с lifecycleScope + repeatOnLifecycle
-viewLifecycleOwner.lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.state.collect { updateUI(it) }
-    }
-}
-
-// ViewModel: Логика с viewModelScope
-viewModelScope.launch {
-    val data = repository.fetch()
-    _state.value = data
 }
 ```
 

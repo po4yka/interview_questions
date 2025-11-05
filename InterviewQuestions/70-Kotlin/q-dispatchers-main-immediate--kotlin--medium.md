@@ -17,7 +17,6 @@ related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-non-inheri
 date created: Saturday, November 1st 2025, 12:10:12 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Dispatchers.Main.immediate Vs Dispatchers.Main
 
 ## English
@@ -25,13 +24,43 @@ date modified: Saturday, November 1st 2025, 5:43:26 pm
 ### Question
 What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
 
-# Question (EN)
-> What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
-
 # Вопрос (RU)
 > What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
 
 ---
+
+# Question (EN)
+> What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
+
+## Ответ (RU)
+
+*(Краткое содержание основных пунктов из английской версии)*
+Что такое Dispatchers.Main.immediate и чем он отличается от Dispatchers.Main? Когда Main.immediate избегает dispatch и каковы последствия для производительности? Приведите production примеры обновлений UI, изменений состояния view, измерений производительности и стратегий тестирования.
+
+**Dispatchers.Main.immediate** — это оптимизация Dispatchers.Main, которая избегает ненужного dispatch когда уже находится на главном потоке. Это может значительно улучшить производительность за счет устранения overhead dispatch.
+
+*(Продолжение следует той же структуре с подробными примерами разницы Main и Main.immediate, случаев использования, production примеров, performance measurements, testing и best practices на русском языке)*
+
+### Связанные Вопросы
+-  - Основы диспетчеров
+-  - Контекст корутины
+-  - Интеграция с Android lifecycle
+- [[q-flow-basics--kotlin--easy]] - Основы Flow
+
+### Дополнительные Вопросы
+1. Какой реальный механизм позволяет Main.immediate проверить, находится ли он уже на главном потоке?
+2. Какое улучшение производительности можно ожидать от использования Main.immediate в типичном Android приложении?
+3. Когда использование Main.immediate может навредить производительности вместо того, чтобы помочь?
+4. Объясните связь между Dispatchers.Main.immediate и диспетчеризацией event loop.
+5. Как тестовые диспетчеры (StandardTestDispatcher, UnconfinedTestDispatcher) ведут себя с Main.immediate?
+6. Есть ли Main.immediate эквивалент для других dispatchers (IO, Default)? Почему да или нет?
+7. Как профилировать и измерить влияние переключения с Main на Main.immediate в production приложении?
+
+### Ссылки
+- [Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Документация Dispatchers.Main](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-main.html)
+- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Оптимизация производительности](https://developer.android.com/topic/performance)
 
 ## Answer (EN)
 
@@ -745,51 +774,3 @@ lifecycleScope.launch(Dispatchers.Main) {
 -  - Coroutine context
 -  - Android lifecycle integration
 - [[q-flow-basics--kotlin--easy]] - Flow fundamentals
-
-## Follow-ups
-1. What is the actual mechanism that allows Main.immediate to check if it's already on the main thread?
-2. How much performance improvement can you expect from using Main.immediate in a typical Android app?
-3. When would using Main.immediate actually hurt performance instead of helping?
-4. Explain the relationship between Dispatchers.Main.immediate and event loop dispatching.
-5. How do test dispatchers (StandardTestDispatcher, UnconfinedTestDispatcher) behave with Main.immediate?
-6. Is there a Main.immediate equivalent for other dispatchers (IO, Default)? Why or why not?
-7. How would you profile and measure the impact of switching from Main to Main.immediate in a production app?
-
-### References
-- [Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [Dispatchers.Main Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-main.html)
-- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-- [Performance Optimization](https://developer.android.com/topic/performance)
-
----
-
-
-## Ответ (RU)
-
-*(Краткое содержание основных пунктов из английской версии)*
-Что такое Dispatchers.Main.immediate и чем он отличается от Dispatchers.Main? Когда Main.immediate избегает dispatch и каковы последствия для производительности? Приведите production примеры обновлений UI, изменений состояния view, измерений производительности и стратегий тестирования.
-
-**Dispatchers.Main.immediate** — это оптимизация Dispatchers.Main, которая избегает ненужного dispatch когда уже находится на главном потоке. Это может значительно улучшить производительность за счет устранения overhead dispatch.
-
-*(Продолжение следует той же структуре с подробными примерами разницы Main и Main.immediate, случаев использования, production примеров, performance measurements, testing и best practices на русском языке)*
-
-### Связанные Вопросы
--  - Основы диспетчеров
--  - Контекст корутины
--  - Интеграция с Android lifecycle
-- [[q-flow-basics--kotlin--easy]] - Основы Flow
-
-### Дополнительные Вопросы
-1. Какой реальный механизм позволяет Main.immediate проверить, находится ли он уже на главном потоке?
-2. Какое улучшение производительности можно ожидать от использования Main.immediate в типичном Android приложении?
-3. Когда использование Main.immediate может навредить производительности вместо того, чтобы помочь?
-4. Объясните связь между Dispatchers.Main.immediate и диспетчеризацией event loop.
-5. Как тестовые диспетчеры (StandardTestDispatcher, UnconfinedTestDispatcher) ведут себя с Main.immediate?
-6. Есть ли Main.immediate эквивалент для других dispatchers (IO, Default)? Почему да или нет?
-7. Как профилировать и измерить влияние переключения с Main на Main.immediate в production приложении?
-
-### Ссылки
-- [Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [Документация Dispatchers.Main](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-main.html)
-- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-- [Оптимизация производительности](https://developer.android.com/topic/performance)

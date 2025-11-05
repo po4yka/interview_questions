@@ -17,16 +17,106 @@ tags: [design-patterns, difficulty/easy, programming-languages, singleton]
 date created: Friday, October 31st 2025, 6:32:57 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # How to Create a Singleton in Kotlin?
-
-# Question (EN)
-> How to create a singleton in Kotlin?
 
 # Вопрос (RU)
 > Как создать singleton в Kotlin?
 
 ---
+
+# Question (EN)
+> How to create a singleton in Kotlin?
+
+## Ответ (RU)
+
+В Kotlin можно создать singleton, используя object-декларацию. Это самый простой и идиоматичный способ реализации паттерна Singleton в Kotlin.
+
+**Синтаксис:**
+```kotlin
+object MySingleton {
+    // свойства и методы
+}
+```
+
+**Ключевые особенности:**
+- Потокобезопасен по умолчанию (не требует синхронизации)
+- Ленивая инициализация при первом обращении
+- Существует только один экземпляр на всё приложение
+- Не может иметь конструкторы
+- Может иметь свойства, методы и блоки init
+- Может наследоваться от классов и реализовывать интерфейсы
+
+### Примеры
+
+**Базовый singleton:**
+```kotlin
+object AppConfig {
+    var apiUrl = "https://api.example.com"
+    var timeout = 30
+
+    fun printConfig() {
+        println("API URL: $apiUrl")
+    }
+}
+
+// Прямой доступ без создания экземпляра
+AppConfig.apiUrl = "https://api.production.com"
+AppConfig.printConfig()
+
+// Всегда один и тот же экземпляр
+val config1 = AppConfig
+val config2 = AppConfig
+println(config1 === config2)  // true
+```
+
+**С инициализацией:**
+```kotlin
+object DatabaseManager {
+    private val connections = mutableListOf<String>()
+
+    init {
+        println("DatabaseManager initialized")
+        connections.add("Default Connection")
+    }
+
+    fun addConnection(name: String) {
+        connections.add(name)
+    }
+}
+```
+
+**Реализующий интерфейс:**
+```kotlin
+interface Logger {
+    fun log(message: String)
+}
+
+object ConsoleLogger : Logger {
+    override fun log(message: String) {
+        println("[LOG] $message")
+    }
+}
+
+ConsoleLogger.log("Application started")
+```
+
+**Альтернатива: через companion object (для ленивой инициализации с параметрами):**
+```kotlin
+class DatabaseConnection private constructor(val url: String) {
+    companion object {
+        @Volatile
+        private var instance: DatabaseConnection? = null
+
+        fun getInstance(url: String): DatabaseConnection {
+            return instance ?: synchronized(this) {
+                instance ?: DatabaseConnection(url).also { instance = it }
+            }
+        }
+    }
+}
+```
+
+Главное преимущество object-декларации — автоматическая потокобезопасность и простота использования.
 
 ## Answer (EN)
 
@@ -219,97 +309,6 @@ fun main() {
 ```
 
 ---
-
-## Ответ (RU)
-
-В Kotlin можно создать singleton, используя object-декларацию. Это самый простой и идиоматичный способ реализации паттерна Singleton в Kotlin.
-
-**Синтаксис:**
-```kotlin
-object MySingleton {
-    // свойства и методы
-}
-```
-
-**Ключевые особенности:**
-- Потокобезопасен по умолчанию (не требует синхронизации)
-- Ленивая инициализация при первом обращении
-- Существует только один экземпляр на всё приложение
-- Не может иметь конструкторы
-- Может иметь свойства, методы и блоки init
-- Может наследоваться от классов и реализовывать интерфейсы
-
-### Примеры
-
-**Базовый singleton:**
-```kotlin
-object AppConfig {
-    var apiUrl = "https://api.example.com"
-    var timeout = 30
-
-    fun printConfig() {
-        println("API URL: $apiUrl")
-    }
-}
-
-// Прямой доступ без создания экземпляра
-AppConfig.apiUrl = "https://api.production.com"
-AppConfig.printConfig()
-
-// Всегда один и тот же экземпляр
-val config1 = AppConfig
-val config2 = AppConfig
-println(config1 === config2)  // true
-```
-
-**С инициализацией:**
-```kotlin
-object DatabaseManager {
-    private val connections = mutableListOf<String>()
-
-    init {
-        println("DatabaseManager initialized")
-        connections.add("Default Connection")
-    }
-
-    fun addConnection(name: String) {
-        connections.add(name)
-    }
-}
-```
-
-**Реализующий интерфейс:**
-```kotlin
-interface Logger {
-    fun log(message: String)
-}
-
-object ConsoleLogger : Logger {
-    override fun log(message: String) {
-        println("[LOG] $message")
-    }
-}
-
-ConsoleLogger.log("Application started")
-```
-
-**Альтернатива: через companion object (для ленивой инициализации с параметрами):**
-```kotlin
-class DatabaseConnection private constructor(val url: String) {
-    companion object {
-        @Volatile
-        private var instance: DatabaseConnection? = null
-
-        fun getInstance(url: String): DatabaseConnection {
-            return instance ?: synchronized(this) {
-                instance ?: DatabaseConnection(url).also { instance = it }
-            }
-        }
-    }
-}
-```
-
-Главное преимущество object-декларации — автоматическая потокобезопасность и простота использования.
 
 ## Follow-ups
 

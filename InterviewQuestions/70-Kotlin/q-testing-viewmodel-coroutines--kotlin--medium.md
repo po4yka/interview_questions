@@ -33,12 +33,100 @@ tags: [coroutines, difficulty/medium, kotlin, stateflow, testing, turbine, unit-
 date created: Saturday, November 1st 2025, 9:25:31 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Как тестировать ViewModel с корутинами? Объясните TestCoroutineDispatcher, StandardTestDispatcher, тестирование StateFlow/SharedFlow и мокирование suspend функций.
+
+---
 
 # Question (EN)
 > How do you test ViewModels that use coroutines? Explain TestCoroutineDispatcher, StandardTestDispatcher, testing StateFlow/SharedFlow, and mocking suspend functions.
 
-# Вопрос (RU)
-> Как тестировать ViewModel с корутинами? Объясните TestCoroutineDispatcher, StandardTestDispatcher, тестирование StateFlow/SharedFlow и мокирование suspend функций.
+## Ответ (RU)
+
+Тестирование корутин в ViewModel требует специальной обработки для детерминированных, быстрых и надёжных тестов.
+
+### Настройка Зависимостей
+
+```gradle
+dependencies {
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("io.mockk:mockk:1.13.8")
+}
+```
+
+### MainDispatcherRule
+
+```kotlin
+@ExperimentalCoroutinesApi
+class MainDispatcherRule(
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+) : TestWatcher() {
+    override fun starting(description: Description) {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    override fun finished(description: Description) {
+        Dispatchers.resetMain()
+    }
+}
+```
+
+### Базовый Тест ViewModel
+
+```kotlin
+@ExperimentalCoroutinesApi
+class UserViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    @Test
+    fun `loadUsers updates state correctly`() = runTest {
+        // Given
+        val users = listOf(User(1, "Alice"))
+        coEvery { repository.getUsers() } returns users
+
+        // When
+        viewModel.loadUsers()
+
+        // Then
+        assertEquals(users, viewModel.users.value)
+    }
+}
+```
+
+### Тестирование С Turbine
+
+```kotlin
+@Test
+fun `loadUsers emits correct states`() = runTest {
+    viewModel.users.test {
+        assertEquals(emptyList<User>(), awaitItem())
+
+        viewModel.loadUsers()
+
+        assertEquals(users, awaitItem())
+    }
+}
+```
+
+### Лучшие Практики
+
+#### ДЕЛАТЬ:
+```kotlin
+// Использовать MainDispatcherRule
+@get:Rule
+val mainDispatcherRule = MainDispatcherRule()
+
+// Использовать runTest
+@Test
+fun test() = runTest { }
+
+// Использовать Turbine для Flow
+flow.test {
+    assertEquals(expected, awaitItem())
+}
+```
 
 ---
 
@@ -536,95 +624,6 @@ fun test() {
 @Test
 fun test() = runTest {
     viewModel.loadData()
-}
-```
-
----
-
-## Ответ (RU)
-
-Тестирование корутин в ViewModel требует специальной обработки для детерминированных, быстрых и надёжных тестов.
-
-### Настройка Зависимостей
-
-```gradle
-dependencies {
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("app.cash.turbine:turbine:1.0.0")
-    testImplementation("io.mockk:mockk:1.13.8")
-}
-```
-
-### MainDispatcherRule
-
-```kotlin
-@ExperimentalCoroutinesApi
-class MainDispatcherRule(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-) : TestWatcher() {
-    override fun starting(description: Description) {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    override fun finished(description: Description) {
-        Dispatchers.resetMain()
-    }
-}
-```
-
-### Базовый Тест ViewModel
-
-```kotlin
-@ExperimentalCoroutinesApi
-class UserViewModelTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    @Test
-    fun `loadUsers updates state correctly`() = runTest {
-        // Given
-        val users = listOf(User(1, "Alice"))
-        coEvery { repository.getUsers() } returns users
-
-        // When
-        viewModel.loadUsers()
-
-        // Then
-        assertEquals(users, viewModel.users.value)
-    }
-}
-```
-
-### Тестирование С Turbine
-
-```kotlin
-@Test
-fun `loadUsers emits correct states`() = runTest {
-    viewModel.users.test {
-        assertEquals(emptyList<User>(), awaitItem())
-
-        viewModel.loadUsers()
-
-        assertEquals(users, awaitItem())
-    }
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-```kotlin
-// Использовать MainDispatcherRule
-@get:Rule
-val mainDispatcherRule = MainDispatcherRule()
-
-// Использовать runTest
-@Test
-fun test() = runTest { }
-
-// Использовать Turbine для Flow
-flow.test {
-    assertEquals(expected, awaitItem())
 }
 ```
 

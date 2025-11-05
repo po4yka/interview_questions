@@ -17,26 +17,25 @@ tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, ko
 date created: Friday, October 31st 2025, 6:31:04 pm
 date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
-
 # Как Работает HashMap?
-
-# Question (EN)
-> How does HashMap work?
 
 # Вопрос (RU)
 > Как работает HashMap?
 
 ---
 
+# Question (EN)
+> How does HashMap work?
+
+## Ответ (RU)
+
+HashMap в Kotlin хранит пары ключ-значение и использует хеширование для быстрого поиска и вставки элементов. Каждый ключ хешируется, и результат хеш-функции определяет где в таблице будет храниться соответствующее значение. В случае коллизий HashMap использует цепочки или другие методы для хранения нескольких значений в одной корзине. Это обеспечивает доступ к элементам за среднее время O(1).
+
 ## Answer (EN)
 
 HashMap in Kotlin stores key-value pairs and uses hashing for fast element lookup and insertion. Each key is hashed, and the hash function result determines where in the table the corresponding value will be stored. In case of collisions, HashMap uses chains or other methods to store multiple values in one bucket. This provides average O(1) time access to elements.
 
 ---
-
-## Ответ (RU)
-
-HashMap в Kotlin хранит пары ключ-значение и использует хеширование для быстрого поиска и вставки элементов. Каждый ключ хешируется, и результат хеш-функции определяет где в таблице будет храниться соответствующее значение. В случае коллизий HashMap использует цепочки или другие методы для хранения нескольких значений в одной корзине. Это обеспечивает доступ к элементам за среднее время O(1).
 
 ## Follow-ups
 

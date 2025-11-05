@@ -17,52 +17,15 @@ tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblo
 date created: Saturday, November 1st 2025, 12:42:09 pm
 date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
-
 # Launch Vs Async Vs RunBlocking
-
-# Question (EN)
-> What's the difference between `launch`, `async`, and `runBlocking` coroutine builders?
 
 # Вопрос (RU)
 > В чём разница между корутинными билдерами `launch`, `async` и `runBlocking`?
 
 ---
 
-## Answer (EN)
-
-**launch**, **async**, and **runBlocking** are three main coroutine builders with different purposes:
-
-| Builder | Returns | Blocks thread | Result | Use case |
-|---------|---------|---------------|--------|----------|
-| **launch** | `Job` | No | No (fire-and-forget) | Background tasks without results |
-| **async** | `Deferred<T>` | No | Yes via `await()` | Parallel computations with results |
-| **runBlocking** | `T` | **YES** | Yes directly | Tests, main function, blocking bridge |
-
-**launch**: Use for side effects, UI updates, background work where result isn't needed.
-**async**: Use for parallel API calls, computations needing results, concurrent operations.
-**runBlocking**: Use ONLY for tests (prefer `runTest`), main function. NEVER in Android UI code.
-
-**Key difference in parallel execution:**
-```kotlin
-// launch - fire and forget
-scope.launch { loadUsers() }
-scope.launch { loadPosts() }
-// How to get results? Only via StateFlow/callbacks
-
-// async - parallel with results
-val users = async { loadUsers() }
-val posts = async { loadPosts() }
-val data = Data(users.await(), posts.await())  // Results available!
-
-// runBlocking - BLOCKS thread
-runBlocking {
-    val users = loadUsers()  // Thread BLOCKED until done
-}
-```
-
-**Exception handling**: launch (immediate in scope), async (at await()), runBlocking (synchronous).
-
----
+# Question (EN)
+> What's the difference between `launch`, `async`, and `runBlocking` coroutine builders?
 
 ## Ответ (RU)
 
@@ -732,6 +695,42 @@ class DataLoaderTest {
     }
 }
 ```
+
+## Answer (EN)
+
+**launch**, **async**, and **runBlocking** are three main coroutine builders with different purposes:
+
+| Builder | Returns | Blocks thread | Result | Use case |
+|---------|---------|---------------|--------|----------|
+| **launch** | `Job` | No | No (fire-and-forget) | Background tasks without results |
+| **async** | `Deferred<T>` | No | Yes via `await()` | Parallel computations with results |
+| **runBlocking** | `T` | **YES** | Yes directly | Tests, main function, blocking bridge |
+
+**launch**: Use for side effects, UI updates, background work where result isn't needed.
+**async**: Use for parallel API calls, computations needing results, concurrent operations.
+**runBlocking**: Use ONLY for tests (prefer `runTest`), main function. NEVER in Android UI code.
+
+**Key difference in parallel execution:**
+```kotlin
+// launch - fire and forget
+scope.launch { loadUsers() }
+scope.launch { loadPosts() }
+// How to get results? Only via StateFlow/callbacks
+
+// async - parallel with results
+val users = async { loadUsers() }
+val posts = async { loadPosts() }
+val data = Data(users.await(), posts.await())  // Results available!
+
+// runBlocking - BLOCKS thread
+runBlocking {
+    val users = loadUsers()  // Thread BLOCKED until done
+}
+```
+
+**Exception handling**: launch (immediate in scope), async (at await()), runBlocking (synchronous).
+
+---
 
 ## Follow-ups
 

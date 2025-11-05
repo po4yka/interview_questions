@@ -17,16 +17,19 @@ tags: [coroutines, difficulty/easy, flow, kotlin, programming-languages, sharedf
 date created: Saturday, October 4th 2025, 10:40:14 am
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
-
 # SharedFlow Vs StateFlow Differences
-
-# Question (EN)
-> What are the differences between SharedFlow and StateFlow?
 
 # Вопрос (RU)
 > Какие различия между SharedFlow и StateFlow?
 
 ---
+
+# Question (EN)
+> What are the differences between SharedFlow and StateFlow?
+
+## Ответ (RU)
+
+SharedFlow — это горячий поток, который передаёт данные нескольким подписчикам в реальном времени и может буферизировать значения. StateFlow — поток, который всегда хранит одно последнее значение и отправляет его подписчикам только при изменении состояния.
 
 ## Answer (EN)
 
@@ -363,10 +366,6 @@ val converted: StateFlow<Int> = sharedFlow.stateIn(
 ```
 
 ---
-
-## Ответ (RU)
-
-SharedFlow — это горячий поток, который передаёт данные нескольким подписчикам в реальном времени и может буферизировать значения. StateFlow — поток, который всегда хранит одно последнее значение и отправляет его подписчикам только при изменении состояния.
 
 ## Follow-ups
 

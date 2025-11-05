@@ -17,16 +17,19 @@ tags: [collections, design-patterns, difficulty/easy, iterator, kotlin, programm
 date created: Friday, October 31st 2025, 6:32:07 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
-
 # Что Такое Итератор?
-
-# Question (EN)
-> What is an iterator?
 
 # Вопрос (RU)
 > Что такое итератор?
 
 ---
+
+# Question (EN)
+> What is an iterator?
+
+## Ответ (RU)
+
+Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
 
 ## Answer (EN)
 
@@ -198,10 +201,6 @@ val filtered = list.filter { it % 2 != 0 }
 ```
 
 ---
-
-## Ответ (RU)
-
-Итератор — это объект, позволяющий поэлементно перебирать коллекцию (список, массив и т.п.). Он обычно предоставляет методы hasNext() и next() и позволяет абстрагироваться от конкретной структуры.
 
 ## Follow-ups
 

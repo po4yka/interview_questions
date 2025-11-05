@@ -28,11 +28,150 @@ tags: [async, channels, concurrency, coroutines, difficulty/medium, kotlin]
 date created: Sunday, October 12th 2025, 12:27:47 pm
 date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
+# Вопрос (RU)
+> Что вы знаете о каналах (Channels) в Kotlin?
+
+---
 
 # Question (EN)
 > What do you know about Channels in Kotlin?
-# Вопрос (RU)
-> Что вы знаете о каналах (Channels) в Kotlin?
+## Ответ (RU)
+
+Отложенные значения (Deferred) предоставляют удобный способ передачи одного значения между корутинами. Каналы предоставляют способ передачи потока значений. **Channel** — это неблокирующий примитив для связи между отправителем (через `SendChannel`) и получателем (через `ReceiveChannel`).
+
+### Основы Работы С Каналами
+
+[Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) концептуально очень похож на `BlockingQueue`. Одно ключевое отличие заключается в том, что вместо блокирующей операции `put` он имеет приостанавливающую операцию [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/send.html), а вместо блокирующей операции `take` — приостанавливающую операцию [receive](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-receive-channel/receive.html).
+
+```kotlin
+val channel = Channel<Int>()
+launch {
+    // это может быть тяжелое вычисление или асинхронная логика, но мы просто отправим пять квадратов
+    for (x in 1..5) channel.send(x * x)
+}
+// здесь мы выведем пять полученных целых чисел:
+repeat(5) { println(channel.receive()) }
+println("Done!")
+```
+
+Вывод этого кода:
+```
+1
+4
+9
+16
+25
+Done!
+```
+
+### Закрытие И Итерация По Каналам
+
+В отличие от очереди, канал может быть закрыт, чтобы указать, что больше элементов не будет. На стороне получателя удобно использовать обычный цикл `for` для получения элементов из канала.
+
+Концептуально, [close](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/close.html) подобна отправке специального токена закрытия в канал. Итерация останавливается, как только этот токен закрытия получен, поэтому есть гарантия, что все ранее отправленные элементы до закрытия будут получены:
+
+```kotlin
+val channel = Channel<Int>()
+launch {
+    for (x in 1..5) channel.send(x * x)
+    channel.close() // мы закончили отправку
+}
+// здесь мы выводим полученные значения используя цикл `for` (пока канал не закрыт)
+for (y in channel) println(y)
+println("Done!")
+```
+
+### Создание Производителей Каналов
+
+Паттерн, когда корутина производит последовательность элементов, довольно распространен. Это часть паттерна **производитель-потребитель**, который часто встречается в параллельном коде. Вы можете абстрагировать такого производителя в функцию, которая принимает канал в качестве параметра, но это противоречит здравому смыслу, что результаты должны возвращаться из функций.
+
+Существует удобный билдер корутин [produce](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/produce.html), который упрощает это на стороне производителя, и функция расширения [consumeEach](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/consume-each.html), которая заменяет цикл `for` на стороне потребителя:
+
+```kotlin
+val squares = produceSquares()
+squares.consumeEach { println(it) }
+println("Done!")
+```
+
+### Конвейеры
+
+Конвейер — это паттерн, где одна корутина производит, возможно бесконечный, поток значений:
+
+```kotlin
+fun CoroutineScope.produceNumbers() = produce<Int> {
+    var x = 1
+    while (true) send(x++) // бесконечный поток целых чисел начиная с 1
+}
+```
+
+А другая корутина или корутины потребляют этот поток, выполняя некоторую обработку и производя другие результаты. В примере ниже числа просто возводятся в квадрат:
+
+```kotlin
+fun CoroutineScope.square(numbers: ReceiveChannel<Int>): ReceiveChannel<Int> = produce {
+    for (x in numbers) send(x * x)
+}
+```
+
+Основной код запускает и соединяет весь конвейер:
+
+```kotlin
+val numbers = produceNumbers() // производит целые числа начиная с 1
+val squares = square(numbers) // возводит целые числа в квадрат
+repeat(5) {
+    println(squares.receive()) // выводит первые пять
+}
+println("Done!") // мы закончили
+coroutineContext.cancelChildren() // отменяем дочерние корутины
+```
+
+### Буферизованные Каналы
+
+Показанные до сих пор каналы не имели буфера. Небуферизованные каналы передают элементы, когда отправитель и получатель встречаются друг с другом (aka rendezvous). Если send вызван первым, то он приостанавливается до вызова receive, если receive вызван первым, он приостанавливается до вызова send.
+
+Как фабричная функция [Channel()](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel.html), так и билдер [produce](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/produce.html) принимают необязательный параметр `capacity` для указания **размера буфера**. Буфер позволяет отправителям отправлять несколько элементов до приостановки, аналогично `BlockingQueue` с указанной емкостью, который блокируется, когда буфер заполнен.
+
+Взгляните на поведение следующего кода:
+
+```kotlin
+val channel = Channel<Int>(4) // создаем буферизованный канал
+val sender = launch { // запускаем корутину-отправителя
+    repeat(10) {
+        println("Sending $it") // выводим перед отправкой каждого элемента
+        channel.send(it) // приостановится когда буфер заполнен
+    }
+}
+// ничего не получаем... просто ждем....
+delay(1000)
+sender.cancel() // отменяем корутину-отправителя
+```
+
+Он выводит "sending" **пять** раз используя буферизованный канал с емкостью **четыре**:
+```
+Sending 0
+Sending 1
+Sending 2
+Sending 3
+Sending 4
+```
+
+Первые четыре элемента добавляются в буфер, и отправитель приостанавливается при попытке отправить пятый.
+
+### Создание Каналов
+
+Фабричная функция `Channel(capacity)` используется для создания каналов различных типов в зависимости от значения целочисленного параметра `capacity`:
+
+- Когда `capacity` равен 0 — создается канал **rendezvous**. Этот канал вообще не имеет буфера. Элемент передается от отправителя к получателю только когда вызовы `send` и `receive` встречаются во времени (rendezvous), поэтому `send` приостанавливается до тех пор, пока другая корутина не вызовет `receive`, а `receive` приостанавливается до тех пор, пока другая корутина не вызовет `send`.
+
+- Когда `capacity` равен `Channel.UNLIMITED` — создается канал с эффективно неограниченным буфером. Этот канал имеет буфер в виде связанного списка неограниченной емкости (ограниченной только доступной памятью). `Sending` в этот канал никогда не приостанавливается, и `offer` всегда возвращает `true`.
+
+- Когда `capacity` равен `Channel.CONFLATED` — создается **conflated** канал. Этот канал буферизует не более одного элемента и объединяет все последующие вызовы `send` и `offer`, так что получатель всегда получает последний отправленный элемент. Ранее отправленные элементы объединяются — получается только последний отправленный элемент, в то время как ранее отправленные элементы **теряются**. `Sending` в этот канал никогда не приостанавливается, и `offer` всегда возвращает `true`.
+
+- Когда `capacity` положительный, но меньше `UNLIMITED` — создается канал на основе массива с указанной емкостью. Этот канал имеет буфер в виде массива фиксированной емкости `capacity`. Sending приостанавливается только когда буфер заполнен, а `receiving` приостанавливается только когда буфер пуст.
+
+Буферизованные каналы могут быть настроены с дополнительным параметром `onBufferOverflow`. Он управляет поведением функции `send` канала при переполнении буфера:
+- `SUSPEND` — по умолчанию, приостановить `send` при переполнении буфера до тех пор, пока не появится свободное место в буфере.
+- `DROP_OLDEST` — не приостанавливать `send`, добавить последнее значение в буфер, удалить самое старое из буфера. Канал с `capacity = 1` и `onBufferOverflow = DROP_OLDEST` является **conflated** каналом.
+- `DROP_LATEST` — не приостанавливать `send`, отбросить отправляемое значение, сохранить содержимое буфера нетронутым.
 
 ---
 
@@ -173,146 +312,6 @@ Buffered channels can be configured with an additional `onBufferOverflow` parame
 - `SUSPEND` — the default, suspend `send` on buffer overflow until there is free space in the buffer.
 - `DROP_OLDEST` — do not suspend the `send`, add the latest value to the buffer, drop the oldest one from the buffer. A channel with `capacity = 1` and `onBufferOverflow = DROP_OLDEST` is a **conflated** channel.
 - `DROP_LATEST` — do not suspend the `send`, drop the value that is being sent, keep the buffer contents intact.
-
-## Ответ (RU)
-
-Отложенные значения (Deferred) предоставляют удобный способ передачи одного значения между корутинами. Каналы предоставляют способ передачи потока значений. **Channel** — это неблокирующий примитив для связи между отправителем (через `SendChannel`) и получателем (через `ReceiveChannel`).
-
-### Основы Работы С Каналами
-
-[Channel](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html) концептуально очень похож на `BlockingQueue`. Одно ключевое отличие заключается в том, что вместо блокирующей операции `put` он имеет приостанавливающую операцию [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/send.html), а вместо блокирующей операции `take` — приостанавливающую операцию [receive](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-receive-channel/receive.html).
-
-```kotlin
-val channel = Channel<Int>()
-launch {
-    // это может быть тяжелое вычисление или асинхронная логика, но мы просто отправим пять квадратов
-    for (x in 1..5) channel.send(x * x)
-}
-// здесь мы выведем пять полученных целых чисел:
-repeat(5) { println(channel.receive()) }
-println("Done!")
-```
-
-Вывод этого кода:
-```
-1
-4
-9
-16
-25
-Done!
-```
-
-### Закрытие И Итерация По Каналам
-
-В отличие от очереди, канал может быть закрыт, чтобы указать, что больше элементов не будет. На стороне получателя удобно использовать обычный цикл `for` для получения элементов из канала.
-
-Концептуально, [close](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/close.html) подобна отправке специального токена закрытия в канал. Итерация останавливается, как только этот токен закрытия получен, поэтому есть гарантия, что все ранее отправленные элементы до закрытия будут получены:
-
-```kotlin
-val channel = Channel<Int>()
-launch {
-    for (x in 1..5) channel.send(x * x)
-    channel.close() // мы закончили отправку
-}
-// здесь мы выводим полученные значения используя цикл `for` (пока канал не закрыт)
-for (y in channel) println(y)
-println("Done!")
-```
-
-### Создание Производителей Каналов
-
-Паттерн, когда корутина производит последовательность элементов, довольно распространен. Это часть паттерна **производитель-потребитель**, который часто встречается в параллельном коде. Вы можете абстрагировать такого производителя в функцию, которая принимает канал в качестве параметра, но это противоречит здравому смыслу, что результаты должны возвращаться из функций.
-
-Существует удобный билдер корутин [produce](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/produce.html), который упрощает это на стороне производителя, и функция расширения [consumeEach](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/consume-each.html), которая заменяет цикл `for` на стороне потребителя:
-
-```kotlin
-val squares = produceSquares()
-squares.consumeEach { println(it) }
-println("Done!")
-```
-
-### Конвейеры
-
-Конвейер — это паттерн, где одна корутина производит, возможно бесконечный, поток значений:
-
-```kotlin
-fun CoroutineScope.produceNumbers() = produce<Int> {
-    var x = 1
-    while (true) send(x++) // бесконечный поток целых чисел начиная с 1
-}
-```
-
-А другая корутина или корутины потребляют этот поток, выполняя некоторую обработку и производя другие результаты. В примере ниже числа просто возводятся в квадрат:
-
-```kotlin
-fun CoroutineScope.square(numbers: ReceiveChannel<Int>): ReceiveChannel<Int> = produce {
-    for (x in numbers) send(x * x)
-}
-```
-
-Основной код запускает и соединяет весь конвейер:
-
-```kotlin
-val numbers = produceNumbers() // производит целые числа начиная с 1
-val squares = square(numbers) // возводит целые числа в квадрат
-repeat(5) {
-    println(squares.receive()) // выводит первые пять
-}
-println("Done!") // мы закончили
-coroutineContext.cancelChildren() // отменяем дочерние корутины
-```
-
-### Буферизованные Каналы
-
-Показанные до сих пор каналы не имели буфера. Небуферизованные каналы передают элементы, когда отправитель и получатель встречаются друг с другом (aka rendezvous). Если send вызван первым, то он приостанавливается до вызова receive, если receive вызван первым, он приостанавливается до вызова send.
-
-Как фабричная функция [Channel()](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel.html), так и билдер [produce](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/produce.html) принимают необязательный параметр `capacity` для указания **размера буфера**. Буфер позволяет отправителям отправлять несколько элементов до приостановки, аналогично `BlockingQueue` с указанной емкостью, который блокируется, когда буфер заполнен.
-
-Взгляните на поведение следующего кода:
-
-```kotlin
-val channel = Channel<Int>(4) // создаем буферизованный канал
-val sender = launch { // запускаем корутину-отправителя
-    repeat(10) {
-        println("Sending $it") // выводим перед отправкой каждого элемента
-        channel.send(it) // приостановится когда буфер заполнен
-    }
-}
-// ничего не получаем... просто ждем....
-delay(1000)
-sender.cancel() // отменяем корутину-отправителя
-```
-
-Он выводит "sending" **пять** раз используя буферизованный канал с емкостью **четыре**:
-```
-Sending 0
-Sending 1
-Sending 2
-Sending 3
-Sending 4
-```
-
-Первые четыре элемента добавляются в буфер, и отправитель приостанавливается при попытке отправить пятый.
-
-### Создание Каналов
-
-Фабричная функция `Channel(capacity)` используется для создания каналов различных типов в зависимости от значения целочисленного параметра `capacity`:
-
-- Когда `capacity` равен 0 — создается канал **rendezvous**. Этот канал вообще не имеет буфера. Элемент передается от отправителя к получателю только когда вызовы `send` и `receive` встречаются во времени (rendezvous), поэтому `send` приостанавливается до тех пор, пока другая корутина не вызовет `receive`, а `receive` приостанавливается до тех пор, пока другая корутина не вызовет `send`.
-
-- Когда `capacity` равен `Channel.UNLIMITED` — создается канал с эффективно неограниченным буфером. Этот канал имеет буфер в виде связанного списка неограниченной емкости (ограниченной только доступной памятью). `Sending` в этот канал никогда не приостанавливается, и `offer` всегда возвращает `true`.
-
-- Когда `capacity` равен `Channel.CONFLATED` — создается **conflated** канал. Этот канал буферизует не более одного элемента и объединяет все последующие вызовы `send` и `offer`, так что получатель всегда получает последний отправленный элемент. Ранее отправленные элементы объединяются — получается только последний отправленный элемент, в то время как ранее отправленные элементы **теряются**. `Sending` в этот канал никогда не приостанавливается, и `offer` всегда возвращает `true`.
-
-- Когда `capacity` положительный, но меньше `UNLIMITED` — создается канал на основе массива с указанной емкостью. Этот канал имеет буфер в виде массива фиксированной емкости `capacity`. Sending приостанавливается только когда буфер заполнен, а `receiving` приостанавливается только когда буфер пуст.
-
-Буферизованные каналы могут быть настроены с дополнительным параметром `onBufferOverflow`. Он управляет поведением функции `send` канала при переполнении буфера:
-- `SUSPEND` — по умолчанию, приостановить `send` при переполнении буфера до тех пор, пока не появится свободное место в буфере.
-- `DROP_OLDEST` — не приостанавливать `send`, добавить последнее значение в буфер, удалить самое старое из буфера. Канал с `capacity = 1` и `onBufferOverflow = DROP_OLDEST` является **conflated** каналом.
-- `DROP_LATEST` — не приостанавливать `send`, отбросить отправляемое значение, сохранить содержимое буфера нетронутым.
-
----
 
 ## References
 - [Kotlin Coroutines Channels Documentation](https://kotlinlang.org/docs/reference/coroutines/channels.html)

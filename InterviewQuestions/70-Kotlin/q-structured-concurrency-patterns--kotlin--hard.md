@@ -28,12 +28,28 @@ tags: [advanced, coroutines, coroutinescope, difficulty/hard, kotlin, structured
 date created: Sunday, October 12th 2025, 3:39:19 pm
 date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
+# Вопрос (RU)
+> Что такое структурированная конкурентность? Объясните coroutineScope vs supervisorScope, отношения родитель-потомок, распространение отмены и продвинутые паттерны.
+
+---
 
 # Question (EN)
 > What is structured concurrency? Explain coroutineScope vs supervisorScope, parent-child relationships, cancellation propagation, and advanced patterns like withContext, async-await coordination.
 
-# Вопрос (RU)
-> Что такое структурированная конкурентность? Объясните coroutineScope vs supervisorScope, отношения родитель-потомок, распространение отмены и продвинутые паттерны.
+## Ответ (RU)
+
+Структурированная конкурентность гарантирует, что родительская корутина ждет завершения всех дочерних.
+
+### Принципы
+
+1. Родитель ждет всех детей
+2. Отмена родителя отменяет детей
+3. Ошибка ребенка отменяет родителя (кроме supervisor)
+
+### coroutineScope Vs supervisorScope
+
+- **coroutineScope**: Ошибка одного → отмена всех
+- **supervisorScope**: Ошибка одного → остальные продолжают
 
 ---
 
@@ -152,23 +168,6 @@ private suspend fun task1() {}
 private suspend fun task2() {}
 private suspend fun task3() {}
 ```
-
----
-
-## Ответ (RU)
-
-Структурированная конкурентность гарантирует, что родительская корутина ждет завершения всех дочерних.
-
-### Принципы
-
-1. Родитель ждет всех детей
-2. Отмена родителя отменяет детей
-3. Ошибка ребенка отменяет родителя (кроме supervisor)
-
-### coroutineScope Vs supervisorScope
-
-- **coroutineScope**: Ошибка одного → отмена всех
-- **supervisorScope**: Ошибка одного → остальные продолжают
 
 ---
 
