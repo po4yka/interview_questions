@@ -14,46 +14,75 @@
 | **Passed** | 137 | 26.0% |
 | **Failed** | 390 | 74.0% |
 
+### Severity Breakdown
+
+| Severity | Count |
+|----------|-------|
+| **CRITICAL** | 325 issues |
+| **ERROR** | 838 issues |
+| **WARNING** | 260 issues |
+| **Total Issues** | 1,423 issues |
+
 ---
 
-## Common Issue Types (Based on Sample Analysis)
+## Detailed Issue Analysis (Complete Dataset)
 
-### 1. Missing Required Headings (CRITICAL)
+### 1. Broken Wikilinks (427 occurrences - ERROR)
+- **Impact:** Most common issue, breaks navigation
+- **Top 10 broken links:**
+  1. `[[q-android-coverage-gaps--android--hard]]` - 32 files
+  2. `[[c-fragment-lifecycle]]` - 6 files
+  3. `[[c-navigation-component]]` - 5 files
+  4. `[[q-activity-lifecycle--android--easy]]` - 4 files
+  5. `[[q-recyclerview-basics--android--easy]]` - 4 files
+  6. `[[c-android-lifecycle]]` - 3 files
+  7. `[[c-parcelable]]` - 3 files
+  8. `[[q-coroutine-basics--kotlin--easy]]` - 3 files
+  9. `[[q-compose-basics--android--easy]]` - 3 files
+  10. `[[q-android-lifecycle--android--easy]]` - 3 files
+- **Fix:** Create missing files or update links to existing alternatives
+
+### 2. Missing Required Headings (324 occurrences - CRITICAL)
 - **Issue:** Files missing `## Related Questions` section
-- **Impact:** Breaks required document structure
-- **Example:** `q-advanced-share-sheet-shortcuts--android--hard.md`
-- **Fix:** Add the missing section to affected files
+- **Impact:** Breaks required document structure, highest severity
+- **Example files:** Mostly hard difficulty questions
+- **Fix:** Add the missing section template to affected files
 
-### 2. Broken Wikilinks (ERROR)
-- **Issue:** Links to non-existent concept or question files
-- **Examples:**
-  - `[[c-compose-semantics]]` - concept file doesn't exist
-  - `[[c-espresso-testing]]` - concept file doesn't exist
-  - `[[q-android-coverage-gaps--android--hard]]` - question file doesn't exist
-- **Fix:** Either create the missing files or update links to existing files
-
-### 3. Invalid Android Subtopics (ERROR)
-- **Issue:** Subtopics not in TAXONOMY.md Android subtopics list
-- **Example:** `subtopics: [communication, sharing, shortcuts]`
-  - `communication` is not a valid Android subtopic
-  - `sharing` is not a valid Android subtopic
-  - `shortcuts` is not a valid Android subtopic
-- **Fix:** Update to use valid Android subtopics from TAXONOMY.md
-
-### 4. Missing Android Tag Mirrors (ERROR)
-- **Issue:** Tags don't mirror the subtopics with `android/` prefix
-- **Example:** If `subtopics: [ui-compose, lifecycle]`, then tags must include `android/ui-compose` and `android/lifecycle`
-- **Fix:** Add missing `android/<subtopic>` tags
-
-### 5. Broken Related Links in YAML (ERROR)
+### 3. Broken Related Links in YAML (294 occurrences - ERROR)
 - **Issue:** YAML `related` field contains links to non-existent files
-- **Impact:** Broken relationships in knowledge graph
-- **Fix:** Update related links to point to existing files
+- **Impact:** Breaks knowledge graph relationships
+- **Top 10 broken YAML links:**
+  1. `q-android-coverage-gaps--android--hard` - 33 files
+  2. `c-performance` - 5 files
+  3. `c-testing` - 4 files
+  4. `c-fragment-lifecycle` - 4 files
+  5. `c-android-components` - 4 files
+  6. `c-compose-modifiers` - 3 files
+  7. `c-choreographer` - 3 files
+  8. `c-threading` - 3 files
+  9. `c-intent` - 3 files
+  10. `c-layouts` - 3 files
+- **Fix:** Update YAML related links to point to existing files
 
-### 6. Code Formatting Issues (WARNING)
-- **Issue:** Generic types not wrapped in backticks, causing potential HTML interpretation
-- **Example:** `ArrayList<String>` should be `` `ArrayList<String>` ``
-- **Fix:** Wrap all types and generics in backticks
+### 4. Invalid Android Subtopics (36 occurrences - ERROR)
+- **Issue:** Subtopics not in TAXONOMY.md Android subtopics list
+- **Most common invalid subtopics:**
+  - `security` - 6 files (should be `keystore-crypto` or `network-security-config`)
+  - `communication` - 3 files (should be `intents-deeplinks`)
+  - `release-engineering` - 3 files (should be `ci-cd`)
+  - `compose` - 3 files (should be `ui-compose`)
+  - `globalization` - 3 files (should be `i18n-l10n`)
+  - And 39 other invalid values
+- **Fix:** Map invalid subtopics to valid TAXONOMY.md Android subtopics
+
+### 5. Missing Android Tag Mirrors (35 occurrences - ERROR)
+- **Issue:** Tags don't mirror the subtopics with `android/` prefix
+- **Example:** If `subtopics: [ui-compose, lifecycle]`, tags must include `android/ui-compose` and `android/lifecycle`
+- **Fix:** Add missing `android/<subtopic>` tags (goes hand-in-hand with subtopic fixes)
+
+### 6. Other Issues (332 occurrences - mixed severity)
+- **Types:** Code formatting, blockquote syntax, long content, etc.
+- **Fix:** Address case-by-case during review
 
 ---
 
@@ -73,57 +102,101 @@
 
 ### Priority 1: CRITICAL Issues
 1. **Add Missing "## Related Questions" Sections**
-   - Estimate: ~100-200 files affected
-   - Impact: High (document structure requirement)
-   - Effort: Low (template-based addition)
+   - **Count:** 324 files
+   - **Impact:** High (document structure requirement, CRITICAL severity)
+   - **Effort:** Low (template-based addition)
+   - **Action:** Add standard template section to each file
 
-### Priority 2: ERROR Issues
-2. **Fix Invalid Android Subtopics**
-   - Estimate: Unknown (detailed analysis in progress)
-   - Impact: High (breaks TAXONOMY compliance)
-   - Effort: Medium (requires TAXONOMY.md lookup)
+### Priority 2: HIGH-IMPACT ERROR Issues
+2. **Fix Most Common Broken Link: `q-android-coverage-gaps--android--hard`**
+   - **Count:** 65 total references (32 wikilinks + 33 YAML)
+   - **Impact:** High (most referenced missing file)
+   - **Effort:** Medium (create this one file to fix 65 references)
+   - **Action:** Either create the file or update all references to alternative
 
-3. **Update Android Tag Mirrors**
-   - Estimate: Goes hand-in-hand with subtopic fixes
-   - Impact: High (validator requirement)
-   - Effort: Low (automated with subtopic fixes)
+3. **Fix Invalid Android Subtopics**
+   - **Count:** 36 files
+   - **Impact:** High (breaks TAXONOMY compliance)
+   - **Effort:** Medium (manual mapping to valid subtopics)
+   - **Common mappings needed:**
+     - `security` → `keystore-crypto` or `network-security-config`
+     - `communication` → `intents-deeplinks`
+     - `release-engineering` → `ci-cd`
+     - `compose` → `ui-compose`
+     - `globalization` → `i18n-l10n`
 
-4. **Fix Broken Wikilinks**
-   - Estimate: Unknown (detailed analysis in progress)
-   - Impact: Medium (breaks navigation)
-   - Effort: High (requires creating missing concept notes or link updates)
+4. **Update Android Tag Mirrors**
+   - **Count:** 35 files
+   - **Impact:** High (validator requirement)
+   - **Effort:** Low (automated with subtopic fixes)
+   - **Action:** Add `android/<subtopic>` tags for each subtopic
 
-5. **Fix Broken Related Links in YAML**
-   - Estimate: Unknown (detailed analysis in progress)
-   - Impact: Medium (breaks knowledge graph)
-   - Effort: Medium (requires finding alternative related files)
+### Priority 3: MEDIUM-IMPACT ERROR Issues
+5. **Fix Remaining Broken Wikilinks**
+   - **Count:** 427 occurrences total
+   - **Impact:** Medium (breaks navigation)
+   - **Effort:** High (requires creating ~50-100 concept notes)
+   - **Action:** Create high-priority concept files (top 10 most referenced)
 
-### Priority 3: WARNING Issues
-6. **Code Formatting**
-   - Estimate: Unknown (detailed analysis in progress)
-   - Impact: Low (cosmetic/rendering issue)
-   - Effort: Low (find-and-replace)
+6. **Fix Broken Related Links in YAML**
+   - **Count:** 294 occurrences
+   - **Impact:** Medium (breaks knowledge graph)
+   - **Effort:** Medium (find alternative related files)
+   - **Action:** Update YAML to point to existing files
+
+### Priority 4: LOW-IMPACT WARNING Issues
+7. **Code Formatting and Other Issues**
+   - **Count:** 332 occurrences (mixed)
+   - **Impact:** Low (cosmetic/rendering issues)
+   - **Effort:** Low (find-and-replace patterns)
+   - **Action:** Address during manual review
 
 ---
 
+## Quick Wins (Highest ROI)
+
+### Quick Win #1: Create `q-android-coverage-gaps--android--hard.md`
+- **Impact:** Fixes 65 broken references immediately
+- **Effort:** 30-60 minutes to create one comprehensive file
+- **ROI:** Highest single-file impact
+
+### Quick Win #2: Batch Add "Related Questions" Sections
+- **Impact:** Fixes 324 CRITICAL issues
+- **Effort:** Can be semi-automated with template insertion
+- **Script:**
+  ```python
+  # Add template section to files missing it
+  template = "\n## Related Questions\n\n- To be populated\n"
+  ```
+
+### Quick Win #3: Fix Top 10 Most Common Invalid Subtopics
+- **Impact:** Fixes ~20 files (6 + 3 + 3 + 3 + 3 + others)
+- **Effort:** Create mapping table, apply systematically
+- **Example mapping:**
+  - `security` → `keystore-crypto`
+  - `communication` → `intents-deeplinks`
+  - `release-engineering` → `ci-cd`
+
 ## Next Steps
 
-1. **Wait for detailed analysis to complete** (running in background)
-   - Will provide exact counts for each issue type
-   - Will identify most common broken links
-   - Will identify most common invalid subtopics
+1. ✅ **Detailed analysis complete**
+   - All 527 files analyzed
+   - Issues categorized by type and frequency
+   - Top broken links identified
 
-2. **Generate prioritized fix list**
-   - Focus on CRITICAL issues first
-   - Batch similar ERROR issues together
+2. **Start with Quick Wins**
+   - Create `q-android-coverage-gaps--android--hard.md` file
+   - Batch add "Related Questions" sections
+   - Fix top 10 invalid subtopics
 
-3. **Create automation scripts** (if applicable)
-   - Automated subtopic/tag updates
-   - Template for adding "Related Questions" sections
+3. **Create automation scripts**
+   - Script to add "Related Questions" template
+   - Script to map invalid → valid subtopics
+   - Script to add missing Android tag mirrors
 
-4. **Execute fixes systematically**
+4. **Execute systematic fixes**
    - Use NOTE-REVIEW-PROMPT.md workflow
-   - Validate before/after each fix
+   - Validate before/after each batch
    - Track progress with checklist
 
 ---
@@ -164,5 +237,17 @@ python3 analyze_android_issues.py
 
 ---
 
-**Status:** Initial validation complete. Detailed analysis in progress.
+## Summary Statistics
+
+- **Total issues found:** 1,423 (325 CRITICAL + 838 ERROR + 260 WARNING)
+- **Files affected:** 390 (74.0% of total)
+- **Files passing:** 137 (26.0% of total)
+- **Most common issue:** Broken Wikilinks (427 occurrences)
+- **Most critical issue:** Missing Required Headings (324 occurrences)
+- **Highest-impact single fix:** Create `q-android-coverage-gaps` file (fixes 65 references)
+
+---
+
+**Status:** ✅ Complete validation and analysis finished
 **Generated:** 2025-11-05
+**Analysis Time:** ~10 minutes for 527 files
