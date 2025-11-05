@@ -630,6 +630,14 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 **English**: **Handler** sends messages, **Looper** processes them in a loop, **MessageQueue** stores them. Looper attaches to thread via `Looper.prepare()` and `Looper.loop()`. Check looper exists with `Looper.myLooper()`. Send messages to main thread: `Handler(Looper.getMainLooper()).post { }`. Use `HandlerThread` for background processing. Always clean up handlers in `onDestroy()` to prevent leaks. Use `Message.obtain()` for object reuse.
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-glide-image-loading-internals--android--medium]]

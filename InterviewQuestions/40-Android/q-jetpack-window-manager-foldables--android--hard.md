@@ -136,3 +136,8 @@ RuleController.getInstance(context).setRules(
 - [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/jetpack/androidx/releases/window
 - https://developer.android.com/guide/topics/large-screens/ideas
+
+## Related Questions
+
+- [[c-window-size-class]]
+- [[q-android-coverage-gaps--android--hard]]

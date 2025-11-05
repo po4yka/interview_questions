@@ -155,6 +155,14 @@ ViewModel реализует паттерн MVVM, обеспечивая чет�
 
 ---
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Hub

@@ -906,6 +906,14 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 3. Не забывайте про `dispatchAddFinished()` в custom animators
 4. Тестируйте анимации на медленных устройствах
 5. Используйте стабильные ID для улучшения производительности
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Prerequisites (Easier)

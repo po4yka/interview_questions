@@ -258,6 +258,14 @@ fun LayeringExample() {
 
 В Android для наложения элементов используется FrameLayout или Box в Jetpack Compose. FrameLayout — контейнер, где элементы располагаются в левом верхнем углу и могут накладываться друг на друга. Box в Jetpack Compose аналогичен FrameLayout и также позволяет наложение элементов.
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-room-database-migrations--android--medium]]

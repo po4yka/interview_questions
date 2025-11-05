@@ -632,6 +632,14 @@ fun RememberScrollState() {
 3. ✅ LazyRow для горизонтальных списков
 4. ✅ LazyVerticalGrid для сеток
 5. ✅ Избегайте вложенных Lazy компонентов
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Hub

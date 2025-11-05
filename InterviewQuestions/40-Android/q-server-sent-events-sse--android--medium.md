@@ -1497,6 +1497,14 @@ Server-Sent Events предоставляют:
 
 ---
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Prerequisites (Easier)

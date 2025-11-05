@@ -386,6 +386,14 @@ WebP — это оптимальный выбор для Android-приложе�
 
 **English**: WebP is the most efficient image format for Android, developed by Google. It provides 25-45% better compression than JPEG/PNG while maintaining quality. Supports both lossy and lossless compression, transparency (alpha channel), and animation. Available since Android 4.0+ (API 14). Convert images using Android Studio's built-in tool, cwebp command-line utility, or online converters. Recommended settings: lossy (q=80) for photos, lossless for logos/icons. Reduces APK size significantly without compromising visual quality.
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-what-are-services-for--android--easy]]

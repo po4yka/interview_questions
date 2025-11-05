@@ -418,6 +418,14 @@ ViewModel и onSaveInstanceState служат для сохранения дан
 
 ---
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Hub

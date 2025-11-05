@@ -142,3 +142,8 @@ session.start(params)
 - https://developer.android.com/guide/topics/connectivity/nfc
 - https://developer.android.com/guide/topics/connectivity/uwb
 - https://developers.google.com/nearby/connections/overview
+
+## Related Questions
+
+- [[c-nearby-uwb]]
+- [[q-android-coverage-gaps--android--hard]]

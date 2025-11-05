@@ -157,6 +157,10 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 ## References
 - [Common modularization patterns](https://developer.android.com/topic/modularization/patterns)
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
 ## Related Questions
 
 ### Related (Hard)

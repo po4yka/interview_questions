@@ -149,6 +149,14 @@ val layout = LinearLayout(this).apply {
 
 ---
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-is-layoutinflater-a-singleton-and-why--android--medium]]

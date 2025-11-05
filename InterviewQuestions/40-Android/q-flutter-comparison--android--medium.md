@@ -494,3 +494,11 @@ class LocationManager {
 - https://flutter.dev/docs - Flutter official documentation
 - https://developer.android.com/kotlin/multiplatform - Android KMM guide
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+## Related Questions
+
+- [[c-cross-platform-development]]
+

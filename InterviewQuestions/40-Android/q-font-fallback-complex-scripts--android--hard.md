@@ -634,3 +634,8 @@ suspend fun loadScriptFont(script: String): Typeface {
 ## References
 - [[c-globalization]]
 - https://developer.android.com/guide/topics/text/downloadable-fonts
+
+## Related Questions
+
+- [[c-globalization]]
+- [[q-android-coverage-gaps--android--hard]]

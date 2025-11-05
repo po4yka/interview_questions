@@ -601,6 +601,14 @@ RemoteViews поддерживает только определённые layou
 
 Виджеты — это интерактивные компоненты на главном экране Android. Существует четыре категории: информационные, коллекций, управления и гибридные. Для создания виджета необходимы: layout, XML метаданных, AppWidgetProvider и запись в manifest. Жизненный цикл включает onEnabled, onUpdate, onDeleted, onDisabled. RemoteViews используется для построения UI с ограниченной поддержкой view. Основные ограничения: поддержка жестов, типы view, лимит выполнения 5 секунд.
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-recyclerview-viewtypes-delegation--android--medium]]

@@ -219,6 +219,14 @@ startActivity(intent)
 | View | Элемент UI | Да | Button, TextView |
 | Intent | Обмен сообщениями | Нет | Запуск Activity |
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-rss-feed-aggregator--android--medium]]

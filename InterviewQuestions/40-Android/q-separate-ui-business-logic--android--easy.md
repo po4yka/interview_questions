@@ -687,6 +687,14 @@ ViewModel переживает изменения конфигурации (по
 
 ---
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Related (Easy)

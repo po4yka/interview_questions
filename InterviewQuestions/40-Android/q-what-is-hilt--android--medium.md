@@ -609,6 +609,14 @@ object DatabaseModule {
 - Интеграция с Jetpack библиотеками
 - Необходима тестируемая архитектура
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-android-app-components--android--easy]]

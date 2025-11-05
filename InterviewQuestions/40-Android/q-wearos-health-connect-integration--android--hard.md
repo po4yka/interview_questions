@@ -126,3 +126,8 @@ if (healthConnectClient.permissionController.getGrantedPermissions()
 - [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/training/wearables/health-services
 - https://developer.android.com/guide/health-and-fitness/health-connect
+
+## Related Questions
+
+- [[c-wear-health]]
+- [[q-android-coverage-gaps--android--hard]]

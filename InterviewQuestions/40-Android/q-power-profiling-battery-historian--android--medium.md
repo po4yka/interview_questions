@@ -96,3 +96,8 @@ sources:
 - [[c-power-profiling]]
 - [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/topic/performance/power/battery-historian
+
+## Related Questions
+
+- [[c-power-profiling]]
+- [[q-android-coverage-gaps--android--hard]]

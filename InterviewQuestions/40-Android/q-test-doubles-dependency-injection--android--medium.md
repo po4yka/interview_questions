@@ -326,6 +326,14 @@ Fake - это рабочая реализация с упрощенным пов
 
 ---
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Related (Medium)

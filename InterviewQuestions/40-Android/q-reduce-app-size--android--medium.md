@@ -363,6 +363,10 @@ android {
 - [8 Best Ways to Reduce Android App Size](https://www.mantralabsglobal.com/blog/reduce-android-app-size/)
 - [Minimizing APK Size: Techniques for Shrinking Android App Size](https://diegomarcher.medium.com/minimizing-apk-size-techniques-for-shrinking-android-app-size-7a4c5eefbd46)
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
 ## Related Questions
 
 ### Prerequisites (Easier)

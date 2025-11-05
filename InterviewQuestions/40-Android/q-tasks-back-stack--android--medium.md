@@ -123,6 +123,10 @@ Android управляет задачами и стеком возврата, п
 
 - [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
 ## Related Questions
 
 - [[q-recyclerview-itemdecoration-advanced--android--medium]]

@@ -136,6 +136,10 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID
 - How do you handle notification channels for different Android versions?
 - What are best practices for channel naming and organization?
 
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Prerequisites (Easier)

@@ -149,6 +149,14 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 Вы можете использовать **GridLayoutManager** и динамически задавать количество колонок в зависимости от ориентации экрана.
 
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Related (Medium)

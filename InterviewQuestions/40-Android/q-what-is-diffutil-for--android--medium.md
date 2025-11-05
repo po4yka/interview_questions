@@ -929,6 +929,14 @@ class UsersFragment : Fragment() {
 | **AsyncListDiffer** | Вычисление в фоновом потоке |
 | **Payloads** | Частичные обновления элементов |
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-how-animations-work-in-recyclerview--android--medium]]

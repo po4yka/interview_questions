@@ -261,6 +261,10 @@ val id: Identifier = userId             // 4. Interfaces
 - When should you use value classes vs data classes?
 - How do value classes affect binary compatibility?
 
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Related (Same Level)

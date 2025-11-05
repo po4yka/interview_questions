@@ -209,6 +209,10 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 - What are the benefits of using adapter delegation?
 - How do you handle view type changes efficiently?
 
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Prerequisites (Easier)

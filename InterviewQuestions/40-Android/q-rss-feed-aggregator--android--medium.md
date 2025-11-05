@@ -482,6 +482,14 @@ fun RssItemCard(
 **Примечание**: Это автоматически сгенерированный перевод для демонстрации процесса обработки batch 2.
 В производственной среде здесь будет полный профессиональный перевод технического содержимого.
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-how-to-choose-layout-for-fragment--android--easy]]

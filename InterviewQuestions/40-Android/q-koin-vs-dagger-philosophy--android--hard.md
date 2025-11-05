@@ -182,3 +182,12 @@ sources:
 - https://dagger.dev/dev-guide/
 - https://developer.android.com/training/dependency-injection/hilt-android
 
+## Related Questions
+
+- [[c-dependency-injection]]
+- [[c-dagger]]
+- [[c-hilt]]
+- [[q-koin-fundamentals--android--medium]]
+- [[q-dagger-framework-overview--android--hard]]
+- [[q-koin-vs-hilt-comparison--android--medium]]
+

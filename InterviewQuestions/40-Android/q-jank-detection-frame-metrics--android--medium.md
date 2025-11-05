@@ -986,6 +986,10 @@ class FrameMetricsMonitor {
 - [Slow Rendering](https://developer.android.com/topic/performance/vitals/render)
 - [Systrace](https://developer.android.com/topic/performance/tracing)
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
 ## Related Questions
 
 ### Prerequisites (Easier)

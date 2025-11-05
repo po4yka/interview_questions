@@ -501,3 +501,13 @@ Key metrics for production reliability: bootstrap latency (<150ms), cache hit ra
 -   [[c-workmanager]]
 -   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
 -   [[ANDROID-INTERVIEWER-GUIDE]]
+
+
+## Follow-ups
+
+- Follow-up questions to be populated
+## Related Questions
+
+- [[c-clean-architecture]]
+- [[c-dependency-injection]]
+- [[c-workmanager]]

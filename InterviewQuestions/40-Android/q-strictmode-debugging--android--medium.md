@@ -463,6 +463,14 @@ fun getUsers(): List<User> {
 - [Android Best Practices: StrictMode](https://code.tutsplus.com/android-best-practices-strictmode--mobile-7581t)
 - [Raising the Bar with Android StrictMode](https://medium.com/wizeline-mobile/raising-the-bar-with-android-strictmode-7042d8a9e67b)
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-real-time-updates-android--android--medium]]

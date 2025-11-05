@@ -1288,6 +1288,14 @@ fun ChatScreen(chatClient: ChatClient) {
 - **UX**: Чёткие состояния и обработка ошибок
 - **Эффективность**: Одно постоянное соединение
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-parcelable-implementation--android--medium]]

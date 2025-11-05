@@ -690,6 +690,14 @@ class DynamicScreenActivity : AppCompatActivity() {
 - **Instagram** - IGListKit для сложных динамических экранов
 - **Netflix** - Falcor для координации данных и UI
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 - [[q-fragments-history-and-purpose--android--hard]]

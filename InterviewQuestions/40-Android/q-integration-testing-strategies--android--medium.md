@@ -289,6 +289,14 @@ class FullStackIntegrationTest {
 
 ---
 
+
+## Follow-ups
+
+- Follow-up questions to be populated
+
+## References
+
+- References to be populated
 ## Related Questions
 
 ### Related (Medium)

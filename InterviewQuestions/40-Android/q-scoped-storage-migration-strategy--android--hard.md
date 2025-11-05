@@ -115,3 +115,8 @@ context.contentResolver.query(MediaStore.Files.getContentUri("external"), projec
 - [[c-scoped-storage-security]]
 - [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/training/data-storage
+
+## Related Questions
+
+- [[c-scoped-storage-security]]
+- [[q-android-coverage-gaps--android--hard]]
