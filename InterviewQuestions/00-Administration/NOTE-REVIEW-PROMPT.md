@@ -7,7 +7,7 @@ Use this playbook when an automation agent must iterate through notes, apply fix
 ## Operating Mode
 
 1. **Scope definition**: specify the working set up front.
-   - Folder: `InterviewQuestions/<FOLDER_NAME>/`
+   - Folder: `InterviewQuestions/<FOLDER>/` (e.g., `20-Algorithms/`, `40-Android/`)
    - Files: explicit list or `ALL`
 2. **Single-note flow**: for each file run validation → edit → re-run validation → present results → wait for reviewer confirmation before touching the next note.
 3. **Progress tracking**: maintain a running checklist using `☐` (pending) and `☑` (completed).
@@ -59,15 +59,16 @@ updated: 2025-01-25
 tags: [leetcode, arrays, hash-map, difficulty/easy]
 ```
 
-Topic ↔ folder mapping (subject folders):
+Topic ↔ folder mapping (actual folders):
 
-- `Algorithms/` → `topic: algorithms`
-- `Android/` → `topic: android`
-- `Behavioural/` → `topic: behavioral`
-- `CompSci/` → `topic: cs`
-- `Data Structures/` → `topic: cs`
-- `System Design/` → `topic: system-design`
-- `MOCs/` → reference maps of content; topic varies per note
+- `20-Algorithms/` → `topic: algorithms` or `data-structures`
+- `30-System-Design/` → `topic: system-design` or `distributed-systems`
+- `40-Android/` → `topic: android`
+- `50-Backend/` → `topic: databases` or `networking`
+- `60-CompSci/` → `topic: cs`, `operating-systems`, `concurrency`, etc.
+- `70-Kotlin/` → `topic: kotlin` or `programming-languages`
+- `80-Tools/` → `topic: tools` or `debugging`
+- `90-MOCs/` → Maps of Content; topic varies per note
 
 Remove obsolete keys (`date created`, `date modified`, legacy metadata).
 
