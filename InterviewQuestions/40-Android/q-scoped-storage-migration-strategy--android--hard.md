@@ -112,9 +112,11 @@ context.contentResolver.query(MediaStore.Files.getContentUri("external"), projec
 - Какие практики для синхронизации фото/видео с облаком при scoped storage?
 
 ## References
+
 - [[c-scoped-storage-security]]
 - [[q-android-coverage-gaps--android--hard]]
-- https://developer.android.com/training/data-storage
+- [Data Storage](https://developer.android.com/training/data-storage)
+
 
 ## Related Questions
 

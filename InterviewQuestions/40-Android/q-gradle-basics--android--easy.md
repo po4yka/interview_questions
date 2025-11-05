@@ -334,8 +334,8 @@ buildTypes {
 
 ## References
 
-- https://developer.android.com/build/build-variants
-- https://developer.android.com/build
+- [Build Variants](https://developer.android.com/build/build-variants)
+- [Gradle Build](https://developer.android.com/build)
 
 
 ## Related Questions

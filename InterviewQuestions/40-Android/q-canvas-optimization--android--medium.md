@@ -288,8 +288,9 @@ Analyze via **Android Studio Profiler** → CPU → System Trace.
 ## References
 
 - [[c-custom-views]] - Custom View fundamentals
-- https://developer.android.com/topic/performance/rendering
+- [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/topic/performance/vitals/render
+
 
 ## Related Questions
 

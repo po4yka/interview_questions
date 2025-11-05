@@ -403,9 +403,10 @@ sealed class UploadState {
 - [[c-retrofit]] - Retrofit HTTP client basics
 - [[c-okhttp]] - OkHttp interceptors and customization
 - [[c-workmanager]] - WorkManager background tasks
-- https://developer.android.com/topic/libraries/architecture/workmanager
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - https://square.github.io/retrofit/
 - https://square.github.io/okhttp/
+
 
 ## Related Questions
 

@@ -127,9 +127,11 @@ sources:
 - Какая стратегия fallback для пользователей в странах с TLS интерцепцией (enterprise proxies)?
 
 ## References
+
 - [[c-security-hardening]]
 - [[q-android-coverage-gaps--android--hard]]
-- https://developer.android.com/training/articles/security-config
+- [Network Security Configuration](https://developer.android.com/training/articles/security-config)
+
 
 ## Related Questions
 

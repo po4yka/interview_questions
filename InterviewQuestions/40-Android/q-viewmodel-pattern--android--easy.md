@@ -165,9 +165,9 @@ ViewModel реализует паттерн MVVM, обеспечивая чет�
 
 ## References
 
-- https://developer.android.com/topic/architecture
-- https://developer.android.com/docs
-- https://developer.android.com/topic/libraries/architecture/lifecycle
+- [Architecture](https://developer.android.com/topic/architecture)
+- [Android Documentation](https://developer.android.com/docs)
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions

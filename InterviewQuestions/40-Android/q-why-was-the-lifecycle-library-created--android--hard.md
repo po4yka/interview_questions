@@ -435,9 +435,10 @@ fun testObserver() {
 
 - [[c-lifecycle]] — Lifecycle-aware components and architecture patterns
 - [[c-viewmodel]] — ViewModel lifecycle and scope
-- https://developer.android.com/topic/libraries/architecture/lifecycle
-- https://developer.android.com/topic/libraries/architecture/viewmodel
-- https://developer.android.com/topic/libraries/architecture/livedata
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+
 
 ## Related Questions
 

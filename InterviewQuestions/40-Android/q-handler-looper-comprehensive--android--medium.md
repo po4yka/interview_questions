@@ -640,7 +640,7 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 ## References
 
-- https://developer.android.com/guide/background/threading
+- [Threading](https://developer.android.com/guide/background/threading)
 
 
 ## Related Questions

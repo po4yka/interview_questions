@@ -332,8 +332,9 @@ class MyApplication : Application() {
 - [[c-viewmodel]]
 - [[c-repository-pattern]]
 - [[c-fragment-lifecycle]]
-- https://developer.android.com/topic/libraries/architecture/viewmodel
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - https://developer.android.com/topic/libraries/architecture/saving-states
+
 
 ## Related Questions
 

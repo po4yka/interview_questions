@@ -497,9 +497,10 @@ android {
 
 ## References
 
-- https://developer.android.com/topic/performance
+- [Performance](https://developer.android.com/topic/performance)
 - https://developer.android.com/topic/performance/baselineprofiles
-- https://developer.android.com/studio/profile
+- [Profiling](https://developer.android.com/studio/profile)
+
 
 ## Related Questions
 

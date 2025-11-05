@@ -235,7 +235,8 @@ fun calculateDistance(x: Int, y: Int): Int {
 
 - [[c-memory-management]]
 - https://source.android.com/docs/core/runtime
-- https://developer.android.com/topic/performance/memory-overview
+- [Memory Management](https://developer.android.com/topic/performance/memory-overview)
+
 
 ## Related Questions
 

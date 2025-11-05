@@ -174,7 +174,7 @@ splitInstallManager.startInstall(request)
 
 ## References
 
-- https://developer.android.com/guide/app-bundle
+- [Android App Bundle](https://developer.android.com/guide/app-bundle)
 
 
 ## Related Questions

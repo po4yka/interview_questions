@@ -208,7 +208,8 @@ if (userLoggedIn) {
 ## References
 
 - [[c-content-provider]] — ContentProvider lifecycle and performance
-- https://developer.android.com/topic/libraries/app-startup
+- [App Startup Library](https://developer.android.com/topic/libraries/app-startup)
+
 
 ## Related Questions
 

@@ -490,7 +490,7 @@ class EventBus {
 
 ## References
 
-- https://developer.android.com/develop/background-work/services
+- [Services](https://developer.android.com/develop/background-work/services)
 
 
 ## Related Questions

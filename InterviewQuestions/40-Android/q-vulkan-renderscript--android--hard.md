@@ -1103,7 +1103,7 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 
 ## References
 
-- https://developer.android.com/topic/performance/rendering
+- [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 
 
 ## Related Questions

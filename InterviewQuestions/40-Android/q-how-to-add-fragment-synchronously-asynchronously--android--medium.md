@@ -459,7 +459,7 @@ if (!isStateSaved) {
 
 ## References
 
-- https://developer.android.com/docs
+- [Android Documentation](https://developer.android.com/docs)
 
 
 ## Related Questions

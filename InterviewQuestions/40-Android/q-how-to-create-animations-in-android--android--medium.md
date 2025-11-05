@@ -347,7 +347,7 @@ override fun onDestroyView() {
 
 ## References
 
-- https://developer.android.com/develop/ui/views/animations
+- [Animations](https://developer.android.com/develop/ui/views/animations)
 
 
 ## Related Questions

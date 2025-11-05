@@ -264,8 +264,9 @@ if (!isMainThread()) {
 ## References
 
 - [[c-coroutines]]
-- https://developer.android.com/guide/components/processes-and-threads
+- [Processes and Threads](https://developer.android.com/guide/components/processes-and-threads)
 - https://developer.android.com/guide/components/handlers
+
 
 ## Related Questions
 

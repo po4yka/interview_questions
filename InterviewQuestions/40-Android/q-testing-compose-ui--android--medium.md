@@ -755,9 +755,9 @@ debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
 
 ## References
 
-- https://developer.android.com/training/testing/ui-testing
-- https://developer.android.com/docs
-- https://developer.android.com/develop/ui/compose
+- [UI Testing](https://developer.android.com/training/testing/ui-testing)
+- [Android Documentation](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
 
 
 ## Related Questions

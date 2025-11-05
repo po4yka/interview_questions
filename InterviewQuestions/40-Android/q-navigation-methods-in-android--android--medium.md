@@ -498,8 +498,9 @@ binding.drawerLayout.addDrawerListener(
 - [[c-navigation-component]]
 - [[c-intent-system]]
 - [[c-compose-navigation]]
-- https://developer.android.com/guide/navigation
+- [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/guide/navigation/navigation-deep-link
+
 
 ## Related Questions
 

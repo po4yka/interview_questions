@@ -217,7 +217,8 @@ class FileTransferService : Service() {
 - [[c-service]]
 - [[c-workmanager]]
 - https://developer.android.com/develop/background-work/background-tasks
-- https://developer.android.com/develop/background-work/services/foreground-services
+- [Foreground Services](https://developer.android.com/develop/background-work/services/foreground-services)
+
 
 ## Related Questions
 

@@ -895,8 +895,8 @@ class MusicPlayerService : Service() {
 
 ## References
 
-- https://developer.android.com/develop/background-work/services
-- https://developer.android.com/guide/components/activities
+- [Services](https://developer.android.com/develop/background-work/services)
+- [Activities](https://developer.android.com/guide/components/activities)
 
 
 ## Related Questions

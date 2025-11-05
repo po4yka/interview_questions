@@ -122,8 +122,8 @@ Activity can move to a task with the same affinity when it comes to foreground.
 
 ## References
 
-- https://developer.android.com/guide/navigation
-- https://developer.android.com/guide/components/activities
+- [Navigation](https://developer.android.com/guide/navigation)
+- [Activities](https://developer.android.com/guide/components/activities)
 
 
 ## Related Questions

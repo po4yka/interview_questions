@@ -180,8 +180,8 @@ class ListViewModel : ViewModel() {
 
 ## References
 
-- https://developer.android.com/topic/architecture
-- https://developer.android.com/docs
+- [Architecture](https://developer.android.com/topic/architecture)
+- [Android Documentation](https://developer.android.com/docs)
 
 
 ## Related Questions

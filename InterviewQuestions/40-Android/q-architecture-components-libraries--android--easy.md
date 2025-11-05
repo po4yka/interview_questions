@@ -317,10 +317,11 @@ UI Layer (Compose / Views)
 - [[c-lifecycle]]
 - [[c-room]]
 - https://developer.android.com/jetpack
-- https://developer.android.com/topic/architecture
-- https://developer.android.com/topic/libraries/architecture/viewmodel
-- https://developer.android.com/training/data-storage/room
-- https://developer.android.com/topic/libraries/architecture/workmanager
+- [Architecture](https://developer.android.com/topic/architecture)
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [Room Database](https://developer.android.com/training/data-storage/room)
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+
 
 ## Related Questions
 

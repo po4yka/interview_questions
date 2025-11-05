@@ -200,7 +200,8 @@ fun detach() {
 - [[c-lifecycle]] — Android component lifecycle
 - [[c-mvvm-pattern]] — Model-View-Presenter architecture
 - https://developer.android.com/kotlin/coroutines/coroutines-best-practices
-- https://developer.android.com/topic/architecture/ui-layer
+- [UI Layer Architecture](https://developer.android.com/topic/architecture/ui-layer)
+
 
 ## Related Questions
 

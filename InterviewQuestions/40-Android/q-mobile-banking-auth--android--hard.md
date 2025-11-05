@@ -139,9 +139,10 @@ Aggressive pinning/attestation blocks some legit users; provide appeals flow and
 -   [[q-database-encryption-android--android--medium]]
 -   [[c-encryption]]
 -   [[c-permissions]]
--   https://developer.android.com/training/articles/keystore
+- [Android Keystore](https://developer.android.com/training/articles/keystore)
 -   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
 -   [[ANDROID-INTERVIEWER-GUIDE]]
+
 
 ## Related Questions
 

@@ -224,9 +224,10 @@ interface UserDao {
 ## References
 
 - [[c-room-database]]
-- https://developer.android.com/training/data-storage
-- https://developer.android.com/topic/libraries/architecture/datastore
-- https://developer.android.com/training/data-storage/room
+- [Data Storage](https://developer.android.com/training/data-storage)
+- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
+- [Room Database](https://developer.android.com/training/data-storage/room)
+
 
 ## Related Questions
 

@@ -312,7 +312,8 @@ NavHost(navController, startDestination = "home") {
 - [[c-single-activity-architecture]]
 - [[c-navigation-component]]
 - [[c-jetpack-compose]]
-- https://developer.android.com/guide/fragments
+- [Fragments](https://developer.android.com/guide/fragments)
+
 
 ## Related Questions
 

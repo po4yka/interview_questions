@@ -101,9 +101,11 @@ StateFlow and SharedFlow are hot flows built on Kotlin Flow, while LiveData is a
 - How does `stateIn` compare to `shareIn` when converting repository flows to UI-facing streams?
 
 ## References
+
 - [[c-coroutines]]
 - https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
-- https://developer.android.com/topic/libraries/architecture/livedata
+- [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+
 
 ## Related Questions
 - [[q-flow-vs-livedata-comparison--kotlin--medium]]

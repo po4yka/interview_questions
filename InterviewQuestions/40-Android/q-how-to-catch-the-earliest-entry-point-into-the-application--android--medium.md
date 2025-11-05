@@ -340,8 +340,8 @@ class MyApplication : Application() {
 
 ## References
 
-- https://developer.android.com/docs
-- https://developer.android.com/topic/libraries/architecture/lifecycle
+- [Android Documentation](https://developer.android.com/docs)
+- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions

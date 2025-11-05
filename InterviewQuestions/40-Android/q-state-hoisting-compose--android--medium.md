@@ -745,8 +745,8 @@ fun ProductCard(
 
 ## References
 
-- https://developer.android.com/docs
-- https://developer.android.com/develop/ui/compose
+- [Android Documentation](https://developer.android.com/docs)
+- [Jetpack Compose](https://developer.android.com/develop/ui/compose)
 
 
 ## Related Questions

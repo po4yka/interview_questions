@@ -262,8 +262,9 @@ findNavController().navigate(R.id.action_home_to_detail, bundle)
 
 - [[c-activity-lifecycle]] — жизненный цикл Activity
 - https://developer.android.com/guide/components/activities/tasks-and-back-stack
-- https://developer.android.com/guide/navigation
+- [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/guide/components/intents-filters
+
 
 ## Related Questions
 

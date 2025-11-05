@@ -492,8 +492,8 @@ fun RssItemCard(
 
 ## References
 
-- https://developer.android.com/training/basics/network-ops/connecting
-- https://developer.android.com/training/data-storage/room
+- [Connecting to the Network](https://developer.android.com/training/basics/network-ops/connecting)
+- [Room Database](https://developer.android.com/training/data-storage/room)
 
 
 ## Related Questions

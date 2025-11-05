@@ -238,9 +238,10 @@ Keep last stable AAB + mapping.txt.
 ## References
 
 - [[c-gradle]] - Gradle build system
-- https://developer.android.com/studio/publish
+- [Publishing](https://developer.android.com/studio/publish)
 - https://developer.android.com/studio/publish/app-signing
 - https://github.com/Triple-T/gradle-play-publisher
+
 
 ## Related Questions
 

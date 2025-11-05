@@ -198,7 +198,8 @@ class MainActivity : AppCompatActivity() {
 - [[c-dagger]] - Dagger dependency injection framework
 - [[c-hilt]] - Hilt Android DI library
 - https://dagger.dev/api/latest/dagger/Inject.html
-- https://developer.android.com/training/dependency-injection/dagger-basics
+- [Dagger Basics](https://developer.android.com/training/dependency-injection/dagger-basics)
+
 
 ## Related Questions
 

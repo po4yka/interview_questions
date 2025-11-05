@@ -611,8 +611,8 @@ RemoteViews поддерживает только определённые layou
 
 ## References
 
-- https://developer.android.com/develop/ui/views
-- https://developer.android.com/docs
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
 
 
 ## Related Questions

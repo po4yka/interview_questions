@@ -1298,8 +1298,8 @@ fun ChatScreen(chatClient: ChatClient) {
 
 ## References
 
-- https://developer.android.com/training/basics/network-ops/connecting
-- https://developer.android.com/topic/performance/vitals/launch-time
+- [Connecting to the Network](https://developer.android.com/training/basics/network-ops/connecting)
+- [App Startup Time](https://developer.android.com/topic/performance/vitals/launch-time)
 
 
 ## Related Questions

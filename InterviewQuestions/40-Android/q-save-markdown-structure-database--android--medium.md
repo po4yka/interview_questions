@@ -491,7 +491,7 @@ class MarkdownRepository(
 
 ## References
 
-- https://developer.android.com/training/data-storage/room
+- [Room Database](https://developer.android.com/training/data-storage/room)
 
 
 ## Related Questions

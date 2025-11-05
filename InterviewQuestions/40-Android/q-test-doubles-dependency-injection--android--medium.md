@@ -336,8 +336,8 @@ Fake - это рабочая реализация с упрощенным пов
 
 ## References
 
-- https://developer.android.com/training/testing/local-tests
-- https://developer.android.com/docs
+- [Local Unit Tests](https://developer.android.com/training/testing/local-tests)
+- [Android Documentation](https://developer.android.com/docs)
 
 
 ## Related Questions

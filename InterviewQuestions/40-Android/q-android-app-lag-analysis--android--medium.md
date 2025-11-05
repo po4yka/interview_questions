@@ -235,8 +235,9 @@ StrictMode.setThreadPolicy(
 
 - [[q-android-performance-measurement-tools--android--medium]]
 - [[q-strictmode-debugging--android--medium]]
-- https://developer.android.com/topic/performance
-- https://developer.android.com/studio/profile
+- [Performance](https://developer.android.com/topic/performance)
+- [Profiling](https://developer.android.com/studio/profile)
+
 
 ## Related Questions
 

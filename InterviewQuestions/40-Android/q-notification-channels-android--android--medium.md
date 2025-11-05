@@ -139,7 +139,7 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID
 
 ## References
 
-- https://developer.android.com/develop/ui/views/notifications
+- [Notifications](https://developer.android.com/develop/ui/views/notifications)
 
 
 ## Related Questions

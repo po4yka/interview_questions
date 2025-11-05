@@ -433,10 +433,10 @@ fun AppNavigation() {
 - [[c-android-navigation]] - Navigation patterns
 - [[c-fragment-lifecycle]] - Fragment lifecycle management
 - [[c-jetpack-compose]] - Compose fundamentals
-- https://developer.android.com/guide/navigation
+- [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/jetpack/compose/navigation
-
 ---
+
 
 ## Related Questions
 

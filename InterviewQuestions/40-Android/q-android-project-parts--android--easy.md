@@ -200,7 +200,8 @@ android {
 
 - https://developer.android.com/studio/projects
 - https://developer.android.com/guide/topics/resources/providing-resources
-- https://developer.android.com/build
+- [Gradle Build](https://developer.android.com/build)
+
 
 ## Related Questions
 

@@ -550,7 +550,7 @@ object AppModule {
 
 ## References
 
-- https://developer.android.com/training/dependency-injection/hilt-android
+- [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 
 
 ## Related Questions
