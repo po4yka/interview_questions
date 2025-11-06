@@ -30,6 +30,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from validators.android_validator import AndroidValidator  # type: ignore
+from validators.code_format_validator import CodeFormatValidator  # type: ignore
 from validators.content_validator import ContentValidator  # type: ignore
 from validators.format_validator import FormatValidator  # type: ignore
 from validators.link_validator import LinkValidator  # type: ignore
@@ -107,6 +108,7 @@ def main() -> int:
                 taxonomy=taxonomy,
                 vault_root=vault_dir,
             ),
+            CodeFormatValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
             AndroidValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
             SystemDesignValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
         ]

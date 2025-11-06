@@ -29,6 +29,7 @@ class LinkValidator(BaseValidator):
     def validate(self):
         self._check_moc_exists()
         self._check_related_links()
+        self._check_related_links_quality()
         self._check_wikilinks()
         self._check_concept_link_presence()
         return self._summary
@@ -76,13 +77,58 @@ class LinkValidator(BaseValidator):
                     f"Wikilink [[{target}]] does not match any note filename",
                 )
 
+    def _check_related_links_quality(self) -> None:
+        """Check quality of related links in YAML frontmatter."""
+        related = self.frontmatter.get("related") or []
+
+        # Skip if not a list or empty (already reported by _check_related_links)
+        if not isinstance(related, list):
+            return
+
+        # Check minimum count
+        if len(related) < 2:
+            self.add_issue(
+                Severity.WARNING,
+                f"Related field has {len(related)} item(s). Recommended: 2-5 items "
+                "(mix of concept links c-... and question links q-...)",
+                field="related",
+            )
+        elif len(related) > 5:
+            self.add_issue(
+                Severity.INFO,
+                f"Related field has {len(related)} items. Recommended: 2-5 items "
+                "for focused cross-referencing",
+                field="related",
+            )
+        else:
+            # Good range: 2-5 items
+            self.add_passed(f"Related field has {len(related)} items (optimal range)")
+
+        # Check for concept links
+        concept_links = [r for r in related if isinstance(r, str) and r.startswith('c-')]
+        question_links = [r for r in related if isinstance(r, str) and r.startswith('q-')]
+
+        if not concept_links:
+            self.add_issue(
+                Severity.WARNING,
+                "Related field should include at least 1 concept link (c-...) "
+                "for foundational knowledge",
+                field="related",
+            )
+        else:
+            self.add_passed(f"Related field includes {len(concept_links)} concept link(s)")
+
+        # Informational: mention question links
+        if question_links:
+            self.add_passed(f"Related field includes {len(question_links)} question link(s)")
+
     def _check_concept_link_presence(self) -> None:
         if not self.content:
             return
         if "[[c-" not in self.content:
             self.add_issue(
                 Severity.WARNING,
-                "Note should include at least one concept link ([[c-...]])",
+                "Note should include at least one concept link ([[c-...]]) in content body",
             )
 
     def _link_exists(self, note_id: str) -> bool:

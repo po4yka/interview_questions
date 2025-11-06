@@ -62,6 +62,7 @@ class ContentValidator(BaseValidator):
             self._check_section_body(content, "# Question (EN)", "## Ответ (RU)")
             self._check_section_body(content, "## Ответ (RU)", "## Answer (EN)")
             self._check_section_body(content, "## Answer (EN)", "## Follow-ups")
+        self._check_question_blockquote_syntax(content)
         self._check_references(content)
         self._check_optional_question_versions(content)
         return self._summary
@@ -114,6 +115,33 @@ class ContentValidator(BaseValidator):
                 Severity.INFO,
                 "References section is present but contains no links",
             )
+
+    def _check_question_blockquote_syntax(self, content: str) -> None:
+        """Ensure questions use blockquote syntax (>) as required by NOTE-REVIEW-PROMPT.md."""
+
+        # Pattern: heading followed by optional blank lines, then check for blockquote
+        patterns = [
+            (r"# Вопрос \(RU\)\s*\n(?:\s*\n)*((?!>)[^\n])", "Russian question", "# Вопрос (RU)"),
+            (r"# Question \(EN\)\s*\n(?:\s*\n)*((?!>)[^\n])", "English question", "# Question (EN)"),
+        ]
+
+        for pattern, lang_label, heading in patterns:
+            match = re.search(pattern, content)
+            if match:
+                # Get the line number for better error reporting
+                lines_before = content[:match.start()].count('\n')
+                self.add_issue(
+                    Severity.ERROR,
+                    f"{lang_label} missing blockquote syntax: expected '>' after '{heading}' heading",
+                    line=lines_before + 1,
+                )
+            else:
+                # Check if heading exists and has blockquote
+                heading_pattern = rf"{re.escape(heading)}\s*\n(?:\s*\n)*>"
+                if re.search(heading_pattern, content):
+                    # Only mark as passed if we found the heading with proper blockquote
+                    if lang_label == "English question":  # Only log once
+                        self.add_passed("Questions use blockquote syntax (>)")
 
     def _check_optional_question_versions(self, content: str) -> None:
         """Validate optional Short/Detailed Version subsections for system design questions."""
