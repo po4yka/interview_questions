@@ -36,32 +36,6 @@ tags:
 
 ---
 
-## Answer (EN)
-
-Handler и Looper — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
-
-**Архитектура:** Handler отправляет сообщения → MessageQueue хранит → Looper обрабатывает в цикле. Looper привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(Looper.getMainLooper()).post { }`.
-
-**Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
-
-
-# Question (EN)
-> Handler Looper Comprehensive
-
----
-
-
----
-
-
-## Answer (EN)
-
-Handler и Looper — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
-
-**Архитектура:** Handler отправляет сообщения → MessageQueue хранит → Looper обрабатывает в цикле. Looper привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(Looper.getMainLooper()).post { }`.
-
-**Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
-
 ## Ответ (RU)
 
 Handler и Looper — это фундаментальные компоненты Android для организации межпоточного взаимодействия и обработки сообщений в очереди.
@@ -658,7 +632,9 @@ Looper.getMainLooper().setMessageLogging { log ->
    }
    ```
 
-**English**: **Handler** sends messages, **Looper** processes them in a loop, **MessageQueue** stores them. Looper attaches to thread via `Looper.prepare()` and `Looper.loop()`. Check looper exists with `Looper.myLooper()`. Send messages to main thread: `Handler(Looper.getMainLooper()).post { }`. Use `HandlerThread` for background processing. Always clean up handlers in `onDestroy()` to prevent leaks. Use `Message.obtain()` for object reuse.
+## Answer (EN)
+
+**Handler** sends messages, **Looper** processes them in a loop, **MessageQueue** stores them. Looper attaches to thread via `Looper.prepare()` and `Looper.loop()`. Check looper exists with `Looper.myLooper()`. Send messages to main thread: `Handler(Looper.getMainLooper()).post { }`. Use `HandlerThread` for background processing. Always clean up handlers in `onDestroy()` to prevent leaks. Use `Message.obtain()` for object reuse.
 
 
 ## Follow-ups
