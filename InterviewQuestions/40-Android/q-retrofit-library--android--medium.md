@@ -15,6 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, rest-api, retrofit]
+
 ---
 
 # Вопрос (RU)
@@ -35,14 +36,14 @@ tags: [android/architecture-mvvm, android/coroutines, android/networking-http, d
 
 ```kotlin
 interface ApiService {
- @GET("users/{id}") // ✅ Path parameter
- suspend fun getUser(@Path("id") userId: Int): User
+    @GET("users/{id}")  // ✅ Path parameter
+    suspend fun getUser(@Path("id") userId: Int): User
 
- @POST("users") // ✅ Body serialization
- suspend fun createUser(@Body user: User): User
+    @POST("users")      // ✅ Body serialization
+    suspend fun createUser(@Body user: User): User
 
- @GET("search") // ✅ Query parameters
- suspend fun search(@Query("q") query: String): List<Result>
+    @GET("search")      // ✅ Query parameters
+    suspend fun search(@Query("q") query: String): List<Result>
 }
 ```
 
@@ -50,11 +51,11 @@ interface ApiService {
 
 ```kotlin
 val retrofit = Retrofit.Builder()
- .baseUrl("https://api.example.com/")
- .addConverterFactory(GsonConverterFactory.create()) // ✅ JSON → POJO
- .build()
+    .baseUrl("https://api.example.com/")
+    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO
+    .build()
 
-data class User(val id: Int, val name: String) // ✅ Auto-mapped
+data class User(val id: Int, val name: String)  // ✅ Auto-mapped
 ```
 
 **3. Интеграция с корутинами**
@@ -62,12 +63,12 @@ data class User(val id: Int, val name: String) // ✅ Auto-mapped
 ```kotlin
 // ✅ Modern: suspend functions
 viewModelScope.launch {
- try {
- val user = apiService.getUser(123)
- _state.value = Success(user)
- } catch (e: HttpException) {
- _state.value = Error(e.code()) // 404, 500, etc.
- }
+    try {
+        val user = apiService.getUser(123)
+        _state.value = Success(user)
+    } catch (e: HttpException) {
+        _state.value = Error(e.code())  // 404, 500, etc.
+    }
 }
 
 // ❌ Legacy: callback-based (avoid)
@@ -78,19 +79,19 @@ apiService.getUser(123).enqueue(object : Callback<User> { ... })
 
 ```kotlin
 val client = OkHttpClient.Builder()
- .addInterceptor { chain -> // ✅ Add auth headers
- chain.proceed(
- chain.request().newBuilder()
- .addHeader("Authorization", "Bearer $token")
- .build()
- )
- }
- .connectTimeout(30, TimeUnit.SECONDS) // ✅ Timeouts
- .build()
+    .addInterceptor { chain ->  // ✅ Add auth headers
+        chain.proceed(
+            chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+        )
+    }
+    .connectTimeout(30, TimeUnit.SECONDS)  // ✅ Timeouts
+    .build()
 
 val retrofit = Retrofit.Builder()
- .client(client)
- .build()
+    .client(client)
+    .build()
 ```
 
 ### Пример С `Repository` Паттерном
@@ -98,27 +99,27 @@ val retrofit = Retrofit.Builder()
 ```kotlin
 // API definition
 interface GitHubApi {
- @GET("users/{username}/repos")
- suspend fun getRepos(@Path("username") name: String): List<Repo>
+    @GET("users/{username}/repos")
+    suspend fun getRepos(@Path("username") name: String): List<Repo>
 }
 
 // Repository layer
 class RepoRepository(private val api: GitHubApi) {
- suspend fun fetchRepos(username: String): Result<List<Repo>> =
- try {
- Result.success(api.getRepos(username))
- } catch (e: Exception) {
- Result.failure(e) // ✅ Handle errors at repository level
- }
+    suspend fun fetchRepos(username: String): Result<List<Repo>> =
+        try {
+            Result.success(api.getRepos(username))
+        } catch (e: Exception) {
+            Result.failure(e)  // ✅ Handle errors at repository level
+        }
 }
 
 // ViewModel
 class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
- fun loadRepos() = viewModelScope.launch {
- repo.fetchRepos("square").onSuccess { repos ->
- _state.value = repos
- }
- }
+    fun loadRepos() = viewModelScope.launch {
+        repo.fetchRepos("square").onSuccess { repos ->
+            _state.value = repos
+        }
+    }
 }
 ```
 
@@ -126,18 +127,18 @@ class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
 
 ```kotlin
 interface ApiService {
- @GET @POST @PUT @DELETE @PATCH // Standard methods
+    @GET @POST @PUT @DELETE @PATCH  // Standard methods
 
- @FormUrlEncoded // ✅ application/x-www-form-urlencoded
- @POST("login")
- suspend fun login(
- @Field("username") user: String,
- @Field("password") pass: String
- ): Token
+    @FormUrlEncoded  // ✅ application/x-www-form-urlencoded
+    @POST("login")
+    suspend fun login(
+        @Field("username") user: String,
+        @Field("password") pass: String
+    ): Token
 
- @Multipart // ✅ multipart/form-data (file uploads)
- @POST("upload")
- suspend fun upload(@Part file: MultipartBody.Part): UploadResponse
+    @Multipart  // ✅ multipart/form-data (file uploads)
+    @POST("upload")
+    suspend fun upload(@Part file: MultipartBody.Part): UploadResponse
 }
 ```
 
@@ -145,18 +146,18 @@ interface ApiService {
 
 ```kotlin
 sealed class ApiResult<out T> {
- data class Success<T>(val data: T) : ApiResult<T>()
- data class Error(val code: Int, val message: String) : ApiResult<Nothing>()
+    data class Success<T>(val data: T) : ApiResult<T>()
+    data class Error(val code: Int, val message: String) : ApiResult<Nothing>()
 }
 
 suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
- try {
- ApiResult.Success(call())
- } catch (e: HttpException) { // ✅ HTTP errors (4xx, 5xx)
- ApiResult.Error(e.code(), e.message())
- } catch (e: IOException) { // ✅ Network errors
- ApiResult.Error(-1, "Network error")
- }
+    try {
+        ApiResult.Success(call())
+    } catch (e: HttpException) {  // ✅ HTTP errors (4xx, 5xx)
+        ApiResult.Error(e.code(), e.message())
+    } catch (e: IOException) {    // ✅ Network errors
+        ApiResult.Error(-1, "Network error")
+    }
 ```
 
 **Итого**: Retrofit превращает HTTP API в идиоматичный Kotlin код, убирая boilerplate для networking логики.
@@ -171,14 +172,14 @@ suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
 
 ```kotlin
 interface ApiService {
- @GET("users/{id}") // ✅ Path parameter
- suspend fun getUser(@Path("id") userId: Int): User
+    @GET("users/{id}")  // ✅ Path parameter
+    suspend fun getUser(@Path("id") userId: Int): User
 
- @POST("users") // ✅ Body serialization
- suspend fun createUser(@Body user: User): User
+    @POST("users")      // ✅ Body serialization
+    suspend fun createUser(@Body user: User): User
 
- @GET("search") // ✅ Query parameters
- suspend fun search(@Query("q") query: String): List<Result>
+    @GET("search")      // ✅ Query parameters
+    suspend fun search(@Query("q") query: String): List<Result>
 }
 ```
 
@@ -186,11 +187,11 @@ interface ApiService {
 
 ```kotlin
 val retrofit = Retrofit.Builder()
- .baseUrl("https://api.example.com/")
- .addConverterFactory(GsonConverterFactory.create()) // ✅ JSON → POJO
- .build()
+    .baseUrl("https://api.example.com/")
+    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO
+    .build()
 
-data class User(val id: Int, val name: String) // ✅ Auto-mapped
+data class User(val id: Int, val name: String)  // ✅ Auto-mapped
 ```
 
 **3. Coroutines Integration**
@@ -198,12 +199,12 @@ data class User(val id: Int, val name: String) // ✅ Auto-mapped
 ```kotlin
 // ✅ Modern: suspend functions
 viewModelScope.launch {
- try {
- val user = apiService.getUser(123)
- _state.value = Success(user)
- } catch (e: HttpException) {
- _state.value = Error(e.code()) // 404, 500, etc.
- }
+    try {
+        val user = apiService.getUser(123)
+        _state.value = Success(user)
+    } catch (e: HttpException) {
+        _state.value = Error(e.code())  // 404, 500, etc.
+    }
 }
 
 // ❌ Legacy: callback-based (avoid)
@@ -214,19 +215,19 @@ apiService.getUser(123).enqueue(object : Callback<User> { ... })
 
 ```kotlin
 val client = OkHttpClient.Builder()
- .addInterceptor { chain -> // ✅ Add auth headers
- chain.proceed(
- chain.request().newBuilder()
- .addHeader("Authorization", "Bearer $token")
- .build()
- )
- }
- .connectTimeout(30, TimeUnit.SECONDS) // ✅ Timeouts
- .build()
+    .addInterceptor { chain ->  // ✅ Add auth headers
+        chain.proceed(
+            chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+        )
+    }
+    .connectTimeout(30, TimeUnit.SECONDS)  // ✅ Timeouts
+    .build()
 
 val retrofit = Retrofit.Builder()
- .client(client)
- .build()
+    .client(client)
+    .build()
 ```
 
 ### `Repository` Pattern Example
@@ -234,27 +235,27 @@ val retrofit = Retrofit.Builder()
 ```kotlin
 // API definition
 interface GitHubApi {
- @GET("users/{username}/repos")
- suspend fun getRepos(@Path("username") name: String): List<Repo>
+    @GET("users/{username}/repos")
+    suspend fun getRepos(@Path("username") name: String): List<Repo>
 }
 
 // Repository layer
 class RepoRepository(private val api: GitHubApi) {
- suspend fun fetchRepos(username: String): Result<List<Repo>> =
- try {
- Result.success(api.getRepos(username))
- } catch (e: Exception) {
- Result.failure(e) // ✅ Handle errors at repository level
- }
+    suspend fun fetchRepos(username: String): Result<List<Repo>> =
+        try {
+            Result.success(api.getRepos(username))
+        } catch (e: Exception) {
+            Result.failure(e)  // ✅ Handle errors at repository level
+        }
 }
 
 // ViewModel
 class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
- fun loadRepos() = viewModelScope.launch {
- repo.fetchRepos("square").onSuccess { repos ->
- _state.value = repos
- }
- }
+    fun loadRepos() = viewModelScope.launch {
+        repo.fetchRepos("square").onSuccess { repos ->
+            _state.value = repos
+        }
+    }
 }
 ```
 
@@ -262,18 +263,18 @@ class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
 
 ```kotlin
 interface ApiService {
- @GET @POST @PUT @DELETE @PATCH // Standard methods
+    @GET @POST @PUT @DELETE @PATCH  // Standard methods
 
- @FormUrlEncoded // ✅ application/x-www-form-urlencoded
- @POST("login")
- suspend fun login(
- @Field("username") user: String,
- @Field("password") pass: String
- ): Token
+    @FormUrlEncoded  // ✅ application/x-www-form-urlencoded
+    @POST("login")
+    suspend fun login(
+        @Field("username") user: String,
+        @Field("password") pass: String
+    ): Token
 
- @Multipart // ✅ multipart/form-data (file uploads)
- @POST("upload")
- suspend fun upload(@Part file: MultipartBody.Part): UploadResponse
+    @Multipart  // ✅ multipart/form-data (file uploads)
+    @POST("upload")
+    suspend fun upload(@Part file: MultipartBody.Part): UploadResponse
 }
 ```
 
@@ -281,18 +282,18 @@ interface ApiService {
 
 ```kotlin
 sealed class ApiResult<out T> {
- data class Success<T>(val data: T) : ApiResult<T>()
- data class Error(val code: Int, val message: String) : ApiResult<Nothing>()
+    data class Success<T>(val data: T) : ApiResult<T>()
+    data class Error(val code: Int, val message: String) : ApiResult<Nothing>()
 }
 
 suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
- try {
- ApiResult.Success(call())
- } catch (e: HttpException) { // ✅ HTTP errors (4xx, 5xx)
- ApiResult.Error(e.code(), e.message())
- } catch (e: IOException) { // ✅ Network errors
- ApiResult.Error(-1, "Network error")
- }
+    try {
+        ApiResult.Success(call())
+    } catch (e: HttpException) {  // ✅ HTTP errors (4xx, 5xx)
+        ApiResult.Error(e.code(), e.message())
+    } catch (e: IOException) {    // ✅ Network errors
+        ApiResult.Error(-1, "Network error")
+    }
 ```
 
 **Summary**: Retrofit transforms HTTP APIs into idiomatic Kotlin code, eliminating networking boilerplate.
@@ -309,9 +310,9 @@ suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
 
 ## References
 
-- - HTTP client fundamentals
-- - REST API design principles
-- - JSON serialization patterns
+-  - HTTP client fundamentals
+-  - REST API design principles
+-  - JSON serialization patterns
 - https://square.github.io/retrofit/ - Official Retrofit documentation
 - https://square.github.io/okhttp/ - OkHttp documentation
 

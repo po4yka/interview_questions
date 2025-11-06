@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-viewcompositionstrategy]
 created: 2025-10-05
 updated: 2025-10-28
 tags: [android/lifecycle, android/ui-compose, compose, difficulty/medium, interop, lifecycle, viewcompositionstrategy]
 sources: ["https://developer.android.com/jetpack/compose/interop/view-composition-strategy"]
+
 ---
 
 # Вопрос (RU)
@@ -33,35 +34,35 @@ ViewCompositionStrategy управляет жизненным циклом Compo
 **Основные стратегии:**
 
 1. **DisposeOnDetachedFromWindowOrReleasedFromPool** (по умолчанию)
- - Освобождает Composition при detach от окна или release из `RecyclerView` pool
- - Подходит для большинства случаев
+   - Освобождает Composition при detach от окна или release из `RecyclerView` pool
+   - Подходит для большинства случаев
 
 ```kotlin
 // ✅ По умолчанию, работает для RecyclerView
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool
+    ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool
 )
 ```
 
 1. **DisposeOnLifecycleDestroyed**
- - Привязывает Composition к `Lifecycle` (`Fragment`, `Activity`)
- - Освобождается только при onDestroy
+   - Привязывает Composition к `Lifecycle` (`Fragment`, `Activity`)
+   - Освобождается только при onDestroy
 
 ```kotlin
 // ✅ Для Fragment — избегает преждевременного dispose
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
+    ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
 )
 ```
 
 1. **DisposeOnViewTreeLifecycleDestroyed**
- - Использует `Lifecycle` из ViewTreeLifecycleOwner
- - Для случаев, когда `Lifecycle` недоступен напрямую
+   - Использует `Lifecycle` из ViewTreeLifecycleOwner
+   - Для случаев, когда `Lifecycle` недоступен напрямую
 
 ```kotlin
 // ✅ Когда lifecycle известен только через ViewTree
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+    ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
 )
 ```
 
@@ -70,15 +71,15 @@ composeView.setViewCompositionStrategy(
 ```kotlin
 // ❌ Fragment с дефолтной стратегией — утечка после rotate
 class MyFragment : Fragment() {
- override fun onCreateView(...) = ComposeView(requireContext()).apply {
- // Composition dispose на onDestroyView, но Fragment жив
- setContent { /* ... */ }
- }
+    override fun onCreateView(...) = ComposeView(requireContext()).apply {
+        // Composition dispose на onDestroyView, но Fragment жив
+        setContent { /* ... */ }
+    }
 }
 
 // ✅ Правильно для Fragment
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
+    ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
 )
 ```
 
@@ -96,35 +97,35 @@ ViewCompositionStrategy controls Composition lifecycle in ComposeView — determ
 **Main Strategies:**
 
 1. **DisposeOnDetachedFromWindowOrReleasedFromPool** (default)
- - Releases Composition on detach from window or release from `RecyclerView` pool
- - Suitable for most cases
+   - Releases Composition on detach from window or release from `RecyclerView` pool
+   - Suitable for most cases
 
 ```kotlin
 // ✅ Default, works for RecyclerView
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool
+    ViewCompositionStrategy.DisposeOnDetachedFromWindowOrReleasedFromPool
 )
 ```
 
 1. **DisposeOnLifecycleDestroyed**
- - Binds Composition to `Lifecycle` (`Fragment`, `Activity`)
- - Releases only on onDestroy
+   - Binds Composition to `Lifecycle` (`Fragment`, `Activity`)
+   - Releases only on onDestroy
 
 ```kotlin
 // ✅ For Fragment — avoids premature disposal
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
+    ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
 )
 ```
 
 1. **DisposeOnViewTreeLifecycleDestroyed**
- - Uses `Lifecycle` from ViewTreeLifecycleOwner
- - For cases when `Lifecycle` isn't directly available
+   - Uses `Lifecycle` from ViewTreeLifecycleOwner
+   - For cases when `Lifecycle` isn't directly available
 
 ```kotlin
 // ✅ When lifecycle known only through ViewTree
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+    ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
 )
 ```
 
@@ -133,15 +134,15 @@ composeView.setViewCompositionStrategy(
 ```kotlin
 // ❌ Fragment with default strategy — leak after rotation
 class MyFragment : Fragment() {
- override fun onCreateView(...) = ComposeView(requireContext()).apply {
- // Composition disposed on onDestroyView, but Fragment alive
- setContent { /* ... */ }
- }
+    override fun onCreateView(...) = ComposeView(requireContext()).apply {
+        // Composition disposed on onDestroyView, but Fragment alive
+        setContent { /* ... */ }
+    }
 }
 
 // ✅ Correct for Fragment
 composeView.setViewCompositionStrategy(
- ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
+    ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner.lifecycle)
 )
 ```
 
@@ -163,21 +164,21 @@ composeView.setViewCompositionStrategy(
 
 ## References
 
-- - Compose lifecycle management
-- - Android `Lifecycle` fundamentals
+-  - Compose lifecycle management
+-  - Android `Lifecycle` fundamentals
 - Official docs: https://developer.android.com/jetpack/compose/interop/view-composition-strategy
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Compose fundamentals
-- - `Lifecycle` basics
+-  - Compose fundamentals
+-  - `Lifecycle` basics
 
 ### Related (Same Level)
 - [[q-custom-view-lifecycle--android--medium]] - Compose lifecycle details
-- - Compose-`View` interop
-- - `Fragment` lifecycle nuances
+-  - Compose-`View` interop
+-  - `Fragment` lifecycle nuances
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Performance optimization strategies
-- - Memory leak analysis
+-  - Memory leak analysis

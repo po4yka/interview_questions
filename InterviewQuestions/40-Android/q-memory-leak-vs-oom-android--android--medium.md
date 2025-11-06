@@ -15,6 +15,7 @@ sources: []
 created: 2025-10-13
 updated: 2025-10-31
 tags: [android, android/performance-memory, android/profiling, difficulty/medium, leakcanary, memory-leak, oom]
+
 ---
 
 # Вопрос (RU)
@@ -38,80 +39,80 @@ tags: [android, android/performance-memory, android/profiling, difficulty/medium
 ```kotlin
 // ❌ Static-ссылка на Activity
 class LeakyActivity : AppCompatActivity() {
- companion object {
- var listener: OnDataListener? = null
- }
+    companion object {
+        var listener: OnDataListener? = null
+    }
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- listener = object : OnDataListener {
- override fun onData(data: String) {
- updateUI(data) // Удерживает Activity
- }
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        listener = object : OnDataListener {
+            override fun onData(data: String) {
+                updateUI(data)  // Удерживает Activity
+            }
+        }
+    }
 }
 
 // ✅ WeakReference
 class FixedActivity : AppCompatActivity() {
- companion object {
- var listenerRef: WeakReference<OnDataListener>? = null
- }
+    companion object {
+        var listenerRef: WeakReference<OnDataListener>? = null
+    }
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- val listener = object : OnDataListener {
- override fun onData(data: String) { updateUI(data) }
- }
- listenerRef = WeakReference(listener)
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val listener = object : OnDataListener {
+            override fun onData(data: String) { updateUI(data) }
+        }
+        listenerRef = WeakReference(listener)
+    }
 }
 ```
 
 ```kotlin
 // ❌ Handler-утечка
 class HandlerLeakActivity : AppCompatActivity() {
- private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- handler.postDelayed({ updateUI() }, 60_000)
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        handler.postDelayed({ updateUI() }, 60_000)
+    }
 }
 
 // ✅ Static Handler + WeakReference + очистка
 class FixedHandlerActivity : AppCompatActivity() {
- private val handler = MyHandler(this)
+    private val handler = MyHandler(this)
 
- class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
- private val activityRef = WeakReference(activity)
+    class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
+        private val activityRef = WeakReference(activity)
 
- override fun handleMessage(msg: Message) {
- activityRef.get()?.updateUI()
- }
- }
+        override fun handleMessage(msg: Message) {
+            activityRef.get()?.updateUI()
+        }
+    }
 
- override fun onDestroy() {
- super.onDestroy()
- handler.removeCallbacksAndMessages(null)
- }
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
 }
 ```
 
 ```kotlin
 // ✅ Lifecycle-aware coroutines (лучший подход)
 class CoroutineActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
- lifecycleScope.launch {
- while (isActive) {
- updateUI()
- delay(1000)
- }
- // Автоматическая отмена при destroy
- }
- }
+        lifecycleScope.launch {
+            while (isActive) {
+                updateUI()
+                delay(1000)
+            }
+            // Автоматическая отмена при destroy
+        }
+    }
 }
 ```
 
@@ -127,23 +128,23 @@ val bitmap = BitmapFactory.decodeFile("/sdcard/large_image.jpg")
 
 // ✅ Glide с автоматическим управлением памятью
 Glide.with(this)
- .load("/sdcard/large_image.jpg")
- .override(imageView.width, imageView.height)
- .into(imageView)
+    .load("/sdcard/large_image.jpg")
+    .override(imageView.width, imageView.height)
+    .into(imageView)
 ```
 
 ```kotlin
 // ❌ Избыточная аллокация
 val results = mutableListOf<Result>()
 repeat(1_000_000) {
- results.add(Result(it, it.toString()))
+    results.add(Result(it, it.toString()))
 }
 
 // ✅ Lazy-генерация через Sequence
 fun processLargeDataset(): Sequence<Result> = sequence {
- repeat(1_000_000) {
- yield(Result(it, it.toString()))
- }
+    repeat(1_000_000) {
+        yield(Result(it, it.toString()))
+    }
 }
 ```
 
@@ -154,7 +155,7 @@ fun processLargeDataset(): Sequence<Result> = sequence {
 ```kotlin
 // build.gradle.kts
 dependencies {
- debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
 }
 // Zero configuration — работает из коробки
 ```
@@ -163,13 +164,13 @@ dependencies {
 
 ```kotlin
 class MemoryMonitor {
- fun logMemoryUsage() {
- val runtime = Runtime.getRuntime()
- val used = runtime.totalMemory() - runtime.freeMemory()
- val max = runtime.maxMemory()
+    fun logMemoryUsage() {
+        val runtime = Runtime.getRuntime()
+        val used = runtime.totalMemory() - runtime.freeMemory()
+        val max = runtime.maxMemory()
 
- Log.d("Memory", "Used: ${used / 1024 / 1024} MB / ${max / 1024 / 1024} MB")
- }
+        Log.d("Memory", "Used: ${used / 1024 / 1024} MB / ${max / 1024 / 1024} MB")
+    }
 }
 ```
 
@@ -204,80 +205,80 @@ class MemoryMonitor {
 ```kotlin
 // ❌ Static reference to Activity
 class LeakyActivity : AppCompatActivity() {
- companion object {
- var listener: OnDataListener? = null
- }
+    companion object {
+        var listener: OnDataListener? = null
+    }
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- listener = object : OnDataListener {
- override fun onData(data: String) {
- updateUI(data) // Holds Activity reference
- }
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        listener = object : OnDataListener {
+            override fun onData(data: String) {
+                updateUI(data)  // Holds Activity reference
+            }
+        }
+    }
 }
 
 // ✅ WeakReference
 class FixedActivity : AppCompatActivity() {
- companion object {
- var listenerRef: WeakReference<OnDataListener>? = null
- }
+    companion object {
+        var listenerRef: WeakReference<OnDataListener>? = null
+    }
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- val listener = object : OnDataListener {
- override fun onData(data: String) { updateUI(data) }
- }
- listenerRef = WeakReference(listener)
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val listener = object : OnDataListener {
+            override fun onData(data: String) { updateUI(data) }
+        }
+        listenerRef = WeakReference(listener)
+    }
 }
 ```
 
 ```kotlin
 // ❌ Handler leak
 class HandlerLeakActivity : AppCompatActivity() {
- private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- handler.postDelayed({ updateUI() }, 60_000)
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        handler.postDelayed({ updateUI() }, 60_000)
+    }
 }
 
 // ✅ Static Handler + WeakReference + cleanup
 class FixedHandlerActivity : AppCompatActivity() {
- private val handler = MyHandler(this)
+    private val handler = MyHandler(this)
 
- class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
- private val activityRef = WeakReference(activity)
+    class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
+        private val activityRef = WeakReference(activity)
 
- override fun handleMessage(msg: Message) {
- activityRef.get()?.updateUI()
- }
- }
+        override fun handleMessage(msg: Message) {
+            activityRef.get()?.updateUI()
+        }
+    }
 
- override fun onDestroy() {
- super.onDestroy()
- handler.removeCallbacksAndMessages(null)
- }
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
 }
 ```
 
 ```kotlin
 // ✅ Lifecycle-aware coroutines (best approach)
 class CoroutineActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
- lifecycleScope.launch {
- while (isActive) {
- updateUI()
- delay(1000)
- }
- // Automatically cancelled on destroy
- }
- }
+        lifecycleScope.launch {
+            while (isActive) {
+                updateUI()
+                delay(1000)
+            }
+            // Automatically cancelled on destroy
+        }
+    }
 }
 ```
 
@@ -293,23 +294,23 @@ val bitmap = BitmapFactory.decodeFile("/sdcard/large_image.jpg")
 
 // ✅ Glide with automatic memory management
 Glide.with(this)
- .load("/sdcard/large_image.jpg")
- .override(imageView.width, imageView.height)
- .into(imageView)
+    .load("/sdcard/large_image.jpg")
+    .override(imageView.width, imageView.height)
+    .into(imageView)
 ```
 
 ```kotlin
 // ❌ Excessive allocation
 val results = mutableListOf<Result>()
 repeat(1_000_000) {
- results.add(Result(it, it.toString()))
+    results.add(Result(it, it.toString()))
 }
 
 // ✅ Lazy generation with Sequence
 fun processLargeDataset(): Sequence<Result> = sequence {
- repeat(1_000_000) {
- yield(Result(it, it.toString()))
- }
+    repeat(1_000_000) {
+        yield(Result(it, it.toString()))
+    }
 }
 ```
 
@@ -320,7 +321,7 @@ fun processLargeDataset(): Sequence<Result> = sequence {
 ```kotlin
 // build.gradle.kts
 dependencies {
- debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
 }
 // Zero configuration — works out of the box
 ```
@@ -329,13 +330,13 @@ dependencies {
 
 ```kotlin
 class MemoryMonitor {
- fun logMemoryUsage() {
- val runtime = Runtime.getRuntime()
- val used = runtime.totalMemory() - runtime.freeMemory()
- val max = runtime.maxMemory()
+    fun logMemoryUsage() {
+        val runtime = Runtime.getRuntime()
+        val used = runtime.totalMemory() - runtime.freeMemory()
+        val max = runtime.maxMemory()
 
- Log.d("Memory", "Used: ${used / 1024 / 1024} MB / ${max / 1024 / 1024} MB")
- }
+        Log.d("Memory", "Used: ${used / 1024 / 1024} MB / ${max / 1024 / 1024} MB")
+    }
 }
 ```
 

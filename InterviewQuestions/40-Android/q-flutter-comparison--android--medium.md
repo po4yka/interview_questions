@@ -4,23 +4,24 @@ title: KMM vs Flutter Comparison / Сравнение KMM и Flutter
 aliases: [KMM vs Flutter, Kotlin Multiplatform Mobile vs Flutter, Сравнение KMM и Flutter]
 topic: android
 subtopics:
- - architecture-clean
- - kmp
+  - architecture-clean
+  - kmp
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
- - en
- - ru
+  - en
+  - ru
 status: reviewed
 moc: moc-android
 related:
 sources:
- - https://flutter.dev/docs
- - https://kotlinlang.org/docs/multiplatform.html
+  - https://flutter.dev/docs
+  - https://kotlinlang.org/docs/multiplatform.html
 created: 2025-10-15
 updated: 2025-11-03
 tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, flutter, multiplatform]
+
 ---
 
 # Вопрос (RU)
@@ -114,57 +115,57 @@ KMM и Flutter представляют два фундаментально ра
 ```kotlin
 // ✅ KMM: Shared business logic
 class TaskRepository(
- private val api: TaskApi,
- private val database: TaskDatabase
+    private val api: TaskApi,
+    private val database: TaskDatabase
 ) {
- suspend fun getTasks(): Result<List<Task>> {
- return try {
- val remote = api.fetchTasks()
- database.saveTasks(remote)
- Result.success(remote)
- } catch (e: Exception) {
- Result.success(database.getTasks())
- }
- }
+    suspend fun getTasks(): Result<List<Task>> {
+        return try {
+            val remote = api.fetchTasks()
+            database.saveTasks(remote)
+            Result.success(remote)
+        } catch (e: Exception) {
+            Result.success(database.getTasks())
+        }
+    }
 }
 
 // Android UI (Jetpack Compose)
 @Composable
 fun TaskList(tasks: List<Task>) {
- LazyColumn {
- items(tasks) { TaskItem(it) } // ✅ Material Design
- }
+    LazyColumn {
+        items(tasks) { TaskItem(it) } // ✅ Material Design
+    }
 }
 
 // iOS UI (SwiftUI)
 struct TaskList: View {
- var body: some View {
- List(tasks) { TaskRow($0) } // ✅ iOS HIG
- }
+    var body: some View {
+        List(tasks) { TaskRow($0) } // ✅ iOS HIG
+    }
 }
 ```
 
 ```dart
 // ✅ Flutter: Shared UI + logic
 class TaskRepository {
- Future<Result<List<Task>>> getTasks() async {
- try {
- final remote = await api.fetchTasks();
- await database.saveTasks(remote);
- return Success(remote);
- } catch (e) {
- return Success(await database.getTasks());
- }
- }
+  Future<Result<List<Task>>> getTasks() async {
+    try {
+      final remote = await api.fetchTasks();
+      await database.saveTasks(remote);
+      return Success(remote);
+    } catch (e) {
+      return Success(await database.getTasks());
+    }
+  }
 }
 
 // Single UI for both platforms
 class TaskList extends StatelessWidget {
- Widget build(context) {
- return ListView.builder(
- itemBuilder: (_, i) => TaskItem(tasks[i]) // ❌ Same UI everywhere
- );
- }
+  Widget build(context) {
+    return ListView.builder(
+      itemBuilder: (_, i) => TaskItem(tasks[i]) // ❌ Same UI everywhere
+    );
+  }
 }
 ```
 
@@ -206,12 +207,12 @@ class TaskList extends StatelessWidget {
 ```kotlin
 // ✅ Direct native API access (zero overhead)
 class LocationManager(context: Context) {
- private val client = LocationServices
- .getFusedLocationProviderClient(context)
+    private val client = LocationServices
+        .getFusedLocationProviderClient(context)
 
- suspend fun getLocation(): Location? {
- return client.lastLocation.await() // ✅ Direct Android SDK
- }
+    suspend fun getLocation(): Location? {
+        return client.lastLocation.await() // ✅ Direct Android SDK
+    }
 }
 ```
 
@@ -219,11 +220,11 @@ class LocationManager(context: Context) {
 ```dart
 // ❌ Platform channel bridge (serialization overhead)
 class LocationManager {
- static const platform = MethodChannel('location');
+  static const platform = MethodChannel('location');
 
- Future<Map?> getLocation() async {
- return await platform.invokeMethod('getLocation'); // ❌ Bridge
- }
+  Future<Map?> getLocation() async {
+    return await platform.invokeMethod('getLocation'); // ❌ Bridge
+  }
 }
 ```
 
@@ -317,57 +318,57 @@ KMM and Flutter represent two fundamentally different approaches to cross-platfo
 ```kotlin
 // ✅ KMM: Shared business logic
 class TaskRepository(
- private val api: TaskApi,
- private val database: TaskDatabase
+    private val api: TaskApi,
+    private val database: TaskDatabase
 ) {
- suspend fun getTasks(): Result<List<Task>> {
- return try {
- val remote = api.fetchTasks()
- database.saveTasks(remote)
- Result.success(remote)
- } catch (e: Exception) {
- Result.success(database.getTasks())
- }
- }
+    suspend fun getTasks(): Result<List<Task>> {
+        return try {
+            val remote = api.fetchTasks()
+            database.saveTasks(remote)
+            Result.success(remote)
+        } catch (e: Exception) {
+            Result.success(database.getTasks())
+        }
+    }
 }
 
 // Android UI (Jetpack Compose)
 @Composable
 fun TaskList(tasks: List<Task>) {
- LazyColumn {
- items(tasks) { TaskItem(it) } // ✅ Material Design
- }
+    LazyColumn {
+        items(tasks) { TaskItem(it) } // ✅ Material Design
+    }
 }
 
 // iOS UI (SwiftUI)
 struct TaskList: View {
- var body: some View {
- List(tasks) { TaskRow($0) } // ✅ iOS HIG
- }
+    var body: some View {
+        List(tasks) { TaskRow($0) } // ✅ iOS HIG
+    }
 }
 ```
 
 ```dart
 // ✅ Flutter: Shared UI + logic
 class TaskRepository {
- Future<Result<List<Task>>> getTasks() async {
- try {
- final remote = await api.fetchTasks();
- await database.saveTasks(remote);
- return Success(remote);
- } catch (e) {
- return Success(await database.getTasks());
- }
- }
+  Future<Result<List<Task>>> getTasks() async {
+    try {
+      final remote = await api.fetchTasks();
+      await database.saveTasks(remote);
+      return Success(remote);
+    } catch (e) {
+      return Success(await database.getTasks());
+    }
+  }
 }
 
 // Single UI for both platforms
 class TaskList extends StatelessWidget {
- Widget build(context) {
- return ListView.builder(
- itemBuilder: (_, i) => TaskItem(tasks[i]) // ❌ Same UI everywhere
- );
- }
+  Widget build(context) {
+    return ListView.builder(
+      itemBuilder: (_, i) => TaskItem(tasks[i]) // ❌ Same UI everywhere
+    );
+  }
 }
 ```
 
@@ -409,12 +410,12 @@ class TaskList extends StatelessWidget {
 ```kotlin
 // ✅ Direct native API access (zero overhead)
 class LocationManager(context: Context) {
- private val client = LocationServices
- .getFusedLocationProviderClient(context)
+    private val client = LocationServices
+        .getFusedLocationProviderClient(context)
 
- suspend fun getLocation(): Location? {
- return client.lastLocation.await() // ✅ Direct Android SDK
- }
+    suspend fun getLocation(): Location? {
+        return client.lastLocation.await() // ✅ Direct Android SDK
+    }
 }
 ```
 
@@ -422,11 +423,11 @@ class LocationManager(context: Context) {
 ```dart
 // ❌ Platform channel bridge (serialization overhead)
 class LocationManager {
- static const platform = MethodChannel('location');
+  static const platform = MethodChannel('location');
 
- Future<Map?> getLocation() async {
- return await platform.invokeMethod('getLocation'); // ❌ Bridge
- }
+  Future<Map?> getLocation() async {
+    return await platform.invokeMethod('getLocation'); // ❌ Bridge
+  }
 }
 ```
 
@@ -491,9 +492,11 @@ class LocationManager {
 - https://flutter.dev/docs - Flutter official documentation
 - https://developer.android.com/kotlin/multiplatform - Android KMM guide
 
+
 ## Follow-ups
 
 - 
+
 
 ## Related Questions
 

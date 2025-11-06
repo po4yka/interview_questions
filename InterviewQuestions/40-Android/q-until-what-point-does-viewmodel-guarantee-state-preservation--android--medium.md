@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium, lifecycle, savedstatehandle, viewmodel]
+
 ---
 
 # Вопрос (RU)
@@ -36,8 +37,8 @@ tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium,
 **Изменения конфигурации**:
 ```kotlin
 class MyActivity : AppCompatActivity() {
- private val viewModel: MyViewModel by viewModels()
- // ✅ ViewModel переживает: поворот экрана, смену языка, темную тему
+    private val viewModel: MyViewModel by viewModels()
+    // ✅ ViewModel переживает: поворот экрана, смену языка, темную тему
 }
 ```
 
@@ -50,7 +51,7 @@ class MyActivity : AppCompatActivity() {
 **`Activity`.finish()**:
 ```kotlin
 fun closeActivity() {
- finish() // ❌ ViewModel.onCleared() будет вызван
+    finish() // ❌ ViewModel.onCleared() будет вызван
 }
 ```
 
@@ -64,15 +65,15 @@ fun closeActivity() {
 
 ```kotlin
 class MyViewModel(
- private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
- // ✅ Переживает смерть процесса
- var userName: String
- get() = savedStateHandle["user_name"] ?: ""
- set(value) { savedStateHandle["user_name"] = value }
+    // ✅ Переживает смерть процесса
+    var userName: String
+        get() = savedStateHandle["user_name"] ?: ""
+        set(value) { savedStateHandle["user_name"] = value }
 
- // ❌ Теряется при смерти процесса
- var temporaryData: String = ""
+    // ❌ Теряется при смерти процесса
+    var temporaryData: String = ""
 }
 ```
 
@@ -80,10 +81,10 @@ class MyViewModel(
 
 ```kotlin
 class MyFragment : Fragment() {
- // Привязан к Fragment
- private val fragmentViewModel: MyViewModel by viewModels()
- // Привязан к Activity - переживает пересоздание Fragment
- private val activityViewModel: SharedViewModel by activityViewModels()
+    // Привязан к Fragment
+    private val fragmentViewModel: MyViewModel by viewModels()
+    // Привязан к Activity - переживает пересоздание Fragment
+    private val activityViewModel: SharedViewModel by activityViewModels()
 }
 ```
 
@@ -98,10 +99,10 @@ class MyFragment : Fragment() {
 
 ```kotlin
 class MyViewModel : ViewModel() {
- override fun onCleared() {
- // ✅ Освободите ресурсы
- disposables.clear()
- }
+    override fun onCleared() {
+        // ✅ Освободите ресурсы
+        disposables.clear()
+    }
 }
 ```
 
@@ -114,8 +115,8 @@ class MyViewModel : ViewModel() {
 **Configuration Changes**:
 ```kotlin
 class MyActivity : AppCompatActivity() {
- private val viewModel: MyViewModel by viewModels()
- // ✅ ViewModel survives: rotation, language change, dark mode
+    private val viewModel: MyViewModel by viewModels()
+    // ✅ ViewModel survives: rotation, language change, dark mode
 }
 ```
 
@@ -128,7 +129,7 @@ class MyActivity : AppCompatActivity() {
 **`Activity`.finish()**:
 ```kotlin
 fun closeActivity() {
- finish() // ❌ ViewModel.onCleared() will be called
+    finish() // ❌ ViewModel.onCleared() will be called
 }
 ```
 
@@ -142,15 +143,15 @@ Use SavedStateHandle for critical data:
 
 ```kotlin
 class MyViewModel(
- private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
- // ✅ Survives process death
- var userName: String
- get() = savedStateHandle["user_name"] ?: ""
- set(value) { savedStateHandle["user_name"] = value }
+    // ✅ Survives process death
+    var userName: String
+        get() = savedStateHandle["user_name"] ?: ""
+        set(value) { savedStateHandle["user_name"] = value }
 
- // ❌ Lost on process death
- var temporaryData: String = ""
+    // ❌ Lost on process death
+    var temporaryData: String = ""
 }
 ```
 
@@ -158,10 +159,10 @@ class MyViewModel(
 
 ```kotlin
 class MyFragment : Fragment() {
- // Scoped to Fragment
- private val fragmentViewModel: MyViewModel by viewModels()
- // Scoped to Activity - survives Fragment recreation
- private val activityViewModel: SharedViewModel by activityViewModels()
+    // Scoped to Fragment
+    private val fragmentViewModel: MyViewModel by viewModels()
+    // Scoped to Activity - survives Fragment recreation
+    private val activityViewModel: SharedViewModel by activityViewModels()
 }
 ```
 
@@ -176,10 +177,10 @@ class MyFragment : Fragment() {
 
 ```kotlin
 class MyViewModel : ViewModel() {
- override fun onCleared() {
- // ✅ Release resources
- disposables.clear()
- }
+    override fun onCleared() {
+        // ✅ Release resources
+        disposables.clear()
+    }
 }
 ```
 
@@ -196,7 +197,7 @@ class MyViewModel : ViewModel() {
 ## References
 
 - [[c-viewmodel]] - `ViewModel` concept and architecture
-- - SavedStateHandle for process death handling
+-  - SavedStateHandle for process death handling
 - [[c-mvvm-pattern]] - MVVM architectural pattern
 - [[c-lifecycle]] - Android lifecycle components
 - [Android Developer Guide: `ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)

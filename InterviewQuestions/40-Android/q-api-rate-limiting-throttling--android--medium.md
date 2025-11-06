@@ -15,6 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/networking-http, android/performance-startup, difficulty/medium, networking, okhttp, performance, retrofit]
+
 ---
 
 # Вопрос (RU)
@@ -35,25 +36,25 @@ tags: [android/networking-http, android/performance-startup, difficulty/medium, 
 
 ```kotlin
 class TokenBucketInterceptor(
- private val capacity: Int = 10,
- private val refillRate: Long = 1000 // ms per token
+    private val capacity: Int = 10,
+    private val refillRate: Long = 1000 // ms per token
 ) : Interceptor {
- private var tokens = capacity
- private var lastRefill = System.currentTimeMillis()
+    private var tokens = capacity
+    private var lastRefill = System.currentTimeMillis()
 
- override fun intercept(chain: Interceptor.Chain): Response {
- synchronized(this) {
- val now = System.currentTimeMillis()
- val elapsed = now - lastRefill
- tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
- lastRefill = now
+    override fun intercept(chain: Interceptor.Chain): Response {
+        synchronized(this) {
+            val now = System.currentTimeMillis()
+            val elapsed = now - lastRefill
+            tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
+            lastRefill = now
 
- // ✅ Пополнение токенов основано на времени
- if (tokens < 1) throw TooManyRequestsException()
- tokens--
- }
- return chain.proceed(chain.request())
- }
+            // ✅ Пополнение токенов основано на времени
+            if (tokens < 1) throw TooManyRequestsException()
+            tokens--
+        }
+        return chain.proceed(chain.request())
+    }
 }
 ```
 
@@ -63,31 +64,31 @@ class TokenBucketInterceptor(
 
 ```kotlin
 class RetryInterceptor(
- private val maxRetries: Int = 3,
- private val initialDelay: Long = 1000
+    private val maxRetries: Int = 3,
+    private val initialDelay: Long = 1000
 ) : Interceptor {
- override fun intercept(chain: Interceptor.Chain): Response {
- var attempt = 0
- while (attempt <= maxRetries) {
- val response = chain.proceed(chain.request())
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var attempt = 0
+        while (attempt <= maxRetries) {
+            val response = chain.proceed(chain.request())
 
- when (response.code) {
- in 200..299 -> return response
- 429, in 500..599 -> {
- response.close()
- if (attempt == maxRetries) throw MaxRetriesExceededException()
+            when (response.code) {
+                in 200..299 -> return response
+                429, in 500..599 -> {
+                    response.close()
+                    if (attempt == maxRetries) throw MaxRetriesExceededException()
 
- // ✅ Учитываем Retry-After header
- val delay = response.header("Retry-After")?.toLongOrNull()?.times(1000)
- ?: (initialDelay shl attempt)
- Thread.sleep(delay)
- attempt++
- }
- else -> return response
- }
- }
- throw MaxRetriesExceededException()
- }
+                    // ✅ Учитываем Retry-After header
+                    val delay = response.header("Retry-After")?.toLongOrNull()?.times(1000)
+                        ?: (initialDelay shl attempt)
+                    Thread.sleep(delay)
+                    attempt++
+                }
+                else -> return response
+            }
+        }
+        throw MaxRetriesExceededException()
+    }
 }
 ```
 
@@ -97,16 +98,16 @@ class RetryInterceptor(
 
 ```kotlin
 class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
- private val searchQuery = MutableStateFlow("")
+    private val searchQuery = MutableStateFlow("")
 
- val searchResults = searchQuery
- .debounce(300) // ✅ Ждём паузы в наборе
- .distinctUntilChanged()
- .flatMapLatest { query ->
- if (query.length < 3) flowOf(emptyList())
- else repo.search(query)
- }
- .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    val searchResults = searchQuery
+        .debounce(300) // ✅ Ждём паузы в наборе
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            if (query.length < 3) flowOf(emptyList())
+            else repo.search(query)
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 }
 ```
 
@@ -116,20 +117,20 @@ class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
 
 ```kotlin
 val constraints = Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED)
- .setRequiresBatteryNotLow(true)
- .build()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
 
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
- .setConstraints(constraints)
- .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
- .build()
+    .setConstraints(constraints)
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
+    .build()
 
 // ✅ KEEP предотвращает дублирование задач
 WorkManager.getInstance(context).enqueueUniquePeriodicWork(
- "sync",
- ExistingPeriodicWorkPolicy.KEEP,
- syncRequest
+    "sync",
+    ExistingPeriodicWorkPolicy.KEEP,
+    syncRequest
 )
 ```
 
@@ -150,25 +151,25 @@ Allows burst traffic while maintaining average rate.
 
 ```kotlin
 class TokenBucketInterceptor(
- private val capacity: Int = 10,
- private val refillRate: Long = 1000 // ms per token
+    private val capacity: Int = 10,
+    private val refillRate: Long = 1000 // ms per token
 ) : Interceptor {
- private var tokens = capacity
- private var lastRefill = System.currentTimeMillis()
+    private var tokens = capacity
+    private var lastRefill = System.currentTimeMillis()
 
- override fun intercept(chain: Interceptor.Chain): Response {
- synchronized(this) {
- val now = System.currentTimeMillis()
- val elapsed = now - lastRefill
- tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
- lastRefill = now
+    override fun intercept(chain: Interceptor.Chain): Response {
+        synchronized(this) {
+            val now = System.currentTimeMillis()
+            val elapsed = now - lastRefill
+            tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
+            lastRefill = now
 
- // ✅ Token refill based on elapsed time
- if (tokens < 1) throw TooManyRequestsException()
- tokens--
- }
- return chain.proceed(chain.request())
- }
+            // ✅ Token refill based on elapsed time
+            if (tokens < 1) throw TooManyRequestsException()
+            tokens--
+        }
+        return chain.proceed(chain.request())
+    }
 }
 ```
 
@@ -178,31 +179,31 @@ Handles 429 and 5xx errors with increasing delays.
 
 ```kotlin
 class RetryInterceptor(
- private val maxRetries: Int = 3,
- private val initialDelay: Long = 1000
+    private val maxRetries: Int = 3,
+    private val initialDelay: Long = 1000
 ) : Interceptor {
- override fun intercept(chain: Interceptor.Chain): Response {
- var attempt = 0
- while (attempt <= maxRetries) {
- val response = chain.proceed(chain.request())
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var attempt = 0
+        while (attempt <= maxRetries) {
+            val response = chain.proceed(chain.request())
 
- when (response.code) {
- in 200..299 -> return response
- 429, in 500..599 -> {
- response.close()
- if (attempt == maxRetries) throw MaxRetriesExceededException()
+            when (response.code) {
+                in 200..299 -> return response
+                429, in 500..599 -> {
+                    response.close()
+                    if (attempt == maxRetries) throw MaxRetriesExceededException()
 
- // ✅ Respect Retry-After header
- val delay = response.header("Retry-After")?.toLongOrNull()?.times(1000)
- ?: (initialDelay shl attempt)
- Thread.sleep(delay)
- attempt++
- }
- else -> return response
- }
- }
- throw MaxRetriesExceededException()
- }
+                    // ✅ Respect Retry-After header
+                    val delay = response.header("Retry-After")?.toLongOrNull()?.times(1000)
+                        ?: (initialDelay shl attempt)
+                    Thread.sleep(delay)
+                    attempt++
+                }
+                else -> return response
+            }
+        }
+        throw MaxRetriesExceededException()
+    }
 }
 ```
 
@@ -212,16 +213,16 @@ Limits frequent requests from user input.
 
 ```kotlin
 class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
- private val searchQuery = MutableStateFlow("")
+    private val searchQuery = MutableStateFlow("")
 
- val searchResults = searchQuery
- .debounce(300) // ✅ Wait for typing pause
- .distinctUntilChanged()
- .flatMapLatest { query ->
- if (query.length < 3) flowOf(emptyList())
- else repo.search(query)
- }
- .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    val searchResults = searchQuery
+        .debounce(300) // ✅ Wait for typing pause
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            if (query.length < 3) flowOf(emptyList())
+            else repo.search(query)
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 }
 ```
 
@@ -231,20 +232,20 @@ Limits background tasks based on network and battery.
 
 ```kotlin
 val constraints = Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED)
- .setRequiresBatteryNotLow(true)
- .build()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .setRequiresBatteryNotLow(true)
+    .build()
 
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(15, TimeUnit.MINUTES)
- .setConstraints(constraints)
- .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
- .build()
+    .setConstraints(constraints)
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
+    .build()
 
 // ✅ KEEP prevents duplicate tasks
 WorkManager.getInstance(context).enqueueUniquePeriodicWork(
- "sync",
- ExistingPeriodicWorkPolicy.KEEP,
- syncRequest
+    "sync",
+    ExistingPeriodicWorkPolicy.KEEP,
+    syncRequest
 )
 ```
 
@@ -276,6 +277,8 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 ## Related Questions
 
 ### Prerequisites (Easier)
+
+
 
 ### Related (Same Level)
 - 

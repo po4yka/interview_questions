@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/di-koin, android/kmp, DI, difficulty/medium, Koin, Kotlin]
+
 ---
 
 # Вопрос (RU)
@@ -37,20 +38,20 @@ tags: [android/di-koin, android/kmp, DI, difficulty/medium, Koin, Kotlin]
 ```kotlin
 // commonMain - общие зависимости
 val networkModule = module {
- single {
- HttpClient {
- install(ContentNegotiation) {
- json(Json { ignoreUnknownKeys = true })
- }
- }
- }
- single { TaskApiService(get()) }
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json { ignoreUnknownKeys = true })
+            }
+        }
+    }
+    single { TaskApiService(get()) }
 }
 
 val repositoryModule = module {
- single<TaskRepository> {
- TaskRepositoryImpl(api = get(), database = get())
- }
+    single<TaskRepository> {
+        TaskRepositoryImpl(api = get(), database = get())
+    }
 }
 
 // ✅ Combine modules
@@ -61,15 +62,15 @@ val sharedModules = listOf(networkModule, repositoryModule)
 ```kotlin
 // androidMain
 val androidModule = module {
- single { androidContext() }
- single { DatabaseDriverFactory(get()) }
- single<SecureStorage> { AndroidSecureStorage(get()) }
+    single { androidContext() }
+    single { DatabaseDriverFactory(get()) }
+    single<SecureStorage> { AndroidSecureStorage(get()) }
 }
 
 // iosMain
 val iosModule = module {
- single { DatabaseDriverFactory() }
- single<SecureStorage> { IOSSecureStorage() }
+    single { DatabaseDriverFactory() }
+    single<SecureStorage> { IOSSecureStorage() }
 }
 ```
 
@@ -77,19 +78,19 @@ val iosModule = module {
 ```kotlin
 // commonMain
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
- appDeclaration()
- modules(sharedModules)
+    appDeclaration()
+    modules(sharedModules)
 }
 
 // androidMain
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
- initKoin {
- androidContext(this@MyApplication)
- modules(androidModule)
- }
- }
+    override fun onCreate() {
+        super.onCreate()
+        initKoin {
+            androidContext(this@MyApplication)
+            modules(androidModule)
+        }
+    }
 }
 
 // iosMain - вызвать из Swift
@@ -102,28 +103,28 @@ fun initKoinIOS() = initKoin { modules(iosModule) }
 ```kotlin
 // commonMain - объявление
 expect class DatabaseDriverFactory {
- fun createDriver(): SqlDriver
+    fun createDriver(): SqlDriver
 }
 
 // androidMain - Android реализация
 actual class DatabaseDriverFactory(private val context: Context) {
- actual fun createDriver(): SqlDriver {
- return AndroidSqliteDriver(
- schema = TaskDatabase.Schema,
- context = context,
- name = "task.db"
- )
- }
+    actual fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(
+            schema = TaskDatabase.Schema,
+            context = context,
+            name = "task.db"
+        )
+    }
 }
 
 // ✅ iosMain - iOS реализация
 actual class DatabaseDriverFactory {
- actual fun createDriver(): SqlDriver {
- return NativeSqliteDriver(
- schema = TaskDatabase.Schema,
- name = "task.db"
- )
- }
+    actual fun createDriver(): SqlDriver {
+        return NativeSqliteDriver(
+            schema = TaskDatabase.Schema,
+            name = "task.db"
+        )
+    }
 }
 ```
 
@@ -167,20 +168,20 @@ actual class DatabaseDriverFactory {
 ```kotlin
 // commonMain - shared dependencies
 val networkModule = module {
- single {
- HttpClient {
- install(ContentNegotiation) {
- json(Json { ignoreUnknownKeys = true })
- }
- }
- }
- single { TaskApiService(get()) }
+    single {
+        HttpClient {
+            install(ContentNegotiation) {
+                json(Json { ignoreUnknownKeys = true })
+            }
+        }
+    }
+    single { TaskApiService(get()) }
 }
 
 val repositoryModule = module {
- single<TaskRepository> {
- TaskRepositoryImpl(api = get(), database = get())
- }
+    single<TaskRepository> {
+        TaskRepositoryImpl(api = get(), database = get())
+    }
 }
 
 // ✅ Combine modules
@@ -191,15 +192,15 @@ val sharedModules = listOf(networkModule, repositoryModule)
 ```kotlin
 // androidMain
 val androidModule = module {
- single { androidContext() }
- single { DatabaseDriverFactory(get()) }
- single<SecureStorage> { AndroidSecureStorage(get()) }
+    single { androidContext() }
+    single { DatabaseDriverFactory(get()) }
+    single<SecureStorage> { AndroidSecureStorage(get()) }
 }
 
 // iosMain
 val iosModule = module {
- single { DatabaseDriverFactory() }
- single<SecureStorage> { IOSSecureStorage() }
+    single { DatabaseDriverFactory() }
+    single<SecureStorage> { IOSSecureStorage() }
 }
 ```
 
@@ -207,19 +208,19 @@ val iosModule = module {
 ```kotlin
 // commonMain
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
- appDeclaration()
- modules(sharedModules)
+    appDeclaration()
+    modules(sharedModules)
 }
 
 // androidMain
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
- initKoin {
- androidContext(this@MyApplication)
- modules(androidModule)
- }
- }
+    override fun onCreate() {
+        super.onCreate()
+        initKoin {
+            androidContext(this@MyApplication)
+            modules(androidModule)
+        }
+    }
 }
 
 // iosMain - call from Swift
@@ -232,28 +233,28 @@ fun initKoinIOS() = initKoin { modules(iosModule) }
 ```kotlin
 // commonMain - declaration
 expect class DatabaseDriverFactory {
- fun createDriver(): SqlDriver
+    fun createDriver(): SqlDriver
 }
 
 // androidMain - Android implementation
 actual class DatabaseDriverFactory(private val context: Context) {
- actual fun createDriver(): SqlDriver {
- return AndroidSqliteDriver(
- schema = TaskDatabase.Schema,
- context = context,
- name = "task.db"
- )
- }
+    actual fun createDriver(): SqlDriver {
+        return AndroidSqliteDriver(
+            schema = TaskDatabase.Schema,
+            context = context,
+            name = "task.db"
+        )
+    }
 }
 
 // ✅ iosMain - iOS implementation
 actual class DatabaseDriverFactory {
- actual fun createDriver(): SqlDriver {
- return NativeSqliteDriver(
- schema = TaskDatabase.Schema,
- name = "task.db"
- )
- }
+    actual fun createDriver(): SqlDriver {
+        return NativeSqliteDriver(
+            schema = TaskDatabase.Schema,
+            name = "task.db"
+        )
+    }
 }
 ```
 
@@ -302,6 +303,7 @@ actual class DatabaseDriverFactory {
 - [[moc-android]]
 - https://insert-koin.io/docs/reference/koin-mp/kmp
 - [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
+
 
 ## Related Questions
 

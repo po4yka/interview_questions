@@ -2,10 +2,10 @@
 id: android-265
 title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
 aliases: [
- "Multiple Manifests Multimodule",
- "Множественные манифесты в мультимодульных проектах",
- "Android Manifest Merging",
- "Слияние манифестов Android"
+  "Multiple Manifests Multimodule",
+  "Множественные манифесты в мультимодульных проектах",
+  "Android Manifest Merging",
+  "Слияние манифестов Android"
 ]
 topic: android
 subtopics: [architecture-modularization, gradle, dependency-management]
@@ -20,9 +20,10 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-modularization, android/gradle, android/dependency-management, manifest-merging, modularization, difficulty/medium]
 sources: [
- "https://developer.android.com/build/manage-manifests",
- "https://developer.android.com/studio/build/manifest-merge"
+  "https://developer.android.com/build/manage-manifests",
+  "https://developer.android.com/studio/build/manifest-merge"
 ]
+
 ---
 
 # Вопрос (RU)
@@ -47,11 +48,11 @@ sources: [
 
 ```
 project/
- app/src/main/AndroidManifest.xml ← Главный манифест
+ app/src/main/AndroidManifest.xml          ← Главный манифест
  feature-login/src/main/AndroidManifest.xml
  feature-camera/src/main/AndroidManifest.xml
  core-network/src/main/AndroidManifest.xml
- ↓ Gradle Merge Task
+                       ↓ Gradle Merge Task
  app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ```
 
@@ -60,16 +61,16 @@ project/
 ```xml
 <!-- feature-camera/src/main/AndroidManifest.xml -->
 <manifest package="com.example.feature.camera">
- <!-- ✅ Модуль сам объявляет свои зависимости -->
- <uses-permission android:name="android.permission.CAMERA" />
- <uses-feature android:name="android.hardware.camera" />
+    <!-- ✅ Модуль сам объявляет свои зависимости -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
 
- <application>
- <activity android:name=".CameraActivity" />
- <provider
- android:name=".CameraFileProvider"
- android:authorities="${applicationId}.camera.provider" />
- </application>
+    <application>
+        <activity android:name=".CameraActivity" />
+        <provider
+            android:name=".CameraFileProvider"
+            android:authorities="${applicationId}.camera.provider" />
+    </application>
 </manifest>
 ```
 
@@ -87,16 +88,16 @@ project/
 <activity android:screenOrientation="portrait" />
 
 <!-- app/AndroidManifest.xml -->
-<activity android:screenOrientation="landscape" /> ← Побеждает app
+<activity android:screenOrientation="landscape" />  ← Побеждает app
 ```
 
 ### Разрешение конфликтов
 
 ```xml
 <manifest xmlns:tools="http://schemas.android.com/tools">
- <activity
- android:name=".LoginActivity"
- tools:replace="android:screenOrientation" /> <!-- Заменить атрибут -->
+    <activity
+        android:name=".LoginActivity"
+        tools:replace="android:screenOrientation" />  <!-- Заменить атрибут -->
 </manifest>
 ```
 
@@ -142,11 +143,11 @@ In multi-module projects, each module has its own **AndroidManifest.xml** for:
 
 ```
 project/
- app/src/main/AndroidManifest.xml ← Main manifest
+ app/src/main/AndroidManifest.xml          ← Main manifest
  feature-login/src/main/AndroidManifest.xml
  feature-camera/src/main/AndroidManifest.xml
  core-network/src/main/AndroidManifest.xml
- ↓ Gradle Merge Task
+                       ↓ Gradle Merge Task
  app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ```
 
@@ -155,16 +156,16 @@ project/
 ```xml
 <!-- feature-camera/src/main/AndroidManifest.xml -->
 <manifest package="com.example.feature.camera">
- <!-- ✅ Module declares its own dependencies -->
- <uses-permission android:name="android.permission.CAMERA" />
- <uses-feature android:name="android.hardware.camera" />
+    <!-- ✅ Module declares its own dependencies -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
 
- <application>
- <activity android:name=".CameraActivity" />
- <provider
- android:name=".CameraFileProvider"
- android:authorities="${applicationId}.camera.provider" />
- </application>
+    <application>
+        <activity android:name=".CameraActivity" />
+        <provider
+            android:name=".CameraFileProvider"
+            android:authorities="${applicationId}.camera.provider" />
+    </application>
 </manifest>
 ```
 
@@ -182,16 +183,16 @@ project/
 <activity android:screenOrientation="portrait" />
 
 <!-- app/AndroidManifest.xml -->
-<activity android:screenOrientation="landscape" /> ← app wins
+<activity android:screenOrientation="landscape" />  ← app wins
 ```
 
 ### Conflict resolution
 
 ```xml
 <manifest xmlns:tools="http://schemas.android.com/tools">
- <activity
- android:name=".LoginActivity"
- tools:replace="android:screenOrientation" /> <!-- Replace attribute -->
+    <activity
+        android:name=".LoginActivity"
+        tools:replace="android:screenOrientation" />  <!-- Replace attribute -->
 </manifest>
 ```
 

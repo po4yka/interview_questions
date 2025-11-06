@@ -25,6 +25,7 @@ tags:
 - android/di-hilt
 - dependency-injection
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -66,33 +67,33 @@ Hilt provides **predefined components** for `Application`, `Activity`, `Fragment
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
- @Provides
- @Singleton
- fun provideDatabase(
- @ApplicationContext context: Context
- ): AppDatabase {
- return Room.databaseBuilder(
- context,
- AppDatabase::class.java,
- "app_database"
- ).build()
- }
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_database"
+        ).build()
+    }
 
- @Provides
- @Singleton
- fun provideRetrofit(): Retrofit {
- return Retrofit.Builder()
- .baseUrl("https://api.example.com/")
- .addConverterFactory(GsonConverterFactory.create())
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.example.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 }
 
 // Usage
 @Singleton
 class UserRepository @Inject constructor(
- private val database: AppDatabase,
- private val api: ApiService
+    private val database: AppDatabase,
+    private val api: ApiService
 )
 ```
 
@@ -107,27 +108,27 @@ class UserRepository @Inject constructor(
 @InstallIn(ViewModelComponent::class)
 object ViewModelModule {
 
- @Provides
- fun provideUseCases(
- repository: UserRepository
- ): GetUserUseCase {
- return GetUserUseCase(repository)
- }
+    @Provides
+    fun provideUseCases(
+        repository: UserRepository
+    ): GetUserUseCase {
+        return GetUserUseCase(repository)
+    }
 }
 
 // Usage
 @HiltViewModel
 class UserViewModel @Inject constructor(
- private val getUserUseCase: GetUserUseCase,
- private val savedStateHandle: SavedStateHandle
+    private val getUserUseCase: GetUserUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
- fun loadUser(id: String) {
- viewModelScope.launch {
- val user = getUserUseCase(id)
- // Update state
- }
- }
+    fun loadUser(id: String) {
+        viewModelScope.launch {
+            val user = getUserUseCase(id)
+            // Update state
+        }
+    }
 }
 ```
 
@@ -142,31 +143,31 @@ class UserViewModel @Inject constructor(
 @InstallIn(ActivityComponent::class)
 object ActivityModule {
 
- @Provides
- @ActivityScoped
- fun providePresenter(
- repository: UserRepository
- ): UserPresenter {
- return UserPresenter(repository)
- }
+    @Provides
+    @ActivityScoped
+    fun providePresenter(
+        repository: UserRepository
+    ): UserPresenter {
+        return UserPresenter(repository)
+    }
 
- @Provides
- fun provideAnalytics(
- @ActivityContext context: Context
- ): Analytics {
- return Analytics(context)
- }
+    @Provides
+    fun provideAnalytics(
+        @ActivityContext context: Context
+    ): Analytics {
+        return Analytics(context)
+    }
 }
 
 // Usage
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
- @Inject
- lateinit var presenter: UserPresenter
+    @Inject
+    lateinit var presenter: UserPresenter
 
- @Inject
- lateinit var analytics: Analytics
+    @Inject
+    lateinit var analytics: Analytics
 }
 ```
 
@@ -181,24 +182,24 @@ class MainActivity : AppCompatActivity() {
 @InstallIn(FragmentComponent::class)
 object FragmentModule {
 
- @Provides
- @FragmentScoped
- fun provideAdapter(): UserAdapter {
- return UserAdapter()
- }
+    @Provides
+    @FragmentScoped
+    fun provideAdapter(): UserAdapter {
+        return UserAdapter()
+    }
 }
 
 // Usage
 @AndroidEntryPoint
 class UserFragment : Fragment() {
 
- @Inject
- lateinit var adapter: UserAdapter
+    @Inject
+    lateinit var adapter: UserAdapter
 
- override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
- super.onViewCreated(view, savedInstanceState)
- recyclerView.adapter = adapter
- }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView.adapter = adapter
+    }
 }
 ```
 
@@ -213,28 +214,28 @@ class UserFragment : Fragment() {
 @InstallIn(ServiceComponent::class)
 object ServiceModule {
 
- @Provides
- @ServiceScoped
- fun provideNotificationBuilder(
- @ApplicationContext context: Context
- ): NotificationCompat.Builder {
- return NotificationCompat.Builder(context, CHANNEL_ID)
- }
+    @Provides
+    @ServiceScoped
+    fun provideNotificationBuilder(
+        @ApplicationContext context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, CHANNEL_ID)
+    }
 }
 
 // Usage
 @AndroidEntryPoint
 class MusicService : Service() {
 
- @Inject
- lateinit var notificationBuilder: NotificationCompat.Builder
+    @Inject
+    lateinit var notificationBuilder: NotificationCompat.Builder
 
- override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
- startForeground(1, notificationBuilder.build())
- return START_STICKY
- }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(1, notificationBuilder.build())
+        return START_STICKY
+    }
 
- override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
@@ -249,51 +250,51 @@ class MusicService : Service() {
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
- @Provides
- @Singleton
- fun provideOkHttpClient(): OkHttpClient {
- return OkHttpClient.Builder()
- .connectTimeout(30, TimeUnit.SECONDS)
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
 
- @Provides
- @Singleton
- fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
- return Retrofit.Builder()
- .baseUrl("https://api.example.com/")
- .client(okHttpClient)
- .addConverterFactory(GsonConverterFactory.create())
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.example.com/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
- @Provides
- @Singleton
- fun provideApiService(retrofit: Retrofit): ApiService {
- return retrofit.create(ApiService::class.java)
- }
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
+    }
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
- @Provides
- @Singleton
- fun provideDatabase(
- @ApplicationContext context: Context
- ): AppDatabase {
- return Room.databaseBuilder(
- context,
- AppDatabase::class.java,
- "app_db"
- ).build()
- }
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_db"
+        ).build()
+    }
 
- @Provides
- fun provideUserDao(database: AppDatabase): UserDao {
- return database.userDao()
- }
+    @Provides
+    fun provideUserDao(database: AppDatabase): UserDao {
+        return database.userDao()
+    }
 }
 ```
 
@@ -302,16 +303,16 @@ object DatabaseModule {
 ```kotlin
 @Singleton
 class UserRepository @Inject constructor(
- private val api: ApiService,
- private val userDao: UserDao
+    private val api: ApiService,
+    private val userDao: UserDao
 ) {
- suspend fun getUser(id: String): User {
- return userDao.getUser(id) ?: run {
- val user = api.fetchUser(id)
- userDao.insert(user)
- user
- }
- }
+    suspend fun getUser(id: String): User {
+        return userDao.getUser(id) ?: run {
+            val user = api.fetchUser(id)
+            userDao.insert(user)
+            user
+        }
+    }
 }
 ```
 
@@ -322,27 +323,27 @@ class UserRepository @Inject constructor(
 @InstallIn(ViewModelComponent::class)
 object UseCaseModule {
 
- @Provides
- fun provideGetUserUseCase(
- repository: UserRepository
- ): GetUserUseCase {
- return GetUserUseCase(repository)
- }
+    @Provides
+    fun provideGetUserUseCase(
+        repository: UserRepository
+    ): GetUserUseCase {
+        return GetUserUseCase(repository)
+    }
 }
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
- private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
- private val _user = MutableStateFlow<User?>(null)
- val user: StateFlow<User?> = _user.asStateFlow()
+    private val _user = MutableStateFlow<User?>(null)
+    val user: StateFlow<User?> = _user.asStateFlow()
 
- fun loadUser(id: String) {
- viewModelScope.launch {
- _user.value = getUserUseCase(id)
- }
- }
+    fun loadUser(id: String) {
+        viewModelScope.launch {
+            _user.value = getUserUseCase(id)
+        }
+    }
 }
 ```
 
@@ -352,20 +353,20 @@ class UserViewModel @Inject constructor(
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
- private val viewModel: UserViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- lifecycleScope.launch {
- viewModel.user.collect { user ->
- textView.text = user?.name
- }
- }
+        lifecycleScope.launch {
+            viewModel.user.collect { user ->
+                textView.text = user?.name
+            }
+        }
 
- viewModel.loadUser("123")
- }
+        viewModel.loadUser("123")
+    }
 }
 ```
 
@@ -377,27 +378,27 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 interface UserRepository {
- suspend fun getUser(id: String): User
+    suspend fun getUser(id: String): User
 }
 
 class UserRepositoryImpl @Inject constructor(
- private val api: ApiService,
- private val dao: UserDao
+    private val api: ApiService,
+    private val dao: UserDao
 ) : UserRepository {
- override suspend fun getUser(id: String): User {
- return dao.getUser(id) ?: api.fetchUser(id)
- }
+    override suspend fun getUser(id: String): User {
+        return dao.getUser(id) ?: api.fetchUser(id)
+    }
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
- @Binds
- @Singleton
- abstract fun bindUserRepository(
- impl: UserRepositoryImpl
- ): UserRepository
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        impl: UserRepositoryImpl
+    ): UserRepository
 }
 ```
 
@@ -418,36 +419,36 @@ annotation class LoggingInterceptor
 @InstallIn(SingletonComponent::class)
 object InterceptorModule {
 
- @Provides
- @AuthInterceptor
- fun provideAuthInterceptor(): Interceptor {
- return Interceptor { chain ->
- val request = chain.request().newBuilder()
- .addHeader("Authorization", "Bearer TOKEN")
- .build()
- chain.proceed(request)
- }
- }
+    @Provides
+    @AuthInterceptor
+    fun provideAuthInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer TOKEN")
+                .build()
+            chain.proceed(request)
+        }
+    }
 
- @Provides
- @LoggingInterceptor
- fun provideLoggingInterceptor(): Interceptor {
- return HttpLoggingInterceptor().apply {
- level = HttpLoggingInterceptor.Level.BODY
- }
- }
+    @Provides
+    @LoggingInterceptor
+    fun provideLoggingInterceptor(): Interceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
 
- @Provides
- @Singleton
- fun provideOkHttpClient(
- @AuthInterceptor authInterceptor: Interceptor,
- @LoggingInterceptor loggingInterceptor: Interceptor
- ): OkHttpClient {
- return OkHttpClient.Builder()
- .addInterceptor(authInterceptor)
- .addInterceptor(loggingInterceptor)
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        @AuthInterceptor authInterceptor: Interceptor,
+        @LoggingInterceptor loggingInterceptor: Interceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
 }
 ```
 
@@ -457,15 +458,15 @@ object InterceptorModule {
 
 ```
 SingletonComponent (Application)
- ↓
+       ↓
 ActivityRetainedComponent (Survives config changes)
- ↓
+       ↓
 ViewModelComponent (ViewModel)
- ↓
+       ↓
 ActivityComponent (Activity)
- ↓
+       ↓
 FragmentComponent (Fragment)
- ↓
+       ↓
 ViewComponent (View)
 
 ServiceComponent (Service) ← Independent
@@ -494,11 +495,11 @@ ServiceComponent (Service) ← Independent
 @InstallIn(SingletonComponent::class) // ← Specify component
 object MyModule {
 
- @Provides
- @Singleton // ← Match scope
- fun provideDependency(): MyDependency {
- return MyDependency()
- }
+    @Provides
+    @Singleton // ← Match scope
+    fun provideDependency(): MyDependency {
+        return MyDependency()
+    }
 }
 ```
 
@@ -509,12 +510,15 @@ object MyModule {
 
 ---
 
+
 # Question (EN)
 > Hilt Components Scope
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 Hilt provides **predefined components** for `Application`, `Activity`, `Fragment`, `ViewModel`, and other Android levels.
@@ -547,33 +551,33 @@ Hilt provides **predefined components** for `Application`, `Activity`, `Fragment
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
- @Provides
- @Singleton
- fun provideDatabase(
- @ApplicationContext context: Context
- ): AppDatabase {
- return Room.databaseBuilder(
- context,
- AppDatabase::class.java,
- "app_database"
- ).build()
- }
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_database"
+        ).build()
+    }
 
- @Provides
- @Singleton
- fun provideRetrofit(): Retrofit {
- return Retrofit.Builder()
- .baseUrl("https://api.example.com/")
- .addConverterFactory(GsonConverterFactory.create())
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.example.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 }
 
 // Usage
 @Singleton
 class UserRepository @Inject constructor(
- private val database: AppDatabase,
- private val api: ApiService
+    private val database: AppDatabase,
+    private val api: ApiService
 )
 ```
 
@@ -588,27 +592,27 @@ class UserRepository @Inject constructor(
 @InstallIn(ViewModelComponent::class)
 object ViewModelModule {
 
- @Provides
- fun provideUseCases(
- repository: UserRepository
- ): GetUserUseCase {
- return GetUserUseCase(repository)
- }
+    @Provides
+    fun provideUseCases(
+        repository: UserRepository
+    ): GetUserUseCase {
+        return GetUserUseCase(repository)
+    }
 }
 
 // Usage
 @HiltViewModel
 class UserViewModel @Inject constructor(
- private val getUserUseCase: GetUserUseCase,
- private val savedStateHandle: SavedStateHandle
+    private val getUserUseCase: GetUserUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
- fun loadUser(id: String) {
- viewModelScope.launch {
- val user = getUserUseCase(id)
- // Update state
- }
- }
+    fun loadUser(id: String) {
+        viewModelScope.launch {
+            val user = getUserUseCase(id)
+            // Update state
+        }
+    }
 }
 ```
 
@@ -623,31 +627,31 @@ class UserViewModel @Inject constructor(
 @InstallIn(ActivityComponent::class)
 object ActivityModule {
 
- @Provides
- @ActivityScoped
- fun providePresenter(
- repository: UserRepository
- ): UserPresenter {
- return UserPresenter(repository)
- }
+    @Provides
+    @ActivityScoped
+    fun providePresenter(
+        repository: UserRepository
+    ): UserPresenter {
+        return UserPresenter(repository)
+    }
 
- @Provides
- fun provideAnalytics(
- @ActivityContext context: Context
- ): Analytics {
- return Analytics(context)
- }
+    @Provides
+    fun provideAnalytics(
+        @ActivityContext context: Context
+    ): Analytics {
+        return Analytics(context)
+    }
 }
 
 // Usage
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
- @Inject
- lateinit var presenter: UserPresenter
+    @Inject
+    lateinit var presenter: UserPresenter
 
- @Inject
- lateinit var analytics: Analytics
+    @Inject
+    lateinit var analytics: Analytics
 }
 ```
 
@@ -662,24 +666,24 @@ class MainActivity : AppCompatActivity() {
 @InstallIn(FragmentComponent::class)
 object FragmentModule {
 
- @Provides
- @FragmentScoped
- fun provideAdapter(): UserAdapter {
- return UserAdapter()
- }
+    @Provides
+    @FragmentScoped
+    fun provideAdapter(): UserAdapter {
+        return UserAdapter()
+    }
 }
 
 // Usage
 @AndroidEntryPoint
 class UserFragment : Fragment() {
 
- @Inject
- lateinit var adapter: UserAdapter
+    @Inject
+    lateinit var adapter: UserAdapter
 
- override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
- super.onViewCreated(view, savedInstanceState)
- recyclerView.adapter = adapter
- }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView.adapter = adapter
+    }
 }
 ```
 
@@ -694,28 +698,28 @@ class UserFragment : Fragment() {
 @InstallIn(ServiceComponent::class)
 object ServiceModule {
 
- @Provides
- @ServiceScoped
- fun provideNotificationBuilder(
- @ApplicationContext context: Context
- ): NotificationCompat.Builder {
- return NotificationCompat.Builder(context, CHANNEL_ID)
- }
+    @Provides
+    @ServiceScoped
+    fun provideNotificationBuilder(
+        @ApplicationContext context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, CHANNEL_ID)
+    }
 }
 
 // Usage
 @AndroidEntryPoint
 class MusicService : Service() {
 
- @Inject
- lateinit var notificationBuilder: NotificationCompat.Builder
+    @Inject
+    lateinit var notificationBuilder: NotificationCompat.Builder
 
- override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
- startForeground(1, notificationBuilder.build())
- return START_STICKY
- }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(1, notificationBuilder.build())
+        return START_STICKY
+    }
 
- override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
@@ -730,51 +734,51 @@ class MusicService : Service() {
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
- @Provides
- @Singleton
- fun provideOkHttpClient(): OkHttpClient {
- return OkHttpClient.Builder()
- .connectTimeout(30, TimeUnit.SECONDS)
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
 
- @Provides
- @Singleton
- fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
- return Retrofit.Builder()
- .baseUrl("https://api.example.com/")
- .client(okHttpClient)
- .addConverterFactory(GsonConverterFactory.create())
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://api.example.com/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
- @Provides
- @Singleton
- fun provideApiService(retrofit: Retrofit): ApiService {
- return retrofit.create(ApiService::class.java)
- }
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
+    }
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
- @Provides
- @Singleton
- fun provideDatabase(
- @ApplicationContext context: Context
- ): AppDatabase {
- return Room.databaseBuilder(
- context,
- AppDatabase::class.java,
- "app_db"
- ).build()
- }
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_db"
+        ).build()
+    }
 
- @Provides
- fun provideUserDao(database: AppDatabase): UserDao {
- return database.userDao()
- }
+    @Provides
+    fun provideUserDao(database: AppDatabase): UserDao {
+        return database.userDao()
+    }
 }
 ```
 
@@ -783,16 +787,16 @@ object DatabaseModule {
 ```kotlin
 @Singleton
 class UserRepository @Inject constructor(
- private val api: ApiService,
- private val userDao: UserDao
+    private val api: ApiService,
+    private val userDao: UserDao
 ) {
- suspend fun getUser(id: String): User {
- return userDao.getUser(id) ?: run {
- val user = api.fetchUser(id)
- userDao.insert(user)
- user
- }
- }
+    suspend fun getUser(id: String): User {
+        return userDao.getUser(id) ?: run {
+            val user = api.fetchUser(id)
+            userDao.insert(user)
+            user
+        }
+    }
 }
 ```
 
@@ -803,27 +807,27 @@ class UserRepository @Inject constructor(
 @InstallIn(ViewModelComponent::class)
 object UseCaseModule {
 
- @Provides
- fun provideGetUserUseCase(
- repository: UserRepository
- ): GetUserUseCase {
- return GetUserUseCase(repository)
- }
+    @Provides
+    fun provideGetUserUseCase(
+        repository: UserRepository
+    ): GetUserUseCase {
+        return GetUserUseCase(repository)
+    }
 }
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
- private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
- private val _user = MutableStateFlow<User?>(null)
- val user: StateFlow<User?> = _user.asStateFlow()
+    private val _user = MutableStateFlow<User?>(null)
+    val user: StateFlow<User?> = _user.asStateFlow()
 
- fun loadUser(id: String) {
- viewModelScope.launch {
- _user.value = getUserUseCase(id)
- }
- }
+    fun loadUser(id: String) {
+        viewModelScope.launch {
+            _user.value = getUserUseCase(id)
+        }
+    }
 }
 ```
 
@@ -833,20 +837,20 @@ class UserViewModel @Inject constructor(
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
- private val viewModel: UserViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- lifecycleScope.launch {
- viewModel.user.collect { user ->
- textView.text = user?.name
- }
- }
+        lifecycleScope.launch {
+            viewModel.user.collect { user ->
+                textView.text = user?.name
+            }
+        }
 
- viewModel.loadUser("123")
- }
+        viewModel.loadUser("123")
+    }
 }
 ```
 
@@ -858,27 +862,27 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 interface UserRepository {
- suspend fun getUser(id: String): User
+    suspend fun getUser(id: String): User
 }
 
 class UserRepositoryImpl @Inject constructor(
- private val api: ApiService,
- private val dao: UserDao
+    private val api: ApiService,
+    private val dao: UserDao
 ) : UserRepository {
- override suspend fun getUser(id: String): User {
- return dao.getUser(id) ?: api.fetchUser(id)
- }
+    override suspend fun getUser(id: String): User {
+        return dao.getUser(id) ?: api.fetchUser(id)
+    }
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
- @Binds
- @Singleton
- abstract fun bindUserRepository(
- impl: UserRepositoryImpl
- ): UserRepository
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        impl: UserRepositoryImpl
+    ): UserRepository
 }
 ```
 
@@ -899,36 +903,36 @@ annotation class LoggingInterceptor
 @InstallIn(SingletonComponent::class)
 object InterceptorModule {
 
- @Provides
- @AuthInterceptor
- fun provideAuthInterceptor(): Interceptor {
- return Interceptor { chain ->
- val request = chain.request().newBuilder()
- .addHeader("Authorization", "Bearer TOKEN")
- .build()
- chain.proceed(request)
- }
- }
+    @Provides
+    @AuthInterceptor
+    fun provideAuthInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer TOKEN")
+                .build()
+            chain.proceed(request)
+        }
+    }
 
- @Provides
- @LoggingInterceptor
- fun provideLoggingInterceptor(): Interceptor {
- return HttpLoggingInterceptor().apply {
- level = HttpLoggingInterceptor.Level.BODY
- }
- }
+    @Provides
+    @LoggingInterceptor
+    fun provideLoggingInterceptor(): Interceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
 
- @Provides
- @Singleton
- fun provideOkHttpClient(
- @AuthInterceptor authInterceptor: Interceptor,
- @LoggingInterceptor loggingInterceptor: Interceptor
- ): OkHttpClient {
- return OkHttpClient.Builder()
- .addInterceptor(authInterceptor)
- .addInterceptor(loggingInterceptor)
- .build()
- }
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        @AuthInterceptor authInterceptor: Interceptor,
+        @LoggingInterceptor loggingInterceptor: Interceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
 }
 ```
 
@@ -938,15 +942,15 @@ object InterceptorModule {
 
 ```
 SingletonComponent (Application)
- ↓
+       ↓
 ActivityRetainedComponent (Survives config changes)
- ↓
+       ↓
 ViewModelComponent (ViewModel)
- ↓
+       ↓
 ActivityComponent (Activity)
- ↓
+       ↓
 FragmentComponent (Fragment)
- ↓
+       ↓
 ViewComponent (View)
 
 ServiceComponent (Service) ← Independent
@@ -975,11 +979,11 @@ ServiceComponent (Service) ← Independent
 @InstallIn(SingletonComponent::class) // ← Specify component
 object MyModule {
 
- @Provides
- @Singleton // ← Match scope
- fun provideDependency(): MyDependency {
- return MyDependency()
- }
+    @Provides
+    @Singleton // ← Match scope
+    fun provideDependency(): MyDependency {
+        return MyDependency()
+    }
 }
 ```
 
@@ -1012,17 +1016,17 @@ Hilt предоставляет **готовые компоненты** для `
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
- @Provides
- @Singleton
- fun provideDatabase(
- @ApplicationContext context: Context
- ): AppDatabase {
- return Room.databaseBuilder(
- context,
- AppDatabase::class.java,
- "database"
- ).build()
- }
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "database"
+        ).build()
+    }
 }
 ```
 
@@ -1031,23 +1035,28 @@ object AppModule {
 - Scope должен соответствовать компоненту
 - Дочерние компоненты наследуют зависимости родителей
 
+
 ---
+
 
 ## Follow-ups
 
 - [[q-android-security-best-practices--android--medium]]
-- [[q-cicd-pipeline-setup--android--medium]]
+- 
 - [[q-room-library-definition--android--easy]]
+
 
 ## References
 
 - [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-hilt]]
+
 
 ### Prerequisites (Easier)
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals

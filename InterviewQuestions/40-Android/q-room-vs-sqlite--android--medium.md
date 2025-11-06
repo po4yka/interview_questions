@@ -18,6 +18,7 @@ moc: moc-android
 related:
 - c-room
 - q-android-runtime-art--android--medium
+- q-compose-navigation-advanced--jetpack-compose--medium
 - q-room-transactions-dao--android--medium
 created: 2025-10-15
 updated: 2025-10-31

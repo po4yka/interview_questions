@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/architecture-mvvm, android/ui-compose, compose, declarative-ui, difficulty/medium, recomposition]
+
 ---
 
 # Вопрос (RU)
@@ -43,9 +44,9 @@ textView.visibility = View.VISIBLE
 // ✅ Декларативный (Compose)
 @Composable
 fun Greeting(name: String, isVisible: Boolean) {
- if (isVisible) {
- Text("Привет $name")
- }
+    if (isVisible) {
+        Text("Привет $name")
+    }
 }
 ```
 
@@ -56,14 +57,14 @@ fun Greeting(name: String, isVisible: Boolean) {
 ```kotlin
 @Composable
 fun Counter() {
- var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
- Column {
- Text("Счет: $count")
- Button(onClick = { count++ }) {
- Text("Увеличить")
- }
- }
+    Column {
+        Text("Счет: $count")
+        Button(onClick = { count++ }) {
+            Text("Увеличить")
+        }
+    }
 }
 ```
 
@@ -79,18 +80,18 @@ fun Counter() {
 ```kotlin
 // 1. Composition - строит дерево UI
 Column {
- Text("Заголовок")
- Button(onClick = {}) { Text("Действие") }
+    Text("Заголовок")
+    Button(onClick = {}) { Text("Действие") }
 }
 
 // 2. Layout - измеряет и позиционирует
 Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
- Text(modifier = Modifier.align(Alignment.Center))
+    Text(modifier = Modifier.align(Alignment.Center))
 }
 
 // 3. Drawing - рендерит на Canvas
 Canvas(modifier = Modifier.size(100.dp)) {
- drawCircle(color = Color.Blue)
+    drawCircle(color = Color.Blue)
 }
 ```
 
@@ -99,13 +100,13 @@ Canvas(modifier = Modifier.size(100.dp)) {
 ```kotlin
 @Composable
 fun SmartRecomposition() {
- var counter by remember { mutableStateOf(0) }
+    var counter by remember { mutableStateOf(0) }
 
- Column {
- Text("Счетчик: $counter") // ✅ Перекомпонуется
- StaticHeader() // ✅ Пропускается (нет зависимостей)
- Button(onClick = { counter++ }) { Text("Увеличить") }
- }
+    Column {
+        Text("Счетчик: $counter") // ✅ Перекомпонуется
+        StaticHeader() // ✅ Пропускается (нет зависимостей)
+        Button(onClick = { counter++ }) { Text("Увеличить") }
+    }
 }
 ```
 
@@ -114,17 +115,17 @@ fun SmartRecomposition() {
 ```kotlin
 @Composable
 fun UserProfile(userId: String) {
- var user by remember { mutableStateOf<User?>(null) }
+    var user by remember { mutableStateOf<User?>(null) }
 
- LaunchedEffect(userId) {
- user = fetchUser(userId) // Запускается при изменении userId
- }
+    LaunchedEffect(userId) {
+        user = fetchUser(userId) // Запускается при изменении userId
+    }
 
- DisposableEffect(Unit) {
- onDispose { cleanup() } // Очистка
- }
+    DisposableEffect(Unit) {
+        onDispose { cleanup() } // Очистка
+    }
 
- user?.let { UserCard(it) }
+    user?.let { UserCard(it) }
 }
 ```
 
@@ -148,9 +149,9 @@ textView.visibility = View.VISIBLE
 // ✅ Declarative (Compose)
 @Composable
 fun Greeting(name: String, isVisible: Boolean) {
- if (isVisible) {
- Text("Hello $name")
- }
+    if (isVisible) {
+        Text("Hello $name")
+    }
 }
 ```
 
@@ -161,14 +162,14 @@ Foundation - functions annotated with `@Composable`:
 ```kotlin
 @Composable
 fun Counter() {
- var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
- Column {
- Text("Count: $count")
- Button(onClick = { count++ }) {
- Text("Increment")
- }
- }
+    Column {
+        Text("Count: $count")
+        Button(onClick = { count++ }) {
+            Text("Increment")
+        }
+    }
 }
 ```
 
@@ -184,18 +185,18 @@ fun Counter() {
 ```kotlin
 // 1. Composition - builds UI tree
 Column {
- Text("Header")
- Button(onClick = {}) { Text("Action") }
+    Text("Header")
+    Button(onClick = {}) { Text("Action") }
 }
 
 // 2. Layout - measures and positions
 Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
- Text(modifier = Modifier.align(Alignment.Center))
+    Text(modifier = Modifier.align(Alignment.Center))
 }
 
 // 3. Drawing - renders to Canvas
 Canvas(modifier = Modifier.size(100.dp)) {
- drawCircle(color = Color.Blue)
+    drawCircle(color = Color.Blue)
 }
 ```
 
@@ -204,13 +205,13 @@ Canvas(modifier = Modifier.size(100.dp)) {
 ```kotlin
 @Composable
 fun SmartRecomposition() {
- var counter by remember { mutableStateOf(0) }
+    var counter by remember { mutableStateOf(0) }
 
- Column {
- Text("Counter: $counter") // ✅ Recomposes
- StaticHeader() // ✅ Skipped (no dependencies)
- Button(onClick = { counter++ }) { Text("Increment") }
- }
+    Column {
+        Text("Counter: $counter") // ✅ Recomposes
+        StaticHeader() // ✅ Skipped (no dependencies)
+        Button(onClick = { counter++ }) { Text("Increment") }
+    }
 }
 ```
 
@@ -219,17 +220,17 @@ fun SmartRecomposition() {
 ```kotlin
 @Composable
 fun UserProfile(userId: String) {
- var user by remember { mutableStateOf<User?>(null) }
+    var user by remember { mutableStateOf<User?>(null) }
 
- LaunchedEffect(userId) {
- user = fetchUser(userId) // Runs when userId changes
- }
+    LaunchedEffect(userId) {
+        user = fetchUser(userId) // Runs when userId changes
+    }
 
- DisposableEffect(Unit) {
- onDispose { cleanup() } // Cleanup
- }
+    DisposableEffect(Unit) {
+        onDispose { cleanup() } // Cleanup
+    }
 
- user?.let { UserCard(it) }
+    user?.let { UserCard(it) }
 }
 ```
 
@@ -247,8 +248,8 @@ fun UserProfile(userId: String) {
 
 ## References
 
-- - Compose UI fundamentals
-- - Declarative programming paradigm
+-  - Compose UI fundamentals
+-  - Declarative programming paradigm
 - [[c-recomposition]] - Recomposition mechanics
 - https://developer.android.com/jetpack/compose/mental-model
 

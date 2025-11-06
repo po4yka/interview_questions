@@ -35,6 +35,7 @@ tags:
 - kapt
 - ksp
 - ru
+
 ---
 
 # Question (EN)
@@ -63,17 +64,17 @@ Problem: Step 1 is expensive and slow
 **Architecture diagram:**
 ```
 Kotlin Source (.kt)
- ↓
+    ↓
 [Generate Java Stubs] ← 30-40% of KAPT time
- ↓
+    ↓
 Java Stubs (.java)
- ↓
+    ↓
 [Java Annotation Processor]
- ↓
+    ↓
 Generated Code
- ↓
+    ↓
 [Kotlin/Java Compiler]
- ↓
+    ↓
 Bytecode
 ```
 
@@ -96,13 +97,13 @@ Benefit: No Java stub generation, 2x faster
 **Architecture diagram:**
 ```
 Kotlin Source (.kt)
- ↓
+    ↓
 [KSP Processor] ← Direct Kotlin API access
- ↓
+    ↓
 Generated Code
- ↓
+    ↓
 [Kotlin Compiler]
- ↓
+    ↓
 Bytecode
 ```
 
@@ -124,10 +125,10 @@ Bytecode
 ```
 Configuration time: 8.2s
 KAPT processing: 45.3s
- - Stub generation: 18.7s
- - Room processor: 14.2s
- - Hilt processor: 9.8s
- - Moshi processor: 2.6s
+  - Stub generation: 18.7s
+  - Room processor: 14.2s
+  - Hilt processor: 9.8s
+  - Moshi processor: 2.6s
 Total build: 89.5s
 ```
 
@@ -135,9 +136,9 @@ Total build: 89.5s
 ```
 Configuration time: 8.2s
 KSP processing: 22.1s
- - Room processor: 7.3s
- - Hilt processor: 11.2s
- - Moshi processor: 3.6s
+  - Room processor: 7.3s
+  - Hilt processor: 11.2s
+  - Moshi processor: 3.6s
 Total build: 46.8s
 
 Improvement: 47.7% faster (89.5s → 46.8s)
@@ -149,14 +150,14 @@ Improvement: 47.7% faster (89.5s → 46.8s)
 
 **KSP-supported libraries (2024):**
 ```kotlin
-// Full KSP support
+//  Full KSP support
 - Room 2.6.0+
 - Hilt 2.44+
 - Moshi 1.14.0+ (with moshi-kotlin-codegen)
 - Glide 4.14.0+
 - Auto-generated code libraries
 
-// Partial or no KSP support
+//  Partial or no KSP support
 - Some Dagger modules (use Hilt instead)
 - Legacy annotation processors
 ```
@@ -168,35 +169,35 @@ Improvement: 47.7% faster (89.5s → 46.8s)
 **build.gradle.kts (app module):**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("kotlin-kapt") // KAPT plugin
- id("dagger.hilt.android.plugin")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // KAPT plugin
+    id("dagger.hilt.android.plugin")
 }
 
 android {
- // ... android configuration
+    // ... android configuration
 
- kapt {
- correctErrorTypes = true
- useBuildCache = true
- }
+    kapt {
+        correctErrorTypes = true
+        useBuildCache = true
+    }
 }
 
 dependencies {
- // Room with KAPT
- implementation("androidx.room:room-runtime:2.6.1")
- implementation("androidx.room:room-ktx:2.6.1")
- kapt("androidx.room:room-compiler:2.6.1")
+    // Room with KAPT
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 
- // Hilt with KAPT
- implementation("com.google.dagger:hilt-android:2.50")
- kapt("com.google.dagger:hilt-android-compiler:2.50")
+    // Hilt with KAPT
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
 
- // Moshi with KAPT
- implementation("com.squareup.moshi:moshi:1.15.0")
- implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
- kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    // Moshi with KAPT
+    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 }
 ```
 
@@ -205,56 +206,56 @@ dependencies {
 **build.gradle.kts (project level):**
 ```kotlin
 plugins {
- id("com.android.application") version "8.2.0" apply false
- id("org.jetbrains.kotlin.android") version "1.9.21" apply false
- id("com.google.dagger.hilt.android") version "2.50" apply false
- id("com.google.devtools.ksp") version "1.9.21-1.0.16" apply false // Add KSP
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.21" apply false
+    id("com.google.dagger.hilt.android") version "2.50" apply false
+    id("com.google.devtools.ksp") version "1.9.21-1.0.16" apply false  // Add KSP
 }
 ```
 
 **build.gradle.kts (app module):**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("com.google.devtools.ksp") // Replace kotlin-kapt with KSP
- id("dagger.hilt.android.plugin")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")  // Replace kotlin-kapt with KSP
+    id("dagger.hilt.android.plugin")
 }
 
 android {
- // ... android configuration
+    // ... android configuration
 
- // KSP configuration
- ksp {
- arg("room.schemaLocation", "$projectDir/schemas")
- arg("room.incremental", "true")
- arg("room.expandProjection", "true")
- }
+    // KSP configuration
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
+    }
 
- // Add generated sources to source sets
- applicationVariants.all {
- kotlin.sourceSets {
- getByName(name) {
- kotlin.srcDir("build/generated/ksp/$name/kotlin")
- }
- }
- }
+    // Add generated sources to source sets
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
- // Room with KSP
- implementation("androidx.room:room-runtime:2.6.1")
- implementation("androidx.room:room-ktx:2.6.1")
- ksp("androidx.room:room-compiler:2.6.1") // Changed from kapt to ksp
+    // Room with KSP
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")  // Changed from kapt to ksp
 
- // Hilt with KSP
- implementation("com.google.dagger:hilt-android:2.50")
- ksp("com.google.dagger:hilt-android-compiler:2.50") // Changed from kapt to ksp
+    // Hilt with KSP
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")  // Changed from kapt to ksp
 
- // Moshi with KSP
- implementation("com.squareup.moshi:moshi:1.15.0")
- implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
- ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0") // Changed from kapt to ksp
+    // Moshi with KSP
+    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")  // Changed from kapt to ksp
 }
 ```
 
@@ -263,25 +264,25 @@ dependencies {
 **Before: KAPT generated sources**
 ```kotlin
 sourceSets {
- getByName("main") {
- java.srcDir("build/generated/source/kapt/main")
- java.srcDir("build/generated/source/kapt/debug")
- }
+    getByName("main") {
+        java.srcDir("build/generated/source/kapt/main")
+        java.srcDir("build/generated/source/kapt/debug")
+    }
 }
 ```
 
 **After: KSP generated sources**
 ```kotlin
 kotlin.sourceSets {
- getByName("main") {
- kotlin.srcDir("build/generated/ksp/main/kotlin")
- }
- getByName("debug") {
- kotlin.srcDir("build/generated/ksp/debug/kotlin")
- }
- getByName("release") {
- kotlin.srcDir("build/generated/ksp/release/kotlin")
- }
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+    getByName("debug") {
+        kotlin.srcDir("build/generated/ksp/debug/kotlin")
+    }
+    getByName("release") {
+        kotlin.srcDir("build/generated/ksp/release/kotlin")
+    }
 }
 ```
 
@@ -333,9 +334,9 @@ ls -la app/build/generated/source/kapt/debug/
 # Example generated files:
 app/build/generated/source/kapt/debug/
  com/example/
- AppDatabase_Impl.java
- UserDao_Impl.java
- MainActivity_GeneratedInjector.java
+    AppDatabase_Impl.java
+    UserDao_Impl.java
+    MainActivity_GeneratedInjector.java
 ```
 
 **After migration (KSP):**
@@ -349,9 +350,9 @@ ls -la app/build/generated/ksp/debug/kotlin/
 # Example generated files:
 app/build/generated/ksp/debug/kotlin/
  com/example/
- AppDatabase_Impl.kt
- UserDao_Impl.kt
- MainActivity_GeneratedInjector.kt
+    AppDatabase_Impl.kt
+    UserDao_Impl.kt
+    MainActivity_GeneratedInjector.kt
 ```
 
 **Compare generated code:**
@@ -370,23 +371,23 @@ Some libraries may not support KSP yet. You can use both temporarily:
 **build.gradle.kts:**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("kotlin-kapt") // Keep for unsupported libraries
- id("com.google.devtools.ksp") // Use for supported libraries
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // Keep for unsupported libraries
+    id("com.google.devtools.ksp")  // Use for supported libraries
 }
 
 dependencies {
- // KSP-supported libraries
- implementation("androidx.room:room-runtime:2.6.1")
- ksp("androidx.room:room-compiler:2.6.1")
+    // KSP-supported libraries
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
- implementation("com.google.dagger:hilt-android:2.50")
- ksp("com.google.dagger:hilt-android-compiler:2.50")
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")
 
- // KAPT-only libraries (legacy)
- implementation("com.some.legacy:library:1.0.0")
- kapt("com.some.legacy:library-compiler:1.0.0")
+    // KAPT-only libraries (legacy)
+    implementation("com.some.legacy:library:1.0.0")
+    kapt("com.some.legacy:library-compiler:1.0.0")
 }
 ```
 
@@ -431,28 +432,28 @@ IMPROVEMENT=$(awk "BEGIN {print (($KAPT_TIME - $KSP_TIME) / $KAPT_TIME) * 100}")
 
 echo ""
 echo "Results:"
-echo " KAPT build time: ${KAPT_TIME}s"
-echo " KSP build time: ${KSP_TIME}s"
-echo " Improvement: ${IMPROVEMENT}%"
+echo "  KAPT build time: ${KAPT_TIME}s"
+echo "  KSP build time: ${KSP_TIME}s"
+echo "  Improvement: ${IMPROVEMENT}%"
 ```
 
 **Real-world results:**
 
 ```
 Small project (< 50 files):
- KAPT: 25s
- KSP: 15s
- Improvement: 40%
+  KAPT: 25s
+  KSP: 15s
+  Improvement: 40%
 
 Medium project (50-200 files):
- KAPT: 89s
- KSP: 47s
- Improvement: 47%
+  KAPT: 89s
+  KSP: 47s
+  Improvement: 47%
 
 Large project (200+ files):
- KAPT: 245s
- KSP: 128s
- Improvement: 48%
+  KAPT: 245s
+  KSP: 128s
+  Improvement: 48%
 
 Average improvement: 40-50% faster builds
 ```
@@ -468,9 +469,9 @@ Error: Unresolved reference: AppDatabase_Impl
 **Solution: Update source sets**
 ```kotlin
 kotlin.sourceSets {
- getByName("main") {
- kotlin.srcDir("build/generated/ksp/main/kotlin")
- }
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
 }
 ```
 
@@ -479,16 +480,16 @@ kotlin.sourceSets {
 **KAPT:**
 ```kotlin
 kapt {
- arguments {
- arg("room.schemaLocation", "$projectDir/schemas")
- }
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 ```
 
 **KSP:**
 ```kotlin
 ksp {
- arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 ```
 
@@ -496,12 +497,12 @@ ksp {
 
 ```kotlin
 ksp {
- arg("room.incremental", "true") // Enable incremental for Room
+    arg("room.incremental", "true")  // Enable incremental for Room
 }
 
 tasks.withType<KspTask> {
- // Force incremental processing
- incremental = true
+    // Force incremental processing
+    incremental = true
 }
 ```
 
@@ -531,6 +532,7 @@ tasks.withType<KspTask> {
 9. **Gradle Sync Issues**: Clean and sync after changes
 10. **Performance Expectations**: Improvement varies by project size
 
+
 # Question (EN)
 > Compare KAPT and KSP for annotation processing in depth. Migrate library dependencies from KAPT to KSP. Measure and document build time improvements.
 
@@ -539,7 +541,9 @@ tasks.withType<KspTask> {
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 
@@ -559,17 +563,17 @@ Problem: Step 1 is expensive and slow
 **Architecture diagram:**
 ```
 Kotlin Source (.kt)
- ↓
+    ↓
 [Generate Java Stubs] ← 30-40% of KAPT time
- ↓
+    ↓
 Java Stubs (.java)
- ↓
+    ↓
 [Java Annotation Processor]
- ↓
+    ↓
 Generated Code
- ↓
+    ↓
 [Kotlin/Java Compiler]
- ↓
+    ↓
 Bytecode
 ```
 
@@ -592,13 +596,13 @@ Benefit: No Java stub generation, 2x faster
 **Architecture diagram:**
 ```
 Kotlin Source (.kt)
- ↓
+    ↓
 [KSP Processor] ← Direct Kotlin API access
- ↓
+    ↓
 Generated Code
- ↓
+    ↓
 [Kotlin Compiler]
- ↓
+    ↓
 Bytecode
 ```
 
@@ -620,10 +624,10 @@ Bytecode
 ```
 Configuration time: 8.2s
 KAPT processing: 45.3s
- - Stub generation: 18.7s
- - Room processor: 14.2s
- - Hilt processor: 9.8s
- - Moshi processor: 2.6s
+  - Stub generation: 18.7s
+  - Room processor: 14.2s
+  - Hilt processor: 9.8s
+  - Moshi processor: 2.6s
 Total build: 89.5s
 ```
 
@@ -631,9 +635,9 @@ Total build: 89.5s
 ```
 Configuration time: 8.2s
 KSP processing: 22.1s
- - Room processor: 7.3s
- - Hilt processor: 11.2s
- - Moshi processor: 3.6s
+  - Room processor: 7.3s
+  - Hilt processor: 11.2s
+  - Moshi processor: 3.6s
 Total build: 46.8s
 
 Improvement: 47.7% faster (89.5s → 46.8s)
@@ -645,14 +649,14 @@ Improvement: 47.7% faster (89.5s → 46.8s)
 
 **KSP-supported libraries (2024):**
 ```kotlin
-// Full KSP support
+//  Full KSP support
 - Room 2.6.0+
 - Hilt 2.44+
 - Moshi 1.14.0+ (with moshi-kotlin-codegen)
 - Glide 4.14.0+
 - Auto-generated code libraries
 
-// Partial or no KSP support
+//  Partial or no KSP support
 - Some Dagger modules (use Hilt instead)
 - Legacy annotation processors
 ```
@@ -664,35 +668,35 @@ Improvement: 47.7% faster (89.5s → 46.8s)
 **build.gradle.kts (app module):**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("kotlin-kapt") // KAPT plugin
- id("dagger.hilt.android.plugin")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // KAPT plugin
+    id("dagger.hilt.android.plugin")
 }
 
 android {
- // ... android configuration
+    // ... android configuration
 
- kapt {
- correctErrorTypes = true
- useBuildCache = true
- }
+    kapt {
+        correctErrorTypes = true
+        useBuildCache = true
+    }
 }
 
 dependencies {
- // Room with KAPT
- implementation("androidx.room:room-runtime:2.6.1")
- implementation("androidx.room:room-ktx:2.6.1")
- kapt("androidx.room:room-compiler:2.6.1")
+    // Room with KAPT
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 
- // Hilt with KAPT
- implementation("com.google.dagger:hilt-android:2.50")
- kapt("com.google.dagger:hilt-android-compiler:2.50")
+    // Hilt with KAPT
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
 
- // Moshi with KAPT
- implementation("com.squareup.moshi:moshi:1.15.0")
- implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
- kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    // Moshi with KAPT
+    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 }
 ```
 
@@ -701,56 +705,56 @@ dependencies {
 **build.gradle.kts (project level):**
 ```kotlin
 plugins {
- id("com.android.application") version "8.2.0" apply false
- id("org.jetbrains.kotlin.android") version "1.9.21" apply false
- id("com.google.dagger.hilt.android") version "2.50" apply false
- id("com.google.devtools.ksp") version "1.9.21-1.0.16" apply false // Add KSP
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.21" apply false
+    id("com.google.dagger.hilt.android") version "2.50" apply false
+    id("com.google.devtools.ksp") version "1.9.21-1.0.16" apply false  // Add KSP
 }
 ```
 
 **build.gradle.kts (app module):**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("com.google.devtools.ksp") // Replace kotlin-kapt with KSP
- id("dagger.hilt.android.plugin")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")  // Replace kotlin-kapt with KSP
+    id("dagger.hilt.android.plugin")
 }
 
 android {
- // ... android configuration
+    // ... android configuration
 
- // KSP configuration
- ksp {
- arg("room.schemaLocation", "$projectDir/schemas")
- arg("room.incremental", "true")
- arg("room.expandProjection", "true")
- }
+    // KSP configuration
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
+    }
 
- // Add generated sources to source sets
- applicationVariants.all {
- kotlin.sourceSets {
- getByName(name) {
- kotlin.srcDir("build/generated/ksp/$name/kotlin")
- }
- }
- }
+    // Add generated sources to source sets
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
- // Room with KSP
- implementation("androidx.room:room-runtime:2.6.1")
- implementation("androidx.room:room-ktx:2.6.1")
- ksp("androidx.room:room-compiler:2.6.1") // Changed from kapt to ksp
+    // Room with KSP
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")  // Changed from kapt to ksp
 
- // Hilt with KSP
- implementation("com.google.dagger:hilt-android:2.50")
- ksp("com.google.dagger:hilt-android-compiler:2.50") // Changed from kapt to ksp
+    // Hilt with KSP
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")  // Changed from kapt to ksp
 
- // Moshi with KSP
- implementation("com.squareup.moshi:moshi:1.15.0")
- implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
- ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0") // Changed from kapt to ksp
+    // Moshi with KSP
+    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")  // Changed from kapt to ksp
 }
 ```
 
@@ -759,25 +763,25 @@ dependencies {
 **Before: KAPT generated sources**
 ```kotlin
 sourceSets {
- getByName("main") {
- java.srcDir("build/generated/source/kapt/main")
- java.srcDir("build/generated/source/kapt/debug")
- }
+    getByName("main") {
+        java.srcDir("build/generated/source/kapt/main")
+        java.srcDir("build/generated/source/kapt/debug")
+    }
 }
 ```
 
 **After: KSP generated sources**
 ```kotlin
 kotlin.sourceSets {
- getByName("main") {
- kotlin.srcDir("build/generated/ksp/main/kotlin")
- }
- getByName("debug") {
- kotlin.srcDir("build/generated/ksp/debug/kotlin")
- }
- getByName("release") {
- kotlin.srcDir("build/generated/ksp/release/kotlin")
- }
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+    getByName("debug") {
+        kotlin.srcDir("build/generated/ksp/debug/kotlin")
+    }
+    getByName("release") {
+        kotlin.srcDir("build/generated/ksp/release/kotlin")
+    }
 }
 ```
 
@@ -829,9 +833,9 @@ ls -la app/build/generated/source/kapt/debug/
 # Example generated files:
 app/build/generated/source/kapt/debug/
  com/example/
- AppDatabase_Impl.java
- UserDao_Impl.java
- MainActivity_GeneratedInjector.java
+    AppDatabase_Impl.java
+    UserDao_Impl.java
+    MainActivity_GeneratedInjector.java
 ```
 
 **After migration (KSP):**
@@ -845,9 +849,9 @@ ls -la app/build/generated/ksp/debug/kotlin/
 # Example generated files:
 app/build/generated/ksp/debug/kotlin/
  com/example/
- AppDatabase_Impl.kt
- UserDao_Impl.kt
- MainActivity_GeneratedInjector.kt
+    AppDatabase_Impl.kt
+    UserDao_Impl.kt
+    MainActivity_GeneratedInjector.kt
 ```
 
 **Compare generated code:**
@@ -866,23 +870,23 @@ Some libraries may not support KSP yet. You can use both temporarily:
 **build.gradle.kts:**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("kotlin-kapt") // Keep for unsupported libraries
- id("com.google.devtools.ksp") // Use for supported libraries
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // Keep for unsupported libraries
+    id("com.google.devtools.ksp")  // Use for supported libraries
 }
 
 dependencies {
- // KSP-supported libraries
- implementation("androidx.room:room-runtime:2.6.1")
- ksp("androidx.room:room-compiler:2.6.1")
+    // KSP-supported libraries
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
- implementation("com.google.dagger:hilt-android:2.50")
- ksp("com.google.dagger:hilt-android-compiler:2.50")
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")
 
- // KAPT-only libraries (legacy)
- implementation("com.some.legacy:library:1.0.0")
- kapt("com.some.legacy:library-compiler:1.0.0")
+    // KAPT-only libraries (legacy)
+    implementation("com.some.legacy:library:1.0.0")
+    kapt("com.some.legacy:library-compiler:1.0.0")
 }
 ```
 
@@ -927,28 +931,28 @@ IMPROVEMENT=$(awk "BEGIN {print (($KAPT_TIME - $KSP_TIME) / $KAPT_TIME) * 100}")
 
 echo ""
 echo "Results:"
-echo " KAPT build time: ${KAPT_TIME}s"
-echo " KSP build time: ${KSP_TIME}s"
-echo " Improvement: ${IMPROVEMENT}%"
+echo "  KAPT build time: ${KAPT_TIME}s"
+echo "  KSP build time: ${KSP_TIME}s"
+echo "  Improvement: ${IMPROVEMENT}%"
 ```
 
 **Real-world results:**
 
 ```
 Small project (< 50 files):
- KAPT: 25s
- KSP: 15s
- Improvement: 40%
+  KAPT: 25s
+  KSP: 15s
+  Improvement: 40%
 
 Medium project (50-200 files):
- KAPT: 89s
- KSP: 47s
- Improvement: 47%
+  KAPT: 89s
+  KSP: 47s
+  Improvement: 47%
 
 Large project (200+ files):
- KAPT: 245s
- KSP: 128s
- Improvement: 48%
+  KAPT: 245s
+  KSP: 128s
+  Improvement: 48%
 
 Average improvement: 40-50% faster builds
 ```
@@ -964,9 +968,9 @@ Error: Unresolved reference: AppDatabase_Impl
 **Solution: Update source sets**
 ```kotlin
 kotlin.sourceSets {
- getByName("main") {
- kotlin.srcDir("build/generated/ksp/main/kotlin")
- }
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
 }
 ```
 
@@ -975,16 +979,16 @@ kotlin.sourceSets {
 **KAPT:**
 ```kotlin
 kapt {
- arguments {
- arg("room.schemaLocation", "$projectDir/schemas")
- }
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 ```
 
 **KSP:**
 ```kotlin
 ksp {
- arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 ```
 
@@ -992,12 +996,12 @@ ksp {
 
 ```kotlin
 ksp {
- arg("room.incremental", "true") // Enable incremental for Room
+    arg("room.incremental", "true")  // Enable incremental for Room
 }
 
 tasks.withType<KspTask> {
- // Force incremental processing
- incremental = true
+    // Force incremental processing
+    incremental = true
 }
 ```
 
@@ -1045,17 +1049,17 @@ tasks.withType<KspTask> {
 **Диаграмма архитектуры:**
 ```
 Kotlin Source (.kt)
- ↓
+    ↓
 [Генерация Java заглушек] ← 30-40% времени KAPT
- ↓
+    ↓
 Java Stubs (.java)
- ↓
+    ↓
 [Java Annotation Processor]
- ↓
+    ↓
 Сгенерированный код
- ↓
+    ↓
 [Kotlin/Java Compiler]
- ↓
+    ↓
 Байт-код
 ```
 
@@ -1078,13 +1082,13 @@ Java Stubs (.java)
 **Диаграмма архитектуры:**
 ```
 Kotlin Source (.kt)
- ↓
+    ↓
 [KSP Processor] ← Прямой доступ к Kotlin API
- ↓
+    ↓
 Сгенерированный код
- ↓
+    ↓
 [Kotlin Compiler]
- ↓
+    ↓
 Байт-код
 ```
 
@@ -1106,10 +1110,10 @@ Kotlin Source (.kt)
 ```
 Время конфигурации: 8.2с
 KAPT обработка: 45.3с
- - Генерация заглушек: 18.7с
- - Room processor: 14.2с
- - Hilt processor: 9.8с
- - Moshi processor: 2.6с
+  - Генерация заглушек: 18.7с
+  - Room processor: 14.2с
+  - Hilt processor: 9.8с
+  - Moshi processor: 2.6с
 Общее время сборки: 89.5с
 ```
 
@@ -1117,9 +1121,9 @@ KAPT обработка: 45.3с
 ```
 Время конфигурации: 8.2с
 KSP обработка: 22.1с
- - Room processor: 7.3с
- - Hilt processor: 11.2с
- - Moshi processor: 3.6с
+  - Room processor: 7.3с
+  - Hilt processor: 11.2с
+  - Moshi processor: 3.6с
 Общее время сборки: 46.8с
 
 Улучшение: на 47.7% быстрее (89.5с → 46.8с)
@@ -1131,14 +1135,14 @@ KSP обработка: 22.1с
 
 **Библиотеки с полной поддержкой KSP (2024):**
 ```kotlin
-// Полная поддержка KSP
+//  Полная поддержка KSP
 - Room 2.6.0+
 - Hilt 2.44+
 - Moshi 1.14.0+ (с moshi-kotlin-codegen)
 - Glide 4.14.0+
 - Библиотеки с авто-генерацией кода
 
-// Частичная или отсутствие поддержки KSP
+//  Частичная или отсутствие поддержки KSP
 - Некоторые модули Dagger (используйте Hilt вместо этого)
 - Устаревшие annotation processors
 ```
@@ -1150,27 +1154,27 @@ KSP обработка: 22.1с
 **build.gradle.kts (app модуль):**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("kotlin-kapt") // KAPT плагин
- id("dagger.hilt.android.plugin")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // KAPT плагин
+    id("dagger.hilt.android.plugin")
 }
 
 android {
- kapt {
- correctErrorTypes = true
- useBuildCache = true
- }
+    kapt {
+        correctErrorTypes = true
+        useBuildCache = true
+    }
 }
 
 dependencies {
- // Room с KAPT
- implementation("androidx.room:room-runtime:2.6.1")
- kapt("androidx.room:room-compiler:2.6.1")
+    // Room с KAPT
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 
- // Hilt с KAPT
- implementation("com.google.dagger:hilt-android:2.50")
- kapt("com.google.dagger:hilt-android-compiler:2.50")
+    // Hilt с KAPT
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
 }
 ```
 
@@ -1179,48 +1183,48 @@ dependencies {
 **build.gradle.kts (уровень проекта):**
 ```kotlin
 plugins {
- id("com.android.application") version "8.2.0" apply false
- id("org.jetbrains.kotlin.android") version "1.9.21" apply false
- id("com.google.dagger.hilt.android") version "2.50" apply false
- id("com.google.devtools.ksp") version "1.9.21-1.0.16" apply false // Добавить KSP
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.21" apply false
+    id("com.google.dagger.hilt.android") version "2.50" apply false
+    id("com.google.devtools.ksp") version "1.9.21-1.0.16" apply false  // Добавить KSP
 }
 ```
 
 **build.gradle.kts (app модуль):**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("com.google.devtools.ksp") // Заменить kotlin-kapt на KSP
- id("dagger.hilt.android.plugin")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")  // Заменить kotlin-kapt на KSP
+    id("dagger.hilt.android.plugin")
 }
 
 android {
- // Конфигурация KSP
- ksp {
- arg("room.schemaLocation", "$projectDir/schemas")
- arg("room.incremental", "true")
- arg("room.expandProjection", "true")
- }
+    // Конфигурация KSP
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+        arg("room.incremental", "true")
+        arg("room.expandProjection", "true")
+    }
 
- // Добавить сгенерированные исходники в source sets
- applicationVariants.all {
- kotlin.sourceSets {
- getByName(name) {
- kotlin.srcDir("build/generated/ksp/$name/kotlin")
- }
- }
- }
+    // Добавить сгенерированные исходники в source sets
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
- // Room с KSP
- implementation("androidx.room:room-runtime:2.6.1")
- ksp("androidx.room:room-compiler:2.6.1") // Изменено с kapt на ksp
+    // Room с KSP
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")  // Изменено с kapt на ksp
 
- // Hilt с KSP
- implementation("com.google.dagger:hilt-android:2.50")
- ksp("com.google.dagger:hilt-android-compiler:2.50") // Изменено с kapt на ksp
+    // Hilt с KSP
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")  // Изменено с kapt на ksp
 }
 ```
 
@@ -1229,25 +1233,25 @@ dependencies {
 **До: KAPT сгенерированные исходники**
 ```kotlin
 sourceSets {
- getByName("main") {
- java.srcDir("build/generated/source/kapt/main")
- java.srcDir("build/generated/source/kapt/debug")
- }
+    getByName("main") {
+        java.srcDir("build/generated/source/kapt/main")
+        java.srcDir("build/generated/source/kapt/debug")
+    }
 }
 ```
 
 **После: KSP сгенерированные исходники**
 ```kotlin
 kotlin.sourceSets {
- getByName("main") {
- kotlin.srcDir("build/generated/ksp/main/kotlin")
- }
- getByName("debug") {
- kotlin.srcDir("build/generated/ksp/debug/kotlin")
- }
- getByName("release") {
- kotlin.srcDir("build/generated/ksp/release/kotlin")
- }
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
+    getByName("debug") {
+        kotlin.srcDir("build/generated/ksp/debug/kotlin")
+    }
+    getByName("release") {
+        kotlin.srcDir("build/generated/ksp/release/kotlin")
+    }
 }
 ```
 
@@ -1299,9 +1303,9 @@ ls -la app/build/generated/source/kapt/debug/
 # Пример сгенерированных файлов:
 app/build/generated/source/kapt/debug/
  com/example/
- AppDatabase_Impl.java
- UserDao_Impl.java
- MainActivity_GeneratedInjector.java
+    AppDatabase_Impl.java
+    UserDao_Impl.java
+    MainActivity_GeneratedInjector.java
 ```
 
 **После миграции (KSP):**
@@ -1315,9 +1319,9 @@ ls -la app/build/generated/ksp/debug/kotlin/
 # Пример сгенерированных файлов:
 app/build/generated/ksp/debug/kotlin/
  com/example/
- AppDatabase_Impl.kt
- UserDao_Impl.kt
- MainActivity_GeneratedInjector.kt
+    AppDatabase_Impl.kt
+    UserDao_Impl.kt
+    MainActivity_GeneratedInjector.kt
 ```
 
 ### Смешанные KAPT/KSP Проекты
@@ -1327,20 +1331,20 @@ app/build/generated/ksp/debug/kotlin/
 **build.gradle.kts:**
 ```kotlin
 plugins {
- id("com.android.application")
- id("org.jetbrains.kotlin.android")
- id("kotlin-kapt") // Оставить для неподдерживаемых библиотек
- id("com.google.devtools.ksp") // Использовать для поддерживаемых библиотек
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")  // Оставить для неподдерживаемых библиотек
+    id("com.google.devtools.ksp")  // Использовать для поддерживаемых библиотек
 }
 
 dependencies {
- // Библиотеки с поддержкой KSP
- implementation("androidx.room:room-runtime:2.6.1")
- ksp("androidx.room:room-compiler:2.6.1")
+    // Библиотеки с поддержкой KSP
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
- // Библиотеки только с KAPT (устаревшие)
- implementation("com.some.legacy:library:1.0.0")
- kapt("com.some.legacy:library-compiler:1.0.0")
+    // Библиотеки только с KAPT (устаревшие)
+    implementation("com.some.legacy:library:1.0.0")
+    kapt("com.some.legacy:library-compiler:1.0.0")
 }
 ```
 
@@ -1383,28 +1387,28 @@ IMPROVEMENT=$(awk "BEGIN {print (($KAPT_TIME - $KSP_TIME) / $KAPT_TIME) * 100}")
 
 echo ""
 echo "Результаты:"
-echo " Время сборки KAPT: ${KAPT_TIME}с"
-echo " Время сборки KSP: ${KSP_TIME}с"
-echo " Улучшение: ${IMPROVEMENT}%"
+echo "  Время сборки KAPT: ${KAPT_TIME}с"
+echo "  Время сборки KSP: ${KSP_TIME}с"
+echo "  Улучшение: ${IMPROVEMENT}%"
 ```
 
 **Реальные результаты:**
 
 ```
 Малый проект (< 50 файлов):
- KAPT: 25с
- KSP: 15с
- Улучшение: 40%
+  KAPT: 25с
+  KSP: 15с
+  Улучшение: 40%
 
 Средний проект (50-200 файлов):
- KAPT: 89с
- KSP: 47с
- Улучшение: 47%
+  KAPT: 89с
+  KSP: 47с
+  Улучшение: 47%
 
 Большой проект (200+ файлов):
- KAPT: 245с
- KSP: 128с
- Улучшение: 48%
+  KAPT: 245с
+  KSP: 128с
+  Улучшение: 48%
 
 Среднее улучшение: на 40-50% быстрее сборки
 ```
@@ -1420,9 +1424,9 @@ Error: Unresolved reference: AppDatabase_Impl
 **Решение: Обновить source sets**
 ```kotlin
 kotlin.sourceSets {
- getByName("main") {
- kotlin.srcDir("build/generated/ksp/main/kotlin")
- }
+    getByName("main") {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
 }
 ```
 
@@ -1431,16 +1435,16 @@ kotlin.sourceSets {
 **KAPT:**
 ```kotlin
 kapt {
- arguments {
- arg("room.schemaLocation", "$projectDir/schemas")
- }
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 ```
 
 **KSP:**
 ```kotlin
 ksp {
- arg("room.schemaLocation", "$projectDir/schemas")
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 ```
 
@@ -1448,12 +1452,12 @@ ksp {
 
 ```kotlin
 ksp {
- arg("room.incremental", "true") // Включить инкрементальную обработку для Room
+    arg("room.incremental", "true")  // Включить инкрементальную обработку для Room
 }
 
 tasks.withType<KspTask> {
- // Принудительная инкрементальная обработка
- incremental = true
+    // Принудительная инкрементальная обработка
+    incremental = true
 }
 ```
 
@@ -1491,10 +1495,12 @@ tasks.withType<KspTask> {
 - [Room with KSP](https://developer.android.com/jetpack/androidx/releases/room#ksp)
 - [Hilt with KSP](https://dagger.dev/dev-guide/ksp.html)
 
+
 ## Follow-ups
 
 - 
 - 
+
 
 ## Related Questions
 
@@ -1502,6 +1508,7 @@ tasks.withType<KspTask> {
 
 - [[c-gradle]]
 - [[c-performance-optimization]]
+
 
 ### Related (Medium)
 - [[q-kapt-vs-ksp--android--medium]] - Annotation Processing

@@ -25,6 +25,7 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [android/background-execution, android/service, background-tasks, difficulty/easy]
+
 ---
 
 # Вопрос (RU)
@@ -73,13 +74,13 @@ WorkManager.getInstance(context).enqueue(request)
 ```kotlin
 // ✅ Пример Bound Service
 class LocalService : Service() {
- private val binder = LocalBinder()
+    private val binder = LocalBinder()
 
- inner class LocalBinder : Binder() {
- fun getService(): LocalService = this@LocalService
- }
+    inner class LocalBinder : Binder() {
+        fun getService(): LocalService = this@LocalService
+    }
 
- override fun onBind(intent: Intent): IBinder = binder
+    override fun onBind(intent: Intent): IBinder = binder
 }
 ```
 
@@ -121,13 +122,13 @@ Provides an interface for interaction with other components via `bindService()`.
 ```kotlin
 // ✅ Bound Service example
 class LocalService : Service() {
- private val binder = LocalBinder()
+    private val binder = LocalBinder()
 
- inner class LocalBinder : Binder() {
- fun getService(): LocalService = this@LocalService
- }
+    inner class LocalBinder : Binder() {
+        fun getService(): LocalService = this@LocalService
+    }
 
- override fun onBind(intent: Intent): IBinder = binder
+    override fun onBind(intent: Intent): IBinder = binder
 }
 ```
 
@@ -153,7 +154,7 @@ class LocalService : Service() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Android components overview
+-  - Android components overview
 
 ### Related (Same Level)
 - [[q-service-component--android--medium]] - `Service` lifecycle and implementation

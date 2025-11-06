@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-workmanager]
+related: [c-jobscheduler, c-workmanager]
 created: 2025-10-12
 updated: 2025-10-29
 tags: [alarmmanager, android/background-execution, difficulty/medium, foreground-service, jobscheduler, workmanager]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -44,16 +45,16 @@ Android предоставляет несколько API для фоновой 
 ```kotlin
 // ✅ Правильно: периодическая синхронизация с ограничениями
 val constraints = Constraints.Builder()
- .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ Только Wi-Fi
- .setRequiresBatteryNotLow(true) // ✅ Экономия батареи
- .build()
+    .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ Только Wi-Fi
+    .setRequiresBatteryNotLow(true)                // ✅ Экономия батареи
+    .build()
 
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(24, TimeUnit.HOURS)
- .setConstraints(constraints)
- .build()
+    .setConstraints(constraints)
+    .build()
 
 WorkManager.getInstance(context)
- .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
+    .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
 ```
 
 **AlarmManager — точный тайминг:**
@@ -62,15 +63,15 @@ WorkManager.getInstance(context)
 // ✅ Правильно: точный будильник для критичных событий
 val alarmManager = context.getSystemService(AlarmManager::class.java)
 val pendingIntent = PendingIntent.getBroadcast(
- context, 0,
- Intent(context, AlarmReceiver::class.java),
- PendingIntent.FLAG_IMMUTABLE // ✅ Безопасность
+    context, 0,
+    Intent(context, AlarmReceiver::class.java),
+    PendingIntent.FLAG_IMMUTABLE // ✅ Безопасность
 )
 
 alarmManager.setExactAndAllowWhileIdle(
- AlarmManager.RTC_WAKEUP, // ✅ Будит устройство
- triggerTime,
- pendingIntent
+    AlarmManager.RTC_WAKEUP, // ✅ Будит устройство
+    triggerTime,
+    pendingIntent
 )
 ```
 
@@ -79,11 +80,11 @@ alarmManager.setExactAndAllowWhileIdle(
 ```kotlin
 // ✅ Правильно: музыкальный плеер с уведомлением
 class MusicService : Service() {
- override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
- val notification = createNotification() // ✅ Обязательное уведомление
- startForeground(NOTIFICATION_ID, notification)
- return START_STICKY // ✅ Перезапуск после kill
- }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = createNotification() // ✅ Обязательное уведомление
+        startForeground(NOTIFICATION_ID, notification)
+        return START_STICKY // ✅ Перезапуск после kill
+    }
 }
 
 // ❌ Неправильно: использовать для скрытой работы без уведомления
@@ -109,16 +110,16 @@ Android provides multiple APIs for background work with different guarantees and
 ```kotlin
 // ✅ Correct: periodic sync with constraints
 val constraints = Constraints.Builder()
- .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ Wi-Fi only
- .setRequiresBatteryNotLow(true) // ✅ Battery saving
- .build()
+    .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ Wi-Fi only
+    .setRequiresBatteryNotLow(true)                // ✅ Battery saving
+    .build()
 
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(24, TimeUnit.HOURS)
- .setConstraints(constraints)
- .build()
+    .setConstraints(constraints)
+    .build()
 
 WorkManager.getInstance(context)
- .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
+    .enqueueUniquePeriodicWork("sync", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
 ```
 
 **AlarmManager — exact timing:**
@@ -127,15 +128,15 @@ WorkManager.getInstance(context)
 // ✅ Correct: exact alarm for critical events
 val alarmManager = context.getSystemService(AlarmManager::class.java)
 val pendingIntent = PendingIntent.getBroadcast(
- context, 0,
- Intent(context, AlarmReceiver::class.java),
- PendingIntent.FLAG_IMMUTABLE // ✅ Security
+    context, 0,
+    Intent(context, AlarmReceiver::class.java),
+    PendingIntent.FLAG_IMMUTABLE // ✅ Security
 )
 
 alarmManager.setExactAndAllowWhileIdle(
- AlarmManager.RTC_WAKEUP, // ✅ Wakes device
- triggerTime,
- pendingIntent
+    AlarmManager.RTC_WAKEUP, // ✅ Wakes device
+    triggerTime,
+    pendingIntent
 )
 ```
 
@@ -144,11 +145,11 @@ alarmManager.setExactAndAllowWhileIdle(
 ```kotlin
 // ✅ Correct: music player with notification
 class MusicService : Service() {
- override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
- val notification = createNotification() // ✅ Mandatory notification
- startForeground(NOTIFICATION_ID, notification)
- return START_STICKY // ✅ Restart after kill
- }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = createNotification() // ✅ Mandatory notification
+        startForeground(NOTIFICATION_ID, notification)
+        return START_STICKY // ✅ Restart after kill
+    }
 }
 
 // ❌ Wrong: use for hidden work without notification
@@ -168,7 +169,7 @@ class MusicService : Service() {
 ## References
 
 - [[c-workmanager]] - WorkManager concept
-- - AlarmManager concept
+-  - AlarmManager concept
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Background Execution Limits](https://developer.android.com/about/versions/oreo/background)
 - [Schedule Tasks with WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
@@ -177,12 +178,12 @@ class MusicService : Service() {
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
-- - `Lifecycle` management
+-  - `Lifecycle` management
 
 ### Related (Same Level)
 - [[q-workmanager-return-result--android--medium]] - WorkManager results
 - [[q-foreground-service-types--android--medium]] - Foreground services
-- - Background limits
+-  - Background limits
 
 ### Advanced (Harder)
 - [[q-workmanager-advanced--android--medium]] - Advanced WorkManager

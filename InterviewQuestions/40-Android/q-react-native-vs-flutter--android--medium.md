@@ -24,6 +24,7 @@ created: 2025-10-06
 updated: 2025-10-28
 
 tags: [android/cross-platform, android/kmp, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
@@ -50,14 +51,14 @@ tags: [android/cross-platform, android/kmp, difficulty/medium]
 ```kotlin
 // ✅ React Native: нативный модуль для Android
 class ToastModule(reactContext: ReactApplicationContext) :
- ReactContextBaseJavaModule(reactContext) {
+    ReactContextBaseJavaModule(reactContext) {
 
- override fun getName() = "ToastModule"
+    override fun getName() = "ToastModule"
 
- @ReactMethod
- fun show(message: String) {
- Toast.makeText(reactApplicationContext, message, LENGTH_SHORT).show()
- }
+    @ReactMethod
+    fun show(message: String) {
+        Toast.makeText(reactApplicationContext, message, LENGTH_SHORT).show()
+    }
 }
 ```
 
@@ -69,16 +70,16 @@ class ToastModule(reactContext: ReactApplicationContext) :
 ```kotlin
 // ✅ Flutter: платформенный канал для Android
 class MainActivity : FlutterActivity() {
- private val CHANNEL = "com.example/toast"
+    private val CHANNEL = "com.example/toast"
 
- override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
- MethodChannel(flutterEngine.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
- if (call.method == "showToast") {
- Toast.makeText(this, call.arguments as String, LENGTH_SHORT).show()
- result.success(null)
- }
- }
- }
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        MethodChannel(flutterEngine.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
+            if (call.method == "showToast") {
+                Toast.makeText(this, call.arguments as String, LENGTH_SHORT).show()
+                result.success(null)
+            }
+        }
+    }
 }
 ```
 
@@ -97,19 +98,19 @@ class MainActivity : FlutterActivity() {
 ```dart
 // ✅ Flutter: оптимизированный рендеринг списков
 ListView.builder(
- itemCount: 10000,
- itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
+  itemCount: 10000,
+  itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
 )
 ```
 
 ```javascript
 // ❌ React Native: может лагать на больших списках без оптимизации
 <FlatList
- data={items}
- renderItem={({item}) => <Text>{item.title}</Text>}
- // ✅ Оптимизация:
- removeClippedSubviews={true}
- maxToRenderPerBatch={10}
+  data={items}
+  renderItem={({item}) => <Text>{item.title}</Text>}
+  // ✅ Оптимизация:
+  removeClippedSubviews={true}
+  maxToRenderPerBatch={10}
 />
 ```
 
@@ -141,15 +142,15 @@ ListView.builder(
 ```kotlin
 // ❌ React Native: требует синхронизации стилей с нативными изменениями
 <View style={{backgroundColor: colors.primary}}>
- <Button title="Native Button" />
+  <Button title="Native Button" />
 </View>
 ```
 
 ```dart
 // ✅ Flutter: полный контроль над пикселями, независимость от платформы
 Container(
- color: Theme.of(context).primaryColor,
- child: ElevatedButton(child: Text('Flutter Button')),
+  color: Theme.of(context).primaryColor,
+  child: ElevatedButton(child: Text('Flutter Button')),
 )
 ```
 
@@ -179,14 +180,14 @@ Container(
 ```kotlin
 // ✅ React Native: native module for Android
 class ToastModule(reactContext: ReactApplicationContext) :
- ReactContextBaseJavaModule(reactContext) {
+    ReactContextBaseJavaModule(reactContext) {
 
- override fun getName() = "ToastModule"
+    override fun getName() = "ToastModule"
 
- @ReactMethod
- fun show(message: String) {
- Toast.makeText(reactApplicationContext, message, LENGTH_SHORT).show()
- }
+    @ReactMethod
+    fun show(message: String) {
+        Toast.makeText(reactApplicationContext, message, LENGTH_SHORT).show()
+    }
 }
 ```
 
@@ -198,16 +199,16 @@ class ToastModule(reactContext: ReactApplicationContext) :
 ```kotlin
 // ✅ Flutter: platform channel for Android
 class MainActivity : FlutterActivity() {
- private val CHANNEL = "com.example/toast"
+    private val CHANNEL = "com.example/toast"
 
- override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
- MethodChannel(flutterEngine.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
- if (call.method == "showToast") {
- Toast.makeText(this, call.arguments as String, LENGTH_SHORT).show()
- result.success(null)
- }
- }
- }
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        MethodChannel(flutterEngine.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
+            if (call.method == "showToast") {
+                Toast.makeText(this, call.arguments as String, LENGTH_SHORT).show()
+                result.success(null)
+            }
+        }
+    }
 }
 ```
 
@@ -226,19 +227,19 @@ class MainActivity : FlutterActivity() {
 ```dart
 // ✅ Flutter: optimized list rendering
 ListView.builder(
- itemCount: 10000,
- itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
+  itemCount: 10000,
+  itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
 )
 ```
 
 ```javascript
 // ❌ React Native: can lag on large lists without optimization
 <FlatList
- data={items}
- renderItem={({item}) => <Text>{item.title}</Text>}
- // ✅ Optimization:
- removeClippedSubviews={true}
- maxToRenderPerBatch={10}
+  data={items}
+  renderItem={({item}) => <Text>{item.title}</Text>}
+  // ✅ Optimization:
+  removeClippedSubviews={true}
+  maxToRenderPerBatch={10}
 />
 ```
 
@@ -270,15 +271,15 @@ ListView.builder(
 ```kotlin
 // ❌ React Native: requires style sync with native changes
 <View style={{backgroundColor: colors.primary}}>
- <Button title="Native Button" />
+  <Button title="Native Button" />
 </View>
 ```
 
 ```dart
 // ✅ Flutter: full pixel control, platform-independent
 Container(
- color: Theme.of(context).primaryColor,
- child: ElevatedButton(child: Text('Flutter Button')),
+  color: Theme.of(context).primaryColor,
+  child: ElevatedButton(child: Text('Flutter Button')),
 )
 ```
 
@@ -315,15 +316,15 @@ Container(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Native vs cross-platform trade-offs
-- - Android UI fundamentals
+-  - Native vs cross-platform trade-offs
+-  - Android UI fundamentals
 
 ### Related (Medium)
 - [[q-kotlin-multiplatform-overview--kotlin--hard]] - Kotlin Multiplatform approach
-- - UI toolkit comparison within Android
-- - Hybrid approaches
+-  - UI toolkit comparison within Android
+-  - Hybrid approaches
 
 ### Advanced (Harder)
-- - Flutter rendering pipeline
-- - Bridge performance tuning
-- - Security in cross-platform frameworks
+-  - Flutter rendering pipeline
+-  - Bridge performance tuning
+-  - Security in cross-platform frameworks

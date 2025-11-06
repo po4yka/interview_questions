@@ -1,7 +1,7 @@
 ---
 id: android-352
 title: How To Catch The Earliest Entry Point Into The Application / Как поймать самую
- раннюю точку входа в приложение
+  раннюю точку входа в приложение
 aliases:
 - How To Catch The Earliest Entry Point Into The Application
 - Как поймать самую раннюю точку входа в приложение
@@ -25,6 +25,7 @@ updated: 2025-10-31
 tags:
 - android/lifecycle
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -42,33 +43,33 @@ The earliest entry point in an Android application is the `Application.onCreate(
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- // This is called before any other component
- // Initialize libraries, logging, crash reporting
- initializeTimber()
- initializeCrashlytics()
- initializeLeakCanary()
+        // This is called before any other component
+        // Initialize libraries, logging, crash reporting
+        initializeTimber()
+        initializeCrashlytics()
+        initializeLeakCanary()
 
- Log.d("App", "Application onCreate called")
- }
+        Log.d("App", "Application onCreate called")
+    }
 
- private fun initializeTimber() {
- if (BuildConfig.DEBUG) {
- Timber.plant(Timber.DebugTree())
- }
- }
+    private fun initializeTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+    }
 }
 ```
 
 **Register in AndroidManifest.xml**:
 ```xml
 <application
- android:name=".MyApplication"
- android:icon="@mipmap/ic_launcher"
- android:label="@string/app_name">
- <!-- Activities and other components -->
+    android:name=".MyApplication"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name">
+    <!-- Activities and other components -->
 </application>
 ```
 
@@ -76,13 +77,13 @@ class MyApplication : Application() {
 
 ```
 1. Process Creation
- ↓
-2. ContentProvider.onCreate() ← EARLIEST
- ↓
+   ↓
+2. ContentProvider.onCreate()  ← EARLIEST
+   ↓
 3. Application.attachBaseContext()
- ↓
-4. Application.onCreate() ← Standard entry point
- ↓
+   ↓
+4. Application.onCreate()      ← Standard entry point
+   ↓
 5. Activity.onCreate() / Service.onCreate() / BroadcastReceiver.onReceive()
 ```
 
@@ -92,34 +93,34 @@ class MyApplication : Application() {
 
 ```kotlin
 class InitializationProvider : ContentProvider() {
- override fun onCreate(): Boolean {
- // This runs BEFORE Application.onCreate()
- val context = context ?: return false
+    override fun onCreate(): Boolean {
+        // This runs BEFORE Application.onCreate()
+        val context = context ?: return false
 
- // Initialize critical libraries here
- Timber.plant(Timber.DebugTree())
+        // Initialize critical libraries here
+        Timber.plant(Timber.DebugTree())
 
- Log.d("Init", "ContentProvider onCreate - earliest entry point")
+        Log.d("Init", "ContentProvider onCreate - earliest entry point")
 
- return true
- }
+        return true
+    }
 
- // Required methods (can be empty)
- override fun query(...): Cursor? = null
- override fun insert(...): Uri? = null
- override fun update(...): Int = 0
- override fun delete(...): Int = 0
- override fun getType(uri: Uri): String? = null
+    // Required methods (can be empty)
+    override fun query(...): Cursor? = null
+    override fun insert(...): Uri? = null
+    override fun update(...): Int = 0
+    override fun delete(...): Int = 0
+    override fun getType(uri: Uri): String? = null
 }
 ```
 
 **Register in AndroidManifest.xml**:
 ```xml
 <application>
- <provider
- android:name=".InitializationProvider"
- android:authorities="${applicationId}.initialization"
- android:exported="false" />
+    <provider
+        android:name=".InitializationProvider"
+        android:authorities="${applicationId}.initialization"
+        android:exported="false" />
 </application>
 ```
 
@@ -129,23 +130,23 @@ Called before `onCreate()` for context configuration:
 
 ```kotlin
 class MyApplication : Application() {
- override fun attachBaseContext(base: Context) {
- super.attachBaseContext(base)
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
 
- // Called before onCreate()
- // Useful for MultiDex, context wrapping
- MultiDex.install(this)
+        // Called before onCreate()
+        // Useful for MultiDex, context wrapping
+        MultiDex.install(this)
 
- // Language/locale changes
- val config = Configuration(base.resources.configuration)
- config.setLocale(Locale("ru"))
- applyOverrideConfiguration(config)
- }
+        // Language/locale changes
+        val config = Configuration(base.resources.configuration)
+        config.setLocale(Locale("ru"))
+        applyOverrideConfiguration(config)
+    }
 
- override fun onCreate() {
- super.onCreate()
- // Regular initialization
- }
+    override fun onCreate() {
+        super.onCreate()
+        // Regular initialization
+    }
 }
 ```
 
@@ -155,44 +156,44 @@ Modern approach using Jetpack App Startup:
 
 ```kotlin
 class TimberInitializer : Initializer<Unit> {
- override fun create(context: Context) {
- Timber.plant(Timber.DebugTree())
- Log.d("Startup", "Timber initialized")
- }
+    override fun create(context: Context) {
+        Timber.plant(Timber.DebugTree())
+        Log.d("Startup", "Timber initialized")
+    }
 
- override fun dependencies(): List<Class<out Initializer<*>>> {
- return emptyList()
- }
+    override fun dependencies(): List<Class<out Initializer<*>>> {
+        return emptyList()
+    }
 }
 
 class WorkManagerInitializer : Initializer<WorkManager> {
- override fun create(context: Context): WorkManager {
- val configuration = Configuration.Builder()
- .setMinimumLoggingLevel(Log.DEBUG)
- .build()
- WorkManager.initialize(context, configuration)
- return WorkManager.getInstance(context)
- }
+    override fun create(context: Context): WorkManager {
+        val configuration = Configuration.Builder()
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .build()
+        WorkManager.initialize(context, configuration)
+        return WorkManager.getInstance(context)
+    }
 
- override fun dependencies(): List<Class<out Initializer<*>>> {
- // Depends on Timber being initialized first
- return listOf(TimberInitializer::class.java)
- }
+    override fun dependencies(): List<Class<out Initializer<*>>> {
+        // Depends on Timber being initialized first
+        return listOf(TimberInitializer::class.java)
+    }
 }
 ```
 
 **Register in AndroidManifest.xml**:
 ```xml
 <provider
- android:name="androidx.startup.InitializationProvider"
- android:authorities="${applicationId}.androidx-startup"
- android:exported="false">
- <meta-data
- android:name="com.example.TimberInitializer"
- android:value="androidx.startup" />
- <meta-data
- android:name="com.example.WorkManagerInitializer"
- android:value="androidx.startup" />
+    android:name="androidx.startup.InitializationProvider"
+    android:authorities="${applicationId}.androidx-startup"
+    android:exported="false">
+    <meta-data
+        android:name="com.example.TimberInitializer"
+        android:value="androidx.startup" />
+    <meta-data
+        android:name="com.example.WorkManagerInitializer"
+        android:value="androidx.startup" />
 </provider>
 ```
 
@@ -202,38 +203,38 @@ Track when app comes to foreground/background:
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
- private var activityReferences = 0
- private var isActivityChangingConfigurations = false
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            private var activityReferences = 0
+            private var isActivityChangingConfigurations = false
 
- override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
- Log.d("Lifecycle", "Activity created: ${activity.localClassName}")
- }
+            override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+                Log.d("Lifecycle", "Activity created: ${activity.localClassName}")
+            }
 
- override fun onActivityStarted(activity: Activity) {
- if (++activityReferences == 1 && !isActivityChangingConfigurations) {
- // App entered foreground
- Log.d("Lifecycle", "App entered foreground")
- }
- }
+            override fun onActivityStarted(activity: Activity) {
+                if (++activityReferences == 1 && !isActivityChangingConfigurations) {
+                    // App entered foreground
+                    Log.d("Lifecycle", "App entered foreground")
+                }
+            }
 
- override fun onActivityStopped(activity: Activity) {
- isActivityChangingConfigurations = activity.isChangingConfigurations
- if (--activityReferences == 0 && !isActivityChangingConfigurations) {
- // App entered background
- Log.d("Lifecycle", "App entered background")
- }
- }
+            override fun onActivityStopped(activity: Activity) {
+                isActivityChangingConfigurations = activity.isChangingConfigurations
+                if (--activityReferences == 0 && !isActivityChangingConfigurations) {
+                    // App entered background
+                    Log.d("Lifecycle", "App entered background")
+                }
+            }
 
- override fun onActivityResumed(activity: Activity) {}
- override fun onActivityPaused(activity: Activity) {}
- override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
- override fun onActivityDestroyed(activity: Activity) {}
- })
- }
+            override fun onActivityResumed(activity: Activity) {}
+            override fun onActivityPaused(activity: Activity) {}
+            override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
+            override fun onActivityDestroyed(activity: Activity) {}
+        })
+    }
 }
 ```
 
@@ -243,23 +244,23 @@ Use `Lifecycle` library for app lifecycle:
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
- override fun onStart(owner: LifecycleOwner) {
- super.onStart(owner)
- // App is in foreground
- Log.d("Lifecycle", "App foreground")
- }
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) {
+                super.onStart(owner)
+                // App is in foreground
+                Log.d("Lifecycle", "App foreground")
+            }
 
- override fun onStop(owner: LifecycleOwner) {
- super.onStop(owner)
- // App is in background
- Log.d("Lifecycle", "App background")
- }
- })
- }
+            override fun onStop(owner: LifecycleOwner) {
+                super.onStop(owner)
+                // App is in background
+                Log.d("Lifecycle", "App background")
+            }
+        })
+    }
 }
 ```
 
@@ -267,44 +268,44 @@ class MyApplication : Application() {
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- // Logging
- initTimber()
+        // Logging
+        initTimber()
 
- // Crash reporting
- FirebaseCrashlytics.getInstance()
+        // Crash reporting
+        FirebaseCrashlytics.getInstance()
 
- // Dependency injection
- startKoin {
- androidContext(this@MyApplication)
- modules(appModule)
- }
+        // Dependency injection
+        startKoin {
+            androidContext(this@MyApplication)
+            modules(appModule)
+        }
 
- // Image loading
- Coil.setImageLoader {
- ImageLoader.Builder(this)
- .crossfade(true)
- .build()
- }
+        // Image loading
+        Coil.setImageLoader {
+            ImageLoader.Builder(this)
+                .crossfade(true)
+                .build()
+        }
 
- // Network monitoring
- if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
- val connectivityManager = getSystemService(ConnectivityManager::class.java)
- connectivityManager.registerDefaultNetworkCallback(networkCallback)
- }
+        // Network monitoring
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val connectivityManager = getSystemService(ConnectivityManager::class.java)
+            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        }
 
- // Strict mode (debug only)
- if (BuildConfig.DEBUG) {
- StrictMode.setThreadPolicy(
- StrictMode.ThreadPolicy.Builder()
- .detectAll()
- .penaltyLog()
- .build()
- )
- }
- }
+        // Strict mode (debug only)
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+            )
+        }
+    }
 }
 ```
 
@@ -318,27 +319,30 @@ class MyApplication : Application() {
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- // Critical synchronous init
- initCrashReporting()
+        // Critical synchronous init
+        initCrashReporting()
 
- // Non-critical async init
- GlobalScope.launch(Dispatchers.IO) {
- initAnalytics()
- preloadData()
- }
- }
+        // Non-critical async init
+        GlobalScope.launch(Dispatchers.IO) {
+            initAnalytics()
+            preloadData()
+        }
+    }
 }
 ```
+
 
 # Question (EN)
 > How To Catch The Earliest Entry Point Into The `Application`
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any `Activity`, `Service`, or other application components are created. However, `ContentProvider` initialization happens even earlier.
@@ -347,33 +351,33 @@ The earliest entry point in an Android application is the `Application.onCreate(
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- // This is called before any other component
- // Initialize libraries, logging, crash reporting
- initializeTimber()
- initializeCrashlytics()
- initializeLeakCanary()
+        // This is called before any other component
+        // Initialize libraries, logging, crash reporting
+        initializeTimber()
+        initializeCrashlytics()
+        initializeLeakCanary()
 
- Log.d("App", "Application onCreate called")
- }
+        Log.d("App", "Application onCreate called")
+    }
 
- private fun initializeTimber() {
- if (BuildConfig.DEBUG) {
- Timber.plant(Timber.DebugTree())
- }
- }
+    private fun initializeTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+    }
 }
 ```
 
 **Register in AndroidManifest.xml**:
 ```xml
 <application
- android:name=".MyApplication"
- android:icon="@mipmap/ic_launcher"
- android:label="@string/app_name">
- <!-- Activities and other components -->
+    android:name=".MyApplication"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name">
+    <!-- Activities and other components -->
 </application>
 ```
 
@@ -381,13 +385,13 @@ class MyApplication : Application() {
 
 ```
 1. Process Creation
- ↓
-2. ContentProvider.onCreate() ← EARLIEST
- ↓
+   ↓
+2. ContentProvider.onCreate()  ← EARLIEST
+   ↓
 3. Application.attachBaseContext()
- ↓
-4. Application.onCreate() ← Standard entry point
- ↓
+   ↓
+4. Application.onCreate()      ← Standard entry point
+   ↓
 5. Activity.onCreate() / Service.onCreate() / BroadcastReceiver.onReceive()
 ```
 
@@ -397,34 +401,34 @@ class MyApplication : Application() {
 
 ```kotlin
 class InitializationProvider : ContentProvider() {
- override fun onCreate(): Boolean {
- // This runs BEFORE Application.onCreate()
- val context = context ?: return false
+    override fun onCreate(): Boolean {
+        // This runs BEFORE Application.onCreate()
+        val context = context ?: return false
 
- // Initialize critical libraries here
- Timber.plant(Timber.DebugTree())
+        // Initialize critical libraries here
+        Timber.plant(Timber.DebugTree())
 
- Log.d("Init", "ContentProvider onCreate - earliest entry point")
+        Log.d("Init", "ContentProvider onCreate - earliest entry point")
 
- return true
- }
+        return true
+    }
 
- // Required methods (can be empty)
- override fun query(...): Cursor? = null
- override fun insert(...): Uri? = null
- override fun update(...): Int = 0
- override fun delete(...): Int = 0
- override fun getType(uri: Uri): String? = null
+    // Required methods (can be empty)
+    override fun query(...): Cursor? = null
+    override fun insert(...): Uri? = null
+    override fun update(...): Int = 0
+    override fun delete(...): Int = 0
+    override fun getType(uri: Uri): String? = null
 }
 ```
 
 **Register in AndroidManifest.xml**:
 ```xml
 <application>
- <provider
- android:name=".InitializationProvider"
- android:authorities="${applicationId}.initialization"
- android:exported="false" />
+    <provider
+        android:name=".InitializationProvider"
+        android:authorities="${applicationId}.initialization"
+        android:exported="false" />
 </application>
 ```
 
@@ -434,23 +438,23 @@ Called before `onCreate()` for context configuration:
 
 ```kotlin
 class MyApplication : Application() {
- override fun attachBaseContext(base: Context) {
- super.attachBaseContext(base)
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
 
- // Called before onCreate()
- // Useful for MultiDex, context wrapping
- MultiDex.install(this)
+        // Called before onCreate()
+        // Useful for MultiDex, context wrapping
+        MultiDex.install(this)
 
- // Language/locale changes
- val config = Configuration(base.resources.configuration)
- config.setLocale(Locale("ru"))
- applyOverrideConfiguration(config)
- }
+        // Language/locale changes
+        val config = Configuration(base.resources.configuration)
+        config.setLocale(Locale("ru"))
+        applyOverrideConfiguration(config)
+    }
 
- override fun onCreate() {
- super.onCreate()
- // Regular initialization
- }
+    override fun onCreate() {
+        super.onCreate()
+        // Regular initialization
+    }
 }
 ```
 
@@ -460,44 +464,44 @@ Modern approach using Jetpack App Startup:
 
 ```kotlin
 class TimberInitializer : Initializer<Unit> {
- override fun create(context: Context) {
- Timber.plant(Timber.DebugTree())
- Log.d("Startup", "Timber initialized")
- }
+    override fun create(context: Context) {
+        Timber.plant(Timber.DebugTree())
+        Log.d("Startup", "Timber initialized")
+    }
 
- override fun dependencies(): List<Class<out Initializer<*>>> {
- return emptyList()
- }
+    override fun dependencies(): List<Class<out Initializer<*>>> {
+        return emptyList()
+    }
 }
 
 class WorkManagerInitializer : Initializer<WorkManager> {
- override fun create(context: Context): WorkManager {
- val configuration = Configuration.Builder()
- .setMinimumLoggingLevel(Log.DEBUG)
- .build()
- WorkManager.initialize(context, configuration)
- return WorkManager.getInstance(context)
- }
+    override fun create(context: Context): WorkManager {
+        val configuration = Configuration.Builder()
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .build()
+        WorkManager.initialize(context, configuration)
+        return WorkManager.getInstance(context)
+    }
 
- override fun dependencies(): List<Class<out Initializer<*>>> {
- // Depends on Timber being initialized first
- return listOf(TimberInitializer::class.java)
- }
+    override fun dependencies(): List<Class<out Initializer<*>>> {
+        // Depends on Timber being initialized first
+        return listOf(TimberInitializer::class.java)
+    }
 }
 ```
 
 **Register in AndroidManifest.xml**:
 ```xml
 <provider
- android:name="androidx.startup.InitializationProvider"
- android:authorities="${applicationId}.androidx-startup"
- android:exported="false">
- <meta-data
- android:name="com.example.TimberInitializer"
- android:value="androidx.startup" />
- <meta-data
- android:name="com.example.WorkManagerInitializer"
- android:value="androidx.startup" />
+    android:name="androidx.startup.InitializationProvider"
+    android:authorities="${applicationId}.androidx-startup"
+    android:exported="false">
+    <meta-data
+        android:name="com.example.TimberInitializer"
+        android:value="androidx.startup" />
+    <meta-data
+        android:name="com.example.WorkManagerInitializer"
+        android:value="androidx.startup" />
 </provider>
 ```
 
@@ -507,38 +511,38 @@ Track when app comes to foreground/background:
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
- private var activityReferences = 0
- private var isActivityChangingConfigurations = false
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            private var activityReferences = 0
+            private var isActivityChangingConfigurations = false
 
- override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
- Log.d("Lifecycle", "Activity created: ${activity.localClassName}")
- }
+            override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+                Log.d("Lifecycle", "Activity created: ${activity.localClassName}")
+            }
 
- override fun onActivityStarted(activity: Activity) {
- if (++activityReferences == 1 && !isActivityChangingConfigurations) {
- // App entered foreground
- Log.d("Lifecycle", "App entered foreground")
- }
- }
+            override fun onActivityStarted(activity: Activity) {
+                if (++activityReferences == 1 && !isActivityChangingConfigurations) {
+                    // App entered foreground
+                    Log.d("Lifecycle", "App entered foreground")
+                }
+            }
 
- override fun onActivityStopped(activity: Activity) {
- isActivityChangingConfigurations = activity.isChangingConfigurations
- if (--activityReferences == 0 && !isActivityChangingConfigurations) {
- // App entered background
- Log.d("Lifecycle", "App entered background")
- }
- }
+            override fun onActivityStopped(activity: Activity) {
+                isActivityChangingConfigurations = activity.isChangingConfigurations
+                if (--activityReferences == 0 && !isActivityChangingConfigurations) {
+                    // App entered background
+                    Log.d("Lifecycle", "App entered background")
+                }
+            }
 
- override fun onActivityResumed(activity: Activity) {}
- override fun onActivityPaused(activity: Activity) {}
- override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
- override fun onActivityDestroyed(activity: Activity) {}
- })
- }
+            override fun onActivityResumed(activity: Activity) {}
+            override fun onActivityPaused(activity: Activity) {}
+            override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
+            override fun onActivityDestroyed(activity: Activity) {}
+        })
+    }
 }
 ```
 
@@ -548,23 +552,23 @@ Use `Lifecycle` library for app lifecycle:
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
- override fun onStart(owner: LifecycleOwner) {
- super.onStart(owner)
- // App is in foreground
- Log.d("Lifecycle", "App foreground")
- }
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) {
+                super.onStart(owner)
+                // App is in foreground
+                Log.d("Lifecycle", "App foreground")
+            }
 
- override fun onStop(owner: LifecycleOwner) {
- super.onStop(owner)
- // App is in background
- Log.d("Lifecycle", "App background")
- }
- })
- }
+            override fun onStop(owner: LifecycleOwner) {
+                super.onStop(owner)
+                // App is in background
+                Log.d("Lifecycle", "App background")
+            }
+        })
+    }
 }
 ```
 
@@ -572,44 +576,44 @@ class MyApplication : Application() {
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- // Logging
- initTimber()
+        // Logging
+        initTimber()
 
- // Crash reporting
- FirebaseCrashlytics.getInstance()
+        // Crash reporting
+        FirebaseCrashlytics.getInstance()
 
- // Dependency injection
- startKoin {
- androidContext(this@MyApplication)
- modules(appModule)
- }
+        // Dependency injection
+        startKoin {
+            androidContext(this@MyApplication)
+            modules(appModule)
+        }
 
- // Image loading
- Coil.setImageLoader {
- ImageLoader.Builder(this)
- .crossfade(true)
- .build()
- }
+        // Image loading
+        Coil.setImageLoader {
+            ImageLoader.Builder(this)
+                .crossfade(true)
+                .build()
+        }
 
- // Network monitoring
- if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
- val connectivityManager = getSystemService(ConnectivityManager::class.java)
- connectivityManager.registerDefaultNetworkCallback(networkCallback)
- }
+        // Network monitoring
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val connectivityManager = getSystemService(ConnectivityManager::class.java)
+            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        }
 
- // Strict mode (debug only)
- if (BuildConfig.DEBUG) {
- StrictMode.setThreadPolicy(
- StrictMode.ThreadPolicy.Builder()
- .detectAll()
- .penaltyLog()
- .build()
- )
- }
- }
+        // Strict mode (debug only)
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+            )
+        }
+    }
 }
 ```
 
@@ -623,18 +627,18 @@ class MyApplication : Application() {
 
 ```kotlin
 class MyApplication : Application() {
- override fun onCreate() {
- super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
- // Critical synchronous init
- initCrashReporting()
+        // Critical synchronous init
+        initCrashReporting()
 
- // Non-critical async init
- GlobalScope.launch(Dispatchers.IO) {
- initAnalytics()
- preloadData()
- }
- }
+        // Non-critical async init
+        GlobalScope.launch(Dispatchers.IO) {
+            initAnalytics()
+            preloadData()
+        }
+    }
 }
 ```
 
@@ -650,22 +654,26 @@ class MyApplication : Application() {
 
 ---
 
+
 ## Follow-ups
 
 - [[q-jetpack-compose-lazy-column--android--easy]]
-- [[q-privacy-sandbox-sdk-runtime--android--hard]]
+- 
 - [[q-retrofit-modify-all-requests--android--hard]]
+
 
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
 - [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals

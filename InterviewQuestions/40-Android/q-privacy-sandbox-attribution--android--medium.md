@@ -15,6 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [advertising, android/privacy-sdks, attribution-reporting, difficulty/medium, privacy, privacy-sandbox]
+
 ---
 
 # Вопрос (RU)
@@ -54,57 +55,57 @@ Attribution Reporting API обеспечивает измерение конве
 ```kotlin
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class AttributionManager(context: Context) {
- private val measurementManager =
- context.getSystemService(MeasurementManager::class.java)
+    private val measurementManager =
+        context.getSystemService(MeasurementManager::class.java)
 
- // ✅ Регистрация показа/клика рекламы
- suspend fun registerAdSource(
- sourceUrl: Uri,
- destination: Uri,
- inputEvent: InputEvent? = null
- ) = suspendCancellableCoroutine { cont ->
- val params = WebSourceParams.Builder(sourceUrl)
- .setDebugKeyAllowed(false)
- .build()
+    // ✅ Регистрация показа/клика рекламы
+    suspend fun registerAdSource(
+        sourceUrl: Uri,
+        destination: Uri,
+        inputEvent: InputEvent? = null
+    ) = suspendCancellableCoroutine { cont ->
+        val params = WebSourceParams.Builder(sourceUrl)
+            .setDebugKeyAllowed(false)
+            .build()
 
- val request = WebSourceRegistrationRequest.Builder(
- listOf(params),
- destination
- ).apply {
- inputEvent?.let { setInputEvent(it) }
- }.build()
+        val request = WebSourceRegistrationRequest.Builder(
+            listOf(params),
+            destination
+        ).apply {
+            inputEvent?.let { setInputEvent(it) }
+        }.build()
 
- measurementManager?.registerWebSource(
- request,
- Executors.newSingleThreadExecutor(),
- OutcomeReceiver.create(
- { cont.resume(Unit) },
- { error -> cont.resumeWithException(error) }
- )
- )
- }
+        measurementManager?.registerWebSource(
+            request,
+            Executors.newSingleThreadExecutor(),
+            OutcomeReceiver.create(
+                { cont.resume(Unit) },
+                { error -> cont.resumeWithException(error) }
+            )
+        )
+    }
 
- // ✅ Регистрация конверсии
- suspend fun registerTrigger(triggerUrl: Uri) =
- suspendCancellableCoroutine { cont ->
- val params = WebTriggerParams.Builder(triggerUrl)
- .setDebugKeyAllowed(false)
- .build()
+    // ✅ Регистрация конверсии
+    suspend fun registerTrigger(triggerUrl: Uri) =
+        suspendCancellableCoroutine { cont ->
+        val params = WebTriggerParams.Builder(triggerUrl)
+            .setDebugKeyAllowed(false)
+            .build()
 
- val request = WebTriggerRegistrationRequest.Builder(
- listOf(params),
- Uri.parse("https://advertiser.example")
- ).build()
+        val request = WebTriggerRegistrationRequest.Builder(
+            listOf(params),
+            Uri.parse("https://advertiser.example")
+        ).build()
 
- measurementManager?.registerWebTrigger(
- request,
- Executors.newSingleThreadExecutor(),
- OutcomeReceiver.create(
- { cont.resume(Unit) },
- { error -> cont.resumeWithException(error) }
- )
- )
- }
+        measurementManager?.registerWebTrigger(
+            request,
+            Executors.newSingleThreadExecutor(),
+            OutcomeReceiver.create(
+                { cont.resume(Unit) },
+                { error -> cont.resumeWithException(error) }
+            )
+        )
+    }
 }
 ```
 
@@ -113,35 +114,35 @@ class AttributionManager(context: Context) {
 ```kotlin
 // Source registration JSON (server endpoint)
 {
- "source_event_id": "campaign_123",
- "destination": "https://advertiser.example",
- "expiry": "2592000", // 30 days in seconds
- "priority": "100",
- "event_report_window": "2592000"
+  "source_event_id": "campaign_123",
+  "destination": "https://advertiser.example",
+  "expiry": "2592000",  // 30 days in seconds
+  "priority": "100",
+  "event_report_window": "2592000"
 }
 
 // Trigger registration JSON
 {
- "event_trigger_data": [
- {
- "trigger_data": "3", // 0-7 только (3 бита)
- "priority": "100",
- "deduplication_key": "conversion_456"
- }
- ]
+  "event_trigger_data": [
+    {
+      "trigger_data": "3",  // 0-7 только (3 бита)
+      "priority": "100",
+      "deduplication_key": "conversion_456"
+    }
+  ]
 }
 
 // ❌ НЕПРАВИЛЬНО: Попытка передать >3 бит
-val conversionValue = 150 // Слишком большое значение
+val conversionValue = 150  // Слишком большое значение
 
 // ✅ ПРАВИЛЬНО: Маппинг на 3-битное значение
 val triggerData = when (conversionType) {
- ConversionType.PAGE_VIEW -> 0
- ConversionType.ADD_TO_CART -> 1
- ConversionType.CHECKOUT -> 2
- ConversionType.PURCHASE -> 3
- ConversionType.SIGN_UP -> 4
- else -> 7 // "other"
+    ConversionType.PAGE_VIEW -> 0
+    ConversionType.ADD_TO_CART -> 1
+    ConversionType.CHECKOUT -> 2
+    ConversionType.PURCHASE -> 3
+    ConversionType.SIGN_UP -> 4
+    else -> 7  // "other"
 }
 ```
 
@@ -150,50 +151,50 @@ val triggerData = when (conversionType) {
 ```kotlin
 // Source с aggregation keys (128-bit идентификаторы)
 {
- "source_event_id": "campaign_123",
- "destination": "https://advertiser.example",
- "aggregation_keys": {
- "campaign_counter": "0x1",
- "geo_value": "0x2",
- "purchase_value": "0x3"
- }
+  "source_event_id": "campaign_123",
+  "destination": "https://advertiser.example",
+  "aggregation_keys": {
+    "campaign_counter": "0x1",
+    "geo_value": "0x2",
+    "purchase_value": "0x3"
+  }
 }
 
 // Trigger с aggregate values
 {
- "aggregatable_trigger_data": [
- {
- "key_piece": "0x1",
- "source_keys": ["campaign_counter"],
- "value": 1
- }
- ],
- "aggregatable_values": {
- "campaign_counter": 1,
- "purchase_value": 5000 // Детальное значение (cents)
- }
+  "aggregatable_trigger_data": [
+    {
+      "key_piece": "0x1",
+      "source_keys": ["campaign_counter"],
+      "value": 1
+    }
+  ],
+  "aggregatable_values": {
+    "campaign_counter": 1,
+    "purchase_value": 5000  // Детальное значение (cents)
+  }
 }
 
 class AggregateTracking {
- // ✅ Детальные значения для aggregate
- suspend fun trackPurchase(
- orderId: String,
- totalValue: Double,
- itemCount: Int
- ) {
- val triggerUrl = buildAggregateTriggerUrl(
- purchaseValue = (totalValue * 100).toInt(), // cents
- quantity = itemCount
- )
- attributionManager.registerTrigger(triggerUrl)
- }
+    // ✅ Детальные значения для aggregate
+    suspend fun trackPurchase(
+        orderId: String,
+        totalValue: Double,
+        itemCount: Int
+    ) {
+        val triggerUrl = buildAggregateTriggerUrl(
+            purchaseValue = (totalValue * 100).toInt(),  // cents
+            quantity = itemCount
+        )
+        attributionManager.registerTrigger(triggerUrl)
+    }
 
- // ❌ НЕПРАВИЛЬНО: Хранение user ID вместе с attribution
- // Нарушает privacy
- data class Attribution(
- val userId: String, // ЗАПРЕЩЕНО
- val conversionValue: Int
- )
+    // ❌ НЕПРАВИЛЬНО: Хранение user ID вместе с attribution
+    // Нарушает privacy
+    data class Attribution(
+        val userId: String,  // ЗАПРЕЩЕНО
+        val conversionValue: Int
+    )
 }
 ```
 
@@ -213,14 +214,14 @@ class AggregateTracking {
 // Deduplication для предотвращения двойного подсчёта
 class ConversionTracker(private val prefs: SharedPreferences) {
 
- // ✅ Проверка дубликатов перед регистрацией
- suspend fun trackIfNew(orderId: String, trigger: Uri) {
- val key = "conversion_$orderId"
- if (!prefs.contains(key)) {
- attributionManager.registerTrigger(trigger)
- prefs.edit().putLong(key, System.currentTimeMillis()).apply()
- }
- }
+    // ✅ Проверка дубликатов перед регистрацией
+    suspend fun trackIfNew(orderId: String, trigger: Uri) {
+        val key = "conversion_$orderId"
+        if (!prefs.contains(key)) {
+            attributionManager.registerTrigger(trigger)
+            prefs.edit().putLong(key, System.currentTimeMillis()).apply()
+        }
+    }
 }
 ```
 
@@ -275,57 +276,57 @@ Attribution Reporting API enables conversion measurement without cross-app track
 ```kotlin
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class AttributionManager(context: Context) {
- private val measurementManager =
- context.getSystemService(MeasurementManager::class.java)
+    private val measurementManager =
+        context.getSystemService(MeasurementManager::class.java)
 
- // ✅ Register ad impression/click
- suspend fun registerAdSource(
- sourceUrl: Uri,
- destination: Uri,
- inputEvent: InputEvent? = null
- ) = suspendCancellableCoroutine { cont ->
- val params = WebSourceParams.Builder(sourceUrl)
- .setDebugKeyAllowed(false)
- .build()
+    // ✅ Register ad impression/click
+    suspend fun registerAdSource(
+        sourceUrl: Uri,
+        destination: Uri,
+        inputEvent: InputEvent? = null
+    ) = suspendCancellableCoroutine { cont ->
+        val params = WebSourceParams.Builder(sourceUrl)
+            .setDebugKeyAllowed(false)
+            .build()
 
- val request = WebSourceRegistrationRequest.Builder(
- listOf(params),
- destination
- ).apply {
- inputEvent?.let { setInputEvent(it) }
- }.build()
+        val request = WebSourceRegistrationRequest.Builder(
+            listOf(params),
+            destination
+        ).apply {
+            inputEvent?.let { setInputEvent(it) }
+        }.build()
 
- measurementManager?.registerWebSource(
- request,
- Executors.newSingleThreadExecutor(),
- OutcomeReceiver.create(
- { cont.resume(Unit) },
- { error -> cont.resumeWithException(error) }
- )
- )
- }
+        measurementManager?.registerWebSource(
+            request,
+            Executors.newSingleThreadExecutor(),
+            OutcomeReceiver.create(
+                { cont.resume(Unit) },
+                { error -> cont.resumeWithException(error) }
+            )
+        )
+    }
 
- // ✅ Register conversion
- suspend fun registerTrigger(triggerUrl: Uri) =
- suspendCancellableCoroutine { cont ->
- val params = WebTriggerParams.Builder(triggerUrl)
- .setDebugKeyAllowed(false)
- .build()
+    // ✅ Register conversion
+    suspend fun registerTrigger(triggerUrl: Uri) =
+        suspendCancellableCoroutine { cont ->
+        val params = WebTriggerParams.Builder(triggerUrl)
+            .setDebugKeyAllowed(false)
+            .build()
 
- val request = WebTriggerRegistrationRequest.Builder(
- listOf(params),
- Uri.parse("https://advertiser.example")
- ).build()
+        val request = WebTriggerRegistrationRequest.Builder(
+            listOf(params),
+            Uri.parse("https://advertiser.example")
+        ).build()
 
- measurementManager?.registerWebTrigger(
- request,
- Executors.newSingleThreadExecutor(),
- OutcomeReceiver.create(
- { cont.resume(Unit) },
- { error -> cont.resumeWithException(error) }
- )
- )
- }
+        measurementManager?.registerWebTrigger(
+            request,
+            Executors.newSingleThreadExecutor(),
+            OutcomeReceiver.create(
+                { cont.resume(Unit) },
+                { error -> cont.resumeWithException(error) }
+            )
+        )
+    }
 }
 ```
 
@@ -334,35 +335,35 @@ class AttributionManager(context: Context) {
 ```kotlin
 // Source registration JSON (server endpoint)
 {
- "source_event_id": "campaign_123",
- "destination": "https://advertiser.example",
- "expiry": "2592000", // 30 days in seconds
- "priority": "100",
- "event_report_window": "2592000"
+  "source_event_id": "campaign_123",
+  "destination": "https://advertiser.example",
+  "expiry": "2592000",  // 30 days in seconds
+  "priority": "100",
+  "event_report_window": "2592000"
 }
 
 // Trigger registration JSON
 {
- "event_trigger_data": [
- {
- "trigger_data": "3", // 0-7 only (3 bits)
- "priority": "100",
- "deduplication_key": "conversion_456"
- }
- ]
+  "event_trigger_data": [
+    {
+      "trigger_data": "3",  // 0-7 only (3 bits)
+      "priority": "100",
+      "deduplication_key": "conversion_456"
+    }
+  ]
 }
 
 // ❌ WRONG: Trying to pass >3 bits
-val conversionValue = 150 // Too large
+val conversionValue = 150  // Too large
 
 // ✅ CORRECT: Map to 3-bit value
 val triggerData = when (conversionType) {
- ConversionType.PAGE_VIEW -> 0
- ConversionType.ADD_TO_CART -> 1
- ConversionType.CHECKOUT -> 2
- ConversionType.PURCHASE -> 3
- ConversionType.SIGN_UP -> 4
- else -> 7 // "other"
+    ConversionType.PAGE_VIEW -> 0
+    ConversionType.ADD_TO_CART -> 1
+    ConversionType.CHECKOUT -> 2
+    ConversionType.PURCHASE -> 3
+    ConversionType.SIGN_UP -> 4
+    else -> 7  // "other"
 }
 ```
 
@@ -371,50 +372,50 @@ val triggerData = when (conversionType) {
 ```kotlin
 // Source with aggregation keys (128-bit identifiers)
 {
- "source_event_id": "campaign_123",
- "destination": "https://advertiser.example",
- "aggregation_keys": {
- "campaign_counter": "0x1",
- "geo_value": "0x2",
- "purchase_value": "0x3"
- }
+  "source_event_id": "campaign_123",
+  "destination": "https://advertiser.example",
+  "aggregation_keys": {
+    "campaign_counter": "0x1",
+    "geo_value": "0x2",
+    "purchase_value": "0x3"
+  }
 }
 
 // Trigger with aggregate values
 {
- "aggregatable_trigger_data": [
- {
- "key_piece": "0x1",
- "source_keys": ["campaign_counter"],
- "value": 1
- }
- ],
- "aggregatable_values": {
- "campaign_counter": 1,
- "purchase_value": 5000 // Detailed value (cents)
- }
+  "aggregatable_trigger_data": [
+    {
+      "key_piece": "0x1",
+      "source_keys": ["campaign_counter"],
+      "value": 1
+    }
+  ],
+  "aggregatable_values": {
+    "campaign_counter": 1,
+    "purchase_value": 5000  // Detailed value (cents)
+  }
 }
 
 class AggregateTracking {
- // ✅ Detailed values for aggregate
- suspend fun trackPurchase(
- orderId: String,
- totalValue: Double,
- itemCount: Int
- ) {
- val triggerUrl = buildAggregateTriggerUrl(
- purchaseValue = (totalValue * 100).toInt(), // cents
- quantity = itemCount
- )
- attributionManager.registerTrigger(triggerUrl)
- }
+    // ✅ Detailed values for aggregate
+    suspend fun trackPurchase(
+        orderId: String,
+        totalValue: Double,
+        itemCount: Int
+    ) {
+        val triggerUrl = buildAggregateTriggerUrl(
+            purchaseValue = (totalValue * 100).toInt(),  // cents
+            quantity = itemCount
+        )
+        attributionManager.registerTrigger(triggerUrl)
+    }
 
- // ❌ WRONG: Storing user ID with attribution
- // Violates privacy
- data class Attribution(
- val userId: String, // FORBIDDEN
- val conversionValue: Int
- )
+    // ❌ WRONG: Storing user ID with attribution
+    // Violates privacy
+    data class Attribution(
+        val userId: String,  // FORBIDDEN
+        val conversionValue: Int
+    )
 }
 ```
 
@@ -434,14 +435,14 @@ class AggregateTracking {
 // Deduplication to prevent double-counting
 class ConversionTracker(private val prefs: SharedPreferences) {
 
- // ✅ Check for duplicates before registration
- suspend fun trackIfNew(orderId: String, trigger: Uri) {
- val key = "conversion_$orderId"
- if (!prefs.contains(key)) {
- attributionManager.registerTrigger(trigger)
- prefs.edit().putLong(key, System.currentTimeMillis()).apply()
- }
- }
+    // ✅ Check for duplicates before registration
+    suspend fun trackIfNew(orderId: String, trigger: Uri) {
+        val key = "conversion_$orderId"
+        if (!prefs.contains(key)) {
+            attributionManager.registerTrigger(trigger)
+            prefs.edit().putLong(key, System.currentTimeMillis()).apply()
+        }
+    }
 }
 ```
 
@@ -487,13 +488,13 @@ class ConversionTracker(private val prefs: SharedPreferences) {
 ## Related Questions
 
 ### Prerequisites
-- [[q-privacy-sandbox-topics-api--android--medium]] - Topics API basics
-- - Differential privacy concepts
+-  - Topics API basics
+-  - Differential privacy concepts
 
 ### Related
 - [[q-privacy-sandbox-fledge--android--hard]] - FLEDGE API for remarketing
 - [[q-privacy-sandbox-sdk-runtime--android--hard]] - SDK Runtime isolation
 
 ### Advanced
-- - Backend aggregation service
-- - Managing privacy budget at scale
+-  - Backend aggregation service
+-  - Managing privacy budget at scale

@@ -18,6 +18,7 @@ moc: moc-android
 related:
 - c-service
 - q-async-operations-android--android--medium
+- q-derived-state-snapshot-system--jetpack-compose--hard
 - q-how-to-fix-a-bad-element-layout--android--easy
 created: 2025-10-15
 updated: 2025-10-31

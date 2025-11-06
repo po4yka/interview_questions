@@ -1,7 +1,7 @@
 ---
 id: android-207
 title: What Is The Main Application Execution Thread / Что такое главный поток выполнения
- приложения
+  приложения
 aliases:
 - Main Thread
 - UI Thread
@@ -29,6 +29,7 @@ tags:
 - android/performance-rendering
 - android/threads-sync
 - difficulty/easy
+
 ---
 
 # Вопрос (RU)
@@ -58,19 +59,19 @@ tags:
 ```kotlin
 // ❌ Плохо - блокирует UI
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- Thread.sleep(5000) // Зависание на 5 секунд
+    super.onCreate(savedInstanceState)
+    Thread.sleep(5000) // Зависание на 5 секунд
 }
 
 // ✅ Хорошо - асинхронная работа
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- lifecycleScope.launch {
- val data = withContext(Dispatchers.IO) {
- fetchDataFromNetwork() // Фон
- }
- textView.text = data // Главный поток
- }
+    super.onCreate(savedInstanceState)
+    lifecycleScope.launch {
+        val data = withContext(Dispatchers.IO) {
+            fetchDataFromNetwork() // Фон
+        }
+        textView.text = data // Главный поток
+    }
 }
 ```
 
@@ -79,18 +80,18 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```kotlin
 // Вариант 1: runOnUiThread
 Thread {
- val data = fetchData()
- runOnUiThread { textView.text = data }
+    val data = fetchData()
+    runOnUiThread { textView.text = data }
 }.start()
 
 // Вариант 2: Handler
 Handler(Looper.getMainLooper()).post {
- textView.text = data
+    textView.text = data
 }
 
 // Вариант 3: Coroutines (рекомендуется)
 lifecycleScope.launch {
- textView.text = data // Автоматически Main Thread
+    textView.text = data // Автоматически Main Thread
 }
 ```
 
@@ -98,7 +99,7 @@ lifecycleScope.launch {
 
 ```kotlin
 fun isMainThread(): Boolean =
- Looper.myLooper() == Looper.getMainLooper()
+    Looper.myLooper() == Looper.getMainLooper()
 ```
 
 **Ответственность Main `Thread`:**
@@ -124,19 +125,19 @@ The main thread must complete each frame in **16ms** (60 FPS) or **11ms** (90 FP
 ```kotlin
 // ❌ Bad - blocks UI
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- Thread.sleep(5000) // Freezes for 5 seconds
+    super.onCreate(savedInstanceState)
+    Thread.sleep(5000) // Freezes for 5 seconds
 }
 
 // ✅ Good - async work
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- lifecycleScope.launch {
- val data = withContext(Dispatchers.IO) {
- fetchDataFromNetwork() // Background
- }
- textView.text = data // Main thread
- }
+    super.onCreate(savedInstanceState)
+    lifecycleScope.launch {
+        val data = withContext(Dispatchers.IO) {
+            fetchDataFromNetwork() // Background
+        }
+        textView.text = data // Main thread
+    }
 }
 ```
 
@@ -145,18 +146,18 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```kotlin
 // Option 1: runOnUiThread
 Thread {
- val data = fetchData()
- runOnUiThread { textView.text = data }
+    val data = fetchData()
+    runOnUiThread { textView.text = data }
 }.start()
 
 // Option 2: Handler
 Handler(Looper.getMainLooper()).post {
- textView.text = data
+    textView.text = data
 }
 
 // Option 3: Coroutines (recommended)
 lifecycleScope.launch {
- textView.text = data // Automatically Main Thread
+    textView.text = data // Automatically Main Thread
 }
 ```
 
@@ -164,7 +165,7 @@ lifecycleScope.launch {
 
 ```kotlin
 fun isMainThread(): Boolean =
- Looper.myLooper() == Looper.getMainLooper()
+    Looper.myLooper() == Looper.getMainLooper()
 ```
 
 **Main `Thread` Responsibilities:**
@@ -196,12 +197,13 @@ fun isMainThread(): Boolean =
 - 
 - 
 
+
 ### Prerequisites (Easier)
 - [[q-main-android-components--android--easy]] — Basic Android components
 
 ### Related (Same Level)
 - [[q-what-unifies-android-components--android--easy]] — Component fundamentals
-- — Asynchronous operations
+-  — Asynchronous operations
 
 ### Advanced (Harder)
 - [[q-anr-application-not-responding--android--medium]] — ANR debugging

@@ -31,6 +31,7 @@ tags:
 - flow
 - testing
 - turbine
+
 ---
 
 # Вопрос (RU)
@@ -56,72 +57,72 @@ tags:
 ```kotlin
 // Example ViewModel
 class UserViewModel(
- private val repository: UserRepository
+    private val repository: UserRepository
 ) : ViewModel() {
- private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
- val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
- fun loadUser(userId: String) {
- viewModelScope.launch {
- _uiState.value = UiState.Loading
- try {
- val user = repository.getUser(userId)
- _uiState.value = UiState.Success(user)
- } catch (e: Exception) {
- _uiState.value = UiState.Error(e.message)
- }
- }
- }
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val user = repository.getUser(userId)
+                _uiState.value = UiState.Success(user)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message)
+            }
+        }
+    }
 }
 
 // Test with Turbine
 @Test
 fun `loadUser emits Loading then Success states`() = runTest {
- // Given
- val mockUser = User("123", "John Doe")
- val repository = FakeUserRepository(mockUser)
- val viewModel = UserViewModel(repository)
+    // Given
+    val mockUser = User("123", "John Doe")
+    val repository = FakeUserRepository(mockUser)
+    val viewModel = UserViewModel(repository)
 
- // When/Then
- viewModel.uiState.test {
- // Initial state
- assertEquals(UiState.Loading, awaitItem())
+    // When/Then
+    viewModel.uiState.test {
+        // Initial state
+        assertEquals(UiState.Loading, awaitItem())
 
- // Trigger action
- viewModel.loadUser("123")
+        // Trigger action
+        viewModel.loadUser("123")
 
- // Loading state
- assertEquals(UiState.Loading, awaitItem())
+        // Loading state
+        assertEquals(UiState.Loading, awaitItem())
 
- // Success state
- val successItem = awaitItem()
- assertTrue(successItem is UiState.Success)
- assertEquals(mockUser, (successItem as UiState.Success).user)
+        // Success state
+        val successItem = awaitItem()
+        assertTrue(successItem is UiState.Success)
+        assertEquals(mockUser, (successItem as UiState.Success).user)
 
- // No more emissions
- expectNoEvents()
- }
+        // No more emissions
+        expectNoEvents()
+    }
 }
 
 @Test
 fun `loadUser emits Error when repository fails`() = runTest {
- // Given
- val repository = FakeUserRepository(shouldFail = true)
- val viewModel = UserViewModel(repository)
+    // Given
+    val repository = FakeUserRepository(shouldFail = true)
+    val viewModel = UserViewModel(repository)
 
- // When/Then
- viewModel.uiState.test {
- awaitItem() // Initial Loading
+    // When/Then
+    viewModel.uiState.test {
+        awaitItem() // Initial Loading
 
- viewModel.loadUser("123")
+        viewModel.loadUser("123")
 
- awaitItem() // Loading state
+        awaitItem() // Loading state
 
- val errorItem = awaitItem()
- assertTrue(errorItem is UiState.Error)
+        val errorItem = awaitItem()
+        assertTrue(errorItem is UiState.Error)
 
- cancelAndIgnoreRemainingEvents()
- }
+        cancelAndIgnoreRemainingEvents()
+    }
 }
 ```
 
@@ -137,6 +138,8 @@ fun `loadUser emits Error when repository fails`() = runTest {
 - Built-in timeout handling
 - Clear assertion API
 - Works with `StateFlow`, `SharedFlow`, and regular Flows
+
+
 
 ## Ответ (RU)
 

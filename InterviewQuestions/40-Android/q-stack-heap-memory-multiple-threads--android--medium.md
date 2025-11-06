@@ -1,7 +1,7 @@
 ---
 id: android-080
 title: Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких
- потоков
+  потоков
 aliases:
 - Stack vs Heap Memory In Multithreading
 - Stack и Heap память для нескольких потоков
@@ -26,6 +26,7 @@ moc: moc-android
 related:
 - c-coroutines
 - c-memory-management
+
 ---
 
 # Вопрос (RU)
@@ -46,8 +47,8 @@ related:
 ```kotlin
 // Each thread has its own stack
 Thread {
- val localVar = 10 // Stored in this thread's stack
- recursiveFunction() // Uses this thread's stack
+    val localVar = 10  // Stored in this thread's stack
+    recursiveFunction()  // Uses this thread's stack
 }.start()
 ```
 
@@ -57,22 +58,22 @@ Thread {
 
 ```kotlin
 // All threads share the same heap
-val sharedObject = MyObject() // Allocated in shared heap
+val sharedObject = MyObject()  // Allocated in shared heap
 
 Thread {
- val obj1 = MyObject() // Same heap
+    val obj1 = MyObject()  // Same heap
 }.start()
 ```
 
 **Memory Calculation:**
 
 ```
-Main thread stack: 8 MB
-Worker thread stack: 1 MB each
-Heap: 512 MB (shared)
+Main thread stack:    8 MB
+Worker thread stack:  1 MB each
+Heap:                 512 MB (shared)
 
-1 thread: 8 + 0 + 512 = 520 MB
-10 threads: 8 + 10 + 512 = 530 MB
+1 thread:    8 + 0 + 512 = 520 MB
+10 threads:  8 + 10 + 512 = 530 MB
 100 threads: 8 + 100 + 512 = 620 MB
 ```
 
@@ -82,12 +83,15 @@ Heap: 512 MB (shared)
 - **Heap**: All threads share heap → heap size **unchanged**, load increases
 - **Per thread**: ~1 MB stack overhead
 
+
 # Question (EN)
 > `Stack` vs Heap Memory In Multithreading
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 **Yes**, **stack size will change**, but **heap size will remain unchanged** (though load on it will increase).
@@ -99,8 +103,8 @@ Heap: 512 MB (shared)
 ```kotlin
 // Each thread has its own stack
 Thread {
- val localVar = 10 // Stored in this thread's stack
- recursiveFunction() // Uses this thread's stack
+    val localVar = 10  // Stored in this thread's stack
+    recursiveFunction()  // Uses this thread's stack
 }.start()
 ```
 
@@ -110,22 +114,22 @@ Thread {
 
 ```kotlin
 // All threads share the same heap
-val sharedObject = MyObject() // Allocated in shared heap
+val sharedObject = MyObject()  // Allocated in shared heap
 
 Thread {
- val obj1 = MyObject() // Same heap
+    val obj1 = MyObject()  // Same heap
 }.start()
 ```
 
 **Memory Calculation:**
 
 ```
-Main thread stack: 8 MB
-Worker thread stack: 1 MB each
-Heap: 512 MB (shared)
+Main thread stack:    8 MB
+Worker thread stack:  1 MB each
+Heap:                 512 MB (shared)
 
-1 thread: 8 + 0 + 512 = 520 MB
-10 threads: 8 + 10 + 512 = 530 MB
+1 thread:    8 + 0 + 512 = 520 MB
+10 threads:  8 + 10 + 512 = 530 MB
 100 threads: 8 + 100 + 512 = 620 MB
 ```
 
@@ -146,8 +150,8 @@ Heap: 512 MB (shared)
 ```kotlin
 // Каждый поток имеет свой стек
 Thread {
- val localVar = 10 // Хранится в стеке этого потока
- recursiveFunction() // Использует стек этого потока
+    val localVar = 10  // Хранится в стеке этого потока
+    recursiveFunction()  // Использует стек этого потока
 }.start()
 ```
 
@@ -157,22 +161,22 @@ Thread {
 
 ```kotlin
 // Все потоки разделяют одну кучу
-val sharedObject = MyObject() // Выделяется в общей куче
+val sharedObject = MyObject()  // Выделяется в общей куче
 
 Thread {
- val obj1 = MyObject() // Та же куча
+    val obj1 = MyObject()  // Та же куча
 }.start()
 ```
 
 **Расчёт памяти:**
 
 ```
-Стек главного потока: 8 MB
-Стек рабочего потока: 1 MB каждый
-Куча: 512 MB (общая)
+Стек главного потока:     8 MB
+Стек рабочего потока:     1 MB каждый
+Куча:                     512 MB (общая)
 
-1 поток: 8 + 0 + 512 = 520 MB
-10 потоков: 8 + 10 + 512 = 530 MB
+1 поток:     8 + 0 + 512 = 520 MB
+10 потоков:  8 + 10 + 512 = 530 MB
 100 потоков: 8 + 100 + 512 = 620 MB
 ```
 
@@ -182,23 +186,27 @@ Thread {
 - **Куча**: Все потоки разделяют кучу → размер кучи **не меняется**, нагрузка растёт
 - **На поток**: ~1 MB дополнительного стека
 
+
 ---
+
 
 ## Follow-ups
 
 - [[c-coroutines]]
 - [[c-memory-management]]
 
+
 ## References
 
 - [Memory Management](https://developer.android.com/topic/performance/memory-overview)
+
 
 ## Related Questions
 
 ### Kotlin Language Features
 - [[q-coroutine-memory-leak-detection--kotlin--hard]] - Concurrency
 - [[q-channel-pipelines--kotlin--hard]] - Concurrency
-- - Concurrency
+-  - Concurrency
 - [[q-deferred-async-patterns--kotlin--medium]] - Concurrency
 - [[q-produce-actor-builders--kotlin--medium]] - Concurrency
 - [[q-actor-pattern--kotlin--hard]] - Concurrency

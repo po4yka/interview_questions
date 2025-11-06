@@ -36,6 +36,7 @@ tags:
 - difficulty/medium
 - en
 - ru
+
 ---
 
 # Question (EN)
@@ -54,11 +55,11 @@ tags:
 ```kotlin
 @Composable
 fun Counter() {
- var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
- Button(onClick = { count++ }) {
- Text("Count: $count")
- }
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
 }
 
 // - Survives: Recomposition
@@ -70,11 +71,11 @@ fun Counter() {
 ```kotlin
 @Composable
 fun Counter() {
- var count by rememberSaveable { mutableStateOf(0) }
+    var count by rememberSaveable { mutableStateOf(0) }
 
- Button(onClick = { count++ }) {
- Text("Count: $count")
- }
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
 }
 
 // - Survives: Recomposition, rotation, process death
@@ -103,13 +104,13 @@ fun Counter() {
 ```kotlin
 @Composable
 fun ExpandableCard() {
- var isExpanded by remember { mutableStateOf(false) } // OK - UI-only state
+    var isExpanded by remember { mutableStateOf(false) }  // OK - UI-only state
 
- Card(
- modifier = Modifier.clickable { isExpanded = !isExpanded }
- ) {
- if (isExpanded) { ExpandedContent() }
- }
+    Card(
+        modifier = Modifier.clickable { isExpanded = !isExpanded }
+    ) {
+        if (isExpanded) { ExpandedContent() }
+    }
 }
 ```
 
@@ -123,12 +124,12 @@ fun ExpandableCard() {
 ```kotlin
 @Composable
 fun SearchScreen() {
- var searchQuery by rememberSaveable { mutableStateOf("") } // Survives rotation
+    var searchQuery by rememberSaveable { mutableStateOf("") }  // Survives rotation
 
- TextField(
- value = searchQuery,
- onValueChange = { searchQuery = it }
- )
+    TextField(
+        value = searchQuery,
+        onValueChange = { searchQuery = it }
+    )
 }
 ```
 
@@ -138,20 +139,21 @@ fun SearchScreen() {
 data class User(val id: String, val name: String)
 
 val UserSaver = Saver<User, Map<String, String>>(
- save = { user -> mapOf("id" to user.id, "name" to user.name) },
- restore = { map -> User(map["id"]!!, map["name"]!!) }
+    save = { user -> mapOf("id" to user.id, "name" to user.name) },
+    restore = { map -> User(map["id"]!!, map["name"]!!) }
 )
 
 @Composable
 fun UserProfile() {
- var user by rememberSaveable(stateSaver = UserSaver) {
- mutableStateOf(User("1", "Alice"))
- }
+    var user by rememberSaveable(stateSaver = UserSaver) {
+        mutableStateOf(User("1", "Alice"))
+    }
 }
 ```
 
 **English Summary**: `remember` stores value across recompositions only (lost on rotation). `rememberSaveable` stores across config changes and process death (uses `Bundle`). Use `remember` for: temporary UI state, animations, focus. Use `rememberSaveable` for: user input, form data, selections. Custom Saver for complex objects.
 
+
 # Question (EN)
 > What is the difference between remember and rememberSaveable in Jetpack Compose?
 # Вопрос (RU)
@@ -159,7 +161,9 @@ fun UserProfile() {
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 
@@ -170,11 +174,11 @@ fun UserProfile() {
 ```kotlin
 @Composable
 fun Counter() {
- var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
- Button(onClick = { count++ }) {
- Text("Count: $count")
- }
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
 }
 
 // - Survives: Recomposition
@@ -186,11 +190,11 @@ fun Counter() {
 ```kotlin
 @Composable
 fun Counter() {
- var count by rememberSaveable { mutableStateOf(0) }
+    var count by rememberSaveable { mutableStateOf(0) }
 
- Button(onClick = { count++ }) {
- Text("Count: $count")
- }
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
 }
 
 // - Survives: Recomposition, rotation, process death
@@ -219,13 +223,13 @@ fun Counter() {
 ```kotlin
 @Composable
 fun ExpandableCard() {
- var isExpanded by remember { mutableStateOf(false) } // OK - UI-only state
+    var isExpanded by remember { mutableStateOf(false) }  // OK - UI-only state
 
- Card(
- modifier = Modifier.clickable { isExpanded = !isExpanded }
- ) {
- if (isExpanded) { ExpandedContent() }
- }
+    Card(
+        modifier = Modifier.clickable { isExpanded = !isExpanded }
+    ) {
+        if (isExpanded) { ExpandedContent() }
+    }
 }
 ```
 
@@ -239,12 +243,12 @@ fun ExpandableCard() {
 ```kotlin
 @Composable
 fun SearchScreen() {
- var searchQuery by rememberSaveable { mutableStateOf("") } // Survives rotation
+    var searchQuery by rememberSaveable { mutableStateOf("") }  // Survives rotation
 
- TextField(
- value = searchQuery,
- onValueChange = { searchQuery = it }
- )
+    TextField(
+        value = searchQuery,
+        onValueChange = { searchQuery = it }
+    )
 }
 ```
 
@@ -254,15 +258,15 @@ fun SearchScreen() {
 data class User(val id: String, val name: String)
 
 val UserSaver = Saver<User, Map<String, String>>(
- save = { user -> mapOf("id" to user.id, "name" to user.name) },
- restore = { map -> User(map["id"]!!, map["name"]!!) }
+    save = { user -> mapOf("id" to user.id, "name" to user.name) },
+    restore = { map -> User(map["id"]!!, map["name"]!!) }
 )
 
 @Composable
 fun UserProfile() {
- var user by rememberSaveable(stateSaver = UserSaver) {
- mutableStateOf(User("1", "Alice"))
- }
+    var user by rememberSaveable(stateSaver = UserSaver) {
+        mutableStateOf(User("1", "Alice"))
+    }
 }
 ```
 
@@ -277,11 +281,11 @@ fun UserProfile() {
 ```kotlin
 @Composable
 fun Counter() {
- var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
- Button(onClick = { count++ }) {
- Text("Count: $count")
- }
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
 }
 
 // - Переживает: Рекомпозицию
@@ -293,11 +297,11 @@ fun Counter() {
 ```kotlin
 @Composable
 fun Counter() {
- var count by rememberSaveable { mutableStateOf(0) }
+    var count by rememberSaveable { mutableStateOf(0) }
 
- Button(onClick = { count++ }) {
- Text("Count: $count")
- }
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
 }
 
 // - Переживает: Рекомпозицию, поворот, смерть процесса
@@ -326,11 +330,13 @@ fun Counter() {
 ## References
 - [State in Compose](https://developer.android.com/jetpack/compose/state)
 
+
 ## Follow-ups
 
 - [[q-how-animations-work-in-recyclerview--android--medium]]
 - 
 - [[q-transaction-too-large-exception--android--medium]]
+
 
 ## Related Questions
 
@@ -339,6 +345,7 @@ fun Counter() {
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 - [[c-viewmodel]]
+
 
 ### Related (Medium)
 - [[q-recomposition-compose--android--medium]] - Jetpack Compose

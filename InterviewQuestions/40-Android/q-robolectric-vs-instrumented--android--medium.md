@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [q-junit-basics--android--easy]
 
 # Timestamps
 created: 2025-10-15
@@ -25,6 +25,7 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [android/testing-instrumented, android/testing-unit, comparison, difficulty/medium, robolectric, strategy]
+
 ---
 
 # Вопрос (RU)
@@ -69,16 +70,16 @@ tags: [android/testing-instrumented, android/testing-unit, comparison, difficult
 ```kotlin
 @RunWith(RobolectricTestRunner::class)
 class UserViewModelTest {
- @Test
- fun loadUser_updatesState() = runTest {
- val context = ApplicationProvider.getApplicationContext<Context>()
- val viewModel = UserViewModel(context)
+    @Test
+    fun loadUser_updatesState() = runTest {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val viewModel = UserViewModel(context)
 
- viewModel.loadUser(1)
+        viewModel.loadUser(1)
 
- // ✅ Быстрая проверка состояния
- assertTrue(viewModel.uiState.value is UiState.Success)
- }
+        // ✅ Быстрая проверка состояния
+        assertTrue(viewModel.uiState.value is UiState.Success)
+    }
 }
 ```
 
@@ -94,20 +95,20 @@ class UserViewModelTest {
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class ComplexUiTest {
- @get:Rule
- val composeTestRule = createComposeRule()
+    @get:Rule
+    val composeTestRule = createComposeRule()
 
- @Test
- fun swipeToDelete_removesItem() {
- composeTestRule
- .onNodeWithText("Item 1")
- .performTouchInput { swipeLeft() }
+    @Test
+    fun swipeToDelete_removesItem() {
+        composeTestRule
+            .onNodeWithText("Item 1")
+            .performTouchInput { swipeLeft() }
 
- // ✅ Реальное поведение жестов
- composeTestRule
- .onNodeWithText("Item 1")
- .assertDoesNotExist()
- }
+        // ✅ Реальное поведение жестов
+        composeTestRule
+            .onNodeWithText("Item 1")
+            .assertDoesNotExist()
+    }
 }
 ```
 
@@ -132,28 +133,28 @@ class ComplexUiTest {
 ```kotlin
 // 70% - Unit-тесты
 class CalculatorTest {
- @Test
- fun add_returnsSum() {
- assertEquals(5, Calculator().add(2, 3))
- }
+    @Test
+    fun add_returnsSum() {
+        assertEquals(5, Calculator().add(2, 3))
+    }
 }
 
 // 20% - Robolectric
 @RunWith(RobolectricTestRunner::class)
 class ViewModelIntegrationTest {
- @Test
- fun loadData_updatesState() = runTest {
- // ✅ Проверка интеграции с Android
- }
+    @Test
+    fun loadData_updatesState() = runTest {
+        // ✅ Проверка интеграции с Android
+    }
 }
 
 // 10% - Инструментальные E2E
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
- @Test
- fun login_navigatesToHome() {
- // ✅ Полный путь пользователя
- }
+    @Test
+    fun login_navigatesToHome() {
+        // ✅ Полный путь пользователя
+    }
 }
 ```
 
@@ -170,20 +171,20 @@ class LoginFlowTest {
 // Robolectric: бизнес-логика + простой UI
 @RunWith(RobolectricTestRunner::class)
 class UserProfileFragmentTest {
- @Test
- fun loadProfile_displaysInfo() {
- val fragment = launchFragment<UserProfileFragment>()
- // ✅ Быстрая проверка
- }
+    @Test
+    fun loadProfile_displaysInfo() {
+        val fragment = launchFragment<UserProfileFragment>()
+        // ✅ Быстрая проверка
+    }
 }
 
 // Инструментальные: критические сценарии
 @RunWith(AndroidJUnit4::class)
 class UserProfileE2ETest {
- @Test
- fun editProfile_syncsToBackend() {
- // ✅ Полная интеграция
- }
+    @Test
+    fun editProfile_syncsToBackend() {
+        // ✅ Полная интеграция
+    }
 }
 ```
 
@@ -221,16 +222,16 @@ class UserProfileE2ETest {
 ```kotlin
 @RunWith(RobolectricTestRunner::class)
 class UserViewModelTest {
- @Test
- fun loadUser_updatesState() = runTest {
- val context = ApplicationProvider.getApplicationContext<Context>()
- val viewModel = UserViewModel(context)
+    @Test
+    fun loadUser_updatesState() = runTest {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val viewModel = UserViewModel(context)
 
- viewModel.loadUser(1)
+        viewModel.loadUser(1)
 
- // ✅ Fast state verification
- assertTrue(viewModel.uiState.value is UiState.Success)
- }
+        // ✅ Fast state verification
+        assertTrue(viewModel.uiState.value is UiState.Success)
+    }
 }
 ```
 
@@ -246,20 +247,20 @@ class UserViewModelTest {
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class ComplexUiTest {
- @get:Rule
- val composeTestRule = createComposeRule()
+    @get:Rule
+    val composeTestRule = createComposeRule()
 
- @Test
- fun swipeToDelete_removesItem() {
- composeTestRule
- .onNodeWithText("Item 1")
- .performTouchInput { swipeLeft() }
+    @Test
+    fun swipeToDelete_removesItem() {
+        composeTestRule
+            .onNodeWithText("Item 1")
+            .performTouchInput { swipeLeft() }
 
- // ✅ Real gesture behavior
- composeTestRule
- .onNodeWithText("Item 1")
- .assertDoesNotExist()
- }
+        // ✅ Real gesture behavior
+        composeTestRule
+            .onNodeWithText("Item 1")
+            .assertDoesNotExist()
+    }
 }
 ```
 
@@ -284,28 +285,28 @@ Recommended distribution:
 ```kotlin
 // 70% - Unit tests
 class CalculatorTest {
- @Test
- fun add_returnsSum() {
- assertEquals(5, Calculator().add(2, 3))
- }
+    @Test
+    fun add_returnsSum() {
+        assertEquals(5, Calculator().add(2, 3))
+    }
 }
 
 // 20% - Robolectric
 @RunWith(RobolectricTestRunner::class)
 class ViewModelIntegrationTest {
- @Test
- fun loadData_updatesState() = runTest {
- // ✅ Integration with Android
- }
+    @Test
+    fun loadData_updatesState() = runTest {
+        // ✅ Integration with Android
+    }
 }
 
 // 10% - Instrumented E2E
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
- @Test
- fun login_navigatesToHome() {
- // ✅ Full user journey
- }
+    @Test
+    fun login_navigatesToHome() {
+        // ✅ Full user journey
+    }
 }
 ```
 
@@ -322,20 +323,20 @@ class LoginFlowTest {
 // Robolectric: business logic + simple UI
 @RunWith(RobolectricTestRunner::class)
 class UserProfileFragmentTest {
- @Test
- fun loadProfile_displaysInfo() {
- val fragment = launchFragment<UserProfileFragment>()
- // ✅ Fast verification
- }
+    @Test
+    fun loadProfile_displaysInfo() {
+        val fragment = launchFragment<UserProfileFragment>()
+        // ✅ Fast verification
+    }
 }
 
 // Instrumented: critical scenarios
 @RunWith(AndroidJUnit4::class)
 class UserProfileE2ETest {
- @Test
- fun editProfile_syncsToBackend() {
- // ✅ Full integration
- }
+    @Test
+    fun editProfile_syncsToBackend() {
+        // ✅ Full integration
+    }
 }
 ```
 
@@ -360,7 +361,7 @@ class UserProfileE2ETest {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Understanding unit tests
+-  - Understanding unit tests
 - [[q-fragment-basics--android--easy]] - JUnit framework basics
 
 ### Related (Medium)
@@ -371,4 +372,4 @@ class UserProfileE2ETest {
 
 ### Advanced (Harder)
 - [[q-testing-coroutines-flow--android--hard]] - Testing async code
-- - Reducing flakiness
+-  - Reducing flakiness

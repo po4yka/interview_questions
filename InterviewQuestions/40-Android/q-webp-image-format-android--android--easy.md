@@ -28,6 +28,7 @@ tags:
 - images
 - optimization
 - webp
+
 ---
 
 # Вопрос (RU)
@@ -104,9 +105,9 @@ WebP поддерживает анимацию, как GIF, но с горазд
 1. Правый клик на изображение в res/drawable
 2. Выбрать "Convert to WebP"
 3. Настроить параметры:
- - Lossy/Lossless
- - Quality (0-100)
- - Skip transparent images
+   - Lossy/Lossless
+   - Quality (0-100)
+   - Skip transparent images
 4. Нажать "OK"
 ```
 
@@ -136,7 +137,7 @@ cwebp -q 80 -alpha_q 100 input.png -o output.webp
 
 # Batch конвертация всех изображений
 for file in *.jpg; do
- cwebp -q 80 "$file" -o "${file%.jpg}.webp"
+    cwebp -q 80 "$file" -o "${file%.jpg}.webp"
 done
 ```
 
@@ -153,11 +154,11 @@ done
 ```xml
 <!-- res/layout/activity_main.xml -->
 <ImageView
- android:id="@+id/imageView"
- android:layout_width="match_size"
- android:layout_height="wrap_content"
- android:src="@drawable/photo" <!-- photo.webp -->
- android:contentDescription="@string/photo_description" />
+    android:id="@+id/imageView"
+    android:layout_width="match_size"
+    android:layout_height="wrap_content"
+    android:src="@drawable/photo"  <!-- photo.webp -->
+    android:contentDescription="@string/photo_description" />
 ```
 
 #### 2. Программная Загрузка
@@ -183,15 +184,15 @@ imageView.setImageBitmap(bitmap)
 ```kotlin
 // build.gradle
 dependencies {
- implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
 }
 
 // Код
 Glide.with(context)
- .load("https://example.com/image.webp")
- .placeholder(R.drawable.placeholder)
- .error(R.drawable.error)
- .into(imageView)
+    .load("https://example.com/image.webp")
+    .placeholder(R.drawable.placeholder)
+    .error(R.drawable.error)
+    .into(imageView)
 ```
 
 #### 4. Загрузка С Сервера Через Coil
@@ -199,14 +200,14 @@ Glide.with(context)
 ```kotlin
 // build.gradle
 dependencies {
- implementation 'io.coil-kt:coil:2.5.0'
+    implementation 'io.coil-kt:coil:2.5.0'
 }
 
 // Код
 imageView.load("https://example.com/image.webp") {
- crossfade(true)
- placeholder(R.drawable.placeholder)
- error(R.drawable.error)
+    crossfade(true)
+    placeholder(R.drawable.placeholder)
+    error(R.drawable.error)
 }
 ```
 
@@ -216,13 +217,13 @@ imageView.load("https://example.com/image.webp") {
 
 ```
 app/
- src/main/res/
- drawable/
- photo1.jpg (500 KB)
- photo2.jpg (450 KB)
- photo3.png (600 KB)
- logo.png (80 KB)
- icon.png (50 KB)
+  src/main/res/
+    drawable/
+      photo1.jpg  (500 KB)
+      photo2.jpg  (450 KB)
+      photo3.png  (600 KB)
+      logo.png    (80 KB)
+      icon.png    (50 KB)
 
 Общий размер: 1680 KB
 APK размер: +1680 KB
@@ -232,13 +233,13 @@ APK размер: +1680 KB
 
 ```
 app/
- src/main/res/
- drawable/
- photo1.webp (325 KB) - экономия 35%
- photo2.webp (290 KB) - экономия 36%
- photo3.webp (400 KB) - экономия 33%
- logo.webp (45 KB) - экономия 44%
- icon.webp (28 KB) - экономия 44%
+  src/main/res/
+    drawable/
+      photo1.webp  (325 KB) - экономия 35%
+      photo2.webp  (290 KB) - экономия 36%
+      photo3.webp  (400 KB) - экономия 33%
+      logo.webp    (45 KB)  - экономия 44%
+      icon.webp    (28 KB)  - экономия 44%
 
 Общий размер: 1088 KB
 APK размер: +1088 KB
@@ -251,28 +252,28 @@ APK размер: +1088 KB
 
 ```
 Оригинал (JPEG): 800x600, 150 KB
-WebP (q=80): 800x600, 95 KB (экономия 37%)
-WebP (q=90): 800x600, 110 KB (экономия 27%)
+WebP (q=80):     800x600, 95 KB  (экономия 37%)
+WebP (q=90):     800x600, 110 KB (экономия 27%)
 ```
 
 #### 2. Логотипы И Иконки (lossless)
 
 ```
-Оригинал (PNG): 512x512, 120 KB
-WebP (lossless): 512x512, 70 KB (экономия 42%)
+Оригинал (PNG):  512x512, 120 KB
+WebP (lossless): 512x512, 70 KB  (экономия 42%)
 ```
 
 #### 3. Прозрачные Изображения
 
 ```
-Оригинал (PNG): 1024x1024 с прозрачностью, 250 KB
+Оригинал (PNG):  1024x1024 с прозрачностью, 250 KB
 WebP (lossless): 1024x1024 с прозрачностью, 140 KB (экономия 44%)
 ```
 
 #### 4. Анимация
 
 ```
-Оригинал (GIF): 320x240, 30 frames, 1.5 MB
+Оригинал (GIF):  320x240, 30 frames, 1.5 MB
 WebP (animated): 320x240, 30 frames, 400 KB (экономия 73%)
 ```
 
@@ -336,12 +337,12 @@ Build → Analyze APK → Выбрать APK
 ```gradle
 // build.gradle
 android {
- buildTypes {
- release {
- minifyEnabled true
- shrinkResources true
- }
- }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+        }
+    }
 }
 ```
 
@@ -349,27 +350,27 @@ android {
 
 ```kotlin
 class ImageLoader {
- suspend fun loadImage(url: String): Bitmap? {
- return withContext(Dispatchers.IO) {
- try {
- val connection = URL(url).openConnection()
- connection.connect()
- val input = connection.getInputStream()
- BitmapFactory.decodeStream(input)
- } catch (e: Exception) {
- Log.e("ImageLoader", "Failed to load WebP image", e)
- null
- }
- }
- }
+    suspend fun loadImage(url: String): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val connection = URL(url).openConnection()
+                connection.connect()
+                val input = connection.getInputStream()
+                BitmapFactory.decodeStream(input)
+            } catch (e: Exception) {
+                Log.e("ImageLoader", "Failed to load WebP image", e)
+                null
+            }
+        }
+    }
 }
 
 // Использование
 lifecycleScope.launch {
- val bitmap = ImageLoader().loadImage("https://example.com/image.webp")
- bitmap?.let {
- imageView.setImageBitmap(it)
- }
+    val bitmap = ImageLoader().loadImage("https://example.com/image.webp")
+    bitmap?.let {
+        imageView.setImageBitmap(it)
+    }
 }
 ```
 
@@ -412,9 +413,11 @@ WebP — это оптимальный выбор для Android-приложе�
 - [[c-performance]]
 - [[q-what-layout-allows-overlapping-objects--android--easy]]
 
+
 ## References
 
 - [Memory Management](https://developer.android.com/topic/performance/memory-overview)
+
 
 ## Related Questions
 

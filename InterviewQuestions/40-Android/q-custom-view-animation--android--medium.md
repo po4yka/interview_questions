@@ -27,6 +27,7 @@ tags:
 - android/ui-animation
 - android/ui-views
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -53,37 +54,37 @@ tags:
 
 ```kotlin
 class AnimatedProgressBar : View {
- private var progress = 0f
- set(value) {
- field = value.coerceIn(0f, 100f)
- invalidate() // ✅ Перерисовка при изменении
- }
+    private var progress = 0f
+        set(value) {
+            field = value.coerceIn(0f, 100f)
+            invalidate() // ✅ Перерисовка при изменении
+        }
 
- private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
- style = Paint.Style.FILL
- color = Color.BLUE
- }
- private var animator: ValueAnimator? = null
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.BLUE
+    }
+    private var animator: ValueAnimator? = null
 
- fun setProgress(target: Float) {
- animator?.cancel() // ✅ Отмена предыдущей
- animator = ValueAnimator.ofFloat(progress, target).apply {
- duration = 500
- interpolator = DecelerateInterpolator()
- addUpdateListener { progress = it.animatedValue as Float }
- start()
- }
- }
+    fun setProgress(target: Float) {
+        animator?.cancel() // ✅ Отмена предыдущей
+        animator = ValueAnimator.ofFloat(progress, target).apply {
+            duration = 500
+            interpolator = DecelerateInterpolator()
+            addUpdateListener { progress = it.animatedValue as Float }
+            start()
+        }
+    }
 
- override fun onDraw(canvas: Canvas) {
- val width = width * (progress / 100f)
- canvas.drawRect(0f, 0f, width, height.toFloat(), paint)
- }
+    override fun onDraw(canvas: Canvas) {
+        val width = width * (progress / 100f)
+        canvas.drawRect(0f, 0f, width, height.toFloat(), paint)
+    }
 
- override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
- animator?.cancel() // ✅ Предотвращение утечек
- }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel() // ✅ Предотвращение утечек
+    }
 }
 ```
 
@@ -93,17 +94,17 @@ class AnimatedProgressBar : View {
 
 ```kotlin
 class AnimatedButton : Button {
- fun animateScale() {
- animate()
- .scaleX(1.2f)
- .scaleY(1.2f)
- .setDuration(200)
- .setInterpolator(OvershootInterpolator())
- .withEndAction {
- animate().scaleX(1f).scaleY(1f).setDuration(200).start()
- }
- .start()
- }
+    fun animateScale() {
+        animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(200)
+            .setInterpolator(OvershootInterpolator())
+            .withEndAction {
+                animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+            }
+            .start()
+    }
 }
 ```
 
@@ -113,33 +114,33 @@ class AnimatedButton : Button {
 
 ```kotlin
 class AnimatedCircleView : View {
- private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
- private var animationProgress = 0f
- private var animator: ValueAnimator? = null
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var animationProgress = 0f
+    private var animator: ValueAnimator? = null
 
- fun startAnimation() {
- animator = ValueAnimator.ofFloat(0f, 1f).apply {
- duration = 2000
- repeatCount = ValueAnimator.INFINITE
- addUpdateListener {
- animationProgress = it.animatedValue as Float
- invalidate()
- }
- start()
- }
- }
+    fun startAnimation() {
+        animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 2000
+            repeatCount = ValueAnimator.INFINITE
+            addUpdateListener {
+                animationProgress = it.animatedValue as Float
+                invalidate()
+            }
+            start()
+        }
+    }
 
- override fun onDraw(canvas: Canvas) {
- val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
- val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
- paint.alpha = alpha
- canvas.drawCircle(width / 2f, height / 2f, radius, paint)
- }
+    override fun onDraw(canvas: Canvas) {
+        val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
+        val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
+        paint.alpha = alpha
+        canvas.drawCircle(width / 2f, height / 2f, radius, paint)
+    }
 
- override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
- animator?.cancel() // ✅ Обязательная очистка
- }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel() // ✅ Обязательная очистка
+    }
 }
 ```
 
@@ -147,35 +148,35 @@ class AnimatedCircleView : View {
 
 ```kotlin
 class LifecycleAwareAnimatedView : View {
- private val activeAnimators = mutableListOf<Animator>()
+    private val activeAnimators = mutableListOf<Animator>()
 
- fun startAnimation() {
- val animator = ValueAnimator.ofFloat(0f, 1f).apply {
- duration = 1000
- addListener(object : AnimatorListenerAdapter() {
- override fun onAnimationEnd(animation: Animator) {
- activeAnimators.remove(animation) // ✅ Автоочистка
- }
- })
- }
- activeAnimators.add(animator)
- animator.start()
- }
+    fun startAnimation() {
+        val animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1000
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    activeAnimators.remove(animation) // ✅ Автоочистка
+                }
+            })
+        }
+        activeAnimators.add(animator)
+        animator.start()
+    }
 
- override fun onVisibilityChanged(changedView: View, visibility: Int) {
- super.onVisibilityChanged(changedView, visibility)
- if (visibility != VISIBLE) {
- activeAnimators.forEach { it.pause() } // ✅ Экономия ресурсов
- } else {
- activeAnimators.forEach { it.resume() }
- }
- }
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (visibility != VISIBLE) {
+            activeAnimators.forEach { it.pause() } // ✅ Экономия ресурсов
+        } else {
+            activeAnimators.forEach { it.resume() }
+        }
+    }
 
- override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
- activeAnimators.forEach { it.cancel() }
- activeAnimators.clear()
- }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        activeAnimators.forEach { it.cancel() }
+        activeAnimators.clear()
+    }
 }
 ```
 
@@ -207,37 +208,37 @@ class LifecycleAwareAnimatedView : View {
 
 ```kotlin
 class AnimatedProgressBar : View {
- private var progress = 0f
- set(value) {
- field = value.coerceIn(0f, 100f)
- invalidate() // ✅ Redraw on change
- }
+    private var progress = 0f
+        set(value) {
+            field = value.coerceIn(0f, 100f)
+            invalidate() // ✅ Redraw on change
+        }
 
- private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
- style = Paint.Style.FILL
- color = Color.BLUE
- }
- private var animator: ValueAnimator? = null
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.BLUE
+    }
+    private var animator: ValueAnimator? = null
 
- fun setProgress(target: Float) {
- animator?.cancel() // ✅ Cancel previous
- animator = ValueAnimator.ofFloat(progress, target).apply {
- duration = 500
- interpolator = DecelerateInterpolator()
- addUpdateListener { progress = it.animatedValue as Float }
- start()
- }
- }
+    fun setProgress(target: Float) {
+        animator?.cancel() // ✅ Cancel previous
+        animator = ValueAnimator.ofFloat(progress, target).apply {
+            duration = 500
+            interpolator = DecelerateInterpolator()
+            addUpdateListener { progress = it.animatedValue as Float }
+            start()
+        }
+    }
 
- override fun onDraw(canvas: Canvas) {
- val width = width * (progress / 100f)
- canvas.drawRect(0f, 0f, width, height.toFloat(), paint)
- }
+    override fun onDraw(canvas: Canvas) {
+        val width = width * (progress / 100f)
+        canvas.drawRect(0f, 0f, width, height.toFloat(), paint)
+    }
 
- override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
- animator?.cancel() // ✅ Prevent leaks
- }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel() // ✅ Prevent leaks
+    }
 }
 ```
 
@@ -247,17 +248,17 @@ class AnimatedProgressBar : View {
 
 ```kotlin
 class AnimatedButton : Button {
- fun animateScale() {
- animate()
- .scaleX(1.2f)
- .scaleY(1.2f)
- .setDuration(200)
- .setInterpolator(OvershootInterpolator())
- .withEndAction {
- animate().scaleX(1f).scaleY(1f).setDuration(200).start()
- }
- .start()
- }
+    fun animateScale() {
+        animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(200)
+            .setInterpolator(OvershootInterpolator())
+            .withEndAction {
+                animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+            }
+            .start()
+    }
 }
 ```
 
@@ -267,33 +268,33 @@ class AnimatedButton : Button {
 
 ```kotlin
 class AnimatedCircleView : View {
- private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
- private var animationProgress = 0f
- private var animator: ValueAnimator? = null
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var animationProgress = 0f
+    private var animator: ValueAnimator? = null
 
- fun startAnimation() {
- animator = ValueAnimator.ofFloat(0f, 1f).apply {
- duration = 2000
- repeatCount = ValueAnimator.INFINITE
- addUpdateListener {
- animationProgress = it.animatedValue as Float
- invalidate()
- }
- start()
- }
- }
+    fun startAnimation() {
+        animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 2000
+            repeatCount = ValueAnimator.INFINITE
+            addUpdateListener {
+                animationProgress = it.animatedValue as Float
+                invalidate()
+            }
+            start()
+        }
+    }
 
- override fun onDraw(canvas: Canvas) {
- val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
- val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
- paint.alpha = alpha
- canvas.drawCircle(width / 2f, height / 2f, radius, paint)
- }
+    override fun onDraw(canvas: Canvas) {
+        val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
+        val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
+        paint.alpha = alpha
+        canvas.drawCircle(width / 2f, height / 2f, radius, paint)
+    }
 
- override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
- animator?.cancel() // ✅ Required cleanup
- }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animator?.cancel() // ✅ Required cleanup
+    }
 }
 ```
 
@@ -301,35 +302,35 @@ class AnimatedCircleView : View {
 
 ```kotlin
 class LifecycleAwareAnimatedView : View {
- private val activeAnimators = mutableListOf<Animator>()
+    private val activeAnimators = mutableListOf<Animator>()
 
- fun startAnimation() {
- val animator = ValueAnimator.ofFloat(0f, 1f).apply {
- duration = 1000
- addListener(object : AnimatorListenerAdapter() {
- override fun onAnimationEnd(animation: Animator) {
- activeAnimators.remove(animation) // ✅ Auto-cleanup
- }
- })
- }
- activeAnimators.add(animator)
- animator.start()
- }
+    fun startAnimation() {
+        val animator = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1000
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    activeAnimators.remove(animation) // ✅ Auto-cleanup
+                }
+            })
+        }
+        activeAnimators.add(animator)
+        animator.start()
+    }
 
- override fun onVisibilityChanged(changedView: View, visibility: Int) {
- super.onVisibilityChanged(changedView, visibility)
- if (visibility != VISIBLE) {
- activeAnimators.forEach { it.pause() } // ✅ Save resources
- } else {
- activeAnimators.forEach { it.resume() }
- }
- }
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        if (visibility != VISIBLE) {
+            activeAnimators.forEach { it.pause() } // ✅ Save resources
+        } else {
+            activeAnimators.forEach { it.resume() }
+        }
+    }
 
- override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
- activeAnimators.forEach { it.cancel() }
- activeAnimators.clear()
- }
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        activeAnimators.forEach { it.cancel() }
+        activeAnimators.clear()
+    }
 }
 ```
 
@@ -367,6 +368,7 @@ class LifecycleAwareAnimatedView : View {
 - 
 - 
 - 
+
 
 ### Prerequisites (Easier)
 - [[q-custom-view-lifecycle--android--medium]] - Жизненный цикл `View` для правильной очистки анимаций

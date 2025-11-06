@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-system-ui]
 created: 2025-10-12
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, difficulty/medium, edge-to-edge, immersive, system-ui, windowinsets]
 sources: ["https://developer.android.com/develop/ui/views/layout/edge-to-edge"]
+
 ---
 
 # Вопрос (RU)
@@ -34,23 +35,23 @@ WindowInsets предоставляют информацию о системны
 
 ```kotlin
 class MainActivity : ComponentActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- enableEdgeToEdge() // ✅ Позволяет рисовать за системными барами
- setContent { MainScreen() }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge() // ✅ Позволяет рисовать за системными барами
+        setContent { MainScreen() }
+    }
 }
 
 @Composable
 fun MainScreen() {
- Scaffold(
- modifier = Modifier
- .fillMaxSize()
- .windowInsetsPadding(WindowInsets.systemBars) // ✅ Автоматический padding
- ) { paddingValues ->
- // ❌ НЕ используйте .padding(paddingValues) дважды
- Content(paddingValues)
- }
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.systemBars) // ✅ Автоматический padding
+    ) { paddingValues ->
+        // ❌ НЕ используйте .padding(paddingValues) дважды
+        Content(paddingValues)
+    }
 }
 ```
 
@@ -58,17 +59,17 @@ fun MainScreen() {
 
 ```kotlin
 // Системные элементы
-WindowInsets.systemBars // Status + Navigation bars
-WindowInsets.statusBars // Только status bar
-WindowInsets.navigationBars // Только navigation bar
+WindowInsets.systemBars       // Status + Navigation bars
+WindowInsets.statusBars        // Только status bar
+WindowInsets.navigationBars    // Только navigation bar
 
 // Динамические элементы
-WindowInsets.ime // ✅ Клавиатура (Input Method Editor)
-WindowInsets.displayCutout // Вырезы экрана (notch, camera hole)
+WindowInsets.ime              // ✅ Клавиатура (Input Method Editor)
+WindowInsets.displayCutout    // Вырезы экрана (notch, camera hole)
 
 // Безопасные области
-WindowInsets.safeDrawing // ✅ Комбинация всех системных insets
-WindowInsets.safeGestures // Зоны системных жестов
+WindowInsets.safeDrawing      // ✅ Комбинация всех системных insets
+WindowInsets.safeGestures     // Зоны системных жестов
 ```
 
 **Обработка клавиатуры:**
@@ -76,22 +77,22 @@ WindowInsets.safeGestures // Зоны системных жестов
 ```kotlin
 @Composable
 fun ChatScreen() {
- Column(
- modifier = Modifier
- .fillMaxSize()
- .imePadding() // ✅ Автоматически адаптируется под клавиатуру
- ) {
- LazyColumn(modifier = Modifier.weight(1f)) {
- items(messages) { MessageItem(it) }
- }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding() // ✅ Автоматически адаптируется под клавиатуру
+    ) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
+            items(messages) { MessageItem(it) }
+        }
 
- TextField(
- value = text,
- onValueChange = { text = it },
- // ❌ НЕ добавляйте .windowInsetsPadding(WindowInsets.ime) вручную
- modifier = Modifier.fillMaxWidth()
- )
- }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            // ❌ НЕ добавляйте .windowInsetsPadding(WindowInsets.ime) вручную
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 ```
 
@@ -100,24 +101,24 @@ fun ChatScreen() {
 ```kotlin
 @Composable
 fun VideoPlayer() {
- val view = LocalView.current
- val insetsController = remember {
- WindowCompat.getInsetsController(
- (view.context as Activity).window,
- view
- )
- }
+    val view = LocalView.current
+    val insetsController = remember {
+        WindowCompat.getInsetsController(
+            (view.context as Activity).window,
+            view
+        )
+    }
 
- DisposableEffect(Unit) {
- // ✅ Скрываем системные бары для полноэкранного видео
- insetsController.hide(WindowInsetsCompat.Type.systemBars())
- insetsController.systemBarsBehavior =
- WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    DisposableEffect(Unit) {
+        // ✅ Скрываем системные бары для полноэкранного видео
+        insetsController.hide(WindowInsetsCompat.Type.systemBars())
+        insetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
- onDispose {
- insetsController.show(WindowInsetsCompat.Type.systemBars())
- }
- }
+        onDispose {
+            insetsController.show(WindowInsetsCompat.Type.systemBars())
+        }
+    }
 }
 ```
 
@@ -130,23 +131,23 @@ WindowInsets provide information about system UI elements (status bar, navigatio
 
 ```kotlin
 class MainActivity : ComponentActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- enableEdgeToEdge() // ✅ Allows drawing behind system bars
- setContent { MainScreen() }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge() // ✅ Allows drawing behind system bars
+        setContent { MainScreen() }
+    }
 }
 
 @Composable
 fun MainScreen() {
- Scaffold(
- modifier = Modifier
- .fillMaxSize()
- .windowInsetsPadding(WindowInsets.systemBars) // ✅ Automatic padding
- ) { paddingValues ->
- // ❌ DON'T use .padding(paddingValues) twice
- Content(paddingValues)
- }
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.systemBars) // ✅ Automatic padding
+    ) { paddingValues ->
+        // ❌ DON'T use .padding(paddingValues) twice
+        Content(paddingValues)
+    }
 }
 ```
 
@@ -154,17 +155,17 @@ fun MainScreen() {
 
 ```kotlin
 // System elements
-WindowInsets.systemBars // Status + Navigation bars
-WindowInsets.statusBars // Status bar only
-WindowInsets.navigationBars // Navigation bar only
+WindowInsets.systemBars       // Status + Navigation bars
+WindowInsets.statusBars        // Status bar only
+WindowInsets.navigationBars    // Navigation bar only
 
 // Dynamic elements
-WindowInsets.ime // ✅ Keyboard (Input Method Editor)
-WindowInsets.displayCutout // Screen cutouts (notch, camera hole)
+WindowInsets.ime              // ✅ Keyboard (Input Method Editor)
+WindowInsets.displayCutout    // Screen cutouts (notch, camera hole)
 
 // Safe areas
-WindowInsets.safeDrawing // ✅ Combination of all system insets
-WindowInsets.safeGestures // System gesture zones
+WindowInsets.safeDrawing      // ✅ Combination of all system insets
+WindowInsets.safeGestures     // System gesture zones
 ```
 
 **Keyboard Handling:**
@@ -172,22 +173,22 @@ WindowInsets.safeGestures // System gesture zones
 ```kotlin
 @Composable
 fun ChatScreen() {
- Column(
- modifier = Modifier
- .fillMaxSize()
- .imePadding() // ✅ Automatically adapts to keyboard
- ) {
- LazyColumn(modifier = Modifier.weight(1f)) {
- items(messages) { MessageItem(it) }
- }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding() // ✅ Automatically adapts to keyboard
+    ) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
+            items(messages) { MessageItem(it) }
+        }
 
- TextField(
- value = text,
- onValueChange = { text = it },
- // ❌ DON'T add .windowInsetsPadding(WindowInsets.ime) manually
- modifier = Modifier.fillMaxWidth()
- )
- }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            // ❌ DON'T add .windowInsetsPadding(WindowInsets.ime) manually
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
 ```
 
@@ -196,24 +197,24 @@ fun ChatScreen() {
 ```kotlin
 @Composable
 fun VideoPlayer() {
- val view = LocalView.current
- val insetsController = remember {
- WindowCompat.getInsetsController(
- (view.context as Activity).window,
- view
- )
- }
+    val view = LocalView.current
+    val insetsController = remember {
+        WindowCompat.getInsetsController(
+            (view.context as Activity).window,
+            view
+        )
+    }
 
- DisposableEffect(Unit) {
- // ✅ Hide system bars for fullscreen video
- insetsController.hide(WindowInsetsCompat.Type.systemBars())
- insetsController.systemBarsBehavior =
- WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    DisposableEffect(Unit) {
+        // ✅ Hide system bars for fullscreen video
+        insetsController.hide(WindowInsetsCompat.Type.systemBars())
+        insetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
- onDispose {
- insetsController.show(WindowInsetsCompat.Type.systemBars())
- }
- }
+        onDispose {
+            insetsController.show(WindowInsetsCompat.Type.systemBars())
+        }
+    }
 }
 ```
 
@@ -229,9 +230,9 @@ fun VideoPlayer() {
 
 ## References
 
-- - WindowInsets concept note
-- - Compose Modifier system
-- - Android System UI overview
+-  - WindowInsets concept note
+-  - Compose Modifier system
+-  - Android System UI overview
 - [Edge-to-Edge Guide](https://developer.android.com/develop/ui/views/layout/edge-to-edge)
 - [WindowInsets API Reference](https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/WindowInsets)
 
@@ -239,11 +240,11 @@ fun VideoPlayer() {
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
-- - Compose basics
+-  - Compose basics
 
 ### Related (Same Level)
 - [[q-compose-navigation-advanced--android--medium]] - Compose navigation
-- - Compose Scaffold
+-  - Compose Scaffold
 - [[q-compose-custom-layout--android--hard]] - Custom layouts
 
 ### Advanced (Harder)

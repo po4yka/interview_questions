@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [android/fragment, android/lifecycle, difficulty/hard, ui]
+
 ---
 
 # Вопрос (RU)
@@ -39,25 +40,25 @@ tags: [android/fragment, android/lifecycle, difficulty/hard, ui]
 ```kotlin
 // ✅ Телефон: одна панель
 class PhoneActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_phone)
- supportFragmentManager.commit {
- replace(R.id.container, ListFragment())
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_phone)
+        supportFragmentManager.commit {
+            replace(R.id.container, ListFragment())
+        }
+    }
 }
 
 // ✅ Планшет: две панели (master-detail)
 class TabletActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_tablet)
- supportFragmentManager.commit {
- replace(R.id.list_container, ListFragment())
- replace(R.id.detail_container, DetailFragment())
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_tablet)
+        supportFragmentManager.commit {
+            replace(R.id.list_container, ListFragment())
+            replace(R.id.detail_container, DetailFragment())
+        }
+    }
 }
 ```
 
@@ -67,11 +68,11 @@ class TabletActivity : AppCompatActivity() {
 ```kotlin
 // ✅ Переиспользуемый фрагмент
 class UserProfileFragment : Fragment() {
- companion object {
- fun newInstance(userId: String) = UserProfileFragment().apply {
- arguments = bundleOf("USER_ID" to userId)
- }
- }
+    companion object {
+        fun newInstance(userId: String) = UserProfileFragment().apply {
+            arguments = bundleOf("USER_ID" to userId)
+        }
+    }
 }
 ```
 
@@ -81,18 +82,18 @@ class UserProfileFragment : Fragment() {
 ```kotlin
 // ✅ Lifecycle-aware фрагмент
 class MyFragment : Fragment() {
- override fun onCreateView(
- inflater: LayoutInflater,
- container: ViewGroup?,
- savedInstanceState: Bundle?
- ): View {
- return inflater.inflate(R.layout.fragment_my, container, false)
- }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_my, container, false)
+    }
 
- override fun onDestroyView() {
- super.onDestroyView()
- // Очистка view-ресурсов
- }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Очистка view-ресурсов
+    }
 }
 ```
 
@@ -102,10 +103,10 @@ class MyFragment : Fragment() {
 ```kotlin
 // ✅ Динамическое управление
 fun showDetail(itemId: String) {
- supportFragmentManager.commit {
- replace(R.id.container, DetailFragment.newInstance(itemId))
- addToBackStack(null)
- }
+    supportFragmentManager.commit {
+        replace(R.id.container, DetailFragment.newInstance(itemId))
+        addToBackStack(null)
+    }
 }
 ```
 
@@ -128,25 +129,25 @@ Ability to use the same component in different configurations: two fragments sid
 ```kotlin
 // ✅ Phone: single pane
 class PhoneActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_phone)
- supportFragmentManager.commit {
- replace(R.id.container, ListFragment())
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_phone)
+        supportFragmentManager.commit {
+            replace(R.id.container, ListFragment())
+        }
+    }
 }
 
 // ✅ Tablet: dual pane (master-detail)
 class TabletActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_tablet)
- supportFragmentManager.commit {
- replace(R.id.list_container, ListFragment())
- replace(R.id.detail_container, DetailFragment())
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_tablet)
+        supportFragmentManager.commit {
+            replace(R.id.list_container, ListFragment())
+            replace(R.id.detail_container, DetailFragment())
+        }
+    }
 }
 ```
 
@@ -156,11 +157,11 @@ Fragments can be developed, tested, and reused independently.
 ```kotlin
 // ✅ Reusable fragment
 class UserProfileFragment : Fragment() {
- companion object {
- fun newInstance(userId: String) = UserProfileFragment().apply {
- arguments = bundleOf("USER_ID" to userId)
- }
- }
+    companion object {
+        fun newInstance(userId: String) = UserProfileFragment().apply {
+            arguments = bundleOf("USER_ID" to userId)
+        }
+    }
 }
 ```
 
@@ -170,18 +171,18 @@ Fragments have their own lifecycle integrated with `Activity`, allowing precise 
 ```kotlin
 // ✅ Lifecycle-aware fragment
 class MyFragment : Fragment() {
- override fun onCreateView(
- inflater: LayoutInflater,
- container: ViewGroup?,
- savedInstanceState: Bundle?
- ): View {
- return inflater.inflate(R.layout.fragment_my, container, false)
- }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_my, container, false)
+    }
 
- override fun onDestroyView() {
- super.onDestroyView()
- // Clean up view resources
- }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Clean up view resources
+    }
 }
 ```
 
@@ -191,10 +192,10 @@ Fragments can be added/removed at runtime, optimizing memory usage.
 ```kotlin
 // ✅ Dynamic management
 fun showDetail(itemId: String) {
- supportFragmentManager.commit {
- replace(R.id.container, DetailFragment.newInstance(itemId))
- addToBackStack(null)
- }
+    supportFragmentManager.commit {
+        replace(R.id.container, DetailFragment.newInstance(itemId))
+        addToBackStack(null)
+    }
 }
 ```
 

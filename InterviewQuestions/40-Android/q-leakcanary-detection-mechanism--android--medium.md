@@ -15,6 +15,7 @@ tags: [android/performance-memory, android/profiling, difficulty/medium, leakcan
 moc: moc-android
 related: [c-memory-leaks, c-memory-management, c-garbage-collection]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -39,10 +40,10 @@ LeakCanary автоматически отслеживает уничтожен�
 
 ```kotlin
 class LeakCanaryLifecycleObserver : LifecycleObserver {
- @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
- fun onDestroy(owner: LifecycleOwner) {
- AppWatcher.objectWatcher.watch(owner)
- }
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy(owner: LifecycleOwner) {
+        AppWatcher.objectWatcher.watch(owner)
+    }
 }
 ```
 
@@ -52,13 +53,13 @@ class LeakCanaryLifecycleObserver : LifecycleObserver {
 
 ```kotlin
 fun watch(watchedObject: Any) {
- val key = UUID.randomUUID().toString()
- val reference = KeyedWeakReference(
- watchedObject,
- key,
- referenceQueue
- )
- watchedObjects[key] = clock.uptimeMillis()
+    val key = UUID.randomUUID().toString()
+    val reference = KeyedWeakReference(
+        watchedObject,
+        key,
+        referenceQueue
+    )
+    watchedObjects[key] = clock.uptimeMillis()
 }
 ```
 
@@ -68,19 +69,19 @@ LeakCanary ждет 5 секунд, запускает сборщик мусор
 
 ```kotlin
 fun checkForLeaks() {
- gcTrigger() // Runtime.getRuntime().gc()
+    gcTrigger() // Runtime.getRuntime().gc()
 
- // Удаляем очищенные ссылки из очереди
- removeWeaklyReachableObjects()
+    // Удаляем очищенные ссылки из очереди
+    removeWeaklyReachableObjects()
 
- // Оставшиеся объекты = утечки
- val leakedRefs = watchedObjects.filter { (_, time) ->
- clock.uptimeMillis() - time >= retainedDelayMillis
- }
+    // Оставшиеся объекты = утечки
+    val leakedRefs = watchedObjects.filter { (_, time) ->
+        clock.uptimeMillis() - time >= retainedDelayMillis
+    }
 
- if (leakedRefs.isNotEmpty()) {
- dumpHeap() // ✅ Создаем heap dump для анализа
- }
+    if (leakedRefs.isNotEmpty()) {
+        dumpHeap() // ✅ Создаем heap dump для анализа
+    }
 }
 ```
 
@@ -96,7 +97,7 @@ weakRef.get() // null - объект собран GC
 
 // ❌ Утечка памяти
 companion object {
- var staticRef: Activity? = null // Сильная ссылка!
+    var staticRef: Activity? = null // Сильная ссылка!
 }
 val activity = MyActivity()
 staticRef = activity
@@ -117,12 +118,12 @@ weakRef.get() // NOT null - staticRef удерживает объект
 
 ```kotlin
 class MyViewModel : ViewModel() {
- init {
- AppWatcher.objectWatcher.watch(
- this,
- "MyViewModel should be cleared"
- )
- }
+    init {
+        AppWatcher.objectWatcher.watch(
+            this,
+            "MyViewModel should be cleared"
+        )
+    }
 }
 ```
 
@@ -138,10 +139,10 @@ LeakCanary automatically tracks `Activity` and `Fragment` destruction via lifecy
 
 ```kotlin
 class LeakCanaryLifecycleObserver : LifecycleObserver {
- @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
- fun onDestroy(owner: LifecycleOwner) {
- AppWatcher.objectWatcher.watch(owner)
- }
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy(owner: LifecycleOwner) {
+        AppWatcher.objectWatcher.watch(owner)
+    }
 }
 ```
 
@@ -151,13 +152,13 @@ After `onDestroy()` is called, a WeakReference is created for the object:
 
 ```kotlin
 fun watch(watchedObject: Any) {
- val key = UUID.randomUUID().toString()
- val reference = KeyedWeakReference(
- watchedObject,
- key,
- referenceQueue
- )
- watchedObjects[key] = clock.uptimeMillis()
+    val key = UUID.randomUUID().toString()
+    val reference = KeyedWeakReference(
+        watchedObject,
+        key,
+        referenceQueue
+    )
+    watchedObjects[key] = clock.uptimeMillis()
 }
 ```
 
@@ -167,19 +168,19 @@ LeakCanary waits 5 seconds, triggers garbage collection, and checks if the weak 
 
 ```kotlin
 fun checkForLeaks() {
- gcTrigger() // Runtime.getRuntime().gc()
+    gcTrigger() // Runtime.getRuntime().gc()
 
- // Remove cleared references from queue
- removeWeaklyReachableObjects()
+    // Remove cleared references from queue
+    removeWeaklyReachableObjects()
 
- // Remaining objects = leaks
- val leakedRefs = watchedObjects.filter { (_, time) ->
- clock.uptimeMillis() - time >= retainedDelayMillis
- }
+    // Remaining objects = leaks
+    val leakedRefs = watchedObjects.filter { (_, time) ->
+        clock.uptimeMillis() - time >= retainedDelayMillis
+    }
 
- if (leakedRefs.isNotEmpty()) {
- dumpHeap() // ✅ Create heap dump for analysis
- }
+    if (leakedRefs.isNotEmpty()) {
+        dumpHeap() // ✅ Create heap dump for analysis
+    }
 }
 ```
 
@@ -195,7 +196,7 @@ weakRef.get() // null - object was collected
 
 // ❌ Memory leak
 companion object {
- var staticRef: Activity? = null // Strong reference!
+    var staticRef: Activity? = null // Strong reference!
 }
 val activity = MyActivity()
 staticRef = activity
@@ -216,12 +217,12 @@ weakRef.get() // NOT null - staticRef holds the object
 
 ```kotlin
 class MyViewModel : ViewModel() {
- init {
- AppWatcher.objectWatcher.watch(
- this,
- "MyViewModel should be cleared"
- )
- }
+    init {
+        AppWatcher.objectWatcher.watch(
+            this,
+            "MyViewModel should be cleared"
+        )
+    }
 }
 ```
 
@@ -239,7 +240,7 @@ class MyViewModel : ViewModel() {
 
 - [[c-memory-management]] - Memory management fundamentals
 - [[c-garbage-collection]] - Garbage collection concepts
-- - Weak reference patterns
+-  - Weak reference patterns
 - https://square.github.io/leakcanary/ - Official LeakCanary documentation
 
 ## Related Questions

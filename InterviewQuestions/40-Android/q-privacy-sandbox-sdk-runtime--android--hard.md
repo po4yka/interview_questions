@@ -29,6 +29,7 @@ tags:
 - difficulty/hard
 - privacy
 - sandboxing
+
 ---
 
 # Вопрос (RU)
@@ -58,8 +59,8 @@ tags:
 
 ```
 App Process <-> SDK Runtime Process <-> Network/Services
- | |
- App Code SDK Code (isolated)
+     |                 |
+  App Code        SDK Code (isolated)
 ```
 
 **Ограничения SDK:**
@@ -73,28 +74,28 @@ App Process <-> SDK Runtime Process <-> Network/Services
 
 ```kotlin
 class SdkRuntimeManager(private val context: Context) {
- private val sdkSandboxManager: SdkSandboxManager? =
- context.getSystemService(SdkSandboxManager::class.java)
+    private val sdkSandboxManager: SdkSandboxManager? =
+        context.getSystemService(SdkSandboxManager::class.java)
 
- suspend fun loadSdk(sdkName: String, params: Bundle): Result<SandboxedSdk> {
- return try {
- val sandboxedSdk = suspendCancellableCoroutine<SandboxedSdk> { cont ->
- sdkSandboxManager?.loadSdk(
- sdkName, params, executor,
- object : OutcomeReceiver<SandboxedSdk, LoadSdkException> {
- override fun onResult(result: SandboxedSdk) = cont.resume(result)
- override fun onError(error: LoadSdkException) =
- cont.resumeWithException(error)
- }
- )
- }
- Result.success(sandboxedSdk)
- } catch (e: Exception) {
- Result.failure(e)
- }
- }
+    suspend fun loadSdk(sdkName: String, params: Bundle): Result<SandboxedSdk> {
+        return try {
+            val sandboxedSdk = suspendCancellableCoroutine<SandboxedSdk> { cont ->
+                sdkSandboxManager?.loadSdk(
+                    sdkName, params, executor,
+                    object : OutcomeReceiver<SandboxedSdk, LoadSdkException> {
+                        override fun onResult(result: SandboxedSdk) = cont.resume(result)
+                        override fun onError(error: LoadSdkException) =
+                            cont.resumeWithException(error)
+                    }
+                )
+            }
+            Result.success(sandboxedSdk)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
- fun getSdkInterface(sdk: SandboxedSdk): IBinder? = sdk.getInterface()
+    fun getSdkInterface(sdk: SandboxedSdk): IBinder? = sdk.getInterface()
 }
 ```
 
@@ -108,24 +109,24 @@ class SdkRuntimeManager(private val context: Context) {
 // Sandbox SDK должен наследовать SandboxedSdkProvider
 abstract class BaseSandboxedSdkProvider : SandboxedSdkProvider() {
 
- override fun onLoadSdk(params: Bundle): SandboxedSdk {
- initializeSdk(params)
- return SandboxedSdk(SdkInterface())
- }
+    override fun onLoadSdk(params: Bundle): SandboxedSdk {
+        initializeSdk(params)
+        return SandboxedSdk(SdkInterface())
+    }
 
- override fun beforeUnloadSdk() {
- cleanupSdk()
- }
+    override fun beforeUnloadSdk() {
+        cleanupSdk()
+    }
 
- inner class SdkInterface : ISdkApi.Stub() {
- override fun performAction(action: String, params: Bundle): Bundle {
- return when (action) {
- "loadAd" -> loadAd(params)
- "trackEvent" -> trackEvent(params)
- else -> Bundle().apply { putString("error", "Unknown action") }
- }
- }
- }
+    inner class SdkInterface : ISdkApi.Stub() {
+        override fun performAction(action: String, params: Bundle): Bundle {
+            return when (action) {
+                "loadAd" -> loadAd(params)
+                "trackEvent" -> trackEvent(params)
+                else -> Bundle().apply { putString("error", "Unknown action") }
+            }
+        }
+    }
 }
 ```
 
@@ -137,37 +138,37 @@ abstract class BaseSandboxedSdkProvider : SandboxedSdkProvider() {
 
 ```kotlin
 class SandboxedAdClient(
- private val runtimeManager: SdkRuntimeManager
+    private val runtimeManager: SdkRuntimeManager
 ) {
- private var sdkInterface: ISdkApi? = null
+    private var sdkInterface: ISdkApi? = null
 
- suspend fun initialize(apiKey: String): Result<Unit> {
- val params = Bundle().apply { putString("apiKey", apiKey) }
- val sandboxedSdk = runtimeManager.loadSdk("com.example.adsdk", params)
- .getOrThrow()
+    suspend fun initialize(apiKey: String): Result<Unit> {
+        val params = Bundle().apply { putString("apiKey", apiKey) }
+        val sandboxedSdk = runtimeManager.loadSdk("com.example.adsdk", params)
+            .getOrThrow()
 
- val binder = sandboxedSdk.getInterface()
- sdkInterface = ISdkApi.Stub.asInterface(binder)
+        val binder = sandboxedSdk.getInterface()
+        sdkInterface = ISdkApi.Stub.asInterface(binder)
 
- val result = sdkInterface?.initialize(Bundle.EMPTY)
- return if (result?.getBoolean("success") == true) {
- Result.success(Unit)
- } else {
- Result.failure(Exception(result?.getString("error")))
- }
- }
+        val result = sdkInterface?.initialize(Bundle.EMPTY)
+        return if (result?.getBoolean("success") == true) {
+            Result.success(Unit)
+        } else {
+            Result.failure(Exception(result?.getString("error")))
+        }
+    }
 
- suspend fun loadAd(adType: String): Result<String> {
- val params = Bundle().apply { putString("adType", adType) }
- val result = sdkInterface?.performAction("loadAd", params)
- ?: return Result.failure(Exception("SDK not initialized"))
+    suspend fun loadAd(adType: String): Result<String> {
+        val params = Bundle().apply { putString("adType", adType) }
+        val result = sdkInterface?.performAction("loadAd", params)
+            ?: return Result.failure(Exception("SDK not initialized"))
 
- return if (result.getBoolean("success")) {
- Result.success(result.getString("adId") ?: "")
- } else {
- Result.failure(Exception(result.getString("error")))
- }
- }
+        return if (result.getBoolean("success")) {
+            Result.success(result.getString("adId") ?: "")
+        } else {
+            Result.failure(Exception(result.getString("error")))
+        }
+    }
 }
 ```
 
@@ -192,18 +193,18 @@ class SandboxedAdClient(
 ```kotlin
 class SdkMigrationManager(private val context: Context) {
 
- fun shouldUseSandboxedSdk(): Boolean =
- Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
- context.packageManager.hasSystemFeature("android.software.sdk_sandbox")
+    fun shouldUseSandboxedSdk(): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        context.packageManager.hasSystemFeature("android.software.sdk_sandbox")
 
- suspend fun initializeSdk(apiKey: String): SdkClient {
- return if (shouldUseSandboxedSdk()) {
- val runtimeManager = SdkRuntimeManager(context)
- SandboxedAdClient(runtimeManager).apply { initialize(apiKey) }
- } else {
- TraditionalAdClient(context).apply { initialize(apiKey) }
- }
- }
+    suspend fun initializeSdk(apiKey: String): SdkClient {
+        return if (shouldUseSandboxedSdk()) {
+            val runtimeManager = SdkRuntimeManager(context)
+            SandboxedAdClient(runtimeManager).apply { initialize(apiKey) }
+        } else {
+            TraditionalAdClient(context).apply { initialize(apiKey) }
+        }
+    }
 }
 ```
 
@@ -238,19 +239,19 @@ class SdkMigrationManager(private val context: Context) {
 ### Распространённые Ошибки
 
 1. **Передача sensitive data** → нарушения приватности
- - Решение: только анонимизированные данные
+   - Решение: только анонимизированные данные
 
 2. **Игнорирование load failures** → краши
- - Решение: Result type, fallback mechanisms
+   - Решение: Result type, fallback mechanisms
 
 3. **Сложные Binder calls** → performance issues
- - Решение: async operations, lightweight data
+   - Решение: async operations, lightweight data
 
 4. **Нет fallback** → сломанное приложение на старых версиях
- - Решение: feature detection, традиционный SDK
+   - Решение: feature detection, традиционный SDK
 
 5. **Предположение о permissions** → SDK сбои
- - Решение: app проверяет permissions, передаёт результаты
+   - Решение: app проверяет permissions, передаёт результаты
 
 ---
 
@@ -269,8 +270,8 @@ class SdkMigrationManager(private val context: Context) {
 
 ```
 App Process <-> SDK Runtime Process <-> Network/Services
- | |
- App Code SDK Code (isolated)
+     |                 |
+  App Code        SDK Code (isolated)
 ```
 
 **SDK Limitations:**
@@ -284,28 +285,28 @@ App Process <-> SDK Runtime Process <-> Network/Services
 
 ```kotlin
 class SdkRuntimeManager(private val context: Context) {
- private val sdkSandboxManager: SdkSandboxManager? =
- context.getSystemService(SdkSandboxManager::class.java)
+    private val sdkSandboxManager: SdkSandboxManager? =
+        context.getSystemService(SdkSandboxManager::class.java)
 
- suspend fun loadSdk(sdkName: String, params: Bundle): Result<SandboxedSdk> {
- return try {
- val sandboxedSdk = suspendCancellableCoroutine<SandboxedSdk> { cont ->
- sdkSandboxManager?.loadSdk(
- sdkName, params, executor,
- object : OutcomeReceiver<SandboxedSdk, LoadSdkException> {
- override fun onResult(result: SandboxedSdk) = cont.resume(result)
- override fun onError(error: LoadSdkException) =
- cont.resumeWithException(error)
- }
- )
- }
- Result.success(sandboxedSdk)
- } catch (e: Exception) {
- Result.failure(e)
- }
- }
+    suspend fun loadSdk(sdkName: String, params: Bundle): Result<SandboxedSdk> {
+        return try {
+            val sandboxedSdk = suspendCancellableCoroutine<SandboxedSdk> { cont ->
+                sdkSandboxManager?.loadSdk(
+                    sdkName, params, executor,
+                    object : OutcomeReceiver<SandboxedSdk, LoadSdkException> {
+                        override fun onResult(result: SandboxedSdk) = cont.resume(result)
+                        override fun onError(error: LoadSdkException) =
+                            cont.resumeWithException(error)
+                    }
+                )
+            }
+            Result.success(sandboxedSdk)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
- fun getSdkInterface(sdk: SandboxedSdk): IBinder? = sdk.getInterface()
+    fun getSdkInterface(sdk: SandboxedSdk): IBinder? = sdk.getInterface()
 }
 ```
 
@@ -319,24 +320,24 @@ class SdkRuntimeManager(private val context: Context) {
 // Sandbox SDK must extend SandboxedSdkProvider
 abstract class BaseSandboxedSdkProvider : SandboxedSdkProvider() {
 
- override fun onLoadSdk(params: Bundle): SandboxedSdk {
- initializeSdk(params)
- return SandboxedSdk(SdkInterface())
- }
+    override fun onLoadSdk(params: Bundle): SandboxedSdk {
+        initializeSdk(params)
+        return SandboxedSdk(SdkInterface())
+    }
 
- override fun beforeUnloadSdk() {
- cleanupSdk()
- }
+    override fun beforeUnloadSdk() {
+        cleanupSdk()
+    }
 
- inner class SdkInterface : ISdkApi.Stub() {
- override fun performAction(action: String, params: Bundle): Bundle {
- return when (action) {
- "loadAd" -> loadAd(params)
- "trackEvent" -> trackEvent(params)
- else -> Bundle().apply { putString("error", "Unknown action") }
- }
- }
- }
+    inner class SdkInterface : ISdkApi.Stub() {
+        override fun performAction(action: String, params: Bundle): Bundle {
+            return when (action) {
+                "loadAd" -> loadAd(params)
+                "trackEvent" -> trackEvent(params)
+                else -> Bundle().apply { putString("error", "Unknown action") }
+            }
+        }
+    }
 }
 ```
 
@@ -348,37 +349,37 @@ abstract class BaseSandboxedSdkProvider : SandboxedSdkProvider() {
 
 ```kotlin
 class SandboxedAdClient(
- private val runtimeManager: SdkRuntimeManager
+    private val runtimeManager: SdkRuntimeManager
 ) {
- private var sdkInterface: ISdkApi? = null
+    private var sdkInterface: ISdkApi? = null
 
- suspend fun initialize(apiKey: String): Result<Unit> {
- val params = Bundle().apply { putString("apiKey", apiKey) }
- val sandboxedSdk = runtimeManager.loadSdk("com.example.adsdk", params)
- .getOrThrow()
+    suspend fun initialize(apiKey: String): Result<Unit> {
+        val params = Bundle().apply { putString("apiKey", apiKey) }
+        val sandboxedSdk = runtimeManager.loadSdk("com.example.adsdk", params)
+            .getOrThrow()
 
- val binder = sandboxedSdk.getInterface()
- sdkInterface = ISdkApi.Stub.asInterface(binder)
+        val binder = sandboxedSdk.getInterface()
+        sdkInterface = ISdkApi.Stub.asInterface(binder)
 
- val result = sdkInterface?.initialize(Bundle.EMPTY)
- return if (result?.getBoolean("success") == true) {
- Result.success(Unit)
- } else {
- Result.failure(Exception(result?.getString("error")))
- }
- }
+        val result = sdkInterface?.initialize(Bundle.EMPTY)
+        return if (result?.getBoolean("success") == true) {
+            Result.success(Unit)
+        } else {
+            Result.failure(Exception(result?.getString("error")))
+        }
+    }
 
- suspend fun loadAd(adType: String): Result<String> {
- val params = Bundle().apply { putString("adType", adType) }
- val result = sdkInterface?.performAction("loadAd", params)
- ?: return Result.failure(Exception("SDK not initialized"))
+    suspend fun loadAd(adType: String): Result<String> {
+        val params = Bundle().apply { putString("adType", adType) }
+        val result = sdkInterface?.performAction("loadAd", params)
+            ?: return Result.failure(Exception("SDK not initialized"))
 
- return if (result.getBoolean("success")) {
- Result.success(result.getString("adId") ?: "")
- } else {
- Result.failure(Exception(result.getString("error")))
- }
- }
+        return if (result.getBoolean("success")) {
+            Result.success(result.getString("adId") ?: "")
+        } else {
+            Result.failure(Exception(result.getString("error")))
+        }
+    }
 }
 ```
 
@@ -403,18 +404,18 @@ class SandboxedAdClient(
 ```kotlin
 class SdkMigrationManager(private val context: Context) {
 
- fun shouldUseSandboxedSdk(): Boolean =
- Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
- context.packageManager.hasSystemFeature("android.software.sdk_sandbox")
+    fun shouldUseSandboxedSdk(): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        context.packageManager.hasSystemFeature("android.software.sdk_sandbox")
 
- suspend fun initializeSdk(apiKey: String): SdkClient {
- return if (shouldUseSandboxedSdk()) {
- val runtimeManager = SdkRuntimeManager(context)
- SandboxedAdClient(runtimeManager).apply { initialize(apiKey) }
- } else {
- TraditionalAdClient(context).apply { initialize(apiKey) }
- }
- }
+    suspend fun initializeSdk(apiKey: String): SdkClient {
+        return if (shouldUseSandboxedSdk()) {
+            val runtimeManager = SdkRuntimeManager(context)
+            SandboxedAdClient(runtimeManager).apply { initialize(apiKey) }
+        } else {
+            TraditionalAdClient(context).apply { initialize(apiKey) }
+        }
+    }
 }
 ```
 
@@ -449,19 +450,19 @@ class SdkMigrationManager(private val context: Context) {
 ### Common Pitfalls
 
 1. **Passing sensitive data** → privacy violations
- - Solution: only anonymized data
+   - Solution: only anonymized data
 
 2. **Ignoring load failures** → crashes
- - Solution: Result type, fallback mechanisms
+   - Solution: Result type, fallback mechanisms
 
 3. **Complex Binder calls** → performance issues
- - Solution: async operations, lightweight data
+   - Solution: async operations, lightweight data
 
 4. **No fallback** → broken app on older versions
- - Solution: feature detection, traditional SDK
+   - Solution: feature detection, traditional SDK
 
 5. **Assuming permissions** → SDK failures
- - Solution: app checks permissions, passes results
+   - Solution: app checks permissions, passes results
 
 ---
 
@@ -486,13 +487,14 @@ class SdkMigrationManager(private val context: Context) {
 
 - [[c-permissions]]
 
+
 ### Prerequisites (Easier)
-- - Process/thread fundamentals
-- - Android process isolation
+-  - Process/thread fundamentals
+-  - Android process isolation
 
 ### Related (Same Level)
-- - Binder IPC mechanisms
-- - Cross-process security
+-  - Binder IPC mechanisms
+-  - Cross-process security
 
 ### Advanced (Harder)
-- - Custom sandboxing strategies
+-  - Custom sandboxing strategies

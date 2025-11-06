@@ -1,7 +1,7 @@
 ---
 id: android-247
 title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор
- как отдельный компонент
+  как отдельный компонент
 aliases:
 - Photo Editor Component
 - Separate Photo Editor
@@ -38,6 +38,7 @@ tags:
 - fragments
 - imageview
 - views
+
 ---
 
 # Вопрос (RU)
@@ -59,27 +60,27 @@ tags:
 ```kotlin
 // ✅ Fragment-based photo editor
 class PhotoEditorFragment : Fragment() {
- private lateinit var binding: FragmentPhotoEditorBinding
- private var originalBitmap: Bitmap? = null
- private var editedBitmap: Bitmap? = null
+    private lateinit var binding: FragmentPhotoEditorBinding
+    private var originalBitmap: Bitmap? = null
+    private var editedBitmap: Bitmap? = null
 
- override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
- super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
- loadImage()
- setupListeners()
- }
+        loadImage()
+        setupListeners()
+    }
 
- private fun loadImage() {
- val imageUri = arguments?.getParcelable<Uri>("image_uri")
- imageUri?.let { uri ->
- originalBitmap = ImageDecoder.decodeBitmap(
- ImageDecoder.createSource(requireContext().contentResolver, uri)
- )
- editedBitmap = originalBitmap?.copy(Bitmap.Config.ARGB_8888, true)
- binding.photoImageView.setImageBitmap(editedBitmap)
- }
- }
+    private fun loadImage() {
+        val imageUri = arguments?.getParcelable<Uri>("image_uri")
+        imageUri?.let { uri ->
+            originalBitmap = ImageDecoder.decodeBitmap(
+                ImageDecoder.createSource(requireContext().contentResolver, uri)
+            )
+            editedBitmap = originalBitmap?.copy(Bitmap.Config.ARGB_8888, true)
+            binding.photoImageView.setImageBitmap(editedBitmap)
+        }
+    }
 }
 ```
 
@@ -88,25 +89,25 @@ class PhotoEditorFragment : Fragment() {
 ```kotlin
 // ✅ Rotate image
 private fun rotateImage() {
- editedBitmap?.let { bitmap ->
- val matrix = Matrix().apply { postRotate(90f) }
- editedBitmap = Bitmap.createBitmap(
- bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true
- )
- binding.photoImageView.setImageBitmap(editedBitmap)
- }
+    editedBitmap?.let { bitmap ->
+        val matrix = Matrix().apply { postRotate(90f) }
+        editedBitmap = Bitmap.createBitmap(
+            bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true
+        )
+        binding.photoImageView.setImageBitmap(editedBitmap)
+    }
 }
 
 // ✅ Apply grayscale filter
 private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
- val result = Bitmap.createBitmap(source.width, source.height, source.config)
- val paint = Paint().apply {
- colorFilter = ColorMatrixColorFilter(
- ColorMatrix().apply { setSaturation(0f) }
- )
- }
- Canvas(result).drawBitmap(source, 0f, 0f, paint)
- return result
+    val result = Bitmap.createBitmap(source.width, source.height, source.config)
+    val paint = Paint().apply {
+        colorFilter = ColorMatrixColorFilter(
+            ColorMatrix().apply { setSaturation(0f) }
+        )
+    }
+    Canvas(result).drawBitmap(source, 0f, 0f, paint)
+    return result
 }
 ```
 
@@ -115,16 +116,16 @@ private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
 ```kotlin
 // ✅ Use as fragment
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
- val imageUri = intent.getParcelableExtra<Uri>("image_uri")
- imageUri?.let { uri ->
- supportFragmentManager.beginTransaction()
- .replace(R.id.container, PhotoEditorFragment.newInstance(uri))
- .commit()
- }
- }
+        val imageUri = intent.getParcelableExtra<Uri>("image_uri")
+        imageUri?.let { uri ->
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, PhotoEditorFragment.newInstance(uri))
+                .commit()
+        }
+    }
 }
 ```
 
@@ -133,23 +134,23 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ Save to MediaStore
 private fun saveImage() {
- editedBitmap?.let { bitmap ->
- val contentValues = ContentValues().apply {
- put(MediaStore.Images.Media.DISPLAY_NAME, "edited_${System.currentTimeMillis()}.jpg")
- put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
- put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
- }
+    editedBitmap?.let { bitmap ->
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "edited_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
 
- val uri = requireContext().contentResolver.insert(
- MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
- )
+        val uri = requireContext().contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
+        )
 
- uri?.let {
- requireContext().contentResolver.openOutputStream(it)?.use { out ->
- bitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
- }
- }
- }
+        uri?.let {
+            requireContext().contentResolver.openOutputStream(it)?.use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
+            }
+        }
+    }
 }
 ```
 
@@ -157,9 +158,9 @@ private fun saveImage() {
 ```kotlin
 // ✅ Recycle bitmaps
 override fun onDestroyView() {
- super.onDestroyView()
- originalBitmap?.recycle()
- editedBitmap?.recycle()
+    super.onDestroyView()
+    originalBitmap?.recycle()
+    editedBitmap?.recycle()
 }
 ```
 
@@ -179,27 +180,27 @@ Photo editor is implemented as a `Fragment` with `ImageView` for display and `Bi
 ```kotlin
 // ✅ Fragment-based photo editor
 class PhotoEditorFragment : Fragment() {
- private lateinit var binding: FragmentPhotoEditorBinding
- private var originalBitmap: Bitmap? = null
- private var editedBitmap: Bitmap? = null
+    private lateinit var binding: FragmentPhotoEditorBinding
+    private var originalBitmap: Bitmap? = null
+    private var editedBitmap: Bitmap? = null
 
- override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
- super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
- loadImage()
- setupListeners()
- }
+        loadImage()
+        setupListeners()
+    }
 
- private fun loadImage() {
- val imageUri = arguments?.getParcelable<Uri>("image_uri")
- imageUri?.let { uri ->
- originalBitmap = ImageDecoder.decodeBitmap(
- ImageDecoder.createSource(requireContext().contentResolver, uri)
- )
- editedBitmap = originalBitmap?.copy(Bitmap.Config.ARGB_8888, true)
- binding.photoImageView.setImageBitmap(editedBitmap)
- }
- }
+    private fun loadImage() {
+        val imageUri = arguments?.getParcelable<Uri>("image_uri")
+        imageUri?.let { uri ->
+            originalBitmap = ImageDecoder.decodeBitmap(
+                ImageDecoder.createSource(requireContext().contentResolver, uri)
+            )
+            editedBitmap = originalBitmap?.copy(Bitmap.Config.ARGB_8888, true)
+            binding.photoImageView.setImageBitmap(editedBitmap)
+        }
+    }
 }
 ```
 
@@ -208,25 +209,25 @@ class PhotoEditorFragment : Fragment() {
 ```kotlin
 // ✅ Rotate image
 private fun rotateImage() {
- editedBitmap?.let { bitmap ->
- val matrix = Matrix().apply { postRotate(90f) }
- editedBitmap = Bitmap.createBitmap(
- bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true
- )
- binding.photoImageView.setImageBitmap(editedBitmap)
- }
+    editedBitmap?.let { bitmap ->
+        val matrix = Matrix().apply { postRotate(90f) }
+        editedBitmap = Bitmap.createBitmap(
+            bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true
+        )
+        binding.photoImageView.setImageBitmap(editedBitmap)
+    }
 }
 
 // ✅ Apply grayscale filter
 private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
- val result = Bitmap.createBitmap(source.width, source.height, source.config)
- val paint = Paint().apply {
- colorFilter = ColorMatrixColorFilter(
- ColorMatrix().apply { setSaturation(0f) }
- )
- }
- Canvas(result).drawBitmap(source, 0f, 0f, paint)
- return result
+    val result = Bitmap.createBitmap(source.width, source.height, source.config)
+    val paint = Paint().apply {
+        colorFilter = ColorMatrixColorFilter(
+            ColorMatrix().apply { setSaturation(0f) }
+        )
+    }
+    Canvas(result).drawBitmap(source, 0f, 0f, paint)
+    return result
 }
 ```
 
@@ -235,16 +236,16 @@ private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
 ```kotlin
 // ✅ Use as fragment
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
- val imageUri = intent.getParcelableExtra<Uri>("image_uri")
- imageUri?.let { uri ->
- supportFragmentManager.beginTransaction()
- .replace(R.id.container, PhotoEditorFragment.newInstance(uri))
- .commit()
- }
- }
+        val imageUri = intent.getParcelableExtra<Uri>("image_uri")
+        imageUri?.let { uri ->
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, PhotoEditorFragment.newInstance(uri))
+                .commit()
+        }
+    }
 }
 ```
 
@@ -253,23 +254,23 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ Save to MediaStore
 private fun saveImage() {
- editedBitmap?.let { bitmap ->
- val contentValues = ContentValues().apply {
- put(MediaStore.Images.Media.DISPLAY_NAME, "edited_${System.currentTimeMillis()}.jpg")
- put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
- put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
- }
+    editedBitmap?.let { bitmap ->
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "edited_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
 
- val uri = requireContext().contentResolver.insert(
- MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
- )
+        val uri = requireContext().contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
+        )
 
- uri?.let {
- requireContext().contentResolver.openOutputStream(it)?.use { out ->
- bitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
- }
- }
- }
+        uri?.let {
+            requireContext().contentResolver.openOutputStream(it)?.use { out ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
+            }
+        }
+    }
 }
 ```
 
@@ -277,9 +278,9 @@ private fun saveImage() {
 ```kotlin
 // ✅ Recycle bitmaps
 override fun onDestroyView() {
- super.onDestroyView()
- originalBitmap?.recycle()
- editedBitmap?.recycle()
+    super.onDestroyView()
+    originalBitmap?.recycle()
+    editedBitmap?.recycle()
 }
 ```
 
@@ -311,6 +312,7 @@ override fun onDestroyView() {
 ### Prerequisites / Concepts
 
 - [[c-fragments]]
+
 
 ### Prerequisites (Easier)
 

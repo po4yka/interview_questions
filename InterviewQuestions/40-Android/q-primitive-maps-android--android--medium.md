@@ -10,11 +10,12 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [q-android-memory-optimization--android--medium, q-boxing-unboxing--kotlin--easy, q-collections-basics--kotlin--easy, q-hashmap-vs-sparsearray--android--medium, q-recyclerview-optimization--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/performance-memory, collections, difficulty/medium, memory-optimization, performance]
+
 ---
 
 # Вопрос (RU)
@@ -42,7 +43,7 @@ val userCache = SparseArray<User>()
 userCache.put(1, User("Alice"))
 userCache.put(100, User("Bob"))
 
-val user = userCache.get(1) // ✅ Нет boxing для ключа
+val user = userCache.get(1)  // ✅ Нет boxing для ключа
 val size = userCache.size()
 ```
 
@@ -55,8 +56,8 @@ val viewCounts = SparseIntArray()
 viewCounts.put(101, 95)
 
 fun incrementCount(id: Int) {
- val current = viewCounts.get(id, 0) // ✅ Default value: 0
- viewCounts.put(id, current + 1)
+    val current = viewCounts.get(id, 0)  // ✅ Default value: 0
+    viewCounts.put(id, current + 1)
 }
 ```
 
@@ -70,7 +71,7 @@ selectedItems.put(0, true)
 selectedItems.put(5, true)
 
 fun isSelected(position: Int): Boolean {
- return selectedItems.get(position, false)
+    return selectedItems.get(position, false)
 }
 ```
 
@@ -109,48 +110,48 @@ timestampCache.put(timestamp, Event("Click"))
 **`RecyclerView` адаптер:**
 ```kotlin
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
- private val expandedItems = SparseBooleanArray() // ✅ Флаги состояния
+    private val expandedItems = SparseBooleanArray()  // ✅ Флаги состояния
 
- fun toggleExpanded(position: Int) {
- val isExpanded = expandedItems.get(position, false)
- expandedItems.put(position, !isExpanded)
- notifyItemChanged(position)
- }
+    fun toggleExpanded(position: Int) {
+        val isExpanded = expandedItems.get(position, false)
+        expandedItems.put(position, !isExpanded)
+        notifyItemChanged(position)
+    }
 }
 ```
 
 **`ViewModel` с кэшем:**
 ```kotlin
 class UserViewModel : ViewModel() {
- private val users = SparseArray<User>() // ✅ Int → User
- private val favorites = SparseBooleanArray() // ✅ Int → Boolean
- private val scores = SparseIntArray() // ✅ Int → Int
+    private val users = SparseArray<User>()          // ✅ Int → User
+    private val favorites = SparseBooleanArray()     // ✅ Int → Boolean
+    private val scores = SparseIntArray()            // ✅ Int → Int
 
- fun toggleFavorite(userId: Int) {
- val isFavorite = favorites.get(userId, false)
- favorites.put(userId, !isFavorite)
- }
+    fun toggleFavorite(userId: Int) {
+        val isFavorite = favorites.get(userId, false)
+        favorites.put(userId, !isFavorite)
+    }
 
- override fun onCleared() {
- users.clear()
- favorites.clear()
- scores.clear()
- }
+    override fun onCleared() {
+        users.clear()
+        favorites.clear()
+        scores.clear()
+    }
 }
 ```
 
 **Состояние загрузки:**
 ```kotlin
 class StateManager {
- private val loadingStates = SparseBooleanArray() // ✅ Флаги загрузки
- private val errorCounts = SparseIntArray() // ✅ Счётчики ошибок
- private val dataCache = SparseArray<Data>() // ✅ Кэш данных
+    private val loadingStates = SparseBooleanArray()  // ✅ Флаги загрузки
+    private val errorCounts = SparseIntArray()        // ✅ Счётчики ошибок
+    private val dataCache = SparseArray<Data>()       // ✅ Кэш данных
 
- fun startLoading(id: Int) {
- loadingStates.put(id, true)
- }
+    fun startLoading(id: Int) {
+        loadingStates.put(id, true)
+    }
 
- fun isLoading(id: Int): Boolean = loadingStates.get(id, false)
+    fun isLoading(id: Int): Boolean = loadingStates.get(id, false)
 }
 ```
 
@@ -199,7 +200,7 @@ val userCache = SparseArray<User>()
 userCache.put(1, User("Alice"))
 userCache.put(100, User("Bob"))
 
-val user = userCache.get(1) // ✅ No boxing for key
+val user = userCache.get(1)  // ✅ No boxing for key
 val size = userCache.size()
 ```
 
@@ -212,8 +213,8 @@ val viewCounts = SparseIntArray()
 viewCounts.put(101, 95)
 
 fun incrementCount(id: Int) {
- val current = viewCounts.get(id, 0) // ✅ Default value: 0
- viewCounts.put(id, current + 1)
+    val current = viewCounts.get(id, 0)  // ✅ Default value: 0
+    viewCounts.put(id, current + 1)
 }
 ```
 
@@ -227,7 +228,7 @@ selectedItems.put(0, true)
 selectedItems.put(5, true)
 
 fun isSelected(position: Int): Boolean {
- return selectedItems.get(position, false)
+    return selectedItems.get(position, false)
 }
 ```
 
@@ -266,48 +267,48 @@ timestampCache.put(timestamp, Event("Click"))
 **`RecyclerView` adapter:**
 ```kotlin
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
- private val expandedItems = SparseBooleanArray() // ✅ State flags
+    private val expandedItems = SparseBooleanArray()  // ✅ State flags
 
- fun toggleExpanded(position: Int) {
- val isExpanded = expandedItems.get(position, false)
- expandedItems.put(position, !isExpanded)
- notifyItemChanged(position)
- }
+    fun toggleExpanded(position: Int) {
+        val isExpanded = expandedItems.get(position, false)
+        expandedItems.put(position, !isExpanded)
+        notifyItemChanged(position)
+    }
 }
 ```
 
 **`ViewModel` with cache:**
 ```kotlin
 class UserViewModel : ViewModel() {
- private val users = SparseArray<User>() // ✅ Int → User
- private val favorites = SparseBooleanArray() // ✅ Int → Boolean
- private val scores = SparseIntArray() // ✅ Int → Int
+    private val users = SparseArray<User>()          // ✅ Int → User
+    private val favorites = SparseBooleanArray()     // ✅ Int → Boolean
+    private val scores = SparseIntArray()            // ✅ Int → Int
 
- fun toggleFavorite(userId: Int) {
- val isFavorite = favorites.get(userId, false)
- favorites.put(userId, !isFavorite)
- }
+    fun toggleFavorite(userId: Int) {
+        val isFavorite = favorites.get(userId, false)
+        favorites.put(userId, !isFavorite)
+    }
 
- override fun onCleared() {
- users.clear()
- favorites.clear()
- scores.clear()
- }
+    override fun onCleared() {
+        users.clear()
+        favorites.clear()
+        scores.clear()
+    }
 }
 ```
 
 **Loading state:**
 ```kotlin
 class StateManager {
- private val loadingStates = SparseBooleanArray() // ✅ Loading flags
- private val errorCounts = SparseIntArray() // ✅ Error counters
- private val dataCache = SparseArray<Data>() // ✅ Data cache
+    private val loadingStates = SparseBooleanArray()  // ✅ Loading flags
+    private val errorCounts = SparseIntArray()        // ✅ Error counters
+    private val dataCache = SparseArray<Data>()       // ✅ Data cache
 
- fun startLoading(id: Int) {
- loadingStates.put(id, true)
- }
+    fun startLoading(id: Int) {
+        loadingStates.put(id, true)
+    }
 
- fun isLoading(id: Int): Boolean = loadingStates.get(id, false)
+    fun isLoading(id: Int): Boolean = loadingStates.get(id, false)
 }
 ```
 
@@ -361,8 +362,8 @@ cache.indexOfKey(id) >= 0
 ## Related Questions
 
 ### Prerequisites
-- - Understanding autoboxing overhead
-- - How `HashMap` works internally
+-  - Understanding autoboxing overhead
+-  - How `HashMap` works internally
 
 ### Related
 - [[q-reduce-apk-size-techniques--android--medium]] - Memory optimization techniques
@@ -370,5 +371,5 @@ cache.indexOfKey(id) >= 0
 - [[q-recyclerview-explained--android--medium]] - `RecyclerView` performance patterns
 
 ### Advanced
-- - Profiling memory usage with Android Studio
-- - Implementing custom optimized collections
+-  - Profiling memory usage with Android Studio
+-  - Implementing custom optimized collections

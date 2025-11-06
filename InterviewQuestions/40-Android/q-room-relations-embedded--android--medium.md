@@ -25,6 +25,7 @@ updated: 2025-10-28
 
 # Tags
 tags: [android/architecture-clean, android/room, database, difficulty/medium, embedded, relations]
+
 ---
 
 # Вопрос (RU)
@@ -47,15 +48,15 @@ Room предоставляет два механизма для работы с
 
 ```kotlin
 data class Address(
- val street: String,
- val city: String
+    val street: String,
+    val city: String
 )
 
 @Entity(tableName = "users")
 data class User(
- @PrimaryKey val userId: Long,
- val name: String,
- @Embedded val address: Address // ✅ Поля встраиваются в таблицу users
+    @PrimaryKey val userId: Long,
+    val name: String,
+    @Embedded val address: Address  // ✅ Поля встраиваются в таблицу users
 )
 // Результат: users(userId, name, street, city)
 ```
@@ -65,9 +66,9 @@ data class User(
 ```kotlin
 @Entity(tableName = "stores")
 data class Store(
- @PrimaryKey val storeId: Long,
- @Embedded(prefix = "pickup_") val pickupLocation: Coordinates, // ✅ pickup_lat, pickup_lon
- @Embedded(prefix = "delivery_") val deliveryLocation: Coordinates // ✅ delivery_lat, delivery_lon
+    @PrimaryKey val storeId: Long,
+    @Embedded(prefix = "pickup_") val pickupLocation: Coordinates,  // ✅ pickup_lat, pickup_lon
+    @Embedded(prefix = "delivery_") val deliveryLocation: Coordinates  // ✅ delivery_lat, delivery_lon
 )
 ```
 
@@ -78,40 +79,40 @@ data class Store(
 ```kotlin
 @Entity(tableName = "users")
 data class User(
- @PrimaryKey val userId: Long,
- val name: String
+    @PrimaryKey val userId: Long,
+    val name: String
 )
 
 @Entity(
- tableName = "posts",
- foreignKeys = [ForeignKey( // ✅ Обеспечивает целостность данных
- entity = User::class,
- parentColumns = ["userId"],
- childColumns = ["authorId"],
- onDelete = ForeignKey.CASCADE
- )],
- indices = [Index("authorId")] // ✅ Критически важно для производительности
+    tableName = "posts",
+    foreignKeys = [ForeignKey(  // ✅ Обеспечивает целостность данных
+        entity = User::class,
+        parentColumns = ["userId"],
+        childColumns = ["authorId"],
+        onDelete = ForeignKey.CASCADE
+    )],
+    indices = [Index("authorId")]  // ✅ Критически важно для производительности
 )
 data class Post(
- @PrimaryKey val postId: Long,
- val authorId: Long,
- val content: String
+    @PrimaryKey val postId: Long,
+    val authorId: Long,
+    val content: String
 )
 
 data class UserWithPosts(
- @Embedded val user: User,
- @Relation(
- parentColumn = "userId",
- entityColumn = "authorId"
- )
- val posts: List<Post>
+    @Embedded val user: User,
+    @Relation(
+        parentColumn = "userId",
+        entityColumn = "authorId"
+    )
+    val posts: List<Post>
 )
 
 @Dao
 interface UserDao {
- @Transaction // ✅ Обязательна для атомарности
- @Query("SELECT * FROM users WHERE userId = :id")
- suspend fun getUserWithPosts(id: Long): UserWithPosts?
+    @Transaction  // ✅ Обязательна для атомарности
+    @Query("SELECT * FROM users WHERE userId = :id")
+    suspend fun getUserWithPosts(id: Long): UserWithPosts?
 }
 ```
 
@@ -125,38 +126,38 @@ data class Student(@PrimaryKey val studentId: Long, val name: String)
 data class Course(@PrimaryKey val courseId: Long, val code: String)
 
 @Entity(
- tableName = "enrollments",
- primaryKeys = ["studentId", "courseId"], // ✅ Составной ключ
- foreignKeys = [
- ForeignKey(entity = Student::class, parentColumns = ["studentId"], childColumns = ["studentId"], onDelete = ForeignKey.CASCADE),
- ForeignKey(entity = Course::class, parentColumns = ["courseId"], childColumns = ["courseId"], onDelete = ForeignKey.CASCADE)
- ],
- indices = [Index("studentId"), Index("courseId")] // ✅ Обязательные индексы
+    tableName = "enrollments",
+    primaryKeys = ["studentId", "courseId"],  // ✅ Составной ключ
+    foreignKeys = [
+        ForeignKey(entity = Student::class, parentColumns = ["studentId"], childColumns = ["studentId"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(entity = Course::class, parentColumns = ["courseId"], childColumns = ["courseId"], onDelete = ForeignKey.CASCADE)
+    ],
+    indices = [Index("studentId"), Index("courseId")]  // ✅ Обязательные индексы
 )
 data class Enrollment(
- val studentId: Long,
- val courseId: Long,
- val grade: String? = null // ✅ Дополнительные данные связи
+    val studentId: Long,
+    val courseId: Long,
+    val grade: String? = null  // ✅ Дополнительные данные связи
 )
 
 data class StudentWithCourses(
- @Embedded val student: Student,
- @Relation(
- parentColumn = "studentId",
- entityColumn = "courseId",
- associateBy = Junction(Enrollment::class) // ✅ Junction определяет связь
- )
- val courses: List<Course>
+    @Embedded val student: Student,
+    @Relation(
+        parentColumn = "studentId",
+        entityColumn = "courseId",
+        associateBy = Junction(Enrollment::class)  // ✅ Junction определяет связь
+    )
+    val courses: List<Course>
 )
 
 @Dao
 interface EnrollmentDao {
- @Insert(onConflict = OnConflictStrategy.IGNORE)
- suspend fun enroll(enrollment: Enrollment)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun enroll(enrollment: Enrollment)
 
- @Transaction
- @Query("SELECT * FROM students WHERE studentId = :id")
- suspend fun getStudentWithCourses(id: Long): StudentWithCourses?
+    @Transaction
+    @Query("SELECT * FROM students WHERE studentId = :id")
+    suspend fun getStudentWithCourses(id: Long): StudentWithCourses?
 }
 ```
 
@@ -187,15 +188,15 @@ Room provides two mechanisms for working with relationships: `@Embedded` for fla
 
 ```kotlin
 data class Address(
- val street: String,
- val city: String
+    val street: String,
+    val city: String
 )
 
 @Entity(tableName = "users")
 data class User(
- @PrimaryKey val userId: Long,
- val name: String,
- @Embedded val address: Address // ✅ Fields are flattened into users table
+    @PrimaryKey val userId: Long,
+    val name: String,
+    @Embedded val address: Address  // ✅ Fields are flattened into users table
 )
 // Result: users(userId, name, street, city)
 ```
@@ -205,9 +206,9 @@ data class User(
 ```kotlin
 @Entity(tableName = "stores")
 data class Store(
- @PrimaryKey val storeId: Long,
- @Embedded(prefix = "pickup_") val pickupLocation: Coordinates, // ✅ pickup_lat, pickup_lon
- @Embedded(prefix = "delivery_") val deliveryLocation: Coordinates // ✅ delivery_lat, delivery_lon
+    @PrimaryKey val storeId: Long,
+    @Embedded(prefix = "pickup_") val pickupLocation: Coordinates,  // ✅ pickup_lat, pickup_lon
+    @Embedded(prefix = "delivery_") val deliveryLocation: Coordinates  // ✅ delivery_lat, delivery_lon
 )
 ```
 
@@ -218,40 +219,40 @@ data class Store(
 ```kotlin
 @Entity(tableName = "users")
 data class User(
- @PrimaryKey val userId: Long,
- val name: String
+    @PrimaryKey val userId: Long,
+    val name: String
 )
 
 @Entity(
- tableName = "posts",
- foreignKeys = [ForeignKey( // ✅ Enforces data integrity
- entity = User::class,
- parentColumns = ["userId"],
- childColumns = ["authorId"],
- onDelete = ForeignKey.CASCADE
- )],
- indices = [Index("authorId")] // ✅ Critical for performance
+    tableName = "posts",
+    foreignKeys = [ForeignKey(  // ✅ Enforces data integrity
+        entity = User::class,
+        parentColumns = ["userId"],
+        childColumns = ["authorId"],
+        onDelete = ForeignKey.CASCADE
+    )],
+    indices = [Index("authorId")]  // ✅ Critical for performance
 )
 data class Post(
- @PrimaryKey val postId: Long,
- val authorId: Long,
- val content: String
+    @PrimaryKey val postId: Long,
+    val authorId: Long,
+    val content: String
 )
 
 data class UserWithPosts(
- @Embedded val user: User,
- @Relation(
- parentColumn = "userId",
- entityColumn = "authorId"
- )
- val posts: List<Post>
+    @Embedded val user: User,
+    @Relation(
+        parentColumn = "userId",
+        entityColumn = "authorId"
+    )
+    val posts: List<Post>
 )
 
 @Dao
 interface UserDao {
- @Transaction // ✅ Required for atomicity
- @Query("SELECT * FROM users WHERE userId = :id")
- suspend fun getUserWithPosts(id: Long): UserWithPosts?
+    @Transaction  // ✅ Required for atomicity
+    @Query("SELECT * FROM users WHERE userId = :id")
+    suspend fun getUserWithPosts(id: Long): UserWithPosts?
 }
 ```
 
@@ -265,38 +266,38 @@ data class Student(@PrimaryKey val studentId: Long, val name: String)
 data class Course(@PrimaryKey val courseId: Long, val code: String)
 
 @Entity(
- tableName = "enrollments",
- primaryKeys = ["studentId", "courseId"], // ✅ Composite key
- foreignKeys = [
- ForeignKey(entity = Student::class, parentColumns = ["studentId"], childColumns = ["studentId"], onDelete = ForeignKey.CASCADE),
- ForeignKey(entity = Course::class, parentColumns = ["courseId"], childColumns = ["courseId"], onDelete = ForeignKey.CASCADE)
- ],
- indices = [Index("studentId"), Index("courseId")] // ✅ Required indices
+    tableName = "enrollments",
+    primaryKeys = ["studentId", "courseId"],  // ✅ Composite key
+    foreignKeys = [
+        ForeignKey(entity = Student::class, parentColumns = ["studentId"], childColumns = ["studentId"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(entity = Course::class, parentColumns = ["courseId"], childColumns = ["courseId"], onDelete = ForeignKey.CASCADE)
+    ],
+    indices = [Index("studentId"), Index("courseId")]  // ✅ Required indices
 )
 data class Enrollment(
- val studentId: Long,
- val courseId: Long,
- val grade: String? = null // ✅ Additional relationship data
+    val studentId: Long,
+    val courseId: Long,
+    val grade: String? = null  // ✅ Additional relationship data
 )
 
 data class StudentWithCourses(
- @Embedded val student: Student,
- @Relation(
- parentColumn = "studentId",
- entityColumn = "courseId",
- associateBy = Junction(Enrollment::class) // ✅ Junction defines the relationship
- )
- val courses: List<Course>
+    @Embedded val student: Student,
+    @Relation(
+        parentColumn = "studentId",
+        entityColumn = "courseId",
+        associateBy = Junction(Enrollment::class)  // ✅ Junction defines the relationship
+    )
+    val courses: List<Course>
 )
 
 @Dao
 interface EnrollmentDao {
- @Insert(onConflict = OnConflictStrategy.IGNORE)
- suspend fun enroll(enrollment: Enrollment)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun enroll(enrollment: Enrollment)
 
- @Transaction
- @Query("SELECT * FROM students WHERE studentId = :id")
- suspend fun getStudentWithCourses(id: Long): StudentWithCourses?
+    @Transaction
+    @Query("SELECT * FROM students WHERE studentId = :id")
+    suspend fun getStudentWithCourses(id: Long): StudentWithCourses?
 }
 ```
 
@@ -350,5 +351,5 @@ interface EnrollmentDao {
 
 ### Advanced (Harder)
 - [[q-room-fts-full-text-search--android--hard]] — Full-text search in Room
-- — Integrating Room with Paging 3
-- — Multi-database architecture
+-  — Integrating Room with Paging 3
+-  — Multi-database architecture

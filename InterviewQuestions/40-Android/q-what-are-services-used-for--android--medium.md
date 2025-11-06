@@ -25,6 +25,7 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [android/background-execution, android/service, background-work, difficulty/medium, foreground-service]
+
 ---
 
 # Вопрос (RU)
@@ -58,32 +59,32 @@ tags: [android/background-execution, android/service, background-work, difficult
 
 ```kotlin
 class MusicPlayerService : Service() {
- override fun onCreate() {
- super.onCreate()
- // ✅ Обязательно: запуск с уведомлением
- startForeground(NOTIFICATION_ID, createNotification())
- }
+    override fun onCreate() {
+        super.onCreate()
+        // ✅ Обязательно: запуск с уведомлением
+        startForeground(NOTIFICATION_ID, createNotification())
+    }
 
- override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
- when (intent?.action) {
- ACTION_PLAY -> playMusic()
- ACTION_STOP -> {
- stopMusic()
- stopSelf() // ✅ Всегда останавливайте сервис явно
- }
- }
- return START_STICKY // Перезапустить если система убила
- }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            ACTION_PLAY -> playMusic()
+            ACTION_STOP -> {
+                stopMusic()
+                stopSelf() // ✅ Всегда останавливайте сервис явно
+            }
+        }
+        return START_STICKY // Перезапустить если система убила
+    }
 
- override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
 **Manifest**:
 ```xml
 <service
- android:name=".MusicPlayerService"
- android:foregroundServiceType="mediaPlayback" />
+    android:name=".MusicPlayerService"
+    android:foregroundServiceType="mediaPlayback" />
 
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
@@ -93,53 +94,53 @@ class MusicPlayerService : Service() {
 
 ```kotlin
 class LocationService : Service() {
- private val binder = LocationBinder()
+    private val binder = LocationBinder()
 
- inner class LocationBinder : Binder() {
- fun getService(): LocationService = this@LocationService
- }
+    inner class LocationBinder : Binder() {
+        fun getService(): LocationService = this@LocationService
+    }
 
- override fun onBind(intent: Intent): IBinder = binder
+    override fun onBind(intent: Intent): IBinder = binder
 
- fun getCurrentLocation(): Location? {
- // Возвращаем текущую позицию
- return null
- }
+    fun getCurrentLocation(): Location? {
+        // Возвращаем текущую позицию
+        return null
+    }
 }
 ```
 
 **Использование в `Activity`**:
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private var locationService: LocationService? = null
- private var isBound = false
+    private var locationService: LocationService? = null
+    private var isBound = false
 
- private val connection = object : ServiceConnection {
- override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
- val binder = service as LocationService.LocationBinder
- locationService = binder.getService()
- isBound = true
- }
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as LocationService.LocationBinder
+            locationService = binder.getService()
+            isBound = true
+        }
 
- override fun onServiceDisconnected(name: ComponentName?) {
- isBound = false
- }
- }
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isBound = false
+        }
+    }
 
- override fun onStart() {
- super.onStart()
- Intent(this, LocationService::class.java).also { intent ->
- bindService(intent, connection, Context.BIND_AUTO_CREATE)
- }
- }
+    override fun onStart() {
+        super.onStart()
+        Intent(this, LocationService::class.java).also { intent ->
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
 
- override fun onStop() {
- super.onStop()
- if (isBound) {
- unbindService(connection)
- isBound = false
- }
- }
+    override fun onStop() {
+        super.onStop()
+        if (isBound) {
+            unbindService(connection)
+            isBound = false
+        }
+    }
 }
 ```
 
@@ -167,28 +168,28 @@ bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 **Пример замены на WorkManager**:
 ```kotlin
 class DownloadWorker(context: Context, params: WorkerParameters)
- : CoroutineWorker(context, params) {
+    : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- val url = inputData.getString("url") ?: return Result.failure()
+    override suspend fun doWork(): Result {
+        val url = inputData.getString("url") ?: return Result.failure()
 
- return try {
- downloadFile(url)
- Result.success() // ✅ Гарантированное выполнение
- } catch (e: Exception) {
- Result.retry() // ✅ Автоматический retry
- }
- }
+        return try {
+            downloadFile(url)
+            Result.success() // ✅ Гарантированное выполнение
+        } catch (e: Exception) {
+            Result.retry() // ✅ Автоматический retry
+        }
+    }
 }
 
 // Запуск с ограничениями
 val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
- .setConstraints(
- Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED)
- .build()
- )
- .build()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
@@ -223,32 +224,32 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ```kotlin
 class MusicPlayerService : Service() {
- override fun onCreate() {
- super.onCreate()
- // ✅ Required: start with notification
- startForeground(NOTIFICATION_ID, createNotification())
- }
+    override fun onCreate() {
+        super.onCreate()
+        // ✅ Required: start with notification
+        startForeground(NOTIFICATION_ID, createNotification())
+    }
 
- override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
- when (intent?.action) {
- ACTION_PLAY -> playMusic()
- ACTION_STOP -> {
- stopMusic()
- stopSelf() // ✅ Always stop service explicitly
- }
- }
- return START_STICKY // Restart if system kills it
- }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            ACTION_PLAY -> playMusic()
+            ACTION_STOP -> {
+                stopMusic()
+                stopSelf() // ✅ Always stop service explicitly
+            }
+        }
+        return START_STICKY // Restart if system kills it
+    }
 
- override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
 **Manifest**:
 ```xml
 <service
- android:name=".MusicPlayerService"
- android:foregroundServiceType="mediaPlayback" />
+    android:name=".MusicPlayerService"
+    android:foregroundServiceType="mediaPlayback" />
 
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
@@ -258,53 +259,53 @@ class MusicPlayerService : Service() {
 
 ```kotlin
 class LocationService : Service() {
- private val binder = LocationBinder()
+    private val binder = LocationBinder()
 
- inner class LocationBinder : Binder() {
- fun getService(): LocationService = this@LocationService
- }
+    inner class LocationBinder : Binder() {
+        fun getService(): LocationService = this@LocationService
+    }
 
- override fun onBind(intent: Intent): IBinder = binder
+    override fun onBind(intent: Intent): IBinder = binder
 
- fun getCurrentLocation(): Location? {
- // Return current location
- return null
- }
+    fun getCurrentLocation(): Location? {
+        // Return current location
+        return null
+    }
 }
 ```
 
 **Usage in `Activity`**:
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private var locationService: LocationService? = null
- private var isBound = false
+    private var locationService: LocationService? = null
+    private var isBound = false
 
- private val connection = object : ServiceConnection {
- override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
- val binder = service as LocationService.LocationBinder
- locationService = binder.getService()
- isBound = true
- }
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as LocationService.LocationBinder
+            locationService = binder.getService()
+            isBound = true
+        }
 
- override fun onServiceDisconnected(name: ComponentName?) {
- isBound = false
- }
- }
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isBound = false
+        }
+    }
 
- override fun onStart() {
- super.onStart()
- Intent(this, LocationService::class.java).also { intent ->
- bindService(intent, connection, Context.BIND_AUTO_CREATE)
- }
- }
+    override fun onStart() {
+        super.onStart()
+        Intent(this, LocationService::class.java).also { intent ->
+            bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
 
- override fun onStop() {
- super.onStop()
- if (isBound) {
- unbindService(connection)
- isBound = false
- }
- }
+    override fun onStop() {
+        super.onStop()
+        if (isBound) {
+            unbindService(connection)
+            isBound = false
+        }
+    }
 }
 ```
 
@@ -332,28 +333,28 @@ bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 **WorkManager replacement example**:
 ```kotlin
 class DownloadWorker(context: Context, params: WorkerParameters)
- : CoroutineWorker(context, params) {
+    : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- val url = inputData.getString("url") ?: return Result.failure()
+    override suspend fun doWork(): Result {
+        val url = inputData.getString("url") ?: return Result.failure()
 
- return try {
- downloadFile(url)
- Result.success() // ✅ Guaranteed execution
- } catch (e: Exception) {
- Result.retry() // ✅ Automatic retry
- }
- }
+        return try {
+            downloadFile(url)
+            Result.success() // ✅ Guaranteed execution
+        } catch (e: Exception) {
+            Result.retry() // ✅ Automatic retry
+        }
+    }
 }
 
 // Schedule with constraints
 val workRequest = OneTimeWorkRequestBuilder<DownloadWorker>()
- .setConstraints(
- Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED)
- .build()
- )
- .build()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
@@ -383,11 +384,12 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - [Services](https://developer.android.com/develop/background-work/services)
 - https://developer.android.com/develop/background-work/background-tasks
 
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-unifies-android-components--android--easy]] - Android component basics
-- - Component lifecycle fundamentals
+-  - Android component basics
+-  - Component lifecycle fundamentals
 
 ### Related (Same Level)
 - [[q-foreground-service-types--android--medium]] - Foreground service types
@@ -396,4 +398,4 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Advanced (Harder)
 - [[q-service-lifecycle-binding--android--hard]] - Complex service lifecycle scenarios
-- - Inter-process communication with AIDL
+-  - Inter-process communication with AIDL

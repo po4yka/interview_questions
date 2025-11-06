@@ -15,6 +15,7 @@ tags: [android/performance-rendering, android/profiling, android/strictmode-anr,
 moc: moc-android
 related: []
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -44,16 +45,16 @@ sources: []
 ```kotlin
 // ПЛОХО: блокирует UI-поток
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val processed = heavyProcessing(data[position]) // 120мс!
- holder.bind(processed)
+    val processed = heavyProcessing(data[position])  // 120мс!
+    holder.bind(processed)
 }
 
 // ХОРОШО: переносим в фоновый поток
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- viewModelScope.launch(Dispatchers.Default) {
- val processed = heavyProcessing(data[position])
- withContext(Dispatchers.Main) { holder.bind(processed) }
- }
+    viewModelScope.launch(Dispatchers.Default) {
+        val processed = heavyProcessing(data[position])
+        withContext(Dispatchers.Main) { holder.bind(processed) }
+    }
 }
 ```
 
@@ -61,16 +62,16 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ПЛОХО: блокирующий вызов БД
 button.setOnClickListener {
- val data = database.query() // Блокирует UI!
- updateUI(data)
+    val data = database.query()  // Блокирует UI!
+    updateUI(data)
 }
 
 // ХОРОШО: асинхронно
 button.setOnClickListener {
- viewModelScope.launch {
- val data = withContext(Dispatchers.IO) { database.query() }
- updateUI(data)
- }
+    viewModelScope.launch {
+        val data = withContext(Dispatchers.IO) { database.query() }
+        updateUI(data)
+    }
 }
 ```
 
@@ -79,15 +80,15 @@ button.setOnClickListener {
 **Измерение производительности:**
 ```kotlin
 Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallback {
- var lastFrameTime = 0L
- override fun doFrame(frameTimeNanos: Long) {
- if (lastFrameTime != 0L) {
- val frameDuration = (frameTimeNanos - lastFrameTime) / 1_000_000
- if (frameDuration > 16) Log.w("Perf", "Slow frame: ${frameDuration}ms")
- }
- lastFrameTime = frameTimeNanos
- Choreographer.getInstance().postFrameCallback(this)
- }
+    var lastFrameTime = 0L
+    override fun doFrame(frameTimeNanos: Long) {
+        if (lastFrameTime != 0L) {
+            val frameDuration = (frameTimeNanos - lastFrameTime) / 1_000_000
+            if (frameDuration > 16) Log.w("Perf", "Slow frame: ${frameDuration}ms")
+        }
+        lastFrameTime = frameTimeNanos
+        Choreographer.getInstance().postFrameCallback(this)
+    }
 })
 ```
 
@@ -116,16 +117,16 @@ Dropped frames: 120 / 16.67 ≈ 7 frames
 ```kotlin
 // BAD: blocks UI thread
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val processed = heavyProcessing(data[position]) // 120ms!
- holder.bind(processed)
+    val processed = heavyProcessing(data[position])  // 120ms!
+    holder.bind(processed)
 }
 
 // GOOD: offload to background
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- viewModelScope.launch(Dispatchers.Default) {
- val processed = heavyProcessing(data[position])
- withContext(Dispatchers.Main) { holder.bind(processed) }
- }
+    viewModelScope.launch(Dispatchers.Default) {
+        val processed = heavyProcessing(data[position])
+        withContext(Dispatchers.Main) { holder.bind(processed) }
+    }
 }
 ```
 
@@ -133,16 +134,16 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // BAD: blocking database call
 button.setOnClickListener {
- val data = database.query() // Blocks UI!
- updateUI(data)
+    val data = database.query()  // Blocks UI!
+    updateUI(data)
 }
 
 // GOOD: async
 button.setOnClickListener {
- viewModelScope.launch {
- val data = withContext(Dispatchers.IO) { database.query() }
- updateUI(data)
- }
+    viewModelScope.launch {
+        val data = withContext(Dispatchers.IO) { database.query() }
+        updateUI(data)
+    }
 }
 ```
 
@@ -151,15 +152,15 @@ button.setOnClickListener {
 **Performance Monitoring:**
 ```kotlin
 Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallback {
- var lastFrameTime = 0L
- override fun doFrame(frameTimeNanos: Long) {
- if (lastFrameTime != 0L) {
- val frameDuration = (frameTimeNanos - lastFrameTime) / 1_000_000
- if (frameDuration > 16) Log.w("Perf", "Slow frame: ${frameDuration}ms")
- }
- lastFrameTime = frameTimeNanos
- Choreographer.getInstance().postFrameCallback(this)
- }
+    var lastFrameTime = 0L
+    override fun doFrame(frameTimeNanos: Long) {
+        if (lastFrameTime != 0L) {
+            val frameDuration = (frameTimeNanos - lastFrameTime) / 1_000_000
+            if (frameDuration > 16) Log.w("Perf", "Slow frame: ${frameDuration}ms")
+        }
+        lastFrameTime = frameTimeNanos
+        Choreographer.getInstance().postFrameCallback(this)
+    }
 })
 ```
 
@@ -184,8 +185,8 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 
 - Android Developer Guide: [Performance & Rendering](https://developer.android.com/topic/performance/rendering)
 - Systrace/Perfetto for detailed frame analysis
-- — frame budget and vsync concepts
-- — frame scheduling and callbacks
+-  — frame budget and vsync concepts
+-  — frame scheduling and callbacks
 
 ## Related Questions
 
@@ -196,5 +197,5 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 ### Related
 
 ### Advanced
-- — advanced profiling techniques
-- — optimizing custom drawing
+-  — advanced profiling techniques
+-  — optimizing custom drawing

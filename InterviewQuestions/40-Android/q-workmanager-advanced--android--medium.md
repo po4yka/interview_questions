@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-workmanager]
+related: [c-background-tasks, c-constraints, c-workmanager]
 created: 2025-10-12
 updated: 2025-10-29
 tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]
 sources: [https://developer.android.com/topic/libraries/architecture/workmanager]
+
 ---
 
 # Вопрос (RU)
@@ -34,13 +35,13 @@ WorkManager обеспечивает гарантированное выполн
 
 ```kotlin
 val constraints = Constraints.Builder()
- .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ WiFi only
- .setRequiresBatteryNotLow(true) // ✅ Battery check
- .build()
+    .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ WiFi only
+    .setRequiresBatteryNotLow(true)                // ✅ Battery check
+    .build()
 
 val uploadRequest = OneTimeWorkRequestBuilder<PhotoUploadWorker>()
- .setConstraints(constraints)
- .build()
+    .setConstraints(constraints)
+    .build()
 ```
 
 **Periodic Work:**
@@ -48,16 +49,16 @@ val uploadRequest = OneTimeWorkRequestBuilder<PhotoUploadWorker>()
 
 ```kotlin
 val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
- repeatInterval = 24, TimeUnit.HOURS,
- flexTimeInterval = 2, TimeUnit.HOURS // ✅ Execution window
+    repeatInterval = 24, TimeUnit.HOURS,
+    flexTimeInterval = 2, TimeUnit.HOURS  // ✅ Execution window
 ).build()
 
 WorkManager.getInstance(context)
- .enqueueUniquePeriodicWork(
- "daily_sync",
- ExistingPeriodicWorkPolicy.KEEP, // ✅ Don't restart if running
- syncRequest
- )
+    .enqueueUniquePeriodicWork(
+        "daily_sync",
+        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't restart if running
+        syncRequest
+    )
 ```
 
 **Work Chaining:**
@@ -66,16 +67,16 @@ WorkManager.getInstance(context)
 ```kotlin
 // Sequential: download → process → upload
 WorkManager.getInstance(context)
- .beginWith(downloadRequest)
- .then(processRequest)
- .then(uploadRequest)
- .enqueue()
+    .beginWith(downloadRequest)
+    .then(processRequest)
+    .then(uploadRequest)
+    .enqueue()
 
 // Parallel + combine
 WorkManager.getInstance(context)
- .beginWith(listOf(task1, task2)) // ✅ Parallel
- .then(combineRequest) // ✅ Waits for both
- .enqueue()
+    .beginWith(listOf(task1, task2))  // ✅ Parallel
+    .then(combineRequest)              // ✅ Waits for both
+    .enqueue()
 ```
 
 **ExistingWorkPolicy:**
@@ -84,15 +85,15 @@ WorkManager.getInstance(context)
 ```kotlin
 // REPLACE — отменить существующую, запустить новую
 WorkManager.getInstance(context)
- .enqueueUniqueWork("sync", ExistingWorkPolicy.REPLACE, request)
+    .enqueueUniqueWork("sync", ExistingWorkPolicy.REPLACE, request)
 
 // KEEP — сохранить существующую, игнорировать новую
 WorkManager.getInstance(context)
- .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
+    .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
 
 // APPEND — добавить в очередь после существующей
 WorkManager.getInstance(context)
- .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND, request)
+    .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND, request)
 ```
 
 **Persistence:**
@@ -101,17 +102,17 @@ WorkManager сохраняет задачи в SQLite, восстанавлив�
 ```kotlin
 @HiltWorker
 class MigrationWorker @AssistedInject constructor(
- @Assisted context: Context,
- @Assisted params: WorkerParameters,
- private val database: AppDatabase
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    private val database: AppDatabase
 ) : CoroutineWorker(context, params) {
- override suspend fun doWork(): Result = try {
- val fromVersion = inputData.getInt("from_version", 0)
- database.migrate(fromVersion, BuildConfig.VERSION_CODE)
- Result.success() // ✅ Success with retry support
- } catch (e: Exception) {
- Result.retry() // ✅ Retry with backoff policy
- }
+    override suspend fun doWork(): Result = try {
+        val fromVersion = inputData.getInt("from_version", 0)
+        database.migrate(fromVersion, BuildConfig.VERSION_CODE)
+        Result.success()  // ✅ Success with retry support
+    } catch (e: Exception) {
+        Result.retry()    // ✅ Retry with backoff policy
+    }
 }
 ```
 
@@ -124,7 +125,7 @@ setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
 
 // In ViewModel
 val progress = workManager.getWorkInfoByIdLiveData(workId)
- .map { it?.progress?.getInt("progress", 0) ?: 0 }
+    .map { it?.progress?.getInt("progress", 0) ?: 0 }
 ```
 
 ## Answer (EN)
@@ -136,13 +137,13 @@ Execute work only when conditions are met to save battery and data.
 
 ```kotlin
 val constraints = Constraints.Builder()
- .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ WiFi only
- .setRequiresBatteryNotLow(true) // ✅ Battery check
- .build()
+    .setRequiredNetworkType(NetworkType.UNMETERED) // ✅ WiFi only
+    .setRequiresBatteryNotLow(true)                // ✅ Battery check
+    .build()
 
 val uploadRequest = OneTimeWorkRequestBuilder<PhotoUploadWorker>()
- .setConstraints(constraints)
- .build()
+    .setConstraints(constraints)
+    .build()
 ```
 
 **Periodic Work:**
@@ -150,16 +151,16 @@ Minimum 15-minute interval with flexible execution window.
 
 ```kotlin
 val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
- repeatInterval = 24, TimeUnit.HOURS,
- flexTimeInterval = 2, TimeUnit.HOURS // ✅ Execution window
+    repeatInterval = 24, TimeUnit.HOURS,
+    flexTimeInterval = 2, TimeUnit.HOURS  // ✅ Execution window
 ).build()
 
 WorkManager.getInstance(context)
- .enqueueUniquePeriodicWork(
- "daily_sync",
- ExistingPeriodicWorkPolicy.KEEP, // ✅ Don't restart if running
- syncRequest
- )
+    .enqueueUniquePeriodicWork(
+        "daily_sync",
+        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't restart if running
+        syncRequest
+    )
 ```
 
 **Work Chaining:**
@@ -168,16 +169,16 @@ Sequential/parallel execution with data passing.
 ```kotlin
 // Sequential: download → process → upload
 WorkManager.getInstance(context)
- .beginWith(downloadRequest)
- .then(processRequest)
- .then(uploadRequest)
- .enqueue()
+    .beginWith(downloadRequest)
+    .then(processRequest)
+    .then(uploadRequest)
+    .enqueue()
 
 // Parallel + combine
 WorkManager.getInstance(context)
- .beginWith(listOf(task1, task2)) // ✅ Parallel
- .then(combineRequest) // ✅ Waits for both
- .enqueue()
+    .beginWith(listOf(task1, task2))  // ✅ Parallel
+    .then(combineRequest)              // ✅ Waits for both
+    .enqueue()
 ```
 
 **ExistingWorkPolicy:**
@@ -186,15 +187,15 @@ Control behavior when re-enqueueing unique work.
 ```kotlin
 // REPLACE — cancel existing, start new
 WorkManager.getInstance(context)
- .enqueueUniqueWork("sync", ExistingWorkPolicy.REPLACE, request)
+    .enqueueUniqueWork("sync", ExistingWorkPolicy.REPLACE, request)
 
 // KEEP — keep existing, ignore new
 WorkManager.getInstance(context)
- .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
+    .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
 
 // APPEND — enqueue after existing
 WorkManager.getInstance(context)
- .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND, request)
+    .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND, request)
 ```
 
 **Persistence:**
@@ -203,17 +204,17 @@ WorkManager persists tasks in SQLite, restores after reboot/app update.
 ```kotlin
 @HiltWorker
 class MigrationWorker @AssistedInject constructor(
- @Assisted context: Context,
- @Assisted params: WorkerParameters,
- private val database: AppDatabase
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
+    private val database: AppDatabase
 ) : CoroutineWorker(context, params) {
- override suspend fun doWork(): Result = try {
- val fromVersion = inputData.getInt("from_version", 0)
- database.migrate(fromVersion, BuildConfig.VERSION_CODE)
- Result.success() // ✅ Success with retry support
- } catch (e: Exception) {
- Result.retry() // ✅ Retry with backoff policy
- }
+    override suspend fun doWork(): Result = try {
+        val fromVersion = inputData.getInt("from_version", 0)
+        database.migrate(fromVersion, BuildConfig.VERSION_CODE)
+        Result.success()  // ✅ Success with retry support
+    } catch (e: Exception) {
+        Result.retry()    // ✅ Retry with backoff policy
+    }
 }
 ```
 
@@ -226,7 +227,7 @@ setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
 
 // In ViewModel
 val progress = workManager.getWorkInfoByIdLiveData(workId)
- .map { it?.progress?.getInt("progress", 0) ?: 0 }
+    .map { it?.progress?.getInt("progress", 0) ?: 0 }
 ```
 
 ---
@@ -242,7 +243,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 ## References
 
 - [[c-workmanager]] - WorkManager concepts
-- - Background execution strategies
+-  - Background execution strategies
 - https://developer.android.com/topic/libraries/architecture/workmanager/advanced
 - https://developer.android.com/topic/libraries/architecture/workmanager/how-to/chain-work
 
@@ -250,14 +251,14 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components overview
-- - `Lifecycle` management basics
-- - WorkManager fundamentals
+-  - `Lifecycle` management basics
+-  - WorkManager fundamentals
 
 ### Related (Same Level)
 - [[q-workmanager-vs-alternatives--android--medium]] - WorkManager vs alternatives
 - [[q-workmanager-return-result--android--medium]] - Returning results from Workers
-- - Background execution limits
+-  - Background execution limits
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] - Android runtime internals
-- - Power and battery optimization
+-  - Power and battery optimization

@@ -28,6 +28,7 @@ tags:
 - layouts
 - ui
 - view-positioning
+
 ---
 
 # Вопрос (RU)
@@ -50,31 +51,31 @@ In the traditional Android `View` system, **`FrameLayout`** is used for overlapp
 
 ```xml
 <FrameLayout
- android:layout_width="match_parent"
- android:layout_height="200dp">
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
 
- <!-- Background image -->
- <ImageView
- android:layout_width="match_parent"
- android:layout_height="match_parent"
- android:src="@drawable/background"
- android:scaleType="centerCrop" />
+    <!-- Background image -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop" />
 
- <!-- Overlay text -->
- <TextView
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:layout_gravity="center"
- android:text="Overlay Text"
- android:textColor="@android:color/white" />
+    <!-- Overlay text -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Overlay Text"
+        android:textColor="@android:color/white" />
 
- <!-- Badge in corner -->
- <ImageView
- android:layout_width="24dp"
- android:layout_height="24dp"
- android:layout_gravity="top|end"
- android:layout_margin="8dp"
- android:src="@drawable/badge" />
+    <!-- Badge in corner -->
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="8dp"
+        android:src="@drawable/badge" />
 </FrameLayout>
 ```
 
@@ -91,36 +92,36 @@ In Jetpack Compose, **Box** serves the same purpose as `FrameLayout`:
 ```kotlin
 @Composable
 fun OverlayExample() {
- Box(
- modifier = Modifier
- .fillMaxWidth()
- .height(200.dp)
- ) {
- // Background image
- Image(
- painter = painterResource(R.drawable.background),
- contentDescription = null,
- modifier = Modifier.fillMaxSize(),
- contentScale = ContentScale.Crop
- )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        // Background image
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
 
- // Overlay text (center)
- Text(
- text = "Overlay Text",
- color = Color.White,
- modifier = Modifier.align(Alignment.Center)
- )
+        // Overlay text (center)
+        Text(
+            text = "Overlay Text",
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
+        )
 
- // Badge (top-end corner)
- Image(
- painter = painterResource(R.drawable.badge),
- contentDescription = "Badge",
- modifier = Modifier
- .size(24.dp)
- .align(Alignment.TopEnd)
- .padding(8.dp)
- )
- }
+        // Badge (top-end corner)
+        Image(
+            painter = painterResource(R.drawable.badge),
+            contentDescription = "Badge",
+            modifier = Modifier
+                .size(24.dp)
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+        )
+    }
 }
 ```
 
@@ -130,30 +131,30 @@ fun OverlayExample() {
 ```kotlin
 @Composable
 fun ImageWithOverlay() {
- Box {
- Image(
- painter = painterResource(R.drawable.photo),
- contentDescription = null,
- modifier = Modifier.fillMaxSize()
- )
+    Box {
+        Image(
+            painter = painterResource(R.drawable.photo),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
 
- // Dark overlay
- Box(
- modifier = Modifier
- .fillMaxSize()
- .background(Color.Black.copy(alpha = 0.3f))
- )
+        // Dark overlay
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.3f))
+        )
 
- // Content on top
- Column(
- modifier = Modifier
- .align(Alignment.BottomStart)
- .padding(16.dp)
- ) {
- Text("Title", color = Color.White, fontSize = 24.sp)
- Text("Subtitle", color = Color.White.copy(alpha = 0.7f))
- }
- }
+        // Content on top
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp)
+        ) {
+            Text("Title", color = Color.White, fontSize = 24.sp)
+            Text("Subtitle", color = Color.White.copy(alpha = 0.7f))
+        }
+    }
 }
 ```
 
@@ -161,24 +162,24 @@ fun ImageWithOverlay() {
 ```kotlin
 @Composable
 fun ContentWithLoading(isLoading: Boolean) {
- Box(modifier = Modifier.fillMaxSize()) {
- // Main content
- ContentView()
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Main content
+        ContentView()
 
- // Loading overlay
- if (isLoading) {
- Box(
- modifier = Modifier
- .fillMaxSize()
- .background(Color.Black.copy(alpha = 0.5f))
- .clickable(enabled = false) { }
- ) {
- CircularProgressIndicator(
- modifier = Modifier.align(Alignment.Center)
- )
- }
- }
- }
+        // Loading overlay
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f))
+                    .clickable(enabled = false) { }
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+    }
 }
 ```
 
@@ -186,30 +187,30 @@ fun ContentWithLoading(isLoading: Boolean) {
 ```kotlin
 @Composable
 fun IconWithBadge(badgeCount: Int) {
- Box {
- Icon(
- imageVector = Icons.Default.Notifications,
- contentDescription = "Notifications",
- modifier = Modifier.size(24.dp)
- )
+    Box {
+        Icon(
+            imageVector = Icons.Default.Notifications,
+            contentDescription = "Notifications",
+            modifier = Modifier.size(24.dp)
+        )
 
- if (badgeCount > 0) {
- Box(
- modifier = Modifier
- .size(16.dp)
- .align(Alignment.TopEnd)
- .offset(x = 4.dp, y = (-4).dp)
- .background(Color.Red, CircleShape),
- contentAlignment = Alignment.Center
- ) {
- Text(
- text = "$badgeCount",
- color = Color.White,
- fontSize = 10.sp
- )
- }
- }
- }
+        if (badgeCount > 0) {
+            Box(
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = 4.dp, y = (-4).dp)
+                    .background(Color.Red, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "$badgeCount",
+                    color = Color.White,
+                    fontSize = 10.sp
+                )
+            }
+        }
+    }
 }
 ```
 
@@ -217,24 +218,24 @@ fun IconWithBadge(badgeCount: Int) {
 ```kotlin
 @Composable
 fun ScreenWithFAB() {
- Box(modifier = Modifier.fillMaxSize()) {
- // Main content
- LazyColumn(modifier = Modifier.fillMaxSize()) {
- items(50) { index ->
- Text("Item $index")
- }
- }
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Main content
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(50) { index ->
+                Text("Item $index")
+            }
+        }
 
- // FAB
- FloatingActionButton(
- onClick = { /* action */ },
- modifier = Modifier
- .align(Alignment.BottomEnd)
- .padding(16.dp)
- ) {
- Icon(Icons.Default.Add, contentDescription = "Add")
- }
- }
+        // FAB
+        FloatingActionButton(
+            onClick = { /* action */ },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add")
+        }
+    }
 }
 ```
 
@@ -245,30 +246,30 @@ In Box, children are layered in order of declaration:
 ```kotlin
 @Composable
 fun LayeringExample() {
- Box(modifier = Modifier.size(200.dp)) {
- // Bottom layer (drawn first)
- Box(
- modifier = Modifier
- .size(150.dp)
- .background(Color.Red)
- )
+    Box(modifier = Modifier.size(200.dp)) {
+        // Bottom layer (drawn first)
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .background(Color.Red)
+        )
 
- // Middle layer
- Box(
- modifier = Modifier
- .size(100.dp)
- .align(Alignment.Center)
- .background(Color.Green)
- )
+        // Middle layer
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .align(Alignment.Center)
+                .background(Color.Green)
+        )
 
- // Top layer (drawn last)
- Box(
- modifier = Modifier
- .size(50.dp)
- .align(Alignment.Center)
- .background(Color.Blue)
- )
- }
+        // Top layer (drawn last)
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+                .align(Alignment.Center)
+                .background(Color.Blue)
+        )
+    }
 }
 ```
 
@@ -280,16 +281,19 @@ fun LayeringExample() {
 
 В Android для наложения элементов используется `FrameLayout` или Box в Jetpack Compose. `FrameLayout` — контейнер, где элементы располагаются в левом верхнем углу и могут накладываться друг на друга. Box в Jetpack Compose аналогичен `FrameLayout` и также позволяет наложение элементов.
 
+
 ## Follow-ups
 
 - [[c-layouts]]
 - 
 - [[q-viewgroup-vs-view-differences--android--easy]]
 
+
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

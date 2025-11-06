@@ -25,6 +25,7 @@ tags:
 - android/threads-sync
 - concurrency
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -43,12 +44,15 @@ tags:
 
 **Использование:** HandlerThread для фонового потока с `Looper`. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
 
+
 # Question (EN)
 > `Handler` `Looper` Comprehensive
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 
@@ -66,9 +70,9 @@ tags:
 
 ```
 Thread
- Looper
- MessageQueue
- Message / Runnable
+   Looper
+       MessageQueue
+           Message / Runnable
 
 Handler (отправляет) → MessageQueue (хранит) → Looper (обрабатывает)
 ```
@@ -76,17 +80,17 @@ Handler (отправляет) → MessageQueue (хранит) → Looper (об�
 ```kotlin
 // Компоненты
 class Thread {
- var looper: Looper? = null // Один Looper на поток
+    var looper: Looper? = null  // Один Looper на поток
 }
 
 class Looper {
- val messageQueue: MessageQueue // Очередь сообщений
- val thread: Thread // Поток владелец
+    val messageQueue: MessageQueue  // Очередь сообщений
+    val thread: Thread               // Поток владелец
 }
 
 class Handler {
- val looper: Looper // Looper для обработки
- fun handleMessage(msg: Message) // Обработчик
+    val looper: Looper              // Looper для обработки
+    fun handleMessage(msg: Message) // Обработчик
 }
 ```
 
@@ -97,39 +101,39 @@ class Handler {
 ```kotlin
 // Создание потока с Looper
 class MyHandlerThread : Thread() {
- lateinit var handler: Handler
- private set
+    lateinit var handler: Handler
+        private set
 
- override fun run() {
- // 1. Создать Looper для этого потока
- Looper.prepare()
+    override fun run() {
+        // 1. Создать Looper для этого потока
+        Looper.prepare()
 
- // 2. Создать Handler привязанный к Looper
- handler = object : Handler(Looper.myLooper()!!) {
- override fun handleMessage(msg: Message) {
- // Обработка сообщений в этом потоке
- when (msg.what) {
- MSG_TASK -> processTask(msg.obj as Task)
- MSG_CANCEL -> cancelTask()
- }
- }
- }
+        // 2. Создать Handler привязанный к Looper
+        handler = object : Handler(Looper.myLooper()!!) {
+            override fun handleMessage(msg: Message) {
+                // Обработка сообщений в этом потоке
+                when (msg.what) {
+                    MSG_TASK -> processTask(msg.obj as Task)
+                    MSG_CANCEL -> cancelTask()
+                }
+            }
+        }
 
- // 3. Запустить цикл обработки сообщений (блокирующий вызов!)
- Looper.loop()
+        // 3. Запустить цикл обработки сообщений (блокирующий вызов!)
+        Looper.loop()
 
- // Код после loop() выполнится только после quit()
- cleanup()
- }
+        // Код после loop() выполнится только после quit()
+        cleanup()
+    }
 
- fun quit() {
- handler.looper.quit()
- }
+    fun quit() {
+        handler.looper.quit()
+    }
 
- companion object {
- const val MSG_TASK = 1
- const val MSG_CANCEL = 2
- }
+    companion object {
+        const val MSG_TASK = 1
+        const val MSG_CANCEL = 2
+    }
 }
 
 // Использование
@@ -138,15 +142,15 @@ handlerThread.start()
 
 // Подождать пока Handler будет готов
 while (!::handler.isInitialized) {
- Thread.sleep(10)
+    Thread.sleep(10)
 }
 
 // Отправить сообщение из другого потока
 handlerThread.handler.sendMessage(
- Message.obtain().apply {
- what = MyHandlerThread.MSG_TASK
- obj = Task("Download file")
- }
+    Message.obtain().apply {
+        what = MyHandlerThread.MSG_TASK
+        obj = Task("Download file")
+    }
 )
 ```
 
@@ -160,50 +164,50 @@ handlerThread.handler.sendMessage(
 ```kotlin
 // Проверка есть ли Looper в текущем потоке
 fun checkLooper() {
- val looper = Looper.myLooper()
+    val looper = Looper.myLooper()
 
- if (looper != null) {
- println("Looper exists in ${Thread.currentThread().name}")
- println("Is main looper: ${looper == Looper.getMainLooper()}")
- } else {
- println("No looper in ${Thread.currentThread().name}")
- }
+    if (looper != null) {
+        println("Looper exists in ${Thread.currentThread().name}")
+        println("Is main looper: ${looper == Looper.getMainLooper()}")
+    } else {
+        println("No looper in ${Thread.currentThread().name}")
+    }
 }
 
 // Использование
 fun demonstrateLooperCheck() {
- // Main thread - всегда имеет Looper
- checkLooper() // "Looper exists in main"
+    // Main thread - всегда имеет Looper
+    checkLooper()  // "Looper exists in main"
 
- // Обычный поток - нет Looper
- Thread {
- checkLooper() // "No looper in Thread-1"
- }.start()
+    // Обычный поток - нет Looper
+    Thread {
+        checkLooper()  // "No looper in Thread-1"
+    }.start()
 
- // HandlerThread - имеет Looper
- val handlerThread = HandlerThread("MyThread")
- handlerThread.start()
+    // HandlerThread - имеет Looper
+    val handlerThread = HandlerThread("MyThread")
+    handlerThread.start()
 
- handlerThread.looper.queue.addIdleHandler {
- checkLooper() // "Looper exists in MyThread"
- false
- }
+    handlerThread.looper.queue.addIdleHandler {
+        checkLooper()  // "Looper exists in MyThread"
+        false
+    }
 }
 
 // Безопасное создание Handler
 fun createHandlerSafely(): Handler? {
- val looper = Looper.myLooper()
- return if (looper != null) {
- Handler(looper)
- } else {
- Log.e("Handler", "Cannot create Handler, no Looper in thread")
- null
- }
+    val looper = Looper.myLooper()
+    return if (looper != null) {
+        Handler(looper)
+    } else {
+        Log.e("Handler", "Cannot create Handler, no Looper in thread")
+        null
+    }
 }
 
 // Проверка main thread
 fun isMainThread(): Boolean {
- return Looper.myLooper() == Looper.getMainLooper()
+    return Looper.myLooper() == Looper.getMainLooper()
 }
 ```
 
@@ -213,31 +217,31 @@ fun isMainThread(): Boolean {
 
 ```kotlin
 class BackgroundTask {
- // Handler привязан к main thread
- private val mainHandler = Handler(Looper.getMainLooper())
+    // Handler привязан к main thread
+    private val mainHandler = Handler(Looper.getMainLooper())
 
- fun executeTask() {
- Thread {
- // Фоновая работа
- val result = performHeavyOperation()
+    fun executeTask() {
+        Thread {
+            // Фоновая работа
+            val result = performHeavyOperation()
 
- // Отправить результат в main thread
- mainHandler.post {
- // Выполнится в main thread
- updateUI(result)
- }
- }.start()
- }
+            // Отправить результат в main thread
+            mainHandler.post {
+                // Выполнится в main thread
+                updateUI(result)
+            }
+        }.start()
+    }
 
- fun performHeavyOperation(): String {
- Thread.sleep(2000)
- return "Task completed"
- }
+    fun performHeavyOperation(): String {
+        Thread.sleep(2000)
+        return "Task completed"
+    }
 
- fun updateUI(result: String) {
- // Обновление UI в main thread
- println("UI update: $result on ${Thread.currentThread().name}")
- }
+    fun updateUI(result: String) {
+        // Обновление UI в main thread
+        println("UI update: $result on ${Thread.currentThread().name}")
+    }
 }
 ```
 
@@ -246,52 +250,52 @@ class BackgroundTask {
 ```kotlin
 class DataProcessor : Handler(Looper.getMainLooper()) {
 
- override fun handleMessage(msg: Message) {
- when (msg.what) {
- MSG_UPDATE -> {
- val data = msg.obj as String
- updateUI(data)
- }
- MSG_ERROR -> {
- val error = msg.obj as Exception
- showError(error)
- }
- }
- }
+    override fun handleMessage(msg: Message) {
+        when (msg.what) {
+            MSG_UPDATE -> {
+                val data = msg.obj as String
+                updateUI(data)
+            }
+            MSG_ERROR -> {
+                val error = msg.obj as Exception
+                showError(error)
+            }
+        }
+    }
 
- fun processDataInBackground(data: String) {
- Thread {
- try {
- // Фоновая обработка
- val processed = processData(data)
+    fun processDataInBackground(data: String) {
+        Thread {
+            try {
+                // Фоновая обработка
+                val processed = processData(data)
 
- // Отправить в main thread
- val message = obtainMessage(MSG_UPDATE, processed)
- sendMessage(message)
- } catch (e: Exception) {
- val errorMsg = obtainMessage(MSG_ERROR, e)
- sendMessage(errorMsg)
- }
- }.start()
- }
+                // Отправить в main thread
+                val message = obtainMessage(MSG_UPDATE, processed)
+                sendMessage(message)
+            } catch (e: Exception) {
+                val errorMsg = obtainMessage(MSG_ERROR, e)
+                sendMessage(errorMsg)
+            }
+        }.start()
+    }
 
- private fun processData(data: String): String {
- Thread.sleep(1000)
- return data.uppercase()
- }
+    private fun processData(data: String): String {
+        Thread.sleep(1000)
+        return data.uppercase()
+    }
 
- private fun updateUI(data: String) {
- println("UI updated: $data")
- }
+    private fun updateUI(data: String) {
+        println("UI updated: $data")
+    }
 
- private fun showError(error: Exception) {
- println("Error: ${error.message}")
- }
+    private fun showError(error: Exception) {
+        println("Error: ${error.message}")
+    }
 
- companion object {
- const val MSG_UPDATE = 1
- const val MSG_ERROR = 2
- }
+    companion object {
+        const val MSG_UPDATE = 1
+        const val MSG_ERROR = 2
+    }
 }
 
 // Использование
@@ -303,37 +307,37 @@ processor.processDataInBackground("hello world")
 
 ```kotlin
 class NotificationManager {
- private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
- fun showDelayedNotification(message: String, delayMs: Long) {
- handler.postDelayed({
- // Выполнится в main thread через delayMs
- showNotification(message)
- }, delayMs)
- }
+    fun showDelayedNotification(message: String, delayMs: Long) {
+        handler.postDelayed({
+            // Выполнится в main thread через delayMs
+            showNotification(message)
+        }, delayMs)
+    }
 
- fun scheduleRepeatingTask(intervalMs: Long) {
- val runnable = object : Runnable {
- override fun run() {
- performTask()
- // Запланировать следующий запуск
- handler.postDelayed(this, intervalMs)
- }
- }
- handler.post(runnable)
- }
+    fun scheduleRepeatingTask(intervalMs: Long) {
+        val runnable = object : Runnable {
+            override fun run() {
+                performTask()
+                // Запланировать следующий запуск
+                handler.postDelayed(this, intervalMs)
+            }
+        }
+        handler.post(runnable)
+    }
 
- fun cancelAllTasks() {
- handler.removeCallbacksAndMessages(null)
- }
+    fun cancelAllTasks() {
+        handler.removeCallbacksAndMessages(null)
+    }
 
- private fun showNotification(message: String) {
- println("Notification: $message")
- }
+    private fun showNotification(message: String) {
+        println("Notification: $message")
+    }
 
- private fun performTask() {
- println("Task executed at ${System.currentTimeMillis()}")
- }
+    private fun performTask() {
+        println("Task executed at ${System.currentTimeMillis()}")
+    }
 }
 ```
 
@@ -343,41 +347,41 @@ Android предоставляет `HandlerThread` — поток с встро�
 
 ```kotlin
 class ImageProcessor {
- private val handlerThread = HandlerThread("ImageProcessor").apply {
- start()
- }
+    private val handlerThread = HandlerThread("ImageProcessor").apply {
+        start()
+    }
 
- private val backgroundHandler = Handler(handlerThread.looper)
- private val mainHandler = Handler(Looper.getMainLooper())
+    private val backgroundHandler = Handler(handlerThread.looper)
+    private val mainHandler = Handler(Looper.getMainLooper())
 
- fun processImage(imageUrl: String, callback: (Bitmap) -> Unit) {
- // Обработка в фоновом потоке
- backgroundHandler.post {
- val bitmap = downloadAndProcessImage(imageUrl)
+    fun processImage(imageUrl: String, callback: (Bitmap) -> Unit) {
+        // Обработка в фоновом потоке
+        backgroundHandler.post {
+            val bitmap = downloadAndProcessImage(imageUrl)
 
- // Вернуть результат в main thread
- mainHandler.post {
- callback(bitmap)
- }
- }
- }
+            // Вернуть результат в main thread
+            mainHandler.post {
+                callback(bitmap)
+            }
+        }
+    }
 
- private fun downloadAndProcessImage(url: String): Bitmap {
- // Тяжелая операция
- Thread.sleep(1000)
- return Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
- }
+    private fun downloadAndProcessImage(url: String): Bitmap {
+        // Тяжелая операция
+        Thread.sleep(1000)
+        return Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
+    }
 
- fun shutdown() {
- handlerThread.quitSafely()
- }
+    fun shutdown() {
+        handlerThread.quitSafely()
+    }
 }
 
 // Использование
 val processor = ImageProcessor()
 processor.processImage("https://example.com/image.jpg") { bitmap ->
- // Выполнится в main thread
- imageView.setImageBitmap(bitmap)
+    // Выполнится в main thread
+    imageView.setImageBitmap(bitmap)
 }
 ```
 
@@ -386,76 +390,76 @@ processor.processImage("https://example.com/image.jpg") { bitmap ->
 ```kotlin
 // Runnable - простые задачи
 handler.post {
- // Выполнить код
+    // Выполнить код
 }
 
 // Message - с данными и идентификатором
 val message = Message.obtain().apply {
- what = MSG_DOWNLOAD_COMPLETE
- arg1 = 100 // progress
- arg2 = 200 // total
- obj = "file.pdf" // любой объект
+    what = MSG_DOWNLOAD_COMPLETE
+    arg1 = 100  // progress
+    arg2 = 200  // total
+    obj = "file.pdf"  // любой объект
 }
 handler.sendMessage(message)
 
 // Message.obtain() - переиспользует объекты из пула
-val msg1 = Message.obtain() // Взять из пула
-val msg2 = Message.obtain(handler, MSG_UPDATE) // С handler и what
-val msg3 = Message.obtain(handler, MSG_DATA, data) // С данными
+val msg1 = Message.obtain()  // Взять из пула
+val msg2 = Message.obtain(handler, MSG_UPDATE)  // С handler и what
+val msg3 = Message.obtain(handler, MSG_DATA, data)  // С данными
 
 // ВАЖНО: Не создавать через конструктор!
-// val wrong = Message() // НЕПРАВИЛЬНО
-// val correct = Message.obtain() // ПРАВИЛЬНО
+// val wrong = Message()  // НЕПРАВИЛЬНО
+// val correct = Message.obtain()  //  ПРАВИЛЬНО
 ```
 
 ### 7. Managing the `Message` `Queue`
 
 ```kotlin
 class TaskQueue {
- private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
- fun enqueueTasks() {
- // Добавить задачу
- handler.post { task1() }
+    fun enqueueTasks() {
+        // Добавить задачу
+        handler.post { task1() }
 
- // Добавить с задержкой
- handler.postDelayed({ task2() }, 1000)
+        // Добавить с задержкой
+        handler.postDelayed({ task2() }, 1000)
 
- // Добавить в начало очереди
- handler.postAtFrontOfQueue { urgentTask() }
+        // Добавить в начало очереди
+        handler.postAtFrontOfQueue { urgentTask() }
 
- // Добавить в определенное время
- handler.postAtTime({ scheduledTask() }, SystemClock.uptimeMillis() + 5000)
+        // Добавить в определенное время
+        handler.postAtTime({ scheduledTask() }, SystemClock.uptimeMillis() + 5000)
 
- // Отправить Message
- val msg = Message.obtain(handler, MSG_PROCESS)
- handler.sendMessage(msg)
+        // Отправить Message
+        val msg = Message.obtain(handler, MSG_PROCESS)
+        handler.sendMessage(msg)
 
- // Отправить Message с задержкой
- handler.sendMessageDelayed(msg, 2000)
- }
+        // Отправить Message с задержкой
+        handler.sendMessageDelayed(msg, 2000)
+    }
 
- fun cancelTasks() {
- // Удалить все Runnable
- handler.removeCallbacksAndMessages(null)
+    fun cancelTasks() {
+        // Удалить все Runnable
+        handler.removeCallbacksAndMessages(null)
 
- // Удалить конкретный Runnable
- val myRunnable = Runnable { }
- handler.removeCallbacks(myRunnable)
+        // Удалить конкретный Runnable
+        val myRunnable = Runnable { }
+        handler.removeCallbacks(myRunnable)
 
- // Удалить сообщения определенного типа
- handler.removeMessages(MSG_PROCESS)
- }
+        // Удалить сообщения определенного типа
+        handler.removeMessages(MSG_PROCESS)
+    }
 
- fun checkQueue() {
- // Проверить есть ли pending сообщения
- val hasPending = handler.hasMessages(MSG_PROCESS)
- println("Has pending messages: $hasPending")
- }
+    fun checkQueue() {
+        // Проверить есть ли pending сообщения
+        val hasPending = handler.hasMessages(MSG_PROCESS)
+        println("Has pending messages: $hasPending")
+    }
 
- companion object {
- const val MSG_PROCESS = 1
- }
+    companion object {
+        const val MSG_PROCESS = 1
+    }
 }
 ```
 
@@ -463,48 +467,48 @@ class TaskQueue {
 
 ```kotlin
 class IdleMonitor {
- private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
- fun setupIdleHandler() {
- Looper.myQueue()?.addIdleHandler {
- // Выполнится когда MessageQueue пуста
- println("Queue is idle, performing maintenance...")
- performMaintenance()
+    fun setupIdleHandler() {
+        Looper.myQueue()?.addIdleHandler {
+            // Выполнится когда MessageQueue пуста
+            println("Queue is idle, performing maintenance...")
+            performMaintenance()
 
- // return true - оставить IdleHandler
- // return false - удалить IdleHandler после выполнения
- false
- }
- }
+            // return true - оставить IdleHandler
+            // return false - удалить IdleHandler после выполнения
+            false
+        }
+    }
 
- fun oneTimeIdleTask(task: () -> Unit) {
- Looper.myQueue()?.addIdleHandler {
- task()
- false // Выполнить один раз
- }
- }
+    fun oneTimeIdleTask(task: () -> Unit) {
+        Looper.myQueue()?.addIdleHandler {
+            task()
+            false  // Выполнить один раз
+        }
+    }
 
- private fun performMaintenance() {
- // Cleanup, cache clearing, etc.
- }
+    private fun performMaintenance() {
+        // Cleanup, cache clearing, etc.
+    }
 }
 
 // Использование для отложенной инициализации
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- // Критичные задачи сразу
- setupCriticalUI()
+        // Критичные задачи сразу
+        setupCriticalUI()
 
- // Некритичные задачи когда UI свободен
- Looper.myQueue()?.addIdleHandler {
- initializeAnalytics()
- loadNonCriticalData()
- false
- }
- }
+        // Некритичные задачи когда UI свободен
+        Looper.myQueue()?.addIdleHandler {
+            initializeAnalytics()
+            loadNonCriticalData()
+            false
+        }
+    }
 }
 ```
 
@@ -513,77 +517,77 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // УТЕЧКА ПАМЯТИ
 class LeakyActivity : AppCompatActivity() {
- private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
- // Handler держит ссылку на Activity!
- handler.postDelayed({
- updateUI() // Activity может быть уничтожена
- }, 10000)
- }
+        // Handler держит ссылку на Activity!
+        handler.postDelayed({
+            updateUI()  // Activity может быть уничтожена
+        }, 10000)
+    }
 }
 
-// ПРАВИЛЬНО - static Handler + WeakReference
+//  ПРАВИЛЬНО - static Handler + WeakReference
 class SafeActivity : AppCompatActivity() {
 
- private val handler = SafeHandler(this)
+    private val handler = SafeHandler(this)
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
- handler.postDelayed({
- updateUI()
- }, 10000)
- }
+        handler.postDelayed({
+            updateUI()
+        }, 10000)
+    }
 
- override fun onDestroy() {
- super.onDestroy()
- // Отменить все pending задачи
- handler.removeCallbacksAndMessages(null)
- }
+    override fun onDestroy() {
+        super.onDestroy()
+        // Отменить все pending задачи
+        handler.removeCallbacksAndMessages(null)
+    }
 
- private fun updateUI() {
- // Update UI
- }
+    private fun updateUI() {
+        // Update UI
+    }
 
- private class SafeHandler(activity: SafeActivity) : Handler(Looper.getMainLooper()) {
- private val activityRef = WeakReference(activity)
+    private class SafeHandler(activity: SafeActivity) : Handler(Looper.getMainLooper()) {
+        private val activityRef = WeakReference(activity)
 
- override fun handleMessage(msg: Message) {
- activityRef.get()?.let { activity ->
- // Activity еще жива
- when (msg.what) {
- MSG_UPDATE -> activity.updateUI()
- }
- }
- }
+        override fun handleMessage(msg: Message) {
+            activityRef.get()?.let { activity ->
+                // Activity еще жива
+                when (msg.what) {
+                    MSG_UPDATE -> activity.updateUI()
+                }
+            }
+        }
 
- companion object {
- const val MSG_UPDATE = 1
- }
- }
+        companion object {
+            const val MSG_UPDATE = 1
+        }
+    }
 }
 
-// АЛЬТЕРНАТИВА - Lifecycle-aware подход
+//  АЛЬТЕРНАТИВА - Lifecycle-aware подход
 class ModernActivity : AppCompatActivity() {
- private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
- lifecycleScope.launch {
- delay(10000)
- if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
- updateUI()
- }
- }
- }
+        lifecycleScope.launch {
+            delay(10000)
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                updateUI()
+            }
+        }
+    }
 
- private fun updateUI() {
- // Update UI
- }
+    private fun updateUI() {
+        // Update UI
+    }
 }
 ```
 
@@ -591,8 +595,8 @@ class ModernActivity : AppCompatActivity() {
 
 ```kotlin
 // Barrier Messages - блокируют выполнение async сообщений
-handler.postSyncBarrier() // Начать барьер
-handler.removeSyncBarrier(token) // Убрать барьер
+handler.postSyncBarrier()  // Начать барьер
+handler.removeSyncBarrier(token)  // Убрать барьер
 
 // Async Messages - выполняются даже при барьере
 val msg = Message.obtain()
@@ -608,11 +612,11 @@ handler.removeCallbacksAndMessages(token)
 
 // MessageQueue monitoring
 Looper.getMainLooper().setMessageLogging { log ->
- if (log.startsWith(">>>>> Dispatching")) {
- // Сообщение начало обработку
- } else if (log.startsWith("<<<<< Finished")) {
- // Сообщение завершило обработку
- }
+    if (log.startsWith(">>>>> Dispatching")) {
+        // Сообщение начало обработку
+    } else if (log.startsWith("<<<<< Finished")) {
+        // Сообщение завершило обработку
+    }
 }
 ```
 
@@ -628,49 +632,53 @@ Looper.getMainLooper().setMessageLogging { log ->
 ### Best Practices
 
 1. **Всегда очищать `Handler` при onDestroy()**
- ```kotlin
- handler.removeCallbacksAndMessages(null)
- ```
+   ```kotlin
+   handler.removeCallbacksAndMessages(null)
+   ```
 
 2. **Использовать WeakReference для `Activity`/`Fragment`**
- ```kotlin
- private val activityRef = WeakReference(activity)
- ```
+   ```kotlin
+   private val activityRef = WeakReference(activity)
+   ```
 
 3. **Предпочитать HandlerThread обычным `Thread`**
- ```kotlin
- val handlerThread = HandlerThread("Background")
- ```
+   ```kotlin
+   val handlerThread = HandlerThread("Background")
+   ```
 
 4. **Использовать `Message`.obtain() вместо конструктора**
- ```kotlin
- val msg = Message.obtain() // Переиспользование
- ```
+   ```kotlin
+   val msg = Message.obtain()  // Переиспользование
+   ```
 
 5. **Проверять `Lifecycle` перед UI обновлениями**
- ```kotlin
- if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
- updateUI()
- }
- ```
+   ```kotlin
+   if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+       updateUI()
+   }
+   ```
 
 **English**: **`Handler`** sends messages, **`Looper`** processes them in a loop, **MessageQueue** stores them. `Looper` attaches to thread via `Looper.prepare()` and `Looper.loop()`. Check looper exists with `Looper.myLooper()`. Send messages to main thread: `Handler(`Looper`.getMainLooper()).post { }`. Use `HandlerThread` for background processing. Always clean up handlers in `onDestroy()` to prevent leaks. Use `Message.obtain()` for object reuse.
 
+
 ## Follow-ups
 
-- [[q-cicd-multi-module--android--medium]]
+- 
 - [[q-glide-image-loading-internals--android--medium]]
 - [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
+
 
 ## References
 
 - [Threading](https://developer.android.com/guide/background/threading)
+
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-coroutines]]
+
 
 - [[q-glide-image-loading-internals--android--medium]]
 - [[q-cicd-multi-module--android--medium]]

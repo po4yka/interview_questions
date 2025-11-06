@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-compose-layout, c-compose-modifiers]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/ui-compose, android/ui-state, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
@@ -47,23 +48,23 @@ tags: [android, android/ui-compose, android/ui-state, difficulty/medium]
 ```kotlin
 @Composable
 fun ModifierOrderExample() {
- Column {
- // ✅ Отступ ПЕРЕД фоном — фон включает отступ
- Text(
- text = "Padding First",
- modifier = Modifier
- .padding(16.dp)
- .background(Color.Blue)
- )
+    Column {
+        // ✅ Отступ ПЕРЕД фоном — фон включает отступ
+        Text(
+            text = "Padding First",
+            modifier = Modifier
+                .padding(16.dp)
+                .background(Color.Blue)
+        )
 
- // ❌ Фон ПЕРЕД отступом — фон не включает отступ
- Text(
- text = "Background First",
- modifier = Modifier
- .background(Color.Blue)
- .padding(16.dp)
- )
- }
+        // ❌ Фон ПЕРЕД отступом — фон не включает отступ
+        Text(
+            text = "Background First",
+            modifier = Modifier
+                .background(Color.Blue)
+                .padding(16.dp)
+        )
+    }
 }
 ```
 
@@ -73,11 +74,11 @@ fun ModifierOrderExample() {
 
 ```kotlin
 Box(
- modifier = Modifier
- .size(100.dp) // Фиксированный размер
- .fillMaxWidth() // Заполнить ширину
- .fillMaxHeight(0.5f) // 50% высоты
- .aspectRatio(16f / 9f) // Соотношение сторон
+    modifier = Modifier
+        .size(100.dp)                    // Фиксированный размер
+        .fillMaxWidth()                  // Заполнить ширину
+        .fillMaxHeight(0.5f)             // 50% высоты
+        .aspectRatio(16f / 9f)           // Соотношение сторон
 )
 ```
 
@@ -85,10 +86,10 @@ Box(
 
 ```kotlin
 Box(
- modifier = Modifier
- .padding(16.dp) // Все стороны
- .padding(horizontal = 16.dp, vertical = 8.dp)
- .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
+    modifier = Modifier
+        .padding(16.dp)                  // Все стороны
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+        .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
 )
 ```
 
@@ -98,13 +99,13 @@ Box(
 var count by remember { mutableIntStateOf(0) }
 
 Text(
- text = "Click: $count",
- modifier = Modifier
- .clickable { count++ } // ✅ Простой клик
- .combinedClickable( // ✅ Клик + долгое нажатие
- onClick = { count++ },
- onLongClick = { count += 10 }
- )
+    text = "Click: $count",
+    modifier = Modifier
+        .clickable { count++ }           // ✅ Простой клик
+        .combinedClickable(              // ✅ Клик + долгое нажатие
+            onClick = { count++ },
+            onLongClick = { count += 10 }
+        )
 )
 ```
 
@@ -112,13 +113,13 @@ Text(
 
 ```kotlin
 Column(
- modifier = Modifier
- .height(200.dp)
- .verticalScroll(rememberScrollState()) // ✅ Вертикальная прокрутка
+    modifier = Modifier
+        .height(200.dp)
+        .verticalScroll(rememberScrollState())  // ✅ Вертикальная прокрутка
 ) {
- repeat(20) {
- Text("Item $it")
- }
+    repeat(20) {
+        Text("Item $it")
+    }
 }
 ```
 
@@ -127,22 +128,22 @@ Column(
 ```kotlin
 // ✅ Extension-функция для переиспользования
 fun Modifier.customCard() = this
- .fillMaxWidth()
- .padding(16.dp)
- .shadow(4.dp, RoundedCornerShape(8.dp))
- .background(Color.White, RoundedCornerShape(8.dp))
- .padding(16.dp)
+    .fillMaxWidth()
+    .padding(16.dp)
+    .shadow(4.dp, RoundedCornerShape(8.dp))
+    .background(Color.White, RoundedCornerShape(8.dp))
+    .padding(16.dp)
 
 // ✅ Модификатор с параметрами
 fun Modifier.dashedBorder(
- color: Color = Color.Black,
- width: Dp = 1.dp
+    color: Color = Color.Black,
+    width: Dp = 1.dp
 ) = this.drawBehind {
- val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
- drawRoundRect(
- color = color,
- style = Stroke(width = width.toPx(), pathEffect = pathEffect)
- )
+    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+    drawRoundRect(
+        color = color,
+        style = Stroke(width = width.toPx(), pathEffect = pathEffect)
+    )
 }
 ```
 
@@ -153,17 +154,17 @@ var isSelected by remember { mutableStateOf(false) }
 
 // ✅ Использование .then() для условной логики
 Text(
- text = "Toggle",
- modifier = Modifier
- .padding(16.dp)
- .then(
- if (isSelected) {
- Modifier.background(Color.Blue, RoundedCornerShape(8.dp))
- } else {
- Modifier.border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
- }
- )
- .clickable { isSelected = !isSelected }
+    text = "Toggle",
+    modifier = Modifier
+        .padding(16.dp)
+        .then(
+            if (isSelected) {
+                Modifier.background(Color.Blue, RoundedCornerShape(8.dp))
+            } else {
+                Modifier.border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+            }
+        )
+        .clickable { isSelected = !isSelected }
 )
 ```
 
@@ -173,20 +174,20 @@ Text(
 var expanded by remember { mutableStateOf(false) }
 
 Box(
- modifier = Modifier
- .animateContentSize() // ✅ Плавное изменение размера
- .height(if (expanded) 200.dp else 100.dp)
- .clickable { expanded = !expanded }
+    modifier = Modifier
+        .animateContentSize()            // ✅ Плавное изменение размера
+        .height(if (expanded) 200.dp else 100.dp)
+        .clickable { expanded = !expanded }
 )
 
 // ✅ Графические трансформации
 Text(
- text = "Transform",
- modifier = Modifier.graphicsLayer {
- rotationZ = 30f
- scaleX = 1.2f
- alpha = 0.8f
- }
+    text = "Transform",
+    modifier = Modifier.graphicsLayer {
+        rotationZ = 30f
+        scaleX = 1.2f
+        alpha = 0.8f
+    }
 )
 ```
 
@@ -201,28 +202,28 @@ Text(
 ```kotlin
 // ✅ Stateful modifier с composed
 fun Modifier.shimmer(): Modifier = composed {
- val transition = rememberInfiniteTransition(label = "shimmer")
- val translateAnim by transition.animateFloat(
- initialValue = 0f,
- targetValue = 1000f,
- animationSpec = infiniteRepeatable(
- tween(1200, easing = FastOutSlowInEasing),
- RepeatMode.Restart
- ),
- label = "shimmer"
- )
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val translateAnim by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            tween(1200, easing = FastOutSlowInEasing),
+            RepeatMode.Restart
+        ),
+        label = "shimmer"
+    )
 
- this.background(
- brush = Brush.linearGradient(
- colors = listOf(
- Color.LightGray.copy(alpha = 0.9f),
- Color.LightGray.copy(alpha = 0.2f),
- Color.LightGray.copy(alpha = 0.9f)
- ),
- start = Offset(translateAnim - 1000f, translateAnim - 1000f),
- end = Offset(translateAnim, translateAnim)
- )
- )
+    this.background(
+        brush = Brush.linearGradient(
+            colors = listOf(
+                Color.LightGray.copy(alpha = 0.9f),
+                Color.LightGray.copy(alpha = 0.2f),
+                Color.LightGray.copy(alpha = 0.9f)
+            ),
+            start = Offset(translateAnim - 1000f, translateAnim - 1000f),
+            end = Offset(translateAnim, translateAnim)
+        )
+    )
 }
 ```
 
@@ -248,23 +249,23 @@ The order in which modifiers are applied is critical to the final result.
 ```kotlin
 @Composable
 fun ModifierOrderExample() {
- Column {
- // ✅ Padding BEFORE background — background includes padding
- Text(
- text = "Padding First",
- modifier = Modifier
- .padding(16.dp)
- .background(Color.Blue)
- )
+    Column {
+        // ✅ Padding BEFORE background — background includes padding
+        Text(
+            text = "Padding First",
+            modifier = Modifier
+                .padding(16.dp)
+                .background(Color.Blue)
+        )
 
- // ❌ Background BEFORE padding — background doesn't include padding
- Text(
- text = "Background First",
- modifier = Modifier
- .background(Color.Blue)
- .padding(16.dp)
- )
- }
+        // ❌ Background BEFORE padding — background doesn't include padding
+        Text(
+            text = "Background First",
+            modifier = Modifier
+                .background(Color.Blue)
+                .padding(16.dp)
+        )
+    }
 }
 ```
 
@@ -274,11 +275,11 @@ fun ModifierOrderExample() {
 
 ```kotlin
 Box(
- modifier = Modifier
- .size(100.dp) // Fixed size
- .fillMaxWidth() // Fill width
- .fillMaxHeight(0.5f) // 50% of height
- .aspectRatio(16f / 9f) // Aspect ratio
+    modifier = Modifier
+        .size(100.dp)                    // Fixed size
+        .fillMaxWidth()                  // Fill width
+        .fillMaxHeight(0.5f)             // 50% of height
+        .aspectRatio(16f / 9f)           // Aspect ratio
 )
 ```
 
@@ -286,10 +287,10 @@ Box(
 
 ```kotlin
 Box(
- modifier = Modifier
- .padding(16.dp) // All sides
- .padding(horizontal = 16.dp, vertical = 8.dp)
- .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
+    modifier = Modifier
+        .padding(16.dp)                  // All sides
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+        .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
 )
 ```
 
@@ -299,13 +300,13 @@ Box(
 var count by remember { mutableIntStateOf(0) }
 
 Text(
- text = "Click: $count",
- modifier = Modifier
- .clickable { count++ } // ✅ Simple click
- .combinedClickable( // ✅ Click + long press
- onClick = { count++ },
- onLongClick = { count += 10 }
- )
+    text = "Click: $count",
+    modifier = Modifier
+        .clickable { count++ }           // ✅ Simple click
+        .combinedClickable(              // ✅ Click + long press
+            onClick = { count++ },
+            onLongClick = { count += 10 }
+        )
 )
 ```
 
@@ -313,13 +314,13 @@ Text(
 
 ```kotlin
 Column(
- modifier = Modifier
- .height(200.dp)
- .verticalScroll(rememberScrollState()) // ✅ Vertical scroll
+    modifier = Modifier
+        .height(200.dp)
+        .verticalScroll(rememberScrollState())  // ✅ Vertical scroll
 ) {
- repeat(20) {
- Text("Item $it")
- }
+    repeat(20) {
+        Text("Item $it")
+    }
 }
 ```
 
@@ -328,22 +329,22 @@ Column(
 ```kotlin
 // ✅ Extension function for reusability
 fun Modifier.customCard() = this
- .fillMaxWidth()
- .padding(16.dp)
- .shadow(4.dp, RoundedCornerShape(8.dp))
- .background(Color.White, RoundedCornerShape(8.dp))
- .padding(16.dp)
+    .fillMaxWidth()
+    .padding(16.dp)
+    .shadow(4.dp, RoundedCornerShape(8.dp))
+    .background(Color.White, RoundedCornerShape(8.dp))
+    .padding(16.dp)
 
 // ✅ Modifier with parameters
 fun Modifier.dashedBorder(
- color: Color = Color.Black,
- width: Dp = 1.dp
+    color: Color = Color.Black,
+    width: Dp = 1.dp
 ) = this.drawBehind {
- val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
- drawRoundRect(
- color = color,
- style = Stroke(width = width.toPx(), pathEffect = pathEffect)
- )
+    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+    drawRoundRect(
+        color = color,
+        style = Stroke(width = width.toPx(), pathEffect = pathEffect)
+    )
 }
 ```
 
@@ -354,17 +355,17 @@ var isSelected by remember { mutableStateOf(false) }
 
 // ✅ Using .then() for conditional logic
 Text(
- text = "Toggle",
- modifier = Modifier
- .padding(16.dp)
- .then(
- if (isSelected) {
- Modifier.background(Color.Blue, RoundedCornerShape(8.dp))
- } else {
- Modifier.border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
- }
- )
- .clickable { isSelected = !isSelected }
+    text = "Toggle",
+    modifier = Modifier
+        .padding(16.dp)
+        .then(
+            if (isSelected) {
+                Modifier.background(Color.Blue, RoundedCornerShape(8.dp))
+            } else {
+                Modifier.border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+            }
+        )
+        .clickable { isSelected = !isSelected }
 )
 ```
 
@@ -374,20 +375,20 @@ Text(
 var expanded by remember { mutableStateOf(false) }
 
 Box(
- modifier = Modifier
- .animateContentSize() // ✅ Smooth size change
- .height(if (expanded) 200.dp else 100.dp)
- .clickable { expanded = !expanded }
+    modifier = Modifier
+        .animateContentSize()            // ✅ Smooth size change
+        .height(if (expanded) 200.dp else 100.dp)
+        .clickable { expanded = !expanded }
 )
 
 // ✅ Graphics transformations
 Text(
- text = "Transform",
- modifier = Modifier.graphicsLayer {
- rotationZ = 30f
- scaleX = 1.2f
- alpha = 0.8f
- }
+    text = "Transform",
+    modifier = Modifier.graphicsLayer {
+        rotationZ = 30f
+        scaleX = 1.2f
+        alpha = 0.8f
+    }
 )
 ```
 
@@ -402,28 +403,28 @@ Text(
 ```kotlin
 // ✅ Stateful modifier with composed
 fun Modifier.shimmer(): Modifier = composed {
- val transition = rememberInfiniteTransition(label = "shimmer")
- val translateAnim by transition.animateFloat(
- initialValue = 0f,
- targetValue = 1000f,
- animationSpec = infiniteRepeatable(
- tween(1200, easing = FastOutSlowInEasing),
- RepeatMode.Restart
- ),
- label = "shimmer"
- )
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val translateAnim by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            tween(1200, easing = FastOutSlowInEasing),
+            RepeatMode.Restart
+        ),
+        label = "shimmer"
+    )
 
- this.background(
- brush = Brush.linearGradient(
- colors = listOf(
- Color.LightGray.copy(alpha = 0.9f),
- Color.LightGray.copy(alpha = 0.2f),
- Color.LightGray.copy(alpha = 0.9f)
- ),
- start = Offset(translateAnim - 1000f, translateAnim - 1000f),
- end = Offset(translateAnim, translateAnim)
- )
- )
+    this.background(
+        brush = Brush.linearGradient(
+            colors = listOf(
+                Color.LightGray.copy(alpha = 0.9f),
+                Color.LightGray.copy(alpha = 0.2f),
+                Color.LightGray.copy(alpha = 0.9f)
+            ),
+            start = Offset(translateAnim - 1000f, translateAnim - 1000f),
+            end = Offset(translateAnim, translateAnim)
+        )
+    )
 }
 ```
 
@@ -447,7 +448,7 @@ fun Modifier.shimmer(): Modifier = composed {
 ## Related Questions
 
 ### Prerequisites
-- [[q-jetpack-compose-basics--android--medium]]
+- 
 - 
 
 ### Related

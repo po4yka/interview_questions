@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, view]
+
 ---
 
 # Вопрос (RU)
@@ -39,23 +40,23 @@ tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, view
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
- context: Context,
- attrs: AttributeSet? = null,
- defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
- // ✅ Правильно: инициализация Paint-объектов здесь
- private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
- color = Color.BLUE
- }
+    // ✅ Правильно: инициализация Paint-объектов здесь
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLUE
+    }
 
- init {
- attrs?.let {
- val ta = context.obtainStyledAttributes(it, R.styleable.CustomView)
- // Чтение атрибутов
- ta.recycle() // ✅ Обязательно recycle()
- }
- }
+    init {
+        attrs?.let {
+            val ta = context.obtainStyledAttributes(it, R.styleable.CustomView)
+            // Чтение атрибутов
+            ta.recycle() // ✅ Обязательно recycle()
+        }
+    }
 }
 ```
 
@@ -65,11 +66,11 @@ class CustomView @JvmOverloads constructor(
 
 ```kotlin
 override fun onAttachedToWindow() {
- super.onAttachedToWindow()
+    super.onAttachedToWindow()
 
- // ✅ Правильно: запуск ресурсов при attach
- sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
- handler.post(updateRunnable)
+    // ✅ Правильно: запуск ресурсов при attach
+    sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+    handler.post(updateRunnable)
 }
 ```
 
@@ -79,12 +80,12 @@ override fun onAttachedToWindow() {
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
- val desiredSize = 200.dpToPx()
+    val desiredSize = 200.dpToPx()
 
- val width = resolveSize(desiredSize, widthMeasureSpec)
- val height = resolveSize(desiredSize, heightMeasureSpec)
+    val width = resolveSize(desiredSize, widthMeasureSpec)
+    val height = resolveSize(desiredSize, heightMeasureSpec)
 
- setMeasuredDimension(width, height) // ✅ Обязательно!
+    setMeasuredDimension(width, height) // ✅ Обязательно!
 }
 ```
 
@@ -100,20 +101,20 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 ```kotlin
 // ViewGroup
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
- var currentTop = paddingTop
+    var currentTop = paddingTop
 
- for (i in 0 until childCount) {
- val child = getChildAt(i)
- if (child.visibility != GONE) {
- child.layout(
- paddingLeft,
- currentTop,
- paddingLeft + child.measuredWidth,
- currentTop + child.measuredHeight
- )
- currentTop += child.measuredHeight
- }
- }
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        if (child.visibility != GONE) {
+            child.layout(
+                paddingLeft,
+                currentTop,
+                paddingLeft + child.measuredWidth,
+                currentTop + child.measuredHeight
+            )
+            currentTop += child.measuredHeight
+        }
+    }
 }
 ```
 
@@ -123,16 +124,16 @@ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
- super.onDraw(canvas)
+    super.onDraw(canvas)
 
- // ✅ Правильно: используем заранее созданные объекты
- canvas.drawCircle(centerX, centerY, radius, paint)
+    // ✅ Правильно: используем заранее созданные объекты
+    canvas.drawCircle(centerX, centerY, radius, paint)
 }
 
 // ❌ Неправильно: создание объектов в onDraw
 // override fun onDraw(canvas: Canvas) {
-// val paint = Paint() // Создаёт мусор каждый кадр!
-// canvas.drawCircle(x, y, r, paint)
+//     val paint = Paint() // Создаёт мусор каждый кадр!
+//     canvas.drawCircle(x, y, r, paint)
 // }
 ```
 
@@ -142,11 +143,11 @@ override fun onDraw(canvas: Canvas) {
 
 ```kotlin
 override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
+    super.onDetachedFromWindow()
 
- // ✅ Правильно: очистка всех ресурсов
- sensorManager.unregisterListener(this)
- handler.removeCallbacks(updateRunnable)
+    // ✅ Правильно: очистка всех ресурсов
+    sensorManager.unregisterListener(this)
+    handler.removeCallbacks(updateRunnable)
 }
 
 // ❌ Неправильно: не отписываться от слушателей → memory leak
@@ -157,16 +158,16 @@ override fun onDetachedFromWindow() {
 **requestLayout()** — для изменения размера/позиции:
 ```kotlin
 fun updateSize() {
- textSize = 24f
- requestLayout() // → onMeasure() → onLayout() → onDraw()
+    textSize = 24f
+    requestLayout() // → onMeasure() → onLayout() → onDraw()
 }
 ```
 
 **invalidate()** — только для визуальных изменений:
 ```kotlin
 fun updateColor() {
- paint.color = Color.RED
- invalidate() // → onDraw() (быстрее)
+    paint.color = Color.RED
+    invalidate() // → onDraw() (быстрее)
 }
 ```
 
@@ -174,20 +175,20 @@ fun updateColor() {
 
 ```kotlin
 override fun onSaveInstanceState(): Parcelable {
- val superState = super.onSaveInstanceState()
- return Bundle().apply {
- putParcelable("super_state", superState)
- putInt("custom_value", customValue)
- }
+    val superState = super.onSaveInstanceState()
+    return Bundle().apply {
+        putParcelable("super_state", superState)
+        putInt("custom_value", customValue)
+    }
 }
 
 override fun onRestoreInstanceState(state: Parcelable?) {
- if (state is Bundle) {
- customValue = state.getInt("custom_value")
- super.onRestoreInstanceState(state.getParcelable("super_state"))
- } else {
- super.onRestoreInstanceState(state)
- }
+    if (state is Bundle) {
+        customValue = state.getInt("custom_value")
+        super.onRestoreInstanceState(state.getParcelable("super_state"))
+    } else {
+        super.onRestoreInstanceState(state)
+    }
 }
 ```
 
@@ -214,23 +215,23 @@ The `View` lifecycle describes the sequence of method calls from view creation t
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
- context: Context,
- attrs: AttributeSet? = null,
- defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
- // ✅ Correct: initialize Paint objects here
- private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
- color = Color.BLUE
- }
+    // ✅ Correct: initialize Paint objects here
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLUE
+    }
 
- init {
- attrs?.let {
- val ta = context.obtainStyledAttributes(it, R.styleable.CustomView)
- // Read attributes
- ta.recycle() // ✅ Must recycle()
- }
- }
+    init {
+        attrs?.let {
+            val ta = context.obtainStyledAttributes(it, R.styleable.CustomView)
+            // Read attributes
+            ta.recycle() // ✅ Must recycle()
+        }
+    }
 }
 ```
 
@@ -240,11 +241,11 @@ Called when the view is attached to a window. Start animations and register list
 
 ```kotlin
 override fun onAttachedToWindow() {
- super.onAttachedToWindow()
+    super.onAttachedToWindow()
 
- // ✅ Correct: start resources on attach
- sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
- handler.post(updateRunnable)
+    // ✅ Correct: start resources on attach
+    sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+    handler.post(updateRunnable)
 }
 ```
 
@@ -254,12 +255,12 @@ Determines view size. Must call `setMeasuredDimension()`.
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
- val desiredSize = 200.dpToPx()
+    val desiredSize = 200.dpToPx()
 
- val width = resolveSize(desiredSize, widthMeasureSpec)
- val height = resolveSize(desiredSize, heightMeasureSpec)
+    val width = resolveSize(desiredSize, widthMeasureSpec)
+    val height = resolveSize(desiredSize, heightMeasureSpec)
 
- setMeasuredDimension(width, height) // ✅ Required!
+    setMeasuredDimension(width, height) // ✅ Required!
 }
 ```
 
@@ -275,20 +276,20 @@ For ViewGroups, positions child views. For simple Views, can recalculate drawing
 ```kotlin
 // ViewGroup
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
- var currentTop = paddingTop
+    var currentTop = paddingTop
 
- for (i in 0 until childCount) {
- val child = getChildAt(i)
- if (child.visibility != GONE) {
- child.layout(
- paddingLeft,
- currentTop,
- paddingLeft + child.measuredWidth,
- currentTop + child.measuredHeight
- )
- currentTop += child.measuredHeight
- }
- }
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        if (child.visibility != GONE) {
+            child.layout(
+                paddingLeft,
+                currentTop,
+                paddingLeft + child.measuredWidth,
+                currentTop + child.measuredHeight
+            )
+            currentTop += child.measuredHeight
+        }
+    }
 }
 ```
 
@@ -298,16 +299,16 @@ Renders view content. Called frequently — avoid allocations!
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
- super.onDraw(canvas)
+    super.onDraw(canvas)
 
- // ✅ Correct: use pre-created objects
- canvas.drawCircle(centerX, centerY, radius, paint)
+    // ✅ Correct: use pre-created objects
+    canvas.drawCircle(centerX, centerY, radius, paint)
 }
 
 // ❌ Wrong: creating objects in onDraw
 // override fun onDraw(canvas: Canvas) {
-// val paint = Paint() // Creates garbage every frame!
-// canvas.drawCircle(x, y, r, paint)
+//     val paint = Paint() // Creates garbage every frame!
+//     canvas.drawCircle(x, y, r, paint)
 // }
 ```
 
@@ -317,11 +318,11 @@ Called when detached from window. Stop animations, unregister listeners.
 
 ```kotlin
 override fun onDetachedFromWindow() {
- super.onDetachedFromWindow()
+    super.onDetachedFromWindow()
 
- // ✅ Correct: clean up all resources
- sensorManager.unregisterListener(this)
- handler.removeCallbacks(updateRunnable)
+    // ✅ Correct: clean up all resources
+    sensorManager.unregisterListener(this)
+    handler.removeCallbacks(updateRunnable)
 }
 
 // ❌ Wrong: not unregistering listeners → memory leak
@@ -332,16 +333,16 @@ override fun onDetachedFromWindow() {
 **requestLayout()** — for size/position changes:
 ```kotlin
 fun updateSize() {
- textSize = 24f
- requestLayout() // → onMeasure() → onLayout() → onDraw()
+    textSize = 24f
+    requestLayout() // → onMeasure() → onLayout() → onDraw()
 }
 ```
 
 **invalidate()** — for visual changes only:
 ```kotlin
 fun updateColor() {
- paint.color = Color.RED
- invalidate() // → onDraw() (faster)
+    paint.color = Color.RED
+    invalidate() // → onDraw() (faster)
 }
 ```
 
@@ -349,20 +350,20 @@ fun updateColor() {
 
 ```kotlin
 override fun onSaveInstanceState(): Parcelable {
- val superState = super.onSaveInstanceState()
- return Bundle().apply {
- putParcelable("super_state", superState)
- putInt("custom_value", customValue)
- }
+    val superState = super.onSaveInstanceState()
+    return Bundle().apply {
+        putParcelable("super_state", superState)
+        putInt("custom_value", customValue)
+    }
 }
 
 override fun onRestoreInstanceState(state: Parcelable?) {
- if (state is Bundle) {
- customValue = state.getInt("custom_value")
- super.onRestoreInstanceState(state.getParcelable("super_state"))
- } else {
- super.onRestoreInstanceState(state)
- }
+    if (state is Bundle) {
+        customValue = state.getInt("custom_value")
+        super.onRestoreInstanceState(state.getParcelable("super_state"))
+    } else {
+        super.onRestoreInstanceState(state)
+    }
 }
 ```
 
@@ -395,8 +396,8 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Understanding lifecycle concepts
-- - `Fragment` lifecycle basics
+-  - Understanding lifecycle concepts
+-  - `Fragment` lifecycle basics
 
 ### Related (Same Level)
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation patterns
@@ -405,5 +406,5 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layouts in Jetpack Compose
-- - Performance optimization for custom views
-- - Deep dive into rendering internals
+-  - Performance optimization for custom views
+-  - Deep dive into rendering internals

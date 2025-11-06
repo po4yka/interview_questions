@@ -15,6 +15,8 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
+  - c-compose-modifiers
+  - c-compose-phases
 sources: []
 created: 2025-10-15
 updated: 2025-10-30

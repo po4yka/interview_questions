@@ -15,6 +15,7 @@ created: 2025-10-12
 updated: 2025-01-27
 tags: [android/architecture-mvi, android/ui-state, difficulty/medium, mvi, sealed-classes, state-management]
 sources: [https://kotlinlang.org/docs/sealed-classes.html]
+
 ---
 
 # Вопрос (RU)
@@ -39,29 +40,29 @@ Sealed классы ([[c-sealed-classes]]) представляют ограни
 
 ```kotlin
 sealed interface UiState<out T> {
- // ✅ data object для состояний без данных
- data object Idle : UiState<Nothing>
- data object Loading : UiState<Nothing>
- // ✅ data class для состояний с данными
- data class Success<T>(val data: T) : UiState<T>
- data class Error(val message: String) : UiState<Nothing>
+    // ✅ data object для состояний без данных
+    data object Idle : UiState<Nothing>
+    data object Loading : UiState<Nothing>
+    // ✅ data class для состояний с данными
+    data class Success<T>(val data: T) : UiState<T>
+    data class Error(val message: String) : UiState<Nothing>
 }
 
 class ProfileViewModel : ViewModel() {
- private val _state = MutableStateFlow<UiState<User>>(UiState.Idle)
- val state: StateFlow<UiState<User>> = _state.asStateFlow()
+    private val _state = MutableStateFlow<UiState<User>>(UiState.Idle)
+    val state: StateFlow<UiState<User>> = _state.asStateFlow()
 
- fun loadProfile() {
- viewModelScope.launch {
- _state.value = UiState.Loading
- _state.value = try {
- val user = repository.getUser()
- UiState.Success(user) // ✅ Явное состояние успеха
- } catch (e: Exception) {
- UiState.Error(e.message ?: "Unknown error") // ✅ Обработка ошибки
- }
- }
- }
+    fun loadProfile() {
+        viewModelScope.launch {
+            _state.value = UiState.Loading
+            _state.value = try {
+                val user = repository.getUser()
+                UiState.Success(user) // ✅ Явное состояние успеха
+            } catch (e: Exception) {
+                UiState.Error(e.message ?: "Unknown error") // ✅ Обработка ошибки
+            }
+        }
+    }
 }
 ```
 
@@ -70,15 +71,15 @@ class ProfileViewModel : ViewModel() {
 ```kotlin
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
- val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
 
- // ✅ Исчерпывающая обработка всех состояний
- when (state) {
- UiState.Idle -> Text("Press button to load")
- UiState.Loading -> CircularProgressIndicator()
- is UiState.Success -> UserProfile(state.data)
- is UiState.Error -> ErrorMessage(state.message)
- } // Компилятор проверит, что все варианты обработаны
+    // ✅ Исчерпывающая обработка всех состояний
+    when (state) {
+        UiState.Idle -> Text("Press button to load")
+        UiState.Loading -> CircularProgressIndicator()
+        is UiState.Success -> UserProfile(state.data)
+        is UiState.Error -> ErrorMessage(state.message)
+    } // Компилятор проверит, что все варианты обработаны
 }
 ```
 
@@ -86,9 +87,9 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 ```kotlin
 sealed interface ProfileEvent {
- data object LoadProfile : ProfileEvent
- data class UpdateName(val name: String) : ProfileEvent
- data object Logout : ProfileEvent
+    data object LoadProfile : ProfileEvent
+    data class UpdateName(val name: String) : ProfileEvent
+    data object Logout : ProfileEvent
 }
 
 // ❌ Не используйте enum для событий с данными
@@ -109,29 +110,29 @@ Sealed classes ([[c-sealed-classes]]) represent restricted type hierarchies wher
 
 ```kotlin
 sealed interface UiState<out T> {
- // ✅ data object for stateless cases
- data object Idle : UiState<Nothing>
- data object Loading : UiState<Nothing>
- // ✅ data class for states with data
- data class Success<T>(val data: T) : UiState<T>
- data class Error(val message: String) : UiState<Nothing>
+    // ✅ data object for stateless cases
+    data object Idle : UiState<Nothing>
+    data object Loading : UiState<Nothing>
+    // ✅ data class for states with data
+    data class Success<T>(val data: T) : UiState<T>
+    data class Error(val message: String) : UiState<Nothing>
 }
 
 class ProfileViewModel : ViewModel() {
- private val _state = MutableStateFlow<UiState<User>>(UiState.Idle)
- val state: StateFlow<UiState<User>> = _state.asStateFlow()
+    private val _state = MutableStateFlow<UiState<User>>(UiState.Idle)
+    val state: StateFlow<UiState<User>> = _state.asStateFlow()
 
- fun loadProfile() {
- viewModelScope.launch {
- _state.value = UiState.Loading
- _state.value = try {
- val user = repository.getUser()
- UiState.Success(user) // ✅ Explicit success state
- } catch (e: Exception) {
- UiState.Error(e.message ?: "Unknown error") // ✅ Error handling
- }
- }
- }
+    fun loadProfile() {
+        viewModelScope.launch {
+            _state.value = UiState.Loading
+            _state.value = try {
+                val user = repository.getUser()
+                UiState.Success(user) // ✅ Explicit success state
+            } catch (e: Exception) {
+                UiState.Error(e.message ?: "Unknown error") // ✅ Error handling
+            }
+        }
+    }
 }
 ```
 
@@ -140,15 +141,15 @@ class ProfileViewModel : ViewModel() {
 ```kotlin
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
- val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
 
- // ✅ Exhaustive handling of all states
- when (state) {
- UiState.Idle -> Text("Press button to load")
- UiState.Loading -> CircularProgressIndicator()
- is UiState.Success -> UserProfile(state.data)
- is UiState.Error -> ErrorMessage(state.message)
- } // Compiler checks all variants are handled
+    // ✅ Exhaustive handling of all states
+    when (state) {
+        UiState.Idle -> Text("Press button to load")
+        UiState.Loading -> CircularProgressIndicator()
+        is UiState.Success -> UserProfile(state.data)
+        is UiState.Error -> ErrorMessage(state.message)
+    } // Compiler checks all variants are handled
 }
 ```
 
@@ -156,9 +157,9 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 ```kotlin
 sealed interface ProfileEvent {
- data object LoadProfile : ProfileEvent
- data class UpdateName(val name: String) : ProfileEvent
- data object Logout : ProfileEvent
+    data object LoadProfile : ProfileEvent
+    data class UpdateName(val name: String) : ProfileEvent
+    data object Logout : ProfileEvent
 }
 
 // ❌ Don't use enum for events with data
@@ -178,7 +179,7 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 
 - [[c-sealed-classes]] - Sealed classes concept
 - [[c-mvvm-pattern]] - MVI architecture pattern
-- - `StateFlow` for state management
+-  - `StateFlow` for state management
 - https://kotlinlang.org/docs/sealed-classes.html
 
 ## Related Questions

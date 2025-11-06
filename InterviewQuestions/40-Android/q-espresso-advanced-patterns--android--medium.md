@@ -22,6 +22,8 @@ moc: moc-android
 related:
 - c-testing
 - q-android-testing-strategies--android--medium
+- q-android-testing-tools--testing--medium
+- q-ui-testing-best-practices--testing--medium
 sources:
 - https://developer.android.com/training/testing/espresso
 created: 2025-10-20

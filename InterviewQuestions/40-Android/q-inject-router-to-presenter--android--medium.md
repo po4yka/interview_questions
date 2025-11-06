@@ -14,6 +14,7 @@ related: [q-play-feature-delivery--android--medium, q-state-hoisting-compose--an
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-injection, difficulty/medium, navigation, router]
+
 ---
 
 # Вопрос (RU)
@@ -41,9 +42,9 @@ tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-in
 ```kotlin
 // ✅ Интерфейс роутера — абстрагирует навигацию
 interface Router {
- fun navigateToDetails(itemId: String)
- fun navigateToSettings()
- fun navigateBack()
+    fun navigateToDetails(itemId: String)
+    fun navigateToSettings()
+    fun navigateBack()
 }
 ```
 
@@ -52,43 +53,43 @@ interface Router {
 ```kotlin
 // Реализация роутера
 class AppRouter @Inject constructor(
- private val navController: NavController
+    private val navController: NavController
 ) : Router {
- override fun navigateToDetails(itemId: String) {
- navController.navigate("details/$itemId")
- }
+    override fun navigateToDetails(itemId: String) {
+        navController.navigate("details/$itemId")
+    }
 
- override fun navigateToSettings() {
- navController.navigate("settings")
- }
+    override fun navigateToSettings() {
+        navController.navigate("settings")
+    }
 
- override fun navigateBack() {
- navController.popBackStack()
- }
+    override fun navigateBack() {
+        navController.popBackStack()
+    }
 }
 
 // Модуль Hilt
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class NavigationModule {
- @Binds
- abstract fun bindRouter(impl: AppRouter): Router
+    @Binds
+    abstract fun bindRouter(impl: AppRouter): Router
 }
 
 // ✅ Презентер с конструкторной инъекцией
 class ProductListPresenter @Inject constructor(
- private val router: Router,
- private val repository: ProductRepository
+    private val router: Router,
+    private val repository: ProductRepository
 ) {
- fun onProductClicked(productId: String) {
- router.navigateToDetails(productId)
- }
+    fun onProductClicked(productId: String) {
+        router.navigateToDetails(productId)
+    }
 }
 
 // Fragment
 @AndroidEntryPoint
 class ProductListFragment : Fragment() {
- @Inject lateinit var presenter: ProductListPresenter
+    @Inject lateinit var presenter: ProductListPresenter
 }
 ```
 
@@ -97,24 +98,24 @@ class ProductListFragment : Fragment() {
 ```kotlin
 // Модуль Koin
 val navigationModule = module {
- scope<MainActivity> {
- scoped<Router> {
- NavigationRouter(
- findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
- )
- }
- }
+    scope<MainActivity> {
+        scoped<Router> {
+            NavigationRouter(
+                findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
+            )
+        }
+    }
 }
 
 val presenterModule = module {
- scope<ProductListFragment> {
- scoped { ProductListPresenter(router = get(), repository = get()) }
- }
+    scope<ProductListFragment> {
+        scoped { ProductListPresenter(router = get(), repository = get()) }
+    }
 }
 
 // Fragment
 class ProductListFragment : Fragment() {
- private val presenter: ProductListPresenter by inject()
+    private val presenter: ProductListPresenter by inject()
 }
 ```
 
@@ -122,20 +123,20 @@ class ProductListFragment : Fragment() {
 
 ```kotlin
 class ProductPresenterTest {
- private val mockRouter = mockk<Router>(relaxed = true)
- private lateinit var presenter: ProductPresenter
+    private val mockRouter = mockk<Router>(relaxed = true)
+    private lateinit var presenter: ProductPresenter
 
- @Before
- fun setup() {
- presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
- }
+    @Before
+    fun setup() {
+        presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
+    }
 
- @Test
- fun `when product clicked, should navigate to details`() {
- presenter.onProductClicked("123")
+    @Test
+    fun `when product clicked, should navigate to details`() {
+        presenter.onProductClicked("123")
 
- verify { mockRouter.navigateToDetails("123") }
- }
+        verify { mockRouter.navigateToDetails("123") }
+    }
 }
 ```
 
@@ -180,9 +181,9 @@ To inject a router into a presenter, use **Dependency Injection (DI)** framework
 ```kotlin
 // ✅ Router interface — abstracts navigation logic
 interface Router {
- fun navigateToDetails(itemId: String)
- fun navigateToSettings()
- fun navigateBack()
+    fun navigateToDetails(itemId: String)
+    fun navigateToSettings()
+    fun navigateBack()
 }
 ```
 
@@ -191,43 +192,43 @@ interface Router {
 ```kotlin
 // Router implementation
 class AppRouter @Inject constructor(
- private val navController: NavController
+    private val navController: NavController
 ) : Router {
- override fun navigateToDetails(itemId: String) {
- navController.navigate("details/$itemId")
- }
+    override fun navigateToDetails(itemId: String) {
+        navController.navigate("details/$itemId")
+    }
 
- override fun navigateToSettings() {
- navController.navigate("settings")
- }
+    override fun navigateToSettings() {
+        navController.navigate("settings")
+    }
 
- override fun navigateBack() {
- navController.popBackStack()
- }
+    override fun navigateBack() {
+        navController.popBackStack()
+    }
 }
 
 // Hilt module
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class NavigationModule {
- @Binds
- abstract fun bindRouter(impl: AppRouter): Router
+    @Binds
+    abstract fun bindRouter(impl: AppRouter): Router
 }
 
 // ✅ Presenter with constructor injection
 class ProductListPresenter @Inject constructor(
- private val router: Router,
- private val repository: ProductRepository
+    private val router: Router,
+    private val repository: ProductRepository
 ) {
- fun onProductClicked(productId: String) {
- router.navigateToDetails(productId)
- }
+    fun onProductClicked(productId: String) {
+        router.navigateToDetails(productId)
+    }
 }
 
 // Fragment
 @AndroidEntryPoint
 class ProductListFragment : Fragment() {
- @Inject lateinit var presenter: ProductListPresenter
+    @Inject lateinit var presenter: ProductListPresenter
 }
 ```
 
@@ -236,24 +237,24 @@ class ProductListFragment : Fragment() {
 ```kotlin
 // Koin module
 val navigationModule = module {
- scope<MainActivity> {
- scoped<Router> {
- NavigationRouter(
- findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
- )
- }
- }
+    scope<MainActivity> {
+        scoped<Router> {
+            NavigationRouter(
+                findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
+            )
+        }
+    }
 }
 
 val presenterModule = module {
- scope<ProductListFragment> {
- scoped { ProductListPresenter(router = get(), repository = get()) }
- }
+    scope<ProductListFragment> {
+        scoped { ProductListPresenter(router = get(), repository = get()) }
+    }
 }
 
 // Fragment
 class ProductListFragment : Fragment() {
- private val presenter: ProductListPresenter by inject()
+    private val presenter: ProductListPresenter by inject()
 }
 ```
 
@@ -261,20 +262,20 @@ class ProductListFragment : Fragment() {
 
 ```kotlin
 class ProductPresenterTest {
- private val mockRouter = mockk<Router>(relaxed = true)
- private lateinit var presenter: ProductPresenter
+    private val mockRouter = mockk<Router>(relaxed = true)
+    private lateinit var presenter: ProductPresenter
 
- @Before
- fun setup() {
- presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
- }
+    @Before
+    fun setup() {
+        presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
+    }
 
- @Test
- fun `when product clicked, should navigate to details`() {
- presenter.onProductClicked("123")
+    @Test
+    fun `when product clicked, should navigate to details`() {
+        presenter.onProductClicked("123")
 
- verify { mockRouter.navigateToDetails("123") }
- }
+        verify { mockRouter.navigateToDetails("123") }
+    }
 }
 ```
 
@@ -315,7 +316,7 @@ class Presenter @Inject constructor(private val navController: NavController)
 ## References
 
 - [[c-dependency-injection]] — DI principles
-- — Android Navigation Component
+-  — Android Navigation Component
 - [[c-mvvm-pattern]] — Presenter pattern
 - [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Koin Documentation](https://insert-koin.io/)
@@ -324,13 +325,13 @@ class Presenter @Inject constructor(private val navController: NavController)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- — DI basics
-- — DI framework comparison
+-  — DI basics
+-  — DI framework comparison
 
 ### Related (Same Level)
 - [[q-play-feature-delivery--android--medium]] — Feature modules with navigation
 - [[q-state-hoisting-compose--android--medium]] — State management patterns
 
 ### Advanced (Harder)
-- — Deep link routing across modules
-- — Navigation with results
+-  — Deep link routing across modules
+-  — Navigation with results

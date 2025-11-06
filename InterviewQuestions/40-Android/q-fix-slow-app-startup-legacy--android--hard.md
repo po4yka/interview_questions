@@ -18,6 +18,7 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
+- q-android-profiling-tools--android--medium
 - q-what-are-services-used-for--android--medium
 sources:
 - Android App Startup documentation
@@ -32,6 +33,7 @@ tags:
 - lazy-init
 - legacy-code
 - optimization
+
 ---
 
 # Вопрос (RU)
@@ -118,9 +120,9 @@ Trace.endSection()
 // ✅ Macrobenchmark для точных измерений
 @Test
 fun startupBenchmark() = benchmarkRule.measureRepeated(
- packageName = "com.example.app",
- metrics = listOf(StartupTimingMetric()),
- iterations = 5
+    packageName = "com.example.app",
+    metrics = listOf(StartupTimingMetric()),
+    iterations = 5
 ) { pressHome(); startActivityAndWait() }
 ```
 
@@ -132,19 +134,19 @@ fun startupBenchmark() = benchmarkRule.measureRepeated(
 
 ```kotlin
 class MyApp : Application() {
- override fun onCreate() {
- super.onCreate()
- // ✅ Только критическое
- FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+    override fun onCreate() {
+        super.onCreate()
+        // ✅ Только критическое
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
- // ❌ Плохо: блокирует UI-поток
- // initDatabase()
- // initNetworking()
+        // ❌ Плохо: блокирует UI-поток
+        // initDatabase()
+        // initNetworking()
 
- // ✅ Отложенная инициализация через App Startup
- AppInitializer.getInstance(this)
- .initializeComponent(WorkManagerInitializer::class.java)
- }
+        // ✅ Отложенная инициализация через App Startup
+        AppInitializer.getInstance(this)
+            .initializeComponent(WorkManagerInitializer::class.java)
+    }
 }
 ```
 
@@ -154,24 +156,24 @@ class MyApp : Application() {
 
 ```kotlin
 class NetworkInitializer : Initializer<ApiClient> {
- override fun create(context: Context): ApiClient {
- return ApiClient.Builder()
- .baseUrl(BuildConfig.API_URL)
- .build()
- }
+    override fun create(context: Context): ApiClient {
+        return ApiClient.Builder()
+            .baseUrl(BuildConfig.API_URL)
+            .build()
+    }
 
- override fun dependencies() = emptyList<Class<Initializer<*>>>()
+    override fun dependencies() = emptyList<Class<Initializer<*>>>()
 }
 
 // ✅ Ленивая инициализация через Hilt
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
- @Provides
- @Singleton
- fun provideDatabase(app: Application): AppDatabase =
- Room.databaseBuilder(app, AppDatabase::class.java, "db")
- .build() // Создание только при первом обращении
+    @Provides
+    @Singleton
+    fun provideDatabase(app: Application): AppDatabase =
+        Room.databaseBuilder(app, AppDatabase::class.java, "db")
+            .build() // Создание только при первом обращении
 }
 ```
 
@@ -182,18 +184,18 @@ object AppModule {
 ```kotlin
 // ❌ Плохо: блокирует onCreate
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- loadUserData() // Синхронная операция!
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadUserData() // Синхронная операция!
+    }
 }
 
 // ✅ Хорошо: async в ViewModel
 class MainViewModel @Inject constructor(
- private val repository: UserRepository
+    private val repository: UserRepository
 ) : ViewModel() {
- val userData = repository.getUserDataFlow()
- .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    val userData = repository.getUserDataFlow()
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 }
 ```
 
@@ -255,9 +257,9 @@ Trace.endSection()
 // ✅ Macrobenchmark for precise measurements
 @Test
 fun startupBenchmark() = benchmarkRule.measureRepeated(
- packageName = "com.example.app",
- metrics = listOf(StartupTimingMetric()),
- iterations = 5
+    packageName = "com.example.app",
+    metrics = listOf(StartupTimingMetric()),
+    iterations = 5
 ) { pressHome(); startActivityAndWait() }
 ```
 
@@ -269,19 +271,19 @@ Critical: only crash reporting and essential systems initialize synchronously.
 
 ```kotlin
 class MyApp : Application() {
- override fun onCreate() {
- super.onCreate()
- // ✅ Critical only
- FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+    override fun onCreate() {
+        super.onCreate()
+        // ✅ Critical only
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
- // ❌ Bad: blocks UI thread
- // initDatabase()
- // initNetworking()
+        // ❌ Bad: blocks UI thread
+        // initDatabase()
+        // initNetworking()
 
- // ✅ Deferred init via App Startup
- AppInitializer.getInstance(this)
- .initializeComponent(WorkManagerInitializer::class.java)
- }
+        // ✅ Deferred init via App Startup
+        AppInitializer.getInstance(this)
+            .initializeComponent(WorkManagerInitializer::class.java)
+    }
 }
 ```
 
@@ -291,24 +293,24 @@ Use App Startup to manage component initialization order:
 
 ```kotlin
 class NetworkInitializer : Initializer<ApiClient> {
- override fun create(context: Context): ApiClient {
- return ApiClient.Builder()
- .baseUrl(BuildConfig.API_URL)
- .build()
- }
+    override fun create(context: Context): ApiClient {
+        return ApiClient.Builder()
+            .baseUrl(BuildConfig.API_URL)
+            .build()
+    }
 
- override fun dependencies() = emptyList<Class<Initializer<*>>>()
+    override fun dependencies() = emptyList<Class<Initializer<*>>>()
 }
 
 // ✅ Lazy init via Hilt
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
- @Provides
- @Singleton
- fun provideDatabase(app: Application): AppDatabase =
- Room.databaseBuilder(app, AppDatabase::class.java, "db")
- .build() // Created only on first access
+    @Provides
+    @Singleton
+    fun provideDatabase(app: Application): AppDatabase =
+        Room.databaseBuilder(app, AppDatabase::class.java, "db")
+            .build() // Created only on first access
 }
 ```
 
@@ -319,18 +321,18 @@ Move heavy work to `ViewModel` + coroutines:
 ```kotlin
 // ❌ Bad: blocks onCreate
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- loadUserData() // Synchronous operation!
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadUserData() // Synchronous operation!
+    }
 }
 
 // ✅ Good: async in ViewModel
 class MainViewModel @Inject constructor(
- private val repository: UserRepository
+    private val repository: UserRepository
 ) : ViewModel() {
- val userData = repository.getUserDataFlow()
- .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    val userData = repository.getUserDataFlow()
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 }
 ```
 
@@ -383,6 +385,7 @@ Effect: 15-30% cold start improvement through pre-compilation.
 
 - 
 - 
+
 
 ### Prerequisites
 - [[q-what-are-services-used-for--android--medium]] - Understanding Android components

@@ -15,6 +15,7 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
+  - c-biometric-authentication
 sources: []
 created: 2025-10-12
 updated: 2025-10-30

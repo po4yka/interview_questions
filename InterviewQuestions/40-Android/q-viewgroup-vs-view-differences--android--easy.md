@@ -28,6 +28,7 @@ tags:
 - view
 - view-hierarchy
 - viewgroup
+
 ---
 
 # Вопрос (RU)
@@ -49,14 +50,14 @@ ViewGroups are **invisible containers** in which other Views can be placed. The 
 
 ```
 View (base class)
- ↓
+  ↓
 ViewGroup (container)
- ↓
- LinearLayout
- RelativeLayout
- ConstraintLayout
- FrameLayout
- ... other layouts
+  ↓
+   LinearLayout
+   RelativeLayout
+   ConstraintLayout
+   FrameLayout
+   ... other layouts
 ```
 
 ![`View` hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
@@ -109,39 +110,39 @@ Common UI components that extend `View`:
 ```xml
 <!-- View: Cannot contain children -->
 <TextView
- android:id="@+id/textView"
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:text="Hello World" />
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Hello World" />
 
 <!-- ViewGroup: Can contain children -->
 <LinearLayout
- android:layout_width="match_parent"
- android:layout_height="wrap_content"
- android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
- <!-- Child View 1 -->
- <TextView
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:text="First Item" />
+    <!-- Child View 1 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Item" />
 
- <!-- Child View 2 -->
- <Button
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:text="Click Me" />
+    <!-- Child View 2 -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me" />
 
- <!-- Child ViewGroup (nested) -->
- <FrameLayout
- android:layout_width="match_parent"
- android:layout_height="100dp">
+    <!-- Child ViewGroup (nested) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
- <ImageView
- android:layout_width="match_parent"
- android:layout_height="match_parent"
- android:src="@drawable/ic_image" />
- </FrameLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_image" />
+    </FrameLayout>
 </LinearLayout>
 ```
 
@@ -150,22 +151,22 @@ Common UI components that extend `View`:
 ```kotlin
 // View is the base class
 open class View {
- protected open fun onDraw(canvas: Canvas)
- protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
- open fun onTouchEvent(event: MotionEvent): Boolean
+    protected open fun onDraw(canvas: Canvas)
+    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
+    open fun onTouchEvent(event: MotionEvent): Boolean
 }
 
 // ViewGroup extends View and adds child management
 abstract class ViewGroup : View {
- // Child management methods
- fun addView(child: View)
- fun removeView(child: View)
- fun getChildAt(index: Int): View
- fun getChildCount(): Int
+    // Child management methods
+    fun addView(child: View)
+    fun removeView(child: View)
+    fun getChildAt(index: Int): View
+    fun getChildCount(): Int
 
- // Layout management
- override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
- fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
+    // Layout management
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
+    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
 }
 ```
 
@@ -173,40 +174,40 @@ abstract class ViewGroup : View {
 
 ```kotlin
 class CustomContainer @JvmOverloads constructor(
- context: Context,
- attrs: AttributeSet? = null,
- defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
- // Must implement onMeasure
- override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
- var maxWidth = 0
- var maxHeight = 0
+    // Must implement onMeasure
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        var maxWidth = 0
+        var maxHeight = 0
 
- // Measure all children
- measureChildren(widthMeasureSpec, heightMeasureSpec)
+        // Measure all children
+        measureChildren(widthMeasureSpec, heightMeasureSpec)
 
- // Calculate dimensions based on children
- for (i in 0 until childCount) {
- val child = getChildAt(i)
- maxWidth = maxOf(maxWidth, child.measuredWidth)
- maxHeight = maxOf(maxHeight, child.measuredHeight)
- }
+        // Calculate dimensions based on children
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            maxWidth = maxOf(maxWidth, child.measuredWidth)
+            maxHeight = maxOf(maxHeight, child.measuredHeight)
+        }
 
- setMeasuredDimension(
- resolveSize(maxWidth, widthMeasureSpec),
- resolveSize(maxHeight, heightMeasureSpec)
- )
- }
+        setMeasuredDimension(
+            resolveSize(maxWidth, widthMeasureSpec),
+            resolveSize(maxHeight, heightMeasureSpec)
+        )
+    }
 
- // Must implement onLayout
- override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
- // Position all children
- for (i in 0 until childCount) {
- val child = getChildAt(i)
- child.layout(0, 0, child.measuredWidth, child.measuredHeight)
- }
- }
+    // Must implement onLayout
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        // Position all children
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            child.layout(0, 0, child.measuredWidth, child.measuredHeight)
+        }
+    }
 }
 ```
 
@@ -230,12 +231,15 @@ class CustomContainer @JvmOverloads constructor(
 4. **Layout responsibility** - ViewGroups are responsible for measuring and positioning their children
 5. **Event distribution** - ViewGroups handle touch event distribution to children
 
+
 # Question (EN)
 > `ViewGroup` vs `View` Differences
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 ### What is `ViewGroup`?
@@ -248,14 +252,14 @@ ViewGroups are **invisible containers** in which other Views can be placed. The 
 
 ```
 View (base class)
- ↓
+  ↓
 ViewGroup (container)
- ↓
- LinearLayout
- RelativeLayout
- ConstraintLayout
- FrameLayout
- ... other layouts
+  ↓
+   LinearLayout
+   RelativeLayout
+   ConstraintLayout
+   FrameLayout
+   ... other layouts
 ```
 
 ![`View` hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
@@ -308,39 +312,39 @@ Common UI components that extend `View`:
 ```xml
 <!-- View: Cannot contain children -->
 <TextView
- android:id="@+id/textView"
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:text="Hello World" />
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Hello World" />
 
 <!-- ViewGroup: Can contain children -->
 <LinearLayout
- android:layout_width="match_parent"
- android:layout_height="wrap_content"
- android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
- <!-- Child View 1 -->
- <TextView
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:text="First Item" />
+    <!-- Child View 1 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Item" />
 
- <!-- Child View 2 -->
- <Button
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:text="Click Me" />
+    <!-- Child View 2 -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me" />
 
- <!-- Child ViewGroup (nested) -->
- <FrameLayout
- android:layout_width="match_parent"
- android:layout_height="100dp">
+    <!-- Child ViewGroup (nested) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
- <ImageView
- android:layout_width="match_parent"
- android:layout_height="match_parent"
- android:src="@drawable/ic_image" />
- </FrameLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_image" />
+    </FrameLayout>
 </LinearLayout>
 ```
 
@@ -349,22 +353,22 @@ Common UI components that extend `View`:
 ```kotlin
 // View is the base class
 open class View {
- protected open fun onDraw(canvas: Canvas)
- protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
- open fun onTouchEvent(event: MotionEvent): Boolean
+    protected open fun onDraw(canvas: Canvas)
+    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
+    open fun onTouchEvent(event: MotionEvent): Boolean
 }
 
 // ViewGroup extends View and adds child management
 abstract class ViewGroup : View {
- // Child management methods
- fun addView(child: View)
- fun removeView(child: View)
- fun getChildAt(index: Int): View
- fun getChildCount(): Int
+    // Child management methods
+    fun addView(child: View)
+    fun removeView(child: View)
+    fun getChildAt(index: Int): View
+    fun getChildCount(): Int
 
- // Layout management
- override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
- fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
+    // Layout management
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
+    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
 }
 ```
 
@@ -372,40 +376,40 @@ abstract class ViewGroup : View {
 
 ```kotlin
 class CustomContainer @JvmOverloads constructor(
- context: Context,
- attrs: AttributeSet? = null,
- defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
- // Must implement onMeasure
- override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
- var maxWidth = 0
- var maxHeight = 0
+    // Must implement onMeasure
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        var maxWidth = 0
+        var maxHeight = 0
 
- // Measure all children
- measureChildren(widthMeasureSpec, heightMeasureSpec)
+        // Measure all children
+        measureChildren(widthMeasureSpec, heightMeasureSpec)
 
- // Calculate dimensions based on children
- for (i in 0 until childCount) {
- val child = getChildAt(i)
- maxWidth = maxOf(maxWidth, child.measuredWidth)
- maxHeight = maxOf(maxHeight, child.measuredHeight)
- }
+        // Calculate dimensions based on children
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            maxWidth = maxOf(maxWidth, child.measuredWidth)
+            maxHeight = maxOf(maxHeight, child.measuredHeight)
+        }
 
- setMeasuredDimension(
- resolveSize(maxWidth, widthMeasureSpec),
- resolveSize(maxHeight, heightMeasureSpec)
- )
- }
+        setMeasuredDimension(
+            resolveSize(maxWidth, widthMeasureSpec),
+            resolveSize(maxHeight, heightMeasureSpec)
+        )
+    }
 
- // Must implement onLayout
- override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
- // Position all children
- for (i in 0 until childCount) {
- val child = getChildAt(i)
- child.layout(0, 0, child.measuredWidth, child.measuredHeight)
- }
- }
+    // Must implement onLayout
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        // Position all children
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            child.layout(0, 0, child.measuredWidth, child.measuredHeight)
+        }
+    }
 }
 ```
 
@@ -488,16 +492,19 @@ ViewGroups — это **невидимые контейнеры**, в котор
 
 ---
 
+
 ## Follow-ups
 
 - 
 - [[c-views]]
 - [[q-viewmodel-pattern--android--easy]]
 
+
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: []
+related: [c-dimension-units]
 
 # Timestamps
 created: 2025-10-15
@@ -25,6 +25,7 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [accessibility, android/ui-theming, android/ui-views, difficulty/easy, dp, measurement-units, sp]
+
 ---
 
 # Вопрос (RU)
@@ -73,19 +74,19 @@ Android использует три основные единицы измере
 ```xml
 <!-- ✅ Правильно: dp для layout, sp для текста -->
 <TextView
- android:layout_width="200dp"
- android:layout_height="50dp"
- android:padding="16dp"
- android:textSize="16sp" />
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    android:padding="16dp"
+    android:textSize="16sp" />
 
 <!-- ❌ Неправильно: px для UI -->
 <TextView
- android:layout_width="200px"
- android:textSize="16px" />
+    android:layout_width="200px"
+    android:textSize="16px" />
 
 <!-- ❌ Неправильно: dp для текста -->
 <TextView
- android:textSize="16dp" />
+    android:textSize="16dp" />
 ```
 
 #### Kotlin (конверсия единиц)
@@ -93,19 +94,19 @@ Android использует три основные единицы измере
 ```kotlin
 // ✅ Extension функции для удобной конверсии
 val Int.dp: Int
- get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 val Int.sp: Float
- get() = TypedValue.applyDimension(
- TypedValue.COMPLEX_UNIT_SP,
- this.toFloat(),
- Resources.getSystem().displayMetrics
- )
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    )
 
 // Использование
 view.layoutParams = LinearLayout.LayoutParams(
- 100.dp, // ✅ 100dp width
- 50.dp // ✅ 50dp height
+    100.dp,  // ✅ 100dp width
+    50.dp    // ✅ 50dp height
 )
 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f) // ✅ 16sp
 ```
@@ -115,29 +116,29 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f) // ✅ 16sp
 ```kotlin
 @Composable
 fun ProperDimensions() {
- Column(
- modifier = Modifier
- .fillMaxWidth()
- .padding(16.dp) // ✅ dp для отступов
- ) {
- Text(
- text = "Title",
- fontSize = 24.sp, // ✅ sp для текста
- modifier = Modifier.padding(bottom = 8.dp)
- )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp) // ✅ dp для отступов
+    ) {
+        Text(
+            text = "Title",
+            fontSize = 24.sp, // ✅ sp для текста
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
 
- Button(
- onClick = { },
- modifier = Modifier
- .fillMaxWidth()
- .height(48.dp) // ✅ dp для размеров
- ) {
- Text(
- text = "Click Me",
- fontSize = 16.sp // ✅ sp для текста
- )
- }
- }
+        Button(
+            onClick = { },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp) // ✅ dp для размеров
+        ) {
+            Text(
+                text = "Click Me",
+                fontSize = 16.sp // ✅ sp для текста
+            )
+        }
+    }
 }
 ```
 
@@ -145,24 +146,24 @@ fun ProperDimensions() {
 
 ```kotlin
 class DimensionUtils(private val context: Context) {
- private val displayMetrics = context.resources.displayMetrics
+    private val displayMetrics = context.resources.displayMetrics
 
- fun dpToPx(dp: Int): Int =
- (dp * displayMetrics.density).toInt()
+    fun dpToPx(dp: Int): Int =
+        (dp * displayMetrics.density).toInt()
 
- fun spToPx(sp: Float): Float =
- TypedValue.applyDimension(
- TypedValue.COMPLEX_UNIT_SP,
- sp,
- displayMetrics
- )
+    fun spToPx(sp: Float): Float =
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            sp,
+            displayMetrics
+        )
 
- // ✅ Получение информации о плотности экрана
- fun getDensityInfo(): String = """
- Density: ${displayMetrics.density}
- DPI: ${displayMetrics.densityDpi}
- Scaled Density: ${displayMetrics.scaledDensity}
- """.trimIndent()
+    // ✅ Получение информации о плотности экрана
+    fun getDensityInfo(): String = """
+        Density: ${displayMetrics.density}
+        DPI: ${displayMetrics.densityDpi}
+        Scaled Density: ${displayMetrics.scaledDensity}
+    """.trimIndent()
 }
 ```
 
@@ -214,19 +215,19 @@ Android uses three main measurement units for UI:
 ```xml
 <!-- ✅ Correct: dp for layout, sp for text -->
 <TextView
- android:layout_width="200dp"
- android:layout_height="50dp"
- android:padding="16dp"
- android:textSize="16sp" />
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    android:padding="16dp"
+    android:textSize="16sp" />
 
 <!-- ❌ Wrong: px for UI -->
 <TextView
- android:layout_width="200px"
- android:textSize="16px" />
+    android:layout_width="200px"
+    android:textSize="16px" />
 
 <!-- ❌ Wrong: dp for text size -->
 <TextView
- android:textSize="16dp" />
+    android:textSize="16dp" />
 ```
 
 #### Kotlin (unit conversion)
@@ -234,19 +235,19 @@ Android uses three main measurement units for UI:
 ```kotlin
 // ✅ Extension functions for easy conversion
 val Int.dp: Int
- get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 val Int.sp: Float
- get() = TypedValue.applyDimension(
- TypedValue.COMPLEX_UNIT_SP,
- this.toFloat(),
- Resources.getSystem().displayMetrics
- )
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    )
 
 // Usage
 view.layoutParams = LinearLayout.LayoutParams(
- 100.dp, // ✅ 100dp width
- 50.dp // ✅ 50dp height
+    100.dp,  // ✅ 100dp width
+    50.dp    // ✅ 50dp height
 )
 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f) // ✅ 16sp
 ```
@@ -256,29 +257,29 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f) // ✅ 16sp
 ```kotlin
 @Composable
 fun ProperDimensions() {
- Column(
- modifier = Modifier
- .fillMaxWidth()
- .padding(16.dp) // ✅ dp for padding
- ) {
- Text(
- text = "Title",
- fontSize = 24.sp, // ✅ sp for text
- modifier = Modifier.padding(bottom = 8.dp)
- )
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp) // ✅ dp for padding
+    ) {
+        Text(
+            text = "Title",
+            fontSize = 24.sp, // ✅ sp for text
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
 
- Button(
- onClick = { },
- modifier = Modifier
- .fillMaxWidth()
- .height(48.dp) // ✅ dp for dimensions
- ) {
- Text(
- text = "Click Me",
- fontSize = 16.sp // ✅ sp for text
- )
- }
- }
+        Button(
+            onClick = { },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp) // ✅ dp for dimensions
+        ) {
+            Text(
+                text = "Click Me",
+                fontSize = 16.sp // ✅ sp for text
+            )
+        }
+    }
 }
 ```
 
@@ -286,24 +287,24 @@ fun ProperDimensions() {
 
 ```kotlin
 class DimensionUtils(private val context: Context) {
- private val displayMetrics = context.resources.displayMetrics
+    private val displayMetrics = context.resources.displayMetrics
 
- fun dpToPx(dp: Int): Int =
- (dp * displayMetrics.density).toInt()
+    fun dpToPx(dp: Int): Int =
+        (dp * displayMetrics.density).toInt()
 
- fun spToPx(sp: Float): Float =
- TypedValue.applyDimension(
- TypedValue.COMPLEX_UNIT_SP,
- sp,
- displayMetrics
- )
+    fun spToPx(sp: Float): Float =
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            sp,
+            displayMetrics
+        )
 
- // ✅ Get screen density info
- fun getDensityInfo(): String = """
- Density: ${displayMetrics.density}
- DPI: ${displayMetrics.densityDpi}
- Scaled Density: ${displayMetrics.scaledDensity}
- """.trimIndent()
+    // ✅ Get screen density info
+    fun getDensityInfo(): String = """
+        Density: ${displayMetrics.density}
+        DPI: ${displayMetrics.densityDpi}
+        Scaled Density: ${displayMetrics.scaledDensity}
+    """.trimIndent()
 }
 ```
 
@@ -331,7 +332,7 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 
 ## References
 
-- — Concept note on dp/sp system
+-  — Concept note on dp/sp system
 - [[c-accessibility]] — Accessibility and sp scaling
 - https://developer.android.com/training/multiscreen/screendensities — Screen densities guide
 - https://developer.android.com/guide/practices/screens_support — Supporting different screens
@@ -340,12 +341,12 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-gradle-basics--android--easy]] — Understanding views first
-- — Layout fundamentals
+-  — Understanding views first
+-  — Layout fundamentals
 
 ### Related (Same Level)
 - [[q-how-to-add-custom-attributes-to-custom-view--android--medium]] — Custom attributes in views
-- — Screen density qualifiers
+-  — Screen density qualifiers
 
 ### Advanced (Harder)
 - [[q-custom-view-animation--android--medium]] — Drawing with px on canvas

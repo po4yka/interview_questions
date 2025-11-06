@@ -30,6 +30,7 @@ tags:
 - ci-cd
 - difficulty/medium
 - testing
+
 ---
 
 # Вопрос (RU)
@@ -61,15 +62,15 @@ tags:
 ```kotlin
 // ✅ Unit-тесты: быстрые, изолированные, мокируем Android API
 class ViewModelTest {
- @Test
- fun `loadData updates state correctly`() = runTest {
- val repo = FakeRepository()
- val viewModel = MyViewModel(repo)
+    @Test
+    fun `loadData updates state correctly`() = runTest {
+        val repo = FakeRepository()
+        val viewModel = MyViewModel(repo)
 
- viewModel.loadData()
+        viewModel.loadData()
 
- assertEquals(Success(data), viewModel.state.value)
- }
+        assertEquals(Success(data), viewModel.state.value)
+    }
 }
 ```
 
@@ -77,15 +78,15 @@ class ViewModelTest {
 // ✅ Инструментальные: реальное устройство, проверка UI
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
- @get:Rule val composeRule = createComposeRule()
+    @get:Rule val composeRule = createComposeRule()
 
- @Test
- fun loginWithValidCredentials_navigatesToHome() {
- composeRule.setContent { LoginScreen() }
- composeRule.onNodeWithTag("email").performTextInput("test@test.com")
- composeRule.onNodeWithTag("submit").performClick()
- composeRule.onNodeWithTag("home").assertIsDisplayed()
- }
+    @Test
+    fun loginWithValidCredentials_navigatesToHome() {
+        composeRule.setContent { LoginScreen() }
+        composeRule.onNodeWithTag("email").performTextInput("test@test.com")
+        composeRule.onNodeWithTag("submit").performClick()
+        composeRule.onNodeWithTag("home").assertIsDisplayed()
+    }
 }
 ```
 
@@ -93,15 +94,15 @@ class LoginFlowTest {
 // ❌ Не используйте сеть напрямую в тестах
 @Test
 fun loadData() {
- val data = api.fetchData() // Нестабильно!
+    val data = api.fetchData() // Нестабильно!
 }
 
 // ✅ Используйте MockWebServer
 @Test
 fun loadData() {
- mockWebServer.enqueue(MockResponse().setBody("""{"id":1}"""))
- val data = api.fetchData()
- assertEquals(1, data.id)
+    mockWebServer.enqueue(MockResponse().setBody("""{"id":1}"""))
+    val data = api.fetchData()
+    assertEquals(1, data.id)
 }
 ```
 
@@ -112,45 +113,45 @@ fun loadData() {
 name: Android CI
 on: [pull_request]
 jobs:
- test:
- runs-on: ubuntu-latest
- steps:
- - uses: actions/checkout@v4
- - uses: actions/setup-java@v4
- with:
- distribution: temurin
- java-version: 17
- - uses: gradle/gradle-build-action@v2
- with:
- cache-read-only: false
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: false
 
- - name: Unit tests
- run: ./gradlew testDebugUnitTest --parallel --configuration-cache
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest --parallel --configuration-cache
 
- - name: Lint
- run: ./gradlew lintDebug --parallel
+      - name: Lint
+        run: ./gradlew lintDebug --parallel
 
- - name: Upload reports
- if: failure()
- uses: actions/upload-artifact@v4
- with:
- name: test-reports
- path: '**/build/reports/**'
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/build/reports/**'
 ```
 
 ```kotlin
 // ✅ Шардинг для параллельного выполнения
 // build.gradle.kts
 android {
- testOptions {
- execution = "ANDROIDX_TEST_ORCHESTRATOR"
- animationsDisabled = true
- }
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        animationsDisabled = true
+    }
 }
 
 // CI: запуск шардов параллельно
 ./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
- -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
+  -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
 ```
 
 ### Управление Нестабильными Тестами
@@ -160,12 +161,12 @@ android {
 @FlakyTest(bugId = "ISSUE-123")
 @Test
 fun animationTest() {
- // Тест в карантине, не блокирует PR
+    // Тест в карантине, не блокирует PR
 }
 
 // CI: автоматический retry
 ./gradlew test --rerun-tasks --max-parallel-forks=4 \
- -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
+  -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
 ```
 
 ### Отчетность И Артефакты
@@ -186,19 +187,19 @@ fun animationTest() {
 ```yaml
 # ✅ Подписание APK в защищенной среде
 - name: Sign APK
- env:
- KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
- KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
- run: |
- echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
- ./gradlew assembleRelease \
- -Pandroid.injected.signing.store.file=keystore.jks \
- -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
- rm keystore.jks
+  env:
+    KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+    KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+  run: |
+    echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
+    ./gradlew assembleRelease \
+      -Pandroid.injected.signing.store.file=keystore.jks \
+      -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
+    rm keystore.jks
 
 # ✅ Проверка зависимостей (supply-chain security)
 - name: Verify checksums
- run: ./gradlew --write-verification-metadata sha256
+  run: ./gradlew --write-verification-metadata sha256
 ```
 
 ## Answer (EN)
@@ -222,15 +223,15 @@ fun animationTest() {
 ```kotlin
 // ✅ Unit tests: fast, isolated, mock Android APIs
 class ViewModelTest {
- @Test
- fun `loadData updates state correctly`() = runTest {
- val repo = FakeRepository()
- val viewModel = MyViewModel(repo)
+    @Test
+    fun `loadData updates state correctly`() = runTest {
+        val repo = FakeRepository()
+        val viewModel = MyViewModel(repo)
 
- viewModel.loadData()
+        viewModel.loadData()
 
- assertEquals(Success(data), viewModel.state.value)
- }
+        assertEquals(Success(data), viewModel.state.value)
+    }
 }
 ```
 
@@ -238,15 +239,15 @@ class ViewModelTest {
 // ✅ Instrumented: real device, UI verification
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
- @get:Rule val composeRule = createComposeRule()
+    @get:Rule val composeRule = createComposeRule()
 
- @Test
- fun loginWithValidCredentials_navigatesToHome() {
- composeRule.setContent { LoginScreen() }
- composeRule.onNodeWithTag("email").performTextInput("test@test.com")
- composeRule.onNodeWithTag("submit").performClick()
- composeRule.onNodeWithTag("home").assertIsDisplayed()
- }
+    @Test
+    fun loginWithValidCredentials_navigatesToHome() {
+        composeRule.setContent { LoginScreen() }
+        composeRule.onNodeWithTag("email").performTextInput("test@test.com")
+        composeRule.onNodeWithTag("submit").performClick()
+        composeRule.onNodeWithTag("home").assertIsDisplayed()
+    }
 }
 ```
 
@@ -254,15 +255,15 @@ class LoginFlowTest {
 // ❌ Don't use network directly in tests
 @Test
 fun loadData() {
- val data = api.fetchData() // Flaky!
+    val data = api.fetchData() // Flaky!
 }
 
 // ✅ Use MockWebServer
 @Test
 fun loadData() {
- mockWebServer.enqueue(MockResponse().setBody("""{"id":1}"""))
- val data = api.fetchData()
- assertEquals(1, data.id)
+    mockWebServer.enqueue(MockResponse().setBody("""{"id":1}"""))
+    val data = api.fetchData()
+    assertEquals(1, data.id)
 }
 ```
 
@@ -273,45 +274,45 @@ fun loadData() {
 name: Android CI
 on: [pull_request]
 jobs:
- test:
- runs-on: ubuntu-latest
- steps:
- - uses: actions/checkout@v4
- - uses: actions/setup-java@v4
- with:
- distribution: temurin
- java-version: 17
- - uses: gradle/gradle-build-action@v2
- with:
- cache-read-only: false
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: false
 
- - name: Unit tests
- run: ./gradlew testDebugUnitTest --parallel --configuration-cache
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest --parallel --configuration-cache
 
- - name: Lint
- run: ./gradlew lintDebug --parallel
+      - name: Lint
+        run: ./gradlew lintDebug --parallel
 
- - name: Upload reports
- if: failure()
- uses: actions/upload-artifact@v4
- with:
- name: test-reports
- path: '**/build/reports/**'
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/build/reports/**'
 ```
 
 ```kotlin
 // ✅ Sharding for parallel execution
 // build.gradle.kts
 android {
- testOptions {
- execution = "ANDROIDX_TEST_ORCHESTRATOR"
- animationsDisabled = true
- }
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+        animationsDisabled = true
+    }
 }
 
 // CI: run shards in parallel
 ./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
- -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
+  -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
 ```
 
 ### Managing Flaky Tests
@@ -321,12 +322,12 @@ android {
 @FlakyTest(bugId = "ISSUE-123")
 @Test
 fun animationTest() {
- // Test in quarantine, doesn't block PRs
+    // Test in quarantine, doesn't block PRs
 }
 
 // CI: automatic retry
 ./gradlew test --rerun-tasks --max-parallel-forks=4 \
- -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
+  -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
 ```
 
 ### Reporting and Artifacts
@@ -347,19 +348,19 @@ fun animationTest() {
 ```yaml
 # ✅ Sign APK in secure environment
 - name: Sign APK
- env:
- KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
- KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
- run: |
- echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
- ./gradlew assembleRelease \
- -Pandroid.injected.signing.store.file=keystore.jks \
- -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
- rm keystore.jks
+  env:
+    KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+    KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+  run: |
+    echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
+    ./gradlew assembleRelease \
+      -Pandroid.injected.signing.store.file=keystore.jks \
+      -Pandroid.injected.signing.store.password="$KEY_PASSWORD"
+    rm keystore.jks
 
 # ✅ Verify dependencies (supply-chain security)
 - name: Verify checksums
- run: ./gradlew --write-verification-metadata sha256
+  run: ./gradlew --write-verification-metadata sha256
 ```
 
 ## Follow-ups
@@ -382,6 +383,7 @@ fun animationTest() {
 
 - 
 - 
+
 
 ### Prerequisites (Easier)
 - [[q-android-testing-strategies--android--medium]] - Testing strategies overview

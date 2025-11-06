@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-workmanager]
+related: [c-coroutines, c-main-thread, c-workmanager]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/easy]
 sources: [https://developer.android.com/guide/background, https://developer.android.com/kotlin/coroutines]
+
 ---
 
 # Вопрос (RU)
@@ -41,29 +42,29 @@ sources: [https://developer.android.com/guide/background, https://developer.andr
 ❌ **Плохо: Блокировка UI потока**
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private fun loadData() {
- // Блокирует UI на 5 секунд!
- Thread.sleep(5000)
- val data = fetchFromNetwork()
- textView.text = data
- }
+    private fun loadData() {
+        // Блокирует UI на 5 секунд!
+        Thread.sleep(5000)
+        val data = fetchFromNetwork()
+        textView.text = data
+    }
 }
 ```
 
 ✅ **Хорошо: Работа в фоновом потоке**
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private fun loadData() {
- lifecycleScope.launch(Dispatchers.IO) {
- // Фоновая работа
- val data = fetchFromNetwork()
+    private fun loadData() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Фоновая работа
+            val data = fetchFromNetwork()
 
- // Обновление UI в главном потоке
- withContext(Dispatchers.Main) {
- textView.text = data
- }
- }
- }
+            // Обновление UI в главном потоке
+            withContext(Dispatchers.Main) {
+                textView.text = data
+            }
+        }
+    }
 }
 ```
 
@@ -83,19 +84,19 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class UserViewModel : ViewModel() {
- fun loadUser(userId: String) {
- viewModelScope.launch(Dispatchers.IO) {
- try {
- val user = userRepository.getUser(userId)
+    fun loadUser(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val user = userRepository.getUser(userId)
 
- withContext(Dispatchers.Main) {
- _userState.value = user
- }
- } catch (e: Exception) {
- _errorState.value = e.message
- }
- }
- }
+                withContext(Dispatchers.Main) {
+                    _userState.value = user
+                }
+            } catch (e: Exception) {
+                _errorState.value = e.message
+            }
+        }
+    }
 }
 ```
 
@@ -111,26 +112,26 @@ class UserViewModel : ViewModel() {
 
 ```kotlin
 class SyncWorker(context: Context, params: WorkerParameters)
- : CoroutineWorker(context, params) {
+    : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- return try {
- syncDataWithServer()
- Result.success()
- } catch (e: Exception) {
- Result.retry()
- }
- }
+    override suspend fun doWork(): Result {
+        return try {
+            syncDataWithServer()
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
 }
 
 // Запуск периодической синхронизации
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
- .setConstraints(
- Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED)
- .build()
- )
- .build()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
 
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
@@ -148,17 +149,17 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private fun loadData() {
- Thread {
- // Фоновая работа
- val data = fetchFromNetwork()
+    private fun loadData() {
+        Thread {
+            // Фоновая работа
+            val data = fetchFromNetwork()
 
- // Обновление UI
- runOnUiThread {
- textView.text = data
- }
- }.start()
- }
+            // Обновление UI
+            runOnUiThread {
+                textView.text = data
+            }
+        }.start()
+    }
 }
 ```
 
@@ -200,29 +201,29 @@ If you block the UI thread for > 5 seconds → **ANR** (`Application` Not Respon
 ❌ **Bad: Blocking UI `Thread`**
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private fun loadData() {
- // Blocks UI for 5 seconds!
- Thread.sleep(5000)
- val data = fetchFromNetwork()
- textView.text = data
- }
+    private fun loadData() {
+        // Blocks UI for 5 seconds!
+        Thread.sleep(5000)
+        val data = fetchFromNetwork()
+        textView.text = data
+    }
 }
 ```
 
 ✅ **Good: Background `Thread`**
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private fun loadData() {
- lifecycleScope.launch(Dispatchers.IO) {
- // Background work
- val data = fetchFromNetwork()
+    private fun loadData() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Background work
+            val data = fetchFromNetwork()
 
- // Update UI on main thread
- withContext(Dispatchers.Main) {
- textView.text = data
- }
- }
- }
+            // Update UI on main thread
+            withContext(Dispatchers.Main) {
+                textView.text = data
+            }
+        }
+    }
 }
 ```
 
@@ -242,19 +243,19 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class UserViewModel : ViewModel() {
- fun loadUser(userId: String) {
- viewModelScope.launch(Dispatchers.IO) {
- try {
- val user = userRepository.getUser(userId)
+    fun loadUser(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val user = userRepository.getUser(userId)
 
- withContext(Dispatchers.Main) {
- _userState.value = user
- }
- } catch (e: Exception) {
- _errorState.value = e.message
- }
- }
- }
+                withContext(Dispatchers.Main) {
+                    _userState.value = user
+                }
+            } catch (e: Exception) {
+                _errorState.value = e.message
+            }
+        }
+    }
 }
 ```
 
@@ -270,26 +271,26 @@ class UserViewModel : ViewModel() {
 
 ```kotlin
 class SyncWorker(context: Context, params: WorkerParameters)
- : CoroutineWorker(context, params) {
+    : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- return try {
- syncDataWithServer()
- Result.success()
- } catch (e: Exception) {
- Result.retry()
- }
- }
+    override suspend fun doWork(): Result {
+        return try {
+            syncDataWithServer()
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
 }
 
 // Schedule periodic sync
 val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
- .setConstraints(
- Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED)
- .build()
- )
- .build()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
 
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
@@ -307,17 +308,17 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private fun loadData() {
- Thread {
- // Background work
- val data = fetchFromNetwork()
+    private fun loadData() {
+        Thread {
+            // Background work
+            val data = fetchFromNetwork()
 
- // Update UI
- runOnUiThread {
- textView.text = data
- }
- }.start()
- }
+            // Update UI
+            runOnUiThread {
+                textView.text = data
+            }
+        }.start()
+    }
 }
 ```
 
@@ -366,11 +367,11 @@ Dispatchers.Main
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-intent--android--easy]]
+- 
 
 ### Related (Same Level)
 - [[q-repository-multiple-sources--android--medium]]
-- [[q-coroutine-scope-basics--kotlin--easy]]
+- 
 
 ### Advanced (Harder)
 - [[q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]]

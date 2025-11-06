@@ -16,6 +16,7 @@ status: reviewed
 moc: moc-android
 related:
   - c-compose-navigation
+  - c-deep-linking
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-navigation, difficulty/medium]

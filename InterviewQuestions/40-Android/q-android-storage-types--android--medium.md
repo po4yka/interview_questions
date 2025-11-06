@@ -16,7 +16,9 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
+  - c-datastore
   - c-room-database
+  - c-scoped-storage
   - q-android-manifest-file--android--easy
   - q-android-security-best-practices--android--medium
 sources: []

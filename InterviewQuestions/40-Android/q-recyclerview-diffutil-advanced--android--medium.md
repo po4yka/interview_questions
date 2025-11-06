@@ -23,6 +23,7 @@ updated: 2025-10-31
 tags:
 - android/ui-views
 - difficulty/medium
+
 ---
 
 # `RecyclerView` DiffUtil Advanced
@@ -43,20 +44,20 @@ tags:
 
 **Without DiffUtil:**
 ```kotlin
-// BAD - Inefficient
+//  BAD - Inefficient
 fun updateData(newList: List<Item>) {
- items = newList
- notifyDataSetChanged() // Refreshes EVERYTHING, loses scroll position, animations
+    items = newList
+    notifyDataSetChanged() // Refreshes EVERYTHING, loses scroll position, animations
 }
 ```
 
 **With DiffUtil:**
 ```kotlin
-// GOOD - Efficient, animated updates
+//  GOOD - Efficient, animated updates
 fun updateData(newList: List<Item>) {
- val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
- items = newList
- diffResult.dispatchUpdatesTo(this) // Only updates changed items
+    val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
+    items = newList
+    diffResult.dispatchUpdatesTo(this) // Only updates changed items
 }
 ```
 
@@ -105,81 +106,81 @@ Result: Only B is removed, E is inserted, C and D are kept
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String
+    val id: Long,
+    val name: String,
+    val description: String
 )
 
 class ItemDiffCallback(
- private val oldList: List<Item>,
- private val newList: List<Item>
+    private val oldList: List<Item>,
+    private val newList: List<Item>
 ) : DiffUtil.Callback() {
 
- // Return sizes
- override fun getOldListSize(): Int = oldList.size
- override fun getNewListSize(): Int = newList.size
+    // Return sizes
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
 
- // Are items the same entity? (same ID)
- override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
- return oldList[oldItemPosition].id == newList[newItemPosition].id
- }
+    //  Are items the same entity? (same ID)
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].id == newList[newItemPosition].id
+    }
 
- // Are item contents the same? (all properties equal)
- override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
- val oldItem = oldList[oldItemPosition]
- val newItem = newList[newItemPosition]
- return oldItem == newItem
- }
+    //  Are item contents the same? (all properties equal)
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem == newItem
+    }
 
- // Optional: What specifically changed? (for partial updates)
- override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
- val oldItem = oldList[oldItemPosition]
- val newItem = newList[newItemPosition]
+    //  Optional: What specifically changed? (for partial updates)
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
 
- val changes = mutableMapOf<String, Any>()
+        val changes = mutableMapOf<String, Any>()
 
- if (oldItem.name != newItem.name) {
- changes["name"] = newItem.name
- }
+        if (oldItem.name != newItem.name) {
+            changes["name"] = newItem.name
+        }
 
- if (oldItem.description != newItem.description) {
- changes["description"] = newItem.description
- }
+        if (oldItem.description != newItem.description) {
+            changes["description"] = newItem.description
+        }
 
- return if (changes.isNotEmpty()) changes else null
- }
+        return if (changes.isNotEmpty()) changes else null
+    }
 }
 
 // Usage in adapter
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private var items = emptyList<Item>()
+    private var items = emptyList<Item>()
 
- fun updateData(newItems: List<Item>) {
- val diffCallback = ItemDiffCallback(items, newItems)
- val diffResult = DiffUtil.calculateDiff(diffCallback)
+    fun updateData(newItems: List<Item>) {
+        val diffCallback = ItemDiffCallback(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
 
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
- if (payloads.isEmpty()) {
- // Full bind
- super.onBindViewHolder(holder, position, payloads)
- } else {
- // Partial bind (only changed properties)
- val item = items[position]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
+        if (payloads.isEmpty()) {
+            // Full bind
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Partial bind (only changed properties)
+            val item = items[position]
 
- @Suppress("UNCHECKED_CAST")
- val changes = payloads[0] as Map<String, Any>
+            @Suppress("UNCHECKED_CAST")
+            val changes = payloads[0] as Map<String, Any>
 
- changes["name"]?.let { holder.nameView.text = it as String }
- changes["description"]?.let { holder.descView.text = it as String }
- }
- }
+            changes["name"]?.let { holder.nameView.text = it as String }
+            changes["description"]?.let { holder.descView.text = it as String }
+        }
+    }
 
- // ... other adapter methods
+    // ... other adapter methods
 }
 ```
 
@@ -192,37 +193,37 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 ```kotlin
 class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()) {
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return ViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = getItem(position) // ListAdapter provides this
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position) // ListAdapter provides this
+        holder.bind(item)
+    }
 
- class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
- private val nameView: TextView = view.findViewById(R.id.name)
- private val descView: TextView = view.findViewById(R.id.description)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val nameView: TextView = view.findViewById(R.id.name)
+        private val descView: TextView = view.findViewById(R.id.description)
 
- fun bind(item: Item) {
- nameView.text = item.name
- descView.text = item.description
- }
- }
+        fun bind(item: Item) {
+            nameView.text = item.name
+            descView.text = item.description
+        }
+    }
 
- // Static DiffCallback (more efficient)
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    // Static DiffCallback (more efficient)
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 
 // Usage - super simple!
@@ -248,26 +249,26 @@ For large lists, calculate diff on background thread.
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private var items = emptyList<Item>()
- private val handler = Handler(Looper.getMainLooper())
+    private var items = emptyList<Item>()
+    private val handler = Handler(Looper.getMainLooper())
 
- fun updateDataAsync(newItems: List<Item>) {
- val oldList = items
+    fun updateDataAsync(newItems: List<Item>) {
+        val oldList = items
 
- // Calculate diff on background thread
- Thread {
- val diffCallback = ItemDiffCallback(oldList, newItems)
- val diffResult = DiffUtil.calculateDiff(diffCallback)
+        // Calculate diff on background thread
+        Thread {
+            val diffCallback = ItemDiffCallback(oldList, newItems)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
 
- // Apply updates on main thread
- handler.post {
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
- }.start()
- }
+            // Apply updates on main thread
+            handler.post {
+                items = newItems
+                diffResult.dispatchUpdatesTo(this)
+            }
+        }.start()
+    }
 
- // ... rest of adapter
+    // ... rest of adapter
 }
 ```
 
@@ -276,32 +277,32 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private val differ = AsyncListDiffer(this, ItemDiffCallback())
+    private val differ = AsyncListDiffer(this, ItemDiffCallback())
 
- // Access current list
- private val items: List<Item>
- get() = differ.currentList
+    // Access current list
+    private val items: List<Item>
+        get() = differ.currentList
 
- fun updateData(newItems: List<Item>) {
- differ.submitList(newItems) // Automatically async!
- }
+    fun updateData(newItems: List<Item>) {
+        differ.submitList(newItems) // Automatically async!
+    }
 
- override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items.size
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = items[position]
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+        holder.bind(item)
+    }
 
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 ```
 
@@ -313,37 +314,37 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String,
- val imageUrl: String,
- val metadata: Map<String, Any> // Expensive to compare
+    val id: Long,
+    val name: String,
+    val description: String,
+    val imageUrl: String,
+    val metadata: Map<String, Any> // Expensive to compare
 ) {
- // Optimize equals to skip expensive comparisons when possible
- override fun equals(other: Any?): Boolean {
- if (this === other) return true
- if (other !is Item) return false
+    //  Optimize equals to skip expensive comparisons when possible
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
 
- // Check cheap properties first
- if (id != other.id) return false
- if (name != other.name) return false
- if (description != other.description) return false
- if (imageUrl != other.imageUrl) return false
+        // Check cheap properties first
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (description != other.description) return false
+        if (imageUrl != other.imageUrl) return false
 
- // Only check expensive property if everything else matches
- if (metadata != other.metadata) return false
+        // Only check expensive property if everything else matches
+        if (metadata != other.metadata) return false
 
- return true
- }
+        return true
+    }
 
- override fun hashCode(): Int {
- var result = id.hashCode()
- result = 31 * result + name.hashCode()
- result = 31 * result + description.hashCode()
- result = 31 * result + imageUrl.hashCode()
- // Don't include expensive metadata in hashCode
- return result
- }
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + description.hashCode()
+        result = 31 * result + imageUrl.hashCode()
+        // Don't include expensive metadata in hashCode
+        return result
+    }
 }
 ```
 
@@ -351,15 +352,15 @@ data class Item(
 
 ```kotlin
 class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- // Compare by ID only (fast)
- return oldItem.id == newItem.id
- }
+    override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+        //  Compare by ID only (fast)
+        return oldItem.id == newItem.id
+    }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- // Use data class equals (efficient)
- return oldItem == newItem
- }
+    override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+        //  Use data class equals (efficient)
+        return oldItem == newItem
+    }
 }
 ```
 
@@ -375,18 +376,18 @@ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
 ```kotlin
 class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()) {
 
- private var pendingUpdate: List<Item>? = null
- private val updateHandler = Handler(Looper.getMainLooper())
- private val updateRunnable = Runnable {
- pendingUpdate?.let { submitList(it) }
- pendingUpdate = null
- }
+    private var pendingUpdate: List<Item>? = null
+    private val updateHandler = Handler(Looper.getMainLooper())
+    private val updateRunnable = Runnable {
+        pendingUpdate?.let { submitList(it) }
+        pendingUpdate = null
+    }
 
- fun updateDataDebounced(newItems: List<Item>, delayMs: Long = 300) {
- pendingUpdate = newItems
- updateHandler.removeCallbacks(updateRunnable)
- updateHandler.postDelayed(updateRunnable, delayMs)
- }
+    fun updateDataDebounced(newItems: List<Item>, delayMs: Long = 300) {
+        pendingUpdate = newItems
+        updateHandler.removeCallbacks(updateRunnable)
+        updateHandler.postDelayed(updateRunnable, delayMs)
+    }
 }
 ```
 
@@ -399,57 +400,57 @@ class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- override fun onBindViewHolder(
- holder: ViewHolder,
- position: Int,
- payloads: List<Any>
- ) {
- if (payloads.isEmpty()) {
- // Full bind
- onBindViewHolder(holder, position)
- } else {
- // Partial bind
- val item = items[position]
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            // Full bind
+            onBindViewHolder(holder, position)
+        } else {
+            // Partial bind
+            val item = items[position]
 
- @Suppress("UNCHECKED_CAST")
- payloads.forEach { payload ->
- when (payload) {
- is Bundle -> {
- // Update only changed fields
- if (payload.containsKey("name")) {
- holder.nameView.text = item.name
- }
- if (payload.containsKey("likeCount")) {
- holder.likeCountView.text = item.likeCount.toString()
- }
- }
- }
- }
- }
- }
+            @Suppress("UNCHECKED_CAST")
+            payloads.forEach { payload ->
+                when (payload) {
+                    is Bundle -> {
+                        // Update only changed fields
+                        if (payload.containsKey("name")) {
+                            holder.nameView.text = item.name
+                        }
+                        if (payload.containsKey("likeCount")) {
+                            holder.likeCountView.text = item.likeCount.toString()
+                        }
+                    }
+                }
+            }
+        }
+    }
 
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item) =
- oldItem.id == newItem.id
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+            oldItem.id == newItem.id
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item) =
- oldItem == newItem
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+            oldItem == newItem
 
- // Return what changed
- override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
- val bundle = Bundle()
+        // Return what changed
+        override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
+            val bundle = Bundle()
 
- if (oldItem.name != newItem.name) {
- bundle.putString("name", newItem.name)
- }
+            if (oldItem.name != newItem.name) {
+                bundle.putString("name", newItem.name)
+            }
 
- if (oldItem.likeCount != newItem.likeCount) {
- bundle.putInt("likeCount", newItem.likeCount)
- }
+            if (oldItem.likeCount != newItem.likeCount) {
+                bundle.putInt("likeCount", newItem.likeCount)
+            }
 
- return if (bundle.isEmpty) null else bundle
- }
- }
+            return if (bundle.isEmpty) null else bundle
+        }
+    }
 }
 ```
 
@@ -459,137 +460,137 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ```kotlin
 data class Post(
- val id: Long,
- val authorName: String,
- val authorAvatar: String,
- val content: String,
- val imageUrl: String?,
- val likeCount: Int,
- val isLiked: Boolean,
- val commentCount: Int,
- val timestamp: Long
+    val id: Long,
+    val authorName: String,
+    val authorAvatar: String,
+    val content: String,
+    val imageUrl: String?,
+    val likeCount: Int,
+    val isLiked: Boolean,
+    val commentCount: Int,
+    val timestamp: Long
 )
 
 class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
 
- var onLikeClick: ((Post) -> Unit)? = null
- var onCommentClick: ((Post) -> Unit)? = null
+    var onLikeClick: ((Post) -> Unit)? = null
+    var onCommentClick: ((Post) -> Unit)? = null
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val binding = ItemPostBinding.inflate(
- LayoutInflater.from(parent.context),
- parent,
- false
- )
- return ViewHolder(binding)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemPostBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- holder.bind(getItem(position))
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
 
- override fun onBindViewHolder(
- holder: ViewHolder,
- position: Int,
- payloads: List<Any>
- ) {
- if (payloads.isEmpty()) {
- super.onBindViewHolder(holder, position, payloads)
- } else {
- // Partial update for like button
- holder.bindPartial(getItem(position), payloads)
- }
- }
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Partial update for like button
+            holder.bindPartial(getItem(position), payloads)
+        }
+    }
 
- inner class ViewHolder(
- private val binding: ItemPostBinding
- ) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(
+        private val binding: ItemPostBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
- fun bind(post: Post) {
- binding.authorName.text = post.authorName
- binding.content.text = post.content
- binding.likeCount.text = post.likeCount.toString()
- binding.commentCount.text = post.commentCount.toString()
+        fun bind(post: Post) {
+            binding.authorName.text = post.authorName
+            binding.content.text = post.content
+            binding.likeCount.text = post.likeCount.toString()
+            binding.commentCount.text = post.commentCount.toString()
 
- // Load images
- Glide.with(binding.root)
- .load(post.authorAvatar)
- .into(binding.authorAvatar)
+            // Load images
+            Glide.with(binding.root)
+                .load(post.authorAvatar)
+                .into(binding.authorAvatar)
 
- post.imageUrl?.let { url ->
- binding.postImage.isVisible = true
- Glide.with(binding.root)
- .load(url)
- .into(binding.postImage)
- } ?: run {
- binding.postImage.isVisible = false
- }
+            post.imageUrl?.let { url ->
+                binding.postImage.isVisible = true
+                Glide.with(binding.root)
+                    .load(url)
+                    .into(binding.postImage)
+            } ?: run {
+                binding.postImage.isVisible = false
+            }
 
- // Like button state
- binding.likeButton.setImageResource(
- if (post.isLiked) R.drawable.ic_liked
- else R.drawable.ic_like
- )
+            // Like button state
+            binding.likeButton.setImageResource(
+                if (post.isLiked) R.drawable.ic_liked
+                else R.drawable.ic_like
+            )
 
- binding.likeButton.setOnClickListener {
- onLikeClick?.invoke(post)
- }
+            binding.likeButton.setOnClickListener {
+                onLikeClick?.invoke(post)
+            }
 
- binding.commentButton.setOnClickListener {
- onCommentClick?.invoke(post)
- }
- }
+            binding.commentButton.setOnClickListener {
+                onCommentClick?.invoke(post)
+            }
+        }
 
- fun bindPartial(post: Post, payloads: List<Any>) {
- payloads.forEach { payload ->
- if (payload is Bundle) {
- // Only update changed fields
- if (payload.containsKey("likeCount")) {
- binding.likeCount.text = post.likeCount.toString()
- }
+        fun bindPartial(post: Post, payloads: List<Any>) {
+            payloads.forEach { payload ->
+                if (payload is Bundle) {
+                    // Only update changed fields
+                    if (payload.containsKey("likeCount")) {
+                        binding.likeCount.text = post.likeCount.toString()
+                    }
 
- if (payload.containsKey("isLiked")) {
- binding.likeButton.setImageResource(
- if (post.isLiked) R.drawable.ic_liked
- else R.drawable.ic_like
- )
- }
+                    if (payload.containsKey("isLiked")) {
+                        binding.likeButton.setImageResource(
+                            if (post.isLiked) R.drawable.ic_liked
+                            else R.drawable.ic_like
+                        )
+                    }
 
- if (payload.containsKey("commentCount")) {
- binding.commentCount.text = post.commentCount.toString()
- }
- }
- }
- }
- }
+                    if (payload.containsKey("commentCount")) {
+                        binding.commentCount.text = post.commentCount.toString()
+                    }
+                }
+            }
+        }
+    }
 
- class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
- override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
- return oldItem.id == newItem.id
- }
+    class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
- return oldItem == newItem
- }
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem == newItem
+        }
 
- override fun getChangePayload(oldItem: Post, newItem: Post): Any? {
- val bundle = Bundle()
+        override fun getChangePayload(oldItem: Post, newItem: Post): Any? {
+            val bundle = Bundle()
 
- if (oldItem.likeCount != newItem.likeCount) {
- bundle.putInt("likeCount", newItem.likeCount)
- }
+            if (oldItem.likeCount != newItem.likeCount) {
+                bundle.putInt("likeCount", newItem.likeCount)
+            }
 
- if (oldItem.isLiked != newItem.isLiked) {
- bundle.putBoolean("isLiked", newItem.isLiked)
- }
+            if (oldItem.isLiked != newItem.isLiked) {
+                bundle.putBoolean("isLiked", newItem.isLiked)
+            }
 
- if (oldItem.commentCount != newItem.commentCount) {
- bundle.putInt("commentCount", newItem.commentCount)
- }
+            if (oldItem.commentCount != newItem.commentCount) {
+                bundle.putInt("commentCount", newItem.commentCount)
+            }
 
- return if (bundle.isEmpty) null else bundle
- }
- }
+            return if (bundle.isEmpty) null else bundle
+        }
+    }
 }
 ```
 
@@ -601,9 +602,9 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
 | Method | Time | Animations | Scroll Position |
 |--------|------|------------|-----------------|
-| `notifyDataSetChanged()` | ~50ms | No | Lost |
-| `DiffUtil` (sync) | ~15ms | Yes | Kept |
-| `ListAdapter` (async) | ~1ms (UI) | Yes | Kept |
+| `notifyDataSetChanged()` | ~50ms |  No |  Lost |
+| `DiffUtil` (sync) | ~15ms |  Yes |  Kept |
+| `ListAdapter` (async) | ~1ms (UI) |  Yes |  Kept |
 
 **DiffUtil is 3x faster and provides better UX!**
 
@@ -613,35 +614,35 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
 **1. Use ListAdapter when possible**
 ```kotlin
-// Simplest and most efficient
+//  Simplest and most efficient
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 ```
 
 **2. Implement efficient equals()**
 ```kotlin
-// Check cheap properties first
+//  Check cheap properties first
 override fun areContentsTheSame(old: Item, new: Item): Boolean {
- if (old.id != new.id) return false // Fast check first
- return old == new // Full comparison
+    if (old.id != new.id) return false // Fast check first
+    return old == new // Full comparison
 }
 ```
 
 **3. Use payloads for partial updates**
 ```kotlin
-// Only update changed views
+//  Only update changed views
 override fun getChangePayload(old: Item, new: Item): Any? {
- // Return what changed
+    // Return what changed
 }
 ```
 
 **4. Stable IDs for better performance**
 ```kotlin
 init {
- setHasStableIds(true)
+    setHasStableIds(true)
 }
 
 override fun getItemId(position: Int): Long {
- return items[position].id
+    return items[position].id
 }
 ```
 
@@ -684,6 +685,7 @@ override fun getItemId(position: Int): Long {
 
 ---
 
+
 # Question (EN)
 > How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom DiffUtil.`Callback`, using ListAdapter, and optimizing DiffUtil for large datasets.
 
@@ -692,7 +694,9 @@ override fun getItemId(position: Int): Long {
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 
@@ -702,20 +706,20 @@ override fun getItemId(position: Int): Long {
 
 **Without DiffUtil:**
 ```kotlin
-// BAD - Inefficient
+//  BAD - Inefficient
 fun updateData(newList: List<Item>) {
- items = newList
- notifyDataSetChanged() // Refreshes EVERYTHING, loses scroll position, animations
+    items = newList
+    notifyDataSetChanged() // Refreshes EVERYTHING, loses scroll position, animations
 }
 ```
 
 **With DiffUtil:**
 ```kotlin
-// GOOD - Efficient, animated updates
+//  GOOD - Efficient, animated updates
 fun updateData(newList: List<Item>) {
- val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
- items = newList
- diffResult.dispatchUpdatesTo(this) // Only updates changed items
+    val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
+    items = newList
+    diffResult.dispatchUpdatesTo(this) // Only updates changed items
 }
 ```
 
@@ -764,81 +768,81 @@ Result: Only B is removed, E is inserted, C and D are kept
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String
+    val id: Long,
+    val name: String,
+    val description: String
 )
 
 class ItemDiffCallback(
- private val oldList: List<Item>,
- private val newList: List<Item>
+    private val oldList: List<Item>,
+    private val newList: List<Item>
 ) : DiffUtil.Callback() {
 
- // Return sizes
- override fun getOldListSize(): Int = oldList.size
- override fun getNewListSize(): Int = newList.size
+    // Return sizes
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
 
- // Are items the same entity? (same ID)
- override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
- return oldList[oldItemPosition].id == newList[newItemPosition].id
- }
+    //  Are items the same entity? (same ID)
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].id == newList[newItemPosition].id
+    }
 
- // Are item contents the same? (all properties equal)
- override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
- val oldItem = oldList[oldItemPosition]
- val newItem = newList[newItemPosition]
- return oldItem == newItem
- }
+    //  Are item contents the same? (all properties equal)
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem == newItem
+    }
 
- // Optional: What specifically changed? (for partial updates)
- override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
- val oldItem = oldList[oldItemPosition]
- val newItem = newList[newItemPosition]
+    //  Optional: What specifically changed? (for partial updates)
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
 
- val changes = mutableMapOf<String, Any>()
+        val changes = mutableMapOf<String, Any>()
 
- if (oldItem.name != newItem.name) {
- changes["name"] = newItem.name
- }
+        if (oldItem.name != newItem.name) {
+            changes["name"] = newItem.name
+        }
 
- if (oldItem.description != newItem.description) {
- changes["description"] = newItem.description
- }
+        if (oldItem.description != newItem.description) {
+            changes["description"] = newItem.description
+        }
 
- return if (changes.isNotEmpty()) changes else null
- }
+        return if (changes.isNotEmpty()) changes else null
+    }
 }
 
 // Usage in adapter
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private var items = emptyList<Item>()
+    private var items = emptyList<Item>()
 
- fun updateData(newItems: List<Item>) {
- val diffCallback = ItemDiffCallback(items, newItems)
- val diffResult = DiffUtil.calculateDiff(diffCallback)
+    fun updateData(newItems: List<Item>) {
+        val diffCallback = ItemDiffCallback(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
 
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
- if (payloads.isEmpty()) {
- // Full bind
- super.onBindViewHolder(holder, position, payloads)
- } else {
- // Partial bind (only changed properties)
- val item = items[position]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
+        if (payloads.isEmpty()) {
+            // Full bind
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Partial bind (only changed properties)
+            val item = items[position]
 
- @Suppress("UNCHECKED_CAST")
- val changes = payloads[0] as Map<String, Any>
+            @Suppress("UNCHECKED_CAST")
+            val changes = payloads[0] as Map<String, Any>
 
- changes["name"]?.let { holder.nameView.text = it as String }
- changes["description"]?.let { holder.descView.text = it as String }
- }
- }
+            changes["name"]?.let { holder.nameView.text = it as String }
+            changes["description"]?.let { holder.descView.text = it as String }
+        }
+    }
 
- // ... other adapter methods
+    // ... other adapter methods
 }
 ```
 
@@ -851,37 +855,37 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 ```kotlin
 class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()) {
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return ViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = getItem(position) // ListAdapter provides this
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position) // ListAdapter provides this
+        holder.bind(item)
+    }
 
- class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
- private val nameView: TextView = view.findViewById(R.id.name)
- private val descView: TextView = view.findViewById(R.id.description)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val nameView: TextView = view.findViewById(R.id.name)
+        private val descView: TextView = view.findViewById(R.id.description)
 
- fun bind(item: Item) {
- nameView.text = item.name
- descView.text = item.description
- }
- }
+        fun bind(item: Item) {
+            nameView.text = item.name
+            descView.text = item.description
+        }
+    }
 
- // Static DiffCallback (more efficient)
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    // Static DiffCallback (more efficient)
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 
 // Usage - super simple!
@@ -907,26 +911,26 @@ For large lists, calculate diff on background thread.
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private var items = emptyList<Item>()
- private val handler = Handler(Looper.getMainLooper())
+    private var items = emptyList<Item>()
+    private val handler = Handler(Looper.getMainLooper())
 
- fun updateDataAsync(newItems: List<Item>) {
- val oldList = items
+    fun updateDataAsync(newItems: List<Item>) {
+        val oldList = items
 
- // Calculate diff on background thread
- Thread {
- val diffCallback = ItemDiffCallback(oldList, newItems)
- val diffResult = DiffUtil.calculateDiff(diffCallback)
+        // Calculate diff on background thread
+        Thread {
+            val diffCallback = ItemDiffCallback(oldList, newItems)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
 
- // Apply updates on main thread
- handler.post {
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
- }.start()
- }
+            // Apply updates on main thread
+            handler.post {
+                items = newItems
+                diffResult.dispatchUpdatesTo(this)
+            }
+        }.start()
+    }
 
- // ... rest of adapter
+    // ... rest of adapter
 }
 ```
 
@@ -935,32 +939,32 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private val differ = AsyncListDiffer(this, ItemDiffCallback())
+    private val differ = AsyncListDiffer(this, ItemDiffCallback())
 
- // Access current list
- private val items: List<Item>
- get() = differ.currentList
+    // Access current list
+    private val items: List<Item>
+        get() = differ.currentList
 
- fun updateData(newItems: List<Item>) {
- differ.submitList(newItems) // Automatically async!
- }
+    fun updateData(newItems: List<Item>) {
+        differ.submitList(newItems) // Automatically async!
+    }
 
- override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items.size
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = items[position]
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+        holder.bind(item)
+    }
 
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 ```
 
@@ -972,37 +976,37 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String,
- val imageUrl: String,
- val metadata: Map<String, Any> // Expensive to compare
+    val id: Long,
+    val name: String,
+    val description: String,
+    val imageUrl: String,
+    val metadata: Map<String, Any> // Expensive to compare
 ) {
- // Optimize equals to skip expensive comparisons when possible
- override fun equals(other: Any?): Boolean {
- if (this === other) return true
- if (other !is Item) return false
+    //  Optimize equals to skip expensive comparisons when possible
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
 
- // Check cheap properties first
- if (id != other.id) return false
- if (name != other.name) return false
- if (description != other.description) return false
- if (imageUrl != other.imageUrl) return false
+        // Check cheap properties first
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (description != other.description) return false
+        if (imageUrl != other.imageUrl) return false
 
- // Only check expensive property if everything else matches
- if (metadata != other.metadata) return false
+        // Only check expensive property if everything else matches
+        if (metadata != other.metadata) return false
 
- return true
- }
+        return true
+    }
 
- override fun hashCode(): Int {
- var result = id.hashCode()
- result = 31 * result + name.hashCode()
- result = 31 * result + description.hashCode()
- result = 31 * result + imageUrl.hashCode()
- // Don't include expensive metadata in hashCode
- return result
- }
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + description.hashCode()
+        result = 31 * result + imageUrl.hashCode()
+        // Don't include expensive metadata in hashCode
+        return result
+    }
 }
 ```
 
@@ -1010,15 +1014,15 @@ data class Item(
 
 ```kotlin
 class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- // Compare by ID only (fast)
- return oldItem.id == newItem.id
- }
+    override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+        //  Compare by ID only (fast)
+        return oldItem.id == newItem.id
+    }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- // Use data class equals (efficient)
- return oldItem == newItem
- }
+    override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+        //  Use data class equals (efficient)
+        return oldItem == newItem
+    }
 }
 ```
 
@@ -1034,18 +1038,18 @@ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
 ```kotlin
 class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()) {
 
- private var pendingUpdate: List<Item>? = null
- private val updateHandler = Handler(Looper.getMainLooper())
- private val updateRunnable = Runnable {
- pendingUpdate?.let { submitList(it) }
- pendingUpdate = null
- }
+    private var pendingUpdate: List<Item>? = null
+    private val updateHandler = Handler(Looper.getMainLooper())
+    private val updateRunnable = Runnable {
+        pendingUpdate?.let { submitList(it) }
+        pendingUpdate = null
+    }
 
- fun updateDataDebounced(newItems: List<Item>, delayMs: Long = 300) {
- pendingUpdate = newItems
- updateHandler.removeCallbacks(updateRunnable)
- updateHandler.postDelayed(updateRunnable, delayMs)
- }
+    fun updateDataDebounced(newItems: List<Item>, delayMs: Long = 300) {
+        pendingUpdate = newItems
+        updateHandler.removeCallbacks(updateRunnable)
+        updateHandler.postDelayed(updateRunnable, delayMs)
+    }
 }
 ```
 
@@ -1058,57 +1062,57 @@ class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- override fun onBindViewHolder(
- holder: ViewHolder,
- position: Int,
- payloads: List<Any>
- ) {
- if (payloads.isEmpty()) {
- // Full bind
- onBindViewHolder(holder, position)
- } else {
- // Partial bind
- val item = items[position]
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            // Full bind
+            onBindViewHolder(holder, position)
+        } else {
+            // Partial bind
+            val item = items[position]
 
- @Suppress("UNCHECKED_CAST")
- payloads.forEach { payload ->
- when (payload) {
- is Bundle -> {
- // Update only changed fields
- if (payload.containsKey("name")) {
- holder.nameView.text = item.name
- }
- if (payload.containsKey("likeCount")) {
- holder.likeCountView.text = item.likeCount.toString()
- }
- }
- }
- }
- }
- }
+            @Suppress("UNCHECKED_CAST")
+            payloads.forEach { payload ->
+                when (payload) {
+                    is Bundle -> {
+                        // Update only changed fields
+                        if (payload.containsKey("name")) {
+                            holder.nameView.text = item.name
+                        }
+                        if (payload.containsKey("likeCount")) {
+                            holder.likeCountView.text = item.likeCount.toString()
+                        }
+                    }
+                }
+            }
+        }
+    }
 
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item) =
- oldItem.id == newItem.id
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+            oldItem.id == newItem.id
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item) =
- oldItem == newItem
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+            oldItem == newItem
 
- // Return what changed
- override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
- val bundle = Bundle()
+        // Return what changed
+        override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
+            val bundle = Bundle()
 
- if (oldItem.name != newItem.name) {
- bundle.putString("name", newItem.name)
- }
+            if (oldItem.name != newItem.name) {
+                bundle.putString("name", newItem.name)
+            }
 
- if (oldItem.likeCount != newItem.likeCount) {
- bundle.putInt("likeCount", newItem.likeCount)
- }
+            if (oldItem.likeCount != newItem.likeCount) {
+                bundle.putInt("likeCount", newItem.likeCount)
+            }
 
- return if (bundle.isEmpty) null else bundle
- }
- }
+            return if (bundle.isEmpty) null else bundle
+        }
+    }
 }
 ```
 
@@ -1118,137 +1122,137 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ```kotlin
 data class Post(
- val id: Long,
- val authorName: String,
- val authorAvatar: String,
- val content: String,
- val imageUrl: String?,
- val likeCount: Int,
- val isLiked: Boolean,
- val commentCount: Int,
- val timestamp: Long
+    val id: Long,
+    val authorName: String,
+    val authorAvatar: String,
+    val content: String,
+    val imageUrl: String?,
+    val likeCount: Int,
+    val isLiked: Boolean,
+    val commentCount: Int,
+    val timestamp: Long
 )
 
 class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()) {
 
- var onLikeClick: ((Post) -> Unit)? = null
- var onCommentClick: ((Post) -> Unit)? = null
+    var onLikeClick: ((Post) -> Unit)? = null
+    var onCommentClick: ((Post) -> Unit)? = null
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val binding = ItemPostBinding.inflate(
- LayoutInflater.from(parent.context),
- parent,
- false
- )
- return ViewHolder(binding)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemPostBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- holder.bind(getItem(position))
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
 
- override fun onBindViewHolder(
- holder: ViewHolder,
- position: Int,
- payloads: List<Any>
- ) {
- if (payloads.isEmpty()) {
- super.onBindViewHolder(holder, position, payloads)
- } else {
- // Partial update for like button
- holder.bindPartial(getItem(position), payloads)
- }
- }
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Partial update for like button
+            holder.bindPartial(getItem(position), payloads)
+        }
+    }
 
- inner class ViewHolder(
- private val binding: ItemPostBinding
- ) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(
+        private val binding: ItemPostBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
- fun bind(post: Post) {
- binding.authorName.text = post.authorName
- binding.content.text = post.content
- binding.likeCount.text = post.likeCount.toString()
- binding.commentCount.text = post.commentCount.toString()
+        fun bind(post: Post) {
+            binding.authorName.text = post.authorName
+            binding.content.text = post.content
+            binding.likeCount.text = post.likeCount.toString()
+            binding.commentCount.text = post.commentCount.toString()
 
- // Load images
- Glide.with(binding.root)
- .load(post.authorAvatar)
- .into(binding.authorAvatar)
+            // Load images
+            Glide.with(binding.root)
+                .load(post.authorAvatar)
+                .into(binding.authorAvatar)
 
- post.imageUrl?.let { url ->
- binding.postImage.isVisible = true
- Glide.with(binding.root)
- .load(url)
- .into(binding.postImage)
- } ?: run {
- binding.postImage.isVisible = false
- }
+            post.imageUrl?.let { url ->
+                binding.postImage.isVisible = true
+                Glide.with(binding.root)
+                    .load(url)
+                    .into(binding.postImage)
+            } ?: run {
+                binding.postImage.isVisible = false
+            }
 
- // Like button state
- binding.likeButton.setImageResource(
- if (post.isLiked) R.drawable.ic_liked
- else R.drawable.ic_like
- )
+            // Like button state
+            binding.likeButton.setImageResource(
+                if (post.isLiked) R.drawable.ic_liked
+                else R.drawable.ic_like
+            )
 
- binding.likeButton.setOnClickListener {
- onLikeClick?.invoke(post)
- }
+            binding.likeButton.setOnClickListener {
+                onLikeClick?.invoke(post)
+            }
 
- binding.commentButton.setOnClickListener {
- onCommentClick?.invoke(post)
- }
- }
+            binding.commentButton.setOnClickListener {
+                onCommentClick?.invoke(post)
+            }
+        }
 
- fun bindPartial(post: Post, payloads: List<Any>) {
- payloads.forEach { payload ->
- if (payload is Bundle) {
- // Only update changed fields
- if (payload.containsKey("likeCount")) {
- binding.likeCount.text = post.likeCount.toString()
- }
+        fun bindPartial(post: Post, payloads: List<Any>) {
+            payloads.forEach { payload ->
+                if (payload is Bundle) {
+                    // Only update changed fields
+                    if (payload.containsKey("likeCount")) {
+                        binding.likeCount.text = post.likeCount.toString()
+                    }
 
- if (payload.containsKey("isLiked")) {
- binding.likeButton.setImageResource(
- if (post.isLiked) R.drawable.ic_liked
- else R.drawable.ic_like
- )
- }
+                    if (payload.containsKey("isLiked")) {
+                        binding.likeButton.setImageResource(
+                            if (post.isLiked) R.drawable.ic_liked
+                            else R.drawable.ic_like
+                        )
+                    }
 
- if (payload.containsKey("commentCount")) {
- binding.commentCount.text = post.commentCount.toString()
- }
- }
- }
- }
- }
+                    if (payload.containsKey("commentCount")) {
+                        binding.commentCount.text = post.commentCount.toString()
+                    }
+                }
+            }
+        }
+    }
 
- class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
- override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
- return oldItem.id == newItem.id
- }
+    class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
- return oldItem == newItem
- }
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+            return oldItem == newItem
+        }
 
- override fun getChangePayload(oldItem: Post, newItem: Post): Any? {
- val bundle = Bundle()
+        override fun getChangePayload(oldItem: Post, newItem: Post): Any? {
+            val bundle = Bundle()
 
- if (oldItem.likeCount != newItem.likeCount) {
- bundle.putInt("likeCount", newItem.likeCount)
- }
+            if (oldItem.likeCount != newItem.likeCount) {
+                bundle.putInt("likeCount", newItem.likeCount)
+            }
 
- if (oldItem.isLiked != newItem.isLiked) {
- bundle.putBoolean("isLiked", newItem.isLiked)
- }
+            if (oldItem.isLiked != newItem.isLiked) {
+                bundle.putBoolean("isLiked", newItem.isLiked)
+            }
 
- if (oldItem.commentCount != newItem.commentCount) {
- bundle.putInt("commentCount", newItem.commentCount)
- }
+            if (oldItem.commentCount != newItem.commentCount) {
+                bundle.putInt("commentCount", newItem.commentCount)
+            }
 
- return if (bundle.isEmpty) null else bundle
- }
- }
+            return if (bundle.isEmpty) null else bundle
+        }
+    }
 }
 ```
 
@@ -1260,9 +1264,9 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
 | Method | Time | Animations | Scroll Position |
 |--------|------|------------|-----------------|
-| `notifyDataSetChanged()` | ~50ms | No | Lost |
-| `DiffUtil` (sync) | ~15ms | Yes | Kept |
-| `ListAdapter` (async) | ~1ms (UI) | Yes | Kept |
+| `notifyDataSetChanged()` | ~50ms |  No |  Lost |
+| `DiffUtil` (sync) | ~15ms |  Yes |  Kept |
+| `ListAdapter` (async) | ~1ms (UI) |  Yes |  Kept |
 
 **DiffUtil is 3x faster and provides better UX!**
 
@@ -1272,35 +1276,35 @@ class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(PostDiffCallback()
 
 **1. Use ListAdapter when possible**
 ```kotlin
-// Simplest and most efficient
+//  Simplest and most efficient
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 ```
 
 **2. Implement efficient equals()**
 ```kotlin
-// Check cheap properties first
+//  Check cheap properties first
 override fun areContentsTheSame(old: Item, new: Item): Boolean {
- if (old.id != new.id) return false // Fast check first
- return old == new // Full comparison
+    if (old.id != new.id) return false // Fast check first
+    return old == new // Full comparison
 }
 ```
 
 **3. Use payloads for partial updates**
 ```kotlin
-// Only update changed views
+//  Only update changed views
 override fun getChangePayload(old: Item, new: Item): Any? {
- // Return what changed
+    // Return what changed
 }
 ```
 
 **4. Stable IDs for better performance**
 ```kotlin
 init {
- setHasStableIds(true)
+    setHasStableIds(true)
 }
 
 override fun getItemId(position: Int): Long {
- return items[position].id
+    return items[position].id
 }
 ```
 
@@ -1351,20 +1355,20 @@ override fun getItemId(position: Int): Long {
 
 **Без DiffUtil:**
 ```kotlin
-// ПЛОХО - Неэффективно
+//  ПЛОХО - Неэффективно
 fun updateData(newList: List<Item>) {
- items = newList
- notifyDataSetChanged() // Обновляет ВСЁ, теряет позицию прокрутки, без анимации
+    items = newList
+    notifyDataSetChanged() // Обновляет ВСЁ, теряет позицию прокрутки, без анимации
 }
 ```
 
 **С DiffUtil:**
 ```kotlin
-// ХОРОШО - Эффективно, анимированные обновления
+//  ХОРОШО - Эффективно, анимированные обновления
 fun updateData(newList: List<Item>) {
- val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
- items = newList
- diffResult.dispatchUpdatesTo(this) // Обновляет только изменённые элементы
+    val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(items, newList))
+    items = newList
+    diffResult.dispatchUpdatesTo(this) // Обновляет только изменённые элементы
 }
 ```
 
@@ -1413,81 +1417,81 @@ DiffUtil использует **алгоритм Myers diff** для нахож�
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String
+    val id: Long,
+    val name: String,
+    val description: String
 )
 
 class ItemDiffCallback(
- private val oldList: List<Item>,
- private val newList: List<Item>
+    private val oldList: List<Item>,
+    private val newList: List<Item>
 ) : DiffUtil.Callback() {
 
- // Вернуть размеры
- override fun getOldListSize(): Int = oldList.size
- override fun getNewListSize(): Int = newList.size
+    // Вернуть размеры
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
 
- // Это одна и та же сущность? (одинаковый ID)
- override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
- return oldList[oldItemPosition].id == newList[newItemPosition].id
- }
+    //  Это одна и та же сущность? (одинаковый ID)
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].id == newList[newItemPosition].id
+    }
 
- // Одинаковое ли содержимое элементов? (все свойства равны)
- override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
- val oldItem = oldList[oldItemPosition]
- val newItem = newList[newItemPosition]
- return oldItem == newItem
- }
+    //  Одинаковое ли содержимое элементов? (все свойства равны)
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
+        return oldItem == newItem
+    }
 
- // Опционально: Что именно изменилось? (для частичных обновлений)
- override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
- val oldItem = oldList[oldItemPosition]
- val newItem = newList[newItemPosition]
+    //  Опционально: Что именно изменилось? (для частичных обновлений)
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        val oldItem = oldList[oldItemPosition]
+        val newItem = newList[newItemPosition]
 
- val changes = mutableMapOf<String, Any>()
+        val changes = mutableMapOf<String, Any>()
 
- if (oldItem.name != newItem.name) {
- changes["name"] = newItem.name
- }
+        if (oldItem.name != newItem.name) {
+            changes["name"] = newItem.name
+        }
 
- if (oldItem.description != newItem.description) {
- changes["description"] = newItem.description
- }
+        if (oldItem.description != newItem.description) {
+            changes["description"] = newItem.description
+        }
 
- return if (changes.isNotEmpty()) changes else null
- }
+        return if (changes.isNotEmpty()) changes else null
+    }
 }
 
 // Использование в адаптере
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private var items = emptyList<Item>()
+    private var items = emptyList<Item>()
 
- fun updateData(newItems: List<Item>) {
- val diffCallback = ItemDiffCallback(items, newItems)
- val diffResult = DiffUtil.calculateDiff(diffCallback)
+    fun updateData(newItems: List<Item>) {
+        val diffCallback = ItemDiffCallback(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
 
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
- if (payloads.isEmpty()) {
- // Полная привязка
- super.onBindViewHolder(holder, position, payloads)
- } else {
- // Частичная привязка (только изменённые свойства)
- val item = items[position]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
+        if (payloads.isEmpty()) {
+            // Полная привязка
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Частичная привязка (только изменённые свойства)
+            val item = items[position]
 
- @Suppress("UNCHECKED_CAST")
- val changes = payloads[0] as Map<String, Any>
+            @Suppress("UNCHECKED_CAST")
+            val changes = payloads[0] as Map<String, Any>
 
- changes["name"]?.let { holder.nameView.text = it as String }
- changes["description"]?.let { holder.descView.text = it as String }
- }
- }
+            changes["name"]?.let { holder.nameView.text = it as String }
+            changes["description"]?.let { holder.descView.text = it as String }
+        }
+    }
 
- // ... остальные методы адаптера
+    // ... остальные методы адаптера
 }
 ```
 
@@ -1500,37 +1504,37 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 ```kotlin
 class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()) {
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return ViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = getItem(position) // ListAdapter предоставляет это
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position) // ListAdapter предоставляет это
+        holder.bind(item)
+    }
 
- class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
- private val nameView: TextView = view.findViewById(R.id.name)
- private val descView: TextView = view.findViewById(R.id.description)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val nameView: TextView = view.findViewById(R.id.name)
+        private val descView: TextView = view.findViewById(R.id.description)
 
- fun bind(item: Item) {
- nameView.text = item.name
- descView.text = item.description
- }
- }
+        fun bind(item: Item) {
+            nameView.text = item.name
+            descView.text = item.description
+        }
+    }
 
- // Статический DiffCallback (более эффективен)
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    // Статический DiffCallback (более эффективен)
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 
 // Использование - очень просто!
@@ -1556,26 +1560,26 @@ adapter.submitList(newItems) // DiffUtil вычисляется автомати
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private var items = emptyList<Item>()
- private val handler = Handler(Looper.getMainLooper())
+    private var items = emptyList<Item>()
+    private val handler = Handler(Looper.getMainLooper())
 
- fun updateDataAsync(newItems: List<Item>) {
- val oldList = items
+    fun updateDataAsync(newItems: List<Item>) {
+        val oldList = items
 
- // Вычислить diff в фоновом потоке
- Thread {
- val diffCallback = ItemDiffCallback(oldList, newItems)
- val diffResult = DiffUtil.calculateDiff(diffCallback)
+        // Вычислить diff в фоновом потоке
+        Thread {
+            val diffCallback = ItemDiffCallback(oldList, newItems)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
 
- // Применить обновления в главном потоке
- handler.post {
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
- }.start()
- }
+            // Применить обновления в главном потоке
+            handler.post {
+                items = newItems
+                diffResult.dispatchUpdatesTo(this)
+            }
+        }.start()
+    }
 
- // ... остальная часть адаптера
+    // ... остальная часть адаптера
 }
 ```
 
@@ -1584,32 +1588,32 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- private val differ = AsyncListDiffer(this, ItemDiffCallback())
+    private val differ = AsyncListDiffer(this, ItemDiffCallback())
 
- // Доступ к текущему списку
- private val items: List<Item>
- get() = differ.currentList
+    // Доступ к текущему списку
+    private val items: List<Item>
+        get() = differ.currentList
 
- fun updateData(newItems: List<Item>) {
- differ.submitList(newItems) // Автоматически асинхронно!
- }
+    fun updateData(newItems: List<Item>) {
+        differ.submitList(newItems) // Автоматически асинхронно!
+    }
 
- override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items.size
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = items[position]
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+        holder.bind(item)
+    }
 
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 ```
 
@@ -1621,37 +1625,37 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String,
- val imageUrl: String,
- val metadata: Map<String, Any> // Дорого сравнивать
+    val id: Long,
+    val name: String,
+    val description: String,
+    val imageUrl: String,
+    val metadata: Map<String, Any> // Дорого сравнивать
 ) {
- // Оптимизировать equals, чтобы пропускать дорогие сравнения когда возможно
- override fun equals(other: Any?): Boolean {
- if (this === other) return true
- if (other !is Item) return false
+    //  Оптимизировать equals, чтобы пропускать дорогие сравнения когда возможно
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
 
- // Сначала проверить дешёвые свойства
- if (id != other.id) return false
- if (name != other.name) return false
- if (description != other.description) return false
- if (imageUrl != other.imageUrl) return false
+        // Сначала проверить дешёвые свойства
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (description != other.description) return false
+        if (imageUrl != other.imageUrl) return false
 
- // Проверить дорогое свойство только если всё остальное совпадает
- if (metadata != other.metadata) return false
+        // Проверить дорогое свойство только если всё остальное совпадает
+        if (metadata != other.metadata) return false
 
- return true
- }
+        return true
+    }
 
- override fun hashCode(): Int {
- var result = id.hashCode()
- result = 31 * result + name.hashCode()
- result = 31 * result + description.hashCode()
- result = 31 * result + imageUrl.hashCode()
- // Не включать дорогие metadata в hashCode
- return result
- }
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + description.hashCode()
+        result = 31 * result + imageUrl.hashCode()
+        // Не включать дорогие metadata в hashCode
+        return result
+    }
 }
 ```
 
@@ -1659,15 +1663,15 @@ data class Item(
 
 ```kotlin
 class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- // Сравнивать только по ID (быстро)
- return oldItem.id == newItem.id
- }
+    override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+        //  Сравнивать только по ID (быстро)
+        return oldItem.id == newItem.id
+    }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- // Использовать equals data класса (эффективно)
- return oldItem == newItem
- }
+    override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+        //  Использовать equals data класса (эффективно)
+        return oldItem == newItem
+    }
 }
 ```
 
@@ -1683,18 +1687,18 @@ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
 ```kotlin
 class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()) {
 
- private var pendingUpdate: List<Item>? = null
- private val updateHandler = Handler(Looper.getMainLooper())
- private val updateRunnable = Runnable {
- pendingUpdate?.let { submitList(it) }
- pendingUpdate = null
- }
+    private var pendingUpdate: List<Item>? = null
+    private val updateHandler = Handler(Looper.getMainLooper())
+    private val updateRunnable = Runnable {
+        pendingUpdate?.let { submitList(it) }
+        pendingUpdate = null
+    }
 
- fun updateDataDebounced(newItems: List<Item>, delayMs: Long = 300) {
- pendingUpdate = newItems
- updateHandler.removeCallbacks(updateRunnable)
- updateHandler.postDelayed(updateRunnable, delayMs)
- }
+    fun updateDataDebounced(newItems: List<Item>, delayMs: Long = 300) {
+        pendingUpdate = newItems
+        updateHandler.removeCallbacks(updateRunnable)
+        updateHandler.postDelayed(updateRunnable, delayMs)
+    }
 }
 ```
 
@@ -1707,57 +1711,57 @@ class ItemAdapter : ListAdapter<Item, ItemAdapter.ViewHolder>(ItemDiffCallback()
 ```kotlin
 class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
- override fun onBindViewHolder(
- holder: ViewHolder,
- position: Int,
- payloads: List<Any>
- ) {
- if (payloads.isEmpty()) {
- // Полная привязка
- onBindViewHolder(holder, position)
- } else {
- // Частичная привязка
- val item = items[position]
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            // Полная привязка
+            onBindViewHolder(holder, position)
+        } else {
+            // Частичная привязка
+            val item = items[position]
 
- @Suppress("UNCHECKED_CAST")
- payloads.forEach { payload ->
- when (payload) {
- is Bundle -> {
- // Обновить только изменённые поля
- if (payload.containsKey("name")) {
- holder.nameView.text = item.name
- }
- if (payload.containsKey("likeCount")) {
- holder.likeCountView.text = item.likeCount.toString()
- }
- }
- }
- }
- }
- }
+            @Suppress("UNCHECKED_CAST")
+            payloads.forEach { payload ->
+                when (payload) {
+                    is Bundle -> {
+                        // Обновить только изменённые поля
+                        if (payload.containsKey("name")) {
+                            holder.nameView.text = item.name
+                        }
+                        if (payload.containsKey("likeCount")) {
+                            holder.likeCountView.text = item.likeCount.toString()
+                        }
+                    }
+                }
+            }
+        }
+    }
 
- class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item) =
- oldItem.id == newItem.id
+    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+            oldItem.id == newItem.id
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item) =
- oldItem == newItem
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+            oldItem == newItem
 
- // Вернуть что изменилось
- override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
- val bundle = Bundle()
+        // Вернуть что изменилось
+        override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
+            val bundle = Bundle()
 
- if (oldItem.name != newItem.name) {
- bundle.putString("name", newItem.name)
- }
+            if (oldItem.name != newItem.name) {
+                bundle.putString("name", newItem.name)
+            }
 
- if (oldItem.likeCount != newItem.likeCount) {
- bundle.putInt("likeCount", newItem.likeCount)
- }
+            if (oldItem.likeCount != newItem.likeCount) {
+                bundle.putInt("likeCount", newItem.likeCount)
+            }
 
- return if (bundle.isEmpty) null else bundle
- }
- }
+            return if (bundle.isEmpty) null else bundle
+        }
+    }
 }
 ```
 
@@ -1769,9 +1773,9 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 | Метод | Время | Анимации | Позиция прокрутки |
 |-------|-------|----------|-------------------|
-| `notifyDataSetChanged()` | ~50ms | Нет | Потеряна |
-| `DiffUtil` (sync) | ~15ms | Да | Сохранена |
-| `ListAdapter` (async) | ~1ms (UI) | Да | Сохранена |
+| `notifyDataSetChanged()` | ~50ms |  Нет |  Потеряна |
+| `DiffUtil` (sync) | ~15ms |  Да |  Сохранена |
+| `ListAdapter` (async) | ~1ms (UI) |  Да |  Сохранена |
 
 **DiffUtil в 3 раза быстрее и обеспечивает лучший UX!**
 
@@ -1781,35 +1785,35 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 **1. Используйте ListAdapter когда возможно**
 ```kotlin
-// Проще всего и наиболее эффективно
+//  Проще всего и наиболее эффективно
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 ```
 
 **2. Реализуйте эффективный equals()**
 ```kotlin
-// Сначала проверяйте дешёвые свойства
+//  Сначала проверяйте дешёвые свойства
 override fun areContentsTheSame(old: Item, new: Item): Boolean {
- if (old.id != new.id) return false // Сначала быстрая проверка
- return old == new // Полное сравнение
+    if (old.id != new.id) return false // Сначала быстрая проверка
+    return old == new // Полное сравнение
 }
 ```
 
 **3. Используйте payloads для частичных обновлений**
 ```kotlin
-// Обновлять только изменённые view
+//  Обновлять только изменённые view
 override fun getChangePayload(old: Item, new: Item): Any? {
- // Вернуть что изменилось
+    // Вернуть что изменилось
 }
 ```
 
 **4. Стабильные ID для лучшей производительности**
 ```kotlin
 init {
- setHasStableIds(true)
+    setHasStableIds(true)
 }
 
 override fun getItemId(position: Int): Long {
- return items[position].id
+    return items[position].id
 }
 ```
 
@@ -1852,22 +1856,26 @@ override fun getItemId(position: Int): Long {
 
 ---
 
+
 ## Follow-ups
 
 - [[q-android-project-parts--android--easy]]
 - 
 - 
 
+
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui

@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-lazy-grid
 created: 2025-10-12
 updated: 2025-10-31
 tags:

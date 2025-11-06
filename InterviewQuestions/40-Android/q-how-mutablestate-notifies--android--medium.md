@@ -15,6 +15,7 @@ tags: [android/architecture-mvvm, android/ui-compose, android/ui-state, difficul
 moc: moc-android
 related: [c-compose-state, c-recomposition, q-recomposition-choreographer--android--hard]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -37,14 +38,14 @@ Composable автоматически подписывается при **чте
 ```kotlin
 @Composable
 fun Counter() {
- var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
- // Чтение count - автоматическая подписка
- Text("Count: $count") // ✅ Подписка на count
+    // Чтение count - автоматическая подписка
+    Text("Count: $count")  // ✅ Подписка на count
 
- Button(onClick = { count++ }) {
- Text("Increment")
- }
+    Button(onClick = { count++ }) {
+        Text("Increment")
+    }
 }
 ```
 
@@ -82,17 +83,17 @@ Snapshot { count = 1 }
 ```kotlin
 @Composable
 fun Screen() {
- var name by remember { mutableStateOf("Alice") }
- var age by remember { mutableStateOf(25) }
+    var name by remember { mutableStateOf("Alice") }
+    var age by remember { mutableStateOf(25) }
 
- Column {
- Text("Name: $name") // ✅ Рекомпозиция только при изменении name
- Text("Age: $age") // ✅ Рекомпозиция только при изменении age
+    Column {
+        Text("Name: $name")  // ✅ Рекомпозиция только при изменении name
+        Text("Age: $age")    // ✅ Рекомпозиция только при изменении age
 
- Button(onClick = { age++ }) {
- Text("Increment Age")
- }
- }
+        Button(onClick = { age++ }) {
+            Text("Increment Age")
+        }
+    }
 }
 ```
 
@@ -105,23 +106,23 @@ fun Screen() {
 
 ```kotlin
 class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
- private val subscribers = mutableListOf<() -> Unit>()
+    private val subscribers = mutableListOf<() -> Unit>()
 
- override var value: T
- get() {
- Snapshot.registerRead(this) // Регистрация подписчика
- return _value
- }
- set(newValue) {
- if (_value != newValue) {
- _value = newValue
- notifySubscribers() // Уведомление
- }
- }
+    override var value: T
+        get() {
+            Snapshot.registerRead(this)  // Регистрация подписчика
+            return _value
+        }
+        set(newValue) {
+            if (_value != newValue) {
+                _value = newValue
+                notifySubscribers()  // Уведомление
+            }
+        }
 
- private fun notifySubscribers() {
- subscribers.forEach { it.invoke() }
- }
+    private fun notifySubscribers() {
+        subscribers.forEach { it.invoke() }
+    }
 }
 ```
 
@@ -129,19 +130,19 @@ class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
 
 ```kotlin
 class CounterViewModel : ViewModel() {
- private val _count = MutableStateFlow(0)
- val count: StateFlow<Int> = _count.asStateFlow()
+    private val _count = MutableStateFlow(0)
+    val count: StateFlow<Int> = _count.asStateFlow()
 
- fun increment() {
- _count.value++ // ✅ Уведомляет коллекторов
- }
+    fun increment() {
+        _count.value++  // ✅ Уведомляет коллекторов
+    }
 }
 
 @Composable
 fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
- val count by viewModel.count.collectAsState()
+    val count by viewModel.count.collectAsState()
 
- Text("Count: $count") // ✅ Рекомпозиция при изменении StateFlow
+    Text("Count: $count")  // ✅ Рекомпозиция при изменении StateFlow
 }
 ```
 
@@ -158,18 +159,18 @@ fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
 ```kotlin
 @Composable
 fun ConditionalDisplay() {
- var count by remember { mutableStateOf(0) }
- var showDetails by remember { mutableStateOf(false) }
+    var count by remember { mutableStateOf(0) }
+    var showDetails by remember { mutableStateOf(false) }
 
- Column {
- Button(onClick = { showDetails = !showDetails }) {
- Text("Toggle Details")
- }
+    Column {
+        Button(onClick = { showDetails = !showDetails }) {
+            Text("Toggle Details")
+        }
 
- if (showDetails) {
- Text("Count: $count") // ✅ Подписка только когда видимо
- }
- }
+        if (showDetails) {
+            Text("Count: $count")  // ✅ Подписка только когда видимо
+        }
+    }
 }
 ```
 
@@ -191,14 +192,14 @@ Composables automatically subscribe when they **read** the state:
 ```kotlin
 @Composable
 fun Counter() {
- var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
- // Reading count subscribes this Text
- Text("Count: $count") // ✅ Subscribes to count
+    // Reading count subscribes this Text
+    Text("Count: $count")  // ✅ Subscribes to count
 
- Button(onClick = { count++ }) {
- Text("Increment")
- }
+    Button(onClick = { count++ }) {
+        Text("Increment")
+    }
 }
 ```
 
@@ -236,17 +237,17 @@ Only Composables that **read** the changed state are recomposed:
 ```kotlin
 @Composable
 fun Screen() {
- var name by remember { mutableStateOf("Alice") }
- var age by remember { mutableStateOf(25) }
+    var name by remember { mutableStateOf("Alice") }
+    var age by remember { mutableStateOf(25) }
 
- Column {
- Text("Name: $name") // ✅ Recomposes only when name changes
- Text("Age: $age") // ✅ Recomposes only when age changes
+    Column {
+        Text("Name: $name")  // ✅ Recomposes only when name changes
+        Text("Age: $age")    // ✅ Recomposes only when age changes
 
- Button(onClick = { age++ }) {
- Text("Increment Age")
- }
- }
+        Button(onClick = { age++ }) {
+            Text("Increment Age")
+        }
+    }
 }
 ```
 
@@ -259,23 +260,23 @@ fun Screen() {
 
 ```kotlin
 class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
- private val subscribers = mutableListOf<() -> Unit>()
+    private val subscribers = mutableListOf<() -> Unit>()
 
- override var value: T
- get() {
- Snapshot.registerRead(this) // Register subscriber
- return _value
- }
- set(newValue) {
- if (_value != newValue) {
- _value = newValue
- notifySubscribers() // Notify
- }
- }
+    override var value: T
+        get() {
+            Snapshot.registerRead(this)  // Register subscriber
+            return _value
+        }
+        set(newValue) {
+            if (_value != newValue) {
+                _value = newValue
+                notifySubscribers()  // Notify
+            }
+        }
 
- private fun notifySubscribers() {
- subscribers.forEach { it.invoke() }
- }
+    private fun notifySubscribers() {
+        subscribers.forEach { it.invoke() }
+    }
 }
 ```
 
@@ -283,19 +284,19 @@ class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
 
 ```kotlin
 class CounterViewModel : ViewModel() {
- private val _count = MutableStateFlow(0)
- val count: StateFlow<Int> = _count.asStateFlow()
+    private val _count = MutableStateFlow(0)
+    val count: StateFlow<Int> = _count.asStateFlow()
 
- fun increment() {
- _count.value++ // ✅ Notifies collectors
- }
+    fun increment() {
+        _count.value++  // ✅ Notifies collectors
+    }
 }
 
 @Composable
 fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
- val count by viewModel.count.collectAsState()
+    val count by viewModel.count.collectAsState()
 
- Text("Count: $count") // ✅ Recomposes when StateFlow emits
+    Text("Count: $count")  // ✅ Recomposes when StateFlow emits
 }
 ```
 
@@ -312,18 +313,18 @@ fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
 ```kotlin
 @Composable
 fun ConditionalDisplay() {
- var count by remember { mutableStateOf(0) }
- var showDetails by remember { mutableStateOf(false) }
+    var count by remember { mutableStateOf(0) }
+    var showDetails by remember { mutableStateOf(false) }
 
- Column {
- Button(onClick = { showDetails = !showDetails }) {
- Text("Toggle Details")
- }
+    Column {
+        Button(onClick = { showDetails = !showDetails }) {
+            Text("Toggle Details")
+        }
 
- if (showDetails) {
- Text("Count: $count") // ✅ Subscribes only when visible
- }
- }
+        if (showDetails) {
+            Text("Count: $count")  // ✅ Subscribes only when visible
+        }
+    }
 }
 ```
 

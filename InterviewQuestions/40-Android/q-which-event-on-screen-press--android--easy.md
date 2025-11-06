@@ -10,10 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-custom-views, c-view-lifecycle]
+related: [c-custom-views, c-gesture-detection, c-touch-events, c-view-lifecycle]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-events]
+
 ---
 
 # Вопрос (RU)
@@ -36,16 +37,16 @@ tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-eve
 
 ```kotlin
 override fun onTouchEvent(event: MotionEvent): Boolean {
- return when (event.action) {
- MotionEvent.ACTION_DOWN -> {
- // ✅ Касание: event.x, event.y
- true // Обязательно true, иначе MOVE/UP не придут
- }
- MotionEvent.ACTION_MOVE -> true // ✅ Движение
- MotionEvent.ACTION_UP -> true // ✅ Отпускание
- MotionEvent.ACTION_CANCEL -> true // ❌ Отменено системой
- else -> super.onTouchEvent(event)
- }
+    return when (event.action) {
+        MotionEvent.ACTION_DOWN -> {
+            // ✅ Касание: event.x, event.y
+            true  // Обязательно true, иначе MOVE/UP не придут
+        }
+        MotionEvent.ACTION_MOVE -> true    // ✅ Движение
+        MotionEvent.ACTION_UP -> true      // ✅ Отпускание
+        MotionEvent.ACTION_CANCEL -> true  // ❌ Отменено системой
+        else -> super.onTouchEvent(event)
+    }
 }
 
 // ❌ WRONG
@@ -65,16 +66,16 @@ When the user presses the screen, **ACTION_DOWN** is triggered via **MotionEvent
 
 ```kotlin
 override fun onTouchEvent(event: MotionEvent): Boolean {
- return when (event.action) {
- MotionEvent.ACTION_DOWN -> {
- // ✅ Touch: event.x, event.y
- true // Must return true or MOVE/UP won't arrive
- }
- MotionEvent.ACTION_MOVE -> true // ✅ Moving
- MotionEvent.ACTION_UP -> true // ✅ Released
- MotionEvent.ACTION_CANCEL -> true // ❌ Cancelled by system
- else -> super.onTouchEvent(event)
- }
+    return when (event.action) {
+        MotionEvent.ACTION_DOWN -> {
+            // ✅ Touch: event.x, event.y
+            true  // Must return true or MOVE/UP won't arrive
+        }
+        MotionEvent.ACTION_MOVE -> true   // ✅ Moving
+        MotionEvent.ACTION_UP -> true     // ✅ Released
+        MotionEvent.ACTION_CANCEL -> true // ❌ Cancelled by system
+        else -> super.onTouchEvent(event)
+    }
 }
 
 // ❌ WRONG

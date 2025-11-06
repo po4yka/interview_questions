@@ -15,6 +15,7 @@ created: 2025-10-13
 updated: 2025-10-28
 sources: []
 tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/medium, hilt, koin]
+
 ---
 
 # Вопрос (RU)
@@ -53,12 +54,12 @@ tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/m
 // ✅ Hilt - аннотации и генерация кода
 @HiltViewModel
 class AuthViewModel @Inject constructor(
- private val repository: AuthRepository
+    private val repository: AuthRepository
 ) : ViewModel()
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
- private val api: AuthApi
+    private val api: AuthApi
 ) : AuthRepository
 ```
 
@@ -71,17 +72,17 @@ class AuthRepositoryImpl @Inject constructor(
 ```kotlin
 // ✅ Koin - простой DSL
 val dataModule = module {
- single<AuthRepository> { AuthRepositoryImpl(get()) }
- viewModel { AuthViewModel(get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    viewModel { AuthViewModel(get()) }
 }
 
 class MyApp : Application() {
- override fun onCreate() {
- super.onCreate()
- startKoin {
- modules(dataModule)
- }
- }
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            modules(dataModule)
+        }
+    }
 }
 ```
 
@@ -107,20 +108,20 @@ class MyApp : Application() {
 ```kotlin
 // ✅ Используйте checkModules() для валидации
 class AppTest : KoinTest {
- @Test
- fun verifyModules() = checkModules {
- modules(appModule, dataModule)
- }
+    @Test
+    fun verifyModules() = checkModules {
+        modules(appModule, dataModule)
+    }
 }
 
 // ✅ Предпочитайте by inject() вместо get()
 class Repository {
- private val api: Api by inject() // lazy
+    private val api: Api by inject() // lazy
 }
 
 // ❌ Избегайте get() для ранней инициализации
 class Repository {
- private val api: Api = get() // eager, может упасть
+    private val api: Api = get() // eager, может упасть
 }
 ```
 
@@ -130,8 +131,8 @@ class Repository {
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataModule {
- @Binds
- abstract fun bindRepository(impl: RepositoryImpl): Repository
+    @Binds
+    abstract fun bindRepository(impl: RepositoryImpl): Repository
 }
 
 // ❌ Избегайте @Provides для интерфейсов
@@ -167,12 +168,12 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 // ✅ Hilt - annotations and code generation
 @HiltViewModel
 class AuthViewModel @Inject constructor(
- private val repository: AuthRepository
+    private val repository: AuthRepository
 ) : ViewModel()
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
- private val api: AuthApi
+    private val api: AuthApi
 ) : AuthRepository
 ```
 
@@ -185,17 +186,17 @@ class AuthRepositoryImpl @Inject constructor(
 ```kotlin
 // ✅ Koin - simple DSL
 val dataModule = module {
- single<AuthRepository> { AuthRepositoryImpl(get()) }
- viewModel { AuthViewModel(get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    viewModel { AuthViewModel(get()) }
 }
 
 class MyApp : Application() {
- override fun onCreate() {
- super.onCreate()
- startKoin {
- modules(dataModule)
- }
- }
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            modules(dataModule)
+        }
+    }
 }
 ```
 
@@ -221,20 +222,20 @@ class MyApp : Application() {
 ```kotlin
 // ✅ Use checkModules() for validation
 class AppTest : KoinTest {
- @Test
- fun verifyModules() = checkModules {
- modules(appModule, dataModule)
- }
+    @Test
+    fun verifyModules() = checkModules {
+        modules(appModule, dataModule)
+    }
 }
 
 // ✅ Prefer by inject() over get()
 class Repository {
- private val api: Api by inject() // lazy
+    private val api: Api by inject() // lazy
 }
 
 // ❌ Avoid get() for eager initialization
 class Repository {
- private val api: Api = get() // eager, may crash
+    private val api: Api = get() // eager, may crash
 }
 ```
 
@@ -244,8 +245,8 @@ class Repository {
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataModule {
- @Binds
- abstract fun bindRepository(impl: RepositoryImpl): Repository
+    @Binds
+    abstract fun bindRepository(impl: RepositoryImpl): Repository
 }
 
 // ❌ Avoid @Provides for interfaces

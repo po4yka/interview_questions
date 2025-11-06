@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/background-execution, android/coroutines, background-processing, coroutines, difficulty/medium, livedata, workmanager]
+
 ---
 
 # Вопрос (RU)
@@ -41,27 +42,27 @@ WorkManager возвращает результаты через механиз�
 
 ```kotlin
 class DataWorker(
- context: Context,
- params: WorkerParameters
+    context: Context,
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- return try {
- val input = inputData.getInt("value", 0)
- val result = processData(input) // ✅ Perform work
+    override suspend fun doWork(): Result {
+        return try {
+            val input = inputData.getInt("value", 0)
+            val result = processData(input) // ✅ Perform work
 
- // ✅ Return success with output data
- Result.success(workDataOf(
- "result" to result,
- "timestamp" to System.currentTimeMillis()
- ))
- } catch (e: IOException) {
- Result.retry() // ✅ Network error - retry
- } catch (e: Exception) {
- // ❌ Fatal error - fail with error info
- Result.failure(workDataOf("error" to e.message))
- }
- }
+            // ✅ Return success with output data
+            Result.success(workDataOf(
+                "result" to result,
+                "timestamp" to System.currentTimeMillis()
+            ))
+        } catch (e: IOException) {
+            Result.retry() // ✅ Network error - retry
+        } catch (e: Exception) {
+            // ❌ Fatal error - fail with error info
+            Result.failure(workDataOf("error" to e.message))
+        }
+    }
 }
 ```
 
@@ -69,44 +70,44 @@ class DataWorker(
 
 ```kotlin
 class DataViewModel(
- private val workManager: WorkManager
+    private val workManager: WorkManager
 ) : ViewModel() {
 
- private val _result = MutableLiveData<WorkResult>()
- val result: LiveData<WorkResult> = _result
+    private val _result = MutableLiveData<WorkResult>()
+    val result: LiveData<WorkResult> = _result
 
- fun startWork(value: Int) {
- val request = OneTimeWorkRequestBuilder<DataWorker>()
- .setInputData(workDataOf("value" to value))
- .build()
+    fun startWork(value: Int) {
+        val request = OneTimeWorkRequestBuilder<DataWorker>()
+            .setInputData(workDataOf("value" to value))
+            .build()
 
- workManager.enqueue(request)
+        workManager.enqueue(request)
 
- // ✅ Observe work status
- workManager.getWorkInfoByIdLiveData(request.id)
- .observeForever { workInfo ->
- when (workInfo.state) {
- WorkInfo.State.SUCCEEDED -> {
- val result = workInfo.outputData.getString("result")
- _result.value = WorkResult.Success(result)
- }
- WorkInfo.State.FAILED -> {
- val error = workInfo.outputData.getString("error")
- _result.value = WorkResult.Error(error)
- }
- WorkInfo.State.RUNNING -> {
- _result.value = WorkResult.Loading
- }
- else -> {} // ENQUEUED, BLOCKED, CANCELLED
- }
- }
- }
+        // ✅ Observe work status
+        workManager.getWorkInfoByIdLiveData(request.id)
+            .observeForever { workInfo ->
+                when (workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        val result = workInfo.outputData.getString("result")
+                        _result.value = WorkResult.Success(result)
+                    }
+                    WorkInfo.State.FAILED -> {
+                        val error = workInfo.outputData.getString("error")
+                        _result.value = WorkResult.Error(error)
+                    }
+                    WorkInfo.State.RUNNING -> {
+                        _result.value = WorkResult.Loading
+                    }
+                    else -> {} // ENQUEUED, BLOCKED, CANCELLED
+                }
+            }
+    }
 }
 
 sealed class WorkResult {
- object Loading : WorkResult()
- data class Success(val data: String?) : WorkResult()
- data class Error(val message: String?) : WorkResult()
+    object Loading : WorkResult()
+    data class Success(val data: String?) : WorkResult()
+    data class Error(val message: String?) : WorkResult()
 }
 ```
 
@@ -114,31 +115,31 @@ sealed class WorkResult {
 
 ```kotlin
 class DataRepository(
- private val workManager: WorkManager
+    private val workManager: WorkManager
 ) {
- fun processData(value: Int): Flow<WorkResult> = flow {
- val request = OneTimeWorkRequestBuilder<DataWorker>()
- .setInputData(workDataOf("value" to value))
- .build()
+    fun processData(value: Int): Flow<WorkResult> = flow {
+        val request = OneTimeWorkRequestBuilder<DataWorker>()
+            .setInputData(workDataOf("value" to value))
+            .build()
 
- workManager.enqueue(request)
+        workManager.enqueue(request)
 
- // ✅ Convert LiveData to Flow
- workManager.getWorkInfoByIdFlow(request.id)
- .collect { workInfo ->
- emit(when (workInfo.state) {
- WorkInfo.State.SUCCEEDED -> {
- val result = workInfo.outputData.getString("result")
- WorkResult.Success(result)
- }
- WorkInfo.State.FAILED -> {
- val error = workInfo.outputData.getString("error")
- WorkResult.Error(error)
- }
- else -> WorkResult.Loading
- })
- }
- }
+        // ✅ Convert LiveData to Flow
+        workManager.getWorkInfoByIdFlow(request.id)
+            .collect { workInfo ->
+                emit(when (workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        val result = workInfo.outputData.getString("result")
+                        WorkResult.Success(result)
+                    }
+                    WorkInfo.State.FAILED -> {
+                        val error = workInfo.outputData.getString("error")
+                        WorkResult.Error(error)
+                    }
+                    else -> WorkResult.Loading
+                })
+            }
+    }
 }
 ```
 
@@ -147,23 +148,23 @@ class DataRepository(
 ```kotlin
 @Serializable
 data class ProcessingResult(
- val processed: Int,
- val total: Int,
- val errors: List<String>
+    val processed: Int,
+    val total: Int,
+    val errors: List<String>
 )
 
 class ComplexDataWorker(...) : CoroutineWorker(...) {
- override suspend fun doWork(): Result {
- val result = ProcessingResult(
- processed = 100,
- total = 150,
- errors = listOf("Error 1", "Error 2")
- )
+    override suspend fun doWork(): Result {
+        val result = ProcessingResult(
+            processed = 100,
+            total = 150,
+            errors = listOf("Error 1", "Error 2")
+        )
 
- // ✅ Serialize complex data to JSON
- val json = Json.encodeToString(result)
- return Result.success(workDataOf("result_json" to json))
- }
+        // ✅ Serialize complex data to JSON
+        val json = Json.encodeToString(result)
+        return Result.success(workDataOf("result_json" to json))
+    }
 }
 
 // In observer:
@@ -176,21 +177,21 @@ val result = Json.decodeFromString<ProcessingResult>(json)
 ```kotlin
 // By tag
 workManager.getWorkInfosByTagLiveData("data_sync")
- .observe(this) { workInfoList ->
- workInfoList.forEach { workInfo ->
- if (workInfo.state.isFinished) {
- processResult(workInfo.outputData)
- }
- }
- }
+    .observe(this) { workInfoList ->
+        workInfoList.forEach { workInfo ->
+            if (workInfo.state.isFinished) {
+                processResult(workInfo.outputData)
+            }
+        }
+    }
 
 // By unique name
 workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
- .observe(this) { workInfoList ->
- workInfoList.firstOrNull()?.let { workInfo ->
- processResult(workInfo.outputData)
- }
- }
+    .observe(this) { workInfoList ->
+        workInfoList.firstOrNull()?.let { workInfo ->
+            processResult(workInfo.outputData)
+        }
+    }
 ```
 
 **Ключевые классы**:
@@ -223,27 +224,27 @@ WorkManager returns results through the `outputData` mechanism:
 
 ```kotlin
 class DataWorker(
- context: Context,
- params: WorkerParameters
+    context: Context,
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- return try {
- val input = inputData.getInt("value", 0)
- val result = processData(input) // ✅ Perform work
+    override suspend fun doWork(): Result {
+        return try {
+            val input = inputData.getInt("value", 0)
+            val result = processData(input) // ✅ Perform work
 
- // ✅ Return success with output data
- Result.success(workDataOf(
- "result" to result,
- "timestamp" to System.currentTimeMillis()
- ))
- } catch (e: IOException) {
- Result.retry() // ✅ Network error - retry
- } catch (e: Exception) {
- // ❌ Fatal error - fail with error info
- Result.failure(workDataOf("error" to e.message))
- }
- }
+            // ✅ Return success with output data
+            Result.success(workDataOf(
+                "result" to result,
+                "timestamp" to System.currentTimeMillis()
+            ))
+        } catch (e: IOException) {
+            Result.retry() // ✅ Network error - retry
+        } catch (e: Exception) {
+            // ❌ Fatal error - fail with error info
+            Result.failure(workDataOf("error" to e.message))
+        }
+    }
 }
 ```
 
@@ -251,44 +252,44 @@ class DataWorker(
 
 ```kotlin
 class DataViewModel(
- private val workManager: WorkManager
+    private val workManager: WorkManager
 ) : ViewModel() {
 
- private val _result = MutableLiveData<WorkResult>()
- val result: LiveData<WorkResult> = _result
+    private val _result = MutableLiveData<WorkResult>()
+    val result: LiveData<WorkResult> = _result
 
- fun startWork(value: Int) {
- val request = OneTimeWorkRequestBuilder<DataWorker>()
- .setInputData(workDataOf("value" to value))
- .build()
+    fun startWork(value: Int) {
+        val request = OneTimeWorkRequestBuilder<DataWorker>()
+            .setInputData(workDataOf("value" to value))
+            .build()
 
- workManager.enqueue(request)
+        workManager.enqueue(request)
 
- // ✅ Observe work status
- workManager.getWorkInfoByIdLiveData(request.id)
- .observeForever { workInfo ->
- when (workInfo.state) {
- WorkInfo.State.SUCCEEDED -> {
- val result = workInfo.outputData.getString("result")
- _result.value = WorkResult.Success(result)
- }
- WorkInfo.State.FAILED -> {
- val error = workInfo.outputData.getString("error")
- _result.value = WorkResult.Error(error)
- }
- WorkInfo.State.RUNNING -> {
- _result.value = WorkResult.Loading
- }
- else -> {} // ENQUEUED, BLOCKED, CANCELLED
- }
- }
- }
+        // ✅ Observe work status
+        workManager.getWorkInfoByIdLiveData(request.id)
+            .observeForever { workInfo ->
+                when (workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        val result = workInfo.outputData.getString("result")
+                        _result.value = WorkResult.Success(result)
+                    }
+                    WorkInfo.State.FAILED -> {
+                        val error = workInfo.outputData.getString("error")
+                        _result.value = WorkResult.Error(error)
+                    }
+                    WorkInfo.State.RUNNING -> {
+                        _result.value = WorkResult.Loading
+                    }
+                    else -> {} // ENQUEUED, BLOCKED, CANCELLED
+                }
+            }
+    }
 }
 
 sealed class WorkResult {
- object Loading : WorkResult()
- data class Success(val data: String?) : WorkResult()
- data class Error(val message: String?) : WorkResult()
+    object Loading : WorkResult()
+    data class Success(val data: String?) : WorkResult()
+    data class Error(val message: String?) : WorkResult()
 }
 ```
 
@@ -296,31 +297,31 @@ sealed class WorkResult {
 
 ```kotlin
 class DataRepository(
- private val workManager: WorkManager
+    private val workManager: WorkManager
 ) {
- fun processData(value: Int): Flow<WorkResult> = flow {
- val request = OneTimeWorkRequestBuilder<DataWorker>()
- .setInputData(workDataOf("value" to value))
- .build()
+    fun processData(value: Int): Flow<WorkResult> = flow {
+        val request = OneTimeWorkRequestBuilder<DataWorker>()
+            .setInputData(workDataOf("value" to value))
+            .build()
 
- workManager.enqueue(request)
+        workManager.enqueue(request)
 
- // ✅ Convert LiveData to Flow
- workManager.getWorkInfoByIdFlow(request.id)
- .collect { workInfo ->
- emit(when (workInfo.state) {
- WorkInfo.State.SUCCEEDED -> {
- val result = workInfo.outputData.getString("result")
- WorkResult.Success(result)
- }
- WorkInfo.State.FAILED -> {
- val error = workInfo.outputData.getString("error")
- WorkResult.Error(error)
- }
- else -> WorkResult.Loading
- })
- }
- }
+        // ✅ Convert LiveData to Flow
+        workManager.getWorkInfoByIdFlow(request.id)
+            .collect { workInfo ->
+                emit(when (workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        val result = workInfo.outputData.getString("result")
+                        WorkResult.Success(result)
+                    }
+                    WorkInfo.State.FAILED -> {
+                        val error = workInfo.outputData.getString("error")
+                        WorkResult.Error(error)
+                    }
+                    else -> WorkResult.Loading
+                })
+            }
+    }
 }
 ```
 
@@ -329,23 +330,23 @@ class DataRepository(
 ```kotlin
 @Serializable
 data class ProcessingResult(
- val processed: Int,
- val total: Int,
- val errors: List<String>
+    val processed: Int,
+    val total: Int,
+    val errors: List<String>
 )
 
 class ComplexDataWorker(...) : CoroutineWorker(...) {
- override suspend fun doWork(): Result {
- val result = ProcessingResult(
- processed = 100,
- total = 150,
- errors = listOf("Error 1", "Error 2")
- )
+    override suspend fun doWork(): Result {
+        val result = ProcessingResult(
+            processed = 100,
+            total = 150,
+            errors = listOf("Error 1", "Error 2")
+        )
 
- // ✅ Serialize complex data to JSON
- val json = Json.encodeToString(result)
- return Result.success(workDataOf("result_json" to json))
- }
+        // ✅ Serialize complex data to JSON
+        val json = Json.encodeToString(result)
+        return Result.success(workDataOf("result_json" to json))
+    }
 }
 
 // In observer:
@@ -358,21 +359,21 @@ val result = Json.decodeFromString<ProcessingResult>(json)
 ```kotlin
 // By tag
 workManager.getWorkInfosByTagLiveData("data_sync")
- .observe(this) { workInfoList ->
- workInfoList.forEach { workInfo ->
- if (workInfo.state.isFinished) {
- processResult(workInfo.outputData)
- }
- }
- }
+    .observe(this) { workInfoList ->
+        workInfoList.forEach { workInfo ->
+            if (workInfo.state.isFinished) {
+                processResult(workInfo.outputData)
+            }
+        }
+    }
 
 // By unique name
 workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
- .observe(this) { workInfoList ->
- workInfoList.firstOrNull()?.let { workInfo ->
- processResult(workInfo.outputData)
- }
- }
+    .observe(this) { workInfoList ->
+        workInfoList.firstOrNull()?.let { workInfo ->
+            processResult(workInfo.outputData)
+        }
+    }
 ```
 
 **Key Classes**:
@@ -405,7 +406,7 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 
 - [[c-workmanager]] — WorkManager core concepts
 - [[c-coroutines]] — Kotlin coroutines fundamentals
-- — `LiveData` reactive pattern
+-  — `LiveData` reactive pattern
 - [[c-flow]] — Kotlin `Flow` fundamentals
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [WorkManager Advanced Guide](https://developer.android.com/topic/libraries/architecture/workmanager/advanced)
@@ -415,14 +416,14 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 ## Related Questions
 
 ### Prerequisites (Easier)
-- — WorkManager fundamentals
-- [[q-coroutine-scope-basics--kotlin--easy]] — Coroutines introduction
+-  — WorkManager fundamentals
+-  — Coroutines introduction
 
 ### Related (Same Level)
-- — WorkManager constraints
-- [[q-workmanager-chaining--android--hard]] — Chaining work requests
-- — `LiveData` vs `Flow` comparison
+-  — WorkManager constraints
+-  — Chaining work requests
+-  — `LiveData` vs `Flow` comparison
 
 ### Advanced (Harder)
 - [[q-workmanager-chaining--android--hard]] — Testing WorkManager
-- — Background execution strategies
+-  — Background execution strategies

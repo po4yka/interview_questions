@@ -24,6 +24,7 @@ updated: 2025-10-31
 tags:
 - android/ui-views
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -45,8 +46,8 @@ Uses ViewHolder pattern for efficient reuse of list items during scrolling.
 
 ```kotlin
 class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
- val textView: TextView = itemView.findViewById(R.id.textView)
- val imageView: ImageView = itemView.findViewById(R.id.imageView)
+    val textView: TextView = itemView.findViewById(R.id.textView)
+    val imageView: ImageView = itemView.findViewById(R.id.imageView)
 }
 ```
 
@@ -62,9 +63,9 @@ recyclerView.layoutManager = LinearLayoutManager(context)
 
 // Horizontal list
 recyclerView.layoutManager = LinearLayoutManager(
- context,
- LinearLayoutManager.HORIZONTAL,
- false
+    context,
+    LinearLayoutManager.HORIZONTAL,
+    false
 )
 
 // Grid
@@ -72,8 +73,8 @@ recyclerView.layoutManager = GridLayoutManager(context, 2)
 
 // Staggered Grid
 recyclerView.layoutManager = StaggeredGridLayoutManager(
- 2,
- StaggeredGridLayoutManager.VERTICAL
+    2,
+    StaggeredGridLayoutManager.VERTICAL
 )
 ```
 
@@ -83,17 +84,17 @@ Built-in animation support for add, remove, and move operations.
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
- private val items = mutableListOf<String>()
+    private val items = mutableListOf<String>()
 
- fun addItem(item: String, position: Int) {
- items.add(position, item)
- notifyItemInserted(position) // Automatic animation
- }
+    fun addItem(item: String, position: Int) {
+        items.add(position, item)
+        notifyItemInserted(position)  // Automatic animation
+    }
 
- fun removeItem(position: Int) {
- items.removeAt(position)
- notifyItemRemoved(position) // Automatic animation
- }
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)  // Automatic animation
+    }
 }
 ```
 
@@ -103,9 +104,9 @@ ItemDecoration class makes it easy to add dividers between items.
 
 ```kotlin
 class DividerItemDecoration : RecyclerView.ItemDecoration() {
- override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
- // Draw dividers
- }
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        // Draw dividers
+    }
 }
 
 recyclerView.addItemDecoration(DividerItemDecoration())
@@ -117,18 +118,18 @@ Unlike `ListView`, `RecyclerView` doesn't have built-in method for handling item
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
- var onItemClick: ((Int) -> Unit)? = null
+    var onItemClick: ((Int) -> Unit)? = null
 
- override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
- holder.itemView.setOnClickListener {
- onItemClick?.invoke(position)
- }
- }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(position)
+        }
+    }
 }
 
 // Usage
 adapter.onItemClick = { position ->
- Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
 }
 ```
 
@@ -138,23 +139,23 @@ adapter.onItemClick = { position ->
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
- RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
- class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
- val textView: TextView = itemView.findViewById(R.id.textView)
- }
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.textView)
+    }
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return MyViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return MyViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
- holder.textView.text = items[position]
- }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.textView.text = items[position]
+    }
 
- override fun getItemCount() = items.size
+    override fun getItemCount() = items.size
 }
 ```
 
@@ -166,25 +167,25 @@ class MyAdapter(private val items: List<String>) :
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
- // Setup LayoutManager
- recyclerView.layoutManager = LinearLayoutManager(this)
+        // Setup LayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
- // Create and set adapter
- val items = listOf("Item 1", "Item 2", "Item 3")
- val adapter = MyAdapter(items)
- recyclerView.adapter = adapter
+        // Create and set adapter
+        val items = listOf("Item 1", "Item 2", "Item 3")
+        val adapter = MyAdapter(items)
+        recyclerView.adapter = adapter
 
- // Add dividers
- recyclerView.addItemDecoration(
- DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
- )
- }
+        // Add dividers
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        )
+    }
 }
 ```
 
@@ -198,12 +199,15 @@ class MainActivity : AppCompatActivity() {
 | **Decorations** | Difficult | ItemDecoration API |
 | **Performance** | Good | Excellent |
 
+
 # Question (EN)
 > `RecyclerView` Explained
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 `RecyclerView` — это мощный компонент пользовательского интерфейса, предоставляемый библиотекой AndroidX, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена `ListView`.
@@ -216,8 +220,8 @@ Uses ViewHolder pattern for efficient reuse of list items during scrolling.
 
 ```kotlin
 class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
- val textView: TextView = itemView.findViewById(R.id.textView)
- val imageView: ImageView = itemView.findViewById(R.id.imageView)
+    val textView: TextView = itemView.findViewById(R.id.textView)
+    val imageView: ImageView = itemView.findViewById(R.id.imageView)
 }
 ```
 
@@ -233,9 +237,9 @@ recyclerView.layoutManager = LinearLayoutManager(context)
 
 // Horizontal list
 recyclerView.layoutManager = LinearLayoutManager(
- context,
- LinearLayoutManager.HORIZONTAL,
- false
+    context,
+    LinearLayoutManager.HORIZONTAL,
+    false
 )
 
 // Grid
@@ -243,8 +247,8 @@ recyclerView.layoutManager = GridLayoutManager(context, 2)
 
 // Staggered Grid
 recyclerView.layoutManager = StaggeredGridLayoutManager(
- 2,
- StaggeredGridLayoutManager.VERTICAL
+    2,
+    StaggeredGridLayoutManager.VERTICAL
 )
 ```
 
@@ -254,17 +258,17 @@ Built-in animation support for add, remove, and move operations.
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
- private val items = mutableListOf<String>()
+    private val items = mutableListOf<String>()
 
- fun addItem(item: String, position: Int) {
- items.add(position, item)
- notifyItemInserted(position) // Automatic animation
- }
+    fun addItem(item: String, position: Int) {
+        items.add(position, item)
+        notifyItemInserted(position)  // Automatic animation
+    }
 
- fun removeItem(position: Int) {
- items.removeAt(position)
- notifyItemRemoved(position) // Automatic animation
- }
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)  // Automatic animation
+    }
 }
 ```
 
@@ -274,9 +278,9 @@ ItemDecoration class makes it easy to add dividers between items.
 
 ```kotlin
 class DividerItemDecoration : RecyclerView.ItemDecoration() {
- override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
- // Draw dividers
- }
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        // Draw dividers
+    }
 }
 
 recyclerView.addItemDecoration(DividerItemDecoration())
@@ -288,18 +292,18 @@ Unlike `ListView`, `RecyclerView` doesn't have built-in method for handling item
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
- var onItemClick: ((Int) -> Unit)? = null
+    var onItemClick: ((Int) -> Unit)? = null
 
- override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
- holder.itemView.setOnClickListener {
- onItemClick?.invoke(position)
- }
- }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(position)
+        }
+    }
 }
 
 // Usage
 adapter.onItemClick = { position ->
- Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
 }
 ```
 
@@ -309,23 +313,23 @@ adapter.onItemClick = { position ->
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
- RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
- class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
- val textView: TextView = itemView.findViewById(R.id.textView)
- }
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.textView)
+    }
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return MyViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return MyViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
- holder.textView.text = items[position]
- }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.textView.text = items[position]
+    }
 
- override fun getItemCount() = items.size
+    override fun getItemCount() = items.size
 }
 ```
 
@@ -337,25 +341,25 @@ class MyAdapter(private val items: List<String>) :
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
- // Setup LayoutManager
- recyclerView.layoutManager = LinearLayoutManager(this)
+        // Setup LayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
- // Create and set adapter
- val items = listOf("Item 1", "Item 2", "Item 3")
- val adapter = MyAdapter(items)
- recyclerView.adapter = adapter
+        // Create and set adapter
+        val items = listOf("Item 1", "Item 2", "Item 3")
+        val adapter = MyAdapter(items)
+        recyclerView.adapter = adapter
 
- // Add dividers
- recyclerView.addItemDecoration(
- DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
- )
- }
+        // Add dividers
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        )
+    }
 }
 ```
 
@@ -381,8 +385,8 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
- val textView: TextView = itemView.findViewById(R.id.textView)
- val imageView: ImageView = itemView.findViewById(R.id.imageView)
+    val textView: TextView = itemView.findViewById(R.id.textView)
+    val imageView: ImageView = itemView.findViewById(R.id.imageView)
 }
 ```
 
@@ -398,9 +402,9 @@ recyclerView.layoutManager = LinearLayoutManager(context)
 
 // Горизонтальный список
 recyclerView.layoutManager = LinearLayoutManager(
- context,
- LinearLayoutManager.HORIZONTAL,
- false
+    context,
+    LinearLayoutManager.HORIZONTAL,
+    false
 )
 
 // Сетка
@@ -408,8 +412,8 @@ recyclerView.layoutManager = GridLayoutManager(context, 2)
 
 // Staggered Grid
 recyclerView.layoutManager = StaggeredGridLayoutManager(
- 2,
- StaggeredGridLayoutManager.VERTICAL
+    2,
+    StaggeredGridLayoutManager.VERTICAL
 )
 ```
 
@@ -419,17 +423,17 @@ recyclerView.layoutManager = StaggeredGridLayoutManager(
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
- private val items = mutableListOf<String>()
+    private val items = mutableListOf<String>()
 
- fun addItem(item: String, position: Int) {
- items.add(position, item)
- notifyItemInserted(position) // Автоматическая анимация
- }
+    fun addItem(item: String, position: Int) {
+        items.add(position, item)
+        notifyItemInserted(position)  // Автоматическая анимация
+    }
 
- fun removeItem(position: Int) {
- items.removeAt(position)
- notifyItemRemoved(position) // Автоматическая анимация
- }
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)  // Автоматическая анимация
+    }
 }
 ```
 
@@ -439,9 +443,9 @@ class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
 
 ```kotlin
 class DividerItemDecoration : RecyclerView.ItemDecoration() {
- override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
- // Рисование разделителей
- }
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        // Рисование разделителей
+    }
 }
 
 recyclerView.addItemDecoration(DividerItemDecoration())
@@ -453,18 +457,18 @@ recyclerView.addItemDecoration(DividerItemDecoration())
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
- var onItemClick: ((Int) -> Unit)? = null
+    var onItemClick: ((Int) -> Unit)? = null
 
- override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
- holder.itemView.setOnClickListener {
- onItemClick?.invoke(position)
- }
- }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(position)
+        }
+    }
 }
 
 // Использование
 adapter.onItemClick = { position ->
- Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
 }
 ```
 
@@ -474,23 +478,23 @@ adapter.onItemClick = { position ->
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
- RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
- class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
- val textView: TextView = itemView.findViewById(R.id.textView)
- }
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.textView)
+    }
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return MyViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return MyViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
- holder.textView.text = items[position]
- }
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.textView.text = items[position]
+    }
 
- override fun getItemCount() = items.size
+    override fun getItemCount() = items.size
 }
 ```
 
@@ -502,25 +506,25 @@ class MyAdapter(private val items: List<String>) :
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
 
- // Настройка LayoutManager
- recyclerView.layoutManager = LinearLayoutManager(this)
+        // Настройка LayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
- // Создание и установка адаптера
- val items = listOf("Item 1", "Item 2", "Item 3")
- val adapter = MyAdapter(items)
- recyclerView.adapter = adapter
+        // Создание и установка адаптера
+        val items = listOf("Item 1", "Item 2", "Item 3")
+        val adapter = MyAdapter(items)
+        recyclerView.adapter = adapter
 
- // Добавление разделителей
- recyclerView.addItemDecoration(
- DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
- )
- }
+        // Добавление разделителей
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        )
+    }
 }
 ```
 
@@ -538,22 +542,26 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
+
 ## Follow-ups
 
 - 
 - [[q-what-does-itemdecoration-do--android--medium]]
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]]
 
+
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui

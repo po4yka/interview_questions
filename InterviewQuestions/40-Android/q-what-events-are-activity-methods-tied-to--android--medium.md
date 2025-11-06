@@ -28,6 +28,7 @@ tags:
 - difficulty/medium
 - events
 - lifecycle
+
 ---
 
 # Вопрос (RU)
@@ -46,21 +47,22 @@ tags:
 
 ```
 
- Activity Lifecycle Events
+         Activity Lifecycle Events
 
-onCreate() Activity is created
- ↓
-onStart() Activity becomes visible
- ↓
-onResume() Activity gains focus, user can interact
- ↓
+
+onCreate()  Activity is created
+    ↓
+onStart()  Activity becomes visible
+    ↓
+onResume()  Activity gains focus, user can interact
+    ↓
 [Activity Running]
- ↓
-onPause() Another activity comes to foreground
- ↓
-onStop() Activity no longer visible
- ↓
-onDestroy() Activity is destroyed
+    ↓
+onPause()  Another activity comes to foreground
+    ↓
+onStop()  Activity no longer visible
+    ↓
+onDestroy()  Activity is destroyed
 ```
 
 ### Detailed Event Mapping
@@ -74,24 +76,24 @@ onDestroy() Activity is destroyed
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- // Initialize UI
- // Restore saved state
- // Set up ViewModels
- // Bind views
+        // Initialize UI
+        // Restore saved state
+        // Set up ViewModels
+        // Bind views
 
- if (savedInstanceState != null) {
- // Activity was recreated
- val counter = savedInstanceState.getInt("counter", 0)
- Log.d("Lifecycle", "Restored counter: $counter")
- } else {
- // First time creation
- Log.d("Lifecycle", "First creation")
- }
- }
+        if (savedInstanceState != null) {
+            // Activity was recreated
+            val counter = savedInstanceState.getInt("counter", 0)
+            Log.d("Lifecycle", "Restored counter: $counter")
+        } else {
+            // First time creation
+            Log.d("Lifecycle", "First creation")
+        }
+    }
 }
 ```
 
@@ -113,16 +115,16 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 override fun onStart() {
- super.onStart()
+    super.onStart()
 
- // Register broadcast receivers
- // Start animations
- // Begin updates that require visibility
+    // Register broadcast receivers
+    // Start animations
+    // Begin updates that require visibility
 
- val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
- registerReceiver(networkReceiver, intentFilter)
+    val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+    registerReceiver(networkReceiver, intentFilter)
 
- Log.d("Lifecycle", "Activity is becoming visible")
+    Log.d("Lifecycle", "Activity is becoming visible")
 }
 ```
 
@@ -144,17 +146,17 @@ override fun onStart() {
 
 ```kotlin
 override fun onResume() {
- super.onResume()
+    super.onResume()
 
- // Resume camera preview
- // Start location updates
- // Resume game/video playback
- // Acquire exclusive resources
+    // Resume camera preview
+    // Start location updates
+    // Resume game/video playback
+    // Acquire exclusive resources
 
- cameraPreview.resume()
- locationManager.requestLocationUpdates()
+    cameraPreview.resume()
+    locationManager.requestLocationUpdates()
 
- Log.d("Lifecycle", "Activity has focus - user can interact")
+    Log.d("Lifecycle", "Activity has focus - user can interact")
 }
 ```
 
@@ -178,20 +180,20 @@ override fun onResume() {
 
 ```kotlin
 override fun onPause() {
- super.onPause()
+    super.onPause()
 
- // Pause camera preview
- // Stop location updates
- // Pause game/video
- // Save critical data (should be fast!)
+    // Pause camera preview
+    // Stop location updates
+    // Pause game/video
+    // Save critical data (should be fast!)
 
- cameraPreview.pause()
- locationManager.removeUpdates(locationListener)
+    cameraPreview.pause()
+    locationManager.removeUpdates(locationListener)
 
- // Save draft
- saveDraft()
+    // Save draft
+    saveDraft()
 
- Log.d("Lifecycle", "Activity losing focus")
+    Log.d("Lifecycle", "Activity losing focus")
 }
 ```
 
@@ -219,19 +221,19 @@ override fun onPause() {
 
 ```kotlin
 override fun onStop() {
- super.onStop()
+    super.onStop()
 
- // Unregister broadcast receivers
- // Release resources
- // Save persistent data
- // Stop background work
+    // Unregister broadcast receivers
+    // Release resources
+    // Save persistent data
+    // Stop background work
 
- unregisterReceiver(networkReceiver)
+    unregisterReceiver(networkReceiver)
 
- // Save state to database
- viewModel.saveState()
+    // Save state to database
+    viewModel.saveState()
 
- Log.d("Lifecycle", "Activity no longer visible")
+    Log.d("Lifecycle", "Activity no longer visible")
 }
 ```
 
@@ -254,21 +256,21 @@ override fun onStop() {
 
 ```kotlin
 override fun onDestroy() {
- super.onDestroy()
+    super.onDestroy()
 
- // Clean up resources
- // Cancel coroutines
- // Close database connections
- // Release memory
+    // Clean up resources
+    // Cancel coroutines
+    // Close database connections
+    // Release memory
 
- viewModelScope.cancel()
- database.close()
+    viewModelScope.cancel()
+    database.close()
 
- if (isFinishing) {
- Log.d("Lifecycle", "Activity is finishing (user navigated away)")
- } else {
- Log.d("Lifecycle", "Activity destroyed for recreation (config change)")
- }
+    if (isFinishing) {
+        Log.d("Lifecycle", "Activity is finishing (user navigated away)")
+    } else {
+        Log.d("Lifecycle", "Activity destroyed for recreation (config change)")
+    }
 }
 ```
 
@@ -289,14 +291,14 @@ override fun onDestroy() {
 
 ```kotlin
 override fun onRestart() {
- super.onRestart()
+    super.onRestart()
 
- // Refresh UI data
- // Reconnect to services
+    // Refresh UI data
+    // Reconnect to services
 
- viewModel.refreshData()
+    viewModel.refreshData()
 
- Log.d("Lifecycle", "Activity restarting after being stopped")
+    Log.d("Lifecycle", "Activity restarting after being stopped")
 }
 ```
 
@@ -312,120 +314,120 @@ override fun onRestart() {
 ```kotlin
 class DetailActivity : AppCompatActivity() {
 
- private lateinit var viewModel: DetailViewModel
- private lateinit var networkReceiver: BroadcastReceiver
- private lateinit var player: MediaPlayer
+    private lateinit var viewModel: DetailViewModel
+    private lateinit var networkReceiver: BroadcastReceiver
+    private lateinit var player: MediaPlayer
 
- // 1. Activity Created
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_detail)
+    // 1. Activity Created
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_detail)
 
- Log.d("Lifecycle", "onCreate - Activity created")
+        Log.d("Lifecycle", "onCreate - Activity created")
 
- viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
+        viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
 
- // Initialize UI
- setupViews()
+        // Initialize UI
+        setupViews()
 
- // Restore state
- savedInstanceState?.let { bundle ->
- val position = bundle.getInt("player_position", 0)
- Log.d("Lifecycle", "Restored player position: $position")
- }
- }
+        // Restore state
+        savedInstanceState?.let { bundle ->
+            val position = bundle.getInt("player_position", 0)
+            Log.d("Lifecycle", "Restored player position: $position")
+        }
+    }
 
- // 2. Activity Becoming Visible
- override fun onStart() {
- super.onStart()
- Log.d("Lifecycle", "onStart - Activity becoming visible")
+    // 2. Activity Becoming Visible
+    override fun onStart() {
+        super.onStart()
+        Log.d("Lifecycle", "onStart - Activity becoming visible")
 
- // Register receiver
- networkReceiver = NetworkChangeReceiver()
- val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
- registerReceiver(networkReceiver, filter)
- }
+        // Register receiver
+        networkReceiver = NetworkChangeReceiver()
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkReceiver, filter)
+    }
 
- // 3. Activity Has Focus
- override fun onResume() {
- super.onResume()
- Log.d("Lifecycle", "onResume - Activity has focus")
+    // 3. Activity Has Focus
+    override fun onResume() {
+        super.onResume()
+        Log.d("Lifecycle", "onResume - Activity has focus")
 
- // Resume playback
- player.start()
+        // Resume playback
+        player.start()
 
- // Refresh data
- viewModel.loadData()
- }
+        // Refresh data
+        viewModel.loadData()
+    }
 
- // 4. Activity Losing Focus
- override fun onPause() {
- super.onPause()
- Log.d("Lifecycle", "onPause - Activity losing focus")
+    // 4. Activity Losing Focus
+    override fun onPause() {
+        super.onPause()
+        Log.d("Lifecycle", "onPause - Activity losing focus")
 
- // Pause playback
- if (player.isPlaying) {
- player.pause()
- }
+        // Pause playback
+        if (player.isPlaying) {
+            player.pause()
+        }
 
- // Save draft (fast operation!)
- viewModel.saveDraft()
- }
+        // Save draft (fast operation!)
+        viewModel.saveDraft()
+    }
 
- // 5. Activity No Longer Visible
- override fun onStop() {
- super.onStop()
- Log.d("Lifecycle", "onStop - Activity no longer visible")
+    // 5. Activity No Longer Visible
+    override fun onStop() {
+        super.onStop()
+        Log.d("Lifecycle", "onStop - Activity no longer visible")
 
- // Unregister receiver
- unregisterReceiver(networkReceiver)
+        // Unregister receiver
+        unregisterReceiver(networkReceiver)
 
- // Save state to database
- viewModel.saveToDatabase()
- }
+        // Save state to database
+        viewModel.saveToDatabase()
+    }
 
- // 6. Activity Destroyed
- override fun onDestroy() {
- super.onDestroy()
- Log.d("Lifecycle", "onDestroy - Activity destroyed")
+    // 6. Activity Destroyed
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Lifecycle", "onDestroy - Activity destroyed")
 
- // Release resources
- player.release()
+        // Release resources
+        player.release()
 
- if (isFinishing) {
- Log.d("Lifecycle", "User navigated away - cleanup completely")
- } else {
- Log.d("Lifecycle", "Configuration change - will be recreated")
- }
- }
+        if (isFinishing) {
+            Log.d("Lifecycle", "User navigated away - cleanup completely")
+        } else {
+            Log.d("Lifecycle", "Configuration change - will be recreated")
+        }
+    }
 
- // 7. Activity Restarting
- override fun onRestart() {
- super.onRestart()
- Log.d("Lifecycle", "onRestart - Returning to activity")
+    // 7. Activity Restarting
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("Lifecycle", "onRestart - Returning to activity")
 
- // Refresh data since user returned
- viewModel.refreshData()
- }
+        // Refresh data since user returned
+        viewModel.refreshData()
+    }
 
- // Save state for recreation
- override fun onSaveInstanceState(outState: Bundle) {
- super.onSaveInstanceState(outState)
+    // Save state for recreation
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
- outState.putInt("player_position", player.currentPosition)
+        outState.putInt("player_position", player.currentPosition)
 
- Log.d("Lifecycle", "onSaveInstanceState - Saving state")
- }
+        Log.d("Lifecycle", "onSaveInstanceState - Saving state")
+    }
 
- // Restore state after recreation
- override fun onRestoreInstanceState(savedInstanceState: Bundle) {
- super.onRestoreInstanceState(savedInstanceState)
+    // Restore state after recreation
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
 
- val position = savedInstanceState.getInt("player_position", 0)
- player.seekTo(position)
+        val position = savedInstanceState.getInt("player_position", 0)
+        player.seekTo(position)
 
- Log.d("Lifecycle", "onRestoreInstanceState - Restored state")
- }
+        Log.d("Lifecycle", "onRestoreInstanceState - Restored state")
+    }
 }
 ```
 
@@ -440,23 +442,23 @@ class DetailActivity : AppCompatActivity() {
 ```kotlin
 // onSaveInstanceState - Save state before destruction
 override fun onSaveInstanceState(outState: Bundle) {
- super.onSaveInstanceState(outState)
+    super.onSaveInstanceState(outState)
 
- outState.putInt("counter", counter)
- outState.putString("text", editText.text.toString())
+    outState.putInt("counter", counter)
+    outState.putString("text", editText.text.toString())
 
- Log.d("Lifecycle", "Saving state before config change")
+    Log.d("Lifecycle", "Saving state before config change")
 }
 
 // onRestoreInstanceState - Restore state after recreation
 override fun onRestoreInstanceState(savedInstanceState: Bundle) {
- super.onRestoreInstanceState(savedInstanceState)
+    super.onRestoreInstanceState(savedInstanceState)
 
- counter = savedInstanceState.getInt("counter", 0)
- val text = savedInstanceState.getString("text", "")
- editText.setText(text)
+    counter = savedInstanceState.getInt("counter", 0)
+    val text = savedInstanceState.getString("text", "")
+    editText.setText(text)
 
- Log.d("Lifecycle", "Restored state after config change")
+    Log.d("Lifecycle", "Restored state after config change")
 }
 ```
 
@@ -476,17 +478,17 @@ onResume()
 
 ```kotlin
 override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
- super.onMultiWindowModeChanged(isInMultiWindowMode)
+    super.onMultiWindowModeChanged(isInMultiWindowMode)
 
- if (isInMultiWindowMode) {
- Log.d("Lifecycle", "Entered multi-window mode")
- // Adjust UI for split screen
- adjustLayoutForSplitScreen()
- } else {
- Log.d("Lifecycle", "Exited multi-window mode")
- // Restore full-screen UI
- restoreFullScreenLayout()
- }
+    if (isInMultiWindowMode) {
+        Log.d("Lifecycle", "Entered multi-window mode")
+        // Adjust UI for split screen
+        adjustLayoutForSplitScreen()
+    } else {
+        Log.d("Lifecycle", "Exited multi-window mode")
+        // Restore full-screen UI
+        restoreFullScreenLayout()
+    }
 }
 ```
 
@@ -494,20 +496,20 @@ override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
 
 ```kotlin
 override fun onPictureInPictureModeChanged(
- isInPictureInPictureMode: Boolean,
- newConfig: Configuration
+    isInPictureInPictureMode: Boolean,
+    newConfig: Configuration
 ) {
- super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
- if (isInPictureInPictureMode) {
- Log.d("Lifecycle", "Entered PiP mode")
- // Hide controls
- hideControls()
- } else {
- Log.d("Lifecycle", "Exited PiP mode")
- // Show controls
- showControls()
- }
+    if (isInPictureInPictureMode) {
+        Log.d("Lifecycle", "Entered PiP mode")
+        // Hide controls
+        hideControls()
+    } else {
+        Log.d("Lifecycle", "Exited PiP mode")
+        // Show controls
+        showControls()
+    }
 }
 ```
 
@@ -576,16 +578,16 @@ onResume()
 ```kotlin
 // - BAD - Heavy operation in onPause
 override fun onPause() {
- super.onPause()
- database.saveAllData() // TOO SLOW!
- uploadToServer() // TOO SLOW!
+    super.onPause()
+    database.saveAllData() // TOO SLOW!
+    uploadToServer()       // TOO SLOW!
 }
 
 // - GOOD - Fast operation in onPause
 override fun onPause() {
- super.onPause()
- player.pause()
- saveDraftLocally() // Fast local save only
+    super.onPause()
+    player.pause()
+    saveDraftLocally() // Fast local save only
 }
 ```
 
@@ -593,37 +595,37 @@ override fun onPause() {
 ```kotlin
 // - BAD - Lose data on config change
 class MainActivity : AppCompatActivity() {
- private var userData: List<User> = emptyList()
+    private var userData: List<User> = emptyList()
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- loadUserData() // Reloads on every rotation!
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadUserData() // Reloads on every rotation!
+    }
 }
 
 // - GOOD - ViewModel survives config changes
 class MainActivity : AppCompatActivity() {
- private val viewModel: UserViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- viewModel.users.observe(this) { users ->
- updateUI(users)
- }
- // ViewModel survives rotation, data not reloaded
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.users.observe(this) { users ->
+            updateUI(users)
+        }
+        // ViewModel survives rotation, data not reloaded
+    }
 }
 ```
 
 **3. Release Resources in onStop()**
 ```kotlin
 override fun onStop() {
- super.onStop()
+    super.onStop()
 
- // Release heavy resources
- unregisterReceiver(receiver)
- stopLocationUpdates()
- releaseCamera()
+    // Release heavy resources
+    unregisterReceiver(receiver)
+    stopLocationUpdates()
+    releaseCamera()
 }
 ```
 
@@ -639,7 +641,10 @@ override fun onStop() {
 | **onDestroy()** | Destroyed | Finishing or config change | Release all resources |
 | **onRestart()** | Restarting | Returning from stopped | Refresh data |
 
+
+
 ---
+
 
 ## Answer (EN)
 # Question (EN)
@@ -653,21 +658,22 @@ override fun onStop() {
 
 ```
 
- Activity Lifecycle Events
+         Activity Lifecycle Events
 
-onCreate() Activity is created
- ↓
-onStart() Activity becomes visible
- ↓
-onResume() Activity gains focus, user can interact
- ↓
+
+onCreate()  Activity is created
+    ↓
+onStart()  Activity becomes visible
+    ↓
+onResume()  Activity gains focus, user can interact
+    ↓
 [Activity Running]
- ↓
-onPause() Another activity comes to foreground
- ↓
-onStop() Activity no longer visible
- ↓
-onDestroy() Activity is destroyed
+    ↓
+onPause()  Another activity comes to foreground
+    ↓
+onStop()  Activity no longer visible
+    ↓
+onDestroy()  Activity is destroyed
 ```
 
 ### Detailed Event Mapping
@@ -681,24 +687,24 @@ onDestroy() Activity is destroyed
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- // Initialize UI
- // Restore saved state
- // Set up ViewModels
- // Bind views
+        // Initialize UI
+        // Restore saved state
+        // Set up ViewModels
+        // Bind views
 
- if (savedInstanceState != null) {
- // Activity was recreated
- val counter = savedInstanceState.getInt("counter", 0)
- Log.d("Lifecycle", "Restored counter: $counter")
- } else {
- // First time creation
- Log.d("Lifecycle", "First creation")
- }
- }
+        if (savedInstanceState != null) {
+            // Activity was recreated
+            val counter = savedInstanceState.getInt("counter", 0)
+            Log.d("Lifecycle", "Restored counter: $counter")
+        } else {
+            // First time creation
+            Log.d("Lifecycle", "First creation")
+        }
+    }
 }
 ```
 
@@ -720,16 +726,16 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 override fun onStart() {
- super.onStart()
+    super.onStart()
 
- // Register broadcast receivers
- // Start animations
- // Begin updates that require visibility
+    // Register broadcast receivers
+    // Start animations
+    // Begin updates that require visibility
 
- val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
- registerReceiver(networkReceiver, intentFilter)
+    val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+    registerReceiver(networkReceiver, intentFilter)
 
- Log.d("Lifecycle", "Activity is becoming visible")
+    Log.d("Lifecycle", "Activity is becoming visible")
 }
 ```
 
@@ -751,17 +757,17 @@ override fun onStart() {
 
 ```kotlin
 override fun onResume() {
- super.onResume()
+    super.onResume()
 
- // Resume camera preview
- // Start location updates
- // Resume game/video playback
- // Acquire exclusive resources
+    // Resume camera preview
+    // Start location updates
+    // Resume game/video playback
+    // Acquire exclusive resources
 
- cameraPreview.resume()
- locationManager.requestLocationUpdates()
+    cameraPreview.resume()
+    locationManager.requestLocationUpdates()
 
- Log.d("Lifecycle", "Activity has focus - user can interact")
+    Log.d("Lifecycle", "Activity has focus - user can interact")
 }
 ```
 
@@ -785,20 +791,20 @@ override fun onResume() {
 
 ```kotlin
 override fun onPause() {
- super.onPause()
+    super.onPause()
 
- // Pause camera preview
- // Stop location updates
- // Pause game/video
- // Save critical data (should be fast!)
+    // Pause camera preview
+    // Stop location updates
+    // Pause game/video
+    // Save critical data (should be fast!)
 
- cameraPreview.pause()
- locationManager.removeUpdates(locationListener)
+    cameraPreview.pause()
+    locationManager.removeUpdates(locationListener)
 
- // Save draft
- saveDraft()
+    // Save draft
+    saveDraft()
 
- Log.d("Lifecycle", "Activity losing focus")
+    Log.d("Lifecycle", "Activity losing focus")
 }
 ```
 
@@ -826,19 +832,19 @@ override fun onPause() {
 
 ```kotlin
 override fun onStop() {
- super.onStop()
+    super.onStop()
 
- // Unregister broadcast receivers
- // Release resources
- // Save persistent data
- // Stop background work
+    // Unregister broadcast receivers
+    // Release resources
+    // Save persistent data
+    // Stop background work
 
- unregisterReceiver(networkReceiver)
+    unregisterReceiver(networkReceiver)
 
- // Save state to database
- viewModel.saveState()
+    // Save state to database
+    viewModel.saveState()
 
- Log.d("Lifecycle", "Activity no longer visible")
+    Log.d("Lifecycle", "Activity no longer visible")
 }
 ```
 
@@ -861,21 +867,21 @@ override fun onStop() {
 
 ```kotlin
 override fun onDestroy() {
- super.onDestroy()
+    super.onDestroy()
 
- // Clean up resources
- // Cancel coroutines
- // Close database connections
- // Release memory
+    // Clean up resources
+    // Cancel coroutines
+    // Close database connections
+    // Release memory
 
- viewModelScope.cancel()
- database.close()
+    viewModelScope.cancel()
+    database.close()
 
- if (isFinishing) {
- Log.d("Lifecycle", "Activity is finishing (user navigated away)")
- } else {
- Log.d("Lifecycle", "Activity destroyed for recreation (config change)")
- }
+    if (isFinishing) {
+        Log.d("Lifecycle", "Activity is finishing (user navigated away)")
+    } else {
+        Log.d("Lifecycle", "Activity destroyed for recreation (config change)")
+    }
 }
 ```
 
@@ -896,14 +902,14 @@ override fun onDestroy() {
 
 ```kotlin
 override fun onRestart() {
- super.onRestart()
+    super.onRestart()
 
- // Refresh UI data
- // Reconnect to services
+    // Refresh UI data
+    // Reconnect to services
 
- viewModel.refreshData()
+    viewModel.refreshData()
 
- Log.d("Lifecycle", "Activity restarting after being stopped")
+    Log.d("Lifecycle", "Activity restarting after being stopped")
 }
 ```
 
@@ -919,120 +925,120 @@ override fun onRestart() {
 ```kotlin
 class DetailActivity : AppCompatActivity() {
 
- private lateinit var viewModel: DetailViewModel
- private lateinit var networkReceiver: BroadcastReceiver
- private lateinit var player: MediaPlayer
+    private lateinit var viewModel: DetailViewModel
+    private lateinit var networkReceiver: BroadcastReceiver
+    private lateinit var player: MediaPlayer
 
- // 1. Activity Created
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_detail)
+    // 1. Activity Created
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_detail)
 
- Log.d("Lifecycle", "onCreate - Activity created")
+        Log.d("Lifecycle", "onCreate - Activity created")
 
- viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
+        viewModel = ViewModelProvider(this)[DetailViewModel::class.java]
 
- // Initialize UI
- setupViews()
+        // Initialize UI
+        setupViews()
 
- // Restore state
- savedInstanceState?.let { bundle ->
- val position = bundle.getInt("player_position", 0)
- Log.d("Lifecycle", "Restored player position: $position")
- }
- }
+        // Restore state
+        savedInstanceState?.let { bundle ->
+            val position = bundle.getInt("player_position", 0)
+            Log.d("Lifecycle", "Restored player position: $position")
+        }
+    }
 
- // 2. Activity Becoming Visible
- override fun onStart() {
- super.onStart()
- Log.d("Lifecycle", "onStart - Activity becoming visible")
+    // 2. Activity Becoming Visible
+    override fun onStart() {
+        super.onStart()
+        Log.d("Lifecycle", "onStart - Activity becoming visible")
 
- // Register receiver
- networkReceiver = NetworkChangeReceiver()
- val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
- registerReceiver(networkReceiver, filter)
- }
+        // Register receiver
+        networkReceiver = NetworkChangeReceiver()
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkReceiver, filter)
+    }
 
- // 3. Activity Has Focus
- override fun onResume() {
- super.onResume()
- Log.d("Lifecycle", "onResume - Activity has focus")
+    // 3. Activity Has Focus
+    override fun onResume() {
+        super.onResume()
+        Log.d("Lifecycle", "onResume - Activity has focus")
 
- // Resume playback
- player.start()
+        // Resume playback
+        player.start()
 
- // Refresh data
- viewModel.loadData()
- }
+        // Refresh data
+        viewModel.loadData()
+    }
 
- // 4. Activity Losing Focus
- override fun onPause() {
- super.onPause()
- Log.d("Lifecycle", "onPause - Activity losing focus")
+    // 4. Activity Losing Focus
+    override fun onPause() {
+        super.onPause()
+        Log.d("Lifecycle", "onPause - Activity losing focus")
 
- // Pause playback
- if (player.isPlaying) {
- player.pause()
- }
+        // Pause playback
+        if (player.isPlaying) {
+            player.pause()
+        }
 
- // Save draft (fast operation!)
- viewModel.saveDraft()
- }
+        // Save draft (fast operation!)
+        viewModel.saveDraft()
+    }
 
- // 5. Activity No Longer Visible
- override fun onStop() {
- super.onStop()
- Log.d("Lifecycle", "onStop - Activity no longer visible")
+    // 5. Activity No Longer Visible
+    override fun onStop() {
+        super.onStop()
+        Log.d("Lifecycle", "onStop - Activity no longer visible")
 
- // Unregister receiver
- unregisterReceiver(networkReceiver)
+        // Unregister receiver
+        unregisterReceiver(networkReceiver)
 
- // Save state to database
- viewModel.saveToDatabase()
- }
+        // Save state to database
+        viewModel.saveToDatabase()
+    }
 
- // 6. Activity Destroyed
- override fun onDestroy() {
- super.onDestroy()
- Log.d("Lifecycle", "onDestroy - Activity destroyed")
+    // 6. Activity Destroyed
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Lifecycle", "onDestroy - Activity destroyed")
 
- // Release resources
- player.release()
+        // Release resources
+        player.release()
 
- if (isFinishing) {
- Log.d("Lifecycle", "User navigated away - cleanup completely")
- } else {
- Log.d("Lifecycle", "Configuration change - will be recreated")
- }
- }
+        if (isFinishing) {
+            Log.d("Lifecycle", "User navigated away - cleanup completely")
+        } else {
+            Log.d("Lifecycle", "Configuration change - will be recreated")
+        }
+    }
 
- // 7. Activity Restarting
- override fun onRestart() {
- super.onRestart()
- Log.d("Lifecycle", "onRestart - Returning to activity")
+    // 7. Activity Restarting
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("Lifecycle", "onRestart - Returning to activity")
 
- // Refresh data since user returned
- viewModel.refreshData()
- }
+        // Refresh data since user returned
+        viewModel.refreshData()
+    }
 
- // Save state for recreation
- override fun onSaveInstanceState(outState: Bundle) {
- super.onSaveInstanceState(outState)
+    // Save state for recreation
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
- outState.putInt("player_position", player.currentPosition)
+        outState.putInt("player_position", player.currentPosition)
 
- Log.d("Lifecycle", "onSaveInstanceState - Saving state")
- }
+        Log.d("Lifecycle", "onSaveInstanceState - Saving state")
+    }
 
- // Restore state after recreation
- override fun onRestoreInstanceState(savedInstanceState: Bundle) {
- super.onRestoreInstanceState(savedInstanceState)
+    // Restore state after recreation
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
 
- val position = savedInstanceState.getInt("player_position", 0)
- player.seekTo(position)
+        val position = savedInstanceState.getInt("player_position", 0)
+        player.seekTo(position)
 
- Log.d("Lifecycle", "onRestoreInstanceState - Restored state")
- }
+        Log.d("Lifecycle", "onRestoreInstanceState - Restored state")
+    }
 }
 ```
 
@@ -1047,23 +1053,23 @@ class DetailActivity : AppCompatActivity() {
 ```kotlin
 // onSaveInstanceState - Save state before destruction
 override fun onSaveInstanceState(outState: Bundle) {
- super.onSaveInstanceState(outState)
+    super.onSaveInstanceState(outState)
 
- outState.putInt("counter", counter)
- outState.putString("text", editText.text.toString())
+    outState.putInt("counter", counter)
+    outState.putString("text", editText.text.toString())
 
- Log.d("Lifecycle", "Saving state before config change")
+    Log.d("Lifecycle", "Saving state before config change")
 }
 
 // onRestoreInstanceState - Restore state after recreation
 override fun onRestoreInstanceState(savedInstanceState: Bundle) {
- super.onRestoreInstanceState(savedInstanceState)
+    super.onRestoreInstanceState(savedInstanceState)
 
- counter = savedInstanceState.getInt("counter", 0)
- val text = savedInstanceState.getString("text", "")
- editText.setText(text)
+    counter = savedInstanceState.getInt("counter", 0)
+    val text = savedInstanceState.getString("text", "")
+    editText.setText(text)
 
- Log.d("Lifecycle", "Restored state after config change")
+    Log.d("Lifecycle", "Restored state after config change")
 }
 ```
 
@@ -1083,17 +1089,17 @@ onResume()
 
 ```kotlin
 override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
- super.onMultiWindowModeChanged(isInMultiWindowMode)
+    super.onMultiWindowModeChanged(isInMultiWindowMode)
 
- if (isInMultiWindowMode) {
- Log.d("Lifecycle", "Entered multi-window mode")
- // Adjust UI for split screen
- adjustLayoutForSplitScreen()
- } else {
- Log.d("Lifecycle", "Exited multi-window mode")
- // Restore full-screen UI
- restoreFullScreenLayout()
- }
+    if (isInMultiWindowMode) {
+        Log.d("Lifecycle", "Entered multi-window mode")
+        // Adjust UI for split screen
+        adjustLayoutForSplitScreen()
+    } else {
+        Log.d("Lifecycle", "Exited multi-window mode")
+        // Restore full-screen UI
+        restoreFullScreenLayout()
+    }
 }
 ```
 
@@ -1101,20 +1107,20 @@ override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
 
 ```kotlin
 override fun onPictureInPictureModeChanged(
- isInPictureInPictureMode: Boolean,
- newConfig: Configuration
+    isInPictureInPictureMode: Boolean,
+    newConfig: Configuration
 ) {
- super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
 
- if (isInPictureInPictureMode) {
- Log.d("Lifecycle", "Entered PiP mode")
- // Hide controls
- hideControls()
- } else {
- Log.d("Lifecycle", "Exited PiP mode")
- // Show controls
- showControls()
- }
+    if (isInPictureInPictureMode) {
+        Log.d("Lifecycle", "Entered PiP mode")
+        // Hide controls
+        hideControls()
+    } else {
+        Log.d("Lifecycle", "Exited PiP mode")
+        // Show controls
+        showControls()
+    }
 }
 ```
 
@@ -1183,16 +1189,16 @@ onResume()
 ```kotlin
 // - BAD - Heavy operation in onPause
 override fun onPause() {
- super.onPause()
- database.saveAllData() // TOO SLOW!
- uploadToServer() // TOO SLOW!
+    super.onPause()
+    database.saveAllData() // TOO SLOW!
+    uploadToServer()       // TOO SLOW!
 }
 
 // - GOOD - Fast operation in onPause
 override fun onPause() {
- super.onPause()
- player.pause()
- saveDraftLocally() // Fast local save only
+    super.onPause()
+    player.pause()
+    saveDraftLocally() // Fast local save only
 }
 ```
 
@@ -1200,37 +1206,37 @@ override fun onPause() {
 ```kotlin
 // - BAD - Lose data on config change
 class MainActivity : AppCompatActivity() {
- private var userData: List<User> = emptyList()
+    private var userData: List<User> = emptyList()
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- loadUserData() // Reloads on every rotation!
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadUserData() // Reloads on every rotation!
+    }
 }
 
 // - GOOD - ViewModel survives config changes
 class MainActivity : AppCompatActivity() {
- private val viewModel: UserViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- viewModel.users.observe(this) { users ->
- updateUI(users)
- }
- // ViewModel survives rotation, data not reloaded
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.users.observe(this) { users ->
+            updateUI(users)
+        }
+        // ViewModel survives rotation, data not reloaded
+    }
 }
 ```
 
 **3. Release Resources in onStop()**
 ```kotlin
 override fun onStop() {
- super.onStop()
+    super.onStop()
 
- // Release heavy resources
- unregisterReceiver(receiver)
- stopLocationUpdates()
- releaseCamera()
+    // Release heavy resources
+    unregisterReceiver(receiver)
+    stopLocationUpdates()
+    releaseCamera()
 }
 ```
 
@@ -1302,7 +1308,9 @@ onPause() → onStop() → onSaveInstanceState() → onDestroy() → onCreate() 
 **Нажатие кнопки Назад:**
 onPause() → onStop() → onDestroy()
 
+
 ---
+
 
 ## Follow-ups
 
@@ -1310,10 +1318,12 @@ onPause() → onStop() → onDestroy()
 - 
 - [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
 
+
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
 - [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
+
 
 ## Related Questions
 

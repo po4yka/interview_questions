@@ -1,7 +1,7 @@
 ---
 id: android-034
 title: How do image loading libraries like Glide work internally? / Как работают библиотеки
- загрузки изображений вроде Glide?
+  загрузки изображений вроде Glide?
 aliases:
 - How do image loading libraries like Glide work internally?
 - Как работают библиотеки загрузки изображений вроде Glide?
@@ -29,6 +29,7 @@ related:
 - c-memory-management
 - c-database-design
 - c-scoped-storage-security
+- memory-optimization
 created: 2025-10-06
 updated: 2025-10-31
 tags:
@@ -38,6 +39,7 @@ tags:
 - difficulty/medium
 - en
 - ru
+
 ---
 
 # Question (EN)
@@ -56,15 +58,21 @@ Image loading libraries like Glide, Fresco, and Coil solve complex problems rela
 ```kotlin
 // High-level overview of Glide architecture
 
- Glide Request Manager
- (Lifecycle-aware request management)
+           Glide Request Manager
+  (Lifecycle-aware request management)
 
- Request Coordinator & Engine
- (Job scheduling, deduplication)
 
- Memory Disk Network
- Cache Cache Fetcher
- (LruCache) (DiskLRU (OkHttp)
+
+         Request Coordinator & Engine
+    (Job scheduling, deduplication)
+
+
+
+
+
+ Memory        Disk      Network
+ Cache         Cache     Fetcher
+ (LruCache)    (DiskLRU  (OkHttp)
 
 ```
 
@@ -74,50 +82,50 @@ Image loading libraries like Glide, Fresco, and Coil solve complex problems rela
 // Simplified Glide loading process
 
 class GlideRequestFlow {
- fun loadImage(url: String, target: ImageView) {
- // 1. Check memory cache (fastest)
- val cachedBitmap = memoryCache.get(url)
- if (cachedBitmap != null) {
- target.setImageBitmap(cachedBitmap)
- return
- }
+    fun loadImage(url: String, target: ImageView) {
+        // 1. Check memory cache (fastest)
+        val cachedBitmap = memoryCache.get(url)
+        if (cachedBitmap != null) {
+            target.setImageBitmap(cachedBitmap)
+            return
+        }
 
- // 2. Check active resources (currently displayed images)
- val activeResource = activeResources.get(url)
- if (activeResource != null) {
- target.setImageBitmap(activeResource)
- return
- }
+        // 2. Check active resources (currently displayed images)
+        val activeResource = activeResources.get(url)
+        if (activeResource != null) {
+            target.setImageBitmap(activeResource)
+            return
+        }
 
- // 3. Check disk cache
- diskCacheExecutor.execute {
- val diskCached = diskCache.get(url)
- if (diskCached != null) {
- val bitmap = BitmapFactory.decodeStream(diskCached)
- memoryCache.put(url, bitmap)
- mainHandler.post {
- target.setImageBitmap(bitmap)
- }
- return@execute
- }
+        // 3. Check disk cache
+        diskCacheExecutor.execute {
+            val diskCached = diskCache.get(url)
+            if (diskCached != null) {
+                val bitmap = BitmapFactory.decodeStream(diskCached)
+                memoryCache.put(url, bitmap)
+                mainHandler.post {
+                    target.setImageBitmap(bitmap)
+                }
+                return@execute
+            }
 
- // 4. Network fetch
- networkExecutor.execute {
- val stream = httpClient.fetch(url)
- val bitmap = BitmapFactory.decodeStream(stream)
+            // 4. Network fetch
+            networkExecutor.execute {
+                val stream = httpClient.fetch(url)
+                val bitmap = BitmapFactory.decodeStream(stream)
 
- // Save to disk cache
- diskCache.put(url, bitmap)
+                // Save to disk cache
+                diskCache.put(url, bitmap)
 
- // Save to memory cache
- memoryCache.put(url, bitmap)
+                // Save to memory cache
+                memoryCache.put(url, bitmap)
 
- mainHandler.post {
- target.setImageBitmap(bitmap)
- }
- }
- }
- }
+                mainHandler.post {
+                    target.setImageBitmap(bitmap)
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -125,28 +133,28 @@ class GlideRequestFlow {
 
 ```kotlin
 class MemoryCache(maxSize: Int) {
- private val cache = LruCache<String, Bitmap>(maxSize)
+    private val cache = LruCache<String, Bitmap>(maxSize)
 
- init {
- // Calculate cache size (typically 1/8 of available memory)
- val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
- val cacheSize = maxMemory / 8
- }
+    init {
+        // Calculate cache size (typically 1/8 of available memory)
+        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
+        val cacheSize = maxMemory / 8
+    }
 
- fun get(key: String): Bitmap? {
- return cache.get(key)
- }
+    fun get(key: String): Bitmap? {
+        return cache.get(key)
+    }
 
- fun put(key: String, bitmap: Bitmap) {
- if (get(key) == null) {
- cache.put(key, bitmap)
- }
- }
+    fun put(key: String, bitmap: Bitmap) {
+        if (get(key) == null) {
+            cache.put(key, bitmap)
+        }
+    }
 
- override fun sizeOf(key: String, bitmap: Bitmap): Int {
- // Return size in kilobytes
- return bitmap.byteCount / 1024
- }
+    override fun sizeOf(key: String, bitmap: Bitmap): Int {
+        // Return size in kilobytes
+        return bitmap.byteCount / 1024
+    }
 }
 ```
 
@@ -154,39 +162,39 @@ class MemoryCache(maxSize: Int) {
 
 ```kotlin
 class RequestManager(private val lifecycle: Lifecycle) {
- private val requests = mutableSetOf<ImageRequest>()
+    private val requests = mutableSetOf<ImageRequest>()
 
- init {
- lifecycle.addObserver(object : LifecycleEventObserver {
- override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
- when (event) {
- Lifecycle.Event.ON_START -> resumeRequests()
- Lifecycle.Event.ON_STOP -> pauseRequests()
- Lifecycle.Event.ON_DESTROY -> clearRequests()
- else -> {}
- }
- }
- })
- }
+    init {
+        lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                when (event) {
+                    Lifecycle.Event.ON_START -> resumeRequests()
+                    Lifecycle.Event.ON_STOP -> pauseRequests()
+                    Lifecycle.Event.ON_DESTROY -> clearRequests()
+                    else -> {}
+                }
+            }
+        })
+    }
 
- fun load(url: String): RequestBuilder {
- val request = RequestBuilder(url, this)
- requests.add(request)
- return request
- }
+    fun load(url: String): RequestBuilder {
+        val request = RequestBuilder(url, this)
+        requests.add(request)
+        return request
+    }
 
- private fun pauseRequests() {
- requests.forEach { it.pause() }
- }
+    private fun pauseRequests() {
+        requests.forEach { it.pause() }
+    }
 
- private fun resumeRequests() {
- requests.forEach { it.resume() }
- }
+    private fun resumeRequests() {
+        requests.forEach { it.resume() }
+    }
 
- private fun clearRequests() {
- requests.forEach { it.cancel() }
- requests.clear()
- }
+    private fun clearRequests() {
+        requests.forEach { it.cancel() }
+        requests.clear()
+    }
 }
 ```
 
@@ -194,36 +202,36 @@ class RequestManager(private val lifecycle: Lifecycle) {
 
 ```kotlin
 class TransformationEngine {
- fun applyTransformations(
- bitmap: Bitmap,
- transformations: List<Transformation>
- ): Bitmap {
- var result = bitmap
- for (transformation in transformations) {
- result = transformation.transform(result)
- }
- return result
- }
+    fun applyTransformations(
+        bitmap: Bitmap,
+        transformations: List<Transformation>
+    ): Bitmap {
+        var result = bitmap
+        for (transformation in transformations) {
+            result = transformation.transform(result)
+        }
+        return result
+    }
 }
 
 // Built-in transformations
 class CenterCropTransformation : Transformation {
- override fun transform(source: Bitmap): Bitmap {
- val scale = max(
- targetWidth.toFloat() / source.width,
- targetHeight.toFloat() / source.height
- )
+    override fun transform(source: Bitmap): Bitmap {
+        val scale = max(
+            targetWidth.toFloat() / source.width,
+            targetHeight.toFloat() / source.height
+        )
 
- val scaledWidth = (scale * source.width).toInt()
- val scaledHeight = (scale * source.height).toInt()
+        val scaledWidth = (scale * source.width).toInt()
+        val scaledHeight = (scale * source.height).toInt()
 
- val scaled = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true)
+        val scaled = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true)
 
- val left = (scaled.width - targetWidth) / 2
- val top = (scaled.height - targetHeight) / 2
+        val left = (scaled.width - targetWidth) / 2
+        val top = (scaled.height - targetHeight) / 2
 
- return Bitmap.createBitmap(scaled, left, top, targetWidth, targetHeight)
- }
+        return Bitmap.createBitmap(scaled, left, top, targetWidth, targetHeight)
+    }
 }
 ```
 
@@ -231,25 +239,25 @@ class CenterCropTransformation : Transformation {
 
 ```kotlin
 class EngineJob {
- private val activeJobs = ConcurrentHashMap<Key, Job>()
+    private val activeJobs = ConcurrentHashMap<Key, Job>()
 
- fun load(key: Key, callback: ResourceCallback): Job? {
- // Check if same request is already running
- val existingJob = activeJobs[key]
- if (existingJob != null) {
- existingJob.addCallback(callback)
- return null // Deduplication - don't start new job
- }
+    fun load(key: Key, callback: ResourceCallback): Job? {
+        // Check if same request is already running
+        val existingJob = activeJobs[key]
+        if (existingJob != null) {
+            existingJob.addCallback(callback)
+            return null // Deduplication - don't start new job
+        }
 
- // Create new job
- val newJob = Job(key, callback)
- activeJobs[key] = newJob
- return newJob
- }
+        // Create new job
+        val newJob = Job(key, callback)
+        activeJobs[key] = newJob
+        return newJob
+    }
 
- fun onJobComplete(key: Key) {
- activeJobs.remove(key)
- }
+    fun onJobComplete(key: Key) {
+        activeJobs.remove(key)
+    }
 }
 ```
 
@@ -257,25 +265,25 @@ class EngineJob {
 
 ```kotlin
 class BitmapPool(maxSize: Int) {
- private val pool = LruCache<Int, MutableList<Bitmap>>(maxSize)
+    private val pool = LruCache<Int, MutableList<Bitmap>>(maxSize)
 
- fun get(width: Int, height: Int, config: Bitmap.Config): Bitmap? {
- val size = width * height * config.bytesPerPixel
- val bitmaps = pool.get(size) ?: return null
+    fun get(width: Int, height: Int, config: Bitmap.Config): Bitmap? {
+        val size = width * height * config.bytesPerPixel
+        val bitmaps = pool.get(size) ?: return null
 
- return if (bitmaps.isNotEmpty()) {
- bitmaps.removeAt(bitmaps.size - 1)
- } else null
- }
+        return if (bitmaps.isNotEmpty()) {
+            bitmaps.removeAt(bitmaps.size - 1)
+        } else null
+    }
 
- fun put(bitmap: Bitmap) {
- if (!bitmap.isMutable) return
+    fun put(bitmap: Bitmap) {
+        if (!bitmap.isMutable) return
 
- val size = bitmap.byteCount
- val bitmaps = pool.get(size) ?: mutableListOf()
- bitmaps.add(bitmap)
- pool.put(size, bitmaps)
- }
+        val size = bitmap.byteCount
+        val bitmaps = pool.get(size) ?: mutableListOf()
+        bitmaps.add(bitmap)
+        pool.put(size, bitmaps)
+    }
 }
 ```
 
@@ -283,30 +291,30 @@ class BitmapPool(maxSize: Int) {
 
 ```kotlin
 sealed class DiskCacheStrategy {
- object None : DiskCacheStrategy()
- object All : DiskCacheStrategy() // Cache original + transformed
- object Automatic : DiskCacheStrategy() // Smart decision
- object Data : DiskCacheStrategy() // Cache only original
- object Resource : DiskCacheStrategy() // Cache only transformed
+    object None : DiskCacheStrategy()
+    object All : DiskCacheStrategy() // Cache original + transformed
+    object Automatic : DiskCacheStrategy() // Smart decision
+    object Data : DiskCacheStrategy() // Cache only original
+    object Resource : DiskCacheStrategy() // Cache only transformed
 }
 
 class DiskCacheManager {
- fun shouldCacheData(strategy: DiskCacheStrategy): Boolean {
- return when (strategy) {
- DiskCacheStrategy.All,
- DiskCacheStrategy.Data,
- DiskCacheStrategy.Automatic -> true
- else -> false
- }
- }
+    fun shouldCacheData(strategy: DiskCacheStrategy): Boolean {
+        return when (strategy) {
+            DiskCacheStrategy.All,
+            DiskCacheStrategy.Data,
+            DiskCacheStrategy.Automatic -> true
+            else -> false
+        }
+    }
 
- fun shouldCacheResource(strategy: DiskCacheStrategy): Boolean {
- return when (strategy) {
- DiskCacheStrategy.All,
- DiskCacheStrategy.Resource -> true
- else -> false
- }
- }
+    fun shouldCacheResource(strategy: DiskCacheStrategy): Boolean {
+        return when (strategy) {
+            DiskCacheStrategy.All,
+            DiskCacheStrategy.Resource -> true
+            else -> false
+        }
+    }
 }
 ```
 
@@ -324,17 +332,18 @@ class DiskCacheManager {
 ```kotlin
 // Modern Glide usage
 Glide.with(context) // Lifecycle-aware
- .load(url)
- .placeholder(R.drawable.placeholder)
- .error(R.drawable.error)
- .diskCacheStrategy(DiskCacheStrategy.ALL)
- .transform(CenterCrop(), RoundedCorners(16))
- .transition(DrawableTransitionOptions.withCrossFade())
- .thumbnail(0.25f) // Load low-res first
- .into(imageView)
+    .load(url)
+    .placeholder(R.drawable.placeholder)
+    .error(R.drawable.error)
+    .diskCacheStrategy(DiskCacheStrategy.ALL)
+    .transform(CenterCrop(), RoundedCorners(16))
+    .transition(DrawableTransitionOptions.withCrossFade())
+    .thumbnail(0.25f) // Load low-res first
+    .into(imageView)
 ```
 
 ---
+
 
 # Question (EN)
 > How do image loading libraries like Glide/Fresco work internally?
@@ -343,7 +352,9 @@ Glide.with(context) // Lifecycle-aware
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 
@@ -354,15 +365,21 @@ Image loading libraries like Glide, Fresco, and Coil solve complex problems rela
 ```kotlin
 // High-level overview of Glide architecture
 
- Glide Request Manager
- (Lifecycle-aware request management)
+           Glide Request Manager
+  (Lifecycle-aware request management)
 
- Request Coordinator & Engine
- (Job scheduling, deduplication)
 
- Memory Disk Network
- Cache Cache Fetcher
- (LruCache) (DiskLRU (OkHttp)
+
+         Request Coordinator & Engine
+    (Job scheduling, deduplication)
+
+
+
+
+
+ Memory        Disk      Network
+ Cache         Cache     Fetcher
+ (LruCache)    (DiskLRU  (OkHttp)
 
 ```
 
@@ -372,50 +389,50 @@ Image loading libraries like Glide, Fresco, and Coil solve complex problems rela
 // Simplified Glide loading process
 
 class GlideRequestFlow {
- fun loadImage(url: String, target: ImageView) {
- // 1. Check memory cache (fastest)
- val cachedBitmap = memoryCache.get(url)
- if (cachedBitmap != null) {
- target.setImageBitmap(cachedBitmap)
- return
- }
+    fun loadImage(url: String, target: ImageView) {
+        // 1. Check memory cache (fastest)
+        val cachedBitmap = memoryCache.get(url)
+        if (cachedBitmap != null) {
+            target.setImageBitmap(cachedBitmap)
+            return
+        }
 
- // 2. Check active resources (currently displayed images)
- val activeResource = activeResources.get(url)
- if (activeResource != null) {
- target.setImageBitmap(activeResource)
- return
- }
+        // 2. Check active resources (currently displayed images)
+        val activeResource = activeResources.get(url)
+        if (activeResource != null) {
+            target.setImageBitmap(activeResource)
+            return
+        }
 
- // 3. Check disk cache
- diskCacheExecutor.execute {
- val diskCached = diskCache.get(url)
- if (diskCached != null) {
- val bitmap = BitmapFactory.decodeStream(diskCached)
- memoryCache.put(url, bitmap)
- mainHandler.post {
- target.setImageBitmap(bitmap)
- }
- return@execute
- }
+        // 3. Check disk cache
+        diskCacheExecutor.execute {
+            val diskCached = diskCache.get(url)
+            if (diskCached != null) {
+                val bitmap = BitmapFactory.decodeStream(diskCached)
+                memoryCache.put(url, bitmap)
+                mainHandler.post {
+                    target.setImageBitmap(bitmap)
+                }
+                return@execute
+            }
 
- // 4. Network fetch
- networkExecutor.execute {
- val stream = httpClient.fetch(url)
- val bitmap = BitmapFactory.decodeStream(stream)
+            // 4. Network fetch
+            networkExecutor.execute {
+                val stream = httpClient.fetch(url)
+                val bitmap = BitmapFactory.decodeStream(stream)
 
- // Save to disk cache
- diskCache.put(url, bitmap)
+                // Save to disk cache
+                diskCache.put(url, bitmap)
 
- // Save to memory cache
- memoryCache.put(url, bitmap)
+                // Save to memory cache
+                memoryCache.put(url, bitmap)
 
- mainHandler.post {
- target.setImageBitmap(bitmap)
- }
- }
- }
- }
+                mainHandler.post {
+                    target.setImageBitmap(bitmap)
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -423,28 +440,28 @@ class GlideRequestFlow {
 
 ```kotlin
 class MemoryCache(maxSize: Int) {
- private val cache = LruCache<String, Bitmap>(maxSize)
+    private val cache = LruCache<String, Bitmap>(maxSize)
 
- init {
- // Calculate cache size (typically 1/8 of available memory)
- val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
- val cacheSize = maxMemory / 8
- }
+    init {
+        // Calculate cache size (typically 1/8 of available memory)
+        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
+        val cacheSize = maxMemory / 8
+    }
 
- fun get(key: String): Bitmap? {
- return cache.get(key)
- }
+    fun get(key: String): Bitmap? {
+        return cache.get(key)
+    }
 
- fun put(key: String, bitmap: Bitmap) {
- if (get(key) == null) {
- cache.put(key, bitmap)
- }
- }
+    fun put(key: String, bitmap: Bitmap) {
+        if (get(key) == null) {
+            cache.put(key, bitmap)
+        }
+    }
 
- override fun sizeOf(key: String, bitmap: Bitmap): Int {
- // Return size in kilobytes
- return bitmap.byteCount / 1024
- }
+    override fun sizeOf(key: String, bitmap: Bitmap): Int {
+        // Return size in kilobytes
+        return bitmap.byteCount / 1024
+    }
 }
 ```
 
@@ -452,39 +469,39 @@ class MemoryCache(maxSize: Int) {
 
 ```kotlin
 class RequestManager(private val lifecycle: Lifecycle) {
- private val requests = mutableSetOf<ImageRequest>()
+    private val requests = mutableSetOf<ImageRequest>()
 
- init {
- lifecycle.addObserver(object : LifecycleEventObserver {
- override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
- when (event) {
- Lifecycle.Event.ON_START -> resumeRequests()
- Lifecycle.Event.ON_STOP -> pauseRequests()
- Lifecycle.Event.ON_DESTROY -> clearRequests()
- else -> {}
- }
- }
- })
- }
+    init {
+        lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                when (event) {
+                    Lifecycle.Event.ON_START -> resumeRequests()
+                    Lifecycle.Event.ON_STOP -> pauseRequests()
+                    Lifecycle.Event.ON_DESTROY -> clearRequests()
+                    else -> {}
+                }
+            }
+        })
+    }
 
- fun load(url: String): RequestBuilder {
- val request = RequestBuilder(url, this)
- requests.add(request)
- return request
- }
+    fun load(url: String): RequestBuilder {
+        val request = RequestBuilder(url, this)
+        requests.add(request)
+        return request
+    }
 
- private fun pauseRequests() {
- requests.forEach { it.pause() }
- }
+    private fun pauseRequests() {
+        requests.forEach { it.pause() }
+    }
 
- private fun resumeRequests() {
- requests.forEach { it.resume() }
- }
+    private fun resumeRequests() {
+        requests.forEach { it.resume() }
+    }
 
- private fun clearRequests() {
- requests.forEach { it.cancel() }
- requests.clear()
- }
+    private fun clearRequests() {
+        requests.forEach { it.cancel() }
+        requests.clear()
+    }
 }
 ```
 
@@ -492,36 +509,36 @@ class RequestManager(private val lifecycle: Lifecycle) {
 
 ```kotlin
 class TransformationEngine {
- fun applyTransformations(
- bitmap: Bitmap,
- transformations: List<Transformation>
- ): Bitmap {
- var result = bitmap
- for (transformation in transformations) {
- result = transformation.transform(result)
- }
- return result
- }
+    fun applyTransformations(
+        bitmap: Bitmap,
+        transformations: List<Transformation>
+    ): Bitmap {
+        var result = bitmap
+        for (transformation in transformations) {
+            result = transformation.transform(result)
+        }
+        return result
+    }
 }
 
 // Built-in transformations
 class CenterCropTransformation : Transformation {
- override fun transform(source: Bitmap): Bitmap {
- val scale = max(
- targetWidth.toFloat() / source.width,
- targetHeight.toFloat() / source.height
- )
+    override fun transform(source: Bitmap): Bitmap {
+        val scale = max(
+            targetWidth.toFloat() / source.width,
+            targetHeight.toFloat() / source.height
+        )
 
- val scaledWidth = (scale * source.width).toInt()
- val scaledHeight = (scale * source.height).toInt()
+        val scaledWidth = (scale * source.width).toInt()
+        val scaledHeight = (scale * source.height).toInt()
 
- val scaled = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true)
+        val scaled = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true)
 
- val left = (scaled.width - targetWidth) / 2
- val top = (scaled.height - targetHeight) / 2
+        val left = (scaled.width - targetWidth) / 2
+        val top = (scaled.height - targetHeight) / 2
 
- return Bitmap.createBitmap(scaled, left, top, targetWidth, targetHeight)
- }
+        return Bitmap.createBitmap(scaled, left, top, targetWidth, targetHeight)
+    }
 }
 ```
 
@@ -529,25 +546,25 @@ class CenterCropTransformation : Transformation {
 
 ```kotlin
 class EngineJob {
- private val activeJobs = ConcurrentHashMap<Key, Job>()
+    private val activeJobs = ConcurrentHashMap<Key, Job>()
 
- fun load(key: Key, callback: ResourceCallback): Job? {
- // Check if same request is already running
- val existingJob = activeJobs[key]
- if (existingJob != null) {
- existingJob.addCallback(callback)
- return null // Deduplication - don't start new job
- }
+    fun load(key: Key, callback: ResourceCallback): Job? {
+        // Check if same request is already running
+        val existingJob = activeJobs[key]
+        if (existingJob != null) {
+            existingJob.addCallback(callback)
+            return null // Deduplication - don't start new job
+        }
 
- // Create new job
- val newJob = Job(key, callback)
- activeJobs[key] = newJob
- return newJob
- }
+        // Create new job
+        val newJob = Job(key, callback)
+        activeJobs[key] = newJob
+        return newJob
+    }
 
- fun onJobComplete(key: Key) {
- activeJobs.remove(key)
- }
+    fun onJobComplete(key: Key) {
+        activeJobs.remove(key)
+    }
 }
 ```
 
@@ -555,25 +572,25 @@ class EngineJob {
 
 ```kotlin
 class BitmapPool(maxSize: Int) {
- private val pool = LruCache<Int, MutableList<Bitmap>>(maxSize)
+    private val pool = LruCache<Int, MutableList<Bitmap>>(maxSize)
 
- fun get(width: Int, height: Int, config: Bitmap.Config): Bitmap? {
- val size = width * height * config.bytesPerPixel
- val bitmaps = pool.get(size) ?: return null
+    fun get(width: Int, height: Int, config: Bitmap.Config): Bitmap? {
+        val size = width * height * config.bytesPerPixel
+        val bitmaps = pool.get(size) ?: return null
 
- return if (bitmaps.isNotEmpty()) {
- bitmaps.removeAt(bitmaps.size - 1)
- } else null
- }
+        return if (bitmaps.isNotEmpty()) {
+            bitmaps.removeAt(bitmaps.size - 1)
+        } else null
+    }
 
- fun put(bitmap: Bitmap) {
- if (!bitmap.isMutable) return
+    fun put(bitmap: Bitmap) {
+        if (!bitmap.isMutable) return
 
- val size = bitmap.byteCount
- val bitmaps = pool.get(size) ?: mutableListOf()
- bitmaps.add(bitmap)
- pool.put(size, bitmaps)
- }
+        val size = bitmap.byteCount
+        val bitmaps = pool.get(size) ?: mutableListOf()
+        bitmaps.add(bitmap)
+        pool.put(size, bitmaps)
+    }
 }
 ```
 
@@ -581,30 +598,30 @@ class BitmapPool(maxSize: Int) {
 
 ```kotlin
 sealed class DiskCacheStrategy {
- object None : DiskCacheStrategy()
- object All : DiskCacheStrategy() // Cache original + transformed
- object Automatic : DiskCacheStrategy() // Smart decision
- object Data : DiskCacheStrategy() // Cache only original
- object Resource : DiskCacheStrategy() // Cache only transformed
+    object None : DiskCacheStrategy()
+    object All : DiskCacheStrategy() // Cache original + transformed
+    object Automatic : DiskCacheStrategy() // Smart decision
+    object Data : DiskCacheStrategy() // Cache only original
+    object Resource : DiskCacheStrategy() // Cache only transformed
 }
 
 class DiskCacheManager {
- fun shouldCacheData(strategy: DiskCacheStrategy): Boolean {
- return when (strategy) {
- DiskCacheStrategy.All,
- DiskCacheStrategy.Data,
- DiskCacheStrategy.Automatic -> true
- else -> false
- }
- }
+    fun shouldCacheData(strategy: DiskCacheStrategy): Boolean {
+        return when (strategy) {
+            DiskCacheStrategy.All,
+            DiskCacheStrategy.Data,
+            DiskCacheStrategy.Automatic -> true
+            else -> false
+        }
+    }
 
- fun shouldCacheResource(strategy: DiskCacheStrategy): Boolean {
- return when (strategy) {
- DiskCacheStrategy.All,
- DiskCacheStrategy.Resource -> true
- else -> false
- }
- }
+    fun shouldCacheResource(strategy: DiskCacheStrategy): Boolean {
+        return when (strategy) {
+            DiskCacheStrategy.All,
+            DiskCacheStrategy.Resource -> true
+            else -> false
+        }
+    }
 }
 ```
 
@@ -622,14 +639,14 @@ class DiskCacheManager {
 ```kotlin
 // Modern Glide usage
 Glide.with(context) // Lifecycle-aware
- .load(url)
- .placeholder(R.drawable.placeholder)
- .error(R.drawable.error)
- .diskCacheStrategy(DiskCacheStrategy.ALL)
- .transform(CenterCrop(), RoundedCorners(16))
- .transition(DrawableTransitionOptions.withCrossFade())
- .thumbnail(0.25f) // Load low-res first
- .into(imageView)
+    .load(url)
+    .placeholder(R.drawable.placeholder)
+    .error(R.drawable.error)
+    .diskCacheStrategy(DiskCacheStrategy.ALL)
+    .transform(CenterCrop(), RoundedCorners(16))
+    .transition(DrawableTransitionOptions.withCrossFade())
+    .thumbnail(0.25f) // Load low-res first
+    .into(imageView)
 ```
 
 ---
@@ -637,6 +654,7 @@ Glide.with(context) // Lifecycle-aware
 ## Ответ (RU)
 
 Библиотеки загрузки изображений, такие как Glide, Fresco и Coil, решают сложные задачи, связанные с эффективной загрузкой, кэшированием и отображением изображений в Android-приложениях.
+
 
 ### Основные Компоненты
 
@@ -664,11 +682,13 @@ Glide.with(context) // Lifecycle-aware
 
 ---
 
+
 ## Follow-ups
 
 - 
 - 
 - 
+
 
 ## Related Questions
 
@@ -677,6 +697,7 @@ Glide.with(context) // Lifecycle-aware
 - [[c-memory-management]]
 - [[c-database-design]]
 - [[c-scoped-storage-security]]
+
 
 ### Related (Medium)
 - [[q-repository-multiple-sources--android--medium]] - Architecture

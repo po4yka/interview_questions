@@ -28,6 +28,7 @@ tags:
 - android/architecture-mvvm
 - android/di-hilt
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -47,24 +48,24 @@ tags:
 ```kotlin
 // ✅ Простой UseCase для одного репозитория
 class GetUserUseCase(
- private val repository: UserRepository
+    private val repository: UserRepository
 ) {
- suspend operator fun invoke(userId: String): Result<User> {
- return repository.getUser(userId)
- }
+    suspend operator fun invoke(userId: String): Result<User> {
+        return repository.getUser(userId)
+    }
 }
 
 // Использование в ViewModel
 class UserViewModel(
- private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
- fun loadUser(userId: String) {
- viewModelScope.launch {
- getUserUseCase(userId)
- .onSuccess { user -> _uiState.value = UiState.Success(user) }
- .onFailure { error -> _uiState.value = UiState.Error(error.message) }
- }
- }
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            getUserUseCase(userId)
+                .onSuccess { user -> _uiState.value = UiState.Success(user) }
+                .onFailure { error -> _uiState.value = UiState.Error(error.message) }
+        }
+    }
 }
 ```
 
@@ -84,22 +85,22 @@ class UserViewModel(
 ```kotlin
 // ❌ BAD - Бесполезный UseCase без бизнес-логики
 class GetProductsUseCase(private val repo: ProductRepository) {
- suspend operator fun invoke() = repo.getProducts() // Просто проксирует
+    suspend operator fun invoke() = repo.getProducts() // Просто проксирует
 }
 // Лучше: вызвать repository напрямую из ViewModel
 
 // ✅ GOOD - UseCase с реальной бизнес-логикой
 class PurchaseProductUseCase(
- private val productRepo: ProductRepository,
- private val paymentRepo: PaymentRepository,
- private val analytics: Analytics
+    private val productRepo: ProductRepository,
+    private val paymentRepo: PaymentRepository,
+    private val analytics: Analytics
 ) {
- suspend operator fun invoke(productId: String): Result<Purchase> {
- val product = productRepo.getProduct(productId)
- val payment = paymentRepo.processPayment(product.price)
- analytics.logPurchase(productId, product.price)
- return Result.success(Purchase(product, payment))
- }
+    suspend operator fun invoke(productId: String): Result<Purchase> {
+        val product = productRepo.getProduct(productId)
+        val payment = paymentRepo.processPayment(product.price)
+        analytics.logPurchase(productId, product.price)
+        return Result.success(Purchase(product, payment))
+    }
 }
 ```
 
@@ -108,17 +109,17 @@ class PurchaseProductUseCase(
 ```kotlin
 // ✅ UseCase возвращающий Flow для реактивных обновлений
 class ObserveCartItemsUseCase(
- private val cartRepo: CartRepository
+    private val cartRepo: CartRepository
 ) {
- operator fun invoke(): Flow<List<CartItem>> {
- return cartRepo.observeCart()
- .map { items -> items.filter { it.isAvailable } } // Фильтрация
- }
+    operator fun invoke(): Flow<List<CartItem>> {
+        return cartRepo.observeCart()
+            .map { items -> items.filter { it.isAvailable } } // Фильтрация
+    }
 }
 
 // Использование
 val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
- .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 ```
 
 **Краткое содержание**: UseCase инкапсулирует бизнес-операцию domain-слоя. Использовать для: сложной логики, нескольких data sources, переиспользования. НЕ использовать для простых вызовов repository. Реализация: `operator fun invoke()`, может возвращать `Flow` для реактивности.
@@ -132,24 +133,24 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 ```kotlin
 // ✅ Simple UseCase for single repository
 class GetUserUseCase(
- private val repository: UserRepository
+    private val repository: UserRepository
 ) {
- suspend operator fun invoke(userId: String): Result<User> {
- return repository.getUser(userId)
- }
+    suspend operator fun invoke(userId: String): Result<User> {
+        return repository.getUser(userId)
+    }
 }
 
 // Usage in ViewModel
 class UserViewModel(
- private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
- fun loadUser(userId: String) {
- viewModelScope.launch {
- getUserUseCase(userId)
- .onSuccess { user -> _uiState.value = UiState.Success(user) }
- .onFailure { error -> _uiState.value = UiState.Error(error.message) }
- }
- }
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            getUserUseCase(userId)
+                .onSuccess { user -> _uiState.value = UiState.Success(user) }
+                .onFailure { error -> _uiState.value = UiState.Error(error.message) }
+        }
+    }
 }
 ```
 
@@ -169,22 +170,22 @@ class UserViewModel(
 ```kotlin
 // ❌ BAD - Useless UseCase without business logic
 class GetProductsUseCase(private val repo: ProductRepository) {
- suspend operator fun invoke() = repo.getProducts() // Just proxies
+    suspend operator fun invoke() = repo.getProducts() // Just proxies
 }
 // Better: call repository directly from ViewModel
 
 // ✅ GOOD - UseCase with real business logic
 class PurchaseProductUseCase(
- private val productRepo: ProductRepository,
- private val paymentRepo: PaymentRepository,
- private val analytics: Analytics
+    private val productRepo: ProductRepository,
+    private val paymentRepo: PaymentRepository,
+    private val analytics: Analytics
 ) {
- suspend operator fun invoke(productId: String): Result<Purchase> {
- val product = productRepo.getProduct(productId)
- val payment = paymentRepo.processPayment(product.price)
- analytics.logPurchase(productId, product.price)
- return Result.success(Purchase(product, payment))
- }
+    suspend operator fun invoke(productId: String): Result<Purchase> {
+        val product = productRepo.getProduct(productId)
+        val payment = paymentRepo.processPayment(product.price)
+        analytics.logPurchase(productId, product.price)
+        return Result.success(Purchase(product, payment))
+    }
 }
 ```
 
@@ -193,17 +194,17 @@ class PurchaseProductUseCase(
 ```kotlin
 // ✅ UseCase returning Flow for reactive updates
 class ObserveCartItemsUseCase(
- private val cartRepo: CartRepository
+    private val cartRepo: CartRepository
 ) {
- operator fun invoke(): Flow<List<CartItem>> {
- return cartRepo.observeCart()
- .map { items -> items.filter { it.isAvailable } } // Filtering
- }
+    operator fun invoke(): Flow<List<CartItem>> {
+        return cartRepo.observeCart()
+            .map { items -> items.filter { it.isAvailable } } // Filtering
+    }
 }
 
 // Usage
 val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
- .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 ```
 
 **Summary**: UseCase encapsulates domain layer business operation. Use for: complex logic, multiple data sources, reusability. Don't use for simple repository calls. Implementation: `operator fun invoke()`, can return `Flow` for reactivity.
@@ -231,11 +232,12 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 - [[c-repository-pattern]]
 - 
 
+
 ### Prerequisites (Easier)
 - [[q-repository-pattern--android--medium]] - `Repository` pattern basics
 
 ### Related (Same Level)
-- - `ViewModel` basics
+-  - `ViewModel` basics
 - [[q-kmm-dependency-injection--android--medium]] - DI fundamentals
 
 ### Advanced (Harder)

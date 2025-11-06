@@ -15,6 +15,7 @@ created: 2025-10-05
 updated: 2025-10-28
 tags: [android/performance-memory, android/profiling, difficulty/medium, memory-optimization, sparsearray]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -43,14 +44,14 @@ viewCache.put(R.id.text_view, textView)
 
 // Итерация без автоупаковки
 for (i in 0 until viewCache.size()) {
- val viewId = viewCache.keyAt(i) // ✅ Примитив int
- val view = viewCache.valueAt(i)
+    val viewId = viewCache.keyAt(i)  // ✅ Примитив int
+    val view = viewCache.valueAt(i)
 }
 ```
 
 ```kotlin
 // ❌ Антипаттерн: большие коллекции
-val userMap = SparseArray<User>(10_000) // ❌ Медленно из-за бинарного поиска
+val userMap = SparseArray<User>(10_000)  // ❌ Медленно из-за бинарного поиска
 userMap[userId] = user
 
 // ✅ Лучше использовать HashMap для больших данных
@@ -59,17 +60,17 @@ val userMap = HashMap<Int, User>(10_000)
 
 **Специализированные варианты:**
 ```kotlin
-SparseIntArray() // int → int (без объектов)
-SparseBooleanArray() // int → boolean
-SparseLongArray() // int → long
-LongSparseArray<T>() // long → Object
+SparseIntArray()      // int → int (без объектов)
+SparseBooleanArray()  // int → boolean
+SparseLongArray()     // int → long
+LongSparseArray<T>()  // long → Object
 ```
 
 **Оптимизация удаления:**
 ```kotlin
 // Ленивое удаление: remove() помечает как DELETE, сжатие откладывается
-sparseArray.remove(key) // Не вызывает System.arraycopy сразу
-sparseArray.put(key, newValue) // Может переиспользовать слот
+sparseArray.remove(key)  // Не вызывает System.arraycopy сразу
+sparseArray.put(key, newValue)  // Может переиспользовать слот
 ```
 
 ## Answer (EN)
@@ -90,14 +91,14 @@ viewCache.put(R.id.text_view, textView)
 
 // Iteration without boxing
 for (i in 0 until viewCache.size()) {
- val viewId = viewCache.keyAt(i) // ✅ Primitive int
- val view = viewCache.valueAt(i)
+    val viewId = viewCache.keyAt(i)  // ✅ Primitive int
+    val view = viewCache.valueAt(i)
 }
 ```
 
 ```kotlin
 // ❌ Anti-pattern: large collections
-val userMap = SparseArray<User>(10_000) // ❌ Slow due to binary search
+val userMap = SparseArray<User>(10_000)  // ❌ Slow due to binary search
 userMap[userId] = user
 
 // ✅ Prefer HashMap for large datasets
@@ -106,17 +107,17 @@ val userMap = HashMap<Int, User>(10_000)
 
 **Specialized variants:**
 ```kotlin
-SparseIntArray() // int → int (no objects)
-SparseBooleanArray() // int → boolean
-SparseLongArray() // int → long
-LongSparseArray<T>() // long → Object
+SparseIntArray()      // int → int (no objects)
+SparseBooleanArray()  // int → boolean
+SparseLongArray()     // int → long
+LongSparseArray<T>()  // long → Object
 ```
 
 **Deletion optimization:**
 ```kotlin
 // Lazy deletion: remove() marks as DELETE, compaction is deferred
-sparseArray.remove(key) // Doesn't call System.arraycopy immediately
-sparseArray.put(key, newValue) // May reuse the slot
+sparseArray.remove(key)  // Doesn't call System.arraycopy immediately
+sparseArray.put(key, newValue)  // May reuse the slot
 ```
 
 ---
@@ -131,21 +132,21 @@ sparseArray.put(key, newValue) // May reuse the slot
 
 ## References
 
-- - SparseArray concept note
+-  - SparseArray concept note
 - [[c-hash-map]] - `HashMap` internals
 - https://developer.android.com/reference/android/util/SparseArray
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Collections fundamentals
-- - Boxing overhead
+-  - Collections fundamentals
+-  - Boxing overhead
 
 ### Related (Same Level)
 - [[q-android-build-optimization--android--medium]] - Memory optimization strategies
-- - Performance comparison
-- - SparseArray in ViewHolder
+-  - Performance comparison
+-  - SparseArray in ViewHolder
 
 ### Advanced (Harder)
-- - Profiling memory allocations
-- - Building optimized collections
+-  - Profiling memory allocations
+-  - Building optimized collections

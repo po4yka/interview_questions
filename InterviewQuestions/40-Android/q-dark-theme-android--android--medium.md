@@ -17,6 +17,7 @@ status: reviewed
 moc: moc-android
 related:
 - c-android-components
+- q-material-design-theming--android--medium
 created: 2025-10-20
 updated: 2025-11-02
 tags:

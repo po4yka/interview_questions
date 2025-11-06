@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-animation, c-drawable, c-vector-graphics]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/performance-rendering, android/ui-animation, android/ui-graphics, animated-vector-drawable, difficulty/medium, vector-graphics]
+
 ---
 
 # Вопрос (RU)
@@ -52,16 +53,16 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
 ```xml
 <!-- res/drawable/ic_heart.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
- android:width="24dp"
- android:height="24dp"
- android:viewportWidth="24"
- android:viewportHeight="24"
- android:tint="?attr/colorControlNormal"> <!-- ✅ Theme-aware tinting -->
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal"> <!-- ✅ Theme-aware tinting -->
 
- <path
- android:name="heart_path"
- android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5..."
- android:fillColor="@android:color/white"/>
+    <path
+        android:name="heart_path"
+        android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5..."
+        android:fillColor="@android:color/white"/>
 </vector>
 ```
 
@@ -70,52 +71,52 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
 ```xml
 <!-- res/drawable/avd_play_to_pause.xml -->
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
- android:drawable="@drawable/ic_play_pause">
- <target
- android:name="play_pause_path"
- android:animation="@animator/morph_animation" />
+    android:drawable="@drawable/ic_play_pause">
+    <target
+        android:name="play_pause_path"
+        android:animation="@animator/morph_animation" />
 </animated-vector>
 
 <!-- res/animator/morph_animation.xml -->
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
- android:propertyName="pathData"
- android:duration="300"
- android:valueFrom="M16,12L16,36L32,24Z"
- android:valueTo="M14,14L14,34L18,34L18,14ZM30,14L30,34L34,34L34,14Z"
- android:valueType="pathType"
- android:interpolator="@android:interpolator/fast_out_slow_in" />
+    android:propertyName="pathData"
+    android:duration="300"
+    android:valueFrom="M16,12L16,36L32,24Z"
+    android:valueTo="M14,14L14,34L18,34L18,14ZM30,14L30,34L34,34L34,14Z"
+    android:valueType="pathType"
+    android:interpolator="@android:interpolator/fast_out_slow_in" />
 ```
 
 **3. Управление анимацией в коде:**
 
 ```kotlin
 class AnimatedVectorManager {
- fun playAnimation(imageView: ImageView, @DrawableRes resId: Int) {
- val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
- imageView.setImageDrawable(avd)
- avd?.start()
- }
+    fun playAnimation(imageView: ImageView, @DrawableRes resId: Int) {
+        val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
+        imageView.setImageDrawable(avd)
+        avd?.start()
+    }
 
- // ✅ Proper cleanup with callbacks
- fun playWithCallback(
- imageView: ImageView,
- @DrawableRes resId: Int,
- onEnd: () -> Unit
- ) {
- val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
- imageView.setImageDrawable(avd)
+    // ✅ Proper cleanup with callbacks
+    fun playWithCallback(
+        imageView: ImageView,
+        @DrawableRes resId: Int,
+        onEnd: () -> Unit
+    ) {
+        val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
+        imageView.setImageDrawable(avd)
 
- if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
- (avd as? AnimatedVectorDrawable)?.registerAnimationCallback(
- object : Animatable2.AnimationCallback() {
- override fun onAnimationEnd(drawable: Drawable?) {
- onEnd()
- }
- }
- )
- }
- avd?.start()
- }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (avd as? AnimatedVectorDrawable)?.registerAnimationCallback(
+                object : Animatable2.AnimationCallback() {
+                    override fun onAnimationEnd(drawable: Drawable?) {
+                        onEnd()
+                    }
+                }
+            )
+        }
+        avd?.start()
+    }
 }
 ```
 
@@ -123,8 +124,8 @@ class AnimatedVectorManager {
 
 ```kotlin
 // ❌ Incompatible paths - different command counts
-val path1 = "M10,10L20,20" // 2 commands
-val path2 = "M10,10L15,15L20,20" // 3 commands
+val path1 = "M10,10L20,20"           // 2 commands
+val path2 = "M10,10L15,15L20,20"     // 3 commands
 
 // ✅ Compatible paths - same command structure
 val path1 = "M10,10L20,20L30,10Z"
@@ -137,15 +138,15 @@ val path2 = "M10,15L20,25L30,15Z"
 
 ```kotlin
 class VectorDrawableCache {
- private val cache = LruCache<Int, Drawable>(50)
+    private val cache = LruCache<Int, Drawable>(50)
 
- fun get(context: Context, @DrawableRes resId: Int): Drawable? {
- return cache.get(resId) ?: run {
- val drawable = ContextCompat.getDrawable(context, resId)
- drawable?.let { cache.put(resId, it.mutate()) }
- drawable
- }
- }
+    fun get(context: Context, @DrawableRes resId: Int): Drawable? {
+        return cache.get(resId) ?: run {
+            val drawable = ContextCompat.getDrawable(context, resId)
+            drawable?.let { cache.put(resId, it.mutate()) }
+            drawable
+        }
+    }
 }
 ```
 
@@ -154,23 +155,23 @@ class VectorDrawableCache {
 ```kotlin
 // ✅ Rasterize complex vectors in RecyclerView
 fun rasterizeIfComplex(drawable: Drawable, size: Int): Drawable {
- val complexity = measureComplexity(drawable)
+    val complexity = measureComplexity(drawable)
 
- return if (complexity > 100) { // Many path commands
- val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
- val canvas = Canvas(bitmap)
- drawable.setBounds(0, 0, size, size)
- drawable.draw(canvas)
- BitmapDrawable(null, bitmap)
- } else {
- drawable
- }
+    return if (complexity > 100) {  // Many path commands
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, size, size)
+        drawable.draw(canvas)
+        BitmapDrawable(null, bitmap)
+    } else {
+        drawable
+    }
 }
 
 fun measureComplexity(drawable: Drawable): Int {
- // Count path commands from XML
- // M, L, C, Z commands = complexity
- return 0 // Simplified
+    // Count path commands from XML
+    // M, L, C, Z commands = complexity
+    return 0 // Simplified
 }
 ```
 
@@ -178,15 +179,15 @@ fun measureComplexity(drawable: Drawable): Int {
 
 ```kotlin
 fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCompat) {
- imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null) // ✅ Enable
+    imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null)  // ✅ Enable
 
- avd.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
- override fun onAnimationEnd(drawable: Drawable?) {
- imageView.setLayerType(View.LAYER_TYPE_NONE, null) // ✅ Disable after
- }
- })
+    avd.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
+        override fun onAnimationEnd(drawable: Drawable?) {
+            imageView.setLayerType(View.LAYER_TYPE_NONE, null)  // ✅ Disable after
+        }
+    })
 
- avd.start()
+    avd.start()
 }
 ```
 
@@ -195,27 +196,27 @@ fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCo
 ```kotlin
 @Composable
 fun AnimatedVectorIcon(
- @DrawableRes resId: Int,
- contentDescription: String?,
- modifier: Modifier = Modifier
+    @DrawableRes resId: Int,
+    contentDescription: String?,
+    modifier: Modifier = Modifier
 ) {
- val context = LocalContext.current
- val drawable = remember(resId) {
- AnimatedVectorDrawableCompat.create(context, resId)
- }
+    val context = LocalContext.current
+    val drawable = remember(resId) {
+        AnimatedVectorDrawableCompat.create(context, resId)
+    }
 
- DisposableEffect(drawable) {
- drawable?.start()
- onDispose {
- drawable?.stop() // ✅ Cleanup
- }
- }
+    DisposableEffect(drawable) {
+        drawable?.start()
+        onDispose {
+            drawable?.stop()  // ✅ Cleanup
+        }
+    }
 
- Image(
- painter = rememberDrawablePainter(drawable),
- contentDescription = contentDescription,
- modifier = modifier
- )
+    Image(
+        painter = rememberDrawablePainter(drawable),
+        contentDescription = contentDescription,
+        modifier = modifier
+    )
 }
 ```
 
@@ -262,16 +263,16 @@ fun AnimatedVectorIcon(
 ```xml
 <!-- res/drawable/ic_heart.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
- android:width="24dp"
- android:height="24dp"
- android:viewportWidth="24"
- android:viewportHeight="24"
- android:tint="?attr/colorControlNormal"> <!-- ✅ Theme-aware tinting -->
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal"> <!-- ✅ Theme-aware tinting -->
 
- <path
- android:name="heart_path"
- android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5..."
- android:fillColor="@android:color/white"/>
+    <path
+        android:name="heart_path"
+        android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5..."
+        android:fillColor="@android:color/white"/>
 </vector>
 ```
 
@@ -280,52 +281,52 @@ fun AnimatedVectorIcon(
 ```xml
 <!-- res/drawable/avd_play_to_pause.xml -->
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
- android:drawable="@drawable/ic_play_pause">
- <target
- android:name="play_pause_path"
- android:animation="@animator/morph_animation" />
+    android:drawable="@drawable/ic_play_pause">
+    <target
+        android:name="play_pause_path"
+        android:animation="@animator/morph_animation" />
 </animated-vector>
 
 <!-- res/animator/morph_animation.xml -->
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
- android:propertyName="pathData"
- android:duration="300"
- android:valueFrom="M16,12L16,36L32,24Z"
- android:valueTo="M14,14L14,34L18,34L18,14ZM30,14L30,34L34,34L34,14Z"
- android:valueType="pathType"
- android:interpolator="@android:interpolator/fast_out_slow_in" />
+    android:propertyName="pathData"
+    android:duration="300"
+    android:valueFrom="M16,12L16,36L32,24Z"
+    android:valueTo="M14,14L14,34L18,34L18,14ZM30,14L30,34L34,34L34,14Z"
+    android:valueType="pathType"
+    android:interpolator="@android:interpolator/fast_out_slow_in" />
 ```
 
 **3. Animation control in code:**
 
 ```kotlin
 class AnimatedVectorManager {
- fun playAnimation(imageView: ImageView, @DrawableRes resId: Int) {
- val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
- imageView.setImageDrawable(avd)
- avd?.start()
- }
+    fun playAnimation(imageView: ImageView, @DrawableRes resId: Int) {
+        val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
+        imageView.setImageDrawable(avd)
+        avd?.start()
+    }
 
- // ✅ Proper cleanup with callbacks
- fun playWithCallback(
- imageView: ImageView,
- @DrawableRes resId: Int,
- onEnd: () -> Unit
- ) {
- val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
- imageView.setImageDrawable(avd)
+    // ✅ Proper cleanup with callbacks
+    fun playWithCallback(
+        imageView: ImageView,
+        @DrawableRes resId: Int,
+        onEnd: () -> Unit
+    ) {
+        val avd = AnimatedVectorDrawableCompat.create(imageView.context, resId)
+        imageView.setImageDrawable(avd)
 
- if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
- (avd as? AnimatedVectorDrawable)?.registerAnimationCallback(
- object : Animatable2.AnimationCallback() {
- override fun onAnimationEnd(drawable: Drawable?) {
- onEnd()
- }
- }
- )
- }
- avd?.start()
- }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (avd as? AnimatedVectorDrawable)?.registerAnimationCallback(
+                object : Animatable2.AnimationCallback() {
+                    override fun onAnimationEnd(drawable: Drawable?) {
+                        onEnd()
+                    }
+                }
+            )
+        }
+        avd?.start()
+    }
 }
 ```
 
@@ -333,8 +334,8 @@ class AnimatedVectorManager {
 
 ```kotlin
 // ❌ Incompatible paths - different command counts
-val path1 = "M10,10L20,20" // 2 commands
-val path2 = "M10,10L15,15L20,20" // 3 commands
+val path1 = "M10,10L20,20"           // 2 commands
+val path2 = "M10,10L15,15L20,20"     // 3 commands
 
 // ✅ Compatible paths - same command structure
 val path1 = "M10,10L20,20L30,10Z"
@@ -347,15 +348,15 @@ val path2 = "M10,15L20,25L30,15Z"
 
 ```kotlin
 class VectorDrawableCache {
- private val cache = LruCache<Int, Drawable>(50)
+    private val cache = LruCache<Int, Drawable>(50)
 
- fun get(context: Context, @DrawableRes resId: Int): Drawable? {
- return cache.get(resId) ?: run {
- val drawable = ContextCompat.getDrawable(context, resId)
- drawable?.let { cache.put(resId, it.mutate()) }
- drawable
- }
- }
+    fun get(context: Context, @DrawableRes resId: Int): Drawable? {
+        return cache.get(resId) ?: run {
+            val drawable = ContextCompat.getDrawable(context, resId)
+            drawable?.let { cache.put(resId, it.mutate()) }
+            drawable
+        }
+    }
 }
 ```
 
@@ -364,23 +365,23 @@ class VectorDrawableCache {
 ```kotlin
 // ✅ Rasterize complex vectors in RecyclerView
 fun rasterizeIfComplex(drawable: Drawable, size: Int): Drawable {
- val complexity = measureComplexity(drawable)
+    val complexity = measureComplexity(drawable)
 
- return if (complexity > 100) { // Many path commands
- val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
- val canvas = Canvas(bitmap)
- drawable.setBounds(0, 0, size, size)
- drawable.draw(canvas)
- BitmapDrawable(null, bitmap)
- } else {
- drawable
- }
+    return if (complexity > 100) {  // Many path commands
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, size, size)
+        drawable.draw(canvas)
+        BitmapDrawable(null, bitmap)
+    } else {
+        drawable
+    }
 }
 
 fun measureComplexity(drawable: Drawable): Int {
- // Count path commands from XML
- // M, L, C, Z commands = complexity
- return 0 // Simplified
+    // Count path commands from XML
+    // M, L, C, Z commands = complexity
+    return 0 // Simplified
 }
 ```
 
@@ -388,15 +389,15 @@ fun measureComplexity(drawable: Drawable): Int {
 
 ```kotlin
 fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCompat) {
- imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null) // ✅ Enable
+    imageView.setLayerType(View.LAYER_TYPE_HARDWARE, null)  // ✅ Enable
 
- avd.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
- override fun onAnimationEnd(drawable: Drawable?) {
- imageView.setLayerType(View.LAYER_TYPE_NONE, null) // ✅ Disable after
- }
- })
+    avd.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
+        override fun onAnimationEnd(drawable: Drawable?) {
+            imageView.setLayerType(View.LAYER_TYPE_NONE, null)  // ✅ Disable after
+        }
+    })
 
- avd.start()
+    avd.start()
 }
 ```
 
@@ -405,27 +406,27 @@ fun animateWithHardwareLayer(imageView: ImageView, avd: AnimatedVectorDrawableCo
 ```kotlin
 @Composable
 fun AnimatedVectorIcon(
- @DrawableRes resId: Int,
- contentDescription: String?,
- modifier: Modifier = Modifier
+    @DrawableRes resId: Int,
+    contentDescription: String?,
+    modifier: Modifier = Modifier
 ) {
- val context = LocalContext.current
- val drawable = remember(resId) {
- AnimatedVectorDrawableCompat.create(context, resId)
- }
+    val context = LocalContext.current
+    val drawable = remember(resId) {
+        AnimatedVectorDrawableCompat.create(context, resId)
+    }
 
- DisposableEffect(drawable) {
- drawable?.start()
- onDispose {
- drawable?.stop() // ✅ Cleanup
- }
- }
+    DisposableEffect(drawable) {
+        drawable?.start()
+        onDispose {
+            drawable?.stop()  // ✅ Cleanup
+        }
+    }
 
- Image(
- painter = rememberDrawablePainter(drawable),
- contentDescription = contentDescription,
- modifier = modifier
- )
+    Image(
+        painter = rememberDrawablePainter(drawable),
+        contentDescription = contentDescription,
+        modifier = modifier
+    )
 }
 ```
 
@@ -457,21 +458,21 @@ fun AnimatedVectorIcon(
 
 ## References
 
-- — Graphics rendering fundamentals
-- — Android animation types
+-  — Graphics rendering fundamentals
+-  — Android animation types
 - [Material Design Motion](https://m3.material.io/styles/motion/overview)
 - [Android Vector Drawables Guide](https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- — Basic drawable types
-- — Animation framework overview
+-  — Basic drawable types
+-  — Animation framework overview
 
 ### Related (Same Level)
-- — Custom drawing with `Canvas`
-- — `View` transitions
+-  — Custom drawing with `Canvas`
+-  — `View` transitions
 
 ### Advanced (Harder)
-- — Low-level graphics with OpenGL
-- — GPU-accelerated computations
+-  — Low-level graphics with OpenGL
+-  — GPU-accelerated computations

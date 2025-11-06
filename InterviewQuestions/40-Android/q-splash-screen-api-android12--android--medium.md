@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [android/app-startup, android/ui-animation, android/ui-views, android12, difficulty/medium, splash-screen]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
+
 ---
 
 # Вопрос (RU)
@@ -50,28 +51,28 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 ```kotlin
 // ✅ Правильный порядок вызовов
 class MainActivity : Activity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- installSplashScreen() // До super.onCreate()
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()  // До super.onCreate()
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
 }
 ```
 
 ```xml
 <!-- ✅ Минимальная тема splash screen -->
 <style name="Theme.App.Starting" parent="Theme.SplashScreen">
- <item name="windowSplashScreenBackground">@color/primary</item>
- <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher</item>
- <item name="postSplashScreenTheme">@style/Theme.App</item>
+    <item name="windowSplashScreenBackground">@color/primary</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher</item>
+    <item name="postSplashScreenTheme">@style/Theme.App</item>
 </style>
 ```
 
 ```xml
 <!-- AndroidManifest.xml -->
 <activity
- android:name=".MainActivity"
- android:theme="@style/Theme.App.Starting"> <!-- ✅ Используем splash тему -->
+    android:name=".MainActivity"
+    android:theme="@style/Theme.App.Starting">  <!-- ✅ Используем splash тему -->
 ```
 
 ### Миграция Существующих Splash Screen `Activity`
@@ -81,14 +82,14 @@ class MainActivity : Activity() {
 ```kotlin
 // ✅ Сохраняем splash screen до завершения роутинга
 class RoutingActivity : Activity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- installSplashScreen().setKeepOnScreenCondition { true }
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().setKeepOnScreenCondition { true }
+        super.onCreate(savedInstanceState)
 
- // Логика роутинга
- navigateToDestination()
- finish()
- }
+        // Логика роутинга
+        navigateToDestination()
+        finish()
+    }
 }
 ```
 
@@ -122,28 +123,28 @@ Use **androidx.core:core-splashscreen** for consistency across all Android versi
 ```kotlin
 // ✅ Correct call order
 class MainActivity : Activity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- installSplashScreen() // Before super.onCreate()
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()  // Before super.onCreate()
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
 }
 ```
 
 ```xml
 <!-- ✅ Minimal splash screen theme -->
 <style name="Theme.App.Starting" parent="Theme.SplashScreen">
- <item name="windowSplashScreenBackground">@color/primary</item>
- <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher</item>
- <item name="postSplashScreenTheme">@style/Theme.App</item>
+    <item name="windowSplashScreenBackground">@color/primary</item>
+    <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher</item>
+    <item name="postSplashScreenTheme">@style/Theme.App</item>
 </style>
 ```
 
 ```xml
 <!-- AndroidManifest.xml -->
 <activity
- android:name=".MainActivity"
- android:theme="@style/Theme.App.Starting"> <!-- ✅ Use splash theme -->
+    android:name=".MainActivity"
+    android:theme="@style/Theme.App.Starting">  <!-- ✅ Use splash theme -->
 ```
 
 ### Migrating Existing Splash Screen Activities
@@ -153,14 +154,14 @@ class MainActivity : Activity() {
 ```kotlin
 // ✅ Keep splash screen until routing completes
 class RoutingActivity : Activity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- installSplashScreen().setKeepOnScreenCondition { true }
- super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().setKeepOnScreenCondition { true }
+        super.onCreate(savedInstanceState)
 
- // Routing logic
- navigateToDestination()
- finish()
- }
+        // Routing logic
+        navigateToDestination()
+        finish()
+    }
 }
 ```
 
@@ -187,14 +188,14 @@ class RoutingActivity : Activity() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Understanding `Activity` lifecycle
-- [[q-android-manifest-file--android--easy]] - Manifest configuration
+-  - Understanding `Activity` lifecycle
+-  - Manifest configuration
 
 ### Related (Same Level)
 - [[q-app-startup-library--android--medium]] - App initialization
 - [[q-app-startup-optimization--android--medium]] - Launch performance
-- - Theming system
+-  - Theming system
 
 ### Advanced (Harder)
-- - Advanced transitions
-- - Performance optimization
+-  - Advanced transitions
+-  - Performance optimization

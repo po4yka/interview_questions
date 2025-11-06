@@ -30,6 +30,7 @@ tags:
 - tasks
 sources:
 - https://developer.android.com/guide/components/activities/tasks-and-back-stack
+
 ---
 
 # Вопрос (RU)
@@ -48,9 +49,9 @@ TaskAffinity определяет, к какой задаче активност
 **Объявление в AndroidManifest:**
 ```xml
 <activity
- android:name=".WeatherActivity"
- android:taskAffinity="com.example.weather"
- android:allowTaskReparenting="true" />
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
 ```
 
 **Когда сродство вступает в силу:**
@@ -72,9 +73,9 @@ startActivity(intent)
 ```xml
 <!-- Активность может переместиться в задачу с тем же сродством -->
 <activity
- android:name=".WeatherActivity"
- android:taskAffinity="com.example.weather"
- android:allowTaskReparenting="true" />
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
 ```
 
 **Практические примеры:**
@@ -90,9 +91,9 @@ TaskAffinity defines which task an activity "prefers" to belong to. By default, 
 **Declaration in AndroidManifest:**
 ```xml
 <activity
- android:name=".WeatherActivity"
- android:taskAffinity="com.example.weather"
- android:allowTaskReparenting="true" />
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
 ```
 
 **When affinity comes into play:**
@@ -114,9 +115,9 @@ startActivity(intent)
 ```xml
 <!-- Activity can move to task with same affinity -->
 <activity
- android:name=".WeatherActivity"
- android:taskAffinity="com.example.weather"
- android:allowTaskReparenting="true" />
+    android:name=".WeatherActivity"
+    android:taskAffinity="com.example.weather"
+    android:allowTaskReparenting="true" />
 ```
 
 **Practical examples:**
@@ -132,10 +133,12 @@ startActivity(intent)
 - What happens when you don't specify taskAffinity?
 - How do you handle taskAffinity with notifications?
 
+
 ## References
 
 - [Navigation](https://developer.android.com/guide/navigation)
 - [Activities](https://developer.android.com/guide/components/activities)
+
 
 ## Related Questions
 
@@ -144,15 +147,16 @@ startActivity(intent)
 - [[c-activity-lifecycle]]
 - 
 
+
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
-- - `Activity` basics
+-  - `Activity` basics
 
 ### Related (Same Level)
-- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
-- [[q-android-modularization--android--medium]] - Android navigation
+-  - `Activity` lifecycle
+-  - Android navigation
 - [[q-tasks-back-stack--android--medium]] - Task back stack
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] - Runtime internals
-- - Launch modes
+-  - Launch modes

@@ -38,6 +38,7 @@ tags:
 - difficulty/medium
 - en
 - ru
+
 ---
 
 # Question (EN)
@@ -73,22 +74,22 @@ The `lint` tool—a static code analyzer included in Android Studio—detects re
 
 ```
 res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
- to be unused [UnusedResources]
+    to be unused [UnusedResources]
 ```
 
 Libraries that you add to your code might include unused resources. Gradle can automatically remove resources on your behalf if you enable `shrinkResources` in your app's `build.gradle.kts` file:
 
 ```kotlin
 android {
- // Other settings.
+    // Other settings.
 
- buildTypes {
- getByName("release") {
- minifyEnabled = true
- shrinkResources = true
- proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
- }
- }
+    buildTypes {
+        getByName("release") {
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
+        }
+    }
 }
 ```
 
@@ -126,10 +127,10 @@ You can also omit resources that are only a rotated equivalent of another resour
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <rotate xmlns:android="http://schemas.android.com/apk/res/android"
- android:drawable="@drawable/ic_thumb_up"
- android:pivotX="50%"
- android:pivotY="50%"
- android:fromDegrees="180" />
+    android:drawable="@drawable/ic_thumb_up"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:fromDegrees="180" />
 ```
 
 #### Compress PNG and JPEG Files
@@ -178,10 +179,10 @@ To limit your language resources to just English and French, you can edit `defau
 
 ```kotlin
 android {
- defaultConfig {
- ...
- resConfigs "en", "fr"
- }
+    defaultConfig {
+        ...
+        resConfigs "en", "fr"
+    }
 }
 ```
 
@@ -193,8 +194,8 @@ For example, don't bother translating URLs:
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
- This device doesn\'t support Android Auto.\n
- &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
+  This device doesn\'t support Android Auto.\n
+  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
 </string>
 ```
 
@@ -202,9 +203,10 @@ You may recognize `&lt;` and `&gt`, as these are escape characters for `<` and `
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
- This device doesn\'t support Android Auto.
+         This device doesn\'t support Android Auto.
 </string>
 ```
+
 
 # Question (EN)
 > What ways do you know to reduce the size of an application?
@@ -213,7 +215,9 @@ You may recognize `&lt;` and `&gt`, as these are escape characters for `<` and `
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 
@@ -241,22 +245,22 @@ The `lint` tool—a static code analyzer included in Android Studio—detects re
 
 ```
 res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
- to be unused [UnusedResources]
+    to be unused [UnusedResources]
 ```
 
 Libraries that you add to your code might include unused resources. Gradle can automatically remove resources on your behalf if you enable `shrinkResources` in your app's `build.gradle.kts` file:
 
 ```kotlin
 android {
- // Other settings.
+    // Other settings.
 
- buildTypes {
- getByName("release") {
- minifyEnabled = true
- shrinkResources = true
- proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
- }
- }
+    buildTypes {
+        getByName("release") {
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
+        }
+    }
 }
 ```
 
@@ -294,10 +298,10 @@ You can also omit resources that are only a rotated equivalent of another resour
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <rotate xmlns:android="http://schemas.android.com/apk/res/android"
- android:drawable="@drawable/ic_thumb_up"
- android:pivotX="50%"
- android:pivotY="50%"
- android:fromDegrees="180" />
+    android:drawable="@drawable/ic_thumb_up"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:fromDegrees="180" />
 ```
 
 #### Compress PNG and JPEG Files
@@ -346,10 +350,10 @@ To limit your language resources to just English and French, you can edit `defau
 
 ```kotlin
 android {
- defaultConfig {
- ...
- resConfigs "en", "fr"
- }
+    defaultConfig {
+        ...
+        resConfigs "en", "fr"
+    }
 }
 ```
 
@@ -361,8 +365,8 @@ For example, don't bother translating URLs:
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
- This device doesn\'t support Android Auto.\n
- &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
+  This device doesn\'t support Android Auto.\n
+  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
 </string>
 ```
 
@@ -370,7 +374,7 @@ You may recognize `&lt;` and `&gt`, as these are escape characters for `<` and `
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
- This device doesn\'t support Android Auto.
+         This device doesn\'t support Android Auto.
 </string>
 ```
 
@@ -400,22 +404,22 @@ You may recognize `&lt;` and `&gt`, as these are escape characters for `<` and `
 
 ```
 res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
- to be unused [UnusedResources]
+    to be unused [UnusedResources]
 ```
 
 Библиотеки, которые вы добавляете в свой код, могут включать неиспользуемые ресурсы. Gradle может автоматически удалять ресурсы от вашего имени, если вы включите `shrinkResources` в файле `build.gradle.kts` вашего приложения:
 
 ```kotlin
 android {
- // Другие настройки.
+    // Другие настройки.
 
- buildTypes {
- getByName("release") {
- minifyEnabled = true
- shrinkResources = true
- proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
- }
- }
+    buildTypes {
+        getByName("release") {
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
+        }
+    }
 }
 ```
 
@@ -453,10 +457,10 @@ Android предоставляет несколько утилит для изм
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <rotate xmlns:android="http://schemas.android.com/apk/res/android"
- android:drawable="@drawable/ic_thumb_up"
- android:pivotX="50%"
- android:pivotY="50%"
- android:fromDegrees="180" />
+    android:drawable="@drawable/ic_thumb_up"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:fromDegrees="180" />
 ```
 
 #### Сжатие PNG И JPEG Файлов
@@ -505,10 +509,10 @@ Play Feature Delivery использует расширенные возможн
 
 ```kotlin
 android {
- defaultConfig {
- ...
- resConfigs "en", "fr"
- }
+    defaultConfig {
+        ...
+        resConfigs "en", "fr"
+    }
 }
 ```
 
@@ -520,8 +524,8 @@ android {
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
- This device doesn\'t support Android Auto.\n
- &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
+  This device doesn\'t support Android Auto.\n
+  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
 </string>
 ```
 
@@ -529,7 +533,7 @@ android {
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
- This device doesn\'t support Android Auto.
+         This device doesn\'t support Android Auto.
 </string>
 ```
 
@@ -542,11 +546,13 @@ android {
 - [8 Best Ways to Reduce Android App Size](https://www.mantralabsglobal.com/blog/reduce-android-app-size/)
 - [Minimizing APK Size: Techniques for Shrinking Android App Size](https://diegomarcher.medium.com/minimizing-apk-size-techniques-for-shrinking-android-app-size-7a4c5eefbd46)
 
+
 ## Follow-ups
 
 - [[q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium]]
 - [[q-memory-leak-vs-oom-android--android--medium]]
 - 
+
 
 ## Related Questions
 
@@ -555,6 +561,7 @@ android {
 - [[c-gradle]]
 - [[c-app-bundle]]
 - [[c-memory-management]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview

@@ -18,6 +18,8 @@ moc: moc-android
 related:
   - c-custom-views
   - c-view-lifecycle
+  - q-view-measure-layout--android--medium
+  - q-view-rendering-performance--android--hard
 created: 2025-10-21
 updated: 2025-10-30
 tags: [android/lifecycle, android/ui-graphics, android/ui-views, custom-views, difficulty/medium]

@@ -1,7 +1,7 @@
 ---
 id: android-007
 title: Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические
- модули
+  модули
 aliases:
 - Play Feature Delivery and Dynamic Modules
 - Play Feature Delivery и динамические модули
@@ -30,6 +30,7 @@ tags:
 - play-feature-delivery
 sources:
 - https://developer.android.com/guide/app-bundle/dynamic-delivery
+
 ---
 
 # Вопрос (RU)
@@ -55,20 +56,20 @@ Play Feature Delivery использует возможности Android App Bu
 ```groovy
 // build.gradle динамического модуля
 plugins {
- id 'com.android.dynamic-feature'
+    id 'com.android.dynamic-feature'
 }
 
 android {
- compileSdk 34
+    compileSdk 34
 
- defaultConfig {
- minSdk 21
- targetSdk 34
- }
+    defaultConfig {
+        minSdk 21
+        targetSdk 34
+    }
 }
 
 dependencies {
- implementation project(':app')
+    implementation project(':app')
 }
 ```
 
@@ -76,7 +77,7 @@ dependencies {
 ```groovy
 // build.gradle базового модуля
 android {
- dynamicFeatures = [":dynamic_feature", ":dynamic_feature2"]
+    dynamicFeatures = [":dynamic_feature", ":dynamic_feature2"]
 }
 ```
 
@@ -90,16 +91,16 @@ android {
 // Проверка доступности динамического модуля
 val splitInstallManager = SplitInstallManagerFactory.create(context)
 val request = SplitInstallRequest.newBuilder()
- .addModule("dynamic_feature")
- .build()
+    .addModule("dynamic_feature")
+    .build()
 
 splitInstallManager.startInstall(request)
- .addOnSuccessListener { sessionId ->
- // Модуль успешно загружен
- }
- .addOnFailureListener { exception ->
- // Ошибка загрузки
- }
+    .addOnSuccessListener { sessionId ->
+        // Модуль успешно загружен
+    }
+    .addOnFailureListener { exception ->
+        // Ошибка загрузки
+    }
 ```
 
 **Ограничения:**
@@ -123,20 +124,20 @@ Play Feature Delivery uses Android App Bundles capabilities for conditional feat
 ```groovy
 // build.gradle of dynamic module
 plugins {
- id 'com.android.dynamic-feature'
+    id 'com.android.dynamic-feature'
 }
 
 android {
- compileSdk 34
+    compileSdk 34
 
- defaultConfig {
- minSdk 21
- targetSdk 34
- }
+    defaultConfig {
+        minSdk 21
+        targetSdk 34
+    }
 }
 
 dependencies {
- implementation project(':app')
+    implementation project(':app')
 }
 ```
 
@@ -144,7 +145,7 @@ dependencies {
 ```groovy
 // build.gradle of base module
 android {
- dynamicFeatures = [":dynamic_feature", ":dynamic_feature2"]
+    dynamicFeatures = [":dynamic_feature", ":dynamic_feature2"]
 }
 ```
 
@@ -158,16 +159,16 @@ android {
 // Check dynamic module availability
 val splitInstallManager = SplitInstallManagerFactory.create(context)
 val request = SplitInstallRequest.newBuilder()
- .addModule("dynamic_feature")
- .build()
+    .addModule("dynamic_feature")
+    .build()
 
 splitInstallManager.startInstall(request)
- .addOnSuccessListener { sessionId ->
- // Module successfully loaded
- }
- .addOnFailureListener { exception ->
- // Loading error
- }
+    .addOnSuccessListener { sessionId ->
+        // Module successfully loaded
+    }
+    .addOnFailureListener { exception ->
+        // Loading error
+    }
 ```
 
 **Limitations:**
@@ -184,9 +185,11 @@ splitInstallManager.startInstall(request)
 - What are the performance implications of dynamic modules?
 - How do you test dynamic feature delivery?
 
+
 ## References
 
 - [Android App `Bundle`](https://developer.android.com/guide/app-bundle)
+
 
 ## Related Questions
 
@@ -194,15 +197,16 @@ splitInstallManager.startInstall(request)
 
 - 
 
+
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
 - [[q-gradle-basics--android--easy]] - Gradle basics
 
 ### Related (Same Level)
-- - App `Bundle` basics
+-  - App `Bundle` basics
 - [[q-android-modularization--android--medium]] - Modularization
-- - Play Console
+-  - Play Console
 
 ### Advanced (Harder)
-- - App `Bundle` advanced
+-  - App `Bundle` advanced
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

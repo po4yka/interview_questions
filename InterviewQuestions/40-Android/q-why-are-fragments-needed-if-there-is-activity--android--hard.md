@@ -10,10 +10,11 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-where-is-composition-created--android--medium]
+related: [q-build-optimization-gradle--gradle--medium, q-hilt-assisted-injection--di--medium, q-where-is-composition-created--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android, android/architecture-modularization, android/fragment, android/lifecycle, architecture, difficulty/hard, fragment, ui]
+
 ---
 
 # Вопрос (RU)
@@ -38,17 +39,17 @@ tags: [android, android/architecture-modularization, android/fragment, android/l
 
 ```kotlin
 class UserFormFragment : Fragment() {
- // Единая реализация формы
+    // Единая реализация формы
 }
 
 // ✅ Переиспользование в разных контекстах
 class CreateUserActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- supportFragmentManager.commit {
- replace(R.id.container, UserFormFragment())
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportFragmentManager.commit {
+            replace(R.id.container, UserFormFragment())
+        }
+    }
 }
 ```
 
@@ -58,21 +59,21 @@ class CreateUserActivity : AppCompatActivity() {
 
 ```kotlin
 class MasterDetailActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- if (isTablet()) {
- // ✅ Планшет: оба фрагмента одновременно
- supportFragmentManager.commit {
- replace(R.id.master_container, MasterFragment())
- replace(R.id.detail_container, DetailFragment())
- }
- } else {
- // ✅ Телефон: только master
- supportFragmentManager.commit {
- replace(R.id.container, MasterFragment())
- }
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (isTablet()) {
+            // ✅ Планшет: оба фрагмента одновременно
+            supportFragmentManager.commit {
+                replace(R.id.master_container, MasterFragment())
+                replace(R.id.detail_container, DetailFragment())
+            }
+        } else {
+            // ✅ Телефон: только master
+            supportFragmentManager.commit {
+                replace(R.id.container, MasterFragment())
+            }
+        }
+    }
 }
 ```
 
@@ -83,11 +84,11 @@ class MasterDetailActivity : AppCompatActivity() {
 ```kotlin
 // ✅ Динамическая замена с back stack
 fun showDetails(itemId: String) {
- supportFragmentManager.commit {
- replace(R.id.container, DetailFragment.newInstance(itemId))
- addToBackStack(null)
- setReorderingAllowed(true)
- }
+    supportFragmentManager.commit {
+        replace(R.id.container, DetailFragment.newInstance(itemId))
+        addToBackStack(null)
+        setReorderingAllowed(true)
+    }
 }
 ```
 
@@ -97,17 +98,17 @@ fun showDetails(itemId: String) {
 
 ```kotlin
 class VideoFragment : Fragment() {
- override fun onStart() {
- super.onStart()
- // ✅ Старт только для этого фрагмента
- videoPlayer.play()
- }
+    override fun onStart() {
+        super.onStart()
+        // ✅ Старт только для этого фрагмента
+        videoPlayer.play()
+    }
 
- override fun onStop() {
- // ✅ Остановка при скрытии фрагмента
- videoPlayer.pause()
- super.onStop()
- }
+    override fun onStop() {
+        // ✅ Остановка при скрытии фрагмента
+        videoPlayer.pause()
+        super.onStop()
+    }
 }
 ```
 
@@ -118,9 +119,9 @@ Navigation Component для изолированных navigation graphs:
 ```kotlin
 // ✅ Модульная навигация
 <fragment
- android:id="@+id/nav_host_fragment"
- android:name="androidx.navigation.fragment.NavHostFragment"
- app:navGraph="@navigation/feature_graph" />
+    android:id="@+id/nav_host_fragment"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    app:navGraph="@navigation/feature_graph" />
 ```
 
 ### Архитектурные Паттерны
@@ -130,8 +131,8 @@ Navigation Component для изолированных navigation graphs:
 ```kotlin
 // ✅ Одна Activity, множество фрагментов
 class MainActivity : AppCompatActivity() {
- // Навигация между фрагментами без создания новых активностей
- // Уменьшение памяти, упрощение state management
+    // Навигация между фрагментами без создания новых активностей
+    // Уменьшение памяти, упрощение state management
 }
 ```
 
@@ -153,8 +154,8 @@ Jetpack Compose предлагает compositional navigation без фрагм�
 ```kotlin
 // ✅ Compose: те же преимущества, меньше сложности
 NavHost(navController, startDestination = "home") {
- composable("home") { HomeScreen() }
- composable("details/{id}") { DetailScreen(it.arguments?.getString("id")) }
+    composable("home") { HomeScreen() }
+    composable("details/{id}") { DetailScreen(it.arguments?.getString("id")) }
 }
 ```
 
@@ -172,17 +173,17 @@ Single fragment reused across different activities:
 
 ```kotlin
 class UserFormFragment : Fragment() {
- // Single implementation
+    // Single implementation
 }
 
 // ✅ Reuse in different contexts
 class CreateUserActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- supportFragmentManager.commit {
- replace(R.id.container, UserFormFragment())
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportFragmentManager.commit {
+            replace(R.id.container, UserFormFragment())
+        }
+    }
 }
 ```
 
@@ -192,21 +193,21 @@ Different layouts for tablets and phones:
 
 ```kotlin
 class MasterDetailActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- if (isTablet()) {
- // ✅ Tablet: both fragments simultaneously
- supportFragmentManager.commit {
- replace(R.id.master_container, MasterFragment())
- replace(R.id.detail_container, DetailFragment())
- }
- } else {
- // ✅ Phone: master only
- supportFragmentManager.commit {
- replace(R.id.container, MasterFragment())
- }
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (isTablet()) {
+            // ✅ Tablet: both fragments simultaneously
+            supportFragmentManager.commit {
+                replace(R.id.master_container, MasterFragment())
+                replace(R.id.detail_container, DetailFragment())
+            }
+        } else {
+            // ✅ Phone: master only
+            supportFragmentManager.commit {
+                replace(R.id.container, MasterFragment())
+            }
+        }
+    }
 }
 ```
 
@@ -217,11 +218,11 @@ Replace UI parts without recreating `Activity`:
 ```kotlin
 // ✅ Dynamic replacement with back stack
 fun showDetails(itemId: String) {
- supportFragmentManager.commit {
- replace(R.id.container, DetailFragment.newInstance(itemId))
- addToBackStack(null)
- setReorderingAllowed(true)
- }
+    supportFragmentManager.commit {
+        replace(R.id.container, DetailFragment.newInstance(itemId))
+        addToBackStack(null)
+        setReorderingAllowed(true)
+    }
 }
 ```
 
@@ -231,17 +232,17 @@ Each fragment manages its own resources:
 
 ```kotlin
 class VideoFragment : Fragment() {
- override fun onStart() {
- super.onStart()
- // ✅ Start only for this fragment
- videoPlayer.play()
- }
+    override fun onStart() {
+        super.onStart()
+        // ✅ Start only for this fragment
+        videoPlayer.play()
+    }
 
- override fun onStop() {
- // ✅ Stop when fragment hidden
- videoPlayer.pause()
- super.onStop()
- }
+    override fun onStop() {
+        // ✅ Stop when fragment hidden
+        videoPlayer.pause()
+        super.onStop()
+    }
 }
 ```
 
@@ -252,9 +253,9 @@ Navigation Component for isolated navigation graphs:
 ```kotlin
 // ✅ Modular navigation
 <fragment
- android:id="@+id/nav_host_fragment"
- android:name="androidx.navigation.fragment.NavHostFragment"
- app:navGraph="@navigation/feature_graph" />
+    android:id="@+id/nav_host_fragment"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    app:navGraph="@navigation/feature_graph" />
 ```
 
 ### Architectural Patterns
@@ -264,8 +265,8 @@ Navigation Component for isolated navigation graphs:
 ```kotlin
 // ✅ One Activity, many fragments
 class MainActivity : AppCompatActivity() {
- // Navigate between fragments without creating new activities
- // Reduces memory, simplifies state management
+    // Navigate between fragments without creating new activities
+    // Reduces memory, simplifies state management
 }
 ```
 
@@ -287,8 +288,8 @@ Jetpack Compose offers compositional navigation without fragments:
 ```kotlin
 // ✅ Compose: same benefits, less complexity
 NavHost(navController, startDestination = "home") {
- composable("home") { HomeScreen() }
- composable("details/{id}") { DetailScreen(it.arguments?.getString("id")) }
+    composable("home") { HomeScreen() }
+    composable("details/{id}") { DetailScreen(it.arguments?.getString("id")) }
 }
 ```
 
@@ -311,6 +312,7 @@ NavHost(navController, startDestination = "home") {
 - 
 - [[c-jetpack-compose]]
 - [Fragments](https://developer.android.com/guide/fragments)
+
 
 ## Related Questions
 

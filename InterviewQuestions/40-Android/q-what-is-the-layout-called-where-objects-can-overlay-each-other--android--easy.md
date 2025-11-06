@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-layout-types]
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, layouts]
+
 ---
 
 # Вопрос (RU)
@@ -43,21 +44,21 @@ tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, 
 
 ```xml
 <FrameLayout
- android:layout_width="match_parent"
- android:layout_height="200dp">
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
 
- <!-- ✅ Базовый слой -->
- <View
- android:layout_width="match_parent"
- android:layout_height="match_parent"
- android:background="@color/blue" />
+    <!-- ✅ Базовый слой -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue" />
 
- <!-- ✅ layout_gravity для позиционирования -->
- <TextView
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:layout_gravity="center"
- android:text="Center Text" />
+    <!-- ✅ layout_gravity для позиционирования -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Center Text" />
 </FrameLayout>
 ```
 
@@ -66,22 +67,22 @@ tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, 
 ```kotlin
 // ✅ Программное создание FrameLayout
 val container = FrameLayout(context).apply {
- layoutParams = FrameLayout.LayoutParams(100.dp, 100.dp)
+    layoutParams = FrameLayout.LayoutParams(100.dp, 100.dp)
 }
 
 val avatar = ImageView(context).apply {
- setImageResource(R.drawable.avatar)
- scaleType = ImageView.ScaleType.CENTER_CROP
+    setImageResource(R.drawable.avatar)
+    scaleType = ImageView.ScaleType.CENTER_CROP
 }
 
 val badge = TextView(context).apply {
- text = "5"
- setBackgroundResource(R.drawable.circle_red)
- layoutParams = FrameLayout.LayoutParams(24.dp, 24.dp, Gravity.TOP or Gravity.END)
+    text = "5"
+    setBackgroundResource(R.drawable.circle_red)
+    layoutParams = FrameLayout.LayoutParams(24.dp, 24.dp, Gravity.TOP or Gravity.END)
 }
 
 container.addView(avatar)
-container.addView(badge) // Добавляется последним = рисуется сверху
+container.addView(badge)  // Добавляется последним = рисуется сверху
 ```
 
 **Типичные паттерны:**
@@ -98,28 +99,28 @@ container.addView(badge) // Добавляется последним = рису
 ```kotlin
 @Composable
 fun OverlayExample() {
- Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
- // ✅ Фоновый слой
- Image(
- painter = painterResource(R.drawable.background),
- contentDescription = null,
- modifier = Modifier.fillMaxSize()
- )
+    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+        // ✅ Фоновый слой
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
 
- // ✅ Полупрозрачный overlay
- Box(
- modifier = Modifier
- .fillMaxSize()
- .background(Color.Black.copy(alpha = 0.5f))
- )
+        // ✅ Полупрозрачный overlay
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+        )
 
- // ✅ Текст по центру
- Text(
- text = "Overlay Text",
- color = Color.White,
- modifier = Modifier.align(Alignment.Center)
- )
- }
+        // ✅ Текст по центру
+        Text(
+            text = "Overlay Text",
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
 }
 ```
 
@@ -128,22 +129,22 @@ fun OverlayExample() {
 ```kotlin
 @Composable
 fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
- Box(modifier = Modifier.fillMaxSize()) {
- content()
+    Box(modifier = Modifier.fillMaxSize()) {
+        content()
 
- // ✅ Overlay блокирует клики на основной контент
- if (isLoading) {
- Box(
- modifier = Modifier
- .fillMaxSize()
- .background(Color.Black.copy(alpha = 0.8f))
- .clickable(enabled = false) {}, // Блокировка interaction
- contentAlignment = Alignment.Center
- ) {
- CircularProgressIndicator()
- }
- }
- }
+        // ✅ Overlay блокирует клики на основной контент
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.8f))
+                    .clickable(enabled = false) {},  // Блокировка interaction
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+    }
 }
 ```
 
@@ -181,21 +182,21 @@ Primary use cases: simple overlays like badges over images, loading overlays, FA
 
 ```xml
 <FrameLayout
- android:layout_width="match_parent"
- android:layout_height="200dp">
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
 
- <!-- ✅ Base layer -->
- <View
- android:layout_width="match_parent"
- android:layout_height="match_parent"
- android:background="@color/blue" />
+    <!-- ✅ Base layer -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue" />
 
- <!-- ✅ layout_gravity for positioning -->
- <TextView
- android:layout_width="wrap_content"
- android:layout_height="wrap_content"
- android:layout_gravity="center"
- android:text="Center Text" />
+    <!-- ✅ layout_gravity for positioning -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Center Text" />
 </FrameLayout>
 ```
 
@@ -204,22 +205,22 @@ Primary use cases: simple overlays like badges over images, loading overlays, FA
 ```kotlin
 // ✅ Programmatic FrameLayout
 val container = FrameLayout(context).apply {
- layoutParams = FrameLayout.LayoutParams(100.dp, 100.dp)
+    layoutParams = FrameLayout.LayoutParams(100.dp, 100.dp)
 }
 
 val avatar = ImageView(context).apply {
- setImageResource(R.drawable.avatar)
- scaleType = ImageView.ScaleType.CENTER_CROP
+    setImageResource(R.drawable.avatar)
+    scaleType = ImageView.ScaleType.CENTER_CROP
 }
 
 val badge = TextView(context).apply {
- text = "5"
- setBackgroundResource(R.drawable.circle_red)
- layoutParams = FrameLayout.LayoutParams(24.dp, 24.dp, Gravity.TOP or Gravity.END)
+    text = "5"
+    setBackgroundResource(R.drawable.circle_red)
+    layoutParams = FrameLayout.LayoutParams(24.dp, 24.dp, Gravity.TOP or Gravity.END)
 }
 
 container.addView(avatar)
-container.addView(badge) // Added last = draws on top
+container.addView(badge)  // Added last = draws on top
 ```
 
 **Common Patterns:**
@@ -236,28 +237,28 @@ Declarative `FrameLayout` equivalent. Positioning via `Modifier.align()`, z-orde
 ```kotlin
 @Composable
 fun OverlayExample() {
- Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
- // ✅ Background layer
- Image(
- painter = painterResource(R.drawable.background),
- contentDescription = null,
- modifier = Modifier.fillMaxSize()
- )
+    Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+        // ✅ Background layer
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
 
- // ✅ Semi-transparent overlay
- Box(
- modifier = Modifier
- .fillMaxSize()
- .background(Color.Black.copy(alpha = 0.5f))
- )
+        // ✅ Semi-transparent overlay
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+        )
 
- // ✅ Centered text
- Text(
- text = "Overlay Text",
- color = Color.White,
- modifier = Modifier.align(Alignment.Center)
- )
- }
+        // ✅ Centered text
+        Text(
+            text = "Overlay Text",
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
 }
 ```
 
@@ -266,22 +267,22 @@ fun OverlayExample() {
 ```kotlin
 @Composable
 fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
- Box(modifier = Modifier.fillMaxSize()) {
- content()
+    Box(modifier = Modifier.fillMaxSize()) {
+        content()
 
- // ✅ Overlay blocks clicks on main content
- if (isLoading) {
- Box(
- modifier = Modifier
- .fillMaxSize()
- .background(Color.Black.copy(alpha = 0.8f))
- .clickable(enabled = false) {}, // Block interactions
- contentAlignment = Alignment.Center
- ) {
- CircularProgressIndicator()
- }
- }
- }
+        // ✅ Overlay blocks clicks on main content
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.8f))
+                    .clickable(enabled = false) {},  // Block interactions
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+    }
 }
 ```
 
@@ -315,8 +316,8 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ## References
 
-- - `FrameLayout` deep dive
-- - Box composable patterns
+-  - `FrameLayout` deep dive
+-  - Box composable patterns
 - https://developer.android.com/reference/android/widget/`FrameLayout`
 - https://developer.android.com/jetpack/compose/layouts/basics
 

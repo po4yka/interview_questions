@@ -15,6 +15,7 @@ created: 2025-10-13
 updated: 2025-10-28
 tags: [android/di-hilt, android/networking-http, authentication, difficulty/hard, interceptor, logging, okhttp]
 sources: [https://square.github.io/okhttp/interceptors/]
+
 ---
 
 # Вопрос (RU)
@@ -42,23 +43,23 @@ OkHttp Interceptors - это цепочка обработчиков, котор
 ```kotlin
 // ✅ Best: Инжектируем TokenManager для тестируемости
 class AuthInterceptor @Inject constructor(
- private val tokenManager: TokenManager
+    private val tokenManager: TokenManager
 ) : Interceptor {
- override fun intercept(chain: Chain): Response {
- val token = tokenManager.getToken() ?: return chain.proceed(chain.request())
+    override fun intercept(chain: Chain): Response {
+        val token = tokenManager.getToken() ?: return chain.proceed(chain.request())
 
- val authenticatedRequest = chain.request().newBuilder()
- .header("Authorization", "Bearer $token") // ✅ header заменяет предыдущие значения
- .build()
+        val authenticatedRequest = chain.request().newBuilder()
+            .header("Authorization", "Bearer $token") // ✅ header заменяет предыдущие значения
+            .build()
 
- return chain.proceed(authenticatedRequest)
- }
+        return chain.proceed(authenticatedRequest)
+    }
 }
 
 // ❌ Wrong: Hardcoded dependencies, нет DI
 class BadAuthInterceptor : Interceptor {
- private val sharedPrefs = context.getSharedPreferences(...) // ❌ Context leak
- override fun intercept(chain: Chain) = ...
+    private val sharedPrefs = context.getSharedPreferences(...) // ❌ Context leak
+    override fun intercept(chain: Chain) = ...
 }
 ```
 
@@ -66,29 +67,29 @@ class BadAuthInterceptor : Interceptor {
 
 ```kotlin
 class TokenRefreshInterceptor @Inject constructor(
- private val tokenManager: TokenManager,
- private val authApi: AuthApi
+    private val tokenManager: TokenManager,
+    private val authApi: AuthApi
 ) : Interceptor {
- override fun intercept(chain: Chain): Response {
- val request = chain.request()
- val response = chain.proceed(request)
+    override fun intercept(chain: Chain): Response {
+        val request = chain.request()
+        val response = chain.proceed(request)
 
- // ✅ Best: Синхронизируем обновление токена
- if (response.code == 401) {
- synchronized(this) {
- val newToken = tokenManager.refreshTokenSync() // Блокирующий вызов
- return if (newToken != null) {
- response.close() // ✅ Важно: закрываем старый response
- chain.proceed(request.newBuilder()
- .header("Authorization", "Bearer $newToken")
- .build())
- } else {
- response // Logout или показ экрана логина
- }
- }
- }
- return response
- }
+        // ✅ Best: Синхронизируем обновление токена
+        if (response.code == 401) {
+            synchronized(this) {
+                val newToken = tokenManager.refreshTokenSync() // Блокирующий вызов
+                return if (newToken != null) {
+                    response.close() // ✅ Важно: закрываем старый response
+                    chain.proceed(request.newBuilder()
+                        .header("Authorization", "Bearer $newToken")
+                        .build())
+                } else {
+                    response // Logout или показ экрана логина
+                }
+            }
+        }
+        return response
+    }
 }
 ```
 
@@ -97,18 +98,18 @@ class TokenRefreshInterceptor @Inject constructor(
 ```kotlin
 // ✅ Best: Добавляем только если параметр отсутствует
 class CommonParamsInterceptor : Interceptor {
- override fun intercept(chain: Chain): Response {
- val original = chain.request()
- val url = original.url.newBuilder()
- .apply {
- if (original.url.queryParameter("platform") == null) {
- addQueryParameter("platform", "android")
- }
- }
- .build()
+    override fun intercept(chain: Chain): Response {
+        val original = chain.request()
+        val url = original.url.newBuilder()
+            .apply {
+                if (original.url.queryParameter("platform") == null) {
+                    addQueryParameter("platform", "android")
+                }
+            }
+            .build()
 
- return chain.proceed(original.newBuilder().url(url).build())
- }
+        return chain.proceed(original.newBuilder().url(url).build())
+    }
 }
 ```
 
@@ -119,24 +120,24 @@ class CommonParamsInterceptor : Interceptor {
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
- @Provides
- @Singleton
- fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
- .apply {
- if (BuildConfig.DEBUG) {
- addInterceptor(HttpLoggingInterceptor().apply {
- level = HttpLoggingInterceptor.Level.BODY // ✅ Полное логирование в debug
- })
- }
- }
- .addInterceptor(AuthInterceptor(tokenManager))
- .connectTimeout(30, TimeUnit.SECONDS) // ✅ Настройки таймаутов
- .build()
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY // ✅ Полное логирование в debug
+                })
+            }
+        }
+        .addInterceptor(AuthInterceptor(tokenManager))
+        .connectTimeout(30, TimeUnit.SECONDS) // ✅ Настройки таймаутов
+        .build()
 }
 
 // ❌ Wrong: Логируем все в production
 addInterceptor(HttpLoggingInterceptor().apply {
- level = HttpLoggingInterceptor.Level.BODY // ❌ Утечка данных, performance hit
+    level = HttpLoggingInterceptor.Level.BODY // ❌ Утечка данных, performance hit
 })
 ```
 
@@ -165,23 +166,23 @@ OkHttp Interceptors are a chain of handlers that intercept every request and res
 ```kotlin
 // ✅ Best: Inject TokenManager for testability
 class AuthInterceptor @Inject constructor(
- private val tokenManager: TokenManager
+    private val tokenManager: TokenManager
 ) : Interceptor {
- override fun intercept(chain: Chain): Response {
- val token = tokenManager.getToken() ?: return chain.proceed(chain.request())
+    override fun intercept(chain: Chain): Response {
+        val token = tokenManager.getToken() ?: return chain.proceed(chain.request())
 
- val authenticatedRequest = chain.request().newBuilder()
- .header("Authorization", "Bearer $token") // ✅ header replaces previous values
- .build()
+        val authenticatedRequest = chain.request().newBuilder()
+            .header("Authorization", "Bearer $token") // ✅ header replaces previous values
+            .build()
 
- return chain.proceed(authenticatedRequest)
- }
+        return chain.proceed(authenticatedRequest)
+    }
 }
 
 // ❌ Wrong: Hardcoded dependencies, no DI
 class BadAuthInterceptor : Interceptor {
- private val sharedPrefs = context.getSharedPreferences(...) // ❌ Context leak
- override fun intercept(chain: Chain) = ...
+    private val sharedPrefs = context.getSharedPreferences(...) // ❌ Context leak
+    override fun intercept(chain: Chain) = ...
 }
 ```
 
@@ -189,29 +190,29 @@ class BadAuthInterceptor : Interceptor {
 
 ```kotlin
 class TokenRefreshInterceptor @Inject constructor(
- private val tokenManager: TokenManager,
- private val authApi: AuthApi
+    private val tokenManager: TokenManager,
+    private val authApi: AuthApi
 ) : Interceptor {
- override fun intercept(chain: Chain): Response {
- val request = chain.request()
- val response = chain.proceed(request)
+    override fun intercept(chain: Chain): Response {
+        val request = chain.request()
+        val response = chain.proceed(request)
 
- // ✅ Best: Synchronize token refresh
- if (response.code == 401) {
- synchronized(this) {
- val newToken = tokenManager.refreshTokenSync() // Blocking call
- return if (newToken != null) {
- response.close() // ✅ Important: close old response
- chain.proceed(request.newBuilder()
- .header("Authorization", "Bearer $newToken")
- .build())
- } else {
- response // Logout or show login screen
- }
- }
- }
- return response
- }
+        // ✅ Best: Synchronize token refresh
+        if (response.code == 401) {
+            synchronized(this) {
+                val newToken = tokenManager.refreshTokenSync() // Blocking call
+                return if (newToken != null) {
+                    response.close() // ✅ Important: close old response
+                    chain.proceed(request.newBuilder()
+                        .header("Authorization", "Bearer $newToken")
+                        .build())
+                } else {
+                    response // Logout or show login screen
+                }
+            }
+        }
+        return response
+    }
 }
 ```
 
@@ -220,18 +221,18 @@ class TokenRefreshInterceptor @Inject constructor(
 ```kotlin
 // ✅ Best: Add only if parameter is missing
 class CommonParamsInterceptor : Interceptor {
- override fun intercept(chain: Chain): Response {
- val original = chain.request()
- val url = original.url.newBuilder()
- .apply {
- if (original.url.queryParameter("platform") == null) {
- addQueryParameter("platform", "android")
- }
- }
- .build()
+    override fun intercept(chain: Chain): Response {
+        val original = chain.request()
+        val url = original.url.newBuilder()
+            .apply {
+                if (original.url.queryParameter("platform") == null) {
+                    addQueryParameter("platform", "android")
+                }
+            }
+            .build()
 
- return chain.proceed(original.newBuilder().url(url).build())
- }
+        return chain.proceed(original.newBuilder().url(url).build())
+    }
 }
 ```
 
@@ -242,24 +243,24 @@ class CommonParamsInterceptor : Interceptor {
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
- @Provides
- @Singleton
- fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
- .apply {
- if (BuildConfig.DEBUG) {
- addInterceptor(HttpLoggingInterceptor().apply {
- level = HttpLoggingInterceptor.Level.BODY // ✅ Full logging in debug
- })
- }
- }
- .addInterceptor(AuthInterceptor(tokenManager))
- .connectTimeout(30, TimeUnit.SECONDS) // ✅ Timeout configuration
- .build()
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY // ✅ Full logging in debug
+                })
+            }
+        }
+        .addInterceptor(AuthInterceptor(tokenManager))
+        .connectTimeout(30, TimeUnit.SECONDS) // ✅ Timeout configuration
+        .build()
 }
 
 // ❌ Wrong: Log everything in production
 addInterceptor(HttpLoggingInterceptor().apply {
- level = HttpLoggingInterceptor.Level.BODY // ❌ Data leaks, performance hit
+    level = HttpLoggingInterceptor.Level.BODY // ❌ Data leaks, performance hit
 })
 ```
 
@@ -286,10 +287,10 @@ addInterceptor(HttpLoggingInterceptor().apply {
 ## References
 
 **Concepts:**
-- - Interceptor patterns and chain of responsibility
-- - OkHttp architecture and request lifecycle
+-  - Interceptor patterns and chain of responsibility
+-  - OkHttp architecture and request lifecycle
 - [[c-dependency-injection]] - DI patterns for network layer
-- - Token storage and refresh strategies
+-  - Token storage and refresh strategies
 **Official Documentation:**
 - https://square.github.io/okhttp/interceptors/
 - https://square.github.io/okhttp/features/interceptors/
@@ -300,19 +301,20 @@ addInterceptor(HttpLoggingInterceptor().apply {
 - HttpLoggingInterceptor levels and security
 - Certificate pinning with CertificatePinner
 
+
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
-- - Networking basics
+-  - Networking basics
 
 ### Related (Same Level)
-- - Retrofit basics
-- - OkHttp interceptors
-- - Authentication patterns
+-  - Retrofit basics
+-  - OkHttp interceptors
+-  - Authentication patterns
 - [[q-cicd-multi-module--android--medium]] - DI with Hilt modules
 
 ### Advanced (Harder)
-- - Retrofit advanced
-- [[q-network-security-hardening--android--hard]] - Network security
-- - Race condition handling
+-  - Retrofit advanced
+-  - Network security
+-  - Race condition handling

@@ -16,6 +16,8 @@ sources: []
 status: reviewed
 related:
   - c-accessibility
+  - c-compose-semantics
+  - c-ui-testing
   - q-compose-semantics--android--medium
   - q-compose-testing--android--medium
 created: 2025-10-20

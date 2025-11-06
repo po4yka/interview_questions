@@ -31,6 +31,7 @@ tags:
 - unit-testing
 sources:
 - https://github.com/cashapp/turbine
+
 ---
 
 # Вопрос (RU)
@@ -58,44 +59,44 @@ Turbine — библиотека для тестирования Kotlin `Flow` �
 // ✅ Базовый паттерн тестирования Flow
 @Test
 fun `test flow emissions`() = runTest {
- val flow = flowOf(1, 2, 3)
+    val flow = flowOf(1, 2, 3)
 
- flow.test {
- assertEquals(1, awaitItem()) // ждем первую эмиссию
- assertEquals(2, awaitItem())
- assertEquals(3, awaitItem())
- awaitComplete() // проверяем завершение
- }
+    flow.test {
+        assertEquals(1, awaitItem())  // ждем первую эмиссию
+        assertEquals(2, awaitItem())
+        assertEquals(3, awaitItem())
+        awaitComplete()               // проверяем завершение
+    }
 }
 
 // ✅ Тестирование ошибок
 @Test
 fun `test flow error`() = runTest {
- val flow = flow {
- emit("data")
- throw IOException("Network error")
- }
+    val flow = flow {
+        emit("data")
+        throw IOException("Network error")
+    }
 
- flow.test {
- assertEquals("data", awaitItem())
- val error = awaitError()
- assertTrue(error is IOException)
- }
+    flow.test {
+        assertEquals("data", awaitItem())
+        val error = awaitError()
+        assertTrue(error is IOException)
+    }
 }
 
 // ✅ Проверка отсутствия событий
 @Test
 fun `test delayed emission`() = runTest {
- val flow = flow {
- delay(100)
- emit(42)
- }
+    val flow = flow {
+        delay(100)
+        emit(42)
+    }
 
- flow.test {
- expectNoEvents() // нет эмиссий до истечения delay
- advanceTimeBy(100)
- assertEquals(42, awaitItem())
- }
+    flow.test {
+        expectNoEvents()           // нет эмиссий до истечения delay
+        advanceTimeBy(100)
+        assertEquals(42, awaitItem())
+    }
 }
 ```
 
@@ -103,27 +104,27 @@ fun `test delayed emission`() = runTest {
 
 ```kotlin
 class CounterViewModel : ViewModel() {
- private val _count = MutableStateFlow(0)
- val count = _count.asStateFlow()
+    private val _count = MutableStateFlow(0)
+    val count = _count.asStateFlow()
 
- fun increment() { _count.value++ }
+    fun increment() { _count.value++ }
 }
 
 @Test
 fun `increment updates state correctly`() = runTest {
- Dispatchers.setMain(StandardTestDispatcher())
- val viewModel = CounterViewModel()
+    Dispatchers.setMain(StandardTestDispatcher())
+    val viewModel = CounterViewModel()
 
- viewModel.count.test {
- assertEquals(0, awaitItem()) // ✅ StateFlow всегда имеет начальное значение
+    viewModel.count.test {
+        assertEquals(0, awaitItem())  // ✅ StateFlow всегда имеет начальное значение
 
- viewModel.increment()
- assertEquals(1, awaitItem())
+        viewModel.increment()
+        assertEquals(1, awaitItem())
 
- cancelAndIgnoreRemainingEvents() // ✅ завершаем тест без ожидания
- }
+        cancelAndIgnoreRemainingEvents()  // ✅ завершаем тест без ожидания
+    }
 
- Dispatchers.resetMain()
+    Dispatchers.resetMain()
 }
 ```
 
@@ -131,45 +132,45 @@ fun `increment updates state correctly`() = runTest {
 
 ```kotlin
 sealed interface UiState {
- data object Loading : UiState
- data class Success(val data: String) : UiState
- data class Error(val msg: String) : UiState
+    data object Loading : UiState
+    data class Success(val data: String) : UiState
+    data class Error(val msg: String) : UiState
 }
 
 class DataViewModel(private val repo: Repository) : ViewModel() {
- private val _state = MutableStateFlow<UiState>(UiState.Loading)
- val state = _state.asStateFlow()
+    private val _state = MutableStateFlow<UiState>(UiState.Loading)
+    val state = _state.asStateFlow()
 
- fun load() {
- viewModelScope.launch {
- repo.getData()
- .onStart { _state.value = UiState.Loading }
- .catch { _state.value = UiState.Error(it.message ?: "Unknown") }
- .collect { _state.value = UiState.Success(it) }
- }
- }
+    fun load() {
+        viewModelScope.launch {
+            repo.getData()
+                .onStart { _state.value = UiState.Loading }
+                .catch { _state.value = UiState.Error(it.message ?: "Unknown") }
+                .collect { _state.value = UiState.Success(it) }
+        }
+    }
 }
 
 @Test
 fun `load transitions through states correctly`() = runTest {
- val mockRepo = mockk<Repository>()
- coEvery { mockRepo.getData() } returns flowOf("result")
+    val mockRepo = mockk<Repository>()
+    coEvery { mockRepo.getData() } returns flowOf("result")
 
- val viewModel = DataViewModel(mockRepo)
+    val viewModel = DataViewModel(mockRepo)
 
- viewModel.state.test {
- assertTrue(awaitItem() is UiState.Loading) // начальное
+    viewModel.state.test {
+        assertTrue(awaitItem() is UiState.Loading)  // начальное
 
- viewModel.load()
- advanceUntilIdle() // ✅ пропускаем виртуальное время до завершения корутин
+        viewModel.load()
+        advanceUntilIdle()  // ✅ пропускаем виртуальное время до завершения корутин
 
- // ❌ НЕ используйте skipItems() без понимания, сколько эмиссий пропустить
- val final = awaitItem()
- assertTrue(final is UiState.Success)
- assertEquals("result", (final as UiState.Success).data)
+        // ❌ НЕ используйте skipItems() без понимания, сколько эмиссий пропустить
+        val final = awaitItem()
+        assertTrue(final is UiState.Success)
+        assertEquals("result", (final as UiState.Success).data)
 
- cancelAndIgnoreRemainingEvents()
- }
+        cancelAndIgnoreRemainingEvents()
+    }
 }
 ```
 
@@ -178,27 +179,27 @@ fun `load transitions through states correctly`() = runTest {
 ```kotlin
 // ❌ Забыли awaitComplete/cancelAndIgnoreRemainingEvents
 flow.test {
- assertEquals(1, awaitItem())
- // тест зависнет, ожидая завершения Flow
+    assertEquals(1, awaitItem())
+    // тест зависнет, ожидая завершения Flow
 }
 
 // ✅ Всегда явно завершайте
 flow.test {
- assertEquals(1, awaitItem())
- awaitComplete() // или cancelAndIgnoreRemainingEvents()
+    assertEquals(1, awaitItem())
+    awaitComplete()  // или cancelAndIgnoreRemainingEvents()
 }
 
 // ❌ Не учли начальное значение StateFlow
 stateFlow.test {
- viewModel.update()
- assertEquals(newValue, awaitItem()) // пропустили начальное!
+    viewModel.update()
+    assertEquals(newValue, awaitItem())  // пропустили начальное!
 }
 
 // ✅ Обрабатываем начальную эмиссию
 stateFlow.test {
- awaitItem() // пропускаем начальное
- viewModel.update()
- assertEquals(newValue, awaitItem())
+    awaitItem()  // пропускаем начальное
+    viewModel.update()
+    assertEquals(newValue, awaitItem())
 }
 ```
 
@@ -219,44 +220,44 @@ Turbine is a `Flow` testing library by Cash App that provides a declarative API 
 // ✅ Basic Flow testing pattern
 @Test
 fun `test flow emissions`() = runTest {
- val flow = flowOf(1, 2, 3)
+    val flow = flowOf(1, 2, 3)
 
- flow.test {
- assertEquals(1, awaitItem()) // wait for first emission
- assertEquals(2, awaitItem())
- assertEquals(3, awaitItem())
- awaitComplete() // verify completion
- }
+    flow.test {
+        assertEquals(1, awaitItem())  // wait for first emission
+        assertEquals(2, awaitItem())
+        assertEquals(3, awaitItem())
+        awaitComplete()               // verify completion
+    }
 }
 
 // ✅ Testing errors
 @Test
 fun `test flow error`() = runTest {
- val flow = flow {
- emit("data")
- throw IOException("Network error")
- }
+    val flow = flow {
+        emit("data")
+        throw IOException("Network error")
+    }
 
- flow.test {
- assertEquals("data", awaitItem())
- val error = awaitError()
- assertTrue(error is IOException)
- }
+    flow.test {
+        assertEquals("data", awaitItem())
+        val error = awaitError()
+        assertTrue(error is IOException)
+    }
 }
 
 // ✅ Verifying no events
 @Test
 fun `test delayed emission`() = runTest {
- val flow = flow {
- delay(100)
- emit(42)
- }
+    val flow = flow {
+        delay(100)
+        emit(42)
+    }
 
- flow.test {
- expectNoEvents() // no emissions before delay expires
- advanceTimeBy(100)
- assertEquals(42, awaitItem())
- }
+    flow.test {
+        expectNoEvents()           // no emissions before delay expires
+        advanceTimeBy(100)
+        assertEquals(42, awaitItem())
+    }
 }
 ```
 
@@ -264,27 +265,27 @@ fun `test delayed emission`() = runTest {
 
 ```kotlin
 class CounterViewModel : ViewModel() {
- private val _count = MutableStateFlow(0)
- val count = _count.asStateFlow()
+    private val _count = MutableStateFlow(0)
+    val count = _count.asStateFlow()
 
- fun increment() { _count.value++ }
+    fun increment() { _count.value++ }
 }
 
 @Test
 fun `increment updates state correctly`() = runTest {
- Dispatchers.setMain(StandardTestDispatcher())
- val viewModel = CounterViewModel()
+    Dispatchers.setMain(StandardTestDispatcher())
+    val viewModel = CounterViewModel()
 
- viewModel.count.test {
- assertEquals(0, awaitItem()) // ✅ StateFlow always has initial value
+    viewModel.count.test {
+        assertEquals(0, awaitItem())  // ✅ StateFlow always has initial value
 
- viewModel.increment()
- assertEquals(1, awaitItem())
+        viewModel.increment()
+        assertEquals(1, awaitItem())
 
- cancelAndIgnoreRemainingEvents() // ✅ finish test without waiting
- }
+        cancelAndIgnoreRemainingEvents()  // ✅ finish test without waiting
+    }
 
- Dispatchers.resetMain()
+    Dispatchers.resetMain()
 }
 ```
 
@@ -292,45 +293,45 @@ fun `increment updates state correctly`() = runTest {
 
 ```kotlin
 sealed interface UiState {
- data object Loading : UiState
- data class Success(val data: String) : UiState
- data class Error(val msg: String) : UiState
+    data object Loading : UiState
+    data class Success(val data: String) : UiState
+    data class Error(val msg: String) : UiState
 }
 
 class DataViewModel(private val repo: Repository) : ViewModel() {
- private val _state = MutableStateFlow<UiState>(UiState.Loading)
- val state = _state.asStateFlow()
+    private val _state = MutableStateFlow<UiState>(UiState.Loading)
+    val state = _state.asStateFlow()
 
- fun load() {
- viewModelScope.launch {
- repo.getData()
- .onStart { _state.value = UiState.Loading }
- .catch { _state.value = UiState.Error(it.message ?: "Unknown") }
- .collect { _state.value = UiState.Success(it) }
- }
- }
+    fun load() {
+        viewModelScope.launch {
+            repo.getData()
+                .onStart { _state.value = UiState.Loading }
+                .catch { _state.value = UiState.Error(it.message ?: "Unknown") }
+                .collect { _state.value = UiState.Success(it) }
+        }
+    }
 }
 
 @Test
 fun `load transitions through states correctly`() = runTest {
- val mockRepo = mockk<Repository>()
- coEvery { mockRepo.getData() } returns flowOf("result")
+    val mockRepo = mockk<Repository>()
+    coEvery { mockRepo.getData() } returns flowOf("result")
 
- val viewModel = DataViewModel(mockRepo)
+    val viewModel = DataViewModel(mockRepo)
 
- viewModel.state.test {
- assertTrue(awaitItem() is UiState.Loading) // initial state
+    viewModel.state.test {
+        assertTrue(awaitItem() is UiState.Loading)  // initial state
 
- viewModel.load()
- advanceUntilIdle() // ✅ skip virtual time until coroutines complete
+        viewModel.load()
+        advanceUntilIdle()  // ✅ skip virtual time until coroutines complete
 
- // ❌ DON'T use skipItems() without knowing how many emissions to skip
- val final = awaitItem()
- assertTrue(final is UiState.Success)
- assertEquals("result", (final as UiState.Success).data)
+        // ❌ DON'T use skipItems() without knowing how many emissions to skip
+        val final = awaitItem()
+        assertTrue(final is UiState.Success)
+        assertEquals("result", (final as UiState.Success).data)
 
- cancelAndIgnoreRemainingEvents()
- }
+        cancelAndIgnoreRemainingEvents()
+    }
 }
 ```
 
@@ -339,27 +340,27 @@ fun `load transitions through states correctly`() = runTest {
 ```kotlin
 // ❌ Forgot awaitComplete/cancelAndIgnoreRemainingEvents
 flow.test {
- assertEquals(1, awaitItem())
- // test will hang waiting for Flow completion
+    assertEquals(1, awaitItem())
+    // test will hang waiting for Flow completion
 }
 
 // ✅ Always explicitly finish
 flow.test {
- assertEquals(1, awaitItem())
- awaitComplete() // or cancelAndIgnoreRemainingEvents()
+    assertEquals(1, awaitItem())
+    awaitComplete()  // or cancelAndIgnoreRemainingEvents()
 }
 
 // ❌ Didn't account for StateFlow initial value
 stateFlow.test {
- viewModel.update()
- assertEquals(newValue, awaitItem()) // missed initial!
+    viewModel.update()
+    assertEquals(newValue, awaitItem())  // missed initial!
 }
 
 // ✅ Handle initial emission
 stateFlow.test {
- awaitItem() // skip initial
- viewModel.update()
- assertEquals(newValue, awaitItem())
+    awaitItem()  // skip initial
+    viewModel.update()
+    assertEquals(newValue, awaitItem())
 }
 ```
 
@@ -384,6 +385,7 @@ stateFlow.test {
 ### Prerequisites / Concepts
 
 - 
+
 
 ### Related
 - [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flows

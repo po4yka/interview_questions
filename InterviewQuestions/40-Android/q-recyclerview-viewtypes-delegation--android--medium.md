@@ -26,6 +26,7 @@ tags:
 - view-types
 sources:
 - https://developer.android.com/guide/topics/ui/layout/recyclerview
+
 ---
 
 # Вопрос (RU)
@@ -50,53 +51,53 @@ ViewTypes позволяют отображать разные макеты в �
 // Базовый адаптер с множественными типами
 class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
- companion object {
- private const val TYPE_HEADER = 0
- private const val TYPE_USER = 1
- }
+    companion object {
+        private const val TYPE_HEADER = 0
+        private const val TYPE_USER = 1
+    }
 
- override fun getItemViewType(position: Int): Int {
- return when (items[position]) {
- is Header -> TYPE_HEADER
- is User -> TYPE_USER
- else -> throw IllegalArgumentException("Unknown type")
- }
- }
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position]) {
+            is Header -> TYPE_HEADER
+            is User -> TYPE_USER
+            else -> throw IllegalArgumentException("Unknown type")
+        }
+    }
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
- return when (viewType) {
- TYPE_HEADER -> HeaderViewHolder(LayoutInflater.from(parent.context)
- .inflate(R.layout.item_header, parent, false))
- TYPE_USER -> UserViewHolder(LayoutInflater.from(parent.context)
- .inflate(R.layout.item_user, parent, false))
- else -> throw IllegalArgumentException("Unknown viewType: $viewType")
- }
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_HEADER -> HeaderViewHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_header, parent, false))
+            TYPE_USER -> UserViewHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_user, parent, false))
+            else -> throw IllegalArgumentException("Unknown viewType: $viewType")
+        }
+    }
 
- override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
- when (holder) {
- is HeaderViewHolder -> holder.bind(items[position] as Header)
- is UserViewHolder -> holder.bind(items[position] as User)
- }
- }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is HeaderViewHolder -> holder.bind(items[position] as Header)
+            is UserViewHolder -> holder.bind(items[position] as User)
+        }
+    }
 }
 ```
 
 **Sealed классы для типобезопасности:**
 ```kotlin
 sealed class ListItem {
- abstract val id: String
+    abstract val id: String
 
- data class HeaderItem(
- override val id: String,
- val title: String
- ) : ListItem()
+    data class HeaderItem(
+        override val id: String,
+        val title: String
+    ) : ListItem()
 
- data class UserItem(
- override val id: String,
- val name: String,
- val email: String
- ) : ListItem()
+    data class UserItem(
+        override val id: String,
+        val name: String,
+        val email: String
+    ) : ListItem()
 }
 ```
 
@@ -106,20 +107,20 @@ sealed class ListItem {
 ```kotlin
 // Делегат для заголовка
 class HeaderDelegate : AdapterDelegate<ListItem> {
- override fun isForViewType(items: List<ListItem>, position: Int): Boolean {
- return items[position] is ListItem.HeaderItem
- }
+    override fun isForViewType(items: List<ListItem>, position: Int): Boolean {
+        return items[position] is ListItem.HeaderItem
+    }
 
- override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_header, parent, false)
- return HeaderViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_header, parent, false)
+        return HeaderViewHolder(view)
+    }
 
- override fun onBindViewHolder(items: List<ListItem>, position: Int, holder: RecyclerView.ViewHolder) {
- val header = items[position] as ListItem.HeaderItem
- (holder as HeaderViewHolder).bind(header)
- }
+    override fun onBindViewHolder(items: List<ListItem>, position: Int, holder: RecyclerView.ViewHolder) {
+        val header = items[position] as ListItem.HeaderItem
+        (holder as HeaderViewHolder).bind(header)
+    }
 }
 ```
 
@@ -137,53 +138,53 @@ ViewTypes allow displaying different layouts in the same `RecyclerView` (headers
 // Basic adapter with multiple types
 class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
- companion object {
- private const val TYPE_HEADER = 0
- private const val TYPE_USER = 1
- }
+    companion object {
+        private const val TYPE_HEADER = 0
+        private const val TYPE_USER = 1
+    }
 
- override fun getItemViewType(position: Int): Int {
- return when (items[position]) {
- is Header -> TYPE_HEADER
- is User -> TYPE_USER
- else -> throw IllegalArgumentException("Unknown type")
- }
- }
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position]) {
+            is Header -> TYPE_HEADER
+            is User -> TYPE_USER
+            else -> throw IllegalArgumentException("Unknown type")
+        }
+    }
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
- return when (viewType) {
- TYPE_HEADER -> HeaderViewHolder(LayoutInflater.from(parent.context)
- .inflate(R.layout.item_header, parent, false))
- TYPE_USER -> UserViewHolder(LayoutInflater.from(parent.context)
- .inflate(R.layout.item_user, parent, false))
- else -> throw IllegalArgumentException("Unknown viewType: $viewType")
- }
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_HEADER -> HeaderViewHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_header, parent, false))
+            TYPE_USER -> UserViewHolder(LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_user, parent, false))
+            else -> throw IllegalArgumentException("Unknown viewType: $viewType")
+        }
+    }
 
- override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
- when (holder) {
- is HeaderViewHolder -> holder.bind(items[position] as Header)
- is UserViewHolder -> holder.bind(items[position] as User)
- }
- }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is HeaderViewHolder -> holder.bind(items[position] as Header)
+            is UserViewHolder -> holder.bind(items[position] as User)
+        }
+    }
 }
 ```
 
 **Sealed classes for type safety:**
 ```kotlin
 sealed class ListItem {
- abstract val id: String
+    abstract val id: String
 
- data class HeaderItem(
- override val id: String,
- val title: String
- ) : ListItem()
+    data class HeaderItem(
+        override val id: String,
+        val title: String
+    ) : ListItem()
 
- data class UserItem(
- override val id: String,
- val name: String,
- val email: String
- ) : ListItem()
+    data class UserItem(
+        override val id: String,
+        val name: String,
+        val email: String
+    ) : ListItem()
 }
 ```
 
@@ -193,20 +194,20 @@ Delegation allows separating logic for different item types into separate adapte
 ```kotlin
 // Delegate for header
 class HeaderDelegate : AdapterDelegate<ListItem> {
- override fun isForViewType(items: List<ListItem>, position: Int): Boolean {
- return items[position] is ListItem.HeaderItem
- }
+    override fun isForViewType(items: List<ListItem>, position: Int): Boolean {
+        return items[position] is ListItem.HeaderItem
+    }
 
- override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_header, parent, false)
- return HeaderViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_header, parent, false)
+        return HeaderViewHolder(view)
+    }
 
- override fun onBindViewHolder(items: List<ListItem>, position: Int, holder: RecyclerView.ViewHolder) {
- val header = items[position] as ListItem.HeaderItem
- (holder as HeaderViewHolder).bind(header)
- }
+    override fun onBindViewHolder(items: List<ListItem>, position: Int, holder: RecyclerView.ViewHolder) {
+        val header = items[position] as ListItem.HeaderItem
+        (holder as HeaderViewHolder).bind(header)
+    }
 }
 ```
 
@@ -218,10 +219,12 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 - What are the benefits of using adapter delegation?
 - How do you handle view type changes efficiently?
 
+
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 
@@ -229,15 +232,16 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 - 
 
+
 ### Prerequisites (Easier)
-- - `RecyclerView` basics
+-  - `RecyclerView` basics
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
-- [[q-mvp-pattern--android--medium]] - Adapter patterns
+-  - Adapter patterns
 - [[q-recyclerview-explained--android--medium]] - `RecyclerView` performance
-- - ViewHolder pattern
+-  - ViewHolder pattern
 
 ### Advanced (Harder)
-- - `RecyclerView` advanced
+-  - `RecyclerView` advanced
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

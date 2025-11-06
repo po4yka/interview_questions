@@ -14,6 +14,7 @@ related: [c-coroutines, c-retrofit, c-workmanager]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
+
 ---
 
 # Вопрос (RU)
@@ -44,21 +45,21 @@ tags: [android/background-execution, android/coroutines, android/networking-http
 
 ```kotlin
 interface FileUploadApi {
- @Multipart
- @POST("upload")
- suspend fun uploadFile(
- @Part file: MultipartBody.Part,
- @Part("metadata") metadata: RequestBody
- ): Response<UploadResponse>
+    @Multipart
+    @POST("upload")
+    suspend fun uploadFile(
+        @Part file: MultipartBody.Part,
+        @Part("metadata") metadata: RequestBody
+    ): Response<UploadResponse>
 
- @Multipart
- @POST("upload/chunk")
- suspend fun uploadChunk(
- @Part chunk: MultipartBody.Part,
- @Part("index") index: RequestBody,
- @Part("total") total: RequestBody,
- @Part("uploadId") uploadId: RequestBody
- ): Response<ChunkResponse>
+    @Multipart
+    @POST("upload/chunk")
+    suspend fun uploadChunk(
+        @Part chunk: MultipartBody.Part,
+        @Part("index") index: RequestBody,
+        @Part("total") total: RequestBody,
+        @Part("uploadId") uploadId: RequestBody
+    ): Response<ChunkResponse>
 }
 ```
 
@@ -66,32 +67,32 @@ interface FileUploadApi {
 
 ```kotlin
 class ProgressRequestBody(
- private val delegate: RequestBody,
- private val onProgress: (Long, Long) -> Unit
+    private val delegate: RequestBody,
+    private val onProgress: (Long, Long) -> Unit
 ) : RequestBody() {
- override fun contentType() = delegate.contentType()
- override fun contentLength() = delegate.contentLength()
+    override fun contentType() = delegate.contentType()
+    override fun contentLength() = delegate.contentLength()
 
- override fun writeTo(sink: BufferedSink) {
- val countingSink = CountingSink(sink, contentLength(), onProgress)
- val bufferedSink = countingSink.buffer()
- delegate.writeTo(bufferedSink)
- bufferedSink.flush()
- }
+    override fun writeTo(sink: BufferedSink) {
+        val countingSink = CountingSink(sink, contentLength(), onProgress)
+        val bufferedSink = countingSink.buffer()
+        delegate.writeTo(bufferedSink)
+        bufferedSink.flush()
+    }
 }
 
 class CountingSink(
- delegate: Sink,
- private val total: Long,
- private val onProgress: (Long, Long) -> Unit
+    delegate: Sink,
+    private val total: Long,
+    private val onProgress: (Long, Long) -> Unit
 ) : ForwardingSink(delegate) {
- private var written = 0L
+    private var written = 0L
 
- override fun write(source: Buffer, byteCount: Long) {
- super.write(source, byteCount)
- written += byteCount
- onProgress(written, total)
- }
+    override fun write(source: Buffer, byteCount: Long) {
+        super.write(source, byteCount)
+        written += byteCount
+        onProgress(written, total)
+    }
 }
 ```
 
@@ -99,53 +100,53 @@ class CountingSink(
 
 ```kotlin
 class FileUploadWorker(
- context: Context,
- params: WorkerParameters
+    context: Context,
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- val filePath = inputData.getString(KEY_FILE_PATH) ?: return Result.failure()
- val file = File(filePath)
+    override suspend fun doWork(): Result {
+        val filePath = inputData.getString(KEY_FILE_PATH) ?: return Result.failure()
+        val file = File(filePath)
 
- if (!file.exists()) return Result.failure()
+        if (!file.exists()) return Result.failure()
 
- createNotificationChannel()
- setForeground(createForegroundInfo(0))
+        createNotificationChannel()
+        setForeground(createForegroundInfo(0))
 
- return try {
- uploadFile(file)
- showNotification("Завершено", file.name, 100)
- Result.success()
- } catch (e: IOException) {
- Result.retry() // ✅ Повтор при сетевых ошибках
- } catch (e: Exception) {
- Result.failure(workDataOf("error" to e.message))
- }
- }
+        return try {
+            uploadFile(file)
+            showNotification("Завершено", file.name, 100)
+            Result.success()
+        } catch (e: IOException) {
+            Result.retry() // ✅ Повтор при сетевых ошибках
+        } catch (e: Exception) {
+            Result.failure(workDataOf("error" to e.message))
+        }
+    }
 
- private suspend fun uploadFile(file: File): Boolean {
- val api = RetrofitClient.create { written, total ->
- val progress = (100 * written / total).toInt()
- setProgressAsync(workDataOf("progress" to progress))
- showNotification("Загрузка...", file.name, progress)
- }
+    private suspend fun uploadFile(file: File): Boolean {
+        val api = RetrofitClient.create { written, total ->
+            val progress = (100 * written / total).toInt()
+            setProgressAsync(workDataOf("progress" to progress))
+            showNotification("Загрузка...", file.name, progress)
+        }
 
- val requestFile = file.asRequestBody("application/octet-stream".toMediaType())
- val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+        val requestFile = file.asRequestBody("application/octet-stream".toMediaType())
+        val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
- val response = api.uploadFile(filePart, createMetadata())
- return response.isSuccessful
- }
+        val response = api.uploadFile(filePart, createMetadata())
+        return response.isSuccessful
+    }
 
- private fun createForegroundInfo(progress: Int) = ForegroundInfo(
- NOTIFICATION_ID,
- NotificationCompat.Builder(applicationContext, CHANNEL_ID)
- .setContentTitle("Загрузка файла")
- .setSmallIcon(android.R.drawable.stat_sys_upload)
- .setProgress(100, progress, false)
- .setOngoing(true)
- .build()
- )
+    private fun createForegroundInfo(progress: Int) = ForegroundInfo(
+        NOTIFICATION_ID,
+        NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setContentTitle("Загрузка файла")
+            .setSmallIcon(android.R.drawable.stat_sys_upload)
+            .setProgress(100, progress, false)
+            .setOngoing(true)
+            .build()
+    )
 }
 ```
 
@@ -153,40 +154,40 @@ class FileUploadWorker(
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private val workManager by lazy { WorkManager.getInstance(this) }
+    private val workManager by lazy { WorkManager.getInstance(this) }
 
- private fun uploadFile(uri: Uri) {
- val file = copyToCache(uri)
+    private fun uploadFile(uri: Uri) {
+        val file = copyToCache(uri)
 
- val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
- .setInputData(workDataOf(KEY_FILE_PATH to file.absolutePath))
- .setConstraints(Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Только при сети
- .setRequiresBatteryNotLow(true) // ✅ Батарея не разряжена
- .build())
- .setBackoffCriteria(
- BackoffPolicy.EXPONENTIAL,
- WorkRequest.MIN_BACKOFF_MILLIS,
- TimeUnit.MILLISECONDS
- )
- .build()
+        val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
+            .setInputData(workDataOf(KEY_FILE_PATH to file.absolutePath))
+            .setConstraints(Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Только при сети
+                .setRequiresBatteryNotLow(true) // ✅ Батарея не разряжена
+                .build())
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                WorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+            .build()
 
- workManager.enqueue(uploadRequest)
+        workManager.enqueue(uploadRequest)
 
- // Наблюдение за прогрессом
- workManager.getWorkInfoByIdLiveData(uploadRequest.id)
- .observe(this) { workInfo ->
- when (workInfo.state) {
- WorkInfo.State.RUNNING -> {
- val progress = workInfo.progress.getInt("progress", 0)
- updateProgress(progress)
- }
- WorkInfo.State.SUCCEEDED -> showSuccess()
- WorkInfo.State.FAILED -> showError()
- else -> {}
- }
- }
- }
+        // Наблюдение за прогрессом
+        workManager.getWorkInfoByIdLiveData(uploadRequest.id)
+            .observe(this) { workInfo ->
+                when (workInfo.state) {
+                    WorkInfo.State.RUNNING -> {
+                        val progress = workInfo.progress.getInt("progress", 0)
+                        updateProgress(progress)
+                    }
+                    WorkInfo.State.SUCCEEDED -> showSuccess()
+                    WorkInfo.State.FAILED -> showError()
+                    else -> {}
+                }
+            }
+    }
 }
 ```
 
@@ -194,65 +195,65 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class ChunkedUploadWorker(
- context: Context,
- params: WorkerParameters
+    context: Context,
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
- companion object {
- const val CHUNK_SIZE = 5 * 1024 * 1024 // 5MB
- }
+    companion object {
+        const val CHUNK_SIZE = 5 * 1024 * 1024 // 5MB
+    }
 
- override suspend fun doWork(): Result {
- val file = File(inputData.getString(KEY_FILE_PATH)!!)
- return try {
- uploadInChunks(file)
- Result.success()
- } catch (e: Exception) {
- Result.retry()
- }
- }
+    override suspend fun doWork(): Result {
+        val file = File(inputData.getString(KEY_FILE_PATH)!!)
+        return try {
+            uploadInChunks(file)
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
 
- private suspend fun uploadInChunks(file: File) {
- val totalChunks = (file.length() / CHUNK_SIZE + 1).toInt()
- val uploadId = UUID.randomUUID().toString()
+    private suspend fun uploadInChunks(file: File) {
+        val totalChunks = (file.length() / CHUNK_SIZE + 1).toInt()
+        val uploadId = UUID.randomUUID().toString()
 
- file.inputStream().buffered().use { input ->
- var index = 0
- val buffer = ByteArray(CHUNK_SIZE)
+        file.inputStream().buffered().use { input ->
+            var index = 0
+            val buffer = ByteArray(CHUNK_SIZE)
 
- while (true) {
- val bytesRead = input.read(buffer)
- if (bytesRead == -1) break
+            while (true) {
+                val bytesRead = input.read(buffer)
+                if (bytesRead == -1) break
 
- val chunk = File(cacheDir, "chunk_$index")
- chunk.writeBytes(buffer.copyOf(bytesRead))
+                val chunk = File(cacheDir, "chunk_$index")
+                chunk.writeBytes(buffer.copyOf(bytesRead))
 
- uploadChunk(chunk, index, totalChunks, uploadId)
- chunk.delete()
+                uploadChunk(chunk, index, totalChunks, uploadId)
+                chunk.delete()
 
- setProgressAsync(workDataOf("progress" to (100 * ++index / totalChunks)))
- }
- }
- }
+                setProgressAsync(workDataOf("progress" to (100 * ++index / totalChunks)))
+            }
+        }
+    }
 
- private suspend fun uploadChunk(file: File, index: Int, total: Int, uploadId: String) {
- val api = RetrofitClient.create()
- val part = MultipartBody.Part.createFormData(
- "chunk", file.name,
- file.asRequestBody("application/octet-stream".toMediaType())
- )
+    private suspend fun uploadChunk(file: File, index: Int, total: Int, uploadId: String) {
+        val api = RetrofitClient.create()
+        val part = MultipartBody.Part.createFormData(
+            "chunk", file.name,
+            file.asRequestBody("application/octet-stream".toMediaType())
+        )
 
- val response = api.uploadChunk(
- part,
- index.toRequestBody(),
- total.toRequestBody(),
- uploadId.toRequestBody()
- )
+        val response = api.uploadChunk(
+            part,
+            index.toRequestBody(),
+            total.toRequestBody(),
+            uploadId.toRequestBody()
+        )
 
- if (!response.isSuccessful) {
- throw IOException("Chunk $index failed: ${response.code()}")
- }
- }
+        if (!response.isSuccessful) {
+            throw IOException("Chunk $index failed: ${response.code()}")
+        }
+    }
 }
 ```
 
@@ -304,21 +305,21 @@ class ChunkedUploadWorker(
 
 ```kotlin
 interface FileUploadApi {
- @Multipart
- @POST("upload")
- suspend fun uploadFile(
- @Part file: MultipartBody.Part,
- @Part("metadata") metadata: RequestBody
- ): Response<UploadResponse>
+    @Multipart
+    @POST("upload")
+    suspend fun uploadFile(
+        @Part file: MultipartBody.Part,
+        @Part("metadata") metadata: RequestBody
+    ): Response<UploadResponse>
 
- @Multipart
- @POST("upload/chunk")
- suspend fun uploadChunk(
- @Part chunk: MultipartBody.Part,
- @Part("index") index: RequestBody,
- @Part("total") total: RequestBody,
- @Part("uploadId") uploadId: RequestBody
- ): Response<ChunkResponse>
+    @Multipart
+    @POST("upload/chunk")
+    suspend fun uploadChunk(
+        @Part chunk: MultipartBody.Part,
+        @Part("index") index: RequestBody,
+        @Part("total") total: RequestBody,
+        @Part("uploadId") uploadId: RequestBody
+    ): Response<ChunkResponse>
 }
 ```
 
@@ -326,32 +327,32 @@ interface FileUploadApi {
 
 ```kotlin
 class ProgressRequestBody(
- private val delegate: RequestBody,
- private val onProgress: (Long, Long) -> Unit
+    private val delegate: RequestBody,
+    private val onProgress: (Long, Long) -> Unit
 ) : RequestBody() {
- override fun contentType() = delegate.contentType()
- override fun contentLength() = delegate.contentLength()
+    override fun contentType() = delegate.contentType()
+    override fun contentLength() = delegate.contentLength()
 
- override fun writeTo(sink: BufferedSink) {
- val countingSink = CountingSink(sink, contentLength(), onProgress)
- val bufferedSink = countingSink.buffer()
- delegate.writeTo(bufferedSink)
- bufferedSink.flush()
- }
+    override fun writeTo(sink: BufferedSink) {
+        val countingSink = CountingSink(sink, contentLength(), onProgress)
+        val bufferedSink = countingSink.buffer()
+        delegate.writeTo(bufferedSink)
+        bufferedSink.flush()
+    }
 }
 
 class CountingSink(
- delegate: Sink,
- private val total: Long,
- private val onProgress: (Long, Long) -> Unit
+    delegate: Sink,
+    private val total: Long,
+    private val onProgress: (Long, Long) -> Unit
 ) : ForwardingSink(delegate) {
- private var written = 0L
+    private var written = 0L
 
- override fun write(source: Buffer, byteCount: Long) {
- super.write(source, byteCount)
- written += byteCount
- onProgress(written, total)
- }
+    override fun write(source: Buffer, byteCount: Long) {
+        super.write(source, byteCount)
+        written += byteCount
+        onProgress(written, total)
+    }
 }
 ```
 
@@ -359,53 +360,53 @@ class CountingSink(
 
 ```kotlin
 class FileUploadWorker(
- context: Context,
- params: WorkerParameters
+    context: Context,
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
- override suspend fun doWork(): Result {
- val filePath = inputData.getString(KEY_FILE_PATH) ?: return Result.failure()
- val file = File(filePath)
+    override suspend fun doWork(): Result {
+        val filePath = inputData.getString(KEY_FILE_PATH) ?: return Result.failure()
+        val file = File(filePath)
 
- if (!file.exists()) return Result.failure()
+        if (!file.exists()) return Result.failure()
 
- createNotificationChannel()
- setForeground(createForegroundInfo(0))
+        createNotificationChannel()
+        setForeground(createForegroundInfo(0))
 
- return try {
- uploadFile(file)
- showNotification("Complete", file.name, 100)
- Result.success()
- } catch (e: IOException) {
- Result.retry() // ✅ Retry on network errors
- } catch (e: Exception) {
- Result.failure(workDataOf("error" to e.message))
- }
- }
+        return try {
+            uploadFile(file)
+            showNotification("Complete", file.name, 100)
+            Result.success()
+        } catch (e: IOException) {
+            Result.retry() // ✅ Retry on network errors
+        } catch (e: Exception) {
+            Result.failure(workDataOf("error" to e.message))
+        }
+    }
 
- private suspend fun uploadFile(file: File): Boolean {
- val api = RetrofitClient.create { written, total ->
- val progress = (100 * written / total).toInt()
- setProgressAsync(workDataOf("progress" to progress))
- showNotification("Uploading...", file.name, progress)
- }
+    private suspend fun uploadFile(file: File): Boolean {
+        val api = RetrofitClient.create { written, total ->
+            val progress = (100 * written / total).toInt()
+            setProgressAsync(workDataOf("progress" to progress))
+            showNotification("Uploading...", file.name, progress)
+        }
 
- val requestFile = file.asRequestBody("application/octet-stream".toMediaType())
- val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+        val requestFile = file.asRequestBody("application/octet-stream".toMediaType())
+        val filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
- val response = api.uploadFile(filePart, createMetadata())
- return response.isSuccessful
- }
+        val response = api.uploadFile(filePart, createMetadata())
+        return response.isSuccessful
+    }
 
- private fun createForegroundInfo(progress: Int) = ForegroundInfo(
- NOTIFICATION_ID,
- NotificationCompat.Builder(applicationContext, CHANNEL_ID)
- .setContentTitle("Uploading File")
- .setSmallIcon(android.R.drawable.stat_sys_upload)
- .setProgress(100, progress, false)
- .setOngoing(true)
- .build()
- )
+    private fun createForegroundInfo(progress: Int) = ForegroundInfo(
+        NOTIFICATION_ID,
+        NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setContentTitle("Uploading File")
+            .setSmallIcon(android.R.drawable.stat_sys_upload)
+            .setProgress(100, progress, false)
+            .setOngoing(true)
+            .build()
+    )
 }
 ```
 
@@ -413,40 +414,40 @@ class FileUploadWorker(
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private val workManager by lazy { WorkManager.getInstance(this) }
+    private val workManager by lazy { WorkManager.getInstance(this) }
 
- private fun uploadFile(uri: Uri) {
- val file = copyToCache(uri)
+    private fun uploadFile(uri: Uri) {
+        val file = copyToCache(uri)
 
- val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
- .setInputData(workDataOf(KEY_FILE_PATH to file.absolutePath))
- .setConstraints(Constraints.Builder()
- .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Network required
- .setRequiresBatteryNotLow(true) // ✅ Battery not low
- .build())
- .setBackoffCriteria(
- BackoffPolicy.EXPONENTIAL,
- WorkRequest.MIN_BACKOFF_MILLIS,
- TimeUnit.MILLISECONDS
- )
- .build()
+        val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
+            .setInputData(workDataOf(KEY_FILE_PATH to file.absolutePath))
+            .setConstraints(Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ Network required
+                .setRequiresBatteryNotLow(true) // ✅ Battery not low
+                .build())
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                WorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+            .build()
 
- workManager.enqueue(uploadRequest)
+        workManager.enqueue(uploadRequest)
 
- // Observe progress
- workManager.getWorkInfoByIdLiveData(uploadRequest.id)
- .observe(this) { workInfo ->
- when (workInfo.state) {
- WorkInfo.State.RUNNING -> {
- val progress = workInfo.progress.getInt("progress", 0)
- updateProgress(progress)
- }
- WorkInfo.State.SUCCEEDED -> showSuccess()
- WorkInfo.State.FAILED -> showError()
- else -> {}
- }
- }
- }
+        // Observe progress
+        workManager.getWorkInfoByIdLiveData(uploadRequest.id)
+            .observe(this) { workInfo ->
+                when (workInfo.state) {
+                    WorkInfo.State.RUNNING -> {
+                        val progress = workInfo.progress.getInt("progress", 0)
+                        updateProgress(progress)
+                    }
+                    WorkInfo.State.SUCCEEDED -> showSuccess()
+                    WorkInfo.State.FAILED -> showError()
+                    else -> {}
+                }
+            }
+    }
 }
 ```
 
@@ -454,65 +455,65 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class ChunkedUploadWorker(
- context: Context,
- params: WorkerParameters
+    context: Context,
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
- companion object {
- const val CHUNK_SIZE = 5 * 1024 * 1024 // 5MB
- }
+    companion object {
+        const val CHUNK_SIZE = 5 * 1024 * 1024 // 5MB
+    }
 
- override suspend fun doWork(): Result {
- val file = File(inputData.getString(KEY_FILE_PATH)!!)
- return try {
- uploadInChunks(file)
- Result.success()
- } catch (e: Exception) {
- Result.retry()
- }
- }
+    override suspend fun doWork(): Result {
+        val file = File(inputData.getString(KEY_FILE_PATH)!!)
+        return try {
+            uploadInChunks(file)
+            Result.success()
+        } catch (e: Exception) {
+            Result.retry()
+        }
+    }
 
- private suspend fun uploadInChunks(file: File) {
- val totalChunks = (file.length() / CHUNK_SIZE + 1).toInt()
- val uploadId = UUID.randomUUID().toString()
+    private suspend fun uploadInChunks(file: File) {
+        val totalChunks = (file.length() / CHUNK_SIZE + 1).toInt()
+        val uploadId = UUID.randomUUID().toString()
 
- file.inputStream().buffered().use { input ->
- var index = 0
- val buffer = ByteArray(CHUNK_SIZE)
+        file.inputStream().buffered().use { input ->
+            var index = 0
+            val buffer = ByteArray(CHUNK_SIZE)
 
- while (true) {
- val bytesRead = input.read(buffer)
- if (bytesRead == -1) break
+            while (true) {
+                val bytesRead = input.read(buffer)
+                if (bytesRead == -1) break
 
- val chunk = File(cacheDir, "chunk_$index")
- chunk.writeBytes(buffer.copyOf(bytesRead))
+                val chunk = File(cacheDir, "chunk_$index")
+                chunk.writeBytes(buffer.copyOf(bytesRead))
 
- uploadChunk(chunk, index, totalChunks, uploadId)
- chunk.delete()
+                uploadChunk(chunk, index, totalChunks, uploadId)
+                chunk.delete()
 
- setProgressAsync(workDataOf("progress" to (100 * ++index / totalChunks)))
- }
- }
- }
+                setProgressAsync(workDataOf("progress" to (100 * ++index / totalChunks)))
+            }
+        }
+    }
 
- private suspend fun uploadChunk(file: File, index: Int, total: Int, uploadId: String) {
- val api = RetrofitClient.create()
- val part = MultipartBody.Part.createFormData(
- "chunk", file.name,
- file.asRequestBody("application/octet-stream".toMediaType())
- )
+    private suspend fun uploadChunk(file: File, index: Int, total: Int, uploadId: String) {
+        val api = RetrofitClient.create()
+        val part = MultipartBody.Part.createFormData(
+            "chunk", file.name,
+            file.asRequestBody("application/octet-stream".toMediaType())
+        )
 
- val response = api.uploadChunk(
- part,
- index.toRequestBody(),
- total.toRequestBody(),
- uploadId.toRequestBody()
- )
+        val response = api.uploadChunk(
+            part,
+            index.toRequestBody(),
+            total.toRequestBody(),
+            uploadId.toRequestBody()
+        )
 
- if (!response.isSuccessful) {
- throw IOException("Chunk $index failed: ${response.code()}")
- }
- }
+        if (!response.isSuccessful) {
+            throw IOException("Chunk $index failed: ${response.code()}")
+        }
+    }
 }
 ```
 

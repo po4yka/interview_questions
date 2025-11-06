@@ -15,6 +15,7 @@ created: 2025-10-13
 updated: 2025-10-28
 tags: [android/room, database, difficulty/easy, orm, room, sqlite]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -41,9 +42,9 @@ Room — это ORM-библиотека от Google, предоставляющ
 ```kotlin
 @Entity(tableName = "users")
 data class User(
- @PrimaryKey(autoGenerate = true) val id: Int = 0, // ✅ автогенерация ID
- @ColumnInfo(name = "user_name") val name: String,
- val email: String
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,  // ✅ автогенерация ID
+    @ColumnInfo(name = "user_name") val name: String,
+    val email: String
 )
 ```
 
@@ -51,11 +52,11 @@ data class User(
 ```kotlin
 @Dao
 interface UserDao {
- @Query("SELECT * FROM users WHERE email = :email")
- suspend fun getUserByEmail(email: String): User? // ✅ suspend для корутин
+    @Query("SELECT * FROM users WHERE email = :email")
+    suspend fun getUserByEmail(email: String): User?  // ✅ suspend для корутин
 
- @Insert(onConflict = OnConflictStrategy.REPLACE)
- suspend fun insert(user: User) // ✅ обработка конфликтов
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(user: User)  // ✅ обработка конфликтов
 }
 ```
 
@@ -63,16 +64,16 @@ interface UserDao {
 ```kotlin
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
- abstract fun userDao(): UserDao
+    abstract fun userDao(): UserDao
 
- companion object {
- @Volatile private var INSTANCE: AppDatabase? = null
+    companion object {
+        @Volatile private var INSTANCE: AppDatabase? = null
 
- fun getDatabase(context: Context): AppDatabase =
- INSTANCE ?: synchronized(this) { // ✅ потокобезопасный singleton
- INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
- }
- }
+        fun getDatabase(context: Context): AppDatabase =
+            INSTANCE ?: synchronized(this) {  // ✅ потокобезопасный singleton
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+            }
+    }
 }
 ```
 
@@ -92,9 +93,9 @@ Room is Google's ORM library providing an abstraction over SQLite with compile-t
 ```kotlin
 @Entity(tableName = "users")
 data class User(
- @PrimaryKey(autoGenerate = true) val id: Int = 0, // ✅ auto-generated ID
- @ColumnInfo(name = "user_name") val name: String,
- val email: String
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,  // ✅ auto-generated ID
+    @ColumnInfo(name = "user_name") val name: String,
+    val email: String
 )
 ```
 
@@ -102,11 +103,11 @@ data class User(
 ```kotlin
 @Dao
 interface UserDao {
- @Query("SELECT * FROM users WHERE email = :email")
- suspend fun getUserByEmail(email: String): User? // ✅ suspend for coroutines
+    @Query("SELECT * FROM users WHERE email = :email")
+    suspend fun getUserByEmail(email: String): User?  // ✅ suspend for coroutines
 
- @Insert(onConflict = OnConflictStrategy.REPLACE)
- suspend fun insert(user: User) // ✅ conflict handling
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(user: User)  // ✅ conflict handling
 }
 ```
 
@@ -114,16 +115,16 @@ interface UserDao {
 ```kotlin
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
- abstract fun userDao(): UserDao
+    abstract fun userDao(): UserDao
 
- companion object {
- @Volatile private var INSTANCE: AppDatabase? = null
+    companion object {
+        @Volatile private var INSTANCE: AppDatabase? = null
 
- fun getDatabase(context: Context): AppDatabase =
- INSTANCE ?: synchronized(this) { // ✅ thread-safe singleton
- INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
- }
- }
+        fun getDatabase(context: Context): AppDatabase =
+            INSTANCE ?: synchronized(this) {  // ✅ thread-safe singleton
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+            }
+    }
 }
 ```
 
@@ -139,24 +140,24 @@ abstract class AppDatabase : RoomDatabase() {
 
 ## References
 
-- - Room library concept
-- - SQLite database basics
-- - Object-Relational Mapping patterns
+-  - Room library concept
+-  - SQLite database basics
+-  - Object-Relational Mapping patterns
 - https://developer.android.com/training/data-storage/room - Official Room documentation
 - https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Room codelab
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- - Android data storage options
-- [[q-gradle-basics--android--easy]] - SQLite fundamentals
+-  - Android data storage options
+-  - SQLite fundamentals
 
 ### Related (Same Level)
-- [[q-fragment-basics--android--easy]] - Room basic operations
-- - Defining Room entities
-- - DAO implementation patterns
+-  - Room basic operations
+-  - Defining Room entities
+-  - DAO implementation patterns
 
 ### Advanced (Harder)
 - [[q-room-database-migrations--android--medium]] - Database schema migrations
-- - Modeling table relationships
-- - Testing Room databases
+-  - Modeling table relationships
+-  - Testing Room databases

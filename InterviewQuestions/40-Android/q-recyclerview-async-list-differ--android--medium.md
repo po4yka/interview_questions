@@ -17,12 +17,14 @@ status: draft
 moc: moc-android
 related:
 - c-recyclerview
+- q-compose-side-effects-advanced--jetpack-compose--hard
 - q-what-are-services-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
 tags:
 - android/ui-views
 - difficulty/medium
+
 ---
 
 # `RecyclerView` Async `List` Diffing
@@ -42,18 +44,18 @@ tags:
 ### The Problem: Blocking UI `Thread`
 
 ```kotlin
-// PROBLEM - Blocks UI thread
+//  PROBLEM - Blocks UI thread
 class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
- private var items = emptyList<Item>()
+    private var items = emptyList<Item>()
 
- fun updateData(newItems: List<Item>) {
- val diffResult = DiffUtil.calculateDiff(
- ItemDiffCallback(items, newItems)
- ) // BLOCKS UI thread for large lists!
+    fun updateData(newItems: List<Item>) {
+        val diffResult = DiffUtil.calculateDiff(
+            ItemDiffCallback(items, newItems)
+        ) // BLOCKS UI thread for large lists!
 
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
 ```
 
@@ -71,48 +73,48 @@ class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
- // AsyncListDiffer handles threading automatically
- private val differ = AsyncListDiffer(this, DiffCallback())
+    //  AsyncListDiffer handles threading automatically
+    private val differ = AsyncListDiffer(this, DiffCallback())
 
- // Access current list
- val currentList: List<Item>
- get() = differ.currentList
+    // Access current list
+    val currentList: List<Item>
+        get() = differ.currentList
 
- // Submit new list (async calculation)
- fun submitList(newList: List<Item>) {
- differ.submitList(newList) // Async, non-blocking!
- }
+    // Submit new list (async calculation)
+    fun submitList(newList: List<Item>) {
+        differ.submitList(newList) // Async, non-blocking!
+    }
 
- override fun getItemCount() = currentList.size
+    override fun getItemCount() = currentList.size
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return ViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = currentList[position]
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = currentList[position]
+        holder.bind(item)
+    }
 
- class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
- private val textView: TextView = view.findViewById(R.id.text)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val textView: TextView = view.findViewById(R.id.text)
 
- fun bind(item: Item) {
- textView.text = item.name
- }
- }
+        fun bind(item: Item) {
+            textView.text = item.name
+        }
+    }
 
- class DiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 ```
 
@@ -123,18 +125,18 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 **`Thread` flow:**
 
 ```
-Main Thread Background Thread
------------ -----------------
+Main Thread                 Background Thread
+-----------                 -----------------
 submitList(newList)
- ↓
+    ↓
 Store newList
- ↓ → Calculate diff
-Keep UI responsive (DiffUtil.calculateDiff)
- ↓ ← Return DiffResult
+    ↓                    →  Calculate diff
+Keep UI responsive           (DiffUtil.calculateDiff)
+    ↓                    ←  Return DiffResult
 Receive result
- ↓
+    ↓
 dispatchUpdatesTo(adapter)
- ↓
+    ↓
 Update UI (smooth!)
 ```
 
@@ -159,25 +161,25 @@ Update UI (smooth!)
 **ListAdapter (built on AsyncListDiffer):**
 
 ```kotlin
-// ListAdapter is simpler
+//  ListAdapter is simpler
 class SimpleAdapter : ListAdapter<Item, SimpleAdapter.ViewHolder>(DiffCallback()) {
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- // ...
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // ...
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = getItem(position) // ListAdapter provides this
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position) // ListAdapter provides this
+        holder.bind(item)
+    }
 
- class DiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item) =
- oldItem.id == newItem.id
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+            oldItem.id == newItem.id
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item) =
- oldItem == newItem
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+            oldItem == newItem
+    }
 }
 
 // Usage
@@ -202,16 +204,16 @@ adapter.submitList(items) // Same API as AsyncListDiffer!
 **submitList() is thread-safe:**
 
 ```kotlin
-// Safe to call from any thread
+//  Safe to call from any thread
 viewModel.items.observe(lifecycleOwner) { items ->
- adapter.submitList(items) // Can be called from background thread
+    adapter.submitList(items) // Can be called from background thread
 }
 ```
 
 **But list itself must not be mutated:**
 
 ```kotlin
-// BAD - Mutable list
+//  BAD - Mutable list
 val items = mutableListOf<Item>()
 adapter.submitList(items)
 
@@ -219,7 +221,7 @@ adapter.submitList(items)
 items.add(Item()) // DANGER! List is being diffed in background
 adapter.submitList(items) // May crash or produce incorrect results
 
-// GOOD - Immutable list
+//  GOOD - Immutable list
 val items = listOf<Item>(...)
 adapter.submitList(items)
 
@@ -235,37 +237,37 @@ adapter.submitList(newItems) // Safe!
 **Problem: Modifying list during diff:**
 
 ```kotlin
-// UNSAFE
+//  UNSAFE
 class UnsafeViewModel : ViewModel() {
- private val _items = MutableLiveData<MutableList<Item>>()
- val items: LiveData<MutableList<Item>> = _items
+    private val _items = MutableLiveData<MutableList<Item>>()
+    val items: LiveData<MutableList<Item>> = _items
 
- fun addItem(item: Item) {
- _items.value?.add(item) // Mutates list!
- _items.value = _items.value // Triggers observer
- }
+    fun addItem(item: Item) {
+        _items.value?.add(item) // Mutates list!
+        _items.value = _items.value // Triggers observer
+    }
 }
 ```
 
 **Solution 1: Use immutable lists**
 
 ```kotlin
-// SAFE - Immutable
+//  SAFE - Immutable
 class SafeViewModel : ViewModel() {
- private val _items = MutableLiveData<List<Item>>()
- val items: LiveData<List<Item>> = _items
+    private val _items = MutableLiveData<List<Item>>()
+    val items: LiveData<List<Item>> = _items
 
- fun addItem(item: Item) {
- val currentList = _items.value ?: emptyList()
- _items.value = currentList + item // Creates new list
- }
+    fun addItem(item: Item) {
+        val currentList = _items.value ?: emptyList()
+        _items.value = currentList + item // Creates new list
+    }
 }
 ```
 
 **Solution 2: Make defensive copy**
 
 ```kotlin
-// SAFE - Defensive copy
+//  SAFE - Defensive copy
 adapter.submitList(items.toList()) // Creates copy
 ```
 
@@ -273,19 +275,19 @@ adapter.submitList(items.toList()) // Creates copy
 
 ```kotlin
 class FlowViewModel : ViewModel() {
- private val _items = MutableStateFlow<List<Item>>(emptyList())
- val items: StateFlow<List<Item>> = _items.asStateFlow()
+    private val _items = MutableStateFlow<List<Item>>(emptyList())
+    val items: StateFlow<List<Item>> = _items.asStateFlow()
 
- fun addItem(item: Item) {
- _items.value = _items.value + item // Creates new list
- }
+    fun addItem(item: Item) {
+        _items.value = _items.value + item // Creates new list
+    }
 }
 
 // In Fragment/Activity
 lifecycleScope.launch {
- viewModel.items.collect { items ->
- adapter.submitList(items)
- }
+    viewModel.items.collect { items ->
+        adapter.submitList(items)
+    }
 }
 ```
 
@@ -297,17 +299,17 @@ lifecycleScope.launch {
 
 ```kotlin
 adapter.submitList(newItems) { // Callback runs when diff complete
- // Scroll to top after update
- recyclerView.scrollToPosition(0)
+    // Scroll to top after update
+    recyclerView.scrollToPosition(0)
 }
 
 // Or with more control
 adapter.submitList(newItems, object : Runnable {
- override fun run() {
- // Update complete
- progressBar.isVisible = false
- emptyView.isVisible = newItems.isEmpty()
- }
+    override fun run() {
+        // Update complete
+        progressBar.isVisible = false
+        emptyView.isVisible = newItems.isEmpty()
+    }
 })
 ```
 
@@ -322,20 +324,20 @@ adapter.submitList(newItems, object : Runnable {
 val customExecutor = Executors.newSingleThreadExecutor()
 
 val differ = AsyncListDiffer(
- adapter,
- AsyncDifferConfig.Builder(DiffCallback())
- .setBackgroundThreadExecutor(customExecutor)
- .build()
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(customExecutor)
+        .build()
 )
 
 // For testing with instant execution
 val testExecutor = Executor { it.run() } // Runs synchronously
 
 val differ = AsyncListDiffer(
- adapter,
- AsyncDifferConfig.Builder(DiffCallback())
- .setBackgroundThreadExecutor(testExecutor)
- .build()
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(testExecutor)
+        .build()
 )
 ```
 
@@ -348,30 +350,30 @@ val differ = AsyncListDiffer(
 ```kotlin
 class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
- private val differ = AsyncListDiffer(this, DiffCallback())
- private val handler = Handler(Looper.getMainLooper())
- private var pendingUpdate: List<Item>? = null
+    private val differ = AsyncListDiffer(this, DiffCallback())
+    private val handler = Handler(Looper.getMainLooper())
+    private var pendingUpdate: List<Item>? = null
 
- private val submitRunnable = Runnable {
- pendingUpdate?.let {
- differ.submitList(it)
- pendingUpdate = null
- }
- }
+    private val submitRunnable = Runnable {
+        pendingUpdate?.let {
+            differ.submitList(it)
+            pendingUpdate = null
+        }
+    }
 
- fun submitListDebounced(items: List<Item>, delayMs: Long = 300) {
- pendingUpdate = items
- handler.removeCallbacks(submitRunnable)
- handler.postDelayed(submitRunnable, delayMs)
- }
+    fun submitListDebounced(items: List<Item>, delayMs: Long = 300) {
+        pendingUpdate = items
+        handler.removeCallbacks(submitRunnable)
+        handler.postDelayed(submitRunnable, delayMs)
+    }
 
- fun submitListImmediate(items: List<Item>) {
- handler.removeCallbacks(submitRunnable)
- pendingUpdate = null
- differ.submitList(items)
- }
+    fun submitListImmediate(items: List<Item>) {
+        handler.removeCallbacks(submitRunnable)
+        pendingUpdate = null
+        differ.submitList(items)
+    }
 
- // ... rest of adapter
+    // ... rest of adapter
 }
 ```
 
@@ -379,24 +381,24 @@ class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String,
- val metadata: Map<String, Any> // Expensive to compare
+    val id: Long,
+    val name: String,
+    val description: String,
+    val metadata: Map<String, Any> // Expensive to compare
 ) {
- // Optimize equals
- override fun equals(other: Any?): Boolean {
- if (this === other) return true
- if (other !is Item) return false
+    // Optimize equals
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
 
- // Check cheap fields first
- if (id != other.id) return false
- if (name != other.name) return false
- if (description != other.description) return false
+        // Check cheap fields first
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (description != other.description) return false
 
- // Only check expensive field if everything else matches
- return metadata == other.metadata
- }
+        // Only check expensive field if everything else matches
+        return metadata == other.metadata
+    }
 }
 ```
 
@@ -413,229 +415,229 @@ data class Item(
 
 ```kotlin
 data class Message(
- val id: String,
- val senderId: String,
- val content: String,
- val timestamp: Long,
- val isSent: Boolean = false,
- val isRead: Boolean = false
+    val id: String,
+    val senderId: String,
+    val content: String,
+    val timestamp: Long,
+    val isSent: Boolean = false,
+    val isRead: Boolean = false
 )
 
 class ChatAdapter(
- private val currentUserId: String,
- private val onMessageClick: (Message) -> Unit
+    private val currentUserId: String,
+    private val onMessageClick: (Message) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
- companion object {
- private const val TYPE_SENT = 0
- private const val TYPE_RECEIVED = 1
- }
+    companion object {
+        private const val TYPE_SENT = 0
+        private const val TYPE_RECEIVED = 1
+    }
 
- private val differ = AsyncListDiffer(this, MessageDiffCallback())
+    private val differ = AsyncListDiffer(this, MessageDiffCallback())
 
- val currentList: List<Message>
- get() = differ.currentList
+    val currentList: List<Message>
+        get() = differ.currentList
 
- fun submitList(messages: List<Message>) {
- differ.submitList(messages)
- }
+    fun submitList(messages: List<Message>) {
+        differ.submitList(messages)
+    }
 
- fun submitList(messages: List<Message>, commitCallback: Runnable?) {
- differ.submitList(messages, commitCallback)
- }
+    fun submitList(messages: List<Message>, commitCallback: Runnable?) {
+        differ.submitList(messages, commitCallback)
+    }
 
- override fun getItemViewType(position: Int): Int {
- val message = currentList[position]
- return if (message.senderId == currentUserId) TYPE_SENT else TYPE_RECEIVED
- }
+    override fun getItemViewType(position: Int): Int {
+        val message = currentList[position]
+        return if (message.senderId == currentUserId) TYPE_SENT else TYPE_RECEIVED
+    }
 
- override fun getItemCount() = currentList.size
+    override fun getItemCount() = currentList.size
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
- return when (viewType) {
- TYPE_SENT -> SentMessageViewHolder.create(parent, onMessageClick)
- TYPE_RECEIVED -> ReceivedMessageViewHolder.create(parent, onMessageClick)
- else -> throw IllegalArgumentException("Unknown viewType")
- }
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_SENT -> SentMessageViewHolder.create(parent, onMessageClick)
+            TYPE_RECEIVED -> ReceivedMessageViewHolder.create(parent, onMessageClick)
+            else -> throw IllegalArgumentException("Unknown viewType")
+        }
+    }
 
- override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
- val message = currentList[position]
- when (holder) {
- is SentMessageViewHolder -> holder.bind(message)
- is ReceivedMessageViewHolder -> holder.bind(message)
- }
- }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val message = currentList[position]
+        when (holder) {
+            is SentMessageViewHolder -> holder.bind(message)
+            is ReceivedMessageViewHolder -> holder.bind(message)
+        }
+    }
 
- override fun onBindViewHolder(
- holder: RecyclerView.ViewHolder,
- position: Int,
- payloads: List<Any>
- ) {
- if (payloads.isEmpty()) {
- super.onBindViewHolder(holder, position, payloads)
- } else {
- // Partial update for message status
- val message = currentList[position]
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Partial update for message status
+            val message = currentList[position]
 
- @Suppress("UNCHECKED_CAST")
- val changes = payloads[0] as Map<String, Any>
+            @Suppress("UNCHECKED_CAST")
+            val changes = payloads[0] as Map<String, Any>
 
- if (holder is SentMessageViewHolder) {
- changes["isSent"]?.let {
- holder.updateSentStatus(message.isSent)
- }
- changes["isRead"]?.let {
- holder.updateReadStatus(message.isRead)
- }
- }
- }
- }
+            if (holder is SentMessageViewHolder) {
+                changes["isSent"]?.let {
+                    holder.updateSentStatus(message.isSent)
+                }
+                changes["isRead"]?.let {
+                    holder.updateReadStatus(message.isRead)
+                }
+            }
+        }
+    }
 
- class SentMessageViewHolder private constructor(
- private val binding: ItemMessageSentBinding,
- private val onMessageClick: (Message) -> Unit
- ) : RecyclerView.ViewHolder(binding.root) {
+    class SentMessageViewHolder private constructor(
+        private val binding: ItemMessageSentBinding,
+        private val onMessageClick: (Message) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
- private var currentMessage: Message? = null
+        private var currentMessage: Message? = null
 
- init {
- binding.root.setOnClickListener {
- currentMessage?.let { onMessageClick(it) }
- }
- }
+        init {
+            binding.root.setOnClickListener {
+                currentMessage?.let { onMessageClick(it) }
+            }
+        }
 
- fun bind(message: Message) {
- currentMessage = message
+        fun bind(message: Message) {
+            currentMessage = message
 
- binding.content.text = message.content
- binding.timestamp.text = formatTimestamp(message.timestamp)
+            binding.content.text = message.content
+            binding.timestamp.text = formatTimestamp(message.timestamp)
 
- updateSentStatus(message.isSent)
- updateReadStatus(message.isRead)
- }
+            updateSentStatus(message.isSent)
+            updateReadStatus(message.isRead)
+        }
 
- fun updateSentStatus(isSent: Boolean) {
- binding.sentIcon.isVisible = isSent
- binding.sendingIcon.isVisible = !isSent
- }
+        fun updateSentStatus(isSent: Boolean) {
+            binding.sentIcon.isVisible = isSent
+            binding.sendingIcon.isVisible = !isSent
+        }
 
- fun updateReadStatus(isRead: Boolean) {
- binding.readIcon.isVisible = isRead
- }
+        fun updateReadStatus(isRead: Boolean) {
+            binding.readIcon.isVisible = isRead
+        }
 
- private fun formatTimestamp(timestamp: Long): String {
- // Format timestamp
- return DateFormat.format("HH:mm", timestamp).toString()
- }
+        private fun formatTimestamp(timestamp: Long): String {
+            // Format timestamp
+            return DateFormat.format("HH:mm", timestamp).toString()
+        }
 
- companion object {
- fun create(
- parent: ViewGroup,
- onMessageClick: (Message) -> Unit
- ): SentMessageViewHolder {
- val binding = ItemMessageSentBinding.inflate(
- LayoutInflater.from(parent.context),
- parent,
- false
- )
- return SentMessageViewHolder(binding, onMessageClick)
- }
- }
- }
+        companion object {
+            fun create(
+                parent: ViewGroup,
+                onMessageClick: (Message) -> Unit
+            ): SentMessageViewHolder {
+                val binding = ItemMessageSentBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                return SentMessageViewHolder(binding, onMessageClick)
+            }
+        }
+    }
 
- class ReceivedMessageViewHolder private constructor(
- private val binding: ItemMessageReceivedBinding,
- private val onMessageClick: (Message) -> Unit
- ) : RecyclerView.ViewHolder(binding.root) {
+    class ReceivedMessageViewHolder private constructor(
+        private val binding: ItemMessageReceivedBinding,
+        private val onMessageClick: (Message) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
- private var currentMessage: Message? = null
+        private var currentMessage: Message? = null
 
- init {
- binding.root.setOnClickListener {
- currentMessage?.let { onMessageClick(it) }
- }
- }
+        init {
+            binding.root.setOnClickListener {
+                currentMessage?.let { onMessageClick(it) }
+            }
+        }
 
- fun bind(message: Message) {
- currentMessage = message
+        fun bind(message: Message) {
+            currentMessage = message
 
- binding.content.text = message.content
- binding.timestamp.text = formatTimestamp(message.timestamp)
- }
+            binding.content.text = message.content
+            binding.timestamp.text = formatTimestamp(message.timestamp)
+        }
 
- private fun formatTimestamp(timestamp: Long): String {
- return DateFormat.format("HH:mm", timestamp).toString()
- }
+        private fun formatTimestamp(timestamp: Long): String {
+            return DateFormat.format("HH:mm", timestamp).toString()
+        }
 
- companion object {
- fun create(
- parent: ViewGroup,
- onMessageClick: (Message) -> Unit
- ): ReceivedMessageViewHolder {
- val binding = ItemMessageReceivedBinding.inflate(
- LayoutInflater.from(parent.context),
- parent,
- false
- )
- return ReceivedMessageViewHolder(binding, onMessageClick)
- }
- }
- }
+        companion object {
+            fun create(
+                parent: ViewGroup,
+                onMessageClick: (Message) -> Unit
+            ): ReceivedMessageViewHolder {
+                val binding = ItemMessageReceivedBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                return ReceivedMessageViewHolder(binding, onMessageClick)
+            }
+        }
+    }
 
- class MessageDiffCallback : DiffUtil.ItemCallback<Message>() {
- override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
- return oldItem.id == newItem.id
- }
+    class MessageDiffCallback : DiffUtil.ItemCallback<Message>() {
+        override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
- return oldItem == newItem
- }
+        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
+            return oldItem == newItem
+        }
 
- override fun getChangePayload(oldItem: Message, newItem: Message): Any? {
- val changes = mutableMapOf<String, Any>()
+        override fun getChangePayload(oldItem: Message, newItem: Message): Any? {
+            val changes = mutableMapOf<String, Any>()
 
- if (oldItem.isSent != newItem.isSent) {
- changes["isSent"] = newItem.isSent
- }
+            if (oldItem.isSent != newItem.isSent) {
+                changes["isSent"] = newItem.isSent
+            }
 
- if (oldItem.isRead != newItem.isRead) {
- changes["isRead"] = newItem.isRead
- }
+            if (oldItem.isRead != newItem.isRead) {
+                changes["isRead"] = newItem.isRead
+            }
 
- return if (changes.isNotEmpty()) changes else null
- }
- }
+            return if (changes.isNotEmpty()) changes else null
+        }
+    }
 }
 
 // Usage in Fragment
 class ChatFragment : Fragment() {
 
- private val viewModel: ChatViewModel by viewModels()
- private lateinit var adapter: ChatAdapter
+    private val viewModel: ChatViewModel by viewModels()
+    private lateinit var adapter: ChatAdapter
 
- override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
- super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
- adapter = ChatAdapter(
- currentUserId = getCurrentUserId(),
- onMessageClick = { message ->
- // Handle message click
- }
- )
+        adapter = ChatAdapter(
+            currentUserId = getCurrentUserId(),
+            onMessageClick = { message ->
+                // Handle message click
+            }
+        )
 
- binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
- // Observe messages
- viewModel.messages.observe(viewLifecycleOwner) { messages ->
- adapter.submitList(messages) {
- // Scroll to bottom after new message
- if (adapter.currentList.isNotEmpty()) {
- binding.recyclerView.scrollToPosition(adapter.currentList.size - 1)
- }
- }
- }
- }
+        // Observe messages
+        viewModel.messages.observe(viewLifecycleOwner) { messages ->
+            adapter.submitList(messages) {
+                // Scroll to bottom after new message
+                if (adapter.currentList.isNotEmpty()) {
+                    binding.recyclerView.scrollToPosition(adapter.currentList.size - 1)
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -647,36 +649,36 @@ class ChatFragment : Fragment() {
 @RunWith(AndroidJUnit4::class)
 class AsyncAdapterTest {
 
- @Test
- fun testListUpdate() = runBlocking {
- val adapter = AsyncAdapter()
+    @Test
+    fun testListUpdate() = runBlocking {
+        val adapter = AsyncAdapter()
 
- val initialList = listOf(Item(1, "A"), Item(2, "B"))
- adapter.submitList(initialList)
+        val initialList = listOf(Item(1, "A"), Item(2, "B"))
+        adapter.submitList(initialList)
 
- // Wait for diff to complete
- delay(100)
+        // Wait for diff to complete
+        delay(100)
 
- assertEquals(2, adapter.itemCount)
- assertEquals("A", adapter.currentList[0].name)
- }
+        assertEquals(2, adapter.itemCount)
+        assertEquals("A", adapter.currentList[0].name)
+    }
 
- @Test
- fun testListUpdateWithCallback() {
- val adapter = AsyncAdapter()
- val initialList = listOf(Item(1, "A"))
+    @Test
+    fun testListUpdateWithCallback() {
+        val adapter = AsyncAdapter()
+        val initialList = listOf(Item(1, "A"))
 
- var callbackCalled = false
+        var callbackCalled = false
 
- adapter.submitList(initialList) {
- callbackCalled = true
- }
+        adapter.submitList(initialList) {
+            callbackCalled = true
+        }
 
- // Wait for callback
- eventually(timeoutMs = 1000) {
- assertTrue(callbackCalled)
- }
- }
+        // Wait for callback
+        eventually(timeoutMs = 1000) {
+            assertTrue(callbackCalled)
+        }
+    }
 }
 ```
 
@@ -686,11 +688,11 @@ class AsyncAdapterTest {
 
 **1. Use immutable lists**
 ```kotlin
-// DO
+//  DO
 val newList = currentList + newItem
 adapter.submitList(newList)
 
-// DON'T
+//  DON'T
 val list = mutableListOf<Item>()
 adapter.submitList(list)
 list.add(item) // Dangerous!
@@ -698,7 +700,7 @@ list.add(item) // Dangerous!
 
 **2. Prefer ListAdapter**
 ```kotlin
-// DO - Simpler
+//  DO - Simpler
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 // Only use AsyncListDiffer for custom needs
@@ -706,22 +708,22 @@ class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 **3. Use commit callback wisely**
 ```kotlin
-// DO - Scroll after update
+//  DO - Scroll after update
 adapter.submitList(items) {
- recyclerView.scrollToPosition(0)
+    recyclerView.scrollToPosition(0)
 }
 
-// DON'T - Heavy work in callback
+//  DON'T - Heavy work in callback
 adapter.submitList(items) {
- // Heavy operation - blocks UI!
+    // Heavy operation - blocks UI!
 }
 ```
 
 **4. Debounce rapid updates**
 ```kotlin
-// DO - Debounce user input
+//  DO - Debounce user input
 searchView.onQueryTextChange { query ->
- viewModel.search(query) // Debounced in ViewModel
+    viewModel.search(query) // Debounced in ViewModel
 }
 ```
 
@@ -765,6 +767,7 @@ searchView.onQueryTextChange { query ->
 
 ---
 
+
 # Question (EN)
 > How does AsyncListDiffer work? Explain background thread diffing, comparing AsyncListDiffer vs ListAdapter, handling list mutations safely, and optimizing for large dataset updates.
 
@@ -773,7 +776,9 @@ searchView.onQueryTextChange { query ->
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 
@@ -782,18 +787,18 @@ searchView.onQueryTextChange { query ->
 ### The Problem: Blocking UI `Thread`
 
 ```kotlin
-// PROBLEM - Blocks UI thread
+//  PROBLEM - Blocks UI thread
 class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
- private var items = emptyList<Item>()
+    private var items = emptyList<Item>()
 
- fun updateData(newItems: List<Item>) {
- val diffResult = DiffUtil.calculateDiff(
- ItemDiffCallback(items, newItems)
- ) // BLOCKS UI thread for large lists!
+    fun updateData(newItems: List<Item>) {
+        val diffResult = DiffUtil.calculateDiff(
+            ItemDiffCallback(items, newItems)
+        ) // BLOCKS UI thread for large lists!
 
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
 ```
 
@@ -811,48 +816,48 @@ class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
- // AsyncListDiffer handles threading automatically
- private val differ = AsyncListDiffer(this, DiffCallback())
+    //  AsyncListDiffer handles threading automatically
+    private val differ = AsyncListDiffer(this, DiffCallback())
 
- // Access current list
- val currentList: List<Item>
- get() = differ.currentList
+    // Access current list
+    val currentList: List<Item>
+        get() = differ.currentList
 
- // Submit new list (async calculation)
- fun submitList(newList: List<Item>) {
- differ.submitList(newList) // Async, non-blocking!
- }
+    // Submit new list (async calculation)
+    fun submitList(newList: List<Item>) {
+        differ.submitList(newList) // Async, non-blocking!
+    }
 
- override fun getItemCount() = currentList.size
+    override fun getItemCount() = currentList.size
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return ViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = currentList[position]
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = currentList[position]
+        holder.bind(item)
+    }
 
- class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
- private val textView: TextView = view.findViewById(R.id.text)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val textView: TextView = view.findViewById(R.id.text)
 
- fun bind(item: Item) {
- textView.text = item.name
- }
- }
+        fun bind(item: Item) {
+            textView.text = item.name
+        }
+    }
 
- class DiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 ```
 
@@ -863,18 +868,18 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 **`Thread` flow:**
 
 ```
-Main Thread Background Thread
------------ -----------------
+Main Thread                 Background Thread
+-----------                 -----------------
 submitList(newList)
- ↓
+    ↓
 Store newList
- ↓ → Calculate diff
-Keep UI responsive (DiffUtil.calculateDiff)
- ↓ ← Return DiffResult
+    ↓                    →  Calculate diff
+Keep UI responsive           (DiffUtil.calculateDiff)
+    ↓                    ←  Return DiffResult
 Receive result
- ↓
+    ↓
 dispatchUpdatesTo(adapter)
- ↓
+    ↓
 Update UI (smooth!)
 ```
 
@@ -899,25 +904,25 @@ Update UI (smooth!)
 **ListAdapter (built on AsyncListDiffer):**
 
 ```kotlin
-// ListAdapter is simpler
+//  ListAdapter is simpler
 class SimpleAdapter : ListAdapter<Item, SimpleAdapter.ViewHolder>(DiffCallback()) {
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- // ...
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // ...
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = getItem(position) // ListAdapter provides this
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position) // ListAdapter provides this
+        holder.bind(item)
+    }
 
- class DiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item) =
- oldItem.id == newItem.id
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+            oldItem.id == newItem.id
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item) =
- oldItem == newItem
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+            oldItem == newItem
+    }
 }
 
 // Usage
@@ -942,16 +947,16 @@ adapter.submitList(items) // Same API as AsyncListDiffer!
 **submitList() is thread-safe:**
 
 ```kotlin
-// Safe to call from any thread
+//  Safe to call from any thread
 viewModel.items.observe(lifecycleOwner) { items ->
- adapter.submitList(items) // Can be called from background thread
+    adapter.submitList(items) // Can be called from background thread
 }
 ```
 
 **But list itself must not be mutated:**
 
 ```kotlin
-// BAD - Mutable list
+//  BAD - Mutable list
 val items = mutableListOf<Item>()
 adapter.submitList(items)
 
@@ -959,7 +964,7 @@ adapter.submitList(items)
 items.add(Item()) // DANGER! List is being diffed in background
 adapter.submitList(items) // May crash or produce incorrect results
 
-// GOOD - Immutable list
+//  GOOD - Immutable list
 val items = listOf<Item>(...)
 adapter.submitList(items)
 
@@ -975,37 +980,37 @@ adapter.submitList(newItems) // Safe!
 **Problem: Modifying list during diff:**
 
 ```kotlin
-// UNSAFE
+//  UNSAFE
 class UnsafeViewModel : ViewModel() {
- private val _items = MutableLiveData<MutableList<Item>>()
- val items: LiveData<MutableList<Item>> = _items
+    private val _items = MutableLiveData<MutableList<Item>>()
+    val items: LiveData<MutableList<Item>> = _items
 
- fun addItem(item: Item) {
- _items.value?.add(item) // Mutates list!
- _items.value = _items.value // Triggers observer
- }
+    fun addItem(item: Item) {
+        _items.value?.add(item) // Mutates list!
+        _items.value = _items.value // Triggers observer
+    }
 }
 ```
 
 **Solution 1: Use immutable lists**
 
 ```kotlin
-// SAFE - Immutable
+//  SAFE - Immutable
 class SafeViewModel : ViewModel() {
- private val _items = MutableLiveData<List<Item>>()
- val items: LiveData<List<Item>> = _items
+    private val _items = MutableLiveData<List<Item>>()
+    val items: LiveData<List<Item>> = _items
 
- fun addItem(item: Item) {
- val currentList = _items.value ?: emptyList()
- _items.value = currentList + item // Creates new list
- }
+    fun addItem(item: Item) {
+        val currentList = _items.value ?: emptyList()
+        _items.value = currentList + item // Creates new list
+    }
 }
 ```
 
 **Solution 2: Make defensive copy**
 
 ```kotlin
-// SAFE - Defensive copy
+//  SAFE - Defensive copy
 adapter.submitList(items.toList()) // Creates copy
 ```
 
@@ -1013,19 +1018,19 @@ adapter.submitList(items.toList()) // Creates copy
 
 ```kotlin
 class FlowViewModel : ViewModel() {
- private val _items = MutableStateFlow<List<Item>>(emptyList())
- val items: StateFlow<List<Item>> = _items.asStateFlow()
+    private val _items = MutableStateFlow<List<Item>>(emptyList())
+    val items: StateFlow<List<Item>> = _items.asStateFlow()
 
- fun addItem(item: Item) {
- _items.value = _items.value + item // Creates new list
- }
+    fun addItem(item: Item) {
+        _items.value = _items.value + item // Creates new list
+    }
 }
 
 // In Fragment/Activity
 lifecycleScope.launch {
- viewModel.items.collect { items ->
- adapter.submitList(items)
- }
+    viewModel.items.collect { items ->
+        adapter.submitList(items)
+    }
 }
 ```
 
@@ -1037,17 +1042,17 @@ lifecycleScope.launch {
 
 ```kotlin
 adapter.submitList(newItems) { // Callback runs when diff complete
- // Scroll to top after update
- recyclerView.scrollToPosition(0)
+    // Scroll to top after update
+    recyclerView.scrollToPosition(0)
 }
 
 // Or with more control
 adapter.submitList(newItems, object : Runnable {
- override fun run() {
- // Update complete
- progressBar.isVisible = false
- emptyView.isVisible = newItems.isEmpty()
- }
+    override fun run() {
+        // Update complete
+        progressBar.isVisible = false
+        emptyView.isVisible = newItems.isEmpty()
+    }
 })
 ```
 
@@ -1062,20 +1067,20 @@ adapter.submitList(newItems, object : Runnable {
 val customExecutor = Executors.newSingleThreadExecutor()
 
 val differ = AsyncListDiffer(
- adapter,
- AsyncDifferConfig.Builder(DiffCallback())
- .setBackgroundThreadExecutor(customExecutor)
- .build()
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(customExecutor)
+        .build()
 )
 
 // For testing with instant execution
 val testExecutor = Executor { it.run() } // Runs synchronously
 
 val differ = AsyncListDiffer(
- adapter,
- AsyncDifferConfig.Builder(DiffCallback())
- .setBackgroundThreadExecutor(testExecutor)
- .build()
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(testExecutor)
+        .build()
 )
 ```
 
@@ -1088,30 +1093,30 @@ val differ = AsyncListDiffer(
 ```kotlin
 class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
- private val differ = AsyncListDiffer(this, DiffCallback())
- private val handler = Handler(Looper.getMainLooper())
- private var pendingUpdate: List<Item>? = null
+    private val differ = AsyncListDiffer(this, DiffCallback())
+    private val handler = Handler(Looper.getMainLooper())
+    private var pendingUpdate: List<Item>? = null
 
- private val submitRunnable = Runnable {
- pendingUpdate?.let {
- differ.submitList(it)
- pendingUpdate = null
- }
- }
+    private val submitRunnable = Runnable {
+        pendingUpdate?.let {
+            differ.submitList(it)
+            pendingUpdate = null
+        }
+    }
 
- fun submitListDebounced(items: List<Item>, delayMs: Long = 300) {
- pendingUpdate = items
- handler.removeCallbacks(submitRunnable)
- handler.postDelayed(submitRunnable, delayMs)
- }
+    fun submitListDebounced(items: List<Item>, delayMs: Long = 300) {
+        pendingUpdate = items
+        handler.removeCallbacks(submitRunnable)
+        handler.postDelayed(submitRunnable, delayMs)
+    }
 
- fun submitListImmediate(items: List<Item>) {
- handler.removeCallbacks(submitRunnable)
- pendingUpdate = null
- differ.submitList(items)
- }
+    fun submitListImmediate(items: List<Item>) {
+        handler.removeCallbacks(submitRunnable)
+        pendingUpdate = null
+        differ.submitList(items)
+    }
 
- // ... rest of adapter
+    // ... rest of adapter
 }
 ```
 
@@ -1119,24 +1124,24 @@ class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String,
- val metadata: Map<String, Any> // Expensive to compare
+    val id: Long,
+    val name: String,
+    val description: String,
+    val metadata: Map<String, Any> // Expensive to compare
 ) {
- // Optimize equals
- override fun equals(other: Any?): Boolean {
- if (this === other) return true
- if (other !is Item) return false
+    // Optimize equals
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
 
- // Check cheap fields first
- if (id != other.id) return false
- if (name != other.name) return false
- if (description != other.description) return false
+        // Check cheap fields first
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (description != other.description) return false
 
- // Only check expensive field if everything else matches
- return metadata == other.metadata
- }
+        // Only check expensive field if everything else matches
+        return metadata == other.metadata
+    }
 }
 ```
 
@@ -1153,229 +1158,229 @@ data class Item(
 
 ```kotlin
 data class Message(
- val id: String,
- val senderId: String,
- val content: String,
- val timestamp: Long,
- val isSent: Boolean = false,
- val isRead: Boolean = false
+    val id: String,
+    val senderId: String,
+    val content: String,
+    val timestamp: Long,
+    val isSent: Boolean = false,
+    val isRead: Boolean = false
 )
 
 class ChatAdapter(
- private val currentUserId: String,
- private val onMessageClick: (Message) -> Unit
+    private val currentUserId: String,
+    private val onMessageClick: (Message) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
- companion object {
- private const val TYPE_SENT = 0
- private const val TYPE_RECEIVED = 1
- }
+    companion object {
+        private const val TYPE_SENT = 0
+        private const val TYPE_RECEIVED = 1
+    }
 
- private val differ = AsyncListDiffer(this, MessageDiffCallback())
+    private val differ = AsyncListDiffer(this, MessageDiffCallback())
 
- val currentList: List<Message>
- get() = differ.currentList
+    val currentList: List<Message>
+        get() = differ.currentList
 
- fun submitList(messages: List<Message>) {
- differ.submitList(messages)
- }
+    fun submitList(messages: List<Message>) {
+        differ.submitList(messages)
+    }
 
- fun submitList(messages: List<Message>, commitCallback: Runnable?) {
- differ.submitList(messages, commitCallback)
- }
+    fun submitList(messages: List<Message>, commitCallback: Runnable?) {
+        differ.submitList(messages, commitCallback)
+    }
 
- override fun getItemViewType(position: Int): Int {
- val message = currentList[position]
- return if (message.senderId == currentUserId) TYPE_SENT else TYPE_RECEIVED
- }
+    override fun getItemViewType(position: Int): Int {
+        val message = currentList[position]
+        return if (message.senderId == currentUserId) TYPE_SENT else TYPE_RECEIVED
+    }
 
- override fun getItemCount() = currentList.size
+    override fun getItemCount() = currentList.size
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
- return when (viewType) {
- TYPE_SENT -> SentMessageViewHolder.create(parent, onMessageClick)
- TYPE_RECEIVED -> ReceivedMessageViewHolder.create(parent, onMessageClick)
- else -> throw IllegalArgumentException("Unknown viewType")
- }
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_SENT -> SentMessageViewHolder.create(parent, onMessageClick)
+            TYPE_RECEIVED -> ReceivedMessageViewHolder.create(parent, onMessageClick)
+            else -> throw IllegalArgumentException("Unknown viewType")
+        }
+    }
 
- override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
- val message = currentList[position]
- when (holder) {
- is SentMessageViewHolder -> holder.bind(message)
- is ReceivedMessageViewHolder -> holder.bind(message)
- }
- }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val message = currentList[position]
+        when (holder) {
+            is SentMessageViewHolder -> holder.bind(message)
+            is ReceivedMessageViewHolder -> holder.bind(message)
+        }
+    }
 
- override fun onBindViewHolder(
- holder: RecyclerView.ViewHolder,
- position: Int,
- payloads: List<Any>
- ) {
- if (payloads.isEmpty()) {
- super.onBindViewHolder(holder, position, payloads)
- } else {
- // Partial update for message status
- val message = currentList[position]
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            // Partial update for message status
+            val message = currentList[position]
 
- @Suppress("UNCHECKED_CAST")
- val changes = payloads[0] as Map<String, Any>
+            @Suppress("UNCHECKED_CAST")
+            val changes = payloads[0] as Map<String, Any>
 
- if (holder is SentMessageViewHolder) {
- changes["isSent"]?.let {
- holder.updateSentStatus(message.isSent)
- }
- changes["isRead"]?.let {
- holder.updateReadStatus(message.isRead)
- }
- }
- }
- }
+            if (holder is SentMessageViewHolder) {
+                changes["isSent"]?.let {
+                    holder.updateSentStatus(message.isSent)
+                }
+                changes["isRead"]?.let {
+                    holder.updateReadStatus(message.isRead)
+                }
+            }
+        }
+    }
 
- class SentMessageViewHolder private constructor(
- private val binding: ItemMessageSentBinding,
- private val onMessageClick: (Message) -> Unit
- ) : RecyclerView.ViewHolder(binding.root) {
+    class SentMessageViewHolder private constructor(
+        private val binding: ItemMessageSentBinding,
+        private val onMessageClick: (Message) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
- private var currentMessage: Message? = null
+        private var currentMessage: Message? = null
 
- init {
- binding.root.setOnClickListener {
- currentMessage?.let { onMessageClick(it) }
- }
- }
+        init {
+            binding.root.setOnClickListener {
+                currentMessage?.let { onMessageClick(it) }
+            }
+        }
 
- fun bind(message: Message) {
- currentMessage = message
+        fun bind(message: Message) {
+            currentMessage = message
 
- binding.content.text = message.content
- binding.timestamp.text = formatTimestamp(message.timestamp)
+            binding.content.text = message.content
+            binding.timestamp.text = formatTimestamp(message.timestamp)
 
- updateSentStatus(message.isSent)
- updateReadStatus(message.isRead)
- }
+            updateSentStatus(message.isSent)
+            updateReadStatus(message.isRead)
+        }
 
- fun updateSentStatus(isSent: Boolean) {
- binding.sentIcon.isVisible = isSent
- binding.sendingIcon.isVisible = !isSent
- }
+        fun updateSentStatus(isSent: Boolean) {
+            binding.sentIcon.isVisible = isSent
+            binding.sendingIcon.isVisible = !isSent
+        }
 
- fun updateReadStatus(isRead: Boolean) {
- binding.readIcon.isVisible = isRead
- }
+        fun updateReadStatus(isRead: Boolean) {
+            binding.readIcon.isVisible = isRead
+        }
 
- private fun formatTimestamp(timestamp: Long): String {
- // Format timestamp
- return DateFormat.format("HH:mm", timestamp).toString()
- }
+        private fun formatTimestamp(timestamp: Long): String {
+            // Format timestamp
+            return DateFormat.format("HH:mm", timestamp).toString()
+        }
 
- companion object {
- fun create(
- parent: ViewGroup,
- onMessageClick: (Message) -> Unit
- ): SentMessageViewHolder {
- val binding = ItemMessageSentBinding.inflate(
- LayoutInflater.from(parent.context),
- parent,
- false
- )
- return SentMessageViewHolder(binding, onMessageClick)
- }
- }
- }
+        companion object {
+            fun create(
+                parent: ViewGroup,
+                onMessageClick: (Message) -> Unit
+            ): SentMessageViewHolder {
+                val binding = ItemMessageSentBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                return SentMessageViewHolder(binding, onMessageClick)
+            }
+        }
+    }
 
- class ReceivedMessageViewHolder private constructor(
- private val binding: ItemMessageReceivedBinding,
- private val onMessageClick: (Message) -> Unit
- ) : RecyclerView.ViewHolder(binding.root) {
+    class ReceivedMessageViewHolder private constructor(
+        private val binding: ItemMessageReceivedBinding,
+        private val onMessageClick: (Message) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
- private var currentMessage: Message? = null
+        private var currentMessage: Message? = null
 
- init {
- binding.root.setOnClickListener {
- currentMessage?.let { onMessageClick(it) }
- }
- }
+        init {
+            binding.root.setOnClickListener {
+                currentMessage?.let { onMessageClick(it) }
+            }
+        }
 
- fun bind(message: Message) {
- currentMessage = message
+        fun bind(message: Message) {
+            currentMessage = message
 
- binding.content.text = message.content
- binding.timestamp.text = formatTimestamp(message.timestamp)
- }
+            binding.content.text = message.content
+            binding.timestamp.text = formatTimestamp(message.timestamp)
+        }
 
- private fun formatTimestamp(timestamp: Long): String {
- return DateFormat.format("HH:mm", timestamp).toString()
- }
+        private fun formatTimestamp(timestamp: Long): String {
+            return DateFormat.format("HH:mm", timestamp).toString()
+        }
 
- companion object {
- fun create(
- parent: ViewGroup,
- onMessageClick: (Message) -> Unit
- ): ReceivedMessageViewHolder {
- val binding = ItemMessageReceivedBinding.inflate(
- LayoutInflater.from(parent.context),
- parent,
- false
- )
- return ReceivedMessageViewHolder(binding, onMessageClick)
- }
- }
- }
+        companion object {
+            fun create(
+                parent: ViewGroup,
+                onMessageClick: (Message) -> Unit
+            ): ReceivedMessageViewHolder {
+                val binding = ItemMessageReceivedBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                return ReceivedMessageViewHolder(binding, onMessageClick)
+            }
+        }
+    }
 
- class MessageDiffCallback : DiffUtil.ItemCallback<Message>() {
- override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
- return oldItem.id == newItem.id
- }
+    class MessageDiffCallback : DiffUtil.ItemCallback<Message>() {
+        override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
- return oldItem == newItem
- }
+        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
+            return oldItem == newItem
+        }
 
- override fun getChangePayload(oldItem: Message, newItem: Message): Any? {
- val changes = mutableMapOf<String, Any>()
+        override fun getChangePayload(oldItem: Message, newItem: Message): Any? {
+            val changes = mutableMapOf<String, Any>()
 
- if (oldItem.isSent != newItem.isSent) {
- changes["isSent"] = newItem.isSent
- }
+            if (oldItem.isSent != newItem.isSent) {
+                changes["isSent"] = newItem.isSent
+            }
 
- if (oldItem.isRead != newItem.isRead) {
- changes["isRead"] = newItem.isRead
- }
+            if (oldItem.isRead != newItem.isRead) {
+                changes["isRead"] = newItem.isRead
+            }
 
- return if (changes.isNotEmpty()) changes else null
- }
- }
+            return if (changes.isNotEmpty()) changes else null
+        }
+    }
 }
 
 // Usage in Fragment
 class ChatFragment : Fragment() {
 
- private val viewModel: ChatViewModel by viewModels()
- private lateinit var adapter: ChatAdapter
+    private val viewModel: ChatViewModel by viewModels()
+    private lateinit var adapter: ChatAdapter
 
- override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
- super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
- adapter = ChatAdapter(
- currentUserId = getCurrentUserId(),
- onMessageClick = { message ->
- // Handle message click
- }
- )
+        adapter = ChatAdapter(
+            currentUserId = getCurrentUserId(),
+            onMessageClick = { message ->
+                // Handle message click
+            }
+        )
 
- binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
- // Observe messages
- viewModel.messages.observe(viewLifecycleOwner) { messages ->
- adapter.submitList(messages) {
- // Scroll to bottom after new message
- if (adapter.currentList.isNotEmpty()) {
- binding.recyclerView.scrollToPosition(adapter.currentList.size - 1)
- }
- }
- }
- }
+        // Observe messages
+        viewModel.messages.observe(viewLifecycleOwner) { messages ->
+            adapter.submitList(messages) {
+                // Scroll to bottom after new message
+                if (adapter.currentList.isNotEmpty()) {
+                    binding.recyclerView.scrollToPosition(adapter.currentList.size - 1)
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -1387,36 +1392,36 @@ class ChatFragment : Fragment() {
 @RunWith(AndroidJUnit4::class)
 class AsyncAdapterTest {
 
- @Test
- fun testListUpdate() = runBlocking {
- val adapter = AsyncAdapter()
+    @Test
+    fun testListUpdate() = runBlocking {
+        val adapter = AsyncAdapter()
 
- val initialList = listOf(Item(1, "A"), Item(2, "B"))
- adapter.submitList(initialList)
+        val initialList = listOf(Item(1, "A"), Item(2, "B"))
+        adapter.submitList(initialList)
 
- // Wait for diff to complete
- delay(100)
+        // Wait for diff to complete
+        delay(100)
 
- assertEquals(2, adapter.itemCount)
- assertEquals("A", adapter.currentList[0].name)
- }
+        assertEquals(2, adapter.itemCount)
+        assertEquals("A", adapter.currentList[0].name)
+    }
 
- @Test
- fun testListUpdateWithCallback() {
- val adapter = AsyncAdapter()
- val initialList = listOf(Item(1, "A"))
+    @Test
+    fun testListUpdateWithCallback() {
+        val adapter = AsyncAdapter()
+        val initialList = listOf(Item(1, "A"))
 
- var callbackCalled = false
+        var callbackCalled = false
 
- adapter.submitList(initialList) {
- callbackCalled = true
- }
+        adapter.submitList(initialList) {
+            callbackCalled = true
+        }
 
- // Wait for callback
- eventually(timeoutMs = 1000) {
- assertTrue(callbackCalled)
- }
- }
+        // Wait for callback
+        eventually(timeoutMs = 1000) {
+            assertTrue(callbackCalled)
+        }
+    }
 }
 ```
 
@@ -1426,11 +1431,11 @@ class AsyncAdapterTest {
 
 **1. Use immutable lists**
 ```kotlin
-// DO
+//  DO
 val newList = currentList + newItem
 adapter.submitList(newList)
 
-// DON'T
+//  DON'T
 val list = mutableListOf<Item>()
 adapter.submitList(list)
 list.add(item) // Dangerous!
@@ -1438,7 +1443,7 @@ list.add(item) // Dangerous!
 
 **2. Prefer ListAdapter**
 ```kotlin
-// DO - Simpler
+//  DO - Simpler
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 // Only use AsyncListDiffer for custom needs
@@ -1446,22 +1451,22 @@ class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 **3. Use commit callback wisely**
 ```kotlin
-// DO - Scroll after update
+//  DO - Scroll after update
 adapter.submitList(items) {
- recyclerView.scrollToPosition(0)
+    recyclerView.scrollToPosition(0)
 }
 
-// DON'T - Heavy work in callback
+//  DON'T - Heavy work in callback
 adapter.submitList(items) {
- // Heavy operation - blocks UI!
+    // Heavy operation - blocks UI!
 }
 ```
 
 **4. Debounce rapid updates**
 ```kotlin
-// DO - Debounce user input
+//  DO - Debounce user input
 searchView.onQueryTextChange { query ->
- viewModel.search(query) // Debounced in ViewModel
+    viewModel.search(query) // Debounced in ViewModel
 }
 ```
 
@@ -1512,18 +1517,18 @@ searchView.onQueryTextChange { query ->
 ### Проблема: Блокировка UI Потока
 
 ```kotlin
-// ПРОБЛЕМА - Блокирует UI поток
+//  ПРОБЛЕМА - Блокирует UI поток
 class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
- private var items = emptyList<Item>()
+    private var items = emptyList<Item>()
 
- fun updateData(newItems: List<Item>) {
- val diffResult = DiffUtil.calculateDiff(
- ItemDiffCallback(items, newItems)
- ) // БЛОКИРУЕТ UI поток для больших списков!
+    fun updateData(newItems: List<Item>) {
+        val diffResult = DiffUtil.calculateDiff(
+            ItemDiffCallback(items, newItems)
+        ) // БЛОКИРУЕТ UI поток для больших списков!
 
- items = newItems
- diffResult.dispatchUpdatesTo(this)
- }
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
 ```
 
@@ -1541,48 +1546,48 @@ class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
- // AsyncListDiffer обрабатывает потоки автоматически
- private val differ = AsyncListDiffer(this, DiffCallback())
+    //  AsyncListDiffer обрабатывает потоки автоматически
+    private val differ = AsyncListDiffer(this, DiffCallback())
 
- // Доступ к текущему списку
- val currentList: List<Item>
- get() = differ.currentList
+    // Доступ к текущему списку
+    val currentList: List<Item>
+        get() = differ.currentList
 
- // Отправить новый список (асинхронное вычисление)
- fun submitList(newList: List<Item>) {
- differ.submitList(newList) // Асинхронно, не блокирует!
- }
+    // Отправить новый список (асинхронное вычисление)
+    fun submitList(newList: List<Item>) {
+        differ.submitList(newList) // Асинхронно, не блокирует!
+    }
 
- override fun getItemCount() = currentList.size
+    override fun getItemCount() = currentList.size
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- val view = LayoutInflater.from(parent.context)
- .inflate(R.layout.item_layout, parent, false)
- return ViewHolder(view)
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = currentList[position]
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = currentList[position]
+        holder.bind(item)
+    }
 
- class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
- private val textView: TextView = view.findViewById(R.id.text)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val textView: TextView = view.findViewById(R.id.text)
 
- fun bind(item: Item) {
- textView.text = item.name
- }
- }
+        fun bind(item: Item) {
+            textView.text = item.name
+        }
+    }
 
- class DiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem.id == newItem.id
- }
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.id == newItem.id
+        }
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
- return oldItem == newItem
- }
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 ```
 
@@ -1593,18 +1598,18 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 **Поток выполнения:**
 
 ```
-Главный поток Фоновый поток
------------ -----------------
+Главный поток              Фоновый поток
+-----------                -----------------
 submitList(newList)
- ↓
+    ↓
 Сохранить newList
- ↓ → Вычислить diff
-UI остается отзывчивым (DiffUtil.calculateDiff)
- ↓ ← Вернуть DiffResult
+    ↓                    →  Вычислить diff
+UI остается отзывчивым      (DiffUtil.calculateDiff)
+    ↓                    ←  Вернуть DiffResult
 Получить результат
- ↓
+    ↓
 dispatchUpdatesTo(adapter)
- ↓
+    ↓
 Обновить UI (плавно!)
 ```
 
@@ -1629,25 +1634,25 @@ dispatchUpdatesTo(adapter)
 **ListAdapter (построен на AsyncListDiffer):**
 
 ```kotlin
-// ListAdapter проще
+//  ListAdapter проще
 class SimpleAdapter : ListAdapter<Item, SimpleAdapter.ViewHolder>(DiffCallback()) {
 
- override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
- // ...
- }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // ...
+    }
 
- override fun onBindViewHolder(holder: ViewHolder, position: Int) {
- val item = getItem(position) // ListAdapter предоставляет это
- holder.bind(item)
- }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position) // ListAdapter предоставляет это
+        holder.bind(item)
+    }
 
- class DiffCallback : DiffUtil.ItemCallback<Item>() {
- override fun areItemsTheSame(oldItem: Item, newItem: Item) =
- oldItem.id == newItem.id
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+            oldItem.id == newItem.id
 
- override fun areContentsTheSame(oldItem: Item, newItem: Item) =
- oldItem == newItem
- }
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+            oldItem == newItem
+    }
 }
 
 // Использование
@@ -1672,16 +1677,16 @@ adapter.submitList(items) // Тот же API, что и AsyncListDiffer!
 **submitList() потокобезопасен:**
 
 ```kotlin
-// Безопасно вызывать из любого потока
+//  Безопасно вызывать из любого потока
 viewModel.items.observe(lifecycleOwner) { items ->
- adapter.submitList(items) // Можно вызывать из фонового потока
+    adapter.submitList(items) // Можно вызывать из фонового потока
 }
 ```
 
 **Но сам список не должен мутировать:**
 
 ```kotlin
-// ПЛОХО - Изменяемый список
+//  ПЛОХО - Изменяемый список
 val items = mutableListOf<Item>()
 adapter.submitList(items)
 
@@ -1689,7 +1694,7 @@ adapter.submitList(items)
 items.add(Item()) // ОПАСНО! Список вычисляется в фоне
 adapter.submitList(items) // Может упасть или дать неправильные результаты
 
-// ХОРОШО - Неизменяемый список
+//  ХОРОШО - Неизменяемый список
 val items = listOf<Item>(...)
 adapter.submitList(items)
 
@@ -1705,37 +1710,37 @@ adapter.submitList(newItems) // Безопасно!
 **Проблема: Изменение списка во время diff:**
 
 ```kotlin
-// НЕБЕЗОПАСНО
+//  НЕБЕЗОПАСНО
 class UnsafeViewModel : ViewModel() {
- private val _items = MutableLiveData<MutableList<Item>>()
- val items: LiveData<MutableList<Item>> = _items
+    private val _items = MutableLiveData<MutableList<Item>>()
+    val items: LiveData<MutableList<Item>> = _items
 
- fun addItem(item: Item) {
- _items.value?.add(item) // Мутирует список!
- _items.value = _items.value // Запускает observer
- }
+    fun addItem(item: Item) {
+        _items.value?.add(item) // Мутирует список!
+        _items.value = _items.value // Запускает observer
+    }
 }
 ```
 
 **Решение 1: Используйте неизменяемые списки**
 
 ```kotlin
-// БЕЗОПАСНО - Неизменяемый
+//  БЕЗОПАСНО - Неизменяемый
 class SafeViewModel : ViewModel() {
- private val _items = MutableLiveData<List<Item>>()
- val items: LiveData<List<Item>> = _items
+    private val _items = MutableLiveData<List<Item>>()
+    val items: LiveData<List<Item>> = _items
 
- fun addItem(item: Item) {
- val currentList = _items.value ?: emptyList()
- _items.value = currentList + item // Создает новый список
- }
+    fun addItem(item: Item) {
+        val currentList = _items.value ?: emptyList()
+        _items.value = currentList + item // Создает новый список
+    }
 }
 ```
 
 **Решение 2: Делайте защитную копию**
 
 ```kotlin
-// БЕЗОПАСНО - Защитная копия
+//  БЕЗОПАСНО - Защитная копия
 adapter.submitList(items.toList()) // Создает копию
 ```
 
@@ -1743,19 +1748,19 @@ adapter.submitList(items.toList()) // Создает копию
 
 ```kotlin
 class FlowViewModel : ViewModel() {
- private val _items = MutableStateFlow<List<Item>>(emptyList())
- val items: StateFlow<List<Item>> = _items.asStateFlow()
+    private val _items = MutableStateFlow<List<Item>>(emptyList())
+    val items: StateFlow<List<Item>> = _items.asStateFlow()
 
- fun addItem(item: Item) {
- _items.value = _items.value + item // Создает новый список
- }
+    fun addItem(item: Item) {
+        _items.value = _items.value + item // Создает новый список
+    }
 }
 
 // Во Fragment/Activity
 lifecycleScope.launch {
- viewModel.items.collect { items ->
- adapter.submitList(items)
- }
+    viewModel.items.collect { items ->
+        adapter.submitList(items)
+    }
 }
 ```
 
@@ -1767,17 +1772,17 @@ lifecycleScope.launch {
 
 ```kotlin
 adapter.submitList(newItems) { // Callback выполняется когда diff завершен
- // Прокрутить наверх после обновления
- recyclerView.scrollToPosition(0)
+    // Прокрутить наверх после обновления
+    recyclerView.scrollToPosition(0)
 }
 
 // Или с большим контролем
 adapter.submitList(newItems, object : Runnable {
- override fun run() {
- // Обновление завершено
- progressBar.isVisible = false
- emptyView.isVisible = newItems.isEmpty()
- }
+    override fun run() {
+        // Обновление завершено
+        progressBar.isVisible = false
+        emptyView.isVisible = newItems.isEmpty()
+    }
 })
 ```
 
@@ -1792,20 +1797,20 @@ adapter.submitList(newItems, object : Runnable {
 val customExecutor = Executors.newSingleThreadExecutor()
 
 val differ = AsyncListDiffer(
- adapter,
- AsyncDifferConfig.Builder(DiffCallback())
- .setBackgroundThreadExecutor(customExecutor)
- .build()
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(customExecutor)
+        .build()
 )
 
 // Для тестирования с мгновенным выполнением
 val testExecutor = Executor { it.run() } // Выполняется синхронно
 
 val differ = AsyncListDiffer(
- adapter,
- AsyncDifferConfig.Builder(DiffCallback())
- .setBackgroundThreadExecutor(testExecutor)
- .build()
+    adapter,
+    AsyncDifferConfig.Builder(DiffCallback())
+        .setBackgroundThreadExecutor(testExecutor)
+        .build()
 )
 ```
 
@@ -1818,30 +1823,30 @@ val differ = AsyncListDiffer(
 ```kotlin
 class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
- private val differ = AsyncListDiffer(this, DiffCallback())
- private val handler = Handler(Looper.getMainLooper())
- private var pendingUpdate: List<Item>? = null
+    private val differ = AsyncListDiffer(this, DiffCallback())
+    private val handler = Handler(Looper.getMainLooper())
+    private var pendingUpdate: List<Item>? = null
 
- private val submitRunnable = Runnable {
- pendingUpdate?.let {
- differ.submitList(it)
- pendingUpdate = null
- }
- }
+    private val submitRunnable = Runnable {
+        pendingUpdate?.let {
+            differ.submitList(it)
+            pendingUpdate = null
+        }
+    }
 
- fun submitListDebounced(items: List<Item>, delayMs: Long = 300) {
- pendingUpdate = items
- handler.removeCallbacks(submitRunnable)
- handler.postDelayed(submitRunnable, delayMs)
- }
+    fun submitListDebounced(items: List<Item>, delayMs: Long = 300) {
+        pendingUpdate = items
+        handler.removeCallbacks(submitRunnable)
+        handler.postDelayed(submitRunnable, delayMs)
+    }
 
- fun submitListImmediate(items: List<Item>) {
- handler.removeCallbacks(submitRunnable)
- pendingUpdate = null
- differ.submitList(items)
- }
+    fun submitListImmediate(items: List<Item>) {
+        handler.removeCallbacks(submitRunnable)
+        pendingUpdate = null
+        differ.submitList(items)
+    }
 
- // ... остальная часть адаптера
+    // ... остальная часть адаптера
 }
 ```
 
@@ -1849,24 +1854,24 @@ class DebouncedAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ```kotlin
 data class Item(
- val id: Long,
- val name: String,
- val description: String,
- val metadata: Map<String, Any> // Дорого сравнивать
+    val id: Long,
+    val name: String,
+    val description: String,
+    val metadata: Map<String, Any> // Дорого сравнивать
 ) {
- // Оптимизировать equals
- override fun equals(other: Any?): Boolean {
- if (this === other) return true
- if (other !is Item) return false
+    // Оптимизировать equals
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
 
- // Сначала проверить дешевые поля
- if (id != other.id) return false
- if (name != other.name) return false
- if (description != other.description) return false
+        // Сначала проверить дешевые поля
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (description != other.description) return false
 
- // Проверить дорогое поле только если все остальное совпадает
- return metadata == other.metadata
- }
+        // Проверить дорогое поле только если все остальное совпадает
+        return metadata == other.metadata
+    }
 }
 ```
 
@@ -1883,11 +1888,11 @@ data class Item(
 
 **1. Используйте неизменяемые списки**
 ```kotlin
-// ДЕЛАЙТЕ
+//  ДЕЛАЙТЕ
 val newList = currentList + newItem
 adapter.submitList(newList)
 
-// НЕ ДЕЛАЙТЕ
+//  НЕ ДЕЛАЙТЕ
 val list = mutableListOf<Item>()
 adapter.submitList(list)
 list.add(item) // Опасно!
@@ -1895,7 +1900,7 @@ list.add(item) // Опасно!
 
 **2. Предпочитайте ListAdapter**
 ```kotlin
-// ДЕЛАЙТЕ - Проще
+//  ДЕЛАЙТЕ - Проще
 class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 // Используйте AsyncListDiffer только для специальных нужд
@@ -1903,22 +1908,22 @@ class MyAdapter : ListAdapter<Item, ViewHolder>(DiffCallback())
 
 **3. Используйте commit callback разумно**
 ```kotlin
-// ДЕЛАЙТЕ - Прокрутка после обновления
+//  ДЕЛАЙТЕ - Прокрутка после обновления
 adapter.submitList(items) {
- recyclerView.scrollToPosition(0)
+    recyclerView.scrollToPosition(0)
 }
 
-// НЕ ДЕЛАЙТЕ - Тяжелая работа в callback
+//  НЕ ДЕЛАЙТЕ - Тяжелая работа в callback
 adapter.submitList(items) {
- // Тяжелая операция - блокирует UI!
+    // Тяжелая операция - блокирует UI!
 }
 ```
 
 **4. Debounce частых обновлений**
 ```kotlin
-// ДЕЛАЙТЕ - Debounce пользовательского ввода
+//  ДЕЛАЙТЕ - Debounce пользовательского ввода
 searchView.onQueryTextChange { query ->
- viewModel.search(query) // Debounced в ViewModel
+    viewModel.search(query) // Debounced в ViewModel
 }
 ```
 
@@ -1962,22 +1967,26 @@ searchView.onQueryTextChange { query ->
 
 ---
 
+
 ## Follow-ups
 
 - [[q-compose-side-effects-advanced--android--hard]]
-- [[q-vector-graphics-animations--android--medium]]
+- 
 - [[q-what-are-services-used-for--android--medium]]
+
 
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui

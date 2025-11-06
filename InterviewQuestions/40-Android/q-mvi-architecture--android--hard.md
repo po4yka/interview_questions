@@ -14,6 +14,7 @@ related: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
+
 ---
 
 # Вопрос (RU)
@@ -45,68 +46,68 @@ Intent → Processor → Model → View → Intent
 ```kotlin
 // Model - единое иммутабельное состояние
 data class UserScreenState(
- val isLoading: Boolean = false,
- val user: User? = null,
- val error: String? = null
+    val isLoading: Boolean = false,
+    val user: User? = null,
+    val error: String? = null
 )
 
 // Intent - действия пользователя
 sealed class UserIntent {
- data class LoadUser(val userId: Int) : UserIntent()
- object RetryLoading : UserIntent()
+    data class LoadUser(val userId: Int) : UserIntent()
+    object RetryLoading : UserIntent()
 }
 
 // ViewModel - обрабатывает Intent
 class UserViewModel(
- private val repository: UserRepository
+    private val repository: UserRepository
 ) : ViewModel() {
- private val _state = MutableStateFlow(UserScreenState())
- val state: StateFlow<UserScreenState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(UserScreenState())
+    val state: StateFlow<UserScreenState> = _state.asStateFlow()
 
- fun processIntent(intent: UserIntent) {
- when (intent) {
- is UserIntent.LoadUser -> loadUser(intent.userId)
- is UserIntent.RetryLoading -> retry()
- }
- }
+    fun processIntent(intent: UserIntent) {
+        when (intent) {
+            is UserIntent.LoadUser -> loadUser(intent.userId)
+            is UserIntent.RetryLoading -> retry()
+        }
+    }
 
- private fun loadUser(userId: Int) {
- viewModelScope.launch {
- _state.value = _state.value.copy(isLoading = true)
+    private fun loadUser(userId: Int) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
 
- try {
- val user = repository.getUser(userId)
- _state.value = _state.value.copy(
- isLoading = false,
- user = user
- )
- } catch (e: Exception) {
- _state.value = _state.value.copy(
- isLoading = false,
- error = e.message
- )
- }
- }
- }
+            try {
+                val user = repository.getUser(userId)
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    user = user
+                )
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    error = e.message
+                )
+            }
+        }
+    }
 }
 
 // View - отправляет Intent, рендерит State
 @Composable
 fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
- val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
 
- LaunchedEffect(Unit) {
- viewModel.processIntent(UserIntent.LoadUser(userId = 1))
- }
+    LaunchedEffect(Unit) {
+        viewModel.processIntent(UserIntent.LoadUser(userId = 1))
+    }
 
- when {
- state.isLoading -> LoadingIndicator()
- state.error != null -> ErrorView(
- message = state.error!!,
- onRetry = { viewModel.processIntent(UserIntent.RetryLoading) }
- )
- state.user != null -> UserContent(state.user!!)
- }
+    when {
+        state.isLoading -> LoadingIndicator()
+        state.error != null -> ErrorView(
+            message = state.error!!,
+            onRetry = { viewModel.processIntent(UserIntent.RetryLoading) }
+        )
+        state.user != null -> UserContent(state.user!!)
+    }
 }
 ```
 
@@ -131,61 +132,61 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 ```kotlin
 // State - для постоянного UI
 data class LoginState(
- val email: String = "",
- val isLoading: Boolean = false,
- val emailError: String? = null
+    val email: String = "",
+    val isLoading: Boolean = false,
+    val emailError: String? = null
 )
 
 // Side Effects - одноразовые события
 sealed class LoginSideEffect {
- data class NavigateToHome(val userId: Int) : LoginSideEffect()
- data class ShowToast(val message: String) : LoginSideEffect()
+    data class NavigateToHome(val userId: Int) : LoginSideEffect()
+    data class ShowToast(val message: String) : LoginSideEffect()
 }
 
 class LoginViewModel : ViewModel() {
- private val _state = MutableStateFlow(LoginState())
- val state: StateFlow<LoginState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state.asStateFlow()
 
- private val _sideEffect = Channel<LoginSideEffect>()
- val sideEffect = _sideEffect.receiveAsFlow()
+    private val _sideEffect = Channel<LoginSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
- fun processIntent(intent: LoginIntent) {
- when (intent) {
- is LoginIntent.LoginClicked -> login()
- }
- }
+    fun processIntent(intent: LoginIntent) {
+        when (intent) {
+            is LoginIntent.LoginClicked -> login()
+        }
+    }
 
- private fun login() {
- viewModelScope.launch {
- _state.value = _state.value.copy(isLoading = true)
+    private fun login() {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
 
- try {
- val user = authRepository.login(...)
- _state.value = _state.value.copy(isLoading = false)
- _sideEffect.send(LoginSideEffect.NavigateToHome(user.id))
- } catch (e: Exception) {
- _state.value = _state.value.copy(isLoading = false)
- _sideEffect.send(LoginSideEffect.ShowToast(e.message))
- }
- }
- }
+            try {
+                val user = authRepository.login(...)
+                _state.value = _state.value.copy(isLoading = false)
+                _sideEffect.send(LoginSideEffect.NavigateToHome(user.id))
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(isLoading = false)
+                _sideEffect.send(LoginSideEffect.ShowToast(e.message))
+            }
+        }
+    }
 }
 
 // View - обрабатываем side effects
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
- val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
 
- LaunchedEffect(Unit) {
- viewModel.sideEffect.collect { effect ->
- when (effect) {
- is LoginSideEffect.NavigateToHome ->
- onNavigateToHome(effect.userId)
- is LoginSideEffect.ShowToast ->
- showToast(effect.message)
- }
- }
- }
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is LoginSideEffect.NavigateToHome ->
+                    onNavigateToHome(effect.userId)
+                is LoginSideEffect.ShowToast ->
+                    showToast(effect.message)
+            }
+        }
+    }
 }
 ```
 
@@ -194,8 +195,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
 ```kotlin
 // Плохо - навигация в State
 data class LoginState(
- val isLoading: Boolean = false,
- val navigateToHome: Boolean = false // Проблема: не сбросится автоматически
+    val isLoading: Boolean = false,
+    val navigateToHome: Boolean = false  // Проблема: не сбросится автоматически
 )
 ```
 
@@ -204,44 +205,44 @@ data class LoginState(
 ```kotlin
 // Reducer - pure function: (State, Intent) -> State
 object LoginReducer {
- fun reduce(state: LoginState, intent: LoginIntent): LoginState {
- return when (intent) {
- is LoginIntent.EmailChanged -> state.copy(
- email = intent.email,
- emailError = null
- )
- is LoginIntent.LoginStarted -> state.copy(isLoading = true)
- is LoginIntent.LoginSuccess -> state.copy(isLoading = false)
- is LoginIntent.LoginFailed -> state.copy(isLoading = false)
- }
- }
+    fun reduce(state: LoginState, intent: LoginIntent): LoginState {
+        return when (intent) {
+            is LoginIntent.EmailChanged -> state.copy(
+                email = intent.email,
+                emailError = null
+            )
+            is LoginIntent.LoginStarted -> state.copy(isLoading = true)
+            is LoginIntent.LoginSuccess -> state.copy(isLoading = false)
+            is LoginIntent.LoginFailed -> state.copy(isLoading = false)
+        }
+    }
 }
 
 // ViewModel использует Reducer
 class LoginViewModel : ViewModel() {
- fun processIntent(intent: LoginIntent) {
- // ✅ Применяем чистую функцию
- _state.value = LoginReducer.reduce(_state.value, intent)
+    fun processIntent(intent: LoginIntent) {
+        // ✅ Применяем чистую функцию
+        _state.value = LoginReducer.reduce(_state.value, intent)
 
- // Side effects отдельно
- when (intent) {
- is LoginIntent.LoginClicked -> performLogin()
- else -> {}
- }
- }
+        // Side effects отдельно
+        when (intent) {
+            is LoginIntent.LoginClicked -> performLogin()
+            else -> {}
+        }
+    }
 }
 
 // ✅ Легко тестировать
 @Test
 fun `reducer is pure function`() {
- val state = LoginState(email = "old@test.com")
- val intent = LoginIntent.EmailChanged("new@test.com")
+    val state = LoginState(email = "old@test.com")
+    val intent = LoginIntent.EmailChanged("new@test.com")
 
- val result1 = LoginReducer.reduce(state, intent)
- val result2 = LoginReducer.reduce(state, intent)
+    val result1 = LoginReducer.reduce(state, intent)
+    val result2 = LoginReducer.reduce(state, intent)
 
- assertEquals(result1, result2) // Всегда одинаковый результат
- assertEquals("old@test.com", state.email) // Original не изменился
+    assertEquals(result1, result2)  // Всегда одинаковый результат
+    assertEquals("old@test.com", state.email)  // Original не изменился
 }
 ```
 
@@ -250,30 +251,30 @@ fun `reducer is pure function`() {
 ```kotlin
 // Complex State - декомпозиция на подсостояния
 data class ProductListState(
- val products: List<Product> = emptyList(),
- val filter: FilterState = FilterState(),
- val pagination: PaginationState = PaginationState(),
- val ui: UIState = UIState()
+    val products: List<Product> = emptyList(),
+    val filter: FilterState = FilterState(),
+    val pagination: PaginationState = PaginationState(),
+    val ui: UIState = UIState()
 )
 
 data class FilterState(
- val query: String = "",
- val category: Category? = null,
- val sortBy: SortOption = SortOption.NAME
+    val query: String = "",
+    val category: Category? = null,
+    val sortBy: SortOption = SortOption.NAME
 )
 
 data class PaginationState(
- val currentPage: Int = 0,
- val hasMore: Boolean = true,
- val isLoadingMore: Boolean = false
+    val currentPage: Int = 0,
+    val hasMore: Boolean = true,
+    val isLoadingMore: Boolean = false
 )
 
 // Intent охватывает все действия
 sealed class ProductListIntent {
- data class SearchQueryChanged(val query: String) : ProductListIntent()
- data class CategorySelected(val category: Category?) : ProductListIntent()
- object LoadMore : ProductListIntent()
- object Refresh : ProductListIntent()
+    data class SearchQueryChanged(val query: String) : ProductListIntent()
+    data class CategorySelected(val category: Category?) : ProductListIntent()
+    object LoadMore : ProductListIntent()
+    object Refresh : ProductListIntent()
 }
 ```
 
@@ -282,36 +283,36 @@ sealed class ProductListIntent {
 ```kotlin
 // Middleware обрабатывает side effects
 interface Middleware<I, S> {
- suspend fun process(intent: I, state: S, dispatch: (I) -> Unit)
+    suspend fun process(intent: I, state: S, dispatch: (I) -> Unit)
 }
 
 class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
- override suspend fun process(
- intent: LoginIntent,
- state: LoginState,
- dispatch: (LoginIntent) -> Unit
- ) {
- when (intent) {
- is LoginIntent.LoginClicked ->
- analytics.logEvent("login_attempt")
- is LoginIntent.LoginSuccess ->
- analytics.logEvent("login_success")
- }
- }
+    override suspend fun process(
+        intent: LoginIntent,
+        state: LoginState,
+        dispatch: (LoginIntent) -> Unit
+    ) {
+        when (intent) {
+            is LoginIntent.LoginClicked ->
+                analytics.logEvent("login_attempt")
+            is LoginIntent.LoginSuccess ->
+                analytics.logEvent("login_success")
+        }
+    }
 }
 
 class LoginViewModel(
- private val middlewares: List<Middleware<LoginIntent, LoginState>>
+    private val middlewares: List<Middleware<LoginIntent, LoginState>>
 ) : ViewModel() {
- fun processIntent(intent: LoginIntent) {
- viewModelScope.launch {
- // ✅ Выполняем middleware
- middlewares.forEach { it.process(intent, _state.value, ::processIntent) }
+    fun processIntent(intent: LoginIntent) {
+        viewModelScope.launch {
+            // ✅ Выполняем middleware
+            middlewares.forEach { it.process(intent, _state.value, ::processIntent) }
 
- // Применяем reducer
- _state.value = LoginReducer.reduce(_state.value, intent)
- }
- }
+            // Применяем reducer
+            _state.value = LoginReducer.reduce(_state.value, intent)
+        }
+    }
 }
 ```
 
@@ -320,33 +321,33 @@ class LoginViewModel(
 ```kotlin
 // Сохраняем историю состояний для debugging
 class DebuggableViewModel<I, S>(
- initialState: S,
- private val reducer: (S, I) -> S
+    initialState: S,
+    private val reducer: (S, I) -> S
 ) : ViewModel() {
- private val _state = MutableStateFlow(initialState)
- val state: StateFlow<S> = _state.asStateFlow()
+    private val _state = MutableStateFlow(initialState)
+    val state: StateFlow<S> = _state.asStateFlow()
 
- private val stateHistory = mutableListOf<Pair<I, S>>()
+    private val stateHistory = mutableListOf<Pair<I, S>>()
 
- fun processIntent(intent: I) {
- val newState = reducer(_state.value, intent)
- stateHistory.add(intent to newState)
- _state.value = newState
- }
+    fun processIntent(intent: I) {
+        val newState = reducer(_state.value, intent)
+        stateHistory.add(intent to newState)
+        _state.value = newState
+    }
 
- // Time travel
- fun replayTo(index: Int) {
- if (index in stateHistory.indices) {
- _state.value = stateHistory[index].second
- }
- }
+    // Time travel
+    fun replayTo(index: Int) {
+        if (index in stateHistory.indices) {
+            _state.value = stateHistory[index].second
+        }
+    }
 
- fun undo() {
- if (stateHistory.size > 1) {
- stateHistory.removeLast()
- _state.value = stateHistory.last().second
- }
- }
+    fun undo() {
+        if (stateHistory.size > 1) {
+            stateHistory.removeLast()
+            _state.value = stateHistory.last().second
+        }
+    }
 }
 ```
 
@@ -388,49 +389,49 @@ Intent → Processor → Model → View → Intent
 ```kotlin
 // Model - single immutable state
 data class UserScreenState(
- val isLoading: Boolean = false,
- val user: User? = null,
- val error: String? = null
+    val isLoading: Boolean = false,
+    val user: User? = null,
+    val error: String? = null
 )
 
 // Intent - user actions
 sealed class UserIntent {
- data class LoadUser(val userId: Int) : UserIntent()
- object RetryLoading : UserIntent()
+    data class LoadUser(val userId: Int) : UserIntent()
+    object RetryLoading : UserIntent()
 }
 
 // ViewModel - processes Intent
 class UserViewModel(
- private val repository: UserRepository
+    private val repository: UserRepository
 ) : ViewModel() {
- private val _state = MutableStateFlow(UserScreenState())
- val state: StateFlow<UserScreenState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(UserScreenState())
+    val state: StateFlow<UserScreenState> = _state.asStateFlow()
 
- fun processIntent(intent: UserIntent) {
- when (intent) {
- is UserIntent.LoadUser -> loadUser(intent.userId)
- is UserIntent.RetryLoading -> retry()
- }
- }
+    fun processIntent(intent: UserIntent) {
+        when (intent) {
+            is UserIntent.LoadUser -> loadUser(intent.userId)
+            is UserIntent.RetryLoading -> retry()
+        }
+    }
 
- private fun loadUser(userId: Int) {
- viewModelScope.launch {
- _state.value = _state.value.copy(isLoading = true)
+    private fun loadUser(userId: Int) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
 
- try {
- val user = repository.getUser(userId)
- _state.value = _state.value.copy(
- isLoading = false,
- user = user
- )
- } catch (e: Exception) {
- _state.value = _state.value.copy(
- isLoading = false,
- error = e.message
- )
- }
- }
- }
+            try {
+                val user = repository.getUser(userId)
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    user = user
+                )
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    error = e.message
+                )
+            }
+        }
+    }
 }
 ```
 
@@ -455,44 +456,44 @@ class UserViewModel(
 ```kotlin
 // State - for persistent UI
 data class LoginState(
- val email: String = "",
- val isLoading: Boolean = false,
- val emailError: String? = null
+    val email: String = "",
+    val isLoading: Boolean = false,
+    val emailError: String? = null
 )
 
 // Side Effects - one-time events
 sealed class LoginSideEffect {
- data class NavigateToHome(val userId: Int) : LoginSideEffect()
- data class ShowToast(val message: String) : LoginSideEffect()
+    data class NavigateToHome(val userId: Int) : LoginSideEffect()
+    data class ShowToast(val message: String) : LoginSideEffect()
 }
 
 class LoginViewModel : ViewModel() {
- private val _state = MutableStateFlow(LoginState())
- val state: StateFlow<LoginState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state.asStateFlow()
 
- private val _sideEffect = Channel<LoginSideEffect>()
- val sideEffect = _sideEffect.receiveAsFlow()
+    private val _sideEffect = Channel<LoginSideEffect>()
+    val sideEffect = _sideEffect.receiveAsFlow()
 
- fun processIntent(intent: LoginIntent) {
- when (intent) {
- is LoginIntent.LoginClicked -> login()
- }
- }
+    fun processIntent(intent: LoginIntent) {
+        when (intent) {
+            is LoginIntent.LoginClicked -> login()
+        }
+    }
 
- private fun login() {
- viewModelScope.launch {
- _state.value = _state.value.copy(isLoading = true)
+    private fun login() {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
 
- try {
- val user = authRepository.login(...)
- _state.value = _state.value.copy(isLoading = false)
- _sideEffect.send(LoginSideEffect.NavigateToHome(user.id))
- } catch (e: Exception) {
- _state.value = _state.value.copy(isLoading = false)
- _sideEffect.send(LoginSideEffect.ShowToast(e.message))
- }
- }
- }
+            try {
+                val user = authRepository.login(...)
+                _state.value = _state.value.copy(isLoading = false)
+                _sideEffect.send(LoginSideEffect.NavigateToHome(user.id))
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(isLoading = false)
+                _sideEffect.send(LoginSideEffect.ShowToast(e.message))
+            }
+        }
+    }
 }
 ```
 
@@ -501,7 +502,7 @@ class LoginViewModel : ViewModel() {
 ```kotlin
 // Bad - navigation in State
 data class LoginState(
- val navigateToHome: Boolean = false // Won't reset automatically
+    val navigateToHome: Boolean = false  // Won't reset automatically
 )
 ```
 
@@ -510,30 +511,30 @@ data class LoginState(
 ```kotlin
 // Reducer - pure function: (State, Intent) -> State
 object LoginReducer {
- fun reduce(state: LoginState, intent: LoginIntent): LoginState {
- return when (intent) {
- is LoginIntent.EmailChanged -> state.copy(
- email = intent.email,
- emailError = null
- )
- is LoginIntent.LoginStarted -> state.copy(isLoading = true)
- is LoginIntent.LoginSuccess -> state.copy(isLoading = false)
- }
- }
+    fun reduce(state: LoginState, intent: LoginIntent): LoginState {
+        return when (intent) {
+            is LoginIntent.EmailChanged -> state.copy(
+                email = intent.email,
+                emailError = null
+            )
+            is LoginIntent.LoginStarted -> state.copy(isLoading = true)
+            is LoginIntent.LoginSuccess -> state.copy(isLoading = false)
+        }
+    }
 }
 
 // ViewModel uses Reducer
 class LoginViewModel : ViewModel() {
- fun processIntent(intent: LoginIntent) {
- // ✅ Apply pure function
- _state.value = LoginReducer.reduce(_state.value, intent)
+    fun processIntent(intent: LoginIntent) {
+        // ✅ Apply pure function
+        _state.value = LoginReducer.reduce(_state.value, intent)
 
- // Side effects separately
- when (intent) {
- is LoginIntent.LoginClicked -> performLogin()
- else -> {}
- }
- }
+        // Side effects separately
+        when (intent) {
+            is LoginIntent.LoginClicked -> performLogin()
+            else -> {}
+        }
+    }
 }
 ```
 
@@ -542,22 +543,22 @@ class LoginViewModel : ViewModel() {
 ```kotlin
 // Complex State - decompose into sub-states
 data class ProductListState(
- val products: List<Product> = emptyList(),
- val filter: FilterState = FilterState(),
- val pagination: PaginationState = PaginationState(),
- val ui: UIState = UIState()
+    val products: List<Product> = emptyList(),
+    val filter: FilterState = FilterState(),
+    val pagination: PaginationState = PaginationState(),
+    val ui: UIState = UIState()
 )
 
 data class FilterState(
- val query: String = "",
- val category: Category? = null,
- val sortBy: SortOption = SortOption.NAME
+    val query: String = "",
+    val category: Category? = null,
+    val sortBy: SortOption = SortOption.NAME
 )
 
 data class PaginationState(
- val currentPage: Int = 0,
- val hasMore: Boolean = true,
- val isLoadingMore: Boolean = false
+    val currentPage: Int = 0,
+    val hasMore: Boolean = true,
+    val isLoadingMore: Boolean = false
 )
 ```
 
@@ -566,22 +567,22 @@ data class PaginationState(
 ```kotlin
 // Middleware handles side effects
 interface Middleware<I, S> {
- suspend fun process(intent: I, state: S, dispatch: (I) -> Unit)
+    suspend fun process(intent: I, state: S, dispatch: (I) -> Unit)
 }
 
 class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
- override suspend fun process(
- intent: LoginIntent,
- state: LoginState,
- dispatch: (LoginIntent) -> Unit
- ) {
- when (intent) {
- is LoginIntent.LoginClicked ->
- analytics.logEvent("login_attempt")
- is LoginIntent.LoginSuccess ->
- analytics.logEvent("login_success")
- }
- }
+    override suspend fun process(
+        intent: LoginIntent,
+        state: LoginState,
+        dispatch: (LoginIntent) -> Unit
+    ) {
+        when (intent) {
+            is LoginIntent.LoginClicked ->
+                analytics.logEvent("login_attempt")
+            is LoginIntent.LoginSuccess ->
+                analytics.logEvent("login_success")
+        }
+    }
 }
 ```
 
@@ -612,9 +613,9 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
 
 ## References
 
-- - Unidirectional data flow concept
-- - Immutability in Kotlin
-- - State management patterns
+-  - Unidirectional data flow concept
+-  - Immutability in Kotlin
+-  - State management patterns
 - [[moc-android]] - Android development hub
 - https://developer.android.com/topic/architecture - Android architecture guide
 

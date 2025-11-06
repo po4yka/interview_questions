@@ -28,6 +28,7 @@ tags:
 - aot
 - difficulty/medium
 - performance
+
 ---
 
 # Вопрос (RU)
@@ -47,13 +48,13 @@ Baseline Profiles — это метаданные компиляции, кото
 **Типичный путь без профиля**:
 ```
 Запуск → Интерпретация байткода → JIT-компиляция горячих методов → Нативный код
- (медленно) (на 2-3 запуске) (быстро)
+  (медленно)                          (на 2-3 запуске)            (быстро)
 ```
 
 **С Baseline Profile**:
 ```
 Установка → AOT-компиляция критичных методов → Запуск → Нативный код сразу
- (dex2oat применяет профиль) (быстро)
+             (dex2oat применяет профиль)       (быстро)
 ```
 
 ### Реализация
@@ -62,14 +63,14 @@ Baseline Profiles — это метаданные компиляции, кото
 ```kotlin
 // ✅ Минимальная конфигурация для включения поддержки профилей
 plugins {
- id("androidx.baselineprofile")
+    id("androidx.baselineprofile")
 }
 
 android {
- defaultConfig {
- // Профили работают с Android 7+, максимальный эффект на Android 9+
- minSdk = 24
- }
+    defaultConfig {
+        // Профили работают с Android 7+, максимальный эффект на Android 9+
+        minSdk = 24
+    }
 }
 ```
 
@@ -78,20 +79,20 @@ android {
 // ✅ Инструментированный тест генерирует профиль
 @RunWith(AndroidJUnit4::class)
 class BaselineProfileGenerator {
- @get:Rule val rule = BaselineProfileRule()
+    @get:Rule val rule = BaselineProfileRule()
 
- @Test
- fun generate() = rule.collect(
- packageName = "com.app",
- profileBlock = {
- pressHome()
- startActivityAndWait()
- // Критичный путь: открытие главного экрана
- device.wait(Until.hasObject(By.text("Feed")), 5000)
- device.findObject(By.text("Feed")).click()
- device.waitForIdle()
- }
- )
+    @Test
+    fun generate() = rule.collect(
+        packageName = "com.app",
+        profileBlock = {
+            pressHome()
+            startActivityAndWait()
+            // Критичный путь: открытие главного экрана
+            device.wait(Until.hasObject(By.text("Feed")), 5000)
+            device.findObject(By.text("Feed")).click()
+            device.waitForIdle()
+        }
+    )
 }
 ```
 
@@ -109,12 +110,12 @@ Lcom/app/data/FeedRepository;
 // ✅ Проверка установки профиля на устройстве
 val status = ProfileVerifier.getCompilationStatusAsync().await()
 when {
- status.profileInstallResultCode == RESULT_CODE_COMPILED_WITH_PROFILE ->
- Log.i("Profile", "Профиль применён и скомпилирован")
- status.profileInstallResultCode == RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION ->
- Log.w("Profile", "Профиль в очереди на компиляцию")
- else ->
- Log.e("Profile", "Профиль не установлен: ${status.profileInstallResultCode}")
+    status.profileInstallResultCode == RESULT_CODE_COMPILED_WITH_PROFILE ->
+        Log.i("Profile", "Профиль применён и скомпилирован")
+    status.profileInstallResultCode == RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION ->
+        Log.w("Profile", "Профиль в очереди на компиляцию")
+    else ->
+        Log.e("Profile", "Профиль не установлен: ${status.profileInstallResultCode}")
 }
 ```
 
@@ -141,13 +142,13 @@ Baseline Profiles are compilation metadata that tell Android Runtime (ART) which
 **Typical path without profile**:
 ```
 Launch → Interpret bytecode → JIT compile hot methods → Native code
- (slow) (on 2nd-3rd run) (fast)
+ (slow)                          (on 2nd-3rd run)        (fast)
 ```
 
 **With Baseline Profile**:
 ```
 Install → AOT compile critical methods → Launch → Native code immediately
- (dex2oat applies profile) (fast)
+           (dex2oat applies profile)      (fast)
 ```
 
 ### Implementation
@@ -156,14 +157,14 @@ Install → AOT compile critical methods → Launch → Native code immediately
 ```kotlin
 // ✅ Minimal configuration to enable profile support
 plugins {
- id("androidx.baselineprofile")
+    id("androidx.baselineprofile")
 }
 
 android {
- defaultConfig {
- // Profiles work on Android 7+, max effect on Android 9+
- minSdk = 24
- }
+    defaultConfig {
+        // Profiles work on Android 7+, max effect on Android 9+
+        minSdk = 24
+    }
 }
 ```
 
@@ -172,20 +173,20 @@ android {
 // ✅ Instrumented test generates profile
 @RunWith(AndroidJUnit4::class)
 class BaselineProfileGenerator {
- @get:Rule val rule = BaselineProfileRule()
+    @get:Rule val rule = BaselineProfileRule()
 
- @Test
- fun generate() = rule.collect(
- packageName = "com.app",
- profileBlock = {
- pressHome()
- startActivityAndWait()
- // Critical path: opening main screen
- device.wait(Until.hasObject(By.text("Feed")), 5000)
- device.findObject(By.text("Feed")).click()
- device.waitForIdle()
- }
- )
+    @Test
+    fun generate() = rule.collect(
+        packageName = "com.app",
+        profileBlock = {
+            pressHome()
+            startActivityAndWait()
+            // Critical path: opening main screen
+            device.wait(Until.hasObject(By.text("Feed")), 5000)
+            device.findObject(By.text("Feed")).click()
+            device.waitForIdle()
+        }
+    )
 }
 ```
 
@@ -203,12 +204,12 @@ Lcom/app/data/FeedRepository;
 // ✅ Check profile installation on device
 val status = ProfileVerifier.getCompilationStatusAsync().await()
 when {
- status.profileInstallResultCode == RESULT_CODE_COMPILED_WITH_PROFILE ->
- Log.i("Profile", "Profile applied and compiled")
- status.profileInstallResultCode == RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION ->
- Log.w("Profile", "Profile queued for compilation")
- else ->
- Log.e("Profile", "Profile not installed: ${status.profileInstallResultCode}")
+    status.profileInstallResultCode == RESULT_CODE_COMPILED_WITH_PROFILE ->
+        Log.i("Profile", "Profile applied and compiled")
+    status.profileInstallResultCode == RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION ->
+        Log.w("Profile", "Profile queued for compilation")
+    else ->
+        Log.e("Profile", "Profile not installed: ${status.profileInstallResultCode}")
 }
 ```
 
@@ -243,6 +244,7 @@ when {
 ### Prerequisites / Concepts
 
 - 
+
 
 ### Prerequisites (Easier)
 - [[q-app-startup-optimization--android--medium]] — General startup optimization techniques

@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts, performance]
+
 ---
 
 # Вопрос (RU)
@@ -38,33 +39,33 @@ tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts
 ```xml
 <!-- ❌ Слишком много вложенных layouts -->
 <LinearLayout>
- <RelativeLayout>
- <LinearLayout>
- <FrameLayout>
- <TextView />
- <ImageView />
- </FrameLayout>
- </LinearLayout>
- </RelativeLayout>
+    <RelativeLayout>
+        <LinearLayout>
+            <FrameLayout>
+                <TextView />
+                <ImageView />
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
 
 <!-- ✅ Плоская иерархия с ConstraintLayout -->
 <androidx.constraintlayout.widget.ConstraintLayout
- android:layout_width="match_parent"
- android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
- <TextView
- android:id="@+id/title"
- app:layout_constraintStart_toStartOf="parent"
- app:layout_constraintEnd_toStartOf="@id/image"
- app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/image"
+        app:layout_constraintTop_toTopOf="parent" />
 
- <ImageView
- android:id="@+id/image"
- android:layout_width="48dp"
- android:layout_height="48dp"
- app:layout_constraintEnd_toEndOf="parent"
- app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
@@ -76,17 +77,17 @@ ViewStub — это view нулевого размера, который инф�
 ```kotlin
 // Inflate ViewStub только когда нужно
 class MainActivity : AppCompatActivity() {
- private var stubInflated = false
+    private var stubInflated = false
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- binding.showButton.setOnClickListener {
- if (!stubInflated) {
- binding.viewStub.inflate()
- stubInflated = true
- }
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding.showButton.setOnClickListener {
+            if (!stubInflated) {
+                binding.viewStub.inflate()
+                stubInflated = true
+            }
+        }
+    }
 }
 ```
 
@@ -97,13 +98,13 @@ class MainActivity : AppCompatActivity() {
 ```xml
 <!-- item_content.xml с merge -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
- <TextView android:text="Label" />
- <TextView android:text="Value" />
+    <TextView android:text="Label" />
+    <TextView android:text="Value" />
 </merge>
 
 <!-- Не создается лишний ViewGroup -->
 <LinearLayout>
- <include layout="@layout/item_content" />
+    <include layout="@layout/item_content" />
 </LinearLayout>
 ```
 
@@ -114,12 +115,12 @@ class MainActivity : AppCompatActivity() {
 ```xml
 <!-- ❌ Лишние backgrounds -->
 <LinearLayout android:background="@color/white">
- <TextView android:background="@color/white" />
+    <TextView android:background="@color/white" />
 </LinearLayout>
 
 <!-- ✅ Минимум backgrounds -->
 <LinearLayout>
- <TextView android:text="Hello" />
+    <TextView android:text="Hello" />
 </LinearLayout>
 ```
 
@@ -127,19 +128,19 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class OptimizedView(context: Context) : View(context) {
- private val paint = Paint()
+    private val paint = Paint()
 
- // ✅ Кэшируем вычисления в onSizeChanged
- private var centerX = 0f
+    // ✅ Кэшируем вычисления в onSizeChanged
+    private var centerX = 0f
 
- override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
- centerX = w / 2f
- }
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        centerX = w / 2f
+    }
 
- override fun onDraw(canvas: Canvas) {
- // ❌ НЕ создавать объекты здесь!
- canvas.drawCircle(centerX, centerY, radius, paint)
- }
+    override fun onDraw(canvas: Canvas) {
+        // ❌ НЕ создавать объекты здесь!
+        canvas.drawCircle(centerX, centerY, radius, paint)
+    }
 }
 ```
 
@@ -160,33 +161,33 @@ Bad layouts cause performance issues, rendering delays, and poor UX. Key optimiz
 ```xml
 <!-- ❌ Too many nested layouts -->
 <LinearLayout>
- <RelativeLayout>
- <LinearLayout>
- <FrameLayout>
- <TextView />
- <ImageView />
- </FrameLayout>
- </LinearLayout>
- </RelativeLayout>
+    <RelativeLayout>
+        <LinearLayout>
+            <FrameLayout>
+                <TextView />
+                <ImageView />
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
 
 <!-- ✅ Flat hierarchy with ConstraintLayout -->
 <androidx.constraintlayout.widget.ConstraintLayout
- android:layout_width="match_parent"
- android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
- <TextView
- android:id="@+id/title"
- app:layout_constraintStart_toStartOf="parent"
- app:layout_constraintEnd_toStartOf="@id/image"
- app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/image"
+        app:layout_constraintTop_toTopOf="parent" />
 
- <ImageView
- android:id="@+id/image"
- android:layout_width="48dp"
- android:layout_height="48dp"
- app:layout_constraintEnd_toEndOf="parent"
- app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
@@ -198,17 +199,17 @@ ViewStub is a zero-sized view that lazily inflates layouts only when needed.
 ```kotlin
 // Inflate ViewStub only when needed
 class MainActivity : AppCompatActivity() {
- private var stubInflated = false
+    private var stubInflated = false
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- binding.showButton.setOnClickListener {
- if (!stubInflated) {
- binding.viewStub.inflate()
- stubInflated = true
- }
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding.showButton.setOnClickListener {
+            if (!stubInflated) {
+                binding.viewStub.inflate()
+                stubInflated = true
+            }
+        }
+    }
 }
 ```
 
@@ -219,13 +220,13 @@ The `<merge>` tag eliminates redundant ViewGroups when using `<include>`.
 ```xml
 <!-- item_content.xml with merge -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
- <TextView android:text="Label" />
- <TextView android:text="Value" />
+    <TextView android:text="Label" />
+    <TextView android:text="Value" />
 </merge>
 
 <!-- No extra ViewGroup created -->
 <LinearLayout>
- <include layout="@layout/item_content" />
+    <include layout="@layout/item_content" />
 </LinearLayout>
 ```
 
@@ -236,12 +237,12 @@ Check: Settings > Developer Options > Debug GPU Overdraw
 ```xml
 <!-- ❌ Unnecessary backgrounds -->
 <LinearLayout android:background="@color/white">
- <TextView android:background="@color/white" />
+    <TextView android:background="@color/white" />
 </LinearLayout>
 
 <!-- ✅ Minimal backgrounds -->
 <LinearLayout>
- <TextView android:text="Hello" />
+    <TextView android:text="Hello" />
 </LinearLayout>
 ```
 
@@ -249,19 +250,19 @@ Check: Settings > Developer Options > Debug GPU Overdraw
 
 ```kotlin
 class OptimizedView(context: Context) : View(context) {
- private val paint = Paint()
+    private val paint = Paint()
 
- // ✅ Cache calculations in onSizeChanged
- private var centerX = 0f
+    // ✅ Cache calculations in onSizeChanged
+    private var centerX = 0f
 
- override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
- centerX = w / 2f
- }
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        centerX = w / 2f
+    }
 
- override fun onDraw(canvas: Canvas) {
- // ❌ DON'T create objects here!
- canvas.drawCircle(centerX, centerY, radius, paint)
- }
+    override fun onDraw(canvas: Canvas) {
+        // ❌ DON'T create objects here!
+        canvas.drawCircle(centerX, centerY, radius, paint)
+    }
 }
 ```
 
@@ -283,8 +284,8 @@ class OptimizedView(context: Context) : View(context) {
 
 ## References
 
-- - Concept note about `ConstraintLayout`
-- - Understanding Android `View` hierarchy
+-  - Concept note about `ConstraintLayout`
+-  - Understanding Android `View` hierarchy
 - Android Developer Documentation: Layout optimization best practices
 
 ## Related Questions

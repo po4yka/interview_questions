@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [android, android/fragment, android/lifecycle, arguments, bundle, difficulty/medium, fragment]
+
 ---
 
 # Вопрос (RU)
@@ -37,30 +38,30 @@ tags: [android, android/fragment, android/lifecycle, arguments, bundle, difficul
 
 ```kotlin
 class DetailsFragment : Fragment() {
- companion object {
- private const val ARG_ITEM_ID = "item_id"
- private const val ARG_ITEM_NAME = "item_name"
+    companion object {
+        private const val ARG_ITEM_ID = "item_id"
+        private const val ARG_ITEM_NAME = "item_name"
 
- // ✅ Фабричный метод для создания фрагмента с аргументами
- fun newInstance(itemId: Int, itemName: String) = DetailsFragment().apply {
- arguments = Bundle().apply {
- putInt(ARG_ITEM_ID, itemId)
- putString(ARG_ITEM_NAME, itemName)
- }
- }
- }
+        // ✅ Фабричный метод для создания фрагмента с аргументами
+        fun newInstance(itemId: Int, itemName: String) = DetailsFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_ITEM_ID, itemId)
+                putString(ARG_ITEM_NAME, itemName)
+            }
+        }
+    }
 
- // ✅ Извлечение аргументов в onCreate
- private var itemId: Int = -1
- private var itemName: String? = null
+    // ✅ Извлечение аргументов в onCreate
+    private var itemId: Int = -1
+    private var itemName: String? = null
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- arguments?.let {
- itemId = it.getInt(ARG_ITEM_ID, -1)
- itemName = it.getString(ARG_ITEM_NAME)
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            itemId = it.getInt(ARG_ITEM_ID, -1)
+            itemName = it.getString(ARG_ITEM_NAME)
+        }
+    }
 }
 
 // Использование
@@ -71,25 +72,25 @@ val fragment = DetailsFragment.newInstance(itemId = 42, itemName = "Item")
 
 ```kotlin
 class UserFragment : Fragment() {
- companion object {
- private const val ARG_USER_ID = "user_id"
- private const val ARG_EMAIL = "user_email"
+    companion object {
+        private const val ARG_USER_ID = "user_id"
+        private const val ARG_EMAIL = "user_email"
 
- fun newInstance(userId: Long, email: String) = UserFragment().apply {
- arguments = Bundle().apply {
- putLong(ARG_USER_ID, userId)
- putString(ARG_EMAIL, email)
- }
- }
- }
+        fun newInstance(userId: Long, email: String) = UserFragment().apply {
+            arguments = Bundle().apply {
+                putLong(ARG_USER_ID, userId)
+                putString(ARG_EMAIL, email)
+            }
+        }
+    }
 
- // ✅ Ленивая инициализация из аргументов
- private val userId: Long by lazy {
- requireArguments().getLong(ARG_USER_ID)
- }
- private val email: String by lazy {
- requireArguments().getString(ARG_EMAIL) ?: ""
- }
+    // ✅ Ленивая инициализация из аргументов
+    private val userId: Long by lazy {
+        requireArguments().getLong(ARG_USER_ID)
+    }
+    private val email: String by lazy {
+        requireArguments().getString(ARG_EMAIL) ?: ""
+    }
 }
 ```
 
@@ -100,23 +101,23 @@ class UserFragment : Fragment() {
 data class User(val id: Long, val name: String, val email: String) : Parcelable
 
 class ProfileFragment : Fragment() {
- companion object {
- private const val ARG_USER = "user"
+    companion object {
+        private const val ARG_USER = "user"
 
- fun newInstance(user: User) = ProfileFragment().apply {
- arguments = Bundle().apply { putParcelable(ARG_USER, user) }
- }
- }
+        fun newInstance(user: User) = ProfileFragment().apply {
+            arguments = Bundle().apply { putParcelable(ARG_USER, user) }
+        }
+    }
 
- // ✅ Безопасное извлечение Parcelable с учетом API 33+
- private val user: User by lazy {
- if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
- requireArguments().getParcelable(ARG_USER, User::class.java)!!
- } else {
- @Suppress("DEPRECATION")
- requireArguments().getParcelable(ARG_USER)!!
- }
- }
+    // ✅ Безопасное извлечение Parcelable с учетом API 33+
+    private val user: User by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable(ARG_USER, User::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            requireArguments().getParcelable(ARG_USER)!!
+        }
+    }
 }
 ```
 
@@ -134,28 +135,28 @@ class ProfileFragment : Fragment() {
 ```kotlin
 // ❌ НЕПРАВИЛЬНО — конструктор (данные теряются при повороте экрана)
 class WrongFragment(private val itemId: Int) : Fragment() {
- // Данные потеряются при изменении конфигурации!
+    // Данные потеряются при изменении конфигурации!
 }
 
 // ❌ НЕПРАВИЛЬНО — сеттеры (небезопасно при изменении конфигурации)
 class WrongFragment : Fragment() {
- private var itemId: Int = 0
- fun setItemId(id: Int) {
- this.itemId = id // Потеряется при повороте экрана
- }
+    private var itemId: Int = 0
+    fun setItemId(id: Int) {
+        this.itemId = id  // Потеряется при повороте экрана
+    }
 }
 
 // ✅ ПРАВИЛЬНО — Bundle
 class CorrectFragment : Fragment() {
- companion object {
- private const val ARG_ITEM_ID = "item_id"
+    companion object {
+        private const val ARG_ITEM_ID = "item_id"
 
- fun newInstance(itemId: Int) = CorrectFragment().apply {
- arguments = Bundle().apply { putInt(ARG_ITEM_ID, itemId) }
- }
- }
+        fun newInstance(itemId: Int) = CorrectFragment().apply {
+            arguments = Bundle().apply { putInt(ARG_ITEM_ID, itemId) }
+        }
+    }
 
- private val itemId by lazy { requireArguments().getInt(ARG_ITEM_ID) }
+    private val itemId by lazy { requireArguments().getInt(ARG_ITEM_ID) }
 }
 ```
 
@@ -171,30 +172,30 @@ The recommended and safe way to pass parameters to a `Fragment` in Android is us
 
 ```kotlin
 class DetailsFragment : Fragment() {
- companion object {
- private const val ARG_ITEM_ID = "item_id"
- private const val ARG_ITEM_NAME = "item_name"
+    companion object {
+        private const val ARG_ITEM_ID = "item_id"
+        private const val ARG_ITEM_NAME = "item_name"
 
- // ✅ Factory method to create fragment with arguments
- fun newInstance(itemId: Int, itemName: String) = DetailsFragment().apply {
- arguments = Bundle().apply {
- putInt(ARG_ITEM_ID, itemId)
- putString(ARG_ITEM_NAME, itemName)
- }
- }
- }
+        // ✅ Factory method to create fragment with arguments
+        fun newInstance(itemId: Int, itemName: String) = DetailsFragment().apply {
+            arguments = Bundle().apply {
+                putInt(ARG_ITEM_ID, itemId)
+                putString(ARG_ITEM_NAME, itemName)
+            }
+        }
+    }
 
- // ✅ Extract arguments in onCreate
- private var itemId: Int = -1
- private var itemName: String? = null
+    // ✅ Extract arguments in onCreate
+    private var itemId: Int = -1
+    private var itemName: String? = null
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- arguments?.let {
- itemId = it.getInt(ARG_ITEM_ID, -1)
- itemName = it.getString(ARG_ITEM_NAME)
- }
- }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            itemId = it.getInt(ARG_ITEM_ID, -1)
+            itemName = it.getString(ARG_ITEM_NAME)
+        }
+    }
 }
 
 // Usage
@@ -205,25 +206,25 @@ val fragment = DetailsFragment.newInstance(itemId = 42, itemName = "Item")
 
 ```kotlin
 class UserFragment : Fragment() {
- companion object {
- private const val ARG_USER_ID = "user_id"
- private const val ARG_EMAIL = "user_email"
+    companion object {
+        private const val ARG_USER_ID = "user_id"
+        private const val ARG_EMAIL = "user_email"
 
- fun newInstance(userId: Long, email: String) = UserFragment().apply {
- arguments = Bundle().apply {
- putLong(ARG_USER_ID, userId)
- putString(ARG_EMAIL, email)
- }
- }
- }
+        fun newInstance(userId: Long, email: String) = UserFragment().apply {
+            arguments = Bundle().apply {
+                putLong(ARG_USER_ID, userId)
+                putString(ARG_EMAIL, email)
+            }
+        }
+    }
 
- // ✅ Lazy initialization from arguments
- private val userId: Long by lazy {
- requireArguments().getLong(ARG_USER_ID)
- }
- private val email: String by lazy {
- requireArguments().getString(ARG_EMAIL) ?: ""
- }
+    // ✅ Lazy initialization from arguments
+    private val userId: Long by lazy {
+        requireArguments().getLong(ARG_USER_ID)
+    }
+    private val email: String by lazy {
+        requireArguments().getString(ARG_EMAIL) ?: ""
+    }
 }
 ```
 
@@ -234,23 +235,23 @@ class UserFragment : Fragment() {
 data class User(val id: Long, val name: String, val email: String) : Parcelable
 
 class ProfileFragment : Fragment() {
- companion object {
- private const val ARG_USER = "user"
+    companion object {
+        private const val ARG_USER = "user"
 
- fun newInstance(user: User) = ProfileFragment().apply {
- arguments = Bundle().apply { putParcelable(ARG_USER, user) }
- }
- }
+        fun newInstance(user: User) = ProfileFragment().apply {
+            arguments = Bundle().apply { putParcelable(ARG_USER, user) }
+        }
+    }
 
- // ✅ Safe Parcelable extraction with API 33+ support
- private val user: User by lazy {
- if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
- requireArguments().getParcelable(ARG_USER, User::class.java)!!
- } else {
- @Suppress("DEPRECATION")
- requireArguments().getParcelable(ARG_USER)!!
- }
- }
+    // ✅ Safe Parcelable extraction with API 33+ support
+    private val user: User by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getParcelable(ARG_USER, User::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            requireArguments().getParcelable(ARG_USER)!!
+        }
+    }
 }
 ```
 
@@ -268,28 +269,28 @@ class ProfileFragment : Fragment() {
 ```kotlin
 // ❌ WRONG — constructor (data lost on configuration change)
 class WrongFragment(private val itemId: Int) : Fragment() {
- // Data will be lost on screen rotation!
+    // Data will be lost on screen rotation!
 }
 
 // ❌ WRONG — setters (unsafe for configuration changes)
 class WrongFragment : Fragment() {
- private var itemId: Int = 0
- fun setItemId(id: Int) {
- this.itemId = id // Lost on screen rotation
- }
+    private var itemId: Int = 0
+    fun setItemId(id: Int) {
+        this.itemId = id  // Lost on screen rotation
+    }
 }
 
 // ✅ CORRECT — Bundle
 class CorrectFragment : Fragment() {
- companion object {
- private const val ARG_ITEM_ID = "item_id"
+    companion object {
+        private const val ARG_ITEM_ID = "item_id"
 
- fun newInstance(itemId: Int) = CorrectFragment().apply {
- arguments = Bundle().apply { putInt(ARG_ITEM_ID, itemId) }
- }
- }
+        fun newInstance(itemId: Int) = CorrectFragment().apply {
+            arguments = Bundle().apply { putInt(ARG_ITEM_ID, itemId) }
+        }
+    }
 
- private val itemId by lazy { requireArguments().getInt(ARG_ITEM_ID) }
+    private val itemId by lazy { requireArguments().getInt(ARG_ITEM_ID) }
 }
 ```
 
@@ -306,8 +307,8 @@ class CorrectFragment : Fragment() {
 ## References
 
 - [[c-fragment-lifecycle]] - `Fragment` lifecycle fundamentals
-- - `Bundle` data structure
-- - `Parcelable` implementation
+-  - `Bundle` data structure
+-  - `Parcelable` implementation
 - [Android Documentation - Fragments](https://developer.android.com/guide/fragments)
 - [Navigation Component Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
 

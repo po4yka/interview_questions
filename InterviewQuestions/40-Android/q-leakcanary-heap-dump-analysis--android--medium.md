@@ -15,6 +15,7 @@ tags: [android/performance-memory, android/profiling, difficulty/medium, heap-du
 moc: moc-android
 related: []
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -38,10 +39,10 @@ sources: []
 ```kotlin
 // LeakCanary проверяет WeakReference после GC
 if (weakReference.get() != null) {
- // ✅ Объект должен был быть собран, но все еще жив
- val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
- Debug.dumpHprofData(heapDumpFile.absolutePath)
- analyzeHeap(heapDumpFile)
+    // ✅ Объект должен был быть собран, но все еще жив
+    val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
+    Debug.dumpHprofData(heapDumpFile.absolutePath)
+    analyzeHeap(heapDumpFile)
 }
 ```
 
@@ -51,26 +52,26 @@ Shark строит граф объектов и находит пути от GC 
 
 ```kotlin
 fun analyzeHeap(heapDumpFile: File) {
- val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
+    val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
 
- val analysis = heapAnalyzer.analyze(
- heapDumpFile = heapDumpFile,
- leakingObjectFinder = FilteringLeakingObjectFinder(
- AndroidObjectInspectors.appLeakingObjectFilters
- ),
- referenceMatchers = AndroidReferenceMatchers.appDefaults,
- computeRetainedHeapSize = true
- )
+    val analysis = heapAnalyzer.analyze(
+        heapDumpFile = heapDumpFile,
+        leakingObjectFinder = FilteringLeakingObjectFinder(
+            AndroidObjectInspectors.appLeakingObjectFilters
+        ),
+        referenceMatchers = AndroidReferenceMatchers.appDefaults,
+        computeRetainedHeapSize = true
+    )
 
- when (analysis) {
- is HeapAnalysisSuccess -> {
- analysis.applicationLeaks.forEach { leak ->
- // ❌ Найдена цепочка удержания от GC root
- println("Leak: ${leak.leakTraces.first()}")
- }
- }
- is HeapAnalysisFailure -> println("Failed: ${analysis.exception}")
- }
+    when (analysis) {
+        is HeapAnalysisSuccess -> {
+            analysis.applicationLeaks.forEach { leak ->
+                // ❌ Найдена цепочка удержания от GC root
+                println("Leak: ${leak.leakTraces.first()}")
+            }
+        }
+        is HeapAnalysisFailure -> println("Failed: ${analysis.exception}")
+    }
 }
 ```
 
@@ -80,11 +81,11 @@ Shark находит цепочку ссылок от GC root к объекту,
 
 ```
 GC Root: Thread (main)
- ↓ HandlerThread.mQueue
- ↓ MessageQueue.mMessages
- ↓ Message.callback (Runnable)
- ↓ Lambda → MainActivity reference
- ↓ MainActivity (LEAKED!)
+  ↓ HandlerThread.mQueue
+  ↓ MessageQueue.mMessages
+  ↓ Message.callback (Runnable)
+  ↓ Lambda → MainActivity reference
+  ↓ MainActivity (LEAKED!)
 
 Retained size: 3.2 MB
 ```
@@ -95,7 +96,7 @@ Retained size: 3.2 MB
 ```kotlin
 // ❌ Activity в static поле
 companion object {
- var activity: Activity? = null
+    var activity: Activity? = null
 }
 
 // Trace: GC Root (Class) → static field → Activity
@@ -105,9 +106,9 @@ companion object {
 ```kotlin
 // ❌ AsyncTask держит неявную ссылку на outer class
 class MyActivity : AppCompatActivity() {
- inner class MyTask : AsyncTask<Void, Void, Void>() {
- // this$0 → MyActivity
- }
+    inner class MyTask : AsyncTask<Void, Void, Void>() {
+        // this$0 → MyActivity
+    }
 }
 ```
 
@@ -115,11 +116,11 @@ class MyActivity : AppCompatActivity() {
 ```kotlin
 // ❌ Anonymous listener держит Activity
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- someService.addListener(object : Listener {
- override fun onEvent() { updateUI() }
- })
- // Нет removeListener() в onDestroy()
+    super.onCreate(savedInstanceState)
+    someService.addListener(object : Listener {
+        override fun onEvent() { updateUI() }
+    })
+    // Нет removeListener() в onDestroy()
 }
 ```
 
@@ -141,10 +142,10 @@ If an object wasn't freed after garbage collection, LeakCanary creates a **heap 
 ```kotlin
 // LeakCanary checks WeakReference after GC
 if (weakReference.get() != null) {
- // ✅ Object should be collected but still alive
- val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
- Debug.dumpHprofData(heapDumpFile.absolutePath)
- analyzeHeap(heapDumpFile)
+    // ✅ Object should be collected but still alive
+    val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
+    Debug.dumpHprofData(heapDumpFile.absolutePath)
+    analyzeHeap(heapDumpFile)
 }
 ```
 
@@ -154,26 +155,26 @@ Shark builds an object graph and finds paths from GC roots to suspicious objects
 
 ```kotlin
 fun analyzeHeap(heapDumpFile: File) {
- val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
+    val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
 
- val analysis = heapAnalyzer.analyze(
- heapDumpFile = heapDumpFile,
- leakingObjectFinder = FilteringLeakingObjectFinder(
- AndroidObjectInspectors.appLeakingObjectFilters
- ),
- referenceMatchers = AndroidReferenceMatchers.appDefaults,
- computeRetainedHeapSize = true
- )
+    val analysis = heapAnalyzer.analyze(
+        heapDumpFile = heapDumpFile,
+        leakingObjectFinder = FilteringLeakingObjectFinder(
+            AndroidObjectInspectors.appLeakingObjectFilters
+        ),
+        referenceMatchers = AndroidReferenceMatchers.appDefaults,
+        computeRetainedHeapSize = true
+    )
 
- when (analysis) {
- is HeapAnalysisSuccess -> {
- analysis.applicationLeaks.forEach { leak ->
- // ❌ Found retention chain from GC root
- println("Leak: ${leak.leakTraces.first()}")
- }
- }
- is HeapAnalysisFailure -> println("Failed: ${analysis.exception}")
- }
+    when (analysis) {
+        is HeapAnalysisSuccess -> {
+            analysis.applicationLeaks.forEach { leak ->
+                // ❌ Found retention chain from GC root
+                println("Leak: ${leak.leakTraces.first()}")
+            }
+        }
+        is HeapAnalysisFailure -> println("Failed: ${analysis.exception}")
+    }
 }
 ```
 
@@ -183,11 +184,11 @@ Shark finds reference chains from GC roots to objects that should have been coll
 
 ```
 GC Root: Thread (main)
- ↓ HandlerThread.mQueue
- ↓ MessageQueue.mMessages
- ↓ Message.callback (Runnable)
- ↓ Lambda → MainActivity reference
- ↓ MainActivity (LEAKED!)
+  ↓ HandlerThread.mQueue
+  ↓ MessageQueue.mMessages
+  ↓ Message.callback (Runnable)
+  ↓ Lambda → MainActivity reference
+  ↓ MainActivity (LEAKED!)
 
 Retained size: 3.2 MB
 ```
@@ -198,7 +199,7 @@ Retained size: 3.2 MB
 ```kotlin
 // ❌ Activity in static field
 companion object {
- var activity: Activity? = null
+    var activity: Activity? = null
 }
 
 // Trace: GC Root (Class) → static field → Activity
@@ -208,9 +209,9 @@ companion object {
 ```kotlin
 // ❌ AsyncTask holds implicit reference to outer class
 class MyActivity : AppCompatActivity() {
- inner class MyTask : AsyncTask<Void, Void, Void>() {
- // this$0 → MyActivity
- }
+    inner class MyTask : AsyncTask<Void, Void, Void>() {
+        // this$0 → MyActivity
+    }
 }
 ```
 
@@ -218,11 +219,11 @@ class MyActivity : AppCompatActivity() {
 ```kotlin
 // ❌ Anonymous listener holds Activity
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- someService.addListener(object : Listener {
- override fun onEvent() { updateUI() }
- })
- // No removeListener() in onDestroy()
+    super.onCreate(savedInstanceState)
+    someService.addListener(object : Listener {
+        override fun onEvent() { updateUI() }
+    })
+    // No removeListener() in onDestroy()
 }
 ```
 
@@ -254,7 +255,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Prerequisites (Easier)
 - [[q-main-thread-android--android--medium]] - Understanding Android threading model
-- - `Activity` lifecycle and destruction
+-  - `Activity` lifecycle and destruction
 
 ### Related (Same Level)
 - [[q-leakcanary-detection-mechanism--android--medium]] - How LeakCanary detects leaks

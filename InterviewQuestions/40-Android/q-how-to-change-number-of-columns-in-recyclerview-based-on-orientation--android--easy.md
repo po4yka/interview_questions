@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, grid-layout, recyclerview]
+
 ---
 
 # Вопрос (RU)
@@ -36,28 +37,28 @@ tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, grid-layo
 ```xml
 <!-- res/values/dimens.xml (Portrait) -->
 <resources>
- <integer name="grid_column_count">2</integer>
+    <integer name="grid_column_count">2</integer>
 </resources>
 
 <!-- res/values-land/dimens.xml (Landscape) -->
 <resources>
- <integer name="grid_column_count">4</integer>
+    <integer name="grid_column_count">4</integer>
 </resources>
 ```
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- val spanCount = resources.getInteger(R.integer.grid_column_count)
- // ✅ Система автоматически выбирает значение при смене ориентации
+        val spanCount = resources.getInteger(R.integer.grid_column_count)
+        // ✅ Система автоматически выбирает значение при смене ориентации
 
- val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
- recyclerView.layoutManager = GridLayoutManager(this, spanCount)
- recyclerView.adapter = MyAdapter(items)
- }
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
+        recyclerView.adapter = MyAdapter(items)
+    }
 }
 ```
 
@@ -70,33 +71,33 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- recyclerView = findViewById(R.id.recyclerView)
- setupRecyclerView()
- }
+        recyclerView = findViewById(R.id.recyclerView)
+        setupRecyclerView()
+    }
 
- private fun setupRecyclerView() {
- val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
- 4 // ✅ Landscape: больше колонок
- } else {
- 2 // ✅ Portrait: меньше колонок
- }
+    private fun setupRecyclerView() {
+        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            4  // ✅ Landscape: больше колонок
+        } else {
+            2  // ✅ Portrait: меньше колонок
+        }
 
- recyclerView.layoutManager = GridLayoutManager(this, spanCount)
- recyclerView.adapter = MyAdapter(items)
- }
+        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
+        recyclerView.adapter = MyAdapter(items)
+    }
 
- override fun onConfigurationChanged(newConfig: Configuration) {
- super.onConfigurationChanged(newConfig)
- // ❌ Требует android:configChanges="orientation|screenSize" в манифесте
- (recyclerView.layoutManager as? GridLayoutManager)?.spanCount =
- if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
- }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // ❌ Требует android:configChanges="orientation|screenSize" в манифесте
+        (recyclerView.layoutManager as? GridLayoutManager)?.spanCount =
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
+    }
 }
 ```
 
@@ -104,17 +105,17 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class AdaptiveGridLayoutManager(
- context: Context,
- private val columnWidth: Int // минимальная ширина колонки в px
+    context: Context,
+    private val columnWidth: Int  // минимальная ширина колонки в px
 ) : GridLayoutManager(context, 1) {
 
- override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
- val totalSpace = width - paddingRight - paddingLeft
- val spanCount = maxOf(1, totalSpace / columnWidth)
- // ✅ Динамически вычисляет количество колонок под любой экран
- setSpanCount(spanCount)
- super.onLayoutChildren(recycler, state)
- }
+    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
+        val totalSpace = width - paddingRight - paddingLeft
+        val spanCount = maxOf(1, totalSpace / columnWidth)
+        // ✅ Динамически вычисляет количество колонок под любой экран
+        setSpanCount(spanCount)
+        super.onLayoutChildren(recycler, state)
+    }
 }
 
 // Usage
@@ -131,28 +132,28 @@ Use **GridLayoutManager** with dynamic spanCount based on orientation. The optim
 ```xml
 <!-- res/values/dimens.xml (Portrait) -->
 <resources>
- <integer name="grid_column_count">2</integer>
+    <integer name="grid_column_count">2</integer>
 </resources>
 
 <!-- res/values-land/dimens.xml (Landscape) -->
 <resources>
- <integer name="grid_column_count">4</integer>
+    <integer name="grid_column_count">4</integer>
 </resources>
 ```
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- val spanCount = resources.getInteger(R.integer.grid_column_count)
- // ✅ System automatically picks value on orientation change
+        val spanCount = resources.getInteger(R.integer.grid_column_count)
+        // ✅ System automatically picks value on orientation change
 
- val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
- recyclerView.layoutManager = GridLayoutManager(this, spanCount)
- recyclerView.adapter = MyAdapter(items)
- }
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
+        recyclerView.adapter = MyAdapter(items)
+    }
 }
 ```
 
@@ -165,33 +166,33 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
- private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
 
- override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
- setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
- recyclerView = findViewById(R.id.recyclerView)
- setupRecyclerView()
- }
+        recyclerView = findViewById(R.id.recyclerView)
+        setupRecyclerView()
+    }
 
- private fun setupRecyclerView() {
- val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
- 4 // ✅ Landscape: more columns
- } else {
- 2 // ✅ Portrait: fewer columns
- }
+    private fun setupRecyclerView() {
+        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            4  // ✅ Landscape: more columns
+        } else {
+            2  // ✅ Portrait: fewer columns
+        }
 
- recyclerView.layoutManager = GridLayoutManager(this, spanCount)
- recyclerView.adapter = MyAdapter(items)
- }
+        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
+        recyclerView.adapter = MyAdapter(items)
+    }
 
- override fun onConfigurationChanged(newConfig: Configuration) {
- super.onConfigurationChanged(newConfig)
- // ❌ Requires android:configChanges="orientation|screenSize" in manifest
- (recyclerView.layoutManager as? GridLayoutManager)?.spanCount =
- if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
- }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // ❌ Requires android:configChanges="orientation|screenSize" in manifest
+        (recyclerView.layoutManager as? GridLayoutManager)?.spanCount =
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 4 else 2
+    }
 }
 ```
 
@@ -199,17 +200,17 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class AdaptiveGridLayoutManager(
- context: Context,
- private val columnWidth: Int // minimum column width in px
+    context: Context,
+    private val columnWidth: Int  // minimum column width in px
 ) : GridLayoutManager(context, 1) {
 
- override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
- val totalSpace = width - paddingRight - paddingLeft
- val spanCount = maxOf(1, totalSpace / columnWidth)
- // ✅ Dynamically calculates columns for any screen
- setSpanCount(spanCount)
- super.onLayoutChildren(recycler, state)
- }
+    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
+        val totalSpace = width - paddingRight - paddingLeft
+        val spanCount = maxOf(1, totalSpace / columnWidth)
+        // ✅ Dynamically calculates columns for any screen
+        setSpanCount(spanCount)
+        super.onLayoutChildren(recycler, state)
+    }
 }
 
 // Usage

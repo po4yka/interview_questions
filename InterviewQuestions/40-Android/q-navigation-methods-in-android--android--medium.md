@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/architecture-modularization, android/intents-deeplinks, android/ui-navigation, difficulty/medium, navigation, ui]
+
 ---
 
 # Вопрос (RU)
@@ -38,23 +39,23 @@ Android предоставляет несколько методов навиг�
 ```kotlin
 // ✅ Явный Intent - прямой переход к конкретной Activity
 val intent = Intent(this, DetailActivity::class.java).apply {
- putExtra("item_id", 42)
+    putExtra("item_id", 42)
 }
 startActivity(intent)
 
 // ✅ Intent с результатом через Activity Result API
 private val launcher = registerForActivityResult(
- ActivityResultContracts.StartActivityForResult()
+    ActivityResultContracts.StartActivityForResult()
 ) { result ->
- if (result.resultCode == RESULT_OK) {
- val data = result.data?.getStringExtra("result_data")
- }
+    if (result.resultCode == RESULT_OK) {
+        val data = result.data?.getStringExtra("result_data")
+    }
 }
 
 launcher.launch(Intent(this, DetailActivity::class.java))
 
 // ❌ Устаревший способ - использование startActivityForResult
-// startActivityForResult(intent, REQUEST_CODE) // Deprecated
+// startActivityForResult(intent, REQUEST_CODE)  // Deprecated
 ```
 
 **Когда использовать**: межмодульная навигация, глубокая интеграция с системой, запуск внешних `Activity`.
@@ -66,22 +67,22 @@ launcher.launch(Intent(this, DetailActivity::class.java))
 ```kotlin
 // ✅ Современный подход с FragmentContainerView
 supportFragmentManager.commit {
- setReorderingAllowed(true)
- replace(R.id.fragment_container, DetailFragment())
- addToBackStack("detail")
+    setReorderingAllowed(true)
+    replace(R.id.fragment_container, DetailFragment())
+    addToBackStack("detail")
 }
 
 // ✅ Безопасная замена фрагментов с проверкой состояния
 if (!isFinishing && !isDestroyed) {
- supportFragmentManager.beginTransaction()
- .replace(R.id.container, DetailFragment())
- .commitAllowingStateLoss()
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.container, DetailFragment())
+        .commitAllowingStateLoss()
 }
 
 // ❌ Прямой доступ к transaction без reordering
 // supportFragmentManager.beginTransaction()
-// .replace(R.id.container, DetailFragment())
-// .commit() // Может вызывать проблемы с восстановлением состояния
+//     .replace(R.id.container, DetailFragment())
+//     .commit()  // Может вызывать проблемы с восстановлением состояния
 ```
 
 **Когда использовать**: single-activity архитектура, управление сложным UI внутри одного экрана, master-detail layouts.
@@ -97,26 +98,26 @@ findNavController().navigate(action)
 
 // ✅ Навигация с опциями анимации и popUpTo
 findNavController().navigate(
- R.id.action_home_to_detail,
- bundleOf("item_id" to 42),
- navOptions {
- anim {
- enter = R.anim.slide_in_right
- exit = R.anim.slide_out_left
- popEnter = R.anim.slide_in_left
- popExit = R.anim.slide_out_right
- }
- popUpTo(R.id.homeFragment) { inclusive = false }
- }
+    R.id.action_home_to_detail,
+    bundleOf("item_id" to 42),
+    navOptions {
+        anim {
+            enter = R.anim.slide_in_right
+            exit = R.anim.slide_out_left
+            popEnter = R.anim.slide_in_left
+            popExit = R.anim.slide_out_right
+        }
+        popUpTo(R.id.homeFragment) { inclusive = false }
+    }
 )
 
 // ✅ Получение результата из другого фрагмента
 findNavController().currentBackStackEntry
- ?.savedStateHandle
- ?.getLiveData<String>("result_key")
- ?.observe(viewLifecycleOwner) { result ->
- // Обработка результата
- }
+    ?.savedStateHandle
+    ?.getLiveData<String>("result_key")
+    ?.observe(viewLifecycleOwner) { result ->
+        // Обработка результата
+    }
 ```
 
 **Когда использовать**: сложные навигационные графы, типобезопасная передача аргументов, автоматическая обработка Deep Links, единая архитектура навигации.
@@ -128,18 +129,18 @@ findNavController().currentBackStackEntry
 ```kotlin
 // ✅ Bottom Navigation с правильным управлением состоянием
 bottomNav.setOnItemSelectedListener { item ->
- val fragment = when (item.itemId) {
- R.id.nav_home -> HomeFragment()
- R.id.nav_search -> SearchFragment()
- R.id.nav_profile -> ProfileFragment()
- else -> return@setOnItemSelectedListener false
- }
+    val fragment = when (item.itemId) {
+        R.id.nav_home -> HomeFragment()
+        R.id.nav_search -> SearchFragment()
+        R.id.nav_profile -> ProfileFragment()
+        else -> return@setOnItemSelectedListener false
+    }
 
- supportFragmentManager.commit {
- replace(R.id.container, fragment)
- // ✅ НЕ добавляем в backstack для bottom navigation
- }
- true
+    supportFragmentManager.commit {
+        replace(R.id.container, fragment)
+        // ✅ НЕ добавляем в backstack для bottom navigation
+    }
+    true
 }
 
 // ✅ Интеграция с Navigation Component
@@ -156,20 +157,20 @@ binding.bottomNav.setupWithNavController(navController)
 ```kotlin
 // ✅ Создание Deep Link с NavDeepLinkBuilder
 val pendingIntent = NavDeepLinkBuilder(context)
- .setGraph(R.navigation.nav_graph)
- .setDestination(R.id.detailFragment)
- .setArguments(bundleOf("item_id" to 42))
- .createPendingIntent()
+    .setGraph(R.navigation.nav_graph)
+    .setDestination(R.id.detailFragment)
+    .setArguments(bundleOf("item_id" to 42))
+    .createPendingIntent()
 
 // ✅ Обработка Deep Link в Activity
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
 
- val data: Uri? = intent?.data
- data?.let { uri ->
- // Автоматическая обработка через Navigation Component
- findNavController(R.id.nav_host_fragment).navigate(uri)
- }
+    val data: Uri? = intent?.data
+    data?.let { uri ->
+        // Автоматическая обработка через Navigation Component
+        findNavController(R.id.nav_host_fragment).navigate(uri)
+    }
 }
 ```
 
@@ -177,12 +178,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```xml
 <!-- ✅ App Link с верификацией домена -->
 <intent-filter android:autoVerify="true">
- <action android:name="android.intent.action.VIEW" />
- <category android:name="android.intent.category.DEFAULT" />
- <category android:name="android.intent.category.BROWSABLE" />
- <data android:scheme="https"
- android:host="example.com"
- android:pathPrefix="/detail" />
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="https"
+          android:host="example.com"
+          android:pathPrefix="/detail" />
 </intent-filter>
 ```
 
@@ -196,35 +197,35 @@ Compose-native навигация для полностью декларатив
 // ✅ Настройка навигационного графа в Compose
 @Composable
 fun AppNavigation() {
- val navController = rememberNavController()
+    val navController = rememberNavController()
 
- NavHost(navController = navController, startDestination = "home") {
- composable("home") {
- HomeScreen(onNavigateToDetail = { itemId ->
- navController.navigate("detail/$itemId")
- })
- }
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") {
+            HomeScreen(onNavigateToDetail = { itemId ->
+                navController.navigate("detail/$itemId")
+            })
+        }
 
- composable(
- route = "detail/{itemId}",
- arguments = listOf(navArgument("itemId") { type = NavType.IntType })
- ) { backStackEntry ->
- val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
- DetailScreen(itemId = itemId)
- }
- }
+        composable(
+            route = "detail/{itemId}",
+            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
+            DetailScreen(itemId = itemId)
+        }
+    }
 }
 
 // ✅ Передача сложных объектов через ViewModel
 @Composable
 fun DetailScreen(
- itemId: Int,
- viewModel: DetailViewModel = hiltViewModel()
+    itemId: Int,
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
- LaunchedEffect(itemId) {
- viewModel.loadItem(itemId)
- }
- // UI
+    LaunchedEffect(itemId) {
+        viewModel.loadItem(itemId)
+    }
+    // UI
 }
 ```
 
@@ -240,13 +241,13 @@ val navController = findNavController(R.id.nav_host_fragment)
 binding.navView.setupWithNavController(navController)
 
 binding.drawerLayout.addDrawerListener(
- ActionBarDrawerToggle(
- this,
- binding.drawerLayout,
- binding.toolbar,
- R.string.navigation_drawer_open,
- R.string.navigation_drawer_close
- )
+    ActionBarDrawerToggle(
+        this,
+        binding.drawerLayout,
+        binding.toolbar,
+        R.string.navigation_drawer_open,
+        R.string.navigation_drawer_close
+    )
 )
 ```
 
@@ -263,23 +264,23 @@ Traditional way of navigating between screens at the `Activity` level. Intents c
 ```kotlin
 // ✅ Explicit Intent - direct navigation to specific Activity
 val intent = Intent(this, DetailActivity::class.java).apply {
- putExtra("item_id", 42)
+    putExtra("item_id", 42)
 }
 startActivity(intent)
 
 // ✅ Intent with result using Activity Result API
 private val launcher = registerForActivityResult(
- ActivityResultContracts.StartActivityForResult()
+    ActivityResultContracts.StartActivityForResult()
 ) { result ->
- if (result.resultCode == RESULT_OK) {
- val data = result.data?.getStringExtra("result_data")
- }
+    if (result.resultCode == RESULT_OK) {
+        val data = result.data?.getStringExtra("result_data")
+    }
 }
 
 launcher.launch(Intent(this, DetailActivity::class.java))
 
 // ❌ Deprecated approach - using startActivityForResult
-// startActivityForResult(intent, REQUEST_CODE) // Deprecated
+// startActivityForResult(intent, REQUEST_CODE)  // Deprecated
 ```
 
 **When to use**: inter-module navigation, deep system integration, launching external Activities.
@@ -291,22 +292,22 @@ Managing fragments within a single `Activity`. Enables modular UI components and
 ```kotlin
 // ✅ Modern approach with FragmentContainerView
 supportFragmentManager.commit {
- setReorderingAllowed(true)
- replace(R.id.fragment_container, DetailFragment())
- addToBackStack("detail")
+    setReorderingAllowed(true)
+    replace(R.id.fragment_container, DetailFragment())
+    addToBackStack("detail")
 }
 
 // ✅ Safe fragment replacement with state checking
 if (!isFinishing && !isDestroyed) {
- supportFragmentManager.beginTransaction()
- .replace(R.id.container, DetailFragment())
- .commitAllowingStateLoss()
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.container, DetailFragment())
+        .commitAllowingStateLoss()
 }
 
 // ❌ Direct transaction access without reordering
 // supportFragmentManager.beginTransaction()
-// .replace(R.id.container, DetailFragment())
-// .commit() // Can cause state restoration issues
+//     .replace(R.id.container, DetailFragment())
+//     .commit()  // Can cause state restoration issues
 ```
 
 **When to use**: single-activity architecture, complex UI management within one screen, master-detail layouts.
@@ -322,26 +323,26 @@ findNavController().navigate(action)
 
 // ✅ Navigation with animation options and popUpTo
 findNavController().navigate(
- R.id.action_home_to_detail,
- bundleOf("item_id" to 42),
- navOptions {
- anim {
- enter = R.anim.slide_in_right
- exit = R.anim.slide_out_left
- popEnter = R.anim.slide_in_left
- popExit = R.anim.slide_out_right
- }
- popUpTo(R.id.homeFragment) { inclusive = false }
- }
+    R.id.action_home_to_detail,
+    bundleOf("item_id" to 42),
+    navOptions {
+        anim {
+            enter = R.anim.slide_in_right
+            exit = R.anim.slide_out_left
+            popEnter = R.anim.slide_in_left
+            popExit = R.anim.slide_out_right
+        }
+        popUpTo(R.id.homeFragment) { inclusive = false }
+    }
 )
 
 // ✅ Getting result from another fragment
 findNavController().currentBackStackEntry
- ?.savedStateHandle
- ?.getLiveData<String>("result_key")
- ?.observe(viewLifecycleOwner) { result ->
- // Handle result
- }
+    ?.savedStateHandle
+    ?.getLiveData<String>("result_key")
+    ?.observe(viewLifecycleOwner) { result ->
+        // Handle result
+    }
 ```
 
 **When to use**: complex navigation graphs, type-safe argument passing, automatic Deep Link handling, unified navigation architecture.
@@ -353,18 +354,18 @@ Navigation between main app sections via bottom bar or tabs.
 ```kotlin
 // ✅ Bottom Navigation with proper state management
 bottomNav.setOnItemSelectedListener { item ->
- val fragment = when (item.itemId) {
- R.id.nav_home -> HomeFragment()
- R.id.nav_search -> SearchFragment()
- R.id.nav_profile -> ProfileFragment()
- else -> return@setOnItemSelectedListener false
- }
+    val fragment = when (item.itemId) {
+        R.id.nav_home -> HomeFragment()
+        R.id.nav_search -> SearchFragment()
+        R.id.nav_profile -> ProfileFragment()
+        else -> return@setOnItemSelectedListener false
+    }
 
- supportFragmentManager.commit {
- replace(R.id.container, fragment)
- // ✅ DON'T add to backstack for bottom navigation
- }
- true
+    supportFragmentManager.commit {
+        replace(R.id.container, fragment)
+        // ✅ DON'T add to backstack for bottom navigation
+    }
+    true
 }
 
 // ✅ Integration with Navigation Component
@@ -381,20 +382,20 @@ URL-based navigation for external and internal transitions.
 ```kotlin
 // ✅ Creating Deep Link with NavDeepLinkBuilder
 val pendingIntent = NavDeepLinkBuilder(context)
- .setGraph(R.navigation.nav_graph)
- .setDestination(R.id.detailFragment)
- .setArguments(bundleOf("item_id" to 42))
- .createPendingIntent()
+    .setGraph(R.navigation.nav_graph)
+    .setDestination(R.id.detailFragment)
+    .setArguments(bundleOf("item_id" to 42))
+    .createPendingIntent()
 
 // ✅ Handling Deep Link in Activity
 override fun onCreate(savedInstanceState: Bundle?) {
- super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
 
- val data: Uri? = intent?.data
- data?.let { uri ->
- // Automatic handling via Navigation Component
- findNavController(R.id.nav_host_fragment).navigate(uri)
- }
+    val data: Uri? = intent?.data
+    data?.let { uri ->
+        // Automatic handling via Navigation Component
+        findNavController(R.id.nav_host_fragment).navigate(uri)
+    }
 }
 ```
 
@@ -402,12 +403,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```xml
 <!-- ✅ App Link with domain verification -->
 <intent-filter android:autoVerify="true">
- <action android:name="android.intent.action.VIEW" />
- <category android:name="android.intent.category.DEFAULT" />
- <category android:name="android.intent.category.BROWSABLE" />
- <data android:scheme="https"
- android:host="example.com"
- android:pathPrefix="/detail" />
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="https"
+          android:host="example.com"
+          android:pathPrefix="/detail" />
 </intent-filter>
 ```
 
@@ -421,35 +422,35 @@ Compose-native navigation for fully declarative UI.
 // ✅ Setting up navigation graph in Compose
 @Composable
 fun AppNavigation() {
- val navController = rememberNavController()
+    val navController = rememberNavController()
 
- NavHost(navController = navController, startDestination = "home") {
- composable("home") {
- HomeScreen(onNavigateToDetail = { itemId ->
- navController.navigate("detail/$itemId")
- })
- }
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") {
+            HomeScreen(onNavigateToDetail = { itemId ->
+                navController.navigate("detail/$itemId")
+            })
+        }
 
- composable(
- route = "detail/{itemId}",
- arguments = listOf(navArgument("itemId") { type = NavType.IntType })
- ) { backStackEntry ->
- val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
- DetailScreen(itemId = itemId)
- }
- }
+        composable(
+            route = "detail/{itemId}",
+            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
+            DetailScreen(itemId = itemId)
+        }
+    }
 }
 
 // ✅ Passing complex objects via ViewModel
 @Composable
 fun DetailScreen(
- itemId: Int,
- viewModel: DetailViewModel = hiltViewModel()
+    itemId: Int,
+    viewModel: DetailViewModel = hiltViewModel()
 ) {
- LaunchedEffect(itemId) {
- viewModel.loadItem(itemId)
- }
- // UI
+    LaunchedEffect(itemId) {
+        viewModel.loadItem(itemId)
+    }
+    // UI
 }
 ```
 
@@ -465,13 +466,13 @@ val navController = findNavController(R.id.nav_host_fragment)
 binding.navView.setupWithNavController(navController)
 
 binding.drawerLayout.addDrawerListener(
- ActionBarDrawerToggle(
- this,
- binding.drawerLayout,
- binding.toolbar,
- R.string.navigation_drawer_open,
- R.string.navigation_drawer_close
- )
+    ActionBarDrawerToggle(
+        this,
+        binding.drawerLayout,
+        binding.toolbar,
+        R.string.navigation_drawer_open,
+        R.string.navigation_drawer_close
+    )
 )
 ```
 
@@ -498,6 +499,7 @@ binding.drawerLayout.addDrawerListener(
 - [[c-compose-navigation]]
 - [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/guide/navigation/navigation-deep-link
+
 
 ## Related Questions
 

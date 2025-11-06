@@ -28,6 +28,7 @@ tags:
 - difficulty/medium
 - rendering
 - surfaceview
+
 ---
 
 # Вопрос (RU)
@@ -60,82 +61,82 @@ tags:
 **4. Additional Development Complexity:**
 - More work is required to create a customized `SurfaceView`
 - You need to:
- - Listen to `surfaceCreated/surfaceDestroyed` events
- - Create and manage a render thread
- - Synchronize the render thread and main thread properly
- - Handle the surface lifecycle
+  - Listen to `surfaceCreated/surfaceDestroyed` events
+  - Create and manage a render thread
+  - Synchronize the render thread and main thread properly
+  - Handle the surface lifecycle
 
 **5. Different Update Timing:**
 - **Regular Views**: Update mechanism is constrained and controlled by the framework
- - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
- - `View` won't update immediately but waits until next VSYNC event
- - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
- - All normal view updates are synchronized with VSYNC for better smoothness
+  - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
+  - `View` won't update immediately but waits until next VSYNC event
+  - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
+  - All normal view updates are synchronized with VSYNC for better smoothness
 
 - **SurfaceView**: You have direct control over when and how to render
- - Can render at any time from the background thread
- - Not bound to VSYNC timing
- - Provides more flexibility for custom rendering loops
+  - Can render at any time from the background thread
+  - Not bound to VSYNC timing
+  - Provides more flexibility for custom rendering loops
 
 **Basic Implementation:**
 
 ```kotlin
 class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
- private var renderThread: RenderThread? = null
+    private var renderThread: RenderThread? = null
 
- init {
- holder.addCallback(this)
- }
+    init {
+        holder.addCallback(this)
+    }
 
- override fun surfaceCreated(holder: SurfaceHolder) {
- // Surface is ready, start rendering thread
- renderThread = RenderThread(holder).apply {
- start()
- }
- }
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        // Surface is ready, start rendering thread
+        renderThread = RenderThread(holder).apply {
+            start()
+        }
+    }
 
- override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
- // Surface dimensions changed
- }
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        // Surface dimensions changed
+    }
 
- override fun surfaceDestroyed(holder: SurfaceHolder) {
- // Stop rendering thread
- renderThread?.requestStop()
- renderThread?.join()
- renderThread = null
- }
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Stop rendering thread
+        renderThread?.requestStop()
+        renderThread?.join()
+        renderThread = null
+    }
 
- inner class RenderThread(private val holder: SurfaceHolder) : Thread() {
- private var running = true
+    inner class RenderThread(private val holder: SurfaceHolder) : Thread() {
+        private var running = true
 
- fun requestStop() {
- running = false
- }
+        fun requestStop() {
+            running = false
+        }
 
- override fun run() {
- while (running) {
- val canvas = holder.lockCanvas()
- try {
- // Perform drawing operations
- synchronized(holder) {
- // Draw on canvas
- canvas?.let { drawContent(it) }
- }
- } finally {
- if (canvas != null) {
- holder.unlockCanvasAndPost(canvas)
- }
- }
- }
- }
+        override fun run() {
+            while (running) {
+                val canvas = holder.lockCanvas()
+                try {
+                    // Perform drawing operations
+                    synchronized(holder) {
+                        // Draw on canvas
+                        canvas?.let { drawContent(it) }
+                    }
+                } finally {
+                    if (canvas != null) {
+                        holder.unlockCanvasAndPost(canvas)
+                    }
+                }
+            }
+        }
 
- private fun drawContent(canvas: Canvas) {
- // Your drawing code here
- canvas.drawColor(Color.BLACK)
- // Draw other content...
- }
- }
+        private fun drawContent(canvas: Canvas) {
+            // Your drawing code here
+            canvas.drawColor(Color.BLACK)
+            // Draw other content...
+        }
+    }
 }
 ```
 
@@ -176,12 +177,15 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 
 **Source**: [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
 
+
 # Question (EN)
 > SurfaceView Rendering
 
 ---
 
+
 ---
+
 
 ## Answer (EN)
 `SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` can be updated on a background thread, making it ideal for high-performance rendering scenarios.
@@ -205,82 +209,82 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 **4. Additional Development Complexity:**
 - More work is required to create a customized `SurfaceView`
 - You need to:
- - Listen to `surfaceCreated/surfaceDestroyed` events
- - Create and manage a render thread
- - Synchronize the render thread and main thread properly
- - Handle the surface lifecycle
+  - Listen to `surfaceCreated/surfaceDestroyed` events
+  - Create and manage a render thread
+  - Synchronize the render thread and main thread properly
+  - Handle the surface lifecycle
 
 **5. Different Update Timing:**
 - **Regular Views**: Update mechanism is constrained and controlled by the framework
- - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
- - `View` won't update immediately but waits until next VSYNC event
- - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
- - All normal view updates are synchronized with VSYNC for better smoothness
+  - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
+  - `View` won't update immediately but waits until next VSYNC event
+  - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
+  - All normal view updates are synchronized with VSYNC for better smoothness
 
 - **SurfaceView**: You have direct control over when and how to render
- - Can render at any time from the background thread
- - Not bound to VSYNC timing
- - Provides more flexibility for custom rendering loops
+  - Can render at any time from the background thread
+  - Not bound to VSYNC timing
+  - Provides more flexibility for custom rendering loops
 
 **Basic Implementation:**
 
 ```kotlin
 class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
- private var renderThread: RenderThread? = null
+    private var renderThread: RenderThread? = null
 
- init {
- holder.addCallback(this)
- }
+    init {
+        holder.addCallback(this)
+    }
 
- override fun surfaceCreated(holder: SurfaceHolder) {
- // Surface is ready, start rendering thread
- renderThread = RenderThread(holder).apply {
- start()
- }
- }
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        // Surface is ready, start rendering thread
+        renderThread = RenderThread(holder).apply {
+            start()
+        }
+    }
 
- override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
- // Surface dimensions changed
- }
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        // Surface dimensions changed
+    }
 
- override fun surfaceDestroyed(holder: SurfaceHolder) {
- // Stop rendering thread
- renderThread?.requestStop()
- renderThread?.join()
- renderThread = null
- }
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Stop rendering thread
+        renderThread?.requestStop()
+        renderThread?.join()
+        renderThread = null
+    }
 
- inner class RenderThread(private val holder: SurfaceHolder) : Thread() {
- private var running = true
+    inner class RenderThread(private val holder: SurfaceHolder) : Thread() {
+        private var running = true
 
- fun requestStop() {
- running = false
- }
+        fun requestStop() {
+            running = false
+        }
 
- override fun run() {
- while (running) {
- val canvas = holder.lockCanvas()
- try {
- // Perform drawing operations
- synchronized(holder) {
- // Draw on canvas
- canvas?.let { drawContent(it) }
- }
- } finally {
- if (canvas != null) {
- holder.unlockCanvasAndPost(canvas)
- }
- }
- }
- }
+        override fun run() {
+            while (running) {
+                val canvas = holder.lockCanvas()
+                try {
+                    // Perform drawing operations
+                    synchronized(holder) {
+                        // Draw on canvas
+                        canvas?.let { drawContent(it) }
+                    }
+                } finally {
+                    if (canvas != null) {
+                        holder.unlockCanvasAndPost(canvas)
+                    }
+                }
+            }
+        }
 
- private fun drawContent(canvas: Canvas) {
- // Your drawing code here
- canvas.drawColor(Color.BLACK)
- // Draw other content...
- }
- }
+        private fun drawContent(canvas: Canvas) {
+            // Your drawing code here
+            canvas.drawColor(Color.BLACK)
+            // Draw other content...
+        }
+    }
 }
 ```
 
@@ -343,22 +347,22 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 **4. Дополнительная сложность разработки:**
 - Для создания пользовательского `SurfaceView` требуется больше работы
 - Необходимо:
- - Слушать события `surfaceCreated/surfaceDestroyed`
- - Создавать и управлять потоком рендеринга
- - Правильно синхронизировать поток рендеринга и главный поток
- - Обрабатывать жизненный цикл поверхности
+  - Слушать события `surfaceCreated/surfaceDestroyed`
+  - Создавать и управлять потоком рендеринга
+  - Правильно синхронизировать поток рендеринга и главный поток
+  - Обрабатывать жизненный цикл поверхности
 
 **5. Отличная синхронизация обновлений:**
 - **Обычные `View`**: Механизм обновления ограничен и контролируется фреймворком
- - Вызов `view.invalidate()` в UI потоке или `view.postInvalidate()` в других потоках
- - Представление не обновляется немедленно, а ждёт следующего события VSYNC
- - VSYNC можно понимать как таймер, который срабатывает каждые 16мс для экрана 60fps
- - Все обновления обычных представлений синхронизируются с VSYNC для лучшей плавности
+  - Вызов `view.invalidate()` в UI потоке или `view.postInvalidate()` в других потоках
+  - Представление не обновляется немедленно, а ждёт следующего события VSYNC
+  - VSYNC можно понимать как таймер, который срабатывает каждые 16мс для экрана 60fps
+  - Все обновления обычных представлений синхронизируются с VSYNC для лучшей плавности
 
 - **SurfaceView**: Вы имеете прямой контроль над тем, когда и как выполнять рендеринг
- - Можно рендерить в любое время из фонового потока
- - Не привязан к таймингу VSYNC
- - Обеспечивает большую гибкость для пользовательских циклов рендеринга
+  - Можно рендерить в любое время из фонового потока
+  - Не привязан к таймингу VSYNC
+  - Обеспечивает большую гибкость для пользовательских циклов рендеринга
 
 **Варианты использования:**
 
@@ -391,16 +395,19 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 
 ---
 
+
 ## Follow-ups
 
 - 
 - [[c-views]]
 - [[q-viewgroup-vs-view-differences--android--easy]]
 
+
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
+
 
 ## Related Questions
 

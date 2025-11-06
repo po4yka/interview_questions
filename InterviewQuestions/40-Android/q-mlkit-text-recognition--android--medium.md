@@ -15,6 +15,7 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit, ocr, text-recognition]
+
 ---
 
 # Вопрос (RU)
@@ -36,29 +37,29 @@ ML Kit предоставляет on-device OCR для Latin (встроенны
 ```kotlin
 // app/build.gradle.kts
 dependencies {
- implementation("com.google.mlkit:text-recognition")
- implementation("com.google.mlkit:text-recognition-chinese")
+    implementation("com.google.mlkit:text-recognition")
+    implementation("com.google.mlkit:text-recognition-chinese")
 }
 
 // ✅ Правильно: Suspend wrapper + resource cleanup
 class TextRecognitionManager(context: Context) {
- private val latinRecognizer = TextRecognition.getClient(
- TextRecognizerOptions.DEFAULT_OPTIONS
- )
+    private val latinRecognizer = TextRecognition.getClient(
+        TextRecognizerOptions.DEFAULT_OPTIONS
+    )
 
- suspend fun recognizeText(image: InputImage): Result<Text> =
- suspendCancellableCoroutine { continuation ->
- latinRecognizer.process(image)
- .addOnSuccessListener { continuation.resume(Result.success(it)) }
- .addOnFailureListener { continuation.resume(Result.failure(it)) }
- }
+    suspend fun recognizeText(image: InputImage): Result<Text> =
+        suspendCancellableCoroutine { continuation ->
+            latinRecognizer.process(image)
+                .addOnSuccessListener { continuation.resume(Result.success(it)) }
+                .addOnFailureListener { continuation.resume(Result.failure(it)) }
+        }
 
- fun close() = latinRecognizer.close()
+    fun close() = latinRecognizer.close()
 }
 
 // ❌ Неправильно: Нет close() - утечка памяти
 class BadManager {
- private val recognizer = TextRecognition.getClient(...)
+    private val recognizer = TextRecognition.getClient(...)
 }
 ```
 
@@ -74,29 +75,29 @@ class BadManager {
 
 ```kotlin
 class ImagePreprocessor {
- suspend fun preprocessImage(bitmap: Bitmap): Bitmap =
- withContext(Dispatchers.Default) {
- var processed = bitmap
+    suspend fun preprocessImage(bitmap: Bitmap): Bitmap =
+        withContext(Dispatchers.Default) {
+            var processed = bitmap
 
- // 1. ✅ Resize если превышает 1920x1080
- if (bitmap.width > 1920 || bitmap.height > 1920) {
- val scale = min(1920f / bitmap.width, 1920f / bitmap.height)
- processed = Bitmap.createScaledBitmap(
- bitmap,
- (bitmap.width * scale).toInt(),
- (bitmap.height * scale).toInt(),
- true
- )
- }
+            // 1. ✅ Resize если превышает 1920x1080
+            if (bitmap.width > 1920 || bitmap.height > 1920) {
+                val scale = min(1920f / bitmap.width, 1920f / bitmap.height)
+                processed = Bitmap.createScaledBitmap(
+                    bitmap,
+                    (bitmap.width * scale).toInt(),
+                    (bitmap.height * scale).toInt(),
+                    true
+                )
+            }
 
- // 2. ✅ Grayscale улучшает OCR на 15-20%
- val result = Bitmap.createBitmap(processed.width, processed.height, ARGB_8888)
- Canvas(result).drawBitmap(processed, 0f, 0f, Paint().apply {
- colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
- })
+            // 2. ✅ Grayscale улучшает OCR на 15-20%
+            val result = Bitmap.createBitmap(processed.width, processed.height, ARGB_8888)
+            Canvas(result).drawBitmap(processed, 0f, 0f, Paint().apply {
+                colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+            })
 
- result
- }
+            result
+        }
 }
 ```
 
@@ -107,48 +108,48 @@ class ImagePreprocessor {
 ```kotlin
 @HiltViewModel
 class TextRecognitionViewModel @Inject constructor(
- private val manager: TextRecognitionManager
+    private val manager: TextRecognitionManager
 ) : ViewModel() {
- private val _recognizedText = MutableStateFlow<String?>(null)
- val recognizedText: StateFlow<String?> = _recognizedText
+    private val _recognizedText = MutableStateFlow<String?>(null)
+    val recognizedText: StateFlow<String?> = _recognizedText
 
- private var lastProcessed = 0L
- private val throttleMs = 1000L // ✅ 1 frame/sec
+    private var lastProcessed = 0L
+    private val throttleMs = 1000L  // ✅ 1 frame/sec
 
- @OptIn(ExperimentalGetImage::class)
- fun analyzeImage(imageProxy: ImageProxy) {
- val now = System.currentTimeMillis()
+    @OptIn(ExperimentalGetImage::class)
+    fun analyzeImage(imageProxy: ImageProxy) {
+        val now = System.currentTimeMillis()
 
- // ✅ Правильно: Throttling предотвращает CPU overload
- if (now - lastProcessed < throttleMs) {
- imageProxy.close()
- return
- }
+        // ✅ Правильно: Throttling предотвращает CPU overload
+        if (now - lastProcessed < throttleMs) {
+            imageProxy.close()
+            return
+        }
 
- lastProcessed = now
- viewModelScope.launch {
- try {
- val inputImage = InputImage.fromMediaImage(
- imageProxy.image!!,
- imageProxy.imageInfo.rotationDegrees
- )
- manager.recognizeText(inputImage)
- .onSuccess { _recognizedText.value = it.text }
- } finally {
- imageProxy.close() // ✅ Всегда закрываем
- }
- }
- }
+        lastProcessed = now
+        viewModelScope.launch {
+            try {
+                val inputImage = InputImage.fromMediaImage(
+                    imageProxy.image!!,
+                    imageProxy.imageInfo.rotationDegrees
+                )
+                manager.recognizeText(inputImage)
+                    .onSuccess { _recognizedText.value = it.text }
+            } finally {
+                imageProxy.close()  // ✅ Всегда закрываем
+            }
+        }
+    }
 
- override fun onCleared() {
- manager.close()
- }
+    override fun onCleared() {
+        manager.close()
+    }
 }
 
 // ❌ Неправильно: Processing 30 FPS
 fun bad(imageProxy: ImageProxy) {
- // CPU 100%, батарея за 20 минут
- viewModelScope.launch { manager.recognizeText(...) }
+    // CPU 100%, батарея за 20 минут
+    viewModelScope.launch { manager.recognizeText(...) }
 }
 ```
 
@@ -156,49 +157,49 @@ fun bad(imageProxy: ImageProxy) {
 
 ```kotlin
 class DocumentScannerViewModel @Inject constructor(
- private val manager: TextRecognitionManager,
- private val preprocessor: ImagePreprocessor
+    private val manager: TextRecognitionManager,
+    private val preprocessor: ImagePreprocessor
 ) : ViewModel() {
 
- suspend fun scanDocument(uri: Uri, context: Context): Result<ScannedDocument> {
- return try {
- val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
- ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
- } else {
- MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
- }
+    suspend fun scanDocument(uri: Uri, context: Context): Result<ScannedDocument> {
+        return try {
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+            } else {
+                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            }
 
- val processed = preprocessor.preprocessImage(bitmap)
- val inputImage = InputImage.fromBitmap(processed, 0)
+            val processed = preprocessor.preprocessImage(bitmap)
+            val inputImage = InputImage.fromBitmap(processed, 0)
 
- manager.recognizeText(inputImage).map { text ->
- ScannedDocument(
- fullText = text.text,
- confidence = text.textBlocks.averageOf { it.confidence ?: 0f },
- emails = extractEmails(text.text),
- phoneNumbers = extractPhones(text.text)
- )
- }
- } catch (e: Exception) {
- Result.failure(e)
- }
- }
+            manager.recognizeText(inputImage).map { text ->
+                ScannedDocument(
+                    fullText = text.text,
+                    confidence = text.textBlocks.averageOf { it.confidence ?: 0f },
+                    emails = extractEmails(text.text),
+                    phoneNumbers = extractPhones(text.text)
+                )
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
- // ✅ Regex extraction
- private fun extractEmails(text: String) =
- Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
- .findAll(text).map { it.value }.toList()
+    // ✅ Regex extraction
+    private fun extractEmails(text: String) =
+        Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
+            .findAll(text).map { it.value }.toList()
 
- private fun extractPhones(text: String) =
- Regex("\\+?\\d{1,4}[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}")
- .findAll(text).map { it.value }.toList()
+    private fun extractPhones(text: String) =
+        Regex("\\+?\\d{1,4}[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}")
+            .findAll(text).map { it.value }.toList()
 }
 
 data class ScannedDocument(
- val fullText: String,
- val confidence: Float, // 0.0-1.0, обычно >0.8
- val emails: List<String>,
- val phoneNumbers: List<String>
+    val fullText: String,
+    val confidence: Float,  // 0.0-1.0, обычно >0.8
+    val emails: List<String>,
+    val phoneNumbers: List<String>
 )
 ```
 
@@ -206,24 +207,24 @@ data class ScannedDocument(
 
 ```kotlin
 class ModelDownloadManager(private val context: Context) {
- // ✅ WiFi-only для экономии mobile data
- fun downloadModel(script: ScriptType, onProgress: (Int) -> Unit) {
- if (script == ScriptType.LATIN) return // Bundled
+    // ✅ WiFi-only для экономии mobile data
+    fun downloadModel(script: ScriptType, onProgress: (Int) -> Unit) {
+        if (script == ScriptType.LATIN) return  // Bundled
 
- val conditions = DownloadConditions.Builder().requireWifi().build()
- val options = ChineseTextRecognizerOptions.Builder().build()
+        val conditions = DownloadConditions.Builder().requireWifi().build()
+        val options = ChineseTextRecognizerOptions.Builder().build()
 
- RemoteModelManager.getInstance()
- .download(options, conditions)
- .addOnProgressListener { snapshot ->
- val progress = (snapshot.bytesDownloaded * 100 / snapshot.totalByteCount).toInt()
- onProgress(progress)
- }
- }
+        RemoteModelManager.getInstance()
+            .download(options, conditions)
+            .addOnProgressListener { snapshot ->
+                val progress = (snapshot.bytesDownloaded * 100 / snapshot.totalByteCount).toInt()
+                onProgress(progress)
+            }
+    }
 
- fun isModelDownloaded(script: ScriptType): Boolean =
- script == ScriptType.LATIN ||
- RemoteModelManager.getInstance().isModelDownloaded(getOptions(script))
+    fun isModelDownloaded(script: ScriptType): Boolean =
+        script == ScriptType.LATIN ||
+        RemoteModelManager.getInstance().isModelDownloaded(getOptions(script))
 }
 ```
 
@@ -261,29 +262,29 @@ ML Kit provides on-device OCR for Latin (bundled), Chinese, Japanese, Korean, De
 ```kotlin
 // app/build.gradle.kts
 dependencies {
- implementation("com.google.mlkit:text-recognition")
- implementation("com.google.mlkit:text-recognition-chinese")
+    implementation("com.google.mlkit:text-recognition")
+    implementation("com.google.mlkit:text-recognition-chinese")
 }
 
 // ✅ Correct: Suspend wrapper + resource cleanup
 class TextRecognitionManager(context: Context) {
- private val latinRecognizer = TextRecognition.getClient(
- TextRecognizerOptions.DEFAULT_OPTIONS
- )
+    private val latinRecognizer = TextRecognition.getClient(
+        TextRecognizerOptions.DEFAULT_OPTIONS
+    )
 
- suspend fun recognizeText(image: InputImage): Result<Text> =
- suspendCancellableCoroutine { continuation ->
- latinRecognizer.process(image)
- .addOnSuccessListener { continuation.resume(Result.success(it)) }
- .addOnFailureListener { continuation.resume(Result.failure(it)) }
- }
+    suspend fun recognizeText(image: InputImage): Result<Text> =
+        suspendCancellableCoroutine { continuation ->
+            latinRecognizer.process(image)
+                .addOnSuccessListener { continuation.resume(Result.success(it)) }
+                .addOnFailureListener { continuation.resume(Result.failure(it)) }
+        }
 
- fun close() = latinRecognizer.close()
+    fun close() = latinRecognizer.close()
 }
 
 // ❌ Wrong: No close() - memory leak
 class BadManager {
- private val recognizer = TextRecognition.getClient(...)
+    private val recognizer = TextRecognition.getClient(...)
 }
 ```
 
@@ -299,29 +300,29 @@ Critical for accuracy. Optimal dimensions: 640x480 - 1920x1080.
 
 ```kotlin
 class ImagePreprocessor {
- suspend fun preprocessImage(bitmap: Bitmap): Bitmap =
- withContext(Dispatchers.Default) {
- var processed = bitmap
+    suspend fun preprocessImage(bitmap: Bitmap): Bitmap =
+        withContext(Dispatchers.Default) {
+            var processed = bitmap
 
- // 1. ✅ Resize if exceeds 1920x1080
- if (bitmap.width > 1920 || bitmap.height > 1920) {
- val scale = min(1920f / bitmap.width, 1920f / bitmap.height)
- processed = Bitmap.createScaledBitmap(
- bitmap,
- (bitmap.width * scale).toInt(),
- (bitmap.height * scale).toInt(),
- true
- )
- }
+            // 1. ✅ Resize if exceeds 1920x1080
+            if (bitmap.width > 1920 || bitmap.height > 1920) {
+                val scale = min(1920f / bitmap.width, 1920f / bitmap.height)
+                processed = Bitmap.createScaledBitmap(
+                    bitmap,
+                    (bitmap.width * scale).toInt(),
+                    (bitmap.height * scale).toInt(),
+                    true
+                )
+            }
 
- // 2. ✅ Grayscale improves OCR by 15-20%
- val result = Bitmap.createBitmap(processed.width, processed.height, ARGB_8888)
- Canvas(result).drawBitmap(processed, 0f, 0f, Paint().apply {
- colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
- })
+            // 2. ✅ Grayscale improves OCR by 15-20%
+            val result = Bitmap.createBitmap(processed.width, processed.height, ARGB_8888)
+            Canvas(result).drawBitmap(processed, 0f, 0f, Paint().apply {
+                colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+            })
 
- result
- }
+            result
+        }
 }
 ```
 
@@ -332,48 +333,48 @@ class ImagePreprocessor {
 ```kotlin
 @HiltViewModel
 class TextRecognitionViewModel @Inject constructor(
- private val manager: TextRecognitionManager
+    private val manager: TextRecognitionManager
 ) : ViewModel() {
- private val _recognizedText = MutableStateFlow<String?>(null)
- val recognizedText: StateFlow<String?> = _recognizedText
+    private val _recognizedText = MutableStateFlow<String?>(null)
+    val recognizedText: StateFlow<String?> = _recognizedText
 
- private var lastProcessed = 0L
- private val throttleMs = 1000L // ✅ 1 frame/sec
+    private var lastProcessed = 0L
+    private val throttleMs = 1000L  // ✅ 1 frame/sec
 
- @OptIn(ExperimentalGetImage::class)
- fun analyzeImage(imageProxy: ImageProxy) {
- val now = System.currentTimeMillis()
+    @OptIn(ExperimentalGetImage::class)
+    fun analyzeImage(imageProxy: ImageProxy) {
+        val now = System.currentTimeMillis()
 
- // ✅ Correct: Throttling prevents CPU overload
- if (now - lastProcessed < throttleMs) {
- imageProxy.close()
- return
- }
+        // ✅ Correct: Throttling prevents CPU overload
+        if (now - lastProcessed < throttleMs) {
+            imageProxy.close()
+            return
+        }
 
- lastProcessed = now
- viewModelScope.launch {
- try {
- val inputImage = InputImage.fromMediaImage(
- imageProxy.image!!,
- imageProxy.imageInfo.rotationDegrees
- )
- manager.recognizeText(inputImage)
- .onSuccess { _recognizedText.value = it.text }
- } finally {
- imageProxy.close() // ✅ Always close
- }
- }
- }
+        lastProcessed = now
+        viewModelScope.launch {
+            try {
+                val inputImage = InputImage.fromMediaImage(
+                    imageProxy.image!!,
+                    imageProxy.imageInfo.rotationDegrees
+                )
+                manager.recognizeText(inputImage)
+                    .onSuccess { _recognizedText.value = it.text }
+            } finally {
+                imageProxy.close()  // ✅ Always close
+            }
+        }
+    }
 
- override fun onCleared() {
- manager.close()
- }
+    override fun onCleared() {
+        manager.close()
+    }
 }
 
 // ❌ Wrong: Processing 30 FPS
 fun bad(imageProxy: ImageProxy) {
- // CPU 100%, drains battery in 20 minutes
- viewModelScope.launch { manager.recognizeText(...) }
+    // CPU 100%, drains battery in 20 minutes
+    viewModelScope.launch { manager.recognizeText(...) }
 }
 ```
 
@@ -381,49 +382,49 @@ fun bad(imageProxy: ImageProxy) {
 
 ```kotlin
 class DocumentScannerViewModel @Inject constructor(
- private val manager: TextRecognitionManager,
- private val preprocessor: ImagePreprocessor
+    private val manager: TextRecognitionManager,
+    private val preprocessor: ImagePreprocessor
 ) : ViewModel() {
 
- suspend fun scanDocument(uri: Uri, context: Context): Result<ScannedDocument> {
- return try {
- val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
- ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
- } else {
- MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
- }
+    suspend fun scanDocument(uri: Uri, context: Context): Result<ScannedDocument> {
+        return try {
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+            } else {
+                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+            }
 
- val processed = preprocessor.preprocessImage(bitmap)
- val inputImage = InputImage.fromBitmap(processed, 0)
+            val processed = preprocessor.preprocessImage(bitmap)
+            val inputImage = InputImage.fromBitmap(processed, 0)
 
- manager.recognizeText(inputImage).map { text ->
- ScannedDocument(
- fullText = text.text,
- confidence = text.textBlocks.averageOf { it.confidence ?: 0f },
- emails = extractEmails(text.text),
- phoneNumbers = extractPhones(text.text)
- )
- }
- } catch (e: Exception) {
- Result.failure(e)
- }
- }
+            manager.recognizeText(inputImage).map { text ->
+                ScannedDocument(
+                    fullText = text.text,
+                    confidence = text.textBlocks.averageOf { it.confidence ?: 0f },
+                    emails = extractEmails(text.text),
+                    phoneNumbers = extractPhones(text.text)
+                )
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
- // ✅ Regex extraction
- private fun extractEmails(text: String) =
- Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
- .findAll(text).map { it.value }.toList()
+    // ✅ Regex extraction
+    private fun extractEmails(text: String) =
+        Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
+            .findAll(text).map { it.value }.toList()
 
- private fun extractPhones(text: String) =
- Regex("\\+?\\d{1,4}[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}")
- .findAll(text).map { it.value }.toList()
+    private fun extractPhones(text: String) =
+        Regex("\\+?\\d{1,4}[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}")
+            .findAll(text).map { it.value }.toList()
 }
 
 data class ScannedDocument(
- val fullText: String,
- val confidence: Float, // 0.0-1.0, typically >0.8
- val emails: List<String>,
- val phoneNumbers: List<String>
+    val fullText: String,
+    val confidence: Float,  // 0.0-1.0, typically >0.8
+    val emails: List<String>,
+    val phoneNumbers: List<String>
 )
 ```
 
@@ -431,24 +432,24 @@ data class ScannedDocument(
 
 ```kotlin
 class ModelDownloadManager(private val context: Context) {
- // ✅ WiFi-only to save mobile data
- fun downloadModel(script: ScriptType, onProgress: (Int) -> Unit) {
- if (script == ScriptType.LATIN) return // Bundled
+    // ✅ WiFi-only to save mobile data
+    fun downloadModel(script: ScriptType, onProgress: (Int) -> Unit) {
+        if (script == ScriptType.LATIN) return  // Bundled
 
- val conditions = DownloadConditions.Builder().requireWifi().build()
- val options = ChineseTextRecognizerOptions.Builder().build()
+        val conditions = DownloadConditions.Builder().requireWifi().build()
+        val options = ChineseTextRecognizerOptions.Builder().build()
 
- RemoteModelManager.getInstance()
- .download(options, conditions)
- .addOnProgressListener { snapshot ->
- val progress = (snapshot.bytesDownloaded * 100 / snapshot.totalByteCount).toInt()
- onProgress(progress)
- }
- }
+        RemoteModelManager.getInstance()
+            .download(options, conditions)
+            .addOnProgressListener { snapshot ->
+                val progress = (snapshot.bytesDownloaded * 100 / snapshot.totalByteCount).toInt()
+                onProgress(progress)
+            }
+    }
 
- fun isModelDownloaded(script: ScriptType): Boolean =
- script == ScriptType.LATIN ||
- RemoteModelManager.getInstance().isModelDownloaded(getOptions(script))
+    fun isModelDownloaded(script: ScriptType): Boolean =
+        script == ScriptType.LATIN ||
+        RemoteModelManager.getInstance().isModelDownloaded(getOptions(script))
 }
 ```
 
@@ -501,7 +502,7 @@ class ModelDownloadManager(private val context: Context) {
 - [[q-view-fundamentals--android--easy]] - `View` and UI basics
 
 ### Related (Same Level)
-- - Advanced CameraX patterns
+-  - Advanced CameraX patterns
 - [[q-mlkit-object-detection--android--medium]] - MLKit object detection
 - [[q-biometric-authentication--android--medium]] - Biometric APIs
 - [[q-android-performance-measurement-tools--android--medium]] - Performance profiling

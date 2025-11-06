@@ -15,6 +15,7 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-clean, android/performance-rendering, android/room, difficulty/medium, jetpack, pagination, paging, recyclerview]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
+
 ---
 
 # Вопрос (RU)
@@ -44,21 +45,21 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 
 ```kotlin
 class ConcertPagingSource(
- private val api: ConcertApi
+    private val api: ConcertApi
 ) : PagingSource<Int, Concert>() {
- override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Concert> {
- val page = params.key ?: 0
- return try {
- val response = api.getConcerts(page, params.loadSize)
- LoadResult.Page(
- data = response.concerts,
- prevKey = if (page > 0) page - 1 else null,
- nextKey = if (response.hasMore) page + 1 else null
- )
- } catch (e: Exception) {
- LoadResult.Error(e)
- }
- }
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Concert> {
+        val page = params.key ?: 0
+        return try {
+            val response = api.getConcerts(page, params.loadSize)
+            LoadResult.Page(
+                data = response.concerts,
+                prevKey = if (page > 0) page - 1 else null,
+                nextKey = if (response.hasMore) page + 1 else null
+            )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
+        }
+    }
 }
 ```
 
@@ -68,10 +69,10 @@ class ConcertPagingSource(
 
 ```kotlin
 class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
- val concerts: Flow<PagingData<Concert>> = Pager(
- config = PagingConfig(pageSize = 20, prefetchDistance = 5),
- pagingSourceFactory = { dao.pagingSource() }
- ).flow.cachedIn(viewModelScope)
+    val concerts: Flow<PagingData<Concert>> = Pager(
+        config = PagingConfig(pageSize = 20, prefetchDistance = 5),
+        pagingSourceFactory = { dao.pagingSource() }
+    ).flow.cachedIn(viewModelScope)
 }
 ```
 
@@ -79,18 +80,18 @@ class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
 
 ```kotlin
 class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
- override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
- getItem(position)?.let { holder.bind(it) }
- }
+    override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
+    }
 
- companion object {
- private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Concert>() {
- override fun areItemsTheSame(old: Concert, new: Concert) =
- old.id == new.id
- override fun areContentsTheSame(old: Concert, new: Concert) =
- old == new
- }
- }
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Concert>() {
+            override fun areItemsTheSame(old: Concert, new: Concert) =
+                old.id == new.id
+            override fun areContentsTheSame(old: Concert, new: Concert) =
+                old == new
+        }
+    }
 }
 ```
 
@@ -99,8 +100,8 @@ class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBA
 ```kotlin
 @Dao
 interface ConcertDao {
- @Query("SELECT * FROM concerts ORDER BY date DESC")
- fun pagingSource(): PagingSource<Int, Concert>
+    @Query("SELECT * FROM concerts ORDER BY date DESC")
+    fun pagingSource(): PagingSource<Int, Concert>
 }
 ```
 
@@ -110,11 +111,11 @@ interface ConcertDao {
 
 ```kotlin
 adapter.addLoadStateListener { loadState ->
- when (loadState.refresh) {
- is LoadState.Loading -> showProgress()
- is LoadState.Error -> showError((loadState.refresh as LoadState.Error).error)
- is LoadState.NotLoading -> hideProgress()
- }
+    when (loadState.refresh) {
+        is LoadState.Loading -> showProgress()
+        is LoadState.Error -> showError((loadState.refresh as LoadState.Error).error)
+        is LoadState.NotLoading -> hideProgress()
+    }
 }
 ```
 
@@ -145,21 +146,21 @@ The library supports three approaches:
 
 ```kotlin
 class ConcertPagingSource(
- private val api: ConcertApi
+    private val api: ConcertApi
 ) : PagingSource<Int, Concert>() {
- override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Concert> {
- val page = params.key ?: 0
- return try {
- val response = api.getConcerts(page, params.loadSize)
- LoadResult.Page(
- data = response.concerts,
- prevKey = if (page > 0) page - 1 else null,
- nextKey = if (response.hasMore) page + 1 else null
- )
- } catch (e: Exception) {
- LoadResult.Error(e)
- }
- }
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Concert> {
+        val page = params.key ?: 0
+        return try {
+            val response = api.getConcerts(page, params.loadSize)
+            LoadResult.Page(
+                data = response.concerts,
+                prevKey = if (page > 0) page - 1 else null,
+                nextKey = if (response.hasMore) page + 1 else null
+            )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
+        }
+    }
 }
 ```
 
@@ -169,10 +170,10 @@ class ConcertPagingSource(
 
 ```kotlin
 class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
- val concerts: Flow<PagingData<Concert>> = Pager(
- config = PagingConfig(pageSize = 20, prefetchDistance = 5),
- pagingSourceFactory = { dao.pagingSource() }
- ).flow.cachedIn(viewModelScope)
+    val concerts: Flow<PagingData<Concert>> = Pager(
+        config = PagingConfig(pageSize = 20, prefetchDistance = 5),
+        pagingSourceFactory = { dao.pagingSource() }
+    ).flow.cachedIn(viewModelScope)
 }
 ```
 
@@ -180,18 +181,18 @@ class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
 
 ```kotlin
 class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
- override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
- getItem(position)?.let { holder.bind(it) }
- }
+    override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
+        getItem(position)?.let { holder.bind(it) }
+    }
 
- companion object {
- private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Concert>() {
- override fun areItemsTheSame(old: Concert, new: Concert) =
- old.id == new.id
- override fun areContentsTheSame(old: Concert, new: Concert) =
- old == new
- }
- }
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Concert>() {
+            override fun areItemsTheSame(old: Concert, new: Concert) =
+                old.id == new.id
+            override fun areContentsTheSame(old: Concert, new: Concert) =
+                old == new
+        }
+    }
 }
 ```
 
@@ -200,8 +201,8 @@ class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBA
 ```kotlin
 @Dao
 interface ConcertDao {
- @Query("SELECT * FROM concerts ORDER BY date DESC")
- fun pagingSource(): PagingSource<Int, Concert>
+    @Query("SELECT * FROM concerts ORDER BY date DESC")
+    fun pagingSource(): PagingSource<Int, Concert>
 }
 ```
 
@@ -211,11 +212,11 @@ interface ConcertDao {
 
 ```kotlin
 adapter.addLoadStateListener { loadState ->
- when (loadState.refresh) {
- is LoadState.Loading -> showProgress()
- is LoadState.Error -> showError((loadState.refresh as LoadState.Error).error)
- is LoadState.NotLoading -> hideProgress()
- }
+    when (loadState.refresh) {
+        is LoadState.Loading -> showProgress()
+        is LoadState.Error -> showError((loadState.refresh as LoadState.Error).error)
+        is LoadState.NotLoading -> hideProgress()
+    }
 }
 ```
 
@@ -251,11 +252,11 @@ adapter.addLoadStateListener { loadState ->
 
 ### Prerequisites (Easier)
 - 
-- [[q-fragment-basics--android--easy]]
+- 
 
 ### Related (Same Level)
 - 
-- [[q-room-database-migrations--android--medium]]
+- 
 - [[q-sharedflow-stateflow--kotlin--medium]]
 
 ### Advanced (Harder)
