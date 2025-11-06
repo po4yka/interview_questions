@@ -2,35 +2,33 @@
 id: android-632
 title: Scoped Storage Migration Strategy / Стратегия миграции на Scoped Storage
 aliases:
-  - Scoped Storage Migration Strategy
-  - Стратегия миграции на Scoped Storage
+- Scoped Storage Migration Strategy
+- Стратегия миграции на Scoped Storage
 topic: android
 subtopics:
-  - storage
-  - security
-  - privacy
+- files-media
+- permissions
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-scoped-storage-security
+- c-scoped-storage-security
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/storage
-  - android/security
-  - privacy
-  - difficulty/hard
+- android/files-media
+- android/permissions
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/training/data-storage
-    note: Android storage guide
-  - url: https://developer.android.com/about/versions/11/privacy/storage
-    note: Scoped storage best practices
+- url: https://developer.android.com/training/data-storage
+  note: Android storage guide
+- url: https://developer.android.com/about/versions/11/privacy/storage
+  note: Scoped storage best practices
 ---
 
 # Вопрос (RU)

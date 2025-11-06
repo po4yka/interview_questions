@@ -2,35 +2,33 @@
 id: android-624
 title: Android Enterprise MDM Architecture / Архитектура Android Enterprise MDM
 aliases:
-  - Android Enterprise MDM Architecture
-  - Архитектура Android Enterprise MDM
+- Android Enterprise MDM Architecture
+- Архитектура Android Enterprise MDM
 topic: android
 subtopics:
-  - enterprise
-  - mdm
-  - security
+- permissions
+- keystore-crypto
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-enterprise-mdm
+- c-enterprise-mdm
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/enterprise
-  - android/mdm
-  - security
-  - difficulty/hard
+- android/permissions
+- android/keystore-crypto
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/work/overview
-    note: Android Enterprise overview
-  - url: https://developer.android.com/work/managed-configurations
-    note: Managed configurations guide
+- url: https://developer.android.com/work/overview
+  note: Android Enterprise overview
+- url: https://developer.android.com/work/managed-configurations
+  note: Managed configurations guide
 ---
 
 # Вопрос (RU)

@@ -2,37 +2,35 @@
 id: android-645
 title: CallStyle & Foreground Service Compliance / CallStyle и требования foreground-сервисов
 aliases:
-  - CallStyle & Foreground Service Compliance
-  - CallStyle и требования foreground-сервисов
+- CallStyle & Foreground Service Compliance
+- CallStyle и требования foreground-сервисов
 topic: android
 subtopics:
-  - communication
-  - notifications
-  - foreground-services
+- service
+- notifications
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-communication-surfaces
+- c-communication-surfaces
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/notifications
-  - android/foreground-service
-  - callstyle
-  - difficulty/hard
+- android/service
+- android/notifications
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/develop/ui/views/notifications/callstyle
-    note: CallStyle documentation
-  - url: https://developer.android.com/about/versions/13/behavior-changes-13#post-notification-runtime-permission
-    note: Foreground service changes
-  - url: https://developer.android.com/about/versions/14/behavior-changes-14#foreground-services
-    note: Android 14 FGS policy
+- url: https://developer.android.com/develop/ui/views/notifications/callstyle
+  note: CallStyle documentation
+- url: https://developer.android.com/about/versions/13/behavior-changes-13#post-notification-runtime-permission
+  note: Foreground service changes
+- url: https://developer.android.com/about/versions/14/behavior-changes-14#foreground-services
+  note: Android 14 FGS policy
 ---
 
 # Вопрос (RU)

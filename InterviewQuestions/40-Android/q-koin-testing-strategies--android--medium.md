@@ -2,38 +2,35 @@
 id: android-610
 title: Koin Testing Strategies / Стратегии тестирования Koin
 aliases:
-  - Koin Testing Strategies
-  - Тестирование модулей Koin
+- Koin Testing Strategies
+- Тестирование модулей Koin
 topic: android
 subtopics:
-  - di-koin
-  - testing
-  - architecture-clean
+- di-koin
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-dependency-injection
-  - q-koin-fundamentals--android--medium
-  - q-koin-scope-management--android--medium
+- c-dependency-injection
+- q-koin-fundamentals--android--medium
+- q-koin-scope-management--android--medium
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/di-koin
-  - android/testing
-  - dependency-injection
-  - koin
-  - difficulty/medium
+- android/di-koin
+- android/testing-unit
+- difficulty/medium
 sources:
-  - url: https://insert-koin.io/docs/reference/koin-test/testing
-    note: Official Koin testing guide
-  - url: https://insert-koin.io/docs/reference/koin-android/check-modules
-    note: checkModules usage and tips
+- url: https://insert-koin.io/docs/reference/koin-test/testing
+  note: Official Koin testing guide
+- url: https://insert-koin.io/docs/reference/koin-android/check-modules
+  note: checkModules usage and tips
 ---
 
 # Вопрос (RU)

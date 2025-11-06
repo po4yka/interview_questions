@@ -2,36 +2,35 @@
 id: android-637
 title: Sensitive Data Lifecycle / Жизненный цикл чувствительных данных
 aliases:
-  - Sensitive Data Lifecycle
-  - Жизненный цикл чувствительных данных
+- Sensitive Data Lifecycle
+- Жизненный цикл чувствительных данных
 topic: android
 subtopics:
-  - security
-  - privacy
+- keystore-crypto
+- privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-security-hardening
+- c-security-hardening
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/security
-  - android/privacy
-  - data-lifecycle
-  - difficulty/hard
+- android/keystore-crypto
+- android/privacy-sdks
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/topic/security/data
-    note: Protecting user data guide
-  - url: https://developer.android.com/topic/security/best-practices
-    note: Android security best practices
-  - url: https://owasp.org/www-project-mobile-security-testing-guide/
-    note: OWASP MSTG data storage/testing guidance
+- url: https://developer.android.com/topic/security/data
+  note: Protecting user data guide
+- url: https://developer.android.com/topic/security/best-practices
+  note: Android security best practices
+- url: https://owasp.org/www-project-mobile-security-testing-guide/
+  note: OWASP MSTG data storage/testing guidance
 ---
 
 # Вопрос (RU)

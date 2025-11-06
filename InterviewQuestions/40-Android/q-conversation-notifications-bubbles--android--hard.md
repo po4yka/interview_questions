@@ -2,35 +2,31 @@
 id: android-644
 title: Conversation Notifications & Bubbles / Уведомления и Bubbles для переписки
 aliases:
-  - Conversation Notifications & Bubbles
-  - Уведомления и Bubbles для переписки
+- Conversation Notifications & Bubbles
+- Уведомления и Bubbles для переписки
 topic: android
 subtopics:
-  - communication
-  - notifications
-  - bubbles
+- notifications
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-communication-surfaces
+- c-communication-surfaces
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/notifications
-  - android/bubbles
-  - communication
-  - difficulty/hard
+- android/notifications
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/develop/ui/views/notifications/conversation
-    note: Conversation notifications guide
-  - url: https://developer.android.com/about/versions/11/features/bubbles
-    note: Bubbles feature overview
+- url: https://developer.android.com/develop/ui/views/notifications/conversation
+  note: Conversation notifications guide
+- url: https://developer.android.com/about/versions/11/features/bubbles
+  note: Bubbles feature overview
 ---
 
 # Вопрос (RU)

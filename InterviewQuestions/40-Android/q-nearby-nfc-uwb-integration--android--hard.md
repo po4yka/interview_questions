@@ -2,38 +2,35 @@
 id: android-620
 title: Nearby, NFC & UWB Integration / Интеграция Nearby, NFC и UWB
 aliases:
-  - Nearby NFC UWB Integration
-  - Интеграция Nearby, NFC и UWB
+- Nearby NFC UWB Integration
+- Интеграция Nearby, NFC и UWB
 topic: android
 subtopics:
-  - connectivity
-  - nfc
-  - uwb
+- nfc
+- bluetooth
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-nearby-uwb
+- c-nearby-uwb
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/nfc
-  - android/nearby
-  - android/uwb
-  - connectivity
-  - difficulty/hard
+- android/nfc
+- android/bluetooth
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/guide/topics/connectivity/nfc
-    note: NFC developer guide
-  - url: https://developer.android.com/guide/topics/connectivity/uwb
-    note: UWB API overview
-  - url: https://developers.google.com/nearby/connections/overview
-    note: Nearby Connections docs
+- url: https://developer.android.com/guide/topics/connectivity/nfc
+  note: NFC developer guide
+- url: https://developer.android.com/guide/topics/connectivity/uwb
+  note: UWB API overview
+- url: https://developers.google.com/nearby/connections/overview
+  note: Nearby Connections docs
 ---
 
 # Вопрос (RU)

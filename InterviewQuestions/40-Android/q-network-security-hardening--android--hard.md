@@ -2,36 +2,33 @@
 id: android-636
 title: Network Security Hardening / Укрепление сетевой безопасности
 aliases:
-  - Network Security Hardening
-  - Укрепление сетевой безопасности
+- Network Security Hardening
+- Укрепление сетевой безопасности
 topic: android
 subtopics:
-  - security
-  - networking
+- network-security-config
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-security-hardening
+- c-security-hardening
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/security
-  - android/networking
-  - certificate-pinning
-  - difficulty/hard
+- android/network-security-config
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/training/articles/security-config
-    note: Network Security Config guide
-  - url: https://square.github.io/okhttp/https/#certificate-pinning
-    note: OkHttp certificate pinning docs
-  - url: https://cloud.google.com/security/encryption-in-transit/application-layer-transport-security
-    note: mTLS best practices
+- url: https://developer.android.com/training/articles/security-config
+  note: Network Security Config guide
+- url: https://square.github.io/okhttp/https/#certificate-pinning
+  note: OkHttp certificate pinning docs
+- url: https://cloud.google.com/security/encryption-in-transit/application-layer-transport-security
+  note: mTLS best practices
 ---
 
 # Вопрос (RU)

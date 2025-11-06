@@ -2,34 +2,33 @@
 id: android-635
 title: Play Data Safety Workflow / Процесс Play Data Safety
 aliases:
-  - Play Data Safety Workflow
-  - Процесс Play Data Safety
+- Play Data Safety Workflow
+- Процесс Play Data Safety
 topic: android
 subtopics:
-  - security
-  - compliance
+- privacy-sdks
+- play-console
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-security-hardening
+- c-security-hardening
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/security
-  - android/compliance
-  - play-data-safety
-  - difficulty/hard
+- android/privacy-sdks
+- android/play-console
+- difficulty/hard
 sources:
-  - url: https://support.google.com/googleplay/android-developer/answer/10787469
-    note: Play Data Safety form policies
-  - url: https://support.google.com/googleplay/android-developer/answer/10787478
-    note: Data safety best practices guide
+- url: https://support.google.com/googleplay/android-developer/answer/10787469
+  note: Play Data Safety form policies
+- url: https://support.google.com/googleplay/android-developer/answer/10787478
+  note: Data safety best practices guide
 ---
 
 # Вопрос (RU)

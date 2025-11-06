@@ -2,37 +2,33 @@
 id: android-628
 title: ARCore Shared Experiences / Совместные ARCore-сцены
 aliases:
-  - ARCore Shared Experiences
-  - Совместные ARCore-сцены
+- ARCore Shared Experiences
+- Совместные ARCore-сцены
 topic: android
 subtopics:
-  - arcore
-  - xr
-  - 3d
+- ui-graphics
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-arcore
+- c-arcore
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/arcore
-  - android/xr
-  - realtime-networking
-  - difficulty/hard
+- android/ui-graphics
+- difficulty/hard
 sources:
-  - url: https://developers.google.com/ar/develop/java/cloud-anchors/overview
-    note: Cloud Anchors overview
-  - url: https://developers.google.com/ar/develop/depth
-    note: Depth API documentation
-  - url: https://developers.google.com/ar/reference/java
-    note: ARCore Java API reference
+- url: https://developers.google.com/ar/develop/java/cloud-anchors/overview
+  note: Cloud Anchors overview
+- url: https://developers.google.com/ar/develop/depth
+  note: Depth API documentation
+- url: https://developers.google.com/ar/reference/java
+  note: ARCore Java API reference
 ---
 
 # Вопрос (RU)

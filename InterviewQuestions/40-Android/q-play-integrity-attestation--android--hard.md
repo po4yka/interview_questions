@@ -2,35 +2,33 @@
 id: android-619
 title: Play Integrity Attestation / Аттестация Play Integrity
 aliases:
-  - Play Integrity Attestation
-  - Аттестация Play Integrity
+- Play Integrity Attestation
+- Аттестация Play Integrity
 topic: android
 subtopics:
-  - security
-  - integrity
-  - monetization
+- keystore-crypto
+- billing
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-play-integrity
+- c-play-integrity
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/security
-  - android/integrity
-  - attestation
-  - difficulty/hard
+- android/keystore-crypto
+- android/billing
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/google/play/integrity
-    note: Play Integrity documentation
-  - url: https://cloud.google.com/play-integrity/reference/rest
-    note: REST API reference
+- url: https://developer.android.com/google/play/integrity
+  note: Play Integrity documentation
+- url: https://cloud.google.com/play-integrity/reference/rest
+  note: REST API reference
 ---
 
 # Вопрос (RU)

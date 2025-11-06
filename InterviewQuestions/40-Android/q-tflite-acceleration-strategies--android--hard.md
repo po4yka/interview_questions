@@ -2,36 +2,31 @@
 id: android-629
 title: TFLite Acceleration Strategies / Стратегии ускорения TFLite
 aliases:
-  - TFLite Acceleration Strategies
-  - Стратегии ускорения TFLite
+- TFLite Acceleration Strategies
+- Стратегии ускорения TFLite
 topic: android
 subtopics:
-  - ml
-  - tflite
-  - nnapi
+- performance-rendering
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-ondevice-ml
+- c-ondevice-ml
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/ml
-  - android/tflite
-  - android/nnapi
-  - performance
-  - difficulty/hard
+- android/performance-rendering
+- difficulty/hard
 sources:
-  - url: https://www.tensorflow.org/lite/performance/delegates
-    note: TFLite delegates performance guide
-  - url: https://firebase.google.com/docs/ml/manage-hosted-models
-    note: Remote model management
+- url: https://www.tensorflow.org/lite/performance/delegates
+  note: TFLite delegates performance guide
+- url: https://firebase.google.com/docs/ml/manage-hosted-models
+  note: Remote model management
 ---
 
 # Вопрос (RU)

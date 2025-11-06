@@ -2,43 +2,38 @@
 id: android-611
 title: Koin Resolution Internals / Внутренние механизмы Koin
 aliases:
-  - Koin Resolution Internals
-  - Внутренние механизмы Koin
-  - Koin Instance Resolution
+- Koin Resolution Internals
+- Внутренние механизмы Koin
+- Koin Instance Resolution
 topic: android
 subtopics:
-  - di-koin
-  - architecture-clean
-  - runtime
+- di-koin
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-dependency-injection
-  - q-koin-fundamentals--android--medium
-  - q-koin-scope-management--android--medium
-  - q-koin-testing-strategies--android--medium
-  - q-koin-vs-hilt-comparison--android--medium
+- c-dependency-injection
+- q-koin-fundamentals--android--medium
+- q-koin-scope-management--android--medium
+- q-koin-testing-strategies--android--medium
+- q-koin-vs-hilt-comparison--android--medium
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/di-koin
-  - android/runtime
-  - dependency-injection
-  - koin
-  - difficulty/hard
+- android/di-koin
+- difficulty/hard
 sources:
-  - url: https://insert-koin.io/docs/reference/koin-core/architecture
-    note: Официальный обзор архитектуры Koin
-  - url: https://github.com/InsertKoinIO/koin/blob/master/core/koin-core/src/main/kotlin/org/koin/core/Koin.kt
-    note: Код ядра Koin (ScopeRegistry, DefinitionResolver)
-  - url: https://blog.insert-koin.io/posts/koin-3-4-deep-dive/
-    note: Deep dive по разрешению зависимостей в Koin 3.x
+- url: https://insert-koin.io/docs/reference/koin-core/architecture
+  note: Официальный обзор архитектуры Koin
+- url: https://github.com/InsertKoinIO/koin/blob/master/core/koin-core/src/main/kotlin/org/koin/core/Koin.kt
+  note: Код ядра Koin (ScopeRegistry, DefinitionResolver)
+- url: https://blog.insert-koin.io/posts/koin-3-4-deep-dive/
+  note: Deep dive по разрешению зависимостей в Koin 3.x
 ---
 
 # Вопрос (RU)

@@ -2,35 +2,31 @@
 id: android-631
 title: Quick Settings Tiles Architecture / Архитектура плиток Quick Settings
 aliases:
-  - Quick Settings Tiles Architecture
-  - Архитектура плиток Quick Settings
+- Quick Settings Tiles Architecture
+- Архитектура плиток Quick Settings
 topic: android
 subtopics:
-  - quick-settings
-  - surfaces
-  - shortcuts
+- shortcuts-widgets
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-android-surfaces
+- c-android-surfaces
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/quick-settings
-  - android/surfaces
-  - android/shortcuts
-  - difficulty/medium
+- android/shortcuts-widgets
+- difficulty/medium
 sources:
-  - url: https://developer.android.com/develop/ui/views/quicksettings
-    note: Quick Settings tile guide
-  - url: https://developer.android.com/develop/shortcutmanager
-    note: App Shortcuts documentation
+- url: https://developer.android.com/develop/ui/views/quicksettings
+  note: Quick Settings tile guide
+- url: https://developer.android.com/develop/shortcutmanager
+  note: App Shortcuts documentation
 ---
 
 # Вопрос (RU)

@@ -2,35 +2,31 @@
 id: android-617
 title: Wear OS Health Integration / Интеграция Health Services и Health Connect
 aliases:
-  - Wear OS Health Integration
-  - Интеграция Health Services и Health Connect
+- Wear OS Health Integration
+- Интеграция Health Services и Health Connect
 topic: android
 subtopics:
-  - wear
-  - health
-  - sensors
+- wear
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-wear-health
+- c-wear-health
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/wear
-  - android/health
-  - sensors
-  - difficulty/hard
+- android/wear
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/training/wearables/health-services
-    note: Health Services documentation
-  - url: https://developer.android.com/guide/health-and-fitness/health-connect
-    note: Health Connect guide
+- url: https://developer.android.com/training/wearables/health-services
+  note: Health Services documentation
+- url: https://developer.android.com/guide/health-and-fitness/health-connect
+  note: Health Connect guide
 ---
 
 # Вопрос (RU)

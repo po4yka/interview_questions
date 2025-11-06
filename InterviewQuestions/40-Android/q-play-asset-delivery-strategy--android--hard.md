@@ -2,35 +2,32 @@
 id: android-639
 title: Play Asset Delivery Strategy / Стратегия Play Asset Delivery
 aliases:
-  - Play Asset Delivery Strategy
-  - Стратегия Play Asset Delivery
+- Play Asset Delivery Strategy
+- Стратегия Play Asset Delivery
 topic: android
 subtopics:
-  - release-engineering
-  - app-bundle
+- app-bundle
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-release-engineering
-  - c-app-bundle
+- c-release-engineering
+- c-app-bundle
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/release
-  - play-asset-delivery
-  - app-bundle
-  - difficulty/hard
+- android/app-bundle
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/guide/playcore/asset-delivery
-    note: Play Asset Delivery documentation
-  - url: https://developer.android.com/guide/app-bundle/asset-delivery-options
-    note: Delivery modes overview
+- url: https://developer.android.com/guide/playcore/asset-delivery
+  note: Play Asset Delivery documentation
+- url: https://developer.android.com/guide/app-bundle/asset-delivery-options
+  note: Delivery modes overview
 ---
 
 # Вопрос (RU)

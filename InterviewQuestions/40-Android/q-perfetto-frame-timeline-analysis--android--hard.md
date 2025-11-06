@@ -2,35 +2,33 @@
 id: android-625
 title: Perfetto Frame Timeline Analysis / Анализ Frame Timeline в Perfetto
 aliases:
-  - Perfetto Frame Timeline Analysis
-  - Анализ Frame Timeline в Perfetto
+- Perfetto Frame Timeline Analysis
+- Анализ Frame Timeline в Perfetto
 topic: android
 subtopics:
-  - performance
-  - perfetto
-  - tracing
+- profiling
+- performance-rendering
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-perfetto
+- c-perfetto
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/performance
-  - android/perfetto
-  - tracing
-  - difficulty/hard
+- android/profiling
+- android/performance-rendering
+- difficulty/hard
 sources:
-  - url: https://perfetto.dev/docs/concepts/frame-timeline
-    note: Frame timeline documentation
-  - url: https://developer.android.com/topic/performance/tracing/perfetto
-    note: Perfetto guide
+- url: https://perfetto.dev/docs/concepts/frame-timeline
+  note: Frame timeline documentation
+- url: https://developer.android.com/topic/performance/tracing/perfetto
+  note: Perfetto guide
 ---
 
 # Вопрос (RU)

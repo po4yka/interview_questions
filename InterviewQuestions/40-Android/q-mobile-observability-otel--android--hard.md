@@ -2,35 +2,33 @@
 id: android-627
 title: Mobile Observability with OpenTelemetry / Наблюдаемость на Android с OpenTelemetry
 aliases:
-  - Mobile Observability with OpenTelemetry
-  - Наблюдаемость на Android с OpenTelemetry
+- Mobile Observability with OpenTelemetry
+- Наблюдаемость на Android с OpenTelemetry
 topic: android
 subtopics:
-  - observability
-  - telemetry
-  - logging
+- logging-tracing
+- monitoring-slo
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-mobile-observability
+- c-mobile-observability
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/observability
-  - telemetry
-  - opentelemetry
-  - difficulty/hard
+- android/logging-tracing
+- android/monitoring-slo
+- difficulty/hard
 sources:
-  - url: https://opentelemetry.io/docs/instrumentation/android/
-    note: OpenTelemetry Android docs
-  - url: https://developer.android.com/topic/performance/monitoring
-    note: Monitoring best practices
+- url: https://opentelemetry.io/docs/instrumentation/android/
+  note: OpenTelemetry Android docs
+- url: https://developer.android.com/topic/performance/monitoring
+  note: Monitoring best practices
 ---
 
 # Вопрос (RU)

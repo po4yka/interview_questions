@@ -2,37 +2,35 @@
 id: android-638
 title: Play Console Automation / Автоматизация Play Console
 aliases:
-  - Play Console Automation
-  - Автоматизация Play Console
+- Play Console Automation
+- Автоматизация Play Console
 topic: android
 subtopics:
-  - release-engineering
-  - play-console
+- ci-cd
+- play-console
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-release-engineering
+- c-release-engineering
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/release
-  - play-console
-  - quality
-  - automation
-  - difficulty/hard
+- android/ci-cd
+- android/play-console
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/distribute/google-play/developer-api
-    note: Play Developer Publishing API
-  - url: https://support.google.com/googleplay/android-developer/answer/9842756
-    note: Play Vitals overview
-  - url: https://support.google.com/googleplay/android-developer/answer/9844778
-    note: Rollback and staged rollout guidance
+- url: https://developer.android.com/distribute/google-play/developer-api
+  note: Play Developer Publishing API
+- url: https://support.google.com/googleplay/android-developer/answer/9842756
+  note: Play Vitals overview
+- url: https://support.google.com/googleplay/android-developer/answer/9844778
+  note: Rollback and staged rollout guidance
 ---
 
 # Вопрос (RU)
