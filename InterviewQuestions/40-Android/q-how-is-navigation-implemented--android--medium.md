@@ -38,11 +38,11 @@ tags:
 
 # Вопрос (RU)
 
-Как реализована навигация в Android приложениях?
+> Как реализована навигация в Android приложениях?
 
 # Question (EN)
 
-How is navigation implemented in Android applications?
+> How is navigation implemented in Android applications?
 
 ---
 

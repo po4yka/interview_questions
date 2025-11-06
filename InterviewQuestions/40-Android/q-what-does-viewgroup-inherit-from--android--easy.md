@@ -32,7 +32,7 @@ tags:
 
 # Вопрос (RU)
 
-От кого наследуются `ViewGroup`
+> От кого наследуются `ViewGroup`
 
 ## Answer (EN)
 # Question (EN)

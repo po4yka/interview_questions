@@ -39,11 +39,11 @@ tags:
 
 # Вопрос (RU)
 
-В чём разница между FragmentManager и FragmentTransaction?
+> В чём разница между FragmentManager и FragmentTransaction?
 
 # Question (EN)
 
-What is the difference between FragmentManager and FragmentTransaction?
+> What is the difference between FragmentManager and FragmentTransaction?
 
 ---
 

@@ -19,11 +19,11 @@ tags: [android/background-execution, android/coroutines, background-processing, 
 
 # Вопрос (RU)
 
-Как вернуть результат работы WorkManager в приложение?
+> Как вернуть результат работы WorkManager в приложение?
 
 # Question (EN)
 
-How to return a result from WorkManager to the app?
+> How to return a result from WorkManager to the app?
 
 ---
 

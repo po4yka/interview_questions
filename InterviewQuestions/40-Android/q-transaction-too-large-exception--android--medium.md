@@ -19,11 +19,11 @@ tags: [android/intents-deeplinks, android/lifecycle, android/performance-memory,
 
 # Вопрос (RU)
 
-Что такое TransactionTooLargeException и как его избежать?
+> Что такое TransactionTooLargeException и как его избежать?
 
 # Question (EN)
 
-What is TransactionTooLargeException and how to avoid it?
+> What is TransactionTooLargeException and how to avoid it?
 
 ---
 

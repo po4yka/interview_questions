@@ -19,11 +19,11 @@ tags: [android/architecture-mvvm, android/room, android/ui-compose, database, di
 
 # Вопрос (RU)
 
-Как интегрировать Room с Paging 3? Реализуйте источник данных из Room и обработку RemoteMediator для офлайн-first архитектуры с сетью и базой данных.
+> Как интегрировать Room с Paging 3? Реализуйте источник данных из Room и обработку RemoteMediator для офлайн-first архитектуры с сетью и базой данных.
 
 # Question (EN)
 
-How to integrate Room with Paging 3? Implement Room database source and handle RemoteMediator for offline-first architecture with network and database paging.
+> How to integrate Room with Paging 3? Implement Room database source and handle RemoteMediator for offline-first architecture with network and database paging.
 
 ## Ответ (RU)
 

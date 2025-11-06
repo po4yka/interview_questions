@@ -19,11 +19,11 @@ sources: [Android Developer Docs, Kirchhoff repo]
 
 # Вопрос (RU)
 
-Что вы знаете о Gradle Version Catalog?
+> Что вы знаете о Gradle Version Catalog?
 
 # Question (EN)
 
-What do you know about Gradle Version Catalog?
+> What do you know about Gradle Version Catalog?
 
 ---
 

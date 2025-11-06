@@ -19,11 +19,11 @@ sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
 
 # Вопрос (RU)
 
-Что вы знаете об API Splash Screen в Android 12+?
+> Что вы знаете об API Splash Screen в Android 12+?
 
 # Question (EN)
 
-What do you know about the Splash Screen API in Android 12+?
+> What do you know about the Splash Screen API in Android 12+?
 
 ## Ответ (RU)
 

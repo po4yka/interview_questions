@@ -19,11 +19,11 @@ tags: [android, android/performance-rendering, android/ui-compose, compose, diff
 
 # Вопрос (RU)
 
-Как можно уменьшить количество рекомпозиций помимо side-эффектов?
+> Как можно уменьшить количество рекомпозиций помимо side-эффектов?
 
 # Question (EN)
 
-How can you reduce the number of recompositions besides using side effects?
+> How can you reduce the number of recompositions besides using side effects?
 
 ---
 

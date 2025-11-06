@@ -36,11 +36,11 @@ tags:
 
 # Вопрос (RU)
 
-Как передать фотографию в редактор — внутри приложения и во внешнее приложение?
+> Как передать фотографию в редактор — внутри приложения и во внешнее приложение?
 
 # Question (EN)
 
-How to pass a photo to an editor — both within your app and to an external app?
+> How to pass a photo to an editor — both within your app and to an external app?
 
 ## Ответ (RU)
 

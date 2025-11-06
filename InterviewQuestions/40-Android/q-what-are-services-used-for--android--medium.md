@@ -29,11 +29,11 @@ tags: [android/background-execution, android/service, background-work, difficult
 
 # Вопрос (RU)
 
-Для чего используются сервисы в Android?
+> Для чего используются сервисы в Android?
 
 # Question (EN)
 
-What are services used for in Android?
+> What are services used for in Android?
 
 ---
 

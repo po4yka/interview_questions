@@ -19,11 +19,11 @@ tags: [android/performance-memory, collections, difficulty/medium, memory-optimi
 
 # Вопрос (RU)
 
-Какие специализированные `Map`-коллекции для примитивных типов предоставляет Android SDK? Когда и почему их следует использовать вместо стандартных `HashMap`?
+> Какие специализированные `Map`-коллекции для примитивных типов предоставляет Android SDK? Когда и почему их следует использовать вместо стандартных `HashMap`?
 
 # Question (EN)
 
-What specialized `Map` collections for primitive types does Android SDK provide? When and why should they be used instead of standard `HashMap`?
+> What specialized `Map` collections for primitive types does Android SDK provide? When and why should they be used instead of standard `HashMap`?
 
 ---
 

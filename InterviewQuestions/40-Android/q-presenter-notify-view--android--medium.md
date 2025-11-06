@@ -19,11 +19,11 @@ tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback
 
 # Вопрос (RU)
 
-После получения результата внутри Presenter как сообщить об этом `View`?
+> После получения результата внутри Presenter как сообщить об этом `View`?
 
 # Question (EN)
 
-After getting a result inside Presenter, how to notify the `View`?
+> After getting a result inside Presenter, how to notify the `View`?
 
 ---
 

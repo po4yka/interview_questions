@@ -37,11 +37,11 @@ tags:
 
 # Вопрос (RU)
 
-Как работает Jetpack Compose?
+> Как работает Jetpack Compose?
 
 # Question (EN)
 
-How does Jetpack Compose work?
+> How does Jetpack Compose work?
 
 ## Ответ (RU)
 

@@ -19,11 +19,11 @@ tags: [android, android/performance-rendering, android/threads-sync, android/ui-
 
 # Вопрос (RU)
 
-Какой класс следует использовать для отрисовки `View` в фоновом потоке?
+> Какой класс следует использовать для отрисовки `View` в фоновом потоке?
 
 # Question (EN)
 
-Which class should be used to render `View` in a background thread?
+> Which class should be used to render `View` in a background thread?
 
 ---
 

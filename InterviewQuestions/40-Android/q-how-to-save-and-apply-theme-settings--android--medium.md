@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-Как сохранять и применять настройки темы в Android-приложении?
+> Как сохранять и применять настройки темы в Android-приложении?
 
 # Question (EN)
 
-How to save and apply theme settings in an Android application?
+> How to save and apply theme settings in an Android application?
 
 ---
 

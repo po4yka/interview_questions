@@ -19,11 +19,11 @@ tags: [advertising, android/privacy-sdks, attribution-reporting, difficulty/medi
 
 # Вопрос (RU)
 
-Как работает Attribution Reporting API в Privacy Sandbox? Как измерять конверсии рекламы без отслеживания пользователей? В чём разница между event-level и aggregate отчётами?
+> Как работает Attribution Reporting API в Privacy Sandbox? Как измерять конверсии рекламы без отслеживания пользователей? В чём разница между event-level и aggregate отчётами?
 
 # Question (EN)
 
-How does the Attribution Reporting API work in Privacy Sandbox? How do you measure ad conversions without tracking users? What are the differences between event-level and aggregate reports?
+> How does the Attribution Reporting API work in Privacy Sandbox? How do you measure ad conversions without tracking users? What are the differences between event-level and aggregate reports?
 
 ---
 

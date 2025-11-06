@@ -42,13 +42,13 @@ tags:
 
 # Вопрос (RU)
 
-Как можно писать `RecyclerView`, чтобы он кэшировал наперёд?
+> Как можно писать `RecyclerView`, чтобы он кэшировал наперёд?
 
 ---
 
 # Question (EN)
 
-How to write `RecyclerView` so that it caches ahead?
+> How to write `RecyclerView` so that it caches ahead?
 
 ---
 

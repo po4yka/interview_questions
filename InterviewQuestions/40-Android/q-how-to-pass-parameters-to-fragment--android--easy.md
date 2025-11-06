@@ -19,11 +19,11 @@ tags: [android, android/fragment, android/lifecycle, arguments, bundle, difficul
 
 # Вопрос (RU)
 
-Как передать параметры во фрагмент?
+> Как передать параметры во фрагмент?
 
 # Question (EN)
 
-How to pass parameters to a `Fragment`?
+> How to pass parameters to a `Fragment`?
 
 ---
 

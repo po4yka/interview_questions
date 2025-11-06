@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-Как зарегистрировать `BroadcastReceiver` для получения сообщений?
+> Как зарегистрировать `BroadcastReceiver` для получения сообщений?
 
 # Question (EN)
 
-How to register `BroadcastReceiver` to receive messages?
+> How to register `BroadcastReceiver` to receive messages?
 
 ## Ответ (RU)
 

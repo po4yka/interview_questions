@@ -22,7 +22,7 @@ tags: [android/performance-rendering, compute, difficulty/hard, gpu, graphics, r
 
 ## Answer (EN)
 # Question (EN)
-How do you use Vulkan for low-level GPU operations in Android? What are the alternatives to deprecated RenderScript? How do you implement compute shaders and GPU-accelerated image processing?
+> How do you use Vulkan for low-level GPU operations in Android? What are the alternatives to deprecated RenderScript? How do you implement compute shaders and GPU-accelerated image processing?
 
 ## Answer (EN)
 With RenderScript deprecated in Android 12, developers need alternative approaches for GPU computing. Vulkan provides low-level GPU access, while other options include GPU Compute shaders, OpenGL ES compute, and platform-specific solutions.
@@ -1016,7 +1016,7 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 
 ## Answer (EN)
 # Question (EN)
-How do you use Vulkan for low-level GPU operations in Android? What are the alternatives to deprecated RenderScript? How do you implement compute shaders and GPU-accelerated image processing?
+> How do you use Vulkan for low-level GPU operations in Android? What are the alternatives to deprecated RenderScript? How do you implement compute shaders and GPU-accelerated image processing?
 
 ## Answer (EN)
 With RenderScript deprecated in Android 12, developers need alternative approaches for GPU computing. Vulkan provides low-level GPU access, while other options include GPU Compute shaders, OpenGL ES compute, and platform-specific solutions.
@@ -2006,7 +2006,7 @@ With RenderScript deprecated, Vulkan and OpenGL ES compute shaders are modern al
 
 ## Ответ (RU)
 # Вопрос (RU)
-Как использовать Vulkan для низкоуровневых GPU операций в Android? Какие существуют альтернативы устаревшему RenderScript? Как реализовать вычислительные шейдеры и GPU-ускоренную обработку изображений?
+> Как использовать Vulkan для низкоуровневых GPU операций в Android? Какие существуют альтернативы устаревшему RenderScript? Как реализовать вычислительные шейдеры и GPU-ускоренную обработку изображений?
 
 ## Ответ (RU)
 С устареванием RenderScript в Android 12, разработчикам нужны альтернативные подходы для GPU вычислений. Vulkan предоставляет низкоуровневый доступ к GPU, в то время как другие опции включают GPU Compute шейдеры, OpenGL ES compute и платформо-специфичные решения.

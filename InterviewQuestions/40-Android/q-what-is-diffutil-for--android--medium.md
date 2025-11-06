@@ -32,7 +32,7 @@ tags:
 
 # Вопрос (RU)
 
-Зачем нужен DiffUtil?
+> Зачем нужен DiffUtil?
 
 ## Answer (EN)
 # Question (EN)

@@ -31,11 +31,11 @@ tags:
 
 # Вопрос (RU)
 
-Каким образом ты выбираешь layout для `Fragment`?
+> Каким образом ты выбираешь layout для `Fragment`?
 
 # Question (EN)
 
-How do you choose a layout for a `Fragment`?
+> How do you choose a layout for a `Fragment`?
 
 ## Ответ (RU)
 

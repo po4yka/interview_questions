@@ -31,11 +31,11 @@ tags: [android/room, android/serialization, database, difficulty/medium, room, t
 
 # Вопрос (RU)
 
-Что вы знаете о TypeConverters в Room?
+> Что вы знаете о TypeConverters в Room?
 
 # Question (EN)
 
-What do you know about Converters in Room?
+> What do you know about Converters in Room?
 
 ---
 

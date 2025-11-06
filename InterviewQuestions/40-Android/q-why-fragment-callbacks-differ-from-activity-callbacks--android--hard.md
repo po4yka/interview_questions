@@ -18,11 +18,11 @@ tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard, f
 
 # Вопрос (RU)
 
-Почему колбэки `Fragment` отличаются от колбэков `Activity`?
+> Почему колбэки `Fragment` отличаются от колбэков `Activity`?
 
 # Question (EN)
 
-Why do `Fragment` callbacks differ from `Activity` callbacks?
+> Why do `Fragment` callbacks differ from `Activity` callbacks?
 
 ---
 

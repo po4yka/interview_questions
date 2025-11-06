@@ -29,11 +29,11 @@ tags: [android/background-execution, android/service, background-tasks, difficul
 
 # Вопрос (RU)
 
-Какие существуют типы `Service` в Android?
+> Какие существуют типы `Service` в Android?
 
 # Question (EN)
 
-What types of `Service` exist in Android?
+> What types of `Service` exist in Android?
 
 ---
 

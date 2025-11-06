@@ -19,11 +19,11 @@ sources: [https://developer.android.com/guide/background, https://developer.andr
 
 # Вопрос (RU)
 
-Для чего нужна многопоточность в Android и какие инструменты использовать?
+> Для чего нужна многопоточность в Android и какие инструменты использовать?
 
 # Question (EN)
 
-Why is multithreading needed in Android and which tools should be used?
+> Why is multithreading needed in Android and which tools should be used?
 
 ---
 

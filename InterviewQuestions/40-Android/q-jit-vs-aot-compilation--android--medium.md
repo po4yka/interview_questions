@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
+> В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
 
 # Question (EN)
 
-What are the differences between JIT and AOT compilation in Android? How does Android use both strategies?
+> What are the differences between JIT and AOT compilation in Android? How does Android use both strategies?
 
 ---
 

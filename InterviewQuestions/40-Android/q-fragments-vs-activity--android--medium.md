@@ -38,11 +38,11 @@ tags:
 
 # Вопрос (RU)
 
-Для чего нужны Фрагменты если есть `Activity`?
+> Для чего нужны Фрагменты если есть `Activity`?
 
 # Question (EN)
 
-Why use Fragments if we have Activities?
+> Why use Fragments if we have Activities?
 
 ## Ответ (RU)
 

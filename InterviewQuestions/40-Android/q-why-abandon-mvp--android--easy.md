@@ -19,11 +19,11 @@ sources: [Android Architecture Guide, Android Developers Blog]
 
 # Вопрос (RU)
 
-Почему многие отказываются от MVP?
+> Почему многие отказываются от MVP?
 
 # Question (EN)
 
-Why do many developers abandon MVP?
+> Why do many developers abandon MVP?
 
 ---
 

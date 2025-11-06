@@ -19,11 +19,11 @@ tags: [android/coroutines, android/room, dao, database, difficulty/medium, trans
 
 # Вопрос (RU)
 
-Как обеспечить атомарность операций с несколькими таблицами в Room? Покажите использование @Transaction для критических операций.
+> Как обеспечить атомарность операций с несколькими таблицами в Room? Покажите использование @Transaction для критических операций.
 
 # Question (EN)
 
-How do you ensure atomicity for multi-table operations in Room? Show @Transaction usage for critical operations.
+> How do you ensure atomicity for multi-table operations in Room? Show @Transaction usage for critical operations.
 
 ---
 

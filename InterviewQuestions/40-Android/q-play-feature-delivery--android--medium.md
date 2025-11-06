@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-Что вы знаете о Play Feature Delivery?
+> Что вы знаете о Play Feature Delivery?
 
 # Question (EN)
 
-What do you know about Play Feature Delivery?
+> What do you know about Play Feature Delivery?
 
 ---
 

@@ -36,11 +36,11 @@ tags:
 
 # Вопрос (RU)
 
-Как можно реализовать поведение `View` при её добавлении в дерево?
+> Как можно реализовать поведение `View` при её добавлении в дерево?
 
 # Question (EN)
 
-How to implement view behavior when it is added to the tree?
+> How to implement view behavior when it is added to the tree?
 
 ---
 

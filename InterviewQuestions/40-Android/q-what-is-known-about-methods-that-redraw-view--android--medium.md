@@ -39,11 +39,11 @@ tags:
 
 # Вопрос (RU)
 
-Что известно про методы, которые перерисовывают `View`?
+> Что известно про методы, которые перерисовывают `View`?
 
 # Question (EN)
 
-What is known about methods that redraw `View`?
+> What is known about methods that redraw `View`?
 
 ## Ответ (RU)
 

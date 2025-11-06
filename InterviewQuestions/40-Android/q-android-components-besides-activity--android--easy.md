@@ -27,13 +27,13 @@ sources: []
 
 # Вопрос (RU)
 
-Какие компоненты Android существуют помимо `Activity`?
+> Какие компоненты Android существуют помимо `Activity`?
 
 ---
 
 # Question (EN)
 
-What Android components exist besides `Activity`?
+> What Android components exist besides `Activity`?
 
 ---
 

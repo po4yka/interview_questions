@@ -19,11 +19,11 @@ tags: [android/fragment, android/serialization, bundle, data-passing, difficulty
 
 # Вопрос (RU)
 
-Как передать параметры во фрагмент?
+> Как передать параметры во фрагмент?
 
 # Question (EN)
 
-How to pass parameters to a `Fragment`?
+> How to pass parameters to a `Fragment`?
 
 ---
 

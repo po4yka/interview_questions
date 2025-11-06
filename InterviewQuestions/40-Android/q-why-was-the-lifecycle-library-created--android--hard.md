@@ -19,11 +19,11 @@ tags: [android/architecture-mvvm, android/lifecycle, android/performance-memory,
 
 # Вопрос (RU)
 
-Почему была создана библиотека `Lifecycle`?
+> Почему была создана библиотека `Lifecycle`?
 
 # Question (EN)
 
-Why was the `Lifecycle` library created?
+> Why was the `Lifecycle` library created?
 
 ## Ответ (RU)
 

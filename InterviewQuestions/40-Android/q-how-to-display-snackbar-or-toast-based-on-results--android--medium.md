@@ -19,11 +19,11 @@ tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-views,
 
 # Вопрос (RU)
 
-Как правильно отображать Toast и Snackbar в зависимости от результатов операций в Android-приложении?
+> Как правильно отображать Toast и Snackbar в зависимости от результатов операций в Android-приложении?
 
 # Question (EN)
 
-How to properly display Toast and Snackbar based on operation results in Android applications?
+> How to properly display Toast and Snackbar based on operation results in Android applications?
 
 ## Ответ (RU)
 

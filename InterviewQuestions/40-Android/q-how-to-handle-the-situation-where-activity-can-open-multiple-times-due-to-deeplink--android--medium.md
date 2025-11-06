@@ -19,11 +19,11 @@ tags: [android, android/activity, android/intents-deeplinks, android/ui-navigati
 
 # Вопрос (RU)
 
-Как обработать ситуацию, когда `Activity` может открыться несколько раз из-за deeplink?
+> Как обработать ситуацию, когда `Activity` может открыться несколько раз из-за deeplink?
 
 # Question (EN)
 
-How to handle the situation where `Activity` can open multiple times due to deeplink?
+> How to handle the situation where `Activity` can open multiple times due to deeplink?
 
 ---
 

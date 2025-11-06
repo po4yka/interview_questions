@@ -19,11 +19,11 @@ tags: [android/lifecycle, android/ui-compose, android/ui-views, composition, dif
 
 # Вопрос (RU)
 
-Где создается композиция для вызова composable функций?
+> Где создается композиция для вызова composable функций?
 
 # Question (EN)
 
-Where is composition created for calling composable functions?
+> Where is composition created for calling composable functions?
 
 ---
 

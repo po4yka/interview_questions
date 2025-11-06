@@ -37,11 +37,11 @@ tags:
 
 # Вопрос (RU)
 
-В какой момент генерируется код при использовании SQLite/Room?
+> В какой момент генерируется код при использовании SQLite/Room?
 
 # Question (EN)
 
-When is code generated when using SQLite/Room?
+> When is code generated when using SQLite/Room?
 
 ## Ответ (RU)
 

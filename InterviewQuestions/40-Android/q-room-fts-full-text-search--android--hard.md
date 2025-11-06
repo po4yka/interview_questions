@@ -19,11 +19,11 @@ tags: [android/performance-rendering, android/room, database, difficulty/hard, f
 
 # Вопрос (RU)
 
-Реализуйте полнотекстовый поиск в Room с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?
+> Реализуйте полнотекстовый поиск в Room с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?
 
 # Question (EN)
 
-Implement full-text search in Room using FTS4/FTS5. Optimize search performance for large datasets. When to use FTS instead of LIKE? How to synchronize FTS tables with main tables?
+> Implement full-text search in Room using FTS4/FTS5. Optimize search performance for large datasets. When to use FTS instead of LIKE? How to synchronize FTS tables with main tables?
 
 ---
 

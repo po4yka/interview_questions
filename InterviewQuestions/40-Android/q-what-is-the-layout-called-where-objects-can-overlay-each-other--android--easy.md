@@ -19,11 +19,11 @@ tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, 
 
 # Вопрос (RU)
 
-Как называется layout, в котором UI-элементы могут наслаиваться друг на друга?
+> Как называется layout, в котором UI-элементы могут наслаиваться друг на друга?
 
 # Question (EN)
 
-What is the layout called where UI elements can overlay each other?
+> What is the layout called where UI elements can overlay each other?
 
 ---
 

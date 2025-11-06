@@ -19,11 +19,11 @@ tags: [advertising, android/privacy-sdks, difficulty/medium, privacy, privacy-sa
 
 # Вопрос (RU)
 
-Что такое Topics API в Privacy Sandbox для Android? Как он обеспечивает рекламу на основе интересов с сохранением приватности?
+> Что такое Topics API в Privacy Sandbox для Android? Как он обеспечивает рекламу на основе интересов с сохранением приватности?
 
 # Question (EN)
 
-What is the Privacy Sandbox Topics API in Android? How does it provide privacy-preserving interest-based advertising?
+> What is the Privacy Sandbox Topics API in Android? How does it provide privacy-preserving interest-based advertising?
 
 ---
 

@@ -19,11 +19,11 @@ tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts
 
 # Вопрос (RU)
 
-Как можно исправить плохой layout элемента?
+> Как можно исправить плохой layout элемента?
 
 # Question (EN)
 
-How to fix a bad element layout?
+> How to fix a bad element layout?
 
 ---
 

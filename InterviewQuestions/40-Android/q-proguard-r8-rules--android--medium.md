@@ -37,11 +37,11 @@ tags:
 
 # Вопрос (RU)
 
-Напишите комплексный набор правил ProGuard/R8 для Android библиотеки. Обработайте рефлексию, сериализацию, нативные методы и публичный API. Оптимизируйте для production, сохраняя функциональность.
+> Напишите комплексный набор правил ProGuard/R8 для Android библиотеки. Обработайте рефлексию, сериализацию, нативные методы и публичный API. Оптимизируйте для production, сохраняя функциональность.
 
 # Question (EN)
 
-Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection, serialization, native methods, and public APIs. Optimize for production while maintaining functionality.
+> Write comprehensive ProGuard/R8 rules for an Android library. Handle reflection, serialization, native methods, and public APIs. Optimize for production while maintaining functionality.
 
 ---
 

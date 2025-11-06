@@ -19,11 +19,11 @@ tags: [android/performance-rendering, android/ui-animation, android/ui-graphics,
 
 # Вопрос (RU)
 
-Как работать с векторной графикой и AnimatedVectorDrawable в Android? Каковы лучшие практики для импорта SVG, морфинга путей и оптимизации производительности?
+> Как работать с векторной графикой и AnimatedVectorDrawable в Android? Каковы лучшие практики для импорта SVG, морфинга путей и оптимизации производительности?
 
 # Question (EN)
 
-How do you work with vector graphics and AnimatedVectorDrawable in Android? What are the best practices for SVG import, path morphing, and performance optimization?
+> How do you work with vector graphics and AnimatedVectorDrawable in Android? What are the best practices for SVG import, path morphing, and performance optimization?
 
 ---
 

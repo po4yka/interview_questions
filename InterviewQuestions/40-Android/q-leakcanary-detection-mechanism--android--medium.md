@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-Как LeakCanary обнаруживает утечки памяти?
+> Как LeakCanary обнаруживает утечки памяти?
 
 # Question (EN)
 
-How does LeakCanary detect memory leaks?
+> How does LeakCanary detect memory leaks?
 
 ---
 

@@ -19,11 +19,11 @@ tags: [android/background-execution, android/service, background-tasks, difficul
 
 # Вопрос (RU)
 
-Как WorkManager гарантирует выполнение задач?
+> Как WorkManager гарантирует выполнение задач?
 
 # Question (EN)
 
-How does WorkManager guarantee task execution?
+> How does WorkManager guarantee task execution?
 
 ## Ответ (RU)
 

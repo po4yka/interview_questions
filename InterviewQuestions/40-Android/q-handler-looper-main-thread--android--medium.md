@@ -38,11 +38,11 @@ tags:
 
 # Вопрос (RU)
 
-Как получить сообщения на главном потоке с помощью `Handler` и `Looper`?
+> Как получить сообщения на главном потоке с помощью `Handler` и `Looper`?
 
 # Question (EN)
 
-How can you receive messages on the main thread using `Handler` and `Looper`?
+> How can you receive messages on the main thread using `Handler` and `Looper`?
 
 ## Ответ (RU)
 

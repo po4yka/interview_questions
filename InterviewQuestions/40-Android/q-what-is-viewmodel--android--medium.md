@@ -40,11 +40,11 @@ tags:
 
 # Вопрос (RU)
 
-Что такое `ViewModel` в Android?
+> Что такое `ViewModel` в Android?
 
 # Question (EN)
 
-What is `ViewModel` in Android?
+> What is `ViewModel` in Android?
 
 ---
 

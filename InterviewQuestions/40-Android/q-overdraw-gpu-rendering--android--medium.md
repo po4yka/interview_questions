@@ -39,11 +39,11 @@ sources: []
 
 # Вопрос (RU)
 
-Что такое Overdraw и как его оптимизировать?
+> Что такое Overdraw и как его оптимизировать?
 
 # Question (EN)
 
-What is Overdraw and how to optimize it?
+> What is Overdraw and how to optimize it?
 
 ## Ответ (RU)
 

@@ -37,11 +37,11 @@ sources: []
 
 # Вопрос (RU)
 
-Как жизненный цикл `Fragment` связан с `Activity`?
+> Как жизненный цикл `Fragment` связан с `Activity`?
 
 # Question (EN)
 
-How is `Fragment` lifecycle connected with `Activity`?
+> How is `Fragment` lifecycle connected with `Activity`?
 
 ---
 

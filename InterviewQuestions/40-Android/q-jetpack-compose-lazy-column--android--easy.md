@@ -19,11 +19,11 @@ tags: [android/ui-compose, android/ui-widgets, difficulty/easy, jetpack-compose,
 
 # Вопрос (RU)
 
-Как в Jetpack Compose создать список, аналогичный `RecyclerView`?
+> Как в Jetpack Compose создать список, аналогичный `RecyclerView`?
 
 # Question (EN)
 
-How to create a `RecyclerView`-like list in Jetpack Compose?
+> How to create a `RecyclerView`-like list in Jetpack Compose?
 
 ---
 

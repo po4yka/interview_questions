@@ -19,11 +19,11 @@ tags: [android/performance-rendering, android/profiling, android/ui-views, diffi
 
 # Вопрос (RU)
 
-В чём измеряется производительность layout в Android?
+> В чём измеряется производительность layout в Android?
 
 # Question (EN)
 
-What is layout performance measured in Android?
+> What is layout performance measured in Android?
 
 ## Ответ (RU)
 

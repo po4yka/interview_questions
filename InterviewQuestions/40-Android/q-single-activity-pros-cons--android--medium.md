@@ -41,11 +41,11 @@ tags:
 
 # Вопрос (RU)
 
-Какие у подхода Single `Activity` этого подхода плюсы и минусы?
+> Какие у подхода Single `Activity` этого подхода плюсы и минусы?
 
 # Question (EN)
 
-What are the pros and cons of the Single `Activity` approach?
+> What are the pros and cons of the Single `Activity` approach?
 
 ## Ответ (RU)
 

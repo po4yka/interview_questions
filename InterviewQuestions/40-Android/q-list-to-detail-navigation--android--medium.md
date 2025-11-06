@@ -19,11 +19,11 @@ tags: [android/fragment, android/intents-deeplinks, android/ui-navigation, bundl
 
 # Вопрос (RU)
 
-С помощью чего делается переход со списков на деталки в Android?
+> С помощью чего делается переход со списков на деталки в Android?
 
 # Question (EN)
 
-How do you implement navigation from a list to detail screens in Android?
+> How do you implement navigation from a list to detail screens in Android?
 
 ---
 

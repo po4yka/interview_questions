@@ -19,11 +19,11 @@ tags: [android/architecture-mvvm, android/coroutines, android/networking-http, d
 
 # Вопрос (RU)
 
-Что из себя представляет Retrofit и зачем он нужен в Android-разработке?
+> Что из себя представляет Retrofit и зачем он нужен в Android-разработке?
 
 # Question (EN)
 
-What is Retrofit and why is it needed in Android development?
+> What is Retrofit and why is it needed in Android development?
 
 ## Ответ (RU)
 

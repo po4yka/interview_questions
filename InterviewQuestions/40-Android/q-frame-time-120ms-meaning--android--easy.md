@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-Если профайлер показывает что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
+> Если профайлер показывает что какой-нибудь фрейм занял 120 миллисекунд, что это значит?
 
 # Question (EN)
 
-If profiler shows that a frame took 120 milliseconds, what does it mean?
+> If profiler shows that a frame took 120 milliseconds, what does it mean?
 
 ---
 

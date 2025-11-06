@@ -41,11 +41,11 @@ tags:
 
 # Вопрос (RU)
 
-Что делать если нужно чтобы сервис продолжал работу в фоне?
+> Что делать если нужно чтобы сервис продолжал работу в фоне?
 
 # Question (EN)
 
-What to do if you need a service to continue running in the background?
+> What to do if you need a service to continue running in the background?
 
 ---
 

@@ -19,11 +19,11 @@ tags: [android/architecture-mvvm, android/coroutines, android/networking-http, d
 
 # Вопрос (RU)
 
-Как делать сетевые запросы с помощью Retrofit?
+> Как делать сетевые запросы с помощью Retrofit?
 
 # Question (EN)
 
-How to make network requests with Retrofit?
+> How to make network requests with Retrofit?
 
 ---
 

@@ -19,11 +19,11 @@ tags: [android/performance-rendering, android/ui-compose, difficulty/hard, jetpa
 
 # Вопрос (RU)
 
-Что известно про `@Stable` в Jetpack Compose?
+> Что известно про `@Stable` в Jetpack Compose?
 
 # Question (EN)
 
-What is known about `@Stable` in Jetpack Compose?
+> What is known about `@Stable` in Jetpack Compose?
 
 ---
 

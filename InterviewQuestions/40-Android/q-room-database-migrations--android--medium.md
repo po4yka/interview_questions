@@ -19,11 +19,11 @@ tags: [android/room, android/testing-instrumented, database, difficulty/medium, 
 
 # Вопрос (RU)
 
-Реализуйте сложные миграции базы данных Room с версии 1 до 3. Обработайте деструктивные и недеструктивные миграции с тестированием.
+> Реализуйте сложные миграции базы данных Room с версии 1 до 3. Обработайте деструктивные и недеструктивные миграции с тестированием.
 
 # Question (EN)
 
-Implement complex Room database migrations from version 1 to 3. Handle destructive and non-destructive migrations with testing.
+> Implement complex Room database migrations from version 1 to 3. Handle destructive and non-destructive migrations with testing.
 
 ## Ответ (RU)
 

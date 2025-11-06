@@ -19,11 +19,11 @@ tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/m
 
 # Вопрос (RU)
 
-Сравните Koin и Hilt детально. Когда вы бы выбрали один вместо другого? Обсудите compile-time vs runtime DI.
+> Сравните Koin и Hilt детально. Когда вы бы выбрали один вместо другого? Обсудите compile-time vs runtime DI.
 
 # Question (EN)
 
-Compare Koin and Hilt in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
+> Compare Koin and Hilt in detail. When would you choose one over the other? Discuss compile-time vs runtime DI.
 
 ## Ответ (RU)
 

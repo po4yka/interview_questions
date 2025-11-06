@@ -19,11 +19,11 @@ tags: [android, android/networking-http, android/websockets, difficulty/medium, 
 
 # Вопрос (RU)
 
-Как реализовать обновления в реальном времени в Android-приложении? Какие технологии доступны и каковы best practices?
+> Как реализовать обновления в реальном времени в Android-приложении? Какие технологии доступны и каковы best practices?
 
 # Question (EN)
 
-How do you implement real-time updates in Android applications? What are the available technologies and best practices?
+> How do you implement real-time updates in Android applications? What are the available technologies and best practices?
 
 ---
 

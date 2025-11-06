@@ -34,11 +34,11 @@ tags:
 
 # Вопрос (RU)
 
-Что вы знаете о `View` Binding?
+> Что вы знаете о `View` Binding?
 
 # Question (EN)
 
-What do you know about `View` Binding?
+> What do you know about `View` Binding?
 
 ---
 

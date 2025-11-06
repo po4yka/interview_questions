@@ -19,11 +19,11 @@ tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, grid-layo
 
 # Вопрос (RU)
 
-Как изменить количество колонок в `RecyclerView` в зависимости от ориентации устройства?
+> Как изменить количество колонок в `RecyclerView` в зависимости от ориентации устройства?
 
 # Question (EN)
 
-How do you change the number of columns in `RecyclerView` based on device orientation?
+> How do you change the number of columns in `RecyclerView` based on device orientation?
 
 ---
 

@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-Что такое MutableState в Compose?
+> Что такое MutableState в Compose?
 
 # Question (EN)
 
-What is MutableState in Compose?
+> What is MutableState in Compose?
 
 ---
 

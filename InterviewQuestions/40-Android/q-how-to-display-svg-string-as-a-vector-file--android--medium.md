@@ -19,11 +19,11 @@ tags: [android, android/ui-compose, android/ui-graphics, android/ui-views, diffi
 
 # Вопрос (RU)
 
-Как отобразить SVG-строку в виде векторного изображения в Android?
+> Как отобразить SVG-строку в виде векторного изображения в Android?
 
 # Question (EN)
 
-How to display an SVG string as a vector image in Android?
+> How to display an SVG string as a vector image in Android?
 
 ---
 

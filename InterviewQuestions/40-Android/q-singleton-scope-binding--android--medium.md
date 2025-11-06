@@ -19,11 +19,11 @@ tags: [android/di-hilt, android/lifecycle, dagger, dependency-injection, difficu
 
 # Вопрос (RU)
 
-К какому scope привязан @Singleton в Dagger/Hilt?
+> К какому scope привязан @Singleton в Dagger/Hilt?
 
 # Question (EN)
 
-What scope is @Singleton bound to in Dagger/Hilt?
+> What scope is @Singleton bound to in Dagger/Hilt?
 
 ---
 

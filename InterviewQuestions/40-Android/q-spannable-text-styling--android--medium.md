@@ -34,11 +34,11 @@ related:
 
 # Вопрос (RU)
 
-Что такое Spannable и как его использовать для стилизации текста?
+> Что такое Spannable и как его использовать для стилизации текста?
 
 # Question (EN)
 
-What is Spannable and how do you use it for text styling?
+> What is Spannable and how do you use it for text styling?
 
 ## Ответ (RU)
 

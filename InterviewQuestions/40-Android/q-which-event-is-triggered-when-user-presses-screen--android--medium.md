@@ -19,12 +19,12 @@ tags: [android, android/ui-compose, android/ui-views, difficulty/medium, gesture
 
 # Вопрос (RU)
 
-Какое событие срабатывает когда пользователь нажимает на экран?
+> Какое событие срабатывает когда пользователь нажимает на экран?
 
 
 # Question (EN)
 
-Which event is triggered when user presses the screen?
+> Which event is triggered when user presses the screen?
 
 
 ---

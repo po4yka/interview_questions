@@ -19,11 +19,11 @@ tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium,
 
 # Вопрос (RU)
 
-До какого момента `ViewModel` гарантирует сохранение состояния?
+> До какого момента `ViewModel` гарантирует сохранение состояния?
 
 # Question (EN)
 
-Until what point does `ViewModel` guarantee state preservation?
+> Until what point does `ViewModel` guarantee state preservation?
 
 ---
 

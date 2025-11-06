@@ -19,11 +19,11 @@ tags: [android/background-execution, android/coroutines, android/performance-bat
 
 # Вопрос (RU)
 
-Когда использовать WorkManager vs Coroutines vs `Service` для фоновой работы в Android?
+> Когда использовать WorkManager vs Coroutines vs `Service` для фоновой работы в Android?
 
 # Question (EN)
 
-When should you use WorkManager vs Coroutines vs `Service` for background work in Android?
+> When should you use WorkManager vs Coroutines vs `Service` for background work in Android?
 
 ---
 

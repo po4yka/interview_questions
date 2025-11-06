@@ -19,11 +19,11 @@ tags: [android/activity, android/architecture-mvvm, android/lifecycle, configura
 
 # Вопрос (RU)
 
-Почему пользовательские данные могут исчезнуть при повороте экрана?
+> Почему пользовательские данные могут исчезнуть при повороте экрана?
 
 # Question (EN)
 
-Why does user data disappear on screen rotation?
+> Why does user data disappear on screen rotation?
 
 ---
 

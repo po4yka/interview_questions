@@ -19,11 +19,11 @@ tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
 
 # Вопрос (RU)
 
-Какой класс можно использовать что бы ловить разные жесты?
+> Какой класс можно использовать что бы ловить разные жесты?
 
 # Question (EN)
 
-Which class can be used to detect different gestures?
+> Which class can be used to detect different gestures?
 
 ---
 

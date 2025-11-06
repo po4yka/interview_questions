@@ -19,11 +19,11 @@ tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immut
 
 # Вопрос (RU)
 
-Какие классы будут автоматически выводиться как stable в Jetpack Compose?
+> Какие классы будут автоматически выводиться как stable в Jetpack Compose?
 
 # Question (EN)
 
-Which classes are automatically inferred as stable in Jetpack Compose?
+> Which classes are automatically inferred as stable in Jetpack Compose?
 
 ---
 

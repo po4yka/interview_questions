@@ -25,10 +25,10 @@ sources: []
 ---
 
 # Вопрос (RU)
-Как работают Slot Table и рекомпозиция в Jetpack Compose? Объясните механизм внутреннего представления и оптимизации перерисовки.
+> Как работают Slot Table и рекомпозиция в Jetpack Compose? Объясните механизм внутреннего представления и оптимизации перерисовки.
 
 # Question (EN)
-How do Slot Table and recomposition work in Jetpack Compose? Explain the internal representation mechanism and rendering optimization.
+> How do Slot Table and recomposition work in Jetpack Compose? Explain the internal representation mechanism and rendering optimization.
 
 ---
 

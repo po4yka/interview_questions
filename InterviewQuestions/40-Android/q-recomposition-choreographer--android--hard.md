@@ -19,11 +19,11 @@ tags: [android/coroutines, android/performance-rendering, android/ui-compose, ch
 
 # Вопрос (RU)
 
-Рекомпозиция происходит в рандомное время или по команде Choreographer?
+> Рекомпозиция происходит в рандомное время или по команде Choreographer?
 
 # Question (EN)
 
-Does recomposition happen at random times or on command from Choreographer?
+> Does recomposition happen at random times or on command from Choreographer?
 
 ## Ответ (RU)
 

@@ -38,11 +38,11 @@ tags:
 
 # Вопрос (RU)
 
-Чем жизненный цикл `Fragment` отличается от жизненного цикла `Activity`?
+> Чем жизненный цикл `Fragment` отличается от жизненного цикла `Activity`?
 
 # Question (EN)
 
-How does `Fragment` lifecycle differ from `Activity` lifecycle?
+> How does `Fragment` lifecycle differ from `Activity` lifecycle?
 
 ---
 

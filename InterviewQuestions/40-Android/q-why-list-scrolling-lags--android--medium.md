@@ -19,11 +19,11 @@ sources: []
 
 # Вопрос (RU)
 
-Почему при скролле может тормозить список?
+> Почему при скролле может тормозить список?
 
 # Question (EN)
 
-Why might list scrolling lag?
+> Why might list scrolling lag?
 
 ---
 

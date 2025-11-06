@@ -42,11 +42,11 @@ tags:
 
 # Вопрос (RU)
 
-Как открыть конкретную `Activity` или `Fragment` из push-уведомления?
+> Как открыть конкретную `Activity` или `Fragment` из push-уведомления?
 
 # Question (EN)
 
-How to open a specific `Activity` or `Fragment` from a push notification?
+> How to open a specific `Activity` or `Fragment` from a push notification?
 
 ---
 

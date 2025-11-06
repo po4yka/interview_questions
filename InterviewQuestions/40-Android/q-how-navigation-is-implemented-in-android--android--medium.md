@@ -40,11 +40,11 @@ tags:
 
 # Вопрос (RU)
 
-Каким образом осуществляется навигация в Android?
+> Каким образом осуществляется навигация в Android?
 
 # Question (EN)
 
-How is navigation implemented in Android?
+> How is navigation implemented in Android?
 
 ---
 

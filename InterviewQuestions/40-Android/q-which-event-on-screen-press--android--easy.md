@@ -18,13 +18,13 @@ tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-eve
 
 # Вопрос (RU)
 
-Какое событие вызывается при нажатии пользователя на экран в Android?
+> Какое событие вызывается при нажатии пользователя на экран в Android?
 
 ---
 
 # Question (EN)
 
-Which event is triggered when a user presses on the screen in Android?
+> Which event is triggered when a user presses on the screen in Android?
 
 ---
 

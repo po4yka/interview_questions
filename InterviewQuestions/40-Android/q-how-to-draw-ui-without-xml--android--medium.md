@@ -40,11 +40,11 @@ tags:
 
 # Вопрос (RU)
 
-Как рисовать UI без XML в Android?
+> Как рисовать UI без XML в Android?
 
 # Question (EN)
 
-How to draw UI without XML in Android?
+> How to draw UI without XML in Android?
 
 ---
 

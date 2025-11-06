@@ -33,10 +33,10 @@ tags:
 ---
 
 # Вопрос (RU)
-Как в Retrofit в GET-методе поставить атрибут в конкретное место пути?
+> Как в Retrofit в GET-методе поставить атрибут в конкретное место пути?
 
 # Question (EN)
-How to put a parameter in a specific place in the path for a GET method in Retrofit?
+> How to put a parameter in a specific place in the path for a GET method in Retrofit?
 
 ## Ответ (RU)
 В Retrofit используйте аннотацию **`@Path`** для подстановки значений в URL.
