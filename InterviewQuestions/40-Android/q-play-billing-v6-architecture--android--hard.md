@@ -7,7 +7,7 @@ aliases:
 topic: android
 subtopics:
   - billing
-  - monetization
+  - billing
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -22,7 +22,7 @@ created: 2025-11-02
 updated: 2025-11-02
 tags:
   - android/billing
-  - monetization
+  - billing
   - difficulty/hard
 sources:
   - url: https://developer.android.com/google/play/billing/integrate

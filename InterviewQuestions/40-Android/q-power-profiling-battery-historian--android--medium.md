@@ -6,9 +6,8 @@ aliases:
   - Профилирование энергии с Battery Historian
 topic: android
 subtopics:
-  - performance
-  - power
-  - energy
+  - performance-battery
+  - profiling
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -22,8 +21,8 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/power
-  - android/performance
+  - android/profiling
+  - android/performance-battery
   - battery
   - difficulty/medium
 sources:

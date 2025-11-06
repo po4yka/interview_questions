@@ -7,8 +7,8 @@ aliases:
 topic: android
 subtopics:
   - wear
-  - compose
-  - ui
+  - ui-compose
+  - wear
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -23,7 +23,7 @@ created: 2025-11-02
 updated: 2025-11-02
 tags:
   - android/wear
-  - android/compose
+  - android/ui-compose
   - ux
   - difficulty/hard
 sources:

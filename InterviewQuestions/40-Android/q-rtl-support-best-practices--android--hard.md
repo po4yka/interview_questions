@@ -6,8 +6,7 @@ aliases:
   - Лучшие практики поддержки RTL
 topic: android
 subtopics:
-  - globalization
-  - rtl
+  - i18n-l10n
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -21,8 +20,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/globalization
-  - rtl
+  - android/i18n-l10n
   - accessibility
   - difficulty/hard
 sources:

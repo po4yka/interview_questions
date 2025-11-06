@@ -7,8 +7,6 @@ aliases:
 topic: android
 subtopics:
   - media
-  - media3
-  - exoplayer
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -22,9 +20,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/media3
-  - android/exoplayer
-  - streaming
+  - android/media
   - difficulty/hard
 sources:
   - url: https://developer.android.com/guide/topics/media/media3/getting-started

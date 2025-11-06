@@ -7,8 +7,6 @@ aliases:
 topic: android
 subtopics:
   - media
-  - media3
-  - editing
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -23,9 +21,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/media3
-  - android/editing
-  - video
+  - android/media
   - difficulty/hard
 sources:
   - url: https://developer.android.com/guide/topics/media/media3/transformer
