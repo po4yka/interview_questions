@@ -33,6 +33,7 @@ from validators.android_validator import AndroidValidator  # type: ignore
 from validators.content_validator import ContentValidator  # type: ignore
 from validators.format_validator import FormatValidator  # type: ignore
 from validators.link_validator import LinkValidator  # type: ignore
+from validators.system_design_validator import SystemDesignValidator  # type: ignore
 from validators.yaml_validator import YAMLValidator  # type: ignore
 from validators.base import Severity  # type: ignore
 from utils.report_generator import FileResult, ReportGenerator
@@ -107,6 +108,7 @@ def main() -> int:
                 vault_root=vault_dir,
             ),
             AndroidValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
+            SystemDesignValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
         ]
         issues = []
         passed = []
