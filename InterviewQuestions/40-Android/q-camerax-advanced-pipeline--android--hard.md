@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-camerax
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -180,7 +179,6 @@ Modern CameraX pipelines orchestrate multiple use cases through `ProcessCameraPr
 ## References
 
 - [[c-camerax]]
-- [[q-android-coverage-gaps--android--hard]]
 - [CameraX](https://developer.android.com/training/camerax)
 - https://medium.com/androiddevelopers/camerax-advanced-usage-article
 
@@ -188,4 +186,3 @@ Modern CameraX pipelines orchestrate multiple use cases through `ProcessCameraPr
 ## Related Questions
 
 - [[c-camerax]]
-- [[q-android-coverage-gaps--android--hard]]

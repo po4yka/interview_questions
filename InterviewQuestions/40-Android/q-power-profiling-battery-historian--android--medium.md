@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-power-profiling
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -94,10 +93,8 @@ sources:
 
 ## References
 - [[c-power-profiling]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/topic/performance/power/battery-historian
 
 ## Related Questions
 
 - [[c-power-profiling]]
-- [[q-android-coverage-gaps--android--hard]]

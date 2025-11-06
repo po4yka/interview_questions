@@ -650,7 +650,7 @@ fun RememberScrollState() {
 
 ## Follow-ups
 
-- [[q-animated-visibility-vs-content--jetpack-compose--medium]]
+- [[q-animated-visibility-vs-content--android--medium]]
 - [[q-compose-testing--android--medium]]
 - [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]]
 

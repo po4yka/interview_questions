@@ -368,7 +368,7 @@ This ensures data survives both configuration changes **and** process death.
 - [[q-viewmodel-basics--android--easy]] - Introduction to ViewModel
 
 ### Related
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]] - Side effects in Compose
+- [[q-compose-side-effects-advanced--android--hard]] - Side effects in Compose
 - [[q-savedstatehandle-vs-viewmodel--android--medium]] - State preservation strategies
 
 ### Advanced

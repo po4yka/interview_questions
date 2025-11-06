@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-ondevice-ml
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -123,10 +122,8 @@ val interpreter = Interpreter(mapped, Interpreter.Options().apply {
 
 ## References
 - [[c-ondevice-ml]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://www.tensorflow.org/lite/performance/delegates
 
 ## Related Questions
 
 - [[c-ondevice-ml]]
-- [[q-android-coverage-gaps--android--hard]]

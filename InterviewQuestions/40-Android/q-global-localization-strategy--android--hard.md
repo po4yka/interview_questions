@@ -18,7 +18,6 @@ status: draft
 moc: moc-android
 related:
   - c-globalization
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -107,11 +106,9 @@ sources:
 ## References
 
 - [[c-globalization]]
-- [[q-android-coverage-gaps--android--hard]]
 - [Localization](https://developer.android.com/guide/topics/resources/localization)
 
 
 ## Related Questions
 
 - [[c-globalization]]
-- [[q-android-coverage-gaps--android--hard]]

@@ -16,7 +16,6 @@ status: reviewed
 moc: moc-android
 related:
   - c-globalization
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags: [accessibility, android/globalization, difficulty/hard, typography]
@@ -638,4 +637,3 @@ suspend fun loadScriptFont(script: String): Typeface {
 ## Related Questions
 
 - [[c-globalization]]
-- [[q-android-coverage-gaps--android--hard]]

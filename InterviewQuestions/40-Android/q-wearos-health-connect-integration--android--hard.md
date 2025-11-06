@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-wear-health
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -123,11 +122,9 @@ if (healthConnectClient.permissionController.getGrantedPermissions()
 
 ## References
 - [[c-wear-health]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/training/wearables/health-services
 - https://developer.android.com/guide/health-and-fitness/health-connect
 
 ## Related Questions
 
 - [[c-wear-health]]
-- [[q-android-coverage-gaps--android--hard]]

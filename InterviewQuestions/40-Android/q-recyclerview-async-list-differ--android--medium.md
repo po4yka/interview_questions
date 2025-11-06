@@ -1218,7 +1218,7 @@ searchView.onQueryTextChange { query ->
 
 ## Follow-ups
 
-- [[q-compose-side-effects-advanced--jetpack-compose--hard]]
+- [[q-compose-side-effects-advanced--android--hard]]
 - [[q-vector-graphics-animations--graphics--medium]]
 - [[q-what-are-services-used-for--android--medium]]
 

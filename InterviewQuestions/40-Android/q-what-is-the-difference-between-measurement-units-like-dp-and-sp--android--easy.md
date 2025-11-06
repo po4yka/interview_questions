@@ -140,5 +140,5 @@ Box(
 - [[q-android-ui-fundamentals--android--easy]] - UI design principles
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layout implementation
+- [[q-compose-custom-layout--android--hard]] - Custom layout implementation
 - [[q-android-runtime-internals--android--hard]] - Platform internals

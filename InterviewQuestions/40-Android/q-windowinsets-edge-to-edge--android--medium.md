@@ -246,7 +246,7 @@ fun VideoPlayer() {
 ### Related (Same Level)
 - [[q-compose-navigation-advanced--android--medium]] - Compose navigation
 - [[q-compose-scaffold--android--medium]] - Compose Scaffold
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+- [[q-compose-custom-layout--android--hard]] - Custom layouts
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Performance optimization

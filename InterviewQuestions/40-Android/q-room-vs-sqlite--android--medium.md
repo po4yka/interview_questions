@@ -737,7 +737,7 @@ class UserRepository(private val userDao: UserDao) {
 ## Follow-ups
 
 - [[q-android-runtime-art--android--medium]]
-- [[q-compose-navigation-advanced--jetpack-compose--medium]]
+- [[q-compose-navigation-advanced--android--medium]]
 - [[q-room-transactions-dao--android--medium]]
 
 

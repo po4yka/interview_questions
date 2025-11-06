@@ -933,7 +933,7 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 ## Follow-ups
 
 - [[q-bundle-data-types--android--medium]]
-- [[q-compositionlocal-advanced--jetpack-compose--medium]]
+- [[q-compositionlocal-advanced--android--medium]]
 - [[q-stack-heap-memory-multiple-threads--android--medium]]
 
 

@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-arcore
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -133,11 +132,9 @@ depthImage.close()
 
 ## References
 - [[c-arcore]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developers.google.com/ar/develop/java/cloud-anchors/overview
 - https://developers.google.com/ar/develop/depth
 
 ## Related Questions
 
 - [[c-arcore]]
-- [[q-android-coverage-gaps--android--hard]]

@@ -715,7 +715,7 @@ class MyService : Service() {
 ## Follow-ups
 
 - [[q-async-operations-android--android--medium]]
-- [[q-derived-state-snapshot-system--jetpack-compose--hard]]
+- [[q-derived-state-snapshot-system--android--hard]]
 - [[q-how-to-fix-a-bad-element-layout--android--easy]]
 
 

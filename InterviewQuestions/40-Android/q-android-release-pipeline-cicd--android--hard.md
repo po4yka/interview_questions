@@ -18,7 +18,6 @@ status: draft
 moc: moc-android
 related:
   - c-release-engineering
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -122,10 +121,8 @@ sources:
 
 ## References
 - [[c-release-engineering]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/studio/build/build-variants
 
 ## Related Questions
 
 - [[c-release-engineering]]
-- [[q-android-coverage-gaps--android--hard]]

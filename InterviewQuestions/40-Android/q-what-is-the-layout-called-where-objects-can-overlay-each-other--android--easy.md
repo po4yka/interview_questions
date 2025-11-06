@@ -334,4 +334,4 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layout implementation
-- [[q-compose-gesture-detection--jetpack-compose--medium]] - Gesture handling in overlays
+- [[q-compose-gesture-detection--android--medium]] - Gesture handling in overlays

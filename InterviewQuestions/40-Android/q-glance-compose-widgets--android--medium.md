@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-glance
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -141,10 +140,8 @@ class RefreshAction : ActionCallback {
 
 ## References
 - [[c-glance]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/jetpack/compose/glance/appwidget
 
 ## Related Questions
 
 - [[c-glance]]
-- [[q-android-coverage-gaps--android--hard]]
